@@ -181,18 +181,6 @@ typedef enum _xe_result_t
 } xe_result_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xe_command_list_desc_t
-typedef struct _xe_command_list_desc_t xe_command_list_desc_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xe_command_queue_desc_t
-typedef struct _xe_command_queue_desc_t xe_command_queue_desc_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xe_image_region_t
-typedef struct _xe_image_region_t xe_image_region_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xe_device_uuid_t
 typedef struct _xe_device_uuid_t xe_device_uuid_t;
 
@@ -211,6 +199,18 @@ typedef struct _xe_device_memory_properties_t xe_device_memory_properties_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xe_device_p2p_properties_t
 typedef struct _xe_device_p2p_properties_t xe_device_p2p_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_command_queue_desc_t
+typedef struct _xe_command_queue_desc_t xe_command_queue_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_command_list_desc_t
+typedef struct _xe_command_list_desc_t xe_command_list_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_image_region_t
+typedef struct _xe_image_region_t xe_image_region_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xe_event_pool_desc_t

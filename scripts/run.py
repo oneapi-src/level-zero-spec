@@ -1,10 +1,8 @@
 import argparse
 import util
 import parse_specs
-import generate_api
+import generate_code
 import generate_docs
-import generate_loader
-import generate_layers
 import os
 import time
 
@@ -70,6 +68,7 @@ def main():
 
         srcpath = os.path.join("./", section)
         dstpath = os.path.join("../include/", section)
+        libpath = os.path.join("../source/lib/", section)
 
         if args[section] and util.exists(srcpath):
             if idx > 0:
@@ -81,13 +80,13 @@ def main():
                 util.jsonWrite(os.path.join(srcpath, "specs.json"), specs)
                 util.jsonWrite(os.path.join(srcpath, "meta.json"), meta)
 
-            generate_api.generate(dstpath, namespace, tags, specs, meta)
+            generate_code.generate_api(dstpath, namespace, tags, specs, meta)
 
             if args['loader']:
-                generate_loader.generate(section, namespace, tags, specs, meta)
+                generate_code.generate_loader("../source/", section, namespace, tags, specs, meta)
 
             if args['layers']:
-                generate_layers.generate(section, namespace, tags, specs, meta)
+                generate_code.generate_layers("../source/", section, namespace, tags, specs, meta)
 
             if args['md']:
                 generate_docs.generate_md(srcpath, dstpath, tags, meta)

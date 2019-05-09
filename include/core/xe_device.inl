@@ -42,86 +42,6 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceSystemBarrier
-    /// 
-    /// @details
-    ///     - This is a special-case system level barrier that can be used to ensure
-    ///       global observability of writes; typically needed after a producer
-    ///       (e.g., NIC) performs direct writes to the device's memory (e.g.,
-    ///       Direct RDMA writes).  This is typically required when the memory
-    ///       corresponding to the writes is subsequently accessed from a remote
-    ///       device.
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @throws result_t
-    inline void 
-    Device::SystemBarrier(
-        void
-        )
-    {
-        // auto result = ::xeDeviceSystemBarrier( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::SystemBarrier");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-#if XE_ENABLE_OCL_INTEROP
-    /// @brief C++ wrapper for ::xeDeviceRegisterCLMemory
-    /// 
-    /// @returns
-    ///     - void*: pointer to device allocation
-    /// 
-    /// @throws result_t
-    inline void* 
-    Device::RegisterCLMemory(
-        cl_context context,                             ///< [in] the OpenCL context that created the memory
-        cl_mem mem                                      ///< [in] the OpenCL memory to register
-        )
-    {
-        // auto result = ::xeDeviceRegisterCLMemory( handle, context, mem );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLMemory");
-    }
-#endif // XE_ENABLE_OCL_INTEROP
-
-    ///////////////////////////////////////////////////////////////////////////////
-#if XE_ENABLE_OCL_INTEROP
-    /// @brief C++ wrapper for ::xeDeviceRegisterCLProgram
-    /// 
-    /// @returns
-    ///     - Module: pointer to handle of module object created
-    /// 
-    /// @throws result_t
-    inline Module* 
-    Device::RegisterCLProgram(
-        cl_context context,                             ///< [in] the OpenCL context that created the program
-        cl_program program                              ///< [in] the OpenCL program to register
-        )
-    {
-        // auto result = ::xeDeviceRegisterCLProgram( handle, context, program );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLProgram");
-    }
-#endif // XE_ENABLE_OCL_INTEROP
-
-    ///////////////////////////////////////////////////////////////////////////////
-#if XE_ENABLE_OCL_INTEROP
-    /// @brief C++ wrapper for ::xeDeviceRegisterCLCommandQueue
-    /// 
-    /// @returns
-    ///     - CommandQueue: pointer to handle of command queue object created
-    /// 
-    /// @throws result_t
-    inline CommandQueue* 
-    Device::RegisterCLCommandQueue(
-        cl_context context,                             ///< [in] the OpenCL context that created the command queue
-        cl_command_queue command_queue                  ///< [in] the OpenCL command queue to register
-        )
-    {
-        // auto result = ::xeDeviceRegisterCLCommandQueue( handle, context, command_queue );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLCommandQueue");
-    }
-#endif // XE_ENABLE_OCL_INTEROP
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceGetCount
     /// 
     /// @details
@@ -385,6 +305,86 @@ namespace xe
         // auto result = ::xeDeviceSetLastLevelCacheConfig( handle, CacheConfig );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::SetLastLevelCacheConfig");
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for ::xeDeviceSystemBarrier
+    /// 
+    /// @details
+    ///     - This is a special-case system level barrier that can be used to ensure
+    ///       global observability of writes; typically needed after a producer
+    ///       (e.g., NIC) performs direct writes to the device's memory (e.g.,
+    ///       Direct RDMA writes).  This is typically required when the memory
+    ///       corresponding to the writes is subsequently accessed from a remote
+    ///       device.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    inline void 
+    Device::SystemBarrier(
+        void
+        )
+    {
+        // auto result = ::xeDeviceSystemBarrier( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::SystemBarrier");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+#if XE_ENABLE_OCL_INTEROP
+    /// @brief C++ wrapper for ::xeDeviceRegisterCLMemory
+    /// 
+    /// @returns
+    ///     - void*: pointer to device allocation
+    /// 
+    /// @throws result_t
+    inline void* 
+    Device::RegisterCLMemory(
+        cl_context context,                             ///< [in] the OpenCL context that created the memory
+        cl_mem mem                                      ///< [in] the OpenCL memory to register
+        )
+    {
+        // auto result = ::xeDeviceRegisterCLMemory( handle, context, mem );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLMemory");
+    }
+#endif // XE_ENABLE_OCL_INTEROP
+
+    ///////////////////////////////////////////////////////////////////////////////
+#if XE_ENABLE_OCL_INTEROP
+    /// @brief C++ wrapper for ::xeDeviceRegisterCLProgram
+    /// 
+    /// @returns
+    ///     - Module: pointer to handle of module object created
+    /// 
+    /// @throws result_t
+    inline Module* 
+    Device::RegisterCLProgram(
+        cl_context context,                             ///< [in] the OpenCL context that created the program
+        cl_program program                              ///< [in] the OpenCL program to register
+        )
+    {
+        // auto result = ::xeDeviceRegisterCLProgram( handle, context, program );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLProgram");
+    }
+#endif // XE_ENABLE_OCL_INTEROP
+
+    ///////////////////////////////////////////////////////////////////////////////
+#if XE_ENABLE_OCL_INTEROP
+    /// @brief C++ wrapper for ::xeDeviceRegisterCLCommandQueue
+    /// 
+    /// @returns
+    ///     - CommandQueue: pointer to handle of command queue object created
+    /// 
+    /// @throws result_t
+    inline CommandQueue* 
+    Device::RegisterCLCommandQueue(
+        cl_context context,                             ///< [in] the OpenCL context that created the command queue
+        cl_command_queue command_queue                  ///< [in] the OpenCL command queue to register
+        )
+    {
+        // auto result = ::xeDeviceRegisterCLCommandQueue( handle, context, command_queue );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLCommandQueue");
+    }
+#endif // XE_ENABLE_OCL_INTEROP
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for ::xeDeviceMakeMemoryResident

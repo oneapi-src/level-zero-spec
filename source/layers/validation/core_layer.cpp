@@ -664,643 +664,34 @@ xeGetGlobalProcAddrTable(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeCommandListAppendBarrier
+/// @brief Intercept function for xeInit
 xe_result_t __xecall
-xeCommandListAppendBarrier(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before executing
-                                                    ///< barrier
+xeInit(
+    xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
     if( context.enableParameterValidation )
     {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
     }
 
-    return context.xeCommandList.pfnAppendBarrier( hCommandList, hSignalEvent, numWaitEvents, phWaitEvents );
+    return context.xeGlobal.pfnInit( flags );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeCommandListAppendMemoryRangesBarrier
+/// @brief Intercept function for xeGetDriverVersion
 xe_result_t __xecall
-xeCommandListAppendMemoryRangesBarrier(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    uint32_t numRanges,                             ///< [in] number of memory ranges
-    const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
-    const void** pRanges,                           ///< [in] array of memory ranges
-    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before executing
-                                                    ///< barrier
+xeGetDriverVersion(
+    uint32_t* version                               ///< [out] driver version
     )
 {
     if( context.enableParameterValidation )
     {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == pRangeSizes )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == pRanges )
+        if( nullptr == version )
             return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     }
 
-    return context.xeCommandList.pfnAppendMemoryRangesBarrier( hCommandList, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeDeviceSystemBarrier
-xe_result_t __xecall
-xeDeviceSystemBarrier(
-    xe_device_handle_t hDevice                      ///< [in] handle of the device
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-    }
-
-    return context.xeDevice.pfnSystemBarrier( hDevice );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeDeviceRegisterCLMemory
-#if XE_ENABLE_OCL_INTEROP
-xe_result_t __xecall
-xeDeviceRegisterCLMemory(
-    xe_device_handle_t hDevice,                     ///< [in] handle to the device
-    cl_context context,                             ///< [in] the OpenCL context that created the memory
-    cl_mem mem,                                     ///< [in] the OpenCL memory to register
-    void** ptr                                      ///< [out] pointer to device allocation
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-    }
-
-    return context.xeDevice.pfnRegisterCLMemory( hDevice, context, mem, ptr );
-}
-#endif // XE_ENABLE_OCL_INTEROP
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeDeviceRegisterCLProgram
-#if XE_ENABLE_OCL_INTEROP
-xe_result_t __xecall
-xeDeviceRegisterCLProgram(
-    xe_device_handle_t hDevice,                     ///< [in] handle to the device
-    cl_context context,                             ///< [in] the OpenCL context that created the program
-    cl_program program,                             ///< [in] the OpenCL program to register
-    xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == phModule )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-    }
-
-    return context.xeDevice.pfnRegisterCLProgram( hDevice, context, program, phModule );
-}
-#endif // XE_ENABLE_OCL_INTEROP
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeDeviceRegisterCLCommandQueue
-#if XE_ENABLE_OCL_INTEROP
-xe_result_t __xecall
-xeDeviceRegisterCLCommandQueue(
-    xe_device_handle_t hDevice,                     ///< [in] handle to the device
-    cl_context context,                             ///< [in] the OpenCL context that created the command queue
-    cl_command_queue command_queue,                 ///< [in] the OpenCL command queue to register
-    xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == phCommandQueue )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-    }
-
-    return context.xeDevice.pfnRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
-}
-#endif // XE_ENABLE_OCL_INTEROP
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeCommandListCreate
-xe_result_t __xecall
-xeCommandListCreate(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
-    xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == desc )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == phCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( XE_COMMAND_LIST_DESC_VERSION_CURRENT < desc->version )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-    }
-
-    return context.xeCommandList.pfnCreate( hDevice, desc, phCommandList );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeCommandListCreateImmediate
-xe_result_t __xecall
-xeCommandListCreateImmediate(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
-    xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == desc )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == phCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-    }
-
-    return context.xeCommandList.pfnCreateImmediate( hDevice, desc, phCommandList );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeCommandListDestroy
-xe_result_t __xecall
-xeCommandListDestroy(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-    }
-
-    return context.xeCommandList.pfnDestroy( hCommandList );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeCommandListClose
-xe_result_t __xecall
-xeCommandListClose(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-    }
-
-    return context.xeCommandList.pfnClose( hCommandList );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeCommandListReset
-xe_result_t __xecall
-xeCommandListReset(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-    }
-
-    return context.xeCommandList.pfnReset( hCommandList );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeCommandListSetParameter
-xe_result_t __xecall
-xeCommandListSetParameter(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-    xe_command_list_parameter_t parameter,          ///< [in] parameter to change
-    uint32_t value                                  ///< [in] value of attribute
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-    }
-
-    return context.xeCommandList.pfnSetParameter( hCommandList, parameter, value );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeCommandListGetParameter
-xe_result_t __xecall
-xeCommandListGetParameter(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-    xe_command_list_parameter_t parameter,          ///< [in] parameter to retrieve
-    uint32_t* value                                 ///< [out] value of attribute
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == value )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-    }
-
-    return context.xeCommandList.pfnGetParameter( hCommandList, parameter, value );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeCommandListResetParameters
-xe_result_t __xecall
-xeCommandListResetParameters(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-    }
-
-    return context.xeCommandList.pfnResetParameters( hCommandList );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeCommandListReserveSpace
-xe_result_t __xecall
-xeCommandListReserveSpace(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    size_t size,                                    ///< [in] size (in bytes) to reserve
-    void** ptr                                      ///< [out] pointer to command buffer space reserved
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-    }
-
-    return context.xeCommandList.pfnReserveSpace( hCommandList, size, ptr );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeCommandQueueCreate
-xe_result_t __xecall
-xeCommandQueueCreate(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
-    xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == desc )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == phCommandQueue )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-    }
-
-    return context.xeCommandQueue.pfnCreate( hDevice, desc, phCommandQueue );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeCommandQueueDestroy
-xe_result_t __xecall
-xeCommandQueueDestroy(
-    xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hCommandQueue )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-    }
-
-    return context.xeCommandQueue.pfnDestroy( hCommandQueue );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeCommandQueueExecuteCommandLists
-xe_result_t __xecall
-xeCommandQueueExecuteCommandLists(
-    xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
-    uint32_t numCommandLists,                       ///< [in] number of command lists to execute
-    xe_command_list_handle_t* phCommandLists,       ///< [in] list of handles of the command lists to execute
-    xe_fence_handle_t hFence                        ///< [in][optional] handle of the fence to signal on completion
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hCommandQueue )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == phCommandLists )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-    }
-
-    return context.xeCommandQueue.pfnExecuteCommandLists( hCommandQueue, numCommandLists, phCommandLists, hFence );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeCommandQueueSynchronize
-xe_result_t __xecall
-xeCommandQueueSynchronize(
-    xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
-    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
-                                                    ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY;
-                                                    ///< if zero, then operates exactly like ::xeFenceQueryStatus;
-                                                    ///< if MAX_UINT32, then function will not return until complete or device
-                                                    ///< is lost.
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hCommandQueue )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-    }
-
-    return context.xeCommandQueue.pfnSynchronize( hCommandQueue, timeout );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeCommandListAppendMemoryCopy
-xe_result_t __xecall
-xeCommandListAppendMemoryCopy(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-    void* dstptr,                                   ///< [in] pointer to destination memory to copy to
-    const void* srcptr,                             ///< [in] pointer to source memory to copy from
-    size_t size,                                    ///< [in] size in bytes to copy
-    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == dstptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == srcptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-    }
-
-    return context.xeCommandList.pfnAppendMemoryCopy( hCommandList, dstptr, srcptr, size, hSignalEvent, numWaitEvents, phWaitEvents );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeCommandListAppendMemorySet
-xe_result_t __xecall
-xeCommandListAppendMemorySet(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-    void* ptr,                                      ///< [in] pointer to memory to initialize
-    int value,                                      ///< [in] value to initialize memory to
-    size_t size,                                    ///< [in] size in bytes to initailize
-    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-    }
-
-    return context.xeCommandList.pfnAppendMemorySet( hCommandList, ptr, value, size, hSignalEvent, numWaitEvents, phWaitEvents );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeCommandListAppendImageCopy
-xe_result_t __xecall
-xeCommandListAppendImageCopy(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-    xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
-    xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
-    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == hDstImage )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == hSrcImage )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-    }
-
-    return context.xeCommandList.pfnAppendImageCopy( hCommandList, hDstImage, hSrcImage, hSignalEvent, numWaitEvents, phWaitEvents );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeCommandListAppendImageCopyRegion
-xe_result_t __xecall
-xeCommandListAppendImageCopyRegion(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-    xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
-    xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
-    xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
-    xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
-    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == hDstImage )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == hSrcImage )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-    }
-
-    return context.xeCommandList.pfnAppendImageCopyRegion( hCommandList, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hSignalEvent, numWaitEvents, phWaitEvents );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeCommandListAppendImageCopyToMemory
-xe_result_t __xecall
-xeCommandListAppendImageCopyToMemory(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-    void* dstptr,                                   ///< [in] pointer to destination memory to copy to
-    xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
-    xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
-    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == dstptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == hSrcImage )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-    }
-
-    return context.xeCommandList.pfnAppendImageCopyToMemory( hCommandList, dstptr, hSrcImage, pSrcRegion, hSignalEvent, numWaitEvents, phWaitEvents );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeCommandListAppendImageCopyFromMemory
-xe_result_t __xecall
-xeCommandListAppendImageCopyFromMemory(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-    xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
-    const void* srcptr,                             ///< [in] pointer to source memory to copy from
-    xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
-    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == hDstImage )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == srcptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-    }
-
-    return context.xeCommandList.pfnAppendImageCopyFromMemory( hCommandList, hDstImage, srcptr, pDstRegion, hSignalEvent, numWaitEvents, phWaitEvents );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeCommandListAppendMemoryPrefetch
-xe_result_t __xecall
-xeCommandListAppendMemoryPrefetch(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-    const void* ptr,                                ///< [in] pointer to start of the memory range to prefetch
-    size_t count                                    ///< [in] size in bytes of the memory range to prefetch
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-    }
-
-    return context.xeCommandList.pfnAppendMemoryPrefetch( hCommandList, ptr, count );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeCommandListAppendMemAdvise
-xe_result_t __xecall
-xeCommandListAppendMemAdvise(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-    xe_device_handle_t hDevice,                     ///< [in] device associated with the memory advice
-    const void* ptr,                                ///< [in] Pointer to the start of the memory range
-    size_t size,                                    ///< [in] Size in bytes of the memory range
-    xe_memory_advice_t advice                       ///< [in] Memory advice for the memory range
-    )
-{
-    if( context.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-        if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
-
-    }
-
-    return context.xeCommandList.pfnAppendMemAdvise( hCommandList, hDevice, ptr, size, advice );
+    return context.xeGlobal.pfnGetDriverVersion( version );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1531,34 +922,643 @@ xeDeviceSetLastLevelCacheConfig(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeInit
+/// @brief Intercept function for xeCommandQueueCreate
 xe_result_t __xecall
-xeInit(
-    xe_init_flag_t flags                            ///< [in] initialization flags
+xeCommandQueueCreate(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+    const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
+    xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     )
 {
     if( context.enableParameterValidation )
     {
+        if( nullptr == hDevice )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == desc )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == phCommandQueue )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
     }
 
-    return context.xeGlobal.pfnInit( flags );
+    return context.xeCommandQueue.pfnCreate( hDevice, desc, phCommandQueue );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeGetDriverVersion
+/// @brief Intercept function for xeCommandQueueDestroy
 xe_result_t __xecall
-xeGetDriverVersion(
-    uint32_t* version                               ///< [out] driver version
+xeCommandQueueDestroy(
+    xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
     )
 {
     if( context.enableParameterValidation )
     {
-        if( nullptr == version )
+        if( nullptr == hCommandQueue )
             return XE_RESULT_ERROR_INVALID_PARAMETER;
 
     }
 
-    return context.xeGlobal.pfnGetDriverVersion( version );
+    return context.xeCommandQueue.pfnDestroy( hCommandQueue );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeCommandQueueExecuteCommandLists
+xe_result_t __xecall
+xeCommandQueueExecuteCommandLists(
+    xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
+    uint32_t numCommandLists,                       ///< [in] number of command lists to execute
+    xe_command_list_handle_t* phCommandLists,       ///< [in] list of handles of the command lists to execute
+    xe_fence_handle_t hFence                        ///< [in][optional] handle of the fence to signal on completion
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hCommandQueue )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == phCommandLists )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeCommandQueue.pfnExecuteCommandLists( hCommandQueue, numCommandLists, phCommandLists, hFence );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeCommandQueueSynchronize
+xe_result_t __xecall
+xeCommandQueueSynchronize(
+    xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
+    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+                                                    ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY;
+                                                    ///< if zero, then operates exactly like ::xeFenceQueryStatus;
+                                                    ///< if MAX_UINT32, then function will not return until complete or device
+                                                    ///< is lost.
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hCommandQueue )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeCommandQueue.pfnSynchronize( hCommandQueue, timeout );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeCommandListCreate
+xe_result_t __xecall
+xeCommandListCreate(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+    const xe_command_list_desc_t* desc,             ///< [in] pointer to command list descriptor
+    xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hDevice )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == desc )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == phCommandList )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( XE_COMMAND_LIST_DESC_VERSION_CURRENT < desc->version )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+    }
+
+    return context.xeCommandList.pfnCreate( hDevice, desc, phCommandList );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeCommandListCreateImmediate
+xe_result_t __xecall
+xeCommandListCreateImmediate(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+    const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
+    xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hDevice )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == desc )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == phCommandList )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+    }
+
+    return context.xeCommandList.pfnCreateImmediate( hDevice, desc, phCommandList );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeCommandListDestroy
+xe_result_t __xecall
+xeCommandListDestroy(
+    xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hCommandList )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeCommandList.pfnDestroy( hCommandList );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeCommandListClose
+xe_result_t __xecall
+xeCommandListClose(
+    xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hCommandList )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeCommandList.pfnClose( hCommandList );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeCommandListReset
+xe_result_t __xecall
+xeCommandListReset(
+    xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hCommandList )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeCommandList.pfnReset( hCommandList );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeCommandListSetParameter
+xe_result_t __xecall
+xeCommandListSetParameter(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
+    xe_command_list_parameter_t parameter,          ///< [in] parameter to change
+    uint32_t value                                  ///< [in] value of attribute
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hCommandList )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeCommandList.pfnSetParameter( hCommandList, parameter, value );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeCommandListGetParameter
+xe_result_t __xecall
+xeCommandListGetParameter(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
+    xe_command_list_parameter_t parameter,          ///< [in] parameter to retrieve
+    uint32_t* value                                 ///< [out] value of attribute
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hCommandList )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == value )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeCommandList.pfnGetParameter( hCommandList, parameter, value );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeCommandListResetParameters
+xe_result_t __xecall
+xeCommandListResetParameters(
+    xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hCommandList )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeCommandList.pfnResetParameters( hCommandList );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeCommandListReserveSpace
+xe_result_t __xecall
+xeCommandListReserveSpace(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    size_t size,                                    ///< [in] size (in bytes) to reserve
+    void** ptr                                      ///< [out] pointer to command buffer space reserved
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hCommandList )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == ptr )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeCommandList.pfnReserveSpace( hCommandList, size, ptr );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeCommandListAppendBarrier
+xe_result_t __xecall
+xeCommandListAppendBarrier(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before executing
+                                                    ///< barrier
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hCommandList )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeCommandList.pfnAppendBarrier( hCommandList, hSignalEvent, numWaitEvents, phWaitEvents );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeCommandListAppendMemoryRangesBarrier
+xe_result_t __xecall
+xeCommandListAppendMemoryRangesBarrier(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    uint32_t numRanges,                             ///< [in] number of memory ranges
+    const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
+    const void** pRanges,                           ///< [in] array of memory ranges
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before executing
+                                                    ///< barrier
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hCommandList )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pRangeSizes )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == pRanges )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeCommandList.pfnAppendMemoryRangesBarrier( hCommandList, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeDeviceSystemBarrier
+xe_result_t __xecall
+xeDeviceSystemBarrier(
+    xe_device_handle_t hDevice                      ///< [in] handle of the device
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hDevice )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeDevice.pfnSystemBarrier( hDevice );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeDeviceRegisterCLMemory
+#if XE_ENABLE_OCL_INTEROP
+xe_result_t __xecall
+xeDeviceRegisterCLMemory(
+    xe_device_handle_t hDevice,                     ///< [in] handle to the device
+    cl_context context,                             ///< [in] the OpenCL context that created the memory
+    cl_mem mem,                                     ///< [in] the OpenCL memory to register
+    void** ptr                                      ///< [out] pointer to device allocation
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hDevice )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == ptr )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeDevice.pfnRegisterCLMemory( hDevice, context, mem, ptr );
+}
+#endif // XE_ENABLE_OCL_INTEROP
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeDeviceRegisterCLProgram
+#if XE_ENABLE_OCL_INTEROP
+xe_result_t __xecall
+xeDeviceRegisterCLProgram(
+    xe_device_handle_t hDevice,                     ///< [in] handle to the device
+    cl_context context,                             ///< [in] the OpenCL context that created the program
+    cl_program program,                             ///< [in] the OpenCL program to register
+    xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hDevice )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == phModule )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeDevice.pfnRegisterCLProgram( hDevice, context, program, phModule );
+}
+#endif // XE_ENABLE_OCL_INTEROP
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeDeviceRegisterCLCommandQueue
+#if XE_ENABLE_OCL_INTEROP
+xe_result_t __xecall
+xeDeviceRegisterCLCommandQueue(
+    xe_device_handle_t hDevice,                     ///< [in] handle to the device
+    cl_context context,                             ///< [in] the OpenCL context that created the command queue
+    cl_command_queue command_queue,                 ///< [in] the OpenCL command queue to register
+    xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hDevice )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == phCommandQueue )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeDevice.pfnRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
+}
+#endif // XE_ENABLE_OCL_INTEROP
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeCommandListAppendMemoryCopy
+xe_result_t __xecall
+xeCommandListAppendMemoryCopy(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
+    void* dstptr,                                   ///< [in] pointer to destination memory to copy to
+    const void* srcptr,                             ///< [in] pointer to source memory to copy from
+    size_t size,                                    ///< [in] size in bytes to copy
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hCommandList )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == dstptr )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == srcptr )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeCommandList.pfnAppendMemoryCopy( hCommandList, dstptr, srcptr, size, hSignalEvent, numWaitEvents, phWaitEvents );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeCommandListAppendMemorySet
+xe_result_t __xecall
+xeCommandListAppendMemorySet(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
+    void* ptr,                                      ///< [in] pointer to memory to initialize
+    int value,                                      ///< [in] value to initialize memory to
+    size_t size,                                    ///< [in] size in bytes to initailize
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hCommandList )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == ptr )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeCommandList.pfnAppendMemorySet( hCommandList, ptr, value, size, hSignalEvent, numWaitEvents, phWaitEvents );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeCommandListAppendImageCopy
+xe_result_t __xecall
+xeCommandListAppendImageCopy(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
+    xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
+    xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hCommandList )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == hDstImage )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == hSrcImage )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeCommandList.pfnAppendImageCopy( hCommandList, hDstImage, hSrcImage, hSignalEvent, numWaitEvents, phWaitEvents );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeCommandListAppendImageCopyRegion
+xe_result_t __xecall
+xeCommandListAppendImageCopyRegion(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
+    xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
+    xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
+    xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
+    xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hCommandList )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == hDstImage )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == hSrcImage )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeCommandList.pfnAppendImageCopyRegion( hCommandList, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hSignalEvent, numWaitEvents, phWaitEvents );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeCommandListAppendImageCopyToMemory
+xe_result_t __xecall
+xeCommandListAppendImageCopyToMemory(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
+    void* dstptr,                                   ///< [in] pointer to destination memory to copy to
+    xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
+    xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hCommandList )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == dstptr )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == hSrcImage )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeCommandList.pfnAppendImageCopyToMemory( hCommandList, dstptr, hSrcImage, pSrcRegion, hSignalEvent, numWaitEvents, phWaitEvents );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeCommandListAppendImageCopyFromMemory
+xe_result_t __xecall
+xeCommandListAppendImageCopyFromMemory(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
+    xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
+    const void* srcptr,                             ///< [in] pointer to source memory to copy from
+    xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hCommandList )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == hDstImage )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == srcptr )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeCommandList.pfnAppendImageCopyFromMemory( hCommandList, hDstImage, srcptr, pDstRegion, hSignalEvent, numWaitEvents, phWaitEvents );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeCommandListAppendMemoryPrefetch
+xe_result_t __xecall
+xeCommandListAppendMemoryPrefetch(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
+    const void* ptr,                                ///< [in] pointer to start of the memory range to prefetch
+    size_t count                                    ///< [in] size in bytes of the memory range to prefetch
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hCommandList )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == ptr )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeCommandList.pfnAppendMemoryPrefetch( hCommandList, ptr, count );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeCommandListAppendMemAdvise
+xe_result_t __xecall
+xeCommandListAppendMemAdvise(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
+    xe_device_handle_t hDevice,                     ///< [in] device associated with the memory advice
+    const void* ptr,                                ///< [in] Pointer to the start of the memory range
+    size_t size,                                    ///< [in] Size in bytes of the memory range
+    xe_memory_advice_t advice                       ///< [in] Memory advice for the memory range
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hCommandList )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == hDevice )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == ptr )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeCommandList.pfnAppendMemAdvise( hCommandList, hDevice, ptr, size, advice );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
