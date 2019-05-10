@@ -356,8 +356,8 @@ xetGetPowerProcAddrTable(
     context.xetPower.pfnGetFreqDomainCount                                   = ptable->pfnGetFreqDomainCount;
     ptable->pfnGetFreqDomainCount                                            = xetPowerGetFreqDomainCount;
 
-    context.xetPower.pfnGetFreqDomainHandle                                  = ptable->pfnGetFreqDomainHandle;
-    ptable->pfnGetFreqDomainHandle                                           = xetPowerGetFreqDomainHandle;
+    context.xetPower.pfnGetFreqDomain                                        = ptable->pfnGetFreqDomain;
+    ptable->pfnGetFreqDomain                                                 = xetPowerGetFreqDomain;
 
     context.xetPower.pfnFanCount                                             = ptable->pfnFanCount;
     ptable->pfnFanCount                                                      = xetPowerFanCount;
@@ -1177,9 +1177,9 @@ xetPowerGetFreqDomainCount(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xetPowerGetFreqDomainHandle
+/// @brief Intercept function for xetPowerGetFreqDomain
 xe_result_t __xecall
-xetPowerGetFreqDomainHandle(
+xetPowerGetFreqDomain(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t ordinal,                               ///< [in] frequency domain index [0 .. ::xetPowerGetFreqDomainCount - 1]
     xet_freq_domain_handle_t* phFreqDomain          ///< [out] pointer to handle of frequency domain object
@@ -1195,7 +1195,7 @@ xetPowerGetFreqDomainHandle(
 
     }
 
-    return context.xetPower.pfnGetFreqDomainHandle( hPower, ordinal, phFreqDomain );
+    return context.xetPower.pfnGetFreqDomain( hPower, ordinal, phFreqDomain );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

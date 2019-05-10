@@ -291,7 +291,7 @@ typedef struct _xet_power_apitable_t
     xet_pfnPowerGetTurboMode_t                                  pfnGetTurboMode;
     xet_pfnPowerSetTurboMode_t                                  pfnSetTurboMode;
     xet_pfnPowerGetFreqDomainCount_t                            pfnGetFreqDomainCount;
-    xet_pfnPowerGetFreqDomainHandle_t                           pfnGetFreqDomainHandle;
+    xet_pfnPowerGetFreqDomain_t                                 pfnGetFreqDomain;
     xet_pfnPowerFanCount_t                                      pfnFanCount;
     xet_pfnPowerFanGetProperties_t                              pfnFanGetProperties;
     xet_pfnPowerFanGetSpeedTable_t                              pfnFanGetSpeedTable;

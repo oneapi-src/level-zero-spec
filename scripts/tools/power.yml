@@ -436,7 +436,7 @@ params:
 type: function
 desc: "Get an object to a frequency domain on a device"
 class: $tPower
-name: GetFreqDomainHandle
+name: GetFreqDomain
 params:
     - type: $t_power_handle_t
       name: hPower

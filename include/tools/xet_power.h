@@ -614,15 +614,15 @@ typedef xe_result_t (__xecall *xet_pfnPowerGetFreqDomainCount_t)(
 ///         + nullptr == phFreqDomain
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetPowerGetFreqDomainHandle(
+xetPowerGetFreqDomain(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t ordinal,                               ///< [in] frequency domain index [0 .. ::xetPowerGetFreqDomainCount - 1]
     xet_freq_domain_handle_t* phFreqDomain          ///< [out] pointer to handle of frequency domain object
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerGetFreqDomainHandle 
-typedef xe_result_t (__xecall *xet_pfnPowerGetFreqDomainHandle_t)(
+/// @brief Function-pointer for xetPowerGetFreqDomain 
+typedef xe_result_t (__xecall *xet_pfnPowerGetFreqDomain_t)(
     xet_power_handle_t,
     uint32_t,
     xet_freq_domain_handle_t*

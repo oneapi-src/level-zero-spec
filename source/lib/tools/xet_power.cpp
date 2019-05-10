@@ -285,19 +285,19 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerGetFreqDomainHandle
+    /// @brief C++ wrapper for ::xetPowerGetFreqDomain
     /// 
     /// @returns
     ///     - FreqDomain: pointer to handle of frequency domain object
     /// 
     /// @throws result_t
     inline FreqDomain* 
-    Power::GetFreqDomainHandle(
+    Power::GetFreqDomain(
         uint32_t ordinal                                ///< [in] frequency domain index [0 .. ::PowerGetFreqDomainCount - 1]
         )
     {
-        // auto result = ::xetPowerGetFreqDomainHandle( handle, ordinal );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetFreqDomainHandle");
+        // auto result = ::xetPowerGetFreqDomain( handle, ordinal );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetFreqDomain");
     }
 
     ///////////////////////////////////////////////////////////////////////////////

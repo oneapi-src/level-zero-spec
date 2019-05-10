@@ -464,7 +464,7 @@ namespace xet
         /// 
         /// @throws result_t
         inline FreqDomain*
-        GetFreqDomainHandle(
+        GetFreqDomain(
             uint32_t ordinal                                ///< [in] frequency domain index [0 .. ::PowerGetFreqDomainCount - 1]
             );
 
