@@ -51,6 +51,23 @@ int main() {
                                                            warm_up_iteration,
                                                            measure_iteration);
     std::cout << std::endl;
+
+    std::cout << "xeCommandListAppendLaunchFunction:"
+              << "\tWarm up iterations " << warm_up_iteration
+              << "\tMeasured iterations " << measure_iteration
+              << std::endl;
+    warm_up_iteration = 142;
+    measure_iteration = 567;
+    xe_api_benchmarks::latency::launch_function_no_parameter(&nano_benchmarks,
+							     warm_up_iteration,
+							     measure_iteration);
+    xe_api_benchmarks::hardware_counter::launch_function_no_parameter(
+							 &nano_benchmarks,
+							 warm_up_iteration,
+							 measure_iteration);
+
+    std::cout << std::endl;
+
     api_static_probe_cleanup();
 
     return 0;

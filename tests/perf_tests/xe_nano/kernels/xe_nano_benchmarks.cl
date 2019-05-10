@@ -36,3 +36,6 @@ kernel void function_parameter_image(image2d_t input_a, image2d_t input_b,
                                      image2d_t input_c, image2d_t input_d,
                                      image2d_t input_e, image2d_t input_f) {
 }
+
+kernel void function_no_parameter() {
+}

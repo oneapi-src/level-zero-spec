@@ -45,11 +45,13 @@ namespace xe_api_benchmarks {
 #define NANO_PROBE PROBE_MEASURE_LATENCY_ITERATION
 namespace latency {
 #include "benchmark_template/set_parameter.cpp"
+#include "benchmark_template/command_list.cpp"
 } /* namespace latency */
 
 #undef NANO_PROBE
 #define NANO_PROBE PROBE_MEASURE_HARDWARE_COUNTERS
 namespace hardware_counter {
 #include "benchmark_template/set_parameter.cpp"
+#include "benchmark_template/command_list.cpp"
 } /* namespace hardware_counter */
 } /* namespace xe_api_benchmarks */

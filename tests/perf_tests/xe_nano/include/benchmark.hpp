@@ -35,9 +35,11 @@ inline void cleanup() {
 
 namespace latency {
 #include "benchmark_template/set_parameter.hpp"
+#include "benchmark_template/command_list.hpp"
 } /* namespace latency */
 namespace hardware_counter {
 #include "benchmark_template/set_parameter.hpp"
+#include "benchmark_template/command_list.hpp"
 } /* namespace hardware_counter */
 } /* namespace xe_api_benchmarks */
 
