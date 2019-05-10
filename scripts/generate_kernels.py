@@ -5,7 +5,7 @@ import re
 
 copyKernelNames = ['copyBufferToBufferBytes']
 copyKernelFiles = ['copy_buffer_to_buffer_bytes']
-kernelsLoc = "../core/source/kernels/"
+kernelsLoc = "../source/core/kernels/"
 
 def create_kernels():
     for k in range(len(copyKernelNames)):
@@ -47,18 +47,19 @@ def create_kernels():
                 else:
 
                     # Create an HPP file with the SPIR-V file's content
+                    spirvTxtFile.write("// Auto-generated header; see scripts/generate_kernels.py\n");
                     spirvTxtFile.write("#pragma once\n\n");
                     spirvFileSize=os.fstat(spirvFile.fileno()).st_size
 
                     i = 0
-                    spirvTxtFile.write("unsigned char spirv_%s[] = {" % (kernelName));
+                    spirvTxtFile.write("static const unsigned char spirv_%s[] = {" % (kernelName));
                     c = spirvFile.read(1)
                     while c:
                         s = "%x" % ord(c)
 
                         if i == 0:
                             spirvTxtFile.write("0x");
-                        elif i < spirvFileSize - 1:
+                        else:
                             spirvTxtFile.write(", 0x");
 
                         spirvTxtFile.write(s)
@@ -68,7 +69,7 @@ def create_kernels():
                         i = i + 1
 
                     spirvTxtFile.write("};\n")
-                    spirvTxtFile.write("uint32_t size_%s = %d;\n" % (kernelName, spirvFileSize));
+                    spirvTxtFile.write("constexpr uint32_t size_%s = %d;\n" % (kernelName, spirvFileSize));
                     spirvTxtFile.close()
                     spirvFile.close()
 
