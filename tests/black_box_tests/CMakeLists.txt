@@ -16,6 +16,8 @@ set (TEST_TARGETS
     xello_world_icd #ICD loader enabled xelloWorld applicaton
     xello_world_icd_clang #ICD loader enabled xelloWorld applicaton using clang in runtime
     xello_spirv #X -> spirV compilation
+#    xello_events # Testing basic event APIs. Disable for now as it fails to
+                  # output AUB file (SetCommandStreamReceiver=1) but works on Fulsim and Gen9.
 )
 
 foreach(TEST ${TEST_TARGETS})
