@@ -1,7 +1,7 @@
 /*
  * Copyright(c) 2019 Intel Corporation
  *
- * Permission is hereby granted, free of charge, to any person obtaining input_a copy
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
@@ -23,7 +23,6 @@
 void launch_function_no_parameter(XeApp *benchmark, int warm_up_iteration,
 				  int measure_iteration) {
     xe_function_handle_t function;
-    int input_a = 1;
     xe_command_list_handle_t command_list;
     benchmark->commandListCreate(&command_list);
 
@@ -41,10 +40,30 @@ void launch_function_no_parameter(XeApp *benchmark, int warm_up_iteration,
 					  nullptr, 0, nullptr);
     }
 
-    NANO_PROBE("  ", measure_iteration,
+    NANO_PROBE(" Function with no parameters\t", measure_iteration,
 	       xeCommandListAppendLaunchFunction, command_list, function,
 	       &thread_group_dimensions, nullptr, 0, nullptr);
 
     benchmark->functionDestroy(function);
+    benchmark->commandListDestroy(command_list);
+}
+
+void command_list_empty_execute(XeApp *benchmark, int warm_up_iteration,
+				int measure_iteration) {
+    xe_command_list_handle_t command_list;
+
+    benchmark->commandListCreate(&command_list);
+    benchmark->commandListClose(command_list);
+
+    /* Warm up */
+    for (int i = 0; i < warm_up_iteration; i++) {
+	xeCommandQueueExecuteCommandLists(benchmark->command_queue, 1,
+					  &command_list, nullptr);
+    }
+
+    NANO_PROBE(" Empty command list\t", measure_iteration,
+	       xeCommandQueueExecuteCommandLists, benchmark->command_queue, 1,
+	       &command_list, nullptr);
+
     benchmark->commandListDestroy(command_list);
 }
