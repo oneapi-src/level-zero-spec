@@ -29,9 +29,9 @@
 *
 ******************************************************************************/
 #if defined(XEX_CPP)
-#include "../include/xex_cmdgraph.hpp"
+#include "xex_cmdgraph.hpp"
 #else
-#include "../include/xex_cmdgraph.h"
+#include "xex_cmdgraph.h"
 #endif
 #if !defined(XEX_NULLDRV)
 #include "cmdgraph.h"

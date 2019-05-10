@@ -64,7 +64,7 @@ def generate_include_all(path, namespace, tags, files, type):
     generates c/c++ include files from the specification documents
 """
 def generate_cpp_include(path, namespace, tags, specs, meta):
-    cpp_path = os.path.join(path, "include")
+    cpp_path = os.path.join("../include", path)
     util.makePath(cpp_path)
     util.removeFiles(cpp_path, "*.h")
     util.removeFiles(cpp_path, "*.hpp")
@@ -84,7 +84,7 @@ def generate_cpp_include(path, namespace, tags, specs, meta):
     generates c/c++ source files from the specification documents
 """
 def generate_cpp_source(path, namespace, tags, specs, meta):
-    cpp_path = os.path.join(path, "source")
+    cpp_path = os.path.join("../source", path)
     util.makePath(cpp_path)
     util.removeFiles(cpp_path, "%s_*.cpp"%namespace)
 

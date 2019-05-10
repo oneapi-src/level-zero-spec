@@ -29,9 +29,9 @@
 *
 ******************************************************************************/
 #if defined(XET_CPP)
-#include "../include/xet_device.hpp"
+#include "xet_device.hpp"
 #else
-#include "../include/xet_device.h"
+#include "xet_device.h"
 #endif
 #if !defined(XET_NULLDRV)
 #include "device.h"

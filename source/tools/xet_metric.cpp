@@ -29,9 +29,9 @@
 *
 ******************************************************************************/
 #if defined(XET_CPP)
-#include "../include/xet_metric.hpp"
+#include "xet_metric.hpp"
 #else
-#include "../include/xet_metric.h"
+#include "xet_metric.h"
 #endif
 #if !defined(XET_NULLDRV)
 #include "metric.h"

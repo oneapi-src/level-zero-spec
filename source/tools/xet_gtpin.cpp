@@ -29,9 +29,9 @@
 *
 ******************************************************************************/
 #if defined(XET_CPP)
-#include "../include/xet_gtpin.hpp"
+#include "xet_gtpin.hpp"
 #else
-#include "../include/xet_gtpin.h"
+#include "xet_gtpin.h"
 #endif
 #if !defined(XET_NULLDRV)
 #include "gtpin.h"

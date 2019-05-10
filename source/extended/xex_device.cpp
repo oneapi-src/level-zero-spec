@@ -29,9 +29,9 @@
 *
 ******************************************************************************/
 #if defined(XEX_CPP)
-#include "../include/xex_device.hpp"
+#include "xex_device.hpp"
 #else
-#include "../include/xex_device.h"
+#include "xex_device.h"
 #endif
 #if !defined(XEX_NULLDRV)
 #include "device.h"

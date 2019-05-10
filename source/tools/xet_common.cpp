@@ -29,9 +29,9 @@
 *
 ******************************************************************************/
 #if defined(XET_CPP)
-#include "../include/xet_common.hpp"
+#include "xet_common.hpp"
 #else
-#include "../include/xet_common.h"
+#include "xet_common.h"
 #endif
 #if !defined(XET_NULLDRV)
 #include "common.h"

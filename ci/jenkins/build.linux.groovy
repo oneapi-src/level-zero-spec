@@ -83,15 +83,15 @@ popd
 				sh """\
 cd scripts
 python3 run.py --html
-# cd ../latex
-# make
+cd ../latex
+make
 """
 			}
 			archiveArtifacts "ubuntu18/*.deb"
 			archiveArtifacts "ubuntu18/*.zip"
-			// dir('latex') {
-			//	archiveArtifacts "*.pdf"
-			//}
+			dir('latex') {
+				archiveArtifacts "*.pdf"
+			}
 
 			//generate apt_get config when componentModel is specified
 			if(componentModel != null) {

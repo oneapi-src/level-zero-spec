@@ -94,6 +94,7 @@ Entry-point:
 """
 def generate_md(srcpath, dstpath, tags, meta):
     loc = 0
+    dstpath = os.path.join("../include", dstpath)
     util.makePath(dstpath)
     util.removeFiles(dstpath, "*.md")
     for fin in util.findFiles(srcpath, "*.md"):

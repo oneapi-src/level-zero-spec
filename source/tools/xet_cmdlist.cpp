@@ -29,9 +29,9 @@
 *
 ******************************************************************************/
 #if defined(XET_CPP)
-#include "../include/xet_cmdlist.hpp"
+#include "xet_cmdlist.hpp"
 #else
-#include "../include/xet_cmdlist.h"
+#include "xet_cmdlist.h"
 #endif
 #if !defined(XET_NULLDRV)
 #include "cmdlist.h"

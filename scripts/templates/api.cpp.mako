@@ -38,9 +38,9 @@ from templates import helper as th
 *
 ******************************************************************************/
 #if defined(${N}_CPP)
-#include "../include/${n}_${name}.hpp"
+#include "${n}_${name}.hpp"
 #else
-#include "../include/${n}_${name}.h"
+#include "${n}_${name}.h"
 #endif
 #if !defined(${N}_NULLDRV)
 #include "${name}.h"

@@ -29,9 +29,9 @@
 *
 ******************************************************************************/
 #if defined(XEX_CPP)
-#include "../include/xex_common.hpp"
+#include "xex_common.hpp"
 #else
-#include "../include/xex_common.h"
+#include "xex_common.h"
 #endif
 #if !defined(XEX_NULLDRV)
 #include "common.h"

@@ -7,7 +7,7 @@ Entry-point:
     generates icd loader for level_zero driver
 """
 def generate(namespace, tags, specs, meta):
-    loader_path = "../icd_loader" #todo: move to ini
+    loader_path = "../source/loader" #todo: move to ini
     util.makePath(loader_path)
     util.removeFiles(loader_path, "*.h")
 
@@ -20,20 +20,20 @@ def generate(namespace, tags, specs, meta):
     for s in specs:
         mergedSpec['objects'] = mergedSpec['objects'] + s['objects']
 
-    print("Generating %s..."%os.path.join(loader_path, "icd_loader.h"))
+    print("Generating %s..."%os.path.join(loader_path, "loader.h"))
     loc += util.makoWrite(
-        os.path.join("templates", "icd_loader.h.mako"),
-        os.path.join(loader_path, "icd_loader.h"),
+        os.path.join("templates", "loader.h.mako"),
+        os.path.join(loader_path, "loader.h"),
         namespace=namespace,
         tags=tags,
         name = mergedSpec['name'],
         header = mergedSpec['header'],
         objects = mergedSpec['objects'])
 
-    print("Generating %s..."%os.path.join(loader_path, "icd_loader.cpp"))
+    print("Generating %s..."%os.path.join(loader_path, "loader.cpp"))
     loc += util.makoWrite(
-        os.path.join("templates", "icd_loader.cpp.mako"),
-        os.path.join(loader_path, "icd_loader.cpp"),
+        os.path.join("templates", "loader.cpp.mako"),
+        os.path.join(loader_path, "loader.cpp"),
         namespace=namespace,
         tags=tags,
         name = mergedSpec['name'],

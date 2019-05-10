@@ -27,14 +27,14 @@ from templates import helper as th
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file icd_loader.cpp
+* @file loader.cpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/icd_loader.cpp.mako
+* DO NOT EDIT: generated from /scripts/templates/loader.cpp.mako
 * @endcond
 *
 ******************************************************************************/
-#include "icd_loader.h"
+#include "loader.h"
 
 #include <cassert>
 #include <mutex>

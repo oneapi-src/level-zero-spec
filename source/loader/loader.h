@@ -21,10 +21,10 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file icd_loader.h
+* @file loader.h
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/icd_loader.h.mako
+* DO NOT EDIT: generated from /scripts/templates/loader.h.mako
 * @endcond
 *
 ******************************************************************************/
