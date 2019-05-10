@@ -9,10 +9,7 @@ Tools can be acquired via instructions in [third_party](/third_party/README.md).
 
 # Building
 Project is defined using [CMake](https://cmake.org/).
-Build using "runtime" branch:
-~~~~
-git checkout runtime
-~~~~
+
 
 **Windows**:
 Generating Visual Studio Project.  EXE and binaries will be in **build/bin/{build_config}**
@@ -20,6 +17,7 @@ Generating Visual Studio Project.  EXE and binaries will be in **build/bin/{buil
 mkdir build
 cd build
 cmake {path_to_source_dir} -G "Visual Studio 15 2017 Win64"
+cmake --build .
 ~~~~
 
 **Linux**:
