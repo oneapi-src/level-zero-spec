@@ -308,7 +308,7 @@ namespace xet
         /// @throws result_t
         inline static Power*
         Create(
-            xe::Device* hDevice,                            ///< [in] handle of the device object
+            xe::Device* pDevice,                            ///< [in] pointer to the device object
             uint32_t flags                                  ///< [in] bitfield of ::power_init_flags_t
             );
 
@@ -322,7 +322,7 @@ namespace xet
         /// @throws result_t
         inline static void
         Destroy(
-            Power* hPower                                   ///< [in] handle of the power object to destroy
+            Power* pPower                                   ///< [in] pointer to the power object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////

@@ -114,7 +114,7 @@ namespace xe
         /// @throws result_t
         inline static EventPool*
         Create(
-            Device* hDevice,                                ///< [in] handle of the device
+            Device* pDevice,                                ///< [in] pointer to the device
             const desc_t* desc                              ///< [in] pointer to event pool descriptor
             );
 
@@ -135,7 +135,7 @@ namespace xe
         /// @throws result_t
         inline static void
         Destroy(
-            EventPool* hEventPool                           ///< [in] handle of event pool object to destroy
+            EventPool* pEventPool                           ///< [in] pointer to event pool object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -175,8 +175,8 @@ namespace xe
         /// @throws result_t
         inline static EventPool*
         OpenIpcHandle(
-            Device* hDevice,                                ///< [in] handle of the device to associate with the IPC event pool handle
-            ipc_event_pool_handle_t hIpc                    ///< [in] IPC event handle
+            Device* pDevice,                                ///< [in] pointer to the device to associate with the IPC event pool handle
+            ipc_event_pool_handle_t pIpc                    ///< [in] IPC event handle
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -286,7 +286,7 @@ namespace xe
         /// @throws result_t
         inline static Event*
         Create(
-            EventPool* hEventPool,                          ///< [in] handle of the event pool
+            EventPool* pEventPool,                          ///< [in] pointer to the event pool
             const desc_t* desc                              ///< [in] pointer to event descriptor
             );
 
@@ -310,7 +310,7 @@ namespace xe
         /// @throws result_t
         inline static void
         Destroy(
-            Event* hEvent                                   ///< [in] handle of event object to destroy
+            Event* pEvent                                   ///< [in] pointer to event object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////

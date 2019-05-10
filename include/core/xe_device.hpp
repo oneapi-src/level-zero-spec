@@ -411,7 +411,7 @@ namespace xe
         /// @throws result_t
         inline p2p_properties_t
         GetP2PProperties(
-            Device* hPeerDevice                             ///< [in] handle of the peer device with the allocation
+            Device* pPeerDevice                             ///< [in] pointer to the peer device with the allocation
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -430,7 +430,7 @@ namespace xe
         /// @throws result_t
         inline bool_t
         CanAccessPeer(
-            Device* hPeerDevice                             ///< [in] handle of the peer device with the allocation
+            Device* pPeerDevice                             ///< [in] pointer to the peer device with the allocation
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -567,7 +567,7 @@ namespace xe
         /// @throws result_t
         inline void
         MakeImageResident(
-            Image* hImage                                   ///< [in] handle of image to make resident
+            Image* pImage                                   ///< [in] pointer to image to make resident
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -583,7 +583,7 @@ namespace xe
         /// @throws result_t
         inline void
         EvictImage(
-            Image* hImage                                   ///< [in] handle of image to make evict
+            Image* pImage                                   ///< [in] pointer to image to make evict
             );
 
     };

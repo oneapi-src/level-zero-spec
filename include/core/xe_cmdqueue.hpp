@@ -152,7 +152,7 @@ namespace xe
         /// @throws result_t
         inline static CommandQueue*
         Create(
-            Device* hDevice,                                ///< [in] handle of the device object
+            Device* pDevice,                                ///< [in] pointer to the device object
             const desc_t* desc                              ///< [in] pointer to command queue descriptor
             );
 
@@ -175,7 +175,7 @@ namespace xe
         /// @throws result_t
         inline static void
         Destroy(
-            CommandQueue* hCommandQueue                     ///< [in] handle of command queue object to destroy
+            CommandQueue* pCommandQueue                     ///< [in] pointer to command queue object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -193,7 +193,7 @@ namespace xe
         ExecuteCommandLists(
             uint32_t numCommandLists,                       ///< [in] number of command lists to execute
             CommandList* phCommandLists,                    ///< [in] list of handles of the command lists to execute
-            Fence* hFence = nullptr                         ///< [in][optional] handle of the fence to signal on completion
+            Fence* pFence = nullptr                         ///< [in][optional] pointer to the fence to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////

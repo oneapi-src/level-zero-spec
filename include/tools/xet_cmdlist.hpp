@@ -74,7 +74,7 @@ namespace xet
         /// @throws result_t
         inline void
         AppendMetricTracerMarker(
-            MetricTracer* hMetricTracer,                    ///< [in] handle of the metric tracer
+            MetricTracer* pMetricTracer,                    ///< [in] pointer to the metric tracer
             uint32_t value                                  ///< [in] tracer marker value
             );
 
@@ -87,7 +87,7 @@ namespace xet
         /// @throws result_t
         inline void
         AppendMetricQueryBegin(
-            MetricQuery* hMetricQuery                       ///< [in] handle of the metric query
+            MetricQuery* pMetricQuery                       ///< [in] pointer to the metric query
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -99,8 +99,8 @@ namespace xet
         /// @throws result_t
         inline void
         AppendMetricQueryEnd(
-            MetricQuery* hMetricQuery,                      ///< [in] handle of the metric query
-            xe::Event* hCompletionEvent                     ///< [in] handle of the completion event to signal
+            MetricQuery* pMetricQuery,                      ///< [in] pointer to the metric query
+            xe::Event* pCompletionEvent                     ///< [in] pointer to the completion event to signal
             );
 
         ///////////////////////////////////////////////////////////////////////////////

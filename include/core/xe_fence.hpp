@@ -115,7 +115,7 @@ namespace xe
         /// @throws result_t
         inline static Fence*
         Create(
-            CommandQueue* hCommandQueue,                    ///< [in] handle of command queue
+            CommandQueue* pCommandQueue,                    ///< [in] pointer to command queue
             const desc_t* desc                              ///< [in] pointer to fence descriptor
             );
 
@@ -137,7 +137,7 @@ namespace xe
         /// @throws result_t
         inline static void
         Destroy(
-            Fence* hFence                                   ///< [in] handle of fence object to destroy
+            Fence* pFence                                   ///< [in] pointer to fence object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////

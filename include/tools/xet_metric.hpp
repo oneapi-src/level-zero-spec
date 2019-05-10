@@ -188,7 +188,7 @@ namespace xet
         /// @throws result_t
         inline static uint32_t
         GetCount(
-            xe::Device* hDevice                             ///< [in] handle of the device object
+            xe::Device* pDevice                             ///< [in] pointer to the device object
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -202,7 +202,7 @@ namespace xet
         /// @throws result_t
         inline static MetricGroup*
         Get(
-            xe::Device* hDevice,                            ///< [in] handle of the device
+            xe::Device* pDevice,                            ///< [in] pointer to the device
             uint32_t ordinal                                ///< [in] metric group index
             );
 
@@ -317,7 +317,7 @@ namespace xet
         /// @throws result_t
         inline static Metric*
         Get(
-            MetricGroup* hMetricGroup,                      ///< [in] handle of the metric group
+            MetricGroup* pMetricGroup,                      ///< [in] pointer to the metric group
             uint32_t ordinal                                ///< [in] metric index
             );
 
@@ -399,9 +399,9 @@ namespace xet
         /// @throws result_t
         inline static MetricTracer*
         Open(
-            xe::Device* hDevice,                            ///< [in] handle of the device
+            xe::Device* pDevice,                            ///< [in] pointer to the device
             desc_t* pDesc,                                  ///< [in,out] metric tracer descriptor
-            xe::Event* hNotificationEvent                   ///< [in] event used for report availability notification. Must be device
+            xe::Event* pNotificationEvent                   ///< [in] event used for report availability notification. Must be device
                                                             ///< to host type.
             );
 
@@ -501,7 +501,7 @@ namespace xet
         /// @throws result_t
         inline static MetricQueryPool*
         Create(
-            xe::Device* hDevice,                            ///< [in] handle of the device
+            xe::Device* pDevice,                            ///< [in] pointer to the device
             desc_t* pDesc                                   ///< [in] metric query pool creation data
             );
 
@@ -514,7 +514,7 @@ namespace xet
         /// @throws result_t
         inline static void
         Destroy(
-            MetricQueryPool* hMetricQueryPool               ///< [in] handle of the metric query pool
+            MetricQueryPool* pMetricQueryPool               ///< [in] pointer to the metric query pool
             );
 
         ///////////////////////////////////////////////////////////////////////////////

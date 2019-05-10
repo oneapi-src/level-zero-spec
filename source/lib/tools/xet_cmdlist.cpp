@@ -44,11 +44,11 @@ namespace xet
     /// @throws result_t
     inline void 
     CommandList::AppendMetricTracerMarker(
-        MetricTracer* hMetricTracer,                    ///< [in] handle of the metric tracer
+        MetricTracer* pMetricTracer,                    ///< [in] pointer to the metric tracer
         uint32_t value                                  ///< [in] tracer marker value
         )
     {
-        // auto result = ::xetCommandListAppendMetricTracerMarker( handle, hMetricTracer, value );
+        // auto result = ::xetCommandListAppendMetricTracerMarker( handle, pMetricTracer, value );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::CommandList::AppendMetricTracerMarker");
     }
 
@@ -62,10 +62,10 @@ namespace xet
     /// @throws result_t
     inline void 
     CommandList::AppendMetricQueryBegin(
-        MetricQuery* hMetricQuery                       ///< [in] handle of the metric query
+        MetricQuery* pMetricQuery                       ///< [in] pointer to the metric query
         )
     {
-        // auto result = ::xetCommandListAppendMetricQueryBegin( handle, hMetricQuery );
+        // auto result = ::xetCommandListAppendMetricQueryBegin( handle, pMetricQuery );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::CommandList::AppendMetricQueryBegin");
     }
 
@@ -79,11 +79,11 @@ namespace xet
     /// @throws result_t
     inline void 
     CommandList::AppendMetricQueryEnd(
-        MetricQuery* hMetricQuery,                      ///< [in] handle of the metric query
-        xe::Event* hCompletionEvent                     ///< [in] handle of the completion event to signal
+        MetricQuery* pMetricQuery,                      ///< [in] pointer to the metric query
+        xe::Event* pCompletionEvent                     ///< [in] pointer to the completion event to signal
         )
     {
-        // auto result = ::xetCommandListAppendMetricQueryEnd( handle, hMetricQuery, hCompletionEvent );
+        // auto result = ::xetCommandListAppendMetricQueryEnd( handle, pMetricQuery, pCompletionEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::CommandList::AppendMetricQueryEnd");
     }
 

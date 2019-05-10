@@ -391,10 +391,13 @@ def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None, for
         init = ""
 
         if cpp:
+            is_handle = re.match(r".*handle_t", item['type'])
+            if is_handle:
+                name = re.sub(r"\bh([A-Z]\w+)", r"p\1", name) # change "hName" to "pName"
+
             is_optional = re.match(r".*\[optional\].*", item['desc'])
             if decl and is_optional:
                 is_pointer = re.match(r".*\w+\*+", item['type'])
-                is_handle = re.match(r".*handle_t", item['type'])
                 if is_pointer or is_handle:
                     init += "= nullptr"
                 else:
@@ -414,7 +417,10 @@ def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None, for
                 prologue += ","
 
         if "desc" in format:
-            for line in split_line(subt(namespace, tags, item['desc'], True, cpp), 70):
+            desc = item['desc']
+            if cpp:
+                desc = re.sub(r"handle of", r"pointer to", desc)
+            for line in split_line(subt(namespace, tags, desc, True, cpp), 70):
                 lines.append("%s///< %s"%(append_ws(prologue, 48), line))
                 prologue = ""
         else:

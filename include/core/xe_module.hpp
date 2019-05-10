@@ -134,9 +134,9 @@ namespace xe
         /// @throws result_t
         inline static Module*
         Create(
-            Device* hDevice,                                ///< [in] handle of the device
+            Device* pDevice,                                ///< [in] pointer to the device
             const desc_t* pDesc,                            ///< [in] pointer to module descriptor
-            ModuleBuildLog* phBuildLog = nullptr            ///< [in,out][optional] pointer to handle of module's build log.
+            ModuleBuildLog* phBuildLog = nullptr            ///< [in,out][optional] pointer to pointer to module's build log.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -157,7 +157,7 @@ namespace xe
         /// @throws result_t
         inline static void
         Destroy(
-            Module* hModule                                 ///< [in] handle of the module
+            Module* pModule                                 ///< [in] pointer to the module
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -326,7 +326,7 @@ namespace xe
         /// @throws result_t
         inline static Function*
         Create(
-            Module* hModule,                                ///< [in] handle of the module
+            Module* pModule,                                ///< [in] pointer to the module
             const desc_t* pDesc                             ///< [in] pointer to function descriptor
             );
 
@@ -344,7 +344,7 @@ namespace xe
         /// @throws result_t
         inline static void
         Destroy(
-            Function* hFunction                             ///< [in] handle of the function object
+            Function* pFunction                             ///< [in] pointer to the function object
             );
 
         ///////////////////////////////////////////////////////////////////////////////

@@ -75,12 +75,12 @@ namespace xe
     /// @throws result_t
     inline Module* 
     Module::Create(
-        Device* hDevice,                                ///< [in] handle of the device
+        Device* pDevice,                                ///< [in] pointer to the device
         const desc_t* pDesc,                            ///< [in] pointer to module descriptor
-        ModuleBuildLog* phBuildLog                      ///< [in,out][optional] pointer to handle of module's build log.
+        ModuleBuildLog* phBuildLog                      ///< [in,out][optional] pointer to pointer to module's build log.
         )
     {
-        // auto result = ::xeModuleCreate( handle, hDevice, pDesc, phBuildLog );
+        // auto result = ::xeModuleCreate( handle, pDevice, pDesc, phBuildLog );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::Create");
     }
 
@@ -103,10 +103,10 @@ namespace xe
     /// @throws result_t
     inline void 
     Module::Destroy(
-        Module* hModule                                 ///< [in] handle of the module
+        Module* pModule                                 ///< [in] pointer to the module
         )
     {
-        // auto result = ::xeModuleDestroy( handle, hModule );
+        // auto result = ::xeModuleDestroy( handle, pModule );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::Destroy");
     }
 
@@ -206,11 +206,11 @@ namespace xe
     /// @throws result_t
     inline Function* 
     Function::Create(
-        Module* hModule,                                ///< [in] handle of the module
+        Module* pModule,                                ///< [in] pointer to the module
         const desc_t* pDesc                             ///< [in] pointer to function descriptor
         )
     {
-        // auto result = ::xeFunctionCreate( handle, hModule, pDesc );
+        // auto result = ::xeFunctionCreate( handle, pModule, pDesc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Function::Create");
     }
 
@@ -229,10 +229,10 @@ namespace xe
     /// @throws result_t
     inline void 
     Function::Destroy(
-        Function* hFunction                             ///< [in] handle of the function object
+        Function* pFunction                             ///< [in] pointer to the function object
         )
     {
-        // auto result = ::xeFunctionDestroy( handle, hFunction );
+        // auto result = ::xeFunctionDestroy( handle, pFunction );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Function::Destroy");
     }
 

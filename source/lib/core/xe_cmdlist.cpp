@@ -58,11 +58,11 @@ namespace xe
     /// @throws result_t
     inline CommandList* 
     CommandList::Create(
-        Device* hDevice,                                ///< [in] handle of the device object
+        Device* pDevice,                                ///< [in] pointer to the device object
         const desc_t* desc                              ///< [in] pointer to command list descriptor
         )
     {
-        // auto result = ::xeCommandListCreate( handle, hDevice, desc );
+        // auto result = ::xeCommandListCreate( handle, pDevice, desc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::Create");
     }
 
@@ -81,11 +81,11 @@ namespace xe
     /// @throws result_t
     inline CommandList* 
     CommandList::CreateImmediate(
-        Device* hDevice,                                ///< [in] handle of the device object
+        Device* pDevice,                                ///< [in] pointer to the device object
         const CommandQueue::desc_t* desc                ///< [in] pointer to command queue descriptor
         )
     {
-        // auto result = ::xeCommandListCreateImmediate( handle, hDevice, desc );
+        // auto result = ::xeCommandListCreateImmediate( handle, pDevice, desc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::CreateImmediate");
     }
 
@@ -104,10 +104,10 @@ namespace xe
     /// @throws result_t
     inline void 
     CommandList::Destroy(
-        CommandList* hCommandList                       ///< [in] handle of command list object to destroy
+        CommandList* pCommandList                       ///< [in] pointer to command list object to destroy
         )
     {
-        // auto result = ::xeCommandListDestroy( handle, hCommandList );
+        // auto result = ::xeCommandListDestroy( handle, pCommandList );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::Destroy");
     }
 
@@ -265,13 +265,13 @@ namespace xe
     /// @throws result_t
     inline void 
     CommandList::AppendBarrier(
-        Event* hSignalEvent,                            ///< [in][optional] handle of the event to signal on completion
+        Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
-        Event* phWaitEvents                             ///< [in][optional] handle of the events to wait on before executing
+        Event* phWaitEvents                             ///< [in][optional] pointer to the events to wait on before executing
                                                         ///< barrier
         )
     {
-        // auto result = ::xeCommandListAppendBarrier( handle, hSignalEvent, numWaitEvents, phWaitEvents );
+        // auto result = ::xeCommandListAppendBarrier( handle, pSignalEvent, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendBarrier");
     }
 
@@ -297,13 +297,13 @@ namespace xe
         uint32_t numRanges,                             ///< [in] number of memory ranges
         const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
         const void** pRanges,                           ///< [in] array of memory ranges
-        Event* hSignalEvent,                            ///< [in][optional] handle of the event to signal on completion
+        Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
-        Event* phWaitEvents                             ///< [in][optional] handle of the events to wait on before executing
+        Event* phWaitEvents                             ///< [in][optional] pointer to the events to wait on before executing
                                                         ///< barrier
         )
     {
-        // auto result = ::xeCommandListAppendMemoryRangesBarrier( handle, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents );
+        // auto result = ::xeCommandListAppendMemoryRangesBarrier( handle, numRanges, pRangeSizes, pRanges, pSignalEvent, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemoryRangesBarrier");
     }
 
@@ -330,12 +330,12 @@ namespace xe
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
         size_t size,                                    ///< [in] size in bytes to copy
-        Event* hSignalEvent,                            ///< [in][optional] handle of the event to signal on completion
+        Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-        Event* phWaitEvents                             ///< [in][optional] handle of the events to wait on before copy
+        Event* phWaitEvents                             ///< [in][optional] pointer to the events to wait on before copy
         )
     {
-        // auto result = ::xeCommandListAppendMemoryCopy( handle, dstptr, srcptr, size, hSignalEvent, numWaitEvents, phWaitEvents );
+        // auto result = ::xeCommandListAppendMemoryCopy( handle, dstptr, srcptr, size, pSignalEvent, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemoryCopy");
     }
 
@@ -362,12 +362,12 @@ namespace xe
         void* ptr,                                      ///< [in] pointer to memory to initialize
         int value,                                      ///< [in] value to initialize memory to
         size_t size,                                    ///< [in] size in bytes to initailize
-        Event* hSignalEvent,                            ///< [in][optional] handle of the event to signal on completion
+        Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-        Event* phWaitEvents                             ///< [in][optional] handle of the events to wait on before copy
+        Event* phWaitEvents                             ///< [in][optional] pointer to the events to wait on before copy
         )
     {
-        // auto result = ::xeCommandListAppendMemorySet( handle, ptr, value, size, hSignalEvent, numWaitEvents, phWaitEvents );
+        // auto result = ::xeCommandListAppendMemorySet( handle, ptr, value, size, pSignalEvent, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemorySet");
     }
 
@@ -386,14 +386,14 @@ namespace xe
     /// @throws result_t
     inline void 
     CommandList::AppendImageCopy(
-        Image* hDstImage,                               ///< [in] handle of destination image to copy to
-        Image* hSrcImage,                               ///< [in] handle of source image to copy from
-        Event* hSignalEvent,                            ///< [in][optional] handle of the event to signal on completion
+        Image* pDstImage,                               ///< [in] pointer to destination image to copy to
+        Image* pSrcImage,                               ///< [in] pointer to source image to copy from
+        Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-        Event* phWaitEvents                             ///< [in][optional] handle of the events to wait on before copy
+        Event* phWaitEvents                             ///< [in][optional] pointer to the events to wait on before copy
         )
     {
-        // auto result = ::xeCommandListAppendImageCopy( handle, hDstImage, hSrcImage, hSignalEvent, numWaitEvents, phWaitEvents );
+        // auto result = ::xeCommandListAppendImageCopy( handle, pDstImage, pSrcImage, pSignalEvent, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendImageCopy");
     }
 
@@ -408,16 +408,16 @@ namespace xe
     /// @throws result_t
     inline void 
     CommandList::AppendImageCopyRegion(
-        Image* hDstImage,                               ///< [in] handle of destination image to copy to
-        Image* hSrcImage,                               ///< [in] handle of source image to copy from
+        Image* pDstImage,                               ///< [in] pointer to destination image to copy to
+        Image* pSrcImage,                               ///< [in] pointer to source image to copy from
         image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
         image_region_t* pSrcRegion,                     ///< [in][optional] source region descriptor
-        Event* hSignalEvent,                            ///< [in][optional] handle of the event to signal on completion
+        Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-        Event* phWaitEvents                             ///< [in][optional] handle of the events to wait on before copy
+        Event* phWaitEvents                             ///< [in][optional] pointer to the events to wait on before copy
         )
     {
-        // auto result = ::xeCommandListAppendImageCopyRegion( handle, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hSignalEvent, numWaitEvents, phWaitEvents );
+        // auto result = ::xeCommandListAppendImageCopyRegion( handle, pDstImage, pSrcImage, pDstRegion, pSrcRegion, pSignalEvent, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendImageCopyRegion");
     }
 
@@ -439,14 +439,14 @@ namespace xe
     inline void 
     CommandList::AppendImageCopyToMemory(
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
-        Image* hSrcImage,                               ///< [in] handle of source image to copy from
+        Image* pSrcImage,                               ///< [in] pointer to source image to copy from
         image_region_t* pSrcRegion,                     ///< [in][optional] source region descriptor
-        Event* hSignalEvent,                            ///< [in][optional] handle of the event to signal on completion
+        Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-        Event* phWaitEvents                             ///< [in][optional] handle of the events to wait on before copy
+        Event* phWaitEvents                             ///< [in][optional] pointer to the events to wait on before copy
         )
     {
-        // auto result = ::xeCommandListAppendImageCopyToMemory( handle, dstptr, hSrcImage, pSrcRegion, hSignalEvent, numWaitEvents, phWaitEvents );
+        // auto result = ::xeCommandListAppendImageCopyToMemory( handle, dstptr, pSrcImage, pSrcRegion, pSignalEvent, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendImageCopyToMemory");
     }
 
@@ -467,15 +467,15 @@ namespace xe
     /// @throws result_t
     inline void 
     CommandList::AppendImageCopyFromMemory(
-        Image* hDstImage,                               ///< [in] handle of destination image to copy to
+        Image* pDstImage,                               ///< [in] pointer to destination image to copy to
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
         image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
-        Event* hSignalEvent,                            ///< [in][optional] handle of the event to signal on completion
+        Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-        Event* phWaitEvents                             ///< [in][optional] handle of the events to wait on before copy
+        Event* phWaitEvents                             ///< [in][optional] pointer to the events to wait on before copy
         )
     {
-        // auto result = ::xeCommandListAppendImageCopyFromMemory( handle, hDstImage, srcptr, pDstRegion, hSignalEvent, numWaitEvents, phWaitEvents );
+        // auto result = ::xeCommandListAppendImageCopyFromMemory( handle, pDstImage, srcptr, pDstRegion, pSignalEvent, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendImageCopyFromMemory");
     }
 
@@ -541,13 +541,13 @@ namespace xe
     /// @throws result_t
     inline void 
     CommandList::AppendMemAdvise(
-        Device* hDevice,                                ///< [in] device associated with the memory advice
+        Device* pDevice,                                ///< [in] device associated with the memory advice
         const void* ptr,                                ///< [in] Pointer to the start of the memory range
         size_t size,                                    ///< [in] Size in bytes of the memory range
         memory_advice_t advice                          ///< [in] Memory advice for the memory range
         )
     {
-        // auto result = ::xeCommandListAppendMemAdvise( handle, hDevice, ptr, size, advice );
+        // auto result = ::xeCommandListAppendMemAdvise( handle, pDevice, ptr, size, advice );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemAdvise");
     }
 
@@ -568,10 +568,10 @@ namespace xe
     /// @throws result_t
     inline void 
     CommandList::AppendSignalEvent(
-        Event* hEvent                                   ///< [in] handle of the event
+        Event* pEvent                                   ///< [in] pointer to the event
         )
     {
-        // auto result = ::xeCommandListAppendSignalEvent( handle, hEvent );
+        // auto result = ::xeCommandListAppendSignalEvent( handle, pEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendSignalEvent");
     }
 
@@ -587,7 +587,7 @@ namespace xe
     inline void 
     CommandList::AppendWaitOnEvents(
         uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
-        Event* phEvents                                 ///< [in] handle of the events to wait on before continuing
+        Event* phEvents                                 ///< [in] pointer to the events to wait on before continuing
         )
     {
         // auto result = ::xeCommandListAppendWaitOnEvents( handle, numEvents, phEvents );
@@ -609,10 +609,10 @@ namespace xe
     /// @throws result_t
     inline void 
     CommandList::AppendEventReset(
-        Event* hEvent                                   ///< [in] handle of the event
+        Event* pEvent                                   ///< [in] pointer to the event
         )
     {
-        // auto result = ::xeCommandListAppendEventReset( handle, hEvent );
+        // auto result = ::xeCommandListAppendEventReset( handle, pEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendEventReset");
     }
 
@@ -633,14 +633,14 @@ namespace xe
     /// @throws result_t
     inline void 
     CommandList::AppendLaunchFunction(
-        Function* hFunction,                            ///< [in] handle of the function object
+        Function* pFunction,                            ///< [in] pointer to the function object
         const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] launch function arguments.
-        Event* hSignalEvent,                            ///< [in][optional] handle of the event to signal on completion
+        Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        Event* phWaitEvents                             ///< [in][optional] handle of the events to wait on before launching
+        Event* phWaitEvents                             ///< [in][optional] pointer to the events to wait on before launching
         )
     {
-        // auto result = ::xeCommandListAppendLaunchFunction( handle, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
+        // auto result = ::xeCommandListAppendLaunchFunction( handle, pFunction, pLaunchFuncArgs, pSignalEvent, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendLaunchFunction");
     }
 
@@ -664,14 +664,14 @@ namespace xe
     /// @throws result_t
     inline void 
     CommandList::AppendLaunchFunctionIndirect(
-        Function* hFunction,                            ///< [in] handle of the function object
+        Function* pFunction,                            ///< [in] pointer to the function object
         const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain launch arguments
-        Event* hSignalEvent,                            ///< [in][optional] handle of the event to signal on completion
+        Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        Event* phWaitEvents                             ///< [in][optional] handle of the events to wait on before launching
+        Event* phWaitEvents                             ///< [in][optional] pointer to the events to wait on before launching
         )
     {
-        // auto result = ::xeCommandListAppendLaunchFunctionIndirect( handle, hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+        // auto result = ::xeCommandListAppendLaunchFunctionIndirect( handle, pFunction, pLaunchArgumentsBuffer, pSignalEvent, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendLaunchFunctionIndirect");
     }
 
@@ -701,12 +701,12 @@ namespace xe
                                                         ///< number of launch arguments; must be less-than or equal-to numFunctions
         const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain a contiguous array of
                                                         ///< launch arguments
-        Event* hSignalEvent,                            ///< [in][optional] handle of the event to signal on completion
+        Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        Event* phWaitEvents                             ///< [in][optional] handle of the events to wait on before launching
+        Event* phWaitEvents                             ///< [in][optional] pointer to the events to wait on before launching
         )
     {
-        // auto result = ::xeCommandListAppendLaunchMultipleFunctionsIndirect( handle, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+        // auto result = ::xeCommandListAppendLaunchMultipleFunctionsIndirect( handle, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, pSignalEvent, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendLaunchMultipleFunctionsIndirect");
     }
 

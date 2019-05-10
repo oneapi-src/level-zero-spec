@@ -234,10 +234,10 @@ namespace xe
     /// @throws result_t
     inline Device::p2p_properties_t 
     Device::GetP2PProperties(
-        Device* hPeerDevice                             ///< [in] handle of the peer device with the allocation
+        Device* pPeerDevice                             ///< [in] pointer to the peer device with the allocation
         )
     {
-        // auto result = ::xeDeviceGetP2PProperties( handle, hPeerDevice );
+        // auto result = ::xeDeviceGetP2PProperties( handle, pPeerDevice );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetP2PProperties");
     }
 
@@ -258,10 +258,10 @@ namespace xe
     /// @throws result_t
     inline bool_t 
     Device::CanAccessPeer(
-        Device* hPeerDevice                             ///< [in] handle of the peer device with the allocation
+        Device* pPeerDevice                             ///< [in] pointer to the peer device with the allocation
         )
     {
-        // auto result = ::xeDeviceCanAccessPeer( handle, hPeerDevice );
+        // auto result = ::xeDeviceCanAccessPeer( handle, pPeerDevice );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CanAccessPeer");
     }
 
@@ -440,10 +440,10 @@ namespace xe
     /// @throws result_t
     inline void 
     Device::MakeImageResident(
-        Image* hImage                                   ///< [in] handle of image to make resident
+        Image* pImage                                   ///< [in] pointer to image to make resident
         )
     {
-        // auto result = ::xeDeviceMakeImageResident( handle, hImage );
+        // auto result = ::xeDeviceMakeImageResident( handle, pImage );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::MakeImageResident");
     }
 
@@ -461,10 +461,10 @@ namespace xe
     /// @throws result_t
     inline void 
     Device::EvictImage(
-        Image* hImage                                   ///< [in] handle of image to make evict
+        Image* pImage                                   ///< [in] pointer to image to make evict
         )
     {
-        // auto result = ::xeDeviceEvictImage( handle, hImage );
+        // auto result = ::xeDeviceEvictImage( handle, pImage );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::EvictImage");
     }
 

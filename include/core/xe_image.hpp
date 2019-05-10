@@ -238,7 +238,7 @@ namespace xe
         /// @throws result_t
         inline static properties_t
         GetProperties(
-            Device* hDevice,                                ///< [in] handle of the device
+            Device* pDevice,                                ///< [in] pointer to the device
             const desc_t* desc                              ///< [in] pointer to image descriptor
             );
 
@@ -258,7 +258,7 @@ namespace xe
         /// @throws result_t
         inline static Image*
         Create(
-            Device* hDevice,                                ///< [in] handle of the device
+            Device* pDevice,                                ///< [in] pointer to the device
             const desc_t* desc                              ///< [in] pointer to image descriptor
             );
 
@@ -276,7 +276,7 @@ namespace xe
         /// @throws result_t
         inline static void
         Destroy(
-            Image* hImage                                   ///< [in] handle of image object to destroy
+            Image* pImage                                   ///< [in] pointer to image object to destroy
             );
 
     };

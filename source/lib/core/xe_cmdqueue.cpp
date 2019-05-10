@@ -63,11 +63,11 @@ namespace xe
     /// @throws result_t
     inline CommandQueue* 
     CommandQueue::Create(
-        Device* hDevice,                                ///< [in] handle of the device object
+        Device* pDevice,                                ///< [in] pointer to the device object
         const desc_t* desc                              ///< [in] pointer to command queue descriptor
         )
     {
-        // auto result = ::xeCommandQueueCreate( handle, hDevice, desc );
+        // auto result = ::xeCommandQueueCreate( handle, pDevice, desc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandQueue::Create");
     }
 
@@ -91,10 +91,10 @@ namespace xe
     /// @throws result_t
     inline void 
     CommandQueue::Destroy(
-        CommandQueue* hCommandQueue                     ///< [in] handle of command queue object to destroy
+        CommandQueue* pCommandQueue                     ///< [in] pointer to command queue object to destroy
         )
     {
-        // auto result = ::xeCommandQueueDestroy( handle, hCommandQueue );
+        // auto result = ::xeCommandQueueDestroy( handle, pCommandQueue );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandQueue::Destroy");
     }
 
@@ -114,10 +114,10 @@ namespace xe
     CommandQueue::ExecuteCommandLists(
         uint32_t numCommandLists,                       ///< [in] number of command lists to execute
         CommandList* phCommandLists,                    ///< [in] list of handles of the command lists to execute
-        Fence* hFence                                   ///< [in][optional] handle of the fence to signal on completion
+        Fence* pFence                                   ///< [in][optional] pointer to the fence to signal on completion
         )
     {
-        // auto result = ::xeCommandQueueExecuteCommandLists( handle, numCommandLists, phCommandLists, hFence );
+        // auto result = ::xeCommandQueueExecuteCommandLists( handle, numCommandLists, phCommandLists, pFence );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandQueue::ExecuteCommandLists");
     }
 

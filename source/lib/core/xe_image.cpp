@@ -57,11 +57,11 @@ namespace xe
     /// @throws result_t
     inline Image::properties_t 
     Image::GetProperties(
-        Device* hDevice,                                ///< [in] handle of the device
+        Device* pDevice,                                ///< [in] pointer to the device
         const desc_t* desc                              ///< [in] pointer to image descriptor
         )
     {
-        // auto result = ::xeImageGetProperties( handle, hDevice, desc );
+        // auto result = ::xeImageGetProperties( handle, pDevice, desc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Image::GetProperties");
     }
 
@@ -82,11 +82,11 @@ namespace xe
     /// @throws result_t
     inline Image* 
     Image::Create(
-        Device* hDevice,                                ///< [in] handle of the device
+        Device* pDevice,                                ///< [in] pointer to the device
         const desc_t* desc                              ///< [in] pointer to image descriptor
         )
     {
-        // auto result = ::xeImageCreate( handle, hDevice, desc );
+        // auto result = ::xeImageCreate( handle, pDevice, desc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Image::Create");
     }
 
@@ -105,10 +105,10 @@ namespace xe
     /// @throws result_t
     inline void 
     Image::Destroy(
-        Image* hImage                                   ///< [in] handle of image object to destroy
+        Image* pImage                                   ///< [in] pointer to image object to destroy
         )
     {
-        // auto result = ::xeImageDestroy( handle, hImage );
+        // auto result = ::xeImageDestroy( handle, pImage );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Image::Destroy");
     }
 

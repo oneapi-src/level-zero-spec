@@ -57,11 +57,11 @@ namespace xex
     /// @throws result_t
     inline CommandGraph* 
     CommandGraph::Create(
-        xe::Device* hDevice,                            ///< [in] handle of the device object
+        xe::Device* pDevice,                            ///< [in] pointer to the device object
         const desc_t* desc                              ///< [in] pointer to command graph descriptor
         )
     {
-        // auto result = ::xexCommandGraphCreate( handle, hDevice, desc );
+        // auto result = ::xexCommandGraphCreate( handle, pDevice, desc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xex::CommandGraph::Create");
     }
 
@@ -78,10 +78,10 @@ namespace xex
     /// @throws result_t
     inline void 
     CommandGraph::Destroy(
-        CommandGraph* hCommandGraph                     ///< [in] handle of command graph object to destroy
+        CommandGraph* pCommandGraph                     ///< [in] pointer to command graph object to destroy
         )
     {
-        // auto result = ::xexCommandGraphDestroy( handle, hCommandGraph );
+        // auto result = ::xexCommandGraphDestroy( handle, pCommandGraph );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xex::CommandGraph::Destroy");
     }
 

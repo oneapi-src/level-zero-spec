@@ -61,11 +61,11 @@ namespace xet
     /// @throws result_t
     inline Power* 
     Power::Create(
-        xe::Device* hDevice,                            ///< [in] handle of the device object
+        xe::Device* pDevice,                            ///< [in] pointer to the device object
         uint32_t flags                                  ///< [in] bitfield of ::power_init_flags_t
         )
     {
-        // auto result = ::xetPowerCreate( handle, hDevice, flags );
+        // auto result = ::xetPowerCreate( handle, pDevice, flags );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::Create");
     }
 
@@ -80,10 +80,10 @@ namespace xet
     /// @throws result_t
     inline void 
     Power::Destroy(
-        Power* hPower                                   ///< [in] handle of the power object to destroy
+        Power* pPower                                   ///< [in] pointer to the power object to destroy
         )
     {
-        // auto result = ::xetPowerDestroy( handle, hPower );
+        // auto result = ::xetPowerDestroy( handle, pPower );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::Destroy");
     }
 

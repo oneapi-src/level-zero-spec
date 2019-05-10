@@ -112,7 +112,7 @@ namespace xex
         /// @throws result_t
         inline static CommandGraph*
         Create(
-            xe::Device* hDevice,                            ///< [in] handle of the device object
+            xe::Device* pDevice,                            ///< [in] pointer to the device object
             const desc_t* desc                              ///< [in] pointer to command graph descriptor
             );
 
@@ -128,7 +128,7 @@ namespace xex
         /// @throws result_t
         inline static void
         Destroy(
-            CommandGraph* hCommandGraph                     ///< [in] handle of command graph object to destroy
+            CommandGraph* pCommandGraph                     ///< [in] pointer to command graph object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////

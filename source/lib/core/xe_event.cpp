@@ -57,11 +57,11 @@ namespace xe
     /// @throws result_t
     inline EventPool* 
     EventPool::Create(
-        Device* hDevice,                                ///< [in] handle of the device
+        Device* pDevice,                                ///< [in] pointer to the device
         const desc_t* desc                              ///< [in] pointer to event pool descriptor
         )
     {
-        // auto result = ::xeEventPoolCreate( handle, hDevice, desc );
+        // auto result = ::xeEventPoolCreate( handle, pDevice, desc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::EventPool::Create");
     }
 
@@ -83,10 +83,10 @@ namespace xe
     /// @throws result_t
     inline void 
     EventPool::Destroy(
-        EventPool* hEventPool                           ///< [in] handle of event pool object to destroy
+        EventPool* pEventPool                           ///< [in] pointer to event pool object to destroy
         )
     {
-        // auto result = ::xeEventPoolDestroy( handle, hEventPool );
+        // auto result = ::xeEventPoolDestroy( handle, pEventPool );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::EventPool::Destroy");
     }
 
@@ -131,11 +131,11 @@ namespace xe
     /// @throws result_t
     inline EventPool* 
     EventPool::OpenIpcHandle(
-        Device* hDevice,                                ///< [in] handle of the device to associate with the IPC event pool handle
-        ipc_event_pool_handle_t hIpc                    ///< [in] IPC event handle
+        Device* pDevice,                                ///< [in] pointer to the device to associate with the IPC event pool handle
+        ipc_event_pool_handle_t pIpc                    ///< [in] IPC event handle
         )
     {
-        // auto result = ::xeEventPoolOpenIpcHandle( handle, hDevice, hIpc );
+        // auto result = ::xeEventPoolOpenIpcHandle( handle, pDevice, pIpc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::EventPool::OpenIpcHandle");
     }
 
@@ -191,11 +191,11 @@ namespace xe
     /// @throws result_t
     inline Event* 
     Event::Create(
-        EventPool* hEventPool,                          ///< [in] handle of the event pool
+        EventPool* pEventPool,                          ///< [in] pointer to the event pool
         const desc_t* desc                              ///< [in] pointer to event descriptor
         )
     {
-        // auto result = ::xeEventCreate( handle, hEventPool, desc );
+        // auto result = ::xeEventCreate( handle, pEventPool, desc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::Create");
     }
 
@@ -220,10 +220,10 @@ namespace xe
     /// @throws result_t
     inline void 
     Event::Destroy(
-        Event* hEvent                                   ///< [in] handle of event object to destroy
+        Event* pEvent                                   ///< [in] pointer to event object to destroy
         )
     {
-        // auto result = ::xeEventDestroy( handle, hEvent );
+        // auto result = ::xeEventDestroy( handle, pEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::Destroy");
     }
 

@@ -51,10 +51,10 @@ namespace xet
     /// @throws result_t
     inline uint32_t 
     MetricGroup::GetCount(
-        xe::Device* hDevice                             ///< [in] handle of the device object
+        xe::Device* pDevice                             ///< [in] pointer to the device object
         )
     {
-        // auto result = ::xetMetricGroupGetCount( handle, hDevice );
+        // auto result = ::xetMetricGroupGetCount( handle, pDevice );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricGroup::GetCount");
     }
 
@@ -70,11 +70,11 @@ namespace xet
     /// @throws result_t
     inline MetricGroup* 
     MetricGroup::Get(
-        xe::Device* hDevice,                            ///< [in] handle of the device
+        xe::Device* pDevice,                            ///< [in] pointer to the device
         uint32_t ordinal                                ///< [in] metric group index
         )
     {
-        // auto result = ::xetMetricGroupGet( handle, hDevice, ordinal );
+        // auto result = ::xetMetricGroupGet( handle, pDevice, ordinal );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricGroup::Get");
     }
 
@@ -138,11 +138,11 @@ namespace xet
     /// @throws result_t
     inline Metric* 
     Metric::Get(
-        MetricGroup* hMetricGroup,                      ///< [in] handle of the metric group
+        MetricGroup* pMetricGroup,                      ///< [in] pointer to the metric group
         uint32_t ordinal                                ///< [in] metric index
         )
     {
-        // auto result = ::xetMetricGet( handle, hMetricGroup, ordinal );
+        // auto result = ::xetMetricGet( handle, pMetricGroup, ordinal );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Metric::Get");
     }
 
@@ -186,13 +186,13 @@ namespace xet
     /// @throws result_t
     inline MetricTracer* 
     MetricTracer::Open(
-        xe::Device* hDevice,                            ///< [in] handle of the device
+        xe::Device* pDevice,                            ///< [in] pointer to the device
         desc_t* pDesc,                                  ///< [in,out] metric tracer descriptor
-        xe::Event* hNotificationEvent                   ///< [in] event used for report availability notification. Must be device
+        xe::Event* pNotificationEvent                   ///< [in] event used for report availability notification. Must be device
                                                         ///< to host type.
         )
     {
-        // auto result = ::xetMetricTracerOpen( handle, hDevice, pDesc, hNotificationEvent );
+        // auto result = ::xetMetricTracerOpen( handle, pDevice, pDesc, pNotificationEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricTracer::Open");
     }
 
@@ -251,11 +251,11 @@ namespace xet
     /// @throws result_t
     inline MetricQueryPool* 
     MetricQueryPool::Create(
-        xe::Device* hDevice,                            ///< [in] handle of the device
+        xe::Device* pDevice,                            ///< [in] pointer to the device
         desc_t* pDesc                                   ///< [in] metric query pool creation data
         )
     {
-        // auto result = ::xetMetricQueryPoolCreate( handle, hDevice, pDesc );
+        // auto result = ::xetMetricQueryPoolCreate( handle, pDevice, pDesc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricQueryPool::Create");
     }
 
@@ -269,10 +269,10 @@ namespace xet
     /// @throws result_t
     inline void 
     MetricQueryPool::Destroy(
-        MetricQueryPool* hMetricQueryPool               ///< [in] handle of the metric query pool
+        MetricQueryPool* pMetricQueryPool               ///< [in] pointer to the metric query pool
         )
     {
-        // auto result = ::xetMetricQueryPoolDestroy( handle, hMetricQueryPool );
+        // auto result = ::xetMetricQueryPoolDestroy( handle, pMetricQueryPool );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricQueryPool::Destroy");
     }
 

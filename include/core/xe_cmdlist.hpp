@@ -176,7 +176,7 @@ namespace xe
         /// @throws result_t
         inline static CommandList*
         Create(
-            Device* hDevice,                                ///< [in] handle of the device object
+            Device* pDevice,                                ///< [in] pointer to the device object
             const desc_t* desc                              ///< [in] pointer to command list descriptor
             );
 
@@ -195,7 +195,7 @@ namespace xe
         /// @throws result_t
         inline static CommandList*
         CreateImmediate(
-            Device* hDevice,                                ///< [in] handle of the device object
+            Device* pDevice,                                ///< [in] pointer to the device object
             const CommandQueue::desc_t* desc                ///< [in] pointer to command queue descriptor
             );
 
@@ -213,7 +213,7 @@ namespace xe
         /// @throws result_t
         inline static void
         Destroy(
-            CommandList* hCommandList                       ///< [in] handle of command list object to destroy
+            CommandList* pCommandList                       ///< [in] pointer to command list object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -341,9 +341,9 @@ namespace xe
         /// @throws result_t
         inline void
         AppendBarrier(
-            Event* hSignalEvent = nullptr,                  ///< [in][optional] handle of the event to signal on completion
+            Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before executing barrier
-            Event* phWaitEvents = nullptr                   ///< [in][optional] handle of the events to wait on before executing
+            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before executing
                                                             ///< barrier
             );
 
@@ -368,9 +368,9 @@ namespace xe
             uint32_t numRanges,                             ///< [in] number of memory ranges
             const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
             const void** pRanges,                           ///< [in] array of memory ranges
-            Event* hSignalEvent = nullptr,                  ///< [in][optional] handle of the event to signal on completion
+            Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before executing barrier
-            Event* phWaitEvents = nullptr                   ///< [in][optional] handle of the events to wait on before executing
+            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before executing
                                                             ///< barrier
             );
 
@@ -396,9 +396,9 @@ namespace xe
             void* dstptr,                                   ///< [in] pointer to destination memory to copy to
             const void* srcptr,                             ///< [in] pointer to source memory to copy from
             size_t size,                                    ///< [in] size in bytes to copy
-            Event* hSignalEvent = nullptr,                  ///< [in][optional] handle of the event to signal on completion
+            Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
-            Event* phWaitEvents = nullptr                   ///< [in][optional] handle of the events to wait on before copy
+            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before copy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -423,9 +423,9 @@ namespace xe
             void* ptr,                                      ///< [in] pointer to memory to initialize
             int value,                                      ///< [in] value to initialize memory to
             size_t size,                                    ///< [in] size in bytes to initailize
-            Event* hSignalEvent = nullptr,                  ///< [in][optional] handle of the event to signal on completion
+            Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
-            Event* phWaitEvents = nullptr                   ///< [in][optional] handle of the events to wait on before copy
+            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before copy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -442,11 +442,11 @@ namespace xe
         /// @throws result_t
         inline void
         AppendImageCopy(
-            Image* hDstImage,                               ///< [in] handle of destination image to copy to
-            Image* hSrcImage,                               ///< [in] handle of source image to copy from
-            Event* hSignalEvent = nullptr,                  ///< [in][optional] handle of the event to signal on completion
+            Image* pDstImage,                               ///< [in] pointer to destination image to copy to
+            Image* pSrcImage,                               ///< [in] pointer to source image to copy from
+            Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
-            Event* phWaitEvents = nullptr                   ///< [in][optional] handle of the events to wait on before copy
+            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before copy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -459,13 +459,13 @@ namespace xe
         /// @throws result_t
         inline void
         AppendImageCopyRegion(
-            Image* hDstImage,                               ///< [in] handle of destination image to copy to
-            Image* hSrcImage,                               ///< [in] handle of source image to copy from
+            Image* pDstImage,                               ///< [in] pointer to destination image to copy to
+            Image* pSrcImage,                               ///< [in] pointer to source image to copy from
             image_region_t* pDstRegion = nullptr,           ///< [in][optional] destination region descriptor
             image_region_t* pSrcRegion = nullptr,           ///< [in][optional] source region descriptor
-            Event* hSignalEvent = nullptr,                  ///< [in][optional] handle of the event to signal on completion
+            Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
-            Event* phWaitEvents = nullptr                   ///< [in][optional] handle of the events to wait on before copy
+            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before copy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -485,11 +485,11 @@ namespace xe
         inline void
         AppendImageCopyToMemory(
             void* dstptr,                                   ///< [in] pointer to destination memory to copy to
-            Image* hSrcImage,                               ///< [in] handle of source image to copy from
+            Image* pSrcImage,                               ///< [in] pointer to source image to copy from
             image_region_t* pSrcRegion = nullptr,           ///< [in][optional] source region descriptor
-            Event* hSignalEvent = nullptr,                  ///< [in][optional] handle of the event to signal on completion
+            Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
-            Event* phWaitEvents = nullptr                   ///< [in][optional] handle of the events to wait on before copy
+            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before copy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -508,12 +508,12 @@ namespace xe
         /// @throws result_t
         inline void
         AppendImageCopyFromMemory(
-            Image* hDstImage,                               ///< [in] handle of destination image to copy to
+            Image* pDstImage,                               ///< [in] pointer to destination image to copy to
             const void* srcptr,                             ///< [in] pointer to source memory to copy from
             image_region_t* pDstRegion = nullptr,           ///< [in][optional] destination region descriptor
-            Event* hSignalEvent = nullptr,                  ///< [in][optional] handle of the event to signal on completion
+            Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
-            Event* phWaitEvents = nullptr                   ///< [in][optional] handle of the events to wait on before copy
+            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before copy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -573,7 +573,7 @@ namespace xe
         /// @throws result_t
         inline void
         AppendMemAdvise(
-            Device* hDevice,                                ///< [in] device associated with the memory advice
+            Device* pDevice,                                ///< [in] device associated with the memory advice
             const void* ptr,                                ///< [in] Pointer to the start of the memory range
             size_t size,                                    ///< [in] Size in bytes of the memory range
             memory_advice_t advice                          ///< [in] Memory advice for the memory range
@@ -595,7 +595,7 @@ namespace xe
         /// @throws result_t
         inline void
         AppendSignalEvent(
-            Event* hEvent                                   ///< [in] handle of the event
+            Event* pEvent                                   ///< [in] pointer to the event
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -609,7 +609,7 @@ namespace xe
         inline void
         AppendWaitOnEvents(
             uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
-            Event* phEvents                                 ///< [in] handle of the events to wait on before continuing
+            Event* phEvents                                 ///< [in] pointer to the events to wait on before continuing
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -626,7 +626,7 @@ namespace xe
         /// @throws result_t
         inline void
         AppendEventReset(
-            Event* hEvent                                   ///< [in] handle of the event
+            Event* pEvent                                   ///< [in] pointer to the event
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -645,11 +645,11 @@ namespace xe
         /// @throws result_t
         inline void
         AppendLaunchFunction(
-            Function* hFunction,                            ///< [in] handle of the function object
+            Function* pFunction,                            ///< [in] pointer to the function object
             const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] launch function arguments.
-            Event* hSignalEvent = nullptr,                  ///< [in][optional] handle of the event to signal on completion
+            Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
-            Event* phWaitEvents = nullptr                   ///< [in][optional] handle of the events to wait on before launching
+            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before launching
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -671,11 +671,11 @@ namespace xe
         /// @throws result_t
         inline void
         AppendLaunchFunctionIndirect(
-            Function* hFunction,                            ///< [in] handle of the function object
+            Function* pFunction,                            ///< [in] pointer to the function object
             const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain launch arguments
-            Event* hSignalEvent = nullptr,                  ///< [in][optional] handle of the event to signal on completion
+            Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
-            Event* phWaitEvents = nullptr                   ///< [in][optional] handle of the events to wait on before launching
+            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before launching
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -704,9 +704,9 @@ namespace xe
                                                             ///< number of launch arguments; must be less-than or equal-to numFunctions
             const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain a contiguous array of
                                                             ///< launch arguments
-            Event* hSignalEvent = nullptr,                  ///< [in][optional] handle of the event to signal on completion
+            Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
-            Event* phWaitEvents = nullptr                   ///< [in][optional] handle of the events to wait on before launching
+            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before launching
             );
 
         ///////////////////////////////////////////////////////////////////////////////

@@ -61,11 +61,11 @@ namespace xe
     /// @throws result_t
     inline Fence* 
     Fence::Create(
-        CommandQueue* hCommandQueue,                    ///< [in] handle of command queue
+        CommandQueue* pCommandQueue,                    ///< [in] pointer to command queue
         const desc_t* desc                              ///< [in] pointer to fence descriptor
         )
     {
-        // auto result = ::xeFenceCreate( handle, hCommandQueue, desc );
+        // auto result = ::xeFenceCreate( handle, pCommandQueue, desc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Fence::Create");
     }
 
@@ -88,10 +88,10 @@ namespace xe
     /// @throws result_t
     inline void 
     Fence::Destroy(
-        Fence* hFence                                   ///< [in] handle of fence object to destroy
+        Fence* pFence                                   ///< [in] pointer to fence object to destroy
         )
     {
-        // auto result = ::xeFenceDestroy( handle, hFence );
+        // auto result = ::xeFenceDestroy( handle, pFence );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Fence::Destroy");
     }
 

@@ -52,14 +52,14 @@ namespace xe
     /// @throws result_t
     inline void* 
     SharedMemAlloc(
-        Device* hDevice,                                ///< [in] handle of the device
+        Device* pDevice,                                ///< [in] pointer to the device
         device_mem_alloc_flag_t device_flags,           ///< [in] flags specifying additional device allocation controls
         host_mem_alloc_flag_t host_flags,               ///< [in] flags specifying additional host allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
         )
     {
-        // auto result = ::xeSharedMemAlloc( handle, hDevice, device_flags, host_flags, size, alignment );
+        // auto result = ::xeSharedMemAlloc( handle, pDevice, device_flags, host_flags, size, alignment );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "SharedMemAlloc");
     }
 
@@ -82,13 +82,13 @@ namespace xe
     /// @throws result_t
     inline void* 
     DeviceMemAlloc(
-        Device* hDevice,                                ///< [in] handle of the device
+        Device* pDevice,                                ///< [in] pointer to the device
         device_mem_alloc_flag_t flags,                  ///< [in] flags specifying additional allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
         )
     {
-        // auto result = ::xeDeviceMemAlloc( handle, hDevice, flags, size, alignment );
+        // auto result = ::xeDeviceMemAlloc( handle, pDevice, flags, size, alignment );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "DeviceMemAlloc");
     }
 
@@ -237,12 +237,12 @@ namespace xe
     /// @throws result_t
     inline void* 
     IpcOpenMemHandle(
-        Device* hDevice,                                ///< [in] handle of the device to associate with the IPC memory handle
+        Device* pDevice,                                ///< [in] pointer to the device to associate with the IPC memory handle
         ipc_mem_handle_t handle,                        ///< [in] IPC memory handle
         ipc_memory_flag_t flags                         ///< [in] flags controlling the operation
         )
     {
-        // auto result = ::xeIpcOpenMemHandle( handle, hDevice, handle, flags );
+        // auto result = ::xeIpcOpenMemHandle( handle, pDevice, handle, flags );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "IpcOpenMemHandle");
     }
 
