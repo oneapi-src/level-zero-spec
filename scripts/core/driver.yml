@@ -56,4 +56,5 @@ name: $xDriver
 members:
     - type: void*
       name: handle
-      desc: "handle of driver module"
+      desc: "[in] handle of driver module"
+      init: nullptr

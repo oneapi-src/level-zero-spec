@@ -36,11 +36,9 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     Device::Device( 
-        Driver* pDriver,                                ///< pointer to parent object
-        device_handle_t handle                          ///< handle of device object
+        Driver* pDriver                                 ///< [in] pointer to parent object
         ) :
-        m_pDriver( pDriver ),
-        m_handle( handle )
+        m_pDriver( pDriver )
     {
     }
 

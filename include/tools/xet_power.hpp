@@ -269,11 +269,13 @@ namespace xet
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         power_handle_t m_handle;                        ///< handle of power object
+        Device* m_pDevice;                              ///< [in] pointer to parent object
 
+    public:
         ///////////////////////////////////////////////////////////////////////////////
         Power( void ) = delete;
         Power( 
-            power_handle_t handle                           ///< handle of power object
+            Device* pDevice                                 ///< [in] pointer to parent object
             );
 
         ~Power( void ) = default;
@@ -284,9 +286,9 @@ namespace xet
         Power( Power&& other ) = delete;
         void operator=( Power&& other ) = delete;
 
-    public:
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
+        auto getDevice( void ) const { return m_pDevice; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Creates an object to access power features on a device
@@ -739,11 +741,13 @@ namespace xet
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         freq_domain_handle_t m_handle;                  ///< handle of frequency domain object
+        Power* m_pPower;                                ///< [in] pointer to parent object
 
+    public:
         ///////////////////////////////////////////////////////////////////////////////
         FreqDomain( void ) = delete;
         FreqDomain( 
-            freq_domain_handle_t handle                     ///< handle of frequency domain object
+            Power* pPower                                   ///< [in] pointer to parent object
             );
 
         ~FreqDomain( void ) = default;
@@ -754,9 +758,9 @@ namespace xet
         FreqDomain( FreqDomain&& other ) = delete;
         void operator=( FreqDomain&& other ) = delete;
 
-    public:
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
+        auto getPower( void ) const { return m_pPower; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get the properties for a frequency domain

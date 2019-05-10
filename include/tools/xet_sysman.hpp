@@ -50,11 +50,13 @@ namespace xet
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         sysman_handle_t m_handle;                       ///< handle of sysman object
+        Device* m_pDevice;                              ///< [in] pointer to parent object
 
+    public:
         ///////////////////////////////////////////////////////////////////////////////
         Sysman( void ) = delete;
         Sysman( 
-            sysman_handle_t handle                          ///< handle of sysman object
+            Device* pDevice                                 ///< [in] pointer to parent object
             );
 
         ~Sysman( void ) = default;
@@ -65,9 +67,9 @@ namespace xet
         Sysman( Sysman&& other ) = delete;
         void operator=( Sysman&& other ) = delete;
 
-    public:
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
+        auto getDevice( void ) const { return m_pDevice; }
 
     };
 

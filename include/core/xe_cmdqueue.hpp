@@ -109,16 +109,16 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        Device* m_pDevice;                              ///< pointer to parent object
-        command_queue_handle_t m_handle;                ///< handle of command queue object
-        desc_t m_desc;                                  ///< descriptor of the command queue object
+        command_queue_handle_t m_handle = nullptr;      ///< handle of command queue object
+        Device* m_pDevice;                              ///< [in] pointer to parent object
+        desc_t m_desc;                                  ///< [in] descriptor of the command queue object
 
+    public:
         ///////////////////////////////////////////////////////////////////////////////
         CommandQueue( void ) = delete;
         CommandQueue( 
-            Device* pDevice,                                ///< pointer to parent object
-            command_queue_handle_t handle,                  ///< handle of command queue object
-            desc_t desc                                     ///< descriptor of the command queue object
+            Device* pDevice,                                ///< [in] pointer to parent object
+            desc_t desc                                     ///< [in] descriptor of the command queue object
             );
 
         ~CommandQueue( void ) = default;
@@ -129,10 +129,9 @@ namespace xe
         CommandQueue( CommandQueue&& other ) = delete;
         void operator=( CommandQueue&& other ) = delete;
 
-    public:
         ///////////////////////////////////////////////////////////////////////////////
-        auto getDevice( void ) const { return m_pDevice; }
         auto getHandle( void ) const { return m_handle; }
+        auto getDevice( void ) const { return m_pDevice; }
         auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////

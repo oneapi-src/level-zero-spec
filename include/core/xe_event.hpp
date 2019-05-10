@@ -77,16 +77,16 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        Device* m_pDevice;                              ///< pointer to parent object
-        event_pool_handle_t m_handle;                   ///< handle of event pool object
-        desc_t m_desc;                                  ///< descriptor of the event object
+        event_pool_handle_t m_handle = nullptr;         ///< handle of event pool object
+        Device* m_pDevice;                              ///< [in] pointer to parent object
+        desc_t m_desc;                                  ///< [in] descriptor of the event object
 
+    public:
         ///////////////////////////////////////////////////////////////////////////////
         EventPool( void ) = delete;
         EventPool( 
-            Device* pDevice,                                ///< pointer to parent object
-            event_pool_handle_t handle,                     ///< handle of event pool object
-            desc_t desc                                     ///< descriptor of the event object
+            Device* pDevice,                                ///< [in] pointer to parent object
+            desc_t desc                                     ///< [in] descriptor of the event object
             );
 
         ~EventPool( void ) = default;
@@ -97,10 +97,9 @@ namespace xe
         EventPool( EventPool&& other ) = delete;
         void operator=( EventPool&& other ) = delete;
 
-    public:
         ///////////////////////////////////////////////////////////////////////////////
-        auto getDevice( void ) const { return m_pDevice; }
         auto getHandle( void ) const { return m_handle; }
+        auto getDevice( void ) const { return m_pDevice; }
         auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -245,14 +244,14 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        EventPool* m_pEventPool;                        ///< pointer to parent object
-        event_handle_t m_handle;                        ///< handle of event object
+        event_handle_t m_handle = nullptr;              ///< handle of event object
+        EventPool* m_pEventPool;                        ///< [in] pointer to parent object
 
+    public:
         ///////////////////////////////////////////////////////////////////////////////
         Event( void ) = delete;
         Event( 
-            EventPool* pEventPool,                          ///< pointer to parent object
-            event_handle_t handle                           ///< handle of event object
+            EventPool* pEventPool                           ///< [in] pointer to parent object
             );
 
         ~Event( void ) = default;
@@ -263,10 +262,9 @@ namespace xe
         Event( Event&& other ) = delete;
         void operator=( Event&& other ) = delete;
 
-    public:
         ///////////////////////////////////////////////////////////////////////////////
-        auto getEventpool( void ) const { return m_pEventPool; }
         auto getHandle( void ) const { return m_handle; }
+        auto getEventpool( void ) const { return m_pEventPool; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Creates an event on the device.

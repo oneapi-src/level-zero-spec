@@ -86,7 +86,7 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     Driver::Driver( 
-        void* handle                                    ///< handle of driver module
+        void* handle                                    ///< [in] handle of driver module
         ) :
         m_handle( handle )
     {

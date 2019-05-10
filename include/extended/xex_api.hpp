@@ -32,8 +32,8 @@
 #if defined(__cplusplus)
 #pragma once
 
-#include "xex_cmdgraph.hpp"
 #include "xex_device.hpp"
+#include "xex_cmdgraph.hpp"
 
 #endif // defined(__cplusplus)
 #endif // _XEX_API_HPP

@@ -238,6 +238,7 @@ namespace ${n}
         ${line}
         %endfor
 
+    public:
         ## CTORS/DTORS ################################################################
         ///////////////////////////////////////////////////////////////////////////////
         ${th.make_class_name(n, tags, obj)}( void ) = delete;
@@ -259,7 +260,6 @@ namespace ${n}
         ${th.make_class_name(n, tags, obj)}( ${th.make_class_name(n, tags, obj)}&& other ) = delete;
         void operator=( ${th.make_class_name(n, tags, obj)}&& other ) = delete;
 
-    public:
         ///////////////////////////////////////////////////////////////////////////////
         %for line in th.make_member_function_lines(n, tags, obj, "m_"):
         ${line}

@@ -74,16 +74,16 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        CommandQueue* m_pCommandQueue;                  ///< pointer to parent object
-        fence_handle_t m_handle;                        ///< handle of fence object
-        desc_t m_desc;                                  ///< descriptor of the fence object
+        fence_handle_t m_handle = nullptr;              ///< handle of fence object
+        CommandQueue* m_pCommandQueue;                  ///< [in] pointer to parent object
+        desc_t m_desc;                                  ///< [in] descriptor of the fence object
 
+    public:
         ///////////////////////////////////////////////////////////////////////////////
         Fence( void ) = delete;
         Fence( 
-            CommandQueue* pCommandQueue,                    ///< pointer to parent object
-            fence_handle_t handle,                          ///< handle of fence object
-            desc_t desc                                     ///< descriptor of the fence object
+            CommandQueue* pCommandQueue,                    ///< [in] pointer to parent object
+            desc_t desc                                     ///< [in] descriptor of the fence object
             );
 
         ~Fence( void ) = default;
@@ -94,10 +94,9 @@ namespace xe
         Fence( Fence&& other ) = delete;
         void operator=( Fence&& other ) = delete;
 
-    public:
         ///////////////////////////////////////////////////////////////////////////////
-        auto getCommandqueue( void ) const { return m_pCommandQueue; }
         auto getHandle( void ) const { return m_handle; }
+        auto getCommandqueue( void ) const { return m_pCommandQueue; }
         auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////

@@ -36,12 +36,10 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     CommandQueue::CommandQueue( 
-        Device* pDevice,                                ///< pointer to parent object
-        command_queue_handle_t handle,                  ///< handle of command queue object
-        desc_t desc                                     ///< descriptor of the command queue object
+        Device* pDevice,                                ///< [in] pointer to parent object
+        desc_t desc                                     ///< [in] descriptor of the command queue object
         ) :
         m_pDevice( pDevice ),
-        m_handle( handle ),
         m_desc( desc )
     {
     }

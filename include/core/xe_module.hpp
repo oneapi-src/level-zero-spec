@@ -79,16 +79,16 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        Device* m_pDevice;                              ///< pointer to parent object
-        module_handle_t m_handle;                       ///< handle of module object
-        desc_t m_desc;                                  ///< descriptor of the module object
+        module_handle_t m_handle = nullptr;             ///< handle of module object
+        Device* m_pDevice;                              ///< [in] pointer to parent object
+        desc_t m_desc;                                  ///< [in] descriptor of the module object
 
+    public:
         ///////////////////////////////////////////////////////////////////////////////
         Module( void ) = delete;
         Module( 
-            Device* pDevice,                                ///< pointer to parent object
-            module_handle_t handle,                         ///< handle of module object
-            desc_t desc                                     ///< descriptor of the module object
+            Device* pDevice,                                ///< [in] pointer to parent object
+            desc_t desc                                     ///< [in] descriptor of the module object
             );
 
         ~Module( void ) = default;
@@ -99,10 +99,9 @@ namespace xe
         Module( Module&& other ) = delete;
         void operator=( Module&& other ) = delete;
 
-    public:
         ///////////////////////////////////////////////////////////////////////////////
-        auto getDevice( void ) const { return m_pDevice; }
         auto getHandle( void ) const { return m_handle; }
+        auto getDevice( void ) const { return m_pDevice; }
         auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -285,16 +284,16 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        Module* m_pModule;                              ///< pointer to parent object
-        function_handle_t m_handle;                     ///< handle of function object
-        desc_t m_desc;                                  ///< descriptor of the function object
+        function_handle_t m_handle = nullptr;           ///< handle of function object
+        Module* m_pModule;                              ///< [in] pointer to parent object
+        desc_t m_desc;                                  ///< [in] descriptor of the function object
 
+    public:
         ///////////////////////////////////////////////////////////////////////////////
         Function( void ) = delete;
         Function( 
-            Module* pModule,                                ///< pointer to parent object
-            function_handle_t handle,                       ///< handle of function object
-            desc_t desc                                     ///< descriptor of the function object
+            Module* pModule,                                ///< [in] pointer to parent object
+            desc_t desc                                     ///< [in] descriptor of the function object
             );
 
         ~Function( void ) = default;
@@ -305,10 +304,9 @@ namespace xe
         Function( Function&& other ) = delete;
         void operator=( Function&& other ) = delete;
 
-    public:
         ///////////////////////////////////////////////////////////////////////////////
-        auto getModule( void ) const { return m_pModule; }
         auto getHandle( void ) const { return m_handle; }
+        auto getModule( void ) const { return m_pModule; }
         auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////

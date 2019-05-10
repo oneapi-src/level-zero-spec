@@ -36,10 +36,10 @@ namespace xex
 {
     ///////////////////////////////////////////////////////////////////////////////
     CommandGraph::CommandGraph( 
-        command_graph_handle_t handle,                  ///< handle of command graph object
-        desc_t desc                                     ///< descriptor of the command graph object
+        Device* pDevice,                                ///< [in] pointer to parent object
+        desc_t desc                                     ///< [in] descriptor of the command graph object
         ) :
-        m_handle( handle ),
+        m_pDevice( pDevice ),
         m_desc( desc )
     {
     }

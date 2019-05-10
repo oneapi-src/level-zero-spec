@@ -36,9 +36,9 @@ namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
     Power::Power( 
-        power_handle_t handle                           ///< handle of power object
+        Device* pDevice                                 ///< [in] pointer to parent object
         ) :
-        m_handle( handle )
+        m_pDevice( pDevice )
     {
     }
 
@@ -557,9 +557,9 @@ namespace xet
 
     ///////////////////////////////////////////////////////////////////////////////
     FreqDomain::FreqDomain( 
-        freq_domain_handle_t handle                     ///< handle of frequency domain object
+        Power* pPower                                   ///< [in] pointer to parent object
         ) :
-        m_handle( handle )
+        m_pPower( pPower )
     {
     }
 

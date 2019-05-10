@@ -455,7 +455,7 @@ Public:
 """
 def make_ctor_param_lines(namespace, tags, obj, meta=None):
     lines = []
-    params = obj['members'] if 'members' in obj else []
+    params = _filter_param_list(obj['members'] if 'members' in obj else [], "in")
     for i, item in enumerate(params):
         name = subt(namespace, tags, item['name'])
         tname = _get_type_name(namespace, tags, obj, item, True, meta)
@@ -481,7 +481,7 @@ Public:
 """
 def make_ctor_param_init_lines(namespace, tags, obj, prefix="", meta=None):
     lines = []
-    params = obj['members'] if 'members' in obj else []
+    params = _filter_param_list(obj['members'] if 'members' in obj else [], "in")
     for i, item in enumerate(params):
         name = subt(namespace, tags, item['name'])
 

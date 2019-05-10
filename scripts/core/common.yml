@@ -1,6 +1,7 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero API common types"
+ordinal: "0"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Generates generic $OneApi API versions"

@@ -190,12 +190,13 @@ type: class
 desc: "C++ wrapper for command queue"
 name: $xCommandQueue
 members:
-    - type: $xDevice*
-      name: pDevice
-      desc: "pointer to parent object"
     - type: $x_command_queue_handle_t
       name: handle
       desc: "handle of command queue object"
+      init: nullptr
+    - type: $xDevice*
+      name: pDevice
+      desc: "[in] pointer to parent object"
     - type: $x_command_queue_desc_t
       name: desc
-      desc: "descriptor of the command queue object"
+      desc: "[in] descriptor of the command queue object"

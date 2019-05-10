@@ -36,12 +36,10 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     Fence::Fence( 
-        CommandQueue* pCommandQueue,                    ///< pointer to parent object
-        fence_handle_t handle,                          ///< handle of fence object
-        desc_t desc                                     ///< descriptor of the fence object
+        CommandQueue* pCommandQueue,                    ///< [in] pointer to parent object
+        desc_t desc                                     ///< [in] descriptor of the fence object
         ) :
         m_pCommandQueue( pCommandQueue ),
-        m_handle( handle ),
         m_desc( desc )
     {
     }

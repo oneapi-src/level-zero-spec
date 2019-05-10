@@ -33,8 +33,8 @@
 #pragma once
 #endif
 
-#include "xet_cmdlist.h"
 #include "xet_device.h"
+#include "xet_cmdlist.h"
 #include "xet_gtpin.h"
 #include "xet_metric.h"
 #include "xet_power.h"

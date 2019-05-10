@@ -74,14 +74,16 @@ namespace xex
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        command_graph_handle_t m_handle;                ///< handle of command graph object
-        desc_t m_desc;                                  ///< descriptor of the command graph object
+        command_graph_handle_t m_handle = nullptr;      ///< handle of command graph object
+        Device* m_pDevice;                              ///< [in] pointer to parent object
+        desc_t m_desc;                                  ///< [in] descriptor of the command graph object
 
+    public:
         ///////////////////////////////////////////////////////////////////////////////
         CommandGraph( void ) = delete;
         CommandGraph( 
-            command_graph_handle_t handle,                  ///< handle of command graph object
-            desc_t desc                                     ///< descriptor of the command graph object
+            Device* pDevice,                                ///< [in] pointer to parent object
+            desc_t desc                                     ///< [in] descriptor of the command graph object
             );
 
         ~CommandGraph( void ) = default;
@@ -92,9 +94,9 @@ namespace xex
         CommandGraph( CommandGraph&& other ) = delete;
         void operator=( CommandGraph&& other ) = delete;
 
-    public:
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
+        auto getDevice( void ) const { return m_pDevice; }
         auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////

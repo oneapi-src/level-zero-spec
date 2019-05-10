@@ -36,9 +36,9 @@ namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
     MetricGroup::MetricGroup( 
-        metric_group_handle_t handle                    ///< handle of metric group object
+        Device* pDevice                                 ///< [in] pointer to parent object
         ) :
-        m_handle( handle )
+        m_pDevice( pDevice )
     {
     }
 
@@ -120,9 +120,9 @@ namespace xet
 
     ///////////////////////////////////////////////////////////////////////////////
     Metric::Metric( 
-        metric_handle_t handle                          ///< handle of metric object
+        Device* pDevice                                 ///< [in] pointer to parent object
         ) :
-        m_handle( handle )
+        m_pDevice( pDevice )
     {
     }
 
@@ -167,9 +167,9 @@ namespace xet
 
     ///////////////////////////////////////////////////////////////////////////////
     MetricTracer::MetricTracer( 
-        metric_tracer_handle_t handle                   ///< handle of metric tracer object
+        Device* pDevice                                 ///< [in] pointer to parent object
         ) :
-        m_handle( handle )
+        m_pDevice( pDevice )
     {
     }
 
@@ -233,9 +233,9 @@ namespace xet
 
     ///////////////////////////////////////////////////////////////////////////////
     MetricQueryPool::MetricQueryPool( 
-        metric_query_pool_handle_t handle               ///< handle of metric query pool object
+        Device* pDevice                                 ///< [in] pointer to parent object
         ) :
-        m_handle( handle )
+        m_pDevice( pDevice )
     {
     }
 
@@ -297,9 +297,9 @@ namespace xet
 
     ///////////////////////////////////////////////////////////////////////////////
     MetricQuery::MetricQuery( 
-        metric_query_handle_t handle                    ///< handle of metric query object
+        Device* pDevice                                 ///< [in] pointer to parent object
         ) :
-        m_handle( handle )
+        m_pDevice( pDevice )
     {
     }
 

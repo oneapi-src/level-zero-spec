@@ -36,12 +36,10 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     Module::Module( 
-        Device* pDevice,                                ///< pointer to parent object
-        module_handle_t handle,                         ///< handle of module object
-        desc_t desc                                     ///< descriptor of the module object
+        Device* pDevice,                                ///< [in] pointer to parent object
+        desc_t desc                                     ///< [in] descriptor of the module object
         ) :
         m_pDevice( pDevice ),
-        m_handle( handle ),
         m_desc( desc )
     {
     }
@@ -182,12 +180,10 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     Function::Function( 
-        Module* pModule,                                ///< pointer to parent object
-        function_handle_t handle,                       ///< handle of function object
-        desc_t desc                                     ///< descriptor of the function object
+        Module* pModule,                                ///< [in] pointer to parent object
+        desc_t desc                                     ///< [in] descriptor of the function object
         ) :
         m_pModule( pModule ),
-        m_handle( handle ),
         m_desc( desc )
     {
     }

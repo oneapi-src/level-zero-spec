@@ -201,16 +201,16 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        Device* m_pDevice;                              ///< pointer to parent object
-        image_handle_t m_handle;                        ///< handle of image object
-        desc_t m_desc;                                  ///< descriptor of the image object
+        image_handle_t m_handle = nullptr;              ///< handle of image object
+        Device* m_pDevice;                              ///< [in] pointer to parent object
+        desc_t m_desc;                                  ///< [in] descriptor of the image object
 
+    public:
         ///////////////////////////////////////////////////////////////////////////////
         Image( void ) = delete;
         Image( 
-            Device* pDevice,                                ///< pointer to parent object
-            image_handle_t handle,                          ///< handle of image object
-            desc_t desc                                     ///< descriptor of the image object
+            Device* pDevice,                                ///< [in] pointer to parent object
+            desc_t desc                                     ///< [in] descriptor of the image object
             );
 
         ~Image( void ) = default;
@@ -221,10 +221,9 @@ namespace xe
         Image( Image&& other ) = delete;
         void operator=( Image&& other ) = delete;
 
-    public:
         ///////////////////////////////////////////////////////////////////////////////
-        auto getDevice( void ) const { return m_pDevice; }
         auto getHandle( void ) const { return m_handle; }
+        auto getDevice( void ) const { return m_pDevice; }
         auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////

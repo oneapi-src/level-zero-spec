@@ -626,6 +626,10 @@ members:
     - type: $t_metric_group_handle_t
       name: handle
       desc: "handle of metric group object" 
+      init: nullptr
+    - type: $tDevice*
+      name: pDevice
+      desc: "[in] pointer to parent object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for metric"
@@ -634,6 +638,9 @@ members:
     - type: $t_metric_handle_t
       name: handle
       desc: "handle of metric object" 
+    - type: $tDevice*
+      name: pDevice
+      desc: "[in] pointer to parent object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for metric tracer"
@@ -642,6 +649,9 @@ members:
     - type: $t_metric_tracer_handle_t
       name: handle
       desc: "handle of metric tracer object" 
+    - type: $tDevice*
+      name: pDevice
+      desc: "[in] pointer to parent object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for metric query pool"
@@ -650,6 +660,9 @@ members:
     - type: $t_metric_query_pool_handle_t
       name: handle
       desc: "handle of metric query pool object" 
+    - type: $tDevice*
+      name: pDevice
+      desc: "[in] pointer to parent object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for metric query"
@@ -658,3 +671,6 @@ members:
     - type: $t_metric_query_handle_t
       name: handle
       desc: "handle of metric query object" 
+    - type: $tDevice*
+      name: pDevice
+      desc: "[in] pointer to parent object"

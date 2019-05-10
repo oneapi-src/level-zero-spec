@@ -36,9 +36,9 @@ namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
     Sysman::Sysman( 
-        sysman_handle_t handle                          ///< handle of sysman object
+        Device* pDevice                                 ///< [in] pointer to parent object
         ) :
-        m_handle( handle )
+        m_pDevice( pDevice )
     {
     }
 

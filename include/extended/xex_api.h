@@ -33,8 +33,8 @@
 #pragma once
 #endif
 
-#include "xex_cmdgraph.h"
 #include "xex_device.h"
+#include "xex_cmdgraph.h"
 
 #if defined(__cplusplus)
 extern "C" {

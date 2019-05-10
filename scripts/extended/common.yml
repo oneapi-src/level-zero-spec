@@ -1,6 +1,7 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Extended API common types"
+ordinal: "0"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's command graph object"

@@ -234,12 +234,13 @@ type: class
 desc: "C++ wrapper for command list"
 name: $xCommandList
 members:
-    - type: $xDevice*
-      name: pDevice
-      desc: "pointer to parent object"
     - type: $x_command_list_handle_t
       name: handle
       desc: "handle of command list object"
+      init: nullptr
+    - type: $xDevice*
+      name: pDevice
+      desc: "[in] pointer to parent object"
     - type: $x_command_list_desc_t
       name: desc
-      desc: "descriptor of the command list object"
+      desc: "[in] descriptor of the command list object"

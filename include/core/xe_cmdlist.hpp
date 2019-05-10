@@ -137,16 +137,16 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        Device* m_pDevice;                              ///< pointer to parent object
-        command_list_handle_t m_handle;                 ///< handle of command list object
-        desc_t m_desc;                                  ///< descriptor of the command list object
+        command_list_handle_t m_handle = nullptr;       ///< handle of command list object
+        Device* m_pDevice;                              ///< [in] pointer to parent object
+        desc_t m_desc;                                  ///< [in] descriptor of the command list object
 
+    public:
         ///////////////////////////////////////////////////////////////////////////////
         CommandList( void ) = delete;
         CommandList( 
-            Device* pDevice,                                ///< pointer to parent object
-            command_list_handle_t handle,                   ///< handle of command list object
-            desc_t desc                                     ///< descriptor of the command list object
+            Device* pDevice,                                ///< [in] pointer to parent object
+            desc_t desc                                     ///< [in] descriptor of the command list object
             );
 
         ~CommandList( void ) = default;
@@ -157,10 +157,9 @@ namespace xe
         CommandList( CommandList&& other ) = delete;
         void operator=( CommandList&& other ) = delete;
 
-    public:
         ///////////////////////////////////////////////////////////////////////////////
-        auto getDevice( void ) const { return m_pDevice; }
         auto getHandle( void ) const { return m_handle; }
+        auto getDevice( void ) const { return m_pDevice; }
         auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////

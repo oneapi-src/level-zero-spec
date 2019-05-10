@@ -2,13 +2,13 @@ set(TARGET_NAME xe_api)
 
 add_library(${TARGET_NAME}
     STATIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/xe_common.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_driver.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_device.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdqueue.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdlist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_barrier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_cl_interop.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_common.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_copy.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_event.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_fence.cpp

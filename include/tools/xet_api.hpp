@@ -32,8 +32,8 @@
 #if defined(__cplusplus)
 #pragma once
 
-#include "xet_cmdlist.hpp"
 #include "xet_device.hpp"
+#include "xet_cmdlist.hpp"
 #include "xet_gtpin.hpp"
 #include "xet_metric.hpp"
 #include "xet_power.hpp"

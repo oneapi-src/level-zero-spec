@@ -36,12 +36,10 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     Image::Image( 
-        Device* pDevice,                                ///< pointer to parent object
-        image_handle_t handle,                          ///< handle of image object
-        desc_t desc                                     ///< descriptor of the image object
+        Device* pDevice,                                ///< [in] pointer to parent object
+        desc_t desc                                     ///< [in] descriptor of the image object
         ) :
         m_pDevice( pDevice ),
-        m_handle( handle ),
         m_desc( desc )
     {
     }

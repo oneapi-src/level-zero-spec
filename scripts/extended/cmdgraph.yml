@@ -91,6 +91,10 @@ members:
     - type: $e_command_graph_handle_t
       name: handle
       desc: "handle of command graph object"
+      init: nullptr
+    - type: $eDevice*
+      name: pDevice
+      desc: "[in] pointer to parent object"
     - type: $e_command_graph_desc_t
       name: desc
-      desc: "descriptor of the command graph object"
+      desc: "[in] descriptor of the command graph object"

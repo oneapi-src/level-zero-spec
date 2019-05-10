@@ -36,12 +36,10 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     CommandList::CommandList( 
-        Device* pDevice,                                ///< pointer to parent object
-        command_list_handle_t handle,                   ///< handle of command list object
-        desc_t desc                                     ///< descriptor of the command list object
+        Device* pDevice,                                ///< [in] pointer to parent object
+        desc_t desc                                     ///< [in] descriptor of the command list object
         ) :
         m_pDevice( pDevice ),
-        m_handle( handle ),
         m_desc( desc )
     {
     }

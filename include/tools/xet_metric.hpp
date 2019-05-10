@@ -158,12 +158,14 @@ namespace xet
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        metric_group_handle_t m_handle;                 ///< handle of metric group object
+        metric_group_handle_t m_handle = nullptr;       ///< handle of metric group object
+        Device* m_pDevice;                              ///< [in] pointer to parent object
 
+    public:
         ///////////////////////////////////////////////////////////////////////////////
         MetricGroup( void ) = delete;
         MetricGroup( 
-            metric_group_handle_t handle                    ///< handle of metric group object
+            Device* pDevice                                 ///< [in] pointer to parent object
             );
 
         ~MetricGroup( void ) = default;
@@ -174,9 +176,9 @@ namespace xet
         MetricGroup( MetricGroup&& other ) = delete;
         void operator=( MetricGroup&& other ) = delete;
 
-    public:
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
+        auto getDevice( void ) const { return m_pDevice; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Returns metric group count for a given device.
@@ -283,11 +285,13 @@ namespace xet
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         metric_handle_t m_handle;                       ///< handle of metric object
+        Device* m_pDevice;                              ///< [in] pointer to parent object
 
+    public:
         ///////////////////////////////////////////////////////////////////////////////
         Metric( void ) = delete;
         Metric( 
-            metric_handle_t handle                          ///< handle of metric object
+            Device* pDevice                                 ///< [in] pointer to parent object
             );
 
         ~Metric( void ) = default;
@@ -298,9 +302,9 @@ namespace xet
         Metric( Metric&& other ) = delete;
         void operator=( Metric&& other ) = delete;
 
-    public:
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
+        auto getDevice( void ) const { return m_pDevice; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Returns metric from a given metric group.
@@ -362,11 +366,13 @@ namespace xet
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         metric_tracer_handle_t m_handle;                ///< handle of metric tracer object
+        Device* m_pDevice;                              ///< [in] pointer to parent object
 
+    public:
         ///////////////////////////////////////////////////////////////////////////////
         MetricTracer( void ) = delete;
         MetricTracer( 
-            metric_tracer_handle_t handle                   ///< handle of metric tracer object
+            Device* pDevice                                 ///< [in] pointer to parent object
             );
 
         ~MetricTracer( void ) = default;
@@ -377,9 +383,9 @@ namespace xet
         MetricTracer( MetricTracer&& other ) = delete;
         void operator=( MetricTracer&& other ) = delete;
 
-    public:
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
+        auto getDevice( void ) const { return m_pDevice; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Opens metric tracer for a given device.
@@ -463,11 +469,13 @@ namespace xet
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         metric_query_pool_handle_t m_handle;            ///< handle of metric query pool object
+        Device* m_pDevice;                              ///< [in] pointer to parent object
 
+    public:
         ///////////////////////////////////////////////////////////////////////////////
         MetricQueryPool( void ) = delete;
         MetricQueryPool( 
-            metric_query_pool_handle_t handle               ///< handle of metric query pool object
+            Device* pDevice                                 ///< [in] pointer to parent object
             );
 
         ~MetricQueryPool( void ) = default;
@@ -478,9 +486,9 @@ namespace xet
         MetricQueryPool( MetricQueryPool&& other ) = delete;
         void operator=( MetricQueryPool&& other ) = delete;
 
-    public:
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
+        auto getDevice( void ) const { return m_pDevice; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Creates metric query pool.
@@ -534,11 +542,13 @@ namespace xet
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         metric_query_handle_t m_handle;                 ///< handle of metric query object
+        Device* m_pDevice;                              ///< [in] pointer to parent object
 
+    public:
         ///////////////////////////////////////////////////////////////////////////////
         MetricQuery( void ) = delete;
         MetricQuery( 
-            metric_query_handle_t handle                    ///< handle of metric query object
+            Device* pDevice                                 ///< [in] pointer to parent object
             );
 
         ~MetricQuery( void ) = default;
@@ -549,9 +559,9 @@ namespace xet
         MetricQuery( MetricQuery&& other ) = delete;
         void operator=( MetricQuery&& other ) = delete;
 
-    public:
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
+        auto getDevice( void ) const { return m_pDevice; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Returns raw data for a given metric query slot.

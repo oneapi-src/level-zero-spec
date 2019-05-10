@@ -232,14 +232,14 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        Driver* m_pDriver;                              ///< pointer to parent object
-        device_handle_t m_handle;                       ///< handle of device object
+        device_handle_t m_handle = nullptr;             ///< handle of device object
+        Driver* m_pDriver;                              ///< [in] pointer to parent object
 
+    public:
         ///////////////////////////////////////////////////////////////////////////////
         Device( void ) = delete;
         Device( 
-            Driver* pDriver,                                ///< pointer to parent object
-            device_handle_t handle                          ///< handle of device object
+            Driver* pDriver                                 ///< [in] pointer to parent object
             );
 
         ~Device( void ) = default;
@@ -250,10 +250,9 @@ namespace xe
         Device( Device&& other ) = delete;
         void operator=( Device&& other ) = delete;
 
-    public:
         ///////////////////////////////////////////////////////////////////////////////
-        auto getDriver( void ) const { return m_pDriver; }
         auto getHandle( void ) const { return m_handle; }
+        auto getDriver( void ) const { return m_pDriver; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Reports the number of devices

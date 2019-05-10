@@ -100,12 +100,13 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        void* m_handle;                                 ///< handle of driver module
+        void* m_handle = nullptr;                       ///< [in] handle of driver module
 
+    public:
         ///////////////////////////////////////////////////////////////////////////////
         Driver( void ) = delete;
         Driver( 
-            void* handle                                    ///< handle of driver module
+            void* handle                                    ///< [in] handle of driver module
             );
 
         ~Driver( void ) = default;
@@ -116,7 +117,6 @@ namespace xe
         Driver( Driver&& other ) = delete;
         void operator=( Driver&& other ) = delete;
 
-    public:
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
 

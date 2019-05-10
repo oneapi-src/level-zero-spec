@@ -306,12 +306,13 @@ type: class
 desc: "C++ wrapper for image"
 name: $xImage
 members:
-    - type: $xDevice*
-      name: pDevice
-      desc: "pointer to parent object"
     - type: $x_image_handle_t
       name: handle
       desc: "handle of image object"
+      init: nullptr
+    - type: $xDevice*
+      name: pDevice
+      desc: "[in] pointer to parent object"
     - type: $x_image_desc_t
       name: desc
-      desc: "descriptor of the image object"
+      desc: "[in] descriptor of the image object"

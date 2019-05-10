@@ -36,12 +36,10 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     EventPool::EventPool( 
-        Device* pDevice,                                ///< pointer to parent object
-        event_pool_handle_t handle,                     ///< handle of event pool object
-        desc_t desc                                     ///< descriptor of the event object
+        Device* pDevice,                                ///< [in] pointer to parent object
+        desc_t desc                                     ///< [in] descriptor of the event object
         ) :
         m_pDevice( pDevice ),
-        m_handle( handle ),
         m_desc( desc )
     {
     }
@@ -166,11 +164,9 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     Event::Event( 
-        EventPool* pEventPool,                          ///< pointer to parent object
-        event_handle_t handle                           ///< handle of event object
+        EventPool* pEventPool                           ///< [in] pointer to parent object
         ) :
-        m_pEventPool( pEventPool ),
-        m_handle( handle )
+        m_pEventPool( pEventPool )
     {
     }
 
