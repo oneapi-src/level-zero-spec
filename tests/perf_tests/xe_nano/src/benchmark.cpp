@@ -19,10 +19,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+/*
+ * The test cases are generated using macros and #include's to facilitate
+ * code resuse when creating nano probes.  Each test case is written once
+ * and imported per nano probe such as the latency and hardware counter
+ * probes.
+ *
+ * Each test case is written with the NANO_PROBE() macro around the
+ * function call to be measured. When each test case is imported,
+ * the NANO_PROBE() is redefined to a type of probe, so that the
+ * test case is generated for that specific probe.
+ *
+ * When a test case is added, benchmark.hpp should be updated.
+ */
 #include "benchmark.hpp"
 #include "api_static_probe.hpp"
 
 namespace xe_api_benchmarks {
+/*
+ * For each test case created, the NANO_PROBE macro needs to be redefined to
+ * generate code with the specific probe.
+ */
 #undef NANO_PROBE
 #define NANO_PROBE PROBE_MEASURE_LATENCY_ITERATION
 namespace latency {
