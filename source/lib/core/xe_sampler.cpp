@@ -21,26 +21,17 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_copy.inl
+* @file xe_sampler.cpp
 *
-* @brief C++ wrapper of Intel Xe Level-Zero APIs for Copies
+* @brief C++ wrapper of Intel Xe Level-Zero APIs for Sampler
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/core/copy.yml
+* DO NOT EDIT: generated from /scripts/core/sampler.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XE_COPY_INL
-#define _XE_COPY_INL
-#if defined(__cplusplus)
-#pragma once
-#if !defined(_XE_API_HPP)
-#pragma message("warning: this file is not intended to be included directly")
-#endif
-#include "xe_copy.hpp"
+#include "xe_api.hpp"
 
 namespace xe
 {
 } // namespace xe
-#endif // defined(__cplusplus)
-#endif // _XE_COPY_INL

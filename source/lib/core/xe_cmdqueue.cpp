@@ -21,7 +21,7 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_cmdqueue.inl
+* @file xe_cmdqueue.cpp
 *
 * @brief C++ wrapper of Intel Xe Level-Zero APIs for Command Queue
 *
@@ -30,14 +30,7 @@
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XE_CMDQUEUE_INL
-#define _XE_CMDQUEUE_INL
-#if defined(__cplusplus)
-#pragma once
-#if !defined(_XE_API_HPP)
-#pragma message("warning: this file is not intended to be included directly")
-#endif
-#include "xe_cmdqueue.hpp"
+#include "xe_api.hpp"
 
 namespace xe
 {
@@ -152,5 +145,3 @@ namespace xe
     }
 
 } // namespace xe
-#endif // defined(__cplusplus)
-#endif // _XE_CMDQUEUE_INL

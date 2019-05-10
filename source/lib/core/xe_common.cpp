@@ -21,26 +21,17 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xet_gtpin.inl
+* @file xe_common.cpp
 *
-* @brief C++ wrapper of Intel Xe Level-Zero Tool APIs for GT-Pin
+* @brief C++ wrapper of Intel Xe Level-Zero API common types
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/tools/gtpin.yml
+* DO NOT EDIT: generated from /scripts/core/common.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XET_GTPIN_INL
-#define _XET_GTPIN_INL
-#if defined(__cplusplus)
-#pragma once
-#if !defined(_XET_API_HPP)
-#pragma message("warning: this file is not intended to be included directly")
-#endif
-#include "xet_gtpin.hpp"
+#include "xe_api.hpp"
 
-namespace xet
+namespace xe
 {
-} // namespace xet
-#endif // defined(__cplusplus)
-#endif // _XET_GTPIN_INL
+} // namespace xe

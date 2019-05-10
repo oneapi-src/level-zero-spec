@@ -38,7 +38,7 @@ def declare_obj(obj, tags):
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file ${n}_${name}.inl
+* @file ${n}_${name}.cpp
 *
 * @brief C++ wrapper of ${th.subt(n, tags, header['desc'])}
 *
@@ -47,18 +47,7 @@ def declare_obj(obj, tags):
 * @endcond
 *
 ******************************************************************************/
-#ifndef _${N}_${name.upper()}_INL
-#define _${N}_${name.upper()}_INL
-#if defined(__cplusplus)
-#pragma once
-#if !defined(_${N}_API_HPP)
-#pragma message("warning: this file is not intended to be included directly")
-#endif
-%if re.match(r"common", name):
-#include "${n}_api.h"
-%else:
-#include "${n}_${name}.hpp"
-%endif
+#include "${n}_api.hpp"
 
 namespace ${n}
 {
@@ -144,5 +133,3 @@ namespace ${n}
 %endif  # declare_obj
 %endfor # obj in objects
 } // namespace ${n}
-#endif // defined(__cplusplus)
-#endif // _${N}_${name.upper()}_INL

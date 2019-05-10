@@ -21,26 +21,17 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xex_device.inl
+* @file xe_copy.cpp
 *
-* @brief C++ wrapper of Intel Xe Level-Zero Extended APIs for Device
+* @brief C++ wrapper of Intel Xe Level-Zero APIs for Copies
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/extended/device.yml
+* DO NOT EDIT: generated from /scripts/core/copy.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XEX_DEVICE_INL
-#define _XEX_DEVICE_INL
-#if defined(__cplusplus)
-#pragma once
-#if !defined(_XEX_API_HPP)
-#pragma message("warning: this file is not intended to be included directly")
-#endif
-#include "xex_device.hpp"
+#include "xe_api.hpp"
 
-namespace xex
+namespace xe
 {
-} // namespace xex
-#endif // defined(__cplusplus)
-#endif // _XEX_DEVICE_INL
+} // namespace xe

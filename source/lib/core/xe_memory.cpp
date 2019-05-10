@@ -21,7 +21,7 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_memory.inl
+* @file xe_memory.cpp
 *
 * @brief C++ wrapper of Intel Xe Level-Zero APIs for Memory
 *
@@ -30,14 +30,7 @@
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XE_MEMORY_INL
-#define _XE_MEMORY_INL
-#if defined(__cplusplus)
-#pragma once
-#if !defined(_XE_API_HPP)
-#pragma message("warning: this file is not intended to be included directly")
-#endif
-#include "xe_memory.hpp"
+#include "xe_api.hpp"
 
 namespace xe
 {
@@ -277,5 +270,3 @@ namespace xe
     }
 
 } // namespace xe
-#endif // defined(__cplusplus)
-#endif // _XE_MEMORY_INL

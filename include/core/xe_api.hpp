@@ -46,20 +46,6 @@
 #include "xe_module.hpp"
 #include "xe_residency.hpp"
 #include "xe_sampler.hpp"
-#include "xe_driver.inl"
-#include "xe_device.inl"
-#include "xe_cmdqueue.inl"
-#include "xe_cmdlist.inl"
-#include "xe_barrier.inl"
-#include "xe_cl_interop.inl"
-#include "xe_copy.inl"
-#include "xe_event.inl"
-#include "xe_fence.inl"
-#include "xe_image.inl"
-#include "xe_memory.inl"
-#include "xe_module.inl"
-#include "xe_residency.inl"
-#include "xe_sampler.inl"
 
 #endif // defined(__cplusplus)
 #endif // _XE_API_HPP

@@ -21,7 +21,7 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xex_cmdgraph.inl
+* @file xex_cmdgraph.cpp
 *
 * @brief C++ wrapper of Intel Xe Level-Zero Extended APIs for CommandGraph
 *
@@ -30,14 +30,7 @@
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XEX_CMDGRAPH_INL
-#define _XEX_CMDGRAPH_INL
-#if defined(__cplusplus)
-#pragma once
-#if !defined(_XEX_API_HPP)
-#pragma message("warning: this file is not intended to be included directly")
-#endif
-#include "xex_cmdgraph.hpp"
+#include "xex_api.hpp"
 
 namespace xex
 {
@@ -114,5 +107,3 @@ namespace xex
     }
 
 } // namespace xex
-#endif // defined(__cplusplus)
-#endif // _XEX_CMDGRAPH_INL

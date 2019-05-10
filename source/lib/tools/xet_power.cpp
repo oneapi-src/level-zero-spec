@@ -21,7 +21,7 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xet_power.inl
+* @file xet_power.cpp
 *
 * @brief C++ wrapper of Intel Xe Level-Zero Tool APIs for Power
 *
@@ -30,14 +30,7 @@
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XET_POWER_INL
-#define _XET_POWER_INL
-#if defined(__cplusplus)
-#pragma once
-#if !defined(_XET_API_HPP)
-#pragma message("warning: this file is not intended to be included directly")
-#endif
-#include "xet_power.hpp"
+#include "xet_api.hpp"
 
 namespace xet
 {
@@ -724,5 +717,3 @@ namespace xet
     }
 
 } // namespace xet
-#endif // defined(__cplusplus)
-#endif // _XET_POWER_INL

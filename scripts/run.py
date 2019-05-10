@@ -45,6 +45,7 @@ def main():
     for section in configParser.sections():
         add_argument(parser, section, "generation of C/C++ '%s' files."%section, True)
     add_argument(parser, "clean", "cleaning previous generated files.")
+    add_argument(parser, "lib", "generation of lib files.", True)
     add_argument(parser, "loader", "generation of loader files.", True)
     add_argument(parser, "layers", "generation of layer files.", True)
     add_argument(parser, "build", "running cmake to generate and build projects.")
@@ -81,6 +82,9 @@ def main():
                 util.jsonWrite(os.path.join(srcpath, "meta.json"), meta)
 
             generate_code.generate_api(dstpath, namespace, tags, specs, meta)
+
+            if args['lib']:
+                generate_code.generate_lib(libpath, namespace, tags, specs, meta)
 
             if args['loader']:
                 generate_code.generate_loader("../source/", section, namespace, tags, specs, meta)

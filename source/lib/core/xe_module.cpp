@@ -21,7 +21,7 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_module.inl
+* @file xe_module.cpp
 *
 * @brief C++ wrapper of Intel Xe Level-Zero APIs for Module
 *
@@ -30,14 +30,7 @@
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XE_MODULE_INL
-#define _XE_MODULE_INL
-#if defined(__cplusplus)
-#pragma once
-#if !defined(_XE_API_HPP)
-#pragma message("warning: this file is not intended to be included directly")
-#endif
-#include "xe_module.hpp"
+#include "xe_api.hpp"
 
 namespace xe
 {
@@ -364,5 +357,3 @@ namespace xe
     }
 
 } // namespace xe
-#endif // defined(__cplusplus)
-#endif // _XE_MODULE_INL

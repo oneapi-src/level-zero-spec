@@ -21,7 +21,7 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_driver.inl
+* @file xe_driver.cpp
 *
 * @brief C++ wrapper of Intel Xe Level-Zero APIs
 *
@@ -30,14 +30,7 @@
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XE_DRIVER_INL
-#define _XE_DRIVER_INL
-#if defined(__cplusplus)
-#pragma once
-#if !defined(_XE_API_HPP)
-#pragma message("warning: this file is not intended to be included directly")
-#endif
-#include "xe_driver.hpp"
+#include "xe_api.hpp"
 
 namespace xe
 {
@@ -100,5 +93,3 @@ namespace xe
     }
 
 } // namespace xe
-#endif // defined(__cplusplus)
-#endif // _XE_DRIVER_INL

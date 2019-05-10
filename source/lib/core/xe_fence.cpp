@@ -21,7 +21,7 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_fence.inl
+* @file xe_fence.cpp
 *
 * @brief C++ wrapper of Intel Xe Level-Zero APIs for Fence
 *
@@ -30,14 +30,7 @@
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XE_FENCE_INL
-#define _XE_FENCE_INL
-#if defined(__cplusplus)
-#pragma once
-#if !defined(_XE_API_HPP)
-#pragma message("warning: this file is not intended to be included directly")
-#endif
-#include "xe_fence.hpp"
+#include "xe_api.hpp"
 
 namespace xe
 {
@@ -172,5 +165,3 @@ namespace xe
     }
 
 } // namespace xe
-#endif // defined(__cplusplus)
-#endif // _XE_FENCE_INL

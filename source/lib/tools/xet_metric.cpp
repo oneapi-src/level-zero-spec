@@ -21,7 +21,7 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xet_metric.inl
+* @file xet_metric.cpp
 *
 * @brief C++ wrapper of Intel Xe Level-Zero Tool APIs for Metric
 *
@@ -30,14 +30,7 @@
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XET_METRIC_INL
-#define _XET_METRIC_INL
-#if defined(__cplusplus)
-#pragma once
-#if !defined(_XET_API_HPP)
-#pragma message("warning: this file is not intended to be included directly")
-#endif
-#include "xet_metric.hpp"
+#include "xet_api.hpp"
 
 namespace xet
 {
@@ -329,5 +322,3 @@ namespace xet
     }
 
 } // namespace xet
-#endif // defined(__cplusplus)
-#endif // _XET_METRIC_INL

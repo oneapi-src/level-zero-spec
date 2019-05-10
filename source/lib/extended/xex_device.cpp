@@ -21,26 +21,17 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_sampler.inl
+* @file xex_device.cpp
 *
-* @brief C++ wrapper of Intel Xe Level-Zero APIs for Sampler
+* @brief C++ wrapper of Intel Xe Level-Zero Extended APIs for Device
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/core/sampler.yml
+* DO NOT EDIT: generated from /scripts/extended/device.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XE_SAMPLER_INL
-#define _XE_SAMPLER_INL
-#if defined(__cplusplus)
-#pragma once
-#if !defined(_XE_API_HPP)
-#pragma message("warning: this file is not intended to be included directly")
-#endif
-#include "xe_sampler.hpp"
+#include "xex_api.hpp"
 
-namespace xe
+namespace xex
 {
-} // namespace xe
-#endif // defined(__cplusplus)
-#endif // _XE_SAMPLER_INL
+} // namespace xex

@@ -21,7 +21,7 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xet_cmdlist.inl
+* @file xet_cmdlist.cpp
 *
 * @brief C++ wrapper of Intel Xe Level-Zero Tool APIs for Command List
 *
@@ -30,14 +30,7 @@
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XET_CMDLIST_INL
-#define _XET_CMDLIST_INL
-#if defined(__cplusplus)
-#pragma once
-#if !defined(_XET_API_HPP)
-#pragma message("warning: this file is not intended to be included directly")
-#endif
-#include "xet_cmdlist.hpp"
+#include "xet_api.hpp"
 
 namespace xet
 {
@@ -112,5 +105,3 @@ namespace xet
     }
 
 } // namespace xet
-#endif // defined(__cplusplus)
-#endif // _XET_CMDLIST_INL

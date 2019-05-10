@@ -21,26 +21,17 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_residency.inl
+* @file xe_barrier.cpp
 *
-* @brief C++ wrapper of Intel Xe Level-Zero APIs for Memory Residency
+* @brief C++ wrapper of Intel Xe Level-Zero APIs for Barrier
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/core/residency.yml
+* DO NOT EDIT: generated from /scripts/core/barrier.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XE_RESIDENCY_INL
-#define _XE_RESIDENCY_INL
-#if defined(__cplusplus)
-#pragma once
-#if !defined(_XE_API_HPP)
-#pragma message("warning: this file is not intended to be included directly")
-#endif
-#include "xe_residency.hpp"
+#include "xe_api.hpp"
 
 namespace xe
 {
 } // namespace xe
-#endif // defined(__cplusplus)
-#endif // _XE_RESIDENCY_INL

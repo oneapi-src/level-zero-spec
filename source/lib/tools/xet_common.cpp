@@ -21,26 +21,17 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_cl_interop.inl
+* @file xet_common.cpp
 *
-* @brief C++ wrapper of Intel Xe Level-Zero APIs for OpenCL Interopability
+* @brief C++ wrapper of Intel Xe Level-Zero Tool API common types
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/core/cl_interop.yml
+* DO NOT EDIT: generated from /scripts/tools/common.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XE_CL_INTEROP_INL
-#define _XE_CL_INTEROP_INL
-#if defined(__cplusplus)
-#pragma once
-#if !defined(_XE_API_HPP)
-#pragma message("warning: this file is not intended to be included directly")
-#endif
-#include "xe_cl_interop.hpp"
+#include "xet_api.hpp"
 
-namespace xe
+namespace xet
 {
-} // namespace xe
-#endif // defined(__cplusplus)
-#endif // _XE_CL_INTEROP_INL
+} // namespace xet

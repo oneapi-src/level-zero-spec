@@ -34,8 +34,6 @@
 
 #include "xex_cmdgraph.hpp"
 #include "xex_device.hpp"
-#include "xex_cmdgraph.inl"
-#include "xex_device.inl"
 
 #endif // defined(__cplusplus)
 #endif // _XEX_API_HPP
