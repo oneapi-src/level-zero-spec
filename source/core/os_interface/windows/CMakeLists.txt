@@ -4,6 +4,8 @@ set(L0_SRCS_OS_INTERFACE_WINDOWS
     ${CMAKE_CURRENT_SOURCE_DIR}/os_context_windows.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wddm_event.h
     ${CMAKE_CURRENT_SOURCE_DIR}/wddm_event.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wddm_memory_manager.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/wddm_memory_manager.cpp
 )
 
 if(WIN32)

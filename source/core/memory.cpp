@@ -17,7 +17,8 @@ xe_result_t hostMemAlloc(xe_host_mem_alloc_flag_t flags, size_t size, size_t ali
 xe_result_t ipcCloseMemHandle(const void *ptr) { return XE_RESULT_ERROR_UNSUPPORTED; }
 
 xe_result_t ipcGetMemHandle(const void *ptr, xe_ipc_mem_handle_t *pIpcHandle) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
+    auto ipc = IPC::create();
+    return ipc->ipcGetMemHandle(ptr, pIpcHandle);
 }
 
 xe_result_t ipcOpenMemHandle(xe_device_handle_t hDevice, xe_ipc_mem_handle_t handle,

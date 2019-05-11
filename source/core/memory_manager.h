@@ -39,4 +39,12 @@ struct MemoryManager {
 
 extern MemoryManager *globalMemoryManager;
 
+struct IPC {
+
+  public:
+    static IPC *create();
+    virtual xe_result_t ipcGetMemHandle(const void *ptr, xe_ipc_mem_handle_t *pIpcHandle) = 0;
+};
+
+
 } // namespace L0
