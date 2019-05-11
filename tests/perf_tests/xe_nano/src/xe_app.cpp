@@ -51,7 +51,6 @@ XeApp::XeApp(std::string module_path) {
     device = nullptr;
     module = nullptr;
     function = nullptr;
-    command_list = nullptr;
     command_queue = nullptr;
     this->module_path = module_path;
 
@@ -114,7 +113,6 @@ void XeApp::commandListCreate(xe_command_list_handle_t *phCommandList) {
     xe_command_list_desc_t command_list_description;
     command_list_description.version = XE_COMMAND_LIST_DESC_VERSION_CURRENT;
 
-    xe_command_list_handle_t command_list = nullptr;
     SUCCESS_OR_TERMINATE(xeCommandListCreate(device,
                                                    &command_list_description,
                                                    phCommandList));
@@ -122,6 +120,10 @@ void XeApp::commandListCreate(xe_command_list_handle_t *phCommandList) {
 
 void XeApp::commandListDestroy(xe_command_list_handle_t command_list) {
     SUCCESS_OR_TERMINATE(xeCommandListDestroy(command_list));
+}
+
+void XeApp::commandListClose(xe_command_list_handle_t command_list) {
+    SUCCESS_OR_TERMINATE(xeCommandListClose(command_list));
 }
 
 void XeApp::commandQueueCreate(const uint32_t command_queue_id,

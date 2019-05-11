@@ -41,6 +41,8 @@ class XeApp {
     void functionDestroy(xe_function_handle_t function);
     void commandListCreate(xe_command_list_handle_t *phCommandList);
     void commandListDestroy(xe_command_list_handle_t phCommandList);
+    void commandListClose(xe_command_list_handle_t phCommandList);
+
     void commandQueueCreate(const uint32_t command_queue_id,
                             xe_command_queue_handle_t *command_queue);
     void commandQueueDestroy(xe_command_queue_handle_t command_queue);
@@ -56,10 +58,6 @@ class XeApp {
 
   private:
     std::string module_path;
-    xe_module_desc_t module_description;
-    xe_command_list_desc_t command_list_description;
-    xe_command_list_handle_t command_list;
-    xe_command_queue_desc_t command_queue_description;
     std::vector<uint8_t> load_binary_file(const std::string &file_path);
 };
 #endif /* _XE_APP_HPP_*/
