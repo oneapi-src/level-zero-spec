@@ -31,6 +31,7 @@
 *
 ******************************************************************************/
 #include "xe_api.hpp"
+#include "xe_api.h"
 
 namespace xe
 {
@@ -43,7 +44,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceGetCount
+    /// @brief Reports the number of devices
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -57,17 +58,19 @@ namespace xe
     ///     - uint32_t: number of devices available
     /// 
     /// @throws result_t
-    inline uint32_t 
+    uint32_t __xecall
     Device::GetCount(
         void
         )
     {
         // auto result = ::xeDeviceGetCount( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetCount");
+
+        return uint32_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceGet
+    /// @brief Returns a handle to the device object
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -82,17 +85,19 @@ namespace xe
     ///     - Device: pointer to handle of device object created
     /// 
     /// @throws result_t
-    inline Device* 
+    Device* __xecall
     Device::Get(
         uint32_t ordinal                                ///< [in] The device index in the range of [0, ::DeviceGetCount]
         )
     {
         // auto result = ::xeDeviceGet( handle, ordinal );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::Get");
+
+        return (Device*)0;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceGetSubDevice
+    /// @brief Returns a handle to the sub-device object
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -107,17 +112,19 @@ namespace xe
     ///     - Device: pointer to handle of sub-device object.
     /// 
     /// @throws result_t
-    inline Device* 
+    Device* __xecall
     Device::GetSubDevice(
         uint32_t ordinal                                ///< [in] ordinal of sub-device to retrieve
         )
     {
         // auto result = ::xeDeviceGetSubDevice( handle, ordinal );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetSubDevice");
+
+        return (Device*)0;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceGetApiVersion
+    /// @brief Returns the API version supported by the device
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -131,17 +138,19 @@ namespace xe
     ///     - api_version_t: api version
     /// 
     /// @throws result_t
-    inline Device::api_version_t 
+    Device::api_version_t __xecall
     Device::GetApiVersion(
         void
         )
     {
         // auto result = ::xeDeviceGetApiVersion( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetApiVersion");
+
+        return api_version_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceGetProperties
+    /// @brief Retrieves attributes of the device
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -157,17 +166,19 @@ namespace xe
     ///     - properties_t: query result for device properties
     /// 
     /// @throws result_t
-    inline Device::properties_t 
+    Device::properties_t __xecall
     Device::GetProperties(
         void
         )
     {
         // auto result = ::xeDeviceGetProperties( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetProperties");
+
+        return properties_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceGetComputeProperties
+    /// @brief Retrieves compute attributes of the device
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -182,17 +193,19 @@ namespace xe
     ///     - compute_properties_t: query result for compute properties
     /// 
     /// @throws result_t
-    inline Device::compute_properties_t 
+    Device::compute_properties_t __xecall
     Device::GetComputeProperties(
         void
         )
     {
         // auto result = ::xeDeviceGetComputeProperties( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetComputeProperties");
+
+        return compute_properties_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceGetMemoryProperties
+    /// @brief Retrieves memory attributes of the device
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -208,17 +221,20 @@ namespace xe
     ///     - memory_properties_t: query result for compute properties
     /// 
     /// @throws result_t
-    inline Device::memory_properties_t 
+    Device::memory_properties_t __xecall
     Device::GetMemoryProperties(
         void
         )
     {
         // auto result = ::xeDeviceGetMemoryProperties( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetMemoryProperties");
+
+        return memory_properties_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceGetP2PProperties
+    /// @brief Retrieves Peer-to-Peer properties between one device and a peer
+    ///        devices
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -232,17 +248,19 @@ namespace xe
     ///     - p2p_properties_t: Peer-to-Peer properties between source and peer device
     /// 
     /// @throws result_t
-    inline Device::p2p_properties_t 
+    Device::p2p_properties_t __xecall
     Device::GetP2PProperties(
         Device* pPeerDevice                             ///< [in] pointer to the peer device with the allocation
         )
     {
         // auto result = ::xeDeviceGetP2PProperties( handle, pPeerDevice );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetP2PProperties");
+
+        return p2p_properties_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceCanAccessPeer
+    /// @brief Queries if one device can directly access peer device allocations
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -256,17 +274,19 @@ namespace xe
     ///     - bool_t: returned access capability
     /// 
     /// @throws result_t
-    inline bool_t 
+    bool_t __xecall
     Device::CanAccessPeer(
         Device* pPeerDevice                             ///< [in] pointer to the peer device with the allocation
         )
     {
         // auto result = ::xeDeviceCanAccessPeer( handle, pPeerDevice );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CanAccessPeer");
+
+        return bool_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceSetIntermediateCacheConfig
+    /// @brief Sets the preferred Intermediate cache configuration for a device.
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
@@ -277,7 +297,7 @@ namespace xe
     ///     - **cudaFuncSetCacheConfig **
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     Device::SetIntermediateCacheConfig(
         cache_config_t CacheConfig                      ///< [in] CacheConfig
         )
@@ -287,7 +307,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceSetLastLevelCacheConfig
+    /// @brief Sets the preferred Last Level cache configuration for a device.
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
@@ -298,174 +318,13 @@ namespace xe
     ///     - **cudaFuncSetCacheConfig **
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     Device::SetLastLevelCacheConfig(
         cache_config_t CacheConfig                      ///< [in] CacheConfig
         )
     {
         // auto result = ::xeDeviceSetLastLevelCacheConfig( handle, CacheConfig );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::SetLastLevelCacheConfig");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceSystemBarrier
-    /// 
-    /// @details
-    ///     - This is a special-case system level barrier that can be used to ensure
-    ///       global observability of writes; typically needed after a producer
-    ///       (e.g., NIC) performs direct writes to the device's memory (e.g.,
-    ///       Direct RDMA writes).  This is typically required when the memory
-    ///       corresponding to the writes is subsequently accessed from a remote
-    ///       device.
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @throws result_t
-    inline void 
-    Device::SystemBarrier(
-        void
-        )
-    {
-        // auto result = ::xeDeviceSystemBarrier( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::SystemBarrier");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-#if XE_ENABLE_OCL_INTEROP
-    /// @brief C++ wrapper for ::xeDeviceRegisterCLMemory
-    /// 
-    /// @returns
-    ///     - void*: pointer to device allocation
-    /// 
-    /// @throws result_t
-    inline void* 
-    Device::RegisterCLMemory(
-        cl_context context,                             ///< [in] the OpenCL context that created the memory
-        cl_mem mem                                      ///< [in] the OpenCL memory to register
-        )
-    {
-        // auto result = ::xeDeviceRegisterCLMemory( handle, context, mem );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLMemory");
-    }
-#endif // XE_ENABLE_OCL_INTEROP
-
-    ///////////////////////////////////////////////////////////////////////////////
-#if XE_ENABLE_OCL_INTEROP
-    /// @brief C++ wrapper for ::xeDeviceRegisterCLProgram
-    /// 
-    /// @returns
-    ///     - Module: pointer to handle of module object created
-    /// 
-    /// @throws result_t
-    inline Module* 
-    Device::RegisterCLProgram(
-        cl_context context,                             ///< [in] the OpenCL context that created the program
-        cl_program program                              ///< [in] the OpenCL program to register
-        )
-    {
-        // auto result = ::xeDeviceRegisterCLProgram( handle, context, program );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLProgram");
-    }
-#endif // XE_ENABLE_OCL_INTEROP
-
-    ///////////////////////////////////////////////////////////////////////////////
-#if XE_ENABLE_OCL_INTEROP
-    /// @brief C++ wrapper for ::xeDeviceRegisterCLCommandQueue
-    /// 
-    /// @returns
-    ///     - CommandQueue: pointer to handle of command queue object created
-    /// 
-    /// @throws result_t
-    inline CommandQueue* 
-    Device::RegisterCLCommandQueue(
-        cl_context context,                             ///< [in] the OpenCL context that created the command queue
-        cl_command_queue command_queue                  ///< [in] the OpenCL command queue to register
-        )
-    {
-        // auto result = ::xeDeviceRegisterCLCommandQueue( handle, context, command_queue );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLCommandQueue");
-    }
-#endif // XE_ENABLE_OCL_INTEROP
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceMakeMemoryResident
-    /// 
-    /// @details
-    ///     - If the application does not properly manage residency then the device
-    ///       may experience unrecoverable page-faults.
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @throws result_t
-    inline void 
-    Device::MakeMemoryResident(
-        void* ptr,                                      ///< [in] pointer to memory to make resident
-        size_t size                                     ///< [in] size in bytes to make resident
-        )
-    {
-        // auto result = ::xeDeviceMakeMemoryResident( handle, ptr, size );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::MakeMemoryResident");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceEvictMemory
-    /// 
-    /// @details
-    ///     - The application is responsible for making sure the GPU is not
-    ///       currently referencing the memory before it is evicted
-    ///     - Memory is always implicitly evicted if it is resident when freed.
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @throws result_t
-    inline void 
-    Device::EvictMemory(
-        void* ptr,                                      ///< [in] pointer to memory to evict
-        size_t size                                     ///< [in] size in bytes to evict
-        )
-    {
-        // auto result = ::xeDeviceEvictMemory( handle, ptr, size );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::EvictMemory");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceMakeImageResident
-    /// 
-    /// @details
-    ///     - If the application does not properly manage residency then the device
-    ///       may experience unrecoverable page-faults.
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @throws result_t
-    inline void 
-    Device::MakeImageResident(
-        Image* pImage                                   ///< [in] pointer to image to make resident
-        )
-    {
-        // auto result = ::xeDeviceMakeImageResident( handle, pImage );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::MakeImageResident");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceEvictImage
-    /// 
-    /// @details
-    ///     - The application is responsible for making sure the GPU is not
-    ///       currently referencing the memory before it is evicted
-    ///     - An image is always implicitly evicted if it is resident when
-    ///       destroyed.
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @throws result_t
-    inline void 
-    Device::EvictImage(
-        Image* pImage                                   ///< [in] pointer to image to make evict
-        )
-    {
-        // auto result = ::xeDeviceEvictImage( handle, pImage );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::EvictImage");
     }
 
 } // namespace xe

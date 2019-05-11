@@ -634,6 +634,18 @@ members:
       desc: "[in] descriptor of the module object"
 --- #--------------------------------------------------------------------------
 type: class
+desc: "C++ wrapper for buildlog"
+name: $xModuleBuildLog
+members:
+    - type: $x_module_build_log_handle_t
+      name: handle
+      desc: "handle of the buildlog object"
+      init: nullptr
+    - type: $xModule*
+      name: pModule
+      desc: "[in] pointer to parent object"
+--- #--------------------------------------------------------------------------
+type: class
 desc: "C++ wrapper for function"
 name: $xFunction
 members:

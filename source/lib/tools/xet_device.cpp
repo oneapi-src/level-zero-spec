@@ -31,27 +31,8 @@
 *
 ******************************************************************************/
 #include "xet_api.hpp"
+#include "xet_api.h"
 
 namespace xet
 {
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetDeviceActivateMetricGroups
-    /// 
-    /// @details
-    ///     - MetricGroup must be active until MetricQueryGetDeta and
-    ///       ::MetricTracerClose.
-    ///     - Conflicting metric groups cannot be activated, in such case tha call
-    ///       would fail.
-    /// 
-    /// @throws result_t
-    inline void 
-    Device::ActivateMetricGroups(
-        uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
-        MetricGroup* phMetricGroups                     ///< [in] handles of the metric groups to activate. NULL to deactivate.
-        )
-    {
-        // auto result = ::xetDeviceActivateMetricGroups( handle, count, phMetricGroups );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Device::ActivateMetricGroups");
-    }
-
 } // namespace xet

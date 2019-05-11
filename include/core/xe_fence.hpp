@@ -83,7 +83,7 @@ namespace xe
         Fence( void ) = delete;
         Fence( 
             CommandQueue* pCommandQueue,                    ///< [in] pointer to parent object
-            desc_t desc                                     ///< [in] descriptor of the fence object
+            const desc_t& desc                              ///< [in] descriptor of the fence object
             );
 
         ~Fence( void ) = default;
@@ -113,7 +113,7 @@ namespace xe
         ///     - Fence: pointer to handle of fence object created
         /// 
         /// @throws result_t
-        inline static Fence*
+        static Fence* __xecall
         Create(
             CommandQueue* pCommandQueue,                    ///< [in] pointer to command queue
             const desc_t* desc                              ///< [in] pointer to fence descriptor
@@ -135,7 +135,7 @@ namespace xe
         ///   _Analogues_
         ///     - **vkDestroyFence**
         /// @throws result_t
-        inline static void
+        static void __xecall
         Destroy(
             Fence* pFence                                   ///< [in] pointer to fence object to destroy
             );
@@ -151,7 +151,7 @@ namespace xe
         ///   _Analogues_
         ///     - **vkWaitForFences**
         /// @throws result_t
-        inline void
+        void __xecall
         HostSynchronize(
             uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
                                                             ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY;
@@ -171,7 +171,7 @@ namespace xe
         ///   _Analogues_
         ///     - **vkGetFenceStatus**
         /// @throws result_t
-        inline void
+        void __xecall
         QueryStatus(
             void
             );
@@ -187,7 +187,7 @@ namespace xe
         ///   _Analogues_
         ///     - **vkResetFences**
         /// @throws result_t
-        inline void
+        void __xecall
         Reset(
             void
             );

@@ -186,7 +186,7 @@ namespace xet
         ///     - uint32_t: number of metric groups supported by the device
         /// 
         /// @throws result_t
-        inline static uint32_t
+        static uint32_t __xecall
         GetCount(
             xe::Device* pDevice                             ///< [in] pointer to the device object
             );
@@ -200,7 +200,7 @@ namespace xet
         ///     - MetricGroup: metric group handle
         /// 
         /// @throws result_t
-        inline static MetricGroup*
+        static MetricGroup* __xecall
         Get(
             xe::Device* pDevice,                            ///< [in] pointer to the device
             uint32_t ordinal                                ///< [in] metric group index
@@ -215,7 +215,7 @@ namespace xet
         ///     - properties_t: metric group properties
         /// 
         /// @throws result_t
-        inline properties_t
+        properties_t __xecall
         GetProperties(
             void
             );
@@ -227,7 +227,7 @@ namespace xet
         ///     - The application may **not** call this function from simultaneous
         ///       threads wth the same metric group handle.
         /// @throws result_t
-        inline void
+        void __xecall
         CalculateData(
             uint32_t* pReportCount,                         ///< [in,out] report count to calculate
             uint32_t rawDataSize,                           ///< [in] raw data size
@@ -315,7 +315,7 @@ namespace xet
         ///     - Metric: handle of metric
         /// 
         /// @throws result_t
-        inline static Metric*
+        static Metric* __xecall
         Get(
             MetricGroup* pMetricGroup,                      ///< [in] pointer to the metric group
             uint32_t ordinal                                ///< [in] metric index
@@ -330,7 +330,7 @@ namespace xet
         ///     - properties_t: metric properties
         /// 
         /// @throws result_t
-        inline properties_t
+        properties_t __xecall
         GetProperties(
             void
             );
@@ -397,7 +397,7 @@ namespace xet
         ///     - MetricTracer: handle of metric tracer
         /// 
         /// @throws result_t
-        inline static MetricTracer*
+        static MetricTracer* __xecall
         Open(
             xe::Device* pDevice,                            ///< [in] pointer to the device
             desc_t* pDesc,                                  ///< [in,out] metric tracer descriptor
@@ -412,7 +412,7 @@ namespace xet
         ///     - The application may **not** call this function from simultaneous
         ///       threads with the same metric tracer handle.
         /// @throws result_t
-        inline void
+        void __xecall
         Close(
             void
             );
@@ -423,7 +423,7 @@ namespace xet
         /// @details
         ///     - The application may call this function from simultaneous threads.
         /// @throws result_t
-        inline void
+        void __xecall
         ReadData(
             uint32_t* pReportCount,                         ///< [in,out] report count to read/returned
             uint32_t rawDataSize,                           ///< [in] raw data buffer size
@@ -499,7 +499,7 @@ namespace xet
         ///     - MetricQueryPool: handle of metric query pool
         /// 
         /// @throws result_t
-        inline static MetricQueryPool*
+        static MetricQueryPool* __xecall
         Create(
             xe::Device* pDevice,                            ///< [in] pointer to the device
             desc_t* pDesc                                   ///< [in] metric query pool creation data
@@ -512,7 +512,7 @@ namespace xet
         ///     - The application may **not** call this function from simultaneous
         ///       threads with the same query pool handle.
         /// @throws result_t
-        inline static void
+        static void __xecall
         Destroy(
             MetricQueryPool* pMetricQueryPool               ///< [in] pointer to the metric query pool
             );
@@ -526,7 +526,7 @@ namespace xet
         ///     - MetricQuery: handle of metric query
         /// 
         /// @throws result_t
-        inline MetricQuery*
+        MetricQuery* __xecall
         GetMetricQuery(
             uint32_t ordinal                                ///< [in] index of the query within the pool
             );
@@ -569,7 +569,7 @@ namespace xet
         /// @details
         ///     - The application may call this function from simultaneous threads.
         /// @throws result_t
-        inline void
+        void __xecall
         GetData(
             uint32_t* pReportCount,                         ///< [in,out] report count to read/returned
             uint32_t rawDataSize,                           ///< [in] raw data size passed by the user

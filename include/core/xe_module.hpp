@@ -88,7 +88,7 @@ namespace xe
         Module( void ) = delete;
         Module( 
             Device* pDevice,                                ///< [in] pointer to parent object
-            desc_t desc                                     ///< [in] descriptor of the module object
+            const desc_t& desc                              ///< [in] descriptor of the module object
             );
 
         ~Module( void ) = default;
@@ -132,7 +132,7 @@ namespace xe
         ///     - Module: pointer to handle of module object created
         /// 
         /// @throws result_t
-        inline static Module*
+        static Module* __xecall
         Create(
             Device* pDevice,                                ///< [in] pointer to the device
             const desc_t* pDesc,                            ///< [in] pointer to module descriptor
@@ -155,7 +155,7 @@ namespace xe
         ///   _Analogues_
         ///     - **cuModuleUnload**
         /// @throws result_t
-        inline static void
+        static void __xecall
         Destroy(
             Module* pModule                                 ///< [in] pointer to the module
             );
@@ -176,7 +176,7 @@ namespace xe
         ///     - The native binary will retain debugging information that is associated
         ///       with a module.
         /// @throws result_t
-        inline void
+        void __xecall
         GetNativeBinary(
             size_t* pSize,                                  ///< [in,out] size of native binary in bytes.
             uint8_t* pModuleNativeBinary = nullptr          ///< [in,out][optional] byte pointer to native binary
@@ -192,7 +192,7 @@ namespace xe
         ///     - void*: device visible pointer
         /// 
         /// @throws result_t
-        inline void*
+        void* __xecall
         GetGlobalPointer(
             const char* pGlobalName                         ///< [in] name of function in global
             );
@@ -208,9 +208,75 @@ namespace xe
         ///     - void*: pointer to function.
         /// 
         /// @throws result_t
-        inline void*
+        void* __xecall
         GetFunctionPointer(
             const char* pFunctionName                       ///< [in] Name of function to retrieve function pointer for.
+            );
+
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for buildlog
+    class ModuleBuildLog
+    {
+    public:
+
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+        module_build_log_handle_t m_handle = nullptr;   ///< handle of the buildlog object
+        Module* m_pModule;                              ///< [in] pointer to parent object
+
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        ModuleBuildLog( void ) = delete;
+        ModuleBuildLog( 
+            Module* pModule                                 ///< [in] pointer to parent object
+            );
+
+        ~ModuleBuildLog( void ) = default;
+
+        ModuleBuildLog( ModuleBuildLog const& other ) = delete;
+        void operator=( ModuleBuildLog const& other ) = delete;
+
+        ModuleBuildLog( ModuleBuildLog&& other ) = delete;
+        void operator=( ModuleBuildLog&& other ) = delete;
+
+        ///////////////////////////////////////////////////////////////////////////////
+        auto getHandle( void ) const { return m_handle; }
+        auto getModule( void ) const { return m_pModule; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Destroys module build log object
+        /// 
+        /// @details
+        ///     - The application is responsible for making sure the GPU is not
+        ///       currently referencing the build log before it is deleted
+        ///     - The implementation of this function will immediately free all Host and
+        ///       Device allocations associated with this object
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same build log handle.
+        ///     - The implementation of this function should be lock-free.
+        ///     - This function can be called before or after ::ModuleDestroy for the
+        ///       associated module.
+        /// @throws result_t
+        static void __xecall
+        Destroy(
+            ModuleBuildLog* pModuleBuildLog                 ///< [in] pointer to the module build log object.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Retrieves text string for build log.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        ///     - The caller must provide memory for build log.
+        ///     - The caller can pass nullptr for pBuildLog when querying only for size.
+        /// @throws result_t
+        void __xecall
+        GetString(
+            size_t* pSize,                                  ///< [in,out] size of build log string.
+            char* pBuildLog = nullptr                       ///< [in,out][optional] pointer to null-terminated string of the log.
             );
 
     };
@@ -293,7 +359,7 @@ namespace xe
         Function( void ) = delete;
         Function( 
             Module* pModule,                                ///< [in] pointer to parent object
-            desc_t desc                                     ///< [in] descriptor of the function object
+            const desc_t& desc                              ///< [in] descriptor of the function object
             );
 
         ~Function( void ) = default;
@@ -324,7 +390,7 @@ namespace xe
         ///     - Function: handle of the Function object
         /// 
         /// @throws result_t
-        inline static Function*
+        static Function* __xecall
         Create(
             Module* pModule,                                ///< [in] pointer to the module
             const desc_t* pDesc                             ///< [in] pointer to function descriptor
@@ -342,7 +408,7 @@ namespace xe
         ///       threads with the same function handle.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
-        inline static void
+        static void __xecall
         Destroy(
             Function* pFunction                             ///< [in] pointer to the function object
             );
@@ -357,7 +423,7 @@ namespace xe
         ///     - This can be called multiple times. The driver copies the group size
         ///       information when appending functions into a command list.
         /// @throws result_t
-        inline void
+        void __xecall
         SetGroupSize(
             uint32_t groupSizeX,                            ///< [in] group size for X dimension to use for this function.
             uint32_t groupSizeY,                            ///< [in] group size for Y dimension to use for this function.
@@ -379,7 +445,7 @@ namespace xe
         ///     - uint32_t: recommended size of group for Z dimension.
         /// 
         /// @throws result_t
-        inline std::tuple<uint32_t, uint32_t, uint32_t>
+        std::tuple<uint32_t, uint32_t, uint32_t> __xecall
         SuggestGroupSize(
             uint32_t globalSizeX,                           ///< [in] global width for X dimension.
             uint32_t globalSizeY,                           ///< [in] global width for Y dimension.
@@ -394,7 +460,7 @@ namespace xe
         ///       same function handle.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
-        inline void
+        void __xecall
         SetArgumentValue(
             uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
             size_t argSize,                                 ///< [in] size of argument type
@@ -414,7 +480,7 @@ namespace xe
         ///   _Analogues_
         ///     - **clSetKernelExecInfo**
         /// @throws result_t
-        inline void
+        void __xecall
         SetAttribute(
             set_attribute_t attr,                           ///< [in] attribute to set
             uint32_t value                                  ///< [in] attribute value to set
@@ -434,7 +500,7 @@ namespace xe
         ///     - uint32_t: returned attribute value
         /// 
         /// @throws result_t
-        inline uint32_t
+        uint32_t __xecall
         GetAttribute(
             get_attribute_t attr                            ///< [in] attribute to query
             );

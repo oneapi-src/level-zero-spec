@@ -65,7 +65,7 @@ namespace xe
     ///     - **cuInit**
     /// 
     /// @throws result_t
-    inline void
+    void __xecall
     Init(
         init_flag_t flags                               ///< [in] initialization flags
         );
@@ -87,7 +87,7 @@ namespace xe
     ///     - uint32_t: driver version
     /// 
     /// @throws result_t
-    inline uint32_t
+    uint32_t __xecall
     GetDriverVersion(
         void
         );

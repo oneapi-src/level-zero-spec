@@ -31,77 +31,8 @@
 *
 ******************************************************************************/
 #include "xet_api.hpp"
+#include "xet_api.h"
 
 namespace xet
 {
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetCommandListAppendMetricTracerMarker
-    /// 
-    /// @details
-    ///     - The application may **not** call this function from simultaneous
-    ///       threads with the same command list handle.
-    /// 
-    /// @throws result_t
-    inline void 
-    CommandList::AppendMetricTracerMarker(
-        MetricTracer* pMetricTracer,                    ///< [in] pointer to the metric tracer
-        uint32_t value                                  ///< [in] tracer marker value
-        )
-    {
-        // auto result = ::xetCommandListAppendMetricTracerMarker( handle, pMetricTracer, value );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::CommandList::AppendMetricTracerMarker");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetCommandListAppendMetricQueryBegin
-    /// 
-    /// @details
-    ///     - The application may **not** call this function from simultaneous
-    ///       threads with the same command list handle.
-    /// 
-    /// @throws result_t
-    inline void 
-    CommandList::AppendMetricQueryBegin(
-        MetricQuery* pMetricQuery                       ///< [in] pointer to the metric query
-        )
-    {
-        // auto result = ::xetCommandListAppendMetricQueryBegin( handle, pMetricQuery );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::CommandList::AppendMetricQueryBegin");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetCommandListAppendMetricQueryEnd
-    /// 
-    /// @details
-    ///     - The application may **not** call this function from simultaneous
-    ///       threads with the same command list handle.
-    /// 
-    /// @throws result_t
-    inline void 
-    CommandList::AppendMetricQueryEnd(
-        MetricQuery* pMetricQuery,                      ///< [in] pointer to the metric query
-        xe::Event* pCompletionEvent                     ///< [in] pointer to the completion event to signal
-        )
-    {
-        // auto result = ::xetCommandListAppendMetricQueryEnd( handle, pMetricQuery, pCompletionEvent );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::CommandList::AppendMetricQueryEnd");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetCommandListAppendMetricMemoryBarrier
-    /// 
-    /// @details
-    ///     - The application may **not** call this function from simultaneous
-    ///       threads with the same command list handle.
-    /// 
-    /// @throws result_t
-    inline void 
-    CommandList::AppendMetricMemoryBarrier(
-        void
-        )
-    {
-        // auto result = ::xetCommandListAppendMetricMemoryBarrier( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::CommandList::AppendMetricMemoryBarrier");
-    }
-
 } // namespace xet

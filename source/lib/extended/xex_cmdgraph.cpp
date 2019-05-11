@@ -31,13 +31,14 @@
 *
 ******************************************************************************/
 #include "xex_api.hpp"
+#include "xex_api.h"
 
 namespace xex
 {
     ///////////////////////////////////////////////////////////////////////////////
     CommandGraph::CommandGraph( 
         Device* pDevice,                                ///< [in] pointer to parent object
-        desc_t desc                                     ///< [in] descriptor of the command graph object
+        const desc_t& desc                              ///< [in] descriptor of the command graph object
         ) :
         m_pDevice( pDevice ),
         m_desc( desc )
@@ -45,7 +46,8 @@ namespace xex
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xexCommandGraphCreate
+    /// @brief Creates a command graph on the device for submitting commands to any
+    ///        command queue.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -55,7 +57,7 @@ namespace xex
     ///     - CommandGraph: pointer to handle of command graph object created
     /// 
     /// @throws result_t
-    inline CommandGraph* 
+    CommandGraph* __xecall
     CommandGraph::Create(
         xe::Device* pDevice,                            ///< [in] pointer to the device object
         const desc_t* desc                              ///< [in] pointer to command graph descriptor
@@ -63,10 +65,12 @@ namespace xex
     {
         // auto result = ::xexCommandGraphCreate( handle, pDevice, desc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xex::CommandGraph::Create");
+
+        return (CommandGraph*)0;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xexCommandGraphDestroy
+    /// @brief Destroys a command graph.
     /// 
     /// @details
     ///     - The implementation of this function will immediately free all Host
@@ -76,7 +80,7 @@ namespace xex
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     CommandGraph::Destroy(
         CommandGraph* pCommandGraph                     ///< [in] pointer to command graph object to destroy
         )
@@ -86,7 +90,7 @@ namespace xex
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xexCommandGraphClose
+    /// @brief Closes a command graph; ready to be executed by a command queue.
     /// 
     /// @details
     ///     - The command graph will optimize the execution order of the command
@@ -97,7 +101,7 @@ namespace xex
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     CommandGraph::Close(
         void
         )

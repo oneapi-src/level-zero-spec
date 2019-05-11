@@ -146,7 +146,7 @@ namespace xe
         CommandList( void ) = delete;
         CommandList( 
             Device* pDevice,                                ///< [in] pointer to parent object
-            desc_t desc                                     ///< [in] descriptor of the command list object
+            const desc_t& desc                              ///< [in] descriptor of the command list object
             );
 
         ~CommandList( void ) = default;
@@ -174,7 +174,7 @@ namespace xe
         ///     - CommandList: pointer to handle of command list object created
         /// 
         /// @throws result_t
-        inline static CommandList*
+        static CommandList* __xecall
         Create(
             Device* pDevice,                                ///< [in] pointer to the device object
             const desc_t* desc                              ///< [in] pointer to command list descriptor
@@ -193,7 +193,7 @@ namespace xe
         ///     - CommandList: pointer to handle of command list object created
         /// 
         /// @throws result_t
-        inline static CommandList*
+        static CommandList* __xecall
         CreateImmediate(
             Device* pDevice,                                ///< [in] pointer to the device object
             const CommandQueue::desc_t* desc                ///< [in] pointer to command queue descriptor
@@ -211,7 +211,7 @@ namespace xe
         ///       threads with the same command list handle.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
-        inline static void
+        static void __xecall
         Destroy(
             CommandList* pCommandList                       ///< [in] pointer to command list object to destroy
             );
@@ -224,7 +224,7 @@ namespace xe
         ///       threads with the same command list handle.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
-        inline void
+        void __xecall
         Close(
             void
             );
@@ -240,7 +240,7 @@ namespace xe
         ///       threads with the same command list handle.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
-        inline void
+        void __xecall
         Reset(
             void
             );
@@ -259,7 +259,7 @@ namespace xe
         ///     - cuCtxSetLimit
         ///     - cuCtxSetSharedMemConfig
         /// @throws result_t
-        inline void
+        void __xecall
         SetParameter(
             parameter_t parameter,                          ///< [in] parameter to change
             uint32_t value                                  ///< [in] value of attribute
@@ -282,7 +282,7 @@ namespace xe
         ///     - uint32_t: value of attribute
         /// 
         /// @throws result_t
-        inline uint32_t
+        uint32_t __xecall
         GetParameter(
             parameter_t parameter                           ///< [in] parameter to retrieve
             );
@@ -295,7 +295,7 @@ namespace xe
         ///       threads with the same command list handle.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
-        inline void
+        void __xecall
         ResetParameters(
             void
             );
@@ -313,7 +313,7 @@ namespace xe
         ///     - void*: pointer to command buffer space reserved
         /// 
         /// @throws result_t
-        inline void*
+        void* __xecall
         ReserveSpace(
             size_t size                                     ///< [in] size (in bytes) to reserve
             );
@@ -339,7 +339,7 @@ namespace xe
         ///     - **vkCmdPipelineBarrier**
         ///     - clEnqueueBarrierWithWaitList
         /// @throws result_t
-        inline void
+        void __xecall
         AppendBarrier(
             Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before executing barrier
@@ -363,7 +363,7 @@ namespace xe
         ///       threads with the same command list handle.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
-        inline void
+        void __xecall
         AppendMemoryRangesBarrier(
             uint32_t numRanges,                             ///< [in] number of memory ranges
             const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
@@ -391,7 +391,7 @@ namespace xe
         ///     - **clEnqueueWriteBuffer**
         ///     - **clEnqueueSVMMemcpy**
         /// @throws result_t
-        inline void
+        void __xecall
         AppendMemoryCopy(
             void* dstptr,                                   ///< [in] pointer to destination memory to copy to
             const void* srcptr,                             ///< [in] pointer to source memory to copy from
@@ -418,7 +418,7 @@ namespace xe
         ///     - **clEnqueueFillBuffer**
         ///     - **clEnqueueSVMMemFill**
         /// @throws result_t
-        inline void
+        void __xecall
         AppendMemorySet(
             void* ptr,                                      ///< [in] pointer to memory to initialize
             int value,                                      ///< [in] value to initialize memory to
@@ -440,7 +440,7 @@ namespace xe
         ///   _Analogues_
         ///     - **clEnqueueCopyImage**
         /// @throws result_t
-        inline void
+        void __xecall
         AppendImageCopy(
             Image* pDstImage,                               ///< [in] pointer to destination image to copy to
             Image* pSrcImage,                               ///< [in] pointer to source image to copy from
@@ -457,7 +457,7 @@ namespace xe
         ///       threads with the same command list handle.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
-        inline void
+        void __xecall
         AppendImageCopyRegion(
             Image* pDstImage,                               ///< [in] pointer to destination image to copy to
             Image* pSrcImage,                               ///< [in] pointer to source image to copy from
@@ -482,7 +482,7 @@ namespace xe
         ///   _Analogues_
         ///     - clEnqueueReadImage
         /// @throws result_t
-        inline void
+        void __xecall
         AppendImageCopyToMemory(
             void* dstptr,                                   ///< [in] pointer to destination memory to copy to
             Image* pSrcImage,                               ///< [in] pointer to source image to copy from
@@ -506,7 +506,7 @@ namespace xe
         ///   _Analogues_
         ///     - clEnqueueWriteImage
         /// @throws result_t
-        inline void
+        void __xecall
         AppendImageCopyFromMemory(
             Image* pDstImage,                               ///< [in] pointer to destination image to copy to
             const void* srcptr,                             ///< [in] pointer to source memory to copy from
@@ -542,7 +542,7 @@ namespace xe
         ///     - cudaMemPrefetchAsync
         ///     - clEnqueueSVMMigrateMem
         /// @throws result_t
-        inline void
+        void __xecall
         AppendMemoryPrefetch(
             const void* ptr,                                ///< [in] pointer to start of the memory range to prefetch
             size_t count                                    ///< [in] size in bytes of the memory range to prefetch
@@ -571,7 +571,7 @@ namespace xe
         ///   _Analogues_
         ///     - **cudaMemAdvise**
         /// @throws result_t
-        inline void
+        void __xecall
         AppendMemAdvise(
             Device* pDevice,                                ///< [in] device associated with the memory advice
             const void* ptr,                                ///< [in] Pointer to the start of the memory range
@@ -593,7 +593,7 @@ namespace xe
         ///     - cuEventRecord
         ///     - vkCmdSetEvent
         /// @throws result_t
-        inline void
+        void __xecall
         AppendSignalEvent(
             Event* pEvent                                   ///< [in] pointer to the event
             );
@@ -606,7 +606,7 @@ namespace xe
         ///       threads with the same command list handle.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
-        inline void
+        void __xecall
         AppendWaitOnEvents(
             uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
             Event* phEvents                                 ///< [in] pointer to the events to wait on before continuing
@@ -624,7 +624,7 @@ namespace xe
         ///   _Analogues_
         ///     - vkResetEvent
         /// @throws result_t
-        inline void
+        void __xecall
         AppendEventReset(
             Event* pEvent                                   ///< [in] pointer to the event
             );
@@ -643,7 +643,7 @@ namespace xe
         ///   _Analogues_
         ///     - **cuLaunchKernel**
         /// @throws result_t
-        inline void
+        void __xecall
         AppendLaunchFunction(
             Function* pFunction,                            ///< [in] pointer to the function object
             const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] launch function arguments.
@@ -669,7 +669,7 @@ namespace xe
         ///   _Analogues_
         ///     - **cuLaunchKernel**
         /// @throws result_t
-        inline void
+        void __xecall
         AppendLaunchFunctionIndirect(
             Function* pFunction,                            ///< [in] pointer to the function object
             const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain launch arguments
@@ -696,7 +696,7 @@ namespace xe
         ///   _Analogues_
         ///     - **cuLaunchKernel**
         /// @throws result_t
-        inline void
+        void __xecall
         AppendLaunchMultipleFunctionsIndirect(
             uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
             Function* phFunctions,                          ///< [in] handles of the function objects
@@ -724,7 +724,7 @@ namespace xe
         ///   _Analogues_
         ///     - **cuLaunchHostFunc**
         /// @throws result_t
-        inline void
+        void __xecall
         AppendLaunchHostFunction(
             host_pfn_t pfnHostFunc,                         ///< [in] pointer to host function.
             void* pUserData                                 ///< [in] pointer to user data to pass to host function.

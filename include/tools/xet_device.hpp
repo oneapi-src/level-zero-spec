@@ -74,7 +74,7 @@ namespace xet
         ///     - Conflicting metric groups cannot be activated, in such case tha call
         ///       would fail.
         /// @throws result_t
-        inline void
+        void __xecall
         ActivateMetricGroups(
             uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
             MetricGroup* phMetricGroups                     ///< [in] handles of the metric groups to activate. NULL to deactivate.

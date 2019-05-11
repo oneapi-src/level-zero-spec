@@ -146,7 +146,7 @@ namespace ${n}
     %for line in th.make_returns_lines(n, tags, obj, cpp=True, meta=meta):
     /// ${line}
     %endfor
-    inline ${th.make_return_value(n, tags, obj, cpp=True, decl=True, meta=meta)}
+    ${th.make_return_value(n, tags, obj, cpp=True, decl=True, meta=meta)} __${x}call
     ${th.make_func_name(n, tags, obj, cpp=True)}(
         %for line in th.make_param_lines(n, tags, obj, cpp=True, decl=True, meta=meta):
         ${line}
@@ -283,7 +283,11 @@ namespace ${n}
         %if 'tparams' in f:
         template<${th.make_tparams_line(n, tags, f)}>
         %endif
-        inline ${th.make_return_value(n, tags, f, cpp=True, decl=True, meta=meta)}
+        %if 'decl' in f:
+        ${f['decl']} ${th.make_return_value(n, tags, f, cpp=True, decl=True, meta=meta)} __${x}call
+        %else:
+        ${th.make_return_value(n, tags, f, cpp=True, decl=True, meta=meta)} __${x}call
+        %endif
         ${th.make_func_name(n, tags, f, cpp=True)}(
             %for line in th.make_param_lines(n, tags, f, cpp=True, decl=True, meta=meta):
             ${line}

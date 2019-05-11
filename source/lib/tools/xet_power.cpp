@@ -31,6 +31,7 @@
 *
 ******************************************************************************/
 #include "xet_api.hpp"
+#include "xet_api.h"
 
 namespace xet
 {
@@ -43,7 +44,15 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerCreate
+    FreqDomain::FreqDomain( 
+        Power* pPower                                   ///< [in] pointer to parent object
+        ) :
+        m_pPower( pPower )
+    {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Creates an object to access power features on a device
     /// 
     /// @details
     ///     - Initializes internal structures to support power management features.
@@ -59,7 +68,7 @@ namespace xet
     ///     - Power: handle for accessing power features of the device
     /// 
     /// @throws result_t
-    inline Power* 
+    Power* __xecall
     Power::Create(
         xe::Device* pDevice,                            ///< [in] pointer to the device object
         uint32_t flags                                  ///< [in] bitfield of ::power_init_flags_t
@@ -67,10 +76,12 @@ namespace xet
     {
         // auto result = ::xetPowerCreate( handle, pDevice, flags );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::Create");
+
+        return (Power*)0;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerDestroy
+    /// @brief Deletes a power object
     /// 
     /// @remarks
     ///   _Analogues_
@@ -78,7 +89,7 @@ namespace xet
     ///     - **rsmi_shut_down**
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     Power::Destroy(
         Power* pPower                                   ///< [in] pointer to the power object to destroy
         )
@@ -88,90 +99,100 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerGetAveragePowerLimit
+    /// @brief Get current average power limit information for a device
     /// 
     /// @returns
     ///     - average_limit_t: information about the average power limit
     /// 
     /// @throws result_t
-    inline Power::average_limit_t 
+    Power::average_limit_t __xecall
     Power::GetAveragePowerLimit(
         void
         )
     {
         // auto result = ::xetPowerGetAveragePowerLimit( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetAveragePowerLimit");
+
+        return average_limit_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerGetBurstPowerLimit
+    /// @brief Get current burst power limit information for a device
     /// 
     /// @returns
     ///     - burst_limit_t: information about the burst power limit
     /// 
     /// @throws result_t
-    inline Power::burst_limit_t 
+    Power::burst_limit_t __xecall
     Power::GetBurstPowerLimit(
         void
         )
     {
         // auto result = ::xetPowerGetBurstPowerLimit( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetBurstPowerLimit");
+
+        return burst_limit_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerGetPeakPowerLimit
+    /// @brief Get current peak power limit information for a device
     /// 
     /// @returns
     ///     - peak_limit_t: information about the peak power limit
     /// 
     /// @throws result_t
-    inline Power::peak_limit_t 
+    Power::peak_limit_t __xecall
     Power::GetPeakPowerLimit(
         void
         )
     {
         // auto result = ::xetPowerGetPeakPowerLimit( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetPeakPowerLimit");
+
+        return peak_limit_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerGetAllPowerLimits
+    /// @brief Get all current power limits for a device
     /// 
     /// @returns
     ///     - limits_t: information about the average/burst/peak power limits
     /// 
     /// @throws result_t
-    inline Power::limits_t 
+    Power::limits_t __xecall
     Power::GetAllPowerLimits(
         void
         )
     {
         // auto result = ::xetPowerGetAllPowerLimits( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetAllPowerLimits");
+
+        return limits_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerGetDefaultPowerLimits
+    /// @brief Get default power limits for a device
     /// 
     /// @returns
     ///     - limits_t: information about the default average/burst/peak power limits
     /// 
     /// @throws result_t
-    inline Power::limits_t 
+    Power::limits_t __xecall
     Power::GetDefaultPowerLimits(
         void
         )
     {
         // auto result = ::xetPowerGetDefaultPowerLimits( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetDefaultPowerLimits");
+
+        return limits_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerSetAveragePowerLimit
+    /// @brief Set the average power limit for a device
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     Power::SetAveragePowerLimit(
         average_limit_t* pLimit                         ///< [in] information about the average power limit
         )
@@ -181,10 +202,10 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerSetBurstPowerLimit
+    /// @brief Set the burst power limit for a device
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     Power::SetBurstPowerLimit(
         burst_limit_t* pLimit                           ///< [in] information about the burst power limit
         )
@@ -194,10 +215,10 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerSetPeakPowerLimit
+    /// @brief Set the peak power limit for a device
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     Power::SetPeakPowerLimit(
         peak_limit_t* pLimit                            ///< [in] information about the peak power limit
         )
@@ -207,10 +228,10 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerSetPowerLimits
+    /// @brief Set the average/burst/peak power limits for a device
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     Power::SetPowerLimits(
         limits_t* pLimits                               ///< [in] information about the average/burst/peak power limits
         )
@@ -220,7 +241,7 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerGetEnergyCounter
+    /// @brief Get energy counter
     /// 
     /// @details
     ///     - Average power = delta(energy counter in millijoules) / delta(time in
@@ -230,36 +251,40 @@ namespace xet
     ///     - uint64_t: the energy counter in millijoules
     /// 
     /// @throws result_t
-    inline uint64_t 
+    uint64_t __xecall
     Power::GetEnergyCounter(
         void
         )
     {
         // auto result = ::xetPowerGetEnergyCounter( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetEnergyCounter");
+
+        return uint64_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerGetTurboMode
+    /// @brief Get the current Turbo mode for a device
     /// 
     /// @returns
     ///     - turbo_mode_t: turbo mode currently in effect
     /// 
     /// @throws result_t
-    inline Power::turbo_mode_t 
+    Power::turbo_mode_t __xecall
     Power::GetTurboMode(
         void
         )
     {
         // auto result = ::xetPowerGetTurboMode( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetTurboMode");
+
+        return turbo_mode_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerSetTurboMode
+    /// @brief Set the current Turbo mode for a device
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     Power::SetTurboMode(
         turbo_mode_t pTurboMode                         ///< [in] new turbo mode
         )
@@ -269,334 +294,81 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerGetFreqDomainCount
+    /// @brief Get the number of frequency domains on the device
     /// 
     /// @returns
     ///     - uint32_t: the number of frequency domains
     /// 
     /// @throws result_t
-    inline uint32_t 
+    uint32_t __xecall
     Power::GetFreqDomainCount(
         void
         )
     {
         // auto result = ::xetPowerGetFreqDomainCount( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetFreqDomainCount");
+
+        return uint32_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerGetFreqDomain
+    /// @brief Get an object to a frequency domain on a device
     /// 
     /// @returns
     ///     - FreqDomain: pointer to handle of frequency domain object
     /// 
     /// @throws result_t
-    inline FreqDomain* 
+    FreqDomain* __xecall
     Power::GetFreqDomain(
         uint32_t ordinal                                ///< [in] frequency domain index [0 .. ::PowerGetFreqDomainCount - 1]
         )
     {
         // auto result = ::xetPowerGetFreqDomain( handle, ordinal );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetFreqDomain");
+
+        return (FreqDomain*)0;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerFanCount
-    /// 
-    /// @returns
-    ///     - uint32_t: the number of fans on the device
-    /// 
-    /// @throws result_t
-    inline uint32_t 
-    Power::FanCount(
-        void
-        )
-    {
-        // auto result = ::xetPowerFanCount( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::FanCount");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerFanGetProperties
-    /// 
-    /// @returns
-    ///     - fan_properties_t: pointer to storage for fan properties
-    /// 
-    /// @throws result_t
-    inline Power::fan_properties_t 
-    Power::FanGetProperties(
-        uint32_t fanIndex                               ///< [in] fan index [0 .. ::PowerFanCount - 1]
-        )
-    {
-        // auto result = ::xetPowerFanGetProperties( handle, fanIndex );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::FanGetProperties");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerFanGetSpeedTable
-    /// 
-    /// @details
-    ///     - Set pFanSpeedTable = nullptr to find out the current number of fan
-    ///       speed points in the table.
-    /// 
-    /// @returns
-    ///     - fan_point_t: pointer to an array of temperature/fan-speed points
-    /// 
-    /// @throws result_t
-    inline Power::fan_point_t 
-    Power::FanGetSpeedTable(
-        uint32_t fanIndex,                              ///< [in] fan index [0 .. ::PowerFanCount - 1]
-        xe::bool_t fanSpeedInRpm,                       ///< [in] true will request fan speeds in RPM, otherwise in percentage
-        uint32_t* pNumFanPoints                         ///< [in,out] input number of elements in pFanSpeedTable array; output
-                                                        ///< number of elements returned
-        )
-    {
-        // auto result = ::xetPowerFanGetSpeedTable( handle, fanIndex, fanSpeedInRpm, pNumFanPoints );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::FanGetSpeedTable");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerFanSetSpeedTable
-    /// 
-    /// @details
-    ///     - Use ::PowerFanGetProperties to determine acceptable units for fan
-    ///       speed (percent, RPM).
-    ///     - Fan points should be ordered according to increasing temperature.
-    /// 
-    /// @throws result_t
-    inline void 
-    Power::FanSetSpeedTable(
-        uint32_t fanIndex,                              ///< [in] fan index [0 .. ::PowerFanCount - 1]
-        uint32_t numFanPoints,                          ///< [in] number of points in pFanSpeedTable array
-        fan_point_t* pFanPoints                         ///< [in] pointer to an array of temperature/fan-speed points
-        )
-    {
-        // auto result = ::xetPowerFanSetSpeedTable( handle, fanIndex, numFanPoints, pFanPoints );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::FanSetSpeedTable");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerFanGetSpeed
-    /// 
-    /// @details
-    ///     - The array pFanSpeed must contain at least numFans entries.
-    /// 
-    /// @returns
-    ///     - fan_speed_info_t: pointer to an array of current fan speeds
-    /// 
-    /// @throws result_t
-    inline Power::fan_speed_info_t 
-    Power::FanGetSpeed(
-        uint32_t startFanIndex,                         ///< [in] fan index [0 .. ::PowerFanCount - 1]
-        uint32_t numFans,                               ///< [in] pFanSpeed will contain results for fan index
-                                                        ///< (startFanIndex)..(startFanIndex + numFans - 1)
-        xe::bool_t fanSpeedInRpm                        ///< [in] true will request fan speeds in RPM, otherwise in percentage
-        )
-    {
-        // auto result = ::xetPowerFanGetSpeed( handle, startFanIndex, numFans, fanSpeedInRpm );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::FanGetSpeed");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerFanSetSpeed
-    /// 
-    /// @details
-    ///     - Use ::fan_speed_info_t.fanSpeedMode to set whether the speed should be
-    ///       fixed or dynamically controlled
-    /// 
-    /// @throws result_t
-    inline void 
-    Power::FanSetSpeed(
-        uint32_t startFanIndex,                         ///< [in] fan index [0 .. ::PowerFanCount - 1]
-        uint32_t numFans,                               ///< [in] pFanSpeed will contain results for fan index
-                                                        ///< (startFanIndex)..(startFanIndex + numFans - 1)
-        fan_speed_info_t* pFanSpeed                     ///< [in] pointer to an array of current fan speeds
-        )
-    {
-        // auto result = ::xetPowerFanSetSpeed( handle, startFanIndex, numFans, pFanSpeed );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::FanSetSpeed");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerTemperatureSensorCount
-    /// 
-    /// @returns
-    ///     - uint32_t: the number of temperature sensors on the device
-    /// 
-    /// @throws result_t
-    inline uint32_t 
-    Power::TemperatureSensorCount(
-        void
-        )
-    {
-        // auto result = ::xetPowerTemperatureSensorCount( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::TemperatureSensorCount");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerGetTemperatureProperties
-    /// 
-    /// @details
-    ///     - Temperature sensor index 0 is special - it gives the maximum
-    ///       temperature across all sensors
-    /// 
-    /// @returns
-    ///     - temperature_properties_t: pointer to properties for this sensor
-    /// 
-    /// @throws result_t
-    inline Power::temperature_properties_t 
-    Power::GetTemperatureProperties(
-        uint32_t sensorIndex                            ///< [in] sensor index [0 .. ::PowerTemperatureSensorCount]
-        )
-    {
-        // auto result = ::xetPowerGetTemperatureProperties( handle, sensorIndex );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetTemperatureProperties");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerGetTemperature
-    /// 
-    /// @details
-    ///     - Temperature sensor index 0 is special - it gives the maximum
-    ///       temperature across all sensors
-    /// 
-    /// @returns
-    ///     - uint16_t: pointer to an array of temperatures in units of degrees celsius
-    /// 
-    /// @throws result_t
-    inline uint16_t 
-    Power::GetTemperature(
-        uint32_t startSensorIndex,                      ///< [in] sensor index [0 .. ::PowerTemperatureSensorCount]
-        uint32_t numSensors                             ///< [in] pTemperatures will contain results for sensors index
-                                                        ///< (startSensorIndex)..(startSensorIndex + numSensors - 1)
-        )
-    {
-        // auto result = ::xetPowerGetTemperature( handle, startSensorIndex, numSensors );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetTemperature");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerSetTemperatureThreshold
-    /// 
-    /// @details
-    ///     - Check ::temperature_properties_t.canChangeThreshold to determine if
-    ///       the threshold can be changed.
-    ///     - On most systems, there is only one threshold and sensorIndex should be
-    ///       0.
-    ///     - **This is an overclocking feature and will void device warranty**
-    /// 
-    /// @throws result_t
-    inline void 
-    Power::SetTemperatureThreshold(
-        uint32_t sensorIndex,                           ///< [in] sensor index [0 .. ::PowerTemperatureSensorCount]
-        uint16_t maxTemperature                         ///< [in] temperature threshold in degrees celsius beyond which frequency
-                                                        ///< will be throttled
-        )
-    {
-        // auto result = ::xetPowerSetTemperatureThreshold( handle, sensorIndex, maxTemperature );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::SetTemperatureThreshold");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerActivityCount
-    /// 
-    /// @returns
-    ///     - uint32_t: the number of activity counters on the device
-    /// 
-    /// @throws result_t
-    inline uint32_t 
-    Power::ActivityCount(
-        void
-        )
-    {
-        // auto result = ::xetPowerActivityCount( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::ActivityCount");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerGetActivityProperties
-    /// 
-    /// @details
-    ///     - Activity counter index 0 is special - it acculates activity across all
-    ///       blocks.
-    /// 
-    /// @returns
-    ///     - activity_properties_t: pointer to properties for this activity counter
-    /// 
-    /// @throws result_t
-    inline Power::activity_properties_t 
-    Power::GetActivityProperties(
-        uint32_t activityIndex                          ///< [in] activity counter index [0 .. ::PowerActivityCount]
-        )
-    {
-        // auto result = ::xetPowerGetActivityProperties( handle, activityIndex );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetActivityProperties");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetPowerGetActivityCounters
-    /// 
-    /// @details
-    ///     - Activity counter index 0 is special - it acculates activity across all
-    ///       blocks.
-    /// 
-    /// @returns
-    ///     - activity_counters_t: pointer to an array of activity counter data
-    /// 
-    /// @throws result_t
-    inline Power::activity_counters_t 
-    Power::GetActivityCounters(
-        uint32_t startCounterIndex,                     ///< [in] sensor index [0 .. ::PowerActivityCount]
-        uint32_t numCounters                            ///< [in] pCounters will contain results for activity counter index
-                                                        ///< (startCounterIndex)..(startCounterIndex + numCounters - 1)
-        )
-    {
-        // auto result = ::xetPowerGetActivityCounters( handle, startCounterIndex, numCounters );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetActivityCounters");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    FreqDomain::FreqDomain( 
-        Power* pPower                                   ///< [in] pointer to parent object
-        ) :
-        m_pPower( pPower )
-    {
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetFreqDomainGetProperties
+    /// @brief Get the properties for a frequency domain
     /// 
     /// @returns
     ///     - properties_t: pointer to properties for the frequency domain
     /// 
     /// @throws result_t
-    inline FreqDomain::properties_t 
+    FreqDomain::properties_t __xecall
     FreqDomain::GetProperties(
         void
         )
     {
         // auto result = ::xetFreqDomainGetProperties( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::FreqDomain::GetProperties");
+
+        return properties_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetFreqDomainGetSourceFreqDomain
+    /// @brief Get the source frequency domain handle for a frequency domain of type
+    ///        ::CLOCK_TYPE_DIVIDER
     /// 
     /// @returns
     ///     - FreqDomain: pointer to a handle where the source frequency domain handle will be returned
     /// 
     /// @throws result_t
-    inline FreqDomain* 
+    FreqDomain* __xecall
     FreqDomain::GetSourceFreqDomain(
         void
         )
     {
         // auto result = ::xetFreqDomainGetSourceFreqDomain( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::FreqDomain::GetSourceFreqDomain");
+
+        return (FreqDomain*)0;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetFreqDomainGetSupportedClocks
+    /// @brief Get supported frequency points for frequency domains with clock type
+    ///        ::CLOCK_TYPE_PLL
     /// 
     /// @details
     ///     - The total available list of frequencies can be found in
@@ -606,17 +378,20 @@ namespace xet
     ///     - uint32_t: pointer to array of frequencies
     /// 
     /// @throws result_t
-    inline uint32_t 
+    uint32_t __xecall
     FreqDomain::GetSupportedClocks(
         uint32_t numClockPoints                         ///< [in] number of elements in pClocks
         )
     {
         // auto result = ::xetFreqDomainGetSupportedClocks( handle, numClockPoints );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::FreqDomain::GetSupportedClocks");
+
+        return uint32_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetFreqDomainGetSupportedClockDividers
+    /// @brief Get supported frequency dividers for frequency domains with clock type
+    ///        ::CLOCK_TYPE_DIVIDER
     /// 
     /// @details
     ///     - The total available list of frequencies can be found in
@@ -626,34 +401,40 @@ namespace xet
     ///     - clock_divider_t: pointer to array of dividers
     /// 
     /// @throws result_t
-    inline FreqDomain::clock_divider_t 
+    FreqDomain::clock_divider_t __xecall
     FreqDomain::GetSupportedClockDividers(
         uint32_t numClockDividers                       ///< [in] number of elements in pDividers
         )
     {
         // auto result = ::xetFreqDomainGetSupportedClockDividers( handle, numClockDividers );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::FreqDomain::GetSupportedClockDividers");
+
+        return clock_divider_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetFreqDomainGetClockRange
+    /// @brief Get the frequency range for a frequency domain with clock type
+    ///        ::CLOCK_TYPE_PLL.
     /// 
     /// @returns
     ///     - uint32_t: min clock frequency in units of MHz
     ///     - uint32_t: max clock frequency in units of MHz
     /// 
     /// @throws result_t
-    inline std::tuple<uint32_t, uint32_t> 
+    std::tuple<uint32_t, uint32_t> __xecall
     FreqDomain::GetClockRange(
         void
         )
     {
         // auto result = ::xetFreqDomainGetClockRange( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::FreqDomain::GetClockRange");
+
+        return std::tuple<uint32_t, uint32_t>{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetFreqDomainSetClockRange
+    /// @brief Set the frequency range for a frequency domain with clock type
+    ///        ::CLOCK_TYPE_PLL.
     /// 
     /// @details
     ///     - Turbo (dynamic hardware frequency management) will select frequencies
@@ -666,7 +447,7 @@ namespace xet
     ///       value.
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     FreqDomain::SetClockRange(
         uint32_t minClock,                              ///< [in] min clock frequency in units of MHz
         uint32_t maxClock                               ///< [in] max clock frequency in units of MHz
@@ -677,7 +458,8 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetFreqDomainSetClockDivider
+    /// @brief Set frequency divider for a frequency domain with clock type
+    ///        ::CLOCK_TYPE_DIVIDER
     /// 
     /// @details
     ///     - This disables dynamic frequency divider management running on the
@@ -689,17 +471,19 @@ namespace xet
     ///     - clock_divider_t: pointer to frequency divider request
     /// 
     /// @throws result_t
-    inline FreqDomain::clock_divider_t 
+    FreqDomain::clock_divider_t __xecall
     FreqDomain::SetClockDivider(
         void
         )
     {
         // auto result = ::xetFreqDomainSetClockDivider( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::FreqDomain::SetClockDivider");
+
+        return clock_divider_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetFreqDomainGetCurrentFrequency
+    /// @brief Get current frequency
     /// 
     /// @returns
     ///     - uint32_t: current frequency in MHz requested by the driver
@@ -707,13 +491,290 @@ namespace xet
     ///     - freq_throttle_reasons_t: the reason the resolved frequency is lower than the request
     /// 
     /// @throws result_t
-    inline std::tuple<uint32_t, uint32_t, FreqDomain::freq_throttle_reasons_t> 
+    std::tuple<uint32_t, uint32_t, FreqDomain::freq_throttle_reasons_t> __xecall
     FreqDomain::GetCurrentFrequency(
         void
         )
     {
         // auto result = ::xetFreqDomainGetCurrentFrequency( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::FreqDomain::GetCurrentFrequency");
+
+        return std::tuple<uint32_t, uint32_t, freq_throttle_reasons_t>{};
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get number of fans on the device
+    /// 
+    /// @returns
+    ///     - uint32_t: the number of fans on the device
+    /// 
+    /// @throws result_t
+    uint32_t __xecall
+    Power::FanCount(
+        void
+        )
+    {
+        // auto result = ::xetPowerFanCount( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::FanCount");
+
+        return uint32_t{};
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get fan properties for one of the fans on a device
+    /// 
+    /// @returns
+    ///     - fan_properties_t: pointer to storage for fan properties
+    /// 
+    /// @throws result_t
+    Power::fan_properties_t __xecall
+    Power::FanGetProperties(
+        uint32_t fanIndex                               ///< [in] fan index [0 .. ::PowerFanCount - 1]
+        )
+    {
+        // auto result = ::xetPowerFanGetProperties( handle, fanIndex );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::FanGetProperties");
+
+        return fan_properties_t{};
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get fan speed table
+    /// 
+    /// @details
+    ///     - Set pFanSpeedTable = nullptr to find out the current number of fan
+    ///       speed points in the table.
+    /// 
+    /// @returns
+    ///     - fan_point_t: pointer to an array of temperature/fan-speed points
+    /// 
+    /// @throws result_t
+    Power::fan_point_t __xecall
+    Power::FanGetSpeedTable(
+        uint32_t fanIndex,                              ///< [in] fan index [0 .. ::PowerFanCount - 1]
+        xe::bool_t fanSpeedInRpm,                       ///< [in] true will request fan speeds in RPM, otherwise in percentage
+        uint32_t* pNumFanPoints                         ///< [in,out] input number of elements in pFanSpeedTable array; output
+                                                        ///< number of elements returned
+        )
+    {
+        // auto result = ::xetPowerFanGetSpeedTable( handle, fanIndex, fanSpeedInRpm, pNumFanPoints );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::FanGetSpeedTable");
+
+        return fan_point_t{};
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Set fan speed table
+    /// 
+    /// @details
+    ///     - Use ::PowerFanGetProperties to determine acceptable units for fan
+    ///       speed (percent, RPM).
+    ///     - Fan points should be ordered according to increasing temperature.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Power::FanSetSpeedTable(
+        uint32_t fanIndex,                              ///< [in] fan index [0 .. ::PowerFanCount - 1]
+        uint32_t numFanPoints,                          ///< [in] number of points in pFanSpeedTable array
+        fan_point_t* pFanPoints                         ///< [in] pointer to an array of temperature/fan-speed points
+        )
+    {
+        // auto result = ::xetPowerFanSetSpeedTable( handle, fanIndex, numFanPoints, pFanPoints );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::FanSetSpeedTable");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get current fan speeds
+    /// 
+    /// @details
+    ///     - The array pFanSpeed must contain at least numFans entries.
+    /// 
+    /// @returns
+    ///     - fan_speed_info_t: pointer to an array of current fan speeds
+    /// 
+    /// @throws result_t
+    Power::fan_speed_info_t __xecall
+    Power::FanGetSpeed(
+        uint32_t startFanIndex,                         ///< [in] fan index [0 .. ::PowerFanCount - 1]
+        uint32_t numFans,                               ///< [in] pFanSpeed will contain results for fan index
+                                                        ///< (startFanIndex)..(startFanIndex + numFans - 1)
+        xe::bool_t fanSpeedInRpm                        ///< [in] true will request fan speeds in RPM, otherwise in percentage
+        )
+    {
+        // auto result = ::xetPowerFanGetSpeed( handle, startFanIndex, numFans, fanSpeedInRpm );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::FanGetSpeed");
+
+        return fan_speed_info_t{};
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Set fan speeds
+    /// 
+    /// @details
+    ///     - Use ::fan_speed_info_t.fanSpeedMode to set whether the speed should be
+    ///       fixed or dynamically controlled
+    /// 
+    /// @throws result_t
+    void __xecall
+    Power::FanSetSpeed(
+        uint32_t startFanIndex,                         ///< [in] fan index [0 .. ::PowerFanCount - 1]
+        uint32_t numFans,                               ///< [in] pFanSpeed will contain results for fan index
+                                                        ///< (startFanIndex)..(startFanIndex + numFans - 1)
+        fan_speed_info_t* pFanSpeed                     ///< [in] pointer to an array of current fan speeds
+        )
+    {
+        // auto result = ::xetPowerFanSetSpeed( handle, startFanIndex, numFans, pFanSpeed );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::FanSetSpeed");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get number of temperature sensors on the device
+    /// 
+    /// @returns
+    ///     - uint32_t: the number of temperature sensors on the device
+    /// 
+    /// @throws result_t
+    uint32_t __xecall
+    Power::TemperatureSensorCount(
+        void
+        )
+    {
+        // auto result = ::xetPowerTemperatureSensorCount( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::TemperatureSensorCount");
+
+        return uint32_t{};
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get temperatures sensor properties
+    /// 
+    /// @details
+    ///     - Temperature sensor index 0 is special - it gives the maximum
+    ///       temperature across all sensors
+    /// 
+    /// @returns
+    ///     - temperature_properties_t: pointer to properties for this sensor
+    /// 
+    /// @throws result_t
+    Power::temperature_properties_t __xecall
+    Power::GetTemperatureProperties(
+        uint32_t sensorIndex                            ///< [in] sensor index [0 .. ::PowerTemperatureSensorCount]
+        )
+    {
+        // auto result = ::xetPowerGetTemperatureProperties( handle, sensorIndex );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetTemperatureProperties");
+
+        return temperature_properties_t{};
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get current temperatures
+    /// 
+    /// @details
+    ///     - Temperature sensor index 0 is special - it gives the maximum
+    ///       temperature across all sensors
+    /// 
+    /// @returns
+    ///     - uint16_t: pointer to an array of temperatures in units of degrees celsius
+    /// 
+    /// @throws result_t
+    uint16_t __xecall
+    Power::GetTemperature(
+        uint32_t startSensorIndex,                      ///< [in] sensor index [0 .. ::PowerTemperatureSensorCount]
+        uint32_t numSensors                             ///< [in] pTemperatures will contain results for sensors index
+                                                        ///< (startSensorIndex)..(startSensorIndex + numSensors - 1)
+        )
+    {
+        // auto result = ::xetPowerGetTemperature( handle, startSensorIndex, numSensors );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetTemperature");
+
+        return uint16_t{};
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Set temperature threshold
+    /// 
+    /// @details
+    ///     - Check ::temperature_properties_t.canChangeThreshold to determine if
+    ///       the threshold can be changed.
+    ///     - On most systems, there is only one threshold and sensorIndex should be
+    ///       0.
+    ///     - **This is an overclocking feature and will void device warranty**
+    /// 
+    /// @throws result_t
+    void __xecall
+    Power::SetTemperatureThreshold(
+        uint32_t sensorIndex,                           ///< [in] sensor index [0 .. ::PowerTemperatureSensorCount]
+        uint16_t maxTemperature                         ///< [in] temperature threshold in degrees celsius beyond which frequency
+                                                        ///< will be throttled
+        )
+    {
+        // auto result = ::xetPowerSetTemperatureThreshold( handle, sensorIndex, maxTemperature );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::SetTemperatureThreshold");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get number of activity counters
+    /// 
+    /// @returns
+    ///     - uint32_t: the number of activity counters on the device
+    /// 
+    /// @throws result_t
+    uint32_t __xecall
+    Power::ActivityCount(
+        void
+        )
+    {
+        // auto result = ::xetPowerActivityCount( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::ActivityCount");
+
+        return uint32_t{};
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get activity counter properties
+    /// 
+    /// @details
+    ///     - Activity counter index 0 is special - it acculates activity across all
+    ///       blocks.
+    /// 
+    /// @returns
+    ///     - activity_properties_t: pointer to properties for this activity counter
+    /// 
+    /// @throws result_t
+    Power::activity_properties_t __xecall
+    Power::GetActivityProperties(
+        uint32_t activityIndex                          ///< [in] activity counter index [0 .. ::PowerActivityCount]
+        )
+    {
+        // auto result = ::xetPowerGetActivityProperties( handle, activityIndex );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetActivityProperties");
+
+        return activity_properties_t{};
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get activity counters
+    /// 
+    /// @details
+    ///     - Activity counter index 0 is special - it acculates activity across all
+    ///       blocks.
+    /// 
+    /// @returns
+    ///     - activity_counters_t: pointer to an array of activity counter data
+    /// 
+    /// @throws result_t
+    Power::activity_counters_t __xecall
+    Power::GetActivityCounters(
+        uint32_t startCounterIndex,                     ///< [in] sensor index [0 .. ::PowerActivityCount]
+        uint32_t numCounters                            ///< [in] pCounters will contain results for activity counter index
+                                                        ///< (startCounterIndex)..(startCounterIndex + numCounters - 1)
+        )
+    {
+        // auto result = ::xetPowerGetActivityCounters( handle, startCounterIndex, numCounters );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetActivityCounters");
+
+        return activity_counters_t{};
     }
 
 } // namespace xet

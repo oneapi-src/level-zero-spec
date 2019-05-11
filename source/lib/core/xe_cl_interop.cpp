@@ -31,7 +31,71 @@
 *
 ******************************************************************************/
 #include "xe_api.hpp"
+#include "xe_api.h"
 
 namespace xe
 {
+    ///////////////////////////////////////////////////////////////////////////////
+#if XE_ENABLE_OCL_INTEROP
+    /// @brief Registers OpenCL memory with Xe::
+    /// 
+    /// @returns
+    ///     - void*: pointer to device allocation
+    /// 
+    /// @throws result_t
+    void* __xecall
+    Device::RegisterCLMemory(
+        cl_context context,                             ///< [in] the OpenCL context that created the memory
+        cl_mem mem                                      ///< [in] the OpenCL memory to register
+        )
+    {
+        // auto result = ::xeDeviceRegisterCLMemory( handle, context, mem );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLMemory");
+
+        return (void*)0;
+    }
+#endif // XE_ENABLE_OCL_INTEROP
+
+    ///////////////////////////////////////////////////////////////////////////////
+#if XE_ENABLE_OCL_INTEROP
+    /// @brief Registers OpenCL program with Xe::
+    /// 
+    /// @returns
+    ///     - Module: pointer to handle of module object created
+    /// 
+    /// @throws result_t
+    Module* __xecall
+    Device::RegisterCLProgram(
+        cl_context context,                             ///< [in] the OpenCL context that created the program
+        cl_program program                              ///< [in] the OpenCL program to register
+        )
+    {
+        // auto result = ::xeDeviceRegisterCLProgram( handle, context, program );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLProgram");
+
+        return (Module*)0;
+    }
+#endif // XE_ENABLE_OCL_INTEROP
+
+    ///////////////////////////////////////////////////////////////////////////////
+#if XE_ENABLE_OCL_INTEROP
+    /// @brief Registers OpenCL command queue with Xe::
+    /// 
+    /// @returns
+    ///     - CommandQueue: pointer to handle of command queue object created
+    /// 
+    /// @throws result_t
+    CommandQueue* __xecall
+    Device::RegisterCLCommandQueue(
+        cl_context context,                             ///< [in] the OpenCL context that created the command queue
+        cl_command_queue command_queue                  ///< [in] the OpenCL command queue to register
+        )
+    {
+        // auto result = ::xeDeviceRegisterCLCommandQueue( handle, context, command_queue );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLCommandQueue");
+
+        return (CommandQueue*)0;
+    }
+#endif // XE_ENABLE_OCL_INTEROP
+
 } // namespace xe

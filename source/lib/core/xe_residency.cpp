@@ -31,7 +31,89 @@
 *
 ******************************************************************************/
 #include "xe_api.hpp"
+#include "xe_api.h"
 
 namespace xe
 {
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Makes memory resident for the device.
+    /// 
+    /// @details
+    ///     - If the application does not properly manage residency then the device
+    ///       may experience unrecoverable page-faults.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Device::MakeMemoryResident(
+        void* ptr,                                      ///< [in] pointer to memory to make resident
+        size_t size                                     ///< [in] size in bytes to make resident
+        )
+    {
+        // auto result = ::xeDeviceMakeMemoryResident( handle, ptr, size );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::MakeMemoryResident");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Allows memory to be evicted from the device.
+    /// 
+    /// @details
+    ///     - The application is responsible for making sure the GPU is not
+    ///       currently referencing the memory before it is evicted
+    ///     - Memory is always implicitly evicted if it is resident when freed.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Device::EvictMemory(
+        void* ptr,                                      ///< [in] pointer to memory to evict
+        size_t size                                     ///< [in] size in bytes to evict
+        )
+    {
+        // auto result = ::xeDeviceEvictMemory( handle, ptr, size );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::EvictMemory");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Makes image resident for the device.
+    /// 
+    /// @details
+    ///     - If the application does not properly manage residency then the device
+    ///       may experience unrecoverable page-faults.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Device::MakeImageResident(
+        Image* pImage                                   ///< [in] pointer to image to make resident
+        )
+    {
+        // auto result = ::xeDeviceMakeImageResident( handle, pImage );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::MakeImageResident");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Allows image to be evicted from the device.
+    /// 
+    /// @details
+    ///     - The application is responsible for making sure the GPU is not
+    ///       currently referencing the memory before it is evicted
+    ///     - An image is always implicitly evicted if it is resident when
+    ///       destroyed.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Device::EvictImage(
+        Image* pImage                                   ///< [in] pointer to image to make evict
+        )
+    {
+        // auto result = ::xeDeviceEvictImage( handle, pImage );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::EvictImage");
+    }
+
 } // namespace xe

@@ -118,7 +118,7 @@ namespace xe
         CommandQueue( void ) = delete;
         CommandQueue( 
             Device* pDevice,                                ///< [in] pointer to parent object
-            desc_t desc                                     ///< [in] descriptor of the command queue object
+            const desc_t& desc                              ///< [in] descriptor of the command queue object
             );
 
         ~CommandQueue( void ) = default;
@@ -150,7 +150,7 @@ namespace xe
         ///     - CommandQueue: pointer to handle of command queue object created
         /// 
         /// @throws result_t
-        inline static CommandQueue*
+        static CommandQueue* __xecall
         Create(
             Device* pDevice,                                ///< [in] pointer to the device object
             const desc_t* desc                              ///< [in] pointer to command queue descriptor
@@ -173,7 +173,7 @@ namespace xe
         ///     - **clReleaseCommandQueue**
         ///     - cuCtxDestroy
         /// @throws result_t
-        inline static void
+        static void __xecall
         Destroy(
             CommandQueue* pCommandQueue                     ///< [in] pointer to command queue object to destroy
             );
@@ -189,7 +189,7 @@ namespace xe
         ///   _Analogues_
         ///     - vkQueueSubmit
         /// @throws result_t
-        inline void
+        void __xecall
         ExecuteCommandLists(
             uint32_t numCommandLists,                       ///< [in] number of command lists to execute
             CommandList* phCommandLists,                    ///< [in] list of handles of the command lists to execute
@@ -203,7 +203,7 @@ namespace xe
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
-        inline void
+        void __xecall
         Synchronize(
             uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
                                                             ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY;

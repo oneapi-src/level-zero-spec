@@ -31,13 +31,14 @@
 *
 ******************************************************************************/
 #include "xe_api.hpp"
+#include "xe_api.h"
 
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     EventPool::EventPool( 
         Device* pDevice,                                ///< [in] pointer to parent object
-        desc_t desc                                     ///< [in] descriptor of the event object
+        const desc_t& desc                              ///< [in] descriptor of the event object
         ) :
         m_pDevice( pDevice ),
         m_desc( desc )
@@ -45,7 +46,15 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeEventPoolCreate
+    Event::Event( 
+        EventPool* pEventPool                           ///< [in] pointer to parent object
+        ) :
+        m_pEventPool( pEventPool )
+    {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Creates a pool for a set of event(s) on the device.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -55,7 +64,7 @@ namespace xe
     ///     - EventPool: pointer handle of event pool object created
     /// 
     /// @throws result_t
-    inline EventPool* 
+    EventPool* __xecall
     EventPool::Create(
         Device* pDevice,                                ///< [in] pointer to the device
         const desc_t* desc                              ///< [in] pointer to event pool descriptor
@@ -63,10 +72,12 @@ namespace xe
     {
         // auto result = ::xeEventPoolCreate( handle, pDevice, desc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::EventPool::Create");
+
+        return (EventPool*)0;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeEventPoolDestroy
+    /// @brief Deletes an event pool object.
     /// 
     /// @details
     ///     - The application is responsible for destroying all event handles
@@ -81,7 +92,7 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     EventPool::Destroy(
         EventPool* pEventPool                           ///< [in] pointer to event pool object to destroy
         )
@@ -91,87 +102,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeEventPoolGetIpcHandle
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuIpcGetEventHandle**
-    /// 
-    /// @returns
-    ///     - ipc_event_pool_handle_t: Returned IPC event handle
-    /// 
-    /// @throws result_t
-    inline ipc_event_pool_handle_t 
-    EventPool::GetIpcHandle(
-        void
-        )
-    {
-        // auto result = ::xeEventPoolGetIpcHandle( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::EventPool::GetIpcHandle");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeEventPoolOpenIpcHandle
-    /// 
-    /// @details
-    ///     - The event handle in this process should not be freed with
-    ///       ::EventPoolDestroy, but rather with ::EventPoolCloseIpcHandle.
-    ///     - The application may call this function from simultaneous threads.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuIpcOpenMemHandle**
-    /// 
-    /// @returns
-    ///     - EventPool: pointer handle of event pool object created
-    /// 
-    /// @throws result_t
-    inline EventPool* 
-    EventPool::OpenIpcHandle(
-        Device* pDevice,                                ///< [in] pointer to the device to associate with the IPC event pool handle
-        ipc_event_pool_handle_t pIpc                    ///< [in] IPC event handle
-        )
-    {
-        // auto result = ::xeEventPoolOpenIpcHandle( handle, pDevice, pIpc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::EventPool::OpenIpcHandle");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeEventPoolCloseIpcHandle
-    /// 
-    /// @details
-    ///     - Closes an IPC event handle by destroying events that were opened in
-    ///       this process using ::EventPoolOpenIpcHandle.
-    ///     - The application may **not** call this function from simultaneous
-    ///       threads with the same event pool handle.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuIpcCloseMemHandle**
-    /// 
-    /// @throws result_t
-    inline void 
-    EventPool::CloseIpcHandle(
-        void
-        )
-    {
-        // auto result = ::xeEventPoolCloseIpcHandle( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::EventPool::CloseIpcHandle");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    Event::Event( 
-        EventPool* pEventPool                           ///< [in] pointer to parent object
-        ) :
-        m_pEventPool( pEventPool )
-    {
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeEventCreate
+    /// @brief Creates an event on the device.
     /// 
     /// @details
     ///     - Multiple events cannot be created using the same location within the
@@ -189,7 +120,7 @@ namespace xe
     ///     - Event: pointer to handle of event object created
     /// 
     /// @throws result_t
-    inline Event* 
+    Event* __xecall
     Event::Create(
         EventPool* pEventPool,                          ///< [in] pointer to the event pool
         const desc_t* desc                              ///< [in] pointer to event descriptor
@@ -197,10 +128,12 @@ namespace xe
     {
         // auto result = ::xeEventCreate( handle, pEventPool, desc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::Create");
+
+        return (Event*)0;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeEventDestroy
+    /// @brief Deletes an event object.
     /// 
     /// @details
     ///     - The application is responsible for making sure the GPU is not
@@ -218,7 +151,7 @@ namespace xe
     ///     - cuEventDestroy
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     Event::Destroy(
         Event* pEvent                                   ///< [in] pointer to event object to destroy
         )
@@ -228,7 +161,128 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeEventHostSignal
+    /// @brief Gets an IPC event pool handle for the specified event handle that can
+    ///        be shared with another process.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuIpcGetEventHandle**
+    /// 
+    /// @returns
+    ///     - ipc_event_pool_handle_t: Returned IPC event handle
+    /// 
+    /// @throws result_t
+    ipc_event_pool_handle_t __xecall
+    EventPool::GetIpcHandle(
+        void
+        )
+    {
+        // auto result = ::xeEventPoolGetIpcHandle( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::EventPool::GetIpcHandle");
+
+        return ipc_event_pool_handle_t{};
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Opens an IPC event pool handle to retrieve an event pool handle from
+    ///        another process.
+    /// 
+    /// @details
+    ///     - The event handle in this process should not be freed with
+    ///       ::EventPoolDestroy, but rather with ::EventPoolCloseIpcHandle.
+    ///     - The application may call this function from simultaneous threads.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuIpcOpenMemHandle**
+    /// 
+    /// @returns
+    ///     - EventPool: pointer handle of event pool object created
+    /// 
+    /// @throws result_t
+    EventPool* __xecall
+    EventPool::OpenIpcHandle(
+        Device* pDevice,                                ///< [in] pointer to the device to associate with the IPC event pool handle
+        ipc_event_pool_handle_t pIpc                    ///< [in] IPC event handle
+        )
+    {
+        // auto result = ::xeEventPoolOpenIpcHandle( handle, pDevice, pIpc );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::EventPool::OpenIpcHandle");
+
+        return (EventPool*)0;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Closes an IPC event handle in the current process.
+    /// 
+    /// @details
+    ///     - Closes an IPC event handle by destroying events that were opened in
+    ///       this process using ::EventPoolOpenIpcHandle.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same event pool handle.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuIpcCloseMemHandle**
+    /// 
+    /// @throws result_t
+    void __xecall
+    EventPool::CloseIpcHandle(
+        void
+        )
+    {
+        // auto result = ::xeEventPoolCloseIpcHandle( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::EventPool::CloseIpcHandle");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Appends a signal of the event from the device into a command list.
+    /// 
+    /// @details
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **clSetUserEventStatus**
+    ///     - cuEventRecord
+    ///     - vkCmdSetEvent
+    /// 
+    /// @throws result_t
+    void __xecall
+    CommandList::AppendSignalEvent(
+        Event* pEvent                                   ///< [in] pointer to the event
+        )
+    {
+        // auto result = ::xeCommandListAppendSignalEvent( handle, pEvent );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendSignalEvent");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Appends wait on event(s) on the device into a command list.
+    /// 
+    /// @details
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    CommandList::AppendWaitOnEvents(
+        uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
+        Event* phEvents                                 ///< [in] pointer to the events to wait on before continuing
+        )
+    {
+        // auto result = ::xeCommandListAppendWaitOnEvents( handle, numEvents, phEvents );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendWaitOnEvents");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Signals a event from host.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -239,7 +293,7 @@ namespace xe
     ///     - clSetUserEventStatus
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     Event::HostSignal(
         void
         )
@@ -249,7 +303,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeEventHostSynchronize
+    /// @brief The current host thread waits on an event to be signalled.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -261,7 +315,7 @@ namespace xe
     ///     - cuEventSynchronize
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     Event::HostSynchronize(
         uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
                                                         ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY;
@@ -275,7 +329,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeEventQueryStatus
+    /// @brief Queries an event object's status.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -288,7 +342,7 @@ namespace xe
     ///     - cuEventQuery
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     Event::QueryStatus(
         void
         )
@@ -298,7 +352,29 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeEventReset
+    /// @brief Reset an event back to not signaled state
+    /// 
+    /// @details
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - vkResetEvent
+    /// 
+    /// @throws result_t
+    void __xecall
+    CommandList::AppendEventReset(
+        Event* pEvent                                   ///< [in] pointer to the event
+        )
+    {
+        // auto result = ::xeCommandListAppendEventReset( handle, pEvent );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendEventReset");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Reset an event back to not signaled state
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -309,7 +385,7 @@ namespace xe
     ///     - vkResetEvent
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     Event::Reset(
         void
         )

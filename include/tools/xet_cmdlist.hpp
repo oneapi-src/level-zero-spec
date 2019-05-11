@@ -72,7 +72,7 @@ namespace xet
         ///     - The application may **not** call this function from simultaneous
         ///       threads with the same command list handle.
         /// @throws result_t
-        inline void
+        void __xecall
         AppendMetricTracerMarker(
             MetricTracer* pMetricTracer,                    ///< [in] pointer to the metric tracer
             uint32_t value                                  ///< [in] tracer marker value
@@ -85,7 +85,7 @@ namespace xet
         ///     - The application may **not** call this function from simultaneous
         ///       threads with the same command list handle.
         /// @throws result_t
-        inline void
+        void __xecall
         AppendMetricQueryBegin(
             MetricQuery* pMetricQuery                       ///< [in] pointer to the metric query
             );
@@ -97,7 +97,7 @@ namespace xet
         ///     - The application may **not** call this function from simultaneous
         ///       threads with the same command list handle.
         /// @throws result_t
-        inline void
+        void __xecall
         AppendMetricQueryEnd(
             MetricQuery* pMetricQuery,                      ///< [in] pointer to the metric query
             xe::Event* pCompletionEvent                     ///< [in] pointer to the completion event to signal
@@ -110,7 +110,7 @@ namespace xet
         ///     - The application may **not** call this function from simultaneous
         ///       threads with the same command list handle.
         /// @throws result_t
-        inline void
+        void __xecall
         AppendMetricMemoryBarrier(
             void
             );

@@ -268,7 +268,7 @@ namespace xe
         ///     - uint32_t: number of devices available
         /// 
         /// @throws result_t
-        inline static uint32_t
+        static uint32_t __xecall
         GetCount(
             void
             );
@@ -288,7 +288,7 @@ namespace xe
         ///     - Device: pointer to handle of device object created
         /// 
         /// @throws result_t
-        inline static Device*
+        static Device* __xecall
         Get(
             uint32_t ordinal                                ///< [in] The device index in the range of [0, ::DeviceGetCount]
             );
@@ -308,7 +308,7 @@ namespace xe
         ///     - Device: pointer to handle of sub-device object.
         /// 
         /// @throws result_t
-        inline Device*
+        Device* __xecall
         GetSubDevice(
             uint32_t ordinal                                ///< [in] ordinal of sub-device to retrieve
             );
@@ -327,7 +327,7 @@ namespace xe
         ///     - api_version_t: api version
         /// 
         /// @throws result_t
-        inline api_version_t
+        api_version_t __xecall
         GetApiVersion(
             void
             );
@@ -348,7 +348,7 @@ namespace xe
         ///     - properties_t: query result for device properties
         /// 
         /// @throws result_t
-        inline properties_t
+        properties_t __xecall
         GetProperties(
             void
             );
@@ -368,7 +368,7 @@ namespace xe
         ///     - compute_properties_t: query result for compute properties
         /// 
         /// @throws result_t
-        inline compute_properties_t
+        compute_properties_t __xecall
         GetComputeProperties(
             void
             );
@@ -389,7 +389,7 @@ namespace xe
         ///     - memory_properties_t: query result for compute properties
         /// 
         /// @throws result_t
-        inline memory_properties_t
+        memory_properties_t __xecall
         GetMemoryProperties(
             void
             );
@@ -409,7 +409,7 @@ namespace xe
         ///     - p2p_properties_t: Peer-to-Peer properties between source and peer device
         /// 
         /// @throws result_t
-        inline p2p_properties_t
+        p2p_properties_t __xecall
         GetP2PProperties(
             Device* pPeerDevice                             ///< [in] pointer to the peer device with the allocation
             );
@@ -428,7 +428,7 @@ namespace xe
         ///     - bool_t: returned access capability
         /// 
         /// @throws result_t
-        inline bool_t
+        bool_t __xecall
         CanAccessPeer(
             Device* pPeerDevice                             ///< [in] pointer to the peer device with the allocation
             );
@@ -444,7 +444,7 @@ namespace xe
         ///   _Analogues_
         ///     - **cudaFuncSetCacheConfig **
         /// @throws result_t
-        inline void
+        void __xecall
         SetIntermediateCacheConfig(
             cache_config_t CacheConfig                      ///< [in] CacheConfig
             );
@@ -460,7 +460,7 @@ namespace xe
         ///   _Analogues_
         ///     - **cudaFuncSetCacheConfig **
         /// @throws result_t
-        inline void
+        void __xecall
         SetLastLevelCacheConfig(
             cache_config_t CacheConfig                      ///< [in] CacheConfig
             );
@@ -478,7 +478,7 @@ namespace xe
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
-        inline void
+        void __xecall
         SystemBarrier(
             void
             );
@@ -490,7 +490,7 @@ namespace xe
         ///     - void*: pointer to device allocation
         /// 
         /// @throws result_t
-        inline void*
+        void* __xecall
         RegisterCLMemory(
             cl_context context,                             ///< [in] the OpenCL context that created the memory
             cl_mem mem                                      ///< [in] the OpenCL memory to register
@@ -504,7 +504,7 @@ namespace xe
         ///     - Module: pointer to handle of module object created
         /// 
         /// @throws result_t
-        inline Module*
+        Module* __xecall
         RegisterCLProgram(
             cl_context context,                             ///< [in] the OpenCL context that created the program
             cl_program program                              ///< [in] the OpenCL program to register
@@ -518,7 +518,7 @@ namespace xe
         ///     - CommandQueue: pointer to handle of command queue object created
         /// 
         /// @throws result_t
-        inline CommandQueue*
+        CommandQueue* __xecall
         RegisterCLCommandQueue(
             cl_context context,                             ///< [in] the OpenCL context that created the command queue
             cl_command_queue command_queue                  ///< [in] the OpenCL command queue to register
@@ -534,7 +534,7 @@ namespace xe
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
-        inline void
+        void __xecall
         MakeMemoryResident(
             void* ptr,                                      ///< [in] pointer to memory to make resident
             size_t size                                     ///< [in] size in bytes to make resident
@@ -550,7 +550,7 @@ namespace xe
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
-        inline void
+        void __xecall
         EvictMemory(
             void* ptr,                                      ///< [in] pointer to memory to evict
             size_t size                                     ///< [in] size in bytes to evict
@@ -565,7 +565,7 @@ namespace xe
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
-        inline void
+        void __xecall
         MakeImageResident(
             Image* pImage                                   ///< [in] pointer to image to make resident
             );
@@ -581,7 +581,7 @@ namespace xe
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
-        inline void
+        void __xecall
         EvictImage(
             Image* pImage                                   ///< [in] pointer to image to make evict
             );

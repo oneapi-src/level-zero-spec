@@ -31,11 +31,21 @@
 *
 ******************************************************************************/
 #include "xe_api.hpp"
+#include "xe_api.h"
 
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeInit
+    Driver::Driver( 
+        void* handle                                    ///< [in] handle of driver module
+        ) :
+        m_handle( handle )
+    {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Initialize the Xe:: driver and must be called before any other API
+    ///        function.
     /// 
     /// @details
     ///     - If this function is not called then all other functions will return
@@ -49,7 +59,7 @@ namespace xe
     ///     - **cuInit**
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     Init(
         init_flag_t flags                               ///< [in] initialization flags
         )
@@ -59,7 +69,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeGetDriverVersion
+    /// @brief Returns the current version of the installed driver.
     /// 
     /// @details
     ///     - The driver version is a non-zero, monotonically increasing value where
@@ -75,21 +85,15 @@ namespace xe
     ///     - uint32_t: driver version
     /// 
     /// @throws result_t
-    inline uint32_t 
+    uint32_t __xecall
     GetDriverVersion(
         void
         )
     {
         // auto result = ::xeGetDriverVersion( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "GetDriverVersion");
-    }
 
-    ///////////////////////////////////////////////////////////////////////////////
-    Driver::Driver( 
-        void* handle                                    ///< [in] handle of driver module
-        ) :
-        m_handle( handle )
-    {
+        return uint32_t{};
     }
 
 } // namespace xe

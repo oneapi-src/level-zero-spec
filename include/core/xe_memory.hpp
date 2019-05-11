@@ -79,7 +79,7 @@ namespace xe
     ///     - void*: pointer to shared allocation
     /// 
     /// @throws result_t
-    inline void*
+    void* __xecall
     SharedMemAlloc(
         Device* pDevice,                                ///< [in] pointer to the device
         device_mem_alloc_flag_t device_flags,           ///< [in] flags specifying additional device allocation controls
@@ -105,7 +105,7 @@ namespace xe
     ///     - void*: pointer to device allocation
     /// 
     /// @throws result_t
-    inline void*
+    void* __xecall
     DeviceMemAlloc(
         Device* pDevice,                                ///< [in] pointer to the device
         device_mem_alloc_flag_t flags,                  ///< [in] flags specifying additional allocation controls
@@ -131,7 +131,7 @@ namespace xe
     ///     - void*: pointer to host allocation
     /// 
     /// @throws result_t
-    inline void*
+    void* __xecall
     HostMemAlloc(
         host_mem_alloc_flag_t flags,                    ///< [in] flags specifying additional allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
@@ -155,7 +155,7 @@ namespace xe
     ///     - **cudaFreeHost**
     /// 
     /// @throws result_t
-    inline void
+    void __xecall
     MemFree(
         const void* ptr                                 ///< [in] pointer to memory to free
         );
@@ -204,7 +204,7 @@ namespace xe
     ///     - memory_allocation_properties_t: Query result for memory allocation properties
     /// 
     /// @throws result_t
-    inline memory_allocation_properties_t
+    memory_allocation_properties_t __xecall
     MemGetProperties(
         const void* ptr                                 ///< [in] Pointer to query
         );
@@ -220,7 +220,7 @@ namespace xe
     ///     - **cuMemGetAddressRange**
     /// 
     /// @throws result_t
-    inline void
+    void __xecall
     MemGetAddressRange(
         const void* ptr,                                ///< [in] Pointer to query
         void** pBase = nullptr,                         ///< [in,out][optional] base address of the allocation
@@ -244,7 +244,7 @@ namespace xe
     ///     - ipc_mem_handle_t: Returned IPC memory handle
     /// 
     /// @throws result_t
-    inline ipc_mem_handle_t
+    ipc_mem_handle_t __xecall
     IpcGetMemHandle(
         const void* ptr                                 ///< [in] Pointer to the device memory allocation
         );
@@ -276,7 +276,7 @@ namespace xe
     ///     - void*: pointer to device allocation in this process
     /// 
     /// @throws result_t
-    inline void*
+    void* __xecall
     IpcOpenMemHandle(
         Device* pDevice,                                ///< [in] pointer to the device to associate with the IPC memory handle
         ipc_mem_handle_t handle,                        ///< [in] IPC memory handle
@@ -297,7 +297,7 @@ namespace xe
     ///     - **cuIpcCloseMemHandle**
     /// 
     /// @throws result_t
-    inline void
+    void __xecall
     IpcCloseMemHandle(
         const void* ptr                                 ///< [in] pointer to device allocation in this process
         );

@@ -31,13 +31,14 @@
 *
 ******************************************************************************/
 #include "xe_api.hpp"
+#include "xe_api.h"
 
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     CommandQueue::CommandQueue( 
         Device* pDevice,                                ///< [in] pointer to parent object
-        desc_t desc                                     ///< [in] descriptor of the command queue object
+        const desc_t& desc                              ///< [in] descriptor of the command queue object
         ) :
         m_pDevice( pDevice ),
         m_desc( desc )
@@ -45,7 +46,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandQueueCreate
+    /// @brief Creates a command queue on the device.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -61,7 +62,7 @@ namespace xe
     ///     - CommandQueue: pointer to handle of command queue object created
     /// 
     /// @throws result_t
-    inline CommandQueue* 
+    CommandQueue* __xecall
     CommandQueue::Create(
         Device* pDevice,                                ///< [in] pointer to the device object
         const desc_t* desc                              ///< [in] pointer to command queue descriptor
@@ -69,10 +70,12 @@ namespace xe
     {
         // auto result = ::xeCommandQueueCreate( handle, pDevice, desc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandQueue::Create");
+
+        return (CommandQueue*)0;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandQueueDestroy
+    /// @brief Destroys a command queue.
     /// 
     /// @details
     ///     - The application is responsible for making sure the GPU is not
@@ -89,7 +92,7 @@ namespace xe
     ///     - cuCtxDestroy
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     CommandQueue::Destroy(
         CommandQueue* pCommandQueue                     ///< [in] pointer to command queue object to destroy
         )
@@ -99,7 +102,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandQueueExecuteCommandLists
+    /// @brief Executes a command list in a command queue.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -110,7 +113,7 @@ namespace xe
     ///     - vkQueueSubmit
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     CommandQueue::ExecuteCommandLists(
         uint32_t numCommandLists,                       ///< [in] number of command lists to execute
         CommandList* phCommandLists,                    ///< [in] list of handles of the command lists to execute
@@ -122,14 +125,14 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeCommandQueueSynchronize
+    /// @brief Synchronizes a command queue by waiting on the host.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     CommandQueue::Synchronize(
         uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
                                                         ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY;

@@ -86,7 +86,7 @@ namespace xe
         EventPool( void ) = delete;
         EventPool( 
             Device* pDevice,                                ///< [in] pointer to parent object
-            desc_t desc                                     ///< [in] descriptor of the event object
+            const desc_t& desc                              ///< [in] descriptor of the event object
             );
 
         ~EventPool( void ) = default;
@@ -112,7 +112,7 @@ namespace xe
         ///     - EventPool: pointer handle of event pool object created
         /// 
         /// @throws result_t
-        inline static EventPool*
+        static EventPool* __xecall
         Create(
             Device* pDevice,                                ///< [in] pointer to the device
             const desc_t* desc                              ///< [in] pointer to event pool descriptor
@@ -133,7 +133,7 @@ namespace xe
         ///       threads with the same event pool handle.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
-        inline static void
+        static void __xecall
         Destroy(
             EventPool* pEventPool                           ///< [in] pointer to event pool object to destroy
             );
@@ -152,7 +152,7 @@ namespace xe
         ///     - ipc_event_pool_handle_t: Returned IPC event handle
         /// 
         /// @throws result_t
-        inline ipc_event_pool_handle_t
+        ipc_event_pool_handle_t __xecall
         GetIpcHandle(
             void
             );
@@ -173,7 +173,7 @@ namespace xe
         ///     - EventPool: pointer handle of event pool object created
         /// 
         /// @throws result_t
-        inline static EventPool*
+        static EventPool* __xecall
         OpenIpcHandle(
             Device* pDevice,                                ///< [in] pointer to the device to associate with the IPC event pool handle
             ipc_event_pool_handle_t pIpc                    ///< [in] IPC event handle
@@ -192,7 +192,7 @@ namespace xe
         ///   _Analogues_
         ///     - **cuIpcCloseMemHandle**
         /// @throws result_t
-        inline void
+        void __xecall
         CloseIpcHandle(
             void
             );
@@ -284,7 +284,7 @@ namespace xe
         ///     - Event: pointer to handle of event object created
         /// 
         /// @throws result_t
-        inline static Event*
+        static Event* __xecall
         Create(
             EventPool* pEventPool,                          ///< [in] pointer to the event pool
             const desc_t* desc                              ///< [in] pointer to event descriptor
@@ -308,7 +308,7 @@ namespace xe
         ///     - vkDestroyEvent
         ///     - cuEventDestroy
         /// @throws result_t
-        inline static void
+        static void __xecall
         Destroy(
             Event* pEvent                                   ///< [in] pointer to event object to destroy
             );
@@ -324,7 +324,7 @@ namespace xe
         ///   _Analogues_
         ///     - clSetUserEventStatus
         /// @throws result_t
-        inline void
+        void __xecall
         HostSignal(
             void
             );
@@ -341,7 +341,7 @@ namespace xe
         ///     - clWaitForEvents
         ///     - cuEventSynchronize
         /// @throws result_t
-        inline void
+        void __xecall
         HostSynchronize(
             uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
                                                             ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY;
@@ -363,7 +363,7 @@ namespace xe
         ///     - vkGetEventStatus
         ///     - cuEventQuery
         /// @throws result_t
-        inline void
+        void __xecall
         QueryStatus(
             void
             );
@@ -379,7 +379,7 @@ namespace xe
         ///   _Analogues_
         ///     - vkResetEvent
         /// @throws result_t
-        inline void
+        void __xecall
         Reset(
             void
             );

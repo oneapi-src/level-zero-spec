@@ -83,7 +83,7 @@ namespace xex
         CommandGraph( void ) = delete;
         CommandGraph( 
             Device* pDevice,                                ///< [in] pointer to parent object
-            desc_t desc                                     ///< [in] descriptor of the command graph object
+            const desc_t& desc                              ///< [in] descriptor of the command graph object
             );
 
         ~CommandGraph( void ) = default;
@@ -110,7 +110,7 @@ namespace xex
         ///     - CommandGraph: pointer to handle of command graph object created
         /// 
         /// @throws result_t
-        inline static CommandGraph*
+        static CommandGraph* __xecall
         Create(
             xe::Device* pDevice,                            ///< [in] pointer to the device object
             const desc_t* desc                              ///< [in] pointer to command graph descriptor
@@ -126,7 +126,7 @@ namespace xex
         ///       threads with the same command graph handle.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
-        inline static void
+        static void __xecall
         Destroy(
             CommandGraph* pCommandGraph                     ///< [in] pointer to command graph object to destroy
             );
@@ -142,7 +142,7 @@ namespace xex
         ///       threads with the same command graph handle.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
-        inline void
+        void __xecall
         Close(
             void
             );

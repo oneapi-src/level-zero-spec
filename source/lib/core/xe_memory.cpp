@@ -31,11 +31,13 @@
 *
 ******************************************************************************/
 #include "xe_api.hpp"
+#include "xe_api.h"
 
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeSharedMemAlloc
+    /// @brief Allocates memory that is shared between the host and one or more
+    ///        devices
     /// 
     /// @details
     ///     - Shared allocations share ownership between the host and one or more
@@ -50,7 +52,7 @@ namespace xe
     ///     - void*: pointer to shared allocation
     /// 
     /// @throws result_t
-    inline void* 
+    void* __xecall
     SharedMemAlloc(
         Device* pDevice,                                ///< [in] pointer to the device
         device_mem_alloc_flag_t device_flags,           ///< [in] flags specifying additional device allocation controls
@@ -61,10 +63,12 @@ namespace xe
     {
         // auto result = ::xeSharedMemAlloc( handle, pDevice, device_flags, host_flags, size, alignment );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "SharedMemAlloc");
+
+        return (void*)0;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeDeviceMemAlloc
+    /// @brief Allocates memory specific to a device
     /// 
     /// @details
     ///     - A device allocation is owned by a specific device.
@@ -80,7 +84,7 @@ namespace xe
     ///     - void*: pointer to device allocation
     /// 
     /// @throws result_t
-    inline void* 
+    void* __xecall
     DeviceMemAlloc(
         Device* pDevice,                                ///< [in] pointer to the device
         device_mem_alloc_flag_t flags,                  ///< [in] flags specifying additional allocation controls
@@ -90,10 +94,12 @@ namespace xe
     {
         // auto result = ::xeDeviceMemAlloc( handle, pDevice, flags, size, alignment );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "DeviceMemAlloc");
+
+        return (void*)0;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeHostMemAlloc
+    /// @brief Allocates host memory
     /// 
     /// @details
     ///     - A host allocation is owned by the host process.
@@ -110,7 +116,7 @@ namespace xe
     ///     - void*: pointer to host allocation
     /// 
     /// @throws result_t
-    inline void* 
+    void* __xecall
     HostMemAlloc(
         host_mem_alloc_flag_t flags,                    ///< [in] flags specifying additional allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
@@ -119,10 +125,12 @@ namespace xe
     {
         // auto result = ::xeHostMemAlloc( handle, flags, size, alignment );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "HostMemAlloc");
+
+        return (void*)0;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeMemFree
+    /// @brief Frees allocated host memory, device memory, or shared memory
     /// 
     /// @details
     ///     - The application is responsible for making sure the GPU is not
@@ -138,7 +146,7 @@ namespace xe
     ///     - **cudaFreeHost**
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     MemFree(
         const void* ptr                                 ///< [in] pointer to memory to free
         )
@@ -148,7 +156,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeMemGetProperties
+    /// @brief Retrieves attributes of a memory allocation
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -161,17 +169,19 @@ namespace xe
     ///     - memory_allocation_properties_t: Query result for memory allocation properties
     /// 
     /// @throws result_t
-    inline memory_allocation_properties_t 
+    memory_allocation_properties_t __xecall
     MemGetProperties(
         const void* ptr                                 ///< [in] Pointer to query
         )
     {
         // auto result = ::xeMemGetProperties( handle, ptr );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "MemGetProperties");
+
+        return memory_allocation_properties_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeMemGetAddressRange
+    /// @brief Retrieves the base address and/or size of an allocation
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -181,7 +191,7 @@ namespace xe
     ///     - **cuMemGetAddressRange**
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     MemGetAddressRange(
         const void* ptr,                                ///< [in] Pointer to query
         void** pBase,                                   ///< [in,out][optional] base address of the allocation
@@ -193,7 +203,8 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeIpcGetMemHandle
+    /// @brief Creates an IPC memory handle for the specified allocation in the
+    ///        sending process
     /// 
     /// @details
     ///     - Takes a pointer to the base of a device memory allocation and exports
@@ -208,17 +219,20 @@ namespace xe
     ///     - ipc_mem_handle_t: Returned IPC memory handle
     /// 
     /// @throws result_t
-    inline ipc_mem_handle_t 
+    ipc_mem_handle_t __xecall
     IpcGetMemHandle(
         const void* ptr                                 ///< [in] Pointer to the device memory allocation
         )
     {
         // auto result = ::xeIpcGetMemHandle( handle, ptr );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "IpcGetMemHandle");
+
+        return ipc_mem_handle_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeIpcOpenMemHandle
+    /// @brief Opens an IPC memory handle to retrieve a device pointer in a receiving
+    ///        process
     /// 
     /// @details
     ///     - Takes an IPC memory handle from a sending process and associates it
@@ -235,7 +249,7 @@ namespace xe
     ///     - void*: pointer to device allocation in this process
     /// 
     /// @throws result_t
-    inline void* 
+    void* __xecall
     IpcOpenMemHandle(
         Device* pDevice,                                ///< [in] pointer to the device to associate with the IPC memory handle
         ipc_mem_handle_t handle,                        ///< [in] IPC memory handle
@@ -244,10 +258,12 @@ namespace xe
     {
         // auto result = ::xeIpcOpenMemHandle( handle, pDevice, handle, flags );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "IpcOpenMemHandle");
+
+        return (void*)0;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeIpcCloseMemHandle
+    /// @brief Closes an IPC memory handle in a receiving process
     /// 
     /// @details
     ///     - Closes an IPC memory handle by unmapping memory that was opened in
@@ -260,7 +276,7 @@ namespace xe
     ///     - **cuIpcCloseMemHandle**
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     IpcCloseMemHandle(
         const void* ptr                                 ///< [in] pointer to device allocation in this process
         )

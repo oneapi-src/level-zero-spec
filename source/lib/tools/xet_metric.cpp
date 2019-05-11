@@ -31,6 +31,7 @@
 *
 ******************************************************************************/
 #include "xet_api.hpp"
+#include "xet_api.h"
 
 namespace xet
 {
@@ -43,23 +44,57 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetMetricGroupGetCount
+    Metric::Metric( 
+        Device* pDevice                                 ///< [in] pointer to parent object
+        ) :
+        m_pDevice( pDevice )
+    {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    MetricTracer::MetricTracer( 
+        Device* pDevice                                 ///< [in] pointer to parent object
+        ) :
+        m_pDevice( pDevice )
+    {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    MetricQueryPool::MetricQueryPool( 
+        Device* pDevice                                 ///< [in] pointer to parent object
+        ) :
+        m_pDevice( pDevice )
+    {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    MetricQuery::MetricQuery( 
+        Device* pDevice                                 ///< [in] pointer to parent object
+        ) :
+        m_pDevice( pDevice )
+    {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Returns metric group count for a given device.
     /// 
     /// @returns
     ///     - uint32_t: number of metric groups supported by the device
     /// 
     /// @throws result_t
-    inline uint32_t 
+    uint32_t __xecall
     MetricGroup::GetCount(
         xe::Device* pDevice                             ///< [in] pointer to the device object
         )
     {
         // auto result = ::xetMetricGroupGetCount( handle, pDevice );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricGroup::GetCount");
+
+        return uint32_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetMetricGroupGet
+    /// @brief Returns metric group handle for a device.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -68,7 +103,7 @@ namespace xet
     ///     - MetricGroup: metric group handle
     /// 
     /// @throws result_t
-    inline MetricGroup* 
+    MetricGroup* __xecall
     MetricGroup::Get(
         xe::Device* pDevice,                            ///< [in] pointer to the device
         uint32_t ordinal                                ///< [in] metric group index
@@ -76,10 +111,12 @@ namespace xet
     {
         // auto result = ::xetMetricGroupGet( handle, pDevice, ordinal );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricGroup::Get");
+
+        return (MetricGroup*)0;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetMetricGroupGetProperties
+    /// @brief Returns properties for a given metric group.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -88,24 +125,69 @@ namespace xet
     ///     - properties_t: metric group properties
     /// 
     /// @throws result_t
-    inline MetricGroup::properties_t 
+    MetricGroup::properties_t __xecall
     MetricGroup::GetProperties(
         void
         )
     {
         // auto result = ::xetMetricGroupGetProperties( handle );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricGroup::GetProperties");
+
+        return properties_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetMetricGroupCalculateData
+    /// @brief Returns metric from a given metric group.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    /// 
+    /// @returns
+    ///     - Metric: handle of metric
+    /// 
+    /// @throws result_t
+    Metric* __xecall
+    Metric::Get(
+        MetricGroup* pMetricGroup,                      ///< [in] pointer to the metric group
+        uint32_t ordinal                                ///< [in] metric index
+        )
+    {
+        // auto result = ::xetMetricGet( handle, pMetricGroup, ordinal );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Metric::Get");
+
+        return (Metric*)0;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Returns metric properties.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    /// 
+    /// @returns
+    ///     - properties_t: metric properties
+    /// 
+    /// @throws result_t
+    Metric::properties_t __xecall
+    Metric::GetProperties(
+        void
+        )
+    {
+        // auto result = ::xetMetricGetProperties( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Metric::GetProperties");
+
+        return properties_t{};
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Calculates counter values from raw data.
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
     ///       threads wth the same metric group handle.
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     MetricGroup::CalculateData(
         uint32_t* pReportCount,                         ///< [in,out] report count to calculate
         uint32_t rawDataSize,                           ///< [in] raw data size
@@ -119,62 +201,27 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    Metric::Metric( 
-        Device* pDevice                                 ///< [in] pointer to parent object
-        ) :
-        m_pDevice( pDevice )
-    {
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetMetricGet
+    /// @brief Activates metric groups.
     /// 
     /// @details
-    ///     - The application may call this function from simultaneous threads.
-    /// 
-    /// @returns
-    ///     - Metric: handle of metric
-    /// 
-    /// @throws result_t
-    inline Metric* 
-    Metric::Get(
-        MetricGroup* pMetricGroup,                      ///< [in] pointer to the metric group
-        uint32_t ordinal                                ///< [in] metric index
-        )
-    {
-        // auto result = ::xetMetricGet( handle, pMetricGroup, ordinal );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Metric::Get");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetMetricGetProperties
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    /// 
-    /// @returns
-    ///     - properties_t: metric properties
+    ///     - MetricGroup must be active until MetricQueryGetDeta and
+    ///       ::MetricTracerClose.
+    ///     - Conflicting metric groups cannot be activated, in such case tha call
+    ///       would fail.
     /// 
     /// @throws result_t
-    inline Metric::properties_t 
-    Metric::GetProperties(
-        void
+    void __xecall
+    Device::ActivateMetricGroups(
+        uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
+        MetricGroup* phMetricGroups                     ///< [in] handles of the metric groups to activate. NULL to deactivate.
         )
     {
-        // auto result = ::xetMetricGetProperties( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Metric::GetProperties");
+        // auto result = ::xetDeviceActivateMetricGroups( handle, count, phMetricGroups );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Device::ActivateMetricGroups");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    MetricTracer::MetricTracer( 
-        Device* pDevice                                 ///< [in] pointer to parent object
-        ) :
-        m_pDevice( pDevice )
-    {
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetMetricTracerOpen
+    /// @brief Opens metric tracer for a given device.
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
@@ -184,7 +231,7 @@ namespace xet
     ///     - MetricTracer: handle of metric tracer
     /// 
     /// @throws result_t
-    inline MetricTracer* 
+    MetricTracer* __xecall
     MetricTracer::Open(
         xe::Device* pDevice,                            ///< [in] pointer to the device
         desc_t* pDesc,                                  ///< [in,out] metric tracer descriptor
@@ -194,17 +241,37 @@ namespace xet
     {
         // auto result = ::xetMetricTracerOpen( handle, pDevice, pDesc, pNotificationEvent );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricTracer::Open");
+
+        return (MetricTracer*)0;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetMetricTracerClose
+    /// @brief Append metric tracer marker to a given command list.
+    /// 
+    /// @details
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    /// 
+    /// @throws result_t
+    void __xecall
+    CommandList::AppendMetricTracerMarker(
+        MetricTracer* pMetricTracer,                    ///< [in] pointer to the metric tracer
+        uint32_t value                                  ///< [in] tracer marker value
+        )
+    {
+        // auto result = ::xetCommandListAppendMetricTracerMarker( handle, pMetricTracer, value );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::CommandList::AppendMetricTracerMarker");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Closes metric tracer.
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same metric tracer handle.
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     MetricTracer::Close(
         void
         )
@@ -214,13 +281,13 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetMetricTracerReadData
+    /// @brief Reads data from metric tracer.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     MetricTracer::ReadData(
         uint32_t* pReportCount,                         ///< [in,out] report count to read/returned
         uint32_t rawDataSize,                           ///< [in] raw data buffer size
@@ -232,15 +299,7 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    MetricQueryPool::MetricQueryPool( 
-        Device* pDevice                                 ///< [in] pointer to parent object
-        ) :
-        m_pDevice( pDevice )
-    {
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetMetricQueryPoolCreate
+    /// @brief Creates metric query pool.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -249,7 +308,7 @@ namespace xet
     ///     - MetricQueryPool: handle of metric query pool
     /// 
     /// @throws result_t
-    inline MetricQueryPool* 
+    MetricQueryPool* __xecall
     MetricQueryPool::Create(
         xe::Device* pDevice,                            ///< [in] pointer to the device
         desc_t* pDesc                                   ///< [in] metric query pool creation data
@@ -257,17 +316,19 @@ namespace xet
     {
         // auto result = ::xetMetricQueryPoolCreate( handle, pDevice, pDesc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricQueryPool::Create");
+
+        return (MetricQueryPool*)0;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetMetricQueryPoolDestroy
+    /// @brief Destroys query pool object.
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same query pool handle.
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     MetricQueryPool::Destroy(
         MetricQueryPool* pMetricQueryPool               ///< [in] pointer to the metric query pool
         )
@@ -277,7 +338,7 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetMetricQueryPoolGetMetricQuery
+    /// @brief Returns metric query handle from a given metric query pool.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -286,31 +347,77 @@ namespace xet
     ///     - MetricQuery: handle of metric query
     /// 
     /// @throws result_t
-    inline MetricQuery* 
+    MetricQuery* __xecall
     MetricQueryPool::GetMetricQuery(
         uint32_t ordinal                                ///< [in] index of the query within the pool
         )
     {
         // auto result = ::xetMetricQueryPoolGetMetricQuery( handle, ordinal );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricQueryPool::GetMetricQuery");
+
+        return (MetricQuery*)0;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    MetricQuery::MetricQuery( 
-        Device* pDevice                                 ///< [in] pointer to parent object
-        ) :
-        m_pDevice( pDevice )
+    /// @brief Appends metric query begin commands to command list.
+    /// 
+    /// @details
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    /// 
+    /// @throws result_t
+    void __xecall
+    CommandList::AppendMetricQueryBegin(
+        MetricQuery* pMetricQuery                       ///< [in] pointer to the metric query
+        )
     {
+        // auto result = ::xetCommandListAppendMetricQueryBegin( handle, pMetricQuery );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::CommandList::AppendMetricQueryBegin");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xetMetricQueryGetData
+    /// @brief Appends metric query end commands to command list.
+    /// 
+    /// @details
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    /// 
+    /// @throws result_t
+    void __xecall
+    CommandList::AppendMetricQueryEnd(
+        MetricQuery* pMetricQuery,                      ///< [in] pointer to the metric query
+        xe::Event* pCompletionEvent                     ///< [in] pointer to the completion event to signal
+        )
+    {
+        // auto result = ::xetCommandListAppendMetricQueryEnd( handle, pMetricQuery, pCompletionEvent );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::CommandList::AppendMetricQueryEnd");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Appends metric query commands to flush all caches.
+    /// 
+    /// @details
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same command list handle.
+    /// 
+    /// @throws result_t
+    void __xecall
+    CommandList::AppendMetricMemoryBarrier(
+        void
+        )
+    {
+        // auto result = ::xetCommandListAppendMetricMemoryBarrier( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::CommandList::AppendMetricMemoryBarrier");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Returns raw data for a given metric query slot.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     MetricQuery::GetData(
         uint32_t* pReportCount,                         ///< [in,out] report count to read/returned
         uint32_t rawDataSize,                           ///< [in] raw data size passed by the user

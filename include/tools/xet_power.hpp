@@ -306,7 +306,7 @@ namespace xet
         ///     - Power: handle for accessing power features of the device
         /// 
         /// @throws result_t
-        inline static Power*
+        static Power* __xecall
         Create(
             xe::Device* pDevice,                            ///< [in] pointer to the device object
             uint32_t flags                                  ///< [in] bitfield of ::power_init_flags_t
@@ -320,7 +320,7 @@ namespace xet
         ///     - **nvmlShutdown**
         ///     - **rsmi_shut_down**
         /// @throws result_t
-        inline static void
+        static void __xecall
         Destroy(
             Power* pPower                                   ///< [in] pointer to the power object to destroy
             );
@@ -331,7 +331,7 @@ namespace xet
         ///     - average_limit_t: information about the average power limit
         /// 
         /// @throws result_t
-        inline average_limit_t
+        average_limit_t __xecall
         GetAveragePowerLimit(
             void
             );
@@ -342,7 +342,7 @@ namespace xet
         ///     - burst_limit_t: information about the burst power limit
         /// 
         /// @throws result_t
-        inline burst_limit_t
+        burst_limit_t __xecall
         GetBurstPowerLimit(
             void
             );
@@ -353,7 +353,7 @@ namespace xet
         ///     - peak_limit_t: information about the peak power limit
         /// 
         /// @throws result_t
-        inline peak_limit_t
+        peak_limit_t __xecall
         GetPeakPowerLimit(
             void
             );
@@ -364,7 +364,7 @@ namespace xet
         ///     - limits_t: information about the average/burst/peak power limits
         /// 
         /// @throws result_t
-        inline limits_t
+        limits_t __xecall
         GetAllPowerLimits(
             void
             );
@@ -375,7 +375,7 @@ namespace xet
         ///     - limits_t: information about the default average/burst/peak power limits
         /// 
         /// @throws result_t
-        inline limits_t
+        limits_t __xecall
         GetDefaultPowerLimits(
             void
             );
@@ -383,7 +383,7 @@ namespace xet
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Set the average power limit for a device
         /// @throws result_t
-        inline void
+        void __xecall
         SetAveragePowerLimit(
             average_limit_t* pLimit                         ///< [in] information about the average power limit
             );
@@ -391,7 +391,7 @@ namespace xet
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Set the burst power limit for a device
         /// @throws result_t
-        inline void
+        void __xecall
         SetBurstPowerLimit(
             burst_limit_t* pLimit                           ///< [in] information about the burst power limit
             );
@@ -399,7 +399,7 @@ namespace xet
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Set the peak power limit for a device
         /// @throws result_t
-        inline void
+        void __xecall
         SetPeakPowerLimit(
             peak_limit_t* pLimit                            ///< [in] information about the peak power limit
             );
@@ -407,7 +407,7 @@ namespace xet
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Set the average/burst/peak power limits for a device
         /// @throws result_t
-        inline void
+        void __xecall
         SetPowerLimits(
             limits_t* pLimits                               ///< [in] information about the average/burst/peak power limits
             );
@@ -422,7 +422,7 @@ namespace xet
         ///     - uint64_t: the energy counter in millijoules
         /// 
         /// @throws result_t
-        inline uint64_t
+        uint64_t __xecall
         GetEnergyCounter(
             void
             );
@@ -433,7 +433,7 @@ namespace xet
         ///     - turbo_mode_t: turbo mode currently in effect
         /// 
         /// @throws result_t
-        inline turbo_mode_t
+        turbo_mode_t __xecall
         GetTurboMode(
             void
             );
@@ -441,7 +441,7 @@ namespace xet
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Set the current Turbo mode for a device
         /// @throws result_t
-        inline void
+        void __xecall
         SetTurboMode(
             turbo_mode_t pTurboMode                         ///< [in] new turbo mode
             );
@@ -452,7 +452,7 @@ namespace xet
         ///     - uint32_t: the number of frequency domains
         /// 
         /// @throws result_t
-        inline uint32_t
+        uint32_t __xecall
         GetFreqDomainCount(
             void
             );
@@ -463,7 +463,7 @@ namespace xet
         ///     - FreqDomain: pointer to handle of frequency domain object
         /// 
         /// @throws result_t
-        inline FreqDomain*
+        FreqDomain* __xecall
         GetFreqDomain(
             uint32_t ordinal                                ///< [in] frequency domain index [0 .. ::PowerGetFreqDomainCount - 1]
             );
@@ -474,7 +474,7 @@ namespace xet
         ///     - uint32_t: the number of fans on the device
         /// 
         /// @throws result_t
-        inline uint32_t
+        uint32_t __xecall
         FanCount(
             void
             );
@@ -485,7 +485,7 @@ namespace xet
         ///     - fan_properties_t: pointer to storage for fan properties
         /// 
         /// @throws result_t
-        inline fan_properties_t
+        fan_properties_t __xecall
         FanGetProperties(
             uint32_t fanIndex                               ///< [in] fan index [0 .. ::PowerFanCount - 1]
             );
@@ -500,7 +500,7 @@ namespace xet
         ///     - fan_point_t: pointer to an array of temperature/fan-speed points
         /// 
         /// @throws result_t
-        inline fan_point_t
+        fan_point_t __xecall
         FanGetSpeedTable(
             uint32_t fanIndex,                              ///< [in] fan index [0 .. ::PowerFanCount - 1]
             xe::bool_t fanSpeedInRpm,                       ///< [in] true will request fan speeds in RPM, otherwise in percentage
@@ -516,7 +516,7 @@ namespace xet
         ///       speed (percent, RPM).
         ///     - Fan points should be ordered according to increasing temperature.
         /// @throws result_t
-        inline void
+        void __xecall
         FanSetSpeedTable(
             uint32_t fanIndex,                              ///< [in] fan index [0 .. ::PowerFanCount - 1]
             uint32_t numFanPoints,                          ///< [in] number of points in pFanSpeedTable array
@@ -532,7 +532,7 @@ namespace xet
         ///     - fan_speed_info_t: pointer to an array of current fan speeds
         /// 
         /// @throws result_t
-        inline fan_speed_info_t
+        fan_speed_info_t __xecall
         FanGetSpeed(
             uint32_t startFanIndex,                         ///< [in] fan index [0 .. ::PowerFanCount - 1]
             uint32_t numFans,                               ///< [in] pFanSpeed will contain results for fan index
@@ -547,7 +547,7 @@ namespace xet
         ///     - Use ::fan_speed_info_t.fanSpeedMode to set whether the speed should be
         ///       fixed or dynamically controlled
         /// @throws result_t
-        inline void
+        void __xecall
         FanSetSpeed(
             uint32_t startFanIndex,                         ///< [in] fan index [0 .. ::PowerFanCount - 1]
             uint32_t numFans,                               ///< [in] pFanSpeed will contain results for fan index
@@ -561,7 +561,7 @@ namespace xet
         ///     - uint32_t: the number of temperature sensors on the device
         /// 
         /// @throws result_t
-        inline uint32_t
+        uint32_t __xecall
         TemperatureSensorCount(
             void
             );
@@ -576,7 +576,7 @@ namespace xet
         ///     - temperature_properties_t: pointer to properties for this sensor
         /// 
         /// @throws result_t
-        inline temperature_properties_t
+        temperature_properties_t __xecall
         GetTemperatureProperties(
             uint32_t sensorIndex                            ///< [in] sensor index [0 .. ::PowerTemperatureSensorCount]
             );
@@ -591,7 +591,7 @@ namespace xet
         ///     - uint16_t: pointer to an array of temperatures in units of degrees celsius
         /// 
         /// @throws result_t
-        inline uint16_t
+        uint16_t __xecall
         GetTemperature(
             uint32_t startSensorIndex,                      ///< [in] sensor index [0 .. ::PowerTemperatureSensorCount]
             uint32_t numSensors                             ///< [in] pTemperatures will contain results for sensors index
@@ -608,7 +608,7 @@ namespace xet
         ///       0.
         ///     - **This is an overclocking feature and will void device warranty**
         /// @throws result_t
-        inline void
+        void __xecall
         SetTemperatureThreshold(
             uint32_t sensorIndex,                           ///< [in] sensor index [0 .. ::PowerTemperatureSensorCount]
             uint16_t maxTemperature                         ///< [in] temperature threshold in degrees celsius beyond which frequency
@@ -621,7 +621,7 @@ namespace xet
         ///     - uint32_t: the number of activity counters on the device
         /// 
         /// @throws result_t
-        inline uint32_t
+        uint32_t __xecall
         ActivityCount(
             void
             );
@@ -636,7 +636,7 @@ namespace xet
         ///     - activity_properties_t: pointer to properties for this activity counter
         /// 
         /// @throws result_t
-        inline activity_properties_t
+        activity_properties_t __xecall
         GetActivityProperties(
             uint32_t activityIndex                          ///< [in] activity counter index [0 .. ::PowerActivityCount]
             );
@@ -651,7 +651,7 @@ namespace xet
         ///     - activity_counters_t: pointer to an array of activity counter data
         /// 
         /// @throws result_t
-        inline activity_counters_t
+        activity_counters_t __xecall
         GetActivityCounters(
             uint32_t startCounterIndex,                     ///< [in] sensor index [0 .. ::PowerActivityCount]
             uint32_t numCounters                            ///< [in] pCounters will contain results for activity counter index
@@ -768,7 +768,7 @@ namespace xet
         ///     - properties_t: pointer to properties for the frequency domain
         /// 
         /// @throws result_t
-        inline properties_t
+        properties_t __xecall
         GetProperties(
             void
             );
@@ -780,7 +780,7 @@ namespace xet
         ///     - FreqDomain: pointer to a handle where the source frequency domain handle will be returned
         /// 
         /// @throws result_t
-        inline FreqDomain*
+        FreqDomain* __xecall
         GetSourceFreqDomain(
             void
             );
@@ -796,7 +796,7 @@ namespace xet
         ///     - uint32_t: pointer to array of frequencies
         /// 
         /// @throws result_t
-        inline uint32_t
+        uint32_t __xecall
         GetSupportedClocks(
             uint32_t numClockPoints                         ///< [in] number of elements in pClocks
             );
@@ -812,7 +812,7 @@ namespace xet
         ///     - clock_divider_t: pointer to array of dividers
         /// 
         /// @throws result_t
-        inline clock_divider_t
+        clock_divider_t __xecall
         GetSupportedClockDividers(
             uint32_t numClockDividers                       ///< [in] number of elements in pDividers
             );
@@ -825,7 +825,7 @@ namespace xet
         ///     - uint32_t: max clock frequency in units of MHz
         /// 
         /// @throws result_t
-        inline std::tuple<uint32_t, uint32_t>
+        std::tuple<uint32_t, uint32_t> __xecall
         GetClockRange(
             void
             );
@@ -844,7 +844,7 @@ namespace xet
         ///     - Setting maxClock = 0 will instruct the hardware to use the default max
         ///       value.
         /// @throws result_t
-        inline void
+        void __xecall
         SetClockRange(
             uint32_t minClock,                              ///< [in] min clock frequency in units of MHz
             uint32_t maxClock                               ///< [in] max clock frequency in units of MHz
@@ -863,7 +863,7 @@ namespace xet
         ///     - clock_divider_t: pointer to frequency divider request
         /// 
         /// @throws result_t
-        inline clock_divider_t
+        clock_divider_t __xecall
         SetClockDivider(
             void
             );
@@ -876,7 +876,7 @@ namespace xet
         ///     - freq_throttle_reasons_t: the reason the resolved frequency is lower than the request
         /// 
         /// @throws result_t
-        inline std::tuple<uint32_t, uint32_t, freq_throttle_reasons_t>
+        std::tuple<uint32_t, uint32_t, freq_throttle_reasons_t> __xecall
         GetCurrentFrequency(
             void
             );

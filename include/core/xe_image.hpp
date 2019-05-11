@@ -210,7 +210,7 @@ namespace xe
         Image( void ) = delete;
         Image( 
             Device* pDevice,                                ///< [in] pointer to parent object
-            desc_t desc                                     ///< [in] descriptor of the image object
+            const desc_t& desc                              ///< [in] descriptor of the image object
             );
 
         ~Image( void ) = default;
@@ -236,7 +236,7 @@ namespace xe
         ///     - properties_t: pointer to image properties
         /// 
         /// @throws result_t
-        inline static properties_t
+        static properties_t __xecall
         GetProperties(
             Device* pDevice,                                ///< [in] pointer to the device
             const desc_t* desc                              ///< [in] pointer to image descriptor
@@ -256,7 +256,7 @@ namespace xe
         ///     - Image: pointer to handle of image object created
         /// 
         /// @throws result_t
-        inline static Image*
+        static Image* __xecall
         Create(
             Device* pDevice,                                ///< [in] pointer to the device
             const desc_t* desc                              ///< [in] pointer to image descriptor
@@ -274,7 +274,7 @@ namespace xe
         ///       threads with the same image handle.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
-        inline static void
+        static void __xecall
         Destroy(
             Image* pImage                                   ///< [in] pointer to image object to destroy
             );

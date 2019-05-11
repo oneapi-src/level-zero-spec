@@ -31,13 +31,14 @@
 *
 ******************************************************************************/
 #include "xe_api.hpp"
+#include "xe_api.h"
 
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     Fence::Fence( 
         CommandQueue* pCommandQueue,                    ///< [in] pointer to parent object
-        desc_t desc                                     ///< [in] descriptor of the fence object
+        const desc_t& desc                              ///< [in] descriptor of the fence object
         ) :
         m_pCommandQueue( pCommandQueue ),
         m_desc( desc )
@@ -45,7 +46,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeFenceCreate
+    /// @brief Creates a fence object on the device's command queue.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -59,7 +60,7 @@ namespace xe
     ///     - Fence: pointer to handle of fence object created
     /// 
     /// @throws result_t
-    inline Fence* 
+    Fence* __xecall
     Fence::Create(
         CommandQueue* pCommandQueue,                    ///< [in] pointer to command queue
         const desc_t* desc                              ///< [in] pointer to fence descriptor
@@ -67,10 +68,12 @@ namespace xe
     {
         // auto result = ::xeFenceCreate( handle, pCommandQueue, desc );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Fence::Create");
+
+        return (Fence*)0;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeFenceDestroy
+    /// @brief Deletes a fence object.
     /// 
     /// @details
     ///     - The application is responsible for making sure the GPU is not
@@ -86,7 +89,7 @@ namespace xe
     ///     - **vkDestroyFence**
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     Fence::Destroy(
         Fence* pFence                                   ///< [in] pointer to fence object to destroy
         )
@@ -96,7 +99,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeFenceHostSynchronize
+    /// @brief The current host thread waits on a fence to be signaled.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -107,7 +110,7 @@ namespace xe
     ///     - **vkWaitForFences**
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     Fence::HostSynchronize(
         uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
                                                         ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY;
@@ -121,7 +124,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeFenceQueryStatus
+    /// @brief Queries a fence object's status.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -132,7 +135,7 @@ namespace xe
     ///     - **vkGetFenceStatus**
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     Fence::QueryStatus(
         void
         )
@@ -142,7 +145,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeFenceReset
+    /// @brief Reset a fence back to the not signaled state.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -153,7 +156,7 @@ namespace xe
     ///     - **vkResetFences**
     /// 
     /// @throws result_t
-    inline void 
+    void __xecall
     Fence::Reset(
         void
         )

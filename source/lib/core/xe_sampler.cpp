@@ -31,7 +31,71 @@
 *
 ******************************************************************************/
 #include "xe_api.hpp"
+#include "xe_api.h"
 
 namespace xe
 {
+    ///////////////////////////////////////////////////////////////////////////////
+    Sampler::Sampler( 
+        Device* pDevice,                                ///< [in] pointer to parent object
+        const desc_t& desc                              ///< [in] sampler descriptor
+        ) :
+        m_pDevice( pDevice ),
+        m_desc( desc )
+    {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Creates sampler object.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuTexObjectCreate**
+    /// 
+    /// @returns
+    ///     - Sampler: handle of the sampler
+    /// 
+    /// @throws result_t
+    Sampler* __xecall
+    Sampler::Create(
+        Device* pDevice,                                ///< [in] pointer to the device
+        const desc_t* pDesc                             ///< [in] pointer to sampler descriptor
+        )
+    {
+        // auto result = ::xeSamplerCreate( handle, pDevice, pDesc );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Sampler::Create");
+
+        return (Sampler*)0;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Destroys sampler object
+    /// 
+    /// @details
+    ///     - The application is responsible for making sure the GPU is not
+    ///       currently referencing the sampler before it is deleted
+    ///     - The implementation of this function will immediately free all Host and
+    ///       Device allocations associated with this module
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same sampler handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuModuleUnload**
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sampler::Destroy(
+        Sampler* pSampler                               ///< [in] pointer to the sampler
+        )
+    {
+        // auto result = ::xeSamplerDestroy( handle, pSampler );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Sampler::Destroy");
+    }
+
 } // namespace xe

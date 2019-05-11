@@ -221,7 +221,7 @@ def make_etor_name(namespace, tags, enum, etor, cpp=False):
         # e.g., "ENUM_NAME_ETOR_NAME" -> "ETOR_NAME"
         prefix = re.sub(r"(\w+)_t", r"\1", subt(namespace, tags, enum, cpp=cpp)).upper()
         name = re.sub(r"%s_(\w+)"%prefix, r"\1", subt(namespace, tags, etor, cpp=cpp))
-        name = re.sub(r"^(\d+\w*)", r"_\1", name) #todo: .lower()?
+        name = re.sub(r"^(\d+\w*)", r"_\1", name)
     else:
         name = subt(namespace, tags, etor)
     return name
@@ -465,6 +465,8 @@ def make_ctor_param_lines(namespace, tags, obj, meta=None):
     for i, item in enumerate(params):
         name = subt(namespace, tags, item['name'])
         tname = _get_type_name(namespace, tags, obj, item, True, meta)
+        if re.match(r"\w*desc_t", tname):
+            tname = "const %s&"%tname
 
         if i < len(params)-1:
             prologue = "%s %s,"%(tname, name)
@@ -629,19 +631,12 @@ Public:
     returns string for declaring function return type
 """
 def make_return_value(namespace, tags, obj, cpp=False, decl=False, meta=None):
-    # if declaration is desired and it exists, and obj belongs to a class...
-    if decl and 'decl' in obj and 'class' in obj and obj['class'] not in tags:
-        # then add the declaration part; e.g., "static"
-        prologue = "%s "%obj['decl']
-    else:
-        prologue = ""
-
     # only "return" the parameters declared as "out"
     params = _filter_param_list(obj['params'], "out")
 
     # if none exist, then just return "void"
     if len(params) == 0:
-        return prologue+"void"
+        return "void"
 
     types = []
     for p in params:
@@ -662,9 +657,9 @@ def make_return_value(namespace, tags, obj, cpp=False, decl=False, meta=None):
 
     if len(types) > 1:
         # if more than one return value, then return a tuple of values
-        return prologue+"std::tuple<%s>"%", ".join(types)
+        return "std::tuple<%s>"%", ".join(types)
     else:
-        return prologue+types[0]
+        return types[0]
 
 """
 Public:

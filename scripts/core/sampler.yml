@@ -85,7 +85,6 @@ returns:
         - "invalid pDesc->addressMode"
         - "invalid pDesc->filterMode"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-    
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys sampler object"
@@ -104,3 +103,18 @@ params:
     - type: "$x_sampler_handle_t"
       name: hSampler
       desc: "[in] handle of the sampler"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "c++ wrapper for sampler"
+name: $xSampler
+members:
+    - type: $x_sampler_handle_t
+      name: handle
+      desc: "handle of the sample object"
+      init: nullptr
+    - type: $xDevice*
+      name: pDevice
+      desc: "[in] pointer to parent object"
+    - type: "$x_sampler_desc_t"
+      name: desc
+      desc: "[in] sampler descriptor"
