@@ -209,6 +209,10 @@ typedef struct _xe_command_queue_desc_t xe_command_queue_desc_t;
 typedef struct _xe_command_list_desc_t xe_command_list_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_copy_region_t
+typedef struct _xe_copy_region_t xe_copy_region_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xe_image_region_t
 typedef struct _xe_image_region_t xe_image_region_t;
 

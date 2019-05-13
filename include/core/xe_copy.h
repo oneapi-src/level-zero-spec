@@ -76,9 +76,7 @@ xeCommandListAppendMemoryCopy(
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     const void* srcptr,                             ///< [in] pointer to source memory to copy from
     size_t size,                                    ///< [in] size in bytes to copy
-    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -88,9 +86,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendMemoryCopy_t)(
     void*,
     const void*,
     size_t,
-    xe_event_handle_t,
-    uint32_t,
-    xe_event_handle_t*
+    xe_event_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -124,9 +120,7 @@ xeCommandListAppendMemorySet(
     void* ptr,                                      ///< [in] pointer to memory to initialize
     int value,                                      ///< [in] value to initialize memory to
     size_t size,                                    ///< [in] size in bytes to initailize
-    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -136,9 +130,62 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendMemorySet_t)(
     void*,
     int,
     size_t,
-    xe_event_handle_t,
-    uint32_t,
-    xe_event_handle_t*
+    xe_event_handle_t
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Copy region descriptor
+typedef struct _xe_copy_region_t
+{
+    uint32_t originX;                               ///< [in] The origin x offset for region in bytes
+    uint32_t originY;                               ///< [in] The origin y offset for region in rows
+    uint32_t width;                                 ///< [in] The region width relative to origin in bytes
+    uint32_t height;                                ///< [in] The region height relative to origin in rows
+
+} xe_copy_region_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Copies a region from a 2D array of host, device, or shared memory.
+/// 
+/// @details
+///     - The memory pointed to by both srcptr and dstptr must be accessible by
+///       the device on which the command list is created.
+///     - The region width and height for both src and dst must be same. The
+///       origins can be different.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command list handle.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hCommandList
+///         + nullptr == dstptr
+///         + nullptr == dstRegion
+///         + nullptr == srcptr
+///         + nullptr == srcRegion
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeCommandListAppendMemoryCopyRegion(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
+    void* dstptr,                                   ///< [in] pointer to destination memory to copy to
+    xe_copy_region* dstRegion,                      ///< [in] pointer to destination region to copy to
+    const void* srcptr,                             ///< [in] pointer to source memory to copy from
+    xe_copy_region* srcRegion,                      ///< [in] pointer to source region to copy from
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeCommandListAppendMemoryCopyRegion 
+typedef xe_result_t (__xecall *xe_pfnCommandListAppendMemoryCopyRegion_t)(
+    xe_command_list_handle_t,
+    void*,
+    xe_copy_region*,
+    const void*,
+    xe_copy_region*,
+    xe_event_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -167,9 +214,7 @@ xeCommandListAppendImageCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
-    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -178,9 +223,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendImageCopy_t)(
     xe_command_list_handle_t,
     xe_image_handle_t,
     xe_image_handle_t,
-    xe_event_handle_t,
-    uint32_t,
-    xe_event_handle_t*
+    xe_event_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -192,7 +235,8 @@ typedef struct _xe_image_region_t
     uint32_t originZ;                               ///< [in] The origin z offset for region in pixels
     uint32_t width;                                 ///< [in] The region width relative to origin in pixels
     uint32_t height;                                ///< [in] The region height relative to origin in pixels
-    uint32_t depth;                                 ///< [in] The region depth relative to origin in pixels
+    uint32_t depth;                                 ///< [in] The region depth relative to origin. For 1D or 2D images, set
+                                                    ///< this to 1.
 
 } xe_image_region_t;
 
@@ -217,12 +261,10 @@ xe_result_t __xecall
 xeCommandListAppendImageCopyRegion(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
-    xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
     xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
+    xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
     xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
-    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -230,12 +272,10 @@ xeCommandListAppendImageCopyRegion(
 typedef xe_result_t (__xecall *xe_pfnCommandListAppendImageCopyRegion_t)(
     xe_command_list_handle_t,
     xe_image_handle_t,
+    xe_image_region_t*,
     xe_image_handle_t,
     xe_image_region_t*,
-    xe_image_region_t*,
-    xe_event_handle_t,
-    uint32_t,
-    xe_event_handle_t*
+    xe_event_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -267,9 +307,7 @@ xeCommandListAppendImageCopyToMemory(
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
     xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
-    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -279,9 +317,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendImageCopyToMemory_t)(
     void*,
     xe_image_handle_t,
     xe_image_region_t*,
-    xe_event_handle_t,
-    uint32_t,
-    xe_event_handle_t*
+    xe_event_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -311,11 +347,9 @@ xe_result_t __xecall
 xeCommandListAppendImageCopyFromMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
-    const void* srcptr,                             ///< [in] pointer to source memory to copy from
     xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
-    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
+    const void* srcptr,                             ///< [in] pointer to source memory to copy from
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -323,11 +357,9 @@ xeCommandListAppendImageCopyFromMemory(
 typedef xe_result_t (__xecall *xe_pfnCommandListAppendImageCopyFromMemory_t)(
     xe_command_list_handle_t,
     xe_image_handle_t,
-    const void*,
     xe_image_region_t*,
-    xe_event_handle_t,
-    uint32_t,
-    xe_event_handle_t*
+    const void*,
+    xe_event_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
