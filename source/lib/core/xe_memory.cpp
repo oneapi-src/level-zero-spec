@@ -285,4 +285,82 @@ namespace xe
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "IpcCloseMemHandle");
     }
 
+#ifdef _DEBUG
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts device_mem_alloc_flag_t to std::string
+    std::string to_string( device_mem_alloc_flag_t val )
+    {
+        const auto bits = static_cast<uint32_t>( val );
+        if( 0 == bits ) return std::string("{}");
+        std::string str;
+        if( static_cast<uint32_t>(device_mem_alloc_flag_t::DEFAULT) & bits )
+            str += "device_mem_alloc_flag_t::DEFAULT | ";
+        if( static_cast<uint32_t>(device_mem_alloc_flag_t::BIAS_CACHED) & bits )
+            str += "device_mem_alloc_flag_t::BIAS_CACHED | ";
+        if( static_cast<uint32_t>(device_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
+            str += "device_mem_alloc_flag_t::BIAS_UNCACHED | ";
+        return "{ " + str.substr(0, str.size() - 3) + " }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts host_mem_alloc_flag_t to std::string
+    std::string to_string( host_mem_alloc_flag_t val )
+    {
+        const auto bits = static_cast<uint32_t>( val );
+        if( 0 == bits ) return std::string("{}");
+        std::string str;
+        if( static_cast<uint32_t>(host_mem_alloc_flag_t::DEFAULT) & bits )
+            str += "host_mem_alloc_flag_t::DEFAULT | ";
+        if( static_cast<uint32_t>(host_mem_alloc_flag_t::BIAS_CACHED) & bits )
+            str += "host_mem_alloc_flag_t::BIAS_CACHED | ";
+        if( static_cast<uint32_t>(host_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
+            str += "host_mem_alloc_flag_t::BIAS_UNCACHED | ";
+        if( static_cast<uint32_t>(host_mem_alloc_flag_t::BIAS_WRITE_COMBINED) & bits )
+            str += "host_mem_alloc_flag_t::BIAS_WRITE_COMBINED | ";
+        return "{ " + str.substr(0, str.size() - 3) + " }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts memory_allocation_properties_version_t to std::string
+    std::string to_string( memory_allocation_properties_version_t val )
+    {
+        switch( val )
+        {
+        case memory_allocation_properties_version_t::CURRENT:
+            return std::string("memory_allocation_properties_version_t::CURRENT");
+        };
+        return std::string("memory_allocation_properties_version_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts memory_type_t to std::string
+    std::string to_string( memory_type_t val )
+    {
+        switch( val )
+        {
+        case memory_type_t::UNKNOWN:
+            return std::string("memory_type_t::UNKNOWN");
+        case memory_type_t::HOST:
+            return std::string("memory_type_t::HOST");
+        case memory_type_t::DEVICE:
+            return std::string("memory_type_t::DEVICE");
+        case memory_type_t::SHARED:
+            return std::string("memory_type_t::SHARED");
+        };
+        return std::string("memory_type_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts ipc_memory_flag_t to std::string
+    std::string to_string( ipc_memory_flag_t val )
+    {
+        switch( val )
+        {
+        case ipc_memory_flag_t::NONE:
+            return std::string("ipc_memory_flag_t::NONE");
+        };
+        return std::string("ipc_memory_flag_t::?");
+    }
+
+#endif // _DEBUG
 } // namespace xe

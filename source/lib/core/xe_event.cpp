@@ -394,4 +394,66 @@ namespace xe
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::Reset");
     }
 
+#ifdef _DEBUG
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts EventPool::desc_version_t to std::string
+    std::string to_string( EventPool::desc_version_t val )
+    {
+        switch( val )
+        {
+        case EventPool::desc_version_t::CURRENT:
+            return std::string("EventPool::desc_version_t::CURRENT");
+        };
+        return std::string("EventPool::desc_version_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts EventPool::flag_t to std::string
+    std::string to_string( EventPool::flag_t val )
+    {
+        const auto bits = static_cast<uint32_t>( val );
+        if( 0 == bits ) return std::string("{}");
+        std::string str;
+        if( static_cast<uint32_t>(EventPool::flag_t::DEFAULT) & bits )
+            str += "EventPool::flag_t::DEFAULT | ";
+        if( static_cast<uint32_t>(EventPool::flag_t::HOST_VISIBLE) & bits )
+            str += "EventPool::flag_t::HOST_VISIBLE | ";
+        if( static_cast<uint32_t>(EventPool::flag_t::IPC) & bits )
+            str += "EventPool::flag_t::IPC | ";
+        return "{ " + str.substr(0, str.size() - 3) + " }";
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Event::desc_version_t to std::string
+    std::string to_string( Event::desc_version_t val )
+    {
+        switch( val )
+        {
+        case Event::desc_version_t::CURRENT:
+            return std::string("Event::desc_version_t::CURRENT");
+        };
+        return std::string("Event::desc_version_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Event::scope_flag_t to std::string
+    std::string to_string( Event::scope_flag_t val )
+    {
+        const auto bits = static_cast<uint32_t>( val );
+        if( 0 == bits ) return std::string("{}");
+        std::string str;
+        if( static_cast<uint32_t>(Event::scope_flag_t::NONE) & bits )
+            str += "Event::scope_flag_t::NONE | ";
+        if( static_cast<uint32_t>(Event::scope_flag_t::SUBDEVICE) & bits )
+            str += "Event::scope_flag_t::SUBDEVICE | ";
+        if( static_cast<uint32_t>(Event::scope_flag_t::DEVICE) & bits )
+            str += "Event::scope_flag_t::DEVICE | ";
+        if( static_cast<uint32_t>(Event::scope_flag_t::HOST) & bits )
+            str += "Event::scope_flag_t::HOST | ";
+        return "{ " + str.substr(0, str.size() - 3) + " }";
+    }
+
+
+#endif // _DEBUG
 } // namespace xe

@@ -386,6 +386,26 @@ namespace xe
 
     };
 
+#ifdef _DEBUG
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts EventPool::desc_version_t to std::string
+    std::string to_string( EventPool::desc_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts EventPool::flag_t to std::string
+    std::string to_string( EventPool::flag_t val );
+
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Event::desc_version_t to std::string
+    std::string to_string( Event::desc_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Event::scope_flag_t to std::string
+    std::string to_string( Event::scope_flag_t val );
+
+
+#endif // _DEBUG
 } // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_EVENT_HPP

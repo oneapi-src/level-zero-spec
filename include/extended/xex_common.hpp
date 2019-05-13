@@ -39,8 +39,10 @@
 #endif
 #include <stdint.h>
 #include <string.h>
-//#include "xex_api.h"
 #include <tuple>
+#ifdef _DEBUG
+#include <string>
+#endif
 #include "xe_api.hpp"
 
 namespace xex
@@ -51,6 +53,8 @@ namespace xex
     struct _command_graph_handle_t;
     using command_graph_handle_t = _command_graph_handle_t*;
 
+#ifdef _DEBUG
+#endif // _DEBUG
 } // namespace xex
 #endif // defined(__cplusplus)
 #endif // _XEX_COMMON_HPP

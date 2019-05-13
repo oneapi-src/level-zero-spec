@@ -39,8 +39,10 @@
 #endif
 #include <stdint.h>
 #include <string.h>
-//#include "xet_api.h"
 #include <tuple>
+#ifdef _DEBUG
+#include <string>
+#endif
 #include "xe_api.hpp"
 
 namespace xet
@@ -105,6 +107,8 @@ namespace xet
     struct _sysman_handle_t;
     using sysman_handle_t = _sysman_handle_t*;
 
+#ifdef _DEBUG
+#endif // _DEBUG
 } // namespace xet
 #endif // defined(__cplusplus)
 #endif // _XET_COMMON_HPP

@@ -117,4 +117,195 @@ namespace xe
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Image::Destroy");
     }
 
+#ifdef _DEBUG
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Image::desc_version_t to std::string
+    std::string to_string( Image::desc_version_t val )
+    {
+        switch( val )
+        {
+        case Image::desc_version_t::CURRENT:
+            return std::string("Image::desc_version_t::CURRENT");
+        };
+        return std::string("Image::desc_version_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Image::flag_t to std::string
+    std::string to_string( Image::flag_t val )
+    {
+        const auto bits = static_cast<uint32_t>( val );
+        if( 0 == bits ) return std::string("{}");
+        std::string str;
+        if( static_cast<uint32_t>(Image::flag_t::PROGRAM_READ) & bits )
+            str += "Image::flag_t::PROGRAM_READ | ";
+        if( static_cast<uint32_t>(Image::flag_t::PROGRAM_WRITE) & bits )
+            str += "Image::flag_t::PROGRAM_WRITE | ";
+        if( static_cast<uint32_t>(Image::flag_t::BIAS_CACHED) & bits )
+            str += "Image::flag_t::BIAS_CACHED | ";
+        if( static_cast<uint32_t>(Image::flag_t::BIAS_UNCACHED) & bits )
+            str += "Image::flag_t::BIAS_UNCACHED | ";
+        return "{ " + str.substr(0, str.size() - 3) + " }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Image::type_t to std::string
+    std::string to_string( Image::type_t val )
+    {
+        switch( val )
+        {
+        case Image::type_t::_1D:
+            return std::string("Image::type_t::_1D");
+        case Image::type_t::_1DARRAY:
+            return std::string("Image::type_t::_1DARRAY");
+        case Image::type_t::_2D:
+            return std::string("Image::type_t::_2D");
+        case Image::type_t::_2DARRAY:
+            return std::string("Image::type_t::_2DARRAY");
+        case Image::type_t::_3D:
+            return std::string("Image::type_t::_3D");
+        };
+        return std::string("Image::type_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Image::format_layout_t to std::string
+    std::string to_string( Image::format_layout_t val )
+    {
+        switch( val )
+        {
+        case Image::format_layout_t::_8:
+            return std::string("Image::format_layout_t::_8");
+        case Image::format_layout_t::_16:
+            return std::string("Image::format_layout_t::_16");
+        case Image::format_layout_t::_32:
+            return std::string("Image::format_layout_t::_32");
+        case Image::format_layout_t::_8_8:
+            return std::string("Image::format_layout_t::_8_8");
+        case Image::format_layout_t::_8_8_8_8:
+            return std::string("Image::format_layout_t::_8_8_8_8");
+        case Image::format_layout_t::_16_16:
+            return std::string("Image::format_layout_t::_16_16");
+        case Image::format_layout_t::_16_16_16_16:
+            return std::string("Image::format_layout_t::_16_16_16_16");
+        case Image::format_layout_t::_32_32:
+            return std::string("Image::format_layout_t::_32_32");
+        case Image::format_layout_t::_32_32_32_32:
+            return std::string("Image::format_layout_t::_32_32_32_32");
+        case Image::format_layout_t::_10_10_10_2:
+            return std::string("Image::format_layout_t::_10_10_10_2");
+        case Image::format_layout_t::_11_11_10:
+            return std::string("Image::format_layout_t::_11_11_10");
+        case Image::format_layout_t::_5_6_5:
+            return std::string("Image::format_layout_t::_5_6_5");
+        case Image::format_layout_t::_5_5_5_1:
+            return std::string("Image::format_layout_t::_5_5_5_1");
+        case Image::format_layout_t::_4_4_4_4:
+            return std::string("Image::format_layout_t::_4_4_4_4");
+        case Image::format_layout_t::Y8:
+            return std::string("Image::format_layout_t::Y8");
+        case Image::format_layout_t::NV12:
+            return std::string("Image::format_layout_t::NV12");
+        case Image::format_layout_t::YUYV:
+            return std::string("Image::format_layout_t::YUYV");
+        case Image::format_layout_t::VYUY:
+            return std::string("Image::format_layout_t::VYUY");
+        case Image::format_layout_t::YVYU:
+            return std::string("Image::format_layout_t::YVYU");
+        case Image::format_layout_t::UYVY:
+            return std::string("Image::format_layout_t::UYVY");
+        case Image::format_layout_t::AYUV:
+            return std::string("Image::format_layout_t::AYUV");
+        case Image::format_layout_t::YUAV:
+            return std::string("Image::format_layout_t::YUAV");
+        case Image::format_layout_t::P010:
+            return std::string("Image::format_layout_t::P010");
+        case Image::format_layout_t::Y410:
+            return std::string("Image::format_layout_t::Y410");
+        case Image::format_layout_t::P012:
+            return std::string("Image::format_layout_t::P012");
+        case Image::format_layout_t::Y16:
+            return std::string("Image::format_layout_t::Y16");
+        case Image::format_layout_t::P016:
+            return std::string("Image::format_layout_t::P016");
+        case Image::format_layout_t::Y216:
+            return std::string("Image::format_layout_t::Y216");
+        case Image::format_layout_t::P216:
+            return std::string("Image::format_layout_t::P216");
+        case Image::format_layout_t::P416:
+            return std::string("Image::format_layout_t::P416");
+        };
+        return std::string("Image::format_layout_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Image::format_type_t to std::string
+    std::string to_string( Image::format_type_t val )
+    {
+        switch( val )
+        {
+        case Image::format_type_t::UINT:
+            return std::string("Image::format_type_t::UINT");
+        case Image::format_type_t::SINT:
+            return std::string("Image::format_type_t::SINT");
+        case Image::format_type_t::UNORM:
+            return std::string("Image::format_type_t::UNORM");
+        case Image::format_type_t::SNORM:
+            return std::string("Image::format_type_t::SNORM");
+        case Image::format_type_t::FLOAT:
+            return std::string("Image::format_type_t::FLOAT");
+        };
+        return std::string("Image::format_type_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Image::format_swizzle_t to std::string
+    std::string to_string( Image::format_swizzle_t val )
+    {
+        switch( val )
+        {
+        case Image::format_swizzle_t::R:
+            return std::string("Image::format_swizzle_t::R");
+        case Image::format_swizzle_t::G:
+            return std::string("Image::format_swizzle_t::G");
+        case Image::format_swizzle_t::B:
+            return std::string("Image::format_swizzle_t::B");
+        case Image::format_swizzle_t::A:
+            return std::string("Image::format_swizzle_t::A");
+        case Image::format_swizzle_t::_0:
+            return std::string("Image::format_swizzle_t::_0");
+        case Image::format_swizzle_t::_1:
+            return std::string("Image::format_swizzle_t::_1");
+        case Image::format_swizzle_t::X:
+            return std::string("Image::format_swizzle_t::X");
+        };
+        return std::string("Image::format_swizzle_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Image::properties_version_t to std::string
+    std::string to_string( Image::properties_version_t val )
+    {
+        switch( val )
+        {
+        case Image::properties_version_t::CURRENT:
+            return std::string("Image::properties_version_t::CURRENT");
+        };
+        return std::string("Image::properties_version_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Image::sampler_filter_flags_t to std::string
+    std::string to_string( Image::sampler_filter_flags_t val )
+    {
+        const auto bits = static_cast<uint32_t>( val );
+        if( 0 == bits ) return std::string("{}");
+        std::string str;
+        if( static_cast<uint32_t>(Image::sampler_filter_flags_t::LINEAR) & bits )
+            str += "Image::sampler_filter_flags_t::LINEAR | ";
+        return "{ " + str.substr(0, str.size() - 3) + " }";
+    }
+
+
+#endif // _DEBUG
 } // namespace xe

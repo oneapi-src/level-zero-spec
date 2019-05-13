@@ -428,4 +428,143 @@ namespace xet
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricQuery::GetData");
     }
 
+#ifdef _DEBUG
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts value_type_t to std::string
+    std::string to_string( value_type_t val )
+    {
+        switch( val )
+        {
+        case value_type_t::UINT32:
+            return std::string("value_type_t::UINT32");
+        case value_type_t::UINT64:
+            return std::string("value_type_t::UINT64");
+        case value_type_t::FLOAT:
+            return std::string("value_type_t::FLOAT");
+        case value_type_t::BOOL:
+            return std::string("value_type_t::BOOL");
+        };
+        return std::string("value_type_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts typed_value_version_t to std::string
+    std::string to_string( typed_value_version_t val )
+    {
+        switch( val )
+        {
+        case typed_value_version_t::CURRENT:
+            return std::string("typed_value_version_t::CURRENT");
+        };
+        return std::string("typed_value_version_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts MetricGroup::sampling_type to std::string
+    std::string to_string( MetricGroup::sampling_type val )
+    {
+        const auto bits = static_cast<uint32_t>( val );
+        if( 0 == bits ) return std::string("{}");
+        std::string str;
+        if( static_cast<uint32_t>(MetricGroup::sampling_type::METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED) & bits )
+            str += "MetricGroup::sampling_type::METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED | ";
+        if( static_cast<uint32_t>(MetricGroup::sampling_type::METRIC_GROUP_SAMPLING_TYPE_TIME_BASED) & bits )
+            str += "MetricGroup::sampling_type::METRIC_GROUP_SAMPLING_TYPE_TIME_BASED | ";
+        return "{ " + str.substr(0, str.size() - 3) + " }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts MetricGroup::properties_version_t to std::string
+    std::string to_string( MetricGroup::properties_version_t val )
+    {
+        switch( val )
+        {
+        case MetricGroup::properties_version_t::CURRENT:
+            return std::string("MetricGroup::properties_version_t::CURRENT");
+        };
+        return std::string("MetricGroup::properties_version_t::?");
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Metric::type_t to std::string
+    std::string to_string( Metric::type_t val )
+    {
+        switch( val )
+        {
+        case Metric::type_t::DURATION:
+            return std::string("Metric::type_t::DURATION");
+        case Metric::type_t::EVENT:
+            return std::string("Metric::type_t::EVENT");
+        case Metric::type_t::EVENT_WITH_RANGE:
+            return std::string("Metric::type_t::EVENT_WITH_RANGE");
+        case Metric::type_t::THROUGHPUT:
+            return std::string("Metric::type_t::THROUGHPUT");
+        case Metric::type_t::TIMESTAMP:
+            return std::string("Metric::type_t::TIMESTAMP");
+        case Metric::type_t::FLAG:
+            return std::string("Metric::type_t::FLAG");
+        case Metric::type_t::RATIO:
+            return std::string("Metric::type_t::RATIO");
+        case Metric::type_t::RAW:
+            return std::string("Metric::type_t::RAW");
+        };
+        return std::string("Metric::type_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Metric::properties_version_t to std::string
+    std::string to_string( Metric::properties_version_t val )
+    {
+        switch( val )
+        {
+        case Metric::properties_version_t::CURRENT:
+            return std::string("Metric::properties_version_t::CURRENT");
+        };
+        return std::string("Metric::properties_version_t::?");
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts MetricTracer::desc_version_t to std::string
+    std::string to_string( MetricTracer::desc_version_t val )
+    {
+        switch( val )
+        {
+        case MetricTracer::desc_version_t::CURRENT:
+            return std::string("MetricTracer::desc_version_t::CURRENT");
+        };
+        return std::string("MetricTracer::desc_version_t::?");
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts MetricQueryPool::flag_t to std::string
+    std::string to_string( MetricQueryPool::flag_t val )
+    {
+        switch( val )
+        {
+        case MetricQueryPool::flag_t::PERFORMANCE:
+            return std::string("MetricQueryPool::flag_t::PERFORMANCE");
+        case MetricQueryPool::flag_t::SKIP_EXECUTION:
+            return std::string("MetricQueryPool::flag_t::SKIP_EXECUTION");
+        };
+        return std::string("MetricQueryPool::flag_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts MetricQueryPool::desc_version_t to std::string
+    std::string to_string( MetricQueryPool::desc_version_t val )
+    {
+        switch( val )
+        {
+        case MetricQueryPool::desc_version_t::CURRENT:
+            return std::string("MetricQueryPool::desc_version_t::CURRENT");
+        };
+        return std::string("MetricQueryPool::desc_version_t::?");
+    }
+
+
+
+#endif // _DEBUG
 } // namespace xet

@@ -41,6 +41,8 @@
 
 namespace xe
 {
+#ifdef _DEBUG
+#endif // _DEBUG
 } // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_BARRIER_HPP

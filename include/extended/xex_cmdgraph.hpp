@@ -149,6 +149,17 @@ namespace xex
 
     };
 
+#ifdef _DEBUG
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts CommandGraph::desc_version_t to std::string
+    std::string to_string( CommandGraph::desc_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts CommandGraph::flag_t to std::string
+    std::string to_string( CommandGraph::flag_t val );
+
+
+#endif // _DEBUG
 } // namespace xex
 #endif // defined(__cplusplus)
 #endif // _XEX_CMDGRAPH_HPP

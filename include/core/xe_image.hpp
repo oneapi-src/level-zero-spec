@@ -281,6 +281,41 @@ namespace xe
 
     };
 
+#ifdef _DEBUG
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Image::desc_version_t to std::string
+    std::string to_string( Image::desc_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Image::flag_t to std::string
+    std::string to_string( Image::flag_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Image::type_t to std::string
+    std::string to_string( Image::type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Image::format_layout_t to std::string
+    std::string to_string( Image::format_layout_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Image::format_type_t to std::string
+    std::string to_string( Image::format_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Image::format_swizzle_t to std::string
+    std::string to_string( Image::format_swizzle_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Image::properties_version_t to std::string
+    std::string to_string( Image::properties_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Image::sampler_filter_flags_t to std::string
+    std::string to_string( Image::sampler_filter_flags_t val );
+
+
+#endif // _DEBUG
 } // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_IMAGE_HPP

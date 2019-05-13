@@ -327,4 +327,101 @@ namespace xe
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::SetLastLevelCacheConfig");
     }
 
+#ifdef _DEBUG
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::api_version_t to std::string
+    std::string to_string( Device::api_version_t val )
+    {
+        switch( val )
+        {
+        case Device::api_version_t::_1_0:
+            return std::string("Device::api_version_t::_1_0");
+        };
+        return std::string("Device::api_version_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::properties_version_t to std::string
+    std::string to_string( Device::properties_version_t val )
+    {
+        switch( val )
+        {
+        case Device::properties_version_t::CURRENT:
+            return std::string("Device::properties_version_t::CURRENT");
+        };
+        return std::string("Device::properties_version_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::compute_properties_version_t to std::string
+    std::string to_string( Device::compute_properties_version_t val )
+    {
+        switch( val )
+        {
+        case Device::compute_properties_version_t::CURRENT:
+            return std::string("Device::compute_properties_version_t::CURRENT");
+        };
+        return std::string("Device::compute_properties_version_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::memory_properties_version_t to std::string
+    std::string to_string( Device::memory_properties_version_t val )
+    {
+        switch( val )
+        {
+        case Device::memory_properties_version_t::CURRENT:
+            return std::string("Device::memory_properties_version_t::CURRENT");
+        };
+        return std::string("Device::memory_properties_version_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::memory_access_capabilities_t to std::string
+    std::string to_string( Device::memory_access_capabilities_t val )
+    {
+        const auto bits = static_cast<uint32_t>( val );
+        if( 0 == bits ) return std::string("{}");
+        std::string str;
+        if( static_cast<uint32_t>(Device::memory_access_capabilities_t::MEMORY_ACCESS) & bits )
+            str += "Device::memory_access_capabilities_t::MEMORY_ACCESS | ";
+        if( static_cast<uint32_t>(Device::memory_access_capabilities_t::MEMORY_ATOMIC_ACCESS) & bits )
+            str += "Device::memory_access_capabilities_t::MEMORY_ATOMIC_ACCESS | ";
+        if( static_cast<uint32_t>(Device::memory_access_capabilities_t::MEMORY_CONCURRENT_ACCESS) & bits )
+            str += "Device::memory_access_capabilities_t::MEMORY_CONCURRENT_ACCESS | ";
+        if( static_cast<uint32_t>(Device::memory_access_capabilities_t::MEMORY_CONCURRENT_ATOMIC_ACCESS) & bits )
+            str += "Device::memory_access_capabilities_t::MEMORY_CONCURRENT_ATOMIC_ACCESS | ";
+        return "{ " + str.substr(0, str.size() - 3) + " }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::p2p_properties_version_t to std::string
+    std::string to_string( Device::p2p_properties_version_t val )
+    {
+        switch( val )
+        {
+        case Device::p2p_properties_version_t::CURRENT:
+            return std::string("Device::p2p_properties_version_t::CURRENT");
+        };
+        return std::string("Device::p2p_properties_version_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::cache_config_t to std::string
+    std::string to_string( Device::cache_config_t val )
+    {
+        const auto bits = static_cast<uint32_t>( val );
+        if( 0 == bits ) return std::string("{}");
+        std::string str;
+        if( static_cast<uint32_t>(Device::cache_config_t::DEFAULT) & bits )
+            str += "Device::cache_config_t::DEFAULT | ";
+        if( static_cast<uint32_t>(Device::cache_config_t::LARGE_SLM) & bits )
+            str += "Device::cache_config_t::LARGE_SLM | ";
+        if( static_cast<uint32_t>(Device::cache_config_t::LARGE_DATA) & bits )
+            str += "Device::cache_config_t::LARGE_DATA | ";
+        return "{ " + str.substr(0, str.size() - 3) + " }";
+    }
+
+
+#endif // _DEBUG
 } // namespace xe

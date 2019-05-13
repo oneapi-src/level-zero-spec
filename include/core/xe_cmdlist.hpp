@@ -732,6 +732,25 @@ namespace xe
 
     };
 
+#ifdef _DEBUG
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts CommandList::desc_version_t to std::string
+    std::string to_string( CommandList::desc_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts CommandList::flag_t to std::string
+    std::string to_string( CommandList::flag_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts CommandList::parameter_t to std::string
+    std::string to_string( CommandList::parameter_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts CommandList::memory_advice_t to std::string
+    std::string to_string( CommandList::memory_advice_t val );
+
+
+#endif // _DEBUG
 } // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_CMDLIST_HPP

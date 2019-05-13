@@ -39,8 +39,10 @@
 #endif
 #include <stdint.h>
 #include <string.h>
-//#include "xe_api.h"
 #include <tuple>
+#ifdef _DEBUG
+#include <string>
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef XE_MAKE_VERSION
@@ -203,6 +205,12 @@ namespace xe
 
     };
 
+#ifdef _DEBUG
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts result_t to std::string
+    std::string to_string( result_t val );
+
+#endif // _DEBUG
 } // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_COMMON_HPP

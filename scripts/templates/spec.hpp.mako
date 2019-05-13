@@ -11,6 +11,13 @@ def declare_obj(obj, tags):
         return True
     return False
 
+def declare_dbg(obj, tags):
+    if re.match("class", obj['type']):
+        return True
+    if 'class' not in obj or obj['class'] in tags:
+        return re.match("enum", obj['type'])
+    return False
+
 %><%
     n=namespace
     N=n.upper()
@@ -58,8 +65,10 @@ def declare_obj(obj, tags):
 %if re.match(r"common", name):
 #include <stdint.h>
 #include <string.h>
-//#include "${n}_api.h"
 #include <tuple>
+#ifdef _DEBUG
+#include <string>
+#endif
 %if x != n:
 #include "${x}_api.hpp"
 %endif
@@ -70,14 +79,15 @@ def declare_obj(obj, tags):
 #include "${re.sub(r"\$h", "hpp", th.subt(n, tags, item))}"
 %endfor
 
-%for obj in th.extract_objs([{'objects': objects}], r"macro"):
-## MACRO ######################################################################
+## MACROS #####################################################################
+%for obj in th.filter_items(objects, 'type', "macro"):
 ///////////////////////////////////////////////////////////////////////////////
-## CONDITION-START ############################################################
 #ifndef ${th.make_macro_name(n, tags, obj, params=False)}
+## CONDITION-START ############################################################
 %if 'condition' in obj:
 #if ${th.subt(n, tags, obj['condition'])}
 %endif
+## DESCRIPTION ################################################################
 %for line in th.make_desc_lines(n, tags, obj, cpp=True):
 /// ${line}
 %endfor
@@ -95,16 +105,17 @@ def declare_obj(obj, tags):
 %endif
 #endif // ${th.make_macro_name(n, tags, obj, params=False)}
 
-%endfor # obj in th.extract_objs([objects], r"macro")
+%endfor # obj
 namespace ${n}
 {
 %for obj in objects:
 %if declare_obj(obj, tags):
     ///////////////////////////////////////////////////////////////////////////////
-    ## CONDITION-START ############################################################
-    %if 'condition' in obj:
-    #if ${th.subt(n, tags, obj['condition'])}
-    %endif
+## CONDITION-START ############################################################
+%if 'condition' in obj:
+#if ${th.subt(n, tags, obj['condition'])}
+%endif
+    ## DESCRIPTION ################################################################
     %for line in th.make_desc_lines(n, tags, obj, cpp=True):
     /// ${line}
     %endfor
@@ -163,6 +174,7 @@ namespace ${n}
 #if ${th.subt(n, tags, t['condition'])}
 %endif
         ///////////////////////////////////////////////////////////////////////////////
+        ## DESCRIPTION ################################################################
         %for line in th.make_desc_lines(n, tags, t, cpp=True):
         /// ${line}
         %endfor
@@ -189,6 +201,7 @@ namespace ${n}
 #if ${th.subt(n, tags, e['condition'])}
 %endif
         ///////////////////////////////////////////////////////////////////////////////
+        ## DESCRIPTION ################################################################
         %for line in th.make_desc_lines(n, tags, e, cpp=True):
         /// ${line}
         %endfor
@@ -213,6 +226,7 @@ namespace ${n}
 #if ${th.subt(n, tags, s['condition'])}
 %endif
         ///////////////////////////////////////////////////////////////////////////////
+        ## DESCRIPTION ################################################################
         %for line in th.make_desc_lines(n, tags, s, cpp=True):
         /// ${line}
         %endfor
@@ -271,6 +285,7 @@ namespace ${n}
 #if ${th.subt(n, tags, f['condition'])}
 %endif
         ///////////////////////////////////////////////////////////////////////////////
+        ## DESCRIPTION ################################################################
         %for line in th.make_desc_lines(n, tags, f, cpp=True):
         /// ${line}
         %endfor
@@ -307,13 +322,49 @@ namespace ${n}
     struct _${th.subt(n, tags, obj['name'], cpp=True)};
     using ${th.subt(n, tags, obj['name'], cpp=True)} = _${th.subt(n, tags, obj['name'], cpp=True)}*;
     %endif
-    ## CONDITION-END ##############################################################
-    %if 'condition' in obj:
-    #endif // ${th.subt(n, tags, obj['condition'])}
-    %endif
+## CONDITION-END ##############################################################
+%if 'condition' in obj:
+#endif // ${th.subt(n, tags, obj['condition'])}
+%endif
 
 %endif  ## declare_obj
 %endfor ## obj in objects
+## DEBUG ######################################################################
+#ifdef _DEBUG
+%for obj in objects:
+%if declare_dbg(obj, tags):
+    ## ENUM #######################################################################
+    %if re.match(r"enum", obj['type']):
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts ${th.make_type_name(n, tags, obj, cpp=True)} to std::string
+    ## CONDITION-START ############################################################
+%if 'condition' in obj:
+#if ${th.subt(n, tags, obj['condition'])}
+%endif
+    std::string to_string( ${th.make_type_name(n, tags, obj, cpp=True)} val );
+    ## CONDITION-END ##############################################################
+%if 'condition' in obj:
+#endif // ${th.subt(n, tags, obj['condition'])}
+%endif
+    ## CLASS ######################################################################
+    %elif re.match(r"class", obj['type']):
+    %for e in th.filter_items(th.extract_objs(specs, r"enum"), 'class', obj['name']):
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts ${th.make_class_name(n, tags, obj)}::${th.make_type_name(n, tags, e, cpp=True)} to std::string
+%if 'condition' in e:
+#if ${th.subt(n, tags, e['condition'])}
+%endif
+    std::string to_string( ${th.make_class_name(n, tags, obj)}::${th.make_type_name(n, tags, e, cpp=True)} val );
+%if 'condition' in e:
+#endif // ${th.subt(n, tags, e['condition'])}
+%endif
+
+    %endfor
+    %endif
+
+%endif  ## declare_dbg
+%endfor ## obj in objects
+#endif // _DEBUG
 } // namespace ${n}
 #endif // defined(__cplusplus)
 #endif // _${N}_${name.upper()}_HPP

@@ -35,4 +35,36 @@
 
 namespace xe
 {
+#ifdef _DEBUG
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts result_t to std::string
+    std::string to_string( result_t val )
+    {
+        switch( val )
+        {
+        case result_t::SUCCESS:
+            return std::string("result_t::SUCCESS");
+        case result_t::NOT_READY:
+            return std::string("result_t::NOT_READY");
+        case result_t::ERROR_UNINITIALIZED:
+            return std::string("result_t::ERROR_UNINITIALIZED");
+        case result_t::ERROR_DEVICE_LOST:
+            return std::string("result_t::ERROR_DEVICE_LOST");
+        case result_t::ERROR_UNSUPPORTED:
+            return std::string("result_t::ERROR_UNSUPPORTED");
+        case result_t::ERROR_INVALID_PARAMETER:
+            return std::string("result_t::ERROR_INVALID_PARAMETER");
+        case result_t::ERROR_OUT_OF_HOST_MEMORY:
+            return std::string("result_t::ERROR_OUT_OF_HOST_MEMORY");
+        case result_t::ERROR_OUT_OF_DEVICE_MEMORY:
+            return std::string("result_t::ERROR_OUT_OF_DEVICE_MEMORY");
+        case result_t::ERROR_MODULE_BUILD_FAILURE:
+            return std::string("result_t::ERROR_MODULE_BUILD_FAILURE");
+        case result_t::ERROR_UNKNOWN:
+            return std::string("result_t::ERROR_UNKNOWN");
+        };
+        return std::string("result_t::?");
+    }
+
+#endif // _DEBUG
 } // namespace xe

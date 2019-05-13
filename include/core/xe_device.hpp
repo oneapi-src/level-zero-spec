@@ -588,6 +588,37 @@ namespace xe
 
     };
 
+#ifdef _DEBUG
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::api_version_t to std::string
+    std::string to_string( Device::api_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::properties_version_t to std::string
+    std::string to_string( Device::properties_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::compute_properties_version_t to std::string
+    std::string to_string( Device::compute_properties_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::memory_properties_version_t to std::string
+    std::string to_string( Device::memory_properties_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::memory_access_capabilities_t to std::string
+    std::string to_string( Device::memory_access_capabilities_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::p2p_properties_version_t to std::string
+    std::string to_string( Device::p2p_properties_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::cache_config_t to std::string
+    std::string to_string( Device::cache_config_t val );
+
+
+#endif // _DEBUG
 } // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_DEVICE_HPP

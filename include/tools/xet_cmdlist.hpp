@@ -117,6 +117,9 @@ namespace xet
 
     };
 
+#ifdef _DEBUG
+
+#endif // _DEBUG
 } // namespace xet
 #endif // defined(__cplusplus)
 #endif // _XET_CMDLIST_HPP

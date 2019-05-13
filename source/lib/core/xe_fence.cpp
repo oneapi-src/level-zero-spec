@@ -165,4 +165,31 @@ namespace xe
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Fence::Reset");
     }
 
+#ifdef _DEBUG
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Fence::desc_version_t to std::string
+    std::string to_string( Fence::desc_version_t val )
+    {
+        switch( val )
+        {
+        case Fence::desc_version_t::CURRENT:
+            return std::string("Fence::desc_version_t::CURRENT");
+        };
+        return std::string("Fence::desc_version_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Fence::flag_t to std::string
+    std::string to_string( Fence::flag_t val )
+    {
+        switch( val )
+        {
+        case Fence::flag_t::NONE:
+            return std::string("Fence::flag_t::NONE");
+        };
+        return std::string("Fence::flag_t::?");
+    }
+
+
+#endif // _DEBUG
 } // namespace xe

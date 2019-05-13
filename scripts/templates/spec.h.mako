@@ -66,13 +66,15 @@ extern "C" {
 %for obj in objects:
 %if not re.match(r"class", obj['type']):
 ///////////////////////////////////////////////////////////////////////////////
-## CONDITION-START ############################################################
+## MACRO ######################################################################
 %if re.match(r"macro", obj['type']):
 #ifndef ${th.make_macro_name(n, tags, obj, params=False)}
 %endif
+## CONDITION-START ############################################################
 %if 'condition' in obj:
 #if ${th.subt(n, tags, obj['condition'])}
 %endif
+## DESCRIPTION ################################################################
 %for line in th.make_desc_lines(n, tags, obj):
 /// ${line}
 %endfor
@@ -143,6 +145,7 @@ typedef struct _${th.subt(n, tags, obj['name'])} *${th.subt(n, tags, obj['name']
 %if 'condition' in obj:
 #endif // ${th.subt(n, tags, obj['condition'])}
 %endif
+## MACRO ######################################################################
 %if re.match(r"macro", obj['type']):
 #endif // ${th.make_macro_name(n, tags, obj, params=False)}
 %endif

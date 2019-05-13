@@ -96,4 +96,19 @@ namespace xe
         return uint32_t{};
     }
 
+#ifdef _DEBUG
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts init_flag_t to std::string
+    std::string to_string( init_flag_t val )
+    {
+        switch( val )
+        {
+        case init_flag_t::NONE:
+            return std::string("init_flag_t::NONE");
+        };
+        return std::string("init_flag_t::?");
+    }
+
+
+#endif // _DEBUG
 } // namespace xe

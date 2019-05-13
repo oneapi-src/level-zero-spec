@@ -110,4 +110,31 @@ namespace xex
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xex::CommandGraph::Close");
     }
 
+#ifdef _DEBUG
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts CommandGraph::desc_version_t to std::string
+    std::string to_string( CommandGraph::desc_version_t val )
+    {
+        switch( val )
+        {
+        case CommandGraph::desc_version_t::CURRENT:
+            return std::string("CommandGraph::desc_version_t::CURRENT");
+        };
+        return std::string("CommandGraph::desc_version_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts CommandGraph::flag_t to std::string
+    std::string to_string( CommandGraph::flag_t val )
+    {
+        switch( val )
+        {
+        case CommandGraph::flag_t::NONE:
+            return std::string("CommandGraph::flag_t::NONE");
+        };
+        return std::string("CommandGraph::flag_t::?");
+    }
+
+
+#endif // _DEBUG
 } // namespace xex

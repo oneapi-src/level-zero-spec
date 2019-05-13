@@ -302,6 +302,28 @@ namespace xe
         const void* ptr                                 ///< [in] pointer to device allocation in this process
         );
 
+#ifdef _DEBUG
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts device_mem_alloc_flag_t to std::string
+    std::string to_string( device_mem_alloc_flag_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts host_mem_alloc_flag_t to std::string
+    std::string to_string( host_mem_alloc_flag_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts memory_allocation_properties_version_t to std::string
+    std::string to_string( memory_allocation_properties_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts memory_type_t to std::string
+    std::string to_string( memory_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts ipc_memory_flag_t to std::string
+    std::string to_string( ipc_memory_flag_t val );
+
+#endif // _DEBUG
 } // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_MEMORY_HPP

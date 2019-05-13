@@ -35,4 +35,6 @@
 
 namespace xex
 {
+#ifdef _DEBUG
+#endif // _DEBUG
 } // namespace xex

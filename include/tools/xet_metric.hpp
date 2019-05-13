@@ -578,6 +578,49 @@ namespace xet
 
     };
 
+#ifdef _DEBUG
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts value_type_t to std::string
+    std::string to_string( value_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts typed_value_version_t to std::string
+    std::string to_string( typed_value_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts MetricGroup::sampling_type to std::string
+    std::string to_string( MetricGroup::sampling_type val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts MetricGroup::properties_version_t to std::string
+    std::string to_string( MetricGroup::properties_version_t val );
+
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Metric::type_t to std::string
+    std::string to_string( Metric::type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Metric::properties_version_t to std::string
+    std::string to_string( Metric::properties_version_t val );
+
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts MetricTracer::desc_version_t to std::string
+    std::string to_string( MetricTracer::desc_version_t val );
+
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts MetricQueryPool::flag_t to std::string
+    std::string to_string( MetricQueryPool::flag_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts MetricQueryPool::desc_version_t to std::string
+    std::string to_string( MetricQueryPool::desc_version_t val );
+
+
+
+#endif // _DEBUG
 } // namespace xet
 #endif // defined(__cplusplus)
 #endif // _XET_METRIC_HPP

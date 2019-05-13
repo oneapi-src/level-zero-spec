@@ -67,6 +67,9 @@ namespace xex
 
     };
 
+#ifdef _DEBUG
+
+#endif // _DEBUG
 } // namespace xex
 #endif // defined(__cplusplus)
 #endif // _XEX_DEVICE_HPP
