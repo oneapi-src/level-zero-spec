@@ -124,10 +124,10 @@ namespace xet
     public:
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Metric group sampling type
-        enum class sampling_type
+        enum class sampling_type_t
         {
-            METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED = XE_BIT(0), ///< Event based sampling
-            METRIC_GROUP_SAMPLING_TYPE_TIME_BASED = XE_BIT(1),  ///< Time based sampling
+            EVENT_BASED = XE_BIT(0),                        ///< Event based sampling
+            TIME_BASED = XE_BIT(1),                         ///< Time based sampling
 
         };
 
@@ -146,7 +146,7 @@ namespace xet
             properties_version_t version = properties_version_t::CURRENT;   ///< [in] ::METRIC_GROUP_PROPERTIES_VERSION_CURRENT
             char name[XET_MAX_METRIC_GROUP_NAME];           ///< [out] metric group name
             char description[XET_MAX_METRIC_GROUP_DESCRIPTION]; ///< [out] metric group description
-            sampling_type samplingType;                     ///< [out] metric group sampling type
+            sampling_type_t samplingType;                   ///< [out] metric group sampling type
             uint32_t domain;                                ///< [out] metric group domain number. Cannot use simultaneous metric
                                                             ///< groups from different domains.
             uint32_t metricCount;                           ///< [out] metric count belonging to this group
@@ -588,8 +588,8 @@ namespace xet
     std::string to_string( typed_value_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts MetricGroup::sampling_type to std::string
-    std::string to_string( MetricGroup::sampling_type val );
+    /// @brief Converts MetricGroup::sampling_type_t to std::string
+    std::string to_string( MetricGroup::sampling_type_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts MetricGroup::properties_version_t to std::string

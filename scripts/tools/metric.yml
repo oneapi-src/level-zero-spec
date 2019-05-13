@@ -49,7 +49,7 @@ value: "256"
 type: enum
 desc: "Metric group sampling type"
 class: $tMetricGroup
-name: $t_metric_group_sampling_type
+name: $t_metric_group_sampling_type_t
 etors:
     - name: $T_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED
       desc: "Event based sampling"
@@ -82,7 +82,7 @@ members:
     - type: char
       name: "description[$T_MAX_METRIC_GROUP_DESCRIPTION]"
       desc: "[out] metric group description"
-    - type: "$t_metric_group_sampling_type"
+    - type: "$t_metric_group_sampling_type_t"
       name: "samplingType"
       desc: "[out] metric group sampling type"
     - type: uint32_t

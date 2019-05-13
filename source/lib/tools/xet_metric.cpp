@@ -460,16 +460,16 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts MetricGroup::sampling_type to std::string
-    std::string to_string( MetricGroup::sampling_type val )
+    /// @brief Converts MetricGroup::sampling_type_t to std::string
+    std::string to_string( MetricGroup::sampling_type_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
         if( 0 == bits ) return std::string("{}");
         std::string str;
-        if( static_cast<uint32_t>(MetricGroup::sampling_type::METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED) & bits )
-            str += "MetricGroup::sampling_type::METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED | ";
-        if( static_cast<uint32_t>(MetricGroup::sampling_type::METRIC_GROUP_SAMPLING_TYPE_TIME_BASED) & bits )
-            str += "MetricGroup::sampling_type::METRIC_GROUP_SAMPLING_TYPE_TIME_BASED | ";
+        if( static_cast<uint32_t>(MetricGroup::sampling_type_t::EVENT_BASED) & bits )
+            str += "MetricGroup::sampling_type_t::EVENT_BASED | ";
+        if( static_cast<uint32_t>(MetricGroup::sampling_type_t::TIME_BASED) & bits )
+            str += "MetricGroup::sampling_type_t::TIME_BASED | ";
         return "{ " + str.substr(0, str.size() - 3) + " }";
     }
 

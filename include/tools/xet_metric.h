@@ -112,12 +112,12 @@ typedef xe_result_t (__xecall *xet_pfnMetricGroupGet_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Metric group sampling type
-typedef enum _xet_metric_group_sampling_type
+typedef enum _xet_metric_group_sampling_type_t
 {
     XET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED = XE_BIT(0), ///< Event based sampling
     XET_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED = XE_BIT(1),  ///< Time based sampling
 
-} xet_metric_group_sampling_type;
+} xet_metric_group_sampling_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xet_metric_group_properties_t
@@ -134,7 +134,7 @@ typedef struct _xet_metric_group_properties_t
     xet_metric_group_properties_version_t version;  ///< [in] ::XET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT
     char name[XET_MAX_METRIC_GROUP_NAME];           ///< [out] metric group name
     char description[XET_MAX_METRIC_GROUP_DESCRIPTION]; ///< [out] metric group description
-    xet_metric_group_sampling_type samplingType;    ///< [out] metric group sampling type
+    xet_metric_group_sampling_type_t samplingType;  ///< [out] metric group sampling type
     uint32_t domain;                                ///< [out] metric group domain number. Cannot use simultaneous metric
                                                     ///< groups from different domains.
     uint32_t metricCount;                           ///< [out] metric count belonging to this group
