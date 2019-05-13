@@ -98,12 +98,18 @@ params:
     - type: "xe_copy_region*"
       name: dstRegion
       desc: "[in] pointer to destination region to copy to"
+    - type: "uint32_t"
+      name: dstPitch
+      desc: "[in] destination pitch in bytes"
     - type: "const void*"
       name: srcptr
       desc: "[in] pointer to source memory to copy from"
     - type: "xe_copy_region*"
       name: srcRegion
       desc: "[in] pointer to source region to copy from"
+    - type: "uint32_t"
+      name: srcPitch
+      desc: "[in] source pitch in bytes"
     - type: $x_event_handle_t
       name: hEvent
       desc: "[in][optional] handle of the event to signal on completion"
