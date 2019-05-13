@@ -124,11 +124,11 @@ members:
       desc: "[in] index of the event within the pool; must be less-than the count specified during pool creation"
     - type: $x_event_scope_flag_t
       name: signal
-      desc: "[in] defines the scope of relevant cache hierarchies to flush on a ‘signal’ action before the event is triggered"
+      desc: "[in] defines the scope of relevant cache hierarchies to flush on a signal action before the event is triggered"
       init: $X_EVENT_SCOPE_FLAG_NONE
     - type: $x_event_scope_flag_t
       name: wait
-      desc: "[in] defines the scope of relevant cache hierarchies to invalidate on a ‘wait’ action after the event is complete"
+      desc: "[in] defines the scope of relevant cache hierarchies to invalidate on a wait action after the event is complete"
       init: $X_EVENT_SCOPE_FLAG_NONE
 --- #--------------------------------------------------------------------------
 type: function

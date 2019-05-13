@@ -100,6 +100,9 @@ xeGetCommandListProcAddrTable(
     context.xeCommandList.pfnAppendMemorySet                                      = ptable->pfnAppendMemorySet;
     ptable->pfnAppendMemorySet                                                    = xeCommandListAppendMemorySet;
 
+    context.xeCommandList.pfnAppendMemoryCopyRegion                               = ptable->pfnAppendMemoryCopyRegion;
+    ptable->pfnAppendMemoryCopyRegion                                             = xeCommandListAppendMemoryCopyRegion;
+
     context.xeCommandList.pfnAppendImageCopy                                      = ptable->pfnAppendImageCopy;
     ptable->pfnAppendImageCopy                                                    = xeCommandListAppendImageCopy;
 
@@ -1349,9 +1352,7 @@ xeCommandListAppendMemoryCopy(
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     const void* srcptr,                             ///< [in] pointer to source memory to copy from
     size_t size,                                    ///< [in] size in bytes to copy
-    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
     if( context.enableParameterValidation )
@@ -1367,7 +1368,7 @@ xeCommandListAppendMemoryCopy(
 
     }
 
-    return context.xeCommandList.pfnAppendMemoryCopy( hCommandList, dstptr, srcptr, size, hSignalEvent, numWaitEvents, phWaitEvents );
+    return context.xeCommandList.pfnAppendMemoryCopy( hCommandList, dstptr, srcptr, size, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1378,9 +1379,7 @@ xeCommandListAppendMemorySet(
     void* ptr,                                      ///< [in] pointer to memory to initialize
     int value,                                      ///< [in] value to initialize memory to
     size_t size,                                    ///< [in] size in bytes to initailize
-    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
     if( context.enableParameterValidation )
@@ -1393,7 +1392,41 @@ xeCommandListAppendMemorySet(
 
     }
 
-    return context.xeCommandList.pfnAppendMemorySet( hCommandList, ptr, value, size, hSignalEvent, numWaitEvents, phWaitEvents );
+    return context.xeCommandList.pfnAppendMemorySet( hCommandList, ptr, value, size, hEvent );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xeCommandListAppendMemoryCopyRegion
+xe_result_t __xecall
+xeCommandListAppendMemoryCopyRegion(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
+    void* dstptr,                                   ///< [in] pointer to destination memory to copy to
+    xe_copy_region* dstRegion,                      ///< [in] pointer to destination region to copy to
+    const void* srcptr,                             ///< [in] pointer to source memory to copy from
+    xe_copy_region* srcRegion,                      ///< [in] pointer to source region to copy from
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
+    )
+{
+    if( context.enableParameterValidation )
+    {
+        if( nullptr == hCommandList )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == dstptr )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == dstRegion )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == srcptr )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+        if( nullptr == srcRegion )
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    }
+
+    return context.xeCommandList.pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, srcptr, srcRegion, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1403,9 +1436,7 @@ xeCommandListAppendImageCopy(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
-    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
     if( context.enableParameterValidation )
@@ -1421,7 +1452,7 @@ xeCommandListAppendImageCopy(
 
     }
 
-    return context.xeCommandList.pfnAppendImageCopy( hCommandList, hDstImage, hSrcImage, hSignalEvent, numWaitEvents, phWaitEvents );
+    return context.xeCommandList.pfnAppendImageCopy( hCommandList, hDstImage, hSrcImage, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1430,12 +1461,10 @@ xe_result_t __xecall
 xeCommandListAppendImageCopyRegion(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
-    xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
     xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
+    xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
     xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
-    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
     if( context.enableParameterValidation )
@@ -1451,7 +1480,7 @@ xeCommandListAppendImageCopyRegion(
 
     }
 
-    return context.xeCommandList.pfnAppendImageCopyRegion( hCommandList, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hSignalEvent, numWaitEvents, phWaitEvents );
+    return context.xeCommandList.pfnAppendImageCopyRegion( hCommandList, hDstImage, pDstRegion, hSrcImage, pSrcRegion, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1462,9 +1491,7 @@ xeCommandListAppendImageCopyToMemory(
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
     xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
-    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
     if( context.enableParameterValidation )
@@ -1480,7 +1507,7 @@ xeCommandListAppendImageCopyToMemory(
 
     }
 
-    return context.xeCommandList.pfnAppendImageCopyToMemory( hCommandList, dstptr, hSrcImage, pSrcRegion, hSignalEvent, numWaitEvents, phWaitEvents );
+    return context.xeCommandList.pfnAppendImageCopyToMemory( hCommandList, dstptr, hSrcImage, pSrcRegion, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1489,11 +1516,9 @@ xe_result_t __xecall
 xeCommandListAppendImageCopyFromMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
-    const void* srcptr,                             ///< [in] pointer to source memory to copy from
     xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
-    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
-    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before copy
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before copy
+    const void* srcptr,                             ///< [in] pointer to source memory to copy from
+    xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
     if( context.enableParameterValidation )
@@ -1509,7 +1534,7 @@ xeCommandListAppendImageCopyFromMemory(
 
     }
 
-    return context.xeCommandList.pfnAppendImageCopyFromMemory( hCommandList, hDstImage, srcptr, pDstRegion, hSignalEvent, numWaitEvents, phWaitEvents );
+    return context.xeCommandList.pfnAppendImageCopyFromMemory( hCommandList, hDstImage, pDstRegion, srcptr, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

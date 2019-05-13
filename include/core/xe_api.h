@@ -69,6 +69,7 @@ typedef struct _xe_command_list_apitable_t
     xe_pfnCommandListAppendMemoryRangesBarrier_t                pfnAppendMemoryRangesBarrier;
     xe_pfnCommandListAppendMemoryCopy_t                         pfnAppendMemoryCopy;
     xe_pfnCommandListAppendMemorySet_t                          pfnAppendMemorySet;
+    xe_pfnCommandListAppendMemoryCopyRegion_t                   pfnAppendMemoryCopyRegion;
     xe_pfnCommandListAppendImageCopy_t                          pfnAppendImageCopy;
     xe_pfnCommandListAppendImageCopyRegion_t                    pfnAppendImageCopyRegion;
     xe_pfnCommandListAppendImageCopyToMemory_t                  pfnAppendImageCopyToMemory;

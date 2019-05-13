@@ -112,6 +112,17 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Copy region descriptor
+        struct copy_region_t
+        {
+            uint32_t originX;                               ///< [in] The origin x offset for region in bytes
+            uint32_t originY;                               ///< [in] The origin y offset for region in rows
+            uint32_t width;                                 ///< [in] The region width relative to origin in bytes
+            uint32_t height;                                ///< [in] The region height relative to origin in rows
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Region descriptor
         struct image_region_t
         {
@@ -120,7 +131,8 @@ namespace xe
             uint32_t originZ;                               ///< [in] The origin z offset for region in pixels
             uint32_t width;                                 ///< [in] The region width relative to origin in pixels
             uint32_t height;                                ///< [in] The region height relative to origin in pixels
-            uint32_t depth;                                 ///< [in] The region depth relative to origin in pixels
+            uint32_t depth;                                 ///< [in] The region depth relative to origin. For 1D or 2D images, set
+                                                            ///< this to 1.
 
         };
 
@@ -396,9 +408,7 @@ namespace xe
             void* dstptr,                                   ///< [in] pointer to destination memory to copy to
             const void* srcptr,                             ///< [in] pointer to source memory to copy from
             size_t size,                                    ///< [in] size in bytes to copy
-            Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
-            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
-            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before copy
+            Event* pEvent = nullptr                         ///< [in][optional] pointer to the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -423,9 +433,28 @@ namespace xe
             void* ptr,                                      ///< [in] pointer to memory to initialize
             int value,                                      ///< [in] value to initialize memory to
             size_t size,                                    ///< [in] size in bytes to initailize
-            Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
-            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
-            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before copy
+            Event* pEvent = nullptr                         ///< [in][optional] pointer to the event to signal on completion
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Copies a region from a 2D array of host, device, or shared memory.
+        /// 
+        /// @details
+        ///     - The memory pointed to by both srcptr and dstptr must be accessible by
+        ///       the device on which the command list is created.
+        ///     - The region width and height for both src and dst must be same. The
+        ///       origins can be different.
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        AppendMemoryCopyRegion(
+            void* dstptr,                                   ///< [in] pointer to destination memory to copy to
+            xe_copy_region* dstRegion,                      ///< [in] pointer to destination region to copy to
+            const void* srcptr,                             ///< [in] pointer to source memory to copy from
+            xe_copy_region* srcRegion,                      ///< [in] pointer to source region to copy from
+            Event* pEvent = nullptr                         ///< [in][optional] pointer to the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -444,9 +473,7 @@ namespace xe
         AppendImageCopy(
             Image* pDstImage,                               ///< [in] pointer to destination image to copy to
             Image* pSrcImage,                               ///< [in] pointer to source image to copy from
-            Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
-            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
-            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before copy
+            Event* pEvent = nullptr                         ///< [in][optional] pointer to the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -460,12 +487,10 @@ namespace xe
         void __xecall
         AppendImageCopyRegion(
             Image* pDstImage,                               ///< [in] pointer to destination image to copy to
-            Image* pSrcImage,                               ///< [in] pointer to source image to copy from
             image_region_t* pDstRegion = nullptr,           ///< [in][optional] destination region descriptor
+            Image* pSrcImage,                               ///< [in] pointer to source image to copy from
             image_region_t* pSrcRegion = nullptr,           ///< [in][optional] source region descriptor
-            Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
-            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
-            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before copy
+            Event* pEvent = nullptr                         ///< [in][optional] pointer to the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -487,9 +512,7 @@ namespace xe
             void* dstptr,                                   ///< [in] pointer to destination memory to copy to
             Image* pSrcImage,                               ///< [in] pointer to source image to copy from
             image_region_t* pSrcRegion = nullptr,           ///< [in][optional] source region descriptor
-            Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
-            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
-            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before copy
+            Event* pEvent = nullptr                         ///< [in][optional] pointer to the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -509,11 +532,9 @@ namespace xe
         void __xecall
         AppendImageCopyFromMemory(
             Image* pDstImage,                               ///< [in] pointer to destination image to copy to
-            const void* srcptr,                             ///< [in] pointer to source memory to copy from
             image_region_t* pDstRegion = nullptr,           ///< [in][optional] destination region descriptor
-            Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
-            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before copy
-            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before copy
+            const void* srcptr,                             ///< [in] pointer to source memory to copy from
+            Event* pEvent = nullptr                         ///< [in][optional] pointer to the event to signal on completion
             );
 
         ///////////////////////////////////////////////////////////////////////////////
