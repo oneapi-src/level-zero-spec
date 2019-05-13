@@ -235,9 +235,9 @@ namespace xe
             uint32_t index;                                 ///< [in] index of the event within the pool; must be less-than the count
                                                             ///< specified during pool creation
             scope_flag_t signal = scope_flag_t::NONE;       ///< [in] defines the scope of relevant cache hierarchies to flush on a
-                                                            ///< ‘signal’ action before the event is triggered
+                                                            ///< signal action before the event is triggered
             scope_flag_t wait = scope_flag_t::NONE;         ///< [in] defines the scope of relevant cache hierarchies to invalidate on
-                                                            ///< a ‘wait’ action after the event is complete
+                                                            ///< a wait action after the event is complete
 
         };
 

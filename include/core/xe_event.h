@@ -170,9 +170,9 @@ typedef struct _xe_event_desc_t
     uint32_t index;                                 ///< [in] index of the event within the pool; must be less-than the count
                                                     ///< specified during pool creation
     xe_event_scope_flag_t signal;                   ///< [in] defines the scope of relevant cache hierarchies to flush on a
-                                                    ///< ‘signal’ action before the event is triggered
+                                                    ///< signal action before the event is triggered
     xe_event_scope_flag_t wait;                     ///< [in] defines the scope of relevant cache hierarchies to invalidate on
-                                                    ///< a ‘wait’ action after the event is complete
+                                                    ///< a wait action after the event is complete
 
 } xe_event_desc_t;
 
