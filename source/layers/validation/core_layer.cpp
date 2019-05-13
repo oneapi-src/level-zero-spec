@@ -1402,8 +1402,10 @@ xeCommandListAppendMemoryCopyRegion(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     xe_copy_region* dstRegion,                      ///< [in] pointer to destination region to copy to
+    uint32_t dstPitch,                              ///< [in] destination pitch in bytes
     const void* srcptr,                             ///< [in] pointer to source memory to copy from
     xe_copy_region* srcRegion,                      ///< [in] pointer to source region to copy from
+    uint32_t srcPitch,                              ///< [in] source pitch in bytes
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
@@ -1426,7 +1428,7 @@ xeCommandListAppendMemoryCopyRegion(
 
     }
 
-    return context.xeCommandList.pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, srcptr, srcRegion, hEvent );
+    return context.xeCommandList.pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, srcptr, srcRegion, srcPitch, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

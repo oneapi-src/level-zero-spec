@@ -452,8 +452,10 @@ namespace xe
         AppendMemoryCopyRegion(
             void* dstptr,                                   ///< [in] pointer to destination memory to copy to
             xe_copy_region* dstRegion,                      ///< [in] pointer to destination region to copy to
+            uint32_t dstPitch,                              ///< [in] destination pitch in bytes
             const void* srcptr,                             ///< [in] pointer to source memory to copy from
             xe_copy_region* srcRegion,                      ///< [in] pointer to source region to copy from
+            uint32_t srcPitch,                              ///< [in] source pitch in bytes
             Event* pEvent = nullptr                         ///< [in][optional] pointer to the event to signal on completion
             );
 
