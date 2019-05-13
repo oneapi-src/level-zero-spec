@@ -849,7 +849,10 @@ xe_result_t __xecall
 xeCommandListAppendLaunchHostFunction(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_host_pfn_t pfnHostFunc,                      ///< [in] pointer to host function.
-    void* pUserData                                 ///< [in] pointer to user data to pass to host function.
+    void* pUserData,                                ///< [in] pointer to user data to pass to host function.
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -857,7 +860,10 @@ xeCommandListAppendLaunchHostFunction(
 typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchHostFunction_t)(
     xe_command_list_handle_t,
     xe_host_pfn_t,
-    void*
+    void*,
+    xe_event_handle_t,
+    uint32_t,
+    xe_event_handle_t*
     );
 
 #if defined(__cplusplus)

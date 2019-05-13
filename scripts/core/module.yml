@@ -617,6 +617,15 @@ params:
     - type: "void*"
       name: pUserData
       desc: "[in] pointer to user data to pass to host function."
+    - type: $x_event_handle_t
+      name: hSignalEvent
+      desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional] handle of the events to wait on before launching"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for module"

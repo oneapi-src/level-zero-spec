@@ -750,7 +750,10 @@ namespace xe
         void __xecall
         AppendLaunchHostFunction(
             host_pfn_t pfnHostFunc,                         ///< [in] pointer to host function.
-            void* pUserData                                 ///< [in] pointer to user data to pass to host function.
+            void* pUserData,                                ///< [in] pointer to user data to pass to host function.
+            Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
+            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before launching
             );
 
     };

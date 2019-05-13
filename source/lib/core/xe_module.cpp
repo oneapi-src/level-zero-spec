@@ -532,10 +532,13 @@ namespace xe
     void __xecall
     CommandList::AppendLaunchHostFunction(
         host_pfn_t pfnHostFunc,                         ///< [in] pointer to host function.
-        void* pUserData                                 ///< [in] pointer to user data to pass to host function.
+        void* pUserData,                                ///< [in] pointer to user data to pass to host function.
+        Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+        Event* phWaitEvents                             ///< [in][optional] pointer to the events to wait on before launching
         )
     {
-        // auto result = ::xeCommandListAppendLaunchHostFunction( handle, pfnHostFunc, pUserData );
+        // auto result = ::xeCommandListAppendLaunchHostFunction( handle, pfnHostFunc, pUserData, pSignalEvent, numWaitEvents, phWaitEvents );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendLaunchHostFunction");
     }
 
