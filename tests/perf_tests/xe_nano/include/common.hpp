@@ -43,6 +43,14 @@ class TimerNanosecond {
         return std::chrono::duration_cast<std::chrono::nanoseconds>(time_end - time_start).count() - time_overhead;
     }
 
+    inline bool has_it_been(long long int moment) {
+	std::chrono::high_resolution_clock::time_point time_now =
+                                     std::chrono::high_resolution_clock::now();
+        auto period = std::chrono::duration_cast<std::chrono::nanoseconds>
+							(time_now - time_start);
+        return (period.count() >= moment);
+    }
+
   private:
     std::chrono::high_resolution_clock::time_point time_start, time_end;
     int64_t time_overhead;

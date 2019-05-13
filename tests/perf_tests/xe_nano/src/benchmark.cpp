@@ -54,4 +54,11 @@ namespace hardware_counter {
 #include "benchmark_template/set_parameter.cpp"
 #include "benchmark_template/command_list.cpp"
 } /* namespace hardware_counter */
+
+#undef NANO_PROBE
+#define NANO_PROBE PROBE_MEASURE_FUNCTION_CALL_RATE
+namespace fuction_call_rate {
+#include "benchmark_template/set_parameter.cpp"
+#include "benchmark_template/command_list.cpp"
+} /* namespace fuction_call_rate */
 } /* namespace xe_api_benchmarks */

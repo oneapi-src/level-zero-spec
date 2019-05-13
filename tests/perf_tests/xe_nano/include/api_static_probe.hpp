@@ -123,4 +123,62 @@ void _function_call_iter_hardware_counters(const std::string filename,
     print_probe_output(prefix, filename, line_number, function_name,
                        cycle_per_instruction, "\tcycles/instructions");
 }
+
+#define PROBE_MEASURE_FUNCTION_CALL_RATE(prefix, iteration_number, \
+                                         function_name, ...)       \
+    _function_call_rate_iter(__FILE__, __LINE__,        \
+                             #function_name,            \
+                             prefix,                    \
+                             function_name,             \
+                             __VA_ARGS__)
+template <typename... Params, typename... Args>
+void _function_call_rate_iter(const std::string filename,
+                              const int line_number,
+                              const std::string function_name,
+                              const std::string prefix,
+                              xe_result_t (*api_function)(Params... params),
+                              Args... args) {
+    TimerNanosecond timer;
+    const int one_second_in_nano = 1000000000;
+    /*
+     * 500 ms will be used to count function calls. This is determined by
+     * dividing 1 nanoseocnd by division_factor.
+     */
+    const int division_factor = 2;
+    const int period = one_second_in_nano / division_factor;
+    int function_call_counter = 0;
+
+    /* Determine number of function calls per 250 milliseocnds */
+    while (timer.has_it_been(period) == false) {
+        api_function(args...);
+	function_call_counter++;
+    }
+
+    timer.start();
+    for (int i = 0; i < function_call_counter; i++) {
+	    api_function(args...);
+    }
+    timer.end();
+
+    auto int_nsec = timer.period_minus_overhead();
+    function_call_counter = static_cast<int>(
+				division_factor *
+				(period / static_cast<long double>(int_nsec)) *
+				function_call_counter);
+    if (verbose) {
+	/* It helps verify that function calls are one second */
+        timer.start();
+        for (int i = 0; i < function_call_counter; i++) {
+                api_function(args...);
+        }
+        timer.end();
+
+        int_nsec = timer.period_minus_overhead();
+        std::cout << "Period " << int_nsec
+		  << " number function calls " << function_call_counter
+		  << std::endl;
+    }
+    print_probe_output(prefix, filename, line_number, function_name,
+		       function_call_counter, "\tfunction calls");
+}
 #endif /* _API_STATIC_PROBE_HPP_ */

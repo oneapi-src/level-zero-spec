@@ -37,6 +37,9 @@ int main() {
     xe_api_benchmarks::hardware_counter::parameter_buffer(&nano_benchmarks,
                                                           warm_up_iteration,
                                                           measure_iteration);
+    xe_api_benchmarks::fuction_call_rate::parameter_buffer(&nano_benchmarks,
+                                                          warm_up_iteration,
+                                                          measure_iteration);
 
     std::cout << std::endl;
 
@@ -48,6 +51,9 @@ int main() {
                                                   warm_up_iteration,
                                                   measure_iteration);
     xe_api_benchmarks::hardware_counter::parameter_integer(&nano_benchmarks,
+                                                           warm_up_iteration,
+                                                           measure_iteration);
+    xe_api_benchmarks::fuction_call_rate::parameter_integer(&nano_benchmarks,
                                                            warm_up_iteration,
                                                            measure_iteration);
     std::cout << std::endl;
@@ -77,6 +83,10 @@ int main() {
 							   warm_up_iteration,
 							   measure_iteration);
     xe_api_benchmarks::hardware_counter::command_list_empty_execute(
+							 &nano_benchmarks,
+							 warm_up_iteration,
+							 measure_iteration);
+    xe_api_benchmarks::fuction_call_rate::command_list_empty_execute(
 							 &nano_benchmarks,
 							 warm_up_iteration,
 							 measure_iteration);

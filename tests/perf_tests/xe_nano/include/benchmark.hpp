@@ -41,6 +41,10 @@ namespace hardware_counter {
 #include "benchmark_template/set_parameter.hpp"
 #include "benchmark_template/command_list.hpp"
 } /* namespace hardware_counter */
+namespace fuction_call_rate {
+#include "benchmark_template/set_parameter.hpp"
+#include "benchmark_template/command_list.hpp"
+} /* namespace fuction_call_rate */
 } /* namespace xe_api_benchmarks */
 
 #endif /* _BENCHMARK_HPP_ */
