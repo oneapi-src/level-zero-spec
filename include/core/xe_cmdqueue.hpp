@@ -214,6 +214,25 @@ namespace xe
 
     };
 
+#ifdef _DEBUG
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts CommandQueue::desc_version_t to std::string
+    std::string to_string( CommandQueue::desc_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts CommandQueue::flag_t to std::string
+    std::string to_string( CommandQueue::flag_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts CommandQueue::mode_t to std::string
+    std::string to_string( CommandQueue::mode_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts CommandQueue::priority_t to std::string
+    std::string to_string( CommandQueue::priority_t val );
+
+
+#endif // _DEBUG
 } // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_CMDQUEUE_HPP
