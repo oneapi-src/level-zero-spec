@@ -33,6 +33,12 @@ void api_static_probe_init();
 void api_static_probe_cleanup();
 bool api_static_probe_is_init();
 
+typedef struct _probe_cofig {
+    int warm_up_iteration;
+    int measure_iteration;
+    int duration_factor;
+} probe_config_t;
+
 template <typename T>
 inline void print_probe_output(const std::string prefix,
                                const std::string filename,
@@ -48,19 +54,20 @@ inline void print_probe_output(const std::string prefix,
               << std::endl;
 }
 
-#define PROBE_MEASURE_LATENCY_ITERATION(prefix, iteration_number, function_name, ...) \
-    _function_call_iter_measure_latency(__FILE__, __LINE__, #function_name,           \
-                                        prefix, iteration_number,                     \
-                                        function_name,                                \
+#define PROBE_MEASURE_LATENCY_ITERATION(prefix, probe_setting, function_name, ...) \
+    _function_call_iter_measure_latency(__FILE__, __LINE__, #function_name,        \
+                                        prefix, probe_setting,                     \
+                                        function_name,                             \
                                         __VA_ARGS__)
 template <typename... Params, typename... Args>
 int64_t _function_call_iter_measure_latency(const std::string filename,
                                             const int line_number,
                                             const std::string function_name,
                                             const std::string prefix,
-                                            const int iteration_number,
+                                            const probe_config_t &probe_setting,
                                             xe_result_t (*api_function)(Params... params),
                                             Args... args) {
+    int iteration_number = probe_setting.measure_iteration;
     TimerNanosecond timer;
 
     timer.start();
@@ -77,11 +84,11 @@ int64_t _function_call_iter_measure_latency(const std::string filename,
     return int_nsec;
 }
 
-#define PROBE_MEASURE_HARDWARE_COUNTERS(prefix, iteration_number,   \
+#define PROBE_MEASURE_HARDWARE_COUNTERS(prefix, probe_setting,      \
                                         function_name, ...)         \
     _function_call_iter_hardware_counters(__FILE__, __LINE__,       \
                                           #function_name,           \
-                                          prefix, iteration_number, \
+                                          prefix, probe_setting,    \
                                           function_name,            \
                                           __VA_ARGS__)
 template <typename... Params, typename... Args>
@@ -89,9 +96,11 @@ void _function_call_iter_hardware_counters(const std::string filename,
                                            const int line_number,
                                            const std::string function_name,
                                            const std::string prefix,
-                                           const int iteration_number,
+                                           const probe_config_t &probe_setting,
                                            xe_result_t (*api_function)(Params... params),
                                            Args... args) {
+    int iteration_number = probe_setting.measure_iteration;
+
     assert(api_static_probe_is_init());
     if (HardwareCounter::is_supported() == false) {
         print_probe_output(prefix, filename, line_number, function_name,
@@ -124,12 +133,12 @@ void _function_call_iter_hardware_counters(const std::string filename,
                        cycle_per_instruction, "\tcycles/instructions");
 }
 
-#define PROBE_MEASURE_FUNCTION_CALL_RATE(prefix, iteration_number, \
-                                         function_name, ...)       \
-    _function_call_rate_iter(__FILE__, __LINE__,        \
-                             #function_name,            \
-                             prefix,                    \
-                             function_name,             \
+#define PROBE_MEASURE_FUNCTION_CALL_RATE(prefix, probe_setting, \
+                                         function_name, ...)    \
+    _function_call_rate_iter(__FILE__, __LINE__,                \
+                             #function_name,                    \
+                             prefix,                            \
+                             function_name,                     \
                              __VA_ARGS__)
 template <typename... Params, typename... Args>
 void _function_call_rate_iter(const std::string filename,

@@ -1,6 +1,3 @@
-void parameter_integer(XeApp *benchmark, int warm_up_iteration,
-                       int measure_iteration);
-void parameter_buffer(XeApp *benchmark, int warm_up_iteration,
-                      int measure_iteration);
-void parameter_image(XeApp *benchmark, int warm_up_iteration,
-		     int measure_iteration);
+void parameter_integer(XeApp *benchmark, probe_config_t &probe_setting);
+void parameter_buffer(XeApp *benchmark, probe_config_t &probe_setting);
+void parameter_image(XeApp *benchmark, probe_config_t &probe_setting);
