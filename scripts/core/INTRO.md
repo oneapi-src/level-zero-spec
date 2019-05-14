@@ -281,7 +281,7 @@ The following examples demonstrate proper usage:
 ${"#"} <a name="tls">Tools</a>
 Level-Zero APIs specific for supporting 3rd-party tools are separated from "Core" into "Tools" APIs.
 
-The following diagram illustrates the hierarchy of "Core" versus "Tool" APIs:
+The following diagram illustrates the hierarchy of "Core" versus "Tool" APIs:  
 ![Tool](../images/intro_tools.png?raw=true)  
 @image latex intro_tools.png
 
