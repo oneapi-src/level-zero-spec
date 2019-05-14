@@ -6,6 +6,9 @@ The following documents the high-level programming models and guidelines.
 
 NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
 
+NOTE: Sample code in this document contains little or no error checking for brevity and clarity. However, proper error checking is highly recommended and necessary in many cases.
+
+
 ## Table of Contents
 * [Devices](#dd)
 * [Memory and Images](#mi)
@@ -54,42 +57,45 @@ This function will load and initialize all Xe driver(s) in the system for all th
 Simultaneous calls to ::xeInit are thread-safe and only one instance of driver(s) will be loaded per-process.
 This function will allow queries of the available device groups in the system.
 
-The following sample code demonstrates a basic initialization sequence:
+The following sample code demonstrates a basic initialization and device discovery sequence:
 ```c
-    // NOTE: Sample code in this document contains little or no error checking for brevity and clarity.
-    //       However, proper error checking is highly recommended and necessary in many cases.
-
     // Initialize the driver
-    if(XE_RESULT_ERROR_UNSUPPORTED == xeInit(XE_API_VERSION_1_0))
-        return;
+    xeInit(XE_INIT_FLAG_NONE);
 
-    // Get the ordinal of the first GPU device group
+
+    // Discover all the device groups and devices
     uint32_t groupCount = 0;
-    xeDeviceGroupGetCount(&groupCount);
+    xeGetDeviceGroups(&groupCount, nullptr);
 
-    uint32_t groupOrdinal = 0;
-    for(; groupOrdinal < groupCount; ++groupOrdinal)
+    xe_device_group_handle_t* arrDeviceGroups = (xe_device_group_handle_t*)
+        malloc(groupCount * sizeof(xe_device_group_handle_t));
+    xeGetDeviceGroups(&groupCount, arrDeviceGroups);
+
+    uint32_t i = 0;
+    for(; i < groupCount; ++i)
     {
         xe_device_properties_t device_properties;
-        xeDeviceGroupGetProperties(i, &device_properties);
+        xeDeviceGroupGetProperties(arrDeviceGroups[i], &device_properties);
     
         if(XE_DEVICE_TYPE_GPU == device_properties.type)
             break;
     }
 
-    if(groupOrdinal == groupCount)
-        return;
+    if(i == groupCount)
+        return; // no GPU devices found
 
-    // Get all devices within the GPU device group
+    // Get all the devices within the device group
     uint32_t deviceCount = 0;
-    xeDeviceGroupGetDevices(groupOrdinal, &deviceCount, nullptr);
+    xeDeviceGroupGetDevices(arrDeviceGroups[i], &deviceCount, nullptr);
 
-    xe_device_handle_t* hDevices = malloc(deviceCount * sizeof(xe_device_handle_t));
-    xeDeviceGroupGetDevices(groupOrdinal, &deviceCount, hDevices);
+    xe_device_handle_t* arrDevices = (xe_device_handle_t*)
+        malloc(deviceCount * sizeof(xe_device_handle_t));
+    xeDeviceGroupGetDevices(arrDeviceGroups[i], &deviceCount, arrDevices);
 
-    // Create context for all devices within the GPU device group
+
+    // Create a context for all devices within the device group
     xe_context_handle_t hContext;
-    xeContextCreate(deviceCount, hDevices, &hContext);
+    xeContextCreate(deviceCount, arrDevices, &hContext);
     ...
 
 ```
@@ -660,7 +666,7 @@ responsibility of the application to implement this using ::xeModuleGetNativeBin
         size_t szBinary = 0;
         xeModuleGetNativeBinary(hModule, &szBinary, nullptr);
 
-        uint8_t* pBinary = malloc(szBinary);
+        uint8_t* pBinary = (uint8_t*)malloc(szBinary);
         xeModuleGetNativeBinary(hModule, &szBinary, pBinary);
 
         // cache pBinary for corresponding IL
@@ -797,7 +803,7 @@ device to generate the parameters.
     xe_thread_group_dimensions_t* pIndirectArgs;
     
     ...
-    xeDeviceMemAlloc(hDevice, flags, sizeof(xe_thread_group_dimensions_t), sizeof(uint32_t), &pIndirectArgs);
+    xeContextAllocDeviceMem(hContext, hDevice, flags, sizeof(xe_thread_group_dimensions_t), sizeof(uint32_t), &pIndirectArgs);
 
     // Append function
     xeCommandListAppendLaunchFunctionIndirect(hCommandList, hFunction, &pIndirectArgs, nullptr, 0, nullptr);
@@ -844,7 +850,7 @@ there are no distinction between sub-devices and devices.
 ![Subdevice](../images/core_subdevice.png?raw=true)  
 @image latex core_subdevice.png
 
-Query device properties using ::xeDeviceGetProperties to confirm subdevices are supported with
+Query device properties using ::xeDeviceGroupGetProperties to confirm subdevices are supported with
 ::xe_device_properties_t.numSubDevices. Use ::xeDeviceGetSubDevice to obtain a sub-device handle.
 There are additional device properties in ::xe_device_properties_t for sub-devices to confirm a
 device is a sub-device and to query the id. This is useful when needing to pass a sub-device
@@ -863,11 +869,11 @@ physical compute queue on the device or sub-device to map the logical queue to. 
 ::xe_device_properties_t.numAsyncComputeEngines from the sub-device to determine how to set this ordinal.
 See ::xe_command_queue_desc_t for more details.
 
-A 16-byte unique device identifier (uuid) can be obtained for a device or sub-device using ::xeDeviceGetProperties.
+A 16-byte unique device identifier (uuid) can be obtained for a device or sub-device using ::xeDeviceGroupGetProperties.
 
 ```c
     ...
-    xeDeviceGetProperties(device, &deviceProps);
+    xeDeviceGroupGetProperties(device, &deviceProps);
     ...
 
     // Code assumes a specific device configuration.
@@ -879,13 +885,13 @@ A 16-byte unique device identifier (uuid) can be obtained for a device or sub-de
 
     // Query sub-device properties.
     xe_device_properties_t subdeviceProps;
-    xeDeviceGetProperties(subdevice, &subdeviceProps);
+    xeDeviceGroupGetProperties(subdevice, &subdeviceProps);
 
     assert(subdeviceProps.isSubdevice == true); // Ensure that we have a handle to a sub-device.
     assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
 
     void* pMemForSubDevice2;
-    xeDeviceMemAlloc(subDevice, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
+    xeContextAllocDeviceMem(hContext, subDevice, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
     ...
 
     ...
@@ -919,9 +925,9 @@ The following sample code demonstrate a sequence for using coarse-grain residenc
         node* next;
     };
     node* begin = nullptr;
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
+    xeContextAllocHostMem(hContext, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
+    xeContextAllocHostMem(hContext, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
+    xeContextAllocHostMem(hContext, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
 
     // 'begin' is passed as function argument and appended into command list
     xeFunctionSetAttribute(hFuncArgs, XE_FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS, TRUE);
@@ -939,9 +945,9 @@ The following sample code demonstrate a sequence for using fine-grain residency 
         node* next;
     };
     node* begin = nullptr;
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
-    xeHostMemAlloc(XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
+    xeContextAllocHostMem(hContext, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
+    xeContextAllocHostMem(hContext, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
+    xeContextAllocHostMem(hContext, XE_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
 
     // 'begin' is passed as function argument and appended into command list
     xeFunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
@@ -1017,10 +1023,10 @@ The following code examples demonstrate how to use the memory IPC APIs:
 1. First, the allocation is made, packaged, and sent on the sending process:
 ```c
     void* dptr = nullptr;
-    xeDeviceMemAlloc(hDevice, flags, size, alignment, &dptr);
+    xeContextAllocDeviceMem(hContext, hDevice, flags, size, alignment, &dptr);
 
     xe_ipc_mem_handle_t hIPC;
-    xeIpcGetMemHandle(dptr, &hIPC);
+    xeContextGetMemIpcHandle(hContext, dptr, &hIPC);
 
     // Method of sending to receiving process is not defined by Xe:
     send_to_receiving_process(hIPC);
@@ -1033,7 +1039,7 @@ The following code examples demonstrate how to use the memory IPC APIs:
     hIPC = receive_from_sending_process();
 
     void* dptr = nullptr;
-    xeIpcOpenMemHandle(hDevice, hIPC, XE_IPC_MEMORY_FLAG_NONE, &dptr);
+    xeContextOpenMemIpcHandle(hContext, hDevice, hIPC, XE_IPC_MEMORY_FLAG_NONE, &dptr);
 ```
 
 3. Each process may now refer to the same device memory allocation via its `dptr`.
@@ -1041,12 +1047,12 @@ Note, there is no guaranteed address equivalence for the values of `dptr` in eac
 
 4. To cleanup, first close the handle in the receiving process:
 ```c
-    xeIpcCloseMemHandle(dptr);
+    xeContextCloseMemIpcHandle(hContext, dptr);
 ```
 
 5. Finally, free the device pointer in the sending process:
 ```c
-    xeMemFree(dptr);
+    xeContextFreeMem(hContext, dptr);
 ```
 
 ### Events

@@ -72,9 +72,9 @@ namespace xe
         enum class mode_t
         {
             DEFAULT = 0,                                    ///< implicit default behavior; uses driver-based heuristics
-            SYNCHRONOUS,                                    ///< GPU execution always completes immediately on execute;
-                                                            ///< CPU thread is blocked using wait on implicit synchronization object
-            ASYNCHRONOUS,                                   ///< GPU execution is scheduled and will complete in future;
+            SYNCHRONOUS,                                    ///< Device execution always completes immediately on execute;
+                                                            ///< Host thread is blocked using wait on implicit synchronization object
+            ASYNCHRONOUS,                                   ///< Device execution is scheduled and will complete in future;
                                                             ///< explicit synchronization object must be used to determine completeness
 
         };
@@ -160,7 +160,7 @@ namespace xe
         /// @brief Destroys a command queue.
         /// 
         /// @details
-        ///     - The application is responsible for making sure the GPU is not
+        ///     - The application is responsible for making sure the device is not
         ///       currently referencing the command queue before it is deleted
         ///     - The implementation of this function will immediately free all Host and
         ///       Device allocations associated with this command queue

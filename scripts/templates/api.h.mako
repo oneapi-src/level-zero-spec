@@ -81,8 +81,8 @@ typedef struct _${tbl['type']}
 ///         + version not supported
 __${x}dllexport ${x}_result_t __${x}call
 ${tbl['export']}(
-    uint32_t version,        ///< [in] ::${X}_API_HEADER_VERSION
-    ${tbl['type']}* ptable   ///< [in,out] pointer to table of API function pointers
+    ${x}_api_version_t version, ///< [in] API version requested
+    ${tbl['type']}* ptable      ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////

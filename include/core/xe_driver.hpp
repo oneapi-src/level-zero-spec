@@ -46,6 +46,7 @@ namespace xe
     enum class init_flag_t
     {
         NONE = 0,                                       ///< default behavior
+        GPU_ONLY = XE_BIT(0),                           ///< only initialize GPU drivers
 
     };
 
@@ -70,63 +71,10 @@ namespace xe
         init_flag_t flags                               ///< [in] initialization flags
         );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Returns the current version of the installed driver.
-    /// 
-    /// @details
-    ///     - The driver version is a non-zero, monotonically increasing value where
-    ///       higher values always indicate a more recent version.
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuDriverGetVersion**
-    /// 
-    /// @returns
-    ///     - uint32_t: driver version
-    /// 
-    /// @throws result_t
-    uint32_t __xecall
-    GetDriverVersion(
-        void
-        );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for driver
-    class Driver
-    {
-    public:
-
-    protected:
-        ///////////////////////////////////////////////////////////////////////////////
-        void* m_handle = nullptr;                       ///< [in] handle of driver module
-
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        Driver( void ) = delete;
-        Driver( 
-            void* handle                                    ///< [in] handle of driver module
-            );
-
-        ~Driver( void ) = default;
-
-        Driver( Driver const& other ) = delete;
-        void operator=( Driver const& other ) = delete;
-
-        Driver( Driver&& other ) = delete;
-        void operator=( Driver&& other ) = delete;
-
-        ///////////////////////////////////////////////////////////////////////////////
-        auto getHandle( void ) const { return m_handle; }
-
-    };
-
 #ifdef _DEBUG
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts init_flag_t to std::string
     std::string to_string( init_flag_t val );
-
 
 #endif // _DEBUG
 } // namespace xe

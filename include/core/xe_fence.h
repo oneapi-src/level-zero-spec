@@ -111,7 +111,7 @@ typedef xe_result_t (__xecall *xe_pfnFenceCreate_t)(
 /// @brief Deletes a fence object.
 /// 
 /// @details
-///     - The application is responsible for making sure the GPU is not
+///     - The application is responsible for making sure the device is not
 ///       currently referencing the fence before it is deleted
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this fence

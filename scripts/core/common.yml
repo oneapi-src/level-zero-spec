@@ -19,11 +19,6 @@ name: "$X_MINOR_VERSION( _ver )"
 value: "( _ver & 0x0000ffff )"
 --- #--------------------------------------------------------------------------
 type: macro
-desc: "Current header file version"
-name: $X_API_HEADER_VERSION
-value: "$X_MAKE_VERSION( 1, 0 )"
---- #--------------------------------------------------------------------------
-type: macro
 desc: "Calling convention for all API functions"
 condition: "defined(_WIN32)"
 name: __$xcall
@@ -47,6 +42,16 @@ type: typedef
 desc: "compiler-independent type"
 name: $x_bool_t
 value: uint8_t
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of driver's context object"
+class: $xContext
+name: "$x_context_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of driver's device group object"
+class: $xDeviceGroup
+name: "$x_device_group_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's device object"

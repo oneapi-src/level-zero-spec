@@ -40,11 +40,11 @@ etors:
       desc: "implicit default behavior; uses driver-based heuristics"
     - name: $X_COMMAND_QUEUE_MODE_SYNCHRONOUS
       desc: |
-        GPU execution always completes immediately on execute;
-        CPU thread is blocked using wait on implicit synchronization object
+        Device execution always completes immediately on execute;
+        Host thread is blocked using wait on implicit synchronization object
     - name: $X_COMMAND_QUEUE_MODE_ASYNCHRONOUS
       desc: |
-        GPU execution is scheduled and will complete in future;
+        Device execution is scheduled and will complete in future;
         explicit synchronization object must be used to determine completeness
 --- #--------------------------------------------------------------------------
 type: enum
@@ -127,7 +127,7 @@ analogue:
     - "**clReleaseCommandQueue**"
     - cuCtxDestroy
 details:
-    - "The application is responsible for making sure the GPU is not currently referencing the command queue before it is deleted"
+    - "The application is responsible for making sure the device is not currently referencing the command queue before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this command queue"
     - "The application may **not** call this function from simultaneous threads with the same command queue handle."
     - "The implementation of this function should be lock-free."

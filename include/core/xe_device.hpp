@@ -60,8 +60,34 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for device
-    class Device
+    /// @brief Retrieves device groups
+    /// 
+    /// @details
+    ///     - A device group represents a collection of physical, homogeneous
+    ///       devices.
+    ///     - The application may pass nullptr for pDeviceGroups when only querying
+    ///       the number of device groups.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - clGetDeviceIDs
+    /// 
+    /// @throws result_t
+    void __xecall
+    GetDeviceGroups(
+        size_t* pCount,                                 ///< [in,out] pointer to the number of device groups.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of device groups available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of
+                                                        ///< device groups.
+        DeviceGroup* pDeviceGroups = nullptr            ///< [in,out][optional] array of pointer to device groups
+        );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for device group
+    class DeviceGroup
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
@@ -78,7 +104,7 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief API version of ::device_properties_t
-        enum class properties_version_t
+        enum class device_properties_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
@@ -86,7 +112,7 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief API version of ::device_compute_properties_t
-        enum class compute_properties_version_t
+        enum class device_compute_properties_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
@@ -94,7 +120,7 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief API version of ::device_memory_properties_t
-        enum class memory_properties_version_t
+        enum class device_memory_properties_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
@@ -116,43 +142,22 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::device_p2p_properties_t
-        enum class p2p_properties_version_t
-        {
-            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Supported Cache Config
-        /// 
-        /// @details
-        ///     - Supported Cache Config (Default, Large SLM, Large Data Cache)
-        enum class cache_config_t
-        {
-            DEFAULT = XE_BIT( 0 ),                          ///< Default Config
-            LARGE_SLM = XE_BIT( 1 ),                        ///< Large SLM size
-            LARGE_DATA = XE_BIT( 2 ),                       ///< Large General Data size
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Device universal unique id (UUID)
-        struct uuid_t
+        struct device_uuid_t
         {
             uint8_t id[XE_MAX_UUID_SIZE];                   ///< [out] device universal unique id
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Device properties queried using ::DeviceGetProperties
-        struct properties_t
+        /// @brief Device properties queried using ::DeviceGroupGetProperties
+        struct device_properties_t
         {
-            properties_version_t version = properties_version_t::CURRENT;   ///< [in] ::DEVICE_PROPERTIES_VERSION_CURRENT
+            device_properties_version_t version = device_properties_version_t::CURRENT; ///< [in] ::DEVICE_PROPERTIES_VERSION_CURRENT
             uint32_t vendorId;                              ///< [out] vendor id from PCI configuration
             uint32_t deviceId;                              ///< [out] device id from PCI configuration
             uint32_t subdeviceId;                           ///< [out] Subdevice id. Only valid if isSubdevice is true.
-            uuid_t uuid;                                    ///< [out] unique id for device.
+            device_uuid_t uuid;                             ///< [out] unique id for device.
             bool_t isSubdevice;                             ///< [out] Is this a subdevice.
             uint32_t numSubDevices;                         ///< [out] Number of sub-devices.
             uint32_t coreClockRate;                         ///< [out] Clock rate for device core.
@@ -175,10 +180,11 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Device compute properties queried using ::DeviceGetComputeProperties
-        struct compute_properties_t
+        /// @brief Device compute properties queried using
+        ///        ::DeviceGroupGetComputeProperties
+        struct device_compute_properties_t
         {
-            compute_properties_version_t version = compute_properties_version_t::CURRENT;   ///< [in] ::DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT
+            device_compute_properties_version_t version = device_compute_properties_version_t::CURRENT; ///< [in] ::DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT
             uint32_t maxTotalGroupSize;                     ///< [out] Maximum items per compute group. (maxGroupSizeX * maxGroupSizeY
                                                             ///< * maxGroupSizeZ) <= maxTotalGroupSize
             uint32_t maxGroupSizeX;                         ///< [out] Maximum items for X dimension in group
@@ -195,10 +201,11 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Device memory properties queried using ::DeviceGetMemoryProperties
-        struct memory_properties_t
+        /// @brief Device memory properties queried using
+        ///        ::DeviceGroupGetMemoryProperties
+        struct device_memory_properties_t
         {
-            memory_properties_version_t version = memory_properties_version_t::CURRENT; ///< [in] ::DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
+            device_memory_properties_version_t version = device_memory_properties_version_t::CURRENT;   ///< [in] ::DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
             bool_t unifiedMemory;                           ///< [out] Host and device share same physical memory.
             bool_t onDemandPageFaults;                      ///< [out] Device supports on-demand page-faulting.
             uint32_t maxImageDims1D;                        ///< [out] Maximum image dimensions for 1D resources.
@@ -219,62 +226,53 @@ namespace xe
 
         };
 
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Device properties queried using ::DeviceGetP2PProperties
-        struct p2p_properties_t
-        {
-            p2p_properties_version_t version = p2p_properties_version_t::CURRENT;   ///< [in] ::DEVICE_P2P_PROPERTIES_VERSION_CURRENT
-            bool_t isP2PSupported;                          ///< [out] Is P2P access supported between two devices
-            bool_t isAtomicsSupported;                      ///< [out] Are atomics supported between two devices
-
-        };
-
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        device_handle_t m_handle = nullptr;             ///< handle of device object
-        Driver* m_pDriver;                              ///< [in] pointer to parent object
+        device_group_handle_t m_handle = nullptr;       ///< handle of device group object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        Device( void ) = delete;
-        Device( 
-            Driver* pDriver                                 ///< [in] pointer to parent object
+        DeviceGroup( void ) = delete;
+        DeviceGroup( 
+            void
             );
 
-        ~Device( void ) = default;
+        ~DeviceGroup( void ) = default;
 
-        Device( Device const& other ) = delete;
-        void operator=( Device const& other ) = delete;
+        DeviceGroup( DeviceGroup const& other ) = delete;
+        void operator=( DeviceGroup const& other ) = delete;
 
-        Device( Device&& other ) = delete;
-        void operator=( Device&& other ) = delete;
+        DeviceGroup( DeviceGroup&& other ) = delete;
+        void operator=( DeviceGroup&& other ) = delete;
 
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
-        auto getDriver( void ) const { return m_pDriver; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Reports the number of devices
+        /// @brief Returns the current version of the installed driver for the specified
+        ///        device group.
         /// 
         /// @details
+        ///     - The driver version is a non-zero, monotonically increasing value where
+        ///       higher values always indicate a more recent version.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// 
         /// @remarks
         ///   _Analogues_
-        ///     - **cuDeviceGetCount**
+        ///     - **cuDriverGetVersion**
         /// @returns
-        ///     - uint32_t: number of devices available
+        ///     - uint32_t: driver version
         /// 
         /// @throws result_t
-        static uint32_t __xecall
-        GetCount(
+        uint32_t __xecall
+        GetDriverVersion(
             void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Returns a handle to the device object
+        /// @brief Retrieves devices within a device group
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -283,38 +281,19 @@ namespace xe
         /// @remarks
         ///   _Analogues_
         ///     - **cuDeviceGet**
-        ///     - clGetDeviceIDs
-        /// @returns
-        ///     - Device: pointer to handle of device object created
-        /// 
         /// @throws result_t
-        static Device* __xecall
-        Get(
-            uint32_t ordinal                                ///< [in] The device index in the range of [0, ::DeviceGetCount]
+        void __xecall
+        GetDevices(
+            size_t* pCount,                                 ///< [in,out] pointer to the number of device groups.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of device groups available.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of
+                                                            ///< device groups.
+            DeviceGroup* pDeviceGroups = nullptr            ///< [in,out][optional] array of pointer to device groups
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Returns a handle to the sub-device object
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - **cuDeviceGet**
-        ///     - clGetDeviceIDs
-        /// @returns
-        ///     - Device: pointer to handle of sub-device object.
-        /// 
-        /// @throws result_t
-        Device* __xecall
-        GetSubDevice(
-            uint32_t ordinal                                ///< [in] ordinal of sub-device to retrieve
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Returns the API version supported by the device
+        /// @brief Returns the API version supported by the device group
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -345,16 +324,16 @@ namespace xe
         ///     - cuDeviceGetName
         ///     - clGetDeviceInfo
         /// @returns
-        ///     - properties_t: query result for device properties
+        ///     - device_properties_t: query result for device properties
         /// 
         /// @throws result_t
-        properties_t __xecall
+        device_properties_t __xecall
         GetProperties(
             void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Retrieves compute attributes of the device
+        /// @brief Retrieves compute attributes of the device group
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -365,10 +344,10 @@ namespace xe
         ///     - **cuDeviceGetAttribute**
         ///     - clGetDeviceInfo
         /// @returns
-        ///     - compute_properties_t: query result for compute properties
+        ///     - device_compute_properties_t: query result for compute properties
         /// 
         /// @throws result_t
-        compute_properties_t __xecall
+        device_compute_properties_t __xecall
         GetComputeProperties(
             void
             );
@@ -386,12 +365,94 @@ namespace xe
         ///     - cuDeviceTotalMem
         ///     - clGetDeviceInfo
         /// @returns
-        ///     - memory_properties_t: query result for compute properties
+        ///     - device_memory_properties_t: query result for compute properties
         /// 
         /// @throws result_t
-        memory_properties_t __xecall
+        device_memory_properties_t __xecall
         GetMemoryProperties(
             void
+            );
+
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for device
+    class Device
+    {
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief API version of ::device_p2p_properties_t
+        enum class p2p_properties_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Supported Cache Config
+        /// 
+        /// @details
+        ///     - Supported Cache Config (Default, Large SLM, Large Data Cache)
+        enum class cache_config_t
+        {
+            DEFAULT = XE_BIT( 0 ),                          ///< Default Config
+            LARGE_SLM = XE_BIT( 1 ),                        ///< Large SLM size
+            LARGE_DATA = XE_BIT( 2 ),                       ///< Large General Data size
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Device properties queried using ::DeviceGetP2PProperties
+        struct p2p_properties_t
+        {
+            p2p_properties_version_t version = p2p_properties_version_t::CURRENT;   ///< [in] ::DEVICE_P2P_PROPERTIES_VERSION_CURRENT
+            bool_t isP2PSupported;                          ///< [out] Is P2P access supported between two devices
+            bool_t isAtomicsSupported;                      ///< [out] Are atomics supported between two devices
+
+        };
+
+
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+        device_handle_t m_handle = nullptr;             ///< handle of device object
+        DeviceGroup* m_pDeviceGroup;                    ///< [in] pointer to parent object
+
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        Device( void ) = delete;
+        Device( 
+            DeviceGroup* pDeviceGroup                       ///< [in] pointer to parent object
+            );
+
+        ~Device( void ) = default;
+
+        Device( Device const& other ) = delete;
+        void operator=( Device const& other ) = delete;
+
+        Device( Device&& other ) = delete;
+        void operator=( Device&& other ) = delete;
+
+        ///////////////////////////////////////////////////////////////////////////////
+        auto getHandle( void ) const { return m_handle; }
+        auto getDevicegroup( void ) const { return m_pDeviceGroup; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Retrieves a sub-device from a device
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - clCreateSubDevices
+        /// @returns
+        ///     - Device: pointer to handle of sub-device object.
+        /// 
+        /// @throws result_t
+        Device* __xecall
+        GetSubDevice(
+            uint32_t ordinal                                ///< [in] ordinal of sub-device to retrieve
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -544,7 +605,7 @@ namespace xe
         /// @brief Allows memory to be evicted from the device.
         /// 
         /// @details
-        ///     - The application is responsible for making sure the GPU is not
+        ///     - The application is responsible for making sure the device is not
         ///       currently referencing the memory before it is evicted
         ///     - Memory is always implicitly evicted if it is resident when freed.
         ///     - The application may call this function from simultaneous threads.
@@ -574,7 +635,7 @@ namespace xe
         /// @brief Allows image to be evicted from the device.
         /// 
         /// @details
-        ///     - The application is responsible for making sure the GPU is not
+        ///     - The application is responsible for making sure the device is not
         ///       currently referencing the memory before it is evicted
         ///     - An image is always implicitly evicted if it is resident when
         ///       destroyed.
@@ -590,24 +651,25 @@ namespace xe
 
 #ifdef _DEBUG
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Device::api_version_t to std::string
-    std::string to_string( Device::api_version_t val );
+    /// @brief Converts DeviceGroup::api_version_t to std::string
+    std::string to_string( DeviceGroup::api_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Device::properties_version_t to std::string
-    std::string to_string( Device::properties_version_t val );
+    /// @brief Converts DeviceGroup::device_properties_version_t to std::string
+    std::string to_string( DeviceGroup::device_properties_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Device::compute_properties_version_t to std::string
-    std::string to_string( Device::compute_properties_version_t val );
+    /// @brief Converts DeviceGroup::device_compute_properties_version_t to std::string
+    std::string to_string( DeviceGroup::device_compute_properties_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Device::memory_properties_version_t to std::string
-    std::string to_string( Device::memory_properties_version_t val );
+    /// @brief Converts DeviceGroup::device_memory_properties_version_t to std::string
+    std::string to_string( DeviceGroup::device_memory_properties_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Device::memory_access_capabilities_t to std::string
-    std::string to_string( Device::memory_access_capabilities_t val );
+    /// @brief Converts DeviceGroup::memory_access_capabilities_t to std::string
+    std::string to_string( DeviceGroup::memory_access_capabilities_t val );
+
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::p2p_properties_version_t to std::string

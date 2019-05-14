@@ -21,17 +21,17 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_driver.h
+* @file xe_context.h
 *
-* @brief Intel Xe Level-Zero APIs
+* @brief Intel Xe Level-Zero APIs for Context
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/core/driver.yml
+* DO NOT EDIT: generated from /scripts/core/context.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XE_DRIVER_H
-#define _XE_DRIVER_H
+#ifndef _XE_CONTEXT_H
+#define _XE_CONTEXT_H
 #if defined(__cplusplus)
 #pragma once
 #endif
@@ -45,85 +45,80 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported initialization flags
-typedef enum _xe_init_flag_t
-{
-    XE_INIT_FLAG_NONE = 0,                          ///< default behavior
-    XE_INIT_FLAG_GPU_ONLY = XE_BIT(0),              ///< only initialize GPU drivers
-
-} xe_init_flag_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Initialize the Xe driver and must be called before any other API
-///        function.
+/// @brief Creates a context.
 /// 
 /// @details
-///     - If this function is not called then all other functions will return
-///       ::XE_RESULT_ERROR_UNINITIALIZED.
-///     - Only one instance of a driver per process will be initialized.
-///     - This function is thread-safe for scenarios where multiple libraries
-///       may initialize the driver simultaneously.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuInit**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + invalid value for flags
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-xe_result_t __xecall
-xeInit(
-    xe_init_flag_t flags                            ///< [in] initialization flags
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeInit 
-typedef xe_result_t (__xecall *xe_pfnInit_t)(
-    xe_init_flag_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns the current version of the installed driver for the specified
-///        device group.
-/// 
-/// @details
-///     - The driver version is a non-zero, monotonically increasing value where
-///       higher values always indicate a more recent version.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuDriverGetVersion**
+///     - **clCreateContext**
+///     - cuCtxCreate
+///     - cuCtxGetCurrent
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hDeviceGroup
-///         + nullptr == version
+///         + nullptr == phDevice
+///         + nullptr == phContext
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
-xeDeviceGroupGetDriverVersion(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of device group
-    uint32_t* version                               ///< [out] driver version
+xeContextCreate(
+    size_t numDevices,                              ///< [in] number of devices in phDevice
+    xe_device_handle_t* phDevice,                   ///< [in] pointer to array of handle of the device objects
+    xe_context_handle_t* phContext                  ///< [out] pointer to handle of context object created
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupGetDriverVersion 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetDriverVersion_t)(
-    xe_device_group_handle_t,
-    uint32_t*
+/// @brief Function-pointer for xeContextCreate 
+typedef xe_result_t (__xecall *xe_pfnContextCreate_t)(
+    size_t,
+    xe_device_handle_t*,
+    xe_context_handle_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Destroys a context.
+/// 
+/// @details
+///     - The application is responsible for making sure the device is not
+///       currently referencing the context before it is deleted
+///     - The implementation of this function will immediately free all Host and
+///       Device allocations associated with this context
+///     - The application may **not** call this function from simultaneous
+///       threads with the same context handle.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **clReleaseContext**
+///     - cuCtxDestroy
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hContext
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeContextDestroy(
+    xe_context_handle_t hContext                    ///< [in] handle of context object to destroy
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeContextDestroy 
+typedef xe_result_t (__xecall *xe_pfnContextDestroy_t)(
+    xe_context_handle_t
     );
 
 #if defined(__cplusplus)
 } // extern "C"
 #endif
 
-#endif // _XE_DRIVER_H
+#endif // _XE_CONTEXT_H

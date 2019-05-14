@@ -63,12 +63,6 @@
 #endif // XE_MINOR_VERSION
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef XE_API_HEADER_VERSION
-/// @brief Current header file version
-#define XE_API_HEADER_VERSION  XE_MAKE_VERSION( 1, 0 )
-#endif // XE_API_HEADER_VERSION
-
-///////////////////////////////////////////////////////////////////////////////
 #ifndef __xecall
 #if defined(_WIN32)
 /// @brief Calling convention for all API functions
@@ -107,6 +101,18 @@ namespace xe
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief compiler-independent type
     using bool_t = uint8_t;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle of driver's context object
+    class Context;
+    struct _context_handle_t;
+    using context_handle_t = _context_handle_t*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle of driver's device group object
+    class DeviceGroup;
+    struct _device_group_handle_t;
+    using device_group_handle_t = _device_group_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of driver's device object

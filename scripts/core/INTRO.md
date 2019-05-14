@@ -112,20 +112,17 @@ Note: "${OneApi}" is a placeholder until One API branding is decided.
 
 ${"##"} Versioning
 There are multiple versions that should be used by the application to determine compatibility:
-1. Header Version - this is the version of the header files included by the application.
-    - This is typically used to determine whether the application is using the latest version of the API header files.
-    - It is determined from ::${X}_API_HEADER_VERSION.
-2. API Version - this is the version of the API supported by the device.
+1. API Version - this is the version of the API supported by the device.
     - This is typically used to determine if the device supports the minimum set of features required by the application.
     - There is a single API version that represents a collection of features.
-    - The value is determined from calling ::${x}DeviceGetApiVersion
-    - The value returned will be the minimum of the ::${X}_API_HEADER_VERSION supported by the device and known by the driver.
-3. Structure Version - these are the versions of the structures passed-by-pointer to the driver.
+    - The value is determined from calling ::${x}DeviceGroupGetApiVersion
+    - The value returned will be the minimum of the ::${x}_api_version_t supported by the device and known by the driver.
+2. Structure Version - these are the versions of the structures passed-by-pointer to the driver.
     - These are typically used by the driver to support applications written to older versions of the API.
     - They are provided as the first member of every structure passed to the driver.
-4. Driver Version - this is the version of the driver installed in the system.
+3. Driver Version - this is the version of the driver installed in the system.
     - This is typically used to mitigate driver implementation issues for a feature.
-    - The value is determined from calling ::${x}GetDriverVersion
+    - The value is determined from calling ::${x}DeviceGroupGetDriverVersion
 
 ${"##"} Error Handling
 The following design philosophies are adopted in order to reduce Host-side overhead:

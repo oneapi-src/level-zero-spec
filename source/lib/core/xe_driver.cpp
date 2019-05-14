@@ -36,14 +36,6 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    Driver::Driver( 
-        void* handle                                    ///< [in] handle of driver module
-        ) :
-        m_handle( handle )
-    {
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Initialize the Xe:: driver and must be called before any other API
     ///        function.
     /// 
@@ -69,7 +61,8 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Returns the current version of the installed driver.
+    /// @brief Returns the current version of the installed driver for the specified
+    ///        device group.
     /// 
     /// @details
     ///     - The driver version is a non-zero, monotonically increasing value where
@@ -86,12 +79,12 @@ namespace xe
     /// 
     /// @throws result_t
     uint32_t __xecall
-    GetDriverVersion(
+    DeviceGroup::GetDriverVersion(
         void
         )
     {
-        // auto result = ::xeGetDriverVersion( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "GetDriverVersion");
+        // auto result = ::xeDeviceGroupGetDriverVersion( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::GetDriverVersion");
 
         return uint32_t{};
     }
@@ -101,14 +94,15 @@ namespace xe
     /// @brief Converts init_flag_t to std::string
     std::string to_string( init_flag_t val )
     {
-        switch( val )
-        {
-        case init_flag_t::NONE:
-            return std::string("init_flag_t::NONE");
-        };
-        return std::string("init_flag_t::?");
+        const auto bits = static_cast<uint32_t>( val );
+        if( 0 == bits ) return std::string("{}");
+        std::string str;
+        if( static_cast<uint32_t>(init_flag_t::NONE) & bits )
+            str += "init_flag_t::NONE | ";
+        if( static_cast<uint32_t>(init_flag_t::GPU_ONLY) & bits )
+            str += "init_flag_t::GPU_ONLY | ";
+        return "{ " + str.substr(0, str.size() - 3) + " }";
     }
-
 
 #endif // _DEBUG
 } // namespace xe

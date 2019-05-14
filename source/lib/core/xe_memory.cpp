@@ -53,7 +53,7 @@ namespace xe
     /// 
     /// @throws result_t
     void* __xecall
-    SharedMemAlloc(
+    Context::AllocSharedMem(
         Device* pDevice,                                ///< [in] pointer to the device
         device_mem_alloc_flag_t device_flags,           ///< [in] flags specifying additional device allocation controls
         host_mem_alloc_flag_t host_flags,               ///< [in] flags specifying additional host allocation controls
@@ -61,8 +61,8 @@ namespace xe
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
         )
     {
-        // auto result = ::xeSharedMemAlloc( handle, pDevice, device_flags, host_flags, size, alignment );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "SharedMemAlloc");
+        // auto result = ::xeContextAllocSharedMem( handle, pDevice, device_flags, host_flags, size, alignment );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Context::AllocSharedMem");
 
         return (void*)0;
     }
@@ -85,15 +85,15 @@ namespace xe
     /// 
     /// @throws result_t
     void* __xecall
-    DeviceMemAlloc(
+    Context::AllocDeviceMem(
         Device* pDevice,                                ///< [in] pointer to the device
         device_mem_alloc_flag_t flags,                  ///< [in] flags specifying additional allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
         )
     {
-        // auto result = ::xeDeviceMemAlloc( handle, pDevice, flags, size, alignment );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "DeviceMemAlloc");
+        // auto result = ::xeContextAllocDeviceMem( handle, pDevice, flags, size, alignment );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Context::AllocDeviceMem");
 
         return (void*)0;
     }
@@ -117,14 +117,14 @@ namespace xe
     /// 
     /// @throws result_t
     void* __xecall
-    HostMemAlloc(
+    Context::AllocHostMem(
         host_mem_alloc_flag_t flags,                    ///< [in] flags specifying additional allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
         )
     {
-        // auto result = ::xeHostMemAlloc( handle, flags, size, alignment );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "HostMemAlloc");
+        // auto result = ::xeContextAllocHostMem( handle, flags, size, alignment );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Context::AllocHostMem");
 
         return (void*)0;
     }
@@ -133,7 +133,7 @@ namespace xe
     /// @brief Frees allocated host memory, device memory, or shared memory
     /// 
     /// @details
-    ///     - The application is responsible for making sure the GPU is not
+    ///     - The application is responsible for making sure the device is not
     ///       currently referencing the memory before it is freed
     ///     - The implementation of this function will immediately free all Host and
     ///       Device allocations associated with this memory
@@ -147,12 +147,12 @@ namespace xe
     /// 
     /// @throws result_t
     void __xecall
-    MemFree(
+    Context::FreeMem(
         const void* ptr                                 ///< [in] pointer to memory to free
         )
     {
-        // auto result = ::xeMemFree( handle, ptr );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "MemFree");
+        // auto result = ::xeContextFreeMem( handle, ptr );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Context::FreeMem");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -169,13 +169,13 @@ namespace xe
     ///     - memory_allocation_properties_t: Query result for memory allocation properties
     /// 
     /// @throws result_t
-    memory_allocation_properties_t __xecall
-    MemGetProperties(
+    Context::memory_allocation_properties_t __xecall
+    Context::GetMemProperties(
         const void* ptr                                 ///< [in] Pointer to query
         )
     {
-        // auto result = ::xeMemGetProperties( handle, ptr );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "MemGetProperties");
+        // auto result = ::xeContextGetMemProperties( handle, ptr );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Context::GetMemProperties");
 
         return memory_allocation_properties_t{};
     }
@@ -192,14 +192,14 @@ namespace xe
     /// 
     /// @throws result_t
     void __xecall
-    MemGetAddressRange(
+    Context::GetMemAddressRange(
         const void* ptr,                                ///< [in] Pointer to query
         void** pBase,                                   ///< [in,out][optional] base address of the allocation
         size_t* pSize                                   ///< [in,out][optional] size of the allocation
         )
     {
-        // auto result = ::xeMemGetAddressRange( handle, ptr, pBase, pSize );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "MemGetAddressRange");
+        // auto result = ::xeContextGetMemAddressRange( handle, ptr, pBase, pSize );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Context::GetMemAddressRange");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -220,12 +220,13 @@ namespace xe
     /// 
     /// @throws result_t
     ipc_mem_handle_t __xecall
-    IpcGetMemHandle(
+    Context::GetMemIpcHandle(
+        Context* pContext,                              ///< [in] pointer to context
         const void* ptr                                 ///< [in] Pointer to the device memory allocation
         )
     {
-        // auto result = ::xeIpcGetMemHandle( handle, ptr );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "IpcGetMemHandle");
+        // auto result = ::xeContextGetMemIpcHandle( handle, pContext, ptr );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Context::GetMemIpcHandle");
 
         return ipc_mem_handle_t{};
     }
@@ -237,8 +238,8 @@ namespace xe
     /// @details
     ///     - Takes an IPC memory handle from a sending process and associates it
     ///       with a device pointer usable in this process.
-    ///     - The device pointer in this process should not be freed with ::MemFree,
-    ///       but rather with ::IpcCloseMemHandle.
+    ///     - The device pointer in this process should not be freed with
+    ///       ::ContextFreeMem, but rather with ::ContextCloseMemIpcHandle.
     ///     - The application may call this function from simultaneous threads.
     /// 
     /// @remarks
@@ -250,14 +251,14 @@ namespace xe
     /// 
     /// @throws result_t
     void* __xecall
-    IpcOpenMemHandle(
+    Context::OpenMemIpcHandle(
         Device* pDevice,                                ///< [in] pointer to the device to associate with the IPC memory handle
         ipc_mem_handle_t handle,                        ///< [in] IPC memory handle
         ipc_memory_flag_t flags                         ///< [in] flags controlling the operation
         )
     {
-        // auto result = ::xeIpcOpenMemHandle( handle, pDevice, handle, flags );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "IpcOpenMemHandle");
+        // auto result = ::xeContextOpenMemIpcHandle( handle, pDevice, handle, flags );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Context::OpenMemIpcHandle");
 
         return (void*)0;
     }
@@ -267,7 +268,7 @@ namespace xe
     /// 
     /// @details
     ///     - Closes an IPC memory handle by unmapping memory that was opened in
-    ///       this process using ::IpcOpenMemHandle.
+    ///       this process using ::ContextOpenMemIpcHandle.
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same pointer.
     /// 
@@ -277,90 +278,14 @@ namespace xe
     /// 
     /// @throws result_t
     void __xecall
-    IpcCloseMemHandle(
+    Context::CloseMemIpcHandle(
         const void* ptr                                 ///< [in] pointer to device allocation in this process
         )
     {
-        // auto result = ::xeIpcCloseMemHandle( handle, ptr );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "IpcCloseMemHandle");
+        // auto result = ::xeContextCloseMemIpcHandle( handle, ptr );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Context::CloseMemIpcHandle");
     }
 
 #ifdef _DEBUG
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts device_mem_alloc_flag_t to std::string
-    std::string to_string( device_mem_alloc_flag_t val )
-    {
-        const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
-        std::string str;
-        if( static_cast<uint32_t>(device_mem_alloc_flag_t::DEFAULT) & bits )
-            str += "device_mem_alloc_flag_t::DEFAULT | ";
-        if( static_cast<uint32_t>(device_mem_alloc_flag_t::BIAS_CACHED) & bits )
-            str += "device_mem_alloc_flag_t::BIAS_CACHED | ";
-        if( static_cast<uint32_t>(device_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
-            str += "device_mem_alloc_flag_t::BIAS_UNCACHED | ";
-        return "{ " + str.substr(0, str.size() - 3) + " }";
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts host_mem_alloc_flag_t to std::string
-    std::string to_string( host_mem_alloc_flag_t val )
-    {
-        const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
-        std::string str;
-        if( static_cast<uint32_t>(host_mem_alloc_flag_t::DEFAULT) & bits )
-            str += "host_mem_alloc_flag_t::DEFAULT | ";
-        if( static_cast<uint32_t>(host_mem_alloc_flag_t::BIAS_CACHED) & bits )
-            str += "host_mem_alloc_flag_t::BIAS_CACHED | ";
-        if( static_cast<uint32_t>(host_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
-            str += "host_mem_alloc_flag_t::BIAS_UNCACHED | ";
-        if( static_cast<uint32_t>(host_mem_alloc_flag_t::BIAS_WRITE_COMBINED) & bits )
-            str += "host_mem_alloc_flag_t::BIAS_WRITE_COMBINED | ";
-        return "{ " + str.substr(0, str.size() - 3) + " }";
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts memory_allocation_properties_version_t to std::string
-    std::string to_string( memory_allocation_properties_version_t val )
-    {
-        switch( val )
-        {
-        case memory_allocation_properties_version_t::CURRENT:
-            return std::string("memory_allocation_properties_version_t::CURRENT");
-        };
-        return std::string("memory_allocation_properties_version_t::?");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts memory_type_t to std::string
-    std::string to_string( memory_type_t val )
-    {
-        switch( val )
-        {
-        case memory_type_t::UNKNOWN:
-            return std::string("memory_type_t::UNKNOWN");
-        case memory_type_t::HOST:
-            return std::string("memory_type_t::HOST");
-        case memory_type_t::DEVICE:
-            return std::string("memory_type_t::DEVICE");
-        case memory_type_t::SHARED:
-            return std::string("memory_type_t::SHARED");
-        };
-        return std::string("memory_type_t::?");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts ipc_memory_flag_t to std::string
-    std::string to_string( ipc_memory_flag_t val )
-    {
-        switch( val )
-        {
-        case ipc_memory_flag_t::NONE:
-            return std::string("ipc_memory_flag_t::NONE");
-        };
-        return std::string("ipc_memory_flag_t::?");
-    }
-
 #endif // _DEBUG
 } // namespace xe

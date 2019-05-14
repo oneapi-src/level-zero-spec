@@ -112,7 +112,7 @@ typedef xe_result_t (__xecall *xe_pfnEventPoolCreate_t)(
 /// @details
 ///     - The application is responsible for destroying all event handles
 ///       created from the pool before destroying the pool itself
-///     - The application is responsible for making sure the GPU is not
+///     - The application is responsible for making sure the device is not
 ///       currently referencing the any event within the pool before it is
 ///       deleted
 ///     - The implementation of this function will immediately free all Host and
@@ -221,7 +221,7 @@ typedef xe_result_t (__xecall *xe_pfnEventCreate_t)(
 /// @brief Deletes an event object.
 /// 
 /// @details
-///     - The application is responsible for making sure the GPU is not
+///     - The application is responsible for making sure the device is not
 ///       currently referencing the event before it is deleted
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this event

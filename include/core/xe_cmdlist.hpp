@@ -215,7 +215,7 @@ namespace xe
         /// @brief Destroys a command list.
         /// 
         /// @details
-        ///     - The application is responsible for making sure the GPU is not
+        ///     - The application is responsible for making sure the device is not
         ///       currently referencing the command list before it is deleted
         ///     - The implementation of this function will immediately free all Host and
         ///       Device allocations associated with this command list.
@@ -246,7 +246,7 @@ namespace xe
         ///        commands.
         /// 
         /// @details
-        ///     - The application is responsible for making sure the GPU is not
+        ///     - The application is responsible for making sure the device is not
         ///       currently referencing the command list before it is reset
         ///     - The application may **not** call this function from simultaneous
         ///       threads with the same command list handle.

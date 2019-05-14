@@ -109,7 +109,7 @@ namespace xe
     /// @brief Destroys module
     /// 
     /// @details
-    ///     - The application is responsible for making sure the GPU is not
+    ///     - The application is responsible for making sure the device is not
     ///       currently referencing the module before it is deleted
     ///     - The implementation of this function will immediately free all Host and
     ///       Device allocations associated with this module
@@ -135,7 +135,7 @@ namespace xe
     /// @brief Destroys module build log object
     /// 
     /// @details
-    ///     - The application is responsible for making sure the GPU is not
+    ///     - The application is responsible for making sure the device is not
     ///       currently referencing the build log before it is deleted
     ///     - The implementation of this function will immediately free all Host and
     ///       Device allocations associated with this object
@@ -256,7 +256,7 @@ namespace xe
     /// @brief Destroys Function object
     /// 
     /// @details
-    ///     - The application is responsible for making sure the GPU is not
+    ///     - The application is responsible for making sure the device is not
     ///       currently referencing the function before it is deleted
     ///     - The implementation of this function will immediately free all Host and
     ///       Device allocations associated with this function

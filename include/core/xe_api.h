@@ -34,6 +34,7 @@
 #endif
 
 #include "xe_driver.h"
+#include "xe_context.h"
 #include "xe_device.h"
 #include "xe_cmdqueue.h"
 #include "xe_cmdlist.h"
@@ -98,8 +99,8 @@ typedef struct _xe_command_list_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetCommandListProcAddrTable(
-    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
-    xe_command_list_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version, ///< [in] API version requested
+    xe_command_list_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -113,13 +114,7 @@ typedef xe_result_t (__xecall *xe_pfnGetCommandListProcAddrTable_t)(
 /// @brief Table of Device functions pointers
 typedef struct _xe_device_apitable_t
 {
-    xe_pfnDeviceGetCount_t                                      pfnGetCount;
-    xe_pfnDeviceGet_t                                           pfnGet;
     xe_pfnDeviceGetSubDevice_t                                  pfnGetSubDevice;
-    xe_pfnDeviceGetApiVersion_t                                 pfnGetApiVersion;
-    xe_pfnDeviceGetProperties_t                                 pfnGetProperties;
-    xe_pfnDeviceGetComputeProperties_t                          pfnGetComputeProperties;
-    xe_pfnDeviceGetMemoryProperties_t                           pfnGetMemoryProperties;
     xe_pfnDeviceGetP2PProperties_t                              pfnGetP2PProperties;
     xe_pfnDeviceCanAccessPeer_t                                 pfnCanAccessPeer;
     xe_pfnDeviceSetIntermediateCacheConfig_t                    pfnSetIntermediateCacheConfig;
@@ -153,8 +148,8 @@ typedef struct _xe_device_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetDeviceProcAddrTable(
-    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
-    xe_device_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version, ///< [in] API version requested
+    xe_device_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -187,8 +182,8 @@ typedef struct _xe_command_queue_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetCommandQueueProcAddrTable(
-    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
-    xe_command_queue_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version, ///< [in] API version requested
+    xe_command_queue_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -196,6 +191,83 @@ xeGetCommandQueueProcAddrTable(
 typedef xe_result_t (__xecall *xe_pfnGetCommandQueueProcAddrTable_t)(
     uint32_t,
     xe_command_queue_apitable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Context functions pointers
+typedef struct _xe_context_apitable_t
+{
+    xe_pfnContextCreate_t                                       pfnCreate;
+    xe_pfnContextDestroy_t                                      pfnDestroy;
+    xe_pfnContextAllocSharedMem_t                               pfnAllocSharedMem;
+    xe_pfnContextAllocDeviceMem_t                               pfnAllocDeviceMem;
+    xe_pfnContextAllocHostMem_t                                 pfnAllocHostMem;
+    xe_pfnContextFreeMem_t                                      pfnFreeMem;
+    xe_pfnContextGetMemProperties_t                             pfnGetMemProperties;
+    xe_pfnContextGetMemAddressRange_t                           pfnGetMemAddressRange;
+    xe_pfnContextGetMemIpcHandle_t                              pfnGetMemIpcHandle;
+    xe_pfnContextOpenMemIpcHandle_t                             pfnOpenMemIpcHandle;
+    xe_pfnContextCloseMemIpcHandle_t                            pfnCloseMemIpcHandle;
+} xe_context_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Context table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xeGetContextProcAddrTable(
+    xe_api_version_t version, ///< [in] API version requested
+    xe_context_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeGetContextProcAddrTable
+typedef xe_result_t (__xecall *xe_pfnGetContextProcAddrTable_t)(
+    uint32_t,
+    xe_context_apitable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of DeviceGroup functions pointers
+typedef struct _xe_device_group_apitable_t
+{
+    xe_pfnDeviceGroupGetDriverVersion_t                         pfnGetDriverVersion;
+    xe_pfnDeviceGroupGetDevices_t                               pfnGetDevices;
+    xe_pfnDeviceGroupGetApiVersion_t                            pfnGetApiVersion;
+    xe_pfnDeviceGroupGetProperties_t                            pfnGetProperties;
+    xe_pfnDeviceGroupGetComputeProperties_t                     pfnGetComputeProperties;
+    xe_pfnDeviceGroupGetMemoryProperties_t                      pfnGetMemoryProperties;
+} xe_device_group_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's DeviceGroup table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xeGetDeviceGroupProcAddrTable(
+    xe_api_version_t version, ///< [in] API version requested
+    xe_device_group_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeGetDeviceGroupProcAddrTable
+typedef xe_result_t (__xecall *xe_pfnGetDeviceGroupProcAddrTable_t)(
+    uint32_t,
+    xe_device_group_apitable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -222,8 +294,8 @@ typedef struct _xe_fence_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetFenceProcAddrTable(
-    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
-    xe_fence_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version, ///< [in] API version requested
+    xe_fence_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -257,8 +329,8 @@ typedef struct _xe_event_pool_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetEventPoolProcAddrTable(
-    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
-    xe_event_pool_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version, ///< [in] API version requested
+    xe_event_pool_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -293,8 +365,8 @@ typedef struct _xe_event_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetEventProcAddrTable(
-    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
-    xe_event_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version, ///< [in] API version requested
+    xe_event_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -326,8 +398,8 @@ typedef struct _xe_image_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetImageProcAddrTable(
-    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
-    xe_image_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version, ///< [in] API version requested
+    xe_image_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -361,8 +433,8 @@ typedef struct _xe_module_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetModuleProcAddrTable(
-    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
-    xe_module_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version, ///< [in] API version requested
+    xe_module_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -393,8 +465,8 @@ typedef struct _xe_module_build_log_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetModuleBuildLogProcAddrTable(
-    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
-    xe_module_build_log_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version, ///< [in] API version requested
+    xe_module_build_log_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -430,8 +502,8 @@ typedef struct _xe_function_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetFunctionProcAddrTable(
-    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
-    xe_function_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version, ///< [in] API version requested
+    xe_function_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -462,8 +534,8 @@ typedef struct _xe_sampler_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetSamplerProcAddrTable(
-    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
-    xe_sampler_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version, ///< [in] API version requested
+    xe_sampler_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -478,16 +550,7 @@ typedef xe_result_t (__xecall *xe_pfnGetSamplerProcAddrTable_t)(
 typedef struct _xe_global_apitable_t
 {
     xe_pfnInit_t                                                pfnInit;
-    xe_pfnGetDriverVersion_t                                    pfnGetDriverVersion;
-    xe_pfnSharedMemAlloc_t                                      pfnSharedMemAlloc;
-    xe_pfnDeviceMemAlloc_t                                      pfnDeviceMemAlloc;
-    xe_pfnHostMemAlloc_t                                        pfnHostMemAlloc;
-    xe_pfnMemFree_t                                             pfnMemFree;
-    xe_pfnMemGetProperties_t                                    pfnMemGetProperties;
-    xe_pfnMemGetAddressRange_t                                  pfnMemGetAddressRange;
-    xe_pfnIpcGetMemHandle_t                                     pfnIpcGetMemHandle;
-    xe_pfnIpcOpenMemHandle_t                                    pfnIpcOpenMemHandle;
-    xe_pfnIpcCloseMemHandle_t                                   pfnIpcCloseMemHandle;
+    xe_pfnGetDeviceGroups_t                                     pfnGetDeviceGroups;
 } xe_global_apitable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -503,8 +566,8 @@ typedef struct _xe_global_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetGlobalProcAddrTable(
-    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
-    xe_global_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version, ///< [in] API version requested
+    xe_global_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////

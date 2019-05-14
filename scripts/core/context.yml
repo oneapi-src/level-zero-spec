@@ -1,0 +1,59 @@
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero APIs for Context"
+ordinal: "1"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Creates a context."
+class: $xContext
+name: Create
+decl: static
+ordinal: "0"
+analogue:
+    - "**clCreateContext**"
+    - cuCtxCreate
+    - cuCtxGetCurrent
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: size_t
+      name: numDevices
+      desc: "[in] number of devices in phDevice"
+    - type: $x_device_handle_t*
+      name: phDevice
+      desc: "[in] pointer to array of handle of the device objects"
+    - type: "$x_context_handle_t*"
+      name: phContext
+      desc: "[out] pointer to handle of context object created"
+returns:
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Destroys a context."
+class: $xContext
+name: Destroy
+decl: static
+ordinal: "0"
+analogue:
+    - "**clReleaseContext**"
+    - cuCtxDestroy
+details:
+    - "The application is responsible for making sure the device is not currently referencing the context before it is deleted"
+    - "The implementation of this function will immediately free all Host and Device allocations associated with this context"
+    - "The application may **not** call this function from simultaneous threads with the same context handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of context object to destroy"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for context"
+name: $xContext
+members:
+    - type: $x_context_handle_t
+      name: handle
+      desc: "handle of context object"
+      init: nullptr

@@ -59,7 +59,7 @@ namespace xe
     /// @brief Allows memory to be evicted from the device.
     /// 
     /// @details
-    ///     - The application is responsible for making sure the GPU is not
+    ///     - The application is responsible for making sure the device is not
     ///       currently referencing the memory before it is evicted
     ///     - Memory is always implicitly evicted if it is resident when freed.
     ///     - The application may call this function from simultaneous threads.
@@ -99,7 +99,7 @@ namespace xe
     /// @brief Allows image to be evicted from the device.
     /// 
     /// @details
-    ///     - The application is responsible for making sure the GPU is not
+    ///     - The application is responsible for making sure the device is not
     ///       currently referencing the memory before it is evicted
     ///     - An image is always implicitly evicted if it is resident when
     ///       destroyed.

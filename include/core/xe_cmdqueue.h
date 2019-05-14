@@ -70,9 +70,9 @@ typedef enum _xe_command_queue_flag_t
 typedef enum _xe_command_queue_mode_t
 {
     XE_COMMAND_QUEUE_MODE_DEFAULT = 0,              ///< implicit default behavior; uses driver-based heuristics
-    XE_COMMAND_QUEUE_MODE_SYNCHRONOUS,              ///< GPU execution always completes immediately on execute;
-                                                    ///< CPU thread is blocked using wait on implicit synchronization object
-    XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS,             ///< GPU execution is scheduled and will complete in future;
+    XE_COMMAND_QUEUE_MODE_SYNCHRONOUS,              ///< Device execution always completes immediately on execute;
+                                                    ///< Host thread is blocked using wait on implicit synchronization object
+    XE_COMMAND_QUEUE_MODE_ASYNCHRONOUS,             ///< Device execution is scheduled and will complete in future;
                                                     ///< explicit synchronization object must be used to determine completeness
 
 } xe_command_queue_mode_t;
@@ -148,7 +148,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandQueueCreate_t)(
 /// @brief Destroys a command queue.
 /// 
 /// @details
-///     - The application is responsible for making sure the GPU is not
+///     - The application is responsible for making sure the device is not
 ///       currently referencing the command queue before it is deleted
 ///     - The implementation of this function will immediately free all Host and
 ///       Device allocations associated with this command queue

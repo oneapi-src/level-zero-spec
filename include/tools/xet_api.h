@@ -64,8 +64,8 @@ typedef struct _xet_device_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetDeviceProcAddrTable(
-    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
-    xet_device_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version, ///< [in] API version requested
+    xet_device_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -98,8 +98,8 @@ typedef struct _xet_command_list_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetCommandListProcAddrTable(
-    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
-    xet_command_list_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version, ///< [in] API version requested
+    xet_command_list_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -132,8 +132,8 @@ typedef struct _xet_metric_group_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricGroupProcAddrTable(
-    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
-    xet_metric_group_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version, ///< [in] API version requested
+    xet_metric_group_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -164,8 +164,8 @@ typedef struct _xet_metric_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricProcAddrTable(
-    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
-    xet_metric_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version, ///< [in] API version requested
+    xet_metric_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -197,8 +197,8 @@ typedef struct _xet_metric_tracer_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricTracerProcAddrTable(
-    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
-    xet_metric_tracer_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version, ///< [in] API version requested
+    xet_metric_tracer_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -230,8 +230,8 @@ typedef struct _xet_metric_query_pool_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricQueryPoolProcAddrTable(
-    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
-    xet_metric_query_pool_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version, ///< [in] API version requested
+    xet_metric_query_pool_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -261,8 +261,8 @@ typedef struct _xet_metric_query_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricQueryProcAddrTable(
-    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
-    xet_metric_query_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version, ///< [in] API version requested
+    xet_metric_query_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -320,8 +320,8 @@ typedef struct _xet_power_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetPowerProcAddrTable(
-    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
-    xet_power_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version, ///< [in] API version requested
+    xet_power_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -358,8 +358,8 @@ typedef struct _xet_freq_domain_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetFreqDomainProcAddrTable(
-    uint32_t version,        ///< [in] ::XE_API_HEADER_VERSION
-    xet_freq_domain_apitable_t* ptable   ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version, ///< [in] API version requested
+    xet_freq_domain_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////

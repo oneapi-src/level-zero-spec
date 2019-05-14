@@ -45,50 +45,46 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Reports the number of devices
+/// @brief Retrieves device groups
 /// 
 /// @details
+///     - A device group represents a collection of physical, homogeneous
+///       devices.
+///     - The application may pass nullptr for pDeviceGroups when only querying
+///       the number of device groups.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuDeviceGetCount**
+///     - clGetDeviceIDs
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == count
+///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGetCount(
-    uint32_t* count                                 ///< [out] number of devices available
+xeGetDeviceGroups(
+    size_t* pCount,                                 ///< [in,out] pointer to the number of device groups.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of device groups available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of
+                                                    ///< device groups.
+    xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional] array of handle of device groups
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGetCount 
-typedef xe_result_t (__xecall *xe_pfnDeviceGetCount_t)(
-    uint32_t*
+/// @brief Function-pointer for xeGetDeviceGroups 
+typedef xe_result_t (__xecall *xe_pfnGetDeviceGroups_t)(
+    size_t*,
+    xe_device_group_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef XE_MAX_UUID_SIZE
-/// @brief Maximum device uuid size in bytes
-#define XE_MAX_UUID_SIZE  16
-#endif // XE_MAX_UUID_SIZE
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Device universal unique id (UUID)
-typedef struct _xe_device_uuid_t
-{
-    uint8_t id[XE_MAX_UUID_SIZE];                   ///< [out] device universal unique id
-
-} xe_device_uuid_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns a handle to the device object
+/// @brief Retrieves devices within a device group
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -97,31 +93,37 @@ typedef struct _xe_device_uuid_t
 /// @remarks
 ///   _Analogues_
 ///     - **cuDeviceGet**
-///     - clGetDeviceIDs
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == phDevice
-///         + ordinal is out of range reported by ::xeDeviceGetCount
+///         + nullptr == hDeviceGroup
+///         + nullptr == pCount
+///         + count is out of range reported by ::xeDeviceGroupGetDevices
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGet(
-    uint32_t ordinal,                               ///< [in] The device index in the range of [0, ::xeDeviceGetCount]
-    xe_device_handle_t* phDevice                    ///< [out] pointer to handle of device object created
+xeDeviceGroupGetDevices(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    size_t* pCount,                                 ///< [in,out] pointer to the number of device groups.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of device groups available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of
+                                                    ///< device groups.
+    xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional] array of handle of device groups
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGet 
-typedef xe_result_t (__xecall *xe_pfnDeviceGet_t)(
-    uint32_t,
-    xe_device_handle_t*
+/// @brief Function-pointer for xeDeviceGroupGetDevices 
+typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetDevices_t)(
+    xe_device_group_handle_t,
+    size_t*,
+    xe_device_group_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns a handle to the sub-device object
+/// @brief Retrieves a sub-device from a device
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -129,8 +131,7 @@ typedef xe_result_t (__xecall *xe_pfnDeviceGet_t)(
 /// 
 /// @remarks
 ///   _Analogues_
-///     - **cuDeviceGet**
-///     - clGetDeviceIDs
+///     - clCreateSubDevices
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -169,7 +170,7 @@ typedef enum _xe_api_version_t
 } xe_api_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns the API version supported by the device
+/// @brief Returns the API version supported by the device group
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -184,19 +185,19 @@ typedef enum _xe_api_version_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hDevice
+///         + nullptr == hDeviceGroup
 ///         + nullptr == version
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGetApiVersion(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+xeDeviceGroupGetApiVersion(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     xe_api_version_t* version                       ///< [out] api version
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGetApiVersion 
-typedef xe_result_t (__xecall *xe_pfnDeviceGetApiVersion_t)(
-    xe_device_handle_t,
+/// @brief Function-pointer for xeDeviceGroupGetApiVersion 
+typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetApiVersion_t)(
+    xe_device_group_handle_t,
     xe_api_version_t*
     );
 
@@ -209,13 +210,27 @@ typedef enum _xe_device_properties_version_t
 } xe_device_properties_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XE_MAX_UUID_SIZE
+/// @brief Maximum device uuid size in bytes
+#define XE_MAX_UUID_SIZE  16
+#endif // XE_MAX_UUID_SIZE
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Device universal unique id (UUID)
+typedef struct _xe_device_uuid_t
+{
+    uint8_t id[XE_MAX_UUID_SIZE];                   ///< [out] device universal unique id
+
+} xe_device_uuid_t;
+
+///////////////////////////////////////////////////////////////////////////////
 #ifndef XE_MAX_DEVICE_NAME
 /// @brief Maximum device name string size
 #define XE_MAX_DEVICE_NAME  256
 #endif // XE_MAX_DEVICE_NAME
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Device properties queried using ::xeDeviceGetProperties
+/// @brief Device properties queried using ::xeDeviceGroupGetProperties
 typedef struct _xe_device_properties_t
 {
     xe_device_properties_version_t version;         ///< [in] ::XE_DEVICE_PROPERTIES_VERSION_CURRENT
@@ -262,19 +277,19 @@ typedef struct _xe_device_properties_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hDevice
+///         + nullptr == hDeviceGroup
 ///         + nullptr == pDeviceProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGetProperties(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+xeDeviceGroupGetProperties(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGetProperties 
-typedef xe_result_t (__xecall *xe_pfnDeviceGetProperties_t)(
-    xe_device_handle_t,
+/// @brief Function-pointer for xeDeviceGroupGetProperties 
+typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetProperties_t)(
+    xe_device_group_handle_t,
     xe_device_properties_t*
     );
 
@@ -293,7 +308,8 @@ typedef enum _xe_device_compute_properties_version_t
 #endif // XE_SUBGROUPSIZE_COUNT
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Device compute properties queried using ::xeDeviceGetComputeProperties
+/// @brief Device compute properties queried using
+///        ::xeDeviceGroupGetComputeProperties
 typedef struct _xe_device_compute_properties_t
 {
     xe_device_compute_properties_version_t version; ///< [in] ::XE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT
@@ -313,7 +329,7 @@ typedef struct _xe_device_compute_properties_t
 } xe_device_compute_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves compute attributes of the device
+/// @brief Retrieves compute attributes of the device group
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -329,19 +345,19 @@ typedef struct _xe_device_compute_properties_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hDevice
+///         + nullptr == hDeviceGroup
 ///         + nullptr == pComputeProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGetComputeProperties(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+xeDeviceGroupGetComputeProperties(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGetComputeProperties 
-typedef xe_result_t (__xecall *xe_pfnDeviceGetComputeProperties_t)(
-    xe_device_handle_t,
+/// @brief Function-pointer for xeDeviceGroupGetComputeProperties 
+typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetComputeProperties_t)(
+    xe_device_group_handle_t,
     xe_device_compute_properties_t*
     );
 
@@ -369,7 +385,8 @@ typedef enum _xe_memory_access_capabilities_t
 } xe_memory_access_capabilities_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Device memory properties queried using ::xeDeviceGetMemoryProperties
+/// @brief Device memory properties queried using
+///        ::xeDeviceGroupGetMemoryProperties
 typedef struct _xe_device_memory_properties_t
 {
     xe_device_memory_properties_version_t version;  ///< [in] ::XE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
@@ -411,19 +428,19 @@ typedef struct _xe_device_memory_properties_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
-///         + nullptr == hDevice
+///         + nullptr == hDeviceGroup
 ///         + nullptr == pMemProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGetMemoryProperties(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+xeDeviceGroupGetMemoryProperties(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGetMemoryProperties 
-typedef xe_result_t (__xecall *xe_pfnDeviceGetMemoryProperties_t)(
-    xe_device_handle_t,
+/// @brief Function-pointer for xeDeviceGroupGetMemoryProperties 
+typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetMemoryProperties_t)(
+    xe_device_group_handle_t,
     xe_device_memory_properties_t*
     );
 

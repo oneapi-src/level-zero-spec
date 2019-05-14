@@ -100,7 +100,7 @@ ordinal: "0"
 analogue:
     - "**cuModuleUnload**"
 details:
-    - "The application is responsible for making sure the GPU is not currently referencing the module before it is deleted"
+    - "The application is responsible for making sure the device is not currently referencing the module before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this module"
     - "The application may **not** call this function from simultaneous threads with the same module handle."
     - "The implementation of this function should be lock-free."
@@ -116,7 +116,7 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application is responsible for making sure the GPU is not currently referencing the build log before it is deleted"
+    - "The application is responsible for making sure the device is not currently referencing the build log before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this object"
     - "The application may **not** call this function from simultaneous threads with the same build log handle."
     - "The implementation of this function should be lock-free."
@@ -271,7 +271,7 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application is responsible for making sure the GPU is not currently referencing the function before it is deleted"
+    - "The application is responsible for making sure the device is not currently referencing the function before it is deleted"
     - "The implementation of this function will immediately free all Host and Device allocations associated with this function"
     - "The application may **not** call this function from simultaneous threads with the same function handle."
     - "The implementation of this function should be lock-free."

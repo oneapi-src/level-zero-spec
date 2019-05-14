@@ -52,7 +52,7 @@ Sampling types are a software representation of device capabilities in terms of 
 Each Metric Group provides information which sampling types it supports.
 There are separate sets of APIs supporting each of the sampling types [Time based](#tbs) and [Query based](#queries).
 
-All available sampling types are defined in ::${t}_metric_group_sampling_type.
+All available sampling types are defined in ::${t}_metric_group_sampling_type_t.
 - Information about supported sampling types for a given Metric Group is provided in 
   ::${t}_metric_group_properties_t.samplingType.
 - It's possible that ${OneApi} provides multiple Metric Groups with the same names but different sampling types.

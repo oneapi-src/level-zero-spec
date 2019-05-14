@@ -163,6 +163,90 @@ xeGetCommandQueueProcAddrTable(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Context table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xeGetContextProcAddrTable(
+    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xe_context_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    )
+{
+    if( nullptr == ptable )
+        return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    if( XE_API_HEADER_VERSION < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    if( nullptr != context.commonDriver )
+    {
+        static auto getTable = reinterpret_cast<xe_pfnGetContextProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.commonDriver, "xeGetContextProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xe_pfnGetContextProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.validationLayer, "xeGetContextProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's DeviceGroup table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xeGetDeviceGroupProcAddrTable(
+    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xe_device_group_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    )
+{
+    if( nullptr == ptable )
+        return XE_RESULT_ERROR_INVALID_PARAMETER;
+
+    if( XE_API_HEADER_VERSION < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    if( nullptr != context.commonDriver )
+    {
+        static auto getTable = reinterpret_cast<xe_pfnGetDeviceGroupProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.commonDriver, "xeGetDeviceGroupProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xe_pfnGetDeviceGroupProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.validationLayer, "xeGetDeviceGroupProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Fence table
 ///        with current process' addresses
 ///

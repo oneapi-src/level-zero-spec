@@ -36,68 +36,52 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    Device::Device( 
-        Driver* pDriver                                 ///< [in] pointer to parent object
-        ) :
-        m_pDriver( pDriver )
-    {
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Reports the number of devices
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuDeviceGetCount**
-    /// 
-    /// @returns
-    ///     - uint32_t: number of devices available
-    /// 
-    /// @throws result_t
-    uint32_t __xecall
-    Device::GetCount(
+    DeviceGroup::DeviceGroup( 
         void
-        )
+        ) :
     {
-        // auto result = ::xeDeviceGetCount( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetCount");
-
-        return uint32_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Returns a handle to the device object
+    Device::Device( 
+        DeviceGroup* pDeviceGroup                       ///< [in] pointer to parent object
+        ) :
+        m_pDeviceGroup( pDeviceGroup )
+    {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Retrieves device groups
     /// 
     /// @details
+    ///     - A device group represents a collection of physical, homogeneous
+    ///       devices.
+    ///     - The application may pass nullptr for pDeviceGroups when only querying
+    ///       the number of device groups.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @remarks
     ///   _Analogues_
-    ///     - **cuDeviceGet**
     ///     - clGetDeviceIDs
-    /// 
-    /// @returns
-    ///     - Device: pointer to handle of device object created
     /// 
     /// @throws result_t
-    Device* __xecall
-    Device::Get(
-        uint32_t ordinal                                ///< [in] The device index in the range of [0, ::DeviceGetCount]
+    void __xecall
+    GetDeviceGroups(
+        size_t* pCount,                                 ///< [in,out] pointer to the number of device groups.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of device groups available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of
+                                                        ///< device groups.
+        DeviceGroup* pDeviceGroups                      ///< [in,out][optional] array of pointer to device groups
         )
     {
-        // auto result = ::xeDeviceGet( handle, ordinal );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::Get");
-
-        return (Device*)0;
+        // auto result = ::xeGetDeviceGroups( handle, pCount, pDeviceGroups );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "GetDeviceGroups");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Returns a handle to the sub-device object
+    /// @brief Retrieves devices within a device group
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -106,7 +90,32 @@ namespace xe
     /// @remarks
     ///   _Analogues_
     ///     - **cuDeviceGet**
-    ///     - clGetDeviceIDs
+    /// 
+    /// @throws result_t
+    void __xecall
+    DeviceGroup::GetDevices(
+        size_t* pCount,                                 ///< [in,out] pointer to the number of device groups.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of device groups available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of
+                                                        ///< device groups.
+        DeviceGroup* pDeviceGroups                      ///< [in,out][optional] array of pointer to device groups
+        )
+    {
+        // auto result = ::xeDeviceGroupGetDevices( handle, pCount, pDeviceGroups );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::GetDevices");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Retrieves a sub-device from a device
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - clCreateSubDevices
     /// 
     /// @returns
     ///     - Device: pointer to handle of sub-device object.
@@ -124,7 +133,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Returns the API version supported by the device
+    /// @brief Returns the API version supported by the device group
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -138,13 +147,13 @@ namespace xe
     ///     - api_version_t: api version
     /// 
     /// @throws result_t
-    Device::api_version_t __xecall
-    Device::GetApiVersion(
+    DeviceGroup::api_version_t __xecall
+    DeviceGroup::GetApiVersion(
         void
         )
     {
-        // auto result = ::xeDeviceGetApiVersion( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetApiVersion");
+        // auto result = ::xeDeviceGroupGetApiVersion( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::GetApiVersion");
 
         return api_version_t{};
     }
@@ -163,22 +172,22 @@ namespace xe
     ///     - clGetDeviceInfo
     /// 
     /// @returns
-    ///     - properties_t: query result for device properties
+    ///     - device_properties_t: query result for device properties
     /// 
     /// @throws result_t
-    Device::properties_t __xecall
-    Device::GetProperties(
+    DeviceGroup::device_properties_t __xecall
+    DeviceGroup::GetProperties(
         void
         )
     {
-        // auto result = ::xeDeviceGetProperties( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetProperties");
+        // auto result = ::xeDeviceGroupGetProperties( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::GetProperties");
 
-        return properties_t{};
+        return device_properties_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieves compute attributes of the device
+    /// @brief Retrieves compute attributes of the device group
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -190,18 +199,18 @@ namespace xe
     ///     - clGetDeviceInfo
     /// 
     /// @returns
-    ///     - compute_properties_t: query result for compute properties
+    ///     - device_compute_properties_t: query result for compute properties
     /// 
     /// @throws result_t
-    Device::compute_properties_t __xecall
-    Device::GetComputeProperties(
+    DeviceGroup::device_compute_properties_t __xecall
+    DeviceGroup::GetComputeProperties(
         void
         )
     {
-        // auto result = ::xeDeviceGetComputeProperties( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetComputeProperties");
+        // auto result = ::xeDeviceGroupGetComputeProperties( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::GetComputeProperties");
 
-        return compute_properties_t{};
+        return device_compute_properties_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -218,18 +227,18 @@ namespace xe
     ///     - clGetDeviceInfo
     /// 
     /// @returns
-    ///     - memory_properties_t: query result for compute properties
+    ///     - device_memory_properties_t: query result for compute properties
     /// 
     /// @throws result_t
-    Device::memory_properties_t __xecall
-    Device::GetMemoryProperties(
+    DeviceGroup::device_memory_properties_t __xecall
+    DeviceGroup::GetMemoryProperties(
         void
         )
     {
-        // auto result = ::xeDeviceGetMemoryProperties( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetMemoryProperties");
+        // auto result = ::xeDeviceGroupGetMemoryProperties( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::GetMemoryProperties");
 
-        return memory_properties_t{};
+        return device_memory_properties_t{};
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -329,70 +338,71 @@ namespace xe
 
 #ifdef _DEBUG
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Device::api_version_t to std::string
-    std::string to_string( Device::api_version_t val )
+    /// @brief Converts DeviceGroup::api_version_t to std::string
+    std::string to_string( DeviceGroup::api_version_t val )
     {
         switch( val )
         {
-        case Device::api_version_t::_1_0:
-            return std::string("Device::api_version_t::_1_0");
+        case DeviceGroup::api_version_t::_1_0:
+            return std::string("DeviceGroup::api_version_t::_1_0");
         };
-        return std::string("Device::api_version_t::?");
+        return std::string("DeviceGroup::api_version_t::?");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Device::properties_version_t to std::string
-    std::string to_string( Device::properties_version_t val )
+    /// @brief Converts DeviceGroup::device_properties_version_t to std::string
+    std::string to_string( DeviceGroup::device_properties_version_t val )
     {
         switch( val )
         {
-        case Device::properties_version_t::CURRENT:
-            return std::string("Device::properties_version_t::CURRENT");
+        case DeviceGroup::device_properties_version_t::CURRENT:
+            return std::string("DeviceGroup::device_properties_version_t::CURRENT");
         };
-        return std::string("Device::properties_version_t::?");
+        return std::string("DeviceGroup::device_properties_version_t::?");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Device::compute_properties_version_t to std::string
-    std::string to_string( Device::compute_properties_version_t val )
+    /// @brief Converts DeviceGroup::device_compute_properties_version_t to std::string
+    std::string to_string( DeviceGroup::device_compute_properties_version_t val )
     {
         switch( val )
         {
-        case Device::compute_properties_version_t::CURRENT:
-            return std::string("Device::compute_properties_version_t::CURRENT");
+        case DeviceGroup::device_compute_properties_version_t::CURRENT:
+            return std::string("DeviceGroup::device_compute_properties_version_t::CURRENT");
         };
-        return std::string("Device::compute_properties_version_t::?");
+        return std::string("DeviceGroup::device_compute_properties_version_t::?");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Device::memory_properties_version_t to std::string
-    std::string to_string( Device::memory_properties_version_t val )
+    /// @brief Converts DeviceGroup::device_memory_properties_version_t to std::string
+    std::string to_string( DeviceGroup::device_memory_properties_version_t val )
     {
         switch( val )
         {
-        case Device::memory_properties_version_t::CURRENT:
-            return std::string("Device::memory_properties_version_t::CURRENT");
+        case DeviceGroup::device_memory_properties_version_t::CURRENT:
+            return std::string("DeviceGroup::device_memory_properties_version_t::CURRENT");
         };
-        return std::string("Device::memory_properties_version_t::?");
+        return std::string("DeviceGroup::device_memory_properties_version_t::?");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Device::memory_access_capabilities_t to std::string
-    std::string to_string( Device::memory_access_capabilities_t val )
+    /// @brief Converts DeviceGroup::memory_access_capabilities_t to std::string
+    std::string to_string( DeviceGroup::memory_access_capabilities_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
         if( 0 == bits ) return std::string("{}");
         std::string str;
-        if( static_cast<uint32_t>(Device::memory_access_capabilities_t::MEMORY_ACCESS) & bits )
-            str += "Device::memory_access_capabilities_t::MEMORY_ACCESS | ";
-        if( static_cast<uint32_t>(Device::memory_access_capabilities_t::MEMORY_ATOMIC_ACCESS) & bits )
-            str += "Device::memory_access_capabilities_t::MEMORY_ATOMIC_ACCESS | ";
-        if( static_cast<uint32_t>(Device::memory_access_capabilities_t::MEMORY_CONCURRENT_ACCESS) & bits )
-            str += "Device::memory_access_capabilities_t::MEMORY_CONCURRENT_ACCESS | ";
-        if( static_cast<uint32_t>(Device::memory_access_capabilities_t::MEMORY_CONCURRENT_ATOMIC_ACCESS) & bits )
-            str += "Device::memory_access_capabilities_t::MEMORY_CONCURRENT_ATOMIC_ACCESS | ";
+        if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS) & bits )
+            str += "DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS | ";
+        if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_ATOMIC_ACCESS) & bits )
+            str += "DeviceGroup::memory_access_capabilities_t::MEMORY_ATOMIC_ACCESS | ";
+        if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ACCESS) & bits )
+            str += "DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ACCESS | ";
+        if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ATOMIC_ACCESS) & bits )
+            str += "DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ATOMIC_ACCESS | ";
         return "{ " + str.substr(0, str.size() - 3) + " }";
     }
+
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::p2p_properties_version_t to std::string

@@ -4,66 +4,61 @@ desc: "Intel $OneApi Level-Zero APIs for Device"
 ordinal: "1"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Reports the number of devices"
-class: $xDevice
-name: GetCount
-decl: static
-ordinal: "0"
+desc: "Retrieves device groups"
+class: $x
+name: GetDeviceGroups
 analogue:
-    - "**cuDeviceGetCount**"
+    - clGetDeviceIDs
 details:
+    - "A device group represents a collection of physical, homogeneous devices."
+    - "The application may pass nullptr for pDeviceGroups when only querying the number of device groups."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: "uint32_t*"
-      name: count
-      desc: "[out] number of devices available"
---- #--------------------------------------------------------------------------
-type: macro
-desc: "Maximum device uuid size in bytes"
-name: $X_MAX_UUID_SIZE
-value: "16"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Device universal unique id (UUID)"
-class: $xDevice
-name: $x_device_uuid_t
-members:
-    - type: uint8_t
-      name: "id[$X_MAX_UUID_SIZE]"
-      desc: "[out] device universal unique id"
+    - type: "size_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of device groups.
+            if count is zero, then the driver will update the value with the total number of device groups available.
+            if count is non-zero, then driver will only retrieve that number of device groups.
+    - type: "$x_device_group_handle_t*"
+      name: pDeviceGroups
+      desc: "[in,out][optional] array of handle of device groups"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Returns a handle to the device object"
-class: $xDevice
-name: Get
-decl: static
+desc: "Retrieves devices within a device group"
+class: $xDeviceGroup
+name: GetDevices
 ordinal: "0"
 analogue:
     - "**cuDeviceGet**"
-    - clGetDeviceIDs
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: uint32_t
-      name: ordinal
-      desc: "[in] The device index in the range of [0, $xDeviceGetCount]"
-    - type: "$x_device_handle_t*"
-      name: phDevice
-      desc: "[out] pointer to handle of device object created"
+    - type: $x_device_group_handle_t
+      name: hDeviceGroup
+      desc: "[in] handle of the device group object"
+    - type: "size_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of device groups.
+            if count is zero, then the driver will update the value with the total number of device groups available.
+            if count is non-zero, then driver will only retrieve that number of device groups.
+    - type: "$x_device_group_handle_t*"
+      name: pDeviceGroups
+      desc: "[in,out][optional] array of handle of device groups"
 returns:
     - $X_RESULT_ERROR_INVALID_PARAMETER:
-        - "ordinal is out of range reported by $xDeviceGetCount"
+        - "count is out of range reported by $xDeviceGroupGetDevices"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Returns a handle to the sub-device object"
+desc: "Retrieves a sub-device from a device"
 class: $xDevice
 name: GetSubDevice
 ordinal: "1"
 analogue:
-    - "**cuDeviceGet**"
-    - clGetDeviceIDs
+    - clCreateSubDevices
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -83,7 +78,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported API versions"
-class: $xDevice
+class: $xDeviceGroup
 name: $x_api_version_t
 details:
     - "API versions contain major and minor attributes, use $X_MAJOR_VERSION and $X_MINOR_VERSION"
@@ -93,8 +88,8 @@ etors:
       desc: "1.0"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Returns the API version supported by the device"
-class: $xDevice
+desc: "Returns the API version supported by the device group"
+class: $xDeviceGroup
 name: GetApiVersion
 ordinal: "1"
 analogue:
@@ -103,16 +98,16 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $x_device_handle_t
-      name: hDevice
-      desc: "[in] handle of the device object"
+    - type: $x_device_group_handle_t
+      name: hDeviceGroup
+      desc: "[in] handle of the device group object"
     - type: "$x_api_version_t*"
       name: version
       desc: "[out] api version"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $x_device_properties_t"
-class: $xDevice
+class: $xDeviceGroup
 name: $x_device_properties_version_t
 etors:
     - name: $X_DEVICE_PROPERTIES_VERSION_CURRENT
@@ -120,13 +115,27 @@ etors:
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: macro
+desc: "Maximum device uuid size in bytes"
+name: $X_MAX_UUID_SIZE
+value: "16"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device universal unique id (UUID)"
+class: $xDeviceGroup
+name: $x_device_uuid_t
+members:
+    - type: uint8_t
+      name: "id[$X_MAX_UUID_SIZE]"
+      desc: "[out] device universal unique id"
+--- #--------------------------------------------------------------------------
+type: macro
 desc: "Maximum device name string size"
 name: $X_MAX_DEVICE_NAME
 value: "256"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Device properties queried using $xDeviceGetProperties"
-class: $xDevice
+desc: "Device properties queried using $xDeviceGroupGetProperties"
+class: $xDeviceGroup
 name: $x_device_properties_t
 members:
     - type: $x_device_properties_version_t
@@ -199,7 +208,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves attributes of the device"
-class: $xDevice
+class: $xDeviceGroup
 name: GetProperties
 ordinal: "1"
 analogue:
@@ -210,16 +219,16 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $x_device_handle_t
-      name: hDevice
-      desc: "[in] handle of the device object"
+    - type: $x_device_group_handle_t
+      name: hDeviceGroup
+      desc: "[in] handle of the device group object"
     - type: "$x_device_properties_t*"
       name: pDeviceProperties
       desc: "[out] query result for device properties"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $x_device_compute_properties_t"
-class: $xDevice
+class: $xDeviceGroup
 name: $x_device_compute_properties_version_t
 etors:
     - name: $X_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT
@@ -232,8 +241,8 @@ name: $X_SUBGROUPSIZE_COUNT
 value: "8"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Device compute properties queried using $xDeviceGetComputeProperties"
-class: $xDevice
+desc: "Device compute properties queried using $xDeviceGroupGetComputeProperties"
+class: $xDeviceGroup
 name: $x_device_compute_properties_t
 members:
     - type: $x_device_compute_properties_version_t
@@ -272,8 +281,8 @@ members:
       desc: "[out] Size group sizes supported."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Retrieves compute attributes of the device"
-class: $xDevice
+desc: "Retrieves compute attributes of the device group"
+class: $xDeviceGroup
 name: GetComputeProperties
 ordinal: "1"
 analogue:
@@ -283,16 +292,16 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $x_device_handle_t
-      name: hDevice
-      desc: "[in] handle of the device object"
+    - type: $x_device_group_handle_t
+      name: hDeviceGroup
+      desc: "[in] handle of the device group object"
     - type: "$x_device_compute_properties_t*"
       name: pComputeProperties
       desc: "[out] query result for compute properties"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $x_device_memory_properties_t"
-class: $xDevice
+class: $xDeviceGroup
 name: $x_device_memory_properties_version_t
 etors:
     - name: $X_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
@@ -301,7 +310,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Memory access capabilities"
-class: $xDevice
+class: $xDeviceGroup
 name: $x_memory_access_capabilities_t
 details:
     - "Supported access capabilities for different types of memory allocations"
@@ -320,8 +329,8 @@ etors:
       desc: "Supports concurrent atomic access"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Device memory properties queried using $xDeviceGetMemoryProperties"
-class: $xDevice
+desc: "Device memory properties queried using $xDeviceGroupGetMemoryProperties"
+class: $xDeviceGroup
 name: $x_device_memory_properties_t
 members:
     - type: $x_device_memory_properties_version_t
@@ -376,7 +385,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves memory attributes of the device"
-class: $xDevice
+class: $xDeviceGroup
 name: GetMemoryProperties
 ordinal: "1"
 analogue:
@@ -387,9 +396,9 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $x_device_handle_t
-      name: hDevice
-      desc: "[in] handle of the device object"
+    - type: $x_device_group_handle_t
+      name: hDeviceGroup
+      desc: "[in] handle of the device group object"
     - type: "$x_device_memory_properties_t*"
       name: pMemProperties
       desc: "[out] query result for compute properties"
@@ -520,6 +529,15 @@ returns:
         - "devices do not support CacheConfig"
 --- #--------------------------------------------------------------------------
 type: class
+desc: "C++ wrapper for device group"
+name: $xDeviceGroup
+members:
+    - type: $x_device_group_handle_t
+      name: handle
+      desc: "handle of device group object"
+      init: nullptr
+--- #--------------------------------------------------------------------------
+type: class
 desc: "C++ wrapper for device"
 name: $xDevice
 members:
@@ -527,6 +545,6 @@ members:
       name: handle
       desc: "handle of device object"
       init: nullptr
-    - type: $xDriver*
-      name: pDriver
+    - type: $xDeviceGroup*
+      name: pDeviceGroup
       desc: "[in] pointer to parent object"
