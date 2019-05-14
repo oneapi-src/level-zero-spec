@@ -34,7 +34,7 @@
 #define _XE_COMMON_INL
 #if defined(__cplusplus)
 #pragma once
-#include "xe_all.h"
+#include "xe_api.h"
 
 namespace xe
 {

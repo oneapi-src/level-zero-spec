@@ -1,5 +1,5 @@
 #include "test.h"
-#include "xe_all.h"
+#include "xe_api.h"
 #include "encode_l3state.h"
 #include "graphics_allocation.h"
 #include "igfxfmid.h"

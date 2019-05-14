@@ -37,7 +37,7 @@
 #endif
 #include <stdint.h>
 #include <string.h>
-#include "xe_all.h"
+#include "xe_api.h"
 
 #if defined(__cplusplus)
 extern "C" {

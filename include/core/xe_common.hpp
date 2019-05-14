@@ -34,7 +34,7 @@
 #define _XE_COMMON_HPP
 #if defined(__cplusplus)
 #pragma once
-#include "xe_all.h"
+#include "xe_api.h"
 #include <tuple>
 
 namespace xe

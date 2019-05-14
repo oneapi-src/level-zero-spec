@@ -1,5 +1,5 @@
 #pragma once
-#include "xe_all.h"
+#include "xe_api.h"
 #include "driver.h"
 
 namespace L0 {

@@ -36,7 +36,7 @@
 #pragma once
 #include "xet_all.h"
 #include <tuple>
-#include "xe_all.hpp"
+#include "xe_api.hpp"
 
 namespace xet
 {

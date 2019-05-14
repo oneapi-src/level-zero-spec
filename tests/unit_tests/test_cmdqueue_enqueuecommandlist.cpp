@@ -6,7 +6,7 @@
 #include "runtime/command_stream/linear_stream.h"
 #include "test.h"
 #include "unit_tests/gen_common/gen_cmd_parse.h"
-#include "xe_all.h"
+#include "xe_api.h"
 #include "gtest/gtest.h"
 #include "global_fixture.h"
 

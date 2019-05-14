@@ -33,7 +33,7 @@
 #if defined(__cplusplus)
 #pragma once
 #endif
-#include "xe_all.h"
+#include "xe_api.h"
 
 typedef struct _cl_mem* cl_mem;
 typedef struct _cl_command_queue* cl_command_queue;

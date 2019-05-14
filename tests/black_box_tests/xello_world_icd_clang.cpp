@@ -3,7 +3,7 @@
 #define ENABLE_OCLOC_WRAPPER
 #include "source/core/ocloc_shared.h"
 
-#include "xe_all.h"
+#include "xe_api.h"
 
 #include <iostream>
 #include <fstream>

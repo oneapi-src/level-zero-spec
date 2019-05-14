@@ -2,7 +2,7 @@
 target_sources(${TARGET_NAME}
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
-    ${CMAKE_CURRENT_SOURCE_DIR}/xe_all.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/xe_api.h
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_barrier.h
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_barrier.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/xe_cl_interop.h

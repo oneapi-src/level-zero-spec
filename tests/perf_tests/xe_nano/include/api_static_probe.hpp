@@ -24,7 +24,7 @@
 
 #include <string>
 #include <assert.h>
-#include "xe_all.h"
+#include "xe_api.h"
 #include "common.hpp"
 #include "hardware_counter.hpp"
 
