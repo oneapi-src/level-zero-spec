@@ -21,6 +21,8 @@
  */
 #include "benchmark.hpp"
 
+using namespace xe_api_benchmarks;
+
 int main() {
     XeApp nano_benchmarks("xe_nano_benchmarks.spv");
     int warm_up_iteration = 1000;
@@ -31,15 +33,12 @@ int main() {
               << "\tWarm up iterations " << warm_up_iteration
               << "\tMeasured iterations " << measure_iteration
               << std::endl;
-    xe_api_benchmarks::latency::parameter_buffer(&nano_benchmarks,
-                                                 warm_up_iteration,
-                                                 measure_iteration);
-    xe_api_benchmarks::hardware_counter::parameter_buffer(&nano_benchmarks,
-                                                          warm_up_iteration,
-                                                          measure_iteration);
-    xe_api_benchmarks::fuction_call_rate::parameter_buffer(&nano_benchmarks,
-                                                          warm_up_iteration,
-                                                          measure_iteration);
+    latency::parameter_buffer(&nano_benchmarks, warm_up_iteration,
+                              measure_iteration);
+    hardware_counter::parameter_buffer(&nano_benchmarks, warm_up_iteration,
+                                       measure_iteration);
+    fuction_call_rate::parameter_buffer(&nano_benchmarks, warm_up_iteration,
+                                        measure_iteration);
 
     std::cout << std::endl;
 
@@ -47,30 +46,24 @@ int main() {
               << "\tWarm up iterations " << warm_up_iteration
               << "\tMeasured iterations " << measure_iteration
               << std::endl;
-    xe_api_benchmarks::latency::parameter_integer(&nano_benchmarks,
-                                                  warm_up_iteration,
-                                                  measure_iteration);
-    xe_api_benchmarks::hardware_counter::parameter_integer(&nano_benchmarks,
-                                                           warm_up_iteration,
-                                                           measure_iteration);
-    xe_api_benchmarks::fuction_call_rate::parameter_integer(&nano_benchmarks,
-                                                           warm_up_iteration,
-                                                           measure_iteration);
+    latency::parameter_integer(&nano_benchmarks, warm_up_iteration,
+                               measure_iteration);
+    hardware_counter::parameter_integer(&nano_benchmarks, warm_up_iteration,
+                                        measure_iteration);
+    fuction_call_rate::parameter_integer(&nano_benchmarks, warm_up_iteration,
+                                         measure_iteration);
     std::cout << std::endl;
 
     std::cout << "xeFunctionSetArgumentValue: Image argument"
               << "\tWarm up iterations " << warm_up_iteration
               << "\tMeasured iterations " << measure_iteration
               << std::endl;
-    xe_api_benchmarks::latency::parameter_integer(&nano_benchmarks,
-                                                  warm_up_iteration,
-                                                  measure_iteration);
-    xe_api_benchmarks::hardware_counter::parameter_integer(&nano_benchmarks,
-                                                           warm_up_iteration,
-                                                           measure_iteration);
-    xe_api_benchmarks::fuction_call_rate::parameter_integer(&nano_benchmarks,
-                                                           warm_up_iteration,
-                                                           measure_iteration);
+    latency::parameter_integer(&nano_benchmarks, warm_up_iteration,
+                               measure_iteration);
+    hardware_counter::parameter_integer(&nano_benchmarks, warm_up_iteration,
+                                        measure_iteration);
+    fuction_call_rate::parameter_integer(&nano_benchmarks, warm_up_iteration,
+                                         measure_iteration);
     std::cout << std::endl;
 
     warm_up_iteration = 142;
@@ -79,13 +72,11 @@ int main() {
               << "\tWarm up iterations " << warm_up_iteration
               << "\tMeasured iterations " << measure_iteration
               << std::endl;
-    xe_api_benchmarks::latency::launch_function_no_parameter(&nano_benchmarks,
-							     warm_up_iteration,
-							     measure_iteration);
-    xe_api_benchmarks::hardware_counter::launch_function_no_parameter(
-							 &nano_benchmarks,
-							 warm_up_iteration,
-							 measure_iteration);
+    latency::launch_function_no_parameter(&nano_benchmarks, warm_up_iteration,
+                                          measure_iteration);
+    hardware_counter::launch_function_no_parameter(&nano_benchmarks,
+                                                   warm_up_iteration,
+                                                   measure_iteration);
     std::cout << std::endl;
 
     warm_up_iteration = 5;
@@ -94,17 +85,14 @@ int main() {
               << "\tWarm up iterations " << warm_up_iteration
               << "\tMeasured iterations " << measure_iteration
               << std::endl;
-    xe_api_benchmarks::latency::command_list_empty_execute(&nano_benchmarks,
-							   warm_up_iteration,
-							   measure_iteration);
-    xe_api_benchmarks::hardware_counter::command_list_empty_execute(
-							 &nano_benchmarks,
-							 warm_up_iteration,
-							 measure_iteration);
-    xe_api_benchmarks::fuction_call_rate::command_list_empty_execute(
-							 &nano_benchmarks,
-							 warm_up_iteration,
-							 measure_iteration);
+    latency::command_list_empty_execute(&nano_benchmarks, warm_up_iteration,
+                                        measure_iteration);
+    hardware_counter::command_list_empty_execute(&nano_benchmarks,
+                                                 warm_up_iteration,
+                                                 measure_iteration);
+    fuction_call_rate::command_list_empty_execute(&nano_benchmarks,
+                                                  warm_up_iteration,
+                                                  measure_iteration);
     std::cout << std::endl;
 
 
