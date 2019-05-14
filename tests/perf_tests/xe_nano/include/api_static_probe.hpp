@@ -36,7 +36,6 @@ bool api_static_probe_is_init();
 typedef struct _probe_cofig {
     int warm_up_iteration;
     int measure_iteration;
-    int duration_factor;
 } probe_config_t;
 
 template <typename T>

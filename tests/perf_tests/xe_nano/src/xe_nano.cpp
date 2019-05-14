@@ -32,10 +32,13 @@ void header_print_iteration(std::string prefix, probe_config_t &probe_setting) {
 
 int main() {
     XeApp nano_benchmarks("xe_nano_benchmarks.spv");
+
+    /*
+     * These iteration fields are not used for function call rate test cases.
+     */
     probe_config_t probe_setting;
     probe_setting.warm_up_iteration = 1000;
     probe_setting.measure_iteration = 9000;
-    probe_setting.duration_factor   = 1;
 
     api_static_probe_init();
     header_print_iteration("xeFunctionSetArgumentValue: Buffer argument",
