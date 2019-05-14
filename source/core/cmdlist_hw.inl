@@ -708,24 +708,23 @@ template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendWaitOnEvents(uint32_t numEvents,
                                                                      xe_event_handle_t *phEvent) {
 
-    if (numEvents > 1) {
-        return XE_RESULT_ERROR_UNSUPPORTED;
-    }
-
     using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using MI_SEMAPHORE_WAIT = typename GfxFamily::MI_SEMAPHORE_WAIT;
-    MI_SEMAPHORE_WAIT cmd = GfxFamily::cmdInitMiSemaphoreWait;
-    auto event = Event::fromHandle(*phEvent);
-    assert(event);
-    addToResidencyContainer(&event->getAllocation());
 
-    cmd.setSemaphoreGraphicsAddress(event->getGpuAddress());
-    cmd.setSemaphoreDataDword(Event::STATE_CLEARED);
-    cmd.setCompareOperation(
-        MI_SEMAPHORE_WAIT::COMPARE_OPERATION::COMPARE_OPERATION_SAD_NOT_EQUAL_SDD);
+    for (uint32_t i = 0; i < numEvents; i++) {
+        MI_SEMAPHORE_WAIT cmd = GfxFamily::cmdInitMiSemaphoreWait;
+        auto event = Event::fromHandle(phEvent[i]);
+        assert(event);
+        addToResidencyContainer(&event->getAllocation());
 
-    auto buffer = commandStream->getSpace(sizeof(cmd));
-    *(MI_SEMAPHORE_WAIT *)buffer = cmd;
+        cmd.setSemaphoreGraphicsAddress(event->getGpuAddress());
+        cmd.setSemaphoreDataDword(Event::STATE_CLEARED);
+        cmd.setCompareOperation(
+            MI_SEMAPHORE_WAIT::COMPARE_OPERATION::COMPARE_OPERATION_SAD_NOT_EQUAL_SDD);
+
+        auto buffer = commandStream->getSpace(sizeof(cmd));
+        *(MI_SEMAPHORE_WAIT *)buffer = cmd;
+    }
     return XE_RESULT_SUCCESS;
 }
 
