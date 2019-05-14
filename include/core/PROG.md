@@ -7,8 +7,8 @@ The following documents the high-level programming models and guidelines.
 NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
 
 ## Table of Contents
-* [Driver and Device](#dnd)
-* [Memory and Image Management](#mim)
+* [Devices](#dd)
+* [Memory and Images](#mi)
     + [Memory](#mem)
     + [Images](#img)
 * [Command Queues and Command Lists](#cnc)
@@ -30,25 +30,29 @@ NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
     + [Inter-Process Communication](#ipc)
 * [Experimental](#exp)
 
-# <a name="dnd">Driver and Device</a>
-## Driver
-A driver represents an instance of a Xe driver being loaded and initialized into the current process.
-- Only one instance of a driver per process can be loaded.
-- Multiple calls to ::xeInit are silently ignored.
-- A driver has minimal global state associated; only that which is sufficient for querying devices recognized by the driver.
-- There is no explicit unload or shutdown of the driver.
-- Any global resources acquired during ::xeInit will be released during process detach.
+# <a name="dd">Devices</a>
+## Device Group
+A device group represents a collection of physical, homogeneous devices in the system that support Xe.
+- The application may query the number device groups and the properties of each device group.
+- More than one device group may be available in the system. For example, group 0 may contain two GPUs, group 1 may contain one FPGA, and finally group 2 may contain another GPU with different properties than group 0.
 
 ## Device
-A device represents a physical device in the system that can support Xe.
-- More than one device may be available in the system.
-- The driver will only report devices that are recognized by the driver.
+A device represents a physical device in the system that support Xe.
+- The application may query the number devices within a device group.
+- All devices in the device group share the same properties.
 - The application is responsible for sharing memory and explicit submission and synchronization across multiple devices.
-- Device can expose sub-devices that allow finer-grained control of multi-tile devices.
+- Device may expose sub-devices that allow finer-grained partition and control; such as each tile of a multi-tile devices.
+
+## Context
+A context represents a set of Xe devices and the memory potentially accessible by those devices.
+- A context is primarily used for allocating and freeing memory used by one or more devices
+- Memory is **not** implicitly shared across all devices within a context.  However, it is available to be explicitly shared.
 
 ## Initialization
-The driver must be initizalized by calling ::xeInit before any other function.
-This function will query the available physical adapters in the system and make this information available to all threads in the current process.
+The driver must be initialized by calling ::xeInit before any other function.
+This function will load and initialize all Xe driver(s) in the system for all threads in the current process.
+Simultaneous calls to ::xeInit are thread-safe and only one instance of driver(s) will be loaded per-process.
+This function will allow queries of the available device groups in the system.
 
 The following sample code demonstrates a basic initialization sequence:
 ```c
@@ -56,39 +60,41 @@ The following sample code demonstrates a basic initialization sequence:
     //       However, proper error checking is highly recommended and necessary in many cases.
 
     // Initialize the driver
-    xeInit(XE_INIT_FLAG_NONE);
-
-    // Get number of devices supporting Xe
-    uint32_t deviceCount = 0;
-    xeDeviceGetCount(&deviceCount);
-    if(0 == deviceCount)
-    {
-        printf("There is no device supporting Xe!\n");
+    if(XE_RESULT_ERROR_UNSUPPORTED == xeInit(XE_API_VERSION_1_0))
         return;
-    }
 
-    // Get the handle for device that supports required API version
-    xe_device_handle_t hDevice;
-    for(uint32_t i = 0; i < deviceCount; ++i)
+    // Get the ordinal of the first GPU device group
+    uint32_t groupCount = 0;
+    xeDeviceGroupGetCount(&groupCount);
+
+    uint32_t groupOrdinal = 0;
+    for(; groupOrdinal < groupCount; ++groupOrdinal)
     {
-        xeDeviceGet(i, &hDevice);
-        
-        xe_api_version_t version;
-        xeDeviceGetApiVersion(hDevice, &version);
-        if(XE_API_VERSION_1_0 <= version)
+        xe_device_properties_t device_properties;
+        xeDeviceGroupGetProperties(i, &device_properties);
+    
+        if(XE_DEVICE_TYPE_GPU == device_properties.type)
             break;
-
-        if(i == deviceCount)
-        {
-            printf("There is no device that supporting Xe version required!\n");
-            return;
-        }
     }
+
+    if(groupOrdinal == groupCount)
+        return;
+
+    // Get all devices within the GPU device group
+    uint32_t deviceCount = 0;
+    xeDeviceGroupGetDevices(groupOrdinal, &deviceCount, nullptr);
+
+    xe_device_handle_t* hDevices = malloc(deviceCount * sizeof(xe_device_handle_t));
+    xeDeviceGroupGetDevices(groupOrdinal, &deviceCount, hDevices);
+
+    // Create context for all devices within the GPU device group
+    xe_context_handle_t hContext;
+    xeContextCreate(deviceCount, hDevices, &hContext);
     ...
 
 ```
 
-# <a name="mim">Memory and Image Management</a>
+# <a name="mi">Memory and Images</a>
 There are two types of allocations:
 1. [**Memory**](#mem) - linear, unformatted allocations for direct access from both the host and device.
 2. [**Images**](#img) - non-linear, formatted allocations for direct access from the device.
@@ -115,7 +121,7 @@ The type of allocation describes the _ownership_ of the allocation:
   Shared allocations trade off transfer costs for per-access benefits.
   The same pointer to a shared allocation may be used on the host and all supported devices.
 
-A **Shared System** allocation is a sub-class of a **Shared** allocation, where the memory is allocated by a _system allocator_ - such as `malloc` or `new` - rather than by a driver allocation API.
+A **Shared System** allocation is a sub-class of a **Shared** allocation, where the memory is allocated by a _system allocator_ - such as `malloc` or `new` - rather than by an allocation API.
 Shared system allocations have no associated device - they are inherently cross-device.
 Like other shared allocations, shared system allocations are intended to migrate between the host and supported devices, and the same pointer to a shared system allocation may be used on the host and all supported devices.
 

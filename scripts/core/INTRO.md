@@ -174,14 +174,25 @@ The following section provides high-level driver architecture.
 ![Driver](../images/intro_driver.png?raw=true)  
 @image latex intro_driver.png
 
+${"##"} Library
+A static library is provided to allow applications to make direct API calls without understanding the underlying driver architecture. 
+## --validate=off
+For example, C/C++ applications should include "${x}_api.h" (C) or "${x}_api.hpp" (C++11) and link with "${x}_api.lib".
+## --validate=on
+
 ${"##"} Loader
 The loader initiates the loading of the driver(s) and layer(s).
-The loader exports all API functions to the application; which internally map to a per-process function pointer table.
+The loader exports all API functions to the static library via per-process API function pointer table(s).
+Each driver and layer must below the loader will also export its API/DDI functions via per-process function pointer table(s).
+## --validate=off
+The export function and table definitions are defined in "${x}_ddi.h".
+## --validate=on
 
 ## --validate=off
-The loader is dynamically linked with the application using the _${x}_vendor_loader.dll_ (windows) or _${x}_vendor_loader.so_ (linux).
-For example, Intel uses the name: "${x}_intc_loader".
+The loader is dynamically linked with the application using the "${x}_loader.dll" (windows) or "${x}_loader.so" (linux).
 ## --validate=on
+The loader is vendor agnostic, but must be aware of the names of vendor-specific common driver names. 
+(Note: these are currently hard-coded but a registration method will be adopted when multiple vendors are supported.)
 
 The following diagram illustrates the expected loading sequence:  
 ![Loader](../images/intro_loader.png?raw=true)  
@@ -195,11 +206,19 @@ Thus, the loader's internal function pointer table entries may point to:
     + or any combination of the above
 
 ${"##"} Common Driver
-The common driver determines which other device drivers need to be loaded, based on which device types are present in the system.
+The common driver determines which other vendor's device driver(s) need to be loaded, based on which device types are present in the system and recognized by the common driver.
+The common driver contain vendor-specific implementations of a subset of APIs (such as memory allocation) and use private DDIs for notifying device drivers of these events.
 The common driver may be bypassed entirely if there is only one device driver needed.
-If the common driver is required, then it may implement specific APIs (such as memory allocation) and use private DDIs for notifying device drivers of these events.
+
+## --validate=off
+The common driver is dynamically linked using a _${x}_vendor_com.dll_ (windows) / _${x}_vendor_com.so_ (linux);
+where _vendor_ is a name chosen by the device vendor.
+For example, Intel GPUs use the name: "${x}_intc_com".
+## --validate=on
 
 ${"##"} Device Drivers
+The device driver(s) contain the device-specific implementations of the APIs.
+
 ## --validate=off
 The device driver(s) are dynamically linked using a _${x}_vendor_type.dll_ (windows) / _${x}_vendor_type.so_ (linux);
 where _vendor_ and _type_ are names chosen by the device vendor.
@@ -210,7 +229,7 @@ ${"##"} <a name="v0">Validation Layer</a>
 The validation layer provides an optional capability for application developers to enable additional API validation while maintaining minimal driver implementation overhead.
 - works independent of driver implementation
 - works for production / release drivers
-- works independent of device type
+- works independent of vendor or device type
 - checks for common application errors, such as parameter validation
 - provides common application debug tracking, such as object and memory lifetime
 

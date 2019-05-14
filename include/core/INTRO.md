@@ -168,12 +168,19 @@ The following section provides high-level driver architecture.
 ![Driver](../images/intro_driver.png?raw=true)  
 @image latex intro_driver.png
 
+## Library
+A static library is provided to allow applications to make direct API calls without understanding the underlying driver architecture. 
+For example, C/C++ applications should include "xe_api.h" (C) or "xe_api.hpp" (C++11) and link with "xe_api.lib".
+
 ## Loader
 The loader initiates the loading of the driver(s) and layer(s).
-The loader exports all API functions to the application; which internally map to a per-process function pointer table.
+The loader exports all API functions to the static library via per-process API function pointer table(s).
+Each driver and layer must below the loader will also export its API/DDI functions via per-process function pointer table(s).
+The export function and table definitions are defined in "xe_ddi.h".
 
-The loader is dynamically linked with the application using the _xe_vendor_loader.dll_ (windows) or _xe_vendor_loader.so_ (linux).
-For example, Intel uses the name: "xe_intc_loader".
+The loader is dynamically linked with the application using the "xe_loader.dll" (windows) or "xe_loader.so" (linux).
+The loader is vendor agnostic, but must be aware of the names of vendor-specific common driver names. 
+(Note: these are currently hard-coded but a registration method will be adopted when multiple vendors are supported.)
 
 The following diagram illustrates the expected loading sequence:  
 ![Loader](../images/intro_loader.png?raw=true)  
@@ -187,11 +194,17 @@ Thus, the loader's internal function pointer table entries may point to:
     + or any combination of the above
 
 ## Common Driver
-The common driver determines which other device drivers need to be loaded, based on which device types are present in the system.
+The common driver determines which other vendor's device driver(s) need to be loaded, based on which device types are present in the system and recognized by the common driver.
+The common driver contain vendor-specific implementations of a subset of APIs (such as memory allocation) and use private DDIs for notifying device drivers of these events.
 The common driver may be bypassed entirely if there is only one device driver needed.
-If the common driver is required, then it may implement specific APIs (such as memory allocation) and use private DDIs for notifying device drivers of these events.
+
+The common driver is dynamically linked using a _xe_vendor_com.dll_ (windows) / _xe_vendor_com.so_ (linux);
+where _vendor_ is a name chosen by the device vendor.
+For example, Intel GPUs use the name: "xe_intc_com".
 
 ## Device Drivers
+The device driver(s) contain the device-specific implementations of the APIs.
+
 The device driver(s) are dynamically linked using a _xe_vendor_type.dll_ (windows) / _xe_vendor_type.so_ (linux);
 where _vendor_ and _type_ are names chosen by the device vendor.
 For example, Intel GPUs use the name: "xe_intc_gpu".
@@ -200,7 +213,7 @@ For example, Intel GPUs use the name: "xe_intc_gpu".
 The validation layer provides an optional capability for application developers to enable additional API validation while maintaining minimal driver implementation overhead.
 - works independent of driver implementation
 - works for production / release drivers
-- works independent of device type
+- works independent of vendor or device type
 - checks for common application errors, such as parameter validation
 - provides common application debug tracking, such as object and memory lifetime
 
