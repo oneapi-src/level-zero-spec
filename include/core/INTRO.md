@@ -204,7 +204,7 @@ The validation layer provides an optional capability for application developers 
 - checks for common application errors, such as parameter validation
 - provides common application debug tracking, such as object and memory lifetime
 
-The validation layer must be enabled via an environment variables.
+The validation layer must be enabled via an environment variable.
 Each capability is enabled by additional environment variables.
 
 The validation layer supports the following capabilities:
@@ -224,7 +224,7 @@ The instrumentation layer provides an optional capability for application develo
 - works for production / release drivers
 - implements [Tools](#tls) APIs
 
-The instrumentation layer must be enabled via an environment variables.
+The instrumentation layer must be enabled via an environment variable.
 Each capability is enabled by additional environment variables.
 
 The instrumentation layer supports the following capabilities:
@@ -250,7 +250,7 @@ The following table documents the supported knobs for overriding default driver 
 
 ### <a name="aff">Affinity Mask</a>
 The affinity mask allows an application or tool to restrict which devices (and sub-devices) are visible to 3rd-party libraries or applications in another process, respectively.
-The affinity mask is specified via an environment variable as a string of hexidecimal values.
+The affinity mask is specified via an environment variable as a string of hexadecimal values.
 The value is specific to system configuration; e.g., the number of devices and the number of sub-devices for each device.
 
 The following examples demonstrate proper usage:
@@ -267,9 +267,9 @@ The following examples demonstrate proper usage:
     + "05" = both device 0 and device 1 are reported, however each only has one sub-device reported as sub-device 0
 
 # <a name="tls">Tools</a>
-Level-Zero APIs specific for supporting 3rd-party tools are seperated from "Core" into "Tools" APIs.
+Level-Zero APIs specific for supporting 3rd-party tools are separated from "Core" into "Tools" APIs.
 
-The following diagram illustrates the hierachy of "Core" versus "Tool" APIs:  
+The following diagram illustrates the hierarchy of "Core" versus "Tool" APIs:  
 ![Tool](../images/intro_tools.png?raw=true)  
 @image latex intro_tools.png
 
