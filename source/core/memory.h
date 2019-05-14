@@ -13,7 +13,7 @@ xe_result_t ipcGetMemHandle(const void *ptr, xe_ipc_mem_handle_t *pIpcHandle);
 xe_result_t ipcOpenMemHandle(xe_device_handle_t hDevice, xe_ipc_mem_handle_t handle,
                              xe_ipc_memory_flag_t flags, void **ptr);
 
-xe_result_t memAlloc(xe_device_handle_t hDevice, xe_device_mem_alloc_flag_t flags, size_t size,
+xe_result_t deviceMemAlloc(xe_device_handle_t hDevice, xe_device_mem_alloc_flag_t flags, size_t size,
                      size_t alignment, void **ptr);
 
 xe_result_t memFree(const void *ptr);

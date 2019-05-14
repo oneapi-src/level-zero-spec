@@ -45,19 +45,19 @@ void XePeak::xe_peak_global_bw(L0Context &context) {
     }
 
     void *inputBuf;
-    result = xeMemAlloc(context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
+    result = xeDeviceMemAlloc(context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
                         (numItems * sizeof(float)), 1, &inputBuf);
     if (result) {
-        throw std::runtime_error("xeMemAlloc failed: " + result);
+        throw std::runtime_error("xeDeviceMemAlloc failed: " + result);
     }
     if (verbose)
         std::cout << "inputBuf device buffer allocated\n";
 
     void *outputBuf;
-    result = xeMemAlloc(context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
+    result = xeDeviceMemAlloc(context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
                         (numItems * sizeof(float)), 1, &outputBuf);
     if (result) {
-        throw std::runtime_error("xeMemAlloc failed: " + result);
+        throw std::runtime_error("xeDeviceMemAlloc failed: " + result);
     }
     if (verbose)
         std::cout << "outputBuf device buffer allocated\n";

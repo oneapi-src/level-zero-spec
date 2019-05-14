@@ -356,7 +356,7 @@ typedef xe_result_t (__xecall *pfn_xeSharedMemAlloc)(
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
     void** ptr                                      ///< [out] pointer to shared allocation
     );
-typedef xe_result_t (__xecall *pfn_xeMemAlloc)(
+typedef xe_result_t (__xecall *pfn_xeDeviceMemAlloc)(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
@@ -591,7 +591,7 @@ typedef struct _xe_dispatch_table_t
     pfn_xeImageCreate xeImageCreate;
     pfn_xeImageDestroy xeImageDestroy;
     pfn_xeSharedMemAlloc xeSharedMemAlloc;
-    pfn_xeMemAlloc xeMemAlloc;
+    pfn_xeDeviceMemAlloc xeDeviceMemAlloc;
     pfn_xeHostMemAlloc xeHostMemAlloc;
     pfn_xeMemFree xeMemFree;
     pfn_xeMemGetProperties xeMemGetProperties;
@@ -692,7 +692,7 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     outTable->xeImageCreate = (pfn_xeImageCreate)funcAddressGetter(handle, "xeImageCreate");
     outTable->xeImageDestroy = (pfn_xeImageDestroy)funcAddressGetter(handle, "xeImageDestroy");
     outTable->xeSharedMemAlloc = (pfn_xeSharedMemAlloc)funcAddressGetter(handle, "xeSharedMemAlloc");
-    outTable->xeMemAlloc = (pfn_xeMemAlloc)funcAddressGetter(handle, "xeMemAlloc");
+    outTable->xeDeviceMemAlloc = (pfn_xeDeviceMemAlloc)funcAddressGetter(handle, "xeDeviceMemAlloc");
     outTable->xeHostMemAlloc = (pfn_xeHostMemAlloc)funcAddressGetter(handle, "xeHostMemAlloc");
     outTable->xeMemFree = (pfn_xeMemFree)funcAddressGetter(handle, "xeMemFree");
     outTable->xeMemGetProperties = (pfn_xeMemGetProperties)funcAddressGetter(handle, "xeMemGetProperties");
@@ -913,7 +913,7 @@ inline bool load_xe(void *handle, void *(*funcAddressGetter)(void *handle, const
     if(0 == outTable->xeSharedMemAlloc){
         return false;
     }
-    if(0 == outTable->xeMemAlloc){
+    if(0 == outTable->xeDeviceMemAlloc){
         return false;
     }
     if(0 == outTable->xeHostMemAlloc){

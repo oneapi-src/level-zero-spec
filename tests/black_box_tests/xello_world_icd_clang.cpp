@@ -99,9 +99,9 @@ int main(int argc, char *argv[]) {
 
 #if SUPPORT_MEM_ALLOC
     SUCCESS_OR_TERMINATE(
-        xeMemAlloc(device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &srcBuffer));
+        xeDeviceMemAlloc(device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &srcBuffer));
     SUCCESS_OR_TERMINATE(
-        xeMemAlloc(device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBuffer));
+        xeDeviceMemAlloc(device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1, &dstBuffer));
 #else
     SUCCESS_OR_TERMINATE(xeSharedMemAlloc(device0, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
                                           XE_HOST_MEM_ALLOC_FLAG_DEFAULT, allocSize, 1,

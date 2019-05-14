@@ -798,7 +798,7 @@ xe_result_t __xecall xeSharedMemAlloc(
     }
     return dispatchTable.xeSharedMemAlloc(hDevice, device_flags, host_flags, size, alignment, ptr);
 }
-xe_result_t __xecall xeMemAlloc(
+xe_result_t __xecall xeDeviceMemAlloc(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
         xe_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
@@ -808,7 +808,7 @@ xe_result_t __xecall xeMemAlloc(
     if(dispatchTableInitialized == false){
         return XE_RESULT_ERROR_UNINITIALIZED;
     }
-    return dispatchTable.xeMemAlloc(hDevice, flags, size, alignment, ptr);
+    return dispatchTable.xeDeviceMemAlloc(hDevice, flags, size, alignment, ptr);
 }
 xe_result_t __xecall xeHostMemAlloc(
         xe_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls

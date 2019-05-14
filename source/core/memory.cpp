@@ -26,7 +26,7 @@ xe_result_t ipcOpenMemHandle(xe_device_handle_t hDevice, xe_ipc_mem_handle_t han
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-xe_result_t memAlloc(xe_device_handle_t hDevice, xe_device_mem_alloc_flag_t flags, size_t size,
+xe_result_t deviceMemAlloc(xe_device_handle_t hDevice, xe_device_mem_alloc_flag_t flags, size_t size,
                      size_t alignment, void **ptr) {
     auto device = Device::fromHandle(hDevice);
     assert(device);

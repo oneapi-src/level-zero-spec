@@ -28,7 +28,7 @@ void testAppendMemoryCopy(xe_device_handle_t &device, bool &validRet) {
     SUCCESS_OR_TERMINATE(xeCommandListCreate(device, &cmdListDesc, &cmdList));
 
     SUCCESS_OR_TERMINATE(
-        xeMemAlloc(device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, allocSize, allocSize, &xeBuffer));
+        xeDeviceMemAlloc(device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, allocSize, allocSize, &xeBuffer));
 
     for (size_t i = 0; i < allocSize; ++i) {
         heapBuffer[i] = static_cast<char>(i + 1);

@@ -68,7 +68,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for ::xeMemAlloc
+    /// @brief C++ wrapper for ::xeDeviceMemAlloc
     /// 
     /// @details
     ///     - A device allocation is owned by a specific device.
@@ -92,7 +92,7 @@ namespace xe
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
         )
     {
-        // auto result = ::xeMemAlloc( handle, hDevice, flags, size, alignment );
+        // auto result = ::xeDeviceMemAlloc( handle, hDevice, flags, size, alignment );
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "MemAlloc");
     }
 

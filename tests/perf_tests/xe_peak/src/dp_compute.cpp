@@ -43,19 +43,19 @@ void XePeak::xe_peak_dp_compute(L0Context &context) {
     number_of_work_items = set_workgroups(context, number_of_work_items, &workgroup_info);
 
     void *device_input_value;
-    result = xeMemAlloc(context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, sizeof(double), 1,
+    result = xeDeviceMemAlloc(context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, sizeof(double), 1,
                         &device_input_value);
     if (result) {
-        throw std::runtime_error("xeMemAlloc failed: " + result);
+        throw std::runtime_error("xeDeviceMemAlloc failed: " + result);
     }
     if (verbose)
         std::cout << "device input value allocated\n";
 
     void *device_output_buffer;
-    result = xeMemAlloc(context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
+    result = xeDeviceMemAlloc(context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
                         (number_of_work_items * sizeof(double)), 1, &device_output_buffer);
     if (result) {
-        throw std::runtime_error("xeMemAlloc failed: " + result);
+        throw std::runtime_error("xeDeviceMemAlloc failed: " + result);
     }
     if (verbose)
         std::cout << "device output buffer allocated\n";

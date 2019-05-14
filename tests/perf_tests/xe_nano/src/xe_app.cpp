@@ -85,7 +85,7 @@ XeApp::~XeApp(void) {
 
 void XeApp::memoryAlloc(size_t size, void **ptr) {
     SUCCESS_OR_TERMINATE(
-        xeMemAlloc(device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
+        xeDeviceMemAlloc(device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
                    size, 1, ptr));
 }
 

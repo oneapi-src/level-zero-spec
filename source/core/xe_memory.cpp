@@ -139,7 +139,7 @@ xeSharedMemAlloc(
 /// @hash {00c7d568c1470ecc7b25b7bb8bfa87e9428b9a4023484c53ee46e6632e24d16d}
 ///
 __xedllexport xe_result_t __xecall
-xeMemAlloc(
+xeDeviceMemAlloc(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
@@ -160,7 +160,7 @@ xeMemAlloc(
 #if defined(XE_NULLDRV)
         return XE_RESULT_SUCCESS;
 #else
-        return L0::memAlloc(hDevice, flags, size, alignment, ptr);
+        return L0::deviceMemAlloc(hDevice, flags, size, alignment, ptr);
 #endif
         /// @end
     }

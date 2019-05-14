@@ -39,10 +39,10 @@ void XePeak::xe_peak_transfer_bw(L0Context &context) {
     size_t size_of_data = (local_memory.size() * sizeof(float));
 
     void *device_buffer;
-    result = xeMemAlloc(context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
+    result = xeDeviceMemAlloc(context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
                         sizeof(float) * number_of_items, 1, &device_buffer);
     if (result) {
-        throw std::runtime_error("xeMemAlloc failed: " + result);
+        throw std::runtime_error("xeDeviceMemAlloc failed: " + result);
     }
     if (verbose)
         std::cout << "device buffer allocated\n";
