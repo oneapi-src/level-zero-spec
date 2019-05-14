@@ -103,3 +103,37 @@ void parameter_integer(XeApp *benchmark, int warm_up_iteration,
 
     benchmark->functionDestroy(function);
 }
+
+void parameter_image(XeApp *benchmark, int warm_up_iteration,
+		     int measure_iteration) {
+    xe_function_handle_t function;
+    xe_image_handle_t input_a;
+
+    benchmark->functionCreate(&function, "function_parameter_integer");
+
+    /* Warm up */
+    for (int i = 0; i < warm_up_iteration; i++) {
+        SUCCESS_OR_TERMINATE(
+	    xeFunctionSetArgumentValue(function, 0, sizeof(input_a), &input_a));
+        SUCCESS_OR_TERMINATE(
+	    xeFunctionSetArgumentValue(function, 1, sizeof(input_a), &input_a));
+        SUCCESS_OR_TERMINATE(
+	    xeFunctionSetArgumentValue(function, 2, sizeof(input_a), &input_a));
+        SUCCESS_OR_TERMINATE(
+	    xeFunctionSetArgumentValue(function, 3, sizeof(input_a), &input_a));
+        SUCCESS_OR_TERMINATE(
+	    xeFunctionSetArgumentValue(function, 4, sizeof(input_a), &input_a));
+        SUCCESS_OR_TERMINATE(
+	    xeFunctionSetArgumentValue(function, 5, sizeof(input_a), &input_a));
+    }
+
+    NANO_PROBE(" Argument index 0\t", measure_iteration,
+               xeFunctionSetArgumentValue,
+               function, 0, sizeof(input_a), &input_a);
+
+    NANO_PROBE(" Argument index 5\t", measure_iteration,
+               xeFunctionSetArgumentValue,
+               function, 5, sizeof(input_a), &input_a);
+
+    benchmark->functionDestroy(function);
+}

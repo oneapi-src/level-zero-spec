@@ -58,6 +58,21 @@ int main() {
                                                            measure_iteration);
     std::cout << std::endl;
 
+    std::cout << "xeFunctionSetArgumentValue: Image argument"
+              << "\tWarm up iterations " << warm_up_iteration
+              << "\tMeasured iterations " << measure_iteration
+              << std::endl;
+    xe_api_benchmarks::latency::parameter_integer(&nano_benchmarks,
+                                                  warm_up_iteration,
+                                                  measure_iteration);
+    xe_api_benchmarks::hardware_counter::parameter_integer(&nano_benchmarks,
+                                                           warm_up_iteration,
+                                                           measure_iteration);
+    xe_api_benchmarks::fuction_call_rate::parameter_integer(&nano_benchmarks,
+                                                           warm_up_iteration,
+                                                           measure_iteration);
+    std::cout << std::endl;
+
     warm_up_iteration = 142;
     measure_iteration = 567;
     std::cout << "xeCommandListAppendLaunchFunction:"
