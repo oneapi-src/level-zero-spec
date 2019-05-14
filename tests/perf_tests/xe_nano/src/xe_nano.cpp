@@ -23,6 +23,13 @@
 
 using namespace xe_api_benchmarks;
 
+void header_print_iteration(std::string prefix, probe_config_t &probe_setting) {
+    std::cout << prefix
+              << "\tWarm up iterations " << probe_setting.warm_up_iteration
+              << "\tMeasured iterations " << probe_setting.measure_iteration
+              << std::endl;
+}
+
 int main() {
     XeApp nano_benchmarks("xe_nano_benchmarks.spv");
     probe_config_t probe_setting;
@@ -31,29 +38,23 @@ int main() {
     probe_setting.duration_factor   = 1;
 
     api_static_probe_init();
-    std::cout << "xeFunctionSetArgumentValue: Buffer argument"
-              << "\tWarm up iterations " << probe_setting.warm_up_iteration
-              << "\tMeasured iterations " << probe_setting.measure_iteration
-              << std::endl;
+    header_print_iteration("xeFunctionSetArgumentValue: Buffer argument",
+                           probe_setting);
     latency::parameter_buffer(&nano_benchmarks, probe_setting);
     hardware_counter::parameter_buffer(&nano_benchmarks, probe_setting);
     fuction_call_rate::parameter_buffer(&nano_benchmarks, probe_setting);
 
     std::cout << std::endl;
 
-    std::cout << "xeFunctionSetArgumentValue: Immediate argument"
-              << "\tWarm up iterations " << probe_setting.warm_up_iteration
-              << "\tMeasured iterations " << probe_setting.measure_iteration
-              << std::endl;
+    header_print_iteration("xeFunctionSetArgumentValue: Immediate argument",
+                           probe_setting);
     latency::parameter_integer(&nano_benchmarks, probe_setting);
     hardware_counter::parameter_integer(&nano_benchmarks, probe_setting);
     fuction_call_rate::parameter_integer(&nano_benchmarks, probe_setting);
     std::cout << std::endl;
 
-    std::cout << "xeFunctionSetArgumentValue: Image argument"
-              << "\tWarm up iterations " << probe_setting.warm_up_iteration
-              << "\tMeasured iterations " << probe_setting.measure_iteration
-              << std::endl;
+    header_print_iteration("xeFunctionSetArgumentValue: Image argument",
+                           probe_setting);
     latency::parameter_integer(&nano_benchmarks, probe_setting);
     hardware_counter::parameter_integer(&nano_benchmarks, probe_setting);
     fuction_call_rate::parameter_integer(&nano_benchmarks, probe_setting);
@@ -61,10 +62,7 @@ int main() {
 
     probe_setting.warm_up_iteration = 142;
     probe_setting.measure_iteration = 567;
-    std::cout << "xeCommandListAppendLaunchFunction:"
-              << "\tWarm up iterations " << probe_setting.warm_up_iteration
-              << "\tMeasured iterations " << probe_setting.measure_iteration
-              << std::endl;
+    header_print_iteration("xeCommandListAppendLaunchFunction:", probe_setting);
     latency::launch_function_no_parameter(&nano_benchmarks, probe_setting);
     hardware_counter::launch_function_no_parameter(&nano_benchmarks,
                                                    probe_setting);
@@ -72,10 +70,7 @@ int main() {
 
     probe_setting.warm_up_iteration = 5;
     probe_setting.measure_iteration = 10;
-    std::cout << "xeCommandQueueExecuteCommandLists:"
-              << "\tWarm up iterations " << probe_setting.warm_up_iteration
-              << "\tMeasured iterations " << probe_setting.measure_iteration
-              << std::endl;
+    header_print_iteration("xeCommandQueueExecuteCommandLists:", probe_setting);
     latency::command_list_empty_execute(&nano_benchmarks, probe_setting);
     hardware_counter::command_list_empty_execute(&nano_benchmarks,
                                                  probe_setting);
