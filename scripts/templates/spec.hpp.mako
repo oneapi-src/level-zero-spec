@@ -255,10 +255,12 @@ namespace ${n}
     public:
         ## CTORS/DTORS ################################################################
         ///////////////////////////////////////////////////////////////////////////////
-        ${th.make_class_name(n, tags, obj)}( void ) = delete;
         %if 'base' in obj:
         using ${th.make_baseclass_ctor(n, tags, obj)};
         %else:
+        %if th.has_ctor_params(obj):
+        ${th.make_class_name(n, tags, obj)}( void ) = delete;
+        %endif
         ${th.make_class_name(n, tags, obj)}( 
         %for line in th.make_ctor_param_lines(n, tags, obj, meta=meta):
             ${line}

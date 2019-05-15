@@ -233,7 +233,6 @@ namespace xe
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        DeviceGroup( void ) = delete;
         DeviceGroup( 
             void
             );

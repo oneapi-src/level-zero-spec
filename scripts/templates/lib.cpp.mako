@@ -60,7 +60,7 @@ namespace ${n}
     %for line in th.make_ctor_param_lines(n, tags, obj, meta=meta):
         ${line}
     %endfor
-        ) :
+        )${" :" if th.has_ctor_params(obj) else ""}
     %for line in th.make_ctor_param_init_lines(n, tags, obj, "m_"):
         ${line}
     %endfor

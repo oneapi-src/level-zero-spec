@@ -52,7 +52,6 @@ namespace xet
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        CommandList( void ) = delete;
         using xe::CommandList::CommandList;
 
         ~CommandList( void ) = default;

@@ -52,7 +52,6 @@ namespace xex
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        Device( void ) = delete;
         using xe::Device::Device;
 
         ~Device( void ) = default;

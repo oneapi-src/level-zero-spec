@@ -494,6 +494,14 @@ def make_tparams_line(namespace, tags, obj):
 
 """
 Public:
+    returns True if ctor has parameters
+"""
+def has_ctor_params(obj):
+    params = _filter_param_list(obj['members'] if 'members' in obj else [], "in")
+    return len(params) > 0
+
+"""
+Public:
     returns a list of strings for ctor parameters of members
     format: "TYPE NAME, ///< DESCRIPTION"
 """
