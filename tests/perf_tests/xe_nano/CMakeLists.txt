@@ -56,7 +56,7 @@ add_executable(xe_nano ${XE_NANO_COMMON} ${XE_NANO_BENCHMARKS})
 
 add_dependencies(xe_nano copy_third_party_files ocloc_shared)
 
-target_link_libraries(xe_nano level_zero_icd_loader ${OS_SPECIFIC_LIBS})
+target_link_libraries(xe_nano level_zero_icd_loader gmock ${OS_SPECIFIC_LIBS})
 
 target_include_directories(xe_nano PRIVATE "include")
 

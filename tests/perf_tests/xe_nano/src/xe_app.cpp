@@ -25,12 +25,13 @@ bool verbose = false;
 
 std::vector<uint8_t> XeApp::load_binary_file(const std::string
                                                  &file_path) {
-    std::cout << "File path: " << file_path << std::endl;
+    if (verbose)
+        std::cout << "File path: " << file_path << std::endl;
     std::ifstream stream(file_path, std::ios::in | std::ios::binary);
 
     std::vector<uint8_t> binary_file;
     if (!stream.good()) {
-        std::cout << "Failed to load binary file: " << file_path;
+        std::cerr << "Failed to load binary file: " << file_path;
         return binary_file;
     }
 
@@ -38,11 +39,13 @@ std::vector<uint8_t> XeApp::load_binary_file(const std::string
     stream.seekg(0, stream.end);
     length = static_cast<size_t>(stream.tellg());
     stream.seekg(0, stream.beg);
-    std::cout << "Binary file length: " << length << std::endl;
+    if (verbose)
+        std::cout << "Binary file length: " << length << std::endl;
 
     binary_file.resize(length);
     stream.read(reinterpret_cast<char *>(binary_file.data()), length);
-    std::cout << "Binary file loaded" << std::endl;
+    if (verbose)
+        std::cout << "Binary file loaded" << std::endl;
 
     return binary_file;
 }

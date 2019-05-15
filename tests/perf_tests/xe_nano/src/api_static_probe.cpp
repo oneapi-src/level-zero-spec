@@ -33,6 +33,7 @@ void api_static_probe_init() {
 void api_static_probe_cleanup() {
     /* api static probe needs to be initialized first*/
     assert(static_probe_init == true);
+    static_probe_init = false;
     delete hardware_counters;
 }
 

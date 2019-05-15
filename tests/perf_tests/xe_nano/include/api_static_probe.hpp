@@ -51,8 +51,7 @@ inline void print_probe_output(const std::string prefix,
                                T output_value, const std::string suffix) {
     std::cout << prefix
               << (verbose ? filename + ":" + std::to_string(line_number) + "\t" : "")
-              << function_name
-              << "\t"
+              << (verbose ? function_name + "\t" : "")
               << output_value
               << suffix
               << std::endl;
