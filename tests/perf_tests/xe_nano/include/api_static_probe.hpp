@@ -28,6 +28,11 @@
 #include "common.hpp"
 #include "hardware_counter.hpp"
 
+const std::string UNIT_FUNCTION_CALL_RATE = "function calls/sec";
+const std::string UNIT_CYCLES = "cycles";
+const std::string UNIT_INSTRUCTION = "instructions";
+const std::string UNIT_CPI = UNIT_CYCLES + "/" + UNIT_INSTRUCTION;
+
 extern HardwareCounter *hardware_counters;
 void api_static_probe_init();
 void api_static_probe_cleanup();
@@ -131,11 +136,11 @@ void _function_call_iter_hardware_counters(const std::string filename,
         normalized_cycle_count / static_cast<double>(normalized_instruction_count);
 
     print_probe_output(prefix, filename, line_number, function_name,
-                       normalized_instruction_count, "\tinstructions");
+                       normalized_instruction_count, "\t" + UNIT_INSTRUCTION);
     print_probe_output(prefix, filename, line_number, function_name,
-                       normalized_cycle_count, "\tcycles");
+                       normalized_cycle_count, "\t" + UNIT_CYCLES);
     print_probe_output(prefix, filename, line_number, function_name,
-                       cycle_per_instruction, "\tcycles/instructions");
+                       cycle_per_instruction, "\t" + UNIT_CPI);
 }
 
 #define PROBE_MEASURE_FUNCTION_CALL_RATE(prefix, probe_setting, \
@@ -193,6 +198,6 @@ void _function_call_rate_iter(const std::string filename,
 		  << std::endl;
     }
     print_probe_output(prefix, filename, line_number, function_name,
-		       function_call_counter, "\tfunction calls");
+		       function_call_counter, "\t" + UNIT_FUNCTION_CALL_RATE);
 }
 #endif /* _API_STATIC_PROBE_HPP_ */
