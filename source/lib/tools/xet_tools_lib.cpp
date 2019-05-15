@@ -103,5 +103,12 @@ xe_result_t xet_lib::Init()
         result = getTable( XE_API_VERSION_1_0, &xetFreqDomain );
     }
 
+    if( XE_RESULT_SUCCESS == result )
+    {
+        auto getTable = reinterpret_cast<xet_pfnGetGlobalProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.loader, "xetGetGlobalProcAddrTable") );
+        result = getTable( XE_API_VERSION_1_0, &xetGlobal );
+    }
+
     return result;
 }

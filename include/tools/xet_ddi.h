@@ -787,6 +787,43 @@ typedef xe_result_t (__xecall *xet_pfnGetFreqDomainProcAddrTable_t)(
     xet_freq_domain_apitable_t*
     );
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetInit 
+typedef xe_result_t (__xecall *xet_pfnInit_t)(
+    xe_init_flag_t
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Global functions pointers
+typedef struct _xet_global_apitable_t
+{
+    xet_pfnInit_t                                               pfnInit;
+} xet_global_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Global table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetGlobalProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_global_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetGetGlobalProcAddrTable
+typedef xe_result_t (__xecall *xet_pfnGetGlobalProcAddrTable_t)(
+    xe_api_version_t,
+    xet_global_apitable_t*
+    );
+
 #if defined(__cplusplus)
 } // extern "C"
 #endif

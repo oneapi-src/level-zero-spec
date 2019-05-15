@@ -3,6 +3,7 @@ set(TARGET_NAME xex_api)
 add_library(${TARGET_NAME}
     STATIC
         ${CMAKE_CURRENT_SOURCE_DIR}/xex_common.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/xex_driver.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xex_device.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xex_cmdgraph.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xex_extended_lib.cpp

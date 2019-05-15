@@ -74,6 +74,56 @@ xexGetCommandGraphProcAddrTable(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Global table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xexGetGlobalProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xex_global_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
+    )
+{
+#ifdef _DEBUG
+    if( nullptr == ptable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    context.xexGlobal.pfnInit                                                 = ptable->pfnInit;
+    ptable->pfnInit                                                           = xexInit;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xexInit
+xe_result_t __xecall
+xexInit(
+    xe_init_flag_t flags                            ///< [in] initialization flags
+    )
+{
+    if( nullptr == context.xexGlobal.pfnInit )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    if( context.enableParameterValidation )
+    {
+    }
+
+    return context.xexGlobal.pfnInit( flags );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xexCommandGraphCreate
 xe_result_t __xecall
 xexCommandGraphCreate(

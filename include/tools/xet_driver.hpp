@@ -21,41 +21,50 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xet_lib.h
+* @file xet_driver.hpp
+*
+* @brief C++ wrapper of Intel Xe Level-Zero APIs
+*
+* @cond DEV
+* DO NOT EDIT: generated from /scripts/tools/driver.yml
+* @endcond
 *
 ******************************************************************************/
-#ifndef _XET_LIB_H
-#define _XET_LIB_H
+#ifndef _XET_DRIVER_HPP
+#define _XET_DRIVER_HPP
 #if defined(__cplusplus)
 #pragma once
+#if !defined(_XET_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
 #endif
-#include "xet_api.hpp"
-#include "xet_ddi.h"
-#include "xe_util.h"
+#include "xet_common.hpp"
 
-///////////////////////////////////////////////////////////////////////////////
-class xet_lib
+namespace xet
 {
-public:
-    HMODULE loader = nullptr;
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Initialize the Xe:: driver and must be called before any other API
+    ///        function.
+    /// 
+    /// @details
+    ///     - If this function is not called then all other functions will return
+    ///       ::XERESULT_ERROR_UNINITIALIZED.
+    ///     - Only one instance of a driver per process will be initialized.
+    ///     - This function is thread-safe for scenarios where multiple libraries
+    ///       may initialize the driver simultaneously.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuInit**
+    /// 
+    /// @throws result_t
+    void __xecall
+    Init(
+        xe::init_flag_t flags                           ///< [in] initialization flags
+        );
 
-    xet_lib();
-    ~xet_lib();
+} // namespace xet
 
-    xe_result_t Init();
-
-    xet_global_apitable_t               xetGlobal = {};
-    xet_device_apitable_t               xetDevice = {};
-    xet_command_list_apitable_t         xetCommandList = {};
-    xet_metric_group_apitable_t         xetMetricGroup = {};
-    xet_metric_apitable_t               xetMetric = {};
-    xet_metric_tracer_apitable_t        xetMetricTracer = {};
-    xet_metric_query_pool_apitable_t    xetMetricQueryPool = {};
-    xet_metric_query_apitable_t         xetMetricQuery = {};
-    xet_power_apitable_t                xetPower = {};
-    xet_freq_domain_apitable_t          xetFreqDomain = {};
-};
-
-extern xet_lib context;
-
-#endif // _XET_LIB_H
+#ifdef _DEBUG
+#endif // _DEBUG
+#endif // defined(__cplusplus)
+#endif // _XET_DRIVER_HPP

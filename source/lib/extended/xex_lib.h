@@ -44,6 +44,7 @@ public:
 
     xe_result_t Init();
 
+    xex_global_apitable_t           xexGlobal = {};
     xex_command_graph_apitable_t    xexCommandGraph = {};
 };
 

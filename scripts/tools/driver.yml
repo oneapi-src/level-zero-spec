@@ -1,0 +1,25 @@
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero APIs"
+ordinal: "0"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Initialize the $OneApi driver and must be called before any other API function."
+class: $t
+name: Init
+decl: static
+ordinal: "0"
+details: 
+    - "If this function is not called then all other functions will return $X_RESULT_ERROR_UNINITIALIZED."
+    - "Only one instance of a driver per process will be initialized."
+    - "This function is thread-safe for scenarios where multiple libraries may initialize the driver simultaneously."
+analogue:
+    - "**cuInit**"
+params:
+    - type: $x_init_flag_t
+      name: flags
+      desc: "[in] initialization flags"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "invalid value for flags"
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY

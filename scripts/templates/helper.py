@@ -315,19 +315,20 @@ def _get_type_name(namespace, tags, obj, item, cpp=False, meta=None):
     name = subt(namespace, tags, item['type'], cpp=cpp)
     if cpp:
         group, cls = _get_class_of_type(item['type'], meta)
-        is_namespace = cls in tags and tags[cls] == namespace   # cls == namespace? e.g., cls == "$x"
+        is_global = cls in tags
+        is_namespace = is_global and tags[cls] == namespace   # cls == namespace? e.g., cls == "$x"
         is_handle = re.match(r".*handle_t", item['type'])
 
         is_inscope = False
         if re.match(r"class", obj['type']):     # if the obj _is_ a class
             is_inscope = cls == obj['name']     #   then is the item's class this obj? 
-        elif 'class' in obj:                    # else if the obj belongs to a class
+        elif 'class' in obj and not is_global:  # else if the obj belongs to a class
             is_inscope = cls == obj['class']    #   then is the item's class the same as the obj?
 
         if cls:
             cls = subt(namespace, tags, cls, cpp=cpp)   # remove tags from class name
 
-            if not (is_namespace or is_handle or is_inscope):
+            if not (is_global or is_namespace or is_handle or is_inscope):
                 # need to prepend the class name to the type
                 name = _add_class(name, cls)
 
@@ -415,7 +416,7 @@ def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None, for
 
     if cpp:
         is_static = 'decl' in obj and re.match(r"static", obj['decl'])
-        is_global = 'class' in obj and re.match(r"\$x$", obj['class'])
+        is_global = 'class' in obj and obj['class'] in tags
         if is_static or is_global:
             params = _filter_param_list(obj['params'], "in")
         else:

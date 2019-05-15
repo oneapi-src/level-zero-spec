@@ -47,5 +47,12 @@ xe_result_t xex_lib::Init()
         result = getTable( XE_API_VERSION_1_0, &xexCommandGraph );
     }
 
+    if( XE_RESULT_SUCCESS == result )
+    {
+        auto getTable = reinterpret_cast<xex_pfnGetGlobalProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.loader, "xexGetGlobalProcAddrTable") );
+        result = getTable( XE_API_VERSION_1_0, &xexGlobal );
+    }
+
     return result;
 }

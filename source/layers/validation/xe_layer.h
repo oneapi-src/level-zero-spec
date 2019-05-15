@@ -60,8 +60,10 @@ public:
     xe_function_apitable_t          xeFunction = {};
     xe_sampler_apitable_t           xeSampler = {};
 
+    xex_global_apitable_t           xexGlobal = {};
     xex_command_graph_apitable_t    xexCommandGraph = {};
 
+    xet_global_apitable_t               xetGlobal = {};
     xet_device_apitable_t               xetDevice = {};
     xet_command_list_apitable_t         xetCommandList = {};
     xet_metric_group_apitable_t         xetMetricGroup = {};

@@ -430,6 +430,50 @@ xetGetFreqDomainProcAddrTable(
     return result;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Global table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetGlobalProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_global_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
+    )
+{
+#ifdef _DEBUG
+    if( nullptr == ptable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    if( nullptr != context.commonDriver )
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetGlobalProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.commonDriver, "xetGetGlobalProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetGlobalProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.validationLayer, "xetGetGlobalProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    return result;
+}
+
 #if defined(__cplusplus)
 };
 #endif

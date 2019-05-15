@@ -3,6 +3,7 @@ set(TARGET_NAME xet_api)
 add_library(${TARGET_NAME}
     STATIC
         ${CMAKE_CURRENT_SOURCE_DIR}/xet_common.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/xet_driver.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xet_device.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xet_cmdlist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xet_gtpin.cpp
