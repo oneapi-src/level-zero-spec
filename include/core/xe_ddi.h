@@ -321,7 +321,7 @@ typedef struct _xe_command_list_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -477,7 +477,7 @@ typedef struct _xe_device_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -541,7 +541,7 @@ typedef struct _xe_command_queue_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -678,7 +678,7 @@ typedef struct _xe_context_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -757,7 +757,7 @@ typedef struct _xe_device_group_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -825,7 +825,7 @@ typedef struct _xe_fence_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -895,7 +895,7 @@ typedef struct _xe_event_pool_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -970,7 +970,7 @@ typedef struct _xe_event_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -1025,7 +1025,7 @@ typedef struct _xe_image_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -1099,7 +1099,7 @@ typedef struct _xe_module_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -1145,7 +1145,7 @@ typedef struct _xe_module_build_log_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -1242,7 +1242,7 @@ typedef struct _xe_function_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -1288,7 +1288,7 @@ typedef struct _xe_sampler_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -1333,7 +1333,7 @@ typedef struct _xe_global_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED

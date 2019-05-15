@@ -59,7 +59,7 @@ typedef struct _xet_device_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -122,7 +122,7 @@ typedef struct _xet_command_list_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -189,7 +189,7 @@ typedef struct _xet_metric_group_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -236,7 +236,7 @@ typedef struct _xet_metric_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -293,7 +293,7 @@ typedef struct _xet_metric_tracer_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -348,7 +348,7 @@ typedef struct _xet_metric_query_pool_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -388,7 +388,7 @@ typedef struct _xet_metric_query_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -669,7 +669,7 @@ typedef struct _xet_power_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -769,7 +769,7 @@ typedef struct _xet_freq_domain_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED

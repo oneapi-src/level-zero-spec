@@ -59,8 +59,8 @@ namespace xe
             return std::string("xe::result_t::ERROR_DEVICE_LOST");
         case xe::result_t::ERROR_UNSUPPORTED:
             return std::string("xe::result_t::ERROR_UNSUPPORTED");
-        case xe::result_t::ERROR_INVALID_PARAMETER:
-            return std::string("xe::result_t::ERROR_INVALID_PARAMETER");
+        case xe::result_t::ERROR_INVALID_ARGUMENT:
+            return std::string("xe::result_t::ERROR_INVALID_ARGUMENT");
         case xe::result_t::ERROR_OUT_OF_HOST_MEMORY:
             return std::string("xe::result_t::ERROR_OUT_OF_HOST_MEMORY");
         case xe::result_t::ERROR_OUT_OF_DEVICE_MEMORY:

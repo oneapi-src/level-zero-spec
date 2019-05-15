@@ -207,7 +207,7 @@ typedef struct _xe_image_properties_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///         + nullptr == desc
 ///         + nullptr == pImageProperties
@@ -235,7 +235,7 @@ xeImageGetProperties(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///         + nullptr == desc
 ///         + nullptr == phImage
@@ -266,7 +266,7 @@ xeImageCreate(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall

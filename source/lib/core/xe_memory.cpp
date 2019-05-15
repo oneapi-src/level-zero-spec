@@ -53,7 +53,7 @@ extern "C" {
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hContext
 ///         + nullptr == hDevice
 ///         + nullptr == ptr
@@ -93,7 +93,7 @@ xeContextAllocSharedMem(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hContext
 ///         + nullptr == hDevice
 ///         + nullptr == ptr
@@ -133,7 +133,7 @@ xeContextAllocDeviceMem(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hContext
 ///         + nullptr == ptr
 ///         + unsupported allocation size
@@ -173,7 +173,7 @@ xeContextAllocHostMem(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hContext
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -200,7 +200,7 @@ xeContextFreeMem(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hContext
 ///         + nullptr == ptr
 ///         + nullptr == pMemProperties
@@ -229,7 +229,7 @@ xeContextGetMemProperties(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hContext
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -261,7 +261,7 @@ xeContextGetMemAddressRange(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hContext
 ///         + nullptr == ptr
 ///         + nullptr == pIpcHandle
@@ -295,7 +295,7 @@ xeContextGetMemIpcHandle(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hContext
 ///         + nullptr == hDevice
 ///         + nullptr == handle
@@ -331,7 +331,7 @@ xeContextOpenMemIpcHandle(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hContext
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED

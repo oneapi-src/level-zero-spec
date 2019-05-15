@@ -65,7 +65,7 @@ extern "C" {
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///         + nullptr == dstptr
 ///         + nullptr == srcptr
@@ -100,7 +100,7 @@ xeCommandListAppendMemoryCopy(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -140,7 +140,7 @@ typedef struct _xe_copy_region_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///         + nullptr == dstptr
 ///         + nullptr == dstRegion
@@ -175,7 +175,7 @@ xeCommandListAppendMemoryCopyRegion(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///         + nullptr == hDstImage
 ///         + nullptr == hSrcImage
@@ -214,7 +214,7 @@ typedef struct _xe_image_region_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///         + nullptr == hDstImage
 ///         + nullptr == hSrcImage
@@ -247,7 +247,7 @@ xeCommandListAppendImageCopyRegion(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///         + nullptr == dstptr
 ///         + nullptr == hSrcImage
@@ -279,7 +279,7 @@ xeCommandListAppendImageCopyToMemory(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///         + nullptr == hDstImage
 ///         + nullptr == srcptr
@@ -323,7 +323,7 @@ xeCommandListAppendImageCopyFromMemory(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -378,7 +378,7 @@ typedef enum _xe_memory_advice_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///         + nullptr == hDevice
 ///         + nullptr == ptr

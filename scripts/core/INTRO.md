@@ -236,7 +236,7 @@ Each capability is enabled by additional environment variables.
 The validation layer supports the following capabilities:
 - <a name="v1">Parameter Validation</a>
     + checks function parameters, such as null pointer parameters, invalid enumerations, uninitialized structures, etc.
-    + functions may return ::${X}_RESULT_ERROR_INVALID_PARAMETER or ::${X}_RESULT_ERROR_UNSUPPORTED
+    + functions may return ::${X}_RESULT_ERROR_INVALID_ARGUMENT or ::${X}_RESULT_ERROR_UNSUPPORTED
 - <a name="v2">Handle Lifetime</a>
     + tracks handle allocations, destruction and usage for leaks and invalid usage (e.g., destruction while still in-use by device)
 - <a name="v3">Memory Tracker</a>

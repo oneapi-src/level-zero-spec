@@ -203,7 +203,7 @@ namespace xe
         ERROR_UNINITIALIZED,                            ///< driver is not initialized
         ERROR_DEVICE_LOST,                              ///< device hung, reset, was removed, or driver update occurred
         ERROR_UNSUPPORTED,                              ///< device does not support feature requested
-        ERROR_INVALID_PARAMETER,                        ///< invalid parameter provided
+        ERROR_INVALID_ARGUMENT,                         ///< invalid argument provided
         ERROR_OUT_OF_HOST_MEMORY,                       ///< insufficient host memory to satisfy call
         ERROR_OUT_OF_DEVICE_MEMORY,                     ///< insufficient device memory to satisfy call
         ERROR_MODULE_BUILD_FAILURE,                     ///< error in building module

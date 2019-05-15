@@ -49,7 +49,7 @@ extern "C" {
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -77,7 +77,7 @@ xeDeviceMakeMemoryResident(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -104,7 +104,7 @@ xeDeviceEvictMemory(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///         + nullptr == hImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -132,7 +132,7 @@ xeDeviceMakeImageResident(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///         + nullptr == hImage
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED

@@ -69,7 +69,7 @@ extern "C" {
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
@@ -101,7 +101,7 @@ xeCommandListAppendBarrier(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///         + nullptr == pRangeSizes
 ///         + nullptr == pRanges
@@ -135,7 +135,7 @@ xeCommandListAppendMemoryRangesBarrier(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall

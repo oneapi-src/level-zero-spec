@@ -49,7 +49,7 @@ params:
       name: pDeviceGroups
       desc: "[in,out][optional] array of handle of device groups"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "count is out of range reported by $xDeviceGroupGetDevices"
 --- #--------------------------------------------------------------------------
 type: function
@@ -73,7 +73,7 @@ params:
       name: phSubDevice
       desc: "[out] pointer to handle of sub-device object."
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "ordinal is out of range reported by device properties."
 --- #--------------------------------------------------------------------------
 type: enum
@@ -505,7 +505,7 @@ params:
       name: CacheConfig
       desc: "[in] CacheConfig"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "devices do not support CacheConfig"
 --- #--------------------------------------------------------------------------
 type: function
@@ -525,7 +525,7 @@ params:
       name: CacheConfig
       desc: "[in] CacheConfig"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "devices do not support CacheConfig"
 --- #--------------------------------------------------------------------------
 type: class

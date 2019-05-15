@@ -83,7 +83,7 @@ typedef struct _xe_event_pool_desc_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///         + nullptr == desc
 ///         + nullptr == phEventPool
@@ -117,7 +117,7 @@ xeEventPoolCreate(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hEventPool
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
@@ -181,7 +181,7 @@ typedef struct _xe_event_desc_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hEventPool
 ///         + nullptr == desc
 ///         + nullptr == phEvent
@@ -217,7 +217,7 @@ xeEventCreate(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
@@ -240,7 +240,7 @@ xeEventDestroy(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hEventPool
 ///         + nullptr == phIpc
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -267,7 +267,7 @@ xeEventPoolGetIpcHandle(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///         + nullptr == hIpc
 ///         + nullptr == phEventPool
@@ -296,7 +296,7 @@ xeEventPoolOpenIpcHandle(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hEventPool
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
@@ -322,7 +322,7 @@ xeEventPoolCloseIpcHandle(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -344,7 +344,7 @@ xeCommandListAppendSignalEvent(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///         + nullptr == phEvents
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -370,7 +370,7 @@ xeCommandListAppendWaitOnEvents(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
@@ -394,7 +394,7 @@ xeEventHostSignal(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
@@ -426,7 +426,7 @@ xeEventHostSynchronize(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_NOT_READY
@@ -452,7 +452,7 @@ xeEventQueryStatus(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -477,7 +477,7 @@ xeCommandListAppendEventReset(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hEvent
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall

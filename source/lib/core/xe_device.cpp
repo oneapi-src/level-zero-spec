@@ -55,7 +55,7 @@ extern "C" {
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
@@ -86,7 +86,7 @@ xeGetDeviceGroups(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDeviceGroup
 ///         + nullptr == pCount
 ///         + count is out of range reported by ::xeDeviceGroupGetDevices
@@ -120,7 +120,7 @@ xeDeviceGroupGetDevices(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///         + nullptr == phSubDevice
 ///         + ordinal is out of range reported by device properties.
@@ -150,7 +150,7 @@ xeDeviceGetSubDevice(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDeviceGroup
 ///         + nullptr == version
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -180,7 +180,7 @@ xeDeviceGroupGetApiVersion(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDeviceGroup
 ///         + nullptr == pDeviceProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -209,7 +209,7 @@ xeDeviceGroupGetProperties(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDeviceGroup
 ///         + nullptr == pComputeProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -239,7 +239,7 @@ xeDeviceGroupGetComputeProperties(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDeviceGroup
 ///         + nullptr == pMemProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -268,7 +268,7 @@ xeDeviceGroupGetMemoryProperties(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///         + nullptr == hPeerDevice
 ///         + nullptr == pP2PProperties
@@ -298,7 +298,7 @@ xeDeviceGetP2PProperties(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///         + nullptr == hPeerDevice
 ///         + nullptr == value
@@ -328,7 +328,7 @@ xeDeviceCanAccessPeer(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///         + devices do not support CacheConfig
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -356,7 +356,7 @@ xeDeviceSetIntermediateCacheConfig(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///         + devices do not support CacheConfig
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED

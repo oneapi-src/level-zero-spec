@@ -103,7 +103,7 @@ typedef struct _xe_module_desc_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///         + nullptr == pDesc
 ///         + nullptr == phModule
@@ -145,7 +145,7 @@ xeModuleCreate(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hModule
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
@@ -171,7 +171,7 @@ xeModuleDestroy(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hModuleBuildLog
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
@@ -192,7 +192,7 @@ xeModuleBuildLogDestroy(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hModuleBuildLog
 ///         + nullptr == pSize
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -225,7 +225,7 @@ xeModuleBuildLogGetString(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hModule
 ///         + nullptr == pSize
 ///         + invalid format
@@ -250,7 +250,7 @@ xeModuleGetNativeBinary(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hModule
 ///         + nullptr == pGlobalName
 ///         + nullptr == pPtr
@@ -306,7 +306,7 @@ typedef struct _xe_function_desc_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hModule
 ///         + nullptr == pDesc
 ///         + nullptr == phFunction
@@ -337,7 +337,7 @@ xeFunctionCreate(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFunction
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
@@ -357,7 +357,7 @@ xeFunctionDestroy(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hModule
 ///         + nullptr == pFunctionName
 ///         + nullptr == pfnFunction
@@ -384,7 +384,7 @@ xeModuleGetFunctionPointer(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFunction
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
@@ -409,7 +409,7 @@ xeFunctionSetGroupSize(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFunction
 ///         + nullptr == groupSizeX
 ///         + nullptr == groupSizeY
@@ -439,7 +439,7 @@ xeFunctionSuggestGroupSize(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFunction
 ///         + invalid argument index
 ///         + invalid size specified
@@ -486,7 +486,7 @@ typedef enum _xe_function_set_attribute_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFunction
 ///         + invalid value for attr
 ///         + invalid value for value
@@ -530,7 +530,7 @@ typedef enum _xe_function_get_attribute_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFunction
 ///         + nullptr == pValue
 ///         + invalid value for attr
@@ -570,7 +570,7 @@ typedef struct _xe_thread_group_dimensions_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///         + nullptr == hFunction
 ///         + nullptr == pLaunchFuncArgs
@@ -606,7 +606,7 @@ xeCommandListAppendLaunchFunction(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///         + nullptr == hFunction
 ///         + nullptr == pLaunchArgumentsBuffer
@@ -643,7 +643,7 @@ xeCommandListAppendLaunchFunctionIndirect(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///         + nullptr == phFunctions
 ///         + nullptr == pNumLaunchArguments
@@ -693,7 +693,7 @@ typedef void(__xecall *xe_host_pfn_t)(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///         + nullptr == pUserData
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED

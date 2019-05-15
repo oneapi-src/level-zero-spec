@@ -334,5 +334,5 @@ params:
       name: advice
       desc: "[in] Memory advice for the memory range"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid value for advice"

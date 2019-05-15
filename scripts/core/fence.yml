@@ -77,7 +77,7 @@ params:
       name: hFence
       desc: "[in] handle of fence object to destroy"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "fence is enqueued in a command queue"
 --- #--------------------------------------------------------------------------
 type: function
@@ -102,7 +102,7 @@ params:
 returns:
     - $X_RESULT_NOT_READY:
        - "timeout expired"
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "fence is not enqueued in a command queue"
 --- #--------------------------------------------------------------------------
 type: function
@@ -121,7 +121,7 @@ params:
 returns:
     - $X_RESULT_NOT_READY:
         - not signaled
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "fence is not enqueued in a command queue"
 --- #--------------------------------------------------------------------------
 type: function

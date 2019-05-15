@@ -601,7 +601,7 @@ Public:
 """
 def make_param_checks(namespace, tags, obj, comment=False, cpp=False):
     checks = {}
-    eip = subt(namespace, tags, "$X_RESULT_ERROR_INVALID_PARAMETER", comment, cpp)
+    eip = subt(namespace, tags, "$X_RESULT_ERROR_INVALID_ARGUMENT", comment, cpp)
     eus = subt(namespace, tags, "$X_RESULT_ERROR_UNSUPPORTED", comment, cpp)
     checks[eip] = []
     checks[eus] = []

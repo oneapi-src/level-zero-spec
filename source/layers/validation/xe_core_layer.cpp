@@ -40,7 +40,7 @@ extern "C" {
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -52,7 +52,7 @@ xeGetCommandListProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -149,7 +149,7 @@ xeGetCommandListProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -161,7 +161,7 @@ xeGetDeviceProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -222,7 +222,7 @@ xeGetDeviceProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -234,7 +234,7 @@ xeGetCommandQueueProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -262,7 +262,7 @@ xeGetCommandQueueProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -274,7 +274,7 @@ xeGetContextProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -323,7 +323,7 @@ xeGetContextProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -335,7 +335,7 @@ xeGetDeviceGroupProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -369,7 +369,7 @@ xeGetDeviceGroupProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -381,7 +381,7 @@ xeGetFenceProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -412,7 +412,7 @@ xeGetFenceProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -424,7 +424,7 @@ xeGetEventPoolProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -455,7 +455,7 @@ xeGetEventPoolProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -467,7 +467,7 @@ xeGetEventProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -501,7 +501,7 @@ xeGetEventProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -513,7 +513,7 @@ xeGetImageProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -538,7 +538,7 @@ xeGetImageProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -550,7 +550,7 @@ xeGetModuleProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -581,7 +581,7 @@ xeGetModuleProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -593,7 +593,7 @@ xeGetModuleBuildLogProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -615,7 +615,7 @@ xeGetModuleBuildLogProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -627,7 +627,7 @@ xeGetFunctionProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -664,7 +664,7 @@ xeGetFunctionProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -676,7 +676,7 @@ xeGetSamplerProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -698,7 +698,7 @@ xeGetSamplerProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -710,7 +710,7 @@ xeGetGlobalProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -751,10 +751,10 @@ xeDeviceGroupGetDriverVersion(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDeviceGroup )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == version )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -773,10 +773,10 @@ xeContextCreate(
     if( context.enableParameterValidation )
     {
         if( nullptr == phDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phContext )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -793,7 +793,7 @@ xeContextDestroy(
     if( context.enableParameterValidation )
     {
         if( nullptr == hContext )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -815,7 +815,7 @@ xeGetDeviceGroups(
     if( context.enableParameterValidation )
     {
         if( nullptr == pCount )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -838,10 +838,10 @@ xeDeviceGroupGetDevices(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDeviceGroup )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pCount )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -860,10 +860,10 @@ xeDeviceGetSubDevice(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phSubDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -881,10 +881,10 @@ xeDeviceGroupGetApiVersion(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDeviceGroup )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == version )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -902,10 +902,10 @@ xeDeviceGroupGetProperties(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDeviceGroup )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pDeviceProperties )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -923,10 +923,10 @@ xeDeviceGroupGetComputeProperties(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDeviceGroup )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pComputeProperties )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -944,10 +944,10 @@ xeDeviceGroupGetMemoryProperties(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDeviceGroup )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pMemProperties )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -966,13 +966,13 @@ xeDeviceGetP2PProperties(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hPeerDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pP2PProperties )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -991,13 +991,13 @@ xeDeviceCanAccessPeer(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hPeerDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == value )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1015,7 +1015,7 @@ xeDeviceSetIntermediateCacheConfig(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1033,7 +1033,7 @@ xeDeviceSetLastLevelCacheConfig(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1052,13 +1052,13 @@ xeCommandQueueCreate(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == desc )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phCommandQueue )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version )
             return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1078,7 +1078,7 @@ xeCommandQueueDestroy(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandQueue )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1098,10 +1098,10 @@ xeCommandQueueExecuteCommandLists(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandQueue )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phCommandLists )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1123,7 +1123,7 @@ xeCommandQueueSynchronize(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandQueue )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1142,13 +1142,13 @@ xeCommandListCreate(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == desc )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( XE_COMMAND_LIST_DESC_VERSION_CURRENT < desc->version )
             return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1170,13 +1170,13 @@ xeCommandListCreateImmediate(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == desc )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version )
             return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1196,7 +1196,7 @@ xeCommandListDestroy(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1213,7 +1213,7 @@ xeCommandListClose(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1230,7 +1230,7 @@ xeCommandListReset(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1249,7 +1249,7 @@ xeCommandListSetParameter(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1268,10 +1268,10 @@ xeCommandListGetParameter(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == value )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1288,7 +1288,7 @@ xeCommandListResetParameters(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1307,10 +1307,10 @@ xeCommandListReserveSpace(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1331,7 +1331,7 @@ xeCommandListAppendBarrier(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1355,13 +1355,13 @@ xeCommandListAppendMemoryRangesBarrier(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pRangeSizes )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pRanges )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1378,7 +1378,7 @@ xeDeviceSystemBarrier(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1399,10 +1399,10 @@ xeDeviceRegisterCLMemory(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1424,10 +1424,10 @@ xeDeviceRegisterCLProgram(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phModule )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1449,10 +1449,10 @@ xeDeviceRegisterCLCommandQueue(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phCommandQueue )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1474,13 +1474,13 @@ xeCommandListAppendMemoryCopy(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == dstptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == srcptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1501,10 +1501,10 @@ xeCommandListAppendMemorySet(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1528,19 +1528,19 @@ xeCommandListAppendMemoryCopyRegion(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == dstptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == dstRegion )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == srcptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == srcRegion )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1560,13 +1560,13 @@ xeCommandListAppendImageCopy(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hDstImage )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hSrcImage )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1588,13 +1588,13 @@ xeCommandListAppendImageCopyRegion(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hDstImage )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hSrcImage )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1615,13 +1615,13 @@ xeCommandListAppendImageCopyToMemory(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == dstptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hSrcImage )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1642,13 +1642,13 @@ xeCommandListAppendImageCopyFromMemory(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hDstImage )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == srcptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1667,10 +1667,10 @@ xeCommandListAppendMemoryPrefetch(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1691,13 +1691,13 @@ xeCommandListAppendMemAdvise(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1716,13 +1716,13 @@ xeEventPoolCreate(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == desc )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phEventPool )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( XE_EVENT_POOL_DESC_VERSION_CURRENT < desc->version )
             return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1742,7 +1742,7 @@ xeEventPoolDestroy(
     if( context.enableParameterValidation )
     {
         if( nullptr == hEventPool )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1761,13 +1761,13 @@ xeEventCreate(
     if( context.enableParameterValidation )
     {
         if( nullptr == hEventPool )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == desc )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phEvent )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( XE_EVENT_DESC_VERSION_CURRENT < desc->version )
             return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1787,7 +1787,7 @@ xeEventDestroy(
     if( context.enableParameterValidation )
     {
         if( nullptr == hEvent )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1805,10 +1805,10 @@ xeEventPoolGetIpcHandle(
     if( context.enableParameterValidation )
     {
         if( nullptr == hEventPool )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phIpc )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1827,13 +1827,13 @@ xeEventPoolOpenIpcHandle(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hIpc )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phEventPool )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1850,7 +1850,7 @@ xeEventPoolCloseIpcHandle(
     if( context.enableParameterValidation )
     {
         if( nullptr == hEventPool )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1868,10 +1868,10 @@ xeCommandListAppendSignalEvent(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hEvent )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1890,10 +1890,10 @@ xeCommandListAppendWaitOnEvents(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phEvents )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1910,7 +1910,7 @@ xeEventHostSignal(
     if( context.enableParameterValidation )
     {
         if( nullptr == hEvent )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1932,7 +1932,7 @@ xeEventHostSynchronize(
     if( context.enableParameterValidation )
     {
         if( nullptr == hEvent )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1949,7 +1949,7 @@ xeEventQueryStatus(
     if( context.enableParameterValidation )
     {
         if( nullptr == hEvent )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1967,10 +1967,10 @@ xeCommandListAppendEventReset(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hEvent )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1987,7 +1987,7 @@ xeEventReset(
     if( context.enableParameterValidation )
     {
         if( nullptr == hEvent )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2006,13 +2006,13 @@ xeFenceCreate(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandQueue )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == desc )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phFence )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( XE_FENCE_DESC_VERSION_CURRENT < desc->version )
             return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2032,7 +2032,7 @@ xeFenceDestroy(
     if( context.enableParameterValidation )
     {
         if( nullptr == hFence )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2054,7 +2054,7 @@ xeFenceHostSynchronize(
     if( context.enableParameterValidation )
     {
         if( nullptr == hFence )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2071,7 +2071,7 @@ xeFenceQueryStatus(
     if( context.enableParameterValidation )
     {
         if( nullptr == hFence )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2088,7 +2088,7 @@ xeFenceReset(
     if( context.enableParameterValidation )
     {
         if( nullptr == hFence )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2107,13 +2107,13 @@ xeImageGetProperties(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == desc )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pImageProperties )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( XE_IMAGE_DESC_VERSION_CURRENT < desc->version )
             return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2135,13 +2135,13 @@ xeImageCreate(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == desc )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phImage )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( XE_IMAGE_DESC_VERSION_CURRENT < desc->version )
             return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2161,7 +2161,7 @@ xeImageDestroy(
     if( context.enableParameterValidation )
     {
         if( nullptr == hImage )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2184,13 +2184,13 @@ xeContextAllocSharedMem(
     if( context.enableParameterValidation )
     {
         if( nullptr == hContext )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2212,13 +2212,13 @@ xeContextAllocDeviceMem(
     if( context.enableParameterValidation )
     {
         if( nullptr == hContext )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2239,10 +2239,10 @@ xeContextAllocHostMem(
     if( context.enableParameterValidation )
     {
         if( nullptr == hContext )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2260,10 +2260,10 @@ xeContextFreeMem(
     if( context.enableParameterValidation )
     {
         if( nullptr == hContext )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2282,13 +2282,13 @@ xeContextGetMemProperties(
     if( context.enableParameterValidation )
     {
         if( nullptr == hContext )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pMemProperties )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2308,10 +2308,10 @@ xeContextGetMemAddressRange(
     if( context.enableParameterValidation )
     {
         if( nullptr == hContext )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2330,13 +2330,13 @@ xeContextGetMemIpcHandle(
     if( context.enableParameterValidation )
     {
         if( nullptr == hContext )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pIpcHandle )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2357,16 +2357,16 @@ xeContextOpenMemIpcHandle(
     if( context.enableParameterValidation )
     {
         if( nullptr == hContext )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == handle )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2384,10 +2384,10 @@ xeContextCloseMemIpcHandle(
     if( context.enableParameterValidation )
     {
         if( nullptr == hContext )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2407,13 +2407,13 @@ xeModuleCreate(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pDesc )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phModule )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( XE_MODULE_DESC_VERSION_CURRENT < pDesc->version )
             return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2433,7 +2433,7 @@ xeModuleDestroy(
     if( context.enableParameterValidation )
     {
         if( nullptr == hModule )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2450,7 +2450,7 @@ xeModuleBuildLogDestroy(
     if( context.enableParameterValidation )
     {
         if( nullptr == hModuleBuildLog )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2469,10 +2469,10 @@ xeModuleBuildLogGetString(
     if( context.enableParameterValidation )
     {
         if( nullptr == hModuleBuildLog )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pSize )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2491,10 +2491,10 @@ xeModuleGetNativeBinary(
     if( context.enableParameterValidation )
     {
         if( nullptr == hModule )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pSize )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2513,13 +2513,13 @@ xeModuleGetGlobalPointer(
     if( context.enableParameterValidation )
     {
         if( nullptr == hModule )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pGlobalName )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pPtr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2538,13 +2538,13 @@ xeFunctionCreate(
     if( context.enableParameterValidation )
     {
         if( nullptr == hModule )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pDesc )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phFunction )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( XE_FUNCTION_DESC_VERSION_CURRENT < pDesc->version )
             return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2564,7 +2564,7 @@ xeFunctionDestroy(
     if( context.enableParameterValidation )
     {
         if( nullptr == hFunction )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2583,13 +2583,13 @@ xeModuleGetFunctionPointer(
     if( context.enableParameterValidation )
     {
         if( nullptr == hModule )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pFunctionName )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pfnFunction )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2609,7 +2609,7 @@ xeFunctionSetGroupSize(
     if( context.enableParameterValidation )
     {
         if( nullptr == hFunction )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2632,16 +2632,16 @@ xeFunctionSuggestGroupSize(
     if( context.enableParameterValidation )
     {
         if( nullptr == hFunction )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == groupSizeX )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == groupSizeY )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == groupSizeZ )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2662,7 +2662,7 @@ xeFunctionSetArgumentValue(
     if( context.enableParameterValidation )
     {
         if( nullptr == hFunction )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2681,7 +2681,7 @@ xeFunctionSetAttribute(
     if( context.enableParameterValidation )
     {
         if( nullptr == hFunction )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2700,10 +2700,10 @@ xeFunctionGetAttribute(
     if( context.enableParameterValidation )
     {
         if( nullptr == hFunction )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pValue )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2725,13 +2725,13 @@ xeCommandListAppendLaunchFunction(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hFunction )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pLaunchFuncArgs )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2753,13 +2753,13 @@ xeCommandListAppendLaunchFunctionIndirect(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hFunction )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pLaunchArgumentsBuffer )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2785,16 +2785,16 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phFunctions )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pNumLaunchArguments )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pLaunchArgumentsBuffer )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2816,10 +2816,10 @@ xeCommandListAppendLaunchHostFunction(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pUserData )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2838,10 +2838,10 @@ xeDeviceMakeMemoryResident(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2860,10 +2860,10 @@ xeDeviceEvictMemory(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2881,10 +2881,10 @@ xeDeviceMakeImageResident(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hImage )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2902,10 +2902,10 @@ xeDeviceEvictImage(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hImage )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -2924,13 +2924,13 @@ xeSamplerCreate(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pDesc )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phSampler )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( XE_SAMPLER_DESC_VERSION_CURRENT < pDesc->version )
             return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2950,7 +2950,7 @@ xeSamplerDestroy(
     if( context.enableParameterValidation )
     {
         if( nullptr == hSampler )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 

@@ -33,7 +33,7 @@ params:
       name: phMetricGroup
       desc: "[out] metric group handle"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "devices do not contain a given metric group"
 --- #--------------------------------------------------------------------------
 type: macro
@@ -112,7 +112,7 @@ params:
       name: pProperties
       desc: "[out] metric group properties"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid metric group handle"
 --- #--------------------------------------------------------------------------
 type: macro
@@ -272,7 +272,7 @@ params:
       name: phMetric
       desc: "[out] handle of metric"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid metric group handle"
 --- #--------------------------------------------------------------------------
 type: function
@@ -289,7 +289,7 @@ params:
       name: pProperties
       desc: "[out] metric properties"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid handle"
 --- #--------------------------------------------------------------------------
 type: function
@@ -318,7 +318,7 @@ params:
       name: pCalculatedData
       desc: "[in,out] calculated metrics"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid metric group handle"
 --- #--------------------------------------------------------------------------
 type: function
@@ -339,7 +339,7 @@ params:
       name: phMetricGroups
       desc: "[in] handles of the metric groups to activate. NULL to deactivate."
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid metric groups"
 --- #--------------------------------------------------------------------------
 type: enum
@@ -391,7 +391,7 @@ params:
       name: phMetricTracer
       desc: "[out] handle of metric tracer"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "devices do not support metric tracer"
 --- #--------------------------------------------------------------------------
 type: function
@@ -411,7 +411,7 @@ params:
       name: value
       desc: "[in] tracer marker value"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "command list do not support metric tracer"
 --- #--------------------------------------------------------------------------
 type: function
@@ -425,7 +425,7 @@ params:
       name: hMetricTracer
       desc: "[in] handle of the metric tracer"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid metric tracer handle"
 --- #--------------------------------------------------------------------------
 type: function
@@ -448,7 +448,7 @@ params:
       name: pRawData
       desc: "[in,out] raw data buffer for reports"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid metric tracer handle"
 --- #--------------------------------------------------------------------------
 type: enum
@@ -507,7 +507,7 @@ params:
       name: phMetricQueryPool
       desc: "[out] handle of metric query pool"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid device handle"
 --- #--------------------------------------------------------------------------
 type: function
@@ -522,7 +522,7 @@ params:
       name: hMetricQueryPool
       desc: "[in] handle of the metric query pool"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid metric query pool handle"
 --- #--------------------------------------------------------------------------
 type: function
@@ -542,7 +542,7 @@ params:
       name: phMetricQuery
       desc: "[out] handle of metric query"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid device handle"
 --- #--------------------------------------------------------------------------
 type: function
@@ -559,7 +559,7 @@ params:
       name: hMetricQuery
       desc: "[in] handle of the metric query"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid handle"
 --- #--------------------------------------------------------------------------
 type: function
@@ -579,7 +579,7 @@ params:
       name: hCompletionEvent
       desc: "[in] handle of the completion event to signal"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid handle"
 --- #--------------------------------------------------------------------------
 type: function
@@ -593,7 +593,7 @@ params:
       name: hCommandList
       desc: "[in] handle of the command list"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid command list handle"
 --- #--------------------------------------------------------------------------
 type: function
@@ -616,7 +616,7 @@ params:
       name: pRawData
       desc: "[in,out] query result data in raw format"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid metric query handle"
 --- #--------------------------------------------------------------------------
 type: class

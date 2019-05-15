@@ -163,7 +163,7 @@ params:
       name: value
       desc: "[in] value of attribute"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid value for attribute"
         - "invalid value for value"
 --- #--------------------------------------------------------------------------
@@ -191,7 +191,7 @@ params:
       name: value
       desc: "[out] value of attribute"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid value for attribute"
 --- #--------------------------------------------------------------------------
 type: function
@@ -227,7 +227,7 @@ params:
       name: ptr
       desc: "[out] pointer to command buffer space reserved"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
        - "0 for size"
 --- #--------------------------------------------------------------------------
 type: class

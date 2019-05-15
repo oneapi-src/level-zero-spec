@@ -73,7 +73,7 @@ typedef struct _xex_command_graph_apitable_t
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED

@@ -81,7 +81,7 @@ params:
       name: phBuildLog
       desc: "[in,out][optional] pointer to handle of module's build log."
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid pDesc->format"
         - "nullptr == pDesc->pInputModule"
         - "nullptr == pDesc->phModule"
@@ -172,7 +172,7 @@ params:
       name: pModuleNativeBinary
       desc: "[in,out][optional] byte pointer to native binary"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid format"
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
@@ -195,7 +195,7 @@ params:
       name: pPtr
       desc: "[out] device visible pointer"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid name"
     - $X_RESULT_ERROR_UNSUPPORTED
 --- #--------------------------------------------------------------------------
@@ -260,7 +260,7 @@ params:
       name:  phFunction
       desc: "[out] handle of the Function object"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "nullptr == pDesc->pFunctionName"
         - "invalid value for pDesc->pFunctionName"
 --- #--------------------------------------------------------------------------
@@ -299,7 +299,7 @@ params:
       name:  pfnFunction
       desc: "[out] pointer to function."
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid value pFunctionName. Function name must exist in Module."
 --- #--------------------------------------------------------------------------
 type: function
@@ -355,7 +355,7 @@ params:
       name: groupSizeZ
       desc: "[out] recommended size of group for Z dimension."
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid number of threads."
 --- #--------------------------------------------------------------------------
 type: function
@@ -379,7 +379,7 @@ params:
       name: pArgValue
       desc: "[in][optional] argument value represented as matching arg type. If null then argument value is considered null."
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid argument index"
         - "invalid size specified"
 --- #--------------------------------------------------------------------------
@@ -418,7 +418,7 @@ params:
       name: value
       desc: "[in] attribute value to set"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid value for attr"
         - "invalid value for value"
 --- #--------------------------------------------------------------------------
@@ -463,7 +463,7 @@ params:
       name: pValue
       desc: "[out] returned attribute value"
 returns:
-    - $X_RESULT_ERROR_INVALID_PARAMETER:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid value for attr"
 --- #--------------------------------------------------------------------------
 type: struct

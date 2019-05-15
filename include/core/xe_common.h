@@ -174,7 +174,7 @@ typedef enum _xe_result_t
     XE_RESULT_ERROR_UNINITIALIZED,                  ///< driver is not initialized
     XE_RESULT_ERROR_DEVICE_LOST,                    ///< device hung, reset, was removed, or driver update occurred
     XE_RESULT_ERROR_UNSUPPORTED,                    ///< device does not support feature requested
-    XE_RESULT_ERROR_INVALID_PARAMETER,              ///< invalid parameter provided
+    XE_RESULT_ERROR_INVALID_ARGUMENT,               ///< invalid argument provided
     XE_RESULT_ERROR_OUT_OF_HOST_MEMORY,             ///< insufficient host memory to satisfy call
     XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY,           ///< insufficient device memory to satisfy call
     XE_RESULT_ERROR_MODULE_BUILD_FAILURE,           ///< error in building module

@@ -139,8 +139,8 @@ etors:
       desc: "device hung, reset, was removed, or driver update occurred"
     - name: $X_RESULT_ERROR_UNSUPPORTED
       desc: "device does not support feature requested"
-    - name: $X_RESULT_ERROR_INVALID_PARAMETER
-      desc: "invalid parameter provided"
+    - name: $X_RESULT_ERROR_INVALID_ARGUMENT
+      desc: "invalid argument provided"
     - name: $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
       desc: "insufficient host memory to satisfy call"
     - name: $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY

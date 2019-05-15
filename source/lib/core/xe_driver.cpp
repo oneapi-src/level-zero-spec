@@ -55,7 +55,7 @@ extern "C" {
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for flags
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
@@ -85,7 +85,7 @@ xeInit(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDeviceGroup
 ///         + nullptr == version
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED

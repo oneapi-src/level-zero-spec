@@ -40,7 +40,7 @@ extern "C" {
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -52,7 +52,7 @@ xexGetCommandGraphProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -83,13 +83,13 @@ xexCommandGraphCreate(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == desc )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phCommandGraph )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( XEX_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version )
             return XE_RESULT_ERROR_UNSUPPORTED;
@@ -109,7 +109,7 @@ xexCommandGraphDestroy(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandGraph )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -126,7 +126,7 @@ xexCommandGraphClose(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandGraph )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 

@@ -84,7 +84,7 @@ typedef struct _xe_fence_desc_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandQueue
 ///         + nullptr == desc
 ///         + nullptr == phFence
@@ -119,7 +119,7 @@ xeFenceCreate(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFence
 ///         + fence is enqueued in a command queue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -143,7 +143,7 @@ xeFenceDestroy(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFence
 ///         + fence is not enqueued in a command queue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -174,7 +174,7 @@ xeFenceHostSynchronize(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFence
 ///         + fence is not enqueued in a command queue
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -200,7 +200,7 @@ xeFenceQueryStatus(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFence
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall

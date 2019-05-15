@@ -40,7 +40,7 @@ extern "C" {
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -52,7 +52,7 @@ xetGetDeviceProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -82,7 +82,7 @@ xetGetDeviceProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -94,7 +94,7 @@ xetGetCommandListProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -124,7 +124,7 @@ xetGetCommandListProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -136,7 +136,7 @@ xetGetMetricGroupProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -166,7 +166,7 @@ xetGetMetricGroupProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -178,7 +178,7 @@ xetGetMetricProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -208,7 +208,7 @@ xetGetMetricProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -220,7 +220,7 @@ xetGetMetricTracerProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -250,7 +250,7 @@ xetGetMetricTracerProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -262,7 +262,7 @@ xetGetMetricQueryPoolProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -292,7 +292,7 @@ xetGetMetricQueryPoolProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -304,7 +304,7 @@ xetGetMetricQueryProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -334,7 +334,7 @@ xetGetMetricQueryProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -346,7 +346,7 @@ xetGetPowerProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -376,7 +376,7 @@ xetGetPowerProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -388,7 +388,7 @@ xetGetFreqDomainProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;

@@ -40,7 +40,7 @@ extern "C" {
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -52,7 +52,7 @@ xetGetDeviceProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -71,7 +71,7 @@ xetGetDeviceProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -83,7 +83,7 @@ xetGetCommandListProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -111,7 +111,7 @@ xetGetCommandListProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -123,7 +123,7 @@ xetGetMetricGroupProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -151,7 +151,7 @@ xetGetMetricGroupProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -163,7 +163,7 @@ xetGetMetricProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -185,7 +185,7 @@ xetGetMetricProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -197,7 +197,7 @@ xetGetMetricTracerProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -222,7 +222,7 @@ xetGetMetricTracerProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -234,7 +234,7 @@ xetGetMetricQueryPoolProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -259,7 +259,7 @@ xetGetMetricQueryPoolProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -271,7 +271,7 @@ xetGetMetricQueryProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -290,7 +290,7 @@ xetGetMetricQueryProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -302,7 +302,7 @@ xetGetPowerProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -405,7 +405,7 @@ xetGetPowerProcAddrTable(
 ///
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -417,7 +417,7 @@ xetGetFreqDomainProcAddrTable(
     )
 {
     if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_PARAMETER;
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -462,10 +462,10 @@ xetMetricGroupGetCount(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pCount )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -484,10 +484,10 @@ xetMetricGroupGet(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phMetricGroup )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -505,10 +505,10 @@ xetMetricGroupGetProperties(
     if( context.enableParameterValidation )
     {
         if( nullptr == hMetricGroup )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pProperties )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -527,10 +527,10 @@ xetMetricGet(
     if( context.enableParameterValidation )
     {
         if( nullptr == hMetricGroup )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phMetric )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -548,10 +548,10 @@ xetMetricGetProperties(
     if( context.enableParameterValidation )
     {
         if( nullptr == hMetric )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pProperties )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -573,16 +573,16 @@ xetMetricGroupCalculateData(
     if( context.enableParameterValidation )
     {
         if( nullptr == hMetricGroup )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pReportCount )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pRawData )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pCalculatedData )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -601,10 +601,10 @@ xetDeviceActivateMetricGroups(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phMetricGroups )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -625,16 +625,16 @@ xetMetricTracerOpen(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pDesc )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hNotificationEvent )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phMetricTracer )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( XET_METRIC_TRACER_DESC_VERSION_CURRENT < pDesc->version )
             return XE_RESULT_ERROR_UNSUPPORTED;
@@ -656,10 +656,10 @@ xetCommandListAppendMetricTracerMarker(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hMetricTracer )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -676,7 +676,7 @@ xetMetricTracerClose(
     if( context.enableParameterValidation )
     {
         if( nullptr == hMetricTracer )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -696,13 +696,13 @@ xetMetricTracerReadData(
     if( context.enableParameterValidation )
     {
         if( nullptr == hMetricTracer )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pReportCount )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pRawData )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -721,13 +721,13 @@ xetMetricQueryPoolCreate(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pDesc )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phMetricQueryPool )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( XET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT < pDesc->version )
             return XE_RESULT_ERROR_UNSUPPORTED;
@@ -747,7 +747,7 @@ xetMetricQueryPoolDestroy(
     if( context.enableParameterValidation )
     {
         if( nullptr == hMetricQueryPool )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -766,10 +766,10 @@ xetMetricQueryPoolGetMetricQuery(
     if( context.enableParameterValidation )
     {
         if( nullptr == hMetricQueryPool )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phMetricQuery )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -787,10 +787,10 @@ xetCommandListAppendMetricQueryBegin(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hMetricQuery )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -809,13 +809,13 @@ xetCommandListAppendMetricQueryEnd(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hMetricQuery )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hCompletionEvent )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -832,7 +832,7 @@ xetCommandListAppendMetricMemoryBarrier(
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -852,13 +852,13 @@ xetMetricQueryGetData(
     if( context.enableParameterValidation )
     {
         if( nullptr == hMetricQuery )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pReportCount )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pRawData )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -877,10 +877,10 @@ xetPowerCreate(
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pPowerHandle )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -897,7 +897,7 @@ xetPowerDestroy(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -915,10 +915,10 @@ xetPowerGetAveragePowerLimit(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pLimit )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -936,10 +936,10 @@ xetPowerGetBurstPowerLimit(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pLimit )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -957,10 +957,10 @@ xetPowerGetPeakPowerLimit(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pLimit )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -978,10 +978,10 @@ xetPowerGetAllPowerLimits(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pLimits )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -999,10 +999,10 @@ xetPowerGetDefaultPowerLimits(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pLimits )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1020,10 +1020,10 @@ xetPowerSetAveragePowerLimit(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pLimit )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1041,10 +1041,10 @@ xetPowerSetBurstPowerLimit(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pLimit )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1062,10 +1062,10 @@ xetPowerSetPeakPowerLimit(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pLimit )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1083,10 +1083,10 @@ xetPowerSetPowerLimits(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pLimits )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1104,10 +1104,10 @@ xetPowerGetEnergyCounter(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pEnergy )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1125,10 +1125,10 @@ xetPowerGetTurboMode(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pTurboMode )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1146,7 +1146,7 @@ xetPowerSetTurboMode(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1164,10 +1164,10 @@ xetPowerGetFreqDomainCount(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pNumFreqDomains )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1186,10 +1186,10 @@ xetPowerGetFreqDomain(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phFreqDomain )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1207,10 +1207,10 @@ xetFreqDomainGetProperties(
     if( context.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pFreqDomainProperties )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1229,10 +1229,10 @@ xetFreqDomainGetSourceFreqDomain(
     if( context.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phSrcFreqDomain )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1251,10 +1251,10 @@ xetFreqDomainGetSupportedClocks(
     if( context.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pClocks )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1273,10 +1273,10 @@ xetFreqDomainGetSupportedClockDividers(
     if( context.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pDividers )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1295,13 +1295,13 @@ xetFreqDomainGetClockRange(
     if( context.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pMinClock )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pMaxClock )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1320,7 +1320,7 @@ xetFreqDomainSetClockRange(
     if( context.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1338,10 +1338,10 @@ xetFreqDomainSetClockDivider(
     if( context.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pClockDividerRequest )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1361,16 +1361,16 @@ xetFreqDomainGetCurrentFrequency(
     if( context.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pFreqRequest )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pFreqResolved )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pFreqThrottleReasons )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1388,10 +1388,10 @@ xetPowerFanCount(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pFanCount )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1410,10 +1410,10 @@ xetPowerFanGetProperties(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pFanProperties )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1435,13 +1435,13 @@ xetPowerFanGetSpeedTable(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pNumFanPoints )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pFanPoints )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1461,10 +1461,10 @@ xetPowerFanSetSpeedTable(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pFanPoints )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1486,10 +1486,10 @@ xetPowerFanGetSpeed(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pFanSpeed )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1510,10 +1510,10 @@ xetPowerFanSetSpeed(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pFanSpeed )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1531,10 +1531,10 @@ xetPowerTemperatureSensorCount(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pSensorCount )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1553,10 +1553,10 @@ xetPowerGetTemperatureProperties(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pProperties )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1577,10 +1577,10 @@ xetPowerGetTemperature(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pTemperatures )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1600,7 +1600,7 @@ xetPowerSetTemperatureThreshold(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1618,10 +1618,10 @@ xetPowerActivityCount(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pActivityCount )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1640,10 +1640,10 @@ xetPowerGetActivityProperties(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pProperties )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
@@ -1664,10 +1664,10 @@ xetPowerGetActivityCounters(
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == pCounters )
-            return XE_RESULT_ERROR_INVALID_PARAMETER;
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 

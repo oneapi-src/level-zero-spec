@@ -85,7 +85,7 @@ typedef struct _${tbl['type']}
 ///
 /// @returns
 ///     - ::${X}_RESULT_SUCCESS
-///     - ::${X}_RESULT_ERROR_INVALID_PARAMETER
+///     - ::${X}_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::${X}_RESULT_ERROR_UNSUPPORTED

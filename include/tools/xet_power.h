@@ -70,7 +70,7 @@ typedef enum _xet_power_init_flags_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///         + nullptr == pPowerHandle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -93,7 +93,7 @@ xetPowerCreate(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
@@ -195,7 +195,7 @@ typedef struct _xet_power_limits_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pLimit
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -212,7 +212,7 @@ xetPowerGetAveragePowerLimit(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pLimit
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -229,7 +229,7 @@ xetPowerGetBurstPowerLimit(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pLimit
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -246,7 +246,7 @@ xetPowerGetPeakPowerLimit(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pLimits
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -263,7 +263,7 @@ xetPowerGetAllPowerLimits(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pLimits
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -280,7 +280,7 @@ xetPowerGetDefaultPowerLimits(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pLimit
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -297,7 +297,7 @@ xetPowerSetAveragePowerLimit(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pLimit
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -314,7 +314,7 @@ xetPowerSetBurstPowerLimit(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pLimit
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -331,7 +331,7 @@ xetPowerSetPeakPowerLimit(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pLimits
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -352,7 +352,7 @@ xetPowerSetPowerLimits(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pEnergy
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -382,7 +382,7 @@ typedef enum _xet_turbo_mode_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pTurboMode
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -399,7 +399,7 @@ xetPowerGetTurboMode(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
@@ -487,7 +487,7 @@ typedef struct _xet_clock_divider_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pNumFreqDomains
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -504,7 +504,7 @@ xetPowerGetFreqDomainCount(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == phFreqDomain
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -522,7 +522,7 @@ xetPowerGetFreqDomain(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFreqDomain
 ///         + nullptr == pFreqDomainProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -540,7 +540,7 @@ xetFreqDomainGetProperties(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFreqDomain
 ///         + nullptr == phSrcFreqDomain
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -563,7 +563,7 @@ xetFreqDomainGetSourceFreqDomain(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFreqDomain
 ///         + nullptr == pClocks
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -586,7 +586,7 @@ xetFreqDomainGetSupportedClocks(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFreqDomain
 ///         + nullptr == pDividers
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -605,7 +605,7 @@ xetFreqDomainGetSupportedClockDividers(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFreqDomain
 ///         + nullptr == pMinClock
 ///         + nullptr == pMaxClock
@@ -635,7 +635,7 @@ xetFreqDomainGetClockRange(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFreqDomain
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
@@ -659,7 +659,7 @@ xetFreqDomainSetClockRange(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFreqDomain
 ///         + nullptr == pClockDividerRequest
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -676,7 +676,7 @@ xetFreqDomainSetClockDivider(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hFreqDomain
 ///         + nullptr == pFreqRequest
 ///         + nullptr == pFreqResolved
@@ -754,7 +754,7 @@ typedef struct _xet_fan_speed_info_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pFanCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -771,7 +771,7 @@ xetPowerFanCount(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pFanProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -793,7 +793,7 @@ xetPowerFanGetProperties(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pNumFanPoints
 ///         + nullptr == pFanPoints
@@ -820,7 +820,7 @@ xetPowerFanGetSpeedTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pFanPoints
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -842,7 +842,7 @@ xetPowerFanSetSpeedTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pFanSpeed
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -867,7 +867,7 @@ xetPowerFanGetSpeed(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pFanSpeed
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -908,7 +908,7 @@ typedef struct _xet_temperature_properties_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pSensorCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -929,7 +929,7 @@ xetPowerTemperatureSensorCount(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -951,7 +951,7 @@ xetPowerGetTemperatureProperties(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pTemperatures
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -978,7 +978,7 @@ xetPowerGetTemperature(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
@@ -1028,7 +1028,7 @@ typedef struct _xet_activity_counters_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pActivityCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -1049,7 +1049,7 @@ xetPowerActivityCount(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -1071,7 +1071,7 @@ xetPowerGetActivityProperties(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
 ///         + nullptr == pCounters
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED

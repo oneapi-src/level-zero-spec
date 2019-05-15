@@ -50,7 +50,7 @@ extern "C" {
 ///
 /// @returns
 ///     - ::${X}_RESULT_SUCCESS
-///     - ::${X}_RESULT_ERROR_INVALID_PARAMETER
+///     - ::${X}_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
 ///         + nullptr for ptable
 ///     - ::${X}_RESULT_ERROR_UNSUPPORTED
@@ -62,7 +62,7 @@ ${tbl['export']}(
     )
 {
     if( nullptr == ptable )
-        return ${X}_RESULT_ERROR_INVALID_PARAMETER;
+        return ${X}_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return ${X}_RESULT_ERROR_UNSUPPORTED;
