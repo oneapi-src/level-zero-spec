@@ -49,14 +49,14 @@ extern "C" {
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetCommandListProcAddrTable(
-    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xe_api_version_t version, ///< [in] API version
     xe_command_list_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_PARAMETER;
 
-    if( XE_API_HEADER_VERSION < version )
+    if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
@@ -158,14 +158,14 @@ xeGetCommandListProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetDeviceProcAddrTable(
-    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xe_api_version_t version, ///< [in] API version
     xe_device_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_PARAMETER;
 
-    if( XE_API_HEADER_VERSION < version )
+    if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
@@ -231,14 +231,14 @@ xeGetDeviceProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetCommandQueueProcAddrTable(
-    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xe_api_version_t version, ///< [in] API version
     xe_command_queue_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_PARAMETER;
 
-    if( XE_API_HEADER_VERSION < version )
+    if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
@@ -271,14 +271,14 @@ xeGetCommandQueueProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetContextProcAddrTable(
-    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xe_api_version_t version, ///< [in] API version
     xe_context_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_PARAMETER;
 
-    if( XE_API_HEADER_VERSION < version )
+    if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
@@ -332,14 +332,14 @@ xeGetContextProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetDeviceGroupProcAddrTable(
-    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xe_api_version_t version, ///< [in] API version
     xe_device_group_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_PARAMETER;
 
-    if( XE_API_HEADER_VERSION < version )
+    if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
@@ -378,14 +378,14 @@ xeGetDeviceGroupProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetFenceProcAddrTable(
-    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xe_api_version_t version, ///< [in] API version
     xe_fence_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_PARAMETER;
 
-    if( XE_API_HEADER_VERSION < version )
+    if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
@@ -421,14 +421,14 @@ xeGetFenceProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetEventPoolProcAddrTable(
-    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xe_api_version_t version, ///< [in] API version
     xe_event_pool_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_PARAMETER;
 
-    if( XE_API_HEADER_VERSION < version )
+    if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
@@ -464,14 +464,14 @@ xeGetEventPoolProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetEventProcAddrTable(
-    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xe_api_version_t version, ///< [in] API version
     xe_event_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_PARAMETER;
 
-    if( XE_API_HEADER_VERSION < version )
+    if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
@@ -510,14 +510,14 @@ xeGetEventProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetImageProcAddrTable(
-    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xe_api_version_t version, ///< [in] API version
     xe_image_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_PARAMETER;
 
-    if( XE_API_HEADER_VERSION < version )
+    if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
@@ -547,14 +547,14 @@ xeGetImageProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetModuleProcAddrTable(
-    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xe_api_version_t version, ///< [in] API version
     xe_module_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_PARAMETER;
 
-    if( XE_API_HEADER_VERSION < version )
+    if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
@@ -590,14 +590,14 @@ xeGetModuleProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetModuleBuildLogProcAddrTable(
-    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xe_api_version_t version, ///< [in] API version
     xe_module_build_log_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_PARAMETER;
 
-    if( XE_API_HEADER_VERSION < version )
+    if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
@@ -624,14 +624,14 @@ xeGetModuleBuildLogProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetFunctionProcAddrTable(
-    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xe_api_version_t version, ///< [in] API version
     xe_function_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_PARAMETER;
 
-    if( XE_API_HEADER_VERSION < version )
+    if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
@@ -673,14 +673,14 @@ xeGetFunctionProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetSamplerProcAddrTable(
-    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xe_api_version_t version, ///< [in] API version
     xe_sampler_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_PARAMETER;
 
-    if( XE_API_HEADER_VERSION < version )
+    if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
@@ -707,14 +707,14 @@ xeGetSamplerProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetGlobalProcAddrTable(
-    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xe_api_version_t version, ///< [in] API version
     xe_global_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_PARAMETER;
 
-    if( XE_API_HEADER_VERSION < version )
+    if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;

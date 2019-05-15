@@ -59,14 +59,14 @@ extern "C" {
 ///         + version not supported
 __${x}dllexport ${x}_result_t __${x}call
 ${tbl['export']}(
-    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    ${x}_api_version_t version, ///< [in] API version
     ${tbl['type']}* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
         return ${X}_RESULT_ERROR_INVALID_PARAMETER;
 
-    if( ${X}_API_HEADER_VERSION < version )
+    if( context.version < version )
         return ${X}_RESULT_ERROR_UNSUPPORTED;
 
     ${x}_result_t result = ${X}_RESULT_SUCCESS;

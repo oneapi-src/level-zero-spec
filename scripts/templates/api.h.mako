@@ -88,7 +88,7 @@ ${tbl['export']}(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for ${tbl['export']}
 typedef ${x}_result_t (__${x}call *${tbl['pfn']})(
-    uint32_t,
+    ${x}_api_version_t,
     ${tbl['type']}*
     );
 

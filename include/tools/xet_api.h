@@ -71,7 +71,7 @@ xetGetDeviceProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetGetDeviceProcAddrTable
 typedef xe_result_t (__xecall *xet_pfnGetDeviceProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xet_device_apitable_t*
     );
 
@@ -105,7 +105,7 @@ xetGetCommandListProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetGetCommandListProcAddrTable
 typedef xe_result_t (__xecall *xet_pfnGetCommandListProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xet_command_list_apitable_t*
     );
 
@@ -139,7 +139,7 @@ xetGetMetricGroupProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetGetMetricGroupProcAddrTable
 typedef xe_result_t (__xecall *xet_pfnGetMetricGroupProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xet_metric_group_apitable_t*
     );
 
@@ -171,7 +171,7 @@ xetGetMetricProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetGetMetricProcAddrTable
 typedef xe_result_t (__xecall *xet_pfnGetMetricProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xet_metric_apitable_t*
     );
 
@@ -204,7 +204,7 @@ xetGetMetricTracerProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetGetMetricTracerProcAddrTable
 typedef xe_result_t (__xecall *xet_pfnGetMetricTracerProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xet_metric_tracer_apitable_t*
     );
 
@@ -237,7 +237,7 @@ xetGetMetricQueryPoolProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetGetMetricQueryPoolProcAddrTable
 typedef xe_result_t (__xecall *xet_pfnGetMetricQueryPoolProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xet_metric_query_pool_apitable_t*
     );
 
@@ -268,7 +268,7 @@ xetGetMetricQueryProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetGetMetricQueryProcAddrTable
 typedef xe_result_t (__xecall *xet_pfnGetMetricQueryProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xet_metric_query_apitable_t*
     );
 
@@ -327,7 +327,7 @@ xetGetPowerProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetGetPowerProcAddrTable
 typedef xe_result_t (__xecall *xet_pfnGetPowerProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xet_power_apitable_t*
     );
 
@@ -365,7 +365,7 @@ xetGetFreqDomainProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetGetFreqDomainProcAddrTable
 typedef xe_result_t (__xecall *xet_pfnGetFreqDomainProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xet_freq_domain_apitable_t*
     );
 

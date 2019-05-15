@@ -106,7 +106,7 @@ xeGetCommandListProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetCommandListProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetCommandListProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xe_command_list_apitable_t*
     );
 
@@ -155,7 +155,7 @@ xeGetDeviceProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetDeviceProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetDeviceProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xe_device_apitable_t*
     );
 
@@ -189,7 +189,7 @@ xeGetCommandQueueProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetCommandQueueProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetCommandQueueProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xe_command_queue_apitable_t*
     );
 
@@ -230,7 +230,7 @@ xeGetContextProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetContextProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetContextProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xe_context_apitable_t*
     );
 
@@ -266,7 +266,7 @@ xeGetDeviceGroupProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetDeviceGroupProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetDeviceGroupProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xe_device_group_apitable_t*
     );
 
@@ -301,7 +301,7 @@ xeGetFenceProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetFenceProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetFenceProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xe_fence_apitable_t*
     );
 
@@ -336,7 +336,7 @@ xeGetEventPoolProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetEventPoolProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetEventPoolProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xe_event_pool_apitable_t*
     );
 
@@ -372,7 +372,7 @@ xeGetEventProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetEventProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetEventProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xe_event_apitable_t*
     );
 
@@ -405,7 +405,7 @@ xeGetImageProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetImageProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetImageProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xe_image_apitable_t*
     );
 
@@ -440,7 +440,7 @@ xeGetModuleProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetModuleProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetModuleProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xe_module_apitable_t*
     );
 
@@ -472,7 +472,7 @@ xeGetModuleBuildLogProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetModuleBuildLogProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetModuleBuildLogProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xe_module_build_log_apitable_t*
     );
 
@@ -509,7 +509,7 @@ xeGetFunctionProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetFunctionProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetFunctionProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xe_function_apitable_t*
     );
 
@@ -541,7 +541,7 @@ xeGetSamplerProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetSamplerProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetSamplerProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xe_sampler_apitable_t*
     );
 
@@ -573,7 +573,7 @@ xeGetGlobalProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetGlobalProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetGlobalProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xe_global_apitable_t*
     );
 

@@ -69,7 +69,7 @@ xexGetCommandGraphProcAddrTable(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xexGetCommandGraphProcAddrTable
 typedef xe_result_t (__xecall *xex_pfnGetCommandGraphProcAddrTable_t)(
-    uint32_t,
+    xe_api_version_t,
     xex_command_graph_apitable_t*
     );
 

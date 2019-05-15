@@ -49,14 +49,14 @@ extern "C" {
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xexGetCommandGraphProcAddrTable(
-    uint32_t version,           ///< [in] ::XE_API_HEADER_VERSION
+    xe_api_version_t version, ///< [in] API version
     xex_command_graph_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_PARAMETER;
 
-    if( XE_API_HEADER_VERSION < version )
+    if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;

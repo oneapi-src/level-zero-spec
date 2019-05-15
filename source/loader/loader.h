@@ -62,6 +62,8 @@ typedef struct _cl_program* cl_program;
 class xe_loader
 {
 public:
+    xe_api_version_t version = XE_API_VERSION_1_0;
+
     HMODULE commonDriver = nullptr;
     HMODULE validationLayer = nullptr;
 
