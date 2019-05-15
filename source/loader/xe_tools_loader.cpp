@@ -30,8 +30,6 @@
 ******************************************************************************/
 #include "xe_loader.h"
 
-extern xe_loader context;
-
 #if defined(__cplusplus)
 extern "C" {
 #endif

@@ -39,8 +39,6 @@ from templates import helper as th
 ******************************************************************************/
 #include "${x}_layer.h"
 
-extern ${x}_layer context;
-
 #if defined(__cplusplus)
 extern "C" {
 #endif

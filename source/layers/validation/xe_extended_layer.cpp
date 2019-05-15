@@ -30,8 +30,6 @@
 ******************************************************************************/
 #include "xe_layer.h"
 
-extern xe_layer context;
-
 #if defined(__cplusplus)
 extern "C" {
 #endif

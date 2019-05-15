@@ -18,6 +18,8 @@ add_library(${TARGET_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_module.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_residency.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_sampler.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/xe_lib.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/xe_lib.cpp
 )
 
 target_include_directories(${TARGET_NAME}

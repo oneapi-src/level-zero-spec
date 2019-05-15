@@ -21,21 +21,10 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file loader.cpp
+* @file xe_loader.cpp
 *
 ******************************************************************************/
-#include <mutex>
-#include <stdlib.h>
 #include "xe_loader.h"
-
-///////////////////////////////////////////////////////////////////////////////
-inline bool getenv_tobool( const char* name )
-{
-    const char* env = getenv( name );
-    if( ( nullptr == env ) || strcmp( "0", env ) )
-        return false;
-    return strcmp( "0", env ) ? false : true;
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 xe_loader context;

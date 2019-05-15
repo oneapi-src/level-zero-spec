@@ -49,7 +49,7 @@ def declare_dbg(obj, tags):
 ******************************************************************************/
 #include "${n}_api.hpp"
 #include "${n}_ddi.h"
-#include "${x}_lib.h"
+#include "${n}_lib.h"
 
 extern "C" {
 

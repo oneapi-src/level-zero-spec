@@ -176,10 +176,10 @@ def generate_api_cpp(path, namespace, tags, specs, meta):
 """
 def generate_lib_cpp(path, namespace, tags, specs, meta):
     util.makePath(path)
-    util.removeFiles(path, "*.cpp")
 
     loc, files = mako_lib_cpp(path, namespace, tags, specs, meta)
 
+    files.extend(["%s_lib.h"%namespace, "%s_lib.cpp"%namespace])
     mako_cmake_cpp(path, namespace, files)
 
     return loc

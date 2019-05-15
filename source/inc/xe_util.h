@@ -29,6 +29,7 @@
 #if defined(__cplusplus)
 #pragma once
 #endif
+#include <stdlib.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 #if defined(__linux__)
@@ -53,5 +54,14 @@ typedef struct _cl_command_queue* cl_command_queue;
 typedef struct _cl_context* cl_context;
 typedef struct _cl_program* cl_program;
 #endif
+
+///////////////////////////////////////////////////////////////////////////////
+inline bool getenv_tobool( const char* name )
+{
+    const char* env = getenv( name );
+    if( ( nullptr == env ) || strcmp( "0", env ) )
+        return false;
+    return strcmp( "1", env );
+}
 
 #endif // _XE_UTIL_H

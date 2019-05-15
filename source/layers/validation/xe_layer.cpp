@@ -21,22 +21,12 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file layer.cpp
+* @file xe_layer.cpp
 *
 ******************************************************************************/
-#include <stdlib.h>
 #include "xe_layer.h"
 
 xe_layer context;
-
-///////////////////////////////////////////////////////////////////////////////
-inline bool getenv_tobool( const char* name )
-{
-    const char* env = getenv( name );
-    if( ( nullptr == env ) || strcmp( "0", env ) )
-        return false;
-    return strcmp( "1", env );
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 xe_layer::xe_layer()

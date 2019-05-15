@@ -39,8 +39,6 @@ from templates import helper as th
 ******************************************************************************/
 #include "${x}_loader.h"
 
-extern ${x}_loader context;
-
 #if defined(__cplusplus)
 extern "C" {
 #endif

@@ -21,25 +21,18 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file layer.h
+* @file xe_layer.h
 *
 ******************************************************************************/
-#ifndef _LAYER_H
-#define _LAYER_H
+#ifndef _XE_LAYER_H
+#define _XE_LAYER_H
 #if defined(__cplusplus)
 #pragma once
 #endif
 #include "xe_ddi.h"
 #include "xex_ddi.h"
 #include "xet_ddi.h"
-
-///////////////////////////////////////////////////////////////////////////////
-#if XE_ENABLE_OCL_INTEROP
-typedef struct _cl_mem* cl_mem;
-typedef struct _cl_command_queue* cl_command_queue;
-typedef struct _cl_context* cl_context;
-typedef struct _cl_program* cl_program;
-#endif
+#include "xe_util.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 class xe_layer
@@ -83,4 +76,6 @@ public:
     ~xe_layer();
 };
 
-#endif // _LAYER_H
+extern xe_layer context;
+
+#endif // _XE_LAYER_H

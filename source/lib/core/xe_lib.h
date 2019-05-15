@@ -21,27 +21,27 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xex_device.cpp
-*
-* @brief C++ wrapper of Intel Xe Level-Zero Extended APIs for Device
-*
-* @cond DEV
-* DO NOT EDIT: generated from /scripts/extended/device.yml
-* @endcond
+* @file xe_lib.h
 *
 ******************************************************************************/
-#include "xex_api.hpp"
-#include "xex_ddi.h"
-#include "xex_lib.h"
+#ifndef _XE_LIB_H
+#define _XE_LIB_H
+#if defined(__cplusplus)
+#pragma once
+#endif
+#include "xe_ddi.h"
+#include "xe_util.h"
 
-extern "C" {
-
-} // extern "C"
-
-namespace xex
+///////////////////////////////////////////////////////////////////////////////
+class xe_lib
 {
-} // namespace xex
+public:
+    HMODULE loader = nullptr;
 
-#ifdef _DEBUG
+    xe_lib();
+    ~xe_lib();
+};
 
-#endif // _DEBUG
+extern xe_lib context;
+
+#endif // _XE_LIB_H

@@ -32,7 +32,7 @@
 ******************************************************************************/
 #include "xet_api.hpp"
 #include "xet_ddi.h"
-#include "xe_lib.h"
+#include "xet_lib.h"
 
 extern "C" {
 

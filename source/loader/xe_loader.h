@@ -21,11 +21,11 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file loader.h
+* @file xe_loader.h
 *
 ******************************************************************************/
-#ifndef _LOADER_H
-#define _LOADER_H
+#ifndef _XE_LOADER_H
+#define _XE_LOADER_H
 #if defined(__cplusplus)
 #pragma once
 #endif
@@ -47,4 +47,6 @@ public:
     ~xe_loader();
 };
 
-#endif // _LOADER_H
+extern xe_loader context;
+
+#endif // _XE_LOADER_H
