@@ -21,16 +21,11 @@
  */
 #include "hardware_counter.hpp"
 #include <assert.h>
-#include <iostream>
 
 HardwareCounter::HardwareCounter() {
-    std::cerr << "ERROR: Hardware counters are only supported on Unix systems."
-              << std::endl;
-    assert(0);
 }
 
 HardwareCounter::~HardwareCounter() {
-    assert(0);
 }
 
 void HardwareCounter::start(void) {
@@ -57,4 +52,8 @@ long long HardwareCounter::counter_cycles(void) {
 
 bool HardwareCounter::is_supported(void) {
     return false;
+}
+
+std::string HardwareCounter::support_warning(void) {
+    return "Hardware counters are not supported. Compile benchmark with the PAPI library on Unix system";
 }

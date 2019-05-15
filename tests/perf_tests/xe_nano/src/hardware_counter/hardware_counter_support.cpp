@@ -24,6 +24,24 @@
 #include <assert.h>
 #include <papi.h>
 
+static void print_enable_events(std::string counter_name) {
+    std::cout << counter_name
+              <<" Counter is not enabled. Try enabling it with:\n"
+              << "  sudo sh -c 'echo -1 >/proc/sys/kernel/perf_event_paranoid'"
+              << std::endl << std::endl;
+}
+
+static void error_handler_function(std::string function_name,
+                                   std::string counter_name,int ret) {
+        std::cout << "ERROR: "
+                  << function_name
+                  << " failed with "
+                  << ret << std::endl;
+        if (ret == PAPI_ECMP_DISABLED) {
+            print_enable_events(counter_name);
+        }
+}
+
 HardwareCounter::HardwareCounter() {
     int ret;
     int number_active_events;
@@ -39,15 +57,26 @@ HardwareCounter::HardwareCounter() {
     SUCCESS_OR_TERMINATE(PAPI_create_eventset(&event_set));
 
     /* Add Total Instructions Executed to the event_set */
-    SUCCESS_OR_TERMINATE(PAPI_add_event(event_set, PAPI_TOT_INS));
+    ret = PAPI_add_event(event_set, PAPI_TOT_INS);
+    if (ret != PAPI_OK) {
+        error_handler_function("PAPI_add_event", "PAPI_TOT_INS", ret);
+    }
 
     /* Add Total Cycles event to the event_set */
-    SUCCESS_OR_TERMINATE(PAPI_add_event(event_set, PAPI_TOT_CYC));
+    ret = PAPI_add_event(event_set, PAPI_TOT_CYC);
+    if (ret != PAPI_OK) {
+        error_handler_function("PAPI_add_event", "PAPI_TOT_CYC", ret);
+    }
 
     number_active_events = 0;
     SUCCESS_OR_TERMINATE(PAPI_list_events(event_set, NULL,
                                           &number_active_events));
-    assert(number_active_events == number_events);
+
+    /*
+     * false if PAPI library is available and the events/counters are
+     * disabled; Otherwise, true.
+     */
+    _counter_enabled = (number_active_events == number_events);
 }
 
 HardwareCounter::~HardwareCounter() {
@@ -89,5 +118,9 @@ long long HardwareCounter::counter_cycles(void) {
 }
 
 bool HardwareCounter::is_supported(void) {
-    return true;
+    return _counter_enabled;
+}
+
+std::string HardwareCounter::support_warning(void) {
+    return "PAPI counters are disabled. Decrease perf_event_paranoid level.";
 }

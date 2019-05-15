@@ -101,10 +101,16 @@ void _function_call_iter_hardware_counters(const std::string filename,
     int iteration_number = probe_setting.measure_iteration;
 
     assert(api_static_probe_is_init());
-    if (HardwareCounter::is_supported() == false) {
+
+    if (hardware_counters->is_supported() == false) {
+        std::string warning = HardwareCounter::support_warning();
         print_probe_output(prefix, filename, line_number, function_name,
-                           "Hardware counters are not supported. Compile benchmark with the PAPI library on Unix system",
-                           "");
+                           warning, "");
+        /*
+         * Even though no hardware counters are retrieved, call the api
+         * function once in case other parts of the test case expect the
+         * api function to update some state.
+         */
         api_function(args...);
         return;
     }

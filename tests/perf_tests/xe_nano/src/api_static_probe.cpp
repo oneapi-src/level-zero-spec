@@ -27,8 +27,7 @@ static bool static_probe_init = false;
 void api_static_probe_init() {
     assert(static_probe_init == false); /* Initialize it only once */
     static_probe_init = true;
-    if (HardwareCounter::is_supported())
-        hardware_counters = new HardwareCounter;
+    hardware_counters = new HardwareCounter;
 }
 
 void api_static_probe_cleanup() {

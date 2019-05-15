@@ -21,6 +21,7 @@
  */
 #ifndef _HARDWARE_COUNTER_HPP_
 #define _HARDWARE_COUNTER_HPP_
+#include <iostream>
 
 class HardwareCounter {
   public:
@@ -30,9 +31,11 @@ class HardwareCounter {
     void end(void);
     long long counter_instructions(void);
     long long counter_cycles(void);
-    static bool is_supported(void);
+    bool is_supported(void);
+    static std::string support_warning(void);
 
   private:
+    bool _counter_enabled;
     int event_set;
 
     /*
