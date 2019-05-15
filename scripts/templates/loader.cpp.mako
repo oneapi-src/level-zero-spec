@@ -56,9 +56,10 @@ extern "C" {
 ///     - ::${X}_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __${x}dllexport ${x}_result_t __${x}call
-${tbl['export']}(
-    ${x}_api_version_t version, ///< [in] API version
-    ${tbl['type']}* ptable      ///< [in,out] pointer to table of API function pointers
+${tbl['export']['name']}(
+    %for line in th.make_param_lines(n, tags, tbl['export']):
+    ${line}
+    %endfor
     )
 {
     if( nullptr == ptable )
@@ -72,14 +73,14 @@ ${tbl['export']}(
     if( nullptr != context.commonDriver )
     {
         static auto getTable = reinterpret_cast<${tbl['pfn']}>(
-            GET_FUNCTION_PTR(context.commonDriver, "${tbl['export']}") );
+            GET_FUNCTION_PTR(context.commonDriver, "${tbl['export']['name']}") );
         result = getTable( version, ptable );
     }
 
     if(( ${X}_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
     {
         static auto getTable = reinterpret_cast<${tbl['pfn']}>(
-            GET_FUNCTION_PTR(context.validationLayer, "${tbl['export']}") );
+            GET_FUNCTION_PTR(context.validationLayer, "${tbl['export']['name']}") );
         result = getTable( version, ptable );
     }
 

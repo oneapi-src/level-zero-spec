@@ -80,8 +80,8 @@ typedef struct _xex_command_graph_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xexGetCommandGraphProcAddrTable(
-    xe_api_version_t version, ///< [in] API version requested
-    xex_command_graph_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xex_command_graph_apitable_t* ptable            ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////

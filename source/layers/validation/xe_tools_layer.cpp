@@ -47,8 +47,8 @@ extern "C" {
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetDeviceProcAddrTable(
-    xe_api_version_t version, ///< [in] API version
-    xet_device_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_device_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
@@ -78,8 +78,8 @@ xetGetDeviceProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetCommandListProcAddrTable(
-    xe_api_version_t version, ///< [in] API version
-    xet_command_list_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_command_list_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
@@ -118,8 +118,8 @@ xetGetCommandListProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricGroupProcAddrTable(
-    xe_api_version_t version, ///< [in] API version
-    xet_metric_group_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_metric_group_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
@@ -158,8 +158,8 @@ xetGetMetricGroupProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricProcAddrTable(
-    xe_api_version_t version, ///< [in] API version
-    xet_metric_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_metric_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
@@ -192,8 +192,8 @@ xetGetMetricProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricTracerProcAddrTable(
-    xe_api_version_t version, ///< [in] API version
-    xet_metric_tracer_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_metric_tracer_apitable_t* ptable            ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
@@ -229,8 +229,8 @@ xetGetMetricTracerProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricQueryPoolProcAddrTable(
-    xe_api_version_t version, ///< [in] API version
-    xet_metric_query_pool_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_metric_query_pool_apitable_t* ptable        ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
@@ -266,8 +266,8 @@ xetGetMetricQueryPoolProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricQueryProcAddrTable(
-    xe_api_version_t version, ///< [in] API version
-    xet_metric_query_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_metric_query_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
@@ -297,8 +297,8 @@ xetGetMetricQueryProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetPowerProcAddrTable(
-    xe_api_version_t version, ///< [in] API version
-    xet_power_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_power_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
@@ -412,8 +412,8 @@ xetGetPowerProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetFreqDomainProcAddrTable(
-    xe_api_version_t version, ///< [in] API version
-    xet_freq_domain_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_freq_domain_apitable_t* ptable              ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )

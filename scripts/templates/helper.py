@@ -808,11 +808,31 @@ def get_pfntables(specs, meta, namespace, tags):
         objs = get_class_function_objs(specs, cls)
         if len(objs) > 0:
             name = get_table_name(namespace, tags, objs[0])
+            table = "%s_%s_apitable_t"%(namespace, _camel_to_snake(name))
+
+            params = []
+            params.append({
+                'type': "$x_api_version_t",
+                'name': "version",
+                'desc': "[in] API version requested"
+                })
+            params.append({
+                'type': "%s*"%table,
+                'name': "ptable",
+                'desc': "[in,out] pointer to table of API function pointers"
+                })
+            export = {
+                'name': "%sGet%sProcAddrTable"%(namespace, name),
+                'params': params
+                }
+
+            pfn = "%s_pfnGet%sProcAddrTable_t"%(namespace, name)
+
             tables.append({
                 'name': name, 
-                'type': "%s_%s_apitable_t"%(namespace, _camel_to_snake(name)),
-                'export': "%sGet%sProcAddrTable"%(namespace, name),
-                'pfn': "%s_pfnGet%sProcAddrTable_t"%(namespace, name),
+                'type': table,
+                'export': export,
+                'pfn': pfn,
                 'functions': objs
         })
     return tables

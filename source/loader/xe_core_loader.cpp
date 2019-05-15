@@ -47,8 +47,8 @@ extern "C" {
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetCommandListProcAddrTable(
-    xe_api_version_t version, ///< [in] API version
-    xe_command_list_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_command_list_apitable_t* ptable              ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
@@ -89,8 +89,8 @@ xeGetCommandListProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetDeviceProcAddrTable(
-    xe_api_version_t version, ///< [in] API version
-    xe_device_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_device_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
@@ -131,8 +131,8 @@ xeGetDeviceProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetCommandQueueProcAddrTable(
-    xe_api_version_t version, ///< [in] API version
-    xe_command_queue_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_command_queue_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
@@ -173,8 +173,8 @@ xeGetCommandQueueProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetContextProcAddrTable(
-    xe_api_version_t version, ///< [in] API version
-    xe_context_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_context_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
@@ -215,8 +215,8 @@ xeGetContextProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetDeviceGroupProcAddrTable(
-    xe_api_version_t version, ///< [in] API version
-    xe_device_group_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_device_group_apitable_t* ptable              ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
@@ -257,8 +257,8 @@ xeGetDeviceGroupProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetFenceProcAddrTable(
-    xe_api_version_t version, ///< [in] API version
-    xe_fence_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_fence_apitable_t* ptable                     ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
@@ -299,8 +299,8 @@ xeGetFenceProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetEventPoolProcAddrTable(
-    xe_api_version_t version, ///< [in] API version
-    xe_event_pool_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_event_pool_apitable_t* ptable                ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
@@ -341,8 +341,8 @@ xeGetEventPoolProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetEventProcAddrTable(
-    xe_api_version_t version, ///< [in] API version
-    xe_event_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_event_apitable_t* ptable                     ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
@@ -383,8 +383,8 @@ xeGetEventProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetImageProcAddrTable(
-    xe_api_version_t version, ///< [in] API version
-    xe_image_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_image_apitable_t* ptable                     ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
@@ -425,8 +425,8 @@ xeGetImageProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetModuleProcAddrTable(
-    xe_api_version_t version, ///< [in] API version
-    xe_module_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_module_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
@@ -467,8 +467,8 @@ xeGetModuleProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetModuleBuildLogProcAddrTable(
-    xe_api_version_t version, ///< [in] API version
-    xe_module_build_log_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_module_build_log_apitable_t* ptable          ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
@@ -509,8 +509,8 @@ xeGetModuleBuildLogProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetFunctionProcAddrTable(
-    xe_api_version_t version, ///< [in] API version
-    xe_function_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_function_apitable_t* ptable                  ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
@@ -551,8 +551,8 @@ xeGetFunctionProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetSamplerProcAddrTable(
-    xe_api_version_t version, ///< [in] API version
-    xe_sampler_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_sampler_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )
@@ -593,8 +593,8 @@ xeGetSamplerProcAddrTable(
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetGlobalProcAddrTable(
-    xe_api_version_t version, ///< [in] API version
-    xe_global_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_global_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
     )
 {
     if( nullptr == ptable )

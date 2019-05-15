@@ -91,16 +91,18 @@ typedef struct _${tbl['type']}
 ///     - ::${X}_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __${x}dllexport ${x}_result_t __${x}call
-${tbl['export']}(
-    ${x}_api_version_t version, ///< [in] API version requested
-    ${tbl['type']}* ptable      ///< [in,out] pointer to table of API function pointers
+${tbl['export']['name']}(
+    %for line in th.make_param_lines(n, tags, tbl['export']):
+    ${line}
+    %endfor
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for ${tbl['export']}
+/// @brief Function-pointer for ${tbl['export']['name']}
 typedef ${x}_result_t (__${x}call *${tbl['pfn']})(
-    ${x}_api_version_t,
-    ${tbl['type']}*
+    %for line in th.make_param_lines(n, tags, tbl['export'], format=["type", "delim"]):
+    ${line}
+    %endfor
     );
 
 %endfor

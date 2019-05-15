@@ -328,8 +328,8 @@ typedef struct _xe_command_list_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetCommandListProcAddrTable(
-    xe_api_version_t version, ///< [in] API version requested
-    xe_command_list_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_command_list_apitable_t* ptable              ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -484,8 +484,8 @@ typedef struct _xe_device_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetDeviceProcAddrTable(
-    xe_api_version_t version, ///< [in] API version requested
-    xe_device_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_device_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -548,8 +548,8 @@ typedef struct _xe_command_queue_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetCommandQueueProcAddrTable(
-    xe_api_version_t version, ///< [in] API version requested
-    xe_command_queue_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_command_queue_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -685,8 +685,8 @@ typedef struct _xe_context_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetContextProcAddrTable(
-    xe_api_version_t version, ///< [in] API version requested
-    xe_context_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_context_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -764,8 +764,8 @@ typedef struct _xe_device_group_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetDeviceGroupProcAddrTable(
-    xe_api_version_t version, ///< [in] API version requested
-    xe_device_group_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_device_group_apitable_t* ptable              ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -832,8 +832,8 @@ typedef struct _xe_fence_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetFenceProcAddrTable(
-    xe_api_version_t version, ///< [in] API version requested
-    xe_fence_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_fence_apitable_t* ptable                     ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -902,8 +902,8 @@ typedef struct _xe_event_pool_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetEventPoolProcAddrTable(
-    xe_api_version_t version, ///< [in] API version requested
-    xe_event_pool_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_event_pool_apitable_t* ptable                ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -977,8 +977,8 @@ typedef struct _xe_event_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetEventProcAddrTable(
-    xe_api_version_t version, ///< [in] API version requested
-    xe_event_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_event_apitable_t* ptable                     ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1032,8 +1032,8 @@ typedef struct _xe_image_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetImageProcAddrTable(
-    xe_api_version_t version, ///< [in] API version requested
-    xe_image_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_image_apitable_t* ptable                     ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1106,8 +1106,8 @@ typedef struct _xe_module_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetModuleProcAddrTable(
-    xe_api_version_t version, ///< [in] API version requested
-    xe_module_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_module_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1152,8 +1152,8 @@ typedef struct _xe_module_build_log_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetModuleBuildLogProcAddrTable(
-    xe_api_version_t version, ///< [in] API version requested
-    xe_module_build_log_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_module_build_log_apitable_t* ptable          ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1249,8 +1249,8 @@ typedef struct _xe_function_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetFunctionProcAddrTable(
-    xe_api_version_t version, ///< [in] API version requested
-    xe_function_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_function_apitable_t* ptable                  ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1295,8 +1295,8 @@ typedef struct _xe_sampler_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetSamplerProcAddrTable(
-    xe_api_version_t version, ///< [in] API version requested
-    xe_sampler_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_sampler_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1340,8 +1340,8 @@ typedef struct _xe_global_apitable_t
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetGlobalProcAddrTable(
-    xe_api_version_t version, ///< [in] API version requested
-    xe_global_apitable_t* ptable      ///< [in,out] pointer to table of API function pointers
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_global_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
