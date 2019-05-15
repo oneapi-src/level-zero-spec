@@ -82,12 +82,6 @@ xeInit(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeInit 
-typedef xe_result_t (__xecall *xe_pfnInit_t)(
-    xe_init_flag_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns the current version of the installed driver for the specified
 ///        device group.
 /// 
@@ -113,13 +107,6 @@ xe_result_t __xecall
 xeDeviceGroupGetDriverVersion(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of device group
     uint32_t* version                               ///< [out] driver version
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupGetDriverVersion 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetDriverVersion_t)(
-    xe_device_group_handle_t,
-    uint32_t*
     );
 
 #if defined(__cplusplus)

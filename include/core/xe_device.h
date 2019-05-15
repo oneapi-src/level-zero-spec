@@ -77,13 +77,6 @@ xeGetDeviceGroups(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeGetDeviceGroups 
-typedef xe_result_t (__xecall *xe_pfnGetDeviceGroups_t)(
-    size_t*,
-    xe_device_group_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves devices within a device group
 /// 
 /// @details
@@ -115,14 +108,6 @@ xeDeviceGroupGetDevices(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupGetDevices 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetDevices_t)(
-    xe_device_group_handle_t,
-    size_t*,
-    xe_device_group_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves a sub-device from a device
 /// 
 /// @details
@@ -147,14 +132,6 @@ xeDeviceGetSubDevice(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve
     xe_device_handle_t* phSubDevice                 ///< [out] pointer to handle of sub-device object.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGetSubDevice 
-typedef xe_result_t (__xecall *xe_pfnDeviceGetSubDevice_t)(
-    xe_device_handle_t,
-    uint32_t,
-    xe_device_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -192,13 +169,6 @@ xe_result_t __xecall
 xeDeviceGroupGetApiVersion(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     xe_api_version_t* version                       ///< [out] api version
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupGetApiVersion 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetApiVersion_t)(
-    xe_device_group_handle_t,
-    xe_api_version_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -287,13 +257,6 @@ xeDeviceGroupGetProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupGetProperties 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetProperties_t)(
-    xe_device_group_handle_t,
-    xe_device_properties_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_device_compute_properties_t
 typedef enum _xe_device_compute_properties_version_t
 {
@@ -352,13 +315,6 @@ xe_result_t __xecall
 xeDeviceGroupGetComputeProperties(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupGetComputeProperties 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetComputeProperties_t)(
-    xe_device_group_handle_t,
-    xe_device_compute_properties_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -438,13 +394,6 @@ xeDeviceGroupGetMemoryProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupGetMemoryProperties 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetMemoryProperties_t)(
-    xe_device_group_handle_t,
-    xe_device_memory_properties_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_device_p2p_properties_t
 typedef enum _xe_device_p2p_properties_version_t
 {
@@ -491,14 +440,6 @@ xeDeviceGetP2PProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGetP2PProperties 
-typedef xe_result_t (__xecall *xe_pfnDeviceGetP2PProperties_t)(
-    xe_device_handle_t,
-    xe_device_handle_t,
-    xe_device_p2p_properties_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries if one device can directly access peer device allocations
 /// 
 /// @details
@@ -523,14 +464,6 @@ xeDeviceCanAccessPeer(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
     xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
     xe_bool_t* value                                ///< [out] returned access capability
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceCanAccessPeer 
-typedef xe_result_t (__xecall *xe_pfnDeviceCanAccessPeer_t)(
-    xe_device_handle_t,
-    xe_device_handle_t,
-    xe_bool_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -572,13 +505,6 @@ xeDeviceSetIntermediateCacheConfig(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceSetIntermediateCacheConfig 
-typedef xe_result_t (__xecall *xe_pfnDeviceSetIntermediateCacheConfig_t)(
-    xe_device_handle_t,
-    xe_cache_config_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Sets the preferred Last Level cache configuration for a device.
 /// 
 /// @details
@@ -601,13 +527,6 @@ xe_result_t __xecall
 xeDeviceSetLastLevelCacheConfig(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device 
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceSetLastLevelCacheConfig 
-typedef xe_result_t (__xecall *xe_pfnDeviceSetLastLevelCacheConfig_t)(
-    xe_device_handle_t,
-    xe_cache_config_t
     );
 
 #if defined(__cplusplus)

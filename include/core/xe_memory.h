@@ -103,18 +103,6 @@ xeContextAllocSharedMem(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeContextAllocSharedMem 
-typedef xe_result_t (__xecall *xe_pfnContextAllocSharedMem_t)(
-    xe_context_handle_t,
-    xe_device_handle_t,
-    xe_device_mem_alloc_flag_t,
-    xe_host_mem_alloc_flag_t,
-    size_t,
-    size_t,
-    void**
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Allocates memory specific to a device
 /// 
 /// @details
@@ -148,17 +136,6 @@ xeContextAllocDeviceMem(
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
     void** ptr                                      ///< [out] pointer to device allocation
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeContextAllocDeviceMem 
-typedef xe_result_t (__xecall *xe_pfnContextAllocDeviceMem_t)(
-    xe_context_handle_t,
-    xe_device_handle_t,
-    xe_device_mem_alloc_flag_t,
-    size_t,
-    size_t,
-    void**
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -197,16 +174,6 @@ xeContextAllocHostMem(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeContextAllocHostMem 
-typedef xe_result_t (__xecall *xe_pfnContextAllocHostMem_t)(
-    xe_context_handle_t,
-    xe_host_mem_alloc_flag_t,
-    size_t,
-    size_t,
-    void**
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Frees allocated host memory, device memory, or shared memory
 /// 
 /// @details
@@ -234,13 +201,6 @@ xe_result_t __xecall
 xeContextFreeMem(
     xe_context_handle_t hContext,                   ///< [in] handle of context
     const void* ptr                                 ///< [in] pointer to memory to free
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeContextFreeMem 
-typedef xe_result_t (__xecall *xe_pfnContextFreeMem_t)(
-    xe_context_handle_t,
-    const void*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -300,14 +260,6 @@ xeContextGetMemProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeContextGetMemProperties 
-typedef xe_result_t (__xecall *xe_pfnContextGetMemProperties_t)(
-    xe_context_handle_t,
-    const void*,
-    xe_memory_allocation_properties_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves the base address and/or size of an allocation
 /// 
 /// @details
@@ -331,15 +283,6 @@ xeContextGetMemAddressRange(
     const void* ptr,                                ///< [in] Pointer to query
     void** pBase,                                   ///< [in,out][optional] base address of the allocation
     size_t* pSize                                   ///< [in,out][optional] size of the allocation
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeContextGetMemAddressRange 
-typedef xe_result_t (__xecall *xe_pfnContextGetMemAddressRange_t)(
-    xe_context_handle_t,
-    const void*,
-    void**,
-    size_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -369,14 +312,6 @@ xeContextGetMemIpcHandle(
     xe_context_handle_t hContext,                   ///< [in] handle of context
     const void* ptr,                                ///< [in] Pointer to the device memory allocation
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeContextGetMemIpcHandle 
-typedef xe_result_t (__xecall *xe_pfnContextGetMemIpcHandle_t)(
-    xe_context_handle_t,
-    const void*,
-    xe_ipc_mem_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -423,16 +358,6 @@ xeContextOpenMemIpcHandle(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeContextOpenMemIpcHandle 
-typedef xe_result_t (__xecall *xe_pfnContextOpenMemIpcHandle_t)(
-    xe_context_handle_t,
-    xe_device_handle_t,
-    xe_ipc_mem_handle_t,
-    xe_ipc_memory_flag_t,
-    void**
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Closes an IPC memory handle in a receiving process
 /// 
 /// @details
@@ -457,13 +382,6 @@ xe_result_t __xecall
 xeContextCloseMemIpcHandle(
     xe_context_handle_t hContext,                   ///< [in] handle of context
     const void* ptr                                 ///< [in] pointer to device allocation in this process
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeContextCloseMemIpcHandle 
-typedef xe_result_t (__xecall *xe_pfnContextCloseMemIpcHandle_t)(
-    xe_context_handle_t,
-    const void*
     );
 
 #if defined(__cplusplus)

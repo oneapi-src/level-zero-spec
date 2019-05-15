@@ -80,16 +80,6 @@ xeCommandListAppendMemoryCopy(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListAppendMemoryCopy 
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendMemoryCopy_t)(
-    xe_command_list_handle_t,
-    void*,
-    const void*,
-    size_t,
-    xe_event_handle_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Initializes host, device, or shared memory.
 /// 
 /// @details
@@ -121,16 +111,6 @@ xeCommandListAppendMemorySet(
     int value,                                      ///< [in] value to initialize memory to
     size_t size,                                    ///< [in] size in bytes to initailize
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListAppendMemorySet 
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendMemorySet_t)(
-    xe_command_list_handle_t,
-    void*,
-    int,
-    size_t,
-    xe_event_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -180,19 +160,6 @@ xeCommandListAppendMemoryCopyRegion(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListAppendMemoryCopyRegion 
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendMemoryCopyRegion_t)(
-    xe_command_list_handle_t,
-    void*,
-    xe_copy_region_t*,
-    uint32_t,
-    const void*,
-    xe_copy_region_t*,
-    uint32_t,
-    xe_event_handle_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Copies a image.
 /// 
 /// @details
@@ -219,15 +186,6 @@ xeCommandListAppendImageCopy(
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListAppendImageCopy 
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendImageCopy_t)(
-    xe_command_list_handle_t,
-    xe_image_handle_t,
-    xe_image_handle_t,
-    xe_event_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -272,17 +230,6 @@ xeCommandListAppendImageCopyRegion(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListAppendImageCopyRegion 
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendImageCopyRegion_t)(
-    xe_command_list_handle_t,
-    xe_image_handle_t,
-    xe_image_handle_t,
-    xe_image_region_t*,
-    xe_image_region_t*,
-    xe_event_handle_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Copies from a image to device or shared memory.
 /// 
 /// @details
@@ -315,16 +262,6 @@ xeCommandListAppendImageCopyToMemory(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListAppendImageCopyToMemory 
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendImageCopyToMemory_t)(
-    xe_command_list_handle_t,
-    void*,
-    xe_image_handle_t,
-    xe_image_region_t*,
-    xe_event_handle_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Copies to a image from device or shared memory.
 /// 
 /// @details
@@ -354,16 +291,6 @@ xeCommandListAppendImageCopyFromMemory(
     const void* srcptr,                             ///< [in] pointer to source memory to copy from
     xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListAppendImageCopyFromMemory 
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendImageCopyFromMemory_t)(
-    xe_command_list_handle_t,
-    xe_image_handle_t,
-    const void*,
-    xe_image_region_t*,
-    xe_event_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -405,14 +332,6 @@ xeCommandListAppendMemoryPrefetch(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     const void* ptr,                                ///< [in] pointer to start of the memory range to prefetch
     size_t count                                    ///< [in] size in bytes of the memory range to prefetch
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListAppendMemoryPrefetch 
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendMemoryPrefetch_t)(
-    xe_command_list_handle_t,
-    const void*,
-    size_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -472,16 +391,6 @@ xeCommandListAppendMemAdvise(
     const void* ptr,                                ///< [in] Pointer to the start of the memory range
     size_t size,                                    ///< [in] Size in bytes of the memory range
     xe_memory_advice_t advice                       ///< [in] Memory advice for the memory range
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListAppendMemAdvise 
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendMemAdvise_t)(
-    xe_command_list_handle_t,
-    xe_device_handle_t,
-    const void*,
-    size_t,
-    xe_memory_advice_t
     );
 
 #if defined(__cplusplus)

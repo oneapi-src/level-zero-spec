@@ -99,14 +99,6 @@ xeEventPoolCreate(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeEventPoolCreate 
-typedef xe_result_t (__xecall *xe_pfnEventPoolCreate_t)(
-    xe_device_handle_t,
-    const xe_event_pool_desc_t*,
-    xe_event_pool_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes an event pool object.
 /// 
 /// @details
@@ -131,12 +123,6 @@ typedef xe_result_t (__xecall *xe_pfnEventPoolCreate_t)(
 xe_result_t __xecall
 xeEventPoolDestroy(
     xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object to destroy
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeEventPoolDestroy 
-typedef xe_result_t (__xecall *xe_pfnEventPoolDestroy_t)(
-    xe_event_pool_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -210,14 +196,6 @@ xeEventCreate(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeEventCreate 
-typedef xe_result_t (__xecall *xe_pfnEventCreate_t)(
-    xe_event_pool_handle_t,
-    const xe_event_desc_t*,
-    xe_event_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes an event object.
 /// 
 /// @details
@@ -248,12 +226,6 @@ xeEventDestroy(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeEventDestroy 
-typedef xe_result_t (__xecall *xe_pfnEventDestroy_t)(
-    xe_event_handle_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Gets an IPC event pool handle for the specified event handle that can
 ///        be shared with another process.
 /// 
@@ -276,13 +248,6 @@ xe_result_t __xecall
 xeEventPoolGetIpcHandle(
     xe_event_pool_handle_t hEventPool,              ///< [in] handle of event pool object
     xe_ipc_event_pool_handle_t* phIpc               ///< [out] Returned IPC event handle
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeEventPoolGetIpcHandle 
-typedef xe_result_t (__xecall *xe_pfnEventPoolGetIpcHandle_t)(
-    xe_event_pool_handle_t,
-    xe_ipc_event_pool_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -315,14 +280,6 @@ xeEventPoolOpenIpcHandle(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeEventPoolOpenIpcHandle 
-typedef xe_result_t (__xecall *xe_pfnEventPoolOpenIpcHandle_t)(
-    xe_device_handle_t,
-    xe_ipc_event_pool_handle_t,
-    xe_event_pool_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Closes an IPC event handle in the current process.
 /// 
 /// @details
@@ -345,12 +302,6 @@ typedef xe_result_t (__xecall *xe_pfnEventPoolOpenIpcHandle_t)(
 xe_result_t __xecall
 xeEventPoolCloseIpcHandle(
     xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeEventPoolCloseIpcHandle 
-typedef xe_result_t (__xecall *xe_pfnEventPoolCloseIpcHandle_t)(
-    xe_event_pool_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -382,13 +333,6 @@ xeCommandListAppendSignalEvent(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListAppendSignalEvent 
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendSignalEvent_t)(
-    xe_command_list_handle_t,
-    xe_event_handle_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Appends wait on event(s) on the device into a command list.
 /// 
 /// @details
@@ -412,14 +356,6 @@ xeCommandListAppendWaitOnEvents(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListAppendWaitOnEvents 
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendWaitOnEvents_t)(
-    xe_command_list_handle_t,
-    uint32_t,
-    xe_event_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Signals a event from host.
 /// 
 /// @details
@@ -440,12 +376,6 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendWaitOnEvents_t)(
 xe_result_t __xecall
 xeEventHostSignal(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeEventHostSignal 
-typedef xe_result_t (__xecall *xe_pfnEventHostSignal_t)(
-    xe_event_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -480,13 +410,6 @@ xeEventHostSynchronize(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeEventHostSynchronize 
-typedef xe_result_t (__xecall *xe_pfnEventHostSynchronize_t)(
-    xe_event_handle_t,
-    uint32_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Queries an event object's status.
 /// 
 /// @details
@@ -511,12 +434,6 @@ typedef xe_result_t (__xecall *xe_pfnEventHostSynchronize_t)(
 xe_result_t __xecall
 xeEventQueryStatus(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeEventQueryStatus 
-typedef xe_result_t (__xecall *xe_pfnEventQueryStatus_t)(
-    xe_event_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -546,13 +463,6 @@ xeCommandListAppendEventReset(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListAppendEventReset 
-typedef xe_result_t (__xecall *xe_pfnCommandListAppendEventReset_t)(
-    xe_command_list_handle_t,
-    xe_event_handle_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Reset an event back to not signaled state
 /// 
 /// @details
@@ -573,12 +483,6 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendEventReset_t)(
 xe_result_t __xecall
 xeEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeEventReset 
-typedef xe_result_t (__xecall *xe_pfnEventReset_t)(
-    xe_event_handle_t
     );
 
 #if defined(__cplusplus)

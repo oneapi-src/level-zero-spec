@@ -31,7 +31,7 @@
 *
 ******************************************************************************/
 #include "xex_api.hpp"
-#include "xex_api.h"
+#include "xex_ddi.h"
 
 namespace xex
 {

@@ -69,14 +69,6 @@ xeDeviceMakeMemoryResident(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceMakeMemoryResident 
-typedef xe_result_t (__xecall *xe_pfnDeviceMakeMemoryResident_t)(
-    xe_device_handle_t,
-    void*,
-    size_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Allows memory to be evicted from the device.
 /// 
 /// @details
@@ -99,14 +91,6 @@ xeDeviceEvictMemory(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     void* ptr,                                      ///< [in] pointer to memory to evict
     size_t size                                     ///< [in] size in bytes to evict
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceEvictMemory 
-typedef xe_result_t (__xecall *xe_pfnDeviceEvictMemory_t)(
-    xe_device_handle_t,
-    void*,
-    size_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -133,13 +117,6 @@ xeDeviceMakeImageResident(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceMakeImageResident 
-typedef xe_result_t (__xecall *xe_pfnDeviceMakeImageResident_t)(
-    xe_device_handle_t,
-    xe_image_handle_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Allows image to be evicted from the device.
 /// 
 /// @details
@@ -162,13 +139,6 @@ xe_result_t __xecall
 xeDeviceEvictImage(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_image_handle_t hImage                        ///< [in] handle of image to make evict
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceEvictImage 
-typedef xe_result_t (__xecall *xe_pfnDeviceEvictImage_t)(
-    xe_device_handle_t,
-    xe_image_handle_t
     );
 
 #if defined(__cplusplus)

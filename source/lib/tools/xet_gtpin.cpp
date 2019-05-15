@@ -31,7 +31,7 @@
 *
 ******************************************************************************/
 #include "xet_api.hpp"
-#include "xet_api.h"
+#include "xet_ddi.h"
 
 namespace xet
 {

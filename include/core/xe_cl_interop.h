@@ -65,15 +65,6 @@ xeDeviceRegisterCLMemory(
     cl_mem mem,                                     ///< [in] the OpenCL memory to register
     void** ptr                                      ///< [out] pointer to device allocation
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceRegisterCLMemory 
-typedef xe_result_t (__xecall *xe_pfnDeviceRegisterCLMemory_t)(
-    xe_device_handle_t,
-    cl_context,
-    cl_mem,
-    void**
-    );
 #endif // XE_ENABLE_OCL_INTEROP
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -97,15 +88,6 @@ xeDeviceRegisterCLProgram(
     cl_program program,                             ///< [in] the OpenCL program to register
     xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
     );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceRegisterCLProgram 
-typedef xe_result_t (__xecall *xe_pfnDeviceRegisterCLProgram_t)(
-    xe_device_handle_t,
-    cl_context,
-    cl_program,
-    xe_module_handle_t*
-    );
 #endif // XE_ENABLE_OCL_INTEROP
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -128,15 +110,6 @@ xeDeviceRegisterCLCommandQueue(
     cl_context context,                             ///< [in] the OpenCL context that created the command queue
     cl_command_queue command_queue,                 ///< [in] the OpenCL command queue to register
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceRegisterCLCommandQueue 
-typedef xe_result_t (__xecall *xe_pfnDeviceRegisterCLCommandQueue_t)(
-    xe_device_handle_t,
-    cl_context,
-    cl_command_queue,
-    xe_command_queue_handle_t*
     );
 #endif // XE_ENABLE_OCL_INTEROP
 

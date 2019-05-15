@@ -52,6 +52,25 @@ def mako_api_cpp(path, namespace, tags, specs, meta, files, ext):
 """
     generates c/c++ files from the specification documents
 """
+def mako_ddi_cpp(path, namespace, tags, specs, meta):
+    template = "ddi.h.mako"
+    fin = os.path.join("templates", template)
+
+    filename = "%s_ddi.h"%(namespace)
+    fout = os.path.join(path, filename)
+
+    print("Generating %s..."%fout)
+    return util.makoWrite(
+        fin, fout,
+        section=os.path.basename(path),
+        namespace=namespace,
+        tags=tags,
+        specs=specs,
+        meta=meta)
+
+"""
+    generates c/c++ files from the specification documents
+"""
 def mako_lib_cpp(path, namespace, tags, specs, meta):
     loc = 0
     template = "lib.cpp.mako"
@@ -147,6 +166,8 @@ def generate_api_cpp(path, namespace, tags, specs, meta):
 
     hloc += mako_api_cpp(path, namespace, tags, specs, meta, hfiles, ".h")
     hpploc += mako_api_cpp(path, namespace, tags, specs, meta, hppfiles, ".hpp")
+
+    hloc += mako_ddi_cpp(path, namespace, tags, specs, meta)
 
     return hloc + hpploc
 

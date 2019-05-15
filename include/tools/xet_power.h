@@ -82,14 +82,6 @@ xetPowerCreate(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerCreate 
-typedef xe_result_t (__xecall *xet_pfnPowerCreate_t)(
-    xe_device_handle_t,
-    uint32_t,
-    xet_power_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Deletes a power object
 /// 
 /// @remarks
@@ -107,12 +99,6 @@ typedef xe_result_t (__xecall *xet_pfnPowerCreate_t)(
 xe_result_t __xecall
 xetPowerDestroy(
     xet_power_handle_t hPower                       ///< [in] handle of the power object to destroy
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerDestroy 
-typedef xe_result_t (__xecall *xet_pfnPowerDestroy_t)(
-    xet_power_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -220,13 +206,6 @@ xetPowerGetAveragePowerLimit(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerGetAveragePowerLimit 
-typedef xe_result_t (__xecall *xet_pfnPowerGetAveragePowerLimit_t)(
-    xet_power_handle_t,
-    xet_power_average_limit_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Get current burst power limit information for a device
 /// 
 /// @returns
@@ -241,13 +220,6 @@ xe_result_t __xecall
 xetPowerGetBurstPowerLimit(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     xet_power_burst_limit_t* pLimit                 ///< [out] information about the burst power limit
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerGetBurstPowerLimit 
-typedef xe_result_t (__xecall *xet_pfnPowerGetBurstPowerLimit_t)(
-    xet_power_handle_t,
-    xet_power_burst_limit_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -268,13 +240,6 @@ xetPowerGetPeakPowerLimit(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerGetPeakPowerLimit 
-typedef xe_result_t (__xecall *xet_pfnPowerGetPeakPowerLimit_t)(
-    xet_power_handle_t,
-    xet_power_peak_limit_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Get all current power limits for a device
 /// 
 /// @returns
@@ -289,13 +254,6 @@ xe_result_t __xecall
 xetPowerGetAllPowerLimits(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     xet_power_limits_t* pLimits                     ///< [out] information about the average/burst/peak power limits
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerGetAllPowerLimits 
-typedef xe_result_t (__xecall *xet_pfnPowerGetAllPowerLimits_t)(
-    xet_power_handle_t,
-    xet_power_limits_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -316,13 +274,6 @@ xetPowerGetDefaultPowerLimits(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerGetDefaultPowerLimits 
-typedef xe_result_t (__xecall *xet_pfnPowerGetDefaultPowerLimits_t)(
-    xet_power_handle_t,
-    xet_power_limits_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Set the average power limit for a device
 /// 
 /// @returns
@@ -337,13 +288,6 @@ xe_result_t __xecall
 xetPowerSetAveragePowerLimit(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     xet_power_average_limit_t* pLimit               ///< [in] information about the average power limit
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerSetAveragePowerLimit 
-typedef xe_result_t (__xecall *xet_pfnPowerSetAveragePowerLimit_t)(
-    xet_power_handle_t,
-    xet_power_average_limit_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -364,13 +308,6 @@ xetPowerSetBurstPowerLimit(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerSetBurstPowerLimit 
-typedef xe_result_t (__xecall *xet_pfnPowerSetBurstPowerLimit_t)(
-    xet_power_handle_t,
-    xet_power_burst_limit_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Set the peak power limit for a device
 /// 
 /// @returns
@@ -388,13 +325,6 @@ xetPowerSetPeakPowerLimit(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerSetPeakPowerLimit 
-typedef xe_result_t (__xecall *xet_pfnPowerSetPeakPowerLimit_t)(
-    xet_power_handle_t,
-    xet_power_peak_limit_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Set the average/burst/peak power limits for a device
 /// 
 /// @returns
@@ -409,13 +339,6 @@ xe_result_t __xecall
 xetPowerSetPowerLimits(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     xet_power_limits_t* pLimits                     ///< [in] information about the average/burst/peak power limits
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerSetPowerLimits 
-typedef xe_result_t (__xecall *xet_pfnPowerSetPowerLimits_t)(
-    xet_power_handle_t,
-    xet_power_limits_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -437,13 +360,6 @@ xe_result_t __xecall
 xetPowerGetEnergyCounter(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint64_t* pEnergy                               ///< [out] the energy counter in millijoules
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerGetEnergyCounter 
-typedef xe_result_t (__xecall *xet_pfnPowerGetEnergyCounter_t)(
-    xet_power_handle_t,
-    uint64_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -477,13 +393,6 @@ xetPowerGetTurboMode(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerGetTurboMode 
-typedef xe_result_t (__xecall *xet_pfnPowerGetTurboMode_t)(
-    xet_power_handle_t,
-    xet_turbo_mode_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Set the current Turbo mode for a device
 /// 
 /// @returns
@@ -497,13 +406,6 @@ xe_result_t __xecall
 xetPowerSetTurboMode(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     xet_turbo_mode_t pTurboMode                     ///< [in] new turbo mode
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerSetTurboMode 
-typedef xe_result_t (__xecall *xet_pfnPowerSetTurboMode_t)(
-    xet_power_handle_t,
-    xet_turbo_mode_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -596,13 +498,6 @@ xetPowerGetFreqDomainCount(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerGetFreqDomainCount 
-typedef xe_result_t (__xecall *xet_pfnPowerGetFreqDomainCount_t)(
-    xet_power_handle_t,
-    uint32_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Get an object to a frequency domain on a device
 /// 
 /// @returns
@@ -618,14 +513,6 @@ xetPowerGetFreqDomain(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t ordinal,                               ///< [in] frequency domain index [0 .. ::xetPowerGetFreqDomainCount - 1]
     xet_freq_domain_handle_t* phFreqDomain          ///< [out] pointer to handle of frequency domain object
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerGetFreqDomain 
-typedef xe_result_t (__xecall *xet_pfnPowerGetFreqDomain_t)(
-    xet_power_handle_t,
-    uint32_t,
-    xet_freq_domain_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -646,13 +533,6 @@ xetFreqDomainGetProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetFreqDomainGetProperties 
-typedef xe_result_t (__xecall *xet_pfnFreqDomainGetProperties_t)(
-    xet_freq_domain_handle_t,
-    xet_freq_domain_properties_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Get the source frequency domain handle for a frequency domain of type
 ///        ::XET_CLOCK_TYPE_DIVIDER
 /// 
@@ -669,13 +549,6 @@ xetFreqDomainGetSourceFreqDomain(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
     xet_freq_domain_handle_t* phSrcFreqDomain       ///< [out] pointer to a handle where the source frequency domain handle
                                                     ///< will be returned
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetFreqDomainGetSourceFreqDomain 
-typedef xe_result_t (__xecall *xet_pfnFreqDomainGetSourceFreqDomain_t)(
-    xet_freq_domain_handle_t,
-    xet_freq_domain_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -702,14 +575,6 @@ xetFreqDomainGetSupportedClocks(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetFreqDomainGetSupportedClocks 
-typedef xe_result_t (__xecall *xet_pfnFreqDomainGetSupportedClocks_t)(
-    xet_freq_domain_handle_t,
-    uint32_t,
-    uint32_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Get supported frequency dividers for frequency domains with clock type
 ///        ::XET_CLOCK_TYPE_DIVIDER
 /// 
@@ -733,14 +598,6 @@ xetFreqDomainGetSupportedClockDividers(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetFreqDomainGetSupportedClockDividers 
-typedef xe_result_t (__xecall *xet_pfnFreqDomainGetSupportedClockDividers_t)(
-    xet_freq_domain_handle_t,
-    uint32_t,
-    xet_clock_divider_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Get the frequency range for a frequency domain with clock type
 ///        ::XET_CLOCK_TYPE_PLL.
 /// 
@@ -758,14 +615,6 @@ xetFreqDomainGetClockRange(
     xet_freq_domain_handle_t hFreqDomain,           ///< [in] handle of the frequency domain
     uint32_t* pMinClock,                            ///< [out] min clock frequency in units of MHz
     uint32_t* pMaxClock                             ///< [out] max clock frequency in units of MHz
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetFreqDomainGetClockRange 
-typedef xe_result_t (__xecall *xet_pfnFreqDomainGetClockRange_t)(
-    xet_freq_domain_handle_t,
-    uint32_t*,
-    uint32_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -797,14 +646,6 @@ xetFreqDomainSetClockRange(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetFreqDomainSetClockRange 
-typedef xe_result_t (__xecall *xet_pfnFreqDomainSetClockRange_t)(
-    xet_freq_domain_handle_t,
-    uint32_t,
-    uint32_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Set frequency divider for a frequency domain with clock type
 ///        ::XET_CLOCK_TYPE_DIVIDER
 /// 
@@ -829,13 +670,6 @@ xetFreqDomainSetClockDivider(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetFreqDomainSetClockDivider 
-typedef xe_result_t (__xecall *xet_pfnFreqDomainSetClockDivider_t)(
-    xet_freq_domain_handle_t,
-    xet_clock_divider_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Get current frequency
 /// 
 /// @returns
@@ -854,15 +688,6 @@ xetFreqDomainGetCurrentFrequency(
     uint32_t* pFreqRequest,                         ///< [out] current frequency in MHz requested by the driver
     uint32_t* pFreqResolved,                        ///< [out] the actual frequency in MHz
     xet_freq_throttle_reasons_t* pFreqThrottleReasons   ///< [out] the reason the resolved frequency is lower than the request
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetFreqDomainGetCurrentFrequency 
-typedef xe_result_t (__xecall *xet_pfnFreqDomainGetCurrentFrequency_t)(
-    xet_freq_domain_handle_t,
-    uint32_t*,
-    uint32_t*,
-    xet_freq_throttle_reasons_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -940,13 +765,6 @@ xetPowerFanCount(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerFanCount 
-typedef xe_result_t (__xecall *xet_pfnPowerFanCount_t)(
-    xet_power_handle_t,
-    uint32_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Get fan properties for one of the fans on a device
 /// 
 /// @returns
@@ -962,14 +780,6 @@ xetPowerFanGetProperties(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t fanIndex,                              ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
     xet_fan_properties_t* pFanProperties            ///< [out] pointer to storage for fan properties
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerFanGetProperties 
-typedef xe_result_t (__xecall *xet_pfnPowerFanGetProperties_t)(
-    xet_power_handle_t,
-    uint32_t,
-    xet_fan_properties_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -999,16 +809,6 @@ xetPowerFanGetSpeedTable(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerFanGetSpeedTable 
-typedef xe_result_t (__xecall *xet_pfnPowerFanGetSpeedTable_t)(
-    xet_power_handle_t,
-    uint32_t,
-    xe_bool_t,
-    uint32_t*,
-    xet_fan_point_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Set fan speed table
 /// 
 /// @details
@@ -1030,15 +830,6 @@ xetPowerFanSetSpeedTable(
     uint32_t fanIndex,                              ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
     uint32_t numFanPoints,                          ///< [in] number of points in pFanSpeedTable array
     xet_fan_point_t* pFanPoints                     ///< [in] pointer to an array of temperature/fan-speed points
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerFanSetSpeedTable 
-typedef xe_result_t (__xecall *xet_pfnPowerFanSetSpeedTable_t)(
-    xet_power_handle_t,
-    uint32_t,
-    uint32_t,
-    xet_fan_point_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1066,16 +857,6 @@ xetPowerFanGetSpeed(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerFanGetSpeed 
-typedef xe_result_t (__xecall *xet_pfnPowerFanGetSpeed_t)(
-    xet_power_handle_t,
-    uint32_t,
-    uint32_t,
-    xe_bool_t,
-    xet_fan_speed_info_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Set fan speeds
 /// 
 /// @details
@@ -1097,15 +878,6 @@ xetPowerFanSetSpeed(
     uint32_t numFans,                               ///< [in] pFanSpeed will contain results for fan index
                                                     ///< (startFanIndex)..(startFanIndex + numFans - 1)
     xet_fan_speed_info_t* pFanSpeed                 ///< [in] pointer to an array of current fan speeds
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerFanSetSpeed 
-typedef xe_result_t (__xecall *xet_pfnPowerFanSetSpeed_t)(
-    xet_power_handle_t,
-    uint32_t,
-    uint32_t,
-    xet_fan_speed_info_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1147,13 +919,6 @@ xetPowerTemperatureSensorCount(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerTemperatureSensorCount 
-typedef xe_result_t (__xecall *xet_pfnPowerTemperatureSensorCount_t)(
-    xet_power_handle_t,
-    uint32_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Get temperatures sensor properties
 /// 
 /// @details
@@ -1173,14 +938,6 @@ xetPowerGetTemperatureProperties(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t sensorIndex,                           ///< [in] sensor index [0 .. ::xetPowerTemperatureSensorCount]
     xet_temperature_properties_t* pProperties       ///< [out] pointer to properties for this sensor
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerGetTemperatureProperties 
-typedef xe_result_t (__xecall *xet_pfnPowerGetTemperatureProperties_t)(
-    xet_power_handle_t,
-    uint32_t,
-    xet_temperature_properties_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1208,15 +965,6 @@ xetPowerGetTemperature(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerGetTemperature 
-typedef xe_result_t (__xecall *xet_pfnPowerGetTemperature_t)(
-    xet_power_handle_t,
-    uint32_t,
-    uint32_t,
-    uint16_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Set temperature threshold
 /// 
 /// @details
@@ -1239,14 +987,6 @@ xetPowerSetTemperatureThreshold(
     uint32_t sensorIndex,                           ///< [in] sensor index [0 .. ::xetPowerTemperatureSensorCount]
     uint16_t maxTemperature                         ///< [in] temperature threshold in degrees celsius beyond which frequency
                                                     ///< will be throttled
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerSetTemperatureThreshold 
-typedef xe_result_t (__xecall *xet_pfnPowerSetTemperatureThreshold_t)(
-    xet_power_handle_t,
-    uint32_t,
-    uint16_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1299,13 +1039,6 @@ xetPowerActivityCount(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerActivityCount 
-typedef xe_result_t (__xecall *xet_pfnPowerActivityCount_t)(
-    xet_power_handle_t,
-    uint32_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Get activity counter properties
 /// 
 /// @details
@@ -1325,14 +1058,6 @@ xetPowerGetActivityProperties(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
     uint32_t activityIndex,                         ///< [in] activity counter index [0 .. ::xetPowerActivityCount]
     xet_activity_properties_t* pProperties          ///< [out] pointer to properties for this activity counter
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerGetActivityProperties 
-typedef xe_result_t (__xecall *xet_pfnPowerGetActivityProperties_t)(
-    xet_power_handle_t,
-    uint32_t,
-    xet_activity_properties_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1357,15 +1082,6 @@ xetPowerGetActivityCounters(
     uint32_t numCounters,                           ///< [in] pCounters will contain results for activity counter index
                                                     ///< (startCounterIndex)..(startCounterIndex + numCounters - 1)
     xet_activity_counters_t* pCounters              ///< [out] pointer to an array of activity counter data
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerGetActivityCounters 
-typedef xe_result_t (__xecall *xet_pfnPowerGetActivityCounters_t)(
-    xet_power_handle_t,
-    uint32_t,
-    uint32_t,
-    xet_activity_counters_t*
     );
 
 #if defined(__cplusplus)

@@ -97,14 +97,6 @@ xexCommandGraphCreate(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xexCommandGraphCreate 
-typedef xe_result_t (__xecall *xex_pfnCommandGraphCreate_t)(
-    xe_device_handle_t,
-    const xex_command_graph_desc_t*,
-    xex_command_graph_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys a command graph.
 /// 
 /// @details
@@ -124,12 +116,6 @@ typedef xe_result_t (__xecall *xex_pfnCommandGraphCreate_t)(
 xe_result_t __xecall
 xexCommandGraphDestroy(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to destroy
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xexCommandGraphDestroy 
-typedef xe_result_t (__xecall *xex_pfnCommandGraphDestroy_t)(
-    xex_command_graph_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -153,12 +139,6 @@ typedef xe_result_t (__xecall *xex_pfnCommandGraphDestroy_t)(
 xe_result_t __xecall
 xexCommandGraphClose(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xexCommandGraphClose 
-typedef xe_result_t (__xecall *xex_pfnCommandGraphClose_t)(
-    xex_command_graph_handle_t
     );
 
 #if defined(__cplusplus)

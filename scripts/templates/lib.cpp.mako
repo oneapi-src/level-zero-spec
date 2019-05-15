@@ -48,7 +48,7 @@ def declare_dbg(obj, tags):
 *
 ******************************************************************************/
 #include "${n}_api.hpp"
-#include "${n}_api.h"
+#include "${n}_ddi.h"
 
 namespace ${n}
 {

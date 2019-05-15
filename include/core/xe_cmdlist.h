@@ -102,14 +102,6 @@ xeCommandListCreate(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListCreate 
-typedef xe_result_t (__xecall *xe_pfnCommandListCreate_t)(
-    xe_device_handle_t,
-    const xe_command_list_desc_t*,
-    xe_command_list_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Creates a command list on the device with an implicit command queue
 ///        for immediate submission of commands.
 /// 
@@ -139,14 +131,6 @@ xeCommandListCreateImmediate(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListCreateImmediate 
-typedef xe_result_t (__xecall *xe_pfnCommandListCreateImmediate_t)(
-    xe_device_handle_t,
-    const xe_command_queue_desc_t*,
-    xe_command_list_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys a command list.
 /// 
 /// @details
@@ -171,12 +155,6 @@ xeCommandListDestroy(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListDestroy 
-typedef xe_result_t (__xecall *xe_pfnCommandListDestroy_t)(
-    xe_command_list_handle_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Closes a command list; ready to be executed by a command queue.
 /// 
 /// @details
@@ -194,12 +172,6 @@ typedef xe_result_t (__xecall *xe_pfnCommandListDestroy_t)(
 xe_result_t __xecall
 xeCommandListClose(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListClose 
-typedef xe_result_t (__xecall *xe_pfnCommandListClose_t)(
-    xe_command_list_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -223,12 +195,6 @@ typedef xe_result_t (__xecall *xe_pfnCommandListClose_t)(
 xe_result_t __xecall
 xeCommandListReset(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListReset 
-typedef xe_result_t (__xecall *xe_pfnCommandListReset_t)(
-    xe_command_list_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -270,14 +236,6 @@ xeCommandListSetParameter(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListSetParameter 
-typedef xe_result_t (__xecall *xe_pfnCommandListSetParameter_t)(
-    xe_command_list_handle_t,
-    xe_command_list_parameter_t,
-    uint32_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves a command list's parameter.
 /// 
 /// @details
@@ -308,14 +266,6 @@ xeCommandListGetParameter(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListGetParameter 
-typedef xe_result_t (__xecall *xe_pfnCommandListGetParameter_t)(
-    xe_command_list_handle_t,
-    xe_command_list_parameter_t,
-    uint32_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Resets all command list parameters to default state.
 /// 
 /// @details
@@ -333,12 +283,6 @@ typedef xe_result_t (__xecall *xe_pfnCommandListGetParameter_t)(
 xe_result_t __xecall
 xeCommandListResetParameters(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListResetParameters 
-typedef xe_result_t (__xecall *xe_pfnCommandListResetParameters_t)(
-    xe_command_list_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -365,14 +309,6 @@ xeCommandListReserveSpace(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     size_t size,                                    ///< [in] size (in bytes) to reserve
     void** ptr                                      ///< [out] pointer to command buffer space reserved
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListReserveSpace 
-typedef xe_result_t (__xecall *xe_pfnCommandListReserveSpace_t)(
-    xe_command_list_handle_t,
-    size_t,
-    void**
     );
 
 #if defined(__cplusplus)

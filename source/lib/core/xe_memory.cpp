@@ -31,7 +31,7 @@
 *
 ******************************************************************************/
 #include "xe_api.hpp"
-#include "xe_api.h"
+#include "xe_ddi.h"
 
 namespace xe
 {

@@ -137,14 +137,6 @@ xeCommandQueueCreate(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandQueueCreate 
-typedef xe_result_t (__xecall *xe_pfnCommandQueueCreate_t)(
-    xe_device_handle_t,
-    const xe_command_queue_desc_t*,
-    xe_command_queue_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys a command queue.
 /// 
 /// @details
@@ -171,12 +163,6 @@ typedef xe_result_t (__xecall *xe_pfnCommandQueueCreate_t)(
 xe_result_t __xecall
 xeCommandQueueDestroy(
     xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandQueueDestroy 
-typedef xe_result_t (__xecall *xe_pfnCommandQueueDestroy_t)(
-    xe_command_queue_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -209,15 +195,6 @@ xeCommandQueueExecuteCommandLists(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandQueueExecuteCommandLists 
-typedef xe_result_t (__xecall *xe_pfnCommandQueueExecuteCommandLists_t)(
-    xe_command_queue_handle_t,
-    uint32_t,
-    xe_command_list_handle_t*,
-    xe_fence_handle_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Synchronizes a command queue by waiting on the host.
 /// 
 /// @details
@@ -241,13 +218,6 @@ xeCommandQueueSynchronize(
                                                     ///< if zero, then operates exactly like ::xeFenceQueryStatus;
                                                     ///< if MAX_UINT32, then function will not return until complete or device
                                                     ///< is lost.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandQueueSynchronize 
-typedef xe_result_t (__xecall *xe_pfnCommandQueueSynchronize_t)(
-    xe_command_queue_handle_t,
-    uint32_t
     );
 
 #if defined(__cplusplus)

@@ -75,14 +75,6 @@ xeContextCreate(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeContextCreate 
-typedef xe_result_t (__xecall *xe_pfnContextCreate_t)(
-    size_t,
-    xe_device_handle_t*,
-    xe_context_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Destroys a context.
 /// 
 /// @details
@@ -109,12 +101,6 @@ typedef xe_result_t (__xecall *xe_pfnContextCreate_t)(
 xe_result_t __xecall
 xeContextDestroy(
     xe_context_handle_t hContext                    ///< [in] handle of context object to destroy
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeContextDestroy 
-typedef xe_result_t (__xecall *xe_pfnContextDestroy_t)(
-    xe_context_handle_t
     );
 
 #if defined(__cplusplus)
