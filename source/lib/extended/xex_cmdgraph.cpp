@@ -33,6 +33,91 @@
 #include "xex_api.hpp"
 #include "xex_ddi.h"
 
+extern "C" {
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Creates a command graph on the device for submitting commands to any
+///        command queue.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == desc
+///         + nullptr == phCommandGraph
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XEX_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+xe_result_t __xecall
+xexCommandGraphCreate(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+    const xex_command_graph_desc_t* desc,           ///< [in] pointer to command graph descriptor
+    xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Destroys a command graph.
+/// 
+/// @details
+///     - The implementation of this function will immediately free all Host
+///       allocations associated with this command graph.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command graph handle.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hCommandGraph
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xexCommandGraphDestroy(
+    xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to destroy
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Closes a command graph; ready to be executed by a command queue.
+/// 
+/// @details
+///     - The command graph will optimize the execution order of the command
+///       lists.
+///     - A command list may **not** be reset after the command graph is closed.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command graph handle.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hCommandGraph
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xexCommandGraphClose(
+    xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+} // extern "C"
+
 namespace xex
 {
     ///////////////////////////////////////////////////////////////////////////////

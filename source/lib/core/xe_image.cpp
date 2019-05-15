@@ -33,6 +33,97 @@
 #include "xe_api.hpp"
 #include "xe_ddi.h"
 
+extern "C" {
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves supported properties of an image.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == desc
+///         + nullptr == pImageProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_IMAGE_DESC_VERSION_CURRENT < desc->version
+xe_result_t __xecall
+xeImageGetProperties(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
+    xe_image_properties_t* pImageProperties         ///< [out] pointer to image properties
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Creates a image object on the device.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - clCreateImage
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == desc
+///         + nullptr == phImage
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_IMAGE_DESC_VERSION_CURRENT < desc->version
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+xe_result_t __xecall
+xeImageCreate(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    const xe_image_desc_t* desc,                    ///< [in] pointer to image descriptor
+    xe_image_handle_t* phImage                      ///< [out] pointer to handle of image object created
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Deletes a image object.
+/// 
+/// @details
+///     - The application is responsible for making sure the device is not
+///       currently referencing the image before it is deleted
+///     - The implementation of this function will immediately free all Host and
+///       Device allocations associated with this image
+///     - The application may **not** call this function from simultaneous
+///       threads with the same image handle.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hImage
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeImageDestroy(
+    xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+} // extern "C"
+
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////

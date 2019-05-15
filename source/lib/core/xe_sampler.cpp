@@ -33,6 +33,75 @@
 #include "xe_api.hpp"
 #include "xe_ddi.h"
 
+extern "C" {
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Creates sampler object.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuTexObjectCreate**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == pDesc
+///         + nullptr == phSampler
+///         + invalid pDesc->addressMode
+///         + invalid pDesc->filterMode
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_SAMPLER_DESC_VERSION_CURRENT < pDesc->version
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+xe_result_t __xecall
+xeSamplerCreate(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    const xe_sampler_desc_t* pDesc,                 ///< [in] pointer to sampler descriptor
+    xe_sampler_handle_t* phSampler                  ///< [out] handle of the sampler
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Destroys sampler object
+/// 
+/// @details
+///     - The application is responsible for making sure the device is not
+///       currently referencing the sampler before it is deleted
+///     - The implementation of this function will immediately free all Host and
+///       Device allocations associated with this module
+///     - The application may **not** call this function from simultaneous
+///       threads with the same sampler handle.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuModuleUnload**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hSampler
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeSamplerDestroy(
+    xe_sampler_handle_t hSampler                    ///< [in] handle of the sampler
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+} // extern "C"
+
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////

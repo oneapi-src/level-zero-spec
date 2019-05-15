@@ -33,6 +33,75 @@
 #include "xe_api.hpp"
 #include "xe_ddi.h"
 
+extern "C" {
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Creates a context.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **clCreateContext**
+///     - cuCtxCreate
+///     - cuCtxGetCurrent
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == phDevice
+///         + nullptr == phContext
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+xe_result_t __xecall
+xeContextCreate(
+    size_t numDevices,                              ///< [in] number of devices in phDevice
+    xe_device_handle_t* phDevice,                   ///< [in] pointer to array of handle of the device objects
+    xe_context_handle_t* phContext                  ///< [out] pointer to handle of context object created
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Destroys a context.
+/// 
+/// @details
+///     - The application is responsible for making sure the device is not
+///       currently referencing the context before it is deleted
+///     - The implementation of this function will immediately free all Host and
+///       Device allocations associated with this context
+///     - The application may **not** call this function from simultaneous
+///       threads with the same context handle.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **clReleaseContext**
+///     - cuCtxDestroy
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hContext
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeContextDestroy(
+    xe_context_handle_t hContext                    ///< [in] handle of context object to destroy
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+} // extern "C"
+
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////

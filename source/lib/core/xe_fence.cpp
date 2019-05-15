@@ -33,6 +33,164 @@
 #include "xe_api.hpp"
 #include "xe_ddi.h"
 
+extern "C" {
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Creates a fence object on the device's command queue.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **vkCreateFence**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hCommandQueue
+///         + nullptr == desc
+///         + nullptr == phFence
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + ::XE_FENCE_DESC_VERSION_CURRENT < desc->version
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+xe_result_t __xecall
+xeFenceCreate(
+    xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of command queue
+    const xe_fence_desc_t* desc,                    ///< [in] pointer to fence descriptor
+    xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Deletes a fence object.
+/// 
+/// @details
+///     - The application is responsible for making sure the device is not
+///       currently referencing the fence before it is deleted
+///     - The implementation of this function will immediately free all Host and
+///       Device allocations associated with this fence
+///     - The application may **not** call this function from simultaneous
+///       threads with the same fence handle.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **vkDestroyFence**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hFence
+///         + fence is enqueued in a command queue
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeFenceDestroy(
+    xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief The current host thread waits on a fence to be signaled.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **vkWaitForFences**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hFence
+///         + fence is not enqueued in a command queue
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_NOT_READY
+///         + timeout expired
+xe_result_t __xecall
+xeFenceHostSynchronize(
+    xe_fence_handle_t hFence,                       ///< [in] handle of the fence
+    uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
+                                                    ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY;
+                                                    ///< if zero, then operates exactly like ::xeFenceQueryStatus;
+                                                    ///< if MAX_UINT32, then function will not return until complete or device
+                                                    ///< is lost.
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Queries a fence object's status.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **vkGetFenceStatus**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hFence
+///         + fence is not enqueued in a command queue
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_NOT_READY
+///         + not signaled
+xe_result_t __xecall
+xeFenceQueryStatus(
+    xe_fence_handle_t hFence                        ///< [in] handle of the fence
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Reset a fence back to the not signaled state.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **vkResetFences**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hFence
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeFenceReset(
+    xe_fence_handle_t hFence                        ///< [in] handle of the fence
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+} // extern "C"
+
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////

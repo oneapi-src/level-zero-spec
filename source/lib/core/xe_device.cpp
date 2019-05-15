@@ -33,6 +33,343 @@
 #include "xe_api.hpp"
 #include "xe_ddi.h"
 
+extern "C" {
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves device groups
+/// 
+/// @details
+///     - A device group represents a collection of physical, homogeneous
+///       devices.
+///     - The application may pass nullptr for pDeviceGroups when only querying
+///       the number of device groups.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - clGetDeviceIDs
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == pCount
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeGetDeviceGroups(
+    size_t* pCount,                                 ///< [in,out] pointer to the number of device groups.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of device groups available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of
+                                                    ///< device groups.
+    xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional] array of handle of device groups
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves devices within a device group
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuDeviceGet**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDeviceGroup
+///         + nullptr == pCount
+///         + count is out of range reported by ::xeDeviceGroupGetDevices
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeDeviceGroupGetDevices(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    size_t* pCount,                                 ///< [in,out] pointer to the number of device groups.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of device groups available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of
+                                                    ///< device groups.
+    xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional] array of handle of device groups
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves a sub-device from a device
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - clCreateSubDevices
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == phSubDevice
+///         + ordinal is out of range reported by device properties.
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeDeviceGetSubDevice(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+    uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve
+    xe_device_handle_t* phSubDevice                 ///< [out] pointer to handle of sub-device object.
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Returns the API version supported by the device group
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuCtxGetApiVersion**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDeviceGroup
+///         + nullptr == version
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeDeviceGroupGetApiVersion(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xe_api_version_t* version                       ///< [out] api version
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves attributes of the device
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuDeviceGetAttribute**
+///     - cuDeviceGetName
+///     - clGetDeviceInfo
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDeviceGroup
+///         + nullptr == pDeviceProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeDeviceGroupGetProperties(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves compute attributes of the device group
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuDeviceGetAttribute**
+///     - clGetDeviceInfo
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDeviceGroup
+///         + nullptr == pComputeProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeDeviceGroupGetComputeProperties(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves memory attributes of the device
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuDeviceGetAttribute**
+///     - cuDeviceTotalMem
+///     - clGetDeviceInfo
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDeviceGroup
+///         + nullptr == pMemProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeDeviceGroupGetMemoryProperties(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves Peer-to-Peer properties between one device and a peer
+///        devices
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cudaDeviceGetP2PAttribute**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == hPeerDevice
+///         + nullptr == pP2PProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeDeviceGetP2PProperties(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
+    xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
+    xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Queries if one device can directly access peer device allocations
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cudaDeviceCanAccessPeer**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == hPeerDevice
+///         + nullptr == value
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeDeviceCanAccessPeer(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
+    xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
+    xe_bool_t* value                                ///< [out] returned access capability
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Sets the preferred Intermediate cache configuration for a device.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads with the same device handle.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cudaFuncSetCacheConfig **
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + devices do not support CacheConfig
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeDeviceSetIntermediateCacheConfig(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device 
+    xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Sets the preferred Last Level cache configuration for a device.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads with the same device handle.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cudaFuncSetCacheConfig **
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + devices do not support CacheConfig
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeDeviceSetLastLevelCacheConfig(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device 
+    xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+} // extern "C"
+
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////

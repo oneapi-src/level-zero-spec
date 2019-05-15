@@ -33,6 +33,10 @@
 #include "xet_api.hpp"
 #include "xet_ddi.h"
 
+extern "C" {
+
+} // extern "C"
+
 namespace xet
 {
 } // namespace xet

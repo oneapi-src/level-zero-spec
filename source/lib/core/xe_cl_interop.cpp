@@ -33,6 +33,88 @@
 #include "xe_api.hpp"
 #include "xe_ddi.h"
 
+extern "C" {
+
+///////////////////////////////////////////////////////////////////////////////
+#if XE_ENABLE_OCL_INTEROP
+/// @brief Registers OpenCL memory with Xe
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == ptr
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+xe_result_t __xecall
+xeDeviceRegisterCLMemory(
+    xe_device_handle_t hDevice,                     ///< [in] handle to the device
+    cl_context context,                             ///< [in] the OpenCL context that created the memory
+    cl_mem mem,                                     ///< [in] the OpenCL memory to register
+    void** ptr                                      ///< [out] pointer to device allocation
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+#endif // XE_ENABLE_OCL_INTEROP
+
+///////////////////////////////////////////////////////////////////////////////
+#if XE_ENABLE_OCL_INTEROP
+/// @brief Registers OpenCL program with Xe
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == phModule
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+xe_result_t __xecall
+xeDeviceRegisterCLProgram(
+    xe_device_handle_t hDevice,                     ///< [in] handle to the device
+    cl_context context,                             ///< [in] the OpenCL context that created the program
+    cl_program program,                             ///< [in] the OpenCL program to register
+    xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+#endif // XE_ENABLE_OCL_INTEROP
+
+///////////////////////////////////////////////////////////////////////////////
+#if XE_ENABLE_OCL_INTEROP
+/// @brief Registers OpenCL command queue with Xe
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///         + nullptr == phCommandQueue
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+xe_result_t __xecall
+xeDeviceRegisterCLCommandQueue(
+    xe_device_handle_t hDevice,                     ///< [in] handle to the device
+    cl_context context,                             ///< [in] the OpenCL context that created the command queue
+    cl_command_queue command_queue,                 ///< [in] the OpenCL command queue to register
+    xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+#endif // XE_ENABLE_OCL_INTEROP
+
+} // extern "C"
+
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////

@@ -33,6 +33,118 @@
 #include "xe_api.hpp"
 #include "xe_ddi.h"
 
+extern "C" {
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Appends an execution and global memory barrier into a command list.
+/// 
+/// @details
+///     - If numWaitEvents is zero, then all previous commands are completed
+///       prior to the execution of the barrier.
+///     - If numWaitEvents is non-zero, then then all phWaitEvents must be
+///       signalled prior to the execution of the barrier.
+///     - This command blocks all following commands from beginning until the
+///       execution of the barrier completes.
+///     - Memory and cache hierarchies are flushed and invalidated sufficient
+///       for device and host access.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command list handle.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **vkCmdPipelineBarrier**
+///     - clEnqueueBarrierWithWaitList
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hCommandList
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeCommandListAppendBarrier(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before executing
+                                                    ///< barrier
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Appends a global memory ranges barrier into a command list.
+/// 
+/// @details
+///     - If numWaitEvents is zero, then all previous commands are completed
+///       prior to the execution of the barrier.
+///     - If numWaitEvents is non-zero, then then all phWaitEvents must be
+///       signalled prior to the execution of the barrier.
+///     - This command blocks all following commands from beginning until the
+///       execution of the barrier completes.
+///     - Memory and cache hierarchies are flushed and invalidated sufficient
+///       for device and host access.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same command list handle.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hCommandList
+///         + nullptr == pRangeSizes
+///         + nullptr == pRanges
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeCommandListAppendMemoryRangesBarrier(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    uint32_t numRanges,                             ///< [in] number of memory ranges
+    const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
+    const void** pRanges,                           ///< [in] array of memory ranges
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before executing
+                                                    ///< barrier
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Ensures in-bound writes to the device are globally observable.
+/// 
+/// @details
+///     - This is a special-case system level barrier that can be used to ensure
+///       global observability of writes; typically needed after a producer
+///       (e.g., NIC) performs direct writes to the device's memory (e.g.,
+///       Direct RDMA writes).  This is typically required when the memory
+///       corresponding to the writes is subsequently accessed from a remote
+///       device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///         + nullptr == hDevice
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeDeviceSystemBarrier(
+    xe_device_handle_t hDevice                      ///< [in] handle of the device
+    )
+{
+    return XE_RESULT_SUCCESS;
+}
+
+} // extern "C"
+
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////

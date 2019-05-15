@@ -50,6 +50,40 @@ def declare_dbg(obj, tags):
 #include "${n}_api.hpp"
 #include "${n}_ddi.h"
 
+extern "C" {
+
+## FUNCTION ###################################################################
+%for obj in th.filter_items(objects, 'type', 'function'):
+///////////////////////////////////////////////////////////////////////////////
+%if 'condition' in obj:
+#if ${th.subt(n, tags, obj['condition'])}
+%endif
+%for line in th.make_desc_lines(n, tags, obj):
+/// ${line}
+%endfor
+%for line in th.make_details_lines(n, tags, obj):
+/// ${line}
+%endfor
+/// 
+%for line in th.make_returns_lines(n, tags, obj):
+/// ${line}
+%endfor
+${x}_result_t __${x}call
+${th.make_func_name(n, tags, obj)}(
+    %for line in th.make_param_lines(n, tags, obj):
+    ${line}
+    %endfor
+    )
+{
+    return ${X}_RESULT_SUCCESS;
+}
+%if 'condition' in obj:
+#endif // ${th.subt(n, tags, obj['condition'])}
+%endif
+
+%endfor
+} // extern "C"
+
 namespace ${n}
 {
 ## CLASS ################################################################

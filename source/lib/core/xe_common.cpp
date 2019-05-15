@@ -33,6 +33,10 @@
 #include "xe_api.hpp"
 #include "xe_ddi.h"
 
+extern "C" {
+
+} // extern "C"
+
 namespace xe
 {
 } // namespace xe

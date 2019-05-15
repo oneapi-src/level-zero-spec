@@ -33,6 +33,10 @@
 #include "xex_api.hpp"
 #include "xex_ddi.h"
 
+extern "C" {
+
+} // extern "C"
+
 namespace xex
 {
 } // namespace xex
