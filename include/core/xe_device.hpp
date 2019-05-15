@@ -648,38 +648,39 @@ namespace xe
 
     };
 
+} // namespace xe
+
 #ifdef _DEBUG
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts DeviceGroup::api_version_t to std::string
-    std::string to_string( DeviceGroup::api_version_t val );
+    std::string to_string( xe::DeviceGroup::api_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts DeviceGroup::device_properties_version_t to std::string
-    std::string to_string( DeviceGroup::device_properties_version_t val );
+    std::string to_string( xe::DeviceGroup::device_properties_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts DeviceGroup::device_compute_properties_version_t to std::string
-    std::string to_string( DeviceGroup::device_compute_properties_version_t val );
+    std::string to_string( xe::DeviceGroup::device_compute_properties_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts DeviceGroup::device_memory_properties_version_t to std::string
-    std::string to_string( DeviceGroup::device_memory_properties_version_t val );
+    std::string to_string( xe::DeviceGroup::device_memory_properties_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts DeviceGroup::memory_access_capabilities_t to std::string
-    std::string to_string( DeviceGroup::memory_access_capabilities_t val );
+    std::string to_string( xe::DeviceGroup::memory_access_capabilities_t val );
 
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::p2p_properties_version_t to std::string
-    std::string to_string( Device::p2p_properties_version_t val );
+    std::string to_string( xe::Device::p2p_properties_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::cache_config_t to std::string
-    std::string to_string( Device::cache_config_t val );
+    std::string to_string( xe::Device::cache_config_t val );
 
 
 #endif // _DEBUG
-} // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_DEVICE_HPP

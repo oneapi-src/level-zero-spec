@@ -98,83 +98,84 @@ namespace xe
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Context::Destroy");
     }
 
+} // namespace xe
+
 #ifdef _DEBUG
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Context::device_mem_alloc_flag_t to std::string
-    std::string to_string( Context::device_mem_alloc_flag_t val )
+    std::string to_string( xe::Context::device_mem_alloc_flag_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
         if( 0 == bits ) return std::string("{}");
         std::string str;
-        if( static_cast<uint32_t>(Context::device_mem_alloc_flag_t::DEFAULT) & bits )
-            str += "Context::device_mem_alloc_flag_t::DEFAULT | ";
-        if( static_cast<uint32_t>(Context::device_mem_alloc_flag_t::BIAS_CACHED) & bits )
-            str += "Context::device_mem_alloc_flag_t::BIAS_CACHED | ";
-        if( static_cast<uint32_t>(Context::device_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
-            str += "Context::device_mem_alloc_flag_t::BIAS_UNCACHED | ";
+        if( static_cast<uint32_t>(xe::Context::device_mem_alloc_flag_t::DEFAULT) & bits )
+            str += "xe::Context::device_mem_alloc_flag_t::DEFAULT | ";
+        if( static_cast<uint32_t>(xe::Context::device_mem_alloc_flag_t::BIAS_CACHED) & bits )
+            str += "xe::Context::device_mem_alloc_flag_t::BIAS_CACHED | ";
+        if( static_cast<uint32_t>(xe::Context::device_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
+            str += "xe::Context::device_mem_alloc_flag_t::BIAS_UNCACHED | ";
         return "{ " + str.substr(0, str.size() - 3) + " }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Context::host_mem_alloc_flag_t to std::string
-    std::string to_string( Context::host_mem_alloc_flag_t val )
+    std::string to_string( xe::Context::host_mem_alloc_flag_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
         if( 0 == bits ) return std::string("{}");
         std::string str;
-        if( static_cast<uint32_t>(Context::host_mem_alloc_flag_t::DEFAULT) & bits )
-            str += "Context::host_mem_alloc_flag_t::DEFAULT | ";
-        if( static_cast<uint32_t>(Context::host_mem_alloc_flag_t::BIAS_CACHED) & bits )
-            str += "Context::host_mem_alloc_flag_t::BIAS_CACHED | ";
-        if( static_cast<uint32_t>(Context::host_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
-            str += "Context::host_mem_alloc_flag_t::BIAS_UNCACHED | ";
-        if( static_cast<uint32_t>(Context::host_mem_alloc_flag_t::BIAS_WRITE_COMBINED) & bits )
-            str += "Context::host_mem_alloc_flag_t::BIAS_WRITE_COMBINED | ";
+        if( static_cast<uint32_t>(xe::Context::host_mem_alloc_flag_t::DEFAULT) & bits )
+            str += "xe::Context::host_mem_alloc_flag_t::DEFAULT | ";
+        if( static_cast<uint32_t>(xe::Context::host_mem_alloc_flag_t::BIAS_CACHED) & bits )
+            str += "xe::Context::host_mem_alloc_flag_t::BIAS_CACHED | ";
+        if( static_cast<uint32_t>(xe::Context::host_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
+            str += "xe::Context::host_mem_alloc_flag_t::BIAS_UNCACHED | ";
+        if( static_cast<uint32_t>(xe::Context::host_mem_alloc_flag_t::BIAS_WRITE_COMBINED) & bits )
+            str += "xe::Context::host_mem_alloc_flag_t::BIAS_WRITE_COMBINED | ";
         return "{ " + str.substr(0, str.size() - 3) + " }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Context::memory_allocation_properties_version_t to std::string
-    std::string to_string( Context::memory_allocation_properties_version_t val )
+    std::string to_string( xe::Context::memory_allocation_properties_version_t val )
     {
         switch( val )
         {
-        case Context::memory_allocation_properties_version_t::CURRENT:
-            return std::string("Context::memory_allocation_properties_version_t::CURRENT");
+        case xe::Context::memory_allocation_properties_version_t::CURRENT:
+            return std::string("xe::Context::memory_allocation_properties_version_t::CURRENT");
         };
-        return std::string("Context::memory_allocation_properties_version_t::?");
+        return std::string("xe::Context::memory_allocation_properties_version_t::?");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Context::memory_type_t to std::string
-    std::string to_string( Context::memory_type_t val )
+    std::string to_string( xe::Context::memory_type_t val )
     {
         switch( val )
         {
-        case Context::memory_type_t::UNKNOWN:
-            return std::string("Context::memory_type_t::UNKNOWN");
-        case Context::memory_type_t::HOST:
-            return std::string("Context::memory_type_t::HOST");
-        case Context::memory_type_t::DEVICE:
-            return std::string("Context::memory_type_t::DEVICE");
-        case Context::memory_type_t::SHARED:
-            return std::string("Context::memory_type_t::SHARED");
+        case xe::Context::memory_type_t::UNKNOWN:
+            return std::string("xe::Context::memory_type_t::UNKNOWN");
+        case xe::Context::memory_type_t::HOST:
+            return std::string("xe::Context::memory_type_t::HOST");
+        case xe::Context::memory_type_t::DEVICE:
+            return std::string("xe::Context::memory_type_t::DEVICE");
+        case xe::Context::memory_type_t::SHARED:
+            return std::string("xe::Context::memory_type_t::SHARED");
         };
-        return std::string("Context::memory_type_t::?");
+        return std::string("xe::Context::memory_type_t::?");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Context::ipc_memory_flag_t to std::string
-    std::string to_string( Context::ipc_memory_flag_t val )
+    std::string to_string( xe::Context::ipc_memory_flag_t val )
     {
         switch( val )
         {
-        case Context::ipc_memory_flag_t::NONE:
-            return std::string("Context::ipc_memory_flag_t::NONE");
+        case xe::Context::ipc_memory_flag_t::NONE:
+            return std::string("xe::Context::ipc_memory_flag_t::NONE");
         };
-        return std::string("Context::ipc_memory_flag_t::?");
+        return std::string("xe::Context::ipc_memory_flag_t::?");
     }
 
 
 #endif // _DEBUG
-} // namespace xe

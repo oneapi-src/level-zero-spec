@@ -274,10 +274,10 @@ Public:
     returns a list of strings for converting each enumerator in an enumeration to a std::string
 """
 def make_etor_debug_lines(namespace, tags, cls, obj):
+    prologue = "%s::"%namespace
     if cls:
-        prologue = "%s::%s"%(make_class_name(namespace, tags, cls), make_type_name(namespace, tags, obj, cpp=True))
-    else:
-        prologue = make_type_name(namespace, tags, obj, cpp=True)
+        prologue += "%s::"%make_class_name(namespace, tags, cls)
+    prologue += make_type_name(namespace, tags, obj, cpp=True)
 
     etors = []
     bitfield = False

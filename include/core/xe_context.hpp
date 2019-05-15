@@ -367,29 +367,30 @@ namespace xe
 
     };
 
+} // namespace xe
+
 #ifdef _DEBUG
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Context::device_mem_alloc_flag_t to std::string
-    std::string to_string( Context::device_mem_alloc_flag_t val );
+    std::string to_string( xe::Context::device_mem_alloc_flag_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Context::host_mem_alloc_flag_t to std::string
-    std::string to_string( Context::host_mem_alloc_flag_t val );
+    std::string to_string( xe::Context::host_mem_alloc_flag_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Context::memory_allocation_properties_version_t to std::string
-    std::string to_string( Context::memory_allocation_properties_version_t val );
+    std::string to_string( xe::Context::memory_allocation_properties_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Context::memory_type_t to std::string
-    std::string to_string( Context::memory_type_t val );
+    std::string to_string( xe::Context::memory_type_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Context::ipc_memory_flag_t to std::string
-    std::string to_string( Context::ipc_memory_flag_t val );
+    std::string to_string( xe::Context::ipc_memory_flag_t val );
 
 
 #endif // _DEBUG
-} // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_CONTEXT_HPP

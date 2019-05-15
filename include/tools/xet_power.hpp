@@ -883,42 +883,43 @@ namespace xet
 
     };
 
+} // namespace xet
+
 #ifdef _DEBUG
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts fan_capabilities_t to std::string
-    std::string to_string( fan_capabilities_t val );
+    std::string to_string( xet::fan_capabilities_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts fan_speed_mode_t to std::string
-    std::string to_string( fan_speed_mode_t val );
+    std::string to_string( xet::fan_speed_mode_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Power::init_flags_t to std::string
-    std::string to_string( Power::init_flags_t val );
+    std::string to_string( xet::Power::init_flags_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Power::gpu_domain_t to std::string
-    std::string to_string( Power::gpu_domain_t val );
+    std::string to_string( xet::Power::gpu_domain_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Power::average_limit_version_t to std::string
-    std::string to_string( Power::average_limit_version_t val );
+    std::string to_string( xet::Power::average_limit_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Power::turbo_mode_t to std::string
-    std::string to_string( Power::turbo_mode_t val );
+    std::string to_string( xet::Power::turbo_mode_t val );
 
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts FreqDomain::clock_type_t to std::string
-    std::string to_string( FreqDomain::clock_type_t val );
+    std::string to_string( xet::FreqDomain::clock_type_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts FreqDomain::freq_throttle_reasons_t to std::string
-    std::string to_string( FreqDomain::freq_throttle_reasons_t val );
+    std::string to_string( xet::FreqDomain::freq_throttle_reasons_t val );
 
 
 #endif // _DEBUG
-} // namespace xet
 #endif // defined(__cplusplus)
 #endif // _XET_POWER_HPP

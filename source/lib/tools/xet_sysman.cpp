@@ -43,7 +43,8 @@ namespace xet
     {
     }
 
+} // namespace xet
+
 #ifdef _DEBUG
 
 #endif // _DEBUG
-} // namespace xet

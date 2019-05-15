@@ -98,6 +98,7 @@ namespace xe
     }
 #endif // XE_ENABLE_OCL_INTEROP
 
+} // namespace xe
+
 #ifdef _DEBUG
 #endif // _DEBUG
-} // namespace xe

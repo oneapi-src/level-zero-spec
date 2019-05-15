@@ -331,6 +331,8 @@ namespace ${n}
 
 %endif  ## declare_obj
 %endfor ## obj in objects
+} // namespace ${n}
+
 ## DEBUG ######################################################################
 #ifdef _DEBUG
 %for obj in objects:
@@ -343,7 +345,7 @@ namespace ${n}
 %if 'condition' in obj:
 #if ${th.subt(n, tags, obj['condition'])}
 %endif
-    std::string to_string( ${th.make_type_name(n, tags, obj, cpp=True)} val );
+    std::string to_string( ${n}::${th.make_type_name(n, tags, obj, cpp=True)} val );
     ## CONDITION-END ##############################################################
 %if 'condition' in obj:
 #endif // ${th.subt(n, tags, obj['condition'])}
@@ -356,7 +358,7 @@ namespace ${n}
 %if 'condition' in e:
 #if ${th.subt(n, tags, e['condition'])}
 %endif
-    std::string to_string( ${th.make_class_name(n, tags, obj)}::${th.make_type_name(n, tags, e, cpp=True)} val );
+    std::string to_string( ${n}::${th.make_class_name(n, tags, obj)}::${th.make_type_name(n, tags, e, cpp=True)} val );
 %if 'condition' in e:
 #endif // ${th.subt(n, tags, e['condition'])}
 %endif
@@ -367,6 +369,5 @@ namespace ${n}
 %endif  ## declare_dbg
 %endfor ## obj in objects
 #endif // _DEBUG
-} // namespace ${n}
 #endif // defined(__cplusplus)
 #endif // _${N}_${name.upper()}_HPP

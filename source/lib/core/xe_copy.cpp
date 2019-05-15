@@ -296,6 +296,7 @@ namespace xe
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemAdvise");
     }
 
+} // namespace xe
+
 #ifdef _DEBUG
 #endif // _DEBUG
-} // namespace xe

@@ -116,6 +116,7 @@ namespace xe
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::EvictImage");
     }
 
+} // namespace xe
+
 #ifdef _DEBUG
 #endif // _DEBUG
-} // namespace xe

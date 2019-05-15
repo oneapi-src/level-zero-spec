@@ -89,20 +89,21 @@ namespace xe
         return uint32_t{};
     }
 
+} // namespace xe
+
 #ifdef _DEBUG
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts init_flag_t to std::string
-    std::string to_string( init_flag_t val )
+    std::string to_string( xe::init_flag_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
         if( 0 == bits ) return std::string("{}");
         std::string str;
-        if( static_cast<uint32_t>(init_flag_t::NONE) & bits )
-            str += "init_flag_t::NONE | ";
-        if( static_cast<uint32_t>(init_flag_t::GPU_ONLY) & bits )
-            str += "init_flag_t::GPU_ONLY | ";
+        if( static_cast<uint32_t>(xe::init_flag_t::NONE) & bits )
+            str += "xe::init_flag_t::NONE | ";
+        if( static_cast<uint32_t>(xe::init_flag_t::GPU_ONLY) & bits )
+            str += "xe::init_flag_t::GPU_ONLY | ";
         return "{ " + str.substr(0, str.size() - 3) + " }";
     }
 
 #endif // _DEBUG
-} // namespace xe

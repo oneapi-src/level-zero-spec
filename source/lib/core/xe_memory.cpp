@@ -286,6 +286,7 @@ namespace xe
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Context::CloseMemIpcHandle");
     }
 
+} // namespace xe
+
 #ifdef _DEBUG
 #endif // _DEBUG
-} // namespace xe

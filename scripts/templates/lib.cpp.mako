@@ -138,6 +138,8 @@ namespace ${n}
 %endif
 
 %endfor
+} // namespace ${n}
+
 ## DEBUG ######################################################################
 #ifdef _DEBUG
 %for obj in objects:
@@ -150,7 +152,7 @@ namespace ${n}
 %if 'condition' in obj:
 #if ${th.subt(n, tags, obj['condition'])}
 %endif
-    std::string to_string( ${th.make_type_name(n, tags, obj, cpp=True)} val )
+    std::string to_string( ${n}::${th.make_type_name(n, tags, obj, cpp=True)} val )
     {
         %for line in th.make_etor_debug_lines(n, tags, None, obj):
         ${line}
@@ -168,7 +170,7 @@ namespace ${n}
 %if 'condition' in e:
 #if ${th.subt(n, tags, e['condition'])}
 %endif
-    std::string to_string( ${th.make_class_name(n, tags, obj)}::${th.make_type_name(n, tags, e, cpp=True)} val )
+    std::string to_string( ${n}::${th.make_class_name(n, tags, obj)}::${th.make_type_name(n, tags, e, cpp=True)} val )
     {
         %for line in th.make_etor_debug_lines(n, tags, obj, e):
         ${line}
@@ -184,4 +186,3 @@ namespace ${n}
 %endif  ## declare_dbg
 %endfor ## obj in objects
 #endif // _DEBUG
-} // namespace ${n}

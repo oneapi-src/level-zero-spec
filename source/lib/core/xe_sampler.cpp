@@ -98,51 +98,52 @@ namespace xe
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Sampler::Destroy");
     }
 
+} // namespace xe
+
 #ifdef _DEBUG
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sampler::desc_version_t to std::string
-    std::string to_string( Sampler::desc_version_t val )
+    std::string to_string( xe::Sampler::desc_version_t val )
     {
         switch( val )
         {
-        case Sampler::desc_version_t::CURRENT:
-            return std::string("Sampler::desc_version_t::CURRENT");
+        case xe::Sampler::desc_version_t::CURRENT:
+            return std::string("xe::Sampler::desc_version_t::CURRENT");
         };
-        return std::string("Sampler::desc_version_t::?");
+        return std::string("xe::Sampler::desc_version_t::?");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sampler::address_mode_t to std::string
-    std::string to_string( Sampler::address_mode_t val )
+    std::string to_string( xe::Sampler::address_mode_t val )
     {
         switch( val )
         {
-        case Sampler::address_mode_t::NONE:
-            return std::string("Sampler::address_mode_t::NONE");
-        case Sampler::address_mode_t::REPEAT:
-            return std::string("Sampler::address_mode_t::REPEAT");
-        case Sampler::address_mode_t::CLAMP:
-            return std::string("Sampler::address_mode_t::CLAMP");
-        case Sampler::address_mode_t::MIRROR:
-            return std::string("Sampler::address_mode_t::MIRROR");
+        case xe::Sampler::address_mode_t::NONE:
+            return std::string("xe::Sampler::address_mode_t::NONE");
+        case xe::Sampler::address_mode_t::REPEAT:
+            return std::string("xe::Sampler::address_mode_t::REPEAT");
+        case xe::Sampler::address_mode_t::CLAMP:
+            return std::string("xe::Sampler::address_mode_t::CLAMP");
+        case xe::Sampler::address_mode_t::MIRROR:
+            return std::string("xe::Sampler::address_mode_t::MIRROR");
         };
-        return std::string("Sampler::address_mode_t::?");
+        return std::string("xe::Sampler::address_mode_t::?");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sampler::filter_mode_t to std::string
-    std::string to_string( Sampler::filter_mode_t val )
+    std::string to_string( xe::Sampler::filter_mode_t val )
     {
         switch( val )
         {
-        case Sampler::filter_mode_t::NEAREST:
-            return std::string("Sampler::filter_mode_t::NEAREST");
-        case Sampler::filter_mode_t::LINEAR:
-            return std::string("Sampler::filter_mode_t::LINEAR");
+        case xe::Sampler::filter_mode_t::NEAREST:
+            return std::string("xe::Sampler::filter_mode_t::NEAREST");
+        case xe::Sampler::filter_mode_t::LINEAR:
+            return std::string("xe::Sampler::filter_mode_t::LINEAR");
         };
-        return std::string("Sampler::filter_mode_t::?");
+        return std::string("xe::Sampler::filter_mode_t::?");
     }
 
 
 #endif // _DEBUG
-} // namespace xe

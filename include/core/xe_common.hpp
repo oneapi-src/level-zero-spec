@@ -211,12 +211,13 @@ namespace xe
 
     };
 
+} // namespace xe
+
 #ifdef _DEBUG
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts result_t to std::string
-    std::string to_string( result_t val );
+    std::string to_string( xe::result_t val );
 
 #endif // _DEBUG
-} // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_COMMON_HPP

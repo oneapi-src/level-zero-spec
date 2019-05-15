@@ -254,77 +254,78 @@ namespace xe
         return (void*)0;
     }
 
+} // namespace xe
+
 #ifdef _DEBUG
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts CommandList::desc_version_t to std::string
-    std::string to_string( CommandList::desc_version_t val )
+    std::string to_string( xe::CommandList::desc_version_t val )
     {
         switch( val )
         {
-        case CommandList::desc_version_t::CURRENT:
-            return std::string("CommandList::desc_version_t::CURRENT");
+        case xe::CommandList::desc_version_t::CURRENT:
+            return std::string("xe::CommandList::desc_version_t::CURRENT");
         };
-        return std::string("CommandList::desc_version_t::?");
+        return std::string("xe::CommandList::desc_version_t::?");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts CommandList::flag_t to std::string
-    std::string to_string( CommandList::flag_t val )
+    std::string to_string( xe::CommandList::flag_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
         if( 0 == bits ) return std::string("{}");
         std::string str;
-        if( static_cast<uint32_t>(CommandList::flag_t::NONE) & bits )
-            str += "CommandList::flag_t::NONE | ";
-        if( static_cast<uint32_t>(CommandList::flag_t::COPY_ONLY) & bits )
-            str += "CommandList::flag_t::COPY_ONLY | ";
-        if( static_cast<uint32_t>(CommandList::flag_t::RELAXED_ORDERING) & bits )
-            str += "CommandList::flag_t::RELAXED_ORDERING | ";
+        if( static_cast<uint32_t>(xe::CommandList::flag_t::NONE) & bits )
+            str += "xe::CommandList::flag_t::NONE | ";
+        if( static_cast<uint32_t>(xe::CommandList::flag_t::COPY_ONLY) & bits )
+            str += "xe::CommandList::flag_t::COPY_ONLY | ";
+        if( static_cast<uint32_t>(xe::CommandList::flag_t::RELAXED_ORDERING) & bits )
+            str += "xe::CommandList::flag_t::RELAXED_ORDERING | ";
         return "{ " + str.substr(0, str.size() - 3) + " }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts CommandList::parameter_t to std::string
-    std::string to_string( CommandList::parameter_t val )
+    std::string to_string( xe::CommandList::parameter_t val )
     {
         switch( val )
         {
-        case CommandList::parameter_t::TBD:
-            return std::string("CommandList::parameter_t::TBD");
+        case xe::CommandList::parameter_t::TBD:
+            return std::string("xe::CommandList::parameter_t::TBD");
         };
-        return std::string("CommandList::parameter_t::?");
+        return std::string("xe::CommandList::parameter_t::?");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts CommandList::memory_advice_t to std::string
-    std::string to_string( CommandList::memory_advice_t val )
+    std::string to_string( xe::CommandList::memory_advice_t val )
     {
         switch( val )
         {
-        case CommandList::memory_advice_t::SET_READ_MOSTLY:
-            return std::string("CommandList::memory_advice_t::SET_READ_MOSTLY");
-        case CommandList::memory_advice_t::CLEAR_READ_MOSTLY:
-            return std::string("CommandList::memory_advice_t::CLEAR_READ_MOSTLY");
-        case CommandList::memory_advice_t::SET_PREFERRED_LOCATION:
-            return std::string("CommandList::memory_advice_t::SET_PREFERRED_LOCATION");
-        case CommandList::memory_advice_t::CLEAR_PREFERRED_LOCATION:
-            return std::string("CommandList::memory_advice_t::CLEAR_PREFERRED_LOCATION");
-        case CommandList::memory_advice_t::SET_ACCESSED_BY:
-            return std::string("CommandList::memory_advice_t::SET_ACCESSED_BY");
-        case CommandList::memory_advice_t::CLEAR_ACCESSED_BY:
-            return std::string("CommandList::memory_advice_t::CLEAR_ACCESSED_BY");
-        case CommandList::memory_advice_t::SET_NON_ATOMIC_MOSTLY:
-            return std::string("CommandList::memory_advice_t::SET_NON_ATOMIC_MOSTLY");
-        case CommandList::memory_advice_t::CLEAR_NON_ATOMIC_MOSTLY:
-            return std::string("CommandList::memory_advice_t::CLEAR_NON_ATOMIC_MOSTLY");
-        case CommandList::memory_advice_t::BIAS_CACHED:
-            return std::string("CommandList::memory_advice_t::BIAS_CACHED");
-        case CommandList::memory_advice_t::BIAS_UNCACHED:
-            return std::string("CommandList::memory_advice_t::BIAS_UNCACHED");
+        case xe::CommandList::memory_advice_t::SET_READ_MOSTLY:
+            return std::string("xe::CommandList::memory_advice_t::SET_READ_MOSTLY");
+        case xe::CommandList::memory_advice_t::CLEAR_READ_MOSTLY:
+            return std::string("xe::CommandList::memory_advice_t::CLEAR_READ_MOSTLY");
+        case xe::CommandList::memory_advice_t::SET_PREFERRED_LOCATION:
+            return std::string("xe::CommandList::memory_advice_t::SET_PREFERRED_LOCATION");
+        case xe::CommandList::memory_advice_t::CLEAR_PREFERRED_LOCATION:
+            return std::string("xe::CommandList::memory_advice_t::CLEAR_PREFERRED_LOCATION");
+        case xe::CommandList::memory_advice_t::SET_ACCESSED_BY:
+            return std::string("xe::CommandList::memory_advice_t::SET_ACCESSED_BY");
+        case xe::CommandList::memory_advice_t::CLEAR_ACCESSED_BY:
+            return std::string("xe::CommandList::memory_advice_t::CLEAR_ACCESSED_BY");
+        case xe::CommandList::memory_advice_t::SET_NON_ATOMIC_MOSTLY:
+            return std::string("xe::CommandList::memory_advice_t::SET_NON_ATOMIC_MOSTLY");
+        case xe::CommandList::memory_advice_t::CLEAR_NON_ATOMIC_MOSTLY:
+            return std::string("xe::CommandList::memory_advice_t::CLEAR_NON_ATOMIC_MOSTLY");
+        case xe::CommandList::memory_advice_t::BIAS_CACHED:
+            return std::string("xe::CommandList::memory_advice_t::BIAS_CACHED");
+        case xe::CommandList::memory_advice_t::BIAS_UNCACHED:
+            return std::string("xe::CommandList::memory_advice_t::BIAS_UNCACHED");
         };
-        return std::string("CommandList::memory_advice_t::?");
+        return std::string("xe::CommandList::memory_advice_t::?");
     }
 
 
 #endif // _DEBUG
-} // namespace xe

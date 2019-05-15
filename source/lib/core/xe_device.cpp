@@ -336,102 +336,103 @@ namespace xe
         // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::SetLastLevelCacheConfig");
     }
 
+} // namespace xe
+
 #ifdef _DEBUG
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts DeviceGroup::api_version_t to std::string
-    std::string to_string( DeviceGroup::api_version_t val )
+    std::string to_string( xe::DeviceGroup::api_version_t val )
     {
         switch( val )
         {
-        case DeviceGroup::api_version_t::_1_0:
-            return std::string("DeviceGroup::api_version_t::_1_0");
+        case xe::DeviceGroup::api_version_t::_1_0:
+            return std::string("xe::DeviceGroup::api_version_t::_1_0");
         };
-        return std::string("DeviceGroup::api_version_t::?");
+        return std::string("xe::DeviceGroup::api_version_t::?");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts DeviceGroup::device_properties_version_t to std::string
-    std::string to_string( DeviceGroup::device_properties_version_t val )
+    std::string to_string( xe::DeviceGroup::device_properties_version_t val )
     {
         switch( val )
         {
-        case DeviceGroup::device_properties_version_t::CURRENT:
-            return std::string("DeviceGroup::device_properties_version_t::CURRENT");
+        case xe::DeviceGroup::device_properties_version_t::CURRENT:
+            return std::string("xe::DeviceGroup::device_properties_version_t::CURRENT");
         };
-        return std::string("DeviceGroup::device_properties_version_t::?");
+        return std::string("xe::DeviceGroup::device_properties_version_t::?");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts DeviceGroup::device_compute_properties_version_t to std::string
-    std::string to_string( DeviceGroup::device_compute_properties_version_t val )
+    std::string to_string( xe::DeviceGroup::device_compute_properties_version_t val )
     {
         switch( val )
         {
-        case DeviceGroup::device_compute_properties_version_t::CURRENT:
-            return std::string("DeviceGroup::device_compute_properties_version_t::CURRENT");
+        case xe::DeviceGroup::device_compute_properties_version_t::CURRENT:
+            return std::string("xe::DeviceGroup::device_compute_properties_version_t::CURRENT");
         };
-        return std::string("DeviceGroup::device_compute_properties_version_t::?");
+        return std::string("xe::DeviceGroup::device_compute_properties_version_t::?");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts DeviceGroup::device_memory_properties_version_t to std::string
-    std::string to_string( DeviceGroup::device_memory_properties_version_t val )
+    std::string to_string( xe::DeviceGroup::device_memory_properties_version_t val )
     {
         switch( val )
         {
-        case DeviceGroup::device_memory_properties_version_t::CURRENT:
-            return std::string("DeviceGroup::device_memory_properties_version_t::CURRENT");
+        case xe::DeviceGroup::device_memory_properties_version_t::CURRENT:
+            return std::string("xe::DeviceGroup::device_memory_properties_version_t::CURRENT");
         };
-        return std::string("DeviceGroup::device_memory_properties_version_t::?");
+        return std::string("xe::DeviceGroup::device_memory_properties_version_t::?");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts DeviceGroup::memory_access_capabilities_t to std::string
-    std::string to_string( DeviceGroup::memory_access_capabilities_t val )
+    std::string to_string( xe::DeviceGroup::memory_access_capabilities_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
         if( 0 == bits ) return std::string("{}");
         std::string str;
-        if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS) & bits )
-            str += "DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS | ";
-        if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_ATOMIC_ACCESS) & bits )
-            str += "DeviceGroup::memory_access_capabilities_t::MEMORY_ATOMIC_ACCESS | ";
-        if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ACCESS) & bits )
-            str += "DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ACCESS | ";
-        if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ATOMIC_ACCESS) & bits )
-            str += "DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ATOMIC_ACCESS | ";
+        if( static_cast<uint32_t>(xe::DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS) & bits )
+            str += "xe::DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS | ";
+        if( static_cast<uint32_t>(xe::DeviceGroup::memory_access_capabilities_t::MEMORY_ATOMIC_ACCESS) & bits )
+            str += "xe::DeviceGroup::memory_access_capabilities_t::MEMORY_ATOMIC_ACCESS | ";
+        if( static_cast<uint32_t>(xe::DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ACCESS) & bits )
+            str += "xe::DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ACCESS | ";
+        if( static_cast<uint32_t>(xe::DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ATOMIC_ACCESS) & bits )
+            str += "xe::DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ATOMIC_ACCESS | ";
         return "{ " + str.substr(0, str.size() - 3) + " }";
     }
 
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::p2p_properties_version_t to std::string
-    std::string to_string( Device::p2p_properties_version_t val )
+    std::string to_string( xe::Device::p2p_properties_version_t val )
     {
         switch( val )
         {
-        case Device::p2p_properties_version_t::CURRENT:
-            return std::string("Device::p2p_properties_version_t::CURRENT");
+        case xe::Device::p2p_properties_version_t::CURRENT:
+            return std::string("xe::Device::p2p_properties_version_t::CURRENT");
         };
-        return std::string("Device::p2p_properties_version_t::?");
+        return std::string("xe::Device::p2p_properties_version_t::?");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::cache_config_t to std::string
-    std::string to_string( Device::cache_config_t val )
+    std::string to_string( xe::Device::cache_config_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
         if( 0 == bits ) return std::string("{}");
         std::string str;
-        if( static_cast<uint32_t>(Device::cache_config_t::DEFAULT) & bits )
-            str += "Device::cache_config_t::DEFAULT | ";
-        if( static_cast<uint32_t>(Device::cache_config_t::LARGE_SLM) & bits )
-            str += "Device::cache_config_t::LARGE_SLM | ";
-        if( static_cast<uint32_t>(Device::cache_config_t::LARGE_DATA) & bits )
-            str += "Device::cache_config_t::LARGE_DATA | ";
+        if( static_cast<uint32_t>(xe::Device::cache_config_t::DEFAULT) & bits )
+            str += "xe::Device::cache_config_t::DEFAULT | ";
+        if( static_cast<uint32_t>(xe::Device::cache_config_t::LARGE_SLM) & bits )
+            str += "xe::Device::cache_config_t::LARGE_SLM | ";
+        if( static_cast<uint32_t>(xe::Device::cache_config_t::LARGE_DATA) & bits )
+            str += "xe::Device::cache_config_t::LARGE_DATA | ";
         return "{ " + str.substr(0, str.size() - 3) + " }";
     }
 
 
 #endif // _DEBUG
-} // namespace xe
