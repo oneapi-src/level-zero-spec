@@ -30,39 +30,22 @@
 ******************************************************************************/
 #include "xex_lib.h"
 
-#if defined(__cplusplus)
-extern "C" {
-#endif
-
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function for importing loaders's CommandGraph table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for ptable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xexGetCommandGraphProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xex_command_graph_apitable_t* ptable            ///< [in,out] pointer to table of API function pointers
-    )
+xe_result_t xex_lib::Init()
 {
+    loader = LOAD_DRIVER_LIBRARY( "xe_loader" );
+
+    if( NULL == context.loader )
+        return XE_RESULT_ERROR_UNINITIALIZED;
+
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr != context.loader )
+    if( XE_RESULT_SUCCESS == result )
     {
-        static auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
             GET_FUNCTION_PTR(context.loader, "xexGetCommandGraphProcAddrTable") );
-        result = getTable( version, ptable );
+        result = getTable( XE_API_VERSION_1_0, &xexCommandGraph );
     }
 
     return result;
 }
-
-#if defined(__cplusplus)
-};
-#endif

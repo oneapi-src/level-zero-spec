@@ -64,7 +64,12 @@ xeContextCreate(
     xe_context_handle_t* phContext                  ///< [out] pointer to handle of context object created
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeContext.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeContext.pfnCreate( numDevices, phDevice, phContext );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -96,7 +101,12 @@ xeContextDestroy(
     xe_context_handle_t hContext                    ///< [in] handle of context object to destroy
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeContext.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeContext.pfnDestroy( hContext );
 }
 
 } // extern "C"

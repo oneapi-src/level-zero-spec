@@ -51,11 +51,13 @@ xeGetCommandListProcAddrTable(
     xe_command_list_apitable_t* ptable              ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -160,11 +162,13 @@ xeGetDeviceProcAddrTable(
     xe_device_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -233,11 +237,13 @@ xeGetCommandQueueProcAddrTable(
     xe_command_queue_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -273,11 +279,13 @@ xeGetContextProcAddrTable(
     xe_context_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -334,11 +342,13 @@ xeGetDeviceGroupProcAddrTable(
     xe_device_group_apitable_t* ptable              ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -380,11 +390,13 @@ xeGetFenceProcAddrTable(
     xe_fence_apitable_t* ptable                     ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -423,11 +435,13 @@ xeGetEventPoolProcAddrTable(
     xe_event_pool_apitable_t* ptable                ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -466,11 +480,13 @@ xeGetEventProcAddrTable(
     xe_event_apitable_t* ptable                     ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -512,11 +528,13 @@ xeGetImageProcAddrTable(
     xe_image_apitable_t* ptable                     ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -549,11 +567,13 @@ xeGetModuleProcAddrTable(
     xe_module_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -592,11 +612,13 @@ xeGetModuleBuildLogProcAddrTable(
     xe_module_build_log_apitable_t* ptable          ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -626,11 +648,13 @@ xeGetFunctionProcAddrTable(
     xe_function_apitable_t* ptable                  ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -675,11 +699,13 @@ xeGetSamplerProcAddrTable(
     xe_sampler_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -709,11 +735,13 @@ xeGetGlobalProcAddrTable(
     xe_global_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -733,6 +761,9 @@ xeInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
+    if( nullptr == context.xeGlobal.pfnInit )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
     }
@@ -748,6 +779,9 @@ xeDeviceGroupGetDriverVersion(
     uint32_t* version                               ///< [out] driver version
     )
 {
+    if( nullptr == context.xeDeviceGroup.pfnGetDriverVersion )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDeviceGroup )
@@ -770,6 +804,9 @@ xeContextCreate(
     xe_context_handle_t* phContext                  ///< [out] pointer to handle of context object created
     )
 {
+    if( nullptr == context.xeContext.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == phDevice )
@@ -790,6 +827,9 @@ xeContextDestroy(
     xe_context_handle_t hContext                    ///< [in] handle of context object to destroy
     )
 {
+    if( nullptr == context.xeContext.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hContext )
@@ -812,6 +852,9 @@ xeGetDeviceGroups(
     xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional] array of handle of device groups
     )
 {
+    if( nullptr == context.xeGlobal.pfnGetDeviceGroups )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == pCount )
@@ -835,6 +878,9 @@ xeDeviceGroupGetDevices(
     xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional] array of handle of device groups
     )
 {
+    if( nullptr == context.xeDeviceGroup.pfnGetDevices )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDeviceGroup )
@@ -857,6 +903,9 @@ xeDeviceGetSubDevice(
     xe_device_handle_t* phSubDevice                 ///< [out] pointer to handle of sub-device object.
     )
 {
+    if( nullptr == context.xeDevice.pfnGetSubDevice )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -878,6 +927,9 @@ xeDeviceGroupGetApiVersion(
     xe_api_version_t* version                       ///< [out] api version
     )
 {
+    if( nullptr == context.xeDeviceGroup.pfnGetApiVersion )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDeviceGroup )
@@ -899,6 +951,9 @@ xeDeviceGroupGetProperties(
     xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
     )
 {
+    if( nullptr == context.xeDeviceGroup.pfnGetProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDeviceGroup )
@@ -920,6 +975,9 @@ xeDeviceGroupGetComputeProperties(
     xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
     )
 {
+    if( nullptr == context.xeDeviceGroup.pfnGetComputeProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDeviceGroup )
@@ -941,6 +999,9 @@ xeDeviceGroupGetMemoryProperties(
     xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
     )
 {
+    if( nullptr == context.xeDeviceGroup.pfnGetMemoryProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDeviceGroup )
@@ -963,6 +1024,9 @@ xeDeviceGetP2PProperties(
     xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
     )
 {
+    if( nullptr == context.xeDevice.pfnGetP2PProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -988,6 +1052,9 @@ xeDeviceCanAccessPeer(
     xe_bool_t* value                                ///< [out] returned access capability
     )
 {
+    if( nullptr == context.xeDevice.pfnCanAccessPeer )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -1012,6 +1079,9 @@ xeDeviceSetIntermediateCacheConfig(
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     )
 {
+    if( nullptr == context.xeDevice.pfnSetIntermediateCacheConfig )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -1030,6 +1100,9 @@ xeDeviceSetLastLevelCacheConfig(
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     )
 {
+    if( nullptr == context.xeDevice.pfnSetLastLevelCacheConfig )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -1049,6 +1122,9 @@ xeCommandQueueCreate(
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     )
 {
+    if( nullptr == context.xeCommandQueue.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -1075,6 +1151,9 @@ xeCommandQueueDestroy(
     xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
     )
 {
+    if( nullptr == context.xeCommandQueue.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandQueue )
@@ -1095,6 +1174,9 @@ xeCommandQueueExecuteCommandLists(
     xe_fence_handle_t hFence                        ///< [in][optional] handle of the fence to signal on completion
     )
 {
+    if( nullptr == context.xeCommandQueue.pfnExecuteCommandLists )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandQueue )
@@ -1120,6 +1202,9 @@ xeCommandQueueSynchronize(
                                                     ///< is lost.
     )
 {
+    if( nullptr == context.xeCommandQueue.pfnSynchronize )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandQueue )
@@ -1139,6 +1224,9 @@ xeCommandListCreate(
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     )
 {
+    if( nullptr == context.xeCommandList.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -1167,6 +1255,9 @@ xeCommandListCreateImmediate(
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     )
 {
+    if( nullptr == context.xeCommandList.pfnCreateImmediate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -1193,6 +1284,9 @@ xeCommandListDestroy(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
     )
 {
+    if( nullptr == context.xeCommandList.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -1210,6 +1304,9 @@ xeCommandListClose(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
     )
 {
+    if( nullptr == context.xeCommandList.pfnClose )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -1227,6 +1324,9 @@ xeCommandListReset(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
     )
 {
+    if( nullptr == context.xeCommandList.pfnReset )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -1246,6 +1346,9 @@ xeCommandListSetParameter(
     uint32_t value                                  ///< [in] value of attribute
     )
 {
+    if( nullptr == context.xeCommandList.pfnSetParameter )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -1265,6 +1368,9 @@ xeCommandListGetParameter(
     uint32_t* value                                 ///< [out] value of attribute
     )
 {
+    if( nullptr == context.xeCommandList.pfnGetParameter )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -1285,6 +1391,9 @@ xeCommandListResetParameters(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
 {
+    if( nullptr == context.xeCommandList.pfnResetParameters )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -1304,6 +1413,9 @@ xeCommandListReserveSpace(
     void** ptr                                      ///< [out] pointer to command buffer space reserved
     )
 {
+    if( nullptr == context.xeCommandList.pfnReserveSpace )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -1328,6 +1440,9 @@ xeCommandListAppendBarrier(
                                                     ///< barrier
     )
 {
+    if( nullptr == context.xeCommandList.pfnAppendBarrier )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -1352,6 +1467,9 @@ xeCommandListAppendMemoryRangesBarrier(
                                                     ///< barrier
     )
 {
+    if( nullptr == context.xeCommandList.pfnAppendMemoryRangesBarrier )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -1375,6 +1493,9 @@ xeDeviceSystemBarrier(
     xe_device_handle_t hDevice                      ///< [in] handle of the device
     )
 {
+    if( nullptr == context.xeDevice.pfnSystemBarrier )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -1396,6 +1517,9 @@ xeDeviceRegisterCLMemory(
     void** ptr                                      ///< [out] pointer to device allocation
     )
 {
+    if( nullptr == context.xeDevice.pfnRegisterCLMemory )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -1421,6 +1545,9 @@ xeDeviceRegisterCLProgram(
     xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
     )
 {
+    if( nullptr == context.xeDevice.pfnRegisterCLProgram )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -1446,6 +1573,9 @@ xeDeviceRegisterCLCommandQueue(
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     )
 {
+    if( nullptr == context.xeDevice.pfnRegisterCLCommandQueue )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -1471,6 +1601,9 @@ xeCommandListAppendMemoryCopy(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
+    if( nullptr == context.xeCommandList.pfnAppendMemoryCopy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -1498,6 +1631,9 @@ xeCommandListAppendMemorySet(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
+    if( nullptr == context.xeCommandList.pfnAppendMemorySet )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -1525,6 +1661,9 @@ xeCommandListAppendMemoryCopyRegion(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
+    if( nullptr == context.xeCommandList.pfnAppendMemoryCopyRegion )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -1557,6 +1696,9 @@ xeCommandListAppendImageCopy(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
+    if( nullptr == context.xeCommandList.pfnAppendImageCopy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -1585,6 +1727,9 @@ xeCommandListAppendImageCopyRegion(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
+    if( nullptr == context.xeCommandList.pfnAppendImageCopyRegion )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -1612,6 +1757,9 @@ xeCommandListAppendImageCopyToMemory(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
+    if( nullptr == context.xeCommandList.pfnAppendImageCopyToMemory )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -1639,6 +1787,9 @@ xeCommandListAppendImageCopyFromMemory(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
+    if( nullptr == context.xeCommandList.pfnAppendImageCopyFromMemory )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -1664,6 +1815,9 @@ xeCommandListAppendMemoryPrefetch(
     size_t count                                    ///< [in] size in bytes of the memory range to prefetch
     )
 {
+    if( nullptr == context.xeCommandList.pfnAppendMemoryPrefetch )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -1688,6 +1842,9 @@ xeCommandListAppendMemAdvise(
     xe_memory_advice_t advice                       ///< [in] Memory advice for the memory range
     )
 {
+    if( nullptr == context.xeCommandList.pfnAppendMemAdvise )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -1713,6 +1870,9 @@ xeEventPoolCreate(
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
     )
 {
+    if( nullptr == context.xeEventPool.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -1739,6 +1899,9 @@ xeEventPoolDestroy(
     xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object to destroy
     )
 {
+    if( nullptr == context.xeEventPool.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hEventPool )
@@ -1758,6 +1921,9 @@ xeEventCreate(
     xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
     )
 {
+    if( nullptr == context.xeEvent.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hEventPool )
@@ -1784,6 +1950,9 @@ xeEventDestroy(
     xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
     )
 {
+    if( nullptr == context.xeEvent.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hEvent )
@@ -1802,6 +1971,9 @@ xeEventPoolGetIpcHandle(
     xe_ipc_event_pool_handle_t* phIpc               ///< [out] Returned IPC event handle
     )
 {
+    if( nullptr == context.xeEventPool.pfnGetIpcHandle )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hEventPool )
@@ -1824,6 +1996,9 @@ xeEventPoolOpenIpcHandle(
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
     )
 {
+    if( nullptr == context.xeEventPool.pfnOpenIpcHandle )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -1847,6 +2022,9 @@ xeEventPoolCloseIpcHandle(
     xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object
     )
 {
+    if( nullptr == context.xeEventPool.pfnCloseIpcHandle )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hEventPool )
@@ -1865,6 +2043,9 @@ xeCommandListAppendSignalEvent(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
+    if( nullptr == context.xeCommandList.pfnAppendSignalEvent )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -1887,6 +2068,9 @@ xeCommandListAppendWaitOnEvents(
     xe_event_handle_t* phEvents                     ///< [in] handle of the events to wait on before continuing
     )
 {
+    if( nullptr == context.xeCommandList.pfnAppendWaitOnEvents )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -1907,6 +2091,9 @@ xeEventHostSignal(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
+    if( nullptr == context.xeEvent.pfnHostSignal )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hEvent )
@@ -1929,6 +2116,9 @@ xeEventHostSynchronize(
                                                     ///< is lost.
     )
 {
+    if( nullptr == context.xeEvent.pfnHostSynchronize )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hEvent )
@@ -1946,6 +2136,9 @@ xeEventQueryStatus(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
+    if( nullptr == context.xeEvent.pfnQueryStatus )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hEvent )
@@ -1964,6 +2157,9 @@ xeCommandListAppendEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
+    if( nullptr == context.xeCommandList.pfnAppendEventReset )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -1984,6 +2180,9 @@ xeEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
+    if( nullptr == context.xeEvent.pfnReset )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hEvent )
@@ -2003,6 +2202,9 @@ xeFenceCreate(
     xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
     )
 {
+    if( nullptr == context.xeFence.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandQueue )
@@ -2029,6 +2231,9 @@ xeFenceDestroy(
     xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
     )
 {
+    if( nullptr == context.xeFence.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hFence )
@@ -2051,6 +2256,9 @@ xeFenceHostSynchronize(
                                                     ///< is lost.
     )
 {
+    if( nullptr == context.xeFence.pfnHostSynchronize )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hFence )
@@ -2068,6 +2276,9 @@ xeFenceQueryStatus(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
+    if( nullptr == context.xeFence.pfnQueryStatus )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hFence )
@@ -2085,6 +2296,9 @@ xeFenceReset(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
+    if( nullptr == context.xeFence.pfnReset )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hFence )
@@ -2104,6 +2318,9 @@ xeImageGetProperties(
     xe_image_properties_t* pImageProperties         ///< [out] pointer to image properties
     )
 {
+    if( nullptr == context.xeImage.pfnGetProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -2132,6 +2349,9 @@ xeImageCreate(
     xe_image_handle_t* phImage                      ///< [out] pointer to handle of image object created
     )
 {
+    if( nullptr == context.xeImage.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -2158,6 +2378,9 @@ xeImageDestroy(
     xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
     )
 {
+    if( nullptr == context.xeImage.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hImage )
@@ -2181,6 +2404,9 @@ xeContextAllocSharedMem(
     void** ptr                                      ///< [out] pointer to shared allocation
     )
 {
+    if( nullptr == context.xeContext.pfnAllocSharedMem )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hContext )
@@ -2209,6 +2435,9 @@ xeContextAllocDeviceMem(
     void** ptr                                      ///< [out] pointer to device allocation
     )
 {
+    if( nullptr == context.xeContext.pfnAllocDeviceMem )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hContext )
@@ -2236,6 +2465,9 @@ xeContextAllocHostMem(
     void** ptr                                      ///< [out] pointer to host allocation
     )
 {
+    if( nullptr == context.xeContext.pfnAllocHostMem )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hContext )
@@ -2257,6 +2489,9 @@ xeContextFreeMem(
     const void* ptr                                 ///< [in] pointer to memory to free
     )
 {
+    if( nullptr == context.xeContext.pfnFreeMem )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hContext )
@@ -2279,6 +2514,9 @@ xeContextGetMemProperties(
     xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
     )
 {
+    if( nullptr == context.xeContext.pfnGetMemProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hContext )
@@ -2305,6 +2543,9 @@ xeContextGetMemAddressRange(
     size_t* pSize                                   ///< [in,out][optional] size of the allocation
     )
 {
+    if( nullptr == context.xeContext.pfnGetMemAddressRange )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hContext )
@@ -2327,6 +2568,9 @@ xeContextGetMemIpcHandle(
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
     )
 {
+    if( nullptr == context.xeContext.pfnGetMemIpcHandle )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hContext )
@@ -2354,6 +2598,9 @@ xeContextOpenMemIpcHandle(
     void** ptr                                      ///< [out] pointer to device allocation in this process
     )
 {
+    if( nullptr == context.xeContext.pfnOpenMemIpcHandle )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hContext )
@@ -2381,6 +2628,9 @@ xeContextCloseMemIpcHandle(
     const void* ptr                                 ///< [in] pointer to device allocation in this process
     )
 {
+    if( nullptr == context.xeContext.pfnCloseMemIpcHandle )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hContext )
@@ -2404,6 +2654,9 @@ xeModuleCreate(
     xe_module_build_log_handle_t* phBuildLog        ///< [in,out][optional] pointer to handle of module's build log.
     )
 {
+    if( nullptr == context.xeModule.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -2430,6 +2683,9 @@ xeModuleDestroy(
     xe_module_handle_t hModule                      ///< [in] handle of the module
     )
 {
+    if( nullptr == context.xeModule.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hModule )
@@ -2447,6 +2703,9 @@ xeModuleBuildLogDestroy(
     xe_module_build_log_handle_t hModuleBuildLog    ///< [in] handle of the module build log object.
     )
 {
+    if( nullptr == context.xeModuleBuildLog.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hModuleBuildLog )
@@ -2466,6 +2725,9 @@ xeModuleBuildLogGetString(
     char* pBuildLog                                 ///< [in,out][optional] pointer to null-terminated string of the log.
     )
 {
+    if( nullptr == context.xeModuleBuildLog.pfnGetString )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hModuleBuildLog )
@@ -2488,6 +2750,9 @@ xeModuleGetNativeBinary(
     uint8_t* pModuleNativeBinary                    ///< [in,out][optional] byte pointer to native binary
     )
 {
+    if( nullptr == context.xeModule.pfnGetNativeBinary )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hModule )
@@ -2510,6 +2775,9 @@ xeModuleGetGlobalPointer(
     void** pPtr                                     ///< [out] device visible pointer
     )
 {
+    if( nullptr == context.xeModule.pfnGetGlobalPointer )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hModule )
@@ -2535,6 +2803,9 @@ xeFunctionCreate(
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object
     )
 {
+    if( nullptr == context.xeFunction.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hModule )
@@ -2561,6 +2832,9 @@ xeFunctionDestroy(
     xe_function_handle_t hFunction                  ///< [in] handle of the function object
     )
 {
+    if( nullptr == context.xeFunction.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hFunction )
@@ -2580,6 +2854,9 @@ xeModuleGetFunctionPointer(
     void** pfnFunction                              ///< [out] pointer to function.
     )
 {
+    if( nullptr == context.xeModule.pfnGetFunctionPointer )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hModule )
@@ -2606,6 +2883,9 @@ xeFunctionSetGroupSize(
     uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this function.
     )
 {
+    if( nullptr == context.xeFunction.pfnSetGroupSize )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hFunction )
@@ -2629,6 +2909,9 @@ xeFunctionSuggestGroupSize(
     uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
     )
 {
+    if( nullptr == context.xeFunction.pfnSuggestGroupSize )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hFunction )
@@ -2659,6 +2942,9 @@ xeFunctionSetArgumentValue(
                                                     ///< null then argument value is considered null.
     )
 {
+    if( nullptr == context.xeFunction.pfnSetArgumentValue )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hFunction )
@@ -2678,6 +2964,9 @@ xeFunctionSetAttribute(
     uint32_t value                                  ///< [in] attribute value to set
     )
 {
+    if( nullptr == context.xeFunction.pfnSetAttribute )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hFunction )
@@ -2697,6 +2986,9 @@ xeFunctionGetAttribute(
     uint32_t* pValue                                ///< [out] returned attribute value
     )
 {
+    if( nullptr == context.xeFunction.pfnGetAttribute )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hFunction )
@@ -2722,6 +3014,9 @@ xeCommandListAppendLaunchFunction(
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
+    if( nullptr == context.xeCommandList.pfnAppendLaunchFunction )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -2750,6 +3045,9 @@ xeCommandListAppendLaunchFunctionIndirect(
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
+    if( nullptr == context.xeCommandList.pfnAppendLaunchFunctionIndirect )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -2782,6 +3080,9 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
+    if( nullptr == context.xeCommandList.pfnAppendLaunchMultipleFunctionsIndirect )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -2813,6 +3114,9 @@ xeCommandListAppendLaunchHostFunction(
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
+    if( nullptr == context.xeCommandList.pfnAppendLaunchHostFunction )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -2835,6 +3139,9 @@ xeDeviceMakeMemoryResident(
     size_t size                                     ///< [in] size in bytes to make resident
     )
 {
+    if( nullptr == context.xeDevice.pfnMakeMemoryResident )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -2857,6 +3164,9 @@ xeDeviceEvictMemory(
     size_t size                                     ///< [in] size in bytes to evict
     )
 {
+    if( nullptr == context.xeDevice.pfnEvictMemory )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -2878,6 +3188,9 @@ xeDeviceMakeImageResident(
     xe_image_handle_t hImage                        ///< [in] handle of image to make resident
     )
 {
+    if( nullptr == context.xeDevice.pfnMakeImageResident )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -2899,6 +3212,9 @@ xeDeviceEvictImage(
     xe_image_handle_t hImage                        ///< [in] handle of image to make evict
     )
 {
+    if( nullptr == context.xeDevice.pfnEvictImage )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -2921,6 +3237,9 @@ xeSamplerCreate(
     xe_sampler_handle_t* phSampler                  ///< [out] handle of the sampler
     )
 {
+    if( nullptr == context.xeSampler.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -2947,6 +3266,9 @@ xeSamplerDestroy(
     xe_sampler_handle_t hSampler                    ///< [in] handle of the sampler
     )
 {
+    if( nullptr == context.xeSampler.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hSampler )

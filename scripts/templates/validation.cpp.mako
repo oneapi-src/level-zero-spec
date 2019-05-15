@@ -62,11 +62,13 @@ ${tbl['export']['name']}(
     %endfor
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return ${X}_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return ${X}_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     ${x}_result_t result = ${X}_RESULT_SUCCESS;
 
@@ -98,6 +100,9 @@ ${th.make_func_name(n, tags, obj)}(
     %endfor
     )
 {
+    if( nullptr == context.${n}${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)} )
+        return ${X}_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         %for key, values in th.make_param_checks(n, tags, obj).items():

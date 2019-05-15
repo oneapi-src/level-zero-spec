@@ -65,7 +65,12 @@ xeSamplerCreate(
     xe_sampler_handle_t* phSampler                  ///< [out] handle of the sampler
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeSampler.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeSampler.pfnCreate( hDevice, pDesc, phSampler );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -96,7 +101,12 @@ xeSamplerDestroy(
     xe_sampler_handle_t hSampler                    ///< [in] handle of the sampler
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeSampler.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeSampler.pfnDestroy( hSampler );
 }
 
 } // extern "C"

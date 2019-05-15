@@ -51,11 +51,13 @@ xeGetCommandListProcAddrTable(
     xe_command_list_apitable_t* ptable              ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -93,11 +95,13 @@ xeGetDeviceProcAddrTable(
     xe_device_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -135,11 +139,13 @@ xeGetCommandQueueProcAddrTable(
     xe_command_queue_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -177,11 +183,13 @@ xeGetContextProcAddrTable(
     xe_context_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -219,11 +227,13 @@ xeGetDeviceGroupProcAddrTable(
     xe_device_group_apitable_t* ptable              ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -261,11 +271,13 @@ xeGetFenceProcAddrTable(
     xe_fence_apitable_t* ptable                     ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -303,11 +315,13 @@ xeGetEventPoolProcAddrTable(
     xe_event_pool_apitable_t* ptable                ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -345,11 +359,13 @@ xeGetEventProcAddrTable(
     xe_event_apitable_t* ptable                     ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -387,11 +403,13 @@ xeGetImageProcAddrTable(
     xe_image_apitable_t* ptable                     ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -429,11 +447,13 @@ xeGetModuleProcAddrTable(
     xe_module_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -471,11 +491,13 @@ xeGetModuleBuildLogProcAddrTable(
     xe_module_build_log_apitable_t* ptable          ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -513,11 +535,13 @@ xeGetFunctionProcAddrTable(
     xe_function_apitable_t* ptable                  ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -555,11 +579,13 @@ xeGetSamplerProcAddrTable(
     xe_sampler_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -597,11 +623,13 @@ xeGetGlobalProcAddrTable(
     xe_global_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 

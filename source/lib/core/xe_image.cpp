@@ -58,7 +58,12 @@ xeImageGetProperties(
     xe_image_properties_t* pImageProperties         ///< [out] pointer to image properties
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeImage.pfnGetProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeImage.pfnGetProperties( hDevice, desc, pImageProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -91,7 +96,12 @@ xeImageCreate(
     xe_image_handle_t* phImage                      ///< [out] pointer to handle of image object created
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeImage.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeImage.pfnCreate( hDevice, desc, phImage );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -118,7 +128,12 @@ xeImageDestroy(
     xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeImage.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeImage.pfnDestroy( hImage );
 }
 
 } // extern "C"

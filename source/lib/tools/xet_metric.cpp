@@ -51,7 +51,12 @@ xetMetricGroupGetCount(
     uint32_t* pCount                                ///< [out] number of metric groups supported by the device
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetMetricGroup.pfnGetCount )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetMetricGroup.pfnGetCount( hDevice, pCount );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -76,7 +81,12 @@ xetMetricGroupGet(
     xet_metric_group_handle_t* phMetricGroup        ///< [out] metric group handle
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetMetricGroup.pfnGet )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetMetricGroup.pfnGet( hDevice, ordinal, phMetricGroup );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -100,7 +110,12 @@ xetMetricGroupGetProperties(
     xet_metric_group_properties_t* pProperties      ///< [out] metric group properties
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetMetricGroup.pfnGetProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetMetricGroup.pfnGetProperties( hMetricGroup, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -125,7 +140,12 @@ xetMetricGet(
     xet_metric_handle_t* phMetric                   ///< [out] handle of metric
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetMetric.pfnGet )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetMetric.pfnGet( hMetricGroup, ordinal, phMetric );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -149,7 +169,12 @@ xetMetricGetProperties(
     xet_metric_properties_t* pProperties            ///< [out] metric properties
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetMetric.pfnGetProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetMetric.pfnGetProperties( hMetric, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -180,7 +205,12 @@ xetMetricGroupCalculateData(
     xet_typed_value_t* pCalculatedData              ///< [in,out] calculated metrics
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetMetricGroup.pfnCalculateData )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetMetricGroup.pfnCalculateData( hMetricGroup, pReportCount, rawDataSize, pRawData, calculatedDataSize, pCalculatedData );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -208,7 +238,12 @@ xetDeviceActivateMetricGroups(
     xet_metric_group_handle_t* phMetricGroups       ///< [in] handles of the metric groups to activate. NULL to deactivate.
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetDevice.pfnActivateMetricGroups )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetDevice.pfnActivateMetricGroups( hDevice, count, phMetricGroups );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -239,7 +274,12 @@ xetMetricTracerOpen(
     xet_metric_tracer_handle_t* phMetricTracer      ///< [out] handle of metric tracer
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetMetricTracer.pfnOpen )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetMetricTracer.pfnOpen( hDevice, pDesc, hNotificationEvent, phMetricTracer );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -265,7 +305,12 @@ xetCommandListAppendMetricTracerMarker(
     uint32_t value                                  ///< [in] tracer marker value
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetCommandList.pfnAppendMetricTracerMarker )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetCommandList.pfnAppendMetricTracerMarker( hCommandList, hMetricTracer, value );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -288,7 +333,12 @@ xetMetricTracerClose(
     xet_metric_tracer_handle_t hMetricTracer        ///< [in] handle of the metric tracer
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetMetricTracer.pfnClose )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetMetricTracer.pfnClose( hMetricTracer );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -315,7 +365,12 @@ xetMetricTracerReadData(
     uint8_t* pRawData                               ///< [in,out] raw data buffer for reports
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetMetricTracer.pfnReadData )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetMetricTracer.pfnReadData( hMetricTracer, pReportCount, rawDataSize, pRawData );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -342,7 +397,12 @@ xetMetricQueryPoolCreate(
     xet_metric_query_pool_handle_t* phMetricQueryPool   ///< [out] handle of metric query pool
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetMetricQueryPool.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetMetricQueryPool.pfnCreate( hDevice, pDesc, phMetricQueryPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -365,7 +425,12 @@ xetMetricQueryPoolDestroy(
     xet_metric_query_pool_handle_t hMetricQueryPool ///< [in] handle of the metric query pool
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetMetricQueryPool.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetMetricQueryPool.pfnDestroy( hMetricQueryPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -390,7 +455,12 @@ xetMetricQueryPoolGetMetricQuery(
     xet_metric_query_handle_t* phMetricQuery        ///< [out] handle of metric query
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetMetricQueryPool.pfnGetMetricQuery )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetMetricQueryPool.pfnGetMetricQuery( hMetricQueryPool, ordinal, phMetricQuery );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -415,7 +485,12 @@ xetCommandListAppendMetricQueryBegin(
     xet_metric_query_handle_t hMetricQuery          ///< [in] handle of the metric query
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetCommandList.pfnAppendMetricQueryBegin )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetCommandList.pfnAppendMetricQueryBegin( hCommandList, hMetricQuery );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -442,7 +517,12 @@ xetCommandListAppendMetricQueryEnd(
     xe_event_handle_t hCompletionEvent              ///< [in] handle of the completion event to signal
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetCommandList.pfnAppendMetricQueryEnd )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetCommandList.pfnAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -465,7 +545,12 @@ xetCommandListAppendMetricMemoryBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetCommandList.pfnAppendMetricMemoryBarrier )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetCommandList.pfnAppendMetricMemoryBarrier( hCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -492,7 +577,12 @@ xetMetricQueryGetData(
     uint8_t* pRawData                               ///< [in,out] query result data in raw format
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetMetricQuery.pfnGetData )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetMetricQuery.pfnGetData( hMetricQuery, pReportCount, rawDataSize, pRawData );
 }
 
 } // extern "C"

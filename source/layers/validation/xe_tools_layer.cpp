@@ -51,11 +51,13 @@ xetGetDeviceProcAddrTable(
     xet_device_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -82,11 +84,13 @@ xetGetCommandListProcAddrTable(
     xet_command_list_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -122,11 +126,13 @@ xetGetMetricGroupProcAddrTable(
     xet_metric_group_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -162,11 +168,13 @@ xetGetMetricProcAddrTable(
     xet_metric_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -196,11 +204,13 @@ xetGetMetricTracerProcAddrTable(
     xet_metric_tracer_apitable_t* ptable            ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -233,11 +243,13 @@ xetGetMetricQueryPoolProcAddrTable(
     xet_metric_query_pool_apitable_t* ptable        ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -270,11 +282,13 @@ xetGetMetricQueryProcAddrTable(
     xet_metric_query_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -301,11 +315,13 @@ xetGetPowerProcAddrTable(
     xet_power_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -416,11 +432,13 @@ xetGetFreqDomainProcAddrTable(
     xet_freq_domain_apitable_t* ptable              ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -459,6 +477,9 @@ xetMetricGroupGetCount(
     uint32_t* pCount                                ///< [out] number of metric groups supported by the device
     )
 {
+    if( nullptr == context.xetMetricGroup.pfnGetCount )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -481,6 +502,9 @@ xetMetricGroupGet(
     xet_metric_group_handle_t* phMetricGroup        ///< [out] metric group handle
     )
 {
+    if( nullptr == context.xetMetricGroup.pfnGet )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -502,6 +526,9 @@ xetMetricGroupGetProperties(
     xet_metric_group_properties_t* pProperties      ///< [out] metric group properties
     )
 {
+    if( nullptr == context.xetMetricGroup.pfnGetProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hMetricGroup )
@@ -524,6 +551,9 @@ xetMetricGet(
     xet_metric_handle_t* phMetric                   ///< [out] handle of metric
     )
 {
+    if( nullptr == context.xetMetric.pfnGet )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hMetricGroup )
@@ -545,6 +575,9 @@ xetMetricGetProperties(
     xet_metric_properties_t* pProperties            ///< [out] metric properties
     )
 {
+    if( nullptr == context.xetMetric.pfnGetProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hMetric )
@@ -570,6 +603,9 @@ xetMetricGroupCalculateData(
     xet_typed_value_t* pCalculatedData              ///< [in,out] calculated metrics
     )
 {
+    if( nullptr == context.xetMetricGroup.pfnCalculateData )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hMetricGroup )
@@ -598,6 +634,9 @@ xetDeviceActivateMetricGroups(
     xet_metric_group_handle_t* phMetricGroups       ///< [in] handles of the metric groups to activate. NULL to deactivate.
     )
 {
+    if( nullptr == context.xetDevice.pfnActivateMetricGroups )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -622,6 +661,9 @@ xetMetricTracerOpen(
     xet_metric_tracer_handle_t* phMetricTracer      ///< [out] handle of metric tracer
     )
 {
+    if( nullptr == context.xetMetricTracer.pfnOpen )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -653,6 +695,9 @@ xetCommandListAppendMetricTracerMarker(
     uint32_t value                                  ///< [in] tracer marker value
     )
 {
+    if( nullptr == context.xetCommandList.pfnAppendMetricTracerMarker )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -673,6 +718,9 @@ xetMetricTracerClose(
     xet_metric_tracer_handle_t hMetricTracer        ///< [in] handle of the metric tracer
     )
 {
+    if( nullptr == context.xetMetricTracer.pfnClose )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hMetricTracer )
@@ -693,6 +741,9 @@ xetMetricTracerReadData(
     uint8_t* pRawData                               ///< [in,out] raw data buffer for reports
     )
 {
+    if( nullptr == context.xetMetricTracer.pfnReadData )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hMetricTracer )
@@ -718,6 +769,9 @@ xetMetricQueryPoolCreate(
     xet_metric_query_pool_handle_t* phMetricQueryPool   ///< [out] handle of metric query pool
     )
 {
+    if( nullptr == context.xetMetricQueryPool.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -744,6 +798,9 @@ xetMetricQueryPoolDestroy(
     xet_metric_query_pool_handle_t hMetricQueryPool ///< [in] handle of the metric query pool
     )
 {
+    if( nullptr == context.xetMetricQueryPool.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hMetricQueryPool )
@@ -763,6 +820,9 @@ xetMetricQueryPoolGetMetricQuery(
     xet_metric_query_handle_t* phMetricQuery        ///< [out] handle of metric query
     )
 {
+    if( nullptr == context.xetMetricQueryPool.pfnGetMetricQuery )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hMetricQueryPool )
@@ -784,6 +844,9 @@ xetCommandListAppendMetricQueryBegin(
     xet_metric_query_handle_t hMetricQuery          ///< [in] handle of the metric query
     )
 {
+    if( nullptr == context.xetCommandList.pfnAppendMetricQueryBegin )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -806,6 +869,9 @@ xetCommandListAppendMetricQueryEnd(
     xe_event_handle_t hCompletionEvent              ///< [in] handle of the completion event to signal
     )
 {
+    if( nullptr == context.xetCommandList.pfnAppendMetricQueryEnd )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -829,6 +895,9 @@ xetCommandListAppendMetricMemoryBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
 {
+    if( nullptr == context.xetCommandList.pfnAppendMetricMemoryBarrier )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandList )
@@ -849,6 +918,9 @@ xetMetricQueryGetData(
     uint8_t* pRawData                               ///< [in,out] query result data in raw format
     )
 {
+    if( nullptr == context.xetMetricQuery.pfnGetData )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hMetricQuery )
@@ -874,6 +946,9 @@ xetPowerCreate(
     xet_power_handle_t* pPowerHandle                ///< [out] handle for accessing power features of the device
     )
 {
+    if( nullptr == context.xetPower.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -894,6 +969,9 @@ xetPowerDestroy(
     xet_power_handle_t hPower                       ///< [in] handle of the power object to destroy
     )
 {
+    if( nullptr == context.xetPower.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -912,6 +990,9 @@ xetPowerGetAveragePowerLimit(
     xet_power_average_limit_t* pLimit               ///< [out] information about the average power limit
     )
 {
+    if( nullptr == context.xetPower.pfnGetAveragePowerLimit )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -933,6 +1014,9 @@ xetPowerGetBurstPowerLimit(
     xet_power_burst_limit_t* pLimit                 ///< [out] information about the burst power limit
     )
 {
+    if( nullptr == context.xetPower.pfnGetBurstPowerLimit )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -954,6 +1038,9 @@ xetPowerGetPeakPowerLimit(
     xet_power_peak_limit_t* pLimit                  ///< [out] information about the peak power limit
     )
 {
+    if( nullptr == context.xetPower.pfnGetPeakPowerLimit )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -975,6 +1062,9 @@ xetPowerGetAllPowerLimits(
     xet_power_limits_t* pLimits                     ///< [out] information about the average/burst/peak power limits
     )
 {
+    if( nullptr == context.xetPower.pfnGetAllPowerLimits )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -996,6 +1086,9 @@ xetPowerGetDefaultPowerLimits(
     xet_power_limits_t* pLimits                     ///< [out] information about the default average/burst/peak power limits
     )
 {
+    if( nullptr == context.xetPower.pfnGetDefaultPowerLimits )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -1017,6 +1110,9 @@ xetPowerSetAveragePowerLimit(
     xet_power_average_limit_t* pLimit               ///< [in] information about the average power limit
     )
 {
+    if( nullptr == context.xetPower.pfnSetAveragePowerLimit )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -1038,6 +1134,9 @@ xetPowerSetBurstPowerLimit(
     xet_power_burst_limit_t* pLimit                 ///< [in] information about the burst power limit
     )
 {
+    if( nullptr == context.xetPower.pfnSetBurstPowerLimit )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -1059,6 +1158,9 @@ xetPowerSetPeakPowerLimit(
     xet_power_peak_limit_t* pLimit                  ///< [in] information about the peak power limit
     )
 {
+    if( nullptr == context.xetPower.pfnSetPeakPowerLimit )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -1080,6 +1182,9 @@ xetPowerSetPowerLimits(
     xet_power_limits_t* pLimits                     ///< [in] information about the average/burst/peak power limits
     )
 {
+    if( nullptr == context.xetPower.pfnSetPowerLimits )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -1101,6 +1206,9 @@ xetPowerGetEnergyCounter(
     uint64_t* pEnergy                               ///< [out] the energy counter in millijoules
     )
 {
+    if( nullptr == context.xetPower.pfnGetEnergyCounter )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -1122,6 +1230,9 @@ xetPowerGetTurboMode(
     xet_turbo_mode_t* pTurboMode                    ///< [out] turbo mode currently in effect
     )
 {
+    if( nullptr == context.xetPower.pfnGetTurboMode )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -1143,6 +1254,9 @@ xetPowerSetTurboMode(
     xet_turbo_mode_t pTurboMode                     ///< [in] new turbo mode
     )
 {
+    if( nullptr == context.xetPower.pfnSetTurboMode )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -1161,6 +1275,9 @@ xetPowerGetFreqDomainCount(
     uint32_t* pNumFreqDomains                       ///< [out] the number of frequency domains
     )
 {
+    if( nullptr == context.xetPower.pfnGetFreqDomainCount )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -1183,6 +1300,9 @@ xetPowerGetFreqDomain(
     xet_freq_domain_handle_t* phFreqDomain          ///< [out] pointer to handle of frequency domain object
     )
 {
+    if( nullptr == context.xetPower.pfnGetFreqDomain )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -1204,6 +1324,9 @@ xetFreqDomainGetProperties(
     xet_freq_domain_properties_t* pFreqDomainProperties ///< [out] pointer to properties for the frequency domain
     )
 {
+    if( nullptr == context.xetFreqDomain.pfnGetProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
@@ -1226,6 +1349,9 @@ xetFreqDomainGetSourceFreqDomain(
                                                     ///< will be returned
     )
 {
+    if( nullptr == context.xetFreqDomain.pfnGetSourceFreqDomain )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
@@ -1248,6 +1374,9 @@ xetFreqDomainGetSupportedClocks(
     uint32_t* pClocks                               ///< [out] pointer to array of frequencies
     )
 {
+    if( nullptr == context.xetFreqDomain.pfnGetSupportedClocks )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
@@ -1270,6 +1399,9 @@ xetFreqDomainGetSupportedClockDividers(
     xet_clock_divider_t* pDividers                  ///< [out] pointer to array of dividers
     )
 {
+    if( nullptr == context.xetFreqDomain.pfnGetSupportedClockDividers )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
@@ -1292,6 +1424,9 @@ xetFreqDomainGetClockRange(
     uint32_t* pMaxClock                             ///< [out] max clock frequency in units of MHz
     )
 {
+    if( nullptr == context.xetFreqDomain.pfnGetClockRange )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
@@ -1317,6 +1452,9 @@ xetFreqDomainSetClockRange(
     uint32_t maxClock                               ///< [in] max clock frequency in units of MHz
     )
 {
+    if( nullptr == context.xetFreqDomain.pfnSetClockRange )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
@@ -1335,6 +1473,9 @@ xetFreqDomainSetClockDivider(
     xet_clock_divider_t* pClockDividerRequest       ///< [out] pointer to frequency divider request
     )
 {
+    if( nullptr == context.xetFreqDomain.pfnSetClockDivider )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
@@ -1358,6 +1499,9 @@ xetFreqDomainGetCurrentFrequency(
     xet_freq_throttle_reasons_t* pFreqThrottleReasons   ///< [out] the reason the resolved frequency is lower than the request
     )
 {
+    if( nullptr == context.xetFreqDomain.pfnGetCurrentFrequency )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
@@ -1385,6 +1529,9 @@ xetPowerFanCount(
     uint32_t* pFanCount                             ///< [out] the number of fans on the device
     )
 {
+    if( nullptr == context.xetPower.pfnFanCount )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -1407,6 +1554,9 @@ xetPowerFanGetProperties(
     xet_fan_properties_t* pFanProperties            ///< [out] pointer to storage for fan properties
     )
 {
+    if( nullptr == context.xetPower.pfnFanGetProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -1432,6 +1582,9 @@ xetPowerFanGetSpeedTable(
     xet_fan_point_t* pFanPoints                     ///< [out] pointer to an array of temperature/fan-speed points
     )
 {
+    if( nullptr == context.xetPower.pfnFanGetSpeedTable )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -1458,6 +1611,9 @@ xetPowerFanSetSpeedTable(
     xet_fan_point_t* pFanPoints                     ///< [in] pointer to an array of temperature/fan-speed points
     )
 {
+    if( nullptr == context.xetPower.pfnFanSetSpeedTable )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -1483,6 +1639,9 @@ xetPowerFanGetSpeed(
     xet_fan_speed_info_t* pFanSpeed                 ///< [out] pointer to an array of current fan speeds
     )
 {
+    if( nullptr == context.xetPower.pfnFanGetSpeed )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -1507,6 +1666,9 @@ xetPowerFanSetSpeed(
     xet_fan_speed_info_t* pFanSpeed                 ///< [in] pointer to an array of current fan speeds
     )
 {
+    if( nullptr == context.xetPower.pfnFanSetSpeed )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -1528,6 +1690,9 @@ xetPowerTemperatureSensorCount(
     uint32_t* pSensorCount                          ///< [out] the number of temperature sensors on the device
     )
 {
+    if( nullptr == context.xetPower.pfnTemperatureSensorCount )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -1550,6 +1715,9 @@ xetPowerGetTemperatureProperties(
     xet_temperature_properties_t* pProperties       ///< [out] pointer to properties for this sensor
     )
 {
+    if( nullptr == context.xetPower.pfnGetTemperatureProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -1574,6 +1742,9 @@ xetPowerGetTemperature(
     uint16_t* pTemperatures                         ///< [out] pointer to an array of temperatures in units of degrees celsius
     )
 {
+    if( nullptr == context.xetPower.pfnGetTemperature )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -1597,6 +1768,9 @@ xetPowerSetTemperatureThreshold(
                                                     ///< will be throttled
     )
 {
+    if( nullptr == context.xetPower.pfnSetTemperatureThreshold )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -1615,6 +1789,9 @@ xetPowerActivityCount(
     uint32_t* pActivityCount                        ///< [out] the number of activity counters on the device
     )
 {
+    if( nullptr == context.xetPower.pfnActivityCount )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -1637,6 +1814,9 @@ xetPowerGetActivityProperties(
     xet_activity_properties_t* pProperties          ///< [out] pointer to properties for this activity counter
     )
 {
+    if( nullptr == context.xetPower.pfnGetActivityProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )
@@ -1661,6 +1841,9 @@ xetPowerGetActivityCounters(
     xet_activity_counters_t* pCounters              ///< [out] pointer to an array of activity counter data
     )
 {
+    if( nullptr == context.xetPower.pfnGetActivityCounters )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hPower )

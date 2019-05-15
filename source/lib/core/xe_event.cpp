@@ -60,7 +60,12 @@ xeEventPoolCreate(
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeEventPool.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeEventPool.pfnCreate( hDevice, desc, phEventPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -90,7 +95,12 @@ xeEventPoolDestroy(
     xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object to destroy
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeEventPool.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeEventPool.pfnDestroy( hEventPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -126,7 +136,12 @@ xeEventCreate(
     xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeEvent.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeEvent.pfnCreate( hEventPool, desc, phEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -159,7 +174,12 @@ xeEventDestroy(
     xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeEvent.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeEvent.pfnDestroy( hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -187,7 +207,12 @@ xeEventPoolGetIpcHandle(
     xe_ipc_event_pool_handle_t* phIpc               ///< [out] Returned IPC event handle
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeEventPool.pfnGetIpcHandle )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeEventPool.pfnGetIpcHandle( hEventPool, phIpc );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -219,7 +244,12 @@ xeEventPoolOpenIpcHandle(
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeEventPool.pfnOpenIpcHandle )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeEventPool.pfnOpenIpcHandle( hDevice, hIpc, phEventPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -247,7 +277,12 @@ xeEventPoolCloseIpcHandle(
     xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeEventPool.pfnCloseIpcHandle )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeEventPool.pfnCloseIpcHandle( hEventPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -278,7 +313,12 @@ xeCommandListAppendSignalEvent(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandList.pfnAppendSignalEvent )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandList.pfnAppendSignalEvent( hCommandList, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -304,7 +344,12 @@ xeCommandListAppendWaitOnEvents(
     xe_event_handle_t* phEvents                     ///< [in] handle of the events to wait on before continuing
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandList.pfnAppendWaitOnEvents )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandList.pfnAppendWaitOnEvents( hCommandList, numEvents, phEvents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -330,7 +375,12 @@ xeEventHostSignal(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeEvent.pfnHostSignal )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeEvent.pfnHostSignal( hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -364,7 +414,12 @@ xeEventHostSynchronize(
                                                     ///< is lost.
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeEvent.pfnHostSynchronize )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeEvent.pfnHostSynchronize( hEvent, timeout );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -394,7 +449,12 @@ xeEventQueryStatus(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeEvent.pfnQueryStatus )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeEvent.pfnQueryStatus( hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -423,7 +483,12 @@ xeCommandListAppendEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandList.pfnAppendEventReset )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandList.pfnAppendEventReset( hCommandList, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -449,7 +514,12 @@ xeEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeEvent.pfnReset )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeEvent.pfnReset( hEvent );
 }
 
 } // extern "C"

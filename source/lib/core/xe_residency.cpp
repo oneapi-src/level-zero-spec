@@ -58,7 +58,12 @@ xeDeviceMakeMemoryResident(
     size_t size                                     ///< [in] size in bytes to make resident
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeDevice.pfnMakeMemoryResident )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeDevice.pfnMakeMemoryResident( hDevice, ptr, size );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -86,7 +91,12 @@ xeDeviceEvictMemory(
     size_t size                                     ///< [in] size in bytes to evict
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeDevice.pfnEvictMemory )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeDevice.pfnEvictMemory( hDevice, ptr, size );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -112,7 +122,12 @@ xeDeviceMakeImageResident(
     xe_image_handle_t hImage                        ///< [in] handle of image to make resident
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeDevice.pfnMakeImageResident )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeDevice.pfnMakeImageResident( hDevice, hImage );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -140,7 +155,12 @@ xeDeviceEvictImage(
     xe_image_handle_t hImage                        ///< [in] handle of image to make evict
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeDevice.pfnEvictImage )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeDevice.pfnEvictImage( hDevice, hImage );
 }
 
 } // extern "C"

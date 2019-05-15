@@ -69,7 +69,12 @@ xeCommandListAppendMemoryCopy(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandList.pfnAppendMemoryCopy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandList.pfnAppendMemoryCopy( hCommandList, dstptr, srcptr, size, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -106,7 +111,12 @@ xeCommandListAppendMemorySet(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandList.pfnAppendMemorySet )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandList.pfnAppendMemorySet( hCommandList, ptr, value, size, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -144,7 +154,12 @@ xeCommandListAppendMemoryCopyRegion(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandList.pfnAppendMemoryCopyRegion )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandList.pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, srcptr, srcRegion, srcPitch, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -176,7 +191,12 @@ xeCommandListAppendImageCopy(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandList.pfnAppendImageCopy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandList.pfnAppendImageCopy( hCommandList, hDstImage, hSrcImage, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -206,7 +226,12 @@ xeCommandListAppendImageCopyRegion(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandList.pfnAppendImageCopyRegion )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandList.pfnAppendImageCopyRegion( hCommandList, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -241,7 +266,12 @@ xeCommandListAppendImageCopyToMemory(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandList.pfnAppendImageCopyToMemory )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandList.pfnAppendImageCopyToMemory( hCommandList, dstptr, hSrcImage, pSrcRegion, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -276,7 +306,12 @@ xeCommandListAppendImageCopyFromMemory(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandList.pfnAppendImageCopyFromMemory )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandList.pfnAppendImageCopyFromMemory( hCommandList, hDstImage, srcptr, pDstRegion, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -320,7 +355,12 @@ xeCommandListAppendMemoryPrefetch(
     size_t count                                    ///< [in] size in bytes of the memory range to prefetch
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandList.pfnAppendMemoryPrefetch )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandList.pfnAppendMemoryPrefetch( hCommandList, ptr, count );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -365,7 +405,12 @@ xeCommandListAppendMemAdvise(
     xe_memory_advice_t advice                       ///< [in] Memory advice for the memory range
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandList.pfnAppendMemAdvise )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandList.pfnAppendMemAdvise( hCommandList, hDevice, ptr, size, advice );
 }
 
 } // extern "C"

@@ -51,11 +51,13 @@ xexGetCommandGraphProcAddrTable(
     xex_command_graph_apitable_t* ptable            ///< [in,out] pointer to table of API function pointers
     )
 {
+#ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -80,6 +82,9 @@ xexCommandGraphCreate(
     xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
     )
 {
+    if( nullptr == context.xexCommandGraph.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hDevice )
@@ -106,6 +111,9 @@ xexCommandGraphDestroy(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to destroy
     )
 {
+    if( nullptr == context.xexCommandGraph.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandGraph )
@@ -123,6 +131,9 @@ xexCommandGraphClose(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
     )
 {
+    if( nullptr == context.xexCommandGraph.pfnClose )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
     if( context.enableParameterValidation )
     {
         if( nullptr == hCommandGraph )

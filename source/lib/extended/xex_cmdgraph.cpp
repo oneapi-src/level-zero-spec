@@ -61,7 +61,12 @@ xexCommandGraphCreate(
     xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xexCommandGraph.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xexCommandGraph.pfnCreate( hDevice, desc, phCommandGraph );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -86,7 +91,12 @@ xexCommandGraphDestroy(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to destroy
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xexCommandGraph.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xexCommandGraph.pfnDestroy( hCommandGraph );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -112,7 +122,12 @@ xexCommandGraphClose(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xexCommandGraph.pfnClose )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xexCommandGraph.pfnClose( hCommandGraph );
 }
 
 } // extern "C"

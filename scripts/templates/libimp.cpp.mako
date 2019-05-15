@@ -39,42 +39,24 @@ from templates import helper as th
 ******************************************************************************/
 #include "${n}_lib.h"
 
-#if defined(__cplusplus)
-extern "C" {
-#endif
-
-%for tbl in th.get_pfntables(specs, meta, n, tags):
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function for importing loaders's ${tbl['name']} table
-///        with current process' addresses
-///
-/// @returns
-///     - ::${X}_RESULT_SUCCESS
-///     - ::${X}_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for ptable
-///     - ::${X}_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__${x}dllexport ${x}_result_t __${x}call
-${tbl['export']['name']}(
-    %for line in th.make_param_lines(n, tags, tbl['export']):
-    ${line}
-    %endfor
-    )
+${x}_result_t ${n}_lib::Init()
 {
+    loader = LOAD_DRIVER_LIBRARY( "${x}_loader" );
+
+    if( NULL == context.loader )
+        return ${X}_RESULT_ERROR_UNINITIALIZED;
+
     ${x}_result_t result = ${X}_RESULT_SUCCESS;
 
-    if( nullptr != context.loader )
+%for tbl in th.get_pfntables(specs, meta, n, tags):
+    if( ${X}_RESULT_SUCCESS == result )
     {
-        static auto getTable = reinterpret_cast<${tbl['pfn']}>(
+        auto getTable = reinterpret_cast<${tbl['pfn']}>(
             GET_FUNCTION_PTR(context.loader, "${tbl['export']['name']}") );
-        result = getTable( version, ptable );
+        result = getTable( ${X}_API_VERSION_1_0, &${n}${tbl['name']} );
     }
 
+%endfor
     return result;
 }
-
-%endfor
-#if defined(__cplusplus)
-};
-#endif

@@ -62,7 +62,12 @@ xeCommandListCreate(
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandList.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandList.pfnCreate( hDevice, desc, phCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -94,7 +99,12 @@ xeCommandListCreateImmediate(
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandList.pfnCreateImmediate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandList.pfnCreateImmediate( hDevice, desc, phCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -121,7 +131,12 @@ xeCommandListDestroy(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandList.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandList.pfnDestroy( hCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -144,7 +159,12 @@ xeCommandListClose(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandList.pfnClose )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandList.pfnClose( hCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -170,7 +190,12 @@ xeCommandListReset(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandList.pfnReset )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandList.pfnReset( hCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -203,7 +228,12 @@ xeCommandListSetParameter(
     uint32_t value                                  ///< [in] value of attribute
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandList.pfnSetParameter )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandList.pfnSetParameter( hCommandList, parameter, value );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -236,7 +266,12 @@ xeCommandListGetParameter(
     uint32_t* value                                 ///< [out] value of attribute
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandList.pfnGetParameter )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandList.pfnGetParameter( hCommandList, parameter, value );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -259,7 +294,12 @@ xeCommandListResetParameters(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandList.pfnResetParameters )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandList.pfnResetParameters( hCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -288,7 +328,12 @@ xeCommandListReserveSpace(
     void** ptr                                      ///< [out] pointer to command buffer space reserved
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandList.pfnReserveSpace )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandList.pfnReserveSpace( hCommandList, size, ptr );
 }
 
 } // extern "C"

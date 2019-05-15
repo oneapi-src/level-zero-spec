@@ -71,7 +71,12 @@ xeCommandListAppendBarrier(
                                                     ///< barrier
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandList.pfnAppendBarrier )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandList.pfnAppendBarrier( hCommandList, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -111,7 +116,12 @@ xeCommandListAppendMemoryRangesBarrier(
                                                     ///< barrier
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandList.pfnAppendMemoryRangesBarrier )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandList.pfnAppendMemoryRangesBarrier( hCommandList, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -139,7 +149,12 @@ xeDeviceSystemBarrier(
     xe_device_handle_t hDevice                      ///< [in] handle of the device
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeDevice.pfnSystemBarrier )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeDevice.pfnSystemBarrier( hDevice );
 }
 
 } // extern "C"

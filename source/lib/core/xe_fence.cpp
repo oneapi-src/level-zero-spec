@@ -64,7 +64,12 @@ xeFenceCreate(
     xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeFence.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeFence.pfnCreate( hCommandQueue, desc, phFence );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -96,7 +101,12 @@ xeFenceDestroy(
     xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeFence.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeFence.pfnDestroy( hFence );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -130,7 +140,12 @@ xeFenceHostSynchronize(
                                                     ///< is lost.
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeFence.pfnHostSynchronize )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeFence.pfnHostSynchronize( hFence, timeout );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -159,7 +174,12 @@ xeFenceQueryStatus(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeFence.pfnQueryStatus )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeFence.pfnQueryStatus( hFence );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -185,7 +205,12 @@ xeFenceReset(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeFence.pfnReset )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeFence.pfnReset( hFence );
 }
 
 } // extern "C"

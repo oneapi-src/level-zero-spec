@@ -30,271 +30,78 @@
 ******************************************************************************/
 #include "xet_lib.h"
 
-#if defined(__cplusplus)
-extern "C" {
-#endif
-
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function for importing loaders's Device table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for ptable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xetGetDeviceProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xet_device_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
-    )
+xe_result_t xet_lib::Init()
 {
+    loader = LOAD_DRIVER_LIBRARY( "xe_loader" );
+
+    if( NULL == context.loader )
+        return XE_RESULT_ERROR_UNINITIALIZED;
+
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr != context.loader )
+    if( XE_RESULT_SUCCESS == result )
     {
-        static auto getTable = reinterpret_cast<xet_pfnGetDeviceProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xet_pfnGetDeviceProcAddrTable_t>(
             GET_FUNCTION_PTR(context.loader, "xetGetDeviceProcAddrTable") );
-        result = getTable( version, ptable );
+        result = getTable( XE_API_VERSION_1_0, &xetDevice );
     }
 
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function for importing loaders's CommandList table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for ptable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xetGetCommandListProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xet_command_list_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
-    )
-{
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    if( nullptr != context.loader )
+    if( XE_RESULT_SUCCESS == result )
     {
-        static auto getTable = reinterpret_cast<xet_pfnGetCommandListProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xet_pfnGetCommandListProcAddrTable_t>(
             GET_FUNCTION_PTR(context.loader, "xetGetCommandListProcAddrTable") );
-        result = getTable( version, ptable );
+        result = getTable( XE_API_VERSION_1_0, &xetCommandList );
     }
 
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function for importing loaders's MetricGroup table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for ptable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xetGetMetricGroupProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_group_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
-    )
-{
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    if( nullptr != context.loader )
+    if( XE_RESULT_SUCCESS == result )
     {
-        static auto getTable = reinterpret_cast<xet_pfnGetMetricGroupProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xet_pfnGetMetricGroupProcAddrTable_t>(
             GET_FUNCTION_PTR(context.loader, "xetGetMetricGroupProcAddrTable") );
-        result = getTable( version, ptable );
+        result = getTable( XE_API_VERSION_1_0, &xetMetricGroup );
     }
 
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function for importing loaders's Metric table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for ptable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xetGetMetricProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
-    )
-{
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    if( nullptr != context.loader )
+    if( XE_RESULT_SUCCESS == result )
     {
-        static auto getTable = reinterpret_cast<xet_pfnGetMetricProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xet_pfnGetMetricProcAddrTable_t>(
             GET_FUNCTION_PTR(context.loader, "xetGetMetricProcAddrTable") );
-        result = getTable( version, ptable );
+        result = getTable( XE_API_VERSION_1_0, &xetMetric );
     }
 
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function for importing loaders's MetricTracer table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for ptable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xetGetMetricTracerProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_tracer_apitable_t* ptable            ///< [in,out] pointer to table of API function pointers
-    )
-{
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    if( nullptr != context.loader )
+    if( XE_RESULT_SUCCESS == result )
     {
-        static auto getTable = reinterpret_cast<xet_pfnGetMetricTracerProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xet_pfnGetMetricTracerProcAddrTable_t>(
             GET_FUNCTION_PTR(context.loader, "xetGetMetricTracerProcAddrTable") );
-        result = getTable( version, ptable );
+        result = getTable( XE_API_VERSION_1_0, &xetMetricTracer );
     }
 
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function for importing loaders's MetricQueryPool table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for ptable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xetGetMetricQueryPoolProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_query_pool_apitable_t* ptable        ///< [in,out] pointer to table of API function pointers
-    )
-{
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    if( nullptr != context.loader )
+    if( XE_RESULT_SUCCESS == result )
     {
-        static auto getTable = reinterpret_cast<xet_pfnGetMetricQueryPoolProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xet_pfnGetMetricQueryPoolProcAddrTable_t>(
             GET_FUNCTION_PTR(context.loader, "xetGetMetricQueryPoolProcAddrTable") );
-        result = getTable( version, ptable );
+        result = getTable( XE_API_VERSION_1_0, &xetMetricQueryPool );
     }
 
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function for importing loaders's MetricQuery table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for ptable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xetGetMetricQueryProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_query_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
-    )
-{
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    if( nullptr != context.loader )
+    if( XE_RESULT_SUCCESS == result )
     {
-        static auto getTable = reinterpret_cast<xet_pfnGetMetricQueryProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xet_pfnGetMetricQueryProcAddrTable_t>(
             GET_FUNCTION_PTR(context.loader, "xetGetMetricQueryProcAddrTable") );
-        result = getTable( version, ptable );
+        result = getTable( XE_API_VERSION_1_0, &xetMetricQuery );
     }
 
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function for importing loaders's Power table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for ptable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xetGetPowerProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xet_power_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
-    )
-{
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    if( nullptr != context.loader )
+    if( XE_RESULT_SUCCESS == result )
     {
-        static auto getTable = reinterpret_cast<xet_pfnGetPowerProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xet_pfnGetPowerProcAddrTable_t>(
             GET_FUNCTION_PTR(context.loader, "xetGetPowerProcAddrTable") );
-        result = getTable( version, ptable );
+        result = getTable( XE_API_VERSION_1_0, &xetPower );
     }
 
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function for importing loaders's FreqDomain table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for ptable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xetGetFreqDomainProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xet_freq_domain_apitable_t* ptable              ///< [in,out] pointer to table of API function pointers
-    )
-{
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    if( nullptr != context.loader )
+    if( XE_RESULT_SUCCESS == result )
     {
-        static auto getTable = reinterpret_cast<xet_pfnGetFreqDomainProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xet_pfnGetFreqDomainProcAddrTable_t>(
             GET_FUNCTION_PTR(context.loader, "xetGetFreqDomainProcAddrTable") );
-        result = getTable( version, ptable );
+        result = getTable( XE_API_VERSION_1_0, &xetFreqDomain );
     }
 
     return result;
 }
-
-#if defined(__cplusplus)
-};
-#endif

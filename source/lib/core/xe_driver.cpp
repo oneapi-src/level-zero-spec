@@ -62,7 +62,16 @@ xeInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    return XE_RESULT_SUCCESS;
+    auto result = context.Init();
+    if( XE_RESULT_SUCCESS != result )
+        return result;
+
+#if _DEBUG
+    if( nullptr == context.xeGlobal.pfnInit )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeGlobal.pfnInit( flags );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -93,7 +102,12 @@ xeDeviceGroupGetDriverVersion(
     uint32_t* version                               ///< [out] driver version
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeDeviceGroup.pfnGetDriverVersion )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeDeviceGroup.pfnGetDriverVersion( hDeviceGroup, version );
 }
 
 } // extern "C"

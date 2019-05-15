@@ -41,6 +41,18 @@ public:
 
     xet_lib();
     ~xet_lib();
+
+    xe_result_t Init();
+
+    xet_device_apitable_t               xetDevice = {};
+    xet_command_list_apitable_t         xetCommandList = {};
+    xet_metric_group_apitable_t         xetMetricGroup = {};
+    xet_metric_apitable_t               xetMetric = {};
+    xet_metric_tracer_apitable_t        xetMetricTracer = {};
+    xet_metric_query_pool_apitable_t    xetMetricQueryPool = {};
+    xet_metric_query_apitable_t         xetMetricQuery = {};
+    xet_power_apitable_t                xetPower = {};
+    xet_freq_domain_apitable_t          xetFreqDomain = {};
 };
 
 extern xet_lib context;

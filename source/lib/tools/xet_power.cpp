@@ -62,7 +62,12 @@ xetPowerCreate(
     xet_power_handle_t* pPowerHandle                ///< [out] handle for accessing power features of the device
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnCreate( hDevice, flags, pPowerHandle );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -85,7 +90,12 @@ xetPowerDestroy(
     xet_power_handle_t hPower                       ///< [in] handle of the power object to destroy
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnDestroy( hPower );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -105,7 +115,12 @@ xetPowerGetAveragePowerLimit(
     xet_power_average_limit_t* pLimit               ///< [out] information about the average power limit
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnGetAveragePowerLimit )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnGetAveragePowerLimit( hPower, pLimit );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -125,7 +140,12 @@ xetPowerGetBurstPowerLimit(
     xet_power_burst_limit_t* pLimit                 ///< [out] information about the burst power limit
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnGetBurstPowerLimit )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnGetBurstPowerLimit( hPower, pLimit );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -145,7 +165,12 @@ xetPowerGetPeakPowerLimit(
     xet_power_peak_limit_t* pLimit                  ///< [out] information about the peak power limit
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnGetPeakPowerLimit )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnGetPeakPowerLimit( hPower, pLimit );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -165,7 +190,12 @@ xetPowerGetAllPowerLimits(
     xet_power_limits_t* pLimits                     ///< [out] information about the average/burst/peak power limits
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnGetAllPowerLimits )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnGetAllPowerLimits( hPower, pLimits );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -185,7 +215,12 @@ xetPowerGetDefaultPowerLimits(
     xet_power_limits_t* pLimits                     ///< [out] information about the default average/burst/peak power limits
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnGetDefaultPowerLimits )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnGetDefaultPowerLimits( hPower, pLimits );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -205,7 +240,12 @@ xetPowerSetAveragePowerLimit(
     xet_power_average_limit_t* pLimit               ///< [in] information about the average power limit
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnSetAveragePowerLimit )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnSetAveragePowerLimit( hPower, pLimit );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -225,7 +265,12 @@ xetPowerSetBurstPowerLimit(
     xet_power_burst_limit_t* pLimit                 ///< [in] information about the burst power limit
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnSetBurstPowerLimit )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnSetBurstPowerLimit( hPower, pLimit );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -245,7 +290,12 @@ xetPowerSetPeakPowerLimit(
     xet_power_peak_limit_t* pLimit                  ///< [in] information about the peak power limit
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnSetPeakPowerLimit )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnSetPeakPowerLimit( hPower, pLimit );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -265,7 +315,12 @@ xetPowerSetPowerLimits(
     xet_power_limits_t* pLimits                     ///< [in] information about the average/burst/peak power limits
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnSetPowerLimits )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnSetPowerLimits( hPower, pLimits );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -289,7 +344,12 @@ xetPowerGetEnergyCounter(
     uint64_t* pEnergy                               ///< [out] the energy counter in millijoules
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnGetEnergyCounter )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnGetEnergyCounter( hPower, pEnergy );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -309,7 +369,12 @@ xetPowerGetTurboMode(
     xet_turbo_mode_t* pTurboMode                    ///< [out] turbo mode currently in effect
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnGetTurboMode )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnGetTurboMode( hPower, pTurboMode );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -328,7 +393,12 @@ xetPowerSetTurboMode(
     xet_turbo_mode_t pTurboMode                     ///< [in] new turbo mode
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnSetTurboMode )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnSetTurboMode( hPower, pTurboMode );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -348,7 +418,12 @@ xetPowerGetFreqDomainCount(
     uint32_t* pNumFreqDomains                       ///< [out] the number of frequency domains
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnGetFreqDomainCount )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnGetFreqDomainCount( hPower, pNumFreqDomains );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -369,7 +444,12 @@ xetPowerGetFreqDomain(
     xet_freq_domain_handle_t* phFreqDomain          ///< [out] pointer to handle of frequency domain object
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnGetFreqDomain )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnGetFreqDomain( hPower, ordinal, phFreqDomain );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -389,7 +469,12 @@ xetFreqDomainGetProperties(
     xet_freq_domain_properties_t* pFreqDomainProperties ///< [out] pointer to properties for the frequency domain
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetFreqDomain.pfnGetProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetFreqDomain.pfnGetProperties( hFreqDomain, pFreqDomainProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -411,7 +496,12 @@ xetFreqDomainGetSourceFreqDomain(
                                                     ///< will be returned
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetFreqDomain.pfnGetSourceFreqDomain )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetFreqDomain.pfnGetSourceFreqDomain( hFreqDomain, phSrcFreqDomain );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -437,7 +527,12 @@ xetFreqDomainGetSupportedClocks(
     uint32_t* pClocks                               ///< [out] pointer to array of frequencies
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetFreqDomain.pfnGetSupportedClocks )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetFreqDomain.pfnGetSupportedClocks( hFreqDomain, numClockPoints, pClocks );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -463,7 +558,12 @@ xetFreqDomainGetSupportedClockDividers(
     xet_clock_divider_t* pDividers                  ///< [out] pointer to array of dividers
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetFreqDomain.pfnGetSupportedClockDividers )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetFreqDomain.pfnGetSupportedClockDividers( hFreqDomain, numClockDividers, pDividers );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -486,7 +586,12 @@ xetFreqDomainGetClockRange(
     uint32_t* pMaxClock                             ///< [out] max clock frequency in units of MHz
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetFreqDomain.pfnGetClockRange )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetFreqDomain.pfnGetClockRange( hFreqDomain, pMinClock, pMaxClock );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -517,7 +622,12 @@ xetFreqDomainSetClockRange(
     uint32_t maxClock                               ///< [in] max clock frequency in units of MHz
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetFreqDomain.pfnSetClockRange )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetFreqDomain.pfnSetClockRange( hFreqDomain, minClock, maxClock );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -544,7 +654,12 @@ xetFreqDomainSetClockDivider(
     xet_clock_divider_t* pClockDividerRequest       ///< [out] pointer to frequency divider request
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetFreqDomain.pfnSetClockDivider )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetFreqDomain.pfnSetClockDivider( hFreqDomain, pClockDividerRequest );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -568,7 +683,12 @@ xetFreqDomainGetCurrentFrequency(
     xet_freq_throttle_reasons_t* pFreqThrottleReasons   ///< [out] the reason the resolved frequency is lower than the request
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetFreqDomain.pfnGetCurrentFrequency )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetFreqDomain.pfnGetCurrentFrequency( hFreqDomain, pFreqRequest, pFreqResolved, pFreqThrottleReasons );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -588,7 +708,12 @@ xetPowerFanCount(
     uint32_t* pFanCount                             ///< [out] the number of fans on the device
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnFanCount )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnFanCount( hPower, pFanCount );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -609,7 +734,12 @@ xetPowerFanGetProperties(
     xet_fan_properties_t* pFanProperties            ///< [out] pointer to storage for fan properties
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnFanGetProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnFanGetProperties( hPower, fanIndex, pFanProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -638,7 +768,12 @@ xetPowerFanGetSpeedTable(
     xet_fan_point_t* pFanPoints                     ///< [out] pointer to an array of temperature/fan-speed points
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnFanGetSpeedTable )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnFanGetSpeedTable( hPower, fanIndex, fanSpeedInRpm, pNumFanPoints, pFanPoints );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -665,7 +800,12 @@ xetPowerFanSetSpeedTable(
     xet_fan_point_t* pFanPoints                     ///< [in] pointer to an array of temperature/fan-speed points
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnFanSetSpeedTable )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnFanSetSpeedTable( hPower, fanIndex, numFanPoints, pFanPoints );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -692,7 +832,12 @@ xetPowerFanGetSpeed(
     xet_fan_speed_info_t* pFanSpeed                 ///< [out] pointer to an array of current fan speeds
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnFanGetSpeed )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnFanGetSpeed( hPower, startFanIndex, numFans, fanSpeedInRpm, pFanSpeed );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -719,7 +864,12 @@ xetPowerFanSetSpeed(
     xet_fan_speed_info_t* pFanSpeed                 ///< [in] pointer to an array of current fan speeds
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnFanSetSpeed )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnFanSetSpeed( hPower, startFanIndex, numFans, pFanSpeed );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -739,7 +889,12 @@ xetPowerTemperatureSensorCount(
     uint32_t* pSensorCount                          ///< [out] the number of temperature sensors on the device
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnTemperatureSensorCount )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnTemperatureSensorCount( hPower, pSensorCount );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -764,7 +919,12 @@ xetPowerGetTemperatureProperties(
     xet_temperature_properties_t* pProperties       ///< [out] pointer to properties for this sensor
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnGetTemperatureProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnGetTemperatureProperties( hPower, sensorIndex, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -791,7 +951,12 @@ xetPowerGetTemperature(
     uint16_t* pTemperatures                         ///< [out] pointer to an array of temperatures in units of degrees celsius
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnGetTemperature )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnGetTemperature( hPower, startSensorIndex, numSensors, pTemperatures );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -819,7 +984,12 @@ xetPowerSetTemperatureThreshold(
                                                     ///< will be throttled
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnSetTemperatureThreshold )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnSetTemperatureThreshold( hPower, sensorIndex, maxTemperature );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -839,7 +1009,12 @@ xetPowerActivityCount(
     uint32_t* pActivityCount                        ///< [out] the number of activity counters on the device
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnActivityCount )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnActivityCount( hPower, pActivityCount );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -864,7 +1039,12 @@ xetPowerGetActivityProperties(
     xet_activity_properties_t* pProperties          ///< [out] pointer to properties for this activity counter
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnGetActivityProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnGetActivityProperties( hPower, activityIndex, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -891,7 +1071,12 @@ xetPowerGetActivityCounters(
     xet_activity_counters_t* pCounters              ///< [out] pointer to an array of activity counter data
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xetPower.pfnGetActivityCounters )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xetPower.pfnGetActivityCounters( hPower, startCounterIndex, numCounters, pCounters );
 }
 
 } // extern "C"

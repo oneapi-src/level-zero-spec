@@ -66,7 +66,12 @@ xeGetDeviceGroups(
     xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional] array of handle of device groups
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeGlobal.pfnGetDeviceGroups )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeGlobal.pfnGetDeviceGroups( pCount, pDeviceGroups );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -100,7 +105,12 @@ xeDeviceGroupGetDevices(
     xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional] array of handle of device groups
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeDeviceGroup.pfnGetDevices )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeDeviceGroup.pfnGetDevices( hDeviceGroup, pCount, pDeviceGroups );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -130,7 +140,12 @@ xeDeviceGetSubDevice(
     xe_device_handle_t* phSubDevice                 ///< [out] pointer to handle of sub-device object.
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeDevice.pfnGetSubDevice )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeDevice.pfnGetSubDevice( hDevice, ordinal, phSubDevice );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -158,7 +173,12 @@ xeDeviceGroupGetApiVersion(
     xe_api_version_t* version                       ///< [out] api version
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeDeviceGroup.pfnGetApiVersion )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeDeviceGroup.pfnGetApiVersion( hDeviceGroup, version );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -188,7 +208,12 @@ xeDeviceGroupGetProperties(
     xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeDeviceGroup.pfnGetProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeDeviceGroup.pfnGetProperties( hDeviceGroup, pDeviceProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -217,7 +242,12 @@ xeDeviceGroupGetComputeProperties(
     xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeDeviceGroup.pfnGetComputeProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeDeviceGroup.pfnGetComputeProperties( hDeviceGroup, pComputeProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -247,7 +277,12 @@ xeDeviceGroupGetMemoryProperties(
     xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeDeviceGroup.pfnGetMemoryProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeDeviceGroup.pfnGetMemoryProperties( hDeviceGroup, pMemProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -278,7 +313,12 @@ xeDeviceGetP2PProperties(
     xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeDevice.pfnGetP2PProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeDevice.pfnGetP2PProperties( hDevice, hPeerDevice, pP2PProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -308,7 +348,12 @@ xeDeviceCanAccessPeer(
     xe_bool_t* value                                ///< [out] returned access capability
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeDevice.pfnCanAccessPeer )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeDevice.pfnCanAccessPeer( hDevice, hPeerDevice, value );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -336,7 +381,12 @@ xeDeviceSetIntermediateCacheConfig(
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeDevice.pfnSetIntermediateCacheConfig )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeDevice.pfnSetIntermediateCacheConfig( hDevice, CacheConfig );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -364,7 +414,12 @@ xeDeviceSetLastLevelCacheConfig(
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeDevice.pfnSetLastLevelCacheConfig )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeDevice.pfnSetLastLevelCacheConfig( hDevice, CacheConfig );
 }
 
 } // extern "C"

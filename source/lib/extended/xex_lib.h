@@ -41,6 +41,10 @@ public:
 
     xex_lib();
     ~xex_lib();
+
+    xe_result_t Init();
+
+    xex_command_graph_apitable_t    xexCommandGraph = {};
 };
 
 extern xex_lib context;

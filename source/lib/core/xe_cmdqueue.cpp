@@ -66,7 +66,12 @@ xeCommandQueueCreate(
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandQueue.pfnCreate )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandQueue.pfnCreate( hDevice, desc, phCommandQueue );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -98,7 +103,12 @@ xeCommandQueueDestroy(
     xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandQueue.pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandQueue.pfnDestroy( hCommandQueue );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -130,7 +140,12 @@ xeCommandQueueExecuteCommandLists(
     xe_fence_handle_t hFence                        ///< [in][optional] handle of the fence to signal on completion
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandQueue.pfnExecuteCommandLists )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandQueue.pfnExecuteCommandLists( hCommandQueue, numCommandLists, phCommandLists, hFence );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -159,7 +174,12 @@ xeCommandQueueSynchronize(
                                                     ///< is lost.
     )
 {
-    return XE_RESULT_SUCCESS;
+#if _DEBUG
+    if( nullptr == context.xeCommandQueue.pfnSynchronize )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return context.xeCommandQueue.pfnSynchronize( hCommandQueue, timeout );
 }
 
 } // extern "C"
