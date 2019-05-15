@@ -30,8 +30,6 @@
 * @endcond
 *
 ******************************************************************************/
-#include "xex_api.hpp"
-#include "xex_ddi.h"
 #include "xex_lib.h"
 
 extern "C" {

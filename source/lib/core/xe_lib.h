@@ -29,6 +29,7 @@
 #if defined(__cplusplus)
 #pragma once
 #endif
+#include "xe_api.hpp"
 #include "xe_ddi.h"
 #include "xe_util.h"
 

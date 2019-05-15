@@ -21,25 +21,48 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xet_cmdlist.cpp
-*
-* @brief C++ wrapper of Intel Xe Level-Zero Tool APIs for Command List
+* @file xex_extended_lib.cpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/tools/cmdlist.yml
+* DO NOT EDIT: generated from /scripts/templates/libimp.cpp.mako
 * @endcond
 *
 ******************************************************************************/
-#include "xet_lib.h"
+#include "xex_lib.h"
 
+#if defined(__cplusplus)
 extern "C" {
+#endif
 
-} // extern "C"
-
-namespace xet
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function for importing loaders's CommandGraph table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xexGetCommandGraphProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xex_command_graph_apitable_t* ptable            ///< [in,out] pointer to table of API function pointers
+    )
 {
-} // namespace xet
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-#ifdef _DEBUG
+    if( nullptr != context.loader )
+    {
+        static auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
+            GET_FUNCTION_PTR(context.loader, "xexGetCommandGraphProcAddrTable") );
+        result = getTable( version, ptable );
+    }
 
-#endif // _DEBUG
+    return result;
+}
+
+#if defined(__cplusplus)
+};
+#endif

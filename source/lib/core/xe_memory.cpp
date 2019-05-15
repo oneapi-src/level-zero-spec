@@ -30,8 +30,6 @@
 * @endcond
 *
 ******************************************************************************/
-#include "xe_api.hpp"
-#include "xe_ddi.h"
 #include "xe_lib.h"
 
 extern "C" {

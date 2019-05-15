@@ -1,4 +1,13 @@
-/**************************************************************************//**
+<%!
+import re
+from templates import helper as th
+%><%
+    n=namespace
+    N=n.upper()
+
+    x=tags['$x']
+    X=x.upper()
+%>/**************************************************************************//**
 * INTEL CONFIDENTIAL  
 * Copyright 2019  
 * Intel Corporation All Rights Reserved.  
@@ -21,28 +30,51 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xex_lib.h
+* @file ${name}.cpp
+*
+* @cond DEV
+* DO NOT EDIT: generated from /scripts/templates/libimp.cpp.mako
+* @endcond
 *
 ******************************************************************************/
-#ifndef _XEX_LIB_H
-#define _XEX_LIB_H
+#include "${n}_lib.h"
+
 #if defined(__cplusplus)
-#pragma once
+extern "C" {
 #endif
-#include "xex_api.hpp"
-#include "xex_ddi.h"
-#include "xe_util.h"
 
+%for tbl in th.get_pfntables(specs, meta, n, tags):
 ///////////////////////////////////////////////////////////////////////////////
-class xex_lib
+/// @brief Function for importing loaders's ${tbl['name']} table
+///        with current process' addresses
+///
+/// @returns
+///     - ::${X}_RESULT_SUCCESS
+///     - ::${X}_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::${X}_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__${x}dllexport ${x}_result_t __${x}call
+${tbl['export']['name']}(
+    %for line in th.make_param_lines(n, tags, tbl['export']):
+    ${line}
+    %endfor
+    )
 {
-public:
-    HMODULE loader = nullptr;
+    ${x}_result_t result = ${X}_RESULT_SUCCESS;
 
-    xex_lib();
-    ~xex_lib();
+    if( nullptr != context.loader )
+    {
+        static auto getTable = reinterpret_cast<${tbl['pfn']}>(
+            GET_FUNCTION_PTR(context.loader, "${tbl['export']['name']}") );
+        result = getTable( version, ptable );
+    }
+
+    return result;
+}
+
+%endfor
+#if defined(__cplusplus)
 };
-
-extern xex_lib context;
-
-#endif // _XEX_LIB_H
+#endif

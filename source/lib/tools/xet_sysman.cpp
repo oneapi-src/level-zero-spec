@@ -30,8 +30,6 @@
 * @endcond
 *
 ******************************************************************************/
-#include "xet_api.hpp"
-#include "xet_ddi.h"
 #include "xet_lib.h"
 
 extern "C" {

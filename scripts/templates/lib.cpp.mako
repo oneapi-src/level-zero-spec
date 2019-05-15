@@ -47,8 +47,6 @@ def declare_dbg(obj, tags):
 * @endcond
 *
 ******************************************************************************/
-#include "${n}_api.hpp"
-#include "${n}_ddi.h"
 #include "${n}_lib.h"
 
 extern "C" {

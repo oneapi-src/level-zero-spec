@@ -93,6 +93,23 @@ def mako_lib_cpp(path, namespace, tags, specs, meta):
             tags=tags,
             specs=specs,
             meta = meta)
+
+    template = "libimp.cpp.mako"
+    fin = os.path.join("templates", template)
+
+    name = "%s_%s_lib"%(namespace, os.path.basename(path))
+    filename = "%s.cpp"%(name)
+    files.append(filename)
+    fout = os.path.join(path, filename)
+
+    print("Generating %s..."%fout)
+    loc += util.makoWrite(
+        fin, fout,
+        name=name,
+        namespace=namespace,
+        tags=tags,
+        specs=specs,
+        meta=meta)
     return loc, files
 
 """
