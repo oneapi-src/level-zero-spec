@@ -37,7 +37,7 @@ from templates import helper as th
 * @endcond
 *
 ******************************************************************************/
-#include "layer.h"
+#include "${x}_layer.h"
 
 extern ${x}_layer context;
 

@@ -37,7 +37,7 @@ from templates import helper as th
 * @endcond
 *
 ******************************************************************************/
-#include "loader.h"
+#include "${x}_loader.h"
 
 extern ${x}_loader context;
 

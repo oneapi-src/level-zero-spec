@@ -21,14 +21,14 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file tools_layer.cpp
+* @file xe_tools_layer.cpp
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/templates/validation.cpp.mako
 * @endcond
 *
 ******************************************************************************/
-#include "layer.h"
+#include "xe_layer.h"
 
 extern xe_layer context;
 

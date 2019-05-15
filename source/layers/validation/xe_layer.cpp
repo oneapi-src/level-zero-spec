@@ -25,7 +25,7 @@
 *
 ******************************************************************************/
 #include <stdlib.h>
-#include "layer.h"
+#include "xe_layer.h"
 
 xe_layer context;
 

@@ -118,7 +118,7 @@ def mako_loader_cpp(path, section, namespace, tags, specs, meta):
     template = "loader.cpp.mako"
     fin = os.path.join("templates", template)
 
-    name = "%s_loader"%section
+    name = "%s_%s_loader"%(tags['$x'], section)
     filename = "%s.cpp"%(name)
     fout = os.path.join(path, filename)
 
@@ -139,7 +139,7 @@ def mako_validation_layer_cpp(path, section, namespace, tags, specs, meta):
     template = "validation.cpp.mako"
     fin = os.path.join("templates", template)
 
-    name = "%s_layer"%section
+    name = "%s_%s_layer"%(tags['$x'], section)
     filename = "%s.cpp"%(name)
     fout = os.path.join(dstpath, filename)
 

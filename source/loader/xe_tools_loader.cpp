@@ -21,14 +21,14 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file tools_loader.cpp
+* @file xe_tools_loader.cpp
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/templates/loader.cpp.mako
 * @endcond
 *
 ******************************************************************************/
-#include "loader.h"
+#include "xe_loader.h"
 
 extern xe_loader context;
 

@@ -26,7 +26,7 @@
 ******************************************************************************/
 #include <mutex>
 #include <stdlib.h>
-#include "loader.h"
+#include "xe_loader.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 inline bool getenv_tobool( const char* name )

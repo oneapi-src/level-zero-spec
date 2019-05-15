@@ -32,6 +32,7 @@
 ******************************************************************************/
 #include "xex_api.hpp"
 #include "xex_ddi.h"
+#include "xe_lib.h"
 
 extern "C" {
 

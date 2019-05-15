@@ -21,17 +21,14 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file loader.h
+* @file xe_util.h
 *
 ******************************************************************************/
-#ifndef _LOADER_H
-#define _LOADER_H
+#ifndef _XE_UTIL_H
+#define _XE_UTIL_H
 #if defined(__cplusplus)
 #pragma once
 #endif
-#include "xe_ddi.h"
-#include "xex_ddi.h"
-#include "xet_ddi.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 #if defined(__linux__)
@@ -57,18 +54,4 @@ typedef struct _cl_context* cl_context;
 typedef struct _cl_program* cl_program;
 #endif
 
-
-///////////////////////////////////////////////////////////////////////////////
-class xe_loader
-{
-public:
-    xe_api_version_t version = XE_API_VERSION_1_0;
-
-    HMODULE commonDriver = nullptr;
-    HMODULE validationLayer = nullptr;
-
-    xe_loader();
-    ~xe_loader();
-};
-
-#endif // _LOADER_H
+#endif // _XE_UTIL_H
