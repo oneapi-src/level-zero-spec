@@ -1,0 +1,17 @@
+set(TARGET_NAME xello_world)
+
+add_executable(${TARGET_NAME}
+    ${CMAKE_CURRENT_SOURCE_DIR}/xello_world.cpp
+)
+    
+if(MSVC)
+    set_target_properties(${TARGET_NAME}
+        PROPERTIES
+            VS_DEBUGGER_COMMAND_ARGUMENTS ""
+            VS_DEBUGGER_WORKING_DIRECTORY "$(OutDir)"
+    )
+endif()
+
+target_link_libraries(${TARGET_NAME}
+    xe_api
+)

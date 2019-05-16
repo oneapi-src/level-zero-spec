@@ -1,4 +1,4 @@
-set(TARGET_NAME xe_intc_loader)
+set(TARGET_NAME xe_loader)
 
 add_library(${TARGET_NAME}
     SHARED

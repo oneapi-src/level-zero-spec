@@ -59,9 +59,9 @@ typedef struct _cl_program* cl_program;
 inline bool getenv_tobool( const char* name )
 {
     const char* env = getenv( name );
-    if( ( nullptr == env ) || strcmp( "0", env ) )
+    if( ( nullptr == env ) || ( 0 == strcmp( "0", env ) ) )
         return false;
-    return strcmp( "1", env );
+    return ( 0 == strcmp( "1", env ) );
 }
 
 #endif // _XE_UTIL_H
