@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
     if (ret)
         return -1;
 
-    ret = clCompute();
+    ret = clComputeAndCopy();
     if (ret)
         return -1;
 
@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
     if (ret)
         return -1;
 
-    ret = xeCompute();
+    ret = xeComputeAndCopy();
     if (ret)
         return -1;
 

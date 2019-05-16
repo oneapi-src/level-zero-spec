@@ -20,14 +20,24 @@
  * SOFTWARE.
  */
 
-__kernel void matmat_gpu(int n, int m, int p, global const float *a,
-        global const float *b, global float *c)
+/*
+ * Compute part of a matrix multiply, in which the full work is divided
+ * among several peer threads.
+ */
+
+__kernel void matmat_partial_gpu(int n, int m, int p, global const float *a,
+        global const float *b, global float *c, int peers, int peer)
 {
     ulong i = get_global_id(0);
     ulong j;
     ulong k = get_global_id(1);
-    float sum = 0.0f;
-    for (j = 0; j < m; j++)
-        sum += a[i * m + j] * b[j * p + k];
-    c[i * p + k] = sum;
+
+    ulong writeidx = i * p + k;
+
+    if (writeidx % peers == peer) {
+        float sum = 0.0f;
+        for (j = 0; j < m; j++)
+            sum += a[i * m + j] * b[j * p + k];
+        c[writeidx] = sum;
+    }
 };

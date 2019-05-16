@@ -10,29 +10,12 @@
 #include <limits>
 #include <fstream>
 #include <memory>
+#include <iomanip>
 
 bool verbose = false;
 
 std::ofstream noOutput;
 #define vcout (verbose ? (std::cout) : noOutput)
-
-const char *source = "__kernel void matmat_gpu("
-                     "       int n,"
-                     "       int m,"
-                     "       int p,"
-                     "       global const float *a,"
-                     "       global const float *b,"
-                     "       global float *c"
-                     "       )"
-                     "{"
-                     "    ulong i = get_global_id(0);"
-                     "    ulong j;"
-                     "    ulong k = get_global_id(1);"
-                     "    float sum = 0.0f;"
-                     "    for (j = 0; j < m; j++)"
-                     "        sum += a[i * m + j] * b[j * p + k];"
-                     "    c[i * p + k] = sum;"
-                     "}";
 
 #define N (16)
 #define M (16)
@@ -43,6 +26,11 @@ static float hostBufB[M * P];
 static float hostBufC[N * P];
 static float hostBufCCL[N * P];
 static float hostBufCXE[N * P];
+
+/* When partial compute is enabled, work is divided among several peers. */
+#define PEERS 2
+#define CL_PEER 0
+#define XE_PEER 1
 
 static void matmat_host(int n, int m, int p, float *a, float *b, float *c) {
     for (int i = 0; i < n; i++) {
@@ -55,6 +43,20 @@ static void matmat_host(int n, int m, int p, float *a, float *b, float *c) {
         }
     }
 }
+
+void printMatrix(const size_t width, const size_t height, const float *m) {
+  std::cout.setf(std::ios::fixed);
+  for (size_t y = 0; y < height; ++y) {
+    for (size_t x = 0; x < width; ++x) {
+        std::cout << std::setw(8) << std::setprecision(2) << m[y * width + x] << " ";
+    }
+    std::cout << '\n';
+  }
+}
+
+#define printMatrixA(mat) printMatrix(N, M, mat)
+#define printMatrixB(mat) printMatrix(M, P, mat)
+#define printMatrixC(mat) printMatrix(N, P, mat)
 
 // CL Objects
 cl_platform_id clPlatform;
@@ -104,11 +106,11 @@ int xeInit() {
     return 0;
 }
 
-int xeInitProgram() {
+int xeInitProgram(const char *path = "mat_mult.spv", const char *functionName = "matmat_gpu") {
     xe_result_t ret;
 
     uint32_t spirvSize = 0;
-    auto spirvModule = readBinaryFile("mat_mult.spv", spirvSize);
+    auto spirvModule = readBinaryFile(path, spirvSize);
     if (!spirvSize) {
         std::cout << "spirVCompilerOutput failed\n";
         return -1;
@@ -125,9 +127,9 @@ int xeInitProgram() {
         return static_cast<int>(ret);
     }
 
-    vcout << "xeFunctionCreate...\n";
+    vcout << "xeFunctionCreate (" << functionName << ")...\n";
     xe_function_desc_t xeFunctionDesc = {XE_FUNCTION_DESC_VERSION_CURRENT};
-    xeFunctionDesc.pFunctionName = "matmat_gpu";
+    xeFunctionDesc.pFunctionName = functionName;
     ret = xeFunctionCreate(xeModule, &xeFunctionDesc, &xeFunction);
     if (ret) {
         std::cout << "xeFunctionCreate failed ret " << static_cast<int>(ret) << "\n";
@@ -260,7 +262,7 @@ int xeInitCmdQueue() {
     return 0;
 }
 
-int xeCompute() {
+int xeMemCopyIn() {
     xe_result_t ret;
 
     vcout << "xeCommandListAppendMemoryCopy...\n";
@@ -278,13 +280,35 @@ int xeCompute() {
         return static_cast<int>(ret);
     }
 
-    // Wait until memory copies are ready before launching the function
-    vcout << "xeCommandListAppendBarrier...\n";
-    ret = xeCommandListAppendBarrier(xeCmdList, nullptr, 0, nullptr);
+    // Dispatch function and wait
+    vcout << "xeCommandListClose...\n";
+    ret = xeCommandListClose(xeCmdList);
     if (ret) {
-        std::cout << "xeCommandListAppendBarrier failed ret " << static_cast<int>(ret) << "\n";
+        std::cout << "xeCommandListClose failed ret " << static_cast<int>(ret) << "\n";
         return static_cast<int>(ret);
     }
+
+    vcout << "xeCommandQueueExecuteCommandLists...\n";
+    ret = xeCommandQueueExecuteCommandLists(xeCmdQueue, 1, &xeCmdList, nullptr);
+    if (ret) {
+        std::cout << "xeCommandQueueExecuteCommandLists failed ret " << static_cast<int>(ret)
+                  << "\n";
+        return static_cast<int>(ret);
+    }
+
+    vcout << "xeCommandListReset...\n";
+    ret = xeCommandListReset(xeCmdList);
+    if (ret) {
+        std::cout << "xeCommandListReset failed ret " << static_cast<int>(ret)
+                  << "\n";
+	return static_cast<int>(ret);
+    }
+
+    return 0;
+}
+
+int xeCompute(const bool partial = false) {
+    xe_result_t ret;
 
     vcout << "xeFunctionSetArgumentValue...\n";
     int val = N;
@@ -326,6 +350,23 @@ int xeCompute() {
         return static_cast<int>(ret);
     }
 
+    if (partial) {
+	cl_int peers = PEERS;
+        cl_int peer = XE_PEER;
+
+        ret = xeFunctionSetArgumentValue(xeFunction, 6, sizeof(peers), &peers);
+        if (ret) {
+            std::cout << "xeFunctionSetArgumentValue failed ret " << static_cast<int>(ret) << "\n";
+            return static_cast<int>(ret);
+        }
+
+        ret = xeFunctionSetArgumentValue(xeFunction, 7, sizeof(peer), &peer);
+        if (ret) {
+            std::cout << "xeFunctionSetArgumentValue failed ret " << static_cast<int>(ret) << "\n";
+            return static_cast<int>(ret);
+        }
+    }
+
     vcout << "xeFunctionSuggestGroupSize...";
     uint32_t groupSizeX = 16;
     uint32_t groupSizeY = 16;
@@ -359,23 +400,6 @@ int xeCompute() {
         return static_cast<int>(ret);
     }
 
-    // Wait until function has completed
-    vcout << "xeCommandListAppendBarrier...\n";
-    ret = xeCommandListAppendBarrier(xeCmdList, nullptr, 0, nullptr);
-    if (ret) {
-        std::cout << "xeCommandListAppendBarrier failed ret " << static_cast<int>(ret) << "\n";
-        return static_cast<int>(ret);
-    }
-
-    // Copy results back
-    vcout << "xeCommandListAppendMemoryCopy...\n";
-    ret = xeCommandListAppendMemoryCopy(xeCmdList, hostBufCXE, xeMemC, sizeof(hostBufB), nullptr, 0,
-                                        nullptr);
-    if (ret) {
-        std::cout << "xeCommandListAppendMemoryCopy failed ret " << static_cast<int>(ret) << "\n";
-        return static_cast<int>(ret);
-    }
-
     // Dispatch function and wait
     vcout << "xeCommandListClose...\n";
     ret = xeCommandListClose(xeCmdList);
@@ -396,6 +420,51 @@ int xeCompute() {
     ret = xeCommandQueueSynchronize(xeCmdQueue, std::numeric_limits<uint32_t>::max());
     if (ret) {
         std::cout << "xeCommandQueueSynchronize failed ret " << static_cast<int>(ret) << "\n";
+        return static_cast<int>(ret);
+    }
+
+    vcout << "xeCommandListReset...\n";
+    ret = xeCommandListReset(xeCmdList);
+    if (ret) {
+        std::cout << "xeCommandListReset failed ret " << static_cast<int>(ret)
+                  << "\n";
+        return static_cast<int>(ret);
+    }
+
+    return 0;
+}
+
+int xeMemCopyOut() {
+    xe_result_t ret;
+
+    vcout << "xeCommandListAppendMemoryCopy...\n";
+    ret = xeCommandListAppendMemoryCopy(xeCmdList, hostBufCXE, xeMemC, sizeof(hostBufCXE), nullptr, 0,
+                                        nullptr);
+    if (ret) {
+        std::cout << "xeCommandListAppendMemoryCopy failed ret " << static_cast<int>(ret) << "\n";
+        return static_cast<int>(ret);
+    }
+
+    vcout << "xeCommandListClose...\n";
+    ret = xeCommandListClose(xeCmdList);
+    if (ret) {
+        std::cout << "xeCommandListClose failed ret " << static_cast<int>(ret) << "\n";
+        return static_cast<int>(ret);
+    }
+
+    vcout << "xeCommandQueueExecuteCommandLists...\n";
+    ret = xeCommandQueueExecuteCommandLists(xeCmdQueue, 1, &xeCmdList, nullptr);
+    if (ret) {
+        std::cout << "xeCommandQueueExecuteCommandLists failed ret " << static_cast<int>(ret)
+                  << "\n";
+        return static_cast<int>(ret);
+    }
+
+    vcout << "xeCommandListReset...\n";
+    ret = xeCommandListReset(xeCmdList);
+    if (ret) {
+        std::cout << "xeCommandListReset failed ret " << static_cast<int>(ret)
+                  << "\n";
         return static_cast<int>(ret);
     }
 
@@ -464,8 +533,15 @@ int clInit() {
     return 0;
 }
 
-int clInitProgram() {
+int clInitProgram(const char *path = "mat_mult.cl", const char *functionName = "matmat_gpu") {
     cl_int ret;
+
+    uint32_t sourceLen = 0;
+    auto source = readTextFile(path, sourceLen);
+    if (!sourceLen) {
+        std::cout << "unable to open cl file\n";
+        return -1;
+    }
 
     vcout << "clCreateProgramWithSource...\n";
     clProgram = clCreateProgramWithSource(clContext, 1, (const char **)&source, NULL, &ret);
@@ -482,7 +558,7 @@ int clInitProgram() {
     }
 
     vcout << "clCreateKernel...\n";
-    clKernel = clCreateKernel(clProgram, "matmat_gpu", &ret);
+    clKernel = clCreateKernel(clProgram, functionName, &ret);
     if (ret) {
         std::cout << "clCreateKernel failed ret " << static_cast<int>(ret) << "\n";
         return static_cast<int>(ret);
@@ -518,23 +594,44 @@ int clInitBuffers() {
     return 0;
 }
 
-int clCompute() {
-    int val, ret;
+int clMemCopyIn() {
+    cl_int ret;
 
     vcout << "clEnqueueWriteBuffer...\n";
     ret = clEnqueueWriteBuffer(clQueue, clMemA, CL_TRUE, 0, sizeof(hostBufA), hostBufA, 0, nullptr,
-                               nullptr);
+                               &event);
     if (ret) {
         std::cout << "clSetKernelArg failed ret " << static_cast<int>(ret) << "\n";
+        return static_cast<int>(ret);
+    }
+
+    vcout << "clWaitForEvents...\n";
+    ret = clWaitForEvents(1, &event);
+    if (ret) {
+        std::cout << "clWaitForEvents failed ret " << static_cast<int>(ret) << "\n";
         return static_cast<int>(ret);
     }
 
     ret = clEnqueueWriteBuffer(clQueue, clMemB, CL_TRUE, 0, sizeof(hostBufB), hostBufB, 0, nullptr,
-                               nullptr);
+                               &event);
     if (ret) {
         std::cout << "clSetKernelArg failed ret " << static_cast<int>(ret) << "\n";
         return static_cast<int>(ret);
     }
+
+    vcout << "clWaitForEvents...\n";
+    ret = clWaitForEvents(1, &event);
+    if (ret) {
+        std::cout << "clWaitForEvents failed ret " << static_cast<int>(ret) << "\n";
+        return static_cast<int>(ret);
+    }
+
+
+    return 0;
+}
+
+int clCompute(const bool partial=false) {
+    int val, ret;
 
     vcout << "clSetKernelArg...\n";
     val = N;
@@ -576,6 +673,22 @@ int clCompute() {
         return static_cast<int>(ret);
     }
 
+    if (partial) {
+        cl_int peers = PEERS;
+	cl_int peer = CL_PEER;
+
+        ret = clSetKernelArg(clKernel, 6, sizeof(peers), &peers);
+        if (ret) {
+            std::cout << "clSetKernelArg failed ret " << static_cast<int>(ret) << "\n";
+            return static_cast<int>(ret);
+        }
+        ret = clSetKernelArg(clKernel, 7, sizeof(peer), &peer);
+        if (ret) {
+            std::cout << "clSetKernelArg failed ret " << static_cast<int>(ret) << "\n";
+            return static_cast<int>(ret);
+        }
+    }
+
     vcout << "clEnqueueNDRangeKernel...\n";
     size_t global_work_size[] = {N, P};
     size_t local_work_size[] = {1, 1};
@@ -592,6 +705,12 @@ int clCompute() {
         std::cout << "clWaitForEvents failed ret " << static_cast<int>(ret) << "\n";
         return static_cast<int>(ret);
     }
+
+    return 0;
+}
+
+int clMemCopyOut() {
+    cl_int ret;
 
     vcout << "clEnqueueReadBuffer...\n";
     ret = clEnqueueReadBuffer(clQueue, clMemC, CL_TRUE, 0, sizeof(hostBufCCL), hostBufCCL, 0, NULL,
@@ -658,7 +777,11 @@ int validateArrays(float *c) {
                 std::cout << "elem[" << i << "][" << j << "] wrong: "
                           << "gpu val " << c[i * P + j] << " != "
                           << "cpu val " << hostBufC[i * P + j] << "\n";
-                return -1;
+
+                if (verbose)
+		    printMatrixC(c);
+
+		return -1;
             }
         }
     }
@@ -682,6 +805,18 @@ int validateResults(bool aubMode) {
             std::cout << "ERROR with XE\n";
     }
 
-    int resultOnFailure = aubMode ? 0 : 1;
-    return goodWithBoth ? 0 : resultOnFailure;
+    if (!aubMode && verbose && !goodWithBoth) {
+        std::cout << "Expected result matrix:\n";
+        printMatrixC(hostBufC);
+
+        std::cout << "CL result matirx:\n";
+        printMatrixC(hostBufCCL);
+
+        std::cout << "XE result matrix:\n";
+        printMatrixC(hostBufCXE);
+    }
+
+   int resultOnFailure = aubMode ? 0 : 1;
+
+   return goodWithBoth ? 0 : resultOnFailure;
 }

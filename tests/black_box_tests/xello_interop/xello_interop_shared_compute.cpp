@@ -13,7 +13,8 @@ int main(int argc, char **argv) {
     if (ret)
         return -1;
 
-    ret = xeInitProgram();
+    ret = xeInitProgram("mat_mult_partial.spv", "matmat_partial_gpu");
+    //ret = xeInitProgram();
     if (ret)
         return -1;
 
@@ -25,7 +26,8 @@ int main(int argc, char **argv) {
     if (ret)
         return -1;
 
-    ret = clInitProgram();
+    ret = clInitProgram("mat_mult_partial.cl", "matmat_partial_gpu");
+    //ret = clInitProgram();
     if (ret)
         return -1;
 
@@ -33,15 +35,28 @@ int main(int argc, char **argv) {
     if (ret)
         return -1;
 
-    ret = clComputeAndCopy();
-    if (ret)
-        return -1;
-
     ret = xeUseCLBuffers();
     if (ret)
         return -1;
 
-    ret = xeComputeAndCopy();
+    /* can be done by CL or XE */
+    ret = xeMemCopyIn();
+    if (ret)
+	return -1;
+
+    ret = xeComputePartial();
+    if (ret)
+        return -1;
+
+    ret = clComputePartial();
+    if (ret)
+        return -1;
+
+    ret = clMemCopyOut();
+    if (ret)
+        return -1;
+
+    ret = xeMemCopyOut();
     if (ret)
         return -1;
 

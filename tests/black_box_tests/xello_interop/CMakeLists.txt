@@ -7,10 +7,11 @@ else()
 endif()
 
 set (TEST_TARGETS
-    xello_interop_cl_cmd_queue #MM in XE using a CL command queue
-    xello_interop_cl_program   #MM in XE using a CL program
-    xello_interop_cl_memory    #MM in XE using a CL memory
-    xello_interop
+    xello_interop_cl_cmd_queue   #MM in XE using a CL command queue
+    xello_interop_cl_program     #MM in XE using a CL program
+    xello_interop_cl_memory      #MM in XE using a CL memory
+    xello_interop                #MM in XE using configurable CL resources
+    xello_interop_shared_compute #MM in XE and CL on shared buffer
 )
 
 foreach(TEST ${TEST_TARGETS})
@@ -44,6 +45,7 @@ if(UNIX)
     install(
         FILES
             "${CMAKE_CURRENT_SOURCE_DIR}/../../unit_tests/test_files/spv_modules/mat_mult.spv"
+	    "${CMAKE_CURRENT_SOURCE_DIR}/../../unit_tests/test_files/spv_modules/mat_mult_partial.spv"
         DESTINATION ${black_box_datadir}
         COMPONENT loki-samples
     )
