@@ -57,10 +57,8 @@ template <> struct Mock<MemoryManager> : public MemoryManager {
     xe_result_t doGetAddressRange(const void *ptr, void **pBase, size_t *pSize);
 
     void track(L0::GraphicsAllocation *alloc);
-    void drop(L0::GraphicsAllocation *alloc);
-    NEO::SVMAllocsManager::MapBasedAllocationTracker knownAllocations;
-    std::unordered_map<NEO::GraphicsAllocation *, L0::GraphicsAllocation *> allocMap;
-    std::unordered_map<void *, L0::MemAllocation *> allocationTracker;
+    void drop(void *ptr);
+    std::map<void *, L0::MemAllocation *> allocationTracker;
 };
 
 } // namespace ult

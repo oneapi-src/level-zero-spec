@@ -7,12 +7,11 @@
 #include "runtime/memory_manager/deferred_deleter.h"
 #include "runtime/memory_manager/deferrable_allocation_deletion.h"
 #include "runtime/memory_manager/memory_manager.h"
-#include "runtime/memory_manager/svm_memory_manager.h"
 #include "runtime/platform/platform.h"
 #include "runtime/execution_environment/execution_environment.h"
 
 #include <cassert>
-#include <unordered_map> // temporary
+#include <map>
 
 namespace L0 {
 
@@ -20,10 +19,15 @@ MemoryManager *globalMemoryManager = nullptr;
 
 struct MemoryManagerImp : public MemoryManager {
 
+    void insertAllocation(void *ptr, MemAllocation *allocation) {
+        allocationTracker.insert(std::pair<void *,
+                MemAllocation *>(allocation->getHostAddress(), allocation));
+    }
+
     void *allocateHostMemory(size_t size, size_t alignment) override {
         void *buffer = this->memoryManagerRT->allocateSystemMemory(size, alignment);
         HostAllocation *allocation = new HostAllocation(buffer, size);
-        allocationTracker[allocation->getHostAddress()] = allocation;
+        insertAllocation(allocation->getHostAddress(), allocation);
 
         return buffer;
     }
@@ -36,9 +40,7 @@ struct MemoryManagerImp : public MemoryManager {
 
         auto allocation = new GraphicsAllocation(
             memoryManagerRT->allocateGraphicsMemoryWithProperties(properties));
-        knownAllocations.insert(*allocation->allocationRT); // temporary
-        allocMap[allocation->allocationRT] = allocation;    // temporary
-        allocationTracker[allocation->getHostAddress()] = allocation;
+        insertAllocation(allocation->getHostAddress(), allocation);
         allocation->setDevice(device);
 
         return allocation;
@@ -52,9 +54,7 @@ struct MemoryManagerImp : public MemoryManager {
 
         auto allocation = new GraphicsAllocation(
             memoryManagerRT->allocateGraphicsMemoryWithProperties(properties));
-        knownAllocations.insert(*allocation->allocationRT); // temporary
-        allocMap[allocation->allocationRT] = allocation;    // temporary
-        allocationTracker[allocation->getHostAddress()] = allocation;
+        insertAllocation(allocation->getHostAddress(), allocation);
         allocation->setDevice(device);
 
         return allocation;
@@ -71,9 +71,7 @@ struct MemoryManagerImp : public MemoryManager {
             new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemoryWithProperties(
                 {false, size, NEO::GraphicsAllocation::AllocationType::UNDECIDED}, buffer));
         allocation->setAllocatedFromFault(true);
-        knownAllocations.insert(*allocation->allocationRT); // temporary
-        allocMap[allocation->allocationRT] = allocation;    // temporary
-        allocationTracker[allocation->getHostAddress()] = allocation;
+        insertAllocation(buffer, allocation);
         allocation->setDevice(device);
 
         return allocation;
@@ -95,23 +93,6 @@ struct MemoryManagerImp : public MemoryManager {
         return this->memoryManagerRT->getInternalHeapBaseAddress();
     }
 
-    xe_result_t getAddressRange(const void *ptr, void **pBase, size_t *pSize) override {
-        uint64_t allocPtr = reinterpret_cast<uint64_t>(ptr);
-        uint64_t *allocBase = reinterpret_cast<uint64_t *>(pBase);
-
-        for (auto &alloc : allocationTracker) {
-            uint64_t base = reinterpret_cast<uint64_t>(alloc.second->getHostAddress());
-            size_t size = alloc.second->getSize();
-            if (allocPtr >= base && allocPtr < base + size) {
-                *allocBase = base;
-                *pSize = size;
-
-                return XE_RESULT_SUCCESS;
-            }
-        }
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-
     PtrOwn<GraphicsAllocation> allocateGraphicsMemoryForPrivateMemory(size_t size) override {
         assert(size > 0);
         auto alloc = this->memoryManagerRT->allocateGraphicsMemoryWithProperties(
@@ -119,12 +100,40 @@ struct MemoryManagerImp : public MemoryManager {
         return PtrOwn<GraphicsAllocation>{new GraphicsAllocation(alloc)};
     }
 
-    GraphicsAllocation *findGraphicsAllocation(const void *ptr) override {
-        return static_cast<GraphicsAllocation *>(allocMap[knownAllocations.get(ptr)]); // temporary
+    MemAllocation *findMemAllocation(const void *ptr) override {
+        auto allocIt = allocationTracker.find(const_cast<void *>(ptr));
+        if (allocIt != allocationTracker.end()) {
+            return allocIt->second;
+        }
+
+        uint64_t allocPtr = reinterpret_cast<uint64_t>(ptr);
+        for (auto allocation : allocationTracker) {
+            uint64_t base = reinterpret_cast<uint64_t>(allocation.second->getHostAddress());
+            size_t size = allocation.second->getSize();
+            if (allocPtr >= base && allocPtr < base + size) {
+                return allocation.second;
+            }
+        }
+        return nullptr;
     }
 
-    MemAllocation *findMemAllocation(const void *ptr) override {
-        return allocMap[knownAllocations.get(ptr)]; // temporary
+    xe_result_t getAddressRange(const void *ptr, void **pBase, size_t *pSize) override {
+        MemAllocation *alloc = findMemAllocation(ptr);
+        if (alloc) {
+            uint64_t *allocBase = reinterpret_cast<uint64_t *>(pBase);
+            uint64_t base = reinterpret_cast<uint64_t>(alloc->getHostAddress());
+            *allocBase = base;
+
+            *pSize = alloc->getSize();
+
+            return XE_RESULT_SUCCESS;
+        }
+
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
+
+    GraphicsAllocation *findGraphicsAllocation(const void *ptr) override {
+        return static_cast<GraphicsAllocation *>(findMemAllocation(ptr));
     }
 
     bool checkMemoryAccessFromDevice(Device *device, const void *ptr) override {
@@ -146,24 +155,28 @@ struct MemoryManagerImp : public MemoryManager {
     }
 
     void freeMemory(GraphicsAllocation *allocation) {
-        allocMap.erase(allocation->allocationRT);           // temporary
-        knownAllocations.remove(*allocation->allocationRT); // temporary
-
         memoryManagerRT->freeGraphicsMemory(
             static_cast<NEO::GraphicsAllocation *>(allocation->allocationRT));
+
+        void *ptr = allocation->getHostAddress();
+        allocationTracker.erase(ptr);
 
         delete allocation;
     }
 
     void freeMemory(const void *ptr) override {
         void *bufferAddress = const_cast<void *>(ptr);
-        MemAllocation *allocation = allocationTracker[bufferAddress];
-        assert(allocation);
-        if (allocation->allocType == AllocationType::DEVICE ||
-            allocation->allocType == AllocationType::SHARED) {
-            freeMemory(static_cast<GraphicsAllocation *>(allocation));
-        } else {
-            alignedFree(bufferAddress);
+        auto it = allocationTracker.find(bufferAddress);
+        if (it != allocationTracker.end()) {
+            MemAllocation *allocation = it->second;
+            if (allocation->allocType == AllocationType::DEVICE ||
+                allocation->allocType == AllocationType::SHARED) {
+                freeMemory(static_cast<GraphicsAllocation *>(allocation));
+            } else {
+                allocationTracker.erase(bufferAddress);
+                delete allocation;
+                alignedFree(bufferAddress);
+            }
         }
     }
 
@@ -171,9 +184,8 @@ struct MemoryManagerImp : public MemoryManager {
         : memoryManagerRT(static_cast<NEO::MemoryManager *>(memoryManagerRT)) {}
 
     NEO::MemoryManager *memoryManagerRT;
-    NEO::SVMAllocsManager::MapBasedAllocationTracker knownAllocations;
-    std::unordered_map<NEO::GraphicsAllocation *, L0::MemAllocation *> allocMap; // temporary
-    std::unordered_map<void *, L0::MemAllocation *> allocationTracker;
+protected:
+    std::map<void *, L0::MemAllocation *> allocationTracker;
 };
 
 void MemoryManager::createGlobalMemoryManager() {

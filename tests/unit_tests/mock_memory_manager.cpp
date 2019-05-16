@@ -100,23 +100,27 @@ void MockMemoryManager::doFreePtr(const void *ptr) {
     alignedFree(const_cast<void *>(ptr));
 }
 
-L0::GraphicsAllocation *MockMemoryManager::doFindGraphicsAllocation(const void *ptr) {
-    return static_cast<L0::GraphicsAllocation *>(allocMap[knownAllocations.get(ptr)]);
+L0::MemAllocation *MockMemoryManager::doFindMemAllocation(const void *ptr) {
+    auto it = allocationTracker.find(const_cast<void *>(ptr));
+    if (it != allocationTracker.end())
+        return it->second;
+    return nullptr;
 }
 
-L0::MemAllocation *MockMemoryManager::doFindMemAllocation(const void *ptr) {
-    return allocMap[knownAllocations.get(ptr)];
+L0::GraphicsAllocation *MockMemoryManager::doFindGraphicsAllocation(const void *ptr) {
+    MemAllocation *alloc = doFindMemAllocation(ptr);
+    if (alloc)
+        return static_cast<L0::GraphicsAllocation *>(alloc);
+    return nullptr;
 }
 
 void MockMemoryManager::track(L0::GraphicsAllocation *alloc) {
-    knownAllocations.insert(*alloc->allocationRT);
-    allocMap[alloc->allocationRT] = alloc;
-    allocationTracker[alloc->getHostAddress()] = alloc;
+    allocationTracker.insert(std::pair<void *,
+                MemAllocation *>(alloc->getHostAddress(), alloc));
 }
 
-void MockMemoryManager::drop(L0::GraphicsAllocation *alloc) {
-    allocMap.erase(alloc->allocationRT);
-    knownAllocations.remove(*alloc->allocationRT);
+void MockMemoryManager::drop(void *ptr) {
+    allocationTracker.erase(ptr);
 }
 
 Mock<MemoryManager>::~Mock() {}
