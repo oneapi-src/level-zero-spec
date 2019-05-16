@@ -19,6 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+#include <iomanip>
 #include "benchmark.hpp"
 #include "gtest/gtest.h"
 
@@ -41,10 +42,13 @@ class XeNano : public ::testing::Test {
 
         void header_print_iteration(std::string prefix,
                                     probe_config_t &probe_setting) {
-            std::cout << prefix
+            std::cout << " All measurements are averaged per call except the function call rate metric"
+                      << std::endl;
+            std::cout << std::left << std::setw(25) << " " + prefix
+                      << std::internal
                       << "Warm up iterations "
                       << probe_setting.warm_up_iteration
-                      << "\tMeasured iterations "
+                      << std::setw(30) << " Measured iterations "
                       << probe_setting.measure_iteration
                       << std::endl;
         }
@@ -57,8 +61,7 @@ TEST_F(XeNano, xeFunctionSetArgumentValue_Buffer) {
     probe_setting.warm_up_iteration = 1000;
     probe_setting.measure_iteration = 9000;
 
-    header_print_iteration("Buffer argument\t",
-                           probe_setting);
+    header_print_iteration("Buffer argument", probe_setting);
     latency::parameter_buffer(benchmark, probe_setting);
     hardware_counter::parameter_buffer(benchmark, probe_setting);
     fuction_call_rate::parameter_buffer(benchmark, probe_setting);
@@ -69,8 +72,7 @@ TEST_F(XeNano, xeFunctionSetArgumentValue_Immediate) {
     probe_setting.warm_up_iteration = 1000;
     probe_setting.measure_iteration = 9000;
 
-    header_print_iteration("Immediate argument\t",
-                           probe_setting);
+    header_print_iteration("Immediate argument", probe_setting);
     latency::parameter_integer(benchmark, probe_setting);
     hardware_counter::parameter_integer(benchmark, probe_setting);
     fuction_call_rate::parameter_integer(benchmark, probe_setting);
@@ -81,8 +83,7 @@ TEST_F(XeNano, xeFunctionSetArgumentValue_Image) {
     probe_setting.warm_up_iteration = 1000;
     probe_setting.measure_iteration = 9000;
 
-    header_print_iteration("Image argument\t",
-                           probe_setting);
+    header_print_iteration("Image argument", probe_setting);
     latency::parameter_integer(benchmark, probe_setting);
     hardware_counter::parameter_integer(benchmark, probe_setting);
     fuction_call_rate::parameter_integer(benchmark, probe_setting);

@@ -23,11 +23,20 @@
 #define _API_STATIC_PROBE_HPP_
 
 #include <string>
+#include <locale>
 #include <assert.h>
+#include <iomanip>
 #include "xe_api.h"
 #include "common.hpp"
 #include "hardware_counter.hpp"
 
+const std::string PREFIX_LATENCY = "[ PERF LATENCY nS ]\t";
+const std::string PREFIX_FUNCTION_CALL_RATE = "[ PERF FUNC_CALL_RATE ]\t";
+const std::string PREFIX_CYCLES = "[ PERF CYCLES ]\t\t";
+const std::string PREFIX_INSTRUCTION = "[ PERF INSTRUCTIONS ]\t";
+const std::string PREFIX_CPI = "[ PERF CPI ]\t\t";
+
+const std::string UNIT_LATENCY = "nanoseconds";
 const std::string UNIT_FUNCTION_CALL_RATE = "function calls/sec";
 const std::string UNIT_CYCLES = "cycles";
 const std::string UNIT_INSTRUCTION = "instructions";
@@ -49,11 +58,12 @@ inline void print_probe_output(const std::string prefix,
                                const int line_number,
                                const std::string function_name,
                                T output_value, const std::string suffix) {
+    std::cout.imbue(std::locale(""));
     std::cout << prefix
               << (verbose ? filename + ":" + std::to_string(line_number) + "\t" : "")
               << (verbose ? function_name + "\t" : "")
-              << output_value
-              << suffix
+              << std::setw(15) << std::setprecision(5) << output_value
+              << "\t" + suffix
               << std::endl;
 }
 
@@ -81,8 +91,9 @@ int64_t _function_call_iter_measure_latency(const std::string filename,
 
     auto int_nsec = timer.period_minus_overhead();
 
-    print_probe_output(prefix, filename, line_number, function_name,
-                       int_nsec / iteration_number, "\tnanoseconds");
+    print_probe_output(PREFIX_LATENCY + prefix, filename, line_number,
+                       function_name, int_nsec / iteration_number,
+                       UNIT_LATENCY);
 
     return int_nsec;
 }
@@ -108,8 +119,8 @@ void _function_call_iter_hardware_counters(const std::string filename,
 
     if (hardware_counters->is_supported() == false) {
         std::string warning = HardwareCounter::support_warning();
-        print_probe_output(prefix, filename, line_number, function_name,
-                           warning, "");
+        print_probe_output(UNIT_CYCLES + prefix, filename, line_number,
+                           function_name, warning, "");
         /*
          * Even though no hardware counters are retrieved, call the api
          * function once in case other parts of the test case expect the
@@ -134,12 +145,14 @@ void _function_call_iter_hardware_counters(const std::string filename,
     auto cycle_per_instruction =
         normalized_cycle_count / static_cast<double>(normalized_instruction_count);
 
-    print_probe_output(prefix, filename, line_number, function_name,
-                       normalized_instruction_count, "\t" + UNIT_INSTRUCTION);
-    print_probe_output(prefix, filename, line_number, function_name,
-                       normalized_cycle_count, "\t" + UNIT_CYCLES);
-    print_probe_output(prefix, filename, line_number, function_name,
-                       cycle_per_instruction, "\t" + UNIT_CPI);
+    print_probe_output(PREFIX_INSTRUCTION + prefix, filename, line_number,
+                       function_name, normalized_instruction_count,
+                       UNIT_INSTRUCTION);
+    print_probe_output(PREFIX_CYCLES + prefix, filename, line_number,
+                       function_name, normalized_cycle_count,
+                       UNIT_CYCLES);
+    print_probe_output(PREFIX_CPI + prefix, filename, line_number, function_name,
+                       cycle_per_instruction, UNIT_CPI);
 }
 
 #define PROBE_MEASURE_FUNCTION_CALL_RATE(prefix, probe_setting, \
@@ -196,7 +209,8 @@ void _function_call_rate_iter(const std::string filename,
 		  << " number function calls " << function_call_counter
 		  << std::endl;
     }
-    print_probe_output(prefix, filename, line_number, function_name,
-		       function_call_counter, "\t" + UNIT_FUNCTION_CALL_RATE);
+    print_probe_output(PREFIX_FUNCTION_CALL_RATE + prefix, filename,
+                       line_number, function_name, function_call_counter,
+                       UNIT_FUNCTION_CALL_RATE);
 }
 #endif /* _API_STATIC_PROBE_HPP_ */
