@@ -101,19 +101,27 @@ struct MemoryManagerImp : public MemoryManager {
     }
 
     MemAllocation *findMemAllocation(const void *ptr) override {
-        auto allocIt = allocationTracker.find(const_cast<void *>(ptr));
-        if (allocIt != allocationTracker.end()) {
-            return allocIt->second;
+        // Check if there are any elements
+        if (allocationTracker.size() == 0) {
+            return nullptr;
         }
 
-        uint64_t allocPtr = reinterpret_cast<uint64_t>(ptr);
-        for (auto allocation : allocationTracker) {
-            uint64_t base = reinterpret_cast<uint64_t>(allocation.second->getHostAddress());
-            size_t size = allocation.second->getSize();
-            if (allocPtr >= base && allocPtr < base + size) {
-                return allocation.second;
-            }
-        }
+        auto allocLower = allocationTracker.lower_bound(const_cast<void *>(ptr));
+
+        // Check if ptr is alloc's base address
+        if (ptr == allocLower->first)
+            return allocLower->second;
+
+        // Check now for ranges
+        if (allocLower != allocationTracker.begin())
+            allocLower--;
+
+        uint64_t arithPtr = reinterpret_cast<uint64_t>(ptr);
+        uint64_t allocBase = reinterpret_cast<uint64_t>(allocLower->first);
+
+        if ((arithPtr >= allocBase) && (arithPtr < (allocBase + allocLower->second->getSize())))
+            return allocLower->second;
+
         return nullptr;
     }
 
