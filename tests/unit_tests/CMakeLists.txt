@@ -66,6 +66,10 @@ add_executable(${TARGET_NAME}
     ${L0_SRCS_OS_INTERFACE_WINDOWS}
 )
 
+
+add_subdirectory(tests_gen9)
+add_subdirectory(tests_gen12hp)
+
 target_compile_definitions(${TARGET_NAME}
     PUBLIC
         DEFAULT_PRODUCT_FAMILY=${DEFAULT_PRODUCT_FAMILY}
