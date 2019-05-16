@@ -64,12 +64,14 @@ xeFenceCreate(
     xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
     )
 {
+    auto pfnCreate = xe_lib::lib.xeFence.pfnCreate;
+
 #if _DEBUG
-    if( nullptr == context.xeFence.pfnCreate )
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeFence.pfnCreate( hCommandQueue, desc, phFence );
+    return pfnCreate( hCommandQueue, desc, phFence );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -101,12 +103,14 @@ xeFenceDestroy(
     xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
     )
 {
+    auto pfnDestroy = xe_lib::lib.xeFence.pfnDestroy;
+
 #if _DEBUG
-    if( nullptr == context.xeFence.pfnDestroy )
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeFence.pfnDestroy( hFence );
+    return pfnDestroy( hFence );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -140,12 +144,14 @@ xeFenceHostSynchronize(
                                                     ///< is lost.
     )
 {
+    auto pfnHostSynchronize = xe_lib::lib.xeFence.pfnHostSynchronize;
+
 #if _DEBUG
-    if( nullptr == context.xeFence.pfnHostSynchronize )
+    if( nullptr == pfnHostSynchronize )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeFence.pfnHostSynchronize( hFence, timeout );
+    return pfnHostSynchronize( hFence, timeout );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -174,12 +180,14 @@ xeFenceQueryStatus(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
+    auto pfnQueryStatus = xe_lib::lib.xeFence.pfnQueryStatus;
+
 #if _DEBUG
-    if( nullptr == context.xeFence.pfnQueryStatus )
+    if( nullptr == pfnQueryStatus )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeFence.pfnQueryStatus( hFence );
+    return pfnQueryStatus( hFence );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -205,12 +213,14 @@ xeFenceReset(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
+    auto pfnReset = xe_lib::lib.xeFence.pfnReset;
+
 #if _DEBUG
-    if( nullptr == context.xeFence.pfnReset )
+    if( nullptr == pfnReset )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeFence.pfnReset( hFence );
+    return pfnReset( hFence );
 }
 
 } // extern "C"

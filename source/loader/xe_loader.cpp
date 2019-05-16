@@ -26,22 +26,26 @@
 ******************************************************************************/
 #include "xe_loader.h"
 
-///////////////////////////////////////////////////////////////////////////////
-xe_loader context;
-
-
-///////////////////////////////////////////////////////////////////////////////
-xe_loader::xe_loader()
+namespace xe_loader
 {
-    commonDriver = LOAD_DRIVER_LIBRARY( "xe_common" );
+    ///////////////////////////////////////////////////////////////////////////////
+    Loader loader;
 
-    if( getenv_tobool( "XE_ENABLE_VALIDATION_LAYER" ) )
-        validationLayer = LOAD_DRIVER_LIBRARY( "xe_validation_layer" );
-};
 
-///////////////////////////////////////////////////////////////////////////////
-xe_loader::~xe_loader()
-{
-    FREE_DRIVER_LIBRARY( validationLayer );
-    FREE_DRIVER_LIBRARY( commonDriver );
-};
+    ///////////////////////////////////////////////////////////////////////////////
+    Loader::Loader()
+    {
+        commonDriver = LOAD_DRIVER_LIBRARY( "xe_common" );
+
+        if( getenv_tobool( "XE_ENABLE_VALIDATION_LAYER" ) )
+            validationLayer = LOAD_DRIVER_LIBRARY( "xe_validation_layer" );
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    Loader::~Loader()
+    {
+        FREE_DRIVER_LIBRARY( validationLayer );
+        FREE_DRIVER_LIBRARY( commonDriver );
+    };
+
+} // namespace xe_loader

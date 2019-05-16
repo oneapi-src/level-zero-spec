@@ -65,12 +65,14 @@ xeSamplerCreate(
     xe_sampler_handle_t* phSampler                  ///< [out] handle of the sampler
     )
 {
+    auto pfnCreate = xe_lib::lib.xeSampler.pfnCreate;
+
 #if _DEBUG
-    if( nullptr == context.xeSampler.pfnCreate )
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeSampler.pfnCreate( hDevice, pDesc, phSampler );
+    return pfnCreate( hDevice, pDesc, phSampler );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -101,12 +103,14 @@ xeSamplerDestroy(
     xe_sampler_handle_t hSampler                    ///< [in] handle of the sampler
     )
 {
+    auto pfnDestroy = xe_lib::lib.xeSampler.pfnDestroy;
+
 #if _DEBUG
-    if( nullptr == context.xeSampler.pfnDestroy )
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeSampler.pfnDestroy( hSampler );
+    return pfnDestroy( hSampler );
 }
 
 } // extern "C"

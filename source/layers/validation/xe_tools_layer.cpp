@@ -51,18 +51,20 @@ xetGetDeviceProcAddrTable(
     xet_device_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xetDevice;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xetDevice.pfnActivateMetricGroups                                 = ptable->pfnActivateMetricGroups;
-    ptable->pfnActivateMetricGroups                                           = xetDeviceActivateMetricGroups;
+    mytable.pfnActivateMetricGroups                                 = ptable->pfnActivateMetricGroups;
+    ptable->pfnActivateMetricGroups                                 = xetDeviceActivateMetricGroups;
 
     return result;
 }
@@ -84,27 +86,29 @@ xetGetCommandListProcAddrTable(
     xet_command_list_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xetCommandList;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xetCommandList.pfnAppendMetricTracerMarker                             = ptable->pfnAppendMetricTracerMarker;
-    ptable->pfnAppendMetricTracerMarker                                            = xetCommandListAppendMetricTracerMarker;
+    mytable.pfnAppendMetricTracerMarker                             = ptable->pfnAppendMetricTracerMarker;
+    ptable->pfnAppendMetricTracerMarker                             = xetCommandListAppendMetricTracerMarker;
 
-    context.xetCommandList.pfnAppendMetricQueryBegin                               = ptable->pfnAppendMetricQueryBegin;
-    ptable->pfnAppendMetricQueryBegin                                              = xetCommandListAppendMetricQueryBegin;
+    mytable.pfnAppendMetricQueryBegin                               = ptable->pfnAppendMetricQueryBegin;
+    ptable->pfnAppendMetricQueryBegin                               = xetCommandListAppendMetricQueryBegin;
 
-    context.xetCommandList.pfnAppendMetricQueryEnd                                 = ptable->pfnAppendMetricQueryEnd;
-    ptable->pfnAppendMetricQueryEnd                                                = xetCommandListAppendMetricQueryEnd;
+    mytable.pfnAppendMetricQueryEnd                                 = ptable->pfnAppendMetricQueryEnd;
+    ptable->pfnAppendMetricQueryEnd                                 = xetCommandListAppendMetricQueryEnd;
 
-    context.xetCommandList.pfnAppendMetricMemoryBarrier                            = ptable->pfnAppendMetricMemoryBarrier;
-    ptable->pfnAppendMetricMemoryBarrier                                           = xetCommandListAppendMetricMemoryBarrier;
+    mytable.pfnAppendMetricMemoryBarrier                            = ptable->pfnAppendMetricMemoryBarrier;
+    ptable->pfnAppendMetricMemoryBarrier                            = xetCommandListAppendMetricMemoryBarrier;
 
     return result;
 }
@@ -126,27 +130,29 @@ xetGetMetricGroupProcAddrTable(
     xet_metric_group_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xetMetricGroup;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xetMetricGroup.pfnGetCount                                             = ptable->pfnGetCount;
-    ptable->pfnGetCount                                                            = xetMetricGroupGetCount;
+    mytable.pfnGetCount                                             = ptable->pfnGetCount;
+    ptable->pfnGetCount                                             = xetMetricGroupGetCount;
 
-    context.xetMetricGroup.pfnGet                                                  = ptable->pfnGet;
-    ptable->pfnGet                                                                 = xetMetricGroupGet;
+    mytable.pfnGet                                                  = ptable->pfnGet;
+    ptable->pfnGet                                                  = xetMetricGroupGet;
 
-    context.xetMetricGroup.pfnGetProperties                                        = ptable->pfnGetProperties;
-    ptable->pfnGetProperties                                                       = xetMetricGroupGetProperties;
+    mytable.pfnGetProperties                                        = ptable->pfnGetProperties;
+    ptable->pfnGetProperties                                        = xetMetricGroupGetProperties;
 
-    context.xetMetricGroup.pfnCalculateData                                        = ptable->pfnCalculateData;
-    ptable->pfnCalculateData                                                       = xetMetricGroupCalculateData;
+    mytable.pfnCalculateData                                        = ptable->pfnCalculateData;
+    ptable->pfnCalculateData                                        = xetMetricGroupCalculateData;
 
     return result;
 }
@@ -168,21 +174,23 @@ xetGetMetricProcAddrTable(
     xet_metric_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xetMetric;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xetMetric.pfnGet                                                  = ptable->pfnGet;
-    ptable->pfnGet                                                            = xetMetricGet;
+    mytable.pfnGet                                                  = ptable->pfnGet;
+    ptable->pfnGet                                                  = xetMetricGet;
 
-    context.xetMetric.pfnGetProperties                                        = ptable->pfnGetProperties;
-    ptable->pfnGetProperties                                                  = xetMetricGetProperties;
+    mytable.pfnGetProperties                                        = ptable->pfnGetProperties;
+    ptable->pfnGetProperties                                        = xetMetricGetProperties;
 
     return result;
 }
@@ -204,24 +212,26 @@ xetGetMetricTracerProcAddrTable(
     xet_metric_tracer_apitable_t* ptable            ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xetMetricTracer;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xetMetricTracer.pfnOpen                                                 = ptable->pfnOpen;
-    ptable->pfnOpen                                                                 = xetMetricTracerOpen;
+    mytable.pfnOpen                                                 = ptable->pfnOpen;
+    ptable->pfnOpen                                                 = xetMetricTracerOpen;
 
-    context.xetMetricTracer.pfnClose                                                = ptable->pfnClose;
-    ptable->pfnClose                                                                = xetMetricTracerClose;
+    mytable.pfnClose                                                = ptable->pfnClose;
+    ptable->pfnClose                                                = xetMetricTracerClose;
 
-    context.xetMetricTracer.pfnReadData                                             = ptable->pfnReadData;
-    ptable->pfnReadData                                                             = xetMetricTracerReadData;
+    mytable.pfnReadData                                             = ptable->pfnReadData;
+    ptable->pfnReadData                                             = xetMetricTracerReadData;
 
     return result;
 }
@@ -243,24 +253,26 @@ xetGetMetricQueryPoolProcAddrTable(
     xet_metric_query_pool_apitable_t* ptable        ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xetMetricQueryPool;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xetMetricQueryPool.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                                                  = xetMetricQueryPoolCreate;
+    mytable.pfnCreate                                               = ptable->pfnCreate;
+    ptable->pfnCreate                                               = xetMetricQueryPoolCreate;
 
-    context.xetMetricQueryPool.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                                                 = xetMetricQueryPoolDestroy;
+    mytable.pfnDestroy                                              = ptable->pfnDestroy;
+    ptable->pfnDestroy                                              = xetMetricQueryPoolDestroy;
 
-    context.xetMetricQueryPool.pfnGetMetricQuery                                       = ptable->pfnGetMetricQuery;
-    ptable->pfnGetMetricQuery                                                          = xetMetricQueryPoolGetMetricQuery;
+    mytable.pfnGetMetricQuery                                       = ptable->pfnGetMetricQuery;
+    ptable->pfnGetMetricQuery                                       = xetMetricQueryPoolGetMetricQuery;
 
     return result;
 }
@@ -282,18 +294,20 @@ xetGetMetricQueryProcAddrTable(
     xet_metric_query_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xetMetricQuery;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xetMetricQuery.pfnGetData                                              = ptable->pfnGetData;
-    ptable->pfnGetData                                                             = xetMetricQueryGetData;
+    mytable.pfnGetData                                              = ptable->pfnGetData;
+    ptable->pfnGetData                                              = xetMetricQueryGetData;
 
     return result;
 }
@@ -315,102 +329,104 @@ xetGetPowerProcAddrTable(
     xet_power_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xetPower;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xetPower.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                                        = xetPowerCreate;
+    mytable.pfnCreate                                               = ptable->pfnCreate;
+    ptable->pfnCreate                                               = xetPowerCreate;
 
-    context.xetPower.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                                       = xetPowerDestroy;
+    mytable.pfnDestroy                                              = ptable->pfnDestroy;
+    ptable->pfnDestroy                                              = xetPowerDestroy;
 
-    context.xetPower.pfnGetAveragePowerLimit                                 = ptable->pfnGetAveragePowerLimit;
-    ptable->pfnGetAveragePowerLimit                                          = xetPowerGetAveragePowerLimit;
+    mytable.pfnGetAveragePowerLimit                                 = ptable->pfnGetAveragePowerLimit;
+    ptable->pfnGetAveragePowerLimit                                 = xetPowerGetAveragePowerLimit;
 
-    context.xetPower.pfnGetBurstPowerLimit                                   = ptable->pfnGetBurstPowerLimit;
-    ptable->pfnGetBurstPowerLimit                                            = xetPowerGetBurstPowerLimit;
+    mytable.pfnGetBurstPowerLimit                                   = ptable->pfnGetBurstPowerLimit;
+    ptable->pfnGetBurstPowerLimit                                   = xetPowerGetBurstPowerLimit;
 
-    context.xetPower.pfnGetPeakPowerLimit                                    = ptable->pfnGetPeakPowerLimit;
-    ptable->pfnGetPeakPowerLimit                                             = xetPowerGetPeakPowerLimit;
+    mytable.pfnGetPeakPowerLimit                                    = ptable->pfnGetPeakPowerLimit;
+    ptable->pfnGetPeakPowerLimit                                    = xetPowerGetPeakPowerLimit;
 
-    context.xetPower.pfnGetAllPowerLimits                                    = ptable->pfnGetAllPowerLimits;
-    ptable->pfnGetAllPowerLimits                                             = xetPowerGetAllPowerLimits;
+    mytable.pfnGetAllPowerLimits                                    = ptable->pfnGetAllPowerLimits;
+    ptable->pfnGetAllPowerLimits                                    = xetPowerGetAllPowerLimits;
 
-    context.xetPower.pfnGetDefaultPowerLimits                                = ptable->pfnGetDefaultPowerLimits;
-    ptable->pfnGetDefaultPowerLimits                                         = xetPowerGetDefaultPowerLimits;
+    mytable.pfnGetDefaultPowerLimits                                = ptable->pfnGetDefaultPowerLimits;
+    ptable->pfnGetDefaultPowerLimits                                = xetPowerGetDefaultPowerLimits;
 
-    context.xetPower.pfnSetAveragePowerLimit                                 = ptable->pfnSetAveragePowerLimit;
-    ptable->pfnSetAveragePowerLimit                                          = xetPowerSetAveragePowerLimit;
+    mytable.pfnSetAveragePowerLimit                                 = ptable->pfnSetAveragePowerLimit;
+    ptable->pfnSetAveragePowerLimit                                 = xetPowerSetAveragePowerLimit;
 
-    context.xetPower.pfnSetBurstPowerLimit                                   = ptable->pfnSetBurstPowerLimit;
-    ptable->pfnSetBurstPowerLimit                                            = xetPowerSetBurstPowerLimit;
+    mytable.pfnSetBurstPowerLimit                                   = ptable->pfnSetBurstPowerLimit;
+    ptable->pfnSetBurstPowerLimit                                   = xetPowerSetBurstPowerLimit;
 
-    context.xetPower.pfnSetPeakPowerLimit                                    = ptable->pfnSetPeakPowerLimit;
-    ptable->pfnSetPeakPowerLimit                                             = xetPowerSetPeakPowerLimit;
+    mytable.pfnSetPeakPowerLimit                                    = ptable->pfnSetPeakPowerLimit;
+    ptable->pfnSetPeakPowerLimit                                    = xetPowerSetPeakPowerLimit;
 
-    context.xetPower.pfnSetPowerLimits                                       = ptable->pfnSetPowerLimits;
-    ptable->pfnSetPowerLimits                                                = xetPowerSetPowerLimits;
+    mytable.pfnSetPowerLimits                                       = ptable->pfnSetPowerLimits;
+    ptable->pfnSetPowerLimits                                       = xetPowerSetPowerLimits;
 
-    context.xetPower.pfnGetEnergyCounter                                     = ptable->pfnGetEnergyCounter;
-    ptable->pfnGetEnergyCounter                                              = xetPowerGetEnergyCounter;
+    mytable.pfnGetEnergyCounter                                     = ptable->pfnGetEnergyCounter;
+    ptable->pfnGetEnergyCounter                                     = xetPowerGetEnergyCounter;
 
-    context.xetPower.pfnGetTurboMode                                         = ptable->pfnGetTurboMode;
-    ptable->pfnGetTurboMode                                                  = xetPowerGetTurboMode;
+    mytable.pfnGetTurboMode                                         = ptable->pfnGetTurboMode;
+    ptable->pfnGetTurboMode                                         = xetPowerGetTurboMode;
 
-    context.xetPower.pfnSetTurboMode                                         = ptable->pfnSetTurboMode;
-    ptable->pfnSetTurboMode                                                  = xetPowerSetTurboMode;
+    mytable.pfnSetTurboMode                                         = ptable->pfnSetTurboMode;
+    ptable->pfnSetTurboMode                                         = xetPowerSetTurboMode;
 
-    context.xetPower.pfnGetFreqDomainCount                                   = ptable->pfnGetFreqDomainCount;
-    ptable->pfnGetFreqDomainCount                                            = xetPowerGetFreqDomainCount;
+    mytable.pfnGetFreqDomainCount                                   = ptable->pfnGetFreqDomainCount;
+    ptable->pfnGetFreqDomainCount                                   = xetPowerGetFreqDomainCount;
 
-    context.xetPower.pfnGetFreqDomain                                        = ptable->pfnGetFreqDomain;
-    ptable->pfnGetFreqDomain                                                 = xetPowerGetFreqDomain;
+    mytable.pfnGetFreqDomain                                        = ptable->pfnGetFreqDomain;
+    ptable->pfnGetFreqDomain                                        = xetPowerGetFreqDomain;
 
-    context.xetPower.pfnFanCount                                             = ptable->pfnFanCount;
-    ptable->pfnFanCount                                                      = xetPowerFanCount;
+    mytable.pfnFanCount                                             = ptable->pfnFanCount;
+    ptable->pfnFanCount                                             = xetPowerFanCount;
 
-    context.xetPower.pfnFanGetProperties                                     = ptable->pfnFanGetProperties;
-    ptable->pfnFanGetProperties                                              = xetPowerFanGetProperties;
+    mytable.pfnFanGetProperties                                     = ptable->pfnFanGetProperties;
+    ptable->pfnFanGetProperties                                     = xetPowerFanGetProperties;
 
-    context.xetPower.pfnFanGetSpeedTable                                     = ptable->pfnFanGetSpeedTable;
-    ptable->pfnFanGetSpeedTable                                              = xetPowerFanGetSpeedTable;
+    mytable.pfnFanGetSpeedTable                                     = ptable->pfnFanGetSpeedTable;
+    ptable->pfnFanGetSpeedTable                                     = xetPowerFanGetSpeedTable;
 
-    context.xetPower.pfnFanSetSpeedTable                                     = ptable->pfnFanSetSpeedTable;
-    ptable->pfnFanSetSpeedTable                                              = xetPowerFanSetSpeedTable;
+    mytable.pfnFanSetSpeedTable                                     = ptable->pfnFanSetSpeedTable;
+    ptable->pfnFanSetSpeedTable                                     = xetPowerFanSetSpeedTable;
 
-    context.xetPower.pfnFanGetSpeed                                          = ptable->pfnFanGetSpeed;
-    ptable->pfnFanGetSpeed                                                   = xetPowerFanGetSpeed;
+    mytable.pfnFanGetSpeed                                          = ptable->pfnFanGetSpeed;
+    ptable->pfnFanGetSpeed                                          = xetPowerFanGetSpeed;
 
-    context.xetPower.pfnFanSetSpeed                                          = ptable->pfnFanSetSpeed;
-    ptable->pfnFanSetSpeed                                                   = xetPowerFanSetSpeed;
+    mytable.pfnFanSetSpeed                                          = ptable->pfnFanSetSpeed;
+    ptable->pfnFanSetSpeed                                          = xetPowerFanSetSpeed;
 
-    context.xetPower.pfnTemperatureSensorCount                               = ptable->pfnTemperatureSensorCount;
-    ptable->pfnTemperatureSensorCount                                        = xetPowerTemperatureSensorCount;
+    mytable.pfnTemperatureSensorCount                               = ptable->pfnTemperatureSensorCount;
+    ptable->pfnTemperatureSensorCount                               = xetPowerTemperatureSensorCount;
 
-    context.xetPower.pfnGetTemperatureProperties                             = ptable->pfnGetTemperatureProperties;
-    ptable->pfnGetTemperatureProperties                                      = xetPowerGetTemperatureProperties;
+    mytable.pfnGetTemperatureProperties                             = ptable->pfnGetTemperatureProperties;
+    ptable->pfnGetTemperatureProperties                             = xetPowerGetTemperatureProperties;
 
-    context.xetPower.pfnGetTemperature                                       = ptable->pfnGetTemperature;
-    ptable->pfnGetTemperature                                                = xetPowerGetTemperature;
+    mytable.pfnGetTemperature                                       = ptable->pfnGetTemperature;
+    ptable->pfnGetTemperature                                       = xetPowerGetTemperature;
 
-    context.xetPower.pfnSetTemperatureThreshold                              = ptable->pfnSetTemperatureThreshold;
-    ptable->pfnSetTemperatureThreshold                                       = xetPowerSetTemperatureThreshold;
+    mytable.pfnSetTemperatureThreshold                              = ptable->pfnSetTemperatureThreshold;
+    ptable->pfnSetTemperatureThreshold                              = xetPowerSetTemperatureThreshold;
 
-    context.xetPower.pfnActivityCount                                        = ptable->pfnActivityCount;
-    ptable->pfnActivityCount                                                 = xetPowerActivityCount;
+    mytable.pfnActivityCount                                        = ptable->pfnActivityCount;
+    ptable->pfnActivityCount                                        = xetPowerActivityCount;
 
-    context.xetPower.pfnGetActivityProperties                                = ptable->pfnGetActivityProperties;
-    ptable->pfnGetActivityProperties                                         = xetPowerGetActivityProperties;
+    mytable.pfnGetActivityProperties                                = ptable->pfnGetActivityProperties;
+    ptable->pfnGetActivityProperties                                = xetPowerGetActivityProperties;
 
-    context.xetPower.pfnGetActivityCounters                                  = ptable->pfnGetActivityCounters;
-    ptable->pfnGetActivityCounters                                           = xetPowerGetActivityCounters;
+    mytable.pfnGetActivityCounters                                  = ptable->pfnGetActivityCounters;
+    ptable->pfnGetActivityCounters                                  = xetPowerGetActivityCounters;
 
     return result;
 }
@@ -432,39 +448,41 @@ xetGetFreqDomainProcAddrTable(
     xet_freq_domain_apitable_t* ptable              ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xetFreqDomain;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xetFreqDomain.pfnGetProperties                                        = ptable->pfnGetProperties;
-    ptable->pfnGetProperties                                                      = xetFreqDomainGetProperties;
+    mytable.pfnGetProperties                                        = ptable->pfnGetProperties;
+    ptable->pfnGetProperties                                        = xetFreqDomainGetProperties;
 
-    context.xetFreqDomain.pfnGetSourceFreqDomain                                  = ptable->pfnGetSourceFreqDomain;
-    ptable->pfnGetSourceFreqDomain                                                = xetFreqDomainGetSourceFreqDomain;
+    mytable.pfnGetSourceFreqDomain                                  = ptable->pfnGetSourceFreqDomain;
+    ptable->pfnGetSourceFreqDomain                                  = xetFreqDomainGetSourceFreqDomain;
 
-    context.xetFreqDomain.pfnGetSupportedClocks                                   = ptable->pfnGetSupportedClocks;
-    ptable->pfnGetSupportedClocks                                                 = xetFreqDomainGetSupportedClocks;
+    mytable.pfnGetSupportedClocks                                   = ptable->pfnGetSupportedClocks;
+    ptable->pfnGetSupportedClocks                                   = xetFreqDomainGetSupportedClocks;
 
-    context.xetFreqDomain.pfnGetSupportedClockDividers                            = ptable->pfnGetSupportedClockDividers;
-    ptable->pfnGetSupportedClockDividers                                          = xetFreqDomainGetSupportedClockDividers;
+    mytable.pfnGetSupportedClockDividers                            = ptable->pfnGetSupportedClockDividers;
+    ptable->pfnGetSupportedClockDividers                            = xetFreqDomainGetSupportedClockDividers;
 
-    context.xetFreqDomain.pfnGetClockRange                                        = ptable->pfnGetClockRange;
-    ptable->pfnGetClockRange                                                      = xetFreqDomainGetClockRange;
+    mytable.pfnGetClockRange                                        = ptable->pfnGetClockRange;
+    ptable->pfnGetClockRange                                        = xetFreqDomainGetClockRange;
 
-    context.xetFreqDomain.pfnSetClockRange                                        = ptable->pfnSetClockRange;
-    ptable->pfnSetClockRange                                                      = xetFreqDomainSetClockRange;
+    mytable.pfnSetClockRange                                        = ptable->pfnSetClockRange;
+    ptable->pfnSetClockRange                                        = xetFreqDomainSetClockRange;
 
-    context.xetFreqDomain.pfnSetClockDivider                                      = ptable->pfnSetClockDivider;
-    ptable->pfnSetClockDivider                                                    = xetFreqDomainSetClockDivider;
+    mytable.pfnSetClockDivider                                      = ptable->pfnSetClockDivider;
+    ptable->pfnSetClockDivider                                      = xetFreqDomainSetClockDivider;
 
-    context.xetFreqDomain.pfnGetCurrentFrequency                                  = ptable->pfnGetCurrentFrequency;
-    ptable->pfnGetCurrentFrequency                                                = xetFreqDomainGetCurrentFrequency;
+    mytable.pfnGetCurrentFrequency                                  = ptable->pfnGetCurrentFrequency;
+    ptable->pfnGetCurrentFrequency                                  = xetFreqDomainGetCurrentFrequency;
 
     return result;
 }
@@ -486,18 +504,20 @@ xetGetGlobalProcAddrTable(
     xet_global_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xetGlobal;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xetGlobal.pfnInit                                                 = ptable->pfnInit;
-    ptable->pfnInit                                                           = xetInit;
+    mytable.pfnInit                                                 = ptable->pfnInit;
+    ptable->pfnInit                                                 = xetInit;
 
     return result;
 }
@@ -509,14 +529,16 @@ xetInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    if( nullptr == context.xetGlobal.pfnInit )
+    auto pfnInit = xe_layer::val.xetGlobal.pfnInit;
+
+    if( nullptr == pfnInit )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
     }
 
-    return context.xetGlobal.pfnInit( flags );
+    return pfnInit( flags );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -527,10 +549,12 @@ xetMetricGroupGetCount(
     uint32_t* pCount                                ///< [out] number of metric groups supported by the device
     )
 {
-    if( nullptr == context.xetMetricGroup.pfnGetCount )
+    auto pfnGetCount = xe_layer::val.xetMetricGroup.pfnGetCount;
+
+    if( nullptr == pfnGetCount )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -540,7 +564,7 @@ xetMetricGroupGetCount(
 
     }
 
-    return context.xetMetricGroup.pfnGetCount( hDevice, pCount );
+    return pfnGetCount( hDevice, pCount );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -552,10 +576,12 @@ xetMetricGroupGet(
     xet_metric_group_handle_t* phMetricGroup        ///< [out] metric group handle
     )
 {
-    if( nullptr == context.xetMetricGroup.pfnGet )
+    auto pfnGet = xe_layer::val.xetMetricGroup.pfnGet;
+
+    if( nullptr == pfnGet )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -565,7 +591,7 @@ xetMetricGroupGet(
 
     }
 
-    return context.xetMetricGroup.pfnGet( hDevice, ordinal, phMetricGroup );
+    return pfnGet( hDevice, ordinal, phMetricGroup );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -576,10 +602,12 @@ xetMetricGroupGetProperties(
     xet_metric_group_properties_t* pProperties      ///< [out] metric group properties
     )
 {
-    if( nullptr == context.xetMetricGroup.pfnGetProperties )
+    auto pfnGetProperties = xe_layer::val.xetMetricGroup.pfnGetProperties;
+
+    if( nullptr == pfnGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hMetricGroup )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -589,7 +617,7 @@ xetMetricGroupGetProperties(
 
     }
 
-    return context.xetMetricGroup.pfnGetProperties( hMetricGroup, pProperties );
+    return pfnGetProperties( hMetricGroup, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -601,10 +629,12 @@ xetMetricGet(
     xet_metric_handle_t* phMetric                   ///< [out] handle of metric
     )
 {
-    if( nullptr == context.xetMetric.pfnGet )
+    auto pfnGet = xe_layer::val.xetMetric.pfnGet;
+
+    if( nullptr == pfnGet )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hMetricGroup )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -614,7 +644,7 @@ xetMetricGet(
 
     }
 
-    return context.xetMetric.pfnGet( hMetricGroup, ordinal, phMetric );
+    return pfnGet( hMetricGroup, ordinal, phMetric );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -625,10 +655,12 @@ xetMetricGetProperties(
     xet_metric_properties_t* pProperties            ///< [out] metric properties
     )
 {
-    if( nullptr == context.xetMetric.pfnGetProperties )
+    auto pfnGetProperties = xe_layer::val.xetMetric.pfnGetProperties;
+
+    if( nullptr == pfnGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hMetric )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -638,7 +670,7 @@ xetMetricGetProperties(
 
     }
 
-    return context.xetMetric.pfnGetProperties( hMetric, pProperties );
+    return pfnGetProperties( hMetric, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -653,10 +685,12 @@ xetMetricGroupCalculateData(
     xet_typed_value_t* pCalculatedData              ///< [in,out] calculated metrics
     )
 {
-    if( nullptr == context.xetMetricGroup.pfnCalculateData )
+    auto pfnCalculateData = xe_layer::val.xetMetricGroup.pfnCalculateData;
+
+    if( nullptr == pfnCalculateData )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hMetricGroup )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -672,7 +706,7 @@ xetMetricGroupCalculateData(
 
     }
 
-    return context.xetMetricGroup.pfnCalculateData( hMetricGroup, pReportCount, rawDataSize, pRawData, calculatedDataSize, pCalculatedData );
+    return pfnCalculateData( hMetricGroup, pReportCount, rawDataSize, pRawData, calculatedDataSize, pCalculatedData );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -684,10 +718,12 @@ xetDeviceActivateMetricGroups(
     xet_metric_group_handle_t* phMetricGroups       ///< [in] handles of the metric groups to activate. NULL to deactivate.
     )
 {
-    if( nullptr == context.xetDevice.pfnActivateMetricGroups )
+    auto pfnActivateMetricGroups = xe_layer::val.xetDevice.pfnActivateMetricGroups;
+
+    if( nullptr == pfnActivateMetricGroups )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -697,7 +733,7 @@ xetDeviceActivateMetricGroups(
 
     }
 
-    return context.xetDevice.pfnActivateMetricGroups( hDevice, count, phMetricGroups );
+    return pfnActivateMetricGroups( hDevice, count, phMetricGroups );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -711,10 +747,12 @@ xetMetricTracerOpen(
     xet_metric_tracer_handle_t* phMetricTracer      ///< [out] handle of metric tracer
     )
 {
-    if( nullptr == context.xetMetricTracer.pfnOpen )
+    auto pfnOpen = xe_layer::val.xetMetricTracer.pfnOpen;
+
+    if( nullptr == pfnOpen )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -733,7 +771,7 @@ xetMetricTracerOpen(
 
     }
 
-    return context.xetMetricTracer.pfnOpen( hDevice, pDesc, hNotificationEvent, phMetricTracer );
+    return pfnOpen( hDevice, pDesc, hNotificationEvent, phMetricTracer );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -745,10 +783,12 @@ xetCommandListAppendMetricTracerMarker(
     uint32_t value                                  ///< [in] tracer marker value
     )
 {
-    if( nullptr == context.xetCommandList.pfnAppendMetricTracerMarker )
+    auto pfnAppendMetricTracerMarker = xe_layer::val.xetCommandList.pfnAppendMetricTracerMarker;
+
+    if( nullptr == pfnAppendMetricTracerMarker )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -758,7 +798,7 @@ xetCommandListAppendMetricTracerMarker(
 
     }
 
-    return context.xetCommandList.pfnAppendMetricTracerMarker( hCommandList, hMetricTracer, value );
+    return pfnAppendMetricTracerMarker( hCommandList, hMetricTracer, value );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -768,17 +808,19 @@ xetMetricTracerClose(
     xet_metric_tracer_handle_t hMetricTracer        ///< [in] handle of the metric tracer
     )
 {
-    if( nullptr == context.xetMetricTracer.pfnClose )
+    auto pfnClose = xe_layer::val.xetMetricTracer.pfnClose;
+
+    if( nullptr == pfnClose )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hMetricTracer )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xetMetricTracer.pfnClose( hMetricTracer );
+    return pfnClose( hMetricTracer );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -791,10 +833,12 @@ xetMetricTracerReadData(
     uint8_t* pRawData                               ///< [in,out] raw data buffer for reports
     )
 {
-    if( nullptr == context.xetMetricTracer.pfnReadData )
+    auto pfnReadData = xe_layer::val.xetMetricTracer.pfnReadData;
+
+    if( nullptr == pfnReadData )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hMetricTracer )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -807,7 +851,7 @@ xetMetricTracerReadData(
 
     }
 
-    return context.xetMetricTracer.pfnReadData( hMetricTracer, pReportCount, rawDataSize, pRawData );
+    return pfnReadData( hMetricTracer, pReportCount, rawDataSize, pRawData );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -819,10 +863,12 @@ xetMetricQueryPoolCreate(
     xet_metric_query_pool_handle_t* phMetricQueryPool   ///< [out] handle of metric query pool
     )
 {
-    if( nullptr == context.xetMetricQueryPool.pfnCreate )
+    auto pfnCreate = xe_layer::val.xetMetricQueryPool.pfnCreate;
+
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -838,7 +884,7 @@ xetMetricQueryPoolCreate(
 
     }
 
-    return context.xetMetricQueryPool.pfnCreate( hDevice, pDesc, phMetricQueryPool );
+    return pfnCreate( hDevice, pDesc, phMetricQueryPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -848,17 +894,19 @@ xetMetricQueryPoolDestroy(
     xet_metric_query_pool_handle_t hMetricQueryPool ///< [in] handle of the metric query pool
     )
 {
-    if( nullptr == context.xetMetricQueryPool.pfnDestroy )
+    auto pfnDestroy = xe_layer::val.xetMetricQueryPool.pfnDestroy;
+
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hMetricQueryPool )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xetMetricQueryPool.pfnDestroy( hMetricQueryPool );
+    return pfnDestroy( hMetricQueryPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -870,10 +918,12 @@ xetMetricQueryPoolGetMetricQuery(
     xet_metric_query_handle_t* phMetricQuery        ///< [out] handle of metric query
     )
 {
-    if( nullptr == context.xetMetricQueryPool.pfnGetMetricQuery )
+    auto pfnGetMetricQuery = xe_layer::val.xetMetricQueryPool.pfnGetMetricQuery;
+
+    if( nullptr == pfnGetMetricQuery )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hMetricQueryPool )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -883,7 +933,7 @@ xetMetricQueryPoolGetMetricQuery(
 
     }
 
-    return context.xetMetricQueryPool.pfnGetMetricQuery( hMetricQueryPool, ordinal, phMetricQuery );
+    return pfnGetMetricQuery( hMetricQueryPool, ordinal, phMetricQuery );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -894,10 +944,12 @@ xetCommandListAppendMetricQueryBegin(
     xet_metric_query_handle_t hMetricQuery          ///< [in] handle of the metric query
     )
 {
-    if( nullptr == context.xetCommandList.pfnAppendMetricQueryBegin )
+    auto pfnAppendMetricQueryBegin = xe_layer::val.xetCommandList.pfnAppendMetricQueryBegin;
+
+    if( nullptr == pfnAppendMetricQueryBegin )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -907,7 +959,7 @@ xetCommandListAppendMetricQueryBegin(
 
     }
 
-    return context.xetCommandList.pfnAppendMetricQueryBegin( hCommandList, hMetricQuery );
+    return pfnAppendMetricQueryBegin( hCommandList, hMetricQuery );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -919,10 +971,12 @@ xetCommandListAppendMetricQueryEnd(
     xe_event_handle_t hCompletionEvent              ///< [in] handle of the completion event to signal
     )
 {
-    if( nullptr == context.xetCommandList.pfnAppendMetricQueryEnd )
+    auto pfnAppendMetricQueryEnd = xe_layer::val.xetCommandList.pfnAppendMetricQueryEnd;
+
+    if( nullptr == pfnAppendMetricQueryEnd )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -935,7 +989,7 @@ xetCommandListAppendMetricQueryEnd(
 
     }
 
-    return context.xetCommandList.pfnAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent );
+    return pfnAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -945,17 +999,19 @@ xetCommandListAppendMetricMemoryBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
 {
-    if( nullptr == context.xetCommandList.pfnAppendMetricMemoryBarrier )
+    auto pfnAppendMetricMemoryBarrier = xe_layer::val.xetCommandList.pfnAppendMetricMemoryBarrier;
+
+    if( nullptr == pfnAppendMetricMemoryBarrier )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xetCommandList.pfnAppendMetricMemoryBarrier( hCommandList );
+    return pfnAppendMetricMemoryBarrier( hCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -968,10 +1024,12 @@ xetMetricQueryGetData(
     uint8_t* pRawData                               ///< [in,out] query result data in raw format
     )
 {
-    if( nullptr == context.xetMetricQuery.pfnGetData )
+    auto pfnGetData = xe_layer::val.xetMetricQuery.pfnGetData;
+
+    if( nullptr == pfnGetData )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hMetricQuery )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -984,7 +1042,7 @@ xetMetricQueryGetData(
 
     }
 
-    return context.xetMetricQuery.pfnGetData( hMetricQuery, pReportCount, rawDataSize, pRawData );
+    return pfnGetData( hMetricQuery, pReportCount, rawDataSize, pRawData );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -996,10 +1054,12 @@ xetPowerCreate(
     xet_power_handle_t* pPowerHandle                ///< [out] handle for accessing power features of the device
     )
 {
-    if( nullptr == context.xetPower.pfnCreate )
+    auto pfnCreate = xe_layer::val.xetPower.pfnCreate;
+
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1009,7 +1069,7 @@ xetPowerCreate(
 
     }
 
-    return context.xetPower.pfnCreate( hDevice, flags, pPowerHandle );
+    return pfnCreate( hDevice, flags, pPowerHandle );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1019,17 +1079,19 @@ xetPowerDestroy(
     xet_power_handle_t hPower                       ///< [in] handle of the power object to destroy
     )
 {
-    if( nullptr == context.xetPower.pfnDestroy )
+    auto pfnDestroy = xe_layer::val.xetPower.pfnDestroy;
+
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xetPower.pfnDestroy( hPower );
+    return pfnDestroy( hPower );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1040,10 +1102,12 @@ xetPowerGetAveragePowerLimit(
     xet_power_average_limit_t* pLimit               ///< [out] information about the average power limit
     )
 {
-    if( nullptr == context.xetPower.pfnGetAveragePowerLimit )
+    auto pfnGetAveragePowerLimit = xe_layer::val.xetPower.pfnGetAveragePowerLimit;
+
+    if( nullptr == pfnGetAveragePowerLimit )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1053,7 +1117,7 @@ xetPowerGetAveragePowerLimit(
 
     }
 
-    return context.xetPower.pfnGetAveragePowerLimit( hPower, pLimit );
+    return pfnGetAveragePowerLimit( hPower, pLimit );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1064,10 +1128,12 @@ xetPowerGetBurstPowerLimit(
     xet_power_burst_limit_t* pLimit                 ///< [out] information about the burst power limit
     )
 {
-    if( nullptr == context.xetPower.pfnGetBurstPowerLimit )
+    auto pfnGetBurstPowerLimit = xe_layer::val.xetPower.pfnGetBurstPowerLimit;
+
+    if( nullptr == pfnGetBurstPowerLimit )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1077,7 +1143,7 @@ xetPowerGetBurstPowerLimit(
 
     }
 
-    return context.xetPower.pfnGetBurstPowerLimit( hPower, pLimit );
+    return pfnGetBurstPowerLimit( hPower, pLimit );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1088,10 +1154,12 @@ xetPowerGetPeakPowerLimit(
     xet_power_peak_limit_t* pLimit                  ///< [out] information about the peak power limit
     )
 {
-    if( nullptr == context.xetPower.pfnGetPeakPowerLimit )
+    auto pfnGetPeakPowerLimit = xe_layer::val.xetPower.pfnGetPeakPowerLimit;
+
+    if( nullptr == pfnGetPeakPowerLimit )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1101,7 +1169,7 @@ xetPowerGetPeakPowerLimit(
 
     }
 
-    return context.xetPower.pfnGetPeakPowerLimit( hPower, pLimit );
+    return pfnGetPeakPowerLimit( hPower, pLimit );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1112,10 +1180,12 @@ xetPowerGetAllPowerLimits(
     xet_power_limits_t* pLimits                     ///< [out] information about the average/burst/peak power limits
     )
 {
-    if( nullptr == context.xetPower.pfnGetAllPowerLimits )
+    auto pfnGetAllPowerLimits = xe_layer::val.xetPower.pfnGetAllPowerLimits;
+
+    if( nullptr == pfnGetAllPowerLimits )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1125,7 +1195,7 @@ xetPowerGetAllPowerLimits(
 
     }
 
-    return context.xetPower.pfnGetAllPowerLimits( hPower, pLimits );
+    return pfnGetAllPowerLimits( hPower, pLimits );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1136,10 +1206,12 @@ xetPowerGetDefaultPowerLimits(
     xet_power_limits_t* pLimits                     ///< [out] information about the default average/burst/peak power limits
     )
 {
-    if( nullptr == context.xetPower.pfnGetDefaultPowerLimits )
+    auto pfnGetDefaultPowerLimits = xe_layer::val.xetPower.pfnGetDefaultPowerLimits;
+
+    if( nullptr == pfnGetDefaultPowerLimits )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1149,7 +1221,7 @@ xetPowerGetDefaultPowerLimits(
 
     }
 
-    return context.xetPower.pfnGetDefaultPowerLimits( hPower, pLimits );
+    return pfnGetDefaultPowerLimits( hPower, pLimits );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1160,10 +1232,12 @@ xetPowerSetAveragePowerLimit(
     xet_power_average_limit_t* pLimit               ///< [in] information about the average power limit
     )
 {
-    if( nullptr == context.xetPower.pfnSetAveragePowerLimit )
+    auto pfnSetAveragePowerLimit = xe_layer::val.xetPower.pfnSetAveragePowerLimit;
+
+    if( nullptr == pfnSetAveragePowerLimit )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1173,7 +1247,7 @@ xetPowerSetAveragePowerLimit(
 
     }
 
-    return context.xetPower.pfnSetAveragePowerLimit( hPower, pLimit );
+    return pfnSetAveragePowerLimit( hPower, pLimit );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1184,10 +1258,12 @@ xetPowerSetBurstPowerLimit(
     xet_power_burst_limit_t* pLimit                 ///< [in] information about the burst power limit
     )
 {
-    if( nullptr == context.xetPower.pfnSetBurstPowerLimit )
+    auto pfnSetBurstPowerLimit = xe_layer::val.xetPower.pfnSetBurstPowerLimit;
+
+    if( nullptr == pfnSetBurstPowerLimit )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1197,7 +1273,7 @@ xetPowerSetBurstPowerLimit(
 
     }
 
-    return context.xetPower.pfnSetBurstPowerLimit( hPower, pLimit );
+    return pfnSetBurstPowerLimit( hPower, pLimit );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1208,10 +1284,12 @@ xetPowerSetPeakPowerLimit(
     xet_power_peak_limit_t* pLimit                  ///< [in] information about the peak power limit
     )
 {
-    if( nullptr == context.xetPower.pfnSetPeakPowerLimit )
+    auto pfnSetPeakPowerLimit = xe_layer::val.xetPower.pfnSetPeakPowerLimit;
+
+    if( nullptr == pfnSetPeakPowerLimit )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1221,7 +1299,7 @@ xetPowerSetPeakPowerLimit(
 
     }
 
-    return context.xetPower.pfnSetPeakPowerLimit( hPower, pLimit );
+    return pfnSetPeakPowerLimit( hPower, pLimit );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1232,10 +1310,12 @@ xetPowerSetPowerLimits(
     xet_power_limits_t* pLimits                     ///< [in] information about the average/burst/peak power limits
     )
 {
-    if( nullptr == context.xetPower.pfnSetPowerLimits )
+    auto pfnSetPowerLimits = xe_layer::val.xetPower.pfnSetPowerLimits;
+
+    if( nullptr == pfnSetPowerLimits )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1245,7 +1325,7 @@ xetPowerSetPowerLimits(
 
     }
 
-    return context.xetPower.pfnSetPowerLimits( hPower, pLimits );
+    return pfnSetPowerLimits( hPower, pLimits );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1256,10 +1336,12 @@ xetPowerGetEnergyCounter(
     uint64_t* pEnergy                               ///< [out] the energy counter in millijoules
     )
 {
-    if( nullptr == context.xetPower.pfnGetEnergyCounter )
+    auto pfnGetEnergyCounter = xe_layer::val.xetPower.pfnGetEnergyCounter;
+
+    if( nullptr == pfnGetEnergyCounter )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1269,7 +1351,7 @@ xetPowerGetEnergyCounter(
 
     }
 
-    return context.xetPower.pfnGetEnergyCounter( hPower, pEnergy );
+    return pfnGetEnergyCounter( hPower, pEnergy );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1280,10 +1362,12 @@ xetPowerGetTurboMode(
     xet_turbo_mode_t* pTurboMode                    ///< [out] turbo mode currently in effect
     )
 {
-    if( nullptr == context.xetPower.pfnGetTurboMode )
+    auto pfnGetTurboMode = xe_layer::val.xetPower.pfnGetTurboMode;
+
+    if( nullptr == pfnGetTurboMode )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1293,7 +1377,7 @@ xetPowerGetTurboMode(
 
     }
 
-    return context.xetPower.pfnGetTurboMode( hPower, pTurboMode );
+    return pfnGetTurboMode( hPower, pTurboMode );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1304,17 +1388,19 @@ xetPowerSetTurboMode(
     xet_turbo_mode_t pTurboMode                     ///< [in] new turbo mode
     )
 {
-    if( nullptr == context.xetPower.pfnSetTurboMode )
+    auto pfnSetTurboMode = xe_layer::val.xetPower.pfnSetTurboMode;
+
+    if( nullptr == pfnSetTurboMode )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xetPower.pfnSetTurboMode( hPower, pTurboMode );
+    return pfnSetTurboMode( hPower, pTurboMode );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1325,10 +1411,12 @@ xetPowerGetFreqDomainCount(
     uint32_t* pNumFreqDomains                       ///< [out] the number of frequency domains
     )
 {
-    if( nullptr == context.xetPower.pfnGetFreqDomainCount )
+    auto pfnGetFreqDomainCount = xe_layer::val.xetPower.pfnGetFreqDomainCount;
+
+    if( nullptr == pfnGetFreqDomainCount )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1338,7 +1426,7 @@ xetPowerGetFreqDomainCount(
 
     }
 
-    return context.xetPower.pfnGetFreqDomainCount( hPower, pNumFreqDomains );
+    return pfnGetFreqDomainCount( hPower, pNumFreqDomains );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1350,10 +1438,12 @@ xetPowerGetFreqDomain(
     xet_freq_domain_handle_t* phFreqDomain          ///< [out] pointer to handle of frequency domain object
     )
 {
-    if( nullptr == context.xetPower.pfnGetFreqDomain )
+    auto pfnGetFreqDomain = xe_layer::val.xetPower.pfnGetFreqDomain;
+
+    if( nullptr == pfnGetFreqDomain )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1363,7 +1453,7 @@ xetPowerGetFreqDomain(
 
     }
 
-    return context.xetPower.pfnGetFreqDomain( hPower, ordinal, phFreqDomain );
+    return pfnGetFreqDomain( hPower, ordinal, phFreqDomain );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1374,10 +1464,12 @@ xetFreqDomainGetProperties(
     xet_freq_domain_properties_t* pFreqDomainProperties ///< [out] pointer to properties for the frequency domain
     )
 {
-    if( nullptr == context.xetFreqDomain.pfnGetProperties )
+    auto pfnGetProperties = xe_layer::val.xetFreqDomain.pfnGetProperties;
+
+    if( nullptr == pfnGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1387,7 +1479,7 @@ xetFreqDomainGetProperties(
 
     }
 
-    return context.xetFreqDomain.pfnGetProperties( hFreqDomain, pFreqDomainProperties );
+    return pfnGetProperties( hFreqDomain, pFreqDomainProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1399,10 +1491,12 @@ xetFreqDomainGetSourceFreqDomain(
                                                     ///< will be returned
     )
 {
-    if( nullptr == context.xetFreqDomain.pfnGetSourceFreqDomain )
+    auto pfnGetSourceFreqDomain = xe_layer::val.xetFreqDomain.pfnGetSourceFreqDomain;
+
+    if( nullptr == pfnGetSourceFreqDomain )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1412,7 +1506,7 @@ xetFreqDomainGetSourceFreqDomain(
 
     }
 
-    return context.xetFreqDomain.pfnGetSourceFreqDomain( hFreqDomain, phSrcFreqDomain );
+    return pfnGetSourceFreqDomain( hFreqDomain, phSrcFreqDomain );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1424,10 +1518,12 @@ xetFreqDomainGetSupportedClocks(
     uint32_t* pClocks                               ///< [out] pointer to array of frequencies
     )
 {
-    if( nullptr == context.xetFreqDomain.pfnGetSupportedClocks )
+    auto pfnGetSupportedClocks = xe_layer::val.xetFreqDomain.pfnGetSupportedClocks;
+
+    if( nullptr == pfnGetSupportedClocks )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1437,7 +1533,7 @@ xetFreqDomainGetSupportedClocks(
 
     }
 
-    return context.xetFreqDomain.pfnGetSupportedClocks( hFreqDomain, numClockPoints, pClocks );
+    return pfnGetSupportedClocks( hFreqDomain, numClockPoints, pClocks );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1449,10 +1545,12 @@ xetFreqDomainGetSupportedClockDividers(
     xet_clock_divider_t* pDividers                  ///< [out] pointer to array of dividers
     )
 {
-    if( nullptr == context.xetFreqDomain.pfnGetSupportedClockDividers )
+    auto pfnGetSupportedClockDividers = xe_layer::val.xetFreqDomain.pfnGetSupportedClockDividers;
+
+    if( nullptr == pfnGetSupportedClockDividers )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1462,7 +1560,7 @@ xetFreqDomainGetSupportedClockDividers(
 
     }
 
-    return context.xetFreqDomain.pfnGetSupportedClockDividers( hFreqDomain, numClockDividers, pDividers );
+    return pfnGetSupportedClockDividers( hFreqDomain, numClockDividers, pDividers );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1474,10 +1572,12 @@ xetFreqDomainGetClockRange(
     uint32_t* pMaxClock                             ///< [out] max clock frequency in units of MHz
     )
 {
-    if( nullptr == context.xetFreqDomain.pfnGetClockRange )
+    auto pfnGetClockRange = xe_layer::val.xetFreqDomain.pfnGetClockRange;
+
+    if( nullptr == pfnGetClockRange )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1490,7 +1590,7 @@ xetFreqDomainGetClockRange(
 
     }
 
-    return context.xetFreqDomain.pfnGetClockRange( hFreqDomain, pMinClock, pMaxClock );
+    return pfnGetClockRange( hFreqDomain, pMinClock, pMaxClock );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1502,17 +1602,19 @@ xetFreqDomainSetClockRange(
     uint32_t maxClock                               ///< [in] max clock frequency in units of MHz
     )
 {
-    if( nullptr == context.xetFreqDomain.pfnSetClockRange )
+    auto pfnSetClockRange = xe_layer::val.xetFreqDomain.pfnSetClockRange;
+
+    if( nullptr == pfnSetClockRange )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xetFreqDomain.pfnSetClockRange( hFreqDomain, minClock, maxClock );
+    return pfnSetClockRange( hFreqDomain, minClock, maxClock );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1523,10 +1625,12 @@ xetFreqDomainSetClockDivider(
     xet_clock_divider_t* pClockDividerRequest       ///< [out] pointer to frequency divider request
     )
 {
-    if( nullptr == context.xetFreqDomain.pfnSetClockDivider )
+    auto pfnSetClockDivider = xe_layer::val.xetFreqDomain.pfnSetClockDivider;
+
+    if( nullptr == pfnSetClockDivider )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1536,7 +1640,7 @@ xetFreqDomainSetClockDivider(
 
     }
 
-    return context.xetFreqDomain.pfnSetClockDivider( hFreqDomain, pClockDividerRequest );
+    return pfnSetClockDivider( hFreqDomain, pClockDividerRequest );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1549,10 +1653,12 @@ xetFreqDomainGetCurrentFrequency(
     xet_freq_throttle_reasons_t* pFreqThrottleReasons   ///< [out] the reason the resolved frequency is lower than the request
     )
 {
-    if( nullptr == context.xetFreqDomain.pfnGetCurrentFrequency )
+    auto pfnGetCurrentFrequency = xe_layer::val.xetFreqDomain.pfnGetCurrentFrequency;
+
+    if( nullptr == pfnGetCurrentFrequency )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hFreqDomain )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1568,7 +1674,7 @@ xetFreqDomainGetCurrentFrequency(
 
     }
 
-    return context.xetFreqDomain.pfnGetCurrentFrequency( hFreqDomain, pFreqRequest, pFreqResolved, pFreqThrottleReasons );
+    return pfnGetCurrentFrequency( hFreqDomain, pFreqRequest, pFreqResolved, pFreqThrottleReasons );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1579,10 +1685,12 @@ xetPowerFanCount(
     uint32_t* pFanCount                             ///< [out] the number of fans on the device
     )
 {
-    if( nullptr == context.xetPower.pfnFanCount )
+    auto pfnFanCount = xe_layer::val.xetPower.pfnFanCount;
+
+    if( nullptr == pfnFanCount )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1592,7 +1700,7 @@ xetPowerFanCount(
 
     }
 
-    return context.xetPower.pfnFanCount( hPower, pFanCount );
+    return pfnFanCount( hPower, pFanCount );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1604,10 +1712,12 @@ xetPowerFanGetProperties(
     xet_fan_properties_t* pFanProperties            ///< [out] pointer to storage for fan properties
     )
 {
-    if( nullptr == context.xetPower.pfnFanGetProperties )
+    auto pfnFanGetProperties = xe_layer::val.xetPower.pfnFanGetProperties;
+
+    if( nullptr == pfnFanGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1617,7 +1727,7 @@ xetPowerFanGetProperties(
 
     }
 
-    return context.xetPower.pfnFanGetProperties( hPower, fanIndex, pFanProperties );
+    return pfnFanGetProperties( hPower, fanIndex, pFanProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1632,10 +1742,12 @@ xetPowerFanGetSpeedTable(
     xet_fan_point_t* pFanPoints                     ///< [out] pointer to an array of temperature/fan-speed points
     )
 {
-    if( nullptr == context.xetPower.pfnFanGetSpeedTable )
+    auto pfnFanGetSpeedTable = xe_layer::val.xetPower.pfnFanGetSpeedTable;
+
+    if( nullptr == pfnFanGetSpeedTable )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1648,7 +1760,7 @@ xetPowerFanGetSpeedTable(
 
     }
 
-    return context.xetPower.pfnFanGetSpeedTable( hPower, fanIndex, fanSpeedInRpm, pNumFanPoints, pFanPoints );
+    return pfnFanGetSpeedTable( hPower, fanIndex, fanSpeedInRpm, pNumFanPoints, pFanPoints );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1661,10 +1773,12 @@ xetPowerFanSetSpeedTable(
     xet_fan_point_t* pFanPoints                     ///< [in] pointer to an array of temperature/fan-speed points
     )
 {
-    if( nullptr == context.xetPower.pfnFanSetSpeedTable )
+    auto pfnFanSetSpeedTable = xe_layer::val.xetPower.pfnFanSetSpeedTable;
+
+    if( nullptr == pfnFanSetSpeedTable )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1674,7 +1788,7 @@ xetPowerFanSetSpeedTable(
 
     }
 
-    return context.xetPower.pfnFanSetSpeedTable( hPower, fanIndex, numFanPoints, pFanPoints );
+    return pfnFanSetSpeedTable( hPower, fanIndex, numFanPoints, pFanPoints );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1689,10 +1803,12 @@ xetPowerFanGetSpeed(
     xet_fan_speed_info_t* pFanSpeed                 ///< [out] pointer to an array of current fan speeds
     )
 {
-    if( nullptr == context.xetPower.pfnFanGetSpeed )
+    auto pfnFanGetSpeed = xe_layer::val.xetPower.pfnFanGetSpeed;
+
+    if( nullptr == pfnFanGetSpeed )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1702,7 +1818,7 @@ xetPowerFanGetSpeed(
 
     }
 
-    return context.xetPower.pfnFanGetSpeed( hPower, startFanIndex, numFans, fanSpeedInRpm, pFanSpeed );
+    return pfnFanGetSpeed( hPower, startFanIndex, numFans, fanSpeedInRpm, pFanSpeed );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1716,10 +1832,12 @@ xetPowerFanSetSpeed(
     xet_fan_speed_info_t* pFanSpeed                 ///< [in] pointer to an array of current fan speeds
     )
 {
-    if( nullptr == context.xetPower.pfnFanSetSpeed )
+    auto pfnFanSetSpeed = xe_layer::val.xetPower.pfnFanSetSpeed;
+
+    if( nullptr == pfnFanSetSpeed )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1729,7 +1847,7 @@ xetPowerFanSetSpeed(
 
     }
 
-    return context.xetPower.pfnFanSetSpeed( hPower, startFanIndex, numFans, pFanSpeed );
+    return pfnFanSetSpeed( hPower, startFanIndex, numFans, pFanSpeed );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1740,10 +1858,12 @@ xetPowerTemperatureSensorCount(
     uint32_t* pSensorCount                          ///< [out] the number of temperature sensors on the device
     )
 {
-    if( nullptr == context.xetPower.pfnTemperatureSensorCount )
+    auto pfnTemperatureSensorCount = xe_layer::val.xetPower.pfnTemperatureSensorCount;
+
+    if( nullptr == pfnTemperatureSensorCount )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1753,7 +1873,7 @@ xetPowerTemperatureSensorCount(
 
     }
 
-    return context.xetPower.pfnTemperatureSensorCount( hPower, pSensorCount );
+    return pfnTemperatureSensorCount( hPower, pSensorCount );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1765,10 +1885,12 @@ xetPowerGetTemperatureProperties(
     xet_temperature_properties_t* pProperties       ///< [out] pointer to properties for this sensor
     )
 {
-    if( nullptr == context.xetPower.pfnGetTemperatureProperties )
+    auto pfnGetTemperatureProperties = xe_layer::val.xetPower.pfnGetTemperatureProperties;
+
+    if( nullptr == pfnGetTemperatureProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1778,7 +1900,7 @@ xetPowerGetTemperatureProperties(
 
     }
 
-    return context.xetPower.pfnGetTemperatureProperties( hPower, sensorIndex, pProperties );
+    return pfnGetTemperatureProperties( hPower, sensorIndex, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1792,10 +1914,12 @@ xetPowerGetTemperature(
     uint16_t* pTemperatures                         ///< [out] pointer to an array of temperatures in units of degrees celsius
     )
 {
-    if( nullptr == context.xetPower.pfnGetTemperature )
+    auto pfnGetTemperature = xe_layer::val.xetPower.pfnGetTemperature;
+
+    if( nullptr == pfnGetTemperature )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1805,7 +1929,7 @@ xetPowerGetTemperature(
 
     }
 
-    return context.xetPower.pfnGetTemperature( hPower, startSensorIndex, numSensors, pTemperatures );
+    return pfnGetTemperature( hPower, startSensorIndex, numSensors, pTemperatures );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1818,17 +1942,19 @@ xetPowerSetTemperatureThreshold(
                                                     ///< will be throttled
     )
 {
-    if( nullptr == context.xetPower.pfnSetTemperatureThreshold )
+    auto pfnSetTemperatureThreshold = xe_layer::val.xetPower.pfnSetTemperatureThreshold;
+
+    if( nullptr == pfnSetTemperatureThreshold )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xetPower.pfnSetTemperatureThreshold( hPower, sensorIndex, maxTemperature );
+    return pfnSetTemperatureThreshold( hPower, sensorIndex, maxTemperature );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1839,10 +1965,12 @@ xetPowerActivityCount(
     uint32_t* pActivityCount                        ///< [out] the number of activity counters on the device
     )
 {
-    if( nullptr == context.xetPower.pfnActivityCount )
+    auto pfnActivityCount = xe_layer::val.xetPower.pfnActivityCount;
+
+    if( nullptr == pfnActivityCount )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1852,7 +1980,7 @@ xetPowerActivityCount(
 
     }
 
-    return context.xetPower.pfnActivityCount( hPower, pActivityCount );
+    return pfnActivityCount( hPower, pActivityCount );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1864,10 +1992,12 @@ xetPowerGetActivityProperties(
     xet_activity_properties_t* pProperties          ///< [out] pointer to properties for this activity counter
     )
 {
-    if( nullptr == context.xetPower.pfnGetActivityProperties )
+    auto pfnGetActivityProperties = xe_layer::val.xetPower.pfnGetActivityProperties;
+
+    if( nullptr == pfnGetActivityProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1877,7 +2007,7 @@ xetPowerGetActivityProperties(
 
     }
 
-    return context.xetPower.pfnGetActivityProperties( hPower, activityIndex, pProperties );
+    return pfnGetActivityProperties( hPower, activityIndex, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1891,10 +2021,12 @@ xetPowerGetActivityCounters(
     xet_activity_counters_t* pCounters              ///< [out] pointer to an array of activity counter data
     )
 {
-    if( nullptr == context.xetPower.pfnGetActivityCounters )
+    auto pfnGetActivityCounters = xe_layer::val.xetPower.pfnGetActivityCounters;
+
+    if( nullptr == pfnGetActivityCounters )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hPower )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1904,7 +2036,7 @@ xetPowerGetActivityCounters(
 
     }
 
-    return context.xetPower.pfnGetActivityCounters( hPower, startCounterIndex, numCounters, pCounters );
+    return pfnGetActivityCounters( hPower, startCounterIndex, numCounters, pCounters );
 }
 
 #if defined(__cplusplus)

@@ -66,12 +66,14 @@ xeCommandQueueCreate(
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     )
 {
+    auto pfnCreate = xe_lib::lib.xeCommandQueue.pfnCreate;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandQueue.pfnCreate )
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandQueue.pfnCreate( hDevice, desc, phCommandQueue );
+    return pfnCreate( hDevice, desc, phCommandQueue );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -103,12 +105,14 @@ xeCommandQueueDestroy(
     xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
     )
 {
+    auto pfnDestroy = xe_lib::lib.xeCommandQueue.pfnDestroy;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandQueue.pfnDestroy )
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandQueue.pfnDestroy( hCommandQueue );
+    return pfnDestroy( hCommandQueue );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -140,12 +144,14 @@ xeCommandQueueExecuteCommandLists(
     xe_fence_handle_t hFence                        ///< [in][optional] handle of the fence to signal on completion
     )
 {
+    auto pfnExecuteCommandLists = xe_lib::lib.xeCommandQueue.pfnExecuteCommandLists;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandQueue.pfnExecuteCommandLists )
+    if( nullptr == pfnExecuteCommandLists )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandQueue.pfnExecuteCommandLists( hCommandQueue, numCommandLists, phCommandLists, hFence );
+    return pfnExecuteCommandLists( hCommandQueue, numCommandLists, phCommandLists, hFence );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -174,12 +180,14 @@ xeCommandQueueSynchronize(
                                                     ///< is lost.
     )
 {
+    auto pfnSynchronize = xe_lib::lib.xeCommandQueue.pfnSynchronize;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandQueue.pfnSynchronize )
+    if( nullptr == pfnSynchronize )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandQueue.pfnSynchronize( hCommandQueue, timeout );
+    return pfnSynchronize( hCommandQueue, timeout );
 }
 
 } // extern "C"

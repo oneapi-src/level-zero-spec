@@ -69,12 +69,14 @@ xeCommandListAppendMemoryCopy(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
+    auto pfnAppendMemoryCopy = xe_lib::lib.xeCommandList.pfnAppendMemoryCopy;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnAppendMemoryCopy )
+    if( nullptr == pfnAppendMemoryCopy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnAppendMemoryCopy( hCommandList, dstptr, srcptr, size, hEvent );
+    return pfnAppendMemoryCopy( hCommandList, dstptr, srcptr, size, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -111,12 +113,14 @@ xeCommandListAppendMemorySet(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
+    auto pfnAppendMemorySet = xe_lib::lib.xeCommandList.pfnAppendMemorySet;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnAppendMemorySet )
+    if( nullptr == pfnAppendMemorySet )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnAppendMemorySet( hCommandList, ptr, value, size, hEvent );
+    return pfnAppendMemorySet( hCommandList, ptr, value, size, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -154,12 +158,14 @@ xeCommandListAppendMemoryCopyRegion(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
+    auto pfnAppendMemoryCopyRegion = xe_lib::lib.xeCommandList.pfnAppendMemoryCopyRegion;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnAppendMemoryCopyRegion )
+    if( nullptr == pfnAppendMemoryCopyRegion )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, srcptr, srcRegion, srcPitch, hEvent );
+    return pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, srcptr, srcRegion, srcPitch, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -191,12 +197,14 @@ xeCommandListAppendImageCopy(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
+    auto pfnAppendImageCopy = xe_lib::lib.xeCommandList.pfnAppendImageCopy;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnAppendImageCopy )
+    if( nullptr == pfnAppendImageCopy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnAppendImageCopy( hCommandList, hDstImage, hSrcImage, hEvent );
+    return pfnAppendImageCopy( hCommandList, hDstImage, hSrcImage, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -226,12 +234,14 @@ xeCommandListAppendImageCopyRegion(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
+    auto pfnAppendImageCopyRegion = xe_lib::lib.xeCommandList.pfnAppendImageCopyRegion;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnAppendImageCopyRegion )
+    if( nullptr == pfnAppendImageCopyRegion )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnAppendImageCopyRegion( hCommandList, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hEvent );
+    return pfnAppendImageCopyRegion( hCommandList, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -266,12 +276,14 @@ xeCommandListAppendImageCopyToMemory(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
+    auto pfnAppendImageCopyToMemory = xe_lib::lib.xeCommandList.pfnAppendImageCopyToMemory;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnAppendImageCopyToMemory )
+    if( nullptr == pfnAppendImageCopyToMemory )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnAppendImageCopyToMemory( hCommandList, dstptr, hSrcImage, pSrcRegion, hEvent );
+    return pfnAppendImageCopyToMemory( hCommandList, dstptr, hSrcImage, pSrcRegion, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -306,12 +318,14 @@ xeCommandListAppendImageCopyFromMemory(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
+    auto pfnAppendImageCopyFromMemory = xe_lib::lib.xeCommandList.pfnAppendImageCopyFromMemory;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnAppendImageCopyFromMemory )
+    if( nullptr == pfnAppendImageCopyFromMemory )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnAppendImageCopyFromMemory( hCommandList, hDstImage, srcptr, pDstRegion, hEvent );
+    return pfnAppendImageCopyFromMemory( hCommandList, hDstImage, srcptr, pDstRegion, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -355,12 +369,14 @@ xeCommandListAppendMemoryPrefetch(
     size_t count                                    ///< [in] size in bytes of the memory range to prefetch
     )
 {
+    auto pfnAppendMemoryPrefetch = xe_lib::lib.xeCommandList.pfnAppendMemoryPrefetch;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnAppendMemoryPrefetch )
+    if( nullptr == pfnAppendMemoryPrefetch )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnAppendMemoryPrefetch( hCommandList, ptr, count );
+    return pfnAppendMemoryPrefetch( hCommandList, ptr, count );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -405,12 +421,14 @@ xeCommandListAppendMemAdvise(
     xe_memory_advice_t advice                       ///< [in] Memory advice for the memory range
     )
 {
+    auto pfnAppendMemAdvise = xe_lib::lib.xeCommandList.pfnAppendMemAdvise;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnAppendMemAdvise )
+    if( nullptr == pfnAppendMemAdvise )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnAppendMemAdvise( hCommandList, hDevice, ptr, size, advice );
+    return pfnAppendMemAdvise( hCommandList, hDevice, ptr, size, advice );
 }
 
 } // extern "C"

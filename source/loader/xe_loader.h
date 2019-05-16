@@ -34,19 +34,22 @@
 #include "xet_ddi.h"
 #include "xe_util.h"
 
-///////////////////////////////////////////////////////////////////////////////
-class xe_loader
+namespace xe_loader
 {
-public:
-    xe_api_version_t version = XE_API_VERSION_1_0;
+    ///////////////////////////////////////////////////////////////////////////////
+    class Loader
+    {
+    public:
+        xe_api_version_t version = XE_API_VERSION_1_0;
 
-    HMODULE commonDriver = nullptr;
-    HMODULE validationLayer = nullptr;
+        HMODULE commonDriver = nullptr;
+        HMODULE validationLayer = nullptr;
 
-    xe_loader();
-    ~xe_loader();
-};
+        Loader();
+        ~Loader();
+    };
 
-extern xe_loader context;
+    extern Loader loader;
 
+} // namespace xe_loader
 #endif // _XE_LOADER_H

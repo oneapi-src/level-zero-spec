@@ -60,12 +60,14 @@ xeEventPoolCreate(
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
     )
 {
+    auto pfnCreate = xe_lib::lib.xeEventPool.pfnCreate;
+
 #if _DEBUG
-    if( nullptr == context.xeEventPool.pfnCreate )
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeEventPool.pfnCreate( hDevice, desc, phEventPool );
+    return pfnCreate( hDevice, desc, phEventPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -95,12 +97,14 @@ xeEventPoolDestroy(
     xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object to destroy
     )
 {
+    auto pfnDestroy = xe_lib::lib.xeEventPool.pfnDestroy;
+
 #if _DEBUG
-    if( nullptr == context.xeEventPool.pfnDestroy )
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeEventPool.pfnDestroy( hEventPool );
+    return pfnDestroy( hEventPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -136,12 +140,14 @@ xeEventCreate(
     xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
     )
 {
+    auto pfnCreate = xe_lib::lib.xeEvent.pfnCreate;
+
 #if _DEBUG
-    if( nullptr == context.xeEvent.pfnCreate )
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeEvent.pfnCreate( hEventPool, desc, phEvent );
+    return pfnCreate( hEventPool, desc, phEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -174,12 +180,14 @@ xeEventDestroy(
     xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
     )
 {
+    auto pfnDestroy = xe_lib::lib.xeEvent.pfnDestroy;
+
 #if _DEBUG
-    if( nullptr == context.xeEvent.pfnDestroy )
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeEvent.pfnDestroy( hEvent );
+    return pfnDestroy( hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -207,12 +215,14 @@ xeEventPoolGetIpcHandle(
     xe_ipc_event_pool_handle_t* phIpc               ///< [out] Returned IPC event handle
     )
 {
+    auto pfnGetIpcHandle = xe_lib::lib.xeEventPool.pfnGetIpcHandle;
+
 #if _DEBUG
-    if( nullptr == context.xeEventPool.pfnGetIpcHandle )
+    if( nullptr == pfnGetIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeEventPool.pfnGetIpcHandle( hEventPool, phIpc );
+    return pfnGetIpcHandle( hEventPool, phIpc );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -244,12 +254,14 @@ xeEventPoolOpenIpcHandle(
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
     )
 {
+    auto pfnOpenIpcHandle = xe_lib::lib.xeEventPool.pfnOpenIpcHandle;
+
 #if _DEBUG
-    if( nullptr == context.xeEventPool.pfnOpenIpcHandle )
+    if( nullptr == pfnOpenIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeEventPool.pfnOpenIpcHandle( hDevice, hIpc, phEventPool );
+    return pfnOpenIpcHandle( hDevice, hIpc, phEventPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -277,12 +289,14 @@ xeEventPoolCloseIpcHandle(
     xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object
     )
 {
+    auto pfnCloseIpcHandle = xe_lib::lib.xeEventPool.pfnCloseIpcHandle;
+
 #if _DEBUG
-    if( nullptr == context.xeEventPool.pfnCloseIpcHandle )
+    if( nullptr == pfnCloseIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeEventPool.pfnCloseIpcHandle( hEventPool );
+    return pfnCloseIpcHandle( hEventPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -313,12 +327,14 @@ xeCommandListAppendSignalEvent(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
+    auto pfnAppendSignalEvent = xe_lib::lib.xeCommandList.pfnAppendSignalEvent;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnAppendSignalEvent )
+    if( nullptr == pfnAppendSignalEvent )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnAppendSignalEvent( hCommandList, hEvent );
+    return pfnAppendSignalEvent( hCommandList, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -344,12 +360,14 @@ xeCommandListAppendWaitOnEvents(
     xe_event_handle_t* phEvents                     ///< [in] handle of the events to wait on before continuing
     )
 {
+    auto pfnAppendWaitOnEvents = xe_lib::lib.xeCommandList.pfnAppendWaitOnEvents;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnAppendWaitOnEvents )
+    if( nullptr == pfnAppendWaitOnEvents )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnAppendWaitOnEvents( hCommandList, numEvents, phEvents );
+    return pfnAppendWaitOnEvents( hCommandList, numEvents, phEvents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -375,12 +393,14 @@ xeEventHostSignal(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
+    auto pfnHostSignal = xe_lib::lib.xeEvent.pfnHostSignal;
+
 #if _DEBUG
-    if( nullptr == context.xeEvent.pfnHostSignal )
+    if( nullptr == pfnHostSignal )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeEvent.pfnHostSignal( hEvent );
+    return pfnHostSignal( hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -414,12 +434,14 @@ xeEventHostSynchronize(
                                                     ///< is lost.
     )
 {
+    auto pfnHostSynchronize = xe_lib::lib.xeEvent.pfnHostSynchronize;
+
 #if _DEBUG
-    if( nullptr == context.xeEvent.pfnHostSynchronize )
+    if( nullptr == pfnHostSynchronize )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeEvent.pfnHostSynchronize( hEvent, timeout );
+    return pfnHostSynchronize( hEvent, timeout );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -449,12 +471,14 @@ xeEventQueryStatus(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
+    auto pfnQueryStatus = xe_lib::lib.xeEvent.pfnQueryStatus;
+
 #if _DEBUG
-    if( nullptr == context.xeEvent.pfnQueryStatus )
+    if( nullptr == pfnQueryStatus )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeEvent.pfnQueryStatus( hEvent );
+    return pfnQueryStatus( hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -483,12 +507,14 @@ xeCommandListAppendEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
+    auto pfnAppendEventReset = xe_lib::lib.xeCommandList.pfnAppendEventReset;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnAppendEventReset )
+    if( nullptr == pfnAppendEventReset )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnAppendEventReset( hCommandList, hEvent );
+    return pfnAppendEventReset( hCommandList, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -514,12 +540,14 @@ xeEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
+    auto pfnReset = xe_lib::lib.xeEvent.pfnReset;
+
 #if _DEBUG
-    if( nullptr == context.xeEvent.pfnReset )
+    if( nullptr == pfnReset )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeEvent.pfnReset( hEvent );
+    return pfnReset( hEvent );
 }
 
 } // extern "C"

@@ -71,12 +71,14 @@ xeCommandListAppendBarrier(
                                                     ///< barrier
     )
 {
+    auto pfnAppendBarrier = xe_lib::lib.xeCommandList.pfnAppendBarrier;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnAppendBarrier )
+    if( nullptr == pfnAppendBarrier )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnAppendBarrier( hCommandList, hSignalEvent, numWaitEvents, phWaitEvents );
+    return pfnAppendBarrier( hCommandList, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -116,12 +118,14 @@ xeCommandListAppendMemoryRangesBarrier(
                                                     ///< barrier
     )
 {
+    auto pfnAppendMemoryRangesBarrier = xe_lib::lib.xeCommandList.pfnAppendMemoryRangesBarrier;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnAppendMemoryRangesBarrier )
+    if( nullptr == pfnAppendMemoryRangesBarrier )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnAppendMemoryRangesBarrier( hCommandList, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents );
+    return pfnAppendMemoryRangesBarrier( hCommandList, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -149,12 +153,14 @@ xeDeviceSystemBarrier(
     xe_device_handle_t hDevice                      ///< [in] handle of the device
     )
 {
+    auto pfnSystemBarrier = xe_lib::lib.xeDevice.pfnSystemBarrier;
+
 #if _DEBUG
-    if( nullptr == context.xeDevice.pfnSystemBarrier )
+    if( nullptr == pfnSystemBarrier )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeDevice.pfnSystemBarrier( hDevice );
+    return pfnSystemBarrier( hDevice );
 }
 
 } // extern "C"

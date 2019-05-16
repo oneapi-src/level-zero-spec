@@ -30,29 +30,32 @@
 ******************************************************************************/
 #include "xex_lib.h"
 
-///////////////////////////////////////////////////////////////////////////////
-xe_result_t xex_lib::Init()
+namespace xex_lib
 {
-    loader = LOAD_DRIVER_LIBRARY( "xe_loader" );
-
-    if( NULL == context.loader )
-        return XE_RESULT_ERROR_UNINITIALIZED;
-
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    if( XE_RESULT_SUCCESS == result )
+    ///////////////////////////////////////////////////////////////////////////////
+    xe_result_t Library::Init()
     {
-        auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.loader, "xexGetCommandGraphProcAddrTable") );
-        result = getTable( XE_API_VERSION_1_0, &xexCommandGraph );
-    }
+        loader = LOAD_DRIVER_LIBRARY( "xe_loader" );
 
-    if( XE_RESULT_SUCCESS == result )
-    {
-        auto getTable = reinterpret_cast<xex_pfnGetGlobalProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.loader, "xexGetGlobalProcAddrTable") );
-        result = getTable( XE_API_VERSION_1_0, &xexGlobal );
-    }
+        if( NULL == loader )
+            return XE_RESULT_ERROR_UNINITIALIZED;
 
-    return result;
-}
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( XE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xexGetCommandGraphProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &xexCommandGraph );
+        }
+
+        if( XE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<xex_pfnGetGlobalProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xexGetGlobalProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &xexGlobal );
+        }
+
+        return result;
+    }
+} // namespace xex_lib

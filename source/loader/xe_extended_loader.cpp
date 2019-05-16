@@ -55,23 +55,23 @@ xexGetCommandGraphProcAddrTable(
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_loader::loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr != context.commonDriver )
+    if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.commonDriver, "xexGetCommandGraphProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xexGetCommandGraphProcAddrTable") );
         result = getTable( version, ptable );
     }
 
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.validationLayer, "xexGetCommandGraphProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xexGetCommandGraphProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -99,23 +99,23 @@ xexGetGlobalProcAddrTable(
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_loader::loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr != context.commonDriver )
+    if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xex_pfnGetGlobalProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.commonDriver, "xexGetGlobalProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xexGetGlobalProcAddrTable") );
         result = getTable( version, ptable );
     }
 
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xex_pfnGetGlobalProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.validationLayer, "xexGetGlobalProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xexGetGlobalProcAddrTable") );
         result = getTable( version, ptable );
     }
 

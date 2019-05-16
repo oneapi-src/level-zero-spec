@@ -56,12 +56,14 @@ xeDeviceRegisterCLMemory(
     void** ptr                                      ///< [out] pointer to device allocation
     )
 {
+    auto pfnRegisterCLMemory = xe_lib::lib.xeDevice.pfnRegisterCLMemory;
+
 #if _DEBUG
-    if( nullptr == context.xeDevice.pfnRegisterCLMemory )
+    if( nullptr == pfnRegisterCLMemory )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeDevice.pfnRegisterCLMemory( hDevice, context, mem, ptr );
+    return pfnRegisterCLMemory( hDevice, context, mem, ptr );
 }
 #endif // XE_ENABLE_OCL_INTEROP
 
@@ -87,12 +89,14 @@ xeDeviceRegisterCLProgram(
     xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
     )
 {
+    auto pfnRegisterCLProgram = xe_lib::lib.xeDevice.pfnRegisterCLProgram;
+
 #if _DEBUG
-    if( nullptr == context.xeDevice.pfnRegisterCLProgram )
+    if( nullptr == pfnRegisterCLProgram )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeDevice.pfnRegisterCLProgram( hDevice, context, program, phModule );
+    return pfnRegisterCLProgram( hDevice, context, program, phModule );
 }
 #endif // XE_ENABLE_OCL_INTEROP
 
@@ -118,12 +122,14 @@ xeDeviceRegisterCLCommandQueue(
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     )
 {
+    auto pfnRegisterCLCommandQueue = xe_lib::lib.xeDevice.pfnRegisterCLCommandQueue;
+
 #if _DEBUG
-    if( nullptr == context.xeDevice.pfnRegisterCLCommandQueue )
+    if( nullptr == pfnRegisterCLCommandQueue )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeDevice.pfnRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
+    return pfnRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
 }
 #endif // XE_ENABLE_OCL_INTEROP
 

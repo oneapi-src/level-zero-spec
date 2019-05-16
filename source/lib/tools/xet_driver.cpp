@@ -62,16 +62,18 @@ xetInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    auto result = context.Init();
+    auto result = xet_lib::lib.Init();
     if( XE_RESULT_SUCCESS != result )
         return result;
 
+    auto pfnInit = xet_lib::lib.xetGlobal.pfnInit;
+
 #if _DEBUG
-    if( nullptr == context.xetGlobal.pfnInit )
+    if( nullptr == pfnInit )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xetGlobal.pfnInit( flags );
+    return pfnInit( flags );
 }
 
 } // extern "C"

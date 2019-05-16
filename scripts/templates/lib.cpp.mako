@@ -75,17 +75,19 @@ ${th.make_func_name(n, tags, obj)}(
     )
 {
 %if re.match("Init", obj['name']):
-    auto result = context.Init();
+    auto result = ${n}_lib::lib.Init();
     if( ${X}_RESULT_SUCCESS != result )
         return result;
 
 %endif
+    auto ${th.make_pfn_name(n, tags, obj)} = ${n}_lib::lib.${n}${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
+
 #if _DEBUG
-    if( nullptr == context.${n}${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)} )
+    if( nullptr == ${th.make_pfn_name(n, tags, obj)} )
         return ${X}_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.${n}${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
+    return ${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
 }
 %if 'condition' in obj:
 #endif // ${th.subt(n, tags, obj['condition'])}

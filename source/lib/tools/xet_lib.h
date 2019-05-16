@@ -33,29 +33,32 @@
 #include "xet_ddi.h"
 #include "xe_util.h"
 
-///////////////////////////////////////////////////////////////////////////////
-class xet_lib
+namespace xet_lib
 {
-public:
-    HMODULE loader = nullptr;
+    ///////////////////////////////////////////////////////////////////////////////
+    class Library
+    {
+    public:
+        HMODULE loader = nullptr;
 
-    xet_lib();
-    ~xet_lib();
+        Library();
+        ~Library();
 
-    xe_result_t Init();
+        xe_result_t Init();
 
-    xet_global_apitable_t               xetGlobal = {};
-    xet_device_apitable_t               xetDevice = {};
-    xet_command_list_apitable_t         xetCommandList = {};
-    xet_metric_group_apitable_t         xetMetricGroup = {};
-    xet_metric_apitable_t               xetMetric = {};
-    xet_metric_tracer_apitable_t        xetMetricTracer = {};
-    xet_metric_query_pool_apitable_t    xetMetricQueryPool = {};
-    xet_metric_query_apitable_t         xetMetricQuery = {};
-    xet_power_apitable_t                xetPower = {};
-    xet_freq_domain_apitable_t          xetFreqDomain = {};
-};
+        xet_global_apitable_t               xetGlobal = {};
+        xet_device_apitable_t               xetDevice = {};
+        xet_command_list_apitable_t         xetCommandList = {};
+        xet_metric_group_apitable_t         xetMetricGroup = {};
+        xet_metric_apitable_t               xetMetric = {};
+        xet_metric_tracer_apitable_t        xetMetricTracer = {};
+        xet_metric_query_pool_apitable_t    xetMetricQueryPool = {};
+        xet_metric_query_apitable_t         xetMetricQuery = {};
+        xet_power_apitable_t                xetPower = {};
+        xet_freq_domain_apitable_t          xetFreqDomain = {};
+    };
 
-extern xet_lib context;
+    extern Library lib;
 
+} // namespace xet_lib
 #endif // _XET_LIB_H

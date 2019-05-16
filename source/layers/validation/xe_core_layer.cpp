@@ -51,96 +51,98 @@ xeGetCommandListProcAddrTable(
     xe_command_list_apitable_t* ptable              ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xeCommandList;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xeCommandList.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                                             = xeCommandListCreate;
+    mytable.pfnCreate                                               = ptable->pfnCreate;
+    ptable->pfnCreate                                               = xeCommandListCreate;
 
-    context.xeCommandList.pfnCreateImmediate                                      = ptable->pfnCreateImmediate;
-    ptable->pfnCreateImmediate                                                    = xeCommandListCreateImmediate;
+    mytable.pfnCreateImmediate                                      = ptable->pfnCreateImmediate;
+    ptable->pfnCreateImmediate                                      = xeCommandListCreateImmediate;
 
-    context.xeCommandList.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                                            = xeCommandListDestroy;
+    mytable.pfnDestroy                                              = ptable->pfnDestroy;
+    ptable->pfnDestroy                                              = xeCommandListDestroy;
 
-    context.xeCommandList.pfnClose                                                = ptable->pfnClose;
-    ptable->pfnClose                                                              = xeCommandListClose;
+    mytable.pfnClose                                                = ptable->pfnClose;
+    ptable->pfnClose                                                = xeCommandListClose;
 
-    context.xeCommandList.pfnReset                                                = ptable->pfnReset;
-    ptable->pfnReset                                                              = xeCommandListReset;
+    mytable.pfnReset                                                = ptable->pfnReset;
+    ptable->pfnReset                                                = xeCommandListReset;
 
-    context.xeCommandList.pfnSetParameter                                         = ptable->pfnSetParameter;
-    ptable->pfnSetParameter                                                       = xeCommandListSetParameter;
+    mytable.pfnSetParameter                                         = ptable->pfnSetParameter;
+    ptable->pfnSetParameter                                         = xeCommandListSetParameter;
 
-    context.xeCommandList.pfnGetParameter                                         = ptable->pfnGetParameter;
-    ptable->pfnGetParameter                                                       = xeCommandListGetParameter;
+    mytable.pfnGetParameter                                         = ptable->pfnGetParameter;
+    ptable->pfnGetParameter                                         = xeCommandListGetParameter;
 
-    context.xeCommandList.pfnResetParameters                                      = ptable->pfnResetParameters;
-    ptable->pfnResetParameters                                                    = xeCommandListResetParameters;
+    mytable.pfnResetParameters                                      = ptable->pfnResetParameters;
+    ptable->pfnResetParameters                                      = xeCommandListResetParameters;
 
-    context.xeCommandList.pfnReserveSpace                                         = ptable->pfnReserveSpace;
-    ptable->pfnReserveSpace                                                       = xeCommandListReserveSpace;
+    mytable.pfnReserveSpace                                         = ptable->pfnReserveSpace;
+    ptable->pfnReserveSpace                                         = xeCommandListReserveSpace;
 
-    context.xeCommandList.pfnAppendBarrier                                        = ptable->pfnAppendBarrier;
-    ptable->pfnAppendBarrier                                                      = xeCommandListAppendBarrier;
+    mytable.pfnAppendBarrier                                        = ptable->pfnAppendBarrier;
+    ptable->pfnAppendBarrier                                        = xeCommandListAppendBarrier;
 
-    context.xeCommandList.pfnAppendMemoryRangesBarrier                            = ptable->pfnAppendMemoryRangesBarrier;
-    ptable->pfnAppendMemoryRangesBarrier                                          = xeCommandListAppendMemoryRangesBarrier;
+    mytable.pfnAppendMemoryRangesBarrier                            = ptable->pfnAppendMemoryRangesBarrier;
+    ptable->pfnAppendMemoryRangesBarrier                            = xeCommandListAppendMemoryRangesBarrier;
 
-    context.xeCommandList.pfnAppendMemoryCopy                                     = ptable->pfnAppendMemoryCopy;
-    ptable->pfnAppendMemoryCopy                                                   = xeCommandListAppendMemoryCopy;
+    mytable.pfnAppendMemoryCopy                                     = ptable->pfnAppendMemoryCopy;
+    ptable->pfnAppendMemoryCopy                                     = xeCommandListAppendMemoryCopy;
 
-    context.xeCommandList.pfnAppendMemorySet                                      = ptable->pfnAppendMemorySet;
-    ptable->pfnAppendMemorySet                                                    = xeCommandListAppendMemorySet;
+    mytable.pfnAppendMemorySet                                      = ptable->pfnAppendMemorySet;
+    ptable->pfnAppendMemorySet                                      = xeCommandListAppendMemorySet;
 
-    context.xeCommandList.pfnAppendMemoryCopyRegion                               = ptable->pfnAppendMemoryCopyRegion;
-    ptable->pfnAppendMemoryCopyRegion                                             = xeCommandListAppendMemoryCopyRegion;
+    mytable.pfnAppendMemoryCopyRegion                               = ptable->pfnAppendMemoryCopyRegion;
+    ptable->pfnAppendMemoryCopyRegion                               = xeCommandListAppendMemoryCopyRegion;
 
-    context.xeCommandList.pfnAppendImageCopy                                      = ptable->pfnAppendImageCopy;
-    ptable->pfnAppendImageCopy                                                    = xeCommandListAppendImageCopy;
+    mytable.pfnAppendImageCopy                                      = ptable->pfnAppendImageCopy;
+    ptable->pfnAppendImageCopy                                      = xeCommandListAppendImageCopy;
 
-    context.xeCommandList.pfnAppendImageCopyRegion                                = ptable->pfnAppendImageCopyRegion;
-    ptable->pfnAppendImageCopyRegion                                              = xeCommandListAppendImageCopyRegion;
+    mytable.pfnAppendImageCopyRegion                                = ptable->pfnAppendImageCopyRegion;
+    ptable->pfnAppendImageCopyRegion                                = xeCommandListAppendImageCopyRegion;
 
-    context.xeCommandList.pfnAppendImageCopyToMemory                              = ptable->pfnAppendImageCopyToMemory;
-    ptable->pfnAppendImageCopyToMemory                                            = xeCommandListAppendImageCopyToMemory;
+    mytable.pfnAppendImageCopyToMemory                              = ptable->pfnAppendImageCopyToMemory;
+    ptable->pfnAppendImageCopyToMemory                              = xeCommandListAppendImageCopyToMemory;
 
-    context.xeCommandList.pfnAppendImageCopyFromMemory                            = ptable->pfnAppendImageCopyFromMemory;
-    ptable->pfnAppendImageCopyFromMemory                                          = xeCommandListAppendImageCopyFromMemory;
+    mytable.pfnAppendImageCopyFromMemory                            = ptable->pfnAppendImageCopyFromMemory;
+    ptable->pfnAppendImageCopyFromMemory                            = xeCommandListAppendImageCopyFromMemory;
 
-    context.xeCommandList.pfnAppendMemoryPrefetch                                 = ptable->pfnAppendMemoryPrefetch;
-    ptable->pfnAppendMemoryPrefetch                                               = xeCommandListAppendMemoryPrefetch;
+    mytable.pfnAppendMemoryPrefetch                                 = ptable->pfnAppendMemoryPrefetch;
+    ptable->pfnAppendMemoryPrefetch                                 = xeCommandListAppendMemoryPrefetch;
 
-    context.xeCommandList.pfnAppendMemAdvise                                      = ptable->pfnAppendMemAdvise;
-    ptable->pfnAppendMemAdvise                                                    = xeCommandListAppendMemAdvise;
+    mytable.pfnAppendMemAdvise                                      = ptable->pfnAppendMemAdvise;
+    ptable->pfnAppendMemAdvise                                      = xeCommandListAppendMemAdvise;
 
-    context.xeCommandList.pfnAppendSignalEvent                                    = ptable->pfnAppendSignalEvent;
-    ptable->pfnAppendSignalEvent                                                  = xeCommandListAppendSignalEvent;
+    mytable.pfnAppendSignalEvent                                    = ptable->pfnAppendSignalEvent;
+    ptable->pfnAppendSignalEvent                                    = xeCommandListAppendSignalEvent;
 
-    context.xeCommandList.pfnAppendWaitOnEvents                                   = ptable->pfnAppendWaitOnEvents;
-    ptable->pfnAppendWaitOnEvents                                                 = xeCommandListAppendWaitOnEvents;
+    mytable.pfnAppendWaitOnEvents                                   = ptable->pfnAppendWaitOnEvents;
+    ptable->pfnAppendWaitOnEvents                                   = xeCommandListAppendWaitOnEvents;
 
-    context.xeCommandList.pfnAppendEventReset                                     = ptable->pfnAppendEventReset;
-    ptable->pfnAppendEventReset                                                   = xeCommandListAppendEventReset;
+    mytable.pfnAppendEventReset                                     = ptable->pfnAppendEventReset;
+    ptable->pfnAppendEventReset                                     = xeCommandListAppendEventReset;
 
-    context.xeCommandList.pfnAppendLaunchFunction                                 = ptable->pfnAppendLaunchFunction;
-    ptable->pfnAppendLaunchFunction                                               = xeCommandListAppendLaunchFunction;
+    mytable.pfnAppendLaunchFunction                                 = ptable->pfnAppendLaunchFunction;
+    ptable->pfnAppendLaunchFunction                                 = xeCommandListAppendLaunchFunction;
 
-    context.xeCommandList.pfnAppendLaunchFunctionIndirect                         = ptable->pfnAppendLaunchFunctionIndirect;
-    ptable->pfnAppendLaunchFunctionIndirect                                       = xeCommandListAppendLaunchFunctionIndirect;
+    mytable.pfnAppendLaunchFunctionIndirect                         = ptable->pfnAppendLaunchFunctionIndirect;
+    ptable->pfnAppendLaunchFunctionIndirect                         = xeCommandListAppendLaunchFunctionIndirect;
 
-    context.xeCommandList.pfnAppendLaunchMultipleFunctionsIndirect                = ptable->pfnAppendLaunchMultipleFunctionsIndirect;
-    ptable->pfnAppendLaunchMultipleFunctionsIndirect                              = xeCommandListAppendLaunchMultipleFunctionsIndirect;
+    mytable.pfnAppendLaunchMultipleFunctionsIndirect                = ptable->pfnAppendLaunchMultipleFunctionsIndirect;
+    ptable->pfnAppendLaunchMultipleFunctionsIndirect                = xeCommandListAppendLaunchMultipleFunctionsIndirect;
 
-    context.xeCommandList.pfnAppendLaunchHostFunction                             = ptable->pfnAppendLaunchHostFunction;
-    ptable->pfnAppendLaunchHostFunction                                           = xeCommandListAppendLaunchHostFunction;
+    mytable.pfnAppendLaunchHostFunction                             = ptable->pfnAppendLaunchHostFunction;
+    ptable->pfnAppendLaunchHostFunction                             = xeCommandListAppendLaunchHostFunction;
 
     return result;
 }
@@ -162,60 +164,62 @@ xeGetDeviceProcAddrTable(
     xe_device_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xeDevice;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xeDevice.pfnGetSubDevice                                         = ptable->pfnGetSubDevice;
-    ptable->pfnGetSubDevice                                                  = xeDeviceGetSubDevice;
+    mytable.pfnGetSubDevice                                         = ptable->pfnGetSubDevice;
+    ptable->pfnGetSubDevice                                         = xeDeviceGetSubDevice;
 
-    context.xeDevice.pfnGetP2PProperties                                     = ptable->pfnGetP2PProperties;
-    ptable->pfnGetP2PProperties                                              = xeDeviceGetP2PProperties;
+    mytable.pfnGetP2PProperties                                     = ptable->pfnGetP2PProperties;
+    ptable->pfnGetP2PProperties                                     = xeDeviceGetP2PProperties;
 
-    context.xeDevice.pfnCanAccessPeer                                        = ptable->pfnCanAccessPeer;
-    ptable->pfnCanAccessPeer                                                 = xeDeviceCanAccessPeer;
+    mytable.pfnCanAccessPeer                                        = ptable->pfnCanAccessPeer;
+    ptable->pfnCanAccessPeer                                        = xeDeviceCanAccessPeer;
 
-    context.xeDevice.pfnSetIntermediateCacheConfig                           = ptable->pfnSetIntermediateCacheConfig;
-    ptable->pfnSetIntermediateCacheConfig                                    = xeDeviceSetIntermediateCacheConfig;
+    mytable.pfnSetIntermediateCacheConfig                           = ptable->pfnSetIntermediateCacheConfig;
+    ptable->pfnSetIntermediateCacheConfig                           = xeDeviceSetIntermediateCacheConfig;
 
-    context.xeDevice.pfnSetLastLevelCacheConfig                              = ptable->pfnSetLastLevelCacheConfig;
-    ptable->pfnSetLastLevelCacheConfig                                       = xeDeviceSetLastLevelCacheConfig;
+    mytable.pfnSetLastLevelCacheConfig                              = ptable->pfnSetLastLevelCacheConfig;
+    ptable->pfnSetLastLevelCacheConfig                              = xeDeviceSetLastLevelCacheConfig;
 
-    context.xeDevice.pfnSystemBarrier                                        = ptable->pfnSystemBarrier;
-    ptable->pfnSystemBarrier                                                 = xeDeviceSystemBarrier;
+    mytable.pfnSystemBarrier                                        = ptable->pfnSystemBarrier;
+    ptable->pfnSystemBarrier                                        = xeDeviceSystemBarrier;
 
 #if XE_ENABLE_OCL_INTEROP
-    context.xeDevice.pfnRegisterCLMemory                                     = ptable->pfnRegisterCLMemory;
-    ptable->pfnRegisterCLMemory                                              = xeDeviceRegisterCLMemory;
+    mytable.pfnRegisterCLMemory                                     = ptable->pfnRegisterCLMemory;
+    ptable->pfnRegisterCLMemory                                     = xeDeviceRegisterCLMemory;
 #endif
 
 #if XE_ENABLE_OCL_INTEROP
-    context.xeDevice.pfnRegisterCLProgram                                    = ptable->pfnRegisterCLProgram;
-    ptable->pfnRegisterCLProgram                                             = xeDeviceRegisterCLProgram;
+    mytable.pfnRegisterCLProgram                                    = ptable->pfnRegisterCLProgram;
+    ptable->pfnRegisterCLProgram                                    = xeDeviceRegisterCLProgram;
 #endif
 
 #if XE_ENABLE_OCL_INTEROP
-    context.xeDevice.pfnRegisterCLCommandQueue                               = ptable->pfnRegisterCLCommandQueue;
-    ptable->pfnRegisterCLCommandQueue                                        = xeDeviceRegisterCLCommandQueue;
+    mytable.pfnRegisterCLCommandQueue                               = ptable->pfnRegisterCLCommandQueue;
+    ptable->pfnRegisterCLCommandQueue                               = xeDeviceRegisterCLCommandQueue;
 #endif
 
-    context.xeDevice.pfnMakeMemoryResident                                   = ptable->pfnMakeMemoryResident;
-    ptable->pfnMakeMemoryResident                                            = xeDeviceMakeMemoryResident;
+    mytable.pfnMakeMemoryResident                                   = ptable->pfnMakeMemoryResident;
+    ptable->pfnMakeMemoryResident                                   = xeDeviceMakeMemoryResident;
 
-    context.xeDevice.pfnEvictMemory                                          = ptable->pfnEvictMemory;
-    ptable->pfnEvictMemory                                                   = xeDeviceEvictMemory;
+    mytable.pfnEvictMemory                                          = ptable->pfnEvictMemory;
+    ptable->pfnEvictMemory                                          = xeDeviceEvictMemory;
 
-    context.xeDevice.pfnMakeImageResident                                    = ptable->pfnMakeImageResident;
-    ptable->pfnMakeImageResident                                             = xeDeviceMakeImageResident;
+    mytable.pfnMakeImageResident                                    = ptable->pfnMakeImageResident;
+    ptable->pfnMakeImageResident                                    = xeDeviceMakeImageResident;
 
-    context.xeDevice.pfnEvictImage                                           = ptable->pfnEvictImage;
-    ptable->pfnEvictImage                                                    = xeDeviceEvictImage;
+    mytable.pfnEvictImage                                           = ptable->pfnEvictImage;
+    ptable->pfnEvictImage                                           = xeDeviceEvictImage;
 
     return result;
 }
@@ -237,27 +241,29 @@ xeGetCommandQueueProcAddrTable(
     xe_command_queue_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xeCommandQueue;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xeCommandQueue.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                                              = xeCommandQueueCreate;
+    mytable.pfnCreate                                               = ptable->pfnCreate;
+    ptable->pfnCreate                                               = xeCommandQueueCreate;
 
-    context.xeCommandQueue.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                                             = xeCommandQueueDestroy;
+    mytable.pfnDestroy                                              = ptable->pfnDestroy;
+    ptable->pfnDestroy                                              = xeCommandQueueDestroy;
 
-    context.xeCommandQueue.pfnExecuteCommandLists                                  = ptable->pfnExecuteCommandLists;
-    ptable->pfnExecuteCommandLists                                                 = xeCommandQueueExecuteCommandLists;
+    mytable.pfnExecuteCommandLists                                  = ptable->pfnExecuteCommandLists;
+    ptable->pfnExecuteCommandLists                                  = xeCommandQueueExecuteCommandLists;
 
-    context.xeCommandQueue.pfnSynchronize                                          = ptable->pfnSynchronize;
-    ptable->pfnSynchronize                                                         = xeCommandQueueSynchronize;
+    mytable.pfnSynchronize                                          = ptable->pfnSynchronize;
+    ptable->pfnSynchronize                                          = xeCommandQueueSynchronize;
 
     return result;
 }
@@ -279,48 +285,50 @@ xeGetContextProcAddrTable(
     xe_context_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xeContext;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xeContext.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                                         = xeContextCreate;
+    mytable.pfnCreate                                               = ptable->pfnCreate;
+    ptable->pfnCreate                                               = xeContextCreate;
 
-    context.xeContext.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                                        = xeContextDestroy;
+    mytable.pfnDestroy                                              = ptable->pfnDestroy;
+    ptable->pfnDestroy                                              = xeContextDestroy;
 
-    context.xeContext.pfnAllocSharedMem                                       = ptable->pfnAllocSharedMem;
-    ptable->pfnAllocSharedMem                                                 = xeContextAllocSharedMem;
+    mytable.pfnAllocSharedMem                                       = ptable->pfnAllocSharedMem;
+    ptable->pfnAllocSharedMem                                       = xeContextAllocSharedMem;
 
-    context.xeContext.pfnAllocDeviceMem                                       = ptable->pfnAllocDeviceMem;
-    ptable->pfnAllocDeviceMem                                                 = xeContextAllocDeviceMem;
+    mytable.pfnAllocDeviceMem                                       = ptable->pfnAllocDeviceMem;
+    ptable->pfnAllocDeviceMem                                       = xeContextAllocDeviceMem;
 
-    context.xeContext.pfnAllocHostMem                                         = ptable->pfnAllocHostMem;
-    ptable->pfnAllocHostMem                                                   = xeContextAllocHostMem;
+    mytable.pfnAllocHostMem                                         = ptable->pfnAllocHostMem;
+    ptable->pfnAllocHostMem                                         = xeContextAllocHostMem;
 
-    context.xeContext.pfnFreeMem                                              = ptable->pfnFreeMem;
-    ptable->pfnFreeMem                                                        = xeContextFreeMem;
+    mytable.pfnFreeMem                                              = ptable->pfnFreeMem;
+    ptable->pfnFreeMem                                              = xeContextFreeMem;
 
-    context.xeContext.pfnGetMemProperties                                     = ptable->pfnGetMemProperties;
-    ptable->pfnGetMemProperties                                               = xeContextGetMemProperties;
+    mytable.pfnGetMemProperties                                     = ptable->pfnGetMemProperties;
+    ptable->pfnGetMemProperties                                     = xeContextGetMemProperties;
 
-    context.xeContext.pfnGetMemAddressRange                                   = ptable->pfnGetMemAddressRange;
-    ptable->pfnGetMemAddressRange                                             = xeContextGetMemAddressRange;
+    mytable.pfnGetMemAddressRange                                   = ptable->pfnGetMemAddressRange;
+    ptable->pfnGetMemAddressRange                                   = xeContextGetMemAddressRange;
 
-    context.xeContext.pfnGetMemIpcHandle                                      = ptable->pfnGetMemIpcHandle;
-    ptable->pfnGetMemIpcHandle                                                = xeContextGetMemIpcHandle;
+    mytable.pfnGetMemIpcHandle                                      = ptable->pfnGetMemIpcHandle;
+    ptable->pfnGetMemIpcHandle                                      = xeContextGetMemIpcHandle;
 
-    context.xeContext.pfnOpenMemIpcHandle                                     = ptable->pfnOpenMemIpcHandle;
-    ptable->pfnOpenMemIpcHandle                                               = xeContextOpenMemIpcHandle;
+    mytable.pfnOpenMemIpcHandle                                     = ptable->pfnOpenMemIpcHandle;
+    ptable->pfnOpenMemIpcHandle                                     = xeContextOpenMemIpcHandle;
 
-    context.xeContext.pfnCloseMemIpcHandle                                    = ptable->pfnCloseMemIpcHandle;
-    ptable->pfnCloseMemIpcHandle                                              = xeContextCloseMemIpcHandle;
+    mytable.pfnCloseMemIpcHandle                                    = ptable->pfnCloseMemIpcHandle;
+    ptable->pfnCloseMemIpcHandle                                    = xeContextCloseMemIpcHandle;
 
     return result;
 }
@@ -342,33 +350,35 @@ xeGetDeviceGroupProcAddrTable(
     xe_device_group_apitable_t* ptable              ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xeDeviceGroup;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xeDeviceGroup.pfnGetDriverVersion                                     = ptable->pfnGetDriverVersion;
-    ptable->pfnGetDriverVersion                                                   = xeDeviceGroupGetDriverVersion;
+    mytable.pfnGetDriverVersion                                     = ptable->pfnGetDriverVersion;
+    ptable->pfnGetDriverVersion                                     = xeDeviceGroupGetDriverVersion;
 
-    context.xeDeviceGroup.pfnGetDevices                                           = ptable->pfnGetDevices;
-    ptable->pfnGetDevices                                                         = xeDeviceGroupGetDevices;
+    mytable.pfnGetDevices                                           = ptable->pfnGetDevices;
+    ptable->pfnGetDevices                                           = xeDeviceGroupGetDevices;
 
-    context.xeDeviceGroup.pfnGetApiVersion                                        = ptable->pfnGetApiVersion;
-    ptable->pfnGetApiVersion                                                      = xeDeviceGroupGetApiVersion;
+    mytable.pfnGetApiVersion                                        = ptable->pfnGetApiVersion;
+    ptable->pfnGetApiVersion                                        = xeDeviceGroupGetApiVersion;
 
-    context.xeDeviceGroup.pfnGetProperties                                        = ptable->pfnGetProperties;
-    ptable->pfnGetProperties                                                      = xeDeviceGroupGetProperties;
+    mytable.pfnGetProperties                                        = ptable->pfnGetProperties;
+    ptable->pfnGetProperties                                        = xeDeviceGroupGetProperties;
 
-    context.xeDeviceGroup.pfnGetComputeProperties                                 = ptable->pfnGetComputeProperties;
-    ptable->pfnGetComputeProperties                                               = xeDeviceGroupGetComputeProperties;
+    mytable.pfnGetComputeProperties                                 = ptable->pfnGetComputeProperties;
+    ptable->pfnGetComputeProperties                                 = xeDeviceGroupGetComputeProperties;
 
-    context.xeDeviceGroup.pfnGetMemoryProperties                                  = ptable->pfnGetMemoryProperties;
-    ptable->pfnGetMemoryProperties                                                = xeDeviceGroupGetMemoryProperties;
+    mytable.pfnGetMemoryProperties                                  = ptable->pfnGetMemoryProperties;
+    ptable->pfnGetMemoryProperties                                  = xeDeviceGroupGetMemoryProperties;
 
     return result;
 }
@@ -390,30 +400,32 @@ xeGetFenceProcAddrTable(
     xe_fence_apitable_t* ptable                     ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xeFence;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xeFence.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                                       = xeFenceCreate;
+    mytable.pfnCreate                                               = ptable->pfnCreate;
+    ptable->pfnCreate                                               = xeFenceCreate;
 
-    context.xeFence.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                                      = xeFenceDestroy;
+    mytable.pfnDestroy                                              = ptable->pfnDestroy;
+    ptable->pfnDestroy                                              = xeFenceDestroy;
 
-    context.xeFence.pfnHostSynchronize                                      = ptable->pfnHostSynchronize;
-    ptable->pfnHostSynchronize                                              = xeFenceHostSynchronize;
+    mytable.pfnHostSynchronize                                      = ptable->pfnHostSynchronize;
+    ptable->pfnHostSynchronize                                      = xeFenceHostSynchronize;
 
-    context.xeFence.pfnQueryStatus                                          = ptable->pfnQueryStatus;
-    ptable->pfnQueryStatus                                                  = xeFenceQueryStatus;
+    mytable.pfnQueryStatus                                          = ptable->pfnQueryStatus;
+    ptable->pfnQueryStatus                                          = xeFenceQueryStatus;
 
-    context.xeFence.pfnReset                                                = ptable->pfnReset;
-    ptable->pfnReset                                                        = xeFenceReset;
+    mytable.pfnReset                                                = ptable->pfnReset;
+    ptable->pfnReset                                                = xeFenceReset;
 
     return result;
 }
@@ -435,30 +447,32 @@ xeGetEventPoolProcAddrTable(
     xe_event_pool_apitable_t* ptable                ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xeEventPool;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xeEventPool.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                                           = xeEventPoolCreate;
+    mytable.pfnCreate                                               = ptable->pfnCreate;
+    ptable->pfnCreate                                               = xeEventPoolCreate;
 
-    context.xeEventPool.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                                          = xeEventPoolDestroy;
+    mytable.pfnDestroy                                              = ptable->pfnDestroy;
+    ptable->pfnDestroy                                              = xeEventPoolDestroy;
 
-    context.xeEventPool.pfnGetIpcHandle                                         = ptable->pfnGetIpcHandle;
-    ptable->pfnGetIpcHandle                                                     = xeEventPoolGetIpcHandle;
+    mytable.pfnGetIpcHandle                                         = ptable->pfnGetIpcHandle;
+    ptable->pfnGetIpcHandle                                         = xeEventPoolGetIpcHandle;
 
-    context.xeEventPool.pfnOpenIpcHandle                                        = ptable->pfnOpenIpcHandle;
-    ptable->pfnOpenIpcHandle                                                    = xeEventPoolOpenIpcHandle;
+    mytable.pfnOpenIpcHandle                                        = ptable->pfnOpenIpcHandle;
+    ptable->pfnOpenIpcHandle                                        = xeEventPoolOpenIpcHandle;
 
-    context.xeEventPool.pfnCloseIpcHandle                                       = ptable->pfnCloseIpcHandle;
-    ptable->pfnCloseIpcHandle                                                   = xeEventPoolCloseIpcHandle;
+    mytable.pfnCloseIpcHandle                                       = ptable->pfnCloseIpcHandle;
+    ptable->pfnCloseIpcHandle                                       = xeEventPoolCloseIpcHandle;
 
     return result;
 }
@@ -480,33 +494,35 @@ xeGetEventProcAddrTable(
     xe_event_apitable_t* ptable                     ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xeEvent;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xeEvent.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                                       = xeEventCreate;
+    mytable.pfnCreate                                               = ptable->pfnCreate;
+    ptable->pfnCreate                                               = xeEventCreate;
 
-    context.xeEvent.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                                      = xeEventDestroy;
+    mytable.pfnDestroy                                              = ptable->pfnDestroy;
+    ptable->pfnDestroy                                              = xeEventDestroy;
 
-    context.xeEvent.pfnHostSignal                                           = ptable->pfnHostSignal;
-    ptable->pfnHostSignal                                                   = xeEventHostSignal;
+    mytable.pfnHostSignal                                           = ptable->pfnHostSignal;
+    ptable->pfnHostSignal                                           = xeEventHostSignal;
 
-    context.xeEvent.pfnHostSynchronize                                      = ptable->pfnHostSynchronize;
-    ptable->pfnHostSynchronize                                              = xeEventHostSynchronize;
+    mytable.pfnHostSynchronize                                      = ptable->pfnHostSynchronize;
+    ptable->pfnHostSynchronize                                      = xeEventHostSynchronize;
 
-    context.xeEvent.pfnQueryStatus                                          = ptable->pfnQueryStatus;
-    ptable->pfnQueryStatus                                                  = xeEventQueryStatus;
+    mytable.pfnQueryStatus                                          = ptable->pfnQueryStatus;
+    ptable->pfnQueryStatus                                          = xeEventQueryStatus;
 
-    context.xeEvent.pfnReset                                                = ptable->pfnReset;
-    ptable->pfnReset                                                        = xeEventReset;
+    mytable.pfnReset                                                = ptable->pfnReset;
+    ptable->pfnReset                                                = xeEventReset;
 
     return result;
 }
@@ -528,24 +544,26 @@ xeGetImageProcAddrTable(
     xe_image_apitable_t* ptable                     ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xeImage;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xeImage.pfnGetProperties                                        = ptable->pfnGetProperties;
-    ptable->pfnGetProperties                                                = xeImageGetProperties;
+    mytable.pfnGetProperties                                        = ptable->pfnGetProperties;
+    ptable->pfnGetProperties                                        = xeImageGetProperties;
 
-    context.xeImage.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                                       = xeImageCreate;
+    mytable.pfnCreate                                               = ptable->pfnCreate;
+    ptable->pfnCreate                                               = xeImageCreate;
 
-    context.xeImage.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                                      = xeImageDestroy;
+    mytable.pfnDestroy                                              = ptable->pfnDestroy;
+    ptable->pfnDestroy                                              = xeImageDestroy;
 
     return result;
 }
@@ -567,30 +585,32 @@ xeGetModuleProcAddrTable(
     xe_module_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xeModule;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xeModule.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                                        = xeModuleCreate;
+    mytable.pfnCreate                                               = ptable->pfnCreate;
+    ptable->pfnCreate                                               = xeModuleCreate;
 
-    context.xeModule.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                                       = xeModuleDestroy;
+    mytable.pfnDestroy                                              = ptable->pfnDestroy;
+    ptable->pfnDestroy                                              = xeModuleDestroy;
 
-    context.xeModule.pfnGetNativeBinary                                      = ptable->pfnGetNativeBinary;
-    ptable->pfnGetNativeBinary                                               = xeModuleGetNativeBinary;
+    mytable.pfnGetNativeBinary                                      = ptable->pfnGetNativeBinary;
+    ptable->pfnGetNativeBinary                                      = xeModuleGetNativeBinary;
 
-    context.xeModule.pfnGetGlobalPointer                                     = ptable->pfnGetGlobalPointer;
-    ptable->pfnGetGlobalPointer                                              = xeModuleGetGlobalPointer;
+    mytable.pfnGetGlobalPointer                                     = ptable->pfnGetGlobalPointer;
+    ptable->pfnGetGlobalPointer                                     = xeModuleGetGlobalPointer;
 
-    context.xeModule.pfnGetFunctionPointer                                   = ptable->pfnGetFunctionPointer;
-    ptable->pfnGetFunctionPointer                                            = xeModuleGetFunctionPointer;
+    mytable.pfnGetFunctionPointer                                   = ptable->pfnGetFunctionPointer;
+    ptable->pfnGetFunctionPointer                                   = xeModuleGetFunctionPointer;
 
     return result;
 }
@@ -612,21 +632,23 @@ xeGetModuleBuildLogProcAddrTable(
     xe_module_build_log_apitable_t* ptable          ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xeModuleBuildLog;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xeModuleBuildLog.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                                               = xeModuleBuildLogDestroy;
+    mytable.pfnDestroy                                              = ptable->pfnDestroy;
+    ptable->pfnDestroy                                              = xeModuleBuildLogDestroy;
 
-    context.xeModuleBuildLog.pfnGetString                                            = ptable->pfnGetString;
-    ptable->pfnGetString                                                             = xeModuleBuildLogGetString;
+    mytable.pfnGetString                                            = ptable->pfnGetString;
+    ptable->pfnGetString                                            = xeModuleBuildLogGetString;
 
     return result;
 }
@@ -648,36 +670,38 @@ xeGetFunctionProcAddrTable(
     xe_function_apitable_t* ptable                  ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xeFunction;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xeFunction.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                                          = xeFunctionCreate;
+    mytable.pfnCreate                                               = ptable->pfnCreate;
+    ptable->pfnCreate                                               = xeFunctionCreate;
 
-    context.xeFunction.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                                         = xeFunctionDestroy;
+    mytable.pfnDestroy                                              = ptable->pfnDestroy;
+    ptable->pfnDestroy                                              = xeFunctionDestroy;
 
-    context.xeFunction.pfnSetGroupSize                                         = ptable->pfnSetGroupSize;
-    ptable->pfnSetGroupSize                                                    = xeFunctionSetGroupSize;
+    mytable.pfnSetGroupSize                                         = ptable->pfnSetGroupSize;
+    ptable->pfnSetGroupSize                                         = xeFunctionSetGroupSize;
 
-    context.xeFunction.pfnSuggestGroupSize                                     = ptable->pfnSuggestGroupSize;
-    ptable->pfnSuggestGroupSize                                                = xeFunctionSuggestGroupSize;
+    mytable.pfnSuggestGroupSize                                     = ptable->pfnSuggestGroupSize;
+    ptable->pfnSuggestGroupSize                                     = xeFunctionSuggestGroupSize;
 
-    context.xeFunction.pfnSetArgumentValue                                     = ptable->pfnSetArgumentValue;
-    ptable->pfnSetArgumentValue                                                = xeFunctionSetArgumentValue;
+    mytable.pfnSetArgumentValue                                     = ptable->pfnSetArgumentValue;
+    ptable->pfnSetArgumentValue                                     = xeFunctionSetArgumentValue;
 
-    context.xeFunction.pfnSetAttribute                                         = ptable->pfnSetAttribute;
-    ptable->pfnSetAttribute                                                    = xeFunctionSetAttribute;
+    mytable.pfnSetAttribute                                         = ptable->pfnSetAttribute;
+    ptable->pfnSetAttribute                                         = xeFunctionSetAttribute;
 
-    context.xeFunction.pfnGetAttribute                                         = ptable->pfnGetAttribute;
-    ptable->pfnGetAttribute                                                    = xeFunctionGetAttribute;
+    mytable.pfnGetAttribute                                         = ptable->pfnGetAttribute;
+    ptable->pfnGetAttribute                                         = xeFunctionGetAttribute;
 
     return result;
 }
@@ -699,21 +723,23 @@ xeGetSamplerProcAddrTable(
     xe_sampler_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xeSampler;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xeSampler.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                                         = xeSamplerCreate;
+    mytable.pfnCreate                                               = ptable->pfnCreate;
+    ptable->pfnCreate                                               = xeSamplerCreate;
 
-    context.xeSampler.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                                        = xeSamplerDestroy;
+    mytable.pfnDestroy                                              = ptable->pfnDestroy;
+    ptable->pfnDestroy                                              = xeSamplerDestroy;
 
     return result;
 }
@@ -735,21 +761,23 @@ xeGetGlobalProcAddrTable(
     xe_global_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xeGlobal;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xeGlobal.pfnInit                                                 = ptable->pfnInit;
-    ptable->pfnInit                                                          = xeInit;
+    mytable.pfnInit                                                 = ptable->pfnInit;
+    ptable->pfnInit                                                 = xeInit;
 
-    context.xeGlobal.pfnGetDeviceGroups                                      = ptable->pfnGetDeviceGroups;
-    ptable->pfnGetDeviceGroups                                               = xeGetDeviceGroups;
+    mytable.pfnGetDeviceGroups                                      = ptable->pfnGetDeviceGroups;
+    ptable->pfnGetDeviceGroups                                      = xeGetDeviceGroups;
 
     return result;
 }
@@ -761,14 +789,16 @@ xeInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    if( nullptr == context.xeGlobal.pfnInit )
+    auto pfnInit = xe_layer::val.xeGlobal.pfnInit;
+
+    if( nullptr == pfnInit )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
     }
 
-    return context.xeGlobal.pfnInit( flags );
+    return pfnInit( flags );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -779,10 +809,12 @@ xeDeviceGroupGetDriverVersion(
     uint32_t* version                               ///< [out] driver version
     )
 {
-    if( nullptr == context.xeDeviceGroup.pfnGetDriverVersion )
+    auto pfnGetDriverVersion = xe_layer::val.xeDeviceGroup.pfnGetDriverVersion;
+
+    if( nullptr == pfnGetDriverVersion )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDeviceGroup )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -792,7 +824,7 @@ xeDeviceGroupGetDriverVersion(
 
     }
 
-    return context.xeDeviceGroup.pfnGetDriverVersion( hDeviceGroup, version );
+    return pfnGetDriverVersion( hDeviceGroup, version );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -804,10 +836,12 @@ xeContextCreate(
     xe_context_handle_t* phContext                  ///< [out] pointer to handle of context object created
     )
 {
-    if( nullptr == context.xeContext.pfnCreate )
+    auto pfnCreate = xe_layer::val.xeContext.pfnCreate;
+
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == phDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -817,7 +851,7 @@ xeContextCreate(
 
     }
 
-    return context.xeContext.pfnCreate( numDevices, phDevice, phContext );
+    return pfnCreate( numDevices, phDevice, phContext );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -827,17 +861,19 @@ xeContextDestroy(
     xe_context_handle_t hContext                    ///< [in] handle of context object to destroy
     )
 {
-    if( nullptr == context.xeContext.pfnDestroy )
+    auto pfnDestroy = xe_layer::val.xeContext.pfnDestroy;
+
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hContext )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeContext.pfnDestroy( hContext );
+    return pfnDestroy( hContext );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -852,17 +888,19 @@ xeGetDeviceGroups(
     xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional] array of handle of device groups
     )
 {
-    if( nullptr == context.xeGlobal.pfnGetDeviceGroups )
+    auto pfnGetDeviceGroups = xe_layer::val.xeGlobal.pfnGetDeviceGroups;
+
+    if( nullptr == pfnGetDeviceGroups )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == pCount )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeGlobal.pfnGetDeviceGroups( pCount, pDeviceGroups );
+    return pfnGetDeviceGroups( pCount, pDeviceGroups );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -878,10 +916,12 @@ xeDeviceGroupGetDevices(
     xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional] array of handle of device groups
     )
 {
-    if( nullptr == context.xeDeviceGroup.pfnGetDevices )
+    auto pfnGetDevices = xe_layer::val.xeDeviceGroup.pfnGetDevices;
+
+    if( nullptr == pfnGetDevices )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDeviceGroup )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -891,7 +931,7 @@ xeDeviceGroupGetDevices(
 
     }
 
-    return context.xeDeviceGroup.pfnGetDevices( hDeviceGroup, pCount, pDeviceGroups );
+    return pfnGetDevices( hDeviceGroup, pCount, pDeviceGroups );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -903,10 +943,12 @@ xeDeviceGetSubDevice(
     xe_device_handle_t* phSubDevice                 ///< [out] pointer to handle of sub-device object.
     )
 {
-    if( nullptr == context.xeDevice.pfnGetSubDevice )
+    auto pfnGetSubDevice = xe_layer::val.xeDevice.pfnGetSubDevice;
+
+    if( nullptr == pfnGetSubDevice )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -916,7 +958,7 @@ xeDeviceGetSubDevice(
 
     }
 
-    return context.xeDevice.pfnGetSubDevice( hDevice, ordinal, phSubDevice );
+    return pfnGetSubDevice( hDevice, ordinal, phSubDevice );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -927,10 +969,12 @@ xeDeviceGroupGetApiVersion(
     xe_api_version_t* version                       ///< [out] api version
     )
 {
-    if( nullptr == context.xeDeviceGroup.pfnGetApiVersion )
+    auto pfnGetApiVersion = xe_layer::val.xeDeviceGroup.pfnGetApiVersion;
+
+    if( nullptr == pfnGetApiVersion )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDeviceGroup )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -940,7 +984,7 @@ xeDeviceGroupGetApiVersion(
 
     }
 
-    return context.xeDeviceGroup.pfnGetApiVersion( hDeviceGroup, version );
+    return pfnGetApiVersion( hDeviceGroup, version );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -951,10 +995,12 @@ xeDeviceGroupGetProperties(
     xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
     )
 {
-    if( nullptr == context.xeDeviceGroup.pfnGetProperties )
+    auto pfnGetProperties = xe_layer::val.xeDeviceGroup.pfnGetProperties;
+
+    if( nullptr == pfnGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDeviceGroup )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -964,7 +1010,7 @@ xeDeviceGroupGetProperties(
 
     }
 
-    return context.xeDeviceGroup.pfnGetProperties( hDeviceGroup, pDeviceProperties );
+    return pfnGetProperties( hDeviceGroup, pDeviceProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -975,10 +1021,12 @@ xeDeviceGroupGetComputeProperties(
     xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
     )
 {
-    if( nullptr == context.xeDeviceGroup.pfnGetComputeProperties )
+    auto pfnGetComputeProperties = xe_layer::val.xeDeviceGroup.pfnGetComputeProperties;
+
+    if( nullptr == pfnGetComputeProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDeviceGroup )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -988,7 +1036,7 @@ xeDeviceGroupGetComputeProperties(
 
     }
 
-    return context.xeDeviceGroup.pfnGetComputeProperties( hDeviceGroup, pComputeProperties );
+    return pfnGetComputeProperties( hDeviceGroup, pComputeProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -999,10 +1047,12 @@ xeDeviceGroupGetMemoryProperties(
     xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
     )
 {
-    if( nullptr == context.xeDeviceGroup.pfnGetMemoryProperties )
+    auto pfnGetMemoryProperties = xe_layer::val.xeDeviceGroup.pfnGetMemoryProperties;
+
+    if( nullptr == pfnGetMemoryProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDeviceGroup )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1012,7 +1062,7 @@ xeDeviceGroupGetMemoryProperties(
 
     }
 
-    return context.xeDeviceGroup.pfnGetMemoryProperties( hDeviceGroup, pMemProperties );
+    return pfnGetMemoryProperties( hDeviceGroup, pMemProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1024,10 +1074,12 @@ xeDeviceGetP2PProperties(
     xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
     )
 {
-    if( nullptr == context.xeDevice.pfnGetP2PProperties )
+    auto pfnGetP2PProperties = xe_layer::val.xeDevice.pfnGetP2PProperties;
+
+    if( nullptr == pfnGetP2PProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1040,7 +1092,7 @@ xeDeviceGetP2PProperties(
 
     }
 
-    return context.xeDevice.pfnGetP2PProperties( hDevice, hPeerDevice, pP2PProperties );
+    return pfnGetP2PProperties( hDevice, hPeerDevice, pP2PProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1052,10 +1104,12 @@ xeDeviceCanAccessPeer(
     xe_bool_t* value                                ///< [out] returned access capability
     )
 {
-    if( nullptr == context.xeDevice.pfnCanAccessPeer )
+    auto pfnCanAccessPeer = xe_layer::val.xeDevice.pfnCanAccessPeer;
+
+    if( nullptr == pfnCanAccessPeer )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1068,7 +1122,7 @@ xeDeviceCanAccessPeer(
 
     }
 
-    return context.xeDevice.pfnCanAccessPeer( hDevice, hPeerDevice, value );
+    return pfnCanAccessPeer( hDevice, hPeerDevice, value );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1079,17 +1133,19 @@ xeDeviceSetIntermediateCacheConfig(
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     )
 {
-    if( nullptr == context.xeDevice.pfnSetIntermediateCacheConfig )
+    auto pfnSetIntermediateCacheConfig = xe_layer::val.xeDevice.pfnSetIntermediateCacheConfig;
+
+    if( nullptr == pfnSetIntermediateCacheConfig )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeDevice.pfnSetIntermediateCacheConfig( hDevice, CacheConfig );
+    return pfnSetIntermediateCacheConfig( hDevice, CacheConfig );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1100,17 +1156,19 @@ xeDeviceSetLastLevelCacheConfig(
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     )
 {
-    if( nullptr == context.xeDevice.pfnSetLastLevelCacheConfig )
+    auto pfnSetLastLevelCacheConfig = xe_layer::val.xeDevice.pfnSetLastLevelCacheConfig;
+
+    if( nullptr == pfnSetLastLevelCacheConfig )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeDevice.pfnSetLastLevelCacheConfig( hDevice, CacheConfig );
+    return pfnSetLastLevelCacheConfig( hDevice, CacheConfig );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1122,10 +1180,12 @@ xeCommandQueueCreate(
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     )
 {
-    if( nullptr == context.xeCommandQueue.pfnCreate )
+    auto pfnCreate = xe_layer::val.xeCommandQueue.pfnCreate;
+
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1141,7 +1201,7 @@ xeCommandQueueCreate(
 
     }
 
-    return context.xeCommandQueue.pfnCreate( hDevice, desc, phCommandQueue );
+    return pfnCreate( hDevice, desc, phCommandQueue );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1151,17 +1211,19 @@ xeCommandQueueDestroy(
     xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
     )
 {
-    if( nullptr == context.xeCommandQueue.pfnDestroy )
+    auto pfnDestroy = xe_layer::val.xeCommandQueue.pfnDestroy;
+
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandQueue )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeCommandQueue.pfnDestroy( hCommandQueue );
+    return pfnDestroy( hCommandQueue );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1174,10 +1236,12 @@ xeCommandQueueExecuteCommandLists(
     xe_fence_handle_t hFence                        ///< [in][optional] handle of the fence to signal on completion
     )
 {
-    if( nullptr == context.xeCommandQueue.pfnExecuteCommandLists )
+    auto pfnExecuteCommandLists = xe_layer::val.xeCommandQueue.pfnExecuteCommandLists;
+
+    if( nullptr == pfnExecuteCommandLists )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandQueue )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1187,7 +1251,7 @@ xeCommandQueueExecuteCommandLists(
 
     }
 
-    return context.xeCommandQueue.pfnExecuteCommandLists( hCommandQueue, numCommandLists, phCommandLists, hFence );
+    return pfnExecuteCommandLists( hCommandQueue, numCommandLists, phCommandLists, hFence );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1202,17 +1266,19 @@ xeCommandQueueSynchronize(
                                                     ///< is lost.
     )
 {
-    if( nullptr == context.xeCommandQueue.pfnSynchronize )
+    auto pfnSynchronize = xe_layer::val.xeCommandQueue.pfnSynchronize;
+
+    if( nullptr == pfnSynchronize )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandQueue )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeCommandQueue.pfnSynchronize( hCommandQueue, timeout );
+    return pfnSynchronize( hCommandQueue, timeout );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1224,10 +1290,12 @@ xeCommandListCreate(
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     )
 {
-    if( nullptr == context.xeCommandList.pfnCreate )
+    auto pfnCreate = xe_layer::val.xeCommandList.pfnCreate;
+
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1243,7 +1311,7 @@ xeCommandListCreate(
 
     }
 
-    return context.xeCommandList.pfnCreate( hDevice, desc, phCommandList );
+    return pfnCreate( hDevice, desc, phCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1255,10 +1323,12 @@ xeCommandListCreateImmediate(
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     )
 {
-    if( nullptr == context.xeCommandList.pfnCreateImmediate )
+    auto pfnCreateImmediate = xe_layer::val.xeCommandList.pfnCreateImmediate;
+
+    if( nullptr == pfnCreateImmediate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1274,7 +1344,7 @@ xeCommandListCreateImmediate(
 
     }
 
-    return context.xeCommandList.pfnCreateImmediate( hDevice, desc, phCommandList );
+    return pfnCreateImmediate( hDevice, desc, phCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1284,17 +1354,19 @@ xeCommandListDestroy(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
     )
 {
-    if( nullptr == context.xeCommandList.pfnDestroy )
+    auto pfnDestroy = xe_layer::val.xeCommandList.pfnDestroy;
+
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeCommandList.pfnDestroy( hCommandList );
+    return pfnDestroy( hCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1304,17 +1376,19 @@ xeCommandListClose(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
     )
 {
-    if( nullptr == context.xeCommandList.pfnClose )
+    auto pfnClose = xe_layer::val.xeCommandList.pfnClose;
+
+    if( nullptr == pfnClose )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeCommandList.pfnClose( hCommandList );
+    return pfnClose( hCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1324,17 +1398,19 @@ xeCommandListReset(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
     )
 {
-    if( nullptr == context.xeCommandList.pfnReset )
+    auto pfnReset = xe_layer::val.xeCommandList.pfnReset;
+
+    if( nullptr == pfnReset )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeCommandList.pfnReset( hCommandList );
+    return pfnReset( hCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1346,17 +1422,19 @@ xeCommandListSetParameter(
     uint32_t value                                  ///< [in] value of attribute
     )
 {
-    if( nullptr == context.xeCommandList.pfnSetParameter )
+    auto pfnSetParameter = xe_layer::val.xeCommandList.pfnSetParameter;
+
+    if( nullptr == pfnSetParameter )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeCommandList.pfnSetParameter( hCommandList, parameter, value );
+    return pfnSetParameter( hCommandList, parameter, value );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1368,10 +1446,12 @@ xeCommandListGetParameter(
     uint32_t* value                                 ///< [out] value of attribute
     )
 {
-    if( nullptr == context.xeCommandList.pfnGetParameter )
+    auto pfnGetParameter = xe_layer::val.xeCommandList.pfnGetParameter;
+
+    if( nullptr == pfnGetParameter )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1381,7 +1461,7 @@ xeCommandListGetParameter(
 
     }
 
-    return context.xeCommandList.pfnGetParameter( hCommandList, parameter, value );
+    return pfnGetParameter( hCommandList, parameter, value );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1391,17 +1471,19 @@ xeCommandListResetParameters(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
 {
-    if( nullptr == context.xeCommandList.pfnResetParameters )
+    auto pfnResetParameters = xe_layer::val.xeCommandList.pfnResetParameters;
+
+    if( nullptr == pfnResetParameters )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeCommandList.pfnResetParameters( hCommandList );
+    return pfnResetParameters( hCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1413,10 +1495,12 @@ xeCommandListReserveSpace(
     void** ptr                                      ///< [out] pointer to command buffer space reserved
     )
 {
-    if( nullptr == context.xeCommandList.pfnReserveSpace )
+    auto pfnReserveSpace = xe_layer::val.xeCommandList.pfnReserveSpace;
+
+    if( nullptr == pfnReserveSpace )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1426,7 +1510,7 @@ xeCommandListReserveSpace(
 
     }
 
-    return context.xeCommandList.pfnReserveSpace( hCommandList, size, ptr );
+    return pfnReserveSpace( hCommandList, size, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1440,17 +1524,19 @@ xeCommandListAppendBarrier(
                                                     ///< barrier
     )
 {
-    if( nullptr == context.xeCommandList.pfnAppendBarrier )
+    auto pfnAppendBarrier = xe_layer::val.xeCommandList.pfnAppendBarrier;
+
+    if( nullptr == pfnAppendBarrier )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeCommandList.pfnAppendBarrier( hCommandList, hSignalEvent, numWaitEvents, phWaitEvents );
+    return pfnAppendBarrier( hCommandList, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1467,10 +1553,12 @@ xeCommandListAppendMemoryRangesBarrier(
                                                     ///< barrier
     )
 {
-    if( nullptr == context.xeCommandList.pfnAppendMemoryRangesBarrier )
+    auto pfnAppendMemoryRangesBarrier = xe_layer::val.xeCommandList.pfnAppendMemoryRangesBarrier;
+
+    if( nullptr == pfnAppendMemoryRangesBarrier )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1483,7 +1571,7 @@ xeCommandListAppendMemoryRangesBarrier(
 
     }
 
-    return context.xeCommandList.pfnAppendMemoryRangesBarrier( hCommandList, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents );
+    return pfnAppendMemoryRangesBarrier( hCommandList, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1493,17 +1581,19 @@ xeDeviceSystemBarrier(
     xe_device_handle_t hDevice                      ///< [in] handle of the device
     )
 {
-    if( nullptr == context.xeDevice.pfnSystemBarrier )
+    auto pfnSystemBarrier = xe_layer::val.xeDevice.pfnSystemBarrier;
+
+    if( nullptr == pfnSystemBarrier )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeDevice.pfnSystemBarrier( hDevice );
+    return pfnSystemBarrier( hDevice );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1517,10 +1607,12 @@ xeDeviceRegisterCLMemory(
     void** ptr                                      ///< [out] pointer to device allocation
     )
 {
-    if( nullptr == context.xeDevice.pfnRegisterCLMemory )
+    auto pfnRegisterCLMemory = xe_layer::val.xeDevice.pfnRegisterCLMemory;
+
+    if( nullptr == pfnRegisterCLMemory )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1530,7 +1622,7 @@ xeDeviceRegisterCLMemory(
 
     }
 
-    return context.xeDevice.pfnRegisterCLMemory( hDevice, context, mem, ptr );
+    return pfnRegisterCLMemory( hDevice, context, mem, ptr );
 }
 #endif // XE_ENABLE_OCL_INTEROP
 
@@ -1545,10 +1637,12 @@ xeDeviceRegisterCLProgram(
     xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
     )
 {
-    if( nullptr == context.xeDevice.pfnRegisterCLProgram )
+    auto pfnRegisterCLProgram = xe_layer::val.xeDevice.pfnRegisterCLProgram;
+
+    if( nullptr == pfnRegisterCLProgram )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1558,7 +1652,7 @@ xeDeviceRegisterCLProgram(
 
     }
 
-    return context.xeDevice.pfnRegisterCLProgram( hDevice, context, program, phModule );
+    return pfnRegisterCLProgram( hDevice, context, program, phModule );
 }
 #endif // XE_ENABLE_OCL_INTEROP
 
@@ -1573,10 +1667,12 @@ xeDeviceRegisterCLCommandQueue(
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     )
 {
-    if( nullptr == context.xeDevice.pfnRegisterCLCommandQueue )
+    auto pfnRegisterCLCommandQueue = xe_layer::val.xeDevice.pfnRegisterCLCommandQueue;
+
+    if( nullptr == pfnRegisterCLCommandQueue )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1586,7 +1682,7 @@ xeDeviceRegisterCLCommandQueue(
 
     }
 
-    return context.xeDevice.pfnRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
+    return pfnRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
 }
 #endif // XE_ENABLE_OCL_INTEROP
 
@@ -1601,10 +1697,12 @@ xeCommandListAppendMemoryCopy(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    if( nullptr == context.xeCommandList.pfnAppendMemoryCopy )
+    auto pfnAppendMemoryCopy = xe_layer::val.xeCommandList.pfnAppendMemoryCopy;
+
+    if( nullptr == pfnAppendMemoryCopy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1617,7 +1715,7 @@ xeCommandListAppendMemoryCopy(
 
     }
 
-    return context.xeCommandList.pfnAppendMemoryCopy( hCommandList, dstptr, srcptr, size, hEvent );
+    return pfnAppendMemoryCopy( hCommandList, dstptr, srcptr, size, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1631,10 +1729,12 @@ xeCommandListAppendMemorySet(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    if( nullptr == context.xeCommandList.pfnAppendMemorySet )
+    auto pfnAppendMemorySet = xe_layer::val.xeCommandList.pfnAppendMemorySet;
+
+    if( nullptr == pfnAppendMemorySet )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1644,7 +1744,7 @@ xeCommandListAppendMemorySet(
 
     }
 
-    return context.xeCommandList.pfnAppendMemorySet( hCommandList, ptr, value, size, hEvent );
+    return pfnAppendMemorySet( hCommandList, ptr, value, size, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1661,10 +1761,12 @@ xeCommandListAppendMemoryCopyRegion(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    if( nullptr == context.xeCommandList.pfnAppendMemoryCopyRegion )
+    auto pfnAppendMemoryCopyRegion = xe_layer::val.xeCommandList.pfnAppendMemoryCopyRegion;
+
+    if( nullptr == pfnAppendMemoryCopyRegion )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1683,7 +1785,7 @@ xeCommandListAppendMemoryCopyRegion(
 
     }
 
-    return context.xeCommandList.pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, srcptr, srcRegion, srcPitch, hEvent );
+    return pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, srcptr, srcRegion, srcPitch, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1696,10 +1798,12 @@ xeCommandListAppendImageCopy(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    if( nullptr == context.xeCommandList.pfnAppendImageCopy )
+    auto pfnAppendImageCopy = xe_layer::val.xeCommandList.pfnAppendImageCopy;
+
+    if( nullptr == pfnAppendImageCopy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1712,7 +1816,7 @@ xeCommandListAppendImageCopy(
 
     }
 
-    return context.xeCommandList.pfnAppendImageCopy( hCommandList, hDstImage, hSrcImage, hEvent );
+    return pfnAppendImageCopy( hCommandList, hDstImage, hSrcImage, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1727,10 +1831,12 @@ xeCommandListAppendImageCopyRegion(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    if( nullptr == context.xeCommandList.pfnAppendImageCopyRegion )
+    auto pfnAppendImageCopyRegion = xe_layer::val.xeCommandList.pfnAppendImageCopyRegion;
+
+    if( nullptr == pfnAppendImageCopyRegion )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1743,7 +1849,7 @@ xeCommandListAppendImageCopyRegion(
 
     }
 
-    return context.xeCommandList.pfnAppendImageCopyRegion( hCommandList, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hEvent );
+    return pfnAppendImageCopyRegion( hCommandList, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1757,10 +1863,12 @@ xeCommandListAppendImageCopyToMemory(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    if( nullptr == context.xeCommandList.pfnAppendImageCopyToMemory )
+    auto pfnAppendImageCopyToMemory = xe_layer::val.xeCommandList.pfnAppendImageCopyToMemory;
+
+    if( nullptr == pfnAppendImageCopyToMemory )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1773,7 +1881,7 @@ xeCommandListAppendImageCopyToMemory(
 
     }
 
-    return context.xeCommandList.pfnAppendImageCopyToMemory( hCommandList, dstptr, hSrcImage, pSrcRegion, hEvent );
+    return pfnAppendImageCopyToMemory( hCommandList, dstptr, hSrcImage, pSrcRegion, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1787,10 +1895,12 @@ xeCommandListAppendImageCopyFromMemory(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    if( nullptr == context.xeCommandList.pfnAppendImageCopyFromMemory )
+    auto pfnAppendImageCopyFromMemory = xe_layer::val.xeCommandList.pfnAppendImageCopyFromMemory;
+
+    if( nullptr == pfnAppendImageCopyFromMemory )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1803,7 +1913,7 @@ xeCommandListAppendImageCopyFromMemory(
 
     }
 
-    return context.xeCommandList.pfnAppendImageCopyFromMemory( hCommandList, hDstImage, srcptr, pDstRegion, hEvent );
+    return pfnAppendImageCopyFromMemory( hCommandList, hDstImage, srcptr, pDstRegion, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1815,10 +1925,12 @@ xeCommandListAppendMemoryPrefetch(
     size_t count                                    ///< [in] size in bytes of the memory range to prefetch
     )
 {
-    if( nullptr == context.xeCommandList.pfnAppendMemoryPrefetch )
+    auto pfnAppendMemoryPrefetch = xe_layer::val.xeCommandList.pfnAppendMemoryPrefetch;
+
+    if( nullptr == pfnAppendMemoryPrefetch )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1828,7 +1940,7 @@ xeCommandListAppendMemoryPrefetch(
 
     }
 
-    return context.xeCommandList.pfnAppendMemoryPrefetch( hCommandList, ptr, count );
+    return pfnAppendMemoryPrefetch( hCommandList, ptr, count );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1842,10 +1954,12 @@ xeCommandListAppendMemAdvise(
     xe_memory_advice_t advice                       ///< [in] Memory advice for the memory range
     )
 {
-    if( nullptr == context.xeCommandList.pfnAppendMemAdvise )
+    auto pfnAppendMemAdvise = xe_layer::val.xeCommandList.pfnAppendMemAdvise;
+
+    if( nullptr == pfnAppendMemAdvise )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1858,7 +1972,7 @@ xeCommandListAppendMemAdvise(
 
     }
 
-    return context.xeCommandList.pfnAppendMemAdvise( hCommandList, hDevice, ptr, size, advice );
+    return pfnAppendMemAdvise( hCommandList, hDevice, ptr, size, advice );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1870,10 +1984,12 @@ xeEventPoolCreate(
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
     )
 {
-    if( nullptr == context.xeEventPool.pfnCreate )
+    auto pfnCreate = xe_layer::val.xeEventPool.pfnCreate;
+
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1889,7 +2005,7 @@ xeEventPoolCreate(
 
     }
 
-    return context.xeEventPool.pfnCreate( hDevice, desc, phEventPool );
+    return pfnCreate( hDevice, desc, phEventPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1899,17 +2015,19 @@ xeEventPoolDestroy(
     xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object to destroy
     )
 {
-    if( nullptr == context.xeEventPool.pfnDestroy )
+    auto pfnDestroy = xe_layer::val.xeEventPool.pfnDestroy;
+
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hEventPool )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeEventPool.pfnDestroy( hEventPool );
+    return pfnDestroy( hEventPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1921,10 +2039,12 @@ xeEventCreate(
     xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
     )
 {
-    if( nullptr == context.xeEvent.pfnCreate )
+    auto pfnCreate = xe_layer::val.xeEvent.pfnCreate;
+
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hEventPool )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1940,7 +2060,7 @@ xeEventCreate(
 
     }
 
-    return context.xeEvent.pfnCreate( hEventPool, desc, phEvent );
+    return pfnCreate( hEventPool, desc, phEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1950,17 +2070,19 @@ xeEventDestroy(
     xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
     )
 {
-    if( nullptr == context.xeEvent.pfnDestroy )
+    auto pfnDestroy = xe_layer::val.xeEvent.pfnDestroy;
+
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hEvent )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeEvent.pfnDestroy( hEvent );
+    return pfnDestroy( hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1971,10 +2093,12 @@ xeEventPoolGetIpcHandle(
     xe_ipc_event_pool_handle_t* phIpc               ///< [out] Returned IPC event handle
     )
 {
-    if( nullptr == context.xeEventPool.pfnGetIpcHandle )
+    auto pfnGetIpcHandle = xe_layer::val.xeEventPool.pfnGetIpcHandle;
+
+    if( nullptr == pfnGetIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hEventPool )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -1984,7 +2108,7 @@ xeEventPoolGetIpcHandle(
 
     }
 
-    return context.xeEventPool.pfnGetIpcHandle( hEventPool, phIpc );
+    return pfnGetIpcHandle( hEventPool, phIpc );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1996,10 +2120,12 @@ xeEventPoolOpenIpcHandle(
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
     )
 {
-    if( nullptr == context.xeEventPool.pfnOpenIpcHandle )
+    auto pfnOpenIpcHandle = xe_layer::val.xeEventPool.pfnOpenIpcHandle;
+
+    if( nullptr == pfnOpenIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2012,7 +2138,7 @@ xeEventPoolOpenIpcHandle(
 
     }
 
-    return context.xeEventPool.pfnOpenIpcHandle( hDevice, hIpc, phEventPool );
+    return pfnOpenIpcHandle( hDevice, hIpc, phEventPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2022,17 +2148,19 @@ xeEventPoolCloseIpcHandle(
     xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object
     )
 {
-    if( nullptr == context.xeEventPool.pfnCloseIpcHandle )
+    auto pfnCloseIpcHandle = xe_layer::val.xeEventPool.pfnCloseIpcHandle;
+
+    if( nullptr == pfnCloseIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hEventPool )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeEventPool.pfnCloseIpcHandle( hEventPool );
+    return pfnCloseIpcHandle( hEventPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2043,10 +2171,12 @@ xeCommandListAppendSignalEvent(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    if( nullptr == context.xeCommandList.pfnAppendSignalEvent )
+    auto pfnAppendSignalEvent = xe_layer::val.xeCommandList.pfnAppendSignalEvent;
+
+    if( nullptr == pfnAppendSignalEvent )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2056,7 +2186,7 @@ xeCommandListAppendSignalEvent(
 
     }
 
-    return context.xeCommandList.pfnAppendSignalEvent( hCommandList, hEvent );
+    return pfnAppendSignalEvent( hCommandList, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2068,10 +2198,12 @@ xeCommandListAppendWaitOnEvents(
     xe_event_handle_t* phEvents                     ///< [in] handle of the events to wait on before continuing
     )
 {
-    if( nullptr == context.xeCommandList.pfnAppendWaitOnEvents )
+    auto pfnAppendWaitOnEvents = xe_layer::val.xeCommandList.pfnAppendWaitOnEvents;
+
+    if( nullptr == pfnAppendWaitOnEvents )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2081,7 +2213,7 @@ xeCommandListAppendWaitOnEvents(
 
     }
 
-    return context.xeCommandList.pfnAppendWaitOnEvents( hCommandList, numEvents, phEvents );
+    return pfnAppendWaitOnEvents( hCommandList, numEvents, phEvents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2091,17 +2223,19 @@ xeEventHostSignal(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    if( nullptr == context.xeEvent.pfnHostSignal )
+    auto pfnHostSignal = xe_layer::val.xeEvent.pfnHostSignal;
+
+    if( nullptr == pfnHostSignal )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hEvent )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeEvent.pfnHostSignal( hEvent );
+    return pfnHostSignal( hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2116,17 +2250,19 @@ xeEventHostSynchronize(
                                                     ///< is lost.
     )
 {
-    if( nullptr == context.xeEvent.pfnHostSynchronize )
+    auto pfnHostSynchronize = xe_layer::val.xeEvent.pfnHostSynchronize;
+
+    if( nullptr == pfnHostSynchronize )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hEvent )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeEvent.pfnHostSynchronize( hEvent, timeout );
+    return pfnHostSynchronize( hEvent, timeout );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2136,17 +2272,19 @@ xeEventQueryStatus(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    if( nullptr == context.xeEvent.pfnQueryStatus )
+    auto pfnQueryStatus = xe_layer::val.xeEvent.pfnQueryStatus;
+
+    if( nullptr == pfnQueryStatus )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hEvent )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeEvent.pfnQueryStatus( hEvent );
+    return pfnQueryStatus( hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2157,10 +2295,12 @@ xeCommandListAppendEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    if( nullptr == context.xeCommandList.pfnAppendEventReset )
+    auto pfnAppendEventReset = xe_layer::val.xeCommandList.pfnAppendEventReset;
+
+    if( nullptr == pfnAppendEventReset )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2170,7 +2310,7 @@ xeCommandListAppendEventReset(
 
     }
 
-    return context.xeCommandList.pfnAppendEventReset( hCommandList, hEvent );
+    return pfnAppendEventReset( hCommandList, hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2180,17 +2320,19 @@ xeEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    if( nullptr == context.xeEvent.pfnReset )
+    auto pfnReset = xe_layer::val.xeEvent.pfnReset;
+
+    if( nullptr == pfnReset )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hEvent )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeEvent.pfnReset( hEvent );
+    return pfnReset( hEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2202,10 +2344,12 @@ xeFenceCreate(
     xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
     )
 {
-    if( nullptr == context.xeFence.pfnCreate )
+    auto pfnCreate = xe_layer::val.xeFence.pfnCreate;
+
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandQueue )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2221,7 +2365,7 @@ xeFenceCreate(
 
     }
 
-    return context.xeFence.pfnCreate( hCommandQueue, desc, phFence );
+    return pfnCreate( hCommandQueue, desc, phFence );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2231,17 +2375,19 @@ xeFenceDestroy(
     xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
     )
 {
-    if( nullptr == context.xeFence.pfnDestroy )
+    auto pfnDestroy = xe_layer::val.xeFence.pfnDestroy;
+
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hFence )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeFence.pfnDestroy( hFence );
+    return pfnDestroy( hFence );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2256,17 +2402,19 @@ xeFenceHostSynchronize(
                                                     ///< is lost.
     )
 {
-    if( nullptr == context.xeFence.pfnHostSynchronize )
+    auto pfnHostSynchronize = xe_layer::val.xeFence.pfnHostSynchronize;
+
+    if( nullptr == pfnHostSynchronize )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hFence )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeFence.pfnHostSynchronize( hFence, timeout );
+    return pfnHostSynchronize( hFence, timeout );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2276,17 +2424,19 @@ xeFenceQueryStatus(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
-    if( nullptr == context.xeFence.pfnQueryStatus )
+    auto pfnQueryStatus = xe_layer::val.xeFence.pfnQueryStatus;
+
+    if( nullptr == pfnQueryStatus )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hFence )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeFence.pfnQueryStatus( hFence );
+    return pfnQueryStatus( hFence );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2296,17 +2446,19 @@ xeFenceReset(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
-    if( nullptr == context.xeFence.pfnReset )
+    auto pfnReset = xe_layer::val.xeFence.pfnReset;
+
+    if( nullptr == pfnReset )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hFence )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeFence.pfnReset( hFence );
+    return pfnReset( hFence );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2318,10 +2470,12 @@ xeImageGetProperties(
     xe_image_properties_t* pImageProperties         ///< [out] pointer to image properties
     )
 {
-    if( nullptr == context.xeImage.pfnGetProperties )
+    auto pfnGetProperties = xe_layer::val.xeImage.pfnGetProperties;
+
+    if( nullptr == pfnGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2337,7 +2491,7 @@ xeImageGetProperties(
 
     }
 
-    return context.xeImage.pfnGetProperties( hDevice, desc, pImageProperties );
+    return pfnGetProperties( hDevice, desc, pImageProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2349,10 +2503,12 @@ xeImageCreate(
     xe_image_handle_t* phImage                      ///< [out] pointer to handle of image object created
     )
 {
-    if( nullptr == context.xeImage.pfnCreate )
+    auto pfnCreate = xe_layer::val.xeImage.pfnCreate;
+
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2368,7 +2524,7 @@ xeImageCreate(
 
     }
 
-    return context.xeImage.pfnCreate( hDevice, desc, phImage );
+    return pfnCreate( hDevice, desc, phImage );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2378,17 +2534,19 @@ xeImageDestroy(
     xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
     )
 {
-    if( nullptr == context.xeImage.pfnDestroy )
+    auto pfnDestroy = xe_layer::val.xeImage.pfnDestroy;
+
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hImage )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeImage.pfnDestroy( hImage );
+    return pfnDestroy( hImage );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2404,10 +2562,12 @@ xeContextAllocSharedMem(
     void** ptr                                      ///< [out] pointer to shared allocation
     )
 {
-    if( nullptr == context.xeContext.pfnAllocSharedMem )
+    auto pfnAllocSharedMem = xe_layer::val.xeContext.pfnAllocSharedMem;
+
+    if( nullptr == pfnAllocSharedMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hContext )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2420,7 +2580,7 @@ xeContextAllocSharedMem(
 
     }
 
-    return context.xeContext.pfnAllocSharedMem( hContext, hDevice, device_flags, host_flags, size, alignment, ptr );
+    return pfnAllocSharedMem( hContext, hDevice, device_flags, host_flags, size, alignment, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2435,10 +2595,12 @@ xeContextAllocDeviceMem(
     void** ptr                                      ///< [out] pointer to device allocation
     )
 {
-    if( nullptr == context.xeContext.pfnAllocDeviceMem )
+    auto pfnAllocDeviceMem = xe_layer::val.xeContext.pfnAllocDeviceMem;
+
+    if( nullptr == pfnAllocDeviceMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hContext )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2451,7 +2613,7 @@ xeContextAllocDeviceMem(
 
     }
 
-    return context.xeContext.pfnAllocDeviceMem( hContext, hDevice, flags, size, alignment, ptr );
+    return pfnAllocDeviceMem( hContext, hDevice, flags, size, alignment, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2465,10 +2627,12 @@ xeContextAllocHostMem(
     void** ptr                                      ///< [out] pointer to host allocation
     )
 {
-    if( nullptr == context.xeContext.pfnAllocHostMem )
+    auto pfnAllocHostMem = xe_layer::val.xeContext.pfnAllocHostMem;
+
+    if( nullptr == pfnAllocHostMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hContext )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2478,7 +2642,7 @@ xeContextAllocHostMem(
 
     }
 
-    return context.xeContext.pfnAllocHostMem( hContext, flags, size, alignment, ptr );
+    return pfnAllocHostMem( hContext, flags, size, alignment, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2489,10 +2653,12 @@ xeContextFreeMem(
     const void* ptr                                 ///< [in] pointer to memory to free
     )
 {
-    if( nullptr == context.xeContext.pfnFreeMem )
+    auto pfnFreeMem = xe_layer::val.xeContext.pfnFreeMem;
+
+    if( nullptr == pfnFreeMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hContext )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2502,7 +2668,7 @@ xeContextFreeMem(
 
     }
 
-    return context.xeContext.pfnFreeMem( hContext, ptr );
+    return pfnFreeMem( hContext, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2514,10 +2680,12 @@ xeContextGetMemProperties(
     xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
     )
 {
-    if( nullptr == context.xeContext.pfnGetMemProperties )
+    auto pfnGetMemProperties = xe_layer::val.xeContext.pfnGetMemProperties;
+
+    if( nullptr == pfnGetMemProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hContext )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2530,7 +2698,7 @@ xeContextGetMemProperties(
 
     }
 
-    return context.xeContext.pfnGetMemProperties( hContext, ptr, pMemProperties );
+    return pfnGetMemProperties( hContext, ptr, pMemProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2543,10 +2711,12 @@ xeContextGetMemAddressRange(
     size_t* pSize                                   ///< [in,out][optional] size of the allocation
     )
 {
-    if( nullptr == context.xeContext.pfnGetMemAddressRange )
+    auto pfnGetMemAddressRange = xe_layer::val.xeContext.pfnGetMemAddressRange;
+
+    if( nullptr == pfnGetMemAddressRange )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hContext )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2556,7 +2726,7 @@ xeContextGetMemAddressRange(
 
     }
 
-    return context.xeContext.pfnGetMemAddressRange( hContext, ptr, pBase, pSize );
+    return pfnGetMemAddressRange( hContext, ptr, pBase, pSize );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2568,10 +2738,12 @@ xeContextGetMemIpcHandle(
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
     )
 {
-    if( nullptr == context.xeContext.pfnGetMemIpcHandle )
+    auto pfnGetMemIpcHandle = xe_layer::val.xeContext.pfnGetMemIpcHandle;
+
+    if( nullptr == pfnGetMemIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hContext )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2584,7 +2756,7 @@ xeContextGetMemIpcHandle(
 
     }
 
-    return context.xeContext.pfnGetMemIpcHandle( hContext, ptr, pIpcHandle );
+    return pfnGetMemIpcHandle( hContext, ptr, pIpcHandle );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2598,10 +2770,12 @@ xeContextOpenMemIpcHandle(
     void** ptr                                      ///< [out] pointer to device allocation in this process
     )
 {
-    if( nullptr == context.xeContext.pfnOpenMemIpcHandle )
+    auto pfnOpenMemIpcHandle = xe_layer::val.xeContext.pfnOpenMemIpcHandle;
+
+    if( nullptr == pfnOpenMemIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hContext )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2617,7 +2791,7 @@ xeContextOpenMemIpcHandle(
 
     }
 
-    return context.xeContext.pfnOpenMemIpcHandle( hContext, hDevice, handle, flags, ptr );
+    return pfnOpenMemIpcHandle( hContext, hDevice, handle, flags, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2628,10 +2802,12 @@ xeContextCloseMemIpcHandle(
     const void* ptr                                 ///< [in] pointer to device allocation in this process
     )
 {
-    if( nullptr == context.xeContext.pfnCloseMemIpcHandle )
+    auto pfnCloseMemIpcHandle = xe_layer::val.xeContext.pfnCloseMemIpcHandle;
+
+    if( nullptr == pfnCloseMemIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hContext )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2641,7 +2817,7 @@ xeContextCloseMemIpcHandle(
 
     }
 
-    return context.xeContext.pfnCloseMemIpcHandle( hContext, ptr );
+    return pfnCloseMemIpcHandle( hContext, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2654,10 +2830,12 @@ xeModuleCreate(
     xe_module_build_log_handle_t* phBuildLog        ///< [in,out][optional] pointer to handle of module's build log.
     )
 {
-    if( nullptr == context.xeModule.pfnCreate )
+    auto pfnCreate = xe_layer::val.xeModule.pfnCreate;
+
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2673,7 +2851,7 @@ xeModuleCreate(
 
     }
 
-    return context.xeModule.pfnCreate( hDevice, pDesc, phModule, phBuildLog );
+    return pfnCreate( hDevice, pDesc, phModule, phBuildLog );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2683,17 +2861,19 @@ xeModuleDestroy(
     xe_module_handle_t hModule                      ///< [in] handle of the module
     )
 {
-    if( nullptr == context.xeModule.pfnDestroy )
+    auto pfnDestroy = xe_layer::val.xeModule.pfnDestroy;
+
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hModule )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeModule.pfnDestroy( hModule );
+    return pfnDestroy( hModule );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2703,17 +2883,19 @@ xeModuleBuildLogDestroy(
     xe_module_build_log_handle_t hModuleBuildLog    ///< [in] handle of the module build log object.
     )
 {
-    if( nullptr == context.xeModuleBuildLog.pfnDestroy )
+    auto pfnDestroy = xe_layer::val.xeModuleBuildLog.pfnDestroy;
+
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hModuleBuildLog )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeModuleBuildLog.pfnDestroy( hModuleBuildLog );
+    return pfnDestroy( hModuleBuildLog );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2725,10 +2907,12 @@ xeModuleBuildLogGetString(
     char* pBuildLog                                 ///< [in,out][optional] pointer to null-terminated string of the log.
     )
 {
-    if( nullptr == context.xeModuleBuildLog.pfnGetString )
+    auto pfnGetString = xe_layer::val.xeModuleBuildLog.pfnGetString;
+
+    if( nullptr == pfnGetString )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hModuleBuildLog )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2738,7 +2922,7 @@ xeModuleBuildLogGetString(
 
     }
 
-    return context.xeModuleBuildLog.pfnGetString( hModuleBuildLog, pSize, pBuildLog );
+    return pfnGetString( hModuleBuildLog, pSize, pBuildLog );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2750,10 +2934,12 @@ xeModuleGetNativeBinary(
     uint8_t* pModuleNativeBinary                    ///< [in,out][optional] byte pointer to native binary
     )
 {
-    if( nullptr == context.xeModule.pfnGetNativeBinary )
+    auto pfnGetNativeBinary = xe_layer::val.xeModule.pfnGetNativeBinary;
+
+    if( nullptr == pfnGetNativeBinary )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hModule )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2763,7 +2949,7 @@ xeModuleGetNativeBinary(
 
     }
 
-    return context.xeModule.pfnGetNativeBinary( hModule, pSize, pModuleNativeBinary );
+    return pfnGetNativeBinary( hModule, pSize, pModuleNativeBinary );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2775,10 +2961,12 @@ xeModuleGetGlobalPointer(
     void** pPtr                                     ///< [out] device visible pointer
     )
 {
-    if( nullptr == context.xeModule.pfnGetGlobalPointer )
+    auto pfnGetGlobalPointer = xe_layer::val.xeModule.pfnGetGlobalPointer;
+
+    if( nullptr == pfnGetGlobalPointer )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hModule )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2791,7 +2979,7 @@ xeModuleGetGlobalPointer(
 
     }
 
-    return context.xeModule.pfnGetGlobalPointer( hModule, pGlobalName, pPtr );
+    return pfnGetGlobalPointer( hModule, pGlobalName, pPtr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2803,10 +2991,12 @@ xeFunctionCreate(
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object
     )
 {
-    if( nullptr == context.xeFunction.pfnCreate )
+    auto pfnCreate = xe_layer::val.xeFunction.pfnCreate;
+
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hModule )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2822,7 +3012,7 @@ xeFunctionCreate(
 
     }
 
-    return context.xeFunction.pfnCreate( hModule, pDesc, phFunction );
+    return pfnCreate( hModule, pDesc, phFunction );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2832,17 +3022,19 @@ xeFunctionDestroy(
     xe_function_handle_t hFunction                  ///< [in] handle of the function object
     )
 {
-    if( nullptr == context.xeFunction.pfnDestroy )
+    auto pfnDestroy = xe_layer::val.xeFunction.pfnDestroy;
+
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hFunction )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeFunction.pfnDestroy( hFunction );
+    return pfnDestroy( hFunction );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2854,10 +3046,12 @@ xeModuleGetFunctionPointer(
     void** pfnFunction                              ///< [out] pointer to function.
     )
 {
-    if( nullptr == context.xeModule.pfnGetFunctionPointer )
+    auto pfnGetFunctionPointer = xe_layer::val.xeModule.pfnGetFunctionPointer;
+
+    if( nullptr == pfnGetFunctionPointer )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hModule )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2870,7 +3064,7 @@ xeModuleGetFunctionPointer(
 
     }
 
-    return context.xeModule.pfnGetFunctionPointer( hModule, pFunctionName, pfnFunction );
+    return pfnGetFunctionPointer( hModule, pFunctionName, pfnFunction );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2883,17 +3077,19 @@ xeFunctionSetGroupSize(
     uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this function.
     )
 {
-    if( nullptr == context.xeFunction.pfnSetGroupSize )
+    auto pfnSetGroupSize = xe_layer::val.xeFunction.pfnSetGroupSize;
+
+    if( nullptr == pfnSetGroupSize )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hFunction )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeFunction.pfnSetGroupSize( hFunction, groupSizeX, groupSizeY, groupSizeZ );
+    return pfnSetGroupSize( hFunction, groupSizeX, groupSizeY, groupSizeZ );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2909,10 +3105,12 @@ xeFunctionSuggestGroupSize(
     uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
     )
 {
-    if( nullptr == context.xeFunction.pfnSuggestGroupSize )
+    auto pfnSuggestGroupSize = xe_layer::val.xeFunction.pfnSuggestGroupSize;
+
+    if( nullptr == pfnSuggestGroupSize )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hFunction )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2928,7 +3126,7 @@ xeFunctionSuggestGroupSize(
 
     }
 
-    return context.xeFunction.pfnSuggestGroupSize( hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
+    return pfnSuggestGroupSize( hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2942,17 +3140,19 @@ xeFunctionSetArgumentValue(
                                                     ///< null then argument value is considered null.
     )
 {
-    if( nullptr == context.xeFunction.pfnSetArgumentValue )
+    auto pfnSetArgumentValue = xe_layer::val.xeFunction.pfnSetArgumentValue;
+
+    if( nullptr == pfnSetArgumentValue )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hFunction )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeFunction.pfnSetArgumentValue( hFunction, argIndex, argSize, pArgValue );
+    return pfnSetArgumentValue( hFunction, argIndex, argSize, pArgValue );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2964,17 +3164,19 @@ xeFunctionSetAttribute(
     uint32_t value                                  ///< [in] attribute value to set
     )
 {
-    if( nullptr == context.xeFunction.pfnSetAttribute )
+    auto pfnSetAttribute = xe_layer::val.xeFunction.pfnSetAttribute;
+
+    if( nullptr == pfnSetAttribute )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hFunction )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeFunction.pfnSetAttribute( hFunction, attr, value );
+    return pfnSetAttribute( hFunction, attr, value );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2986,10 +3188,12 @@ xeFunctionGetAttribute(
     uint32_t* pValue                                ///< [out] returned attribute value
     )
 {
-    if( nullptr == context.xeFunction.pfnGetAttribute )
+    auto pfnGetAttribute = xe_layer::val.xeFunction.pfnGetAttribute;
+
+    if( nullptr == pfnGetAttribute )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hFunction )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2999,7 +3203,7 @@ xeFunctionGetAttribute(
 
     }
 
-    return context.xeFunction.pfnGetAttribute( hFunction, attr, pValue );
+    return pfnGetAttribute( hFunction, attr, pValue );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3014,10 +3218,12 @@ xeCommandListAppendLaunchFunction(
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
-    if( nullptr == context.xeCommandList.pfnAppendLaunchFunction )
+    auto pfnAppendLaunchFunction = xe_layer::val.xeCommandList.pfnAppendLaunchFunction;
+
+    if( nullptr == pfnAppendLaunchFunction )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -3030,7 +3236,7 @@ xeCommandListAppendLaunchFunction(
 
     }
 
-    return context.xeCommandList.pfnAppendLaunchFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
+    return pfnAppendLaunchFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3045,10 +3251,12 @@ xeCommandListAppendLaunchFunctionIndirect(
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
-    if( nullptr == context.xeCommandList.pfnAppendLaunchFunctionIndirect )
+    auto pfnAppendLaunchFunctionIndirect = xe_layer::val.xeCommandList.pfnAppendLaunchFunctionIndirect;
+
+    if( nullptr == pfnAppendLaunchFunctionIndirect )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -3061,7 +3269,7 @@ xeCommandListAppendLaunchFunctionIndirect(
 
     }
 
-    return context.xeCommandList.pfnAppendLaunchFunctionIndirect( hCommandList, hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+    return pfnAppendLaunchFunctionIndirect( hCommandList, hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3080,10 +3288,12 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
-    if( nullptr == context.xeCommandList.pfnAppendLaunchMultipleFunctionsIndirect )
+    auto pfnAppendLaunchMultipleFunctionsIndirect = xe_layer::val.xeCommandList.pfnAppendLaunchMultipleFunctionsIndirect;
+
+    if( nullptr == pfnAppendLaunchMultipleFunctionsIndirect )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -3099,7 +3309,7 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
 
     }
 
-    return context.xeCommandList.pfnAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+    return pfnAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3114,10 +3324,12 @@ xeCommandListAppendLaunchHostFunction(
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
-    if( nullptr == context.xeCommandList.pfnAppendLaunchHostFunction )
+    auto pfnAppendLaunchHostFunction = xe_layer::val.xeCommandList.pfnAppendLaunchHostFunction;
+
+    if( nullptr == pfnAppendLaunchHostFunction )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -3127,7 +3339,7 @@ xeCommandListAppendLaunchHostFunction(
 
     }
 
-    return context.xeCommandList.pfnAppendLaunchHostFunction( hCommandList, pfnHostFunc, pUserData, hSignalEvent, numWaitEvents, phWaitEvents );
+    return pfnAppendLaunchHostFunction( hCommandList, pfnHostFunc, pUserData, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3139,10 +3351,12 @@ xeDeviceMakeMemoryResident(
     size_t size                                     ///< [in] size in bytes to make resident
     )
 {
-    if( nullptr == context.xeDevice.pfnMakeMemoryResident )
+    auto pfnMakeMemoryResident = xe_layer::val.xeDevice.pfnMakeMemoryResident;
+
+    if( nullptr == pfnMakeMemoryResident )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -3152,7 +3366,7 @@ xeDeviceMakeMemoryResident(
 
     }
 
-    return context.xeDevice.pfnMakeMemoryResident( hDevice, ptr, size );
+    return pfnMakeMemoryResident( hDevice, ptr, size );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3164,10 +3378,12 @@ xeDeviceEvictMemory(
     size_t size                                     ///< [in] size in bytes to evict
     )
 {
-    if( nullptr == context.xeDevice.pfnEvictMemory )
+    auto pfnEvictMemory = xe_layer::val.xeDevice.pfnEvictMemory;
+
+    if( nullptr == pfnEvictMemory )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -3177,7 +3393,7 @@ xeDeviceEvictMemory(
 
     }
 
-    return context.xeDevice.pfnEvictMemory( hDevice, ptr, size );
+    return pfnEvictMemory( hDevice, ptr, size );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3188,10 +3404,12 @@ xeDeviceMakeImageResident(
     xe_image_handle_t hImage                        ///< [in] handle of image to make resident
     )
 {
-    if( nullptr == context.xeDevice.pfnMakeImageResident )
+    auto pfnMakeImageResident = xe_layer::val.xeDevice.pfnMakeImageResident;
+
+    if( nullptr == pfnMakeImageResident )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -3201,7 +3419,7 @@ xeDeviceMakeImageResident(
 
     }
 
-    return context.xeDevice.pfnMakeImageResident( hDevice, hImage );
+    return pfnMakeImageResident( hDevice, hImage );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3212,10 +3430,12 @@ xeDeviceEvictImage(
     xe_image_handle_t hImage                        ///< [in] handle of image to make evict
     )
 {
-    if( nullptr == context.xeDevice.pfnEvictImage )
+    auto pfnEvictImage = xe_layer::val.xeDevice.pfnEvictImage;
+
+    if( nullptr == pfnEvictImage )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -3225,7 +3445,7 @@ xeDeviceEvictImage(
 
     }
 
-    return context.xeDevice.pfnEvictImage( hDevice, hImage );
+    return pfnEvictImage( hDevice, hImage );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3237,10 +3457,12 @@ xeSamplerCreate(
     xe_sampler_handle_t* phSampler                  ///< [out] handle of the sampler
     )
 {
-    if( nullptr == context.xeSampler.pfnCreate )
+    auto pfnCreate = xe_layer::val.xeSampler.pfnCreate;
+
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -3256,7 +3478,7 @@ xeSamplerCreate(
 
     }
 
-    return context.xeSampler.pfnCreate( hDevice, pDesc, phSampler );
+    return pfnCreate( hDevice, pDesc, phSampler );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3266,17 +3488,19 @@ xeSamplerDestroy(
     xe_sampler_handle_t hSampler                    ///< [in] handle of the sampler
     )
 {
-    if( nullptr == context.xeSampler.pfnDestroy )
+    auto pfnDestroy = xe_layer::val.xeSampler.pfnDestroy;
+
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hSampler )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xeSampler.pfnDestroy( hSampler );
+    return pfnDestroy( hSampler );
 }
 
 #if defined(__cplusplus)

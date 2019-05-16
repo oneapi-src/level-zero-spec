@@ -62,16 +62,18 @@ xeInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    auto result = context.Init();
+    auto result = xe_lib::lib.Init();
     if( XE_RESULT_SUCCESS != result )
         return result;
 
+    auto pfnInit = xe_lib::lib.xeGlobal.pfnInit;
+
 #if _DEBUG
-    if( nullptr == context.xeGlobal.pfnInit )
+    if( nullptr == pfnInit )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeGlobal.pfnInit( flags );
+    return pfnInit( flags );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -102,12 +104,14 @@ xeDeviceGroupGetDriverVersion(
     uint32_t* version                               ///< [out] driver version
     )
 {
+    auto pfnGetDriverVersion = xe_lib::lib.xeDeviceGroup.pfnGetDriverVersion;
+
 #if _DEBUG
-    if( nullptr == context.xeDeviceGroup.pfnGetDriverVersion )
+    if( nullptr == pfnGetDriverVersion )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeDeviceGroup.pfnGetDriverVersion( hDeviceGroup, version );
+    return pfnGetDriverVersion( hDeviceGroup, version );
 }
 
 } // extern "C"

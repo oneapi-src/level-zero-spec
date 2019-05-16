@@ -55,23 +55,23 @@ xetGetDeviceProcAddrTable(
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_loader::loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr != context.commonDriver )
+    if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetDeviceProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.commonDriver, "xetGetDeviceProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xetGetDeviceProcAddrTable") );
         result = getTable( version, ptable );
     }
 
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetDeviceProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.validationLayer, "xetGetDeviceProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetDeviceProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -99,23 +99,23 @@ xetGetCommandListProcAddrTable(
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_loader::loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr != context.commonDriver )
+    if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetCommandListProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.commonDriver, "xetGetCommandListProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xetGetCommandListProcAddrTable") );
         result = getTable( version, ptable );
     }
 
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetCommandListProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.validationLayer, "xetGetCommandListProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetCommandListProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -143,23 +143,23 @@ xetGetMetricGroupProcAddrTable(
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_loader::loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr != context.commonDriver )
+    if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricGroupProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.commonDriver, "xetGetMetricGroupProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xetGetMetricGroupProcAddrTable") );
         result = getTable( version, ptable );
     }
 
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricGroupProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.validationLayer, "xetGetMetricGroupProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetMetricGroupProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -187,23 +187,23 @@ xetGetMetricProcAddrTable(
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_loader::loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr != context.commonDriver )
+    if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.commonDriver, "xetGetMetricProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xetGetMetricProcAddrTable") );
         result = getTable( version, ptable );
     }
 
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.validationLayer, "xetGetMetricProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetMetricProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -231,23 +231,23 @@ xetGetMetricTracerProcAddrTable(
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_loader::loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr != context.commonDriver )
+    if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricTracerProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.commonDriver, "xetGetMetricTracerProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xetGetMetricTracerProcAddrTable") );
         result = getTable( version, ptable );
     }
 
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricTracerProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.validationLayer, "xetGetMetricTracerProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetMetricTracerProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -275,23 +275,23 @@ xetGetMetricQueryPoolProcAddrTable(
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_loader::loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr != context.commonDriver )
+    if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricQueryPoolProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.commonDriver, "xetGetMetricQueryPoolProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xetGetMetricQueryPoolProcAddrTable") );
         result = getTable( version, ptable );
     }
 
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricQueryPoolProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.validationLayer, "xetGetMetricQueryPoolProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetMetricQueryPoolProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -319,23 +319,23 @@ xetGetMetricQueryProcAddrTable(
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_loader::loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr != context.commonDriver )
+    if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricQueryProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.commonDriver, "xetGetMetricQueryProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xetGetMetricQueryProcAddrTable") );
         result = getTable( version, ptable );
     }
 
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricQueryProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.validationLayer, "xetGetMetricQueryProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetMetricQueryProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -363,23 +363,23 @@ xetGetPowerProcAddrTable(
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_loader::loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr != context.commonDriver )
+    if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetPowerProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.commonDriver, "xetGetPowerProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xetGetPowerProcAddrTable") );
         result = getTable( version, ptable );
     }
 
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetPowerProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.validationLayer, "xetGetPowerProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetPowerProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -407,23 +407,23 @@ xetGetFreqDomainProcAddrTable(
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_loader::loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr != context.commonDriver )
+    if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetFreqDomainProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.commonDriver, "xetGetFreqDomainProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xetGetFreqDomainProcAddrTable") );
         result = getTable( version, ptable );
     }
 
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetFreqDomainProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.validationLayer, "xetGetFreqDomainProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetFreqDomainProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -451,23 +451,23 @@ xetGetGlobalProcAddrTable(
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_loader::loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr != context.commonDriver )
+    if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetGlobalProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.commonDriver, "xetGetGlobalProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xetGetGlobalProcAddrTable") );
         result = getTable( version, ptable );
     }
 
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetGlobalProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.validationLayer, "xetGetGlobalProcAddrTable") );
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetGlobalProcAddrTable") );
         result = getTable( version, ptable );
     }
 

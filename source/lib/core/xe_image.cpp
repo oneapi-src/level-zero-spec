@@ -58,12 +58,14 @@ xeImageGetProperties(
     xe_image_properties_t* pImageProperties         ///< [out] pointer to image properties
     )
 {
+    auto pfnGetProperties = xe_lib::lib.xeImage.pfnGetProperties;
+
 #if _DEBUG
-    if( nullptr == context.xeImage.pfnGetProperties )
+    if( nullptr == pfnGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeImage.pfnGetProperties( hDevice, desc, pImageProperties );
+    return pfnGetProperties( hDevice, desc, pImageProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -96,12 +98,14 @@ xeImageCreate(
     xe_image_handle_t* phImage                      ///< [out] pointer to handle of image object created
     )
 {
+    auto pfnCreate = xe_lib::lib.xeImage.pfnCreate;
+
 #if _DEBUG
-    if( nullptr == context.xeImage.pfnCreate )
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeImage.pfnCreate( hDevice, desc, phImage );
+    return pfnCreate( hDevice, desc, phImage );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -128,12 +132,14 @@ xeImageDestroy(
     xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
     )
 {
+    auto pfnDestroy = xe_lib::lib.xeImage.pfnDestroy;
+
 #if _DEBUG
-    if( nullptr == context.xeImage.pfnDestroy )
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeImage.pfnDestroy( hImage );
+    return pfnDestroy( hImage );
 }
 
 } // extern "C"

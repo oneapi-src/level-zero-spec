@@ -30,113 +30,116 @@
 ******************************************************************************/
 #include "xe_lib.h"
 
-///////////////////////////////////////////////////////////////////////////////
-xe_result_t xe_lib::Init()
+namespace xe_lib
 {
-    loader = LOAD_DRIVER_LIBRARY( "xe_loader" );
-
-    if( NULL == context.loader )
-        return XE_RESULT_ERROR_UNINITIALIZED;
-
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    if( XE_RESULT_SUCCESS == result )
+    ///////////////////////////////////////////////////////////////////////////////
+    xe_result_t Library::Init()
     {
-        auto getTable = reinterpret_cast<xe_pfnGetCommandListProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.loader, "xeGetCommandListProcAddrTable") );
-        result = getTable( XE_API_VERSION_1_0, &xeCommandList );
-    }
+        loader = LOAD_DRIVER_LIBRARY( "xe_loader" );
 
-    if( XE_RESULT_SUCCESS == result )
-    {
-        auto getTable = reinterpret_cast<xe_pfnGetDeviceProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.loader, "xeGetDeviceProcAddrTable") );
-        result = getTable( XE_API_VERSION_1_0, &xeDevice );
-    }
+        if( NULL == loader )
+            return XE_RESULT_ERROR_UNINITIALIZED;
 
-    if( XE_RESULT_SUCCESS == result )
-    {
-        auto getTable = reinterpret_cast<xe_pfnGetCommandQueueProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.loader, "xeGetCommandQueueProcAddrTable") );
-        result = getTable( XE_API_VERSION_1_0, &xeCommandQueue );
-    }
+        xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( XE_RESULT_SUCCESS == result )
-    {
-        auto getTable = reinterpret_cast<xe_pfnGetContextProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.loader, "xeGetContextProcAddrTable") );
-        result = getTable( XE_API_VERSION_1_0, &xeContext );
-    }
+        if( XE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<xe_pfnGetCommandListProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xeGetCommandListProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &xeCommandList );
+        }
 
-    if( XE_RESULT_SUCCESS == result )
-    {
-        auto getTable = reinterpret_cast<xe_pfnGetDeviceGroupProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.loader, "xeGetDeviceGroupProcAddrTable") );
-        result = getTable( XE_API_VERSION_1_0, &xeDeviceGroup );
-    }
+        if( XE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<xe_pfnGetDeviceProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xeGetDeviceProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &xeDevice );
+        }
 
-    if( XE_RESULT_SUCCESS == result )
-    {
-        auto getTable = reinterpret_cast<xe_pfnGetFenceProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.loader, "xeGetFenceProcAddrTable") );
-        result = getTable( XE_API_VERSION_1_0, &xeFence );
-    }
+        if( XE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<xe_pfnGetCommandQueueProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xeGetCommandQueueProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &xeCommandQueue );
+        }
 
-    if( XE_RESULT_SUCCESS == result )
-    {
-        auto getTable = reinterpret_cast<xe_pfnGetEventPoolProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.loader, "xeGetEventPoolProcAddrTable") );
-        result = getTable( XE_API_VERSION_1_0, &xeEventPool );
-    }
+        if( XE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<xe_pfnGetContextProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xeGetContextProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &xeContext );
+        }
 
-    if( XE_RESULT_SUCCESS == result )
-    {
-        auto getTable = reinterpret_cast<xe_pfnGetEventProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.loader, "xeGetEventProcAddrTable") );
-        result = getTable( XE_API_VERSION_1_0, &xeEvent );
-    }
+        if( XE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<xe_pfnGetDeviceGroupProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xeGetDeviceGroupProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &xeDeviceGroup );
+        }
 
-    if( XE_RESULT_SUCCESS == result )
-    {
-        auto getTable = reinterpret_cast<xe_pfnGetImageProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.loader, "xeGetImageProcAddrTable") );
-        result = getTable( XE_API_VERSION_1_0, &xeImage );
-    }
+        if( XE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<xe_pfnGetFenceProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xeGetFenceProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &xeFence );
+        }
 
-    if( XE_RESULT_SUCCESS == result )
-    {
-        auto getTable = reinterpret_cast<xe_pfnGetModuleProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.loader, "xeGetModuleProcAddrTable") );
-        result = getTable( XE_API_VERSION_1_0, &xeModule );
-    }
+        if( XE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<xe_pfnGetEventPoolProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xeGetEventPoolProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &xeEventPool );
+        }
 
-    if( XE_RESULT_SUCCESS == result )
-    {
-        auto getTable = reinterpret_cast<xe_pfnGetModuleBuildLogProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.loader, "xeGetModuleBuildLogProcAddrTable") );
-        result = getTable( XE_API_VERSION_1_0, &xeModuleBuildLog );
-    }
+        if( XE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<xe_pfnGetEventProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xeGetEventProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &xeEvent );
+        }
 
-    if( XE_RESULT_SUCCESS == result )
-    {
-        auto getTable = reinterpret_cast<xe_pfnGetFunctionProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.loader, "xeGetFunctionProcAddrTable") );
-        result = getTable( XE_API_VERSION_1_0, &xeFunction );
-    }
+        if( XE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<xe_pfnGetImageProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xeGetImageProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &xeImage );
+        }
 
-    if( XE_RESULT_SUCCESS == result )
-    {
-        auto getTable = reinterpret_cast<xe_pfnGetSamplerProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.loader, "xeGetSamplerProcAddrTable") );
-        result = getTable( XE_API_VERSION_1_0, &xeSampler );
-    }
+        if( XE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<xe_pfnGetModuleProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xeGetModuleProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &xeModule );
+        }
 
-    if( XE_RESULT_SUCCESS == result )
-    {
-        auto getTable = reinterpret_cast<xe_pfnGetGlobalProcAddrTable_t>(
-            GET_FUNCTION_PTR(context.loader, "xeGetGlobalProcAddrTable") );
-        result = getTable( XE_API_VERSION_1_0, &xeGlobal );
-    }
+        if( XE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<xe_pfnGetModuleBuildLogProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xeGetModuleBuildLogProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &xeModuleBuildLog );
+        }
 
-    return result;
-}
+        if( XE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<xe_pfnGetFunctionProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xeGetFunctionProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &xeFunction );
+        }
+
+        if( XE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<xe_pfnGetSamplerProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xeGetSamplerProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &xeSampler );
+        }
+
+        if( XE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<xe_pfnGetGlobalProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xeGetGlobalProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &xeGlobal );
+        }
+
+        return result;
+    }
+} // namespace xe_lib

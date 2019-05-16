@@ -33,21 +33,26 @@
 #include "xex_ddi.h"
 #include "xe_util.h"
 
-///////////////////////////////////////////////////////////////////////////////
-class xex_lib
+namespace xex_lib
 {
-public:
-    HMODULE loader = nullptr;
+    using namespace xex;
 
-    xex_lib();
-    ~xex_lib();
+    ///////////////////////////////////////////////////////////////////////////////
+    class Library
+    {
+    public:
+        HMODULE loader = nullptr;
 
-    xe_result_t Init();
+        Library();
+        ~Library();
 
-    xex_global_apitable_t           xexGlobal = {};
-    xex_command_graph_apitable_t    xexCommandGraph = {};
-};
+        xe_result_t Init();
 
-extern xex_lib context;
+        xex_global_apitable_t           xexGlobal = {};
+        xex_command_graph_apitable_t    xexCommandGraph = {};
+    };
 
+    extern Library lib;
+
+} // namespace xex_lib
 #endif // _XEX_LIB_H

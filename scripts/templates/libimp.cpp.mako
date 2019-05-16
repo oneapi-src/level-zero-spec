@@ -39,24 +39,27 @@ from templates import helper as th
 ******************************************************************************/
 #include "${n}_lib.h"
 
-///////////////////////////////////////////////////////////////////////////////
-${x}_result_t ${n}_lib::Init()
+namespace ${n}_lib
 {
-    loader = LOAD_DRIVER_LIBRARY( "${x}_loader" );
-
-    if( NULL == context.loader )
-        return ${X}_RESULT_ERROR_UNINITIALIZED;
-
-    ${x}_result_t result = ${X}_RESULT_SUCCESS;
-
-%for tbl in th.get_pfntables(specs, meta, n, tags):
-    if( ${X}_RESULT_SUCCESS == result )
+    ///////////////////////////////////////////////////////////////////////////////
+    ${x}_result_t Library::Init()
     {
-        auto getTable = reinterpret_cast<${tbl['pfn']}>(
-            GET_FUNCTION_PTR(context.loader, "${tbl['export']['name']}") );
-        result = getTable( ${X}_API_VERSION_1_0, &${n}${tbl['name']} );
-    }
+        loader = LOAD_DRIVER_LIBRARY( "${x}_loader" );
 
-%endfor
-    return result;
-}
+        if( NULL == loader )
+            return ${X}_RESULT_ERROR_UNINITIALIZED;
+
+        ${x}_result_t result = ${X}_RESULT_SUCCESS;
+
+    %for tbl in th.get_pfntables(specs, meta, n, tags):
+        if( ${X}_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<${tbl['pfn']}>(
+                GET_FUNCTION_PTR(loader, "${tbl['export']['name']}") );
+            result = getTable( ${X}_API_VERSION_1_0, &${n}${tbl['name']} );
+        }
+
+    %endfor
+        return result;
+    }
+} // namespace ${n}_lib

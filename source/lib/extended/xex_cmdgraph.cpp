@@ -61,12 +61,14 @@ xexCommandGraphCreate(
     xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
     )
 {
+    auto pfnCreate = xex_lib::lib.xexCommandGraph.pfnCreate;
+
 #if _DEBUG
-    if( nullptr == context.xexCommandGraph.pfnCreate )
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xexCommandGraph.pfnCreate( hDevice, desc, phCommandGraph );
+    return pfnCreate( hDevice, desc, phCommandGraph );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -91,12 +93,14 @@ xexCommandGraphDestroy(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to destroy
     )
 {
+    auto pfnDestroy = xex_lib::lib.xexCommandGraph.pfnDestroy;
+
 #if _DEBUG
-    if( nullptr == context.xexCommandGraph.pfnDestroy )
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xexCommandGraph.pfnDestroy( hCommandGraph );
+    return pfnDestroy( hCommandGraph );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -122,12 +126,14 @@ xexCommandGraphClose(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
     )
 {
+    auto pfnClose = xex_lib::lib.xexCommandGraph.pfnClose;
+
 #if _DEBUG
-    if( nullptr == context.xexCommandGraph.pfnClose )
+    if( nullptr == pfnClose )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xexCommandGraph.pfnClose( hCommandGraph );
+    return pfnClose( hCommandGraph );
 }
 
 } // extern "C"

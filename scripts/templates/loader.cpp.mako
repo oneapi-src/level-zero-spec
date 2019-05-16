@@ -66,23 +66,23 @@ ${tbl['export']['name']}(
     if( nullptr == ptable )
         return ${X}_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( ${x}_loader::loader.version < version )
         return ${X}_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     ${x}_result_t result = ${X}_RESULT_SUCCESS;
 
-    if( nullptr != context.commonDriver )
+    if( nullptr != ${x}_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<${tbl['pfn']}>(
-            GET_FUNCTION_PTR(context.commonDriver, "${tbl['export']['name']}") );
+            GET_FUNCTION_PTR(${x}_loader::loader.commonDriver, "${tbl['export']['name']}") );
         result = getTable( version, ptable );
     }
 
-    if(( ${X}_RESULT_SUCCESS == result ) && ( nullptr != context.validationLayer ))
+    if(( ${X}_RESULT_SUCCESS == result ) && ( nullptr != ${x}_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<${tbl['pfn']}>(
-            GET_FUNCTION_PTR(context.validationLayer, "${tbl['export']['name']}") );
+            GET_FUNCTION_PTR(${x}_loader::loader.validationLayer, "${tbl['export']['name']}") );
         result = getTable( version, ptable );
     }
 

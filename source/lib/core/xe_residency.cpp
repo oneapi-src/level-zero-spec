@@ -58,12 +58,14 @@ xeDeviceMakeMemoryResident(
     size_t size                                     ///< [in] size in bytes to make resident
     )
 {
+    auto pfnMakeMemoryResident = xe_lib::lib.xeDevice.pfnMakeMemoryResident;
+
 #if _DEBUG
-    if( nullptr == context.xeDevice.pfnMakeMemoryResident )
+    if( nullptr == pfnMakeMemoryResident )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeDevice.pfnMakeMemoryResident( hDevice, ptr, size );
+    return pfnMakeMemoryResident( hDevice, ptr, size );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -91,12 +93,14 @@ xeDeviceEvictMemory(
     size_t size                                     ///< [in] size in bytes to evict
     )
 {
+    auto pfnEvictMemory = xe_lib::lib.xeDevice.pfnEvictMemory;
+
 #if _DEBUG
-    if( nullptr == context.xeDevice.pfnEvictMemory )
+    if( nullptr == pfnEvictMemory )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeDevice.pfnEvictMemory( hDevice, ptr, size );
+    return pfnEvictMemory( hDevice, ptr, size );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -122,12 +126,14 @@ xeDeviceMakeImageResident(
     xe_image_handle_t hImage                        ///< [in] handle of image to make resident
     )
 {
+    auto pfnMakeImageResident = xe_lib::lib.xeDevice.pfnMakeImageResident;
+
 #if _DEBUG
-    if( nullptr == context.xeDevice.pfnMakeImageResident )
+    if( nullptr == pfnMakeImageResident )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeDevice.pfnMakeImageResident( hDevice, hImage );
+    return pfnMakeImageResident( hDevice, hImage );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -155,12 +161,14 @@ xeDeviceEvictImage(
     xe_image_handle_t hImage                        ///< [in] handle of image to make evict
     )
 {
+    auto pfnEvictImage = xe_lib::lib.xeDevice.pfnEvictImage;
+
 #if _DEBUG
-    if( nullptr == context.xeDevice.pfnEvictImage )
+    if( nullptr == pfnEvictImage )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeDevice.pfnEvictImage( hDevice, hImage );
+    return pfnEvictImage( hDevice, hImage );
 }
 
 } // extern "C"

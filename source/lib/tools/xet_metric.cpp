@@ -51,12 +51,14 @@ xetMetricGroupGetCount(
     uint32_t* pCount                                ///< [out] number of metric groups supported by the device
     )
 {
+    auto pfnGetCount = xet_lib::lib.xetMetricGroup.pfnGetCount;
+
 #if _DEBUG
-    if( nullptr == context.xetMetricGroup.pfnGetCount )
+    if( nullptr == pfnGetCount )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xetMetricGroup.pfnGetCount( hDevice, pCount );
+    return pfnGetCount( hDevice, pCount );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -81,12 +83,14 @@ xetMetricGroupGet(
     xet_metric_group_handle_t* phMetricGroup        ///< [out] metric group handle
     )
 {
+    auto pfnGet = xet_lib::lib.xetMetricGroup.pfnGet;
+
 #if _DEBUG
-    if( nullptr == context.xetMetricGroup.pfnGet )
+    if( nullptr == pfnGet )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xetMetricGroup.pfnGet( hDevice, ordinal, phMetricGroup );
+    return pfnGet( hDevice, ordinal, phMetricGroup );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -110,12 +114,14 @@ xetMetricGroupGetProperties(
     xet_metric_group_properties_t* pProperties      ///< [out] metric group properties
     )
 {
+    auto pfnGetProperties = xet_lib::lib.xetMetricGroup.pfnGetProperties;
+
 #if _DEBUG
-    if( nullptr == context.xetMetricGroup.pfnGetProperties )
+    if( nullptr == pfnGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xetMetricGroup.pfnGetProperties( hMetricGroup, pProperties );
+    return pfnGetProperties( hMetricGroup, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -140,12 +146,14 @@ xetMetricGet(
     xet_metric_handle_t* phMetric                   ///< [out] handle of metric
     )
 {
+    auto pfnGet = xet_lib::lib.xetMetric.pfnGet;
+
 #if _DEBUG
-    if( nullptr == context.xetMetric.pfnGet )
+    if( nullptr == pfnGet )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xetMetric.pfnGet( hMetricGroup, ordinal, phMetric );
+    return pfnGet( hMetricGroup, ordinal, phMetric );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -169,12 +177,14 @@ xetMetricGetProperties(
     xet_metric_properties_t* pProperties            ///< [out] metric properties
     )
 {
+    auto pfnGetProperties = xet_lib::lib.xetMetric.pfnGetProperties;
+
 #if _DEBUG
-    if( nullptr == context.xetMetric.pfnGetProperties )
+    if( nullptr == pfnGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xetMetric.pfnGetProperties( hMetric, pProperties );
+    return pfnGetProperties( hMetric, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -205,12 +215,14 @@ xetMetricGroupCalculateData(
     xet_typed_value_t* pCalculatedData              ///< [in,out] calculated metrics
     )
 {
+    auto pfnCalculateData = xet_lib::lib.xetMetricGroup.pfnCalculateData;
+
 #if _DEBUG
-    if( nullptr == context.xetMetricGroup.pfnCalculateData )
+    if( nullptr == pfnCalculateData )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xetMetricGroup.pfnCalculateData( hMetricGroup, pReportCount, rawDataSize, pRawData, calculatedDataSize, pCalculatedData );
+    return pfnCalculateData( hMetricGroup, pReportCount, rawDataSize, pRawData, calculatedDataSize, pCalculatedData );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -238,12 +250,14 @@ xetDeviceActivateMetricGroups(
     xet_metric_group_handle_t* phMetricGroups       ///< [in] handles of the metric groups to activate. NULL to deactivate.
     )
 {
+    auto pfnActivateMetricGroups = xet_lib::lib.xetDevice.pfnActivateMetricGroups;
+
 #if _DEBUG
-    if( nullptr == context.xetDevice.pfnActivateMetricGroups )
+    if( nullptr == pfnActivateMetricGroups )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xetDevice.pfnActivateMetricGroups( hDevice, count, phMetricGroups );
+    return pfnActivateMetricGroups( hDevice, count, phMetricGroups );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -274,12 +288,14 @@ xetMetricTracerOpen(
     xet_metric_tracer_handle_t* phMetricTracer      ///< [out] handle of metric tracer
     )
 {
+    auto pfnOpen = xet_lib::lib.xetMetricTracer.pfnOpen;
+
 #if _DEBUG
-    if( nullptr == context.xetMetricTracer.pfnOpen )
+    if( nullptr == pfnOpen )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xetMetricTracer.pfnOpen( hDevice, pDesc, hNotificationEvent, phMetricTracer );
+    return pfnOpen( hDevice, pDesc, hNotificationEvent, phMetricTracer );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -305,12 +321,14 @@ xetCommandListAppendMetricTracerMarker(
     uint32_t value                                  ///< [in] tracer marker value
     )
 {
+    auto pfnAppendMetricTracerMarker = xet_lib::lib.xetCommandList.pfnAppendMetricTracerMarker;
+
 #if _DEBUG
-    if( nullptr == context.xetCommandList.pfnAppendMetricTracerMarker )
+    if( nullptr == pfnAppendMetricTracerMarker )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xetCommandList.pfnAppendMetricTracerMarker( hCommandList, hMetricTracer, value );
+    return pfnAppendMetricTracerMarker( hCommandList, hMetricTracer, value );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -333,12 +351,14 @@ xetMetricTracerClose(
     xet_metric_tracer_handle_t hMetricTracer        ///< [in] handle of the metric tracer
     )
 {
+    auto pfnClose = xet_lib::lib.xetMetricTracer.pfnClose;
+
 #if _DEBUG
-    if( nullptr == context.xetMetricTracer.pfnClose )
+    if( nullptr == pfnClose )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xetMetricTracer.pfnClose( hMetricTracer );
+    return pfnClose( hMetricTracer );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -365,12 +385,14 @@ xetMetricTracerReadData(
     uint8_t* pRawData                               ///< [in,out] raw data buffer for reports
     )
 {
+    auto pfnReadData = xet_lib::lib.xetMetricTracer.pfnReadData;
+
 #if _DEBUG
-    if( nullptr == context.xetMetricTracer.pfnReadData )
+    if( nullptr == pfnReadData )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xetMetricTracer.pfnReadData( hMetricTracer, pReportCount, rawDataSize, pRawData );
+    return pfnReadData( hMetricTracer, pReportCount, rawDataSize, pRawData );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -397,12 +419,14 @@ xetMetricQueryPoolCreate(
     xet_metric_query_pool_handle_t* phMetricQueryPool   ///< [out] handle of metric query pool
     )
 {
+    auto pfnCreate = xet_lib::lib.xetMetricQueryPool.pfnCreate;
+
 #if _DEBUG
-    if( nullptr == context.xetMetricQueryPool.pfnCreate )
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xetMetricQueryPool.pfnCreate( hDevice, pDesc, phMetricQueryPool );
+    return pfnCreate( hDevice, pDesc, phMetricQueryPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -425,12 +449,14 @@ xetMetricQueryPoolDestroy(
     xet_metric_query_pool_handle_t hMetricQueryPool ///< [in] handle of the metric query pool
     )
 {
+    auto pfnDestroy = xet_lib::lib.xetMetricQueryPool.pfnDestroy;
+
 #if _DEBUG
-    if( nullptr == context.xetMetricQueryPool.pfnDestroy )
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xetMetricQueryPool.pfnDestroy( hMetricQueryPool );
+    return pfnDestroy( hMetricQueryPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -455,12 +481,14 @@ xetMetricQueryPoolGetMetricQuery(
     xet_metric_query_handle_t* phMetricQuery        ///< [out] handle of metric query
     )
 {
+    auto pfnGetMetricQuery = xet_lib::lib.xetMetricQueryPool.pfnGetMetricQuery;
+
 #if _DEBUG
-    if( nullptr == context.xetMetricQueryPool.pfnGetMetricQuery )
+    if( nullptr == pfnGetMetricQuery )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xetMetricQueryPool.pfnGetMetricQuery( hMetricQueryPool, ordinal, phMetricQuery );
+    return pfnGetMetricQuery( hMetricQueryPool, ordinal, phMetricQuery );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -485,12 +513,14 @@ xetCommandListAppendMetricQueryBegin(
     xet_metric_query_handle_t hMetricQuery          ///< [in] handle of the metric query
     )
 {
+    auto pfnAppendMetricQueryBegin = xet_lib::lib.xetCommandList.pfnAppendMetricQueryBegin;
+
 #if _DEBUG
-    if( nullptr == context.xetCommandList.pfnAppendMetricQueryBegin )
+    if( nullptr == pfnAppendMetricQueryBegin )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xetCommandList.pfnAppendMetricQueryBegin( hCommandList, hMetricQuery );
+    return pfnAppendMetricQueryBegin( hCommandList, hMetricQuery );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -517,12 +547,14 @@ xetCommandListAppendMetricQueryEnd(
     xe_event_handle_t hCompletionEvent              ///< [in] handle of the completion event to signal
     )
 {
+    auto pfnAppendMetricQueryEnd = xet_lib::lib.xetCommandList.pfnAppendMetricQueryEnd;
+
 #if _DEBUG
-    if( nullptr == context.xetCommandList.pfnAppendMetricQueryEnd )
+    if( nullptr == pfnAppendMetricQueryEnd )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xetCommandList.pfnAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent );
+    return pfnAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -545,12 +577,14 @@ xetCommandListAppendMetricMemoryBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
 {
+    auto pfnAppendMetricMemoryBarrier = xet_lib::lib.xetCommandList.pfnAppendMetricMemoryBarrier;
+
 #if _DEBUG
-    if( nullptr == context.xetCommandList.pfnAppendMetricMemoryBarrier )
+    if( nullptr == pfnAppendMetricMemoryBarrier )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xetCommandList.pfnAppendMetricMemoryBarrier( hCommandList );
+    return pfnAppendMetricMemoryBarrier( hCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -577,12 +611,14 @@ xetMetricQueryGetData(
     uint8_t* pRawData                               ///< [in,out] query result data in raw format
     )
 {
+    auto pfnGetData = xet_lib::lib.xetMetricQuery.pfnGetData;
+
 #if _DEBUG
-    if( nullptr == context.xetMetricQuery.pfnGetData )
+    if( nullptr == pfnGetData )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xetMetricQuery.pfnGetData( hMetricQuery, pReportCount, rawDataSize, pRawData );
+    return pfnGetData( hMetricQuery, pReportCount, rawDataSize, pRawData );
 }
 
 } // extern "C"

@@ -66,12 +66,14 @@ xeGetDeviceGroups(
     xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional] array of handle of device groups
     )
 {
+    auto pfnGetDeviceGroups = xe_lib::lib.xeGlobal.pfnGetDeviceGroups;
+
 #if _DEBUG
-    if( nullptr == context.xeGlobal.pfnGetDeviceGroups )
+    if( nullptr == pfnGetDeviceGroups )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeGlobal.pfnGetDeviceGroups( pCount, pDeviceGroups );
+    return pfnGetDeviceGroups( pCount, pDeviceGroups );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -105,12 +107,14 @@ xeDeviceGroupGetDevices(
     xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional] array of handle of device groups
     )
 {
+    auto pfnGetDevices = xe_lib::lib.xeDeviceGroup.pfnGetDevices;
+
 #if _DEBUG
-    if( nullptr == context.xeDeviceGroup.pfnGetDevices )
+    if( nullptr == pfnGetDevices )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeDeviceGroup.pfnGetDevices( hDeviceGroup, pCount, pDeviceGroups );
+    return pfnGetDevices( hDeviceGroup, pCount, pDeviceGroups );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -140,12 +144,14 @@ xeDeviceGetSubDevice(
     xe_device_handle_t* phSubDevice                 ///< [out] pointer to handle of sub-device object.
     )
 {
+    auto pfnGetSubDevice = xe_lib::lib.xeDevice.pfnGetSubDevice;
+
 #if _DEBUG
-    if( nullptr == context.xeDevice.pfnGetSubDevice )
+    if( nullptr == pfnGetSubDevice )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeDevice.pfnGetSubDevice( hDevice, ordinal, phSubDevice );
+    return pfnGetSubDevice( hDevice, ordinal, phSubDevice );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -173,12 +179,14 @@ xeDeviceGroupGetApiVersion(
     xe_api_version_t* version                       ///< [out] api version
     )
 {
+    auto pfnGetApiVersion = xe_lib::lib.xeDeviceGroup.pfnGetApiVersion;
+
 #if _DEBUG
-    if( nullptr == context.xeDeviceGroup.pfnGetApiVersion )
+    if( nullptr == pfnGetApiVersion )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeDeviceGroup.pfnGetApiVersion( hDeviceGroup, version );
+    return pfnGetApiVersion( hDeviceGroup, version );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -208,12 +216,14 @@ xeDeviceGroupGetProperties(
     xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
     )
 {
+    auto pfnGetProperties = xe_lib::lib.xeDeviceGroup.pfnGetProperties;
+
 #if _DEBUG
-    if( nullptr == context.xeDeviceGroup.pfnGetProperties )
+    if( nullptr == pfnGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeDeviceGroup.pfnGetProperties( hDeviceGroup, pDeviceProperties );
+    return pfnGetProperties( hDeviceGroup, pDeviceProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -242,12 +252,14 @@ xeDeviceGroupGetComputeProperties(
     xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
     )
 {
+    auto pfnGetComputeProperties = xe_lib::lib.xeDeviceGroup.pfnGetComputeProperties;
+
 #if _DEBUG
-    if( nullptr == context.xeDeviceGroup.pfnGetComputeProperties )
+    if( nullptr == pfnGetComputeProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeDeviceGroup.pfnGetComputeProperties( hDeviceGroup, pComputeProperties );
+    return pfnGetComputeProperties( hDeviceGroup, pComputeProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -277,12 +289,14 @@ xeDeviceGroupGetMemoryProperties(
     xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
     )
 {
+    auto pfnGetMemoryProperties = xe_lib::lib.xeDeviceGroup.pfnGetMemoryProperties;
+
 #if _DEBUG
-    if( nullptr == context.xeDeviceGroup.pfnGetMemoryProperties )
+    if( nullptr == pfnGetMemoryProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeDeviceGroup.pfnGetMemoryProperties( hDeviceGroup, pMemProperties );
+    return pfnGetMemoryProperties( hDeviceGroup, pMemProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -313,12 +327,14 @@ xeDeviceGetP2PProperties(
     xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
     )
 {
+    auto pfnGetP2PProperties = xe_lib::lib.xeDevice.pfnGetP2PProperties;
+
 #if _DEBUG
-    if( nullptr == context.xeDevice.pfnGetP2PProperties )
+    if( nullptr == pfnGetP2PProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeDevice.pfnGetP2PProperties( hDevice, hPeerDevice, pP2PProperties );
+    return pfnGetP2PProperties( hDevice, hPeerDevice, pP2PProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -348,12 +364,14 @@ xeDeviceCanAccessPeer(
     xe_bool_t* value                                ///< [out] returned access capability
     )
 {
+    auto pfnCanAccessPeer = xe_lib::lib.xeDevice.pfnCanAccessPeer;
+
 #if _DEBUG
-    if( nullptr == context.xeDevice.pfnCanAccessPeer )
+    if( nullptr == pfnCanAccessPeer )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeDevice.pfnCanAccessPeer( hDevice, hPeerDevice, value );
+    return pfnCanAccessPeer( hDevice, hPeerDevice, value );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -381,12 +399,14 @@ xeDeviceSetIntermediateCacheConfig(
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     )
 {
+    auto pfnSetIntermediateCacheConfig = xe_lib::lib.xeDevice.pfnSetIntermediateCacheConfig;
+
 #if _DEBUG
-    if( nullptr == context.xeDevice.pfnSetIntermediateCacheConfig )
+    if( nullptr == pfnSetIntermediateCacheConfig )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeDevice.pfnSetIntermediateCacheConfig( hDevice, CacheConfig );
+    return pfnSetIntermediateCacheConfig( hDevice, CacheConfig );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -414,12 +434,14 @@ xeDeviceSetLastLevelCacheConfig(
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     )
 {
+    auto pfnSetLastLevelCacheConfig = xe_lib::lib.xeDevice.pfnSetLastLevelCacheConfig;
+
 #if _DEBUG
-    if( nullptr == context.xeDevice.pfnSetLastLevelCacheConfig )
+    if( nullptr == pfnSetLastLevelCacheConfig )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeDevice.pfnSetLastLevelCacheConfig( hDevice, CacheConfig );
+    return pfnSetLastLevelCacheConfig( hDevice, CacheConfig );
 }
 
 } // extern "C"

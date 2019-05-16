@@ -51,24 +51,26 @@ xexGetCommandGraphProcAddrTable(
     xex_command_graph_apitable_t* ptable            ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xexCommandGraph;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xexCommandGraph.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                                               = xexCommandGraphCreate;
+    mytable.pfnCreate                                               = ptable->pfnCreate;
+    ptable->pfnCreate                                               = xexCommandGraphCreate;
 
-    context.xexCommandGraph.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                                              = xexCommandGraphDestroy;
+    mytable.pfnDestroy                                              = ptable->pfnDestroy;
+    ptable->pfnDestroy                                              = xexCommandGraphDestroy;
 
-    context.xexCommandGraph.pfnClose                                                = ptable->pfnClose;
-    ptable->pfnClose                                                                = xexCommandGraphClose;
+    mytable.pfnClose                                                = ptable->pfnClose;
+    ptable->pfnClose                                                = xexCommandGraphClose;
 
     return result;
 }
@@ -90,18 +92,20 @@ xexGetGlobalProcAddrTable(
     xex_global_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
     )
 {
+    auto& mytable = xe_layer::val.xexGlobal;
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    context.xexGlobal.pfnInit                                                 = ptable->pfnInit;
-    ptable->pfnInit                                                           = xexInit;
+    mytable.pfnInit                                                 = ptable->pfnInit;
+    ptable->pfnInit                                                 = xexInit;
 
     return result;
 }
@@ -113,14 +117,16 @@ xexInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    if( nullptr == context.xexGlobal.pfnInit )
+    auto pfnInit = xe_layer::val.xexGlobal.pfnInit;
+
+    if( nullptr == pfnInit )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
     }
 
-    return context.xexGlobal.pfnInit( flags );
+    return pfnInit( flags );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -132,10 +138,12 @@ xexCommandGraphCreate(
     xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
     )
 {
-    if( nullptr == context.xexCommandGraph.pfnCreate )
+    auto pfnCreate = xe_layer::val.xexCommandGraph.pfnCreate;
+
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -151,7 +159,7 @@ xexCommandGraphCreate(
 
     }
 
-    return context.xexCommandGraph.pfnCreate( hDevice, desc, phCommandGraph );
+    return pfnCreate( hDevice, desc, phCommandGraph );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -161,17 +169,19 @@ xexCommandGraphDestroy(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to destroy
     )
 {
-    if( nullptr == context.xexCommandGraph.pfnDestroy )
+    auto pfnDestroy = xe_layer::val.xexCommandGraph.pfnDestroy;
+
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandGraph )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xexCommandGraph.pfnDestroy( hCommandGraph );
+    return pfnDestroy( hCommandGraph );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -181,17 +191,19 @@ xexCommandGraphClose(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
     )
 {
-    if( nullptr == context.xexCommandGraph.pfnClose )
+    auto pfnClose = xe_layer::val.xexCommandGraph.pfnClose;
+
+    if( nullptr == pfnClose )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( xe_layer::val.enableParameterValidation )
     {
         if( nullptr == hCommandGraph )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     }
 
-    return context.xexCommandGraph.pfnClose( hCommandGraph );
+    return pfnClose( hCommandGraph );
 }
 
 #if defined(__cplusplus)

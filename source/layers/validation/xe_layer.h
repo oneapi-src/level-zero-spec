@@ -34,50 +34,53 @@
 #include "xet_ddi.h"
 #include "xe_util.h"
 
-///////////////////////////////////////////////////////////////////////////////
-class xe_layer
+namespace xe_layer
 {
-public:
-    xe_api_version_t version = XE_API_VERSION_1_0;
+    ///////////////////////////////////////////////////////////////////////////////
+    class Validation
+    {
+    public:
+        xe_api_version_t version = XE_API_VERSION_1_0;
 
-    bool enableParameterValidation = false;
-    bool enableHandleLifetime = false;
-    bool enableMemoryTracker = false;
-    bool enableThreadingValidation = false;
+        bool enableParameterValidation = false;
+        bool enableHandleLifetime = false;
+        bool enableMemoryTracker = false;
+        bool enableThreadingValidation = false;
 
-    xe_global_apitable_t            xeGlobal = {};
-    xe_device_group_apitable_t      xeDeviceGroup = {};
-    xe_device_apitable_t            xeDevice = {};
-    xe_context_apitable_t           xeContext = {};
-    xe_command_list_apitable_t      xeCommandList = {};
-    xe_command_queue_apitable_t     xeCommandQueue = {};
-    xe_fence_apitable_t             xeFence = {};
-    xe_event_pool_apitable_t        xeEventPool = {};
-    xe_event_apitable_t             xeEvent = {};
-    xe_image_apitable_t             xeImage = {};
-    xe_module_apitable_t            xeModule = {};
-    xe_module_build_log_apitable_t  xeModuleBuildLog = {};
-    xe_function_apitable_t          xeFunction = {};
-    xe_sampler_apitable_t           xeSampler = {};
+        xe_global_apitable_t            xeGlobal = {};
+        xe_device_group_apitable_t      xeDeviceGroup = {};
+        xe_device_apitable_t            xeDevice = {};
+        xe_context_apitable_t           xeContext = {};
+        xe_command_list_apitable_t      xeCommandList = {};
+        xe_command_queue_apitable_t     xeCommandQueue = {};
+        xe_fence_apitable_t             xeFence = {};
+        xe_event_pool_apitable_t        xeEventPool = {};
+        xe_event_apitable_t             xeEvent = {};
+        xe_image_apitable_t             xeImage = {};
+        xe_module_apitable_t            xeModule = {};
+        xe_module_build_log_apitable_t  xeModuleBuildLog = {};
+        xe_function_apitable_t          xeFunction = {};
+        xe_sampler_apitable_t           xeSampler = {};
 
-    xex_global_apitable_t           xexGlobal = {};
-    xex_command_graph_apitable_t    xexCommandGraph = {};
+        xex_global_apitable_t           xexGlobal = {};
+        xex_command_graph_apitable_t    xexCommandGraph = {};
 
-    xet_global_apitable_t               xetGlobal = {};
-    xet_device_apitable_t               xetDevice = {};
-    xet_command_list_apitable_t         xetCommandList = {};
-    xet_metric_group_apitable_t         xetMetricGroup = {};
-    xet_metric_apitable_t               xetMetric = {};
-    xet_metric_tracer_apitable_t        xetMetricTracer = {};
-    xet_metric_query_pool_apitable_t    xetMetricQueryPool = {};
-    xet_metric_query_apitable_t         xetMetricQuery = {};
-    xet_power_apitable_t                xetPower = {};
-    xet_freq_domain_apitable_t          xetFreqDomain = {};
+        xet_global_apitable_t               xetGlobal = {};
+        xet_device_apitable_t               xetDevice = {};
+        xet_command_list_apitable_t         xetCommandList = {};
+        xet_metric_group_apitable_t         xetMetricGroup = {};
+        xet_metric_apitable_t               xetMetric = {};
+        xet_metric_tracer_apitable_t        xetMetricTracer = {};
+        xet_metric_query_pool_apitable_t    xetMetricQueryPool = {};
+        xet_metric_query_apitable_t         xetMetricQuery = {};
+        xet_power_apitable_t                xetPower = {};
+        xet_freq_domain_apitable_t          xetFreqDomain = {};
 
-    xe_layer();
-    ~xe_layer();
-};
+        Validation();
+        ~Validation();
+    };
 
-extern xe_layer context;
+    extern Validation val;
 
+} // namespace xe_layer
 #endif // _XE_LAYER_H

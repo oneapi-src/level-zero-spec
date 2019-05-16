@@ -71,12 +71,14 @@ xeContextAllocSharedMem(
     void** ptr                                      ///< [out] pointer to shared allocation
     )
 {
+    auto pfnAllocSharedMem = xe_lib::lib.xeContext.pfnAllocSharedMem;
+
 #if _DEBUG
-    if( nullptr == context.xeContext.pfnAllocSharedMem )
+    if( nullptr == pfnAllocSharedMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeContext.pfnAllocSharedMem( hContext, hDevice, device_flags, host_flags, size, alignment, ptr );
+    return pfnAllocSharedMem( hContext, hDevice, device_flags, host_flags, size, alignment, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -115,12 +117,14 @@ xeContextAllocDeviceMem(
     void** ptr                                      ///< [out] pointer to device allocation
     )
 {
+    auto pfnAllocDeviceMem = xe_lib::lib.xeContext.pfnAllocDeviceMem;
+
 #if _DEBUG
-    if( nullptr == context.xeContext.pfnAllocDeviceMem )
+    if( nullptr == pfnAllocDeviceMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeContext.pfnAllocDeviceMem( hContext, hDevice, flags, size, alignment, ptr );
+    return pfnAllocDeviceMem( hContext, hDevice, flags, size, alignment, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -158,12 +162,14 @@ xeContextAllocHostMem(
     void** ptr                                      ///< [out] pointer to host allocation
     )
 {
+    auto pfnAllocHostMem = xe_lib::lib.xeContext.pfnAllocHostMem;
+
 #if _DEBUG
-    if( nullptr == context.xeContext.pfnAllocHostMem )
+    if( nullptr == pfnAllocHostMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeContext.pfnAllocHostMem( hContext, flags, size, alignment, ptr );
+    return pfnAllocHostMem( hContext, flags, size, alignment, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -196,12 +202,14 @@ xeContextFreeMem(
     const void* ptr                                 ///< [in] pointer to memory to free
     )
 {
+    auto pfnFreeMem = xe_lib::lib.xeContext.pfnFreeMem;
+
 #if _DEBUG
-    if( nullptr == context.xeContext.pfnFreeMem )
+    if( nullptr == pfnFreeMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeContext.pfnFreeMem( hContext, ptr );
+    return pfnFreeMem( hContext, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -230,12 +238,14 @@ xeContextGetMemProperties(
     xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
     )
 {
+    auto pfnGetMemProperties = xe_lib::lib.xeContext.pfnGetMemProperties;
+
 #if _DEBUG
-    if( nullptr == context.xeContext.pfnGetMemProperties )
+    if( nullptr == pfnGetMemProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeContext.pfnGetMemProperties( hContext, ptr, pMemProperties );
+    return pfnGetMemProperties( hContext, ptr, pMemProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -264,12 +274,14 @@ xeContextGetMemAddressRange(
     size_t* pSize                                   ///< [in,out][optional] size of the allocation
     )
 {
+    auto pfnGetMemAddressRange = xe_lib::lib.xeContext.pfnGetMemAddressRange;
+
 #if _DEBUG
-    if( nullptr == context.xeContext.pfnGetMemAddressRange )
+    if( nullptr == pfnGetMemAddressRange )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeContext.pfnGetMemAddressRange( hContext, ptr, pBase, pSize );
+    return pfnGetMemAddressRange( hContext, ptr, pBase, pSize );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -301,12 +313,14 @@ xeContextGetMemIpcHandle(
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
     )
 {
+    auto pfnGetMemIpcHandle = xe_lib::lib.xeContext.pfnGetMemIpcHandle;
+
 #if _DEBUG
-    if( nullptr == context.xeContext.pfnGetMemIpcHandle )
+    if( nullptr == pfnGetMemIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeContext.pfnGetMemIpcHandle( hContext, ptr, pIpcHandle );
+    return pfnGetMemIpcHandle( hContext, ptr, pIpcHandle );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -344,12 +358,14 @@ xeContextOpenMemIpcHandle(
     void** ptr                                      ///< [out] pointer to device allocation in this process
     )
 {
+    auto pfnOpenMemIpcHandle = xe_lib::lib.xeContext.pfnOpenMemIpcHandle;
+
 #if _DEBUG
-    if( nullptr == context.xeContext.pfnOpenMemIpcHandle )
+    if( nullptr == pfnOpenMemIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeContext.pfnOpenMemIpcHandle( hContext, hDevice, handle, flags, ptr );
+    return pfnOpenMemIpcHandle( hContext, hDevice, handle, flags, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -379,12 +395,14 @@ xeContextCloseMemIpcHandle(
     const void* ptr                                 ///< [in] pointer to device allocation in this process
     )
 {
+    auto pfnCloseMemIpcHandle = xe_lib::lib.xeContext.pfnCloseMemIpcHandle;
+
 #if _DEBUG
-    if( nullptr == context.xeContext.pfnCloseMemIpcHandle )
+    if( nullptr == pfnCloseMemIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeContext.pfnCloseMemIpcHandle( hContext, ptr );
+    return pfnCloseMemIpcHandle( hContext, ptr );
 }
 
 } // extern "C"

@@ -62,12 +62,14 @@ xeCommandListCreate(
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     )
 {
+    auto pfnCreate = xe_lib::lib.xeCommandList.pfnCreate;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnCreate )
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnCreate( hDevice, desc, phCommandList );
+    return pfnCreate( hDevice, desc, phCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -99,12 +101,14 @@ xeCommandListCreateImmediate(
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     )
 {
+    auto pfnCreateImmediate = xe_lib::lib.xeCommandList.pfnCreateImmediate;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnCreateImmediate )
+    if( nullptr == pfnCreateImmediate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnCreateImmediate( hDevice, desc, phCommandList );
+    return pfnCreateImmediate( hDevice, desc, phCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -131,12 +135,14 @@ xeCommandListDestroy(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
     )
 {
+    auto pfnDestroy = xe_lib::lib.xeCommandList.pfnDestroy;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnDestroy )
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnDestroy( hCommandList );
+    return pfnDestroy( hCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -159,12 +165,14 @@ xeCommandListClose(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
     )
 {
+    auto pfnClose = xe_lib::lib.xeCommandList.pfnClose;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnClose )
+    if( nullptr == pfnClose )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnClose( hCommandList );
+    return pfnClose( hCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -190,12 +198,14 @@ xeCommandListReset(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
     )
 {
+    auto pfnReset = xe_lib::lib.xeCommandList.pfnReset;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnReset )
+    if( nullptr == pfnReset )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnReset( hCommandList );
+    return pfnReset( hCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -228,12 +238,14 @@ xeCommandListSetParameter(
     uint32_t value                                  ///< [in] value of attribute
     )
 {
+    auto pfnSetParameter = xe_lib::lib.xeCommandList.pfnSetParameter;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnSetParameter )
+    if( nullptr == pfnSetParameter )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnSetParameter( hCommandList, parameter, value );
+    return pfnSetParameter( hCommandList, parameter, value );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -266,12 +278,14 @@ xeCommandListGetParameter(
     uint32_t* value                                 ///< [out] value of attribute
     )
 {
+    auto pfnGetParameter = xe_lib::lib.xeCommandList.pfnGetParameter;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnGetParameter )
+    if( nullptr == pfnGetParameter )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnGetParameter( hCommandList, parameter, value );
+    return pfnGetParameter( hCommandList, parameter, value );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -294,12 +308,14 @@ xeCommandListResetParameters(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
 {
+    auto pfnResetParameters = xe_lib::lib.xeCommandList.pfnResetParameters;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnResetParameters )
+    if( nullptr == pfnResetParameters )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnResetParameters( hCommandList );
+    return pfnResetParameters( hCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -328,12 +344,14 @@ xeCommandListReserveSpace(
     void** ptr                                      ///< [out] pointer to command buffer space reserved
     )
 {
+    auto pfnReserveSpace = xe_lib::lib.xeCommandList.pfnReserveSpace;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnReserveSpace )
+    if( nullptr == pfnReserveSpace )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnReserveSpace( hCommandList, size, ptr );
+    return pfnReserveSpace( hCommandList, size, ptr );
 }
 
 } // extern "C"

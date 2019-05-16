@@ -26,18 +26,22 @@
 ******************************************************************************/
 #include "xe_layer.h"
 
-xe_layer context;
-
-///////////////////////////////////////////////////////////////////////////////
-xe_layer::xe_layer()
+namespace xe_layer
 {
-    enableParameterValidation = getenv_tobool("XE_ENABLE_PARAMETER_VALIDATION");
-    enableHandleLifetime = getenv_tobool( "XE_ENABLE_HANDLE_LIFETIME" );
-    enableMemoryTracker = getenv_tobool( "XE_ENABLE_MEMORY_TRACKER" );
-    enableThreadingValidation = getenv_tobool( "XE_ENABLE_THREADING_VALIDATION" );
-}
+    Validation val;
 
-///////////////////////////////////////////////////////////////////////////////
-xe_layer::~xe_layer()
-{
-}
+    ///////////////////////////////////////////////////////////////////////////////
+    Validation::Validation()
+    {
+        enableParameterValidation = getenv_tobool( "XE_ENABLE_PARAMETER_VALIDATION" );
+        enableHandleLifetime = getenv_tobool( "XE_ENABLE_HANDLE_LIFETIME" );
+        enableMemoryTracker = getenv_tobool( "XE_ENABLE_MEMORY_TRACKER" );
+        enableThreadingValidation = getenv_tobool( "XE_ENABLE_THREADING_VALIDATION" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    Validation::~Validation()
+    {
+    }
+
+} // namespace xe_layer

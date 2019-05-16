@@ -62,11 +62,13 @@ ${tbl['export']['name']}(
     %endfor
     )
 {
+    auto& mytable = ${x}_layer::val.${n}${tbl['name']};
+
 #ifdef _DEBUG
     if( nullptr == ptable )
         return ${X}_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( context.version < version )
+    if( ${x}_layer::val.version < version )
         return ${X}_RESULT_ERROR_UNSUPPORTED;
 #endif
 
@@ -76,8 +78,8 @@ ${tbl['export']['name']}(
     %if 'condition' in obj:
 #if ${th.subt(n, tags, obj['condition'])}
     %endif
-    context.${n}${tbl['name']}.${th.append_ws(th.make_pfn_name(n, tags, obj), 55)} = ptable->${th.make_pfn_name(n, tags, obj)};
-    ptable->${th.append_ws(th.make_pfn_name(n, tags, obj), 56+len(n)+len(tbl['name']))} = ${th.make_func_name(n, tags, obj)};
+    mytable.${th.append_ws(th.make_pfn_name(n, tags, obj), 55)} = ptable->${th.make_pfn_name(n, tags, obj)};
+    ptable->${th.append_ws(th.make_pfn_name(n, tags, obj), 55)} = ${th.make_func_name(n, tags, obj)};
     %if 'condition' in obj:
 #endif
     %endif
@@ -100,10 +102,12 @@ ${th.make_func_name(n, tags, obj)}(
     %endfor
     )
 {
-    if( nullptr == context.${n}${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)} )
+    auto ${th.make_pfn_name(n, tags, obj)} = ${x}_layer::val.${n}${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
+
+    if( nullptr == ${th.make_pfn_name(n, tags, obj)} )
         return ${X}_RESULT_ERROR_UNSUPPORTED;
 
-    if( context.enableParameterValidation )
+    if( ${x}_layer::val.enableParameterValidation )
     {
         %for key, values in th.make_param_checks(n, tags, obj).items():
         %for val in values:
@@ -114,7 +118,7 @@ ${th.make_func_name(n, tags, obj)}(
         %endfor
     }
 
-    return context.${n}${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
+    return ${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
 }
 %if 'condition' in obj:
 #endif // ${th.subt(n, tags, obj['condition'])}

@@ -85,12 +85,14 @@ xeModuleCreate(
     xe_module_build_log_handle_t* phBuildLog        ///< [in,out][optional] pointer to handle of module's build log.
     )
 {
+    auto pfnCreate = xe_lib::lib.xeModule.pfnCreate;
+
 #if _DEBUG
-    if( nullptr == context.xeModule.pfnCreate )
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeModule.pfnCreate( hDevice, pDesc, phModule, phBuildLog );
+    return pfnCreate( hDevice, pDesc, phModule, phBuildLog );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -121,12 +123,14 @@ xeModuleDestroy(
     xe_module_handle_t hModule                      ///< [in] handle of the module
     )
 {
+    auto pfnDestroy = xe_lib::lib.xeModule.pfnDestroy;
+
 #if _DEBUG
-    if( nullptr == context.xeModule.pfnDestroy )
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeModule.pfnDestroy( hModule );
+    return pfnDestroy( hModule );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -155,12 +159,14 @@ xeModuleBuildLogDestroy(
     xe_module_build_log_handle_t hModuleBuildLog    ///< [in] handle of the module build log object.
     )
 {
+    auto pfnDestroy = xe_lib::lib.xeModuleBuildLog.pfnDestroy;
+
 #if _DEBUG
-    if( nullptr == context.xeModuleBuildLog.pfnDestroy )
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeModuleBuildLog.pfnDestroy( hModuleBuildLog );
+    return pfnDestroy( hModuleBuildLog );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -189,12 +195,14 @@ xeModuleBuildLogGetString(
     char* pBuildLog                                 ///< [in,out][optional] pointer to null-terminated string of the log.
     )
 {
+    auto pfnGetString = xe_lib::lib.xeModuleBuildLog.pfnGetString;
+
 #if _DEBUG
-    if( nullptr == context.xeModuleBuildLog.pfnGetString )
+    if( nullptr == pfnGetString )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeModuleBuildLog.pfnGetString( hModuleBuildLog, pSize, pBuildLog );
+    return pfnGetString( hModuleBuildLog, pSize, pBuildLog );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -231,12 +239,14 @@ xeModuleGetNativeBinary(
     uint8_t* pModuleNativeBinary                    ///< [in,out][optional] byte pointer to native binary
     )
 {
+    auto pfnGetNativeBinary = xe_lib::lib.xeModule.pfnGetNativeBinary;
+
 #if _DEBUG
-    if( nullptr == context.xeModule.pfnGetNativeBinary )
+    if( nullptr == pfnGetNativeBinary )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeModule.pfnGetNativeBinary( hModule, pSize, pModuleNativeBinary );
+    return pfnGetNativeBinary( hModule, pSize, pModuleNativeBinary );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -263,12 +273,14 @@ xeModuleGetGlobalPointer(
     void** pPtr                                     ///< [out] device visible pointer
     )
 {
+    auto pfnGetGlobalPointer = xe_lib::lib.xeModule.pfnGetGlobalPointer;
+
 #if _DEBUG
-    if( nullptr == context.xeModule.pfnGetGlobalPointer )
+    if( nullptr == pfnGetGlobalPointer )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeModule.pfnGetGlobalPointer( hModule, pGlobalName, pPtr );
+    return pfnGetGlobalPointer( hModule, pGlobalName, pPtr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -302,12 +314,14 @@ xeFunctionCreate(
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object
     )
 {
+    auto pfnCreate = xe_lib::lib.xeFunction.pfnCreate;
+
 #if _DEBUG
-    if( nullptr == context.xeFunction.pfnCreate )
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeFunction.pfnCreate( hModule, pDesc, phFunction );
+    return pfnCreate( hModule, pDesc, phFunction );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -334,12 +348,14 @@ xeFunctionDestroy(
     xe_function_handle_t hFunction                  ///< [in] handle of the function object
     )
 {
+    auto pfnDestroy = xe_lib::lib.xeFunction.pfnDestroy;
+
 #if _DEBUG
-    if( nullptr == context.xeFunction.pfnDestroy )
+    if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeFunction.pfnDestroy( hFunction );
+    return pfnDestroy( hFunction );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -367,12 +383,14 @@ xeModuleGetFunctionPointer(
     void** pfnFunction                              ///< [out] pointer to function.
     )
 {
+    auto pfnGetFunctionPointer = xe_lib::lib.xeModule.pfnGetFunctionPointer;
+
 #if _DEBUG
-    if( nullptr == context.xeModule.pfnGetFunctionPointer )
+    if( nullptr == pfnGetFunctionPointer )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeModule.pfnGetFunctionPointer( hModule, pFunctionName, pfnFunction );
+    return pfnGetFunctionPointer( hModule, pFunctionName, pfnFunction );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -400,12 +418,14 @@ xeFunctionSetGroupSize(
     uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this function.
     )
 {
+    auto pfnSetGroupSize = xe_lib::lib.xeFunction.pfnSetGroupSize;
+
 #if _DEBUG
-    if( nullptr == context.xeFunction.pfnSetGroupSize )
+    if( nullptr == pfnSetGroupSize )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeFunction.pfnSetGroupSize( hFunction, groupSizeX, groupSizeY, groupSizeZ );
+    return pfnSetGroupSize( hFunction, groupSizeX, groupSizeY, groupSizeZ );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -440,12 +460,14 @@ xeFunctionSuggestGroupSize(
     uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
     )
 {
+    auto pfnSuggestGroupSize = xe_lib::lib.xeFunction.pfnSuggestGroupSize;
+
 #if _DEBUG
-    if( nullptr == context.xeFunction.pfnSuggestGroupSize )
+    if( nullptr == pfnSuggestGroupSize )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeFunction.pfnSuggestGroupSize( hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
+    return pfnSuggestGroupSize( hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -474,12 +496,14 @@ xeFunctionSetArgumentValue(
                                                     ///< null then argument value is considered null.
     )
 {
+    auto pfnSetArgumentValue = xe_lib::lib.xeFunction.pfnSetArgumentValue;
+
 #if _DEBUG
-    if( nullptr == context.xeFunction.pfnSetArgumentValue )
+    if( nullptr == pfnSetArgumentValue )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeFunction.pfnSetArgumentValue( hFunction, argIndex, argSize, pArgValue );
+    return pfnSetArgumentValue( hFunction, argIndex, argSize, pArgValue );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -510,12 +534,14 @@ xeFunctionSetAttribute(
     uint32_t value                                  ///< [in] attribute value to set
     )
 {
+    auto pfnSetAttribute = xe_lib::lib.xeFunction.pfnSetAttribute;
+
 #if _DEBUG
-    if( nullptr == context.xeFunction.pfnSetAttribute )
+    if( nullptr == pfnSetAttribute )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeFunction.pfnSetAttribute( hFunction, attr, value );
+    return pfnSetAttribute( hFunction, attr, value );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -545,12 +571,14 @@ xeFunctionGetAttribute(
     uint32_t* pValue                                ///< [out] returned attribute value
     )
 {
+    auto pfnGetAttribute = xe_lib::lib.xeFunction.pfnGetAttribute;
+
 #if _DEBUG
-    if( nullptr == context.xeFunction.pfnGetAttribute )
+    if( nullptr == pfnGetAttribute )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeFunction.pfnGetAttribute( hFunction, attr, pValue );
+    return pfnGetAttribute( hFunction, attr, pValue );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -586,12 +614,14 @@ xeCommandListAppendLaunchFunction(
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
+    auto pfnAppendLaunchFunction = xe_lib::lib.xeCommandList.pfnAppendLaunchFunction;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnAppendLaunchFunction )
+    if( nullptr == pfnAppendLaunchFunction )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnAppendLaunchFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
+    return pfnAppendLaunchFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -630,12 +660,14 @@ xeCommandListAppendLaunchFunctionIndirect(
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
+    auto pfnAppendLaunchFunctionIndirect = xe_lib::lib.xeCommandList.pfnAppendLaunchFunctionIndirect;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnAppendLaunchFunctionIndirect )
+    if( nullptr == pfnAppendLaunchFunctionIndirect )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnAppendLaunchFunctionIndirect( hCommandList, hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+    return pfnAppendLaunchFunctionIndirect( hCommandList, hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -680,12 +712,14 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
+    auto pfnAppendLaunchMultipleFunctionsIndirect = xe_lib::lib.xeCommandList.pfnAppendLaunchMultipleFunctionsIndirect;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnAppendLaunchMultipleFunctionsIndirect )
+    if( nullptr == pfnAppendLaunchMultipleFunctionsIndirect )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+    return pfnAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -721,12 +755,14 @@ xeCommandListAppendLaunchHostFunction(
     xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
     )
 {
+    auto pfnAppendLaunchHostFunction = xe_lib::lib.xeCommandList.pfnAppendLaunchHostFunction;
+
 #if _DEBUG
-    if( nullptr == context.xeCommandList.pfnAppendLaunchHostFunction )
+    if( nullptr == pfnAppendLaunchHostFunction )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return context.xeCommandList.pfnAppendLaunchHostFunction( hCommandList, pfnHostFunc, pUserData, hSignalEvent, numWaitEvents, phWaitEvents );
+    return pfnAppendLaunchHostFunction( hCommandList, pfnHostFunc, pUserData, hSignalEvent, numWaitEvents, phWaitEvents );
 }
 
 } // extern "C"
