@@ -1,5 +1,4 @@
 #include "os_interface/windows/os_context_windows.h"
-#include "os_interface/windows/wddm_event.h"
 
 namespace L0 {
 

@@ -1,5 +1,7 @@
+#include "test.h"
 #include "mock_event.h"
 #include "mock_device.h"
+#include "mock_cmdlist.h"
 #include "gtest/gtest.h"
 
 namespace L0 {
@@ -24,26 +26,12 @@ TEST(Event_create, allocationContainsAtLeast64Bytes) {
     delete event;
 }
 
-// Disable for now as ULT complains
-TEST(hostSynchronize, DISABLED_waitWithMaxTimeout) {
-    Mock<Device> device;
+TEST(xeEventHostSynchronize, redirectsToObject) {
+    Mock<Event> event;
+    EXPECT_CALL(event, hostSynchronize);
 
-    auto event = whitebox_cast(Event::create(&device));
-    ASSERT_NE(event, nullptr);
-
-    auto result = event->hostSynchronize(std::numeric_limits<uint32_t>::max());
+    auto result = xeEventHostSynchronize(event.toHandle(), UINT32_MAX);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
-}
-
-// Disable for now as ULT complains
-TEST(hostSynchronize, DISABLED_waitWithFiniteTimeout) {
-    Mock<Device> device;
-
-    auto event = whitebox_cast(Event::create(&device));
-    ASSERT_NE(event, nullptr);
-
-    auto result = event->hostSynchronize(40);
-    EXPECT_EQ(XE_RESULT_ERROR_INVALID_PARAMETER, result);
 }
 
 TEST(Event_hostSignal, returnsSuccessFromQueryStatus) {

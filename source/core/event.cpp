@@ -1,7 +1,6 @@
 #include "device.h"
 #include "event.h"
 #include "memory_manager.h"
-#include "os_interface/os_event.h"
 #include "runtime/device/device.h"
 #include "runtime/execution_environment/execution_environment.h"
 
@@ -78,26 +77,30 @@ xe_result_t EventImp::hostSignal() {
 
 xe_result_t EventImp::hostSynchronize(uint32_t timeout) {
     uint32_t timeArg = timeout;
+    std::chrono::high_resolution_clock::time_point time1, time2;
+    int64_t timeDiff = 0;
+    xe_result_t ret = XE_RESULT_NOT_READY;
 
     if (timeout == 0) {
         return queryStatus();
     }
 
-    if (timeout == std::numeric_limits<uint32_t>::max()) {
-        timeArg = 0;
+    /* Block until timeout. If Event is Signaled, then return immediately */
+    time1 = std::chrono::high_resolution_clock::now();
+    while (timeDiff < timeout) {
+        ret = queryStatus();
+        if (ret == XE_RESULT_SUCCESS) {
+            return XE_RESULT_SUCCESS;
+        }
+
+        std::this_thread::yield();
+        _mm_pause();
+
+        time2 = std::chrono::high_resolution_clock::now();
+        timeDiff = std::chrono::duration_cast<std::chrono::microseconds>(time2 - time1).count();
     }
 
-    auto execEnvironment = device->getExecEnvironment();
-    //Get the OS agnostic event object here and use that to call the overridden function
-    auto osEvent = OsEvent::create(execEnvironment);
-
-    bool ret = osEvent->hostSynchronize(allocation->allocationRT, timeArg);
-    
-    if (!ret) {
-        return XE_RESULT_NOT_READY;
-    }
-
-    return XE_RESULT_SUCCESS;
+    return ret;
 }
 
 xe_result_t EventImp::reset() {
