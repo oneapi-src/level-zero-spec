@@ -57,8 +57,7 @@ TEST_F(MemoryManagerGetAddressRange, returnsRange) {
     void *base;
     size_t size;
     void *allocAddress = allocation->getHostAddress();
-    xe_result_t res =
-        globalMemoryManager->getAddressRange(allocAddress, &base, &size);
+    globalMemoryManager->getAddressRange(allocAddress, &base, &size);
     ASSERT_EQ(base, allocAddress);
     ASSERT_EQ(size, 16u);
 

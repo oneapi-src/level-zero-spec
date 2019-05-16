@@ -74,7 +74,6 @@ void FunctionImmutableData::initialize(PtrRef<void> kernelInfoRT, MemoryManager 
     auto &kernelInfo = *kernelInfoRT.weakRef<NEO::KernelInfo>();
 
     const auto &workloadInfo = kernelInfo.workloadInfo;
-    const auto &heapInfo = kernelInfo.heapInfo;
     const auto &patchInfo = kernelInfo.patchInfo;
 
     auto kernelIsaSize = kernelInfo.heapInfo.pKernelHeader->KernelHeapSize;
@@ -95,7 +94,6 @@ void FunctionImmutableData::initialize(PtrRef<void> kernelInfoRT, MemoryManager 
         }
 
         static_assert(NEO::KernelArgInfo::undefinedOffset == Undefined, "");
-        auto crossThread = reinterpret_cast<uint32_t *>(crossThreadDataTemplate.weakRef().get());
         FunctionSignature::setOffsetsVec(this->signature.dispatchMetadata.globalWorkOffset,
                                          workloadInfo.globalWorkOffsetOffsets);
         FunctionSignature::setOffsetsVec(this->signature.dispatchMetadata.localWorkSize,
