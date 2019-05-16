@@ -41,6 +41,7 @@ template <> struct Mock<MemoryManager> : public MemoryManager {
     MOCK_METHOD1(findGraphicsAllocation, L0::GraphicsAllocation *(const void *ptr));
     MOCK_METHOD1(findMemAllocation, L0::MemAllocation *(const void *ptr));
     MOCK_METHOD1(freeGraphicsAllocation, void(L0::GraphicsAllocation *allocation));
+    MOCK_METHOD1(freeHostMemory, void(L0::MemAllocation *allocation));
     MOCK_METHOD1(freeMemory, void(const void *ptr));
 
     // default mock implementation
@@ -51,6 +52,7 @@ template <> struct Mock<MemoryManager> : public MemoryManager {
                                                                     size_t size);
     PtrOwn<L0::GraphicsAllocation> doCreateGraphicsAllocationForPrivateMemory(size_t size);
     void doFreeGraphicsAllocation(L0::GraphicsAllocation *allocation);
+    void doFreeHostMemory(L0::MemAllocation *allocation);
     void doFreePtr(const void *ptr);
     L0::GraphicsAllocation *doFindGraphicsAllocation(const void *ptr);
     L0::MemAllocation *doFindMemAllocation(const void *ptr);

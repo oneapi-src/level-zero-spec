@@ -164,6 +164,15 @@ struct MemoryManagerImp : public MemoryManager {
         delete allocation;
     }
 
+    void freeHostMemory(MemAllocation *allocation) {
+        void *ptr = allocation->getHostAddress();
+        allocationTracker.erase(ptr);
+
+        delete allocation;
+
+        alignedFree(ptr);
+    }
+
     void freeMemory(const void *ptr) override {
         void *bufferAddress = const_cast<void *>(ptr);
         auto it = allocationTracker.find(bufferAddress);
@@ -173,9 +182,7 @@ struct MemoryManagerImp : public MemoryManager {
                 allocation->allocType == AllocationType::SHARED) {
                 freeGraphicsAllocation(static_cast<GraphicsAllocation *>(allocation));
             } else {
-                allocationTracker.erase(bufferAddress);
-                delete allocation;
-                alignedFree(bufferAddress);
+                freeHostMemory(allocation);
             }
         }
     }

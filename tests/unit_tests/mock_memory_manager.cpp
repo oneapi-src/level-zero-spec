@@ -29,6 +29,9 @@ MockMemoryManager::Mock() {
     EXPECT_CALL(*this, freeGraphicsAllocation)
         .WillRepeatedly(Invoke(this, &MockMemoryManager::doFreeGraphicsAllocation));
 
+    EXPECT_CALL(*this, freeHostMemory)
+        .WillRepeatedly(Invoke(this, &MockMemoryManager::doFreeHostMemory));
+
     EXPECT_CALL(*this, freeMemory)
         .WillRepeatedly(Invoke(this, &MockMemoryManager::doFreePtr));
 
@@ -45,7 +48,9 @@ MockMemoryManager::Mock() {
 }
 
 void *MockMemoryManager::doAllocateHostMemory(size_t size, size_t alignment) {
-    return alignedMalloc(size, alignment);
+    L0::GraphicsAllocation *alloc = doCreateGraphicsAllocation(nullptr, size, alignment);
+    assert(alloc);
+    return alloc->getHostAddress();
 }
 
 xe_result_t MockMemoryManager::doGetAddressRange(const void *ptr, void **pBase, size_t *pSize) {
@@ -95,9 +100,14 @@ void MockMemoryManager::doFreeGraphicsAllocation(L0::GraphicsAllocation *allocat
     drop(allocation);
 }
 
+void MockMemoryManager::doFreeHostMemory(L0::MemAllocation *allocation) {
+    doFreeGraphicsAllocation(static_cast<L0::GraphicsAllocation *>(allocation));
+}
+
 void MockMemoryManager::doFreePtr(const void *ptr) {
-    assert(ptr);
-    alignedFree(const_cast<void *>(ptr));
+    auto it = allocationTracker.find(const_cast<void *>(ptr));
+    assert (it != allocationTracker.end());
+    doFreeGraphicsAllocation(static_cast<GraphicsAllocation *>(it->second));
 }
 
 L0::MemAllocation *MockMemoryManager::doFindMemAllocation(const void *ptr) {
@@ -116,7 +126,8 @@ L0::GraphicsAllocation *MockMemoryManager::doFindGraphicsAllocation(const void *
 
 void MockMemoryManager::track(L0::GraphicsAllocation *alloc) {
     allocationTracker.insert(std::pair<void *,
-                MemAllocation *>(alloc->getHostAddress(), alloc));
+                MemAllocation *>(alloc->getHostAddress(),
+                        static_cast<L0::MemAllocation *>(alloc)));
 }
 
 void MockMemoryManager::drop(void *ptr) {
