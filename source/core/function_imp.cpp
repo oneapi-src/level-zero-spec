@@ -293,7 +293,7 @@ FunctionImp::~FunctionImp() {
         perThreadDataForWholeThreadGroup.rebind(nullptr);
     }
     if (printfBuffer != nullptr) {
-        globalMemoryManager->freeMemory(printfBuffer.weakRef().get());
+        globalMemoryManager->freeGraphicsAllocation(printfBuffer.weakRef().get());
     }
     crossThreadData.deleteOwned();
     surfaceStateHeapData.deleteOwned();

@@ -31,7 +31,7 @@ struct MemoryManager {
     virtual GraphicsAllocation *findGraphicsAllocation(const void *ptr) = 0;
     virtual MemAllocation *findMemAllocation(const void *ptr) = 0;
     virtual bool checkMemoryAccessFromDevice(Device *device, const void *ptr) = 0;
-    virtual void freeMemory(GraphicsAllocation *allocation) = 0;
+    virtual void freeGraphicsAllocation(GraphicsAllocation *allocation) = 0;
     virtual void freeMemory(const void *ptr) = 0;
 
     static void createGlobalMemoryManager();

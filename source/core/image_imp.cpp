@@ -14,7 +14,7 @@ xe_result_t ImageImp::destroy() {
     if (this->allocation) {
         assert(this->device);
         assert(globalMemoryManager);
-        globalMemoryManager->freeMemory(this->allocation);
+        globalMemoryManager->freeGraphicsAllocation(this->allocation);
     }
 
     delete this;

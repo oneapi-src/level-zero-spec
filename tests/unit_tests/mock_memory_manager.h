@@ -40,7 +40,7 @@ template <> struct Mock<MemoryManager> : public MemoryManager {
     MOCK_METHOD2(checkMemoryAccessFromDevice, bool(L0::Device *device, const void *ptr));
     MOCK_METHOD1(findGraphicsAllocation, L0::GraphicsAllocation *(const void *ptr));
     MOCK_METHOD1(findMemAllocation, L0::MemAllocation *(const void *ptr));
-    MOCK_METHOD1(freeMemory, void(L0::GraphicsAllocation *allocation));
+    MOCK_METHOD1(freeGraphicsAllocation, void(L0::GraphicsAllocation *allocation));
     MOCK_METHOD1(freeMemory, void(const void *ptr));
 
     // default mock implementation

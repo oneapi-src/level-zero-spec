@@ -68,8 +68,8 @@ struct CommandListAppendLaunchFunction : public GlobalFixtureTest {
 
         auto memoryManager = globalMemoryManager;
         ASSERT_NE(memoryManager, nullptr);
-        memoryManager->freeMemory(buffer1);
-        memoryManager->freeMemory(buffer2);
+        memoryManager->freeGraphicsAllocation(buffer1);
+        memoryManager->freeGraphicsAllocation(buffer2);
         GlobalFixtureTest::TearDown();
     }
 

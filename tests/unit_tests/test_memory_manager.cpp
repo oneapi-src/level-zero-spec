@@ -35,7 +35,7 @@ TEST_F(MemoryManagerAllocateDeviceMemory, returnsGraphicsAllocation) {
     auto allocation = globalMemoryManager->allocateDeviceMemory(device, 16u, 16u);
     EXPECT_NE(nullptr, allocation);
 
-    globalMemoryManager->freeMemory(allocation);
+    globalMemoryManager->freeGraphicsAllocation(allocation);
 
     delete device;
 }
@@ -61,7 +61,7 @@ TEST_F(MemoryManagerGetAddressRange, returnsRange) {
     ASSERT_EQ(base, allocAddress);
     ASSERT_EQ(size, 16u);
 
-    globalMemoryManager->freeMemory(allocation);
+    globalMemoryManager->freeGraphicsAllocation(allocation);
 
     delete device;
 }

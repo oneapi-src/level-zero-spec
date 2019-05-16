@@ -49,7 +49,7 @@ xe_result_t CommandContainer::destroy() {
         if (!memoryManager) {
             assert(false);
         } else {
-            memoryManager->freeMemory(allocation);
+            memoryManager->freeGraphicsAllocation(allocation);
         }
     }
 
@@ -58,7 +58,7 @@ xe_result_t CommandContainer::destroy() {
             if (!memoryManager) {
                 assert(false);
             } else {
-                memoryManager->freeMemory(allocationIndirectHeap);
+                memoryManager->freeGraphicsAllocation(allocationIndirectHeap);
             }
         }
     }
@@ -66,7 +66,7 @@ xe_result_t CommandContainer::destroy() {
     for (auto deallocation : deallocationContainer) {
         assert(deallocation);
         assert(memoryManager);
-        memoryManager->freeMemory(deallocation);
+        memoryManager->freeGraphicsAllocation(deallocation);
     }
 
     for (auto &indirectHeap : indirectHeaps) {

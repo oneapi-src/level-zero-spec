@@ -154,7 +154,7 @@ struct MemoryManagerImp : public MemoryManager {
         return p2pCapable;
     }
 
-    void freeMemory(GraphicsAllocation *allocation) {
+    void freeGraphicsAllocation(GraphicsAllocation *allocation) {
         memoryManagerRT->freeGraphicsMemory(
             static_cast<NEO::GraphicsAllocation *>(allocation->allocationRT));
 
@@ -171,7 +171,7 @@ struct MemoryManagerImp : public MemoryManager {
             MemAllocation *allocation = it->second;
             if (allocation->allocType == AllocationType::DEVICE ||
                 allocation->allocType == AllocationType::SHARED) {
-                freeMemory(static_cast<GraphicsAllocation *>(allocation));
+                freeGraphicsAllocation(static_cast<GraphicsAllocation *>(allocation));
             } else {
                 allocationTracker.erase(bufferAddress);
                 delete allocation;

@@ -26,10 +26,10 @@ MockMemoryManager::Mock() {
     EXPECT_CALL(*this, allocateManagedMemory)
         .WillRepeatedly(Invoke(this, &MockMemoryManager::doCreateGraphicsAllocation));
 
-    EXPECT_CALL(*this, freeMemory(An<GraphicsAllocation *>()))
+    EXPECT_CALL(*this, freeGraphicsAllocation)
         .WillRepeatedly(Invoke(this, &MockMemoryManager::doFreeGraphicsAllocation));
 
-    EXPECT_CALL(*this, freeMemory(An<const void *>()))
+    EXPECT_CALL(*this, freeMemory)
         .WillRepeatedly(Invoke(this, &MockMemoryManager::doFreePtr));
 
     EXPECT_CALL(*this, getIsaHeapGpuAddress).Times(AnyNumber());
