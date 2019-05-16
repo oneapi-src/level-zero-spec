@@ -270,6 +270,8 @@ struct Function : public _xe_function_handle_t {
 
     static Function *create(uint32_t productFamily, Module *module, const xe_function_desc_t *desc);
 
+    virtual ~Function() = default;
+
     virtual xe_result_t destroy() = 0;
     virtual xe_result_t setAttribute(xe_function_set_attribute_t attr, uint32_t value) = 0;
     virtual xe_result_t getAttribute(xe_function_get_attribute_t attr, uint32_t *pValue) = 0;

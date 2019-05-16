@@ -54,6 +54,8 @@ struct ImageImp : public Image {
 
     ImageImp() : allocation(nullptr) {}
 
+    virtual ~ImageImp() = default;
+
     GraphicsAllocation *getAllocation() override { return allocation; }
 
     size_t getSizeInBytes() override { return sizeBytes; }

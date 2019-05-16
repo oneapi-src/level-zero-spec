@@ -13,6 +13,8 @@ struct Sampler : public _xe_sampler_handle_t {
 
     virtual xe_result_t destroy() = 0;
 
+    virtual ~Sampler() = default;
+
     static Sampler *create(Device *device);
 
     static Sampler *fromHandle(xe_sampler_handle_t handle) {

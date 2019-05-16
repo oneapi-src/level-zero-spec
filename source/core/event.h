@@ -13,6 +13,7 @@ struct GraphicsAllocation;
 typedef uint64_t FlushStamp;
 
 struct Event : public _xe_event_handle_t {
+    virtual ~Event() = default;
     virtual xe_result_t destroy();
     virtual xe_result_t hostSignal() { return XE_RESULT_ERROR_UNSUPPORTED; }
     virtual xe_result_t hostSynchronize(uint32_t timeout) { return XE_RESULT_ERROR_UNSUPPORTED; }

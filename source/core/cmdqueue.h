@@ -14,6 +14,8 @@ struct CommandQueue : public _xe_command_queue_handle_t {
         }
     };
 
+    virtual ~CommandQueue() = default;
+
     virtual xe_result_t createFence(const xe_fence_desc_t *desc, xe_fence_handle_t *phFence) = 0;
     virtual xe_result_t destroy() = 0;
     virtual xe_result_t executeCommandLists(uint32_t numCommandLists,

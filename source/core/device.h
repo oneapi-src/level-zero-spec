@@ -69,6 +69,8 @@ struct Device : _xe_device_handle_t {
     virtual xe_result_t registerCLCommandQueue(cl_context context, cl_command_queue command_queue,
                                                xe_command_queue_handle_t *phCommandQueue) = 0;
 
+    virtual ~Device() = default;
+
     virtual void *getExecEnvironment() = 0;
     virtual PtrRef<BuiltinFunctionsLib> getBuiltinFunctionsLib() = 0;
     virtual PtrRef<MOCSMapper> getMOCSMapper() = 0;
