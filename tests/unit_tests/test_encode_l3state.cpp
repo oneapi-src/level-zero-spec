@@ -24,7 +24,7 @@ HWTEST2_F(EncodeL3State, givenNoSLMSetCorrectMMIO, IsGen9) {
     auto itorLRI = find<MI_LOAD_REGISTER_IMM *>(commands.begin(), commands.end());
     ASSERT_NE(itorLRI, commands.end());
     auto cmd = genCmdCast<MI_LOAD_REGISTER_IMM *>(*itorLRI);
-    EXPECT_EQ(cmd->getRegisterOffset(), 0x7034);
+    EXPECT_EQ(cmd->getRegisterOffset(), 0x7034u);
     EXPECT_EQ(cmd->getDataDword(), 0x80000140u);
 }
 
@@ -37,7 +37,7 @@ HWTEST2_F(EncodeL3State, givenSLMSetCorrectMMIO, IsGen9) {
     auto itorLRI = find<MI_LOAD_REGISTER_IMM *>(commands.begin(), commands.end());
     ASSERT_NE(itorLRI, commands.end());
     auto cmd = genCmdCast<MI_LOAD_REGISTER_IMM *>(*itorLRI);
-    EXPECT_EQ(cmd->getRegisterOffset(), 0x7034);
+    EXPECT_EQ(cmd->getRegisterOffset(), 0x7034u);
     EXPECT_EQ(cmd->getDataDword(), 0x60000121u);
 }
 
@@ -51,7 +51,7 @@ HWTEST2_F(EncodeL3State, setCorrectMMIO, IsAtLeastGen12LP) {
     auto itorLRI = find<MI_LOAD_REGISTER_IMM *>(commands.begin(), commands.end());
     ASSERT_NE(itorLRI, commands.end());
     auto cmd = genCmdCast<MI_LOAD_REGISTER_IMM *>(*itorLRI);
-    EXPECT_EQ(cmd->getRegisterOffset(), 0xB134);
+    EXPECT_EQ(cmd->getRegisterOffset(), 0xB134u);
     EXPECT_EQ(cmd->getDataDword(), 0xD0000020u);
 }
 

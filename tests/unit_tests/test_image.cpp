@@ -165,9 +165,9 @@ HWTEST2_F(ImageSurfaceState, descMatchesSurface, MatchAny) {
 
     ASSERT_EQ(surfaceState->getSurfaceType(), RENDER_SURFACE_STATE::SURFACE_TYPE_SURFTYPE_3D);
     ASSERT_EQ(surfaceState->getSurfaceFormat(), RENDER_SURFACE_STATE::SURFACE_FORMAT_R8G8B8A8_UINT);
-    ASSERT_EQ(surfaceState->getWidth(), 11);
-    ASSERT_EQ(surfaceState->getHeight(), 13);
-    ASSERT_EQ(surfaceState->getDepth(), 17);
+    ASSERT_EQ(surfaceState->getWidth(), 11u);
+    ASSERT_EQ(surfaceState->getHeight(), 13u);
+    ASSERT_EQ(surfaceState->getDepth(), 17u);
     ASSERT_EQ(surfaceState->getShaderChannelSelectRed(),
               RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_RED_RED);
     ASSERT_EQ(surfaceState->getShaderChannelSelectGreen(),
@@ -300,15 +300,15 @@ HWTEST2_F(ImageSurfaceState, copyToSSH, MatchAny) {
     ASSERT_EQ(surfaceStateA->getSurfaceType(), RENDER_SURFACE_STATE::SURFACE_TYPE_SURFTYPE_2D);
     ASSERT_EQ(surfaceStateA->getSurfaceFormat(),
               RENDER_SURFACE_STATE::SURFACE_FORMAT_R8G8B8A8_UINT);
-    ASSERT_EQ(surfaceStateA->getWidth(), 11);
-    ASSERT_EQ(surfaceStateA->getHeight(), 13);
+    ASSERT_EQ(surfaceStateA->getWidth(), 11u);
+    ASSERT_EQ(surfaceStateA->getHeight(), 13u);
 
     auto surfaceStateB =
         reinterpret_cast<RENDER_SURFACE_STATE *>(ptrOffset(mockSSH, sizeof(RENDER_SURFACE_STATE)));
     ASSERT_EQ(surfaceStateB->getSurfaceType(), RENDER_SURFACE_STATE::SURFACE_TYPE_SURFTYPE_2D);
     ASSERT_EQ(surfaceStateB->getSurfaceFormat(), RENDER_SURFACE_STATE::SURFACE_FORMAT_R32G32_UINT);
-    ASSERT_EQ(surfaceStateB->getWidth(), 10);
-    ASSERT_EQ(surfaceStateB->getHeight(), 10);
+    ASSERT_EQ(surfaceStateB->getWidth(), 10u);
+    ASSERT_EQ(surfaceStateB->getHeight(), 10u);
 }
 
 } // namespace ult

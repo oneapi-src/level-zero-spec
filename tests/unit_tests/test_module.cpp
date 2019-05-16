@@ -85,12 +85,12 @@ TEST(ModuleBuildLog, stringModuleBuildLog) {
 
     auto result = moduleBuildLog->getString(&buildLogSize, nullptr);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
-    EXPECT_EQ(1, buildLogSize);
+    EXPECT_EQ(1u, buildLogSize);
 
     buildLog = (char *)malloc(buildLogSize);
     result = moduleBuildLog->getString(&buildLogSize, buildLog);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
-    EXPECT_EQ(1, buildLogSize);
+    EXPECT_EQ(1u, buildLogSize);
 
     free(buildLog);
 
@@ -324,8 +324,8 @@ TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
     function->setArgumentValue(0, sizeof(xe_image_handle_t), &srcHandle);
     function->setArgumentValue(1, sizeof(xe_image_handle_t), &dstHandle);
 
-    EXPECT_EQ(2, function->getImmutableData()->getSignature().bindingTable.numSurfaceStates);
-    EXPECT_EQ(128, function->getImmutableData()->getSignature().bindingTable.tableOffset);
+    EXPECT_EQ(2u, function->getImmutableData()->getSignature().bindingTable.numSurfaceStates);
+    EXPECT_EQ(128u, function->getImmutableData()->getSignature().bindingTable.tableOffset);
     EXPECT_NE(nullptr, function->getImmutableData()->getIsaGraphicsAllocation());
     EXPECT_NE(0U, function->getImmutableData()->getIsaSize());
     EXPECT_NE(0U, function->getImmutableData()->getSignature().attributes.simdSize);
@@ -474,7 +474,7 @@ TEST_F(ModuleOnlineCompiled, getNativeBinaryReturnsGenBinary) {
     binary = storage.get();
     result = xeModuleGetNativeBinary(module->toHandle(), &binarySize, binary);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
-    EXPECT_EQ(0u, memcmp(binary, "CTNI", 4));
+    EXPECT_EQ(0, memcmp(binary, "CTNI", 4));
 }
 
 TEST_F(ModuleOnlineCompiled, createFromNativeBinary) {
@@ -489,7 +489,7 @@ TEST_F(ModuleOnlineCompiled, createFromNativeBinary) {
     binary = storage.get();
     result = module->getNativeBinary(&binarySize, binary);
     EXPECT_EQ(XE_RESULT_SUCCESS, result);
-    EXPECT_EQ(0u, memcmp(binary, "CTNI", 4));
+    EXPECT_EQ(0, memcmp(binary, "CTNI", 4));
 
     xe_module_desc_t modDesc = {};
     modDesc.version = XE_MODULE_DESC_VERSION_CURRENT;
@@ -513,7 +513,7 @@ TEST_F(ModuleOnlineCompiled, functionReturnsCorrectThreadGroupParameters) {
     ASSERT_NE(nullptr, function);
 
     function->setGroupSize(5u, 7u, 13u);
-    EXPECT_EQ(function->getThreadExecutionMask(), 0x7f);
+    EXPECT_EQ(function->getThreadExecutionMask(), 0x7fu);
     EXPECT_EQ(function->getThreadsPerThreadGroup(), 15u);
 }
 

@@ -496,7 +496,7 @@ TYPED_TEST(SmartPointerTest, ComparisonOperators) {
     EXPECT_TRUE(x != y);
     EXPECT_FALSE(x == y);
 
-    auto weakY = y.weakRef();
+    y.weakRef();
     EXPECT_TRUE(x != y);
     EXPECT_TRUE(y != x);
     EXPECT_FALSE(x == y);

@@ -171,7 +171,7 @@ TEST_F(FunctionPrintfTest, createPrintfBufferPatchesCrossThreadData) {
     EXPECT_EQ(printfBufferGpuAddressOffset, printfBufferAddressPatched);
 
     function->crossThreadData.rebind(nullptr);
-    delete crossThreadData;
+    delete[] crossThreadData;
 }
 
 TEST_F(FunctionPrintfFromSpirvTest,

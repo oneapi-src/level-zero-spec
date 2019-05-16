@@ -15,8 +15,8 @@ HWTEST2_F(EncodeSetMMIO, appendsAMI_LOAD_REGISTER_IMM, MatchAny) {
     ASSERT_NE(itorLRI, commands.end());
     {
         auto cmd = genCmdCast<MI_LOAD_REGISTER_IMM *>(*itorLRI);
-        EXPECT_EQ(cmd->getRegisterOffset(), 0xf00);
-        EXPECT_EQ(cmd->getDataDword(), 0xbaa);
+        EXPECT_EQ(cmd->getRegisterOffset(), 0xf00u);
+        EXPECT_EQ(cmd->getDataDword(), 0xbaau);
     }
 }
 
