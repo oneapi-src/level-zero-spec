@@ -89,10 +89,14 @@ struct LightweightOclProgram
 
         cl_int retVal = CL_SUCCESS;
         retVal = compilerInterface->build(*this, inputArgs, false);
-        assert(retVal == CL_SUCCESS);
+        if (retVal != CL_SUCCESS) {
+            assert(false);
+        }
 
         retVal = processGenBinary();
-        assert(retVal == CL_SUCCESS);
+        if (retVal != CL_SUCCESS) {
+            assert(false);
+        }
 
         buildStatus = CL_BUILD_SUCCESS;
         programBinaryType = CL_PROGRAM_BINARY_TYPE_EXECUTABLE;

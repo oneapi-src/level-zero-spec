@@ -46,14 +46,20 @@ xe_result_t CommandContainer::destroy() {
     auto memoryManager = device ? globalMemoryManager : nullptr;
 
     if (allocation) {
-        assert(memoryManager);
-        memoryManager->freeMemory(allocation);
+        if (!memoryManager) {
+            assert(false);
+        } else {
+            memoryManager->freeMemory(allocation);
+        }
     }
 
     for (auto allocationIndirectHeap : allocationIndirectHeaps) {
         if (allocationIndirectHeap) {
-            assert(memoryManager);
-            memoryManager->freeMemory(allocationIndirectHeap);
+            if (!memoryManager) {
+                assert(false);
+            } else {
+                memoryManager->freeMemory(allocationIndirectHeap);
+            }
         }
     }
 

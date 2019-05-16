@@ -47,7 +47,9 @@ void BuiltinFunctionsLibImpl::initFunctions() {
         moduleDesc.pInputModule = reinterpret_cast<const uint8_t *>(inputModuleSpirV);
         moduleDesc.inputSize = inputModuleSize;
         res = device->createModule(&moduleDesc, &moduleHandle, nullptr);
-        assert(res == XE_RESULT_SUCCESS);
+        if (res != XE_RESULT_SUCCESS) {
+            assert(false);
+        }
         module.rebind(Module::fromHandle(moduleHandle));
 
         PtrOwn<Function> function = nullptr;
@@ -55,7 +57,9 @@ void BuiltinFunctionsLibImpl::initFunctions() {
         xe_function_desc_t functionDesc = {XE_FUNCTION_DESC_VERSION_CURRENT};
         functionDesc.pFunctionName = builtinName;
         res = module->createFunction(&functionDesc, &functionHandle);
-        assert(res == XE_RESULT_SUCCESS);
+        if (res != XE_RESULT_SUCCESS) {
+            assert(false);
+        }
         function.rebind(Function::fromHandle(functionHandle));
 
         builtins[builtId].rebind(new BuiltinData{std::move(module), std::move(function)});

@@ -230,7 +230,9 @@ xe_result_t CommandListCoreFamily<IGFX_GEN12_CORE>::appendLaunchFunction(
 
         postSync.setOperation(POSTSYNC_DATA::OPERATION_WRITE_TIMESTAMP);
         auto gpuAddress = event->getGpuAddress();
-        assert((gpuAddress & 63u) == 0u);
+        if ((gpuAddress & 63u) != 0u) {
+            assert(false);
+        }
         postSync.setDestinationAddress(event->getGpuAddress());
 
         addToResidencyContainer(&event->getAllocation());

@@ -15,7 +15,9 @@ Mock<Device>::Mock() {
     auto ordinal = 0u;
     auto platform = NEO::constructPlatform();
     auto success = platform->initialize();
-    assert(success);
+    if (!success) {
+        assert(false);
+    }
     auto deviceRT = platform->getDevice(ordinal);
     this->deviceRT = deviceRT;
     assert(deviceRT);
