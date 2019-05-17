@@ -73,7 +73,7 @@ def mako_ddi_cpp(path, namespace, tags, specs, meta):
 """
 def mako_lib_cpp(path, namespace, tags, specs, meta):
     loc = 0
-    template = "lib.cpp.mako"
+    template = "libspec.cpp.mako"
     fin = os.path.join("templates", template)
 
     files = []
@@ -94,7 +94,7 @@ def mako_lib_cpp(path, namespace, tags, specs, meta):
             specs=specs,
             meta = meta)
 
-    template = "libimp.cpp.mako"
+    template = "libddi.cpp.mako"
     fin = os.path.join("templates", template)
 
     name = "%s_%s_lib"%(namespace, os.path.basename(path))
@@ -132,7 +132,7 @@ def mako_cmake_cpp(path, namespace, files):
     generates c/c++ files from the specification documents
 """
 def mako_loader_cpp(path, section, namespace, tags, specs, meta):
-    template = "loader.cpp.mako"
+    template = "ldrddi.cpp.mako"
     fin = os.path.join("templates", template)
 
     name = "%s_%s_loader"%(tags['$x'], section)
@@ -153,7 +153,7 @@ def mako_loader_cpp(path, section, namespace, tags, specs, meta):
 """
 def mako_validation_layer_cpp(path, section, namespace, tags, specs, meta):
     dstpath = os.path.join(path, "validation")
-    template = "validation.cpp.mako"
+    template = "valddi.cpp.mako"
     fin = os.path.join("templates", template)
 
     name = "%s_%s_layer"%(tags['$x'], section)
