@@ -35,7 +35,7 @@ namespace xet_lib
     ///////////////////////////////////////////////////////////////////////////////
     xe_result_t Library::Init()
     {
-        loader = LOAD_DRIVER_LIBRARY( "xe_loader" );
+        loader = LOAD_DRIVER_LIBRARY( MAKE_DRIVER_NAME( "xe_loader" ) );
 
         if( NULL == loader )
             return XE_RESULT_ERROR_UNINITIALIZED;
