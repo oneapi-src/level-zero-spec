@@ -146,7 +146,8 @@ namespace xe
         static Context* __xecall
         Create(
             size_t numDevices,                              ///< [in] number of devices in phDevice
-            Device* phDevice                                ///< [in] pointer to array of pointer to the device objects
+            Device* phDevice                                ///< [in][range(0, numDevices)] pointer to array of pointer to the device
+                                                            ///< objects
             );
 
         ///////////////////////////////////////////////////////////////////////////////

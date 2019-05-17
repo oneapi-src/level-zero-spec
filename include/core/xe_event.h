@@ -352,7 +352,8 @@ xe_result_t __xecall
 xeCommandListAppendWaitOnEvents(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
-    xe_event_handle_t* phEvents                     ///< [in] handle of the events to wait on before continuing
+    xe_event_handle_t* phEvents                     ///< [in][range(0, numEvents)] handle of the events to wait on before
+                                                    ///< continuing
     );
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -67,8 +67,8 @@ xeCommandListAppendBarrier(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before executing
-                                                    ///< barrier
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
+                                                    ///< on before executing barrier
     )
 {
     auto pfnAppendBarrier = xe_lib::lib.xeCommandList.pfnAppendBarrier;
@@ -110,12 +110,12 @@ xe_result_t __xecall
 xeCommandListAppendMemoryRangesBarrier(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numRanges,                             ///< [in] number of memory ranges
-    const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
-    const void** pRanges,                           ///< [in] array of memory ranges
+    const size_t* pRangeSizes,                      ///< [in][range(0, numRanges)] array of sizes of memory range
+    const void** pRanges,                           ///< [in][range(0, numRanges)] array of memory ranges
     xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before executing
-                                                    ///< barrier
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
+                                                    ///< on before executing barrier
     )
 {
     auto pfnAppendMemoryRangesBarrier = xe_lib::lib.xeCommandList.pfnAppendMemoryRangesBarrier;
@@ -193,8 +193,8 @@ namespace xe
     CommandList::AppendBarrier(
         Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
-        Event* phWaitEvents                             ///< [in][optional] pointer to the events to wait on before executing
-                                                        ///< barrier
+        Event* phWaitEvents                             ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+                                                        ///< on before executing barrier
         )
     {
         // auto result = ::xeCommandListAppendBarrier( handle, pSignalEvent, numWaitEvents, phWaitEvents );
@@ -221,12 +221,12 @@ namespace xe
     void __xecall
     CommandList::AppendMemoryRangesBarrier(
         uint32_t numRanges,                             ///< [in] number of memory ranges
-        const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
-        const void** pRanges,                           ///< [in] array of memory ranges
+        const size_t* pRangeSizes,                      ///< [in][range(0, numRanges)] array of sizes of memory range
+        const void** pRanges,                           ///< [in][range(0, numRanges)] array of memory ranges
         Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
-        Event* phWaitEvents                             ///< [in][optional] pointer to the events to wait on before executing
-                                                        ///< barrier
+        Event* phWaitEvents                             ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+                                                        ///< on before executing barrier
         )
     {
         // auto result = ::xeCommandListAppendMemoryRangesBarrier( handle, numRanges, pRangeSizes, pRanges, pSignalEvent, numWaitEvents, phWaitEvents );

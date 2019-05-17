@@ -355,8 +355,8 @@ namespace xe
         AppendBarrier(
             Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before executing barrier
-            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before executing
-                                                            ///< barrier
+            Event* phWaitEvents = nullptr                   ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+                                                            ///< on before executing barrier
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -378,12 +378,12 @@ namespace xe
         void __xecall
         AppendMemoryRangesBarrier(
             uint32_t numRanges,                             ///< [in] number of memory ranges
-            const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
-            const void** pRanges,                           ///< [in] array of memory ranges
+            const size_t* pRangeSizes,                      ///< [in][range(0, numRanges)] array of sizes of memory range
+            const void** pRanges,                           ///< [in][range(0, numRanges)] array of memory ranges
             Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before executing barrier
-            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before executing
-                                                            ///< barrier
+            Event* phWaitEvents = nullptr                   ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+                                                            ///< on before executing barrier
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -632,7 +632,8 @@ namespace xe
         void __xecall
         AppendWaitOnEvents(
             uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
-            Event* phEvents                                 ///< [in] pointer to the events to wait on before continuing
+            Event* phEvents                                 ///< [in][range(0, numEvents)] pointer to the events to wait on before
+                                                            ///< continuing
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -672,7 +673,8 @@ namespace xe
             const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] launch function arguments.
             Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
-            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before launching
+            Event* phWaitEvents = nullptr                   ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+                                                            ///< on before launching
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -698,7 +700,8 @@ namespace xe
             const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain launch arguments
             Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
-            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before launching
+            Event* phWaitEvents = nullptr                   ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+                                                            ///< on before launching
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -729,7 +732,8 @@ namespace xe
                                                             ///< launch arguments
             Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
-            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before launching
+            Event* phWaitEvents = nullptr                   ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+                                                            ///< on before launching
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -753,7 +757,8 @@ namespace xe
             void* pUserData,                                ///< [in] pointer to user data to pass to host function.
             Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
-            Event* phWaitEvents = nullptr                   ///< [in][optional] pointer to the events to wait on before launching
+            Event* phWaitEvents = nullptr                   ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+                                                            ///< on before launching
             );
 
     };

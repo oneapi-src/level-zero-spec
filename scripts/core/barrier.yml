@@ -28,7 +28,7 @@ params:
       desc: "[in][optional] number of events to wait on before executing barrier"
     - type: "$x_event_handle_t*"
       name: phWaitEvents
-      desc: "[in][optional] handle of the events to wait on before executing barrier"
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before executing barrier"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Appends a global memory ranges barrier into a command list."
@@ -50,10 +50,10 @@ params:
       desc: "[in] number of memory ranges"
     - type: "const size_t*"
       name: "pRangeSizes"
-      desc: "[in] array of sizes of memory range"
+      desc: "[in][range(0, numRanges)] array of sizes of memory range"
     - type: "const void**"
       name: "pRanges"
-      desc: "[in] array of memory ranges"
+      desc: "[in][range(0, numRanges)] array of memory ranges"
     - type: $x_event_handle_t
       name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"
@@ -62,7 +62,7 @@ params:
       desc: "[in][optional] number of events to wait on before executing barrier"
     - type: "$x_event_handle_t*"
       name: phWaitEvents
-      desc: "[in][optional] handle of the events to wait on before executing barrier"
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before executing barrier"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Ensures in-bound writes to the device are globally observable."

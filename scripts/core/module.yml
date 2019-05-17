@@ -512,7 +512,7 @@ params:
       desc: "[in][optional] number of events to wait on before launching"
     - type: "$x_event_handle_t*"
       name: phWaitEvents
-      desc: "[in][optional] handle of the events to wait on before launching"
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Launch function over one or more work groups using indirect arguments."
@@ -544,7 +544,7 @@ params:
       desc: "[in][optional] number of events to wait on before launching"
     - type: "$x_event_handle_t*"
       name: phWaitEvents
-      desc: "[in][optional] handle of the events to wait on before launching"
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Launch multiple functions over one or more work groups using an array of indirect arguments."
@@ -582,7 +582,7 @@ params:
       desc: "[in][optional] number of events to wait on before launching"
     - type: "$x_event_handle_t*"
       name: phWaitEvents
-      desc: "[in][optional] handle of the events to wait on before launching"
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 --- #--------------------------------------------------------------------------
 type: typedef
 desc: "type definition for host function pointers used with $xCommandListAppendLaunchHostFunction"
@@ -625,7 +625,7 @@ params:
       desc: "[in][optional] number of events to wait on before launching"
     - type: "$x_event_handle_t*"
       name: phWaitEvents
-      desc: "[in][optional] handle of the events to wait on before launching"
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for module"

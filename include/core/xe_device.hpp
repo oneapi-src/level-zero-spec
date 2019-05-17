@@ -82,7 +82,8 @@ namespace xe
                                                         ///< number of device groups available.
                                                         ///< if count is non-zero, then driver will only retrieve that number of
                                                         ///< device groups.
-        DeviceGroup* pDeviceGroups = nullptr            ///< [in,out][optional] array of pointer to device groups
+        DeviceGroup* pDeviceGroups = nullptr            ///< [in,out][optional][range(0, *pCount)] array of pointer to device
+                                                        ///< groups
         );
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -288,7 +289,8 @@ namespace xe
                                                             ///< number of device groups available.
                                                             ///< if count is non-zero, then driver will only retrieve that number of
                                                             ///< device groups.
-            DeviceGroup* pDeviceGroups = nullptr            ///< [in,out][optional] array of pointer to device groups
+            DeviceGroup* pDeviceGroups = nullptr            ///< [in,out][optional][range(0, *pCount)] array of pointer to device
+                                                            ///< groups
             );
 
         ///////////////////////////////////////////////////////////////////////////////

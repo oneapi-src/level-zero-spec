@@ -611,7 +611,8 @@ xeCommandListAppendLaunchFunction(
     const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
     xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
+                                                    ///< on before launching
     )
 {
     auto pfnAppendLaunchFunction = xe_lib::lib.xeCommandList.pfnAppendLaunchFunction;
@@ -657,7 +658,8 @@ xeCommandListAppendLaunchFunctionIndirect(
     const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain launch arguments
     xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
+                                                    ///< on before launching
     )
 {
     auto pfnAppendLaunchFunctionIndirect = xe_lib::lib.xeCommandList.pfnAppendLaunchFunctionIndirect;
@@ -709,7 +711,8 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
                                                     ///< launch arguments
     xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
+                                                    ///< on before launching
     )
 {
     auto pfnAppendLaunchMultipleFunctionsIndirect = xe_lib::lib.xeCommandList.pfnAppendLaunchMultipleFunctionsIndirect;
@@ -752,7 +755,8 @@ xeCommandListAppendLaunchHostFunction(
     void* pUserData,                                ///< [in] pointer to user data to pass to host function.
     xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
+                                                    ///< on before launching
     )
 {
     auto pfnAppendLaunchHostFunction = xe_lib::lib.xeCommandList.pfnAppendLaunchHostFunction;
@@ -1173,7 +1177,8 @@ namespace xe
         const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] launch function arguments.
         Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        Event* phWaitEvents                             ///< [in][optional] pointer to the events to wait on before launching
+        Event* phWaitEvents                             ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+                                                        ///< on before launching
         )
     {
         // auto result = ::xeCommandListAppendLaunchFunction( handle, pFunction, pLaunchFuncArgs, pSignalEvent, numWaitEvents, phWaitEvents );
@@ -1204,7 +1209,8 @@ namespace xe
         const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain launch arguments
         Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        Event* phWaitEvents                             ///< [in][optional] pointer to the events to wait on before launching
+        Event* phWaitEvents                             ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+                                                        ///< on before launching
         )
     {
         // auto result = ::xeCommandListAppendLaunchFunctionIndirect( handle, pFunction, pLaunchArgumentsBuffer, pSignalEvent, numWaitEvents, phWaitEvents );
@@ -1240,7 +1246,8 @@ namespace xe
                                                         ///< launch arguments
         Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        Event* phWaitEvents                             ///< [in][optional] pointer to the events to wait on before launching
+        Event* phWaitEvents                             ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+                                                        ///< on before launching
         )
     {
         // auto result = ::xeCommandListAppendLaunchMultipleFunctionsIndirect( handle, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, pSignalEvent, numWaitEvents, phWaitEvents );
@@ -1269,7 +1276,8 @@ namespace xe
         void* pUserData,                                ///< [in] pointer to user data to pass to host function.
         Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        Event* phWaitEvents                             ///< [in][optional] pointer to the events to wait on before launching
+        Event* phWaitEvents                             ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+                                                        ///< on before launching
         )
     {
         // auto result = ::xeCommandListAppendLaunchHostFunction( handle, pfnHostFunc, pUserData, pSignalEvent, numWaitEvents, phWaitEvents );

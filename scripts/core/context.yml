@@ -22,7 +22,7 @@ params:
       desc: "[in] number of devices in phDevice"
     - type: $x_device_handle_t*
       name: phDevice
-      desc: "[in] pointer to array of handle of the device objects"
+      desc: "[in][range(0, numDevices)] pointer to array of handle of the device objects"
     - type: "$x_context_handle_t*"
       name: phContext
       desc: "[out] pointer to handle of context object created"

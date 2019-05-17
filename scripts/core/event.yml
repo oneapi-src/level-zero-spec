@@ -264,7 +264,7 @@ params:
       desc: "[in] number of events to wait on before continuing"
     - type: "$x_event_handle_t*"
       name: phEvents
-      desc: "[in] handle of the events to wait on before continuing"
+      desc: "[in][range(0, numEvents)] handle of the events to wait on before continuing"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Signals a event from host."

@@ -73,7 +73,7 @@ xeGetDeviceGroups(
                                                     ///< number of device groups available.
                                                     ///< if count is non-zero, then driver will only retrieve that number of
                                                     ///< device groups.
-    xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional] array of handle of device groups
+    xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -104,7 +104,7 @@ xeDeviceGroupGetDevices(
                                                     ///< number of device groups available.
                                                     ///< if count is non-zero, then driver will only retrieve that number of
                                                     ///< device groups.
-    xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional] array of handle of device groups
+    xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
     );
 
 ///////////////////////////////////////////////////////////////////////////////

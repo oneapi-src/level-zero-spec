@@ -70,7 +70,8 @@ extern "C" {
 xe_result_t __xecall
 xeContextCreate(
     size_t numDevices,                              ///< [in] number of devices in phDevice
-    xe_device_handle_t* phDevice,                   ///< [in] pointer to array of handle of the device objects
+    xe_device_handle_t* phDevice,                   ///< [in][range(0, numDevices)] pointer to array of handle of the device
+                                                    ///< objects
     xe_context_handle_t* phContext                  ///< [out] pointer to handle of context object created
     );
 

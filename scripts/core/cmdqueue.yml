@@ -155,7 +155,7 @@ params:
       desc: "[in] number of command lists to execute"
     - type: "$x_command_list_handle_t*"
       name: phCommandLists
-      desc: "[in] list of handles of the command lists to execute"
+      desc: "[in][range(0, numCommandLists)] list of handles of the command lists to execute"
     - type: $x_fence_handle_t
       name: hFence
       desc: "[in][optional] handle of the fence to signal on completion"

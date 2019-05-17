@@ -63,7 +63,7 @@ xeGetDeviceGroups(
                                                     ///< number of device groups available.
                                                     ///< if count is non-zero, then driver will only retrieve that number of
                                                     ///< device groups.
-    xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional] array of handle of device groups
+    xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
     )
 {
     auto pfnGetDeviceGroups = xe_lib::lib.xeGlobal.pfnGetDeviceGroups;
@@ -104,7 +104,7 @@ xeDeviceGroupGetDevices(
                                                     ///< number of device groups available.
                                                     ///< if count is non-zero, then driver will only retrieve that number of
                                                     ///< device groups.
-    xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional] array of handle of device groups
+    xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
     )
 {
     auto pfnGetDevices = xe_lib::lib.xeDeviceGroup.pfnGetDevices;
@@ -486,7 +486,8 @@ namespace xe
                                                         ///< number of device groups available.
                                                         ///< if count is non-zero, then driver will only retrieve that number of
                                                         ///< device groups.
-        DeviceGroup* pDeviceGroups                      ///< [in,out][optional] array of pointer to device groups
+        DeviceGroup* pDeviceGroups                      ///< [in,out][optional][range(0, *pCount)] array of pointer to device
+                                                        ///< groups
         )
     {
         // auto result = ::xeGetDeviceGroups( handle, pCount, pDeviceGroups );
@@ -512,7 +513,8 @@ namespace xe
                                                         ///< number of device groups available.
                                                         ///< if count is non-zero, then driver will only retrieve that number of
                                                         ///< device groups.
-        DeviceGroup* pDeviceGroups                      ///< [in,out][optional] array of pointer to device groups
+        DeviceGroup* pDeviceGroups                      ///< [in,out][optional][range(0, *pCount)] array of pointer to device
+                                                        ///< groups
         )
     {
         // auto result = ::xeDeviceGroupGetDevices( handle, pCount, pDeviceGroups );

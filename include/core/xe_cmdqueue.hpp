@@ -192,7 +192,8 @@ namespace xe
         void __xecall
         ExecuteCommandLists(
             uint32_t numCommandLists,                       ///< [in] number of command lists to execute
-            CommandList* phCommandLists,                    ///< [in] list of handles of the command lists to execute
+            CommandList* phCommandLists,                    ///< [in][range(0, numCommandLists)] list of handles of the command lists
+                                                            ///< to execute
             Fence* pFence = nullptr                         ///< [in][optional] pointer to the fence to signal on completion
             );
 

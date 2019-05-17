@@ -190,7 +190,8 @@ xe_result_t __xecall
 xeCommandQueueExecuteCommandLists(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
     uint32_t numCommandLists,                       ///< [in] number of command lists to execute
-    xe_command_list_handle_t* phCommandLists,       ///< [in] list of handles of the command lists to execute
+    xe_command_list_handle_t* phCommandLists,       ///< [in][range(0, numCommandLists)] list of handles of the command lists
+                                                    ///< to execute
     xe_fence_handle_t hFence                        ///< [in][optional] handle of the fence to signal on completion
     );
 

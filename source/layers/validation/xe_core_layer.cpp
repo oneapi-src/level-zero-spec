@@ -832,7 +832,8 @@ xeDeviceGroupGetDriverVersion(
 xe_result_t __xecall
 xeContextCreate(
     size_t numDevices,                              ///< [in] number of devices in phDevice
-    xe_device_handle_t* phDevice,                   ///< [in] pointer to array of handle of the device objects
+    xe_device_handle_t* phDevice,                   ///< [in][range(0, numDevices)] pointer to array of handle of the device
+                                                    ///< objects
     xe_context_handle_t* phContext                  ///< [out] pointer to handle of context object created
     )
 {
@@ -885,7 +886,7 @@ xeGetDeviceGroups(
                                                     ///< number of device groups available.
                                                     ///< if count is non-zero, then driver will only retrieve that number of
                                                     ///< device groups.
-    xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional] array of handle of device groups
+    xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
     )
 {
     auto pfnGetDeviceGroups = xe_layer::val.xeGlobal.pfnGetDeviceGroups;
@@ -913,7 +914,7 @@ xeDeviceGroupGetDevices(
                                                     ///< number of device groups available.
                                                     ///< if count is non-zero, then driver will only retrieve that number of
                                                     ///< device groups.
-    xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional] array of handle of device groups
+    xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
     )
 {
     auto pfnGetDevices = xe_layer::val.xeDeviceGroup.pfnGetDevices;
@@ -1232,7 +1233,8 @@ xe_result_t __xecall
 xeCommandQueueExecuteCommandLists(
     xe_command_queue_handle_t hCommandQueue,        ///< [in] handle of the command queue
     uint32_t numCommandLists,                       ///< [in] number of command lists to execute
-    xe_command_list_handle_t* phCommandLists,       ///< [in] list of handles of the command lists to execute
+    xe_command_list_handle_t* phCommandLists,       ///< [in][range(0, numCommandLists)] list of handles of the command lists
+                                                    ///< to execute
     xe_fence_handle_t hFence                        ///< [in][optional] handle of the fence to signal on completion
     )
 {
@@ -1520,8 +1522,8 @@ xeCommandListAppendBarrier(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before executing
-                                                    ///< barrier
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
+                                                    ///< on before executing barrier
     )
 {
     auto pfnAppendBarrier = xe_layer::val.xeCommandList.pfnAppendBarrier;
@@ -1545,12 +1547,12 @@ xe_result_t __xecall
 xeCommandListAppendMemoryRangesBarrier(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numRanges,                             ///< [in] number of memory ranges
-    const size_t* pRangeSizes,                      ///< [in] array of sizes of memory range
-    const void** pRanges,                           ///< [in] array of memory ranges
+    const size_t* pRangeSizes,                      ///< [in][range(0, numRanges)] array of sizes of memory range
+    const void** pRanges,                           ///< [in][range(0, numRanges)] array of memory ranges
     xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before executing
-                                                    ///< barrier
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
+                                                    ///< on before executing barrier
     )
 {
     auto pfnAppendMemoryRangesBarrier = xe_layer::val.xeCommandList.pfnAppendMemoryRangesBarrier;
@@ -2195,7 +2197,8 @@ xe_result_t __xecall
 xeCommandListAppendWaitOnEvents(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
-    xe_event_handle_t* phEvents                     ///< [in] handle of the events to wait on before continuing
+    xe_event_handle_t* phEvents                     ///< [in][range(0, numEvents)] handle of the events to wait on before
+                                                    ///< continuing
     )
 {
     auto pfnAppendWaitOnEvents = xe_layer::val.xeCommandList.pfnAppendWaitOnEvents;
@@ -3215,7 +3218,8 @@ xeCommandListAppendLaunchFunction(
     const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
     xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
+                                                    ///< on before launching
     )
 {
     auto pfnAppendLaunchFunction = xe_layer::val.xeCommandList.pfnAppendLaunchFunction;
@@ -3248,7 +3252,8 @@ xeCommandListAppendLaunchFunctionIndirect(
     const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain launch arguments
     xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
+                                                    ///< on before launching
     )
 {
     auto pfnAppendLaunchFunctionIndirect = xe_layer::val.xeCommandList.pfnAppendLaunchFunctionIndirect;
@@ -3285,7 +3290,8 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
                                                     ///< launch arguments
     xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
+                                                    ///< on before launching
     )
 {
     auto pfnAppendLaunchMultipleFunctionsIndirect = xe_layer::val.xeCommandList.pfnAppendLaunchMultipleFunctionsIndirect;
@@ -3321,7 +3327,8 @@ xeCommandListAppendLaunchHostFunction(
     void* pUserData,                                ///< [in] pointer to user data to pass to host function.
     xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
+                                                    ///< on before launching
     )
 {
     auto pfnAppendLaunchHostFunction = xe_layer::val.xeCommandList.pfnAppendLaunchHostFunction;

@@ -582,7 +582,8 @@ xeCommandListAppendLaunchFunction(
     const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
     xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
+                                                    ///< on before launching
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -618,7 +619,8 @@ xeCommandListAppendLaunchFunctionIndirect(
     const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in] pointer to device buffer that will contain launch arguments
     xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
+                                                    ///< on before launching
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -660,7 +662,8 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
                                                     ///< launch arguments
     xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
+                                                    ///< on before launching
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -704,7 +707,8 @@ xeCommandListAppendLaunchHostFunction(
     void* pUserData,                                ///< [in] pointer to user data to pass to host function.
     xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
     uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-    xe_event_handle_t* phWaitEvents                 ///< [in][optional] handle of the events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
+                                                    ///< on before launching
     );
 
 #if defined(__cplusplus)
