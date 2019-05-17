@@ -35,12 +35,14 @@
 #if defined(__linux__)
 #  include <dlfcn.h>
 #  define HMODULE void*
-#  define LOAD_DRIVER_LIBRARY(NAME) dlopen("lib##NAME##.so", RTLD_LAZY|RTLD_LOCAL)
+#  define MAKE_DRIVER_NAME(NAME)    "lib##NAME##.so"
+#  define LOAD_DRIVER_LIBRARY(NAME) dlopen(NAME, RTLD_LAZY|RTLD_LOCAL)
 #  define FREE_DRIVER_LIBRARY(LIB)  if(LIB) dlclose(LIB)
 #  define GET_FUNCTION_PTR(LIB, FUNC_NAME) dlsym(LIB, FUNC_NAME)
 #elif defined(_WIN32)
 #  include <Windows.h>
-#  define LOAD_DRIVER_LIBRARY(NAME) LoadLibrary(NAME".dll")
+#  define MAKE_DRIVER_NAME(NAME)    NAME".dll"
+#  define LOAD_DRIVER_LIBRARY(NAME) LoadLibrary(NAME)
 #  define FREE_DRIVER_LIBRARY(LIB)  if(LIB) FreeLibrary(LIB)
 #  define GET_FUNCTION_PTR(LIB, FUNC_NAME) GetProcAddress(LIB, FUNC_NAME)
 #else
