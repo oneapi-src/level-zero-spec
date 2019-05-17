@@ -778,9 +778,6 @@ int validateArrays(float *c) {
                           << "gpu val " << c[i * P + j] << " != "
                           << "cpu val " << hostBufC[i * P + j] << "\n";
 
-                if (verbose)
-		    printMatrixC(c);
-
 		return -1;
             }
         }
@@ -809,7 +806,7 @@ int validateResults(bool aubMode) {
         std::cout << "Expected result matrix:\n";
         printMatrixC(hostBufC);
 
-        std::cout << "CL result matirx:\n";
+        std::cout << "CL result matrix:\n";
         printMatrixC(hostBufCCL);
 
         std::cout << "XE result matrix:\n";
