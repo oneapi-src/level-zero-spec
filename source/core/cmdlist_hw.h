@@ -3,6 +3,7 @@
 #include "cmdlist_imp.h"
 #undef CMD_LIST_INTERNAL
 #include "igfxfmid.h"
+#include "builtin_functions_lib.h"
 
 namespace L0 {
 
@@ -83,6 +84,9 @@ template <GFXCORE_FAMILY gfxCoreFamily> struct CommandListCoreFamily : public Co
                               uint32_t samplerCount, uint32_t borderColorOffset,
                               const void *fnDynamicStateHeap);
     void copySamplerState(NEO::IndirectHeap *dsh, Function *function);
+
+    xe_result_t appendMemoryCopyKernel(void *dstptr, const void *srcptr, uint32_t size,
+                                       Builtin builtin, uint32_t elementSize);
 
     static const uint32_t alignIndirectStatePointer = 64 * sizeof(uint8_t);
 };

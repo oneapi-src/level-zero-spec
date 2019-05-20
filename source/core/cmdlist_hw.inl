@@ -7,7 +7,6 @@
 #include "memory_manager.h"
 #include "module.h"
 #include "builtins.h"
-#include "builtin_functions_lib.h"
 #include "runtime/command_stream/linear_stream.h"
 #include "runtime/command_stream/preemption.h"
 #include "runtime/built_ins/built_ins.h"
@@ -606,19 +605,63 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemAdvise(xe_device_hand
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
-xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(
-    void *dstptr, const void *srcptr, size_t size, xe_event_handle_t hSignalEvent,
-    uint32_t numWaitEvents, xe_event_handle_t *phWaitEvents) {
-    auto builtinFunction =
-        this->device->getBuiltinFunctionsLib()->getFunction(Builtin::CopyBufferBytes);
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopyKernel(
+    void *dstptr, const void *srcptr, uint32_t size, Builtin builtin, uint32_t elementSize) {
+    auto builtinFunction = this->device->getBuiltinFunctionsLib()->getFunction(builtin);
 
     uint32_t groupSizeX = builtinFunction->getImmutableData()
                               ->getSignature()
                               .attributes.simdSize; // TODO : consider ATS fused threads
     uint32_t groupSizeY = 1u;
     uint32_t groupSizeZ = 1u;
+
     if (builtinFunction->setGroupSize(groupSizeX, groupSizeY, groupSizeZ))
         return XE_RESULT_ERROR_UNKNOWN;
+
+    builtinFunction->setArgumentValue(0, sizeof(dstptr), &dstptr);
+    builtinFunction->setArgumentValue(1, sizeof(srcptr), &srcptr);
+    uint32_t elems = size / elementSize;
+    builtinFunction->setArgumentValue(2, sizeof(elems), &elems);
+
+    uint32_t groups = (size + ((groupSizeX * elementSize) - 1)) / (groupSizeX * elementSize);
+    xe_thread_group_dimensions_t dispatchFuncArgs{groups, 1u, 1u};
+
+    return this->appendLaunchFunction(builtinFunction->toHandle(), &dispatchFuncArgs, nullptr, 0,
+                                      nullptr);
+}
+
+template <GFXCORE_FAMILY gfxCoreFamily>
+xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(
+    void *dstptr, const void *srcptr, size_t size, xe_event_handle_t hSignalEvent,
+    uint32_t numWaitEvents, xe_event_handle_t *phWaitEvents) {
+
+    uintptr_t start = reinterpret_cast<uintptr_t>(dstptr);
+
+    size_t middleAlignment = MemoryConstants::cacheLineSize;
+    size_t middleElSize = sizeof(uint32_t) * 4;
+
+    uintptr_t leftSize = start % middleAlignment;
+    leftSize = (leftSize > 0) ? (middleAlignment - leftSize) : 0;
+    // calc left leftover size
+    leftSize = std::min(leftSize, size);
+    // clamp left leftover size to requested size
+
+    uintptr_t rightSize = (start + size) % middleAlignment;
+    // calc right leftover size
+    rightSize = std::min(rightSize, size - leftSize);
+    // clamp
+
+    uintptr_t middleSizeBytes = size - leftSize - rightSize;
+    // calc middle size
+
+    if (!isAligned<4>(reinterpret_cast<uintptr_t>(srcptr) + leftSize)) {
+        // corner case - src relative to dst does not have DWORD alignment
+        leftSize += middleSizeBytes;
+        middleSizeBytes = 0;
+    }
+
+    auto middleSizeEls = middleSizeBytes / middleElSize;
+    assert(size == leftSize + middleSizeBytes + rightSize);
 
     auto alloc = globalMemoryManager->findMemAllocation(dstptr);
     if (alloc == nullptr) {
@@ -648,34 +691,29 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemoryCopy(
         return XE_RESULT_ERROR_INVALID_PARAMETER;
     }
 
-    builtinFunction->setArgumentValue(0, sizeof(dstptr), &dstptr);
-    builtinFunction->setArgumentValue(1, sizeof(srcptr), &srcptr);
+    xe_result_t ret = XE_RESULT_SUCCESS;
 
-    constexpr auto elementSize = sizeof(char);
-    assert(size / (groupSizeX * elementSize) < MemoryConstants::gigaByte);
-    uint32_t whole = static_cast<uint32_t>(size / (groupSizeX * elementSize));
-    uint32_t rest = static_cast<uint32_t>(size - whole * groupSizeX * elementSize);
-    xe_thread_group_dimensions_t dispatchFuncArgs{whole, 1u, 1u};
+    if (ret == XE_RESULT_SUCCESS && leftSize) {
+        ret = appendMemoryCopyKernel(dstptr, srcptr, static_cast<uint32_t>(leftSize),
+                                     Builtin::CopyBufferToBufferSide, 1);
+    }
 
-    auto ret = XE_RESULT_SUCCESS;
-    if (whole > 0) {
-        ret = this->appendLaunchFunction(builtinFunction->toHandle(), &dispatchFuncArgs, nullptr, 0,
-                                         nullptr);
+    if (ret == XE_RESULT_SUCCESS && middleSizeBytes) {
+        ret = appendMemoryCopyKernel(ptrOffset(dstptr, leftSize),
+                                     ptrOffset(srcptr, leftSize),
+                                     static_cast<uint32_t>(middleSizeBytes),
+                                     Builtin::CopyBufferToBufferMiddle,
+                                     static_cast<uint32_t>(middleElSize));
     }
-    if ((XE_RESULT_SUCCESS != ret) || (rest == 0)) {
-        return ret;
-    }
-    dstptr = ptrOffset(dstptr, whole * groupSizeX * elementSize);
-    srcptr = ptrOffset(srcptr, whole * groupSizeX * elementSize);
-    builtinFunction->setArgumentValue(0, sizeof(dstptr), &dstptr);
-    builtinFunction->setArgumentValue(1, sizeof(srcptr), &srcptr);
-    if (builtinFunction->setGroupSize(rest, 1u, 1u)) {
-        return XE_RESULT_ERROR_UNKNOWN;
-    }
-    dispatchFuncArgs.groupCountX = 1;
 
-    return this->appendLaunchFunction(builtinFunction->toHandle(), &dispatchFuncArgs, nullptr, 0,
-                                      nullptr);
+    if (ret == XE_RESULT_SUCCESS && rightSize) {
+        ret = appendMemoryCopyKernel(ptrOffset(dstptr, (leftSize + middleSizeBytes)),
+                                     ptrOffset(srcptr, (leftSize + middleSizeBytes)),
+                                     static_cast<uint32_t>(rightSize),
+                                     Builtin::CopyBufferToBufferSide, 1);
+    }
+
+    return ret;
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>
