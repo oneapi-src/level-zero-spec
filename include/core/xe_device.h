@@ -186,6 +186,15 @@ typedef enum _xe_device_properties_version_t
 #endif // XE_MAX_UUID_SIZE
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Supported device types
+typedef enum _xe_device_type_t
+{
+    XE_DEVICE_TYPE_GPU = 1,                         ///< Graphics Processing Unit
+    XE_DEVICE_TYPE_FPGA,                            ///< Field Programmable Gate Array
+
+} xe_device_type_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Device universal unique id (UUID)
 typedef struct _xe_device_uuid_t
 {
@@ -204,6 +213,7 @@ typedef struct _xe_device_uuid_t
 typedef struct _xe_device_properties_t
 {
     xe_device_properties_version_t version;         ///< [in] ::XE_DEVICE_PROPERTIES_VERSION_CURRENT
+    xe_device_type_t type;                          ///< [out] generic device type
     uint32_t vendorId;                              ///< [out] vendor id from PCI configuration
     uint32_t deviceId;                              ///< [out] device id from PCI configuration
     uint32_t subdeviceId;                           ///< [out] Subdevice id. Only valid if isSubdevice is true.

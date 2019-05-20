@@ -90,7 +90,7 @@ The following sample code demonstrates a basic initialization and device discove
 
     // Get the first device within the device group
     ${x}_device_handle_t hDevice = nullptr;
-    deviceCount = 1;
+    uint32_t deviceCount = 1;
     ${x}DeviceGroupGetDevices(hDeviceGroup, &deviceCount, &hDevice);
 
     ...

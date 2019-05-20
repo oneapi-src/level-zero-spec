@@ -112,6 +112,15 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Supported device types
+        enum class device_type_t
+        {
+            GPU = 1,                                        ///< Graphics Processing Unit
+            FPGA,                                           ///< Field Programmable Gate Array
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief API version of ::device_compute_properties_t
         enum class device_compute_properties_version_t
         {
@@ -203,6 +212,7 @@ namespace xe
         struct device_properties_t
         {
             device_properties_version_t version = device_properties_version_t::CURRENT; ///< [in] ::DEVICE_PROPERTIES_VERSION_CURRENT
+            device_type_t type;                             ///< [out] generic device type
             uint32_t vendorId;                              ///< [out] vendor id from PCI configuration
             uint32_t deviceId;                              ///< [out] device id from PCI configuration
             uint32_t subdeviceId;                           ///< [out] Subdevice id. Only valid if isSubdevice is true.
@@ -912,6 +922,10 @@ namespace xe
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts DeviceGroup::device_properties_version_t to std::string
     std::string to_string( xe::DeviceGroup::device_properties_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts DeviceGroup::device_type_t to std::string
+    std::string to_string( xe::DeviceGroup::device_type_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts DeviceGroup::device_compute_properties_version_t to std::string

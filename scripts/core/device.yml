@@ -119,6 +119,17 @@ desc: "Maximum device uuid size in bytes"
 name: $X_MAX_UUID_SIZE
 value: "16"
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported device types"
+class: $xDeviceGroup
+name: $x_device_type_t
+etors:
+    - name: $X_DEVICE_TYPE_GPU
+      value: "1"
+      desc: "Graphics Processing Unit"
+    - name: $X_DEVICE_TYPE_FPGA
+      desc: "Field Programmable Gate Array"
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "Device universal unique id (UUID)"
 class: $xDeviceGroup
@@ -142,6 +153,9 @@ members:
       name: version
       desc: "[in] $X_DEVICE_PROPERTIES_VERSION_CURRENT"
       init: $X_DEVICE_PROPERTIES_VERSION_CURRENT
+    - type: $x_device_type_t
+      name: type
+      desc: "[out] generic device type"
     - type: uint32_t
       name: vendorId
       desc: "[out] vendor id from PCI configuration"

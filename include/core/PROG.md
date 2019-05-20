@@ -86,7 +86,7 @@ The following sample code demonstrates a basic initialization and device discove
 
     // Get the first device within the device group
     xe_device_handle_t hDevice = nullptr;
-    deviceCount = 1;
+    uint32_t deviceCount = 1;
     xeDeviceGroupGetDevices(hDeviceGroup, &deviceCount, &hDevice);
 
     ...

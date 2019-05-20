@@ -778,6 +778,20 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts DeviceGroup::device_type_t to std::string
+    std::string to_string( xe::DeviceGroup::device_type_t val )
+    {
+        switch( val )
+        {
+        case xe::DeviceGroup::device_type_t::GPU:
+            return std::string("xe::DeviceGroup::device_type_t::GPU");
+        case xe::DeviceGroup::device_type_t::FPGA:
+            return std::string("xe::DeviceGroup::device_type_t::FPGA");
+        };
+        return std::string("xe::DeviceGroup::device_type_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts DeviceGroup::device_compute_properties_version_t to std::string
     std::string to_string( xe::DeviceGroup::device_compute_properties_version_t val )
     {
