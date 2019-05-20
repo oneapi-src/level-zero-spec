@@ -96,10 +96,6 @@ extern "C" {
 typedef uint8_t xe_bool_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle of driver's context object
-typedef struct _xe_context_handle_t *xe_context_handle_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's device group object
 typedef struct _xe_device_group_handle_t *xe_device_group_handle_t;
 

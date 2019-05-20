@@ -38,7 +38,6 @@
 //////////////////////////////////////////////////////////////////////////
 using xe_device_group_object_t      = std::tuple < xe_device_group_handle_t, xe_device_group_apitable_t* >;
 using xe_device_object_t            = std::tuple < xe_device_handle_t, xe_device_apitable_t* >;
-using xe_context_object_t           = std::tuple < xe_context_handle_t, xe_context_apitable_t* >;
 using xe_command_list_object_t      = std::tuple < xe_command_list_handle_t, xe_command_list_apitable_t* >;
 using xe_command_queue_object_t     = std::tuple < xe_command_queue_handle_t, xe_command_queue_apitable_t* >;
 using xe_fence_object_t             = std::tuple < xe_fence_handle_t, xe_fence_apitable_t* >;

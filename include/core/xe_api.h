@@ -34,7 +34,6 @@
 #endif
 
 #include "xe_driver.h"
-#include "xe_context.h"
 #include "xe_device.h"
 #include "xe_cmdqueue.h"
 #include "xe_cmdlist.h"

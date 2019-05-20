@@ -4,7 +4,6 @@ add_library(${TARGET_NAME}
     STATIC
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_common.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_driver.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_context.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_device.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdqueue.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_cmdlist.cpp

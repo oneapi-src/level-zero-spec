@@ -103,12 +103,6 @@ namespace xe
     using bool_t = uint8_t;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle of driver's context object
-    class Context;
-    struct _context_handle_t;
-    using context_handle_t = _context_handle_t*;
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of driver's device group object
     class DeviceGroup;
     struct _device_group_handle_t;

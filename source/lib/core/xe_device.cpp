@@ -819,6 +819,82 @@ namespace xe
         return "{ " + str.substr(0, str.size() - 3) + " }";
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts DeviceGroup::device_mem_alloc_flag_t to std::string
+    std::string to_string( xe::DeviceGroup::device_mem_alloc_flag_t val )
+    {
+        const auto bits = static_cast<uint32_t>( val );
+        if( 0 == bits ) return std::string("{}");
+        std::string str;
+        if( static_cast<uint32_t>(xe::DeviceGroup::device_mem_alloc_flag_t::DEFAULT) & bits )
+            str += "xe::DeviceGroup::device_mem_alloc_flag_t::DEFAULT | ";
+        if( static_cast<uint32_t>(xe::DeviceGroup::device_mem_alloc_flag_t::BIAS_CACHED) & bits )
+            str += "xe::DeviceGroup::device_mem_alloc_flag_t::BIAS_CACHED | ";
+        if( static_cast<uint32_t>(xe::DeviceGroup::device_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
+            str += "xe::DeviceGroup::device_mem_alloc_flag_t::BIAS_UNCACHED | ";
+        return "{ " + str.substr(0, str.size() - 3) + " }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts DeviceGroup::host_mem_alloc_flag_t to std::string
+    std::string to_string( xe::DeviceGroup::host_mem_alloc_flag_t val )
+    {
+        const auto bits = static_cast<uint32_t>( val );
+        if( 0 == bits ) return std::string("{}");
+        std::string str;
+        if( static_cast<uint32_t>(xe::DeviceGroup::host_mem_alloc_flag_t::DEFAULT) & bits )
+            str += "xe::DeviceGroup::host_mem_alloc_flag_t::DEFAULT | ";
+        if( static_cast<uint32_t>(xe::DeviceGroup::host_mem_alloc_flag_t::BIAS_CACHED) & bits )
+            str += "xe::DeviceGroup::host_mem_alloc_flag_t::BIAS_CACHED | ";
+        if( static_cast<uint32_t>(xe::DeviceGroup::host_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
+            str += "xe::DeviceGroup::host_mem_alloc_flag_t::BIAS_UNCACHED | ";
+        if( static_cast<uint32_t>(xe::DeviceGroup::host_mem_alloc_flag_t::BIAS_WRITE_COMBINED) & bits )
+            str += "xe::DeviceGroup::host_mem_alloc_flag_t::BIAS_WRITE_COMBINED | ";
+        return "{ " + str.substr(0, str.size() - 3) + " }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts DeviceGroup::memory_allocation_properties_version_t to std::string
+    std::string to_string( xe::DeviceGroup::memory_allocation_properties_version_t val )
+    {
+        switch( val )
+        {
+        case xe::DeviceGroup::memory_allocation_properties_version_t::CURRENT:
+            return std::string("xe::DeviceGroup::memory_allocation_properties_version_t::CURRENT");
+        };
+        return std::string("xe::DeviceGroup::memory_allocation_properties_version_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts DeviceGroup::memory_type_t to std::string
+    std::string to_string( xe::DeviceGroup::memory_type_t val )
+    {
+        switch( val )
+        {
+        case xe::DeviceGroup::memory_type_t::UNKNOWN:
+            return std::string("xe::DeviceGroup::memory_type_t::UNKNOWN");
+        case xe::DeviceGroup::memory_type_t::HOST:
+            return std::string("xe::DeviceGroup::memory_type_t::HOST");
+        case xe::DeviceGroup::memory_type_t::DEVICE:
+            return std::string("xe::DeviceGroup::memory_type_t::DEVICE");
+        case xe::DeviceGroup::memory_type_t::SHARED:
+            return std::string("xe::DeviceGroup::memory_type_t::SHARED");
+        };
+        return std::string("xe::DeviceGroup::memory_type_t::?");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts DeviceGroup::ipc_memory_flag_t to std::string
+    std::string to_string( xe::DeviceGroup::ipc_memory_flag_t val )
+    {
+        switch( val )
+        {
+        case xe::DeviceGroup::ipc_memory_flag_t::NONE:
+            return std::string("xe::DeviceGroup::ipc_memory_flag_t::NONE");
+        };
+        return std::string("xe::DeviceGroup::ipc_memory_flag_t::?");
+    }
+
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Device::p2p_properties_version_t to std::string

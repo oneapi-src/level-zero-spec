@@ -33,7 +33,6 @@
 #pragma once
 
 #include "xe_driver.hpp"
-#include "xe_context.hpp"
 #include "xe_device.hpp"
 #include "xe_cmdqueue.hpp"
 #include "xe_cmdlist.hpp"

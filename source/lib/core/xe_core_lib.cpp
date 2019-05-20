@@ -58,13 +58,6 @@ namespace xe_lib
 
         if( XE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<xe_pfnGetContextProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "xeGetContextProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &xeContext );
-        }
-
-        if( XE_RESULT_SUCCESS == result )
-        {
             auto getTable = reinterpret_cast<xe_pfnGetDeviceGroupProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "xeGetDeviceGroupProcAddrTable") );
             result = getTable( XE_API_VERSION_1_0, &xeDeviceGroup );

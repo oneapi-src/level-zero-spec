@@ -42,6 +42,8 @@ ${"##"} Device Group
 A device group represents a collection of physical, homogeneous devices in the system that support ${OneApi}.
 - The application may query the number device groups and the properties of each device group.
 - More than one device group may be available in the system. For example, group 0 may contain two GPUs, group 1 may contain one FPGA, and finally group 2 may contain another GPU with different properties than group 0.
+- A device group is primarily used for allocating and freeing memory used by one or more devices
+- Memory is **not** implicitly shared across all devices within a device group.  However, it is available to be explicitly shared.
 
 ${"##"} Device
 A device represents a physical device in the system that support ${OneApi}.
@@ -49,11 +51,6 @@ A device represents a physical device in the system that support ${OneApi}.
 - All devices in the device group share the same properties.
 - The application is responsible for sharing memory and explicit submission and synchronization across multiple devices.
 - Device may expose sub-devices that allow finer-grained partition and control; such as each tile of a multi-tile devices.
-
-${"##"} Context
-A context represents a set of ${OneApi} devices and the memory potentially accessible by those devices.
-- A context is primarily used for allocating and freeing memory used by one or more devices
-- Memory is **not** implicitly shared across all devices within a context.  However, it is available to be explicitly shared.
 
 ${"##"} Initialization
 The driver must be initialized by calling ::${x}Init before any other function.
@@ -71,35 +68,31 @@ The following sample code demonstrates a basic initialization and device discove
     uint32_t groupCount = 0;
     ${x}GetDeviceGroups(&groupCount, nullptr);
 
-    ${x}_device_group_handle_t* arrDeviceGroups = (${x}_device_group_handle_t*)
+    ${x}_device_group_handle_t* allDeviceGroups = (${x}_device_group_handle_t*)
         malloc(groupCount * sizeof(${x}_device_group_handle_t));
-    ${x}GetDeviceGroups(&groupCount, arrDeviceGroups);
+    ${x}GetDeviceGroups(&groupCount, allDeviceGroups);
 
-    uint32_t i = 0;
-    for(; i < groupCount; ++i)
-    {
+
+    // Find the first GPU device group
+    ${x}_device_group_handle_t hDeviceGroup = nullptr;
+    for(uint32_t i = 0; i < groupCount; ++i) {
         ${x}_device_properties_t device_properties;
-        ${x}DeviceGroupGetProperties(arrDeviceGroups[i], &device_properties);
+        ${x}DeviceGroupGetProperties(allDeviceGroups[i], &device_properties);
     
-        if(${X}_DEVICE_TYPE_GPU == device_properties.type)
+        if(${X}_DEVICE_TYPE_GPU == device_properties.type) {
+            hDeviceGroup = allDeviceGroups[i];
             break;
+        }
     }
-
-    if(i == groupCount)
+    if(nullptr == hDeviceGroup)
         return; // no GPU devices found
 
-    // Get all the devices within the device group
-    uint32_t deviceCount = 0;
-    ${x}DeviceGroupGetDevices(arrDeviceGroups[i], &deviceCount, nullptr);
 
-    ${x}_device_handle_t* arrDevices = (${x}_device_handle_t*)
-        malloc(deviceCount * sizeof(${x}_device_handle_t));
-    ${x}DeviceGroupGetDevices(arrDeviceGroups[i], &deviceCount, arrDevices);
+    // Get the first device within the device group
+    ${x}_device_handle_t hDevice = nullptr;
+    deviceCount = 1;
+    ${x}DeviceGroupGetDevices(hDeviceGroup, &deviceCount, &hDevice);
 
-
-    // Create a context for all devices within the device group
-    ${x}_context_handle_t hContext;
-    ${x}ContextCreate(deviceCount, arrDevices, &hContext);
     ...
 
 ```
@@ -809,7 +802,7 @@ device to generate the parameters.
     ${x}_thread_group_dimensions_t* pIndirectArgs;
     
     ...
-    ${x}ContextAllocDeviceMem(hContext, hDevice, flags, sizeof(${x}_thread_group_dimensions_t), sizeof(uint32_t), &pIndirectArgs);
+    ${x}DeviceGroupAllocDeviceMem(hDeviceGroup, hDevice, flags, sizeof(${x}_thread_group_dimensions_t), sizeof(uint32_t), &pIndirectArgs);
 
     // Append function
     ${x}CommandListAppendLaunchFunctionIndirect(hCommandList, hFunction, &pIndirectArgs, nullptr, 0, nullptr);
@@ -897,7 +890,7 @@ A 16-byte unique device identifier (uuid) can be obtained for a device or sub-de
     assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
 
     void* pMemForSubDevice2;
-    ${x}ContextAllocDeviceMem(hContext, subDevice, ${X}_DEVICE_MEM_ALLOC_FLAG_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
+    ${x}DeviceGroupAllocDeviceMem(hDeviceGroup, subDevice, ${X}_DEVICE_MEM_ALLOC_FLAG_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
     ...
 
     ...
@@ -931,9 +924,9 @@ The following sample code demonstrate a sequence for using coarse-grain residenc
         node* next;
     };
     node* begin = nullptr;
-    ${x}ContextAllocHostMem(hContext, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
-    ${x}ContextAllocHostMem(hContext, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
-    ${x}ContextAllocHostMem(hContext, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
+    ${x}DeviceGroupAllocHostMem(hDeviceGroup, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
+    ${x}DeviceGroupAllocHostMem(hDeviceGroup, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
+    ${x}DeviceGroupAllocHostMem(hDeviceGroup, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
 
     // 'begin' is passed as function argument and appended into command list
     ${x}FunctionSetAttribute(hFuncArgs, ${X}_FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS, TRUE);
@@ -951,9 +944,9 @@ The following sample code demonstrate a sequence for using fine-grain residency 
         node* next;
     };
     node* begin = nullptr;
-    ${x}ContextAllocHostMem(hContext, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
-    ${x}ContextAllocHostMem(hContext, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
-    ${x}ContextAllocHostMem(hContext, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
+    ${x}DeviceGroupAllocHostMem(hDeviceGroup, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
+    ${x}DeviceGroupAllocHostMem(hDeviceGroup, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
+    ${x}DeviceGroupAllocHostMem(hDeviceGroup, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
 
     // 'begin' is passed as function argument and appended into command list
     ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
@@ -1029,10 +1022,10 @@ The following code examples demonstrate how to use the memory IPC APIs:
 1. First, the allocation is made, packaged, and sent on the sending process:
 ```c
     void* dptr = nullptr;
-    ${x}ContextAllocDeviceMem(hContext, hDevice, flags, size, alignment, &dptr);
+    ${x}DeviceGroupAllocDeviceMem(hDeviceGroup, hDevice, flags, size, alignment, &dptr);
 
     ${x}_ipc_mem_handle_t hIPC;
-    ${x}ContextGetMemIpcHandle(hContext, dptr, &hIPC);
+    ${x}DeviceGroupGetMemIpcHandle(hDeviceGroup, dptr, &hIPC);
 
     // Method of sending to receiving process is not defined by ${OneApi}:
     send_to_receiving_process(hIPC);
@@ -1045,7 +1038,7 @@ The following code examples demonstrate how to use the memory IPC APIs:
     hIPC = receive_from_sending_process();
 
     void* dptr = nullptr;
-    ${x}ContextOpenMemIpcHandle(hContext, hDevice, hIPC, ${X}_IPC_MEMORY_FLAG_NONE, &dptr);
+    ${x}DeviceGroupOpenMemIpcHandle(hDeviceGroup, hDevice, hIPC, ${X}_IPC_MEMORY_FLAG_NONE, &dptr);
 ```
 
 3. Each process may now refer to the same device memory allocation via its `dptr`.
@@ -1053,12 +1046,12 @@ Note, there is no guaranteed address equivalence for the values of `dptr` in eac
 
 4. To cleanup, first close the handle in the receiving process:
 ```c
-    ${x}ContextCloseMemIpcHandle(hContext, dptr);
+    ${x}DeviceGroupCloseMemIpcHandle(hDeviceGroup, dptr);
 ```
 
 5. Finally, free the device pointer in the sending process:
 ```c
-    ${x}ContextFreeMem(hContext, dptr);
+    ${x}DeviceGroupFreeMem(hDeviceGroup, dptr);
 ```
 
 ${"###"} Events

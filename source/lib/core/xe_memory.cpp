@@ -52,7 +52,7 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hContext
+///         + nullptr == hDeviceGroup
 ///         + nullptr == hDevice
 ///         + nullptr == ptr
 ///         + unsupported allocation size
@@ -61,8 +61,8 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
-xeContextAllocSharedMem(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupAllocSharedMem(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
     xe_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
@@ -71,14 +71,14 @@ xeContextAllocSharedMem(
     void** ptr                                      ///< [out] pointer to shared allocation
     )
 {
-    auto pfnAllocSharedMem = xe_lib::lib.xeContext.pfnAllocSharedMem;
+    auto pfnAllocSharedMem = xe_lib::lib.xeDeviceGroup.pfnAllocSharedMem;
 
 #if _DEBUG
     if( nullptr == pfnAllocSharedMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnAllocSharedMem( hContext, hDevice, device_flags, host_flags, size, alignment, ptr );
+    return pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, host_flags, size, alignment, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -99,7 +99,7 @@ xeContextAllocSharedMem(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hContext
+///         + nullptr == hDeviceGroup
 ///         + nullptr == hDevice
 ///         + nullptr == ptr
 ///         + unsupported allocation size
@@ -108,8 +108,8 @@ xeContextAllocSharedMem(
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
-xeContextAllocDeviceMem(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupAllocDeviceMem(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
@@ -117,14 +117,14 @@ xeContextAllocDeviceMem(
     void** ptr                                      ///< [out] pointer to device allocation
     )
 {
-    auto pfnAllocDeviceMem = xe_lib::lib.xeContext.pfnAllocDeviceMem;
+    auto pfnAllocDeviceMem = xe_lib::lib.xeDeviceGroup.pfnAllocDeviceMem;
 
 #if _DEBUG
     if( nullptr == pfnAllocDeviceMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnAllocDeviceMem( hContext, hDevice, flags, size, alignment, ptr );
+    return pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, size, alignment, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -146,7 +146,7 @@ xeContextAllocDeviceMem(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hContext
+///         + nullptr == hDeviceGroup
 ///         + nullptr == ptr
 ///         + unsupported allocation size
 ///         + unsupported alignment
@@ -154,22 +154,22 @@ xeContextAllocDeviceMem(
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
-xeContextAllocHostMem(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupAllocHostMem(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     xe_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
     void** ptr                                      ///< [out] pointer to host allocation
     )
 {
-    auto pfnAllocHostMem = xe_lib::lib.xeContext.pfnAllocHostMem;
+    auto pfnAllocHostMem = xe_lib::lib.xeDeviceGroup.pfnAllocHostMem;
 
 #if _DEBUG
     if( nullptr == pfnAllocHostMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnAllocHostMem( hContext, flags, size, alignment, ptr );
+    return pfnAllocHostMem( hDeviceGroup, flags, size, alignment, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -193,23 +193,23 @@ xeContextAllocHostMem(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hContext
+///         + nullptr == hDeviceGroup
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeContextFreeMem(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupFreeMem(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     const void* ptr                                 ///< [in] pointer to memory to free
     )
 {
-    auto pfnFreeMem = xe_lib::lib.xeContext.pfnFreeMem;
+    auto pfnFreeMem = xe_lib::lib.xeDeviceGroup.pfnFreeMem;
 
 #if _DEBUG
     if( nullptr == pfnFreeMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnFreeMem( hContext, ptr );
+    return pfnFreeMem( hDeviceGroup, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -227,25 +227,25 @@ xeContextFreeMem(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hContext
+///         + nullptr == hDeviceGroup
 ///         + nullptr == ptr
 ///         + nullptr == pMemProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeContextGetMemProperties(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupGetMemProperties(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     const void* ptr,                                ///< [in] Pointer to query
     xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
     )
 {
-    auto pfnGetMemProperties = xe_lib::lib.xeContext.pfnGetMemProperties;
+    auto pfnGetMemProperties = xe_lib::lib.xeDeviceGroup.pfnGetMemProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetMemProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnGetMemProperties( hContext, ptr, pMemProperties );
+    return pfnGetMemProperties( hDeviceGroup, ptr, pMemProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -263,25 +263,25 @@ xeContextGetMemProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hContext
+///         + nullptr == hDeviceGroup
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeContextGetMemAddressRange(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupGetMemAddressRange(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     const void* ptr,                                ///< [in] Pointer to query
     void** pBase,                                   ///< [in,out][optional] base address of the allocation
     size_t* pSize                                   ///< [in,out][optional] size of the allocation
     )
 {
-    auto pfnGetMemAddressRange = xe_lib::lib.xeContext.pfnGetMemAddressRange;
+    auto pfnGetMemAddressRange = xe_lib::lib.xeDeviceGroup.pfnGetMemAddressRange;
 
 #if _DEBUG
     if( nullptr == pfnGetMemAddressRange )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnGetMemAddressRange( hContext, ptr, pBase, pSize );
+    return pfnGetMemAddressRange( hDeviceGroup, ptr, pBase, pSize );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -302,25 +302,25 @@ xeContextGetMemAddressRange(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hContext
+///         + nullptr == hDeviceGroup
 ///         + nullptr == ptr
 ///         + nullptr == pIpcHandle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeContextGetMemIpcHandle(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupGetMemIpcHandle(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     const void* ptr,                                ///< [in] Pointer to the device memory allocation
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
     )
 {
-    auto pfnGetMemIpcHandle = xe_lib::lib.xeContext.pfnGetMemIpcHandle;
+    auto pfnGetMemIpcHandle = xe_lib::lib.xeDeviceGroup.pfnGetMemIpcHandle;
 
 #if _DEBUG
     if( nullptr == pfnGetMemIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnGetMemIpcHandle( hContext, ptr, pIpcHandle );
+    return pfnGetMemIpcHandle( hDeviceGroup, ptr, pIpcHandle );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -331,7 +331,8 @@ xeContextGetMemIpcHandle(
 ///     - Takes an IPC memory handle from a sending process and associates it
 ///       with a device pointer usable in this process.
 ///     - The device pointer in this process should not be freed with
-///       ::xeContextFreeMem, but rather with ::xeContextCloseMemIpcHandle.
+///       ::xeDeviceGroupFreeMem, but rather with
+///       ::xeDeviceGroupCloseMemIpcHandle.
 ///     - The application may call this function from simultaneous threads.
 /// 
 /// @remarks
@@ -343,29 +344,29 @@ xeContextGetMemIpcHandle(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hContext
+///         + nullptr == hDeviceGroup
 ///         + nullptr == hDevice
 ///         + nullptr == handle
 ///         + nullptr == ptr
 ///         + invalid flags
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeContextOpenMemIpcHandle(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupOpenMemIpcHandle(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
     xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
     xe_ipc_memory_flag_t flags,                     ///< [in] flags controlling the operation
     void** ptr                                      ///< [out] pointer to device allocation in this process
     )
 {
-    auto pfnOpenMemIpcHandle = xe_lib::lib.xeContext.pfnOpenMemIpcHandle;
+    auto pfnOpenMemIpcHandle = xe_lib::lib.xeDeviceGroup.pfnOpenMemIpcHandle;
 
 #if _DEBUG
     if( nullptr == pfnOpenMemIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnOpenMemIpcHandle( hContext, hDevice, handle, flags, ptr );
+    return pfnOpenMemIpcHandle( hDeviceGroup, hDevice, handle, flags, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -373,7 +374,7 @@ xeContextOpenMemIpcHandle(
 /// 
 /// @details
 ///     - Closes an IPC memory handle by unmapping memory that was opened in
-///       this process using ::xeContextOpenMemIpcHandle.
+///       this process using ::xeDeviceGroupOpenMemIpcHandle.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same pointer.
 /// 
@@ -386,23 +387,23 @@ xeContextOpenMemIpcHandle(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hContext
+///         + nullptr == hDeviceGroup
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeContextCloseMemIpcHandle(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupCloseMemIpcHandle(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     const void* ptr                                 ///< [in] pointer to device allocation in this process
     )
 {
-    auto pfnCloseMemIpcHandle = xe_lib::lib.xeContext.pfnCloseMemIpcHandle;
+    auto pfnCloseMemIpcHandle = xe_lib::lib.xeDeviceGroup.pfnCloseMemIpcHandle;
 
 #if _DEBUG
     if( nullptr == pfnCloseMemIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnCloseMemIpcHandle( hContext, ptr );
+    return pfnCloseMemIpcHandle( hDeviceGroup, ptr );
 }
 
 } // extern "C"
@@ -427,7 +428,7 @@ namespace xe
     /// 
     /// @throws result_t
     void* __xecall
-    Context::AllocSharedMem(
+    DeviceGroup::AllocSharedMem(
         Device* pDevice,                                ///< [in] pointer to the device
         device_mem_alloc_flag_t device_flags,           ///< [in] flags specifying additional device allocation controls
         host_mem_alloc_flag_t host_flags,               ///< [in] flags specifying additional host allocation controls
@@ -435,8 +436,8 @@ namespace xe
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
         )
     {
-        // auto result = ::xeContextAllocSharedMem( handle, pDevice, device_flags, host_flags, size, alignment );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Context::AllocSharedMem");
+        // auto result = ::xeDeviceGroupAllocSharedMem( handle, pDevice, device_flags, host_flags, size, alignment );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::AllocSharedMem");
 
         return (void*)0;
     }
@@ -459,15 +460,15 @@ namespace xe
     /// 
     /// @throws result_t
     void* __xecall
-    Context::AllocDeviceMem(
+    DeviceGroup::AllocDeviceMem(
         Device* pDevice,                                ///< [in] pointer to the device
         device_mem_alloc_flag_t flags,                  ///< [in] flags specifying additional allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
         )
     {
-        // auto result = ::xeContextAllocDeviceMem( handle, pDevice, flags, size, alignment );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Context::AllocDeviceMem");
+        // auto result = ::xeDeviceGroupAllocDeviceMem( handle, pDevice, flags, size, alignment );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::AllocDeviceMem");
 
         return (void*)0;
     }
@@ -491,14 +492,14 @@ namespace xe
     /// 
     /// @throws result_t
     void* __xecall
-    Context::AllocHostMem(
+    DeviceGroup::AllocHostMem(
         host_mem_alloc_flag_t flags,                    ///< [in] flags specifying additional allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
         )
     {
-        // auto result = ::xeContextAllocHostMem( handle, flags, size, alignment );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Context::AllocHostMem");
+        // auto result = ::xeDeviceGroupAllocHostMem( handle, flags, size, alignment );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::AllocHostMem");
 
         return (void*)0;
     }
@@ -521,12 +522,12 @@ namespace xe
     /// 
     /// @throws result_t
     void __xecall
-    Context::FreeMem(
+    DeviceGroup::FreeMem(
         const void* ptr                                 ///< [in] pointer to memory to free
         )
     {
-        // auto result = ::xeContextFreeMem( handle, ptr );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Context::FreeMem");
+        // auto result = ::xeDeviceGroupFreeMem( handle, ptr );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::FreeMem");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -543,13 +544,13 @@ namespace xe
     ///     - memory_allocation_properties_t: Query result for memory allocation properties
     /// 
     /// @throws result_t
-    Context::memory_allocation_properties_t __xecall
-    Context::GetMemProperties(
+    DeviceGroup::memory_allocation_properties_t __xecall
+    DeviceGroup::GetMemProperties(
         const void* ptr                                 ///< [in] Pointer to query
         )
     {
-        // auto result = ::xeContextGetMemProperties( handle, ptr );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Context::GetMemProperties");
+        // auto result = ::xeDeviceGroupGetMemProperties( handle, ptr );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::GetMemProperties");
 
         return memory_allocation_properties_t{};
     }
@@ -566,14 +567,14 @@ namespace xe
     /// 
     /// @throws result_t
     void __xecall
-    Context::GetMemAddressRange(
+    DeviceGroup::GetMemAddressRange(
         const void* ptr,                                ///< [in] Pointer to query
         void** pBase,                                   ///< [in,out][optional] base address of the allocation
         size_t* pSize                                   ///< [in,out][optional] size of the allocation
         )
     {
-        // auto result = ::xeContextGetMemAddressRange( handle, ptr, pBase, pSize );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Context::GetMemAddressRange");
+        // auto result = ::xeDeviceGroupGetMemAddressRange( handle, ptr, pBase, pSize );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::GetMemAddressRange");
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -594,13 +595,12 @@ namespace xe
     /// 
     /// @throws result_t
     ipc_mem_handle_t __xecall
-    Context::GetMemIpcHandle(
-        Context* pContext,                              ///< [in] pointer to context
+    DeviceGroup::GetMemIpcHandle(
         const void* ptr                                 ///< [in] Pointer to the device memory allocation
         )
     {
-        // auto result = ::xeContextGetMemIpcHandle( handle, pContext, ptr );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Context::GetMemIpcHandle");
+        // auto result = ::xeDeviceGroupGetMemIpcHandle( handle, ptr );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::GetMemIpcHandle");
 
         return ipc_mem_handle_t{};
     }
@@ -613,7 +613,7 @@ namespace xe
     ///     - Takes an IPC memory handle from a sending process and associates it
     ///       with a device pointer usable in this process.
     ///     - The device pointer in this process should not be freed with
-    ///       ::ContextFreeMem, but rather with ::ContextCloseMemIpcHandle.
+    ///       ::DeviceGroupFreeMem, but rather with ::DeviceGroupCloseMemIpcHandle.
     ///     - The application may call this function from simultaneous threads.
     /// 
     /// @remarks
@@ -625,14 +625,14 @@ namespace xe
     /// 
     /// @throws result_t
     void* __xecall
-    Context::OpenMemIpcHandle(
+    DeviceGroup::OpenMemIpcHandle(
         Device* pDevice,                                ///< [in] pointer to the device to associate with the IPC memory handle
         ipc_mem_handle_t handle,                        ///< [in] IPC memory handle
         ipc_memory_flag_t flags                         ///< [in] flags controlling the operation
         )
     {
-        // auto result = ::xeContextOpenMemIpcHandle( handle, pDevice, handle, flags );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Context::OpenMemIpcHandle");
+        // auto result = ::xeDeviceGroupOpenMemIpcHandle( handle, pDevice, handle, flags );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::OpenMemIpcHandle");
 
         return (void*)0;
     }
@@ -642,7 +642,7 @@ namespace xe
     /// 
     /// @details
     ///     - Closes an IPC memory handle by unmapping memory that was opened in
-    ///       this process using ::ContextOpenMemIpcHandle.
+    ///       this process using ::DeviceGroupOpenMemIpcHandle.
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same pointer.
     /// 
@@ -652,12 +652,12 @@ namespace xe
     /// 
     /// @throws result_t
     void __xecall
-    Context::CloseMemIpcHandle(
+    DeviceGroup::CloseMemIpcHandle(
         const void* ptr                                 ///< [in] pointer to device allocation in this process
         )
     {
-        // auto result = ::xeContextCloseMemIpcHandle( handle, ptr );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Context::CloseMemIpcHandle");
+        // auto result = ::xeDeviceGroupCloseMemIpcHandle( handle, ptr );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::CloseMemIpcHandle");
     }
 
 } // namespace xe

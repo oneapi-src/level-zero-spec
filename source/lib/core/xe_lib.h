@@ -51,7 +51,6 @@ namespace xe_lib
         xe_global_apitable_t            xeGlobal = {};
         xe_device_group_apitable_t      xeDeviceGroup = {};
         xe_device_apitable_t            xeDevice = {};
-        xe_context_apitable_t           xeContext = {};
         xe_command_list_apitable_t      xeCommandList = {};
         xe_command_queue_apitable_t     xeCommandQueue = {};
         xe_fence_apitable_t             xeFence = {};

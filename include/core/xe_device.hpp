@@ -143,6 +143,54 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Supported device memory allocation flags
+        enum class device_mem_alloc_flag_t
+        {
+            DEFAULT = 0,                                    ///< implicit default behavior; uses driver-based heuristics
+            BIAS_CACHED = XE_BIT( 0 ),                      ///< device should cache allocation
+            BIAS_UNCACHED = XE_BIT( 1 ),                    ///< device should not cache allocation (UC)
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Supported host memory allocation flags
+        enum class host_mem_alloc_flag_t
+        {
+            DEFAULT = 0,                                    ///< implicit default behavior; uses driver-based heuristics
+            BIAS_CACHED = XE_BIT( 0 ),                      ///< host should cache allocation
+            BIAS_UNCACHED = XE_BIT( 1 ),                    ///< host should not cache allocation (UC)
+            BIAS_WRITE_COMBINED = XE_BIT( 2 ),              ///< host memory should be allocated write-combined (WC)
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief API version of ::memory_allocation_properties_t
+        enum class memory_allocation_properties_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Memory allocation type
+        enum class memory_type_t
+        {
+            UNKNOWN = 0,                                    ///< the memory pointed to is of unknown type
+            HOST,                                           ///< the memory pointed to is a host allocation
+            DEVICE,                                         ///< the memory pointed to is a device allocation
+            SHARED,                                         ///< the memory pointed to is a shared ownership allocation
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Supported IPC memory flags
+        enum class ipc_memory_flag_t
+        {
+            NONE = 0,                                       ///< No special flags
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Device universal unique id (UUID)
         struct device_uuid_t
         {
@@ -224,6 +272,18 @@ namespace xe
             uint32_t lastLevelCacheSize;                    ///< [out] Per-cache Last Level Cache (L3) size, in bytes
             bool_t lastLevelCacheSizeControl;               ///< [out] Support User control on Last Level Cache (i.e. Resize SLM
                                                             ///< section vs Generic Cache).
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Memory allocation properties queried using
+        ///        ::DeviceGroupGetMemProperties
+        struct memory_allocation_properties_t
+        {
+            memory_allocation_properties_version_t version = memory_allocation_properties_version_t::CURRENT;   ///< [in] ::MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT
+            memory_type_t type;                             ///< [out] Type of allocated memory
+            Device* device;                                 ///< [out] Device handle associated with this allocation (optional)
+            uint64_t id;                                    ///< [out] Identifier for this allocation
 
         };
 
@@ -371,6 +431,199 @@ namespace xe
         device_memory_properties_t __xecall
         GetMemoryProperties(
             void
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Allocates memory that is shared between the host and one or more
+        ///        devices
+        /// 
+        /// @details
+        ///     - Shared allocations share ownership between the host and one or more
+        ///       devices.
+        ///     - The application may call this function from simultaneous threads.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cudaMallocManaged**
+        /// @returns
+        ///     - void*: pointer to shared allocation
+        /// 
+        /// @throws result_t
+        void* __xecall
+        AllocSharedMem(
+            Device* pDevice,                                ///< [in] pointer to the device
+            device_mem_alloc_flag_t device_flags,           ///< [in] flags specifying additional device allocation controls
+            host_mem_alloc_flag_t host_flags,               ///< [in] flags specifying additional host allocation controls
+            size_t size,                                    ///< [in] size in bytes to allocate
+            size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Allocates memory specific to a device
+        /// 
+        /// @details
+        ///     - A device allocation is owned by a specific device.
+        ///     - In general, a device allocation may only be accessed by the device
+        ///       that owns it.
+        ///     - The application may call this function from simultaneous threads.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cudaMalloc**
+        /// @returns
+        ///     - void*: pointer to device allocation
+        /// 
+        /// @throws result_t
+        void* __xecall
+        AllocDeviceMem(
+            Device* pDevice,                                ///< [in] pointer to the device
+            device_mem_alloc_flag_t flags,                  ///< [in] flags specifying additional allocation controls
+            size_t size,                                    ///< [in] size in bytes to allocate
+            size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Allocates host memory
+        /// 
+        /// @details
+        ///     - A host allocation is owned by the host process.
+        ///     - Host allocations are accessible by the host and all devices.
+        ///     - Host allocations are frequently used as staging areas to transfer data
+        ///       to or from devices.
+        ///     - The application may call this function from simultaneous threads.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cudaHostAlloc**
+        /// @returns
+        ///     - void*: pointer to host allocation
+        /// 
+        /// @throws result_t
+        void* __xecall
+        AllocHostMem(
+            host_mem_alloc_flag_t flags,                    ///< [in] flags specifying additional allocation controls
+            size_t size,                                    ///< [in] size in bytes to allocate
+            size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Frees allocated host memory, device memory, or shared memory
+        /// 
+        /// @details
+        ///     - The application is responsible for making sure the device is not
+        ///       currently referencing the memory before it is freed
+        ///     - The implementation of this function will immediately free all Host and
+        ///       Device allocations associated with this memory
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same pointer.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cudaFree**
+        ///     - **cudaFreeHost**
+        /// @throws result_t
+        void __xecall
+        FreeMem(
+            const void* ptr                                 ///< [in] pointer to memory to free
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Retrieves attributes of a memory allocation
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuPointerGetAttribute**
+        /// @returns
+        ///     - memory_allocation_properties_t: Query result for memory allocation properties
+        /// 
+        /// @throws result_t
+        memory_allocation_properties_t __xecall
+        GetMemProperties(
+            const void* ptr                                 ///< [in] Pointer to query
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Retrieves the base address and/or size of an allocation
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuMemGetAddressRange**
+        /// @throws result_t
+        void __xecall
+        GetMemAddressRange(
+            const void* ptr,                                ///< [in] Pointer to query
+            void** pBase = nullptr,                         ///< [in,out][optional] base address of the allocation
+            size_t* pSize = nullptr                         ///< [in,out][optional] size of the allocation
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Creates an IPC memory handle for the specified allocation in the
+        ///        sending process
+        /// 
+        /// @details
+        ///     - Takes a pointer to the base of a device memory allocation and exports
+        ///       it for use in another process.
+        ///     - The application may call this function from simultaneous threads.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuIpcGetMemHandle**
+        /// @returns
+        ///     - ipc_mem_handle_t: Returned IPC memory handle
+        /// 
+        /// @throws result_t
+        ipc_mem_handle_t __xecall
+        GetMemIpcHandle(
+            const void* ptr                                 ///< [in] Pointer to the device memory allocation
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Opens an IPC memory handle to retrieve a device pointer in a receiving
+        ///        process
+        /// 
+        /// @details
+        ///     - Takes an IPC memory handle from a sending process and associates it
+        ///       with a device pointer usable in this process.
+        ///     - The device pointer in this process should not be freed with
+        ///       ::DeviceGroupFreeMem, but rather with ::DeviceGroupCloseMemIpcHandle.
+        ///     - The application may call this function from simultaneous threads.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuIpcOpenMemHandle**
+        /// @returns
+        ///     - void*: pointer to device allocation in this process
+        /// 
+        /// @throws result_t
+        void* __xecall
+        OpenMemIpcHandle(
+            Device* pDevice,                                ///< [in] pointer to the device to associate with the IPC memory handle
+            ipc_mem_handle_t handle,                        ///< [in] IPC memory handle
+            ipc_memory_flag_t flags                         ///< [in] flags controlling the operation
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Closes an IPC memory handle in a receiving process
+        /// 
+        /// @details
+        ///     - Closes an IPC memory handle by unmapping memory that was opened in
+        ///       this process using ::DeviceGroupOpenMemIpcHandle.
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same pointer.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuIpcCloseMemHandle**
+        /// @throws result_t
+        void __xecall
+        CloseMemIpcHandle(
+            const void* ptr                                 ///< [in] pointer to device allocation in this process
             );
 
     };
@@ -671,6 +924,26 @@ namespace xe
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts DeviceGroup::memory_access_capabilities_t to std::string
     std::string to_string( xe::DeviceGroup::memory_access_capabilities_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts DeviceGroup::device_mem_alloc_flag_t to std::string
+    std::string to_string( xe::DeviceGroup::device_mem_alloc_flag_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts DeviceGroup::host_mem_alloc_flag_t to std::string
+    std::string to_string( xe::DeviceGroup::host_mem_alloc_flag_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts DeviceGroup::memory_allocation_properties_version_t to std::string
+    std::string to_string( xe::DeviceGroup::memory_allocation_properties_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts DeviceGroup::memory_type_t to std::string
+    std::string to_string( xe::DeviceGroup::memory_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts DeviceGroup::ipc_memory_flag_t to std::string
+    std::string to_string( xe::DeviceGroup::ipc_memory_flag_t val );
 
 
     ///////////////////////////////////////////////////////////////////////////////

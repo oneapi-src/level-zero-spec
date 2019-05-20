@@ -150,71 +150,6 @@ xeGetDeviceProcAddrTable(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Context table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for ptable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xeGetContextProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xe_context_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
-    )
-{
-    auto& mytable = xe_layer::val.xeContext;
-
-#ifdef _DEBUG
-    if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    if( xe_layer::val.version < version )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
-
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    mytable.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                               = xeContextCreate;
-
-    mytable.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                              = xeContextDestroy;
-
-    mytable.pfnAllocSharedMem                                       = ptable->pfnAllocSharedMem;
-    ptable->pfnAllocSharedMem                                       = xeContextAllocSharedMem;
-
-    mytable.pfnAllocDeviceMem                                       = ptable->pfnAllocDeviceMem;
-    ptable->pfnAllocDeviceMem                                       = xeContextAllocDeviceMem;
-
-    mytable.pfnAllocHostMem                                         = ptable->pfnAllocHostMem;
-    ptable->pfnAllocHostMem                                         = xeContextAllocHostMem;
-
-    mytable.pfnFreeMem                                              = ptable->pfnFreeMem;
-    ptable->pfnFreeMem                                              = xeContextFreeMem;
-
-    mytable.pfnGetMemProperties                                     = ptable->pfnGetMemProperties;
-    ptable->pfnGetMemProperties                                     = xeContextGetMemProperties;
-
-    mytable.pfnGetMemAddressRange                                   = ptable->pfnGetMemAddressRange;
-    ptable->pfnGetMemAddressRange                                   = xeContextGetMemAddressRange;
-
-    mytable.pfnGetMemIpcHandle                                      = ptable->pfnGetMemIpcHandle;
-    ptable->pfnGetMemIpcHandle                                      = xeContextGetMemIpcHandle;
-
-    mytable.pfnOpenMemIpcHandle                                     = ptable->pfnOpenMemIpcHandle;
-    ptable->pfnOpenMemIpcHandle                                     = xeContextOpenMemIpcHandle;
-
-    mytable.pfnCloseMemIpcHandle                                    = ptable->pfnCloseMemIpcHandle;
-    ptable->pfnCloseMemIpcHandle                                    = xeContextCloseMemIpcHandle;
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's DeviceGroup table
 ///        with current process' addresses
 ///
@@ -260,6 +195,33 @@ xeGetDeviceGroupProcAddrTable(
 
     mytable.pfnGetMemoryProperties                                  = ptable->pfnGetMemoryProperties;
     ptable->pfnGetMemoryProperties                                  = xeDeviceGroupGetMemoryProperties;
+
+    mytable.pfnAllocSharedMem                                       = ptable->pfnAllocSharedMem;
+    ptable->pfnAllocSharedMem                                       = xeDeviceGroupAllocSharedMem;
+
+    mytable.pfnAllocDeviceMem                                       = ptable->pfnAllocDeviceMem;
+    ptable->pfnAllocDeviceMem                                       = xeDeviceGroupAllocDeviceMem;
+
+    mytable.pfnAllocHostMem                                         = ptable->pfnAllocHostMem;
+    ptable->pfnAllocHostMem                                         = xeDeviceGroupAllocHostMem;
+
+    mytable.pfnFreeMem                                              = ptable->pfnFreeMem;
+    ptable->pfnFreeMem                                              = xeDeviceGroupFreeMem;
+
+    mytable.pfnGetMemProperties                                     = ptable->pfnGetMemProperties;
+    ptable->pfnGetMemProperties                                     = xeDeviceGroupGetMemProperties;
+
+    mytable.pfnGetMemAddressRange                                   = ptable->pfnGetMemAddressRange;
+    ptable->pfnGetMemAddressRange                                   = xeDeviceGroupGetMemAddressRange;
+
+    mytable.pfnGetMemIpcHandle                                      = ptable->pfnGetMemIpcHandle;
+    ptable->pfnGetMemIpcHandle                                      = xeDeviceGroupGetMemIpcHandle;
+
+    mytable.pfnOpenMemIpcHandle                                     = ptable->pfnOpenMemIpcHandle;
+    ptable->pfnOpenMemIpcHandle                                     = xeDeviceGroupOpenMemIpcHandle;
+
+    mytable.pfnCloseMemIpcHandle                                    = ptable->pfnCloseMemIpcHandle;
+    ptable->pfnCloseMemIpcHandle                                    = xeDeviceGroupCloseMemIpcHandle;
 
     return result;
 }
@@ -825,56 +787,6 @@ xeDeviceGroupGetDriverVersion(
     }
 
     return pfnGetDriverVersion( hDeviceGroup, version );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeContextCreate
-xe_result_t __xecall
-xeContextCreate(
-    uint32_t numDevices,                            ///< [in] number of devices in phDevice
-    xe_device_handle_t* phDevice,                   ///< [in][range(0, numDevices)] pointer to array of handle of the device
-                                                    ///< objects
-    xe_context_handle_t* phContext                  ///< [out] pointer to handle of context object created
-    )
-{
-    auto pfnCreate = xe_layer::val.xeContext.pfnCreate;
-
-    if( nullptr == pfnCreate )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( xe_layer::val.enableParameterValidation )
-    {
-        if( nullptr == phDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phContext )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnCreate( numDevices, phDevice, phContext );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeContextDestroy
-xe_result_t __xecall
-xeContextDestroy(
-    xe_context_handle_t hContext                    ///< [in] handle of context object to destroy
-    )
-{
-    auto pfnDestroy = xe_layer::val.xeContext.pfnDestroy;
-
-    if( nullptr == pfnDestroy )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( xe_layer::val.enableParameterValidation )
-    {
-        if( nullptr == hContext )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnDestroy( hContext );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2553,10 +2465,10 @@ xeImageDestroy(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeContextAllocSharedMem
+/// @brief Intercept function for xeDeviceGroupAllocSharedMem
 xe_result_t __xecall
-xeContextAllocSharedMem(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupAllocSharedMem(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
     xe_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
@@ -2565,14 +2477,14 @@ xeContextAllocSharedMem(
     void** ptr                                      ///< [out] pointer to shared allocation
     )
 {
-    auto pfnAllocSharedMem = xe_layer::val.xeContext.pfnAllocSharedMem;
+    auto pfnAllocSharedMem = xe_layer::val.xeDeviceGroup.pfnAllocSharedMem;
 
     if( nullptr == pfnAllocSharedMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     if( xe_layer::val.enableParameterValidation )
     {
-        if( nullptr == hContext )
+        if( nullptr == hDeviceGroup )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hDevice )
@@ -2583,14 +2495,14 @@ xeContextAllocSharedMem(
 
     }
 
-    return pfnAllocSharedMem( hContext, hDevice, device_flags, host_flags, size, alignment, ptr );
+    return pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, host_flags, size, alignment, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeContextAllocDeviceMem
+/// @brief Intercept function for xeDeviceGroupAllocDeviceMem
 xe_result_t __xecall
-xeContextAllocDeviceMem(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupAllocDeviceMem(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
@@ -2598,14 +2510,14 @@ xeContextAllocDeviceMem(
     void** ptr                                      ///< [out] pointer to device allocation
     )
 {
-    auto pfnAllocDeviceMem = xe_layer::val.xeContext.pfnAllocDeviceMem;
+    auto pfnAllocDeviceMem = xe_layer::val.xeDeviceGroup.pfnAllocDeviceMem;
 
     if( nullptr == pfnAllocDeviceMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     if( xe_layer::val.enableParameterValidation )
     {
-        if( nullptr == hContext )
+        if( nullptr == hDeviceGroup )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hDevice )
@@ -2616,28 +2528,28 @@ xeContextAllocDeviceMem(
 
     }
 
-    return pfnAllocDeviceMem( hContext, hDevice, flags, size, alignment, ptr );
+    return pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, size, alignment, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeContextAllocHostMem
+/// @brief Intercept function for xeDeviceGroupAllocHostMem
 xe_result_t __xecall
-xeContextAllocHostMem(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupAllocHostMem(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     xe_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
     void** ptr                                      ///< [out] pointer to host allocation
     )
 {
-    auto pfnAllocHostMem = xe_layer::val.xeContext.pfnAllocHostMem;
+    auto pfnAllocHostMem = xe_layer::val.xeDeviceGroup.pfnAllocHostMem;
 
     if( nullptr == pfnAllocHostMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     if( xe_layer::val.enableParameterValidation )
     {
-        if( nullptr == hContext )
+        if( nullptr == hDeviceGroup )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == ptr )
@@ -2645,25 +2557,25 @@ xeContextAllocHostMem(
 
     }
 
-    return pfnAllocHostMem( hContext, flags, size, alignment, ptr );
+    return pfnAllocHostMem( hDeviceGroup, flags, size, alignment, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeContextFreeMem
+/// @brief Intercept function for xeDeviceGroupFreeMem
 xe_result_t __xecall
-xeContextFreeMem(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupFreeMem(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     const void* ptr                                 ///< [in] pointer to memory to free
     )
 {
-    auto pfnFreeMem = xe_layer::val.xeContext.pfnFreeMem;
+    auto pfnFreeMem = xe_layer::val.xeDeviceGroup.pfnFreeMem;
 
     if( nullptr == pfnFreeMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     if( xe_layer::val.enableParameterValidation )
     {
-        if( nullptr == hContext )
+        if( nullptr == hDeviceGroup )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == ptr )
@@ -2671,26 +2583,26 @@ xeContextFreeMem(
 
     }
 
-    return pfnFreeMem( hContext, ptr );
+    return pfnFreeMem( hDeviceGroup, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeContextGetMemProperties
+/// @brief Intercept function for xeDeviceGroupGetMemProperties
 xe_result_t __xecall
-xeContextGetMemProperties(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupGetMemProperties(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     const void* ptr,                                ///< [in] Pointer to query
     xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
     )
 {
-    auto pfnGetMemProperties = xe_layer::val.xeContext.pfnGetMemProperties;
+    auto pfnGetMemProperties = xe_layer::val.xeDeviceGroup.pfnGetMemProperties;
 
     if( nullptr == pfnGetMemProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     if( xe_layer::val.enableParameterValidation )
     {
-        if( nullptr == hContext )
+        if( nullptr == hDeviceGroup )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == ptr )
@@ -2701,27 +2613,27 @@ xeContextGetMemProperties(
 
     }
 
-    return pfnGetMemProperties( hContext, ptr, pMemProperties );
+    return pfnGetMemProperties( hDeviceGroup, ptr, pMemProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeContextGetMemAddressRange
+/// @brief Intercept function for xeDeviceGroupGetMemAddressRange
 xe_result_t __xecall
-xeContextGetMemAddressRange(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupGetMemAddressRange(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     const void* ptr,                                ///< [in] Pointer to query
     void** pBase,                                   ///< [in,out][optional] base address of the allocation
     size_t* pSize                                   ///< [in,out][optional] size of the allocation
     )
 {
-    auto pfnGetMemAddressRange = xe_layer::val.xeContext.pfnGetMemAddressRange;
+    auto pfnGetMemAddressRange = xe_layer::val.xeDeviceGroup.pfnGetMemAddressRange;
 
     if( nullptr == pfnGetMemAddressRange )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     if( xe_layer::val.enableParameterValidation )
     {
-        if( nullptr == hContext )
+        if( nullptr == hDeviceGroup )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == ptr )
@@ -2729,26 +2641,26 @@ xeContextGetMemAddressRange(
 
     }
 
-    return pfnGetMemAddressRange( hContext, ptr, pBase, pSize );
+    return pfnGetMemAddressRange( hDeviceGroup, ptr, pBase, pSize );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeContextGetMemIpcHandle
+/// @brief Intercept function for xeDeviceGroupGetMemIpcHandle
 xe_result_t __xecall
-xeContextGetMemIpcHandle(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupGetMemIpcHandle(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     const void* ptr,                                ///< [in] Pointer to the device memory allocation
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
     )
 {
-    auto pfnGetMemIpcHandle = xe_layer::val.xeContext.pfnGetMemIpcHandle;
+    auto pfnGetMemIpcHandle = xe_layer::val.xeDeviceGroup.pfnGetMemIpcHandle;
 
     if( nullptr == pfnGetMemIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     if( xe_layer::val.enableParameterValidation )
     {
-        if( nullptr == hContext )
+        if( nullptr == hDeviceGroup )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == ptr )
@@ -2759,28 +2671,28 @@ xeContextGetMemIpcHandle(
 
     }
 
-    return pfnGetMemIpcHandle( hContext, ptr, pIpcHandle );
+    return pfnGetMemIpcHandle( hDeviceGroup, ptr, pIpcHandle );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeContextOpenMemIpcHandle
+/// @brief Intercept function for xeDeviceGroupOpenMemIpcHandle
 xe_result_t __xecall
-xeContextOpenMemIpcHandle(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupOpenMemIpcHandle(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
     xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
     xe_ipc_memory_flag_t flags,                     ///< [in] flags controlling the operation
     void** ptr                                      ///< [out] pointer to device allocation in this process
     )
 {
-    auto pfnOpenMemIpcHandle = xe_layer::val.xeContext.pfnOpenMemIpcHandle;
+    auto pfnOpenMemIpcHandle = xe_layer::val.xeDeviceGroup.pfnOpenMemIpcHandle;
 
     if( nullptr == pfnOpenMemIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     if( xe_layer::val.enableParameterValidation )
     {
-        if( nullptr == hContext )
+        if( nullptr == hDeviceGroup )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == hDevice )
@@ -2794,25 +2706,25 @@ xeContextOpenMemIpcHandle(
 
     }
 
-    return pfnOpenMemIpcHandle( hContext, hDevice, handle, flags, ptr );
+    return pfnOpenMemIpcHandle( hDeviceGroup, hDevice, handle, flags, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeContextCloseMemIpcHandle
+/// @brief Intercept function for xeDeviceGroupCloseMemIpcHandle
 xe_result_t __xecall
-xeContextCloseMemIpcHandle(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupCloseMemIpcHandle(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     const void* ptr                                 ///< [in] pointer to device allocation in this process
     )
 {
-    auto pfnCloseMemIpcHandle = xe_layer::val.xeContext.pfnCloseMemIpcHandle;
+    auto pfnCloseMemIpcHandle = xe_layer::val.xeDeviceGroup.pfnCloseMemIpcHandle;
 
     if( nullptr == pfnCloseMemIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     if( xe_layer::val.enableParameterValidation )
     {
-        if( nullptr == hContext )
+        if( nullptr == hDeviceGroup )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == ptr )
@@ -2820,7 +2732,7 @@ xeContextCloseMemIpcHandle(
 
     }
 
-    return pfnCloseMemIpcHandle( hContext, ptr );
+    return pfnCloseMemIpcHandle( hDeviceGroup, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

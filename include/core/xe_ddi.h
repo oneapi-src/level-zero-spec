@@ -41,7 +41,6 @@ extern "C" {
 ///////////////////////////////////////////////////////////////////////////////
 typedef struct _xe_global_apitable_t                xe_global_apitable_t;
 typedef struct _xe_device_apitable_t                xe_device_apitable_t;
-typedef struct _xe_context_apitable_t               xe_context_apitable_t;
 typedef struct _xe_device_group_apitable_t          xe_device_group_apitable_t;
 typedef struct _xe_command_queue_apitable_t         xe_command_queue_apitable_t;
 typedef struct _xe_command_list_apitable_t          xe_command_list_apitable_t;
@@ -264,144 +263,6 @@ typedef xe_result_t (__xecall *xe_pfnGetDeviceProcAddrTable_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeContextCreate 
-typedef xe_result_t (__xecall *xe_pfnContextCreate_t)(
-    uint32_t,
-    xe_device_handle_t*,
-    xe_context_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeContextDestroy 
-typedef xe_result_t (__xecall *xe_pfnContextDestroy_t)(
-    xe_context_handle_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeContextAllocSharedMem 
-typedef xe_result_t (__xecall *xe_pfnContextAllocSharedMem_t)(
-    xe_context_handle_t,
-    xe_device_handle_t,
-    xe_device_mem_alloc_flag_t,
-    xe_host_mem_alloc_flag_t,
-    size_t,
-    size_t,
-    void**
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeContextAllocDeviceMem 
-typedef xe_result_t (__xecall *xe_pfnContextAllocDeviceMem_t)(
-    xe_context_handle_t,
-    xe_device_handle_t,
-    xe_device_mem_alloc_flag_t,
-    size_t,
-    size_t,
-    void**
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeContextAllocHostMem 
-typedef xe_result_t (__xecall *xe_pfnContextAllocHostMem_t)(
-    xe_context_handle_t,
-    xe_host_mem_alloc_flag_t,
-    size_t,
-    size_t,
-    void**
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeContextFreeMem 
-typedef xe_result_t (__xecall *xe_pfnContextFreeMem_t)(
-    xe_context_handle_t,
-    const void*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeContextGetMemProperties 
-typedef xe_result_t (__xecall *xe_pfnContextGetMemProperties_t)(
-    xe_context_handle_t,
-    const void*,
-    xe_memory_allocation_properties_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeContextGetMemAddressRange 
-typedef xe_result_t (__xecall *xe_pfnContextGetMemAddressRange_t)(
-    xe_context_handle_t,
-    const void*,
-    void**,
-    size_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeContextGetMemIpcHandle 
-typedef xe_result_t (__xecall *xe_pfnContextGetMemIpcHandle_t)(
-    xe_context_handle_t,
-    const void*,
-    xe_ipc_mem_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeContextOpenMemIpcHandle 
-typedef xe_result_t (__xecall *xe_pfnContextOpenMemIpcHandle_t)(
-    xe_context_handle_t,
-    xe_device_handle_t,
-    xe_ipc_mem_handle_t,
-    xe_ipc_memory_flag_t,
-    void**
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeContextCloseMemIpcHandle 
-typedef xe_result_t (__xecall *xe_pfnContextCloseMemIpcHandle_t)(
-    xe_context_handle_t,
-    const void*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Table of Context functions pointers
-typedef struct _xe_context_apitable_t
-{
-    xe_pfnContextCreate_t                                       pfnCreate;
-    xe_pfnContextDestroy_t                                      pfnDestroy;
-    xe_pfnContextAllocSharedMem_t                               pfnAllocSharedMem;
-    xe_pfnContextAllocDeviceMem_t                               pfnAllocDeviceMem;
-    xe_pfnContextAllocHostMem_t                                 pfnAllocHostMem;
-    xe_pfnContextFreeMem_t                                      pfnFreeMem;
-    xe_pfnContextGetMemProperties_t                             pfnGetMemProperties;
-    xe_pfnContextGetMemAddressRange_t                           pfnGetMemAddressRange;
-    xe_pfnContextGetMemIpcHandle_t                              pfnGetMemIpcHandle;
-    xe_pfnContextOpenMemIpcHandle_t                             pfnOpenMemIpcHandle;
-    xe_pfnContextCloseMemIpcHandle_t                            pfnCloseMemIpcHandle;
-
-} xe_context_apitable_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Context table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for ptable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xeGetContextProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xe_context_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeGetContextProcAddrTable
-typedef xe_result_t (__xecall *xe_pfnGetContextProcAddrTable_t)(
-    xe_api_version_t,
-    xe_context_apitable_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeDeviceGroupGetDriverVersion 
 typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetDriverVersion_t)(
     xe_device_group_handle_t,
@@ -445,6 +306,88 @@ typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetMemoryProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeDeviceGroupAllocSharedMem 
+typedef xe_result_t (__xecall *xe_pfnDeviceGroupAllocSharedMem_t)(
+    xe_device_group_handle_t,
+    xe_device_handle_t,
+    xe_device_mem_alloc_flag_t,
+    xe_host_mem_alloc_flag_t,
+    size_t,
+    size_t,
+    void**
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeDeviceGroupAllocDeviceMem 
+typedef xe_result_t (__xecall *xe_pfnDeviceGroupAllocDeviceMem_t)(
+    xe_device_group_handle_t,
+    xe_device_handle_t,
+    xe_device_mem_alloc_flag_t,
+    size_t,
+    size_t,
+    void**
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeDeviceGroupAllocHostMem 
+typedef xe_result_t (__xecall *xe_pfnDeviceGroupAllocHostMem_t)(
+    xe_device_group_handle_t,
+    xe_host_mem_alloc_flag_t,
+    size_t,
+    size_t,
+    void**
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeDeviceGroupFreeMem 
+typedef xe_result_t (__xecall *xe_pfnDeviceGroupFreeMem_t)(
+    xe_device_group_handle_t,
+    const void*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeDeviceGroupGetMemProperties 
+typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetMemProperties_t)(
+    xe_device_group_handle_t,
+    const void*,
+    xe_memory_allocation_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeDeviceGroupGetMemAddressRange 
+typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetMemAddressRange_t)(
+    xe_device_group_handle_t,
+    const void*,
+    void**,
+    size_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeDeviceGroupGetMemIpcHandle 
+typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetMemIpcHandle_t)(
+    xe_device_group_handle_t,
+    const void*,
+    xe_ipc_mem_handle_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeDeviceGroupOpenMemIpcHandle 
+typedef xe_result_t (__xecall *xe_pfnDeviceGroupOpenMemIpcHandle_t)(
+    xe_device_group_handle_t,
+    xe_device_handle_t,
+    xe_ipc_mem_handle_t,
+    xe_ipc_memory_flag_t,
+    void**
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeDeviceGroupCloseMemIpcHandle 
+typedef xe_result_t (__xecall *xe_pfnDeviceGroupCloseMemIpcHandle_t)(
+    xe_device_group_handle_t,
+    const void*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of DeviceGroup functions pointers
 typedef struct _xe_device_group_apitable_t
 {
@@ -454,6 +397,15 @@ typedef struct _xe_device_group_apitable_t
     xe_pfnDeviceGroupGetProperties_t                            pfnGetProperties;
     xe_pfnDeviceGroupGetComputeProperties_t                     pfnGetComputeProperties;
     xe_pfnDeviceGroupGetMemoryProperties_t                      pfnGetMemoryProperties;
+    xe_pfnDeviceGroupAllocSharedMem_t                           pfnAllocSharedMem;
+    xe_pfnDeviceGroupAllocDeviceMem_t                           pfnAllocDeviceMem;
+    xe_pfnDeviceGroupAllocHostMem_t                             pfnAllocHostMem;
+    xe_pfnDeviceGroupFreeMem_t                                  pfnFreeMem;
+    xe_pfnDeviceGroupGetMemProperties_t                         pfnGetMemProperties;
+    xe_pfnDeviceGroupGetMemAddressRange_t                       pfnGetMemAddressRange;
+    xe_pfnDeviceGroupGetMemIpcHandle_t                          pfnGetMemIpcHandle;
+    xe_pfnDeviceGroupOpenMemIpcHandle_t                         pfnOpenMemIpcHandle;
+    xe_pfnDeviceGroupCloseMemIpcHandle_t                        pfnCloseMemIpcHandle;
 
     xe_device_apitable_t*                                       pDevice;
 } xe_device_group_apitable_t;

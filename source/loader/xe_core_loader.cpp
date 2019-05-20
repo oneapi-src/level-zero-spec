@@ -123,50 +123,6 @@ xeGetDeviceProcAddrTable(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Context table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for ptable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xeGetContextProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xe_context_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
-    )
-{
-#ifdef _DEBUG
-    if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    if( xe_loader::loader.version < version )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
-
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    if( nullptr != xe_loader::loader.commonDriver )
-    {
-        static auto getTable = reinterpret_cast<xe_pfnGetContextProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xeGetContextProcAddrTable") );
-        result = getTable( version, ptable );
-    }
-
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
-    {
-        static auto getTable = reinterpret_cast<xe_pfnGetContextProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xeGetContextProcAddrTable") );
-        result = getTable( version, ptable );
-    }
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's DeviceGroup table
 ///        with current process' addresses
 ///
@@ -677,40 +633,6 @@ xeDeviceGroupGetDriverVersion(
     hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     
     //auto result = pfnGetDriverVersion( hDeviceGroup, version );
-
-    return XE_RESULT_SUCCESS;
-}
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeContextCreate
-xe_result_t __xecall
-xeContextCreate(
-    uint32_t numDevices,                            ///< [in] number of devices in phDevice
-    xe_device_handle_t* phDevice,                   ///< [in][range(0, numDevices)] pointer to array of handle of the device
-                                                    ///< objects
-    xe_context_handle_t* phContext                  ///< [out] pointer to handle of context object created
-    )
-{
-    for( size_t i = 0; ( nullptr != phDevice ) && ( i < numDevices ); ++i )
-        phDevice[ i ] = std::get<0>( *reinterpret_cast<xe_device_object_t*>( phDevice[ i ] ) );
-    
-    //auto result = pfnCreate( numDevices, phDevice, phContext );
-
-    *phContext = reinterpret_cast<xe_context_handle_t>( new xe_context_object_t( *phContext, nullptr ) );
-    
-    return XE_RESULT_SUCCESS;
-}
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeContextDestroy
-xe_result_t __xecall
-xeContextDestroy(
-    xe_context_handle_t hContext                    ///< [in] handle of context object to destroy
-    )
-{
-    auto pfnDestroy = std::get<1>( *reinterpret_cast<xe_context_object_t*>( hContext ) )->pfnDestroy;
-    
-    hContext = std::get<0>( *reinterpret_cast<xe_context_object_t*>( hContext ) );
-    
-    //auto result = pfnDestroy( hContext );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1815,10 +1737,10 @@ xeImageDestroy(
     return XE_RESULT_SUCCESS;
 }
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeContextAllocSharedMem
+/// @brief Intercept function for xeDeviceGroupAllocSharedMem
 xe_result_t __xecall
-xeContextAllocSharedMem(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupAllocSharedMem(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
     xe_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
@@ -1827,20 +1749,20 @@ xeContextAllocSharedMem(
     void** ptr                                      ///< [out] pointer to shared allocation
     )
 {
-    auto pfnAllocSharedMem = std::get<1>( *reinterpret_cast<xe_context_object_t*>( hContext ) )->pfnAllocSharedMem;
+    auto pfnAllocSharedMem = std::get<1>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) )->pfnAllocSharedMem;
     
-    hContext = std::get<0>( *reinterpret_cast<xe_context_object_t*>( hContext ) );
+    hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnAllocSharedMem( hContext, hDevice, device_flags, host_flags, size, alignment, ptr );
+    //auto result = pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, host_flags, size, alignment, ptr );
 
     return XE_RESULT_SUCCESS;
 }
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeContextAllocDeviceMem
+/// @brief Intercept function for xeDeviceGroupAllocDeviceMem
 xe_result_t __xecall
-xeContextAllocDeviceMem(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupAllocDeviceMem(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
@@ -1848,135 +1770,135 @@ xeContextAllocDeviceMem(
     void** ptr                                      ///< [out] pointer to device allocation
     )
 {
-    auto pfnAllocDeviceMem = std::get<1>( *reinterpret_cast<xe_context_object_t*>( hContext ) )->pfnAllocDeviceMem;
+    auto pfnAllocDeviceMem = std::get<1>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) )->pfnAllocDeviceMem;
     
-    hContext = std::get<0>( *reinterpret_cast<xe_context_object_t*>( hContext ) );
+    hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnAllocDeviceMem( hContext, hDevice, flags, size, alignment, ptr );
+    //auto result = pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, size, alignment, ptr );
 
     return XE_RESULT_SUCCESS;
 }
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeContextAllocHostMem
+/// @brief Intercept function for xeDeviceGroupAllocHostMem
 xe_result_t __xecall
-xeContextAllocHostMem(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupAllocHostMem(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     xe_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
     void** ptr                                      ///< [out] pointer to host allocation
     )
 {
-    auto pfnAllocHostMem = std::get<1>( *reinterpret_cast<xe_context_object_t*>( hContext ) )->pfnAllocHostMem;
+    auto pfnAllocHostMem = std::get<1>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) )->pfnAllocHostMem;
     
-    hContext = std::get<0>( *reinterpret_cast<xe_context_object_t*>( hContext ) );
+    hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     
-    //auto result = pfnAllocHostMem( hContext, flags, size, alignment, ptr );
+    //auto result = pfnAllocHostMem( hDeviceGroup, flags, size, alignment, ptr );
 
     return XE_RESULT_SUCCESS;
 }
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeContextFreeMem
+/// @brief Intercept function for xeDeviceGroupFreeMem
 xe_result_t __xecall
-xeContextFreeMem(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupFreeMem(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     const void* ptr                                 ///< [in] pointer to memory to free
     )
 {
-    auto pfnFreeMem = std::get<1>( *reinterpret_cast<xe_context_object_t*>( hContext ) )->pfnFreeMem;
+    auto pfnFreeMem = std::get<1>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) )->pfnFreeMem;
     
-    hContext = std::get<0>( *reinterpret_cast<xe_context_object_t*>( hContext ) );
+    hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     
-    //auto result = pfnFreeMem( hContext, ptr );
+    //auto result = pfnFreeMem( hDeviceGroup, ptr );
 
     return XE_RESULT_SUCCESS;
 }
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeContextGetMemProperties
+/// @brief Intercept function for xeDeviceGroupGetMemProperties
 xe_result_t __xecall
-xeContextGetMemProperties(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupGetMemProperties(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     const void* ptr,                                ///< [in] Pointer to query
     xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
     )
 {
-    auto pfnGetMemProperties = std::get<1>( *reinterpret_cast<xe_context_object_t*>( hContext ) )->pfnGetMemProperties;
+    auto pfnGetMemProperties = std::get<1>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) )->pfnGetMemProperties;
     
-    hContext = std::get<0>( *reinterpret_cast<xe_context_object_t*>( hContext ) );
+    hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     
-    //auto result = pfnGetMemProperties( hContext, ptr, pMemProperties );
+    //auto result = pfnGetMemProperties( hDeviceGroup, ptr, pMemProperties );
 
     return XE_RESULT_SUCCESS;
 }
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeContextGetMemAddressRange
+/// @brief Intercept function for xeDeviceGroupGetMemAddressRange
 xe_result_t __xecall
-xeContextGetMemAddressRange(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupGetMemAddressRange(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     const void* ptr,                                ///< [in] Pointer to query
     void** pBase,                                   ///< [in,out][optional] base address of the allocation
     size_t* pSize                                   ///< [in,out][optional] size of the allocation
     )
 {
-    auto pfnGetMemAddressRange = std::get<1>( *reinterpret_cast<xe_context_object_t*>( hContext ) )->pfnGetMemAddressRange;
+    auto pfnGetMemAddressRange = std::get<1>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) )->pfnGetMemAddressRange;
     
-    hContext = std::get<0>( *reinterpret_cast<xe_context_object_t*>( hContext ) );
+    hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     
-    //auto result = pfnGetMemAddressRange( hContext, ptr, pBase, pSize );
+    //auto result = pfnGetMemAddressRange( hDeviceGroup, ptr, pBase, pSize );
 
     return XE_RESULT_SUCCESS;
 }
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeContextGetMemIpcHandle
+/// @brief Intercept function for xeDeviceGroupGetMemIpcHandle
 xe_result_t __xecall
-xeContextGetMemIpcHandle(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupGetMemIpcHandle(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     const void* ptr,                                ///< [in] Pointer to the device memory allocation
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
     )
 {
-    auto pfnGetMemIpcHandle = std::get<1>( *reinterpret_cast<xe_context_object_t*>( hContext ) )->pfnGetMemIpcHandle;
+    auto pfnGetMemIpcHandle = std::get<1>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) )->pfnGetMemIpcHandle;
     
-    hContext = std::get<0>( *reinterpret_cast<xe_context_object_t*>( hContext ) );
+    hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     
-    //auto result = pfnGetMemIpcHandle( hContext, ptr, pIpcHandle );
+    //auto result = pfnGetMemIpcHandle( hDeviceGroup, ptr, pIpcHandle );
 
     return XE_RESULT_SUCCESS;
 }
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeContextOpenMemIpcHandle
+/// @brief Intercept function for xeDeviceGroupOpenMemIpcHandle
 xe_result_t __xecall
-xeContextOpenMemIpcHandle(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupOpenMemIpcHandle(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
     xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
     xe_ipc_memory_flag_t flags,                     ///< [in] flags controlling the operation
     void** ptr                                      ///< [out] pointer to device allocation in this process
     )
 {
-    auto pfnOpenMemIpcHandle = std::get<1>( *reinterpret_cast<xe_context_object_t*>( hContext ) )->pfnOpenMemIpcHandle;
+    auto pfnOpenMemIpcHandle = std::get<1>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) )->pfnOpenMemIpcHandle;
     
-    hContext = std::get<0>( *reinterpret_cast<xe_context_object_t*>( hContext ) );
+    hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnOpenMemIpcHandle( hContext, hDevice, handle, flags, ptr );
+    //auto result = pfnOpenMemIpcHandle( hDeviceGroup, hDevice, handle, flags, ptr );
 
     return XE_RESULT_SUCCESS;
 }
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeContextCloseMemIpcHandle
+/// @brief Intercept function for xeDeviceGroupCloseMemIpcHandle
 xe_result_t __xecall
-xeContextCloseMemIpcHandle(
-    xe_context_handle_t hContext,                   ///< [in] handle of context
+xeDeviceGroupCloseMemIpcHandle(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     const void* ptr                                 ///< [in] pointer to device allocation in this process
     )
 {
-    auto pfnCloseMemIpcHandle = std::get<1>( *reinterpret_cast<xe_context_object_t*>( hContext ) )->pfnCloseMemIpcHandle;
+    auto pfnCloseMemIpcHandle = std::get<1>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) )->pfnCloseMemIpcHandle;
     
-    hContext = std::get<0>( *reinterpret_cast<xe_context_object_t*>( hContext ) );
+    hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     
-    //auto result = pfnCloseMemIpcHandle( hContext, ptr );
+    //auto result = pfnCloseMemIpcHandle( hDeviceGroup, ptr );
 
     return XE_RESULT_SUCCESS;
 }
