@@ -250,7 +250,7 @@ def _get_value_name(namespace, tags, value, cpp, meta):
 
 """
 Public:
-    returns a list of strings for declaring each enumerator in an enumeration
+    returns a list of c++ strings for declaring each enumerator in an enumeration
     format: "ETOR_NAME = VALUE, ///< DESCRIPTION"
 """
 def make_etor_lines(namespace, tags, obj, cpp=False, meta=None):
@@ -271,7 +271,7 @@ def make_etor_lines(namespace, tags, obj, cpp=False, meta=None):
 
 """
 Public:
-    returns a list of strings for converting each enumerator in an enumeration to a std::string
+    returns a list of c++ strings for converting each enumerator in an enumeration to a std::string
 """
 def make_etor_debug_lines(namespace, tags, cls, obj):
     prologue = "%s::"%namespace
@@ -344,7 +344,7 @@ def _get_type_name(namespace, tags, obj, item, cpp=False, meta=None):
 
 """
 Public:
-    returns a list of strings for each member of a structure or class
+    returns a list of c++ strings for each member of a structure or class
     format: "TYPE NAME = INIT, ///< DESCRIPTION"
 """
 def make_member_lines(namespace, tags, obj, prefix="", cpp=False, meta=None):
@@ -373,7 +373,7 @@ def make_member_lines(namespace, tags, obj, prefix="", cpp=False, meta=None):
 
 """
 Public:
-    returns a list of strings for each member of a class
+    returns a list of c++ strings for each member of a class
     format: "auto getNAME( void ) const { return MEMBER; }"
 """
 def make_member_function_lines(namespace, tags, obj, prefix=""):
@@ -408,7 +408,7 @@ def _filter_param_list(params, filters=["in", "in,out", "out"]):
 
 """
 Public:
-    returns a list of strings for each parameter of a function
+    returns a list of c++ strings for each parameter of a function
     format: "TYPE NAME = INIT, ///< DESCRIPTION"
 """
 def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None, format=["type", "name", "init", "delim", "desc"]):
@@ -472,7 +472,7 @@ def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None, for
 
 """
 Public:
-    returns a string of parameter names for passing to a function
+    returns a string of parameter names for passing to a c++ function
     format: "PARAM0, PARAM1, PARAM2"
 """
 def make_param_call_str(namespace, tags, prologue, obj, cpp=False):
@@ -486,7 +486,7 @@ def make_param_call_str(namespace, tags, prologue, obj, cpp=False):
 
 """
 Public:
-    returns a string of template parameters
+    returns a string of c++ template parameters
     format: "TPARAM0, TPARAM1"
 """
 def make_tparams_line(namespace, tags, obj):
@@ -503,7 +503,7 @@ def has_ctor_params(obj):
 
 """
 Public:
-    returns a list of strings for ctor parameters of members
+    returns a list of c++ strings for ctor parameters of members
     format: "TYPE NAME, ///< DESCRIPTION"
 """
 def make_ctor_param_lines(namespace, tags, obj, meta=None):
@@ -531,7 +531,7 @@ def make_ctor_param_lines(namespace, tags, obj, meta=None):
 
 """
 Public:
-    returns a list of strings for initializing members from ctor parameters of members
+    returns a list of c++ strings for initializing members from ctor parameters of members
     format: "MEMBER( NAME ),"
 """
 def make_ctor_param_init_lines(namespace, tags, obj, prefix="", meta=None):
@@ -598,7 +598,7 @@ def make_details_lines(namespace, tags, obj, cpp=False):
 
 """
 Public:
-    returns a dict of auto-generated parameter validation checks
+    returns a dict of auto-generated c++ parameter validation checks
 """
 def make_param_checks(namespace, tags, obj, comment=False, cpp=False):
     checks = {}
@@ -675,7 +675,7 @@ def make_returns_lines(namespace, tags, obj, cpp=False, meta=None):
 
 """
 Public:
-    returns string for declaring function return type
+    returns c++ string for declaring function return type
 """
 def make_return_value(namespace, tags, obj, cpp=False, decl=False, meta=None):
     # only "return" the parameters declared as "out"
@@ -748,7 +748,7 @@ def make_class_name(namespace, tags, obj):
 
 """
 Public:
-    returns a string for the declaration of a base class
+    returns a c++ string for the declaration of a base class
 """
 def make_baseclass_decl(namespace, tags, obj):
     if 'base' in obj:
@@ -757,7 +757,7 @@ def make_baseclass_decl(namespace, tags, obj):
 
 """
 Public:
-    returns a string for the declaration of a base class ctor
+    returns a c++ string for the declaration of a base class ctor
 """
 def make_baseclass_ctor(namespace, tags, obj):
     base = subt(namespace, tags, obj['base'], cpp=True)
@@ -795,9 +795,25 @@ def get_table_name(namespace, tags, obj):
         cls = obj['class']
     else:
         cls = ""
-    name = subt(namespace, tags, cls, cpp=True)
+    name = subt(namespace, tags, cls, cpp=True) # i.e., "$x" -> ""
     name = name if len(name) > 0 else "Global"
     return name
+
+"""
+Private:
+    returns a list of dict for all tables owned by cls
+"""
+def _get_table_owns(namespace, tags, cls, meta):
+    owns = []
+    if 'owns' in meta['class'][cls]:
+        for ocls in meta['class'][cls]['owns']:
+            name = get_table_name(namespace, tags, {'class': ocls})
+            table = "%s_%s_apitable_t"%(namespace, _camel_to_snake(name))
+            owns.append({
+                'name': name,
+                'type': table
+            })
+    return owns
 
 """
 Public:
@@ -805,10 +821,17 @@ Public:
 """
 def get_pfntables(specs, meta, namespace, tags):
     tables = []
-    for cls in meta['class']:
+    for cls in sorted(meta['class'], key=lambda x: meta['class'][x]['ordinal']):
+        # only include tables for cls in this namespace
+        RE_EXTRACT_TAG = r"^(\$[^A-Z])\w*"
+        t = re.sub(RE_EXTRACT_TAG, r"\1", cls)
+        if not (t in tags and re.match(namespace, tags[t])):
+            continue
+
         objs = get_class_function_objs(specs, cls)
-        if len(objs) > 0:
-            name = get_table_name(namespace, tags, objs[0])
+        owns = _get_table_owns(namespace, tags, cls, meta)
+        if len(objs) > 0 or len(owns) > 0:
+            name = get_table_name(namespace, tags, {'class': cls})
             table = "%s_%s_apitable_t"%(namespace, _camel_to_snake(name))
 
             params = []
@@ -834,24 +857,35 @@ def get_pfntables(specs, meta, namespace, tags):
                 'type': table,
                 'export': export,
                 'pfn': pfn,
-                'functions': objs
-        })
+                'functions': objs,
+                'owns': owns
+            })
     return tables
 
 """
 Public:
-    returns a list of strings
+    returns a list of c++ strings for converting loader input parameters
 """
-def make_loader_prologue_lines(namespace, tags, obj, meta):
+def make_loader_prologue_lines(namespace, tags, obj, meta, loader):
     lines = []
+
+    tblname = get_table_name(namespace, tags, obj)
+    pfnname = make_pfn_name(namespace, tags, obj)
+    if re.match(r"Global.*", tblname):
+        lines.append("auto %s = %s.%s%s.%s;"%(pfnname, loader, namespace, tblname, pfnname))
+        lines.append("")
+
     params = _filter_param_list(obj['params'], ["in"])
     for i, item in enumerate(params):
         is_handle = re.match(r".*_handle_t", item['type'])
+
         tname = _remove_const_ptr(item['type'])
-        is_class = is_handle and tname in meta['handle'] and len(meta['handle'][tname]['class']) > 0
-        if is_handle and is_class:
+        hcls = meta['handle'][tname]['class'] if is_handle and tname in meta['handle'] else ""
+
+        if is_handle and len(hcls) > 0:
             name = subt(namespace, tags, item['name'])
             tname = _remove_const_ptr(subt(namespace, tags, item['type']))
+
             obj_name = re.sub(r"^[^_]+_(\w+)", r"%s_\1"%namespace, re.sub(r"(\w+)_handle_t", r"\1_object_t", tname))
 
             is_pointer = re.match(r".*\w+\*+", item['type'])
@@ -866,6 +900,16 @@ def make_loader_prologue_lines(namespace, tags, obj, meta):
                 if is_optional:
                     lines.append("%s = ( %s ) ? std::get<0>( *reinterpret_cast<%s*>( %s ) ) : nullptr;"%(name, name, obj_name, name))
                 else:
+                    if i == 0:
+                        prologue = ""
+                        RE_REMOVE_TAG = r"^\$[^A-Z](\w+)"
+                        cls = obj['class']
+                        if not re.match(re.sub(RE_REMOVE_TAG, r"\1", cls), re.sub(RE_REMOVE_TAG, r"\1", hcls)):
+                            prologue = "p%s->"%get_table_name(namespace, tags, {'class': cls})
+
+                        lines.append("auto %s = std::get<1>( *reinterpret_cast<%s*>( %s ) )->%s%s;"%(pfnname, obj_name, name, prologue, pfnname))
+                        lines.append("")
+
                     lines.append("%s = std::get<0>( *reinterpret_cast<%s*>( %s ) );"%(name, obj_name, name))
 
     if len(lines) > 0:
@@ -874,18 +918,22 @@ def make_loader_prologue_lines(namespace, tags, obj, meta):
 
 """
 Public:
-    returns a list of strings
+    returns a list of c++ strings for converting loader output parameters
 """
 def make_loader_epilogue_lines(namespace, tags, obj, meta):
     lines = []
+
     params = _filter_param_list(obj['params'], ["out"])
     for i, item in enumerate(params):
         is_handle = re.match(r".*_handle_t", item['type'])
+
         tname = _remove_const_ptr(item['type'])
-        is_class = is_handle and tname in meta['handle'] and len(meta['handle'][tname]['class']) > 0
-        if is_handle and is_class:
+        hcls = meta['handle'][tname]['class'] if is_handle and tname in meta['handle'] else ""
+
+        if is_handle and len(hcls) > 0:
             name = subt(namespace, tags, item['name'])
             tname = _remove_const_ptr(subt(namespace, tags, item['type']))
+
             obj_name = re.sub(r"^[^_]+_(\w+)", r"%s_\1"%namespace, re.sub(r"(\w+)_handle_t", r"\1_object_t", tname))
 
             RE_RANGE = r".*\[range\((.+),\s*(.+)\)\].*"
@@ -894,6 +942,7 @@ def make_loader_epilogue_lines(namespace, tags, obj, meta):
                 range_end   = re.sub(RE_RANGE, r"\2", item['desc'])
                 lines.append("for( size_t i = %s; ( nullptr != %s ) && ( i < %s ); ++i )"%(range_start, name, range_end))
                 lines.append("    %s[ i ] = reinterpret_cast<%s>( new %s( %s[ i ], nullptr ) );"%(name, tname, obj_name, name))
+
             else:
                 is_optional = re.match(r".*\[optional\].*", item['desc'])
                 if is_optional:

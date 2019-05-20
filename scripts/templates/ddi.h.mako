@@ -47,6 +47,11 @@ from templates import helper as th
 extern "C" {
 #endif
 
+///////////////////////////////////////////////////////////////////////////////
+%for tbl in th.get_pfntables(specs, meta, n, tags):
+typedef struct _${th.append_ws(tbl['type'], 35)} ${tbl['type']};
+%endfor
+
 %for tbl in th.get_pfntables(specs, meta, n, tags):
 %for obj in tbl['functions']:
 ///////////////////////////////////////////////////////////////////////////////
@@ -76,6 +81,10 @@ typedef struct _${tbl['type']}
     %if 'condition' in obj:
     #endif // ${th.subt(n, tags, obj['condition'])}
     %endif
+    %endfor
+
+    %for obj in tbl['owns']:
+    ${th.append_ws(obj['type']+"*", 59)} p${obj['name']};
     %endfor
 } ${tbl['type']};
 

@@ -63,6 +63,7 @@ namespace xe_layer
         xe_sampler_apitable_t           xeSampler = {};
 
         xex_global_apitable_t           xexGlobal = {};
+        xex_device_apitable_t           xexDevice = {};
         xex_command_graph_apitable_t    xexCommandGraph = {};
 
         xet_global_apitable_t               xetGlobal = {};
@@ -75,6 +76,7 @@ namespace xe_layer
         xet_metric_query_apitable_t         xetMetricQuery = {};
         xet_power_apitable_t                xetPower = {};
         xet_freq_domain_apitable_t          xetFreqDomain = {};
+        xet_sysman_apitable_t               xetSysman = {};
 
         Validation();
         ~Validation();

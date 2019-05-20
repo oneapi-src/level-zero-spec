@@ -25,7 +25,7 @@ def generate_hash(d):
 """
     generates meta-data on all objects
 """
-def generate_meta(d, meta):
+def generate_meta(d, ordinal, meta):
     type = d['type']
     name = re.sub(r"(\w+)\(.*\)", r"\1", d['name']) # removes '()' part of macros
 
@@ -34,6 +34,7 @@ def generate_meta(d, meta):
         # create dict if class name is not already known...
         if c not in meta['class']:
             meta['class'][c] = {}
+            meta['class'][c]['ordinal'] = "0"
 
         # create list if object-type is not already known for class...
         if type not in meta['class'][c]:
@@ -42,6 +43,7 @@ def generate_meta(d, meta):
         # append if object-name is not already known for object-type in class...
         if name not in meta['class'][c][type]:
             meta['class'][c][type].append(name)
+
         else:
             print("Error - duplicate entries for %s found!"%name)
             raise
@@ -62,29 +64,48 @@ def generate_meta(d, meta):
         if 'enum' == type:
             for etor in d['etors']:
                 meta[type][name]['types'].append(etor['name'])
+
         elif 'macro' == type:   
             if 'value' in d:
                 meta[type][name]['types'].append(d['value'])
+
             if 'altvalue' in d:
                 meta[type][name]['types'].append(d['altvalue'])
+
         elif 'function' == type:
             for p in d['params']:
                 meta[type][name]['types'].append(p['type'])
+
         elif 'struct' == type or 'union' == type:
             for m in d['members']:
                 meta[type][name]['types'].append(m['type'])
-        
+
         if 'class' in d:
             meta[type][name]['class'] = d['class']
-    else:
-        if 'members' in d:
-            if name not in meta['class']:
-                meta['class'][name] = {}
 
+    else:
+        if name not in meta['class']:
+            meta['class'][name] = {}
+
+        meta['class'][name]['ordinal'] = ordinal
+
+        if 'members' in d:
             meta['class'][name]['members'] = []
 
             for m in d['members']:
                 meta['class'][name]['members'].append(m['type'])
+
+        if 'owner' in d:
+            owner = d['owner']
+            meta['class'][name]['owner'] = owner
+
+            if owner not in meta['class']:
+                meta['class'][owner] = {}
+
+            if 'owns' not in meta['class'][owner]:
+                meta['class'][owner]['owns'] = []
+
+            meta['class'][owner]['owns'].append(name)
 
     return meta
 
@@ -108,10 +129,14 @@ def parse(path, meta = {'class':{}}):
                 header = d
                 if 'includes' not in header:
                     header['includes'] = []
+
+                if 'ordinal' not in header:
+                    header['ordinal'] = "9999"
+
             else:
                 d['hash'] = generate_hash(d)
                 objects.append(d)
-                meta = generate_meta(d, meta)
+                meta = generate_meta(d, header['ordinal'], meta)
 
         specs.append({
             'name'      : os.path.splitext(os.path.basename(f))[0],
@@ -122,4 +147,4 @@ def parse(path, meta = {'class':{}}):
     print("Parsed %s files and found:"%len(specs))
     for key in meta:
         print(" - %s %s(s)"%(len(meta[key]),key))
-    return sorted(specs, key=lambda x: x['header']['ordinal'] if 'ordinal' in x['header'] else "9999"), meta
+    return sorted(specs, key=lambda x: x['header']['ordinal']), meta

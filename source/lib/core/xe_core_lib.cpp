@@ -44,9 +44,9 @@ namespace xe_lib
 
         if( XE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<xe_pfnGetCommandListProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "xeGetCommandListProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &xeCommandList );
+            auto getTable = reinterpret_cast<xe_pfnGetGlobalProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xeGetGlobalProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &xeGlobal );
         }
 
         if( XE_RESULT_SUCCESS == result )
@@ -54,13 +54,6 @@ namespace xe_lib
             auto getTable = reinterpret_cast<xe_pfnGetDeviceProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "xeGetDeviceProcAddrTable") );
             result = getTable( XE_API_VERSION_1_0, &xeDevice );
-        }
-
-        if( XE_RESULT_SUCCESS == result )
-        {
-            auto getTable = reinterpret_cast<xe_pfnGetCommandQueueProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "xeGetCommandQueueProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &xeCommandQueue );
         }
 
         if( XE_RESULT_SUCCESS == result )
@@ -75,6 +68,20 @@ namespace xe_lib
             auto getTable = reinterpret_cast<xe_pfnGetDeviceGroupProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "xeGetDeviceGroupProcAddrTable") );
             result = getTable( XE_API_VERSION_1_0, &xeDeviceGroup );
+        }
+
+        if( XE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<xe_pfnGetCommandQueueProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xeGetCommandQueueProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &xeCommandQueue );
+        }
+
+        if( XE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<xe_pfnGetCommandListProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xeGetCommandListProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &xeCommandList );
         }
 
         if( XE_RESULT_SUCCESS == result )
@@ -131,13 +138,6 @@ namespace xe_lib
             auto getTable = reinterpret_cast<xe_pfnGetSamplerProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "xeGetSamplerProcAddrTable") );
             result = getTable( XE_API_VERSION_1_0, &xeSampler );
-        }
-
-        if( XE_RESULT_SUCCESS == result )
-        {
-            auto getTable = reinterpret_cast<xe_pfnGetGlobalProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "xeGetGlobalProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &xeGlobal );
         }
 
         return result;

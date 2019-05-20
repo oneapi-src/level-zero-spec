@@ -35,6 +35,50 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Global table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetGlobalProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_global_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
+    )
+{
+#ifdef _DEBUG
+    if( nullptr == ptable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( xe_loader::loader.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    if( nullptr != xe_loader::loader.commonDriver )
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetGlobalProcAddrTable_t>(
+            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xetGetGlobalProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetGlobalProcAddrTable_t>(
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetGlobalProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Device table
 ///        with current process' addresses
 ///
@@ -431,7 +475,7 @@ xetGetFreqDomainProcAddrTable(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Global table
+/// @brief Exported function for filling application's Sysman table
 ///        with current process' addresses
 ///
 /// @returns
@@ -442,9 +486,9 @@ xetGetFreqDomainProcAddrTable(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
-xetGetGlobalProcAddrTable(
+xetGetSysmanProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_global_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
+    xet_sysman_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
     )
 {
 #ifdef _DEBUG
@@ -459,15 +503,15 @@ xetGetGlobalProcAddrTable(
 
     if( nullptr != xe_loader::loader.commonDriver )
     {
-        static auto getTable = reinterpret_cast<xet_pfnGetGlobalProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xetGetGlobalProcAddrTable") );
+        static auto getTable = reinterpret_cast<xet_pfnGetSysmanProcAddrTable_t>(
+            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xetGetSysmanProcAddrTable") );
         result = getTable( version, ptable );
     }
 
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
-        static auto getTable = reinterpret_cast<xet_pfnGetGlobalProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetGlobalProcAddrTable") );
+        static auto getTable = reinterpret_cast<xet_pfnGetSysmanProcAddrTable_t>(
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetSysmanProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -481,9 +525,10 @@ xetInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    // FOUND: Global
-    // auto pfnInit = xe_loader::loader.xetGlobal.pfnInit;
-    // return pfnInit( flags );
+    auto pfnInit = xe_loader::loader.xetGlobal.pfnInit;
+    
+    
+    //auto result = pfnInit( flags );
 
     return XE_RESULT_SUCCESS;
 }
@@ -495,9 +540,11 @@ xetMetricGroupGetCount(
     uint32_t* pCount                                ///< [out] number of metric groups supported by the device
     )
 {
+    auto pfnGetCount = std::get<1>( *reinterpret_cast<xet_device_object_t*>( hDevice ) )->pMetricGroup->pfnGetCount;
+    
     hDevice = std::get<0>( *reinterpret_cast<xet_device_object_t*>( hDevice ) );
     
-    // FOUND: Other
+    //auto result = pfnGetCount( hDevice, pCount );
 
     return XE_RESULT_SUCCESS;
 }
@@ -510,9 +557,11 @@ xetMetricGroupGet(
     xet_metric_group_handle_t* phMetricGroup        ///< [out] metric group handle
     )
 {
+    auto pfnGet = std::get<1>( *reinterpret_cast<xet_device_object_t*>( hDevice ) )->pMetricGroup->pfnGet;
+    
     hDevice = std::get<0>( *reinterpret_cast<xet_device_object_t*>( hDevice ) );
     
-    // FOUND: Other
+    //auto result = pfnGet( hDevice, ordinal, phMetricGroup );
 
     *phMetricGroup = reinterpret_cast<xet_metric_group_handle_t>( new xet_metric_group_object_t( *phMetricGroup, nullptr ) );
     
@@ -526,9 +575,11 @@ xetMetricGroupGetProperties(
     xet_metric_group_properties_t* pProperties      ///< [out] metric group properties
     )
 {
+    auto pfnGetProperties = std::get<1>( *reinterpret_cast<xet_metric_group_object_t*>( hMetricGroup ) )->pfnGetProperties;
+    
     hMetricGroup = std::get<0>( *reinterpret_cast<xet_metric_group_object_t*>( hMetricGroup ) );
     
-    // FOUND: Other
+    //auto result = pfnGetProperties( hMetricGroup, pProperties );
 
     return XE_RESULT_SUCCESS;
 }
@@ -541,9 +592,11 @@ xetMetricGet(
     xet_metric_handle_t* phMetric                   ///< [out] handle of metric
     )
 {
+    auto pfnGet = std::get<1>( *reinterpret_cast<xet_metric_group_object_t*>( hMetricGroup ) )->pfnGet;
+    
     hMetricGroup = std::get<0>( *reinterpret_cast<xet_metric_group_object_t*>( hMetricGroup ) );
     
-    // FOUND: Other
+    //auto result = pfnGet( hMetricGroup, ordinal, phMetric );
 
     *phMetric = reinterpret_cast<xet_metric_handle_t>( new xet_metric_object_t( *phMetric, nullptr ) );
     
@@ -557,9 +610,11 @@ xetMetricGetProperties(
     xet_metric_properties_t* pProperties            ///< [out] metric properties
     )
 {
+    auto pfnGetProperties = std::get<1>( *reinterpret_cast<xet_metric_object_t*>( hMetric ) )->pfnGetProperties;
+    
     hMetric = std::get<0>( *reinterpret_cast<xet_metric_object_t*>( hMetric ) );
     
-    // FOUND: Other
+    //auto result = pfnGetProperties( hMetric, pProperties );
 
     return XE_RESULT_SUCCESS;
 }
@@ -575,9 +630,11 @@ xetMetricGroupCalculateData(
     xet_typed_value_t* pCalculatedData              ///< [in,out] calculated metrics
     )
 {
+    auto pfnCalculateData = std::get<1>( *reinterpret_cast<xet_metric_group_object_t*>( hMetricGroup ) )->pfnCalculateData;
+    
     hMetricGroup = std::get<0>( *reinterpret_cast<xet_metric_group_object_t*>( hMetricGroup ) );
     
-    // FOUND: Other
+    //auto result = pfnCalculateData( hMetricGroup, pReportCount, rawDataSize, pRawData, calculatedDataSize, pCalculatedData );
 
     return XE_RESULT_SUCCESS;
 }
@@ -591,11 +648,13 @@ xetDeviceActivateMetricGroups(
                                                     ///< to deactivate.
     )
 {
+    auto pfnActivateMetricGroups = std::get<1>( *reinterpret_cast<xet_device_object_t*>( hDevice ) )->pfnActivateMetricGroups;
+    
     hDevice = std::get<0>( *reinterpret_cast<xet_device_object_t*>( hDevice ) );
     for( size_t i = 0; ( nullptr != phMetricGroups ) && ( i < count ); ++i )
         phMetricGroups[ i ] = std::get<0>( *reinterpret_cast<xet_metric_group_object_t*>( phMetricGroups[ i ] ) );
     
-    // FOUND: Other
+    //auto result = pfnActivateMetricGroups( hDevice, count, phMetricGroups );
 
     return XE_RESULT_SUCCESS;
 }
@@ -610,10 +669,12 @@ xetMetricTracerOpen(
     xet_metric_tracer_handle_t* phMetricTracer      ///< [out] handle of metric tracer
     )
 {
+    auto pfnOpen = std::get<1>( *reinterpret_cast<xet_device_object_t*>( hDevice ) )->pMetricTracer->pfnOpen;
+    
     hDevice = std::get<0>( *reinterpret_cast<xet_device_object_t*>( hDevice ) );
     hNotificationEvent = std::get<0>( *reinterpret_cast<xet_event_object_t*>( hNotificationEvent ) );
     
-    // FOUND: Other
+    //auto result = pfnOpen( hDevice, pDesc, hNotificationEvent, phMetricTracer );
 
     *phMetricTracer = reinterpret_cast<xet_metric_tracer_handle_t>( new xet_metric_tracer_object_t( *phMetricTracer, nullptr ) );
     
@@ -628,10 +689,12 @@ xetCommandListAppendMetricTracerMarker(
     uint32_t value                                  ///< [in] tracer marker value
     )
 {
+    auto pfnAppendMetricTracerMarker = std::get<1>( *reinterpret_cast<xet_command_list_object_t*>( hCommandList ) )->pfnAppendMetricTracerMarker;
+    
     hCommandList = std::get<0>( *reinterpret_cast<xet_command_list_object_t*>( hCommandList ) );
     hMetricTracer = std::get<0>( *reinterpret_cast<xet_metric_tracer_object_t*>( hMetricTracer ) );
     
-    // FOUND: Other
+    //auto result = pfnAppendMetricTracerMarker( hCommandList, hMetricTracer, value );
 
     return XE_RESULT_SUCCESS;
 }
@@ -642,9 +705,11 @@ xetMetricTracerClose(
     xet_metric_tracer_handle_t hMetricTracer        ///< [in] handle of the metric tracer
     )
 {
+    auto pfnClose = std::get<1>( *reinterpret_cast<xet_metric_tracer_object_t*>( hMetricTracer ) )->pfnClose;
+    
     hMetricTracer = std::get<0>( *reinterpret_cast<xet_metric_tracer_object_t*>( hMetricTracer ) );
     
-    // FOUND: Other
+    //auto result = pfnClose( hMetricTracer );
 
     return XE_RESULT_SUCCESS;
 }
@@ -658,9 +723,11 @@ xetMetricTracerReadData(
     uint8_t* pRawData                               ///< [in,out] raw data buffer for reports
     )
 {
+    auto pfnReadData = std::get<1>( *reinterpret_cast<xet_metric_tracer_object_t*>( hMetricTracer ) )->pfnReadData;
+    
     hMetricTracer = std::get<0>( *reinterpret_cast<xet_metric_tracer_object_t*>( hMetricTracer ) );
     
-    // FOUND: Other
+    //auto result = pfnReadData( hMetricTracer, pReportCount, rawDataSize, pRawData );
 
     return XE_RESULT_SUCCESS;
 }
@@ -673,9 +740,11 @@ xetMetricQueryPoolCreate(
     xet_metric_query_pool_handle_t* phMetricQueryPool   ///< [out] handle of metric query pool
     )
 {
+    auto pfnCreate = std::get<1>( *reinterpret_cast<xet_device_object_t*>( hDevice ) )->pMetricQueryPool->pfnCreate;
+    
     hDevice = std::get<0>( *reinterpret_cast<xet_device_object_t*>( hDevice ) );
     
-    // FOUND: Create
+    //auto result = pfnCreate( hDevice, pDesc, phMetricQueryPool );
 
     *phMetricQueryPool = reinterpret_cast<xet_metric_query_pool_handle_t>( new xet_metric_query_pool_object_t( *phMetricQueryPool, nullptr ) );
     
@@ -688,9 +757,11 @@ xetMetricQueryPoolDestroy(
     xet_metric_query_pool_handle_t hMetricQueryPool ///< [in] handle of the metric query pool
     )
 {
+    auto pfnDestroy = std::get<1>( *reinterpret_cast<xet_metric_query_pool_object_t*>( hMetricQueryPool ) )->pfnDestroy;
+    
     hMetricQueryPool = std::get<0>( *reinterpret_cast<xet_metric_query_pool_object_t*>( hMetricQueryPool ) );
     
-    // FOUND: Destroy
+    //auto result = pfnDestroy( hMetricQueryPool );
 
     return XE_RESULT_SUCCESS;
 }
@@ -703,9 +774,11 @@ xetMetricQueryPoolGetMetricQuery(
     xet_metric_query_handle_t* phMetricQuery        ///< [out] handle of metric query
     )
 {
+    auto pfnGetMetricQuery = std::get<1>( *reinterpret_cast<xet_metric_query_pool_object_t*>( hMetricQueryPool ) )->pfnGetMetricQuery;
+    
     hMetricQueryPool = std::get<0>( *reinterpret_cast<xet_metric_query_pool_object_t*>( hMetricQueryPool ) );
     
-    // FOUND: Other
+    //auto result = pfnGetMetricQuery( hMetricQueryPool, ordinal, phMetricQuery );
 
     *phMetricQuery = reinterpret_cast<xet_metric_query_handle_t>( new xet_metric_query_object_t( *phMetricQuery, nullptr ) );
     
@@ -719,10 +792,12 @@ xetCommandListAppendMetricQueryBegin(
     xet_metric_query_handle_t hMetricQuery          ///< [in] handle of the metric query
     )
 {
+    auto pfnAppendMetricQueryBegin = std::get<1>( *reinterpret_cast<xet_command_list_object_t*>( hCommandList ) )->pfnAppendMetricQueryBegin;
+    
     hCommandList = std::get<0>( *reinterpret_cast<xet_command_list_object_t*>( hCommandList ) );
     hMetricQuery = std::get<0>( *reinterpret_cast<xet_metric_query_object_t*>( hMetricQuery ) );
     
-    // FOUND: Other
+    //auto result = pfnAppendMetricQueryBegin( hCommandList, hMetricQuery );
 
     return XE_RESULT_SUCCESS;
 }
@@ -735,11 +810,13 @@ xetCommandListAppendMetricQueryEnd(
     xe_event_handle_t hCompletionEvent              ///< [in] handle of the completion event to signal
     )
 {
+    auto pfnAppendMetricQueryEnd = std::get<1>( *reinterpret_cast<xet_command_list_object_t*>( hCommandList ) )->pfnAppendMetricQueryEnd;
+    
     hCommandList = std::get<0>( *reinterpret_cast<xet_command_list_object_t*>( hCommandList ) );
     hMetricQuery = std::get<0>( *reinterpret_cast<xet_metric_query_object_t*>( hMetricQuery ) );
     hCompletionEvent = std::get<0>( *reinterpret_cast<xet_event_object_t*>( hCompletionEvent ) );
     
-    // FOUND: Other
+    //auto result = pfnAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent );
 
     return XE_RESULT_SUCCESS;
 }
@@ -750,9 +827,11 @@ xetCommandListAppendMetricMemoryBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
 {
+    auto pfnAppendMetricMemoryBarrier = std::get<1>( *reinterpret_cast<xet_command_list_object_t*>( hCommandList ) )->pfnAppendMetricMemoryBarrier;
+    
     hCommandList = std::get<0>( *reinterpret_cast<xet_command_list_object_t*>( hCommandList ) );
     
-    // FOUND: Other
+    //auto result = pfnAppendMetricMemoryBarrier( hCommandList );
 
     return XE_RESULT_SUCCESS;
 }
@@ -766,9 +845,11 @@ xetMetricQueryGetData(
     uint8_t* pRawData                               ///< [in,out] query result data in raw format
     )
 {
+    auto pfnGetData = std::get<1>( *reinterpret_cast<xet_metric_query_object_t*>( hMetricQuery ) )->pfnGetData;
+    
     hMetricQuery = std::get<0>( *reinterpret_cast<xet_metric_query_object_t*>( hMetricQuery ) );
     
-    // FOUND: Other
+    //auto result = pfnGetData( hMetricQuery, pReportCount, rawDataSize, pRawData );
 
     return XE_RESULT_SUCCESS;
 }
@@ -781,9 +862,11 @@ xetPowerCreate(
     xet_power_handle_t* pPowerHandle                ///< [out] handle for accessing power features of the device
     )
 {
+    auto pfnCreate = std::get<1>( *reinterpret_cast<xet_device_object_t*>( hDevice ) )->pPower->pfnCreate;
+    
     hDevice = std::get<0>( *reinterpret_cast<xet_device_object_t*>( hDevice ) );
     
-    // FOUND: Create
+    //auto result = pfnCreate( hDevice, flags, pPowerHandle );
 
     *pPowerHandle = reinterpret_cast<xet_power_handle_t>( new xet_power_object_t( *pPowerHandle, nullptr ) );
     
@@ -796,9 +879,11 @@ xetPowerDestroy(
     xet_power_handle_t hPower                       ///< [in] handle of the power object to destroy
     )
 {
+    auto pfnDestroy = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnDestroy;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Destroy
+    //auto result = pfnDestroy( hPower );
 
     return XE_RESULT_SUCCESS;
 }
@@ -810,9 +895,11 @@ xetPowerGetAveragePowerLimit(
     xet_power_average_limit_t* pLimit               ///< [out] information about the average power limit
     )
 {
+    auto pfnGetAveragePowerLimit = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnGetAveragePowerLimit;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnGetAveragePowerLimit( hPower, pLimit );
 
     return XE_RESULT_SUCCESS;
 }
@@ -824,9 +911,11 @@ xetPowerGetBurstPowerLimit(
     xet_power_burst_limit_t* pLimit                 ///< [out] information about the burst power limit
     )
 {
+    auto pfnGetBurstPowerLimit = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnGetBurstPowerLimit;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnGetBurstPowerLimit( hPower, pLimit );
 
     return XE_RESULT_SUCCESS;
 }
@@ -838,9 +927,11 @@ xetPowerGetPeakPowerLimit(
     xet_power_peak_limit_t* pLimit                  ///< [out] information about the peak power limit
     )
 {
+    auto pfnGetPeakPowerLimit = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnGetPeakPowerLimit;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnGetPeakPowerLimit( hPower, pLimit );
 
     return XE_RESULT_SUCCESS;
 }
@@ -852,9 +943,11 @@ xetPowerGetAllPowerLimits(
     xet_power_limits_t* pLimits                     ///< [out] information about the average/burst/peak power limits
     )
 {
+    auto pfnGetAllPowerLimits = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnGetAllPowerLimits;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnGetAllPowerLimits( hPower, pLimits );
 
     return XE_RESULT_SUCCESS;
 }
@@ -866,9 +959,11 @@ xetPowerGetDefaultPowerLimits(
     xet_power_limits_t* pLimits                     ///< [out] information about the default average/burst/peak power limits
     )
 {
+    auto pfnGetDefaultPowerLimits = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnGetDefaultPowerLimits;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnGetDefaultPowerLimits( hPower, pLimits );
 
     return XE_RESULT_SUCCESS;
 }
@@ -880,9 +975,11 @@ xetPowerSetAveragePowerLimit(
     xet_power_average_limit_t* pLimit               ///< [in] information about the average power limit
     )
 {
+    auto pfnSetAveragePowerLimit = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnSetAveragePowerLimit;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnSetAveragePowerLimit( hPower, pLimit );
 
     return XE_RESULT_SUCCESS;
 }
@@ -894,9 +991,11 @@ xetPowerSetBurstPowerLimit(
     xet_power_burst_limit_t* pLimit                 ///< [in] information about the burst power limit
     )
 {
+    auto pfnSetBurstPowerLimit = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnSetBurstPowerLimit;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnSetBurstPowerLimit( hPower, pLimit );
 
     return XE_RESULT_SUCCESS;
 }
@@ -908,9 +1007,11 @@ xetPowerSetPeakPowerLimit(
     xet_power_peak_limit_t* pLimit                  ///< [in] information about the peak power limit
     )
 {
+    auto pfnSetPeakPowerLimit = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnSetPeakPowerLimit;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnSetPeakPowerLimit( hPower, pLimit );
 
     return XE_RESULT_SUCCESS;
 }
@@ -922,9 +1023,11 @@ xetPowerSetPowerLimits(
     xet_power_limits_t* pLimits                     ///< [in] information about the average/burst/peak power limits
     )
 {
+    auto pfnSetPowerLimits = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnSetPowerLimits;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnSetPowerLimits( hPower, pLimits );
 
     return XE_RESULT_SUCCESS;
 }
@@ -936,9 +1039,11 @@ xetPowerGetEnergyCounter(
     uint64_t* pEnergy                               ///< [out] the energy counter in millijoules
     )
 {
+    auto pfnGetEnergyCounter = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnGetEnergyCounter;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnGetEnergyCounter( hPower, pEnergy );
 
     return XE_RESULT_SUCCESS;
 }
@@ -950,9 +1055,11 @@ xetPowerGetTurboMode(
     xet_turbo_mode_t* pTurboMode                    ///< [out] turbo mode currently in effect
     )
 {
+    auto pfnGetTurboMode = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnGetTurboMode;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnGetTurboMode( hPower, pTurboMode );
 
     return XE_RESULT_SUCCESS;
 }
@@ -964,9 +1071,11 @@ xetPowerSetTurboMode(
     xet_turbo_mode_t pTurboMode                     ///< [in] new turbo mode
     )
 {
+    auto pfnSetTurboMode = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnSetTurboMode;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnSetTurboMode( hPower, pTurboMode );
 
     return XE_RESULT_SUCCESS;
 }
@@ -978,9 +1087,11 @@ xetPowerGetFreqDomainCount(
     uint32_t* pNumFreqDomains                       ///< [out] the number of frequency domains
     )
 {
+    auto pfnGetFreqDomainCount = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnGetFreqDomainCount;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnGetFreqDomainCount( hPower, pNumFreqDomains );
 
     return XE_RESULT_SUCCESS;
 }
@@ -993,9 +1104,11 @@ xetPowerGetFreqDomain(
     xet_freq_domain_handle_t* phFreqDomain          ///< [out] pointer to handle of frequency domain object
     )
 {
+    auto pfnGetFreqDomain = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnGetFreqDomain;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnGetFreqDomain( hPower, ordinal, phFreqDomain );
 
     *phFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>( new xet_freq_domain_object_t( *phFreqDomain, nullptr ) );
     
@@ -1009,9 +1122,11 @@ xetFreqDomainGetProperties(
     xet_freq_domain_properties_t* pFreqDomainProperties ///< [out] pointer to properties for the frequency domain
     )
 {
+    auto pfnGetProperties = std::get<1>( *reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain ) )->pfnGetProperties;
+    
     hFreqDomain = std::get<0>( *reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain ) );
     
-    // FOUND: Other
+    //auto result = pfnGetProperties( hFreqDomain, pFreqDomainProperties );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1024,9 +1139,11 @@ xetFreqDomainGetSourceFreqDomain(
                                                     ///< will be returned
     )
 {
+    auto pfnGetSourceFreqDomain = std::get<1>( *reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain ) )->pfnGetSourceFreqDomain;
+    
     hFreqDomain = std::get<0>( *reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain ) );
     
-    // FOUND: Other
+    //auto result = pfnGetSourceFreqDomain( hFreqDomain, phSrcFreqDomain );
 
     *phSrcFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>( new xet_freq_domain_object_t( *phSrcFreqDomain, nullptr ) );
     
@@ -1041,9 +1158,11 @@ xetFreqDomainGetSupportedClocks(
     uint32_t* pClocks                               ///< [out] pointer to array of frequencies
     )
 {
+    auto pfnGetSupportedClocks = std::get<1>( *reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain ) )->pfnGetSupportedClocks;
+    
     hFreqDomain = std::get<0>( *reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain ) );
     
-    // FOUND: Other
+    //auto result = pfnGetSupportedClocks( hFreqDomain, numClockPoints, pClocks );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1056,9 +1175,11 @@ xetFreqDomainGetSupportedClockDividers(
     xet_clock_divider_t* pDividers                  ///< [out] pointer to array of dividers
     )
 {
+    auto pfnGetSupportedClockDividers = std::get<1>( *reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain ) )->pfnGetSupportedClockDividers;
+    
     hFreqDomain = std::get<0>( *reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain ) );
     
-    // FOUND: Other
+    //auto result = pfnGetSupportedClockDividers( hFreqDomain, numClockDividers, pDividers );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1071,9 +1192,11 @@ xetFreqDomainGetClockRange(
     uint32_t* pMaxClock                             ///< [out] max clock frequency in units of MHz
     )
 {
+    auto pfnGetClockRange = std::get<1>( *reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain ) )->pfnGetClockRange;
+    
     hFreqDomain = std::get<0>( *reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain ) );
     
-    // FOUND: Other
+    //auto result = pfnGetClockRange( hFreqDomain, pMinClock, pMaxClock );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1086,9 +1209,11 @@ xetFreqDomainSetClockRange(
     uint32_t maxClock                               ///< [in] max clock frequency in units of MHz
     )
 {
+    auto pfnSetClockRange = std::get<1>( *reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain ) )->pfnSetClockRange;
+    
     hFreqDomain = std::get<0>( *reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain ) );
     
-    // FOUND: Other
+    //auto result = pfnSetClockRange( hFreqDomain, minClock, maxClock );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1100,9 +1225,11 @@ xetFreqDomainSetClockDivider(
     xet_clock_divider_t* pClockDividerRequest       ///< [out] pointer to frequency divider request
     )
 {
+    auto pfnSetClockDivider = std::get<1>( *reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain ) )->pfnSetClockDivider;
+    
     hFreqDomain = std::get<0>( *reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain ) );
     
-    // FOUND: Other
+    //auto result = pfnSetClockDivider( hFreqDomain, pClockDividerRequest );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1116,9 +1243,11 @@ xetFreqDomainGetCurrentFrequency(
     xet_freq_throttle_reasons_t* pFreqThrottleReasons   ///< [out] the reason the resolved frequency is lower than the request
     )
 {
+    auto pfnGetCurrentFrequency = std::get<1>( *reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain ) )->pfnGetCurrentFrequency;
+    
     hFreqDomain = std::get<0>( *reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain ) );
     
-    // FOUND: Other
+    //auto result = pfnGetCurrentFrequency( hFreqDomain, pFreqRequest, pFreqResolved, pFreqThrottleReasons );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1130,9 +1259,11 @@ xetPowerFanCount(
     uint32_t* pFanCount                             ///< [out] the number of fans on the device
     )
 {
+    auto pfnFanCount = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnFanCount;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnFanCount( hPower, pFanCount );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1145,9 +1276,11 @@ xetPowerFanGetProperties(
     xet_fan_properties_t* pFanProperties            ///< [out] pointer to storage for fan properties
     )
 {
+    auto pfnFanGetProperties = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnFanGetProperties;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnFanGetProperties( hPower, fanIndex, pFanProperties );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1163,9 +1296,11 @@ xetPowerFanGetSpeedTable(
     xet_fan_point_t* pFanPoints                     ///< [out] pointer to an array of temperature/fan-speed points
     )
 {
+    auto pfnFanGetSpeedTable = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnFanGetSpeedTable;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnFanGetSpeedTable( hPower, fanIndex, fanSpeedInRpm, pNumFanPoints, pFanPoints );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1179,9 +1314,11 @@ xetPowerFanSetSpeedTable(
     xet_fan_point_t* pFanPoints                     ///< [in] pointer to an array of temperature/fan-speed points
     )
 {
+    auto pfnFanSetSpeedTable = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnFanSetSpeedTable;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnFanSetSpeedTable( hPower, fanIndex, numFanPoints, pFanPoints );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1197,9 +1334,11 @@ xetPowerFanGetSpeed(
     xet_fan_speed_info_t* pFanSpeed                 ///< [out] pointer to an array of current fan speeds
     )
 {
+    auto pfnFanGetSpeed = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnFanGetSpeed;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnFanGetSpeed( hPower, startFanIndex, numFans, fanSpeedInRpm, pFanSpeed );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1214,9 +1353,11 @@ xetPowerFanSetSpeed(
     xet_fan_speed_info_t* pFanSpeed                 ///< [in] pointer to an array of current fan speeds
     )
 {
+    auto pfnFanSetSpeed = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnFanSetSpeed;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnFanSetSpeed( hPower, startFanIndex, numFans, pFanSpeed );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1228,9 +1369,11 @@ xetPowerTemperatureSensorCount(
     uint32_t* pSensorCount                          ///< [out] the number of temperature sensors on the device
     )
 {
+    auto pfnTemperatureSensorCount = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnTemperatureSensorCount;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnTemperatureSensorCount( hPower, pSensorCount );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1243,9 +1386,11 @@ xetPowerGetTemperatureProperties(
     xet_temperature_properties_t* pProperties       ///< [out] pointer to properties for this sensor
     )
 {
+    auto pfnGetTemperatureProperties = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnGetTemperatureProperties;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnGetTemperatureProperties( hPower, sensorIndex, pProperties );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1260,9 +1405,11 @@ xetPowerGetTemperature(
     uint16_t* pTemperatures                         ///< [out] pointer to an array of temperatures in units of degrees celsius
     )
 {
+    auto pfnGetTemperature = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnGetTemperature;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnGetTemperature( hPower, startSensorIndex, numSensors, pTemperatures );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1276,9 +1423,11 @@ xetPowerSetTemperatureThreshold(
                                                     ///< will be throttled
     )
 {
+    auto pfnSetTemperatureThreshold = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnSetTemperatureThreshold;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnSetTemperatureThreshold( hPower, sensorIndex, maxTemperature );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1290,9 +1439,11 @@ xetPowerActivityCount(
     uint32_t* pActivityCount                        ///< [out] the number of activity counters on the device
     )
 {
+    auto pfnActivityCount = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnActivityCount;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnActivityCount( hPower, pActivityCount );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1305,9 +1456,11 @@ xetPowerGetActivityProperties(
     xet_activity_properties_t* pProperties          ///< [out] pointer to properties for this activity counter
     )
 {
+    auto pfnGetActivityProperties = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnGetActivityProperties;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnGetActivityProperties( hPower, activityIndex, pProperties );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1322,9 +1475,22 @@ xetPowerGetActivityCounters(
     xet_activity_counters_t* pCounters              ///< [out] pointer to an array of activity counter data
     )
 {
+    auto pfnGetActivityCounters = std::get<1>( *reinterpret_cast<xet_power_object_t*>( hPower ) )->pfnGetActivityCounters;
+    
     hPower = std::get<0>( *reinterpret_cast<xet_power_object_t*>( hPower ) );
     
-    // FOUND: Other
+    //auto result = pfnGetActivityCounters( hPower, startCounterIndex, numCounters, pCounters );
+
+    return XE_RESULT_SUCCESS;
+}
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xetSysmanfoo
+xe_result_t __xecall
+xetSysmanfoo(
+    void* blob                                      ///< [in]
+    )
+{
+    //auto result = pfnfoo( blob );
 
     return XE_RESULT_SUCCESS;
 }

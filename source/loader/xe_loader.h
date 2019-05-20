@@ -50,7 +50,7 @@ using xe_module_build_log_object_t  = std::tuple < xe_module_build_log_handle_t,
 using xe_function_object_t          = std::tuple < xe_function_handle_t, xe_function_apitable_t* >;
 using xe_sampler_object_t           = std::tuple < xe_sampler_handle_t, xe_sampler_apitable_t* >;
 
-using xex_device_object_t           = std::tuple < xe_device_handle_t, xe_device_apitable_t* >;
+using xex_device_object_t           = std::tuple < xe_device_handle_t, xex_device_apitable_t* >;
 using xex_command_graph_object_t    = std::tuple < xex_command_graph_handle_t, xex_command_graph_apitable_t* >;
 
 using xet_device_object_t               = std::tuple < xe_device_handle_t, xet_device_apitable_t* >;
@@ -78,6 +78,10 @@ namespace xe_loader
 
         Loader();
         ~Loader();
+
+        xe_global_apitable_t    xeGlobal = {};
+        xex_global_apitable_t   xexGlobal = {};
+        xet_global_apitable_t   xetGlobal = {};
     };
 
     extern Loader loader;

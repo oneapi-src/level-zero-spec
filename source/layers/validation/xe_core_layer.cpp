@@ -35,7 +35,7 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's CommandList table
+/// @brief Exported function for filling application's Global table
 ///        with current process' addresses
 ///
 /// @returns
@@ -46,12 +46,12 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
-xeGetCommandListProcAddrTable(
+xeGetGlobalProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_command_list_apitable_t* ptable              ///< [in,out] pointer to table of API function pointers
+    xe_global_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeCommandList;
+    auto& mytable = xe_layer::val.xeGlobal;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -63,86 +63,11 @@ xeGetCommandListProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                               = xeCommandListCreate;
+    mytable.pfnInit                                                 = ptable->pfnInit;
+    ptable->pfnInit                                                 = xeInit;
 
-    mytable.pfnCreateImmediate                                      = ptable->pfnCreateImmediate;
-    ptable->pfnCreateImmediate                                      = xeCommandListCreateImmediate;
-
-    mytable.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                              = xeCommandListDestroy;
-
-    mytable.pfnClose                                                = ptable->pfnClose;
-    ptable->pfnClose                                                = xeCommandListClose;
-
-    mytable.pfnReset                                                = ptable->pfnReset;
-    ptable->pfnReset                                                = xeCommandListReset;
-
-    mytable.pfnSetParameter                                         = ptable->pfnSetParameter;
-    ptable->pfnSetParameter                                         = xeCommandListSetParameter;
-
-    mytable.pfnGetParameter                                         = ptable->pfnGetParameter;
-    ptable->pfnGetParameter                                         = xeCommandListGetParameter;
-
-    mytable.pfnResetParameters                                      = ptable->pfnResetParameters;
-    ptable->pfnResetParameters                                      = xeCommandListResetParameters;
-
-    mytable.pfnReserveSpace                                         = ptable->pfnReserveSpace;
-    ptable->pfnReserveSpace                                         = xeCommandListReserveSpace;
-
-    mytable.pfnAppendBarrier                                        = ptable->pfnAppendBarrier;
-    ptable->pfnAppendBarrier                                        = xeCommandListAppendBarrier;
-
-    mytable.pfnAppendMemoryRangesBarrier                            = ptable->pfnAppendMemoryRangesBarrier;
-    ptable->pfnAppendMemoryRangesBarrier                            = xeCommandListAppendMemoryRangesBarrier;
-
-    mytable.pfnAppendMemoryCopy                                     = ptable->pfnAppendMemoryCopy;
-    ptable->pfnAppendMemoryCopy                                     = xeCommandListAppendMemoryCopy;
-
-    mytable.pfnAppendMemorySet                                      = ptable->pfnAppendMemorySet;
-    ptable->pfnAppendMemorySet                                      = xeCommandListAppendMemorySet;
-
-    mytable.pfnAppendMemoryCopyRegion                               = ptable->pfnAppendMemoryCopyRegion;
-    ptable->pfnAppendMemoryCopyRegion                               = xeCommandListAppendMemoryCopyRegion;
-
-    mytable.pfnAppendImageCopy                                      = ptable->pfnAppendImageCopy;
-    ptable->pfnAppendImageCopy                                      = xeCommandListAppendImageCopy;
-
-    mytable.pfnAppendImageCopyRegion                                = ptable->pfnAppendImageCopyRegion;
-    ptable->pfnAppendImageCopyRegion                                = xeCommandListAppendImageCopyRegion;
-
-    mytable.pfnAppendImageCopyToMemory                              = ptable->pfnAppendImageCopyToMemory;
-    ptable->pfnAppendImageCopyToMemory                              = xeCommandListAppendImageCopyToMemory;
-
-    mytable.pfnAppendImageCopyFromMemory                            = ptable->pfnAppendImageCopyFromMemory;
-    ptable->pfnAppendImageCopyFromMemory                            = xeCommandListAppendImageCopyFromMemory;
-
-    mytable.pfnAppendMemoryPrefetch                                 = ptable->pfnAppendMemoryPrefetch;
-    ptable->pfnAppendMemoryPrefetch                                 = xeCommandListAppendMemoryPrefetch;
-
-    mytable.pfnAppendMemAdvise                                      = ptable->pfnAppendMemAdvise;
-    ptable->pfnAppendMemAdvise                                      = xeCommandListAppendMemAdvise;
-
-    mytable.pfnAppendSignalEvent                                    = ptable->pfnAppendSignalEvent;
-    ptable->pfnAppendSignalEvent                                    = xeCommandListAppendSignalEvent;
-
-    mytable.pfnAppendWaitOnEvents                                   = ptable->pfnAppendWaitOnEvents;
-    ptable->pfnAppendWaitOnEvents                                   = xeCommandListAppendWaitOnEvents;
-
-    mytable.pfnAppendEventReset                                     = ptable->pfnAppendEventReset;
-    ptable->pfnAppendEventReset                                     = xeCommandListAppendEventReset;
-
-    mytable.pfnAppendLaunchFunction                                 = ptable->pfnAppendLaunchFunction;
-    ptable->pfnAppendLaunchFunction                                 = xeCommandListAppendLaunchFunction;
-
-    mytable.pfnAppendLaunchFunctionIndirect                         = ptable->pfnAppendLaunchFunctionIndirect;
-    ptable->pfnAppendLaunchFunctionIndirect                         = xeCommandListAppendLaunchFunctionIndirect;
-
-    mytable.pfnAppendLaunchMultipleFunctionsIndirect                = ptable->pfnAppendLaunchMultipleFunctionsIndirect;
-    ptable->pfnAppendLaunchMultipleFunctionsIndirect                = xeCommandListAppendLaunchMultipleFunctionsIndirect;
-
-    mytable.pfnAppendLaunchHostFunction                             = ptable->pfnAppendLaunchHostFunction;
-    ptable->pfnAppendLaunchHostFunction                             = xeCommandListAppendLaunchHostFunction;
+    mytable.pfnGetDeviceGroups                                      = ptable->pfnGetDeviceGroups;
+    ptable->pfnGetDeviceGroups                                      = xeGetDeviceGroups;
 
     return result;
 }
@@ -220,50 +145,6 @@ xeGetDeviceProcAddrTable(
 
     mytable.pfnEvictImage                                           = ptable->pfnEvictImage;
     ptable->pfnEvictImage                                           = xeDeviceEvictImage;
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's CommandQueue table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for ptable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xeGetCommandQueueProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xe_command_queue_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
-    )
-{
-    auto& mytable = xe_layer::val.xeCommandQueue;
-
-#ifdef _DEBUG
-    if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    if( xe_layer::val.version < version )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
-
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    mytable.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                               = xeCommandQueueCreate;
-
-    mytable.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                              = xeCommandQueueDestroy;
-
-    mytable.pfnExecuteCommandLists                                  = ptable->pfnExecuteCommandLists;
-    ptable->pfnExecuteCommandLists                                  = xeCommandQueueExecuteCommandLists;
-
-    mytable.pfnSynchronize                                          = ptable->pfnSynchronize;
-    ptable->pfnSynchronize                                          = xeCommandQueueSynchronize;
 
     return result;
 }
@@ -379,6 +260,163 @@ xeGetDeviceGroupProcAddrTable(
 
     mytable.pfnGetMemoryProperties                                  = ptable->pfnGetMemoryProperties;
     ptable->pfnGetMemoryProperties                                  = xeDeviceGroupGetMemoryProperties;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's CommandQueue table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xeGetCommandQueueProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_command_queue_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
+    )
+{
+    auto& mytable = xe_layer::val.xeCommandQueue;
+
+#ifdef _DEBUG
+    if( nullptr == ptable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( xe_layer::val.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    mytable.pfnCreate                                               = ptable->pfnCreate;
+    ptable->pfnCreate                                               = xeCommandQueueCreate;
+
+    mytable.pfnDestroy                                              = ptable->pfnDestroy;
+    ptable->pfnDestroy                                              = xeCommandQueueDestroy;
+
+    mytable.pfnExecuteCommandLists                                  = ptable->pfnExecuteCommandLists;
+    ptable->pfnExecuteCommandLists                                  = xeCommandQueueExecuteCommandLists;
+
+    mytable.pfnSynchronize                                          = ptable->pfnSynchronize;
+    ptable->pfnSynchronize                                          = xeCommandQueueSynchronize;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's CommandList table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xeGetCommandListProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xe_command_list_apitable_t* ptable              ///< [in,out] pointer to table of API function pointers
+    )
+{
+    auto& mytable = xe_layer::val.xeCommandList;
+
+#ifdef _DEBUG
+    if( nullptr == ptable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( xe_layer::val.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    mytable.pfnCreate                                               = ptable->pfnCreate;
+    ptable->pfnCreate                                               = xeCommandListCreate;
+
+    mytable.pfnCreateImmediate                                      = ptable->pfnCreateImmediate;
+    ptable->pfnCreateImmediate                                      = xeCommandListCreateImmediate;
+
+    mytable.pfnDestroy                                              = ptable->pfnDestroy;
+    ptable->pfnDestroy                                              = xeCommandListDestroy;
+
+    mytable.pfnClose                                                = ptable->pfnClose;
+    ptable->pfnClose                                                = xeCommandListClose;
+
+    mytable.pfnReset                                                = ptable->pfnReset;
+    ptable->pfnReset                                                = xeCommandListReset;
+
+    mytable.pfnSetParameter                                         = ptable->pfnSetParameter;
+    ptable->pfnSetParameter                                         = xeCommandListSetParameter;
+
+    mytable.pfnGetParameter                                         = ptable->pfnGetParameter;
+    ptable->pfnGetParameter                                         = xeCommandListGetParameter;
+
+    mytable.pfnResetParameters                                      = ptable->pfnResetParameters;
+    ptable->pfnResetParameters                                      = xeCommandListResetParameters;
+
+    mytable.pfnReserveSpace                                         = ptable->pfnReserveSpace;
+    ptable->pfnReserveSpace                                         = xeCommandListReserveSpace;
+
+    mytable.pfnAppendBarrier                                        = ptable->pfnAppendBarrier;
+    ptable->pfnAppendBarrier                                        = xeCommandListAppendBarrier;
+
+    mytable.pfnAppendMemoryRangesBarrier                            = ptable->pfnAppendMemoryRangesBarrier;
+    ptable->pfnAppendMemoryRangesBarrier                            = xeCommandListAppendMemoryRangesBarrier;
+
+    mytable.pfnAppendMemoryCopy                                     = ptable->pfnAppendMemoryCopy;
+    ptable->pfnAppendMemoryCopy                                     = xeCommandListAppendMemoryCopy;
+
+    mytable.pfnAppendMemorySet                                      = ptable->pfnAppendMemorySet;
+    ptable->pfnAppendMemorySet                                      = xeCommandListAppendMemorySet;
+
+    mytable.pfnAppendMemoryCopyRegion                               = ptable->pfnAppendMemoryCopyRegion;
+    ptable->pfnAppendMemoryCopyRegion                               = xeCommandListAppendMemoryCopyRegion;
+
+    mytable.pfnAppendImageCopy                                      = ptable->pfnAppendImageCopy;
+    ptable->pfnAppendImageCopy                                      = xeCommandListAppendImageCopy;
+
+    mytable.pfnAppendImageCopyRegion                                = ptable->pfnAppendImageCopyRegion;
+    ptable->pfnAppendImageCopyRegion                                = xeCommandListAppendImageCopyRegion;
+
+    mytable.pfnAppendImageCopyToMemory                              = ptable->pfnAppendImageCopyToMemory;
+    ptable->pfnAppendImageCopyToMemory                              = xeCommandListAppendImageCopyToMemory;
+
+    mytable.pfnAppendImageCopyFromMemory                            = ptable->pfnAppendImageCopyFromMemory;
+    ptable->pfnAppendImageCopyFromMemory                            = xeCommandListAppendImageCopyFromMemory;
+
+    mytable.pfnAppendMemoryPrefetch                                 = ptable->pfnAppendMemoryPrefetch;
+    ptable->pfnAppendMemoryPrefetch                                 = xeCommandListAppendMemoryPrefetch;
+
+    mytable.pfnAppendMemAdvise                                      = ptable->pfnAppendMemAdvise;
+    ptable->pfnAppendMemAdvise                                      = xeCommandListAppendMemAdvise;
+
+    mytable.pfnAppendSignalEvent                                    = ptable->pfnAppendSignalEvent;
+    ptable->pfnAppendSignalEvent                                    = xeCommandListAppendSignalEvent;
+
+    mytable.pfnAppendWaitOnEvents                                   = ptable->pfnAppendWaitOnEvents;
+    ptable->pfnAppendWaitOnEvents                                   = xeCommandListAppendWaitOnEvents;
+
+    mytable.pfnAppendEventReset                                     = ptable->pfnAppendEventReset;
+    ptable->pfnAppendEventReset                                     = xeCommandListAppendEventReset;
+
+    mytable.pfnAppendLaunchFunction                                 = ptable->pfnAppendLaunchFunction;
+    ptable->pfnAppendLaunchFunction                                 = xeCommandListAppendLaunchFunction;
+
+    mytable.pfnAppendLaunchFunctionIndirect                         = ptable->pfnAppendLaunchFunctionIndirect;
+    ptable->pfnAppendLaunchFunctionIndirect                         = xeCommandListAppendLaunchFunctionIndirect;
+
+    mytable.pfnAppendLaunchMultipleFunctionsIndirect                = ptable->pfnAppendLaunchMultipleFunctionsIndirect;
+    ptable->pfnAppendLaunchMultipleFunctionsIndirect                = xeCommandListAppendLaunchMultipleFunctionsIndirect;
+
+    mytable.pfnAppendLaunchHostFunction                             = ptable->pfnAppendLaunchHostFunction;
+    ptable->pfnAppendLaunchHostFunction                             = xeCommandListAppendLaunchHostFunction;
 
     return result;
 }
@@ -740,44 +778,6 @@ xeGetSamplerProcAddrTable(
 
     mytable.pfnDestroy                                              = ptable->pfnDestroy;
     ptable->pfnDestroy                                              = xeSamplerDestroy;
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Global table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for ptable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xeGetGlobalProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xe_global_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
-    )
-{
-    auto& mytable = xe_layer::val.xeGlobal;
-
-#ifdef _DEBUG
-    if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    if( xe_layer::val.version < version )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
-
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    mytable.pfnInit                                                 = ptable->pfnInit;
-    ptable->pfnInit                                                 = xeInit;
-
-    mytable.pfnGetDeviceGroups                                      = ptable->pfnGetDeviceGroups;
-    ptable->pfnGetDeviceGroups                                      = xeGetDeviceGroups;
 
     return result;
 }

@@ -71,6 +71,14 @@ namespace xet
         auto getHandle( void ) const { return m_handle; }
         auto getDevice( void ) const { return m_pDevice; }
 
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief temp
+        /// @throws result_t
+        void __xecall
+        foo(
+            void
+            );
+
     };
 
 } // namespace xet

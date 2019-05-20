@@ -35,6 +35,73 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Global table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xexGetGlobalProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xex_global_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
+    )
+{
+    auto& mytable = xe_layer::val.xexGlobal;
+
+#ifdef _DEBUG
+    if( nullptr == ptable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( xe_layer::val.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    mytable.pfnInit                                                 = ptable->pfnInit;
+    ptable->pfnInit                                                 = xexInit;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Device table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xexGetDeviceProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xex_device_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
+    )
+{
+    auto& mytable = xe_layer::val.xexDevice;
+
+#ifdef _DEBUG
+    if( nullptr == ptable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( xe_layer::val.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's CommandGraph table
 ///        with current process' addresses
 ///
@@ -71,41 +138,6 @@ xexGetCommandGraphProcAddrTable(
 
     mytable.pfnClose                                                = ptable->pfnClose;
     ptable->pfnClose                                                = xexCommandGraphClose;
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Global table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for ptable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xexGetGlobalProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xex_global_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
-    )
-{
-    auto& mytable = xe_layer::val.xexGlobal;
-
-#ifdef _DEBUG
-    if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    if( xe_layer::val.version < version )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
-
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    mytable.pfnInit                                                 = ptable->pfnInit;
-    ptable->pfnInit                                                 = xexInit;
 
     return result;
 }

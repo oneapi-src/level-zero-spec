@@ -44,6 +44,13 @@ namespace xet_lib
 
         if( XE_RESULT_SUCCESS == result )
         {
+            auto getTable = reinterpret_cast<xet_pfnGetGlobalProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xetGetGlobalProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &xetGlobal );
+        }
+
+        if( XE_RESULT_SUCCESS == result )
+        {
             auto getTable = reinterpret_cast<xet_pfnGetDeviceProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "xetGetDeviceProcAddrTable") );
             result = getTable( XE_API_VERSION_1_0, &xetDevice );
@@ -107,9 +114,9 @@ namespace xet_lib
 
         if( XE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<xet_pfnGetGlobalProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "xetGetGlobalProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &xetGlobal );
+            auto getTable = reinterpret_cast<xet_pfnGetSysmanProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xetGetSysmanProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &xetSysman );
         }
 
         return result;

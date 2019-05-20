@@ -34,6 +34,31 @@
 
 extern "C" {
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief temp
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == blob
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanfoo(
+    void* blob                                      ///< [in]
+    )
+{
+    auto pfnfoo = xet_lib::lib.xetSysman.pfnfoo;
+
+#if _DEBUG
+    if( nullptr == pfnfoo )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return pfnfoo( blob );
+}
+
 } // extern "C"
 
 namespace xet
@@ -44,6 +69,19 @@ namespace xet
         ) :
         m_pDevice( pDevice )
     {
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief temp
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::foo(
+        void
+        )
+    {
+        // auto result = ::xetSysmanfoo( handle );
+        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Sysman::foo");
     }
 
 } // namespace xet

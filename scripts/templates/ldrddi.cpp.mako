@@ -103,26 +103,10 @@ ${th.make_func_name(n, tags, obj)}(
     %endfor
     )
 {
-    %for line in th.make_loader_prologue_lines(n, tags, obj, meta):
+    %for line in th.make_loader_prologue_lines(n, tags, obj, meta, th.subt(namespace, tags, "$x_loader::loader")):
     ${line}
     %endfor
-    %if re.match(r"Global.*", th.get_table_name(n, tags, obj)):
-    // FOUND: Global
-    // auto ${th.make_pfn_name(n, tags, obj)} = ${x}_loader::loader.${n}${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
-    // return ${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
-    %elif re.match(r"DeviceGroup.*", th.get_table_name(n, tags, obj)):
-    // FOUND: DeviceGroup
-    %elif re.match(r"Context.*", th.get_table_name(n, tags, obj)):
-    // FOUND: Context
-    %else:
-    %if re.match(r"Create.*", obj['name']):
-    // FOUND: Create
-    %elif re.match(r"Destroy.*", obj['name']):
-    // FOUND: Destroy
-    %else:
-    // FOUND: Other
-    %endif
-    %endif
+    //auto result = ${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
 
     %for line in th.make_loader_epilogue_lines(n, tags, obj, meta):
     ${line}

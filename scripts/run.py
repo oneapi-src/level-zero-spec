@@ -60,6 +60,8 @@ def main():
     if args['clean']:
         clean()
 
+    meta = None
+
     # generate code
     for idx, section in enumerate(configParser.sections()):
         namespace = configParser.get(section,'namespace')
@@ -72,7 +74,7 @@ def main():
         libpath = os.path.join("../source/lib/", section)
 
         if args[section] and util.exists(srcpath):
-            if idx > 0:
+            if meta:
                 specs, meta = parse_specs.parse(srcpath, meta)
             else:
                 specs, meta = parse_specs.parse(srcpath)

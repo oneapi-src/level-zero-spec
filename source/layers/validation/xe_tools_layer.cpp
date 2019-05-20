@@ -35,6 +35,41 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Global table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetGlobalProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_global_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
+    )
+{
+    auto& mytable = xe_layer::val.xetGlobal;
+
+#ifdef _DEBUG
+    if( nullptr == ptable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( xe_layer::val.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    mytable.pfnInit                                                 = ptable->pfnInit;
+    ptable->pfnInit                                                 = xetInit;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Device table
 ///        with current process' addresses
 ///
@@ -488,7 +523,7 @@ xetGetFreqDomainProcAddrTable(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Global table
+/// @brief Exported function for filling application's Sysman table
 ///        with current process' addresses
 ///
 /// @returns
@@ -499,12 +534,12 @@ xetGetFreqDomainProcAddrTable(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
-xetGetGlobalProcAddrTable(
+xetGetSysmanProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_global_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
+    xet_sysman_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
     )
 {
-    auto& mytable = xe_layer::val.xetGlobal;
+    auto& mytable = xe_layer::val.xetSysman;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -516,8 +551,8 @@ xetGetGlobalProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnInit                                                 = ptable->pfnInit;
-    ptable->pfnInit                                                 = xetInit;
+    mytable.pfnfoo                                                  = ptable->pfnfoo;
+    ptable->pfnfoo                                                  = xetSysmanfoo;
 
     return result;
 }
@@ -2038,6 +2073,28 @@ xetPowerGetActivityCounters(
     }
 
     return pfnGetActivityCounters( hPower, startCounterIndex, numCounters, pCounters );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xetSysmanfoo
+xe_result_t __xecall
+xetSysmanfoo(
+    void* blob                                      ///< [in]
+    )
+{
+    auto pfnfoo = xe_layer::val.xetSysman.pfnfoo;
+
+    if( nullptr == pfnfoo )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    if( xe_layer::val.enableParameterValidation )
+    {
+        if( nullptr == blob )
+            return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    }
+
+    return pfnfoo( blob );
 }
 
 #if defined(__cplusplus)

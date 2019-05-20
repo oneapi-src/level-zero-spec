@@ -39,6 +39,57 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+typedef struct _xet_global_apitable_t               xet_global_apitable_t;
+typedef struct _xet_device_apitable_t               xet_device_apitable_t;
+typedef struct _xet_command_list_apitable_t         xet_command_list_apitable_t;
+typedef struct _xet_metric_group_apitable_t         xet_metric_group_apitable_t;
+typedef struct _xet_metric_apitable_t               xet_metric_apitable_t;
+typedef struct _xet_metric_tracer_apitable_t        xet_metric_tracer_apitable_t;
+typedef struct _xet_metric_query_pool_apitable_t    xet_metric_query_pool_apitable_t;
+typedef struct _xet_metric_query_apitable_t         xet_metric_query_apitable_t;
+typedef struct _xet_power_apitable_t                xet_power_apitable_t;
+typedef struct _xet_freq_domain_apitable_t          xet_freq_domain_apitable_t;
+typedef struct _xet_sysman_apitable_t               xet_sysman_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetInit 
+typedef xe_result_t (__xecall *xet_pfnInit_t)(
+    xe_init_flag_t
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Global functions pointers
+typedef struct _xet_global_apitable_t
+{
+    xet_pfnInit_t                                               pfnInit;
+
+} xet_global_apitable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Global table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetGlobalProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_global_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetGetGlobalProcAddrTable
+typedef xe_result_t (__xecall *xet_pfnGetGlobalProcAddrTable_t)(
+    xe_api_version_t,
+    xet_global_apitable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetDeviceActivateMetricGroups 
 typedef xe_result_t (__xecall *xet_pfnDeviceActivateMetricGroups_t)(
     xe_device_handle_t,
@@ -51,6 +102,14 @@ typedef xe_result_t (__xecall *xet_pfnDeviceActivateMetricGroups_t)(
 typedef struct _xet_device_apitable_t
 {
     xet_pfnDeviceActivateMetricGroups_t                         pfnActivateMetricGroups;
+
+    xet_metric_group_apitable_t*                                pMetricGroup;
+    xet_metric_apitable_t*                                      pMetric;
+    xet_metric_tracer_apitable_t*                               pMetricTracer;
+    xet_metric_query_pool_apitable_t*                           pMetricQueryPool;
+    xet_metric_query_apitable_t*                                pMetricQuery;
+    xet_power_apitable_t*                                       pPower;
+    xet_sysman_apitable_t*                                      pSysman;
 } xet_device_apitable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -114,6 +173,7 @@ typedef struct _xet_command_list_apitable_t
     xet_pfnCommandListAppendMetricQueryBegin_t                  pfnAppendMetricQueryBegin;
     xet_pfnCommandListAppendMetricQueryEnd_t                    pfnAppendMetricQueryEnd;
     xet_pfnCommandListAppendMetricMemoryBarrier_t               pfnAppendMetricMemoryBarrier;
+
 } xet_command_list_apitable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -181,6 +241,7 @@ typedef struct _xet_metric_group_apitable_t
     xet_pfnMetricGroupGet_t                                     pfnGet;
     xet_pfnMetricGroupGetProperties_t                           pfnGetProperties;
     xet_pfnMetricGroupCalculateData_t                           pfnCalculateData;
+
 } xet_metric_group_apitable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -228,6 +289,7 @@ typedef struct _xet_metric_apitable_t
 {
     xet_pfnMetricGet_t                                          pfnGet;
     xet_pfnMetricGetProperties_t                                pfnGetProperties;
+
 } xet_metric_apitable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -285,6 +347,7 @@ typedef struct _xet_metric_tracer_apitable_t
     xet_pfnMetricTracerOpen_t                                   pfnOpen;
     xet_pfnMetricTracerClose_t                                  pfnClose;
     xet_pfnMetricTracerReadData_t                               pfnReadData;
+
 } xet_metric_tracer_apitable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -340,6 +403,7 @@ typedef struct _xet_metric_query_pool_apitable_t
     xet_pfnMetricQueryPoolCreate_t                              pfnCreate;
     xet_pfnMetricQueryPoolDestroy_t                             pfnDestroy;
     xet_pfnMetricQueryPoolGetMetricQuery_t                      pfnGetMetricQuery;
+
 } xet_metric_query_pool_apitable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -380,6 +444,7 @@ typedef xe_result_t (__xecall *xet_pfnMetricQueryGetData_t)(
 typedef struct _xet_metric_query_apitable_t
 {
     xet_pfnMetricQueryGetData_t                                 pfnGetData;
+
 } xet_metric_query_apitable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -661,6 +726,8 @@ typedef struct _xet_power_apitable_t
     xet_pfnPowerActivityCount_t                                 pfnActivityCount;
     xet_pfnPowerGetActivityProperties_t                         pfnGetActivityProperties;
     xet_pfnPowerGetActivityCounters_t                           pfnGetActivityCounters;
+
+    xet_freq_domain_apitable_t*                                 pFreqDomain;
 } xet_power_apitable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -761,6 +828,7 @@ typedef struct _xet_freq_domain_apitable_t
     xet_pfnFreqDomainSetClockRange_t                            pfnSetClockRange;
     xet_pfnFreqDomainSetClockDivider_t                          pfnSetClockDivider;
     xet_pfnFreqDomainGetCurrentFrequency_t                      pfnGetCurrentFrequency;
+
 } xet_freq_domain_apitable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -788,20 +856,21 @@ typedef xe_result_t (__xecall *xet_pfnGetFreqDomainProcAddrTable_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetInit 
-typedef xe_result_t (__xecall *xet_pfnInit_t)(
-    xe_init_flag_t
+/// @brief Function-pointer for xetSysmanfoo 
+typedef xe_result_t (__xecall *xet_pfnSysmanfoo_t)(
+    void*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Table of Global functions pointers
-typedef struct _xet_global_apitable_t
+/// @brief Table of Sysman functions pointers
+typedef struct _xet_sysman_apitable_t
 {
-    xet_pfnInit_t                                               pfnInit;
-} xet_global_apitable_t;
+    xet_pfnSysmanfoo_t                                          pfnfoo;
+
+} xet_sysman_apitable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Global table
+/// @brief Exported function for filling application's Sysman table
 ///        with current process' addresses
 ///
 /// @returns
@@ -812,16 +881,16 @@ typedef struct _xet_global_apitable_t
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
-xetGetGlobalProcAddrTable(
+xetGetSysmanProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_global_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
+    xet_sysman_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetGetGlobalProcAddrTable
-typedef xe_result_t (__xecall *xet_pfnGetGlobalProcAddrTable_t)(
+/// @brief Function-pointer for xetGetSysmanProcAddrTable
+typedef xe_result_t (__xecall *xet_pfnGetSysmanProcAddrTable_t)(
     xe_api_version_t,
-    xet_global_apitable_t*
+    xet_sysman_apitable_t*
     );
 
 #if defined(__cplusplus)

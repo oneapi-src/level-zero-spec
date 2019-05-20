@@ -44,6 +44,21 @@
 extern "C" {
 #endif
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief temp
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == blob
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanfoo(
+    void* blob                                      ///< [in]
+    );
+
 #if defined(__cplusplus)
 } // extern "C"
 #endif

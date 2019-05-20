@@ -35,50 +35,6 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's CommandGraph table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for ptable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xexGetCommandGraphProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xex_command_graph_apitable_t* ptable            ///< [in,out] pointer to table of API function pointers
-    )
-{
-#ifdef _DEBUG
-    if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    if( xe_loader::loader.version < version )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
-
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    if( nullptr != xe_loader::loader.commonDriver )
-    {
-        static auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xexGetCommandGraphProcAddrTable") );
-        result = getTable( version, ptable );
-    }
-
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
-    {
-        static auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xexGetCommandGraphProcAddrTable") );
-        result = getTable( version, ptable );
-    }
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Global table
 ///        with current process' addresses
 ///
@@ -123,15 +79,104 @@ xexGetGlobalProcAddrTable(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Device table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xexGetDeviceProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xex_device_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
+    )
+{
+#ifdef _DEBUG
+    if( nullptr == ptable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( xe_loader::loader.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    if( nullptr != xe_loader::loader.commonDriver )
+    {
+        static auto getTable = reinterpret_cast<xex_pfnGetDeviceProcAddrTable_t>(
+            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xexGetDeviceProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xex_pfnGetDeviceProcAddrTable_t>(
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xexGetDeviceProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's CommandGraph table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for ptable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xexGetCommandGraphProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xex_command_graph_apitable_t* ptable            ///< [in,out] pointer to table of API function pointers
+    )
+{
+#ifdef _DEBUG
+    if( nullptr == ptable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( xe_loader::loader.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    if( nullptr != xe_loader::loader.commonDriver )
+    {
+        static auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
+            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xexGetCommandGraphProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xexGetCommandGraphProcAddrTable") );
+        result = getTable( version, ptable );
+    }
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xexInit
 xe_result_t __xecall
 xexInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    // FOUND: Global
-    // auto pfnInit = xe_loader::loader.xexGlobal.pfnInit;
-    // return pfnInit( flags );
+    auto pfnInit = xe_loader::loader.xexGlobal.pfnInit;
+    
+    
+    //auto result = pfnInit( flags );
 
     return XE_RESULT_SUCCESS;
 }
@@ -144,9 +189,11 @@ xexCommandGraphCreate(
     xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
     )
 {
+    auto pfnCreate = std::get<1>( *reinterpret_cast<xex_device_object_t*>( hDevice ) )->pCommandGraph->pfnCreate;
+    
     hDevice = std::get<0>( *reinterpret_cast<xex_device_object_t*>( hDevice ) );
     
-    // FOUND: Create
+    //auto result = pfnCreate( hDevice, desc, phCommandGraph );
 
     *phCommandGraph = reinterpret_cast<xex_command_graph_handle_t>( new xex_command_graph_object_t( *phCommandGraph, nullptr ) );
     
@@ -159,9 +206,11 @@ xexCommandGraphDestroy(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to destroy
     )
 {
+    auto pfnDestroy = std::get<1>( *reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph ) )->pfnDestroy;
+    
     hCommandGraph = std::get<0>( *reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph ) );
     
-    // FOUND: Destroy
+    //auto result = pfnDestroy( hCommandGraph );
 
     return XE_RESULT_SUCCESS;
 }
@@ -172,9 +221,11 @@ xexCommandGraphClose(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
     )
 {
+    auto pfnClose = std::get<1>( *reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph ) )->pfnClose;
+    
     hCommandGraph = std::get<0>( *reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph ) );
     
-    // FOUND: Other
+    //auto result = pfnClose( hCommandGraph );
 
     return XE_RESULT_SUCCESS;
 }
