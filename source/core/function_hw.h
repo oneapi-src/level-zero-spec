@@ -45,7 +45,7 @@ template <GFXCORE_FAMILY gfxCoreFamily> struct FunctionHw : public FunctionImp {
         void *bufferAddressForSsh = reinterpret_cast<void *>(baseAddress);
         auto alignment = EncodeSurfaceState<gfxCoreFamily>::getSurfaceBaseAddressAlignment();
         size_t bufferSizeForSsh =
-            ptrDiff(alloc->getHostAddress(), bufferAddressForSsh) +
+            ptrDiff(bufferAddressForSsh, alloc->getHostAddress()) +
             sizeTillEndOfSurface; // take address alignment offset into account
         bufferSizeForSsh = alignUp(bufferSizeForSsh, alignment);
 
