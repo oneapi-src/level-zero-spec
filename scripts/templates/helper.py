@@ -395,15 +395,15 @@ def make_member_function_lines(namespace, tags, obj, prefix=""):
 
 """
 Private:
-    returns the list of parameters, filtering either inputs or outputs
+    returns the list of parameters, filtering based on desc tags
 """
-def _filter_param_list(params, in_or_out):
+def _filter_param_list(params, filters=["in", "in,out", "out"]):
     lst = []
     for p in params:
-        if "in" == in_or_out and re.match(r"\[\s*in.*", p['desc']):
-            lst.append(p)
-        elif "out" == in_or_out and re.match(r"\[\s*out.*", p['desc']):
-            lst.append(p)
+        for f in filters:
+            if re.match(r"\[%s\]"%f, p['desc']):
+                lst.append(p)
+                break
     return lst
 
 """
@@ -418,9 +418,9 @@ def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None, for
         is_static = 'decl' in obj and re.match(r"static", obj['decl'])
         is_global = 'class' in obj and obj['class'] in tags
         if is_static or is_global:
-            params = _filter_param_list(obj['params'], "in")
+            params = _filter_param_list(obj['params'], ["in", "in,out"])
         else:
-            params = _filter_param_list(obj['params'][1:], "in")
+            params = _filter_param_list(obj['params'][1:], ["in", "in,out"])
     else:
         params = obj['params']
 
@@ -498,7 +498,7 @@ Public:
     returns True if ctor has parameters
 """
 def has_ctor_params(obj):
-    params = _filter_param_list(obj['members'] if 'members' in obj else [], "in")
+    params = _filter_param_list(obj['members'] if 'members' in obj else [], ["in"])
     return len(params) > 0
 
 """
@@ -508,7 +508,7 @@ Public:
 """
 def make_ctor_param_lines(namespace, tags, obj, meta=None):
     lines = []
-    params = _filter_param_list(obj['members'] if 'members' in obj else [], "in")
+    params = _filter_param_list(obj['members'] if 'members' in obj else [], ["in"])
     for i, item in enumerate(params):
         name = subt(namespace, tags, item['name'])
         tname = _get_type_name(namespace, tags, obj, item, True, meta)
@@ -536,7 +536,7 @@ Public:
 """
 def make_ctor_param_init_lines(namespace, tags, obj, prefix="", meta=None):
     lines = []
-    params = _filter_param_list(obj['members'] if 'members' in obj else [], "in")
+    params = _filter_param_list(obj['members'] if 'members' in obj else [], ["in"])
     for i, item in enumerate(params):
         name = subt(namespace, tags, item['name'])
 
@@ -632,7 +632,7 @@ Public:
 def make_returns_lines(namespace, tags, obj, cpp=False, meta=None):
     lines = []
     if cpp:
-        params = _filter_param_list(obj['params'], "out")
+        params = _filter_param_list(obj['params'], ["out"])
         if len(params) > 0:
             lines.append("@returns")
             for p in params:
@@ -679,7 +679,7 @@ Public:
 """
 def make_return_value(namespace, tags, obj, cpp=False, decl=False, meta=None):
     # only "return" the parameters declared as "out"
-    params = _filter_param_list(obj['params'], "out")
+    params = _filter_param_list(obj['params'], ["out"])
 
     # if none exist, then just return "void"
     if len(params) == 0:
@@ -837,4 +837,70 @@ def get_pfntables(specs, meta, namespace, tags):
                 'functions': objs
         })
     return tables
-    
+
+"""
+Public:
+    returns a list of strings
+"""
+def make_loader_prologue_lines(namespace, tags, obj, meta):
+    lines = []
+    params = _filter_param_list(obj['params'], ["in"])
+    for i, item in enumerate(params):
+        is_handle = re.match(r".*_handle_t", item['type'])
+        tname = _remove_const_ptr(item['type'])
+        is_class = is_handle and tname in meta['handle'] and len(meta['handle'][tname]['class']) > 0
+        if is_handle and is_class:
+            name = subt(namespace, tags, item['name'])
+            tname = _remove_const_ptr(subt(namespace, tags, item['type']))
+            obj_name = re.sub(r"^[^_]+_(\w+)", r"%s_\1"%namespace, re.sub(r"(\w+)_handle_t", r"\1_object_t", tname))
+
+            is_pointer = re.match(r".*\w+\*+", item['type'])
+            if is_pointer:
+                RE_RANGE = r".*\[range\((.+),\s*(.+)\)\].*"
+                range_start = re.sub(RE_RANGE, r"\1", item['desc'])
+                range_end   = re.sub(RE_RANGE, r"\2", item['desc'])
+                lines.append("for( size_t i = %s; ( nullptr != %s ) && ( i < %s ); ++i )"%(range_start, name, range_end))
+                lines.append("    %s[ i ] = std::get<0>( *reinterpret_cast<%s*>( %s[ i ] ) );"%(name, obj_name, name))
+            else:
+                is_optional = re.match(r".*\[optional\].*", item['desc'])
+                if is_optional:
+                    lines.append("%s = ( %s ) ? std::get<0>( *reinterpret_cast<%s*>( %s ) ) : nullptr;"%(name, name, obj_name, name))
+                else:
+                    lines.append("%s = std::get<0>( *reinterpret_cast<%s*>( %s ) );"%(name, obj_name, name))
+
+    if len(lines) > 0:
+        lines.append("")
+    return lines
+
+"""
+Public:
+    returns a list of strings
+"""
+def make_loader_epilogue_lines(namespace, tags, obj, meta):
+    lines = []
+    params = _filter_param_list(obj['params'], ["out"])
+    for i, item in enumerate(params):
+        is_handle = re.match(r".*_handle_t", item['type'])
+        tname = _remove_const_ptr(item['type'])
+        is_class = is_handle and tname in meta['handle'] and len(meta['handle'][tname]['class']) > 0
+        if is_handle and is_class:
+            name = subt(namespace, tags, item['name'])
+            tname = _remove_const_ptr(subt(namespace, tags, item['type']))
+            obj_name = re.sub(r"^[^_]+_(\w+)", r"%s_\1"%namespace, re.sub(r"(\w+)_handle_t", r"\1_object_t", tname))
+
+            RE_RANGE = r".*\[range\((.+),\s*(.+)\)\].*"
+            if re.match(RE_RANGE, item['desc']):
+                range_start = re.sub(RE_RANGE, r"\1", item['desc'])
+                range_end   = re.sub(RE_RANGE, r"\2", item['desc'])
+                lines.append("for( size_t i = %s; ( nullptr != %s ) && ( i < %s ); ++i )"%(range_start, name, range_end))
+                lines.append("    %s[ i ] = reinterpret_cast<%s>( new %s( %s[ i ], nullptr ) );"%(name, tname, obj_name, name))
+            else:
+                is_optional = re.match(r".*\[optional\].*", item['desc'])
+                if is_optional:
+                    lines.append("if( nullptr != %s ) *%s = reinterpret_cast<%s>( new %s( *%s, nullptr ) );"%(name, name, tname, obj_name, name))
+                else:
+                    lines.append("*%s = reinterpret_cast<%s>( new %s( *%s, nullptr ) );"%(name, tname, obj_name, name))
+
+    if len(lines) > 0:
+        lines.append("")
+    return lines

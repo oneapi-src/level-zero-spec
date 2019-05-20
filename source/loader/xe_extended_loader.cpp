@@ -122,6 +122,62 @@ xexGetGlobalProcAddrTable(
     return result;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xexInit
+xe_result_t __xecall
+xexInit(
+    xe_init_flag_t flags                            ///< [in] initialization flags
+    )
+{
+    // FOUND: Global
+    // auto pfnInit = xe_loader::loader.xexGlobal.pfnInit;
+    // return pfnInit( flags );
+
+    return XE_RESULT_SUCCESS;
+}
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xexCommandGraphCreate
+xe_result_t __xecall
+xexCommandGraphCreate(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+    const xex_command_graph_desc_t* desc,           ///< [in] pointer to command graph descriptor
+    xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
+    )
+{
+    hDevice = std::get<0>( *reinterpret_cast<xex_device_object_t*>( hDevice ) );
+    
+    // FOUND: Create
+
+    *phCommandGraph = reinterpret_cast<xex_command_graph_handle_t>( new xex_command_graph_object_t( *phCommandGraph, nullptr ) );
+    
+    return XE_RESULT_SUCCESS;
+}
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xexCommandGraphDestroy
+xe_result_t __xecall
+xexCommandGraphDestroy(
+    xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to destroy
+    )
+{
+    hCommandGraph = std::get<0>( *reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph ) );
+    
+    // FOUND: Destroy
+
+    return XE_RESULT_SUCCESS;
+}
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for xexCommandGraphClose
+xe_result_t __xecall
+xexCommandGraphClose(
+    xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
+    )
+{
+    hCommandGraph = std::get<0>( *reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph ) );
+    
+    // FOUND: Other
+
+    return XE_RESULT_SUCCESS;
+}
 #if defined(__cplusplus)
 };
 #endif

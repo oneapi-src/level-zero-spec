@@ -90,6 +90,49 @@ ${tbl['export']['name']}(
 }
 
 %endfor
+%for obj in th.extract_objs(specs, r"function"):
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Intercept function for ${th.make_func_name(n, tags, obj)}
+%if 'condition' in obj:
+#if ${th.subt(n, tags, obj['condition'])}
+%endif
+${x}_result_t __${x}call
+${th.make_func_name(n, tags, obj)}(
+    %for line in th.make_param_lines(n, tags, obj):
+    ${line}
+    %endfor
+    )
+{
+    %for line in th.make_loader_prologue_lines(n, tags, obj, meta):
+    ${line}
+    %endfor
+    %if re.match(r"Global.*", th.get_table_name(n, tags, obj)):
+    // FOUND: Global
+    // auto ${th.make_pfn_name(n, tags, obj)} = ${x}_loader::loader.${n}${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
+    // return ${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
+    %elif re.match(r"DeviceGroup.*", th.get_table_name(n, tags, obj)):
+    // FOUND: DeviceGroup
+    %elif re.match(r"Context.*", th.get_table_name(n, tags, obj)):
+    // FOUND: Context
+    %else:
+    %if re.match(r"Create.*", obj['name']):
+    // FOUND: Create
+    %elif re.match(r"Destroy.*", obj['name']):
+    // FOUND: Destroy
+    %else:
+    // FOUND: Other
+    %endif
+    %endif
+
+    %for line in th.make_loader_epilogue_lines(n, tags, obj, meta):
+    ${line}
+    %endfor
+    return ${X}_RESULT_SUCCESS;
+}
+%if 'condition' in obj:
+#endif // ${th.subt(n, tags, obj['condition'])}
+%endif
+%endfor
 #if defined(__cplusplus)
 };
 #endif
