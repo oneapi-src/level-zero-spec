@@ -15,7 +15,7 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: "size_t*"
+    - type: "uint32_t*"
       name: pCount
       desc: |
             [in,out] pointer to the number of device groups.
@@ -39,15 +39,15 @@ params:
     - type: $x_device_group_handle_t
       name: hDeviceGroup
       desc: "[in] handle of the device group object"
-    - type: "size_t*"
+    - type: "uint32_t*"
       name: pCount
       desc: |
             [in,out] pointer to the number of device groups.
             if count is zero, then the driver will update the value with the total number of device groups available.
             if count is non-zero, then driver will only retrieve that number of device groups.
-    - type: "$x_device_group_handle_t*"
-      name: pDeviceGroups
-      desc: "[in,out][optional][range(0, *pCount)] array of handle of device groups"
+    - type: "$x_device_handle_t*"
+      name: pDevices
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of devices"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "count is out of range reported by $xDeviceGroupGetDevices"

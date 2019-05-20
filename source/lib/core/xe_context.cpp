@@ -59,7 +59,7 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
 xeContextCreate(
-    size_t numDevices,                              ///< [in] number of devices in phDevice
+    uint32_t numDevices,                            ///< [in] number of devices in phDevice
     xe_device_handle_t* phDevice,                   ///< [in][range(0, numDevices)] pointer to array of handle of the device
                                                     ///< objects
     xe_context_handle_t* phContext                  ///< [out] pointer to handle of context object created
@@ -144,7 +144,7 @@ namespace xe
     /// @throws result_t
     Context* __xecall
     Context::Create(
-        size_t numDevices,                              ///< [in] number of devices in phDevice
+        uint32_t numDevices,                            ///< [in] number of devices in phDevice
         Device* phDevice                                ///< [in][range(0, numDevices)] pointer to array of pointer to the device
                                                         ///< objects
         )

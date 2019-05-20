@@ -656,7 +656,7 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
     xe_function_handle_t* phFunctions,              ///< [in][range(0, numFunctions)] handles of the function objects
-    const size_t* pNumLaunchArguments,              ///< [in] pointer to device memory location that will contain the actual
+    const uint32_t* pNumLaunchArguments,            ///< [in] pointer to device memory location that will contain the actual
                                                     ///< number of launch arguments; value must be less-than or equal-to
                                                     ///< numFunctions
     const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in][range(0, numFunctions)] pointer to device buffer that will

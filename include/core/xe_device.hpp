@@ -77,7 +77,7 @@ namespace xe
     /// @throws result_t
     void __xecall
     GetDeviceGroups(
-        size_t* pCount,                                 ///< [in,out] pointer to the number of device groups.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of device groups available.
                                                         ///< if count is non-zero, then driver will only retrieve that number of
@@ -284,13 +284,12 @@ namespace xe
         /// @throws result_t
         void __xecall
         GetDevices(
-            size_t* pCount,                                 ///< [in,out] pointer to the number of device groups.
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
                                                             ///< if count is zero, then the driver will update the value with the total
                                                             ///< number of device groups available.
                                                             ///< if count is non-zero, then driver will only retrieve that number of
                                                             ///< device groups.
-            DeviceGroup* pDeviceGroups = nullptr            ///< [in,out][optional][range(0, *pCount)] array of pointer to device
-                                                            ///< groups
+            Device* pDevices = nullptr                      ///< [in,out][optional][range(0, *pCount)] array of pointer to devices
             );
 
         ///////////////////////////////////////////////////////////////////////////////

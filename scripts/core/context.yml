@@ -17,7 +17,7 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: size_t
+    - type: uint32_t
       name: numDevices
       desc: "[in] number of devices in phDevice"
     - type: $x_device_handle_t*

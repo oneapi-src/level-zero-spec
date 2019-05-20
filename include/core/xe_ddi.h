@@ -264,7 +264,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchMultipleFunctionsInd
     xe_command_list_handle_t,
     uint32_t,
     xe_function_handle_t*,
-    const size_t*,
+    const uint32_t*,
     const xe_thread_group_dimensions_t*,
     xe_event_handle_t,
     uint32_t,
@@ -562,7 +562,7 @@ typedef xe_result_t (__xecall *xe_pfnGetCommandQueueProcAddrTable_t)(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeContextCreate 
 typedef xe_result_t (__xecall *xe_pfnContextCreate_t)(
-    size_t,
+    uint32_t,
     xe_device_handle_t*,
     xe_context_handle_t*
     );
@@ -707,8 +707,8 @@ typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetDriverVersion_t)(
 /// @brief Function-pointer for xeDeviceGroupGetDevices 
 typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetDevices_t)(
     xe_device_group_handle_t,
-    size_t*,
-    xe_device_group_handle_t*
+    uint32_t*,
+    xe_device_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1315,7 +1315,7 @@ typedef xe_result_t (__xecall *xe_pfnInit_t)(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetDeviceGroups 
 typedef xe_result_t (__xecall *xe_pfnGetDeviceGroups_t)(
-    size_t*,
+    uint32_t*,
     xe_device_group_handle_t*
     );
 

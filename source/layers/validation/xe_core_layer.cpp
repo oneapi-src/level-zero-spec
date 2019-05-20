@@ -831,7 +831,7 @@ xeDeviceGroupGetDriverVersion(
 /// @brief Intercept function for xeContextCreate
 xe_result_t __xecall
 xeContextCreate(
-    size_t numDevices,                              ///< [in] number of devices in phDevice
+    uint32_t numDevices,                            ///< [in] number of devices in phDevice
     xe_device_handle_t* phDevice,                   ///< [in][range(0, numDevices)] pointer to array of handle of the device
                                                     ///< objects
     xe_context_handle_t* phContext                  ///< [out] pointer to handle of context object created
@@ -881,7 +881,7 @@ xeContextDestroy(
 /// @brief Intercept function for xeGetDeviceGroups
 xe_result_t __xecall
 xeGetDeviceGroups(
-    size_t* pCount,                                 ///< [in,out] pointer to the number of device groups.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of device groups available.
                                                     ///< if count is non-zero, then driver will only retrieve that number of
@@ -909,12 +909,12 @@ xeGetDeviceGroups(
 xe_result_t __xecall
 xeDeviceGroupGetDevices(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    size_t* pCount,                                 ///< [in,out] pointer to the number of device groups.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of device groups available.
                                                     ///< if count is non-zero, then driver will only retrieve that number of
                                                     ///< device groups.
-    xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
+    xe_device_handle_t* pDevices                    ///< [in,out][optional][range(0, *pCount)] array of handle of devices
     )
 {
     auto pfnGetDevices = xe_layer::val.xeDeviceGroup.pfnGetDevices;
@@ -932,7 +932,7 @@ xeDeviceGroupGetDevices(
 
     }
 
-    return pfnGetDevices( hDeviceGroup, pCount, pDeviceGroups );
+    return pfnGetDevices( hDeviceGroup, pCount, pDevices );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3284,7 +3284,7 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
     uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
     xe_function_handle_t* phFunctions,              ///< [in][range(0, numFunctions)] handles of the function objects
-    const size_t* pNumLaunchArguments,              ///< [in] pointer to device memory location that will contain the actual
+    const uint32_t* pNumLaunchArguments,            ///< [in] pointer to device memory location that will contain the actual
                                                     ///< number of launch arguments; value must be less-than or equal-to
                                                     ///< numFunctions
     const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in][range(0, numFunctions)] pointer to device buffer that will
