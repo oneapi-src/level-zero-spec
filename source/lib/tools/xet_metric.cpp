@@ -628,7 +628,7 @@ namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
     MetricGroup::MetricGroup( 
-        Device* pDevice                                 ///< [in] pointer to parent object
+        Device* pDevice                                 ///< [in] pointer to owner object
         ) :
         m_pDevice( pDevice )
     {
@@ -636,7 +636,7 @@ namespace xet
 
     ///////////////////////////////////////////////////////////////////////////////
     Metric::Metric( 
-        Device* pDevice                                 ///< [in] pointer to parent object
+        Device* pDevice                                 ///< [in] pointer to owner object
         ) :
         m_pDevice( pDevice )
     {
@@ -644,7 +644,7 @@ namespace xet
 
     ///////////////////////////////////////////////////////////////////////////////
     MetricTracer::MetricTracer( 
-        Device* pDevice                                 ///< [in] pointer to parent object
+        Device* pDevice                                 ///< [in] pointer to owner object
         ) :
         m_pDevice( pDevice )
     {
@@ -652,7 +652,7 @@ namespace xet
 
     ///////////////////////////////////////////////////////////////////////////////
     MetricQueryPool::MetricQueryPool( 
-        Device* pDevice                                 ///< [in] pointer to parent object
+        Device* pDevice                                 ///< [in] pointer to owner object
         ) :
         m_pDevice( pDevice )
     {
@@ -660,7 +660,7 @@ namespace xet
 
     ///////////////////////////////////////////////////////////////////////////////
     MetricQuery::MetricQuery( 
-        Device* pDevice                                 ///< [in] pointer to parent object
+        Device* pDevice                                 ///< [in] pointer to owner object
         ) :
         m_pDevice( pDevice )
     {

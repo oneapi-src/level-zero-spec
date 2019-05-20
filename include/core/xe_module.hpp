@@ -80,14 +80,14 @@ namespace xe
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         module_handle_t m_handle = nullptr;             ///< handle of module object
-        Device* m_pDevice;                              ///< [in] pointer to parent object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
         desc_t m_desc;                                  ///< [in] descriptor of the module object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         Module( void ) = delete;
         Module( 
-            Device* pDevice,                                ///< [in] pointer to parent object
+            Device* pDevice,                                ///< [in] pointer to owner object
             const desc_t& desc                              ///< [in] descriptor of the module object
             );
 
@@ -224,13 +224,13 @@ namespace xe
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         module_build_log_handle_t m_handle = nullptr;   ///< handle of the buildlog object
-        Module* m_pModule;                              ///< [in] pointer to parent object
+        Module* m_pModule;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         ModuleBuildLog( void ) = delete;
         ModuleBuildLog( 
-            Module* pModule                                 ///< [in] pointer to parent object
+            Module* pModule                                 ///< [in] pointer to owner object
             );
 
         ~ModuleBuildLog( void ) = default;
@@ -351,14 +351,14 @@ namespace xe
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         function_handle_t m_handle = nullptr;           ///< handle of function object
-        Module* m_pModule;                              ///< [in] pointer to parent object
+        Module* m_pModule;                              ///< [in] pointer to owner object
         desc_t m_desc;                                  ///< [in] descriptor of the function object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         Function( void ) = delete;
         Function( 
-            Module* pModule,                                ///< [in] pointer to parent object
+            Module* pModule,                                ///< [in] pointer to owner object
             const desc_t& desc                              ///< [in] descriptor of the function object
             );
 

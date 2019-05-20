@@ -457,7 +457,7 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     Device::Device( 
-        DeviceGroup* pDeviceGroup                       ///< [in] pointer to parent object
+        DeviceGroup* pDeviceGroup                       ///< [in] pointer to owner object
         ) :
         m_pDeviceGroup( pDeviceGroup )
     {

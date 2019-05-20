@@ -78,14 +78,14 @@ namespace xe
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         event_pool_handle_t m_handle = nullptr;         ///< handle of event pool object
-        Device* m_pDevice;                              ///< [in] pointer to parent object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
         desc_t m_desc;                                  ///< [in] descriptor of the event object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         EventPool( void ) = delete;
         EventPool( 
-            Device* pDevice,                                ///< [in] pointer to parent object
+            Device* pDevice,                                ///< [in] pointer to owner object
             const desc_t& desc                              ///< [in] descriptor of the event object
             );
 
@@ -245,13 +245,13 @@ namespace xe
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         event_handle_t m_handle = nullptr;              ///< handle of event object
-        EventPool* m_pEventPool;                        ///< [in] pointer to parent object
+        EventPool* m_pEventPool;                        ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         Event( void ) = delete;
         Event( 
-            EventPool* pEventPool                           ///< [in] pointer to parent object
+            EventPool* pEventPool                           ///< [in] pointer to owner object
             );
 
         ~Event( void ) = default;

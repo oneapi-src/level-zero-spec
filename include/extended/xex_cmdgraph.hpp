@@ -75,14 +75,14 @@ namespace xex
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         command_graph_handle_t m_handle = nullptr;      ///< handle of command graph object
-        Device* m_pDevice;                              ///< [in] pointer to parent object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
         desc_t m_desc;                                  ///< [in] descriptor of the command graph object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         CommandGraph( void ) = delete;
         CommandGraph( 
-            Device* pDevice,                                ///< [in] pointer to parent object
+            Device* pDevice,                                ///< [in] pointer to owner object
             const desc_t& desc                              ///< [in] descriptor of the command graph object
             );
 

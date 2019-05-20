@@ -75,14 +75,14 @@ namespace xe
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         fence_handle_t m_handle = nullptr;              ///< handle of fence object
-        CommandQueue* m_pCommandQueue;                  ///< [in] pointer to parent object
+        CommandQueue* m_pCommandQueue;                  ///< [in] pointer to owner object
         desc_t m_desc;                                  ///< [in] descriptor of the fence object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         Fence( void ) = delete;
         Fence( 
-            CommandQueue* pCommandQueue,                    ///< [in] pointer to parent object
+            CommandQueue* pCommandQueue,                    ///< [in] pointer to owner object
             const desc_t& desc                              ///< [in] descriptor of the fence object
             );
 

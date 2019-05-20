@@ -119,7 +119,7 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     Sampler::Sampler( 
-        Device* pDevice,                                ///< [in] pointer to parent object
+        Device* pDevice,                                ///< [in] pointer to owner object
         const desc_t& desc                              ///< [in] sampler descriptor
         ) :
         m_pDevice( pDevice ),

@@ -229,7 +229,7 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     Fence::Fence( 
-        CommandQueue* pCommandQueue,                    ///< [in] pointer to parent object
+        CommandQueue* pCommandQueue,                    ///< [in] pointer to owner object
         const desc_t& desc                              ///< [in] descriptor of the fence object
         ) :
         m_pCommandQueue( pCommandQueue ),

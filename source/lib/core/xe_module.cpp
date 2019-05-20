@@ -776,7 +776,7 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     Module::Module( 
-        Device* pDevice,                                ///< [in] pointer to parent object
+        Device* pDevice,                                ///< [in] pointer to owner object
         const desc_t& desc                              ///< [in] descriptor of the module object
         ) :
         m_pDevice( pDevice ),
@@ -786,7 +786,7 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     ModuleBuildLog::ModuleBuildLog( 
-        Module* pModule                                 ///< [in] pointer to parent object
+        Module* pModule                                 ///< [in] pointer to owner object
         ) :
         m_pModule( pModule )
     {
@@ -794,7 +794,7 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     Function::Function( 
-        Module* pModule,                                ///< [in] pointer to parent object
+        Module* pModule,                                ///< [in] pointer to owner object
         const desc_t& desc                              ///< [in] descriptor of the function object
         ) :
         m_pModule( pModule ),

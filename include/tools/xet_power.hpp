@@ -269,13 +269,13 @@ namespace xet
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         power_handle_t m_handle;                        ///< handle of power object
-        Device* m_pDevice;                              ///< [in] pointer to parent object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         Power( void ) = delete;
         Power( 
-            Device* pDevice                                 ///< [in] pointer to parent object
+            Device* pDevice                                 ///< [in] pointer to owner object
             );
 
         ~Power( void ) = default;
@@ -741,13 +741,13 @@ namespace xet
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         freq_domain_handle_t m_handle;                  ///< handle of frequency domain object
-        Power* m_pPower;                                ///< [in] pointer to parent object
+        Power* m_pPower;                                ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         FreqDomain( void ) = delete;
         FreqDomain( 
-            Power* pPower                                   ///< [in] pointer to parent object
+            Power* pPower                                   ///< [in] pointer to owner object
             );
 
         ~FreqDomain( void ) = default;

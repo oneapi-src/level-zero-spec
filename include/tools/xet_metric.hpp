@@ -159,13 +159,13 @@ namespace xet
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         metric_group_handle_t m_handle = nullptr;       ///< handle of metric group object
-        Device* m_pDevice;                              ///< [in] pointer to parent object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         MetricGroup( void ) = delete;
         MetricGroup( 
-            Device* pDevice                                 ///< [in] pointer to parent object
+            Device* pDevice                                 ///< [in] pointer to owner object
             );
 
         ~MetricGroup( void ) = default;
@@ -285,13 +285,13 @@ namespace xet
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         metric_handle_t m_handle;                       ///< handle of metric object
-        Device* m_pDevice;                              ///< [in] pointer to parent object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         Metric( void ) = delete;
         Metric( 
-            Device* pDevice                                 ///< [in] pointer to parent object
+            Device* pDevice                                 ///< [in] pointer to owner object
             );
 
         ~Metric( void ) = default;
@@ -366,13 +366,13 @@ namespace xet
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         metric_tracer_handle_t m_handle;                ///< handle of metric tracer object
-        Device* m_pDevice;                              ///< [in] pointer to parent object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         MetricTracer( void ) = delete;
         MetricTracer( 
-            Device* pDevice                                 ///< [in] pointer to parent object
+            Device* pDevice                                 ///< [in] pointer to owner object
             );
 
         ~MetricTracer( void ) = default;
@@ -469,13 +469,13 @@ namespace xet
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         metric_query_pool_handle_t m_handle;            ///< handle of metric query pool object
-        Device* m_pDevice;                              ///< [in] pointer to parent object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         MetricQueryPool( void ) = delete;
         MetricQueryPool( 
-            Device* pDevice                                 ///< [in] pointer to parent object
+            Device* pDevice                                 ///< [in] pointer to owner object
             );
 
         ~MetricQueryPool( void ) = default;
@@ -542,13 +542,13 @@ namespace xet
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         metric_query_handle_t m_handle;                 ///< handle of metric query object
-        Device* m_pDevice;                              ///< [in] pointer to parent object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         MetricQuery( void ) = delete;
         MetricQuery( 
-            Device* pDevice                                 ///< [in] pointer to parent object
+            Device* pDevice                                 ///< [in] pointer to owner object
             );
 
         ~MetricQuery( void ) = default;

@@ -6,10 +6,11 @@ desc: "Intel $OneApi Level-Zero Tool APIs for System Management"
 type: class
 desc: "C++ wrapper for sysman"
 name: $tSysman
+owner: $tDevice
 members:
     - type: $t_sysman_handle_t
       name: handle
       desc: "handle of sysman object"
     - type: $tDevice*
       name: pDevice
-      desc: "[in] pointer to parent object"
+      desc: "[in] pointer to owner object"

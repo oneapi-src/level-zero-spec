@@ -50,13 +50,13 @@ namespace xet
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         sysman_handle_t m_handle;                       ///< handle of sysman object
-        Device* m_pDevice;                              ///< [in] pointer to parent object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         Sysman( void ) = delete;
         Sysman( 
-            Device* pDevice                                 ///< [in] pointer to parent object
+            Device* pDevice                                 ///< [in] pointer to owner object
             );
 
         ~Sysman( void ) = default;

@@ -107,6 +107,7 @@ params:
 type: class
 desc: "c++ wrapper for sampler"
 name: $xSampler
+owner: $xDevice
 members:
     - type: $x_sampler_handle_t
       name: handle
@@ -114,7 +115,7 @@ members:
       init: nullptr
     - type: $xDevice*
       name: pDevice
-      desc: "[in] pointer to parent object"
+      desc: "[in] pointer to owner object"
     - type: "$x_sampler_desc_t"
       name: desc
       desc: "[in] sampler descriptor"

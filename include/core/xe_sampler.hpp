@@ -90,14 +90,14 @@ namespace xe
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         sampler_handle_t m_handle = nullptr;            ///< handle of the sample object
-        Device* m_pDevice;                              ///< [in] pointer to parent object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
         desc_t m_desc;                                  ///< [in] sampler descriptor
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         Sampler( void ) = delete;
         Sampler( 
-            Device* pDevice,                                ///< [in] pointer to parent object
+            Device* pDevice,                                ///< [in] pointer to owner object
             const desc_t& desc                              ///< [in] sampler descriptor
             );
 

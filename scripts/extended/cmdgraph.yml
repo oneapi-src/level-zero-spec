@@ -87,6 +87,7 @@ params:
 type: class
 desc: "C++ wrapper for command graph"
 name: $eCommandGraph
+owner: $eDevice
 members:
     - type: $e_command_graph_handle_t
       name: handle
@@ -94,7 +95,7 @@ members:
       init: nullptr
     - type: $eDevice*
       name: pDevice
-      desc: "[in] pointer to parent object"
+      desc: "[in] pointer to owner object"
     - type: $e_command_graph_desc_t
       name: desc
       desc: "[in] descriptor of the command graph object"

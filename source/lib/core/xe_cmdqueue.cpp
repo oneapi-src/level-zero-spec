@@ -197,7 +197,7 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     CommandQueue::CommandQueue( 
-        Device* pDevice,                                ///< [in] pointer to parent object
+        Device* pDevice,                                ///< [in] pointer to owner object
         const desc_t& desc                              ///< [in] descriptor of the command queue object
         ) :
         m_pDevice( pDevice ),

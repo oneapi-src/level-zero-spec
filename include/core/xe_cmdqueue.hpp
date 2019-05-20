@@ -110,14 +110,14 @@ namespace xe
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         command_queue_handle_t m_handle = nullptr;      ///< handle of command queue object
-        Device* m_pDevice;                              ///< [in] pointer to parent object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
         desc_t m_desc;                                  ///< [in] descriptor of the command queue object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         CommandQueue( void ) = delete;
         CommandQueue( 
-            Device* pDevice,                                ///< [in] pointer to parent object
+            Device* pDevice,                                ///< [in] pointer to owner object
             const desc_t& desc                              ///< [in] descriptor of the command queue object
             );
 

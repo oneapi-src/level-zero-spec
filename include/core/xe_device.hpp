@@ -415,13 +415,13 @@ namespace xe
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         device_handle_t m_handle = nullptr;             ///< handle of device object
-        DeviceGroup* m_pDeviceGroup;                    ///< [in] pointer to parent object
+        DeviceGroup* m_pDeviceGroup;                    ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         Device( void ) = delete;
         Device( 
-            DeviceGroup* pDeviceGroup                       ///< [in] pointer to parent object
+            DeviceGroup* pDeviceGroup                       ///< [in] pointer to owner object
             );
 
         ~Device( void ) = default;

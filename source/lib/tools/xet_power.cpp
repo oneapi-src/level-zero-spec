@@ -1159,7 +1159,7 @@ namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
     Power::Power( 
-        Device* pDevice                                 ///< [in] pointer to parent object
+        Device* pDevice                                 ///< [in] pointer to owner object
         ) :
         m_pDevice( pDevice )
     {
@@ -1167,7 +1167,7 @@ namespace xet
 
     ///////////////////////////////////////////////////////////////////////////////
     FreqDomain::FreqDomain( 
-        Power* pPower                                   ///< [in] pointer to parent object
+        Power* pPower                                   ///< [in] pointer to owner object
         ) :
         m_pPower( pPower )
     {

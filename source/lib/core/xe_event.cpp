@@ -557,7 +557,7 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     EventPool::EventPool( 
-        Device* pDevice,                                ///< [in] pointer to parent object
+        Device* pDevice,                                ///< [in] pointer to owner object
         const desc_t& desc                              ///< [in] descriptor of the event object
         ) :
         m_pDevice( pDevice ),
@@ -567,7 +567,7 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     Event::Event( 
-        EventPool* pEventPool                           ///< [in] pointer to parent object
+        EventPool* pEventPool                           ///< [in] pointer to owner object
         ) :
         m_pEventPool( pEventPool )
     {

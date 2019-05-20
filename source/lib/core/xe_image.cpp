@@ -148,7 +148,7 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     Image::Image( 
-        Device* pDevice,                                ///< [in] pointer to parent object
+        Device* pDevice,                                ///< [in] pointer to owner object
         const desc_t& desc                              ///< [in] descriptor of the image object
         ) :
         m_pDevice( pDevice ),

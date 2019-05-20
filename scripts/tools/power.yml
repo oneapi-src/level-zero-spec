@@ -940,21 +940,23 @@ params:
 type: class
 desc: "C++ wrapper for power"
 name: $tPower
+owner: $tDevice
 members:
     - type: $t_power_handle_t
       name: handle
       desc: "handle of power object"
     - type: $tDevice*
       name: pDevice
-      desc: "[in] pointer to parent object"
+      desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for frequency domain"
 name: $tFreqDomain
+owner: $tPower
 members:
     - type: $t_freq_domain_handle_t
       name: handle
       desc: "handle of frequency domain object"
     - type: $tPower*
       name: pPower
-      desc: "[in] pointer to parent object"
+      desc: "[in] pointer to owner object"

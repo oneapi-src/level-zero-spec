@@ -141,6 +141,7 @@ params:
 type: class
 desc: "C++ wrapper for fence"
 name: $xFence
+owner: $xCommandQueue
 members:
     - type: $x_fence_handle_t
       name: handle
@@ -148,7 +149,7 @@ members:
       init: nullptr
     - type: $xCommandQueue*
       name: pCommandQueue
-      desc: "[in] pointer to parent object"
+      desc: "[in] pointer to owner object"
     - type: $x_fence_desc_t
       name: desc
       desc: "[in] descriptor of the fence object"

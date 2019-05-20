@@ -202,14 +202,14 @@ namespace xe
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         image_handle_t m_handle = nullptr;              ///< handle of image object
-        Device* m_pDevice;                              ///< [in] pointer to parent object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
         desc_t m_desc;                                  ///< [in] descriptor of the image object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         Image( void ) = delete;
         Image( 
-            Device* pDevice,                                ///< [in] pointer to parent object
+            Device* pDevice,                                ///< [in] pointer to owner object
             const desc_t& desc                              ///< [in] descriptor of the image object
             );
 

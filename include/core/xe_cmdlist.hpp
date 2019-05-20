@@ -150,14 +150,14 @@ namespace xe
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         command_list_handle_t m_handle = nullptr;       ///< handle of command list object
-        Device* m_pDevice;                              ///< [in] pointer to parent object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
         desc_t m_desc;                                  ///< [in] descriptor of the command list object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         CommandList( void ) = delete;
         CommandList( 
-            Device* pDevice,                                ///< [in] pointer to parent object
+            Device* pDevice,                                ///< [in] pointer to owner object
             const desc_t& desc                              ///< [in] descriptor of the command list object
             );
 

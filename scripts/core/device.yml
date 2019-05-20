@@ -540,6 +540,7 @@ members:
 type: class
 desc: "C++ wrapper for device"
 name: $xDevice
+owner: $xDeviceGroup
 members:
     - type: $x_device_handle_t
       name: handle
@@ -547,4 +548,4 @@ members:
       init: nullptr
     - type: $xDeviceGroup*
       name: pDeviceGroup
-      desc: "[in] pointer to parent object"
+      desc: "[in] pointer to owner object"

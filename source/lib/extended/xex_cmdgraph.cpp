@@ -142,7 +142,7 @@ namespace xex
 {
     ///////////////////////////////////////////////////////////////////////////////
     CommandGraph::CommandGraph( 
-        Device* pDevice,                                ///< [in] pointer to parent object
+        Device* pDevice,                                ///< [in] pointer to owner object
         const desc_t& desc                              ///< [in] descriptor of the command graph object
         ) :
         m_pDevice( pDevice ),

@@ -630,6 +630,7 @@ params:
 type: class
 desc: "C++ wrapper for module"
 name: $xModule
+owner: $xDevice
 members:
     - type: $x_module_handle_t
       name: handle
@@ -637,7 +638,7 @@ members:
       init: nullptr
     - type: $xDevice*
       name: pDevice
-      desc: "[in] pointer to parent object"
+      desc: "[in] pointer to owner object"
     - type: $x_module_desc_t
       name: desc
       desc: "[in] descriptor of the module object"
@@ -645,6 +646,7 @@ members:
 type: class
 desc: "C++ wrapper for buildlog"
 name: $xModuleBuildLog
+owner: $xModule
 members:
     - type: $x_module_build_log_handle_t
       name: handle
@@ -652,11 +654,12 @@ members:
       init: nullptr
     - type: $xModule*
       name: pModule
-      desc: "[in] pointer to parent object"
+      desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for function"
 name: $xFunction
+owner: $xModule
 members:
     - type: $x_function_handle_t
       name: handle
@@ -664,7 +667,7 @@ members:
       init: nullptr
     - type: $xModule*
       name: pModule
-      desc: "[in] pointer to parent object"
+      desc: "[in] pointer to owner object"
     - type: $x_function_desc_t
       name: desc
       desc: "[in] descriptor of the function object"

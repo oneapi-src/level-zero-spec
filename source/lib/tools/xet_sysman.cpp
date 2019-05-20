@@ -40,7 +40,7 @@ namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
     Sysman::Sysman( 
-        Device* pDevice                                 ///< [in] pointer to parent object
+        Device* pDevice                                 ///< [in] pointer to owner object
         ) :
         m_pDevice( pDevice )
     {
