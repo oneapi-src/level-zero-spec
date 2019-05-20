@@ -25,7 +25,7 @@ struct BuiltinFunctionsLibImpl::BuiltinData {
 
 void BuiltinFunctionsLibImpl::initFunctions() {
     for (uint32_t builtId = 0; builtId < static_cast<uint32_t>(Builtin::COUNT); builtId++) {
-        const char *inputModuleSpirV = nullptr;
+        const unsigned char *inputModuleSpirV = nullptr;
         uint32_t inputModuleSize = 0;
         const char *builtinName = nullptr;
 
@@ -54,7 +54,7 @@ void BuiltinFunctionsLibImpl::initFunctions() {
         xe_module_handle_t moduleHandle;
         xe_module_desc_t moduleDesc = {XE_MODULE_DESC_VERSION_CURRENT};
         moduleDesc.format = XE_MODULE_FORMAT_IL_SPIRV;
-        moduleDesc.pInputModule = reinterpret_cast<const uint8_t *>(inputModuleSpirV);
+        moduleDesc.pInputModule = inputModuleSpirV;
         moduleDesc.inputSize = inputModuleSize;
         res = device->createModule(&moduleDesc, &moduleHandle, nullptr);
         if (res != XE_RESULT_SUCCESS) {

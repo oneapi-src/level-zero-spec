@@ -9,18 +9,16 @@ class preCompiledBins {
   public:
     preCompiledBins(const std::string &moduleName);
 
-    ~preCompiledBins() { delete[] spirvModule; }
-
     uint32_t getSize() { return spirvSize; }
 
     char *getModuleName() { return (char *)moduleName.c_str(); }
 
-    char *getModule() { return spirvModule; }
+    const unsigned char *getModule() { return spirvModule; }
 
   private:
     std::string moduleName;
     uint32_t spirvSize;
-    char *spirvModule;
+    const unsigned char *spirvModule;
 };
 extern preCompiledBins compileCopyBufferToBufferBin;
 extern preCompiledBins compileCopyBufferToBufferDecomposedBin;
