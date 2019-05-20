@@ -33,7 +33,17 @@ void BuiltinFunctionsLibImpl::initFunctions() {
         case Builtin::CopyBufferBytes:
             inputModuleSpirV = compileCopyBufferToBufferBin.getModule();
             inputModuleSize = compileCopyBufferToBufferBin.getSize();
-            builtinName = compileCopyBufferToBufferBin.getFunctionName();
+            builtinName = compileCopyBufferToBufferBin.getModuleName();
+            break;
+        case Builtin::CopyBufferToBufferSide:
+            inputModuleSpirV = compileCopyBufferToBufferDecomposedBin.getModule();
+            inputModuleSize = compileCopyBufferToBufferDecomposedBin.getSize();
+            builtinName = "CopyBufferToBufferSide";
+            break;
+        case Builtin::CopyBufferToBufferMiddle:
+            inputModuleSpirV = compileCopyBufferToBufferDecomposedBin.getModule();
+            inputModuleSize = compileCopyBufferToBufferDecomposedBin.getSize();
+            builtinName = "CopyBufferToBufferMiddle";
             break;
         default:
             continue;

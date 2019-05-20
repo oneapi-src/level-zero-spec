@@ -6,7 +6,11 @@ namespace L0 {
 struct Device;
 struct Function;
 
-enum class Builtin { CopyBufferBytes, CopyImageBytes, COUNT };
+enum class Builtin {
+    CopyBufferBytes,
+    CopyBufferToBufferSide,
+    CopyBufferToBufferMiddle,
+    COUNT };
 
 struct BuiltinFunctionsLib {
     virtual ~BuiltinFunctionsLib() = default;

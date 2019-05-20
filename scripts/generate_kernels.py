@@ -3,14 +3,11 @@ import sys
 import binascii
 import re
 
-copyKernelNames = ['copyBufferToBufferBytes']
-copyKernelFiles = ['copy_buffer_to_buffer_bytes']
+copyKernelFiles = ['copy_buffer_to_buffer_bytes', 'copy_buffer_to_buffer_decomposed']
 kernelsLoc = "../source/core/kernels/"
 
 def create_kernels():
-    for k in range(len(copyKernelNames)):
-            kernelName = copyKernelNames[k]
-            kernelFileName = copyKernelFiles[k]
+    for kernelFileName in copyKernelFiles:
             kernelCL = kernelsLoc + kernelFileName + ".cl"
             kernelSPV = kernelsLoc + kernelFileName + "_Gen12HPcore.spv"
             kernelBIN = kernelsLoc + kernelFileName + "_Gen12HPcore.bin"
@@ -52,7 +49,7 @@ def create_kernels():
                     spirvFileSize=os.fstat(spirvFile.fileno()).st_size
 
                     i = 0
-                    spirvTxtFile.write("static const unsigned char spirv_%s[] = {" % (kernelName));
+                    spirvTxtFile.write("static const unsigned char spirv_%s[] = {" % (kernelFileName));
                     c = spirvFile.read(1)
                     while c:
                         s = "%x" % ord(c)
@@ -69,7 +66,6 @@ def create_kernels():
                         i = i + 1
 
                     spirvTxtFile.write("};\n")
-                    spirvTxtFile.write("constexpr uint32_t size_%s = %d;\n" % (kernelName, spirvFileSize));
                     spirvTxtFile.close()
                     spirvFile.close()
 
