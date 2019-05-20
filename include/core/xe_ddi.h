@@ -263,7 +263,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchFunctionIndirect_t)(
 typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchMultipleFunctionsIndirect_t)(
     xe_command_list_handle_t,
     uint32_t,
-    const xe_function_handle_t*,
+    xe_function_handle_t*,
     const size_t*,
     const xe_thread_group_dimensions_t*,
     xe_event_handle_t,

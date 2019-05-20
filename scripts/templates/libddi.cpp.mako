@@ -44,7 +44,7 @@ namespace ${n}_lib
     ///////////////////////////////////////////////////////////////////////////////
     ${x}_result_t Library::Init()
     {
-        loader = LOAD_DRIVER_LIBRARY( "${x}_loader" );
+        loader = LOAD_DRIVER_LIBRARY( MAKE_DRIVER_NAME( "${x}_loader" ) );
 
         if( NULL == loader )
             return ${X}_RESULT_ERROR_UNINITIALIZED;

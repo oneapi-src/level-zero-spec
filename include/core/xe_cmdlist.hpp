@@ -725,11 +725,12 @@ namespace xe
         void __xecall
         AppendLaunchMultipleFunctionsIndirect(
             uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
-            Function* phFunctions,                          ///< [in] handles of the function objects
+            Function* phFunctions,                          ///< [in][range(0, numFunctions)] handles of the function objects
             const size_t* pNumLaunchArguments,              ///< [in] pointer to device memory location that will contain the actual
-                                                            ///< number of launch arguments; must be less-than or equal-to numFunctions
-            const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain a contiguous array of
-                                                            ///< launch arguments
+                                                            ///< number of launch arguments; value must be less-than or equal-to
+                                                            ///< numFunctions
+            const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in][range(0, numFunctions)] pointer to device buffer that will
+                                                            ///< contain a contiguous array of launch arguments
             Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
             Event* phWaitEvents = nullptr                   ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait

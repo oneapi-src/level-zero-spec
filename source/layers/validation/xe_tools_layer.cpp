@@ -715,7 +715,8 @@ xe_result_t __xecall
 xetDeviceActivateMetricGroups(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
-    xet_metric_group_handle_t* phMetricGroups       ///< [in] handles of the metric groups to activate. NULL to deactivate.
+    xet_metric_group_handle_t* phMetricGroups       ///< [in][range(0, count)] handles of the metric groups to activate. NULL
+                                                    ///< to deactivate.
     )
 {
     auto pfnActivateMetricGroups = xe_layer::val.xetDevice.pfnActivateMetricGroups;

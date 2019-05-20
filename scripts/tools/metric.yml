@@ -337,7 +337,7 @@ params:
       desc: "[in] metric group count to activate. 0 to deactivate."
     - type: "$t_metric_group_handle_t*"
       name: phMetricGroups
-      desc: "[in] handles of the metric groups to activate. NULL to deactivate."
+      desc: "[in][range(0, count)] handles of the metric groups to activate. NULL to deactivate."
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid metric groups"

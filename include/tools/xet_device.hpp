@@ -76,7 +76,8 @@ namespace xet
         void __xecall
         ActivateMetricGroups(
             uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
-            MetricGroup* phMetricGroups                     ///< [in] handles of the metric groups to activate. NULL to deactivate.
+            MetricGroup* phMetricGroups                     ///< [in][range(0, count)] handles of the metric groups to activate. NULL
+                                                            ///< to deactivate.
             );
 
     };

@@ -24,7 +24,7 @@
 * @file xex_extended_lib.cpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/libimp.cpp.mako
+* DO NOT EDIT: generated from /scripts/templates/libddi.cpp.mako
 * @endcond
 *
 ******************************************************************************/
