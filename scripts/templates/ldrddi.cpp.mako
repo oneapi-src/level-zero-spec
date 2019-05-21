@@ -117,7 +117,7 @@ ${th.make_func_name(n, tags, obj)}(
     ${line}
     %endfor
     // forward to device-driver
-    auto result = ${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
+    auto result = dditable->${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
 
     %for line in th.make_loader_epilogue_lines(n, tags, obj, meta):
     ${line}

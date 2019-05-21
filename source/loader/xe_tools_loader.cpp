@@ -544,14 +544,14 @@ xetMetricGroupGetCount(
     uint32_t* pCount                                ///< [out] number of metric groups supported by the device
     )
 {
-    // extract driver's function pointer
-    auto pfnGetCount = reinterpret_cast<xet_device_object_t*>( hDevice )->dditable->MetricGroup.pfnGetCount;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_device_object_t*>( hDevice )->dditable;
     
     // convert loader handle to driver handle
     hDevice = reinterpret_cast<xet_device_object_t*>( hDevice )->handle;
     
     // forward to device-driver
-    auto result = pfnGetCount( hDevice, pCount );
+    auto result = dditable->MetricGroup.pfnGetCount( hDevice, pCount );
 
     return result;
 }
@@ -564,17 +564,17 @@ xetMetricGroupGet(
     xet_metric_group_handle_t* phMetricGroup        ///< [out] metric group handle
     )
 {
-    // extract driver's function pointer
-    auto pfnGet = reinterpret_cast<xet_device_object_t*>( hDevice )->dditable->MetricGroup.pfnGet;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_device_object_t*>( hDevice )->dditable;
     
     // convert loader handle to driver handle
     hDevice = reinterpret_cast<xet_device_object_t*>( hDevice )->handle;
     
     // forward to device-driver
-    auto result = pfnGet( hDevice, ordinal, phMetricGroup );
+    auto result = dditable->MetricGroup.pfnGet( hDevice, ordinal, phMetricGroup );
 
     // convert driver handle to new loader handle
-    *phMetricGroup = reinterpret_cast<xet_metric_group_handle_t>( /*temp:*/new xet_metric_group_object_t { *phMetricGroup, /*todo:*/nullptr } );
+    *phMetricGroup = reinterpret_cast<xet_metric_group_handle_t>( /*temp:*/new xet_metric_group_object_t { *phMetricGroup, dditable } );
     
     return result;
 }
@@ -586,14 +586,14 @@ xetMetricGroupGetProperties(
     xet_metric_group_properties_t* pProperties      ///< [out] metric group properties
     )
 {
-    // extract driver's function pointer
-    auto pfnGetProperties = reinterpret_cast<xet_metric_group_object_t*>( hMetricGroup )->dditable->MetricGroup.pfnGetProperties;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_metric_group_object_t*>( hMetricGroup )->dditable;
     
     // convert loader handle to driver handle
     hMetricGroup = reinterpret_cast<xet_metric_group_object_t*>( hMetricGroup )->handle;
     
     // forward to device-driver
-    auto result = pfnGetProperties( hMetricGroup, pProperties );
+    auto result = dditable->MetricGroup.pfnGetProperties( hMetricGroup, pProperties );
 
     return result;
 }
@@ -606,17 +606,17 @@ xetMetricGet(
     xet_metric_handle_t* phMetric                   ///< [out] handle of metric
     )
 {
-    // extract driver's function pointer
-    auto pfnGet = reinterpret_cast<xet_metric_group_object_t*>( hMetricGroup )->dditable->Metric.pfnGet;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_metric_group_object_t*>( hMetricGroup )->dditable;
     
     // convert loader handle to driver handle
     hMetricGroup = reinterpret_cast<xet_metric_group_object_t*>( hMetricGroup )->handle;
     
     // forward to device-driver
-    auto result = pfnGet( hMetricGroup, ordinal, phMetric );
+    auto result = dditable->Metric.pfnGet( hMetricGroup, ordinal, phMetric );
 
     // convert driver handle to new loader handle
-    *phMetric = reinterpret_cast<xet_metric_handle_t>( /*temp:*/new xet_metric_object_t { *phMetric, /*todo:*/nullptr } );
+    *phMetric = reinterpret_cast<xet_metric_handle_t>( /*temp:*/new xet_metric_object_t { *phMetric, dditable } );
     
     return result;
 }
@@ -628,14 +628,14 @@ xetMetricGetProperties(
     xet_metric_properties_t* pProperties            ///< [out] metric properties
     )
 {
-    // extract driver's function pointer
-    auto pfnGetProperties = reinterpret_cast<xet_metric_object_t*>( hMetric )->dditable->Metric.pfnGetProperties;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_metric_object_t*>( hMetric )->dditable;
     
     // convert loader handle to driver handle
     hMetric = reinterpret_cast<xet_metric_object_t*>( hMetric )->handle;
     
     // forward to device-driver
-    auto result = pfnGetProperties( hMetric, pProperties );
+    auto result = dditable->Metric.pfnGetProperties( hMetric, pProperties );
 
     return result;
 }
@@ -651,14 +651,14 @@ xetMetricGroupCalculateData(
     xet_typed_value_t* pCalculatedData              ///< [in,out] calculated metrics
     )
 {
-    // extract driver's function pointer
-    auto pfnCalculateData = reinterpret_cast<xet_metric_group_object_t*>( hMetricGroup )->dditable->MetricGroup.pfnCalculateData;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_metric_group_object_t*>( hMetricGroup )->dditable;
     
     // convert loader handle to driver handle
     hMetricGroup = reinterpret_cast<xet_metric_group_object_t*>( hMetricGroup )->handle;
     
     // forward to device-driver
-    auto result = pfnCalculateData( hMetricGroup, pReportCount, rawDataSize, pRawData, calculatedDataSize, pCalculatedData );
+    auto result = dditable->MetricGroup.pfnCalculateData( hMetricGroup, pReportCount, rawDataSize, pRawData, calculatedDataSize, pCalculatedData );
 
     return result;
 }
@@ -672,8 +672,8 @@ xetDeviceActivateMetricGroups(
                                                     ///< to deactivate.
     )
 {
-    // extract driver's function pointer
-    auto pfnActivateMetricGroups = reinterpret_cast<xet_device_object_t*>( hDevice )->dditable->Device.pfnActivateMetricGroups;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_device_object_t*>( hDevice )->dditable;
     
     // convert loader handle to driver handle
     hDevice = reinterpret_cast<xet_device_object_t*>( hDevice )->handle;
@@ -681,8 +681,9 @@ xetDeviceActivateMetricGroups(
     // convert loader handles to driver handles
     for( size_t i = 0; ( nullptr != phMetricGroups ) && ( i < count ); ++i )
         phMetricGroups[ i ] = reinterpret_cast<xet_metric_group_object_t*>( phMetricGroups[ i ] )->handle;
+    
     // forward to device-driver
-    auto result = pfnActivateMetricGroups( hDevice, count, phMetricGroups );
+    auto result = dditable->Device.pfnActivateMetricGroups( hDevice, count, phMetricGroups );
 
     return result;
 }
@@ -697,8 +698,8 @@ xetMetricTracerOpen(
     xet_metric_tracer_handle_t* phMetricTracer      ///< [out] handle of metric tracer
     )
 {
-    // extract driver's function pointer
-    auto pfnOpen = reinterpret_cast<xet_device_object_t*>( hDevice )->dditable->MetricTracer.pfnOpen;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_device_object_t*>( hDevice )->dditable;
     
     // convert loader handle to driver handle
     hDevice = reinterpret_cast<xet_device_object_t*>( hDevice )->handle;
@@ -707,10 +708,10 @@ xetMetricTracerOpen(
     hNotificationEvent = reinterpret_cast<xet_event_object_t*>( hNotificationEvent )->handle;
     
     // forward to device-driver
-    auto result = pfnOpen( hDevice, pDesc, hNotificationEvent, phMetricTracer );
+    auto result = dditable->MetricTracer.pfnOpen( hDevice, pDesc, hNotificationEvent, phMetricTracer );
 
     // convert driver handle to new loader handle
-    *phMetricTracer = reinterpret_cast<xet_metric_tracer_handle_t>( /*temp:*/new xet_metric_tracer_object_t { *phMetricTracer, /*todo:*/nullptr } );
+    *phMetricTracer = reinterpret_cast<xet_metric_tracer_handle_t>( /*temp:*/new xet_metric_tracer_object_t { *phMetricTracer, dditable } );
     
     return result;
 }
@@ -723,8 +724,8 @@ xetCommandListAppendMetricTracerMarker(
     uint32_t value                                  ///< [in] tracer marker value
     )
 {
-    // extract driver's function pointer
-    auto pfnAppendMetricTracerMarker = reinterpret_cast<xet_command_list_object_t*>( hCommandList )->dditable->CommandList.pfnAppendMetricTracerMarker;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_command_list_object_t*>( hCommandList )->dditable;
     
     // convert loader handle to driver handle
     hCommandList = reinterpret_cast<xet_command_list_object_t*>( hCommandList )->handle;
@@ -733,7 +734,7 @@ xetCommandListAppendMetricTracerMarker(
     hMetricTracer = reinterpret_cast<xet_metric_tracer_object_t*>( hMetricTracer )->handle;
     
     // forward to device-driver
-    auto result = pfnAppendMetricTracerMarker( hCommandList, hMetricTracer, value );
+    auto result = dditable->CommandList.pfnAppendMetricTracerMarker( hCommandList, hMetricTracer, value );
 
     return result;
 }
@@ -744,14 +745,14 @@ xetMetricTracerClose(
     xet_metric_tracer_handle_t hMetricTracer        ///< [in] handle of the metric tracer
     )
 {
-    // extract driver's function pointer
-    auto pfnClose = reinterpret_cast<xet_metric_tracer_object_t*>( hMetricTracer )->dditable->MetricTracer.pfnClose;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_metric_tracer_object_t*>( hMetricTracer )->dditable;
     
     // convert loader handle to driver handle
     hMetricTracer = reinterpret_cast<xet_metric_tracer_object_t*>( hMetricTracer )->handle;
     
     // forward to device-driver
-    auto result = pfnClose( hMetricTracer );
+    auto result = dditable->MetricTracer.pfnClose( hMetricTracer );
 
     return result;
 }
@@ -765,14 +766,14 @@ xetMetricTracerReadData(
     uint8_t* pRawData                               ///< [in,out] raw data buffer for reports
     )
 {
-    // extract driver's function pointer
-    auto pfnReadData = reinterpret_cast<xet_metric_tracer_object_t*>( hMetricTracer )->dditable->MetricTracer.pfnReadData;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_metric_tracer_object_t*>( hMetricTracer )->dditable;
     
     // convert loader handle to driver handle
     hMetricTracer = reinterpret_cast<xet_metric_tracer_object_t*>( hMetricTracer )->handle;
     
     // forward to device-driver
-    auto result = pfnReadData( hMetricTracer, pReportCount, rawDataSize, pRawData );
+    auto result = dditable->MetricTracer.pfnReadData( hMetricTracer, pReportCount, rawDataSize, pRawData );
 
     return result;
 }
@@ -785,17 +786,17 @@ xetMetricQueryPoolCreate(
     xet_metric_query_pool_handle_t* phMetricQueryPool   ///< [out] handle of metric query pool
     )
 {
-    // extract driver's function pointer
-    auto pfnCreate = reinterpret_cast<xet_device_object_t*>( hDevice )->dditable->MetricQueryPool.pfnCreate;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_device_object_t*>( hDevice )->dditable;
     
     // convert loader handle to driver handle
     hDevice = reinterpret_cast<xet_device_object_t*>( hDevice )->handle;
     
     // forward to device-driver
-    auto result = pfnCreate( hDevice, pDesc, phMetricQueryPool );
+    auto result = dditable->MetricQueryPool.pfnCreate( hDevice, pDesc, phMetricQueryPool );
 
     // convert driver handle to new loader handle
-    *phMetricQueryPool = reinterpret_cast<xet_metric_query_pool_handle_t>( /*temp:*/new xet_metric_query_pool_object_t { *phMetricQueryPool, /*todo:*/nullptr } );
+    *phMetricQueryPool = reinterpret_cast<xet_metric_query_pool_handle_t>( /*temp:*/new xet_metric_query_pool_object_t { *phMetricQueryPool, dditable } );
     
     return result;
 }
@@ -806,14 +807,14 @@ xetMetricQueryPoolDestroy(
     xet_metric_query_pool_handle_t hMetricQueryPool ///< [in] handle of the metric query pool
     )
 {
-    // extract driver's function pointer
-    auto pfnDestroy = reinterpret_cast<xet_metric_query_pool_object_t*>( hMetricQueryPool )->dditable->MetricQueryPool.pfnDestroy;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_metric_query_pool_object_t*>( hMetricQueryPool )->dditable;
     
     // convert loader handle to driver handle
     hMetricQueryPool = reinterpret_cast<xet_metric_query_pool_object_t*>( hMetricQueryPool )->handle;
     
     // forward to device-driver
-    auto result = pfnDestroy( hMetricQueryPool );
+    auto result = dditable->MetricQueryPool.pfnDestroy( hMetricQueryPool );
 
     return result;
 }
@@ -826,17 +827,17 @@ xetMetricQueryPoolGetMetricQuery(
     xet_metric_query_handle_t* phMetricQuery        ///< [out] handle of metric query
     )
 {
-    // extract driver's function pointer
-    auto pfnGetMetricQuery = reinterpret_cast<xet_metric_query_pool_object_t*>( hMetricQueryPool )->dditable->MetricQueryPool.pfnGetMetricQuery;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_metric_query_pool_object_t*>( hMetricQueryPool )->dditable;
     
     // convert loader handle to driver handle
     hMetricQueryPool = reinterpret_cast<xet_metric_query_pool_object_t*>( hMetricQueryPool )->handle;
     
     // forward to device-driver
-    auto result = pfnGetMetricQuery( hMetricQueryPool, ordinal, phMetricQuery );
+    auto result = dditable->MetricQueryPool.pfnGetMetricQuery( hMetricQueryPool, ordinal, phMetricQuery );
 
     // convert driver handle to new loader handle
-    *phMetricQuery = reinterpret_cast<xet_metric_query_handle_t>( /*temp:*/new xet_metric_query_object_t { *phMetricQuery, /*todo:*/nullptr } );
+    *phMetricQuery = reinterpret_cast<xet_metric_query_handle_t>( /*temp:*/new xet_metric_query_object_t { *phMetricQuery, dditable } );
     
     return result;
 }
@@ -848,8 +849,8 @@ xetCommandListAppendMetricQueryBegin(
     xet_metric_query_handle_t hMetricQuery          ///< [in] handle of the metric query
     )
 {
-    // extract driver's function pointer
-    auto pfnAppendMetricQueryBegin = reinterpret_cast<xet_command_list_object_t*>( hCommandList )->dditable->CommandList.pfnAppendMetricQueryBegin;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_command_list_object_t*>( hCommandList )->dditable;
     
     // convert loader handle to driver handle
     hCommandList = reinterpret_cast<xet_command_list_object_t*>( hCommandList )->handle;
@@ -858,7 +859,7 @@ xetCommandListAppendMetricQueryBegin(
     hMetricQuery = reinterpret_cast<xet_metric_query_object_t*>( hMetricQuery )->handle;
     
     // forward to device-driver
-    auto result = pfnAppendMetricQueryBegin( hCommandList, hMetricQuery );
+    auto result = dditable->CommandList.pfnAppendMetricQueryBegin( hCommandList, hMetricQuery );
 
     return result;
 }
@@ -871,8 +872,8 @@ xetCommandListAppendMetricQueryEnd(
     xe_event_handle_t hCompletionEvent              ///< [in] handle of the completion event to signal
     )
 {
-    // extract driver's function pointer
-    auto pfnAppendMetricQueryEnd = reinterpret_cast<xet_command_list_object_t*>( hCommandList )->dditable->CommandList.pfnAppendMetricQueryEnd;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_command_list_object_t*>( hCommandList )->dditable;
     
     // convert loader handle to driver handle
     hCommandList = reinterpret_cast<xet_command_list_object_t*>( hCommandList )->handle;
@@ -884,7 +885,7 @@ xetCommandListAppendMetricQueryEnd(
     hCompletionEvent = reinterpret_cast<xet_event_object_t*>( hCompletionEvent )->handle;
     
     // forward to device-driver
-    auto result = pfnAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent );
+    auto result = dditable->CommandList.pfnAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent );
 
     return result;
 }
@@ -895,14 +896,14 @@ xetCommandListAppendMetricMemoryBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
 {
-    // extract driver's function pointer
-    auto pfnAppendMetricMemoryBarrier = reinterpret_cast<xet_command_list_object_t*>( hCommandList )->dditable->CommandList.pfnAppendMetricMemoryBarrier;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_command_list_object_t*>( hCommandList )->dditable;
     
     // convert loader handle to driver handle
     hCommandList = reinterpret_cast<xet_command_list_object_t*>( hCommandList )->handle;
     
     // forward to device-driver
-    auto result = pfnAppendMetricMemoryBarrier( hCommandList );
+    auto result = dditable->CommandList.pfnAppendMetricMemoryBarrier( hCommandList );
 
     return result;
 }
@@ -916,14 +917,14 @@ xetMetricQueryGetData(
     uint8_t* pRawData                               ///< [in,out] query result data in raw format
     )
 {
-    // extract driver's function pointer
-    auto pfnGetData = reinterpret_cast<xet_metric_query_object_t*>( hMetricQuery )->dditable->MetricQuery.pfnGetData;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_metric_query_object_t*>( hMetricQuery )->dditable;
     
     // convert loader handle to driver handle
     hMetricQuery = reinterpret_cast<xet_metric_query_object_t*>( hMetricQuery )->handle;
     
     // forward to device-driver
-    auto result = pfnGetData( hMetricQuery, pReportCount, rawDataSize, pRawData );
+    auto result = dditable->MetricQuery.pfnGetData( hMetricQuery, pReportCount, rawDataSize, pRawData );
 
     return result;
 }
@@ -936,17 +937,17 @@ xetPowerCreate(
     xet_power_handle_t* pPowerHandle                ///< [out] handle for accessing power features of the device
     )
 {
-    // extract driver's function pointer
-    auto pfnCreate = reinterpret_cast<xet_device_object_t*>( hDevice )->dditable->Power.pfnCreate;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_device_object_t*>( hDevice )->dditable;
     
     // convert loader handle to driver handle
     hDevice = reinterpret_cast<xet_device_object_t*>( hDevice )->handle;
     
     // forward to device-driver
-    auto result = pfnCreate( hDevice, flags, pPowerHandle );
+    auto result = dditable->Power.pfnCreate( hDevice, flags, pPowerHandle );
 
     // convert driver handle to new loader handle
-    *pPowerHandle = reinterpret_cast<xet_power_handle_t>( /*temp:*/new xet_power_object_t { *pPowerHandle, /*todo:*/nullptr } );
+    *pPowerHandle = reinterpret_cast<xet_power_handle_t>( /*temp:*/new xet_power_object_t { *pPowerHandle, dditable } );
     
     return result;
 }
@@ -957,14 +958,14 @@ xetPowerDestroy(
     xet_power_handle_t hPower                       ///< [in] handle of the power object to destroy
     )
 {
-    // extract driver's function pointer
-    auto pfnDestroy = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnDestroy;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnDestroy( hPower );
+    auto result = dditable->Power.pfnDestroy( hPower );
 
     return result;
 }
@@ -976,14 +977,14 @@ xetPowerGetAveragePowerLimit(
     xet_power_average_limit_t* pLimit               ///< [out] information about the average power limit
     )
 {
-    // extract driver's function pointer
-    auto pfnGetAveragePowerLimit = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnGetAveragePowerLimit;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnGetAveragePowerLimit( hPower, pLimit );
+    auto result = dditable->Power.pfnGetAveragePowerLimit( hPower, pLimit );
 
     return result;
 }
@@ -995,14 +996,14 @@ xetPowerGetBurstPowerLimit(
     xet_power_burst_limit_t* pLimit                 ///< [out] information about the burst power limit
     )
 {
-    // extract driver's function pointer
-    auto pfnGetBurstPowerLimit = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnGetBurstPowerLimit;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnGetBurstPowerLimit( hPower, pLimit );
+    auto result = dditable->Power.pfnGetBurstPowerLimit( hPower, pLimit );
 
     return result;
 }
@@ -1014,14 +1015,14 @@ xetPowerGetPeakPowerLimit(
     xet_power_peak_limit_t* pLimit                  ///< [out] information about the peak power limit
     )
 {
-    // extract driver's function pointer
-    auto pfnGetPeakPowerLimit = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnGetPeakPowerLimit;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnGetPeakPowerLimit( hPower, pLimit );
+    auto result = dditable->Power.pfnGetPeakPowerLimit( hPower, pLimit );
 
     return result;
 }
@@ -1033,14 +1034,14 @@ xetPowerGetAllPowerLimits(
     xet_power_limits_t* pLimits                     ///< [out] information about the average/burst/peak power limits
     )
 {
-    // extract driver's function pointer
-    auto pfnGetAllPowerLimits = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnGetAllPowerLimits;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnGetAllPowerLimits( hPower, pLimits );
+    auto result = dditable->Power.pfnGetAllPowerLimits( hPower, pLimits );
 
     return result;
 }
@@ -1052,14 +1053,14 @@ xetPowerGetDefaultPowerLimits(
     xet_power_limits_t* pLimits                     ///< [out] information about the default average/burst/peak power limits
     )
 {
-    // extract driver's function pointer
-    auto pfnGetDefaultPowerLimits = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnGetDefaultPowerLimits;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnGetDefaultPowerLimits( hPower, pLimits );
+    auto result = dditable->Power.pfnGetDefaultPowerLimits( hPower, pLimits );
 
     return result;
 }
@@ -1071,14 +1072,14 @@ xetPowerSetAveragePowerLimit(
     xet_power_average_limit_t* pLimit               ///< [in] information about the average power limit
     )
 {
-    // extract driver's function pointer
-    auto pfnSetAveragePowerLimit = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnSetAveragePowerLimit;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnSetAveragePowerLimit( hPower, pLimit );
+    auto result = dditable->Power.pfnSetAveragePowerLimit( hPower, pLimit );
 
     return result;
 }
@@ -1090,14 +1091,14 @@ xetPowerSetBurstPowerLimit(
     xet_power_burst_limit_t* pLimit                 ///< [in] information about the burst power limit
     )
 {
-    // extract driver's function pointer
-    auto pfnSetBurstPowerLimit = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnSetBurstPowerLimit;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnSetBurstPowerLimit( hPower, pLimit );
+    auto result = dditable->Power.pfnSetBurstPowerLimit( hPower, pLimit );
 
     return result;
 }
@@ -1109,14 +1110,14 @@ xetPowerSetPeakPowerLimit(
     xet_power_peak_limit_t* pLimit                  ///< [in] information about the peak power limit
     )
 {
-    // extract driver's function pointer
-    auto pfnSetPeakPowerLimit = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnSetPeakPowerLimit;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnSetPeakPowerLimit( hPower, pLimit );
+    auto result = dditable->Power.pfnSetPeakPowerLimit( hPower, pLimit );
 
     return result;
 }
@@ -1128,14 +1129,14 @@ xetPowerSetPowerLimits(
     xet_power_limits_t* pLimits                     ///< [in] information about the average/burst/peak power limits
     )
 {
-    // extract driver's function pointer
-    auto pfnSetPowerLimits = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnSetPowerLimits;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnSetPowerLimits( hPower, pLimits );
+    auto result = dditable->Power.pfnSetPowerLimits( hPower, pLimits );
 
     return result;
 }
@@ -1147,14 +1148,14 @@ xetPowerGetEnergyCounter(
     uint64_t* pEnergy                               ///< [out] the energy counter in millijoules
     )
 {
-    // extract driver's function pointer
-    auto pfnGetEnergyCounter = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnGetEnergyCounter;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnGetEnergyCounter( hPower, pEnergy );
+    auto result = dditable->Power.pfnGetEnergyCounter( hPower, pEnergy );
 
     return result;
 }
@@ -1166,14 +1167,14 @@ xetPowerGetTurboMode(
     xet_turbo_mode_t* pTurboMode                    ///< [out] turbo mode currently in effect
     )
 {
-    // extract driver's function pointer
-    auto pfnGetTurboMode = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnGetTurboMode;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnGetTurboMode( hPower, pTurboMode );
+    auto result = dditable->Power.pfnGetTurboMode( hPower, pTurboMode );
 
     return result;
 }
@@ -1185,14 +1186,14 @@ xetPowerSetTurboMode(
     xet_turbo_mode_t pTurboMode                     ///< [in] new turbo mode
     )
 {
-    // extract driver's function pointer
-    auto pfnSetTurboMode = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnSetTurboMode;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnSetTurboMode( hPower, pTurboMode );
+    auto result = dditable->Power.pfnSetTurboMode( hPower, pTurboMode );
 
     return result;
 }
@@ -1204,14 +1205,14 @@ xetPowerGetFreqDomainCount(
     uint32_t* pNumFreqDomains                       ///< [out] the number of frequency domains
     )
 {
-    // extract driver's function pointer
-    auto pfnGetFreqDomainCount = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnGetFreqDomainCount;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnGetFreqDomainCount( hPower, pNumFreqDomains );
+    auto result = dditable->Power.pfnGetFreqDomainCount( hPower, pNumFreqDomains );
 
     return result;
 }
@@ -1224,17 +1225,17 @@ xetPowerGetFreqDomain(
     xet_freq_domain_handle_t* phFreqDomain          ///< [out] pointer to handle of frequency domain object
     )
 {
-    // extract driver's function pointer
-    auto pfnGetFreqDomain = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnGetFreqDomain;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnGetFreqDomain( hPower, ordinal, phFreqDomain );
+    auto result = dditable->Power.pfnGetFreqDomain( hPower, ordinal, phFreqDomain );
 
     // convert driver handle to new loader handle
-    *phFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>( /*temp:*/new xet_freq_domain_object_t { *phFreqDomain, /*todo:*/nullptr } );
+    *phFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>( /*temp:*/new xet_freq_domain_object_t { *phFreqDomain, dditable } );
     
     return result;
 }
@@ -1246,14 +1247,14 @@ xetFreqDomainGetProperties(
     xet_freq_domain_properties_t* pFreqDomainProperties ///< [out] pointer to properties for the frequency domain
     )
 {
-    // extract driver's function pointer
-    auto pfnGetProperties = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->dditable->FreqDomain.pfnGetProperties;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->dditable;
     
     // convert loader handle to driver handle
     hFreqDomain = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->handle;
     
     // forward to device-driver
-    auto result = pfnGetProperties( hFreqDomain, pFreqDomainProperties );
+    auto result = dditable->FreqDomain.pfnGetProperties( hFreqDomain, pFreqDomainProperties );
 
     return result;
 }
@@ -1266,17 +1267,17 @@ xetFreqDomainGetSourceFreqDomain(
                                                     ///< will be returned
     )
 {
-    // extract driver's function pointer
-    auto pfnGetSourceFreqDomain = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->dditable->FreqDomain.pfnGetSourceFreqDomain;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->dditable;
     
     // convert loader handle to driver handle
     hFreqDomain = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->handle;
     
     // forward to device-driver
-    auto result = pfnGetSourceFreqDomain( hFreqDomain, phSrcFreqDomain );
+    auto result = dditable->FreqDomain.pfnGetSourceFreqDomain( hFreqDomain, phSrcFreqDomain );
 
     // convert driver handle to new loader handle
-    *phSrcFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>( /*temp:*/new xet_freq_domain_object_t { *phSrcFreqDomain, /*todo:*/nullptr } );
+    *phSrcFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>( /*temp:*/new xet_freq_domain_object_t { *phSrcFreqDomain, dditable } );
     
     return result;
 }
@@ -1289,14 +1290,14 @@ xetFreqDomainGetSupportedClocks(
     uint32_t* pClocks                               ///< [out] pointer to array of frequencies
     )
 {
-    // extract driver's function pointer
-    auto pfnGetSupportedClocks = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->dditable->FreqDomain.pfnGetSupportedClocks;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->dditable;
     
     // convert loader handle to driver handle
     hFreqDomain = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->handle;
     
     // forward to device-driver
-    auto result = pfnGetSupportedClocks( hFreqDomain, numClockPoints, pClocks );
+    auto result = dditable->FreqDomain.pfnGetSupportedClocks( hFreqDomain, numClockPoints, pClocks );
 
     return result;
 }
@@ -1309,14 +1310,14 @@ xetFreqDomainGetSupportedClockDividers(
     xet_clock_divider_t* pDividers                  ///< [out] pointer to array of dividers
     )
 {
-    // extract driver's function pointer
-    auto pfnGetSupportedClockDividers = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->dditable->FreqDomain.pfnGetSupportedClockDividers;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->dditable;
     
     // convert loader handle to driver handle
     hFreqDomain = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->handle;
     
     // forward to device-driver
-    auto result = pfnGetSupportedClockDividers( hFreqDomain, numClockDividers, pDividers );
+    auto result = dditable->FreqDomain.pfnGetSupportedClockDividers( hFreqDomain, numClockDividers, pDividers );
 
     return result;
 }
@@ -1329,14 +1330,14 @@ xetFreqDomainGetClockRange(
     uint32_t* pMaxClock                             ///< [out] max clock frequency in units of MHz
     )
 {
-    // extract driver's function pointer
-    auto pfnGetClockRange = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->dditable->FreqDomain.pfnGetClockRange;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->dditable;
     
     // convert loader handle to driver handle
     hFreqDomain = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->handle;
     
     // forward to device-driver
-    auto result = pfnGetClockRange( hFreqDomain, pMinClock, pMaxClock );
+    auto result = dditable->FreqDomain.pfnGetClockRange( hFreqDomain, pMinClock, pMaxClock );
 
     return result;
 }
@@ -1349,14 +1350,14 @@ xetFreqDomainSetClockRange(
     uint32_t maxClock                               ///< [in] max clock frequency in units of MHz
     )
 {
-    // extract driver's function pointer
-    auto pfnSetClockRange = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->dditable->FreqDomain.pfnSetClockRange;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->dditable;
     
     // convert loader handle to driver handle
     hFreqDomain = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->handle;
     
     // forward to device-driver
-    auto result = pfnSetClockRange( hFreqDomain, minClock, maxClock );
+    auto result = dditable->FreqDomain.pfnSetClockRange( hFreqDomain, minClock, maxClock );
 
     return result;
 }
@@ -1368,14 +1369,14 @@ xetFreqDomainSetClockDivider(
     xet_clock_divider_t* pClockDividerRequest       ///< [out] pointer to frequency divider request
     )
 {
-    // extract driver's function pointer
-    auto pfnSetClockDivider = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->dditable->FreqDomain.pfnSetClockDivider;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->dditable;
     
     // convert loader handle to driver handle
     hFreqDomain = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->handle;
     
     // forward to device-driver
-    auto result = pfnSetClockDivider( hFreqDomain, pClockDividerRequest );
+    auto result = dditable->FreqDomain.pfnSetClockDivider( hFreqDomain, pClockDividerRequest );
 
     return result;
 }
@@ -1389,14 +1390,14 @@ xetFreqDomainGetCurrentFrequency(
     xet_freq_throttle_reasons_t* pFreqThrottleReasons   ///< [out] the reason the resolved frequency is lower than the request
     )
 {
-    // extract driver's function pointer
-    auto pfnGetCurrentFrequency = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->dditable->FreqDomain.pfnGetCurrentFrequency;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->dditable;
     
     // convert loader handle to driver handle
     hFreqDomain = reinterpret_cast<xet_freq_domain_object_t*>( hFreqDomain )->handle;
     
     // forward to device-driver
-    auto result = pfnGetCurrentFrequency( hFreqDomain, pFreqRequest, pFreqResolved, pFreqThrottleReasons );
+    auto result = dditable->FreqDomain.pfnGetCurrentFrequency( hFreqDomain, pFreqRequest, pFreqResolved, pFreqThrottleReasons );
 
     return result;
 }
@@ -1408,14 +1409,14 @@ xetPowerFanCount(
     uint32_t* pFanCount                             ///< [out] the number of fans on the device
     )
 {
-    // extract driver's function pointer
-    auto pfnFanCount = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnFanCount;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnFanCount( hPower, pFanCount );
+    auto result = dditable->Power.pfnFanCount( hPower, pFanCount );
 
     return result;
 }
@@ -1428,14 +1429,14 @@ xetPowerFanGetProperties(
     xet_fan_properties_t* pFanProperties            ///< [out] pointer to storage for fan properties
     )
 {
-    // extract driver's function pointer
-    auto pfnFanGetProperties = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnFanGetProperties;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnFanGetProperties( hPower, fanIndex, pFanProperties );
+    auto result = dditable->Power.pfnFanGetProperties( hPower, fanIndex, pFanProperties );
 
     return result;
 }
@@ -1451,14 +1452,14 @@ xetPowerFanGetSpeedTable(
     xet_fan_point_t* pFanPoints                     ///< [out] pointer to an array of temperature/fan-speed points
     )
 {
-    // extract driver's function pointer
-    auto pfnFanGetSpeedTable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnFanGetSpeedTable;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnFanGetSpeedTable( hPower, fanIndex, fanSpeedInRpm, pNumFanPoints, pFanPoints );
+    auto result = dditable->Power.pfnFanGetSpeedTable( hPower, fanIndex, fanSpeedInRpm, pNumFanPoints, pFanPoints );
 
     return result;
 }
@@ -1472,14 +1473,14 @@ xetPowerFanSetSpeedTable(
     xet_fan_point_t* pFanPoints                     ///< [in] pointer to an array of temperature/fan-speed points
     )
 {
-    // extract driver's function pointer
-    auto pfnFanSetSpeedTable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnFanSetSpeedTable;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnFanSetSpeedTable( hPower, fanIndex, numFanPoints, pFanPoints );
+    auto result = dditable->Power.pfnFanSetSpeedTable( hPower, fanIndex, numFanPoints, pFanPoints );
 
     return result;
 }
@@ -1495,14 +1496,14 @@ xetPowerFanGetSpeed(
     xet_fan_speed_info_t* pFanSpeed                 ///< [out] pointer to an array of current fan speeds
     )
 {
-    // extract driver's function pointer
-    auto pfnFanGetSpeed = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnFanGetSpeed;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnFanGetSpeed( hPower, startFanIndex, numFans, fanSpeedInRpm, pFanSpeed );
+    auto result = dditable->Power.pfnFanGetSpeed( hPower, startFanIndex, numFans, fanSpeedInRpm, pFanSpeed );
 
     return result;
 }
@@ -1517,14 +1518,14 @@ xetPowerFanSetSpeed(
     xet_fan_speed_info_t* pFanSpeed                 ///< [in] pointer to an array of current fan speeds
     )
 {
-    // extract driver's function pointer
-    auto pfnFanSetSpeed = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnFanSetSpeed;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnFanSetSpeed( hPower, startFanIndex, numFans, pFanSpeed );
+    auto result = dditable->Power.pfnFanSetSpeed( hPower, startFanIndex, numFans, pFanSpeed );
 
     return result;
 }
@@ -1536,14 +1537,14 @@ xetPowerTemperatureSensorCount(
     uint32_t* pSensorCount                          ///< [out] the number of temperature sensors on the device
     )
 {
-    // extract driver's function pointer
-    auto pfnTemperatureSensorCount = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnTemperatureSensorCount;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnTemperatureSensorCount( hPower, pSensorCount );
+    auto result = dditable->Power.pfnTemperatureSensorCount( hPower, pSensorCount );
 
     return result;
 }
@@ -1556,14 +1557,14 @@ xetPowerGetTemperatureProperties(
     xet_temperature_properties_t* pProperties       ///< [out] pointer to properties for this sensor
     )
 {
-    // extract driver's function pointer
-    auto pfnGetTemperatureProperties = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnGetTemperatureProperties;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnGetTemperatureProperties( hPower, sensorIndex, pProperties );
+    auto result = dditable->Power.pfnGetTemperatureProperties( hPower, sensorIndex, pProperties );
 
     return result;
 }
@@ -1578,14 +1579,14 @@ xetPowerGetTemperature(
     uint16_t* pTemperatures                         ///< [out] pointer to an array of temperatures in units of degrees celsius
     )
 {
-    // extract driver's function pointer
-    auto pfnGetTemperature = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnGetTemperature;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnGetTemperature( hPower, startSensorIndex, numSensors, pTemperatures );
+    auto result = dditable->Power.pfnGetTemperature( hPower, startSensorIndex, numSensors, pTemperatures );
 
     return result;
 }
@@ -1599,14 +1600,14 @@ xetPowerSetTemperatureThreshold(
                                                     ///< will be throttled
     )
 {
-    // extract driver's function pointer
-    auto pfnSetTemperatureThreshold = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnSetTemperatureThreshold;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnSetTemperatureThreshold( hPower, sensorIndex, maxTemperature );
+    auto result = dditable->Power.pfnSetTemperatureThreshold( hPower, sensorIndex, maxTemperature );
 
     return result;
 }
@@ -1618,14 +1619,14 @@ xetPowerActivityCount(
     uint32_t* pActivityCount                        ///< [out] the number of activity counters on the device
     )
 {
-    // extract driver's function pointer
-    auto pfnActivityCount = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnActivityCount;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnActivityCount( hPower, pActivityCount );
+    auto result = dditable->Power.pfnActivityCount( hPower, pActivityCount );
 
     return result;
 }
@@ -1638,14 +1639,14 @@ xetPowerGetActivityProperties(
     xet_activity_properties_t* pProperties          ///< [out] pointer to properties for this activity counter
     )
 {
-    // extract driver's function pointer
-    auto pfnGetActivityProperties = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnGetActivityProperties;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnGetActivityProperties( hPower, activityIndex, pProperties );
+    auto result = dditable->Power.pfnGetActivityProperties( hPower, activityIndex, pProperties );
 
     return result;
 }
@@ -1660,14 +1661,14 @@ xetPowerGetActivityCounters(
     xet_activity_counters_t* pCounters              ///< [out] pointer to an array of activity counter data
     )
 {
-    // extract driver's function pointer
-    auto pfnGetActivityCounters = reinterpret_cast<xet_power_object_t*>( hPower )->dditable->Power.pfnGetActivityCounters;
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
     
     // convert loader handle to driver handle
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
     
     // forward to device-driver
-    auto result = pfnGetActivityCounters( hPower, startCounterIndex, numCounters, pCounters );
+    auto result = dditable->Power.pfnGetActivityCounters( hPower, startCounterIndex, numCounters, pCounters );
 
     return result;
 }

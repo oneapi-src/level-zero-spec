@@ -995,8 +995,6 @@ Public:
 def make_loader_prologue_lines(namespace, tags, obj, meta):
     lines = []
 
-    tblname = get_table_name(namespace, tags, obj)
-    pfnname = make_pfn_name(namespace, tags, obj)
     params = _filter_param_list(obj['params'], ["in"])
     for i, item in enumerate(params):
         is_handle = type_traits.is_handle(item['type'])
@@ -1015,14 +1013,15 @@ def make_loader_prologue_lines(namespace, tags, obj, meta):
                 lines.append("// convert loader handles to driver handles")
                 lines.append("for( size_t i = %s; ( nullptr != %s ) && ( i < %s ); ++i )"%(range_start, name, range_end))
                 lines.append("    %s[ i ] = reinterpret_cast<%s*>( %s[ i ] )->handle;"%(name, obj_name, name))
+                lines.append("")
             else:
                 if param_traits.is_optional(item):
                     lines.append("%s = ( %s ) ? reinterpret_cast<%s*>( %s )->handle : nullptr;"%(name, name, obj_name, name))
+                    lines.append("")
                 else:
                     if i == 0:
-                        lines.append("// extract driver's function pointer")
-                        prologue = "%s."%get_table_name(namespace, tags, {'class': obj['class']})
-                        lines.append("auto %s = reinterpret_cast<%s*>( %s )->dditable->%s%s;"%(pfnname, obj_name, name, prologue, pfnname))
+                        lines.append("// extract driver's function pointer table")
+                        lines.append("auto dditable = reinterpret_cast<%s*>( %s )->dditable;"%(obj_name, name))
                         lines.append("")
 
                     lines.append("// convert loader handle to driver handle")
@@ -1054,15 +1053,15 @@ def make_loader_epilogue_lines(namespace, tags, obj, meta):
                 range_end   = param_traits.range_end(item)
                 lines.append("// convert driver handles to new loader handles")
                 lines.append("for( size_t i = %s; ( nullptr != %s ) && ( i < %s ); ++i )"%(range_start, name, range_end))
-                lines.append("    %s[ i ] = reinterpret_cast<%s>( /*temp:*/new %s { %s[ i ], /*todo:*/nullptr } );"%(name, tname, obj_name, name))
+                lines.append("    %s[ i ] = reinterpret_cast<%s>( /*temp:*/new %s { %s[ i ], dditable } );"%(name, tname, obj_name, name))
                 lines.append("")
 
             else:
                 lines.append("// convert driver handle to new loader handle")
                 if param_traits.is_optional(item):
-                    lines.append("if( nullptr != %s ) *%s = reinterpret_cast<%s>( /*temp:*/new %s { *%s, /*todo:*/nullptr } );"%(name, name, tname, obj_name, name))
+                    lines.append("if( nullptr != %s ) *%s = reinterpret_cast<%s>( /*temp:*/new %s { *%s, dditable } );"%(name, name, tname, obj_name, name))
                 else:
-                    lines.append("*%s = reinterpret_cast<%s>( /*temp:*/new %s { *%s, /*todo:*/nullptr } );"%(name, tname, obj_name, name))
+                    lines.append("*%s = reinterpret_cast<%s>( /*temp:*/new %s { *%s, dditable } );"%(name, tname, obj_name, name))
                 lines.append("")
 
     return lines
