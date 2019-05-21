@@ -97,6 +97,7 @@ xe_result_t EventImp::hostSynchronize(uint32_t timeout) {
         _mm_pause();
 
         time2 = std::chrono::high_resolution_clock::now();
+        /* TODO: Check if we need microsecs conversion here? */
         timeDiff = std::chrono::duration_cast<std::chrono::microseconds>(time2 - time1).count();
     }
 
