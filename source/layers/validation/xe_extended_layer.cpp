@@ -42,19 +42,19 @@ extern "C" {
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xexGetGlobalProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xex_global_dditable_t* ptable                   ///< [in,out] pointer to table of DDI function pointers
+    xex_global_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xexDdiTable.Global;
+    auto& dditable = xe_layer::val.xexDdiTable.Global;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -63,8 +63,8 @@ xexGetGlobalProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnInit                                                 = ptable->pfnInit;
-    ptable->pfnInit                                                 = xexInit;
+    dditable.pfnInit                                     = pDdiTable->pfnInit;
+    pDdiTable->pfnInit                                   = xexInit;
 
     return result;
 }
@@ -77,19 +77,19 @@ xexGetGlobalProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xexGetCommandGraphProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xex_command_graph_dditable_t* ptable            ///< [in,out] pointer to table of DDI function pointers
+    xex_command_graph_dditable_t* pDdiTable         ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xexDdiTable.CommandGraph;
+    auto& dditable = xe_layer::val.xexDdiTable.CommandGraph;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -98,14 +98,14 @@ xexGetCommandGraphProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                               = xexCommandGraphCreate;
+    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
+    pDdiTable->pfnCreate                                 = xexCommandGraphCreate;
 
-    mytable.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                              = xexCommandGraphDestroy;
+    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
+    pDdiTable->pfnDestroy                                = xexCommandGraphDestroy;
 
-    mytable.pfnClose                                                = ptable->pfnClose;
-    ptable->pfnClose                                                = xexCommandGraphClose;
+    dditable.pfnClose                                    = pDdiTable->pfnClose;
+    pDdiTable->pfnClose                                  = xexCommandGraphClose;
 
     return result;
 }

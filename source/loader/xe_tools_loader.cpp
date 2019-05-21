@@ -42,22 +42,23 @@ extern "C" {
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetGlobalProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_global_dditable_t* ptable                   ///< [in,out] pointer to table of DDI function pointers
+    xet_global_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-#ifdef _DEBUG
-    if( nullptr == ptable )
+    if( xe_loader::loader.drivers.size() < 1 )
+        return XE_RESULT_ERROR_UNINITIALIZED;
+
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_loader::loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -70,14 +71,28 @@ xetGetGlobalProcAddrTable(
                 GET_FUNCTION_PTR( drv.handle, "xetGetGlobalProcAddrTable") );
             result = getTable( version, &drv.xetDdiTable.Global );
         }
+    }
 
-        // If the validation layer is enabled, then intercept the device-driver DDI tables
-        if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if( XE_RESULT_SUCCESS == result )
+    {
+        if( xe_loader::loader.drivers.size() > 1 )
         {
-            static auto getTable = reinterpret_cast<xet_pfnGetGlobalProcAddrTable_t>(
-                GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetGlobalProcAddrTable") );
-            result = getTable( version, &drv.xetDdiTable.Global );
+            // return pointers to loader's DDIs
+            pDdiTable->pfnInit                                     = xetInit;
         }
+        else
+        {
+            // return pointers directly to driver's DDIs
+            *pDdiTable = xe_loader::loader.drivers.front().xetDdiTable.Global;
+        }
+    }
+
+    // If the validation layer is enabled, then intercept the loader's DDIs
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetGlobalProcAddrTable_t>(
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetGlobalProcAddrTable") );
+        result = getTable( version, pDdiTable );
     }
 
     return result;
@@ -91,22 +106,23 @@ xetGetGlobalProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetDeviceProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_device_dditable_t* ptable                   ///< [in,out] pointer to table of DDI function pointers
+    xet_device_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-#ifdef _DEBUG
-    if( nullptr == ptable )
+    if( xe_loader::loader.drivers.size() < 1 )
+        return XE_RESULT_ERROR_UNINITIALIZED;
+
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_loader::loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -119,14 +135,28 @@ xetGetDeviceProcAddrTable(
                 GET_FUNCTION_PTR( drv.handle, "xetGetDeviceProcAddrTable") );
             result = getTable( version, &drv.xetDdiTable.Device );
         }
+    }
 
-        // If the validation layer is enabled, then intercept the device-driver DDI tables
-        if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if( XE_RESULT_SUCCESS == result )
+    {
+        if( xe_loader::loader.drivers.size() > 1 )
         {
-            static auto getTable = reinterpret_cast<xet_pfnGetDeviceProcAddrTable_t>(
-                GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetDeviceProcAddrTable") );
-            result = getTable( version, &drv.xetDdiTable.Device );
+            // return pointers to loader's DDIs
+            pDdiTable->pfnActivateMetricGroups                     = xetDeviceActivateMetricGroups;
         }
+        else
+        {
+            // return pointers directly to driver's DDIs
+            *pDdiTable = xe_loader::loader.drivers.front().xetDdiTable.Device;
+        }
+    }
+
+    // If the validation layer is enabled, then intercept the loader's DDIs
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetDeviceProcAddrTable_t>(
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetDeviceProcAddrTable") );
+        result = getTable( version, pDdiTable );
     }
 
     return result;
@@ -140,22 +170,23 @@ xetGetDeviceProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetCommandListProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_command_list_dditable_t* ptable             ///< [in,out] pointer to table of DDI function pointers
+    xet_command_list_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
     )
 {
-#ifdef _DEBUG
-    if( nullptr == ptable )
+    if( xe_loader::loader.drivers.size() < 1 )
+        return XE_RESULT_ERROR_UNINITIALIZED;
+
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_loader::loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -168,14 +199,31 @@ xetGetCommandListProcAddrTable(
                 GET_FUNCTION_PTR( drv.handle, "xetGetCommandListProcAddrTable") );
             result = getTable( version, &drv.xetDdiTable.CommandList );
         }
+    }
 
-        // If the validation layer is enabled, then intercept the device-driver DDI tables
-        if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if( XE_RESULT_SUCCESS == result )
+    {
+        if( xe_loader::loader.drivers.size() > 1 )
         {
-            static auto getTable = reinterpret_cast<xet_pfnGetCommandListProcAddrTable_t>(
-                GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetCommandListProcAddrTable") );
-            result = getTable( version, &drv.xetDdiTable.CommandList );
+            // return pointers to loader's DDIs
+            pDdiTable->pfnAppendMetricTracerMarker                 = xetCommandListAppendMetricTracerMarker;
+            pDdiTable->pfnAppendMetricQueryBegin                   = xetCommandListAppendMetricQueryBegin;
+            pDdiTable->pfnAppendMetricQueryEnd                     = xetCommandListAppendMetricQueryEnd;
+            pDdiTable->pfnAppendMetricMemoryBarrier                = xetCommandListAppendMetricMemoryBarrier;
         }
+        else
+        {
+            // return pointers directly to driver's DDIs
+            *pDdiTable = xe_loader::loader.drivers.front().xetDdiTable.CommandList;
+        }
+    }
+
+    // If the validation layer is enabled, then intercept the loader's DDIs
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetCommandListProcAddrTable_t>(
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetCommandListProcAddrTable") );
+        result = getTable( version, pDdiTable );
     }
 
     return result;
@@ -189,22 +237,23 @@ xetGetCommandListProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricGroupProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_group_dditable_t* ptable             ///< [in,out] pointer to table of DDI function pointers
+    xet_metric_group_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
     )
 {
-#ifdef _DEBUG
-    if( nullptr == ptable )
+    if( xe_loader::loader.drivers.size() < 1 )
+        return XE_RESULT_ERROR_UNINITIALIZED;
+
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_loader::loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -217,14 +266,31 @@ xetGetMetricGroupProcAddrTable(
                 GET_FUNCTION_PTR( drv.handle, "xetGetMetricGroupProcAddrTable") );
             result = getTable( version, &drv.xetDdiTable.MetricGroup );
         }
+    }
 
-        // If the validation layer is enabled, then intercept the device-driver DDI tables
-        if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if( XE_RESULT_SUCCESS == result )
+    {
+        if( xe_loader::loader.drivers.size() > 1 )
         {
-            static auto getTable = reinterpret_cast<xet_pfnGetMetricGroupProcAddrTable_t>(
-                GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetMetricGroupProcAddrTable") );
-            result = getTable( version, &drv.xetDdiTable.MetricGroup );
+            // return pointers to loader's DDIs
+            pDdiTable->pfnGetCount                                 = xetMetricGroupGetCount;
+            pDdiTable->pfnGet                                      = xetMetricGroupGet;
+            pDdiTable->pfnGetProperties                            = xetMetricGroupGetProperties;
+            pDdiTable->pfnCalculateData                            = xetMetricGroupCalculateData;
         }
+        else
+        {
+            // return pointers directly to driver's DDIs
+            *pDdiTable = xe_loader::loader.drivers.front().xetDdiTable.MetricGroup;
+        }
+    }
+
+    // If the validation layer is enabled, then intercept the loader's DDIs
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetMetricGroupProcAddrTable_t>(
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetMetricGroupProcAddrTable") );
+        result = getTable( version, pDdiTable );
     }
 
     return result;
@@ -238,22 +304,23 @@ xetGetMetricGroupProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_dditable_t* ptable                   ///< [in,out] pointer to table of DDI function pointers
+    xet_metric_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-#ifdef _DEBUG
-    if( nullptr == ptable )
+    if( xe_loader::loader.drivers.size() < 1 )
+        return XE_RESULT_ERROR_UNINITIALIZED;
+
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_loader::loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -266,14 +333,29 @@ xetGetMetricProcAddrTable(
                 GET_FUNCTION_PTR( drv.handle, "xetGetMetricProcAddrTable") );
             result = getTable( version, &drv.xetDdiTable.Metric );
         }
+    }
 
-        // If the validation layer is enabled, then intercept the device-driver DDI tables
-        if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if( XE_RESULT_SUCCESS == result )
+    {
+        if( xe_loader::loader.drivers.size() > 1 )
         {
-            static auto getTable = reinterpret_cast<xet_pfnGetMetricProcAddrTable_t>(
-                GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetMetricProcAddrTable") );
-            result = getTable( version, &drv.xetDdiTable.Metric );
+            // return pointers to loader's DDIs
+            pDdiTable->pfnGet                                      = xetMetricGet;
+            pDdiTable->pfnGetProperties                            = xetMetricGetProperties;
         }
+        else
+        {
+            // return pointers directly to driver's DDIs
+            *pDdiTable = xe_loader::loader.drivers.front().xetDdiTable.Metric;
+        }
+    }
+
+    // If the validation layer is enabled, then intercept the loader's DDIs
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetMetricProcAddrTable_t>(
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetMetricProcAddrTable") );
+        result = getTable( version, pDdiTable );
     }
 
     return result;
@@ -287,22 +369,23 @@ xetGetMetricProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricTracerProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_tracer_dditable_t* ptable            ///< [in,out] pointer to table of DDI function pointers
+    xet_metric_tracer_dditable_t* pDdiTable         ///< [in,out] pointer to table of DDI function pointers
     )
 {
-#ifdef _DEBUG
-    if( nullptr == ptable )
+    if( xe_loader::loader.drivers.size() < 1 )
+        return XE_RESULT_ERROR_UNINITIALIZED;
+
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_loader::loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -315,14 +398,30 @@ xetGetMetricTracerProcAddrTable(
                 GET_FUNCTION_PTR( drv.handle, "xetGetMetricTracerProcAddrTable") );
             result = getTable( version, &drv.xetDdiTable.MetricTracer );
         }
+    }
 
-        // If the validation layer is enabled, then intercept the device-driver DDI tables
-        if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if( XE_RESULT_SUCCESS == result )
+    {
+        if( xe_loader::loader.drivers.size() > 1 )
         {
-            static auto getTable = reinterpret_cast<xet_pfnGetMetricTracerProcAddrTable_t>(
-                GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetMetricTracerProcAddrTable") );
-            result = getTable( version, &drv.xetDdiTable.MetricTracer );
+            // return pointers to loader's DDIs
+            pDdiTable->pfnOpen                                     = xetMetricTracerOpen;
+            pDdiTable->pfnClose                                    = xetMetricTracerClose;
+            pDdiTable->pfnReadData                                 = xetMetricTracerReadData;
         }
+        else
+        {
+            // return pointers directly to driver's DDIs
+            *pDdiTable = xe_loader::loader.drivers.front().xetDdiTable.MetricTracer;
+        }
+    }
+
+    // If the validation layer is enabled, then intercept the loader's DDIs
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetMetricTracerProcAddrTable_t>(
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetMetricTracerProcAddrTable") );
+        result = getTable( version, pDdiTable );
     }
 
     return result;
@@ -336,22 +435,23 @@ xetGetMetricTracerProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricQueryPoolProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_query_pool_dditable_t* ptable        ///< [in,out] pointer to table of DDI function pointers
+    xet_metric_query_pool_dditable_t* pDdiTable     ///< [in,out] pointer to table of DDI function pointers
     )
 {
-#ifdef _DEBUG
-    if( nullptr == ptable )
+    if( xe_loader::loader.drivers.size() < 1 )
+        return XE_RESULT_ERROR_UNINITIALIZED;
+
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_loader::loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -364,14 +464,30 @@ xetGetMetricQueryPoolProcAddrTable(
                 GET_FUNCTION_PTR( drv.handle, "xetGetMetricQueryPoolProcAddrTable") );
             result = getTable( version, &drv.xetDdiTable.MetricQueryPool );
         }
+    }
 
-        // If the validation layer is enabled, then intercept the device-driver DDI tables
-        if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if( XE_RESULT_SUCCESS == result )
+    {
+        if( xe_loader::loader.drivers.size() > 1 )
         {
-            static auto getTable = reinterpret_cast<xet_pfnGetMetricQueryPoolProcAddrTable_t>(
-                GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetMetricQueryPoolProcAddrTable") );
-            result = getTable( version, &drv.xetDdiTable.MetricQueryPool );
+            // return pointers to loader's DDIs
+            pDdiTable->pfnCreate                                   = xetMetricQueryPoolCreate;
+            pDdiTable->pfnDestroy                                  = xetMetricQueryPoolDestroy;
+            pDdiTable->pfnGetMetricQuery                           = xetMetricQueryPoolGetMetricQuery;
         }
+        else
+        {
+            // return pointers directly to driver's DDIs
+            *pDdiTable = xe_loader::loader.drivers.front().xetDdiTable.MetricQueryPool;
+        }
+    }
+
+    // If the validation layer is enabled, then intercept the loader's DDIs
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetMetricQueryPoolProcAddrTable_t>(
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetMetricQueryPoolProcAddrTable") );
+        result = getTable( version, pDdiTable );
     }
 
     return result;
@@ -385,22 +501,23 @@ xetGetMetricQueryPoolProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricQueryProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_query_dditable_t* ptable             ///< [in,out] pointer to table of DDI function pointers
+    xet_metric_query_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
     )
 {
-#ifdef _DEBUG
-    if( nullptr == ptable )
+    if( xe_loader::loader.drivers.size() < 1 )
+        return XE_RESULT_ERROR_UNINITIALIZED;
+
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_loader::loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -413,14 +530,28 @@ xetGetMetricQueryProcAddrTable(
                 GET_FUNCTION_PTR( drv.handle, "xetGetMetricQueryProcAddrTable") );
             result = getTable( version, &drv.xetDdiTable.MetricQuery );
         }
+    }
 
-        // If the validation layer is enabled, then intercept the device-driver DDI tables
-        if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if( XE_RESULT_SUCCESS == result )
+    {
+        if( xe_loader::loader.drivers.size() > 1 )
         {
-            static auto getTable = reinterpret_cast<xet_pfnGetMetricQueryProcAddrTable_t>(
-                GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetMetricQueryProcAddrTable") );
-            result = getTable( version, &drv.xetDdiTable.MetricQuery );
+            // return pointers to loader's DDIs
+            pDdiTable->pfnGetData                                  = xetMetricQueryGetData;
         }
+        else
+        {
+            // return pointers directly to driver's DDIs
+            *pDdiTable = xe_loader::loader.drivers.front().xetDdiTable.MetricQuery;
+        }
+    }
+
+    // If the validation layer is enabled, then intercept the loader's DDIs
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetMetricQueryProcAddrTable_t>(
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetMetricQueryProcAddrTable") );
+        result = getTable( version, pDdiTable );
     }
 
     return result;
@@ -434,22 +565,23 @@ xetGetMetricQueryProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetPowerProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_power_dditable_t* ptable                    ///< [in,out] pointer to table of DDI function pointers
+    xet_power_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     )
 {
-#ifdef _DEBUG
-    if( nullptr == ptable )
+    if( xe_loader::loader.drivers.size() < 1 )
+        return XE_RESULT_ERROR_UNINITIALIZED;
+
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_loader::loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -462,14 +594,56 @@ xetGetPowerProcAddrTable(
                 GET_FUNCTION_PTR( drv.handle, "xetGetPowerProcAddrTable") );
             result = getTable( version, &drv.xetDdiTable.Power );
         }
+    }
 
-        // If the validation layer is enabled, then intercept the device-driver DDI tables
-        if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if( XE_RESULT_SUCCESS == result )
+    {
+        if( xe_loader::loader.drivers.size() > 1 )
         {
-            static auto getTable = reinterpret_cast<xet_pfnGetPowerProcAddrTable_t>(
-                GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetPowerProcAddrTable") );
-            result = getTable( version, &drv.xetDdiTable.Power );
+            // return pointers to loader's DDIs
+            pDdiTable->pfnCreate                                   = xetPowerCreate;
+            pDdiTable->pfnDestroy                                  = xetPowerDestroy;
+            pDdiTable->pfnGetAveragePowerLimit                     = xetPowerGetAveragePowerLimit;
+            pDdiTable->pfnGetBurstPowerLimit                       = xetPowerGetBurstPowerLimit;
+            pDdiTable->pfnGetPeakPowerLimit                        = xetPowerGetPeakPowerLimit;
+            pDdiTable->pfnGetAllPowerLimits                        = xetPowerGetAllPowerLimits;
+            pDdiTable->pfnGetDefaultPowerLimits                    = xetPowerGetDefaultPowerLimits;
+            pDdiTable->pfnSetAveragePowerLimit                     = xetPowerSetAveragePowerLimit;
+            pDdiTable->pfnSetBurstPowerLimit                       = xetPowerSetBurstPowerLimit;
+            pDdiTable->pfnSetPeakPowerLimit                        = xetPowerSetPeakPowerLimit;
+            pDdiTable->pfnSetPowerLimits                           = xetPowerSetPowerLimits;
+            pDdiTable->pfnGetEnergyCounter                         = xetPowerGetEnergyCounter;
+            pDdiTable->pfnGetTurboMode                             = xetPowerGetTurboMode;
+            pDdiTable->pfnSetTurboMode                             = xetPowerSetTurboMode;
+            pDdiTable->pfnGetFreqDomainCount                       = xetPowerGetFreqDomainCount;
+            pDdiTable->pfnGetFreqDomain                            = xetPowerGetFreqDomain;
+            pDdiTable->pfnFanCount                                 = xetPowerFanCount;
+            pDdiTable->pfnFanGetProperties                         = xetPowerFanGetProperties;
+            pDdiTable->pfnFanGetSpeedTable                         = xetPowerFanGetSpeedTable;
+            pDdiTable->pfnFanSetSpeedTable                         = xetPowerFanSetSpeedTable;
+            pDdiTable->pfnFanGetSpeed                              = xetPowerFanGetSpeed;
+            pDdiTable->pfnFanSetSpeed                              = xetPowerFanSetSpeed;
+            pDdiTable->pfnTemperatureSensorCount                   = xetPowerTemperatureSensorCount;
+            pDdiTable->pfnGetTemperatureProperties                 = xetPowerGetTemperatureProperties;
+            pDdiTable->pfnGetTemperature                           = xetPowerGetTemperature;
+            pDdiTable->pfnSetTemperatureThreshold                  = xetPowerSetTemperatureThreshold;
+            pDdiTable->pfnActivityCount                            = xetPowerActivityCount;
+            pDdiTable->pfnGetActivityProperties                    = xetPowerGetActivityProperties;
+            pDdiTable->pfnGetActivityCounters                      = xetPowerGetActivityCounters;
         }
+        else
+        {
+            // return pointers directly to driver's DDIs
+            *pDdiTable = xe_loader::loader.drivers.front().xetDdiTable.Power;
+        }
+    }
+
+    // If the validation layer is enabled, then intercept the loader's DDIs
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetPowerProcAddrTable_t>(
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetPowerProcAddrTable") );
+        result = getTable( version, pDdiTable );
     }
 
     return result;
@@ -483,22 +657,23 @@ xetGetPowerProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetFreqDomainProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_freq_domain_dditable_t* ptable              ///< [in,out] pointer to table of DDI function pointers
+    xet_freq_domain_dditable_t* pDdiTable           ///< [in,out] pointer to table of DDI function pointers
     )
 {
-#ifdef _DEBUG
-    if( nullptr == ptable )
+    if( xe_loader::loader.drivers.size() < 1 )
+        return XE_RESULT_ERROR_UNINITIALIZED;
+
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_loader::loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -511,14 +686,35 @@ xetGetFreqDomainProcAddrTable(
                 GET_FUNCTION_PTR( drv.handle, "xetGetFreqDomainProcAddrTable") );
             result = getTable( version, &drv.xetDdiTable.FreqDomain );
         }
+    }
 
-        // If the validation layer is enabled, then intercept the device-driver DDI tables
-        if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if( XE_RESULT_SUCCESS == result )
+    {
+        if( xe_loader::loader.drivers.size() > 1 )
         {
-            static auto getTable = reinterpret_cast<xet_pfnGetFreqDomainProcAddrTable_t>(
-                GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetFreqDomainProcAddrTable") );
-            result = getTable( version, &drv.xetDdiTable.FreqDomain );
+            // return pointers to loader's DDIs
+            pDdiTable->pfnGetProperties                            = xetFreqDomainGetProperties;
+            pDdiTable->pfnGetSourceFreqDomain                      = xetFreqDomainGetSourceFreqDomain;
+            pDdiTable->pfnGetSupportedClocks                       = xetFreqDomainGetSupportedClocks;
+            pDdiTable->pfnGetSupportedClockDividers                = xetFreqDomainGetSupportedClockDividers;
+            pDdiTable->pfnGetClockRange                            = xetFreqDomainGetClockRange;
+            pDdiTable->pfnSetClockRange                            = xetFreqDomainSetClockRange;
+            pDdiTable->pfnSetClockDivider                          = xetFreqDomainSetClockDivider;
+            pDdiTable->pfnGetCurrentFrequency                      = xetFreqDomainGetCurrentFrequency;
         }
+        else
+        {
+            // return pointers directly to driver's DDIs
+            *pDdiTable = xe_loader::loader.drivers.front().xetDdiTable.FreqDomain;
+        }
+    }
+
+    // If the validation layer is enabled, then intercept the loader's DDIs
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetFreqDomainProcAddrTable_t>(
+            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetFreqDomainProcAddrTable") );
+        result = getTable( version, pDdiTable );
     }
 
     return result;

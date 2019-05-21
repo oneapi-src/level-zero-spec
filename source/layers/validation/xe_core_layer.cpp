@@ -42,19 +42,19 @@ extern "C" {
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetGlobalProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_global_dditable_t* ptable                    ///< [in,out] pointer to table of DDI function pointers
+    xe_global_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeDdiTable.Global;
+    auto& dditable = xe_layer::val.xeDdiTable.Global;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -63,11 +63,11 @@ xeGetGlobalProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnInit                                                 = ptable->pfnInit;
-    ptable->pfnInit                                                 = xeInit;
+    dditable.pfnInit                                     = pDdiTable->pfnInit;
+    pDdiTable->pfnInit                                   = xeInit;
 
-    mytable.pfnGetDeviceGroups                                      = ptable->pfnGetDeviceGroups;
-    ptable->pfnGetDeviceGroups                                      = xeGetDeviceGroups;
+    dditable.pfnGetDeviceGroups                          = pDdiTable->pfnGetDeviceGroups;
+    pDdiTable->pfnGetDeviceGroups                        = xeGetDeviceGroups;
 
     return result;
 }
@@ -80,19 +80,19 @@ xeGetGlobalProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetDeviceProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_device_dditable_t* ptable                    ///< [in,out] pointer to table of DDI function pointers
+    xe_device_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeDdiTable.Device;
+    auto& dditable = xe_layer::val.xeDdiTable.Device;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -101,50 +101,50 @@ xeGetDeviceProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnGetSubDevice                                         = ptable->pfnGetSubDevice;
-    ptable->pfnGetSubDevice                                         = xeDeviceGetSubDevice;
+    dditable.pfnGetSubDevice                             = pDdiTable->pfnGetSubDevice;
+    pDdiTable->pfnGetSubDevice                           = xeDeviceGetSubDevice;
 
-    mytable.pfnGetP2PProperties                                     = ptable->pfnGetP2PProperties;
-    ptable->pfnGetP2PProperties                                     = xeDeviceGetP2PProperties;
+    dditable.pfnGetP2PProperties                         = pDdiTable->pfnGetP2PProperties;
+    pDdiTable->pfnGetP2PProperties                       = xeDeviceGetP2PProperties;
 
-    mytable.pfnCanAccessPeer                                        = ptable->pfnCanAccessPeer;
-    ptable->pfnCanAccessPeer                                        = xeDeviceCanAccessPeer;
+    dditable.pfnCanAccessPeer                            = pDdiTable->pfnCanAccessPeer;
+    pDdiTable->pfnCanAccessPeer                          = xeDeviceCanAccessPeer;
 
-    mytable.pfnSetIntermediateCacheConfig                           = ptable->pfnSetIntermediateCacheConfig;
-    ptable->pfnSetIntermediateCacheConfig                           = xeDeviceSetIntermediateCacheConfig;
+    dditable.pfnSetIntermediateCacheConfig               = pDdiTable->pfnSetIntermediateCacheConfig;
+    pDdiTable->pfnSetIntermediateCacheConfig             = xeDeviceSetIntermediateCacheConfig;
 
-    mytable.pfnSetLastLevelCacheConfig                              = ptable->pfnSetLastLevelCacheConfig;
-    ptable->pfnSetLastLevelCacheConfig                              = xeDeviceSetLastLevelCacheConfig;
+    dditable.pfnSetLastLevelCacheConfig                  = pDdiTable->pfnSetLastLevelCacheConfig;
+    pDdiTable->pfnSetLastLevelCacheConfig                = xeDeviceSetLastLevelCacheConfig;
 
-    mytable.pfnSystemBarrier                                        = ptable->pfnSystemBarrier;
-    ptable->pfnSystemBarrier                                        = xeDeviceSystemBarrier;
+    dditable.pfnSystemBarrier                            = pDdiTable->pfnSystemBarrier;
+    pDdiTable->pfnSystemBarrier                          = xeDeviceSystemBarrier;
 
 #if XE_ENABLE_OCL_INTEROP
-    mytable.pfnRegisterCLMemory                                     = ptable->pfnRegisterCLMemory;
-    ptable->pfnRegisterCLMemory                                     = xeDeviceRegisterCLMemory;
+    dditable.pfnRegisterCLMemory                         = pDdiTable->pfnRegisterCLMemory;
+    pDdiTable->pfnRegisterCLMemory                       = xeDeviceRegisterCLMemory;
 #endif
 
 #if XE_ENABLE_OCL_INTEROP
-    mytable.pfnRegisterCLProgram                                    = ptable->pfnRegisterCLProgram;
-    ptable->pfnRegisterCLProgram                                    = xeDeviceRegisterCLProgram;
+    dditable.pfnRegisterCLProgram                        = pDdiTable->pfnRegisterCLProgram;
+    pDdiTable->pfnRegisterCLProgram                      = xeDeviceRegisterCLProgram;
 #endif
 
 #if XE_ENABLE_OCL_INTEROP
-    mytable.pfnRegisterCLCommandQueue                               = ptable->pfnRegisterCLCommandQueue;
-    ptable->pfnRegisterCLCommandQueue                               = xeDeviceRegisterCLCommandQueue;
+    dditable.pfnRegisterCLCommandQueue                   = pDdiTable->pfnRegisterCLCommandQueue;
+    pDdiTable->pfnRegisterCLCommandQueue                 = xeDeviceRegisterCLCommandQueue;
 #endif
 
-    mytable.pfnMakeMemoryResident                                   = ptable->pfnMakeMemoryResident;
-    ptable->pfnMakeMemoryResident                                   = xeDeviceMakeMemoryResident;
+    dditable.pfnMakeMemoryResident                       = pDdiTable->pfnMakeMemoryResident;
+    pDdiTable->pfnMakeMemoryResident                     = xeDeviceMakeMemoryResident;
 
-    mytable.pfnEvictMemory                                          = ptable->pfnEvictMemory;
-    ptable->pfnEvictMemory                                          = xeDeviceEvictMemory;
+    dditable.pfnEvictMemory                              = pDdiTable->pfnEvictMemory;
+    pDdiTable->pfnEvictMemory                            = xeDeviceEvictMemory;
 
-    mytable.pfnMakeImageResident                                    = ptable->pfnMakeImageResident;
-    ptable->pfnMakeImageResident                                    = xeDeviceMakeImageResident;
+    dditable.pfnMakeImageResident                        = pDdiTable->pfnMakeImageResident;
+    pDdiTable->pfnMakeImageResident                      = xeDeviceMakeImageResident;
 
-    mytable.pfnEvictImage                                           = ptable->pfnEvictImage;
-    ptable->pfnEvictImage                                           = xeDeviceEvictImage;
+    dditable.pfnEvictImage                               = pDdiTable->pfnEvictImage;
+    pDdiTable->pfnEvictImage                             = xeDeviceEvictImage;
 
     return result;
 }
@@ -157,19 +157,19 @@ xeGetDeviceProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetDeviceGroupProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_device_group_dditable_t* ptable              ///< [in,out] pointer to table of DDI function pointers
+    xe_device_group_dditable_t* pDdiTable           ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeDdiTable.DeviceGroup;
+    auto& dditable = xe_layer::val.xeDdiTable.DeviceGroup;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -178,50 +178,50 @@ xeGetDeviceGroupProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnGetDriverVersion                                     = ptable->pfnGetDriverVersion;
-    ptable->pfnGetDriverVersion                                     = xeDeviceGroupGetDriverVersion;
+    dditable.pfnGetDriverVersion                         = pDdiTable->pfnGetDriverVersion;
+    pDdiTable->pfnGetDriverVersion                       = xeDeviceGroupGetDriverVersion;
 
-    mytable.pfnGetDevices                                           = ptable->pfnGetDevices;
-    ptable->pfnGetDevices                                           = xeDeviceGroupGetDevices;
+    dditable.pfnGetDevices                               = pDdiTable->pfnGetDevices;
+    pDdiTable->pfnGetDevices                             = xeDeviceGroupGetDevices;
 
-    mytable.pfnGetApiVersion                                        = ptable->pfnGetApiVersion;
-    ptable->pfnGetApiVersion                                        = xeDeviceGroupGetApiVersion;
+    dditable.pfnGetApiVersion                            = pDdiTable->pfnGetApiVersion;
+    pDdiTable->pfnGetApiVersion                          = xeDeviceGroupGetApiVersion;
 
-    mytable.pfnGetProperties                                        = ptable->pfnGetProperties;
-    ptable->pfnGetProperties                                        = xeDeviceGroupGetProperties;
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = xeDeviceGroupGetProperties;
 
-    mytable.pfnGetComputeProperties                                 = ptable->pfnGetComputeProperties;
-    ptable->pfnGetComputeProperties                                 = xeDeviceGroupGetComputeProperties;
+    dditable.pfnGetComputeProperties                     = pDdiTable->pfnGetComputeProperties;
+    pDdiTable->pfnGetComputeProperties                   = xeDeviceGroupGetComputeProperties;
 
-    mytable.pfnGetMemoryProperties                                  = ptable->pfnGetMemoryProperties;
-    ptable->pfnGetMemoryProperties                                  = xeDeviceGroupGetMemoryProperties;
+    dditable.pfnGetMemoryProperties                      = pDdiTable->pfnGetMemoryProperties;
+    pDdiTable->pfnGetMemoryProperties                    = xeDeviceGroupGetMemoryProperties;
 
-    mytable.pfnAllocSharedMem                                       = ptable->pfnAllocSharedMem;
-    ptable->pfnAllocSharedMem                                       = xeDeviceGroupAllocSharedMem;
+    dditable.pfnAllocSharedMem                           = pDdiTable->pfnAllocSharedMem;
+    pDdiTable->pfnAllocSharedMem                         = xeDeviceGroupAllocSharedMem;
 
-    mytable.pfnAllocDeviceMem                                       = ptable->pfnAllocDeviceMem;
-    ptable->pfnAllocDeviceMem                                       = xeDeviceGroupAllocDeviceMem;
+    dditable.pfnAllocDeviceMem                           = pDdiTable->pfnAllocDeviceMem;
+    pDdiTable->pfnAllocDeviceMem                         = xeDeviceGroupAllocDeviceMem;
 
-    mytable.pfnAllocHostMem                                         = ptable->pfnAllocHostMem;
-    ptable->pfnAllocHostMem                                         = xeDeviceGroupAllocHostMem;
+    dditable.pfnAllocHostMem                             = pDdiTable->pfnAllocHostMem;
+    pDdiTable->pfnAllocHostMem                           = xeDeviceGroupAllocHostMem;
 
-    mytable.pfnFreeMem                                              = ptable->pfnFreeMem;
-    ptable->pfnFreeMem                                              = xeDeviceGroupFreeMem;
+    dditable.pfnFreeMem                                  = pDdiTable->pfnFreeMem;
+    pDdiTable->pfnFreeMem                                = xeDeviceGroupFreeMem;
 
-    mytable.pfnGetMemProperties                                     = ptable->pfnGetMemProperties;
-    ptable->pfnGetMemProperties                                     = xeDeviceGroupGetMemProperties;
+    dditable.pfnGetMemProperties                         = pDdiTable->pfnGetMemProperties;
+    pDdiTable->pfnGetMemProperties                       = xeDeviceGroupGetMemProperties;
 
-    mytable.pfnGetMemAddressRange                                   = ptable->pfnGetMemAddressRange;
-    ptable->pfnGetMemAddressRange                                   = xeDeviceGroupGetMemAddressRange;
+    dditable.pfnGetMemAddressRange                       = pDdiTable->pfnGetMemAddressRange;
+    pDdiTable->pfnGetMemAddressRange                     = xeDeviceGroupGetMemAddressRange;
 
-    mytable.pfnGetMemIpcHandle                                      = ptable->pfnGetMemIpcHandle;
-    ptable->pfnGetMemIpcHandle                                      = xeDeviceGroupGetMemIpcHandle;
+    dditable.pfnGetMemIpcHandle                          = pDdiTable->pfnGetMemIpcHandle;
+    pDdiTable->pfnGetMemIpcHandle                        = xeDeviceGroupGetMemIpcHandle;
 
-    mytable.pfnOpenMemIpcHandle                                     = ptable->pfnOpenMemIpcHandle;
-    ptable->pfnOpenMemIpcHandle                                     = xeDeviceGroupOpenMemIpcHandle;
+    dditable.pfnOpenMemIpcHandle                         = pDdiTable->pfnOpenMemIpcHandle;
+    pDdiTable->pfnOpenMemIpcHandle                       = xeDeviceGroupOpenMemIpcHandle;
 
-    mytable.pfnCloseMemIpcHandle                                    = ptable->pfnCloseMemIpcHandle;
-    ptable->pfnCloseMemIpcHandle                                    = xeDeviceGroupCloseMemIpcHandle;
+    dditable.pfnCloseMemIpcHandle                        = pDdiTable->pfnCloseMemIpcHandle;
+    pDdiTable->pfnCloseMemIpcHandle                      = xeDeviceGroupCloseMemIpcHandle;
 
     return result;
 }
@@ -234,19 +234,19 @@ xeGetDeviceGroupProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetCommandQueueProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_command_queue_dditable_t* ptable             ///< [in,out] pointer to table of DDI function pointers
+    xe_command_queue_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeDdiTable.CommandQueue;
+    auto& dditable = xe_layer::val.xeDdiTable.CommandQueue;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -255,17 +255,17 @@ xeGetCommandQueueProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                               = xeCommandQueueCreate;
+    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
+    pDdiTable->pfnCreate                                 = xeCommandQueueCreate;
 
-    mytable.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                              = xeCommandQueueDestroy;
+    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
+    pDdiTable->pfnDestroy                                = xeCommandQueueDestroy;
 
-    mytable.pfnExecuteCommandLists                                  = ptable->pfnExecuteCommandLists;
-    ptable->pfnExecuteCommandLists                                  = xeCommandQueueExecuteCommandLists;
+    dditable.pfnExecuteCommandLists                      = pDdiTable->pfnExecuteCommandLists;
+    pDdiTable->pfnExecuteCommandLists                    = xeCommandQueueExecuteCommandLists;
 
-    mytable.pfnSynchronize                                          = ptable->pfnSynchronize;
-    ptable->pfnSynchronize                                          = xeCommandQueueSynchronize;
+    dditable.pfnSynchronize                              = pDdiTable->pfnSynchronize;
+    pDdiTable->pfnSynchronize                            = xeCommandQueueSynchronize;
 
     return result;
 }
@@ -278,19 +278,19 @@ xeGetCommandQueueProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetCommandListProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_command_list_dditable_t* ptable              ///< [in,out] pointer to table of DDI function pointers
+    xe_command_list_dditable_t* pDdiTable           ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeDdiTable.CommandList;
+    auto& dditable = xe_layer::val.xeDdiTable.CommandList;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -299,86 +299,86 @@ xeGetCommandListProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                               = xeCommandListCreate;
+    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
+    pDdiTable->pfnCreate                                 = xeCommandListCreate;
 
-    mytable.pfnCreateImmediate                                      = ptable->pfnCreateImmediate;
-    ptable->pfnCreateImmediate                                      = xeCommandListCreateImmediate;
+    dditable.pfnCreateImmediate                          = pDdiTable->pfnCreateImmediate;
+    pDdiTable->pfnCreateImmediate                        = xeCommandListCreateImmediate;
 
-    mytable.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                              = xeCommandListDestroy;
+    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
+    pDdiTable->pfnDestroy                                = xeCommandListDestroy;
 
-    mytable.pfnClose                                                = ptable->pfnClose;
-    ptable->pfnClose                                                = xeCommandListClose;
+    dditable.pfnClose                                    = pDdiTable->pfnClose;
+    pDdiTable->pfnClose                                  = xeCommandListClose;
 
-    mytable.pfnReset                                                = ptable->pfnReset;
-    ptable->pfnReset                                                = xeCommandListReset;
+    dditable.pfnReset                                    = pDdiTable->pfnReset;
+    pDdiTable->pfnReset                                  = xeCommandListReset;
 
-    mytable.pfnSetParameter                                         = ptable->pfnSetParameter;
-    ptable->pfnSetParameter                                         = xeCommandListSetParameter;
+    dditable.pfnSetParameter                             = pDdiTable->pfnSetParameter;
+    pDdiTable->pfnSetParameter                           = xeCommandListSetParameter;
 
-    mytable.pfnGetParameter                                         = ptable->pfnGetParameter;
-    ptable->pfnGetParameter                                         = xeCommandListGetParameter;
+    dditable.pfnGetParameter                             = pDdiTable->pfnGetParameter;
+    pDdiTable->pfnGetParameter                           = xeCommandListGetParameter;
 
-    mytable.pfnResetParameters                                      = ptable->pfnResetParameters;
-    ptable->pfnResetParameters                                      = xeCommandListResetParameters;
+    dditable.pfnResetParameters                          = pDdiTable->pfnResetParameters;
+    pDdiTable->pfnResetParameters                        = xeCommandListResetParameters;
 
-    mytable.pfnReserveSpace                                         = ptable->pfnReserveSpace;
-    ptable->pfnReserveSpace                                         = xeCommandListReserveSpace;
+    dditable.pfnReserveSpace                             = pDdiTable->pfnReserveSpace;
+    pDdiTable->pfnReserveSpace                           = xeCommandListReserveSpace;
 
-    mytable.pfnAppendBarrier                                        = ptable->pfnAppendBarrier;
-    ptable->pfnAppendBarrier                                        = xeCommandListAppendBarrier;
+    dditable.pfnAppendBarrier                            = pDdiTable->pfnAppendBarrier;
+    pDdiTable->pfnAppendBarrier                          = xeCommandListAppendBarrier;
 
-    mytable.pfnAppendMemoryRangesBarrier                            = ptable->pfnAppendMemoryRangesBarrier;
-    ptable->pfnAppendMemoryRangesBarrier                            = xeCommandListAppendMemoryRangesBarrier;
+    dditable.pfnAppendMemoryRangesBarrier                = pDdiTable->pfnAppendMemoryRangesBarrier;
+    pDdiTable->pfnAppendMemoryRangesBarrier              = xeCommandListAppendMemoryRangesBarrier;
 
-    mytable.pfnAppendMemoryCopy                                     = ptable->pfnAppendMemoryCopy;
-    ptable->pfnAppendMemoryCopy                                     = xeCommandListAppendMemoryCopy;
+    dditable.pfnAppendMemoryCopy                         = pDdiTable->pfnAppendMemoryCopy;
+    pDdiTable->pfnAppendMemoryCopy                       = xeCommandListAppendMemoryCopy;
 
-    mytable.pfnAppendMemorySet                                      = ptable->pfnAppendMemorySet;
-    ptable->pfnAppendMemorySet                                      = xeCommandListAppendMemorySet;
+    dditable.pfnAppendMemorySet                          = pDdiTable->pfnAppendMemorySet;
+    pDdiTable->pfnAppendMemorySet                        = xeCommandListAppendMemorySet;
 
-    mytable.pfnAppendMemoryCopyRegion                               = ptable->pfnAppendMemoryCopyRegion;
-    ptable->pfnAppendMemoryCopyRegion                               = xeCommandListAppendMemoryCopyRegion;
+    dditable.pfnAppendMemoryCopyRegion                   = pDdiTable->pfnAppendMemoryCopyRegion;
+    pDdiTable->pfnAppendMemoryCopyRegion                 = xeCommandListAppendMemoryCopyRegion;
 
-    mytable.pfnAppendImageCopy                                      = ptable->pfnAppendImageCopy;
-    ptable->pfnAppendImageCopy                                      = xeCommandListAppendImageCopy;
+    dditable.pfnAppendImageCopy                          = pDdiTable->pfnAppendImageCopy;
+    pDdiTable->pfnAppendImageCopy                        = xeCommandListAppendImageCopy;
 
-    mytable.pfnAppendImageCopyRegion                                = ptable->pfnAppendImageCopyRegion;
-    ptable->pfnAppendImageCopyRegion                                = xeCommandListAppendImageCopyRegion;
+    dditable.pfnAppendImageCopyRegion                    = pDdiTable->pfnAppendImageCopyRegion;
+    pDdiTable->pfnAppendImageCopyRegion                  = xeCommandListAppendImageCopyRegion;
 
-    mytable.pfnAppendImageCopyToMemory                              = ptable->pfnAppendImageCopyToMemory;
-    ptable->pfnAppendImageCopyToMemory                              = xeCommandListAppendImageCopyToMemory;
+    dditable.pfnAppendImageCopyToMemory                  = pDdiTable->pfnAppendImageCopyToMemory;
+    pDdiTable->pfnAppendImageCopyToMemory                = xeCommandListAppendImageCopyToMemory;
 
-    mytable.pfnAppendImageCopyFromMemory                            = ptable->pfnAppendImageCopyFromMemory;
-    ptable->pfnAppendImageCopyFromMemory                            = xeCommandListAppendImageCopyFromMemory;
+    dditable.pfnAppendImageCopyFromMemory                = pDdiTable->pfnAppendImageCopyFromMemory;
+    pDdiTable->pfnAppendImageCopyFromMemory              = xeCommandListAppendImageCopyFromMemory;
 
-    mytable.pfnAppendMemoryPrefetch                                 = ptable->pfnAppendMemoryPrefetch;
-    ptable->pfnAppendMemoryPrefetch                                 = xeCommandListAppendMemoryPrefetch;
+    dditable.pfnAppendMemoryPrefetch                     = pDdiTable->pfnAppendMemoryPrefetch;
+    pDdiTable->pfnAppendMemoryPrefetch                   = xeCommandListAppendMemoryPrefetch;
 
-    mytable.pfnAppendMemAdvise                                      = ptable->pfnAppendMemAdvise;
-    ptable->pfnAppendMemAdvise                                      = xeCommandListAppendMemAdvise;
+    dditable.pfnAppendMemAdvise                          = pDdiTable->pfnAppendMemAdvise;
+    pDdiTable->pfnAppendMemAdvise                        = xeCommandListAppendMemAdvise;
 
-    mytable.pfnAppendSignalEvent                                    = ptable->pfnAppendSignalEvent;
-    ptable->pfnAppendSignalEvent                                    = xeCommandListAppendSignalEvent;
+    dditable.pfnAppendSignalEvent                        = pDdiTable->pfnAppendSignalEvent;
+    pDdiTable->pfnAppendSignalEvent                      = xeCommandListAppendSignalEvent;
 
-    mytable.pfnAppendWaitOnEvents                                   = ptable->pfnAppendWaitOnEvents;
-    ptable->pfnAppendWaitOnEvents                                   = xeCommandListAppendWaitOnEvents;
+    dditable.pfnAppendWaitOnEvents                       = pDdiTable->pfnAppendWaitOnEvents;
+    pDdiTable->pfnAppendWaitOnEvents                     = xeCommandListAppendWaitOnEvents;
 
-    mytable.pfnAppendEventReset                                     = ptable->pfnAppendEventReset;
-    ptable->pfnAppendEventReset                                     = xeCommandListAppendEventReset;
+    dditable.pfnAppendEventReset                         = pDdiTable->pfnAppendEventReset;
+    pDdiTable->pfnAppendEventReset                       = xeCommandListAppendEventReset;
 
-    mytable.pfnAppendLaunchFunction                                 = ptable->pfnAppendLaunchFunction;
-    ptable->pfnAppendLaunchFunction                                 = xeCommandListAppendLaunchFunction;
+    dditable.pfnAppendLaunchFunction                     = pDdiTable->pfnAppendLaunchFunction;
+    pDdiTable->pfnAppendLaunchFunction                   = xeCommandListAppendLaunchFunction;
 
-    mytable.pfnAppendLaunchFunctionIndirect                         = ptable->pfnAppendLaunchFunctionIndirect;
-    ptable->pfnAppendLaunchFunctionIndirect                         = xeCommandListAppendLaunchFunctionIndirect;
+    dditable.pfnAppendLaunchFunctionIndirect             = pDdiTable->pfnAppendLaunchFunctionIndirect;
+    pDdiTable->pfnAppendLaunchFunctionIndirect           = xeCommandListAppendLaunchFunctionIndirect;
 
-    mytable.pfnAppendLaunchMultipleFunctionsIndirect                = ptable->pfnAppendLaunchMultipleFunctionsIndirect;
-    ptable->pfnAppendLaunchMultipleFunctionsIndirect                = xeCommandListAppendLaunchMultipleFunctionsIndirect;
+    dditable.pfnAppendLaunchMultipleFunctionsIndirect    = pDdiTable->pfnAppendLaunchMultipleFunctionsIndirect;
+    pDdiTable->pfnAppendLaunchMultipleFunctionsIndirect  = xeCommandListAppendLaunchMultipleFunctionsIndirect;
 
-    mytable.pfnAppendLaunchHostFunction                             = ptable->pfnAppendLaunchHostFunction;
-    ptable->pfnAppendLaunchHostFunction                             = xeCommandListAppendLaunchHostFunction;
+    dditable.pfnAppendLaunchHostFunction                 = pDdiTable->pfnAppendLaunchHostFunction;
+    pDdiTable->pfnAppendLaunchHostFunction               = xeCommandListAppendLaunchHostFunction;
 
     return result;
 }
@@ -391,19 +391,19 @@ xeGetCommandListProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetFenceProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_fence_dditable_t* ptable                     ///< [in,out] pointer to table of DDI function pointers
+    xe_fence_dditable_t* pDdiTable                  ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeDdiTable.Fence;
+    auto& dditable = xe_layer::val.xeDdiTable.Fence;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -412,20 +412,20 @@ xeGetFenceProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                               = xeFenceCreate;
+    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
+    pDdiTable->pfnCreate                                 = xeFenceCreate;
 
-    mytable.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                              = xeFenceDestroy;
+    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
+    pDdiTable->pfnDestroy                                = xeFenceDestroy;
 
-    mytable.pfnHostSynchronize                                      = ptable->pfnHostSynchronize;
-    ptable->pfnHostSynchronize                                      = xeFenceHostSynchronize;
+    dditable.pfnHostSynchronize                          = pDdiTable->pfnHostSynchronize;
+    pDdiTable->pfnHostSynchronize                        = xeFenceHostSynchronize;
 
-    mytable.pfnQueryStatus                                          = ptable->pfnQueryStatus;
-    ptable->pfnQueryStatus                                          = xeFenceQueryStatus;
+    dditable.pfnQueryStatus                              = pDdiTable->pfnQueryStatus;
+    pDdiTable->pfnQueryStatus                            = xeFenceQueryStatus;
 
-    mytable.pfnReset                                                = ptable->pfnReset;
-    ptable->pfnReset                                                = xeFenceReset;
+    dditable.pfnReset                                    = pDdiTable->pfnReset;
+    pDdiTable->pfnReset                                  = xeFenceReset;
 
     return result;
 }
@@ -438,19 +438,19 @@ xeGetFenceProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetEventPoolProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_event_pool_dditable_t* ptable                ///< [in,out] pointer to table of DDI function pointers
+    xe_event_pool_dditable_t* pDdiTable             ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeDdiTable.EventPool;
+    auto& dditable = xe_layer::val.xeDdiTable.EventPool;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -459,20 +459,20 @@ xeGetEventPoolProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                               = xeEventPoolCreate;
+    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
+    pDdiTable->pfnCreate                                 = xeEventPoolCreate;
 
-    mytable.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                              = xeEventPoolDestroy;
+    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
+    pDdiTable->pfnDestroy                                = xeEventPoolDestroy;
 
-    mytable.pfnGetIpcHandle                                         = ptable->pfnGetIpcHandle;
-    ptable->pfnGetIpcHandle                                         = xeEventPoolGetIpcHandle;
+    dditable.pfnGetIpcHandle                             = pDdiTable->pfnGetIpcHandle;
+    pDdiTable->pfnGetIpcHandle                           = xeEventPoolGetIpcHandle;
 
-    mytable.pfnOpenIpcHandle                                        = ptable->pfnOpenIpcHandle;
-    ptable->pfnOpenIpcHandle                                        = xeEventPoolOpenIpcHandle;
+    dditable.pfnOpenIpcHandle                            = pDdiTable->pfnOpenIpcHandle;
+    pDdiTable->pfnOpenIpcHandle                          = xeEventPoolOpenIpcHandle;
 
-    mytable.pfnCloseIpcHandle                                       = ptable->pfnCloseIpcHandle;
-    ptable->pfnCloseIpcHandle                                       = xeEventPoolCloseIpcHandle;
+    dditable.pfnCloseIpcHandle                           = pDdiTable->pfnCloseIpcHandle;
+    pDdiTable->pfnCloseIpcHandle                         = xeEventPoolCloseIpcHandle;
 
     return result;
 }
@@ -485,19 +485,19 @@ xeGetEventPoolProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetEventProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_event_dditable_t* ptable                     ///< [in,out] pointer to table of DDI function pointers
+    xe_event_dditable_t* pDdiTable                  ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeDdiTable.Event;
+    auto& dditable = xe_layer::val.xeDdiTable.Event;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -506,23 +506,23 @@ xeGetEventProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                               = xeEventCreate;
+    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
+    pDdiTable->pfnCreate                                 = xeEventCreate;
 
-    mytable.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                              = xeEventDestroy;
+    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
+    pDdiTable->pfnDestroy                                = xeEventDestroy;
 
-    mytable.pfnHostSignal                                           = ptable->pfnHostSignal;
-    ptable->pfnHostSignal                                           = xeEventHostSignal;
+    dditable.pfnHostSignal                               = pDdiTable->pfnHostSignal;
+    pDdiTable->pfnHostSignal                             = xeEventHostSignal;
 
-    mytable.pfnHostSynchronize                                      = ptable->pfnHostSynchronize;
-    ptable->pfnHostSynchronize                                      = xeEventHostSynchronize;
+    dditable.pfnHostSynchronize                          = pDdiTable->pfnHostSynchronize;
+    pDdiTable->pfnHostSynchronize                        = xeEventHostSynchronize;
 
-    mytable.pfnQueryStatus                                          = ptable->pfnQueryStatus;
-    ptable->pfnQueryStatus                                          = xeEventQueryStatus;
+    dditable.pfnQueryStatus                              = pDdiTable->pfnQueryStatus;
+    pDdiTable->pfnQueryStatus                            = xeEventQueryStatus;
 
-    mytable.pfnReset                                                = ptable->pfnReset;
-    ptable->pfnReset                                                = xeEventReset;
+    dditable.pfnReset                                    = pDdiTable->pfnReset;
+    pDdiTable->pfnReset                                  = xeEventReset;
 
     return result;
 }
@@ -535,19 +535,19 @@ xeGetEventProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetImageProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_image_dditable_t* ptable                     ///< [in,out] pointer to table of DDI function pointers
+    xe_image_dditable_t* pDdiTable                  ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeDdiTable.Image;
+    auto& dditable = xe_layer::val.xeDdiTable.Image;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -556,14 +556,14 @@ xeGetImageProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnGetProperties                                        = ptable->pfnGetProperties;
-    ptable->pfnGetProperties                                        = xeImageGetProperties;
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = xeImageGetProperties;
 
-    mytable.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                               = xeImageCreate;
+    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
+    pDdiTable->pfnCreate                                 = xeImageCreate;
 
-    mytable.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                              = xeImageDestroy;
+    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
+    pDdiTable->pfnDestroy                                = xeImageDestroy;
 
     return result;
 }
@@ -576,19 +576,19 @@ xeGetImageProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetModuleProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_module_dditable_t* ptable                    ///< [in,out] pointer to table of DDI function pointers
+    xe_module_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeDdiTable.Module;
+    auto& dditable = xe_layer::val.xeDdiTable.Module;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -597,20 +597,20 @@ xeGetModuleProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                               = xeModuleCreate;
+    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
+    pDdiTable->pfnCreate                                 = xeModuleCreate;
 
-    mytable.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                              = xeModuleDestroy;
+    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
+    pDdiTable->pfnDestroy                                = xeModuleDestroy;
 
-    mytable.pfnGetNativeBinary                                      = ptable->pfnGetNativeBinary;
-    ptable->pfnGetNativeBinary                                      = xeModuleGetNativeBinary;
+    dditable.pfnGetNativeBinary                          = pDdiTable->pfnGetNativeBinary;
+    pDdiTable->pfnGetNativeBinary                        = xeModuleGetNativeBinary;
 
-    mytable.pfnGetGlobalPointer                                     = ptable->pfnGetGlobalPointer;
-    ptable->pfnGetGlobalPointer                                     = xeModuleGetGlobalPointer;
+    dditable.pfnGetGlobalPointer                         = pDdiTable->pfnGetGlobalPointer;
+    pDdiTable->pfnGetGlobalPointer                       = xeModuleGetGlobalPointer;
 
-    mytable.pfnGetFunctionPointer                                   = ptable->pfnGetFunctionPointer;
-    ptable->pfnGetFunctionPointer                                   = xeModuleGetFunctionPointer;
+    dditable.pfnGetFunctionPointer                       = pDdiTable->pfnGetFunctionPointer;
+    pDdiTable->pfnGetFunctionPointer                     = xeModuleGetFunctionPointer;
 
     return result;
 }
@@ -623,19 +623,19 @@ xeGetModuleProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetModuleBuildLogProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_module_build_log_dditable_t* ptable          ///< [in,out] pointer to table of DDI function pointers
+    xe_module_build_log_dditable_t* pDdiTable       ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeDdiTable.ModuleBuildLog;
+    auto& dditable = xe_layer::val.xeDdiTable.ModuleBuildLog;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -644,11 +644,11 @@ xeGetModuleBuildLogProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                              = xeModuleBuildLogDestroy;
+    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
+    pDdiTable->pfnDestroy                                = xeModuleBuildLogDestroy;
 
-    mytable.pfnGetString                                            = ptable->pfnGetString;
-    ptable->pfnGetString                                            = xeModuleBuildLogGetString;
+    dditable.pfnGetString                                = pDdiTable->pfnGetString;
+    pDdiTable->pfnGetString                              = xeModuleBuildLogGetString;
 
     return result;
 }
@@ -661,19 +661,19 @@ xeGetModuleBuildLogProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetFunctionProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_function_dditable_t* ptable                  ///< [in,out] pointer to table of DDI function pointers
+    xe_function_dditable_t* pDdiTable               ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeDdiTable.Function;
+    auto& dditable = xe_layer::val.xeDdiTable.Function;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -682,26 +682,26 @@ xeGetFunctionProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                               = xeFunctionCreate;
+    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
+    pDdiTable->pfnCreate                                 = xeFunctionCreate;
 
-    mytable.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                              = xeFunctionDestroy;
+    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
+    pDdiTable->pfnDestroy                                = xeFunctionDestroy;
 
-    mytable.pfnSetGroupSize                                         = ptable->pfnSetGroupSize;
-    ptable->pfnSetGroupSize                                         = xeFunctionSetGroupSize;
+    dditable.pfnSetGroupSize                             = pDdiTable->pfnSetGroupSize;
+    pDdiTable->pfnSetGroupSize                           = xeFunctionSetGroupSize;
 
-    mytable.pfnSuggestGroupSize                                     = ptable->pfnSuggestGroupSize;
-    ptable->pfnSuggestGroupSize                                     = xeFunctionSuggestGroupSize;
+    dditable.pfnSuggestGroupSize                         = pDdiTable->pfnSuggestGroupSize;
+    pDdiTable->pfnSuggestGroupSize                       = xeFunctionSuggestGroupSize;
 
-    mytable.pfnSetArgumentValue                                     = ptable->pfnSetArgumentValue;
-    ptable->pfnSetArgumentValue                                     = xeFunctionSetArgumentValue;
+    dditable.pfnSetArgumentValue                         = pDdiTable->pfnSetArgumentValue;
+    pDdiTable->pfnSetArgumentValue                       = xeFunctionSetArgumentValue;
 
-    mytable.pfnSetAttribute                                         = ptable->pfnSetAttribute;
-    ptable->pfnSetAttribute                                         = xeFunctionSetAttribute;
+    dditable.pfnSetAttribute                             = pDdiTable->pfnSetAttribute;
+    pDdiTable->pfnSetAttribute                           = xeFunctionSetAttribute;
 
-    mytable.pfnGetAttribute                                         = ptable->pfnGetAttribute;
-    ptable->pfnGetAttribute                                         = xeFunctionGetAttribute;
+    dditable.pfnGetAttribute                             = pDdiTable->pfnGetAttribute;
+    pDdiTable->pfnGetAttribute                           = xeFunctionGetAttribute;
 
     return result;
 }
@@ -714,19 +714,19 @@ xeGetFunctionProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetSamplerProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_sampler_dditable_t* ptable                   ///< [in,out] pointer to table of DDI function pointers
+    xe_sampler_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeDdiTable.Sampler;
+    auto& dditable = xe_layer::val.xeDdiTable.Sampler;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -735,11 +735,11 @@ xeGetSamplerProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                               = xeSamplerCreate;
+    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
+    pDdiTable->pfnCreate                                 = xeSamplerCreate;
 
-    mytable.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                              = xeSamplerDestroy;
+    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
+    pDdiTable->pfnDestroy                                = xeSamplerDestroy;
 
     return result;
 }

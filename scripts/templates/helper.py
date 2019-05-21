@@ -969,7 +969,7 @@ def get_pfntables(specs, meta, namespace, tags):
                 })
             params.append({
                 'type': "%s*"%table,
-                'name': "ptable",
+                'name': "pDdiTable",
                 'desc': "[in,out] pointer to table of DDI function pointers"
                 })
             export = {

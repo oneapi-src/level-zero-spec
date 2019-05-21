@@ -87,7 +87,7 @@ typedef struct _${tbl['type']}
 ///     - ::${X}_RESULT_SUCCESS
 ///     - ::${X}_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::${X}_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __${x}dllexport ${x}_result_t __${x}call

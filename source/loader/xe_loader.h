@@ -102,7 +102,7 @@ namespace xe_loader
     public:
         xe_api_version_t version = XE_API_VERSION_1_0;
 
-        driver_vector_t drivers; // todo: change to be tuple with each driver's dditable
+        driver_vector_t drivers;
 
         HMODULE validationLayer = nullptr;
 

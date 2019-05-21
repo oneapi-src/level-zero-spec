@@ -42,19 +42,19 @@ extern "C" {
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetGlobalProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_global_dditable_t* ptable                   ///< [in,out] pointer to table of DDI function pointers
+    xet_global_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xetDdiTable.Global;
+    auto& dditable = xe_layer::val.xetDdiTable.Global;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -63,8 +63,8 @@ xetGetGlobalProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnInit                                                 = ptable->pfnInit;
-    ptable->pfnInit                                                 = xetInit;
+    dditable.pfnInit                                     = pDdiTable->pfnInit;
+    pDdiTable->pfnInit                                   = xetInit;
 
     return result;
 }
@@ -77,19 +77,19 @@ xetGetGlobalProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetDeviceProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_device_dditable_t* ptable                   ///< [in,out] pointer to table of DDI function pointers
+    xet_device_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xetDdiTable.Device;
+    auto& dditable = xe_layer::val.xetDdiTable.Device;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -98,8 +98,8 @@ xetGetDeviceProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnActivateMetricGroups                                 = ptable->pfnActivateMetricGroups;
-    ptable->pfnActivateMetricGroups                                 = xetDeviceActivateMetricGroups;
+    dditable.pfnActivateMetricGroups                     = pDdiTable->pfnActivateMetricGroups;
+    pDdiTable->pfnActivateMetricGroups                   = xetDeviceActivateMetricGroups;
 
     return result;
 }
@@ -112,19 +112,19 @@ xetGetDeviceProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetCommandListProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_command_list_dditable_t* ptable             ///< [in,out] pointer to table of DDI function pointers
+    xet_command_list_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xetDdiTable.CommandList;
+    auto& dditable = xe_layer::val.xetDdiTable.CommandList;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -133,17 +133,17 @@ xetGetCommandListProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnAppendMetricTracerMarker                             = ptable->pfnAppendMetricTracerMarker;
-    ptable->pfnAppendMetricTracerMarker                             = xetCommandListAppendMetricTracerMarker;
+    dditable.pfnAppendMetricTracerMarker                 = pDdiTable->pfnAppendMetricTracerMarker;
+    pDdiTable->pfnAppendMetricTracerMarker               = xetCommandListAppendMetricTracerMarker;
 
-    mytable.pfnAppendMetricQueryBegin                               = ptable->pfnAppendMetricQueryBegin;
-    ptable->pfnAppendMetricQueryBegin                               = xetCommandListAppendMetricQueryBegin;
+    dditable.pfnAppendMetricQueryBegin                   = pDdiTable->pfnAppendMetricQueryBegin;
+    pDdiTable->pfnAppendMetricQueryBegin                 = xetCommandListAppendMetricQueryBegin;
 
-    mytable.pfnAppendMetricQueryEnd                                 = ptable->pfnAppendMetricQueryEnd;
-    ptable->pfnAppendMetricQueryEnd                                 = xetCommandListAppendMetricQueryEnd;
+    dditable.pfnAppendMetricQueryEnd                     = pDdiTable->pfnAppendMetricQueryEnd;
+    pDdiTable->pfnAppendMetricQueryEnd                   = xetCommandListAppendMetricQueryEnd;
 
-    mytable.pfnAppendMetricMemoryBarrier                            = ptable->pfnAppendMetricMemoryBarrier;
-    ptable->pfnAppendMetricMemoryBarrier                            = xetCommandListAppendMetricMemoryBarrier;
+    dditable.pfnAppendMetricMemoryBarrier                = pDdiTable->pfnAppendMetricMemoryBarrier;
+    pDdiTable->pfnAppendMetricMemoryBarrier              = xetCommandListAppendMetricMemoryBarrier;
 
     return result;
 }
@@ -156,19 +156,19 @@ xetGetCommandListProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricGroupProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_group_dditable_t* ptable             ///< [in,out] pointer to table of DDI function pointers
+    xet_metric_group_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xetDdiTable.MetricGroup;
+    auto& dditable = xe_layer::val.xetDdiTable.MetricGroup;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -177,17 +177,17 @@ xetGetMetricGroupProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnGetCount                                             = ptable->pfnGetCount;
-    ptable->pfnGetCount                                             = xetMetricGroupGetCount;
+    dditable.pfnGetCount                                 = pDdiTable->pfnGetCount;
+    pDdiTable->pfnGetCount                               = xetMetricGroupGetCount;
 
-    mytable.pfnGet                                                  = ptable->pfnGet;
-    ptable->pfnGet                                                  = xetMetricGroupGet;
+    dditable.pfnGet                                      = pDdiTable->pfnGet;
+    pDdiTable->pfnGet                                    = xetMetricGroupGet;
 
-    mytable.pfnGetProperties                                        = ptable->pfnGetProperties;
-    ptable->pfnGetProperties                                        = xetMetricGroupGetProperties;
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = xetMetricGroupGetProperties;
 
-    mytable.pfnCalculateData                                        = ptable->pfnCalculateData;
-    ptable->pfnCalculateData                                        = xetMetricGroupCalculateData;
+    dditable.pfnCalculateData                            = pDdiTable->pfnCalculateData;
+    pDdiTable->pfnCalculateData                          = xetMetricGroupCalculateData;
 
     return result;
 }
@@ -200,19 +200,19 @@ xetGetMetricGroupProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_dditable_t* ptable                   ///< [in,out] pointer to table of DDI function pointers
+    xet_metric_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xetDdiTable.Metric;
+    auto& dditable = xe_layer::val.xetDdiTable.Metric;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -221,11 +221,11 @@ xetGetMetricProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnGet                                                  = ptable->pfnGet;
-    ptable->pfnGet                                                  = xetMetricGet;
+    dditable.pfnGet                                      = pDdiTable->pfnGet;
+    pDdiTable->pfnGet                                    = xetMetricGet;
 
-    mytable.pfnGetProperties                                        = ptable->pfnGetProperties;
-    ptable->pfnGetProperties                                        = xetMetricGetProperties;
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = xetMetricGetProperties;
 
     return result;
 }
@@ -238,19 +238,19 @@ xetGetMetricProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricTracerProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_tracer_dditable_t* ptable            ///< [in,out] pointer to table of DDI function pointers
+    xet_metric_tracer_dditable_t* pDdiTable         ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xetDdiTable.MetricTracer;
+    auto& dditable = xe_layer::val.xetDdiTable.MetricTracer;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -259,14 +259,14 @@ xetGetMetricTracerProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnOpen                                                 = ptable->pfnOpen;
-    ptable->pfnOpen                                                 = xetMetricTracerOpen;
+    dditable.pfnOpen                                     = pDdiTable->pfnOpen;
+    pDdiTable->pfnOpen                                   = xetMetricTracerOpen;
 
-    mytable.pfnClose                                                = ptable->pfnClose;
-    ptable->pfnClose                                                = xetMetricTracerClose;
+    dditable.pfnClose                                    = pDdiTable->pfnClose;
+    pDdiTable->pfnClose                                  = xetMetricTracerClose;
 
-    mytable.pfnReadData                                             = ptable->pfnReadData;
-    ptable->pfnReadData                                             = xetMetricTracerReadData;
+    dditable.pfnReadData                                 = pDdiTable->pfnReadData;
+    pDdiTable->pfnReadData                               = xetMetricTracerReadData;
 
     return result;
 }
@@ -279,19 +279,19 @@ xetGetMetricTracerProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricQueryPoolProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_query_pool_dditable_t* ptable        ///< [in,out] pointer to table of DDI function pointers
+    xet_metric_query_pool_dditable_t* pDdiTable     ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xetDdiTable.MetricQueryPool;
+    auto& dditable = xe_layer::val.xetDdiTable.MetricQueryPool;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -300,14 +300,14 @@ xetGetMetricQueryPoolProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                               = xetMetricQueryPoolCreate;
+    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
+    pDdiTable->pfnCreate                                 = xetMetricQueryPoolCreate;
 
-    mytable.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                              = xetMetricQueryPoolDestroy;
+    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
+    pDdiTable->pfnDestroy                                = xetMetricQueryPoolDestroy;
 
-    mytable.pfnGetMetricQuery                                       = ptable->pfnGetMetricQuery;
-    ptable->pfnGetMetricQuery                                       = xetMetricQueryPoolGetMetricQuery;
+    dditable.pfnGetMetricQuery                           = pDdiTable->pfnGetMetricQuery;
+    pDdiTable->pfnGetMetricQuery                         = xetMetricQueryPoolGetMetricQuery;
 
     return result;
 }
@@ -320,19 +320,19 @@ xetGetMetricQueryPoolProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricQueryProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_query_dditable_t* ptable             ///< [in,out] pointer to table of DDI function pointers
+    xet_metric_query_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xetDdiTable.MetricQuery;
+    auto& dditable = xe_layer::val.xetDdiTable.MetricQuery;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -341,8 +341,8 @@ xetGetMetricQueryProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnGetData                                              = ptable->pfnGetData;
-    ptable->pfnGetData                                              = xetMetricQueryGetData;
+    dditable.pfnGetData                                  = pDdiTable->pfnGetData;
+    pDdiTable->pfnGetData                                = xetMetricQueryGetData;
 
     return result;
 }
@@ -355,19 +355,19 @@ xetGetMetricQueryProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetPowerProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_power_dditable_t* ptable                    ///< [in,out] pointer to table of DDI function pointers
+    xet_power_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xetDdiTable.Power;
+    auto& dditable = xe_layer::val.xetDdiTable.Power;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -376,92 +376,92 @@ xetGetPowerProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnCreate                                               = ptable->pfnCreate;
-    ptable->pfnCreate                                               = xetPowerCreate;
+    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
+    pDdiTable->pfnCreate                                 = xetPowerCreate;
 
-    mytable.pfnDestroy                                              = ptable->pfnDestroy;
-    ptable->pfnDestroy                                              = xetPowerDestroy;
+    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
+    pDdiTable->pfnDestroy                                = xetPowerDestroy;
 
-    mytable.pfnGetAveragePowerLimit                                 = ptable->pfnGetAveragePowerLimit;
-    ptable->pfnGetAveragePowerLimit                                 = xetPowerGetAveragePowerLimit;
+    dditable.pfnGetAveragePowerLimit                     = pDdiTable->pfnGetAveragePowerLimit;
+    pDdiTable->pfnGetAveragePowerLimit                   = xetPowerGetAveragePowerLimit;
 
-    mytable.pfnGetBurstPowerLimit                                   = ptable->pfnGetBurstPowerLimit;
-    ptable->pfnGetBurstPowerLimit                                   = xetPowerGetBurstPowerLimit;
+    dditable.pfnGetBurstPowerLimit                       = pDdiTable->pfnGetBurstPowerLimit;
+    pDdiTable->pfnGetBurstPowerLimit                     = xetPowerGetBurstPowerLimit;
 
-    mytable.pfnGetPeakPowerLimit                                    = ptable->pfnGetPeakPowerLimit;
-    ptable->pfnGetPeakPowerLimit                                    = xetPowerGetPeakPowerLimit;
+    dditable.pfnGetPeakPowerLimit                        = pDdiTable->pfnGetPeakPowerLimit;
+    pDdiTable->pfnGetPeakPowerLimit                      = xetPowerGetPeakPowerLimit;
 
-    mytable.pfnGetAllPowerLimits                                    = ptable->pfnGetAllPowerLimits;
-    ptable->pfnGetAllPowerLimits                                    = xetPowerGetAllPowerLimits;
+    dditable.pfnGetAllPowerLimits                        = pDdiTable->pfnGetAllPowerLimits;
+    pDdiTable->pfnGetAllPowerLimits                      = xetPowerGetAllPowerLimits;
 
-    mytable.pfnGetDefaultPowerLimits                                = ptable->pfnGetDefaultPowerLimits;
-    ptable->pfnGetDefaultPowerLimits                                = xetPowerGetDefaultPowerLimits;
+    dditable.pfnGetDefaultPowerLimits                    = pDdiTable->pfnGetDefaultPowerLimits;
+    pDdiTable->pfnGetDefaultPowerLimits                  = xetPowerGetDefaultPowerLimits;
 
-    mytable.pfnSetAveragePowerLimit                                 = ptable->pfnSetAveragePowerLimit;
-    ptable->pfnSetAveragePowerLimit                                 = xetPowerSetAveragePowerLimit;
+    dditable.pfnSetAveragePowerLimit                     = pDdiTable->pfnSetAveragePowerLimit;
+    pDdiTable->pfnSetAveragePowerLimit                   = xetPowerSetAveragePowerLimit;
 
-    mytable.pfnSetBurstPowerLimit                                   = ptable->pfnSetBurstPowerLimit;
-    ptable->pfnSetBurstPowerLimit                                   = xetPowerSetBurstPowerLimit;
+    dditable.pfnSetBurstPowerLimit                       = pDdiTable->pfnSetBurstPowerLimit;
+    pDdiTable->pfnSetBurstPowerLimit                     = xetPowerSetBurstPowerLimit;
 
-    mytable.pfnSetPeakPowerLimit                                    = ptable->pfnSetPeakPowerLimit;
-    ptable->pfnSetPeakPowerLimit                                    = xetPowerSetPeakPowerLimit;
+    dditable.pfnSetPeakPowerLimit                        = pDdiTable->pfnSetPeakPowerLimit;
+    pDdiTable->pfnSetPeakPowerLimit                      = xetPowerSetPeakPowerLimit;
 
-    mytable.pfnSetPowerLimits                                       = ptable->pfnSetPowerLimits;
-    ptable->pfnSetPowerLimits                                       = xetPowerSetPowerLimits;
+    dditable.pfnSetPowerLimits                           = pDdiTable->pfnSetPowerLimits;
+    pDdiTable->pfnSetPowerLimits                         = xetPowerSetPowerLimits;
 
-    mytable.pfnGetEnergyCounter                                     = ptable->pfnGetEnergyCounter;
-    ptable->pfnGetEnergyCounter                                     = xetPowerGetEnergyCounter;
+    dditable.pfnGetEnergyCounter                         = pDdiTable->pfnGetEnergyCounter;
+    pDdiTable->pfnGetEnergyCounter                       = xetPowerGetEnergyCounter;
 
-    mytable.pfnGetTurboMode                                         = ptable->pfnGetTurboMode;
-    ptable->pfnGetTurboMode                                         = xetPowerGetTurboMode;
+    dditable.pfnGetTurboMode                             = pDdiTable->pfnGetTurboMode;
+    pDdiTable->pfnGetTurboMode                           = xetPowerGetTurboMode;
 
-    mytable.pfnSetTurboMode                                         = ptable->pfnSetTurboMode;
-    ptable->pfnSetTurboMode                                         = xetPowerSetTurboMode;
+    dditable.pfnSetTurboMode                             = pDdiTable->pfnSetTurboMode;
+    pDdiTable->pfnSetTurboMode                           = xetPowerSetTurboMode;
 
-    mytable.pfnGetFreqDomainCount                                   = ptable->pfnGetFreqDomainCount;
-    ptable->pfnGetFreqDomainCount                                   = xetPowerGetFreqDomainCount;
+    dditable.pfnGetFreqDomainCount                       = pDdiTable->pfnGetFreqDomainCount;
+    pDdiTable->pfnGetFreqDomainCount                     = xetPowerGetFreqDomainCount;
 
-    mytable.pfnGetFreqDomain                                        = ptable->pfnGetFreqDomain;
-    ptable->pfnGetFreqDomain                                        = xetPowerGetFreqDomain;
+    dditable.pfnGetFreqDomain                            = pDdiTable->pfnGetFreqDomain;
+    pDdiTable->pfnGetFreqDomain                          = xetPowerGetFreqDomain;
 
-    mytable.pfnFanCount                                             = ptable->pfnFanCount;
-    ptable->pfnFanCount                                             = xetPowerFanCount;
+    dditable.pfnFanCount                                 = pDdiTable->pfnFanCount;
+    pDdiTable->pfnFanCount                               = xetPowerFanCount;
 
-    mytable.pfnFanGetProperties                                     = ptable->pfnFanGetProperties;
-    ptable->pfnFanGetProperties                                     = xetPowerFanGetProperties;
+    dditable.pfnFanGetProperties                         = pDdiTable->pfnFanGetProperties;
+    pDdiTable->pfnFanGetProperties                       = xetPowerFanGetProperties;
 
-    mytable.pfnFanGetSpeedTable                                     = ptable->pfnFanGetSpeedTable;
-    ptable->pfnFanGetSpeedTable                                     = xetPowerFanGetSpeedTable;
+    dditable.pfnFanGetSpeedTable                         = pDdiTable->pfnFanGetSpeedTable;
+    pDdiTable->pfnFanGetSpeedTable                       = xetPowerFanGetSpeedTable;
 
-    mytable.pfnFanSetSpeedTable                                     = ptable->pfnFanSetSpeedTable;
-    ptable->pfnFanSetSpeedTable                                     = xetPowerFanSetSpeedTable;
+    dditable.pfnFanSetSpeedTable                         = pDdiTable->pfnFanSetSpeedTable;
+    pDdiTable->pfnFanSetSpeedTable                       = xetPowerFanSetSpeedTable;
 
-    mytable.pfnFanGetSpeed                                          = ptable->pfnFanGetSpeed;
-    ptable->pfnFanGetSpeed                                          = xetPowerFanGetSpeed;
+    dditable.pfnFanGetSpeed                              = pDdiTable->pfnFanGetSpeed;
+    pDdiTable->pfnFanGetSpeed                            = xetPowerFanGetSpeed;
 
-    mytable.pfnFanSetSpeed                                          = ptable->pfnFanSetSpeed;
-    ptable->pfnFanSetSpeed                                          = xetPowerFanSetSpeed;
+    dditable.pfnFanSetSpeed                              = pDdiTable->pfnFanSetSpeed;
+    pDdiTable->pfnFanSetSpeed                            = xetPowerFanSetSpeed;
 
-    mytable.pfnTemperatureSensorCount                               = ptable->pfnTemperatureSensorCount;
-    ptable->pfnTemperatureSensorCount                               = xetPowerTemperatureSensorCount;
+    dditable.pfnTemperatureSensorCount                   = pDdiTable->pfnTemperatureSensorCount;
+    pDdiTable->pfnTemperatureSensorCount                 = xetPowerTemperatureSensorCount;
 
-    mytable.pfnGetTemperatureProperties                             = ptable->pfnGetTemperatureProperties;
-    ptable->pfnGetTemperatureProperties                             = xetPowerGetTemperatureProperties;
+    dditable.pfnGetTemperatureProperties                 = pDdiTable->pfnGetTemperatureProperties;
+    pDdiTable->pfnGetTemperatureProperties               = xetPowerGetTemperatureProperties;
 
-    mytable.pfnGetTemperature                                       = ptable->pfnGetTemperature;
-    ptable->pfnGetTemperature                                       = xetPowerGetTemperature;
+    dditable.pfnGetTemperature                           = pDdiTable->pfnGetTemperature;
+    pDdiTable->pfnGetTemperature                         = xetPowerGetTemperature;
 
-    mytable.pfnSetTemperatureThreshold                              = ptable->pfnSetTemperatureThreshold;
-    ptable->pfnSetTemperatureThreshold                              = xetPowerSetTemperatureThreshold;
+    dditable.pfnSetTemperatureThreshold                  = pDdiTable->pfnSetTemperatureThreshold;
+    pDdiTable->pfnSetTemperatureThreshold                = xetPowerSetTemperatureThreshold;
 
-    mytable.pfnActivityCount                                        = ptable->pfnActivityCount;
-    ptable->pfnActivityCount                                        = xetPowerActivityCount;
+    dditable.pfnActivityCount                            = pDdiTable->pfnActivityCount;
+    pDdiTable->pfnActivityCount                          = xetPowerActivityCount;
 
-    mytable.pfnGetActivityProperties                                = ptable->pfnGetActivityProperties;
-    ptable->pfnGetActivityProperties                                = xetPowerGetActivityProperties;
+    dditable.pfnGetActivityProperties                    = pDdiTable->pfnGetActivityProperties;
+    pDdiTable->pfnGetActivityProperties                  = xetPowerGetActivityProperties;
 
-    mytable.pfnGetActivityCounters                                  = ptable->pfnGetActivityCounters;
-    ptable->pfnGetActivityCounters                                  = xetPowerGetActivityCounters;
+    dditable.pfnGetActivityCounters                      = pDdiTable->pfnGetActivityCounters;
+    pDdiTable->pfnGetActivityCounters                    = xetPowerGetActivityCounters;
 
     return result;
 }
@@ -474,19 +474,19 @@ xetGetPowerProcAddrTable(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetFreqDomainProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_freq_domain_dditable_t* ptable              ///< [in,out] pointer to table of DDI function pointers
+    xet_freq_domain_dditable_t* pDdiTable           ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xetDdiTable.FreqDomain;
+    auto& dditable = xe_layer::val.xetDdiTable.FreqDomain;
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
@@ -495,29 +495,29 @@ xetGetFreqDomainProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    mytable.pfnGetProperties                                        = ptable->pfnGetProperties;
-    ptable->pfnGetProperties                                        = xetFreqDomainGetProperties;
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = xetFreqDomainGetProperties;
 
-    mytable.pfnGetSourceFreqDomain                                  = ptable->pfnGetSourceFreqDomain;
-    ptable->pfnGetSourceFreqDomain                                  = xetFreqDomainGetSourceFreqDomain;
+    dditable.pfnGetSourceFreqDomain                      = pDdiTable->pfnGetSourceFreqDomain;
+    pDdiTable->pfnGetSourceFreqDomain                    = xetFreqDomainGetSourceFreqDomain;
 
-    mytable.pfnGetSupportedClocks                                   = ptable->pfnGetSupportedClocks;
-    ptable->pfnGetSupportedClocks                                   = xetFreqDomainGetSupportedClocks;
+    dditable.pfnGetSupportedClocks                       = pDdiTable->pfnGetSupportedClocks;
+    pDdiTable->pfnGetSupportedClocks                     = xetFreqDomainGetSupportedClocks;
 
-    mytable.pfnGetSupportedClockDividers                            = ptable->pfnGetSupportedClockDividers;
-    ptable->pfnGetSupportedClockDividers                            = xetFreqDomainGetSupportedClockDividers;
+    dditable.pfnGetSupportedClockDividers                = pDdiTable->pfnGetSupportedClockDividers;
+    pDdiTable->pfnGetSupportedClockDividers              = xetFreqDomainGetSupportedClockDividers;
 
-    mytable.pfnGetClockRange                                        = ptable->pfnGetClockRange;
-    ptable->pfnGetClockRange                                        = xetFreqDomainGetClockRange;
+    dditable.pfnGetClockRange                            = pDdiTable->pfnGetClockRange;
+    pDdiTable->pfnGetClockRange                          = xetFreqDomainGetClockRange;
 
-    mytable.pfnSetClockRange                                        = ptable->pfnSetClockRange;
-    ptable->pfnSetClockRange                                        = xetFreqDomainSetClockRange;
+    dditable.pfnSetClockRange                            = pDdiTable->pfnSetClockRange;
+    pDdiTable->pfnSetClockRange                          = xetFreqDomainSetClockRange;
 
-    mytable.pfnSetClockDivider                                      = ptable->pfnSetClockDivider;
-    ptable->pfnSetClockDivider                                      = xetFreqDomainSetClockDivider;
+    dditable.pfnSetClockDivider                          = pDdiTable->pfnSetClockDivider;
+    pDdiTable->pfnSetClockDivider                        = xetFreqDomainSetClockDivider;
 
-    mytable.pfnGetCurrentFrequency                                  = ptable->pfnGetCurrentFrequency;
-    ptable->pfnGetCurrentFrequency                                  = xetFreqDomainGetCurrentFrequency;
+    dditable.pfnGetCurrentFrequency                      = pDdiTable->pfnGetCurrentFrequency;
+    pDdiTable->pfnGetCurrentFrequency                    = xetFreqDomainGetCurrentFrequency;
 
     return result;
 }

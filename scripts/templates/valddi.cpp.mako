@@ -52,7 +52,7 @@ extern "C" {
 ///     - ::${X}_RESULT_SUCCESS
 ///     - ::${X}_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::${X}_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __${x}dllexport ${x}_result_t __${x}call
@@ -62,10 +62,10 @@ ${tbl['export']['name']}(
     %endfor
     )
 {
-    auto& mytable = ${x}_layer::val.${n}DdiTable.${tbl['name']};
+    auto& dditable = ${x}_layer::val.${n}DdiTable.${tbl['name']};
 
 #ifdef _DEBUG
-    if( nullptr == ptable )
+    if( nullptr == pDdiTable )
         return ${X}_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( ${x}_layer::val.version < version )
@@ -78,8 +78,8 @@ ${tbl['export']['name']}(
     %if 'condition' in obj:
 #if ${th.subt(n, tags, obj['condition'])}
     %endif
-    mytable.${th.append_ws(th.make_pfn_name(n, tags, obj), 55)} = ptable->${th.make_pfn_name(n, tags, obj)};
-    ptable->${th.append_ws(th.make_pfn_name(n, tags, obj), 55)} = ${th.make_func_name(n, tags, obj)};
+    dditable.${th.append_ws(th.make_pfn_name(n, tags, obj), 43)} = pDdiTable->${th.make_pfn_name(n, tags, obj)};
+    pDdiTable->${th.append_ws(th.make_pfn_name(n, tags, obj), 41)} = ${th.make_func_name(n, tags, obj)};
     %if 'condition' in obj:
 #endif
     %endif

@@ -67,13 +67,13 @@ typedef struct _xe_global_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetGlobalProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_global_dditable_t* ptable                    ///< [in,out] pointer to table of DDI function pointers
+    xe_global_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -223,13 +223,13 @@ typedef struct _xe_device_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetDeviceProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_device_dditable_t* ptable                    ///< [in,out] pointer to table of DDI function pointers
+    xe_device_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -393,13 +393,13 @@ typedef struct _xe_device_group_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetDeviceGroupProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_device_group_dditable_t* ptable              ///< [in,out] pointer to table of DDI function pointers
+    xe_device_group_dditable_t* pDdiTable           ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -457,13 +457,13 @@ typedef struct _xe_command_queue_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetCommandQueueProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_command_queue_dditable_t* ptable             ///< [in,out] pointer to table of DDI function pointers
+    xe_command_queue_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -758,13 +758,13 @@ typedef struct _xe_command_list_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetCommandListProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_command_list_dditable_t* ptable              ///< [in,out] pointer to table of DDI function pointers
+    xe_command_list_dditable_t* pDdiTable           ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -826,13 +826,13 @@ typedef struct _xe_fence_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetFenceProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_fence_dditable_t* ptable                     ///< [in,out] pointer to table of DDI function pointers
+    xe_fence_dditable_t* pDdiTable                  ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -896,13 +896,13 @@ typedef struct _xe_event_pool_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetEventPoolProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_event_pool_dditable_t* ptable                ///< [in,out] pointer to table of DDI function pointers
+    xe_event_pool_dditable_t* pDdiTable             ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -971,13 +971,13 @@ typedef struct _xe_event_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetEventProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_event_dditable_t* ptable                     ///< [in,out] pointer to table of DDI function pointers
+    xe_event_dditable_t* pDdiTable                  ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1026,13 +1026,13 @@ typedef struct _xe_image_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetImageProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_image_dditable_t* ptable                     ///< [in,out] pointer to table of DDI function pointers
+    xe_image_dditable_t* pDdiTable                  ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1100,13 +1100,13 @@ typedef struct _xe_module_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetModuleProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_module_dditable_t* ptable                    ///< [in,out] pointer to table of DDI function pointers
+    xe_module_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1146,13 +1146,13 @@ typedef struct _xe_module_build_log_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetModuleBuildLogProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_module_build_log_dditable_t* ptable          ///< [in,out] pointer to table of DDI function pointers
+    xe_module_build_log_dditable_t* pDdiTable       ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1243,13 +1243,13 @@ typedef struct _xe_function_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetFunctionProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_function_dditable_t* ptable                  ///< [in,out] pointer to table of DDI function pointers
+    xe_function_dditable_t* pDdiTable               ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1289,13 +1289,13 @@ typedef struct _xe_sampler_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xeGetSamplerProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_sampler_dditable_t* ptable                   ///< [in,out] pointer to table of DDI function pointers
+    xe_sampler_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////

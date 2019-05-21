@@ -52,7 +52,7 @@ extern "C" {
 ///     - ::${X}_RESULT_SUCCESS
 ///     - ::${X}_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::${X}_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __${x}dllexport ${x}_result_t __${x}call
@@ -62,13 +62,14 @@ ${tbl['export']['name']}(
     %endfor
     )
 {
-#ifdef _DEBUG
-    if( nullptr == ptable )
+    if( ${x}_loader::loader.drivers.size() < 1 )
+        return ${X}_RESULT_ERROR_UNINITIALIZED;
+
+    if( nullptr == pDdiTable )
         return ${X}_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( ${x}_loader::loader.version < version )
         return ${X}_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     ${x}_result_t result = ${X}_RESULT_SUCCESS;
 
@@ -81,14 +82,36 @@ ${tbl['export']['name']}(
                 GET_FUNCTION_PTR( drv.handle, "${tbl['export']['name']}") );
             result = getTable( version, &drv.${n}DdiTable.${tbl['name']} );
         }
+    }
 
-        // If the validation layer is enabled, then intercept the device-driver DDI tables
-        if(( ${X}_RESULT_SUCCESS == result ) && ( nullptr != ${x}_loader::loader.validationLayer ))
+    if( ${X}_RESULT_SUCCESS == result )
+    {
+        if( ${x}_loader::loader.drivers.size() > 1 )
         {
-            static auto getTable = reinterpret_cast<${tbl['pfn']}>(
-                GET_FUNCTION_PTR(${x}_loader::loader.validationLayer, "${tbl['export']['name']}") );
-            result = getTable( version, &drv.${n}DdiTable.${tbl['name']} );
+            // return pointers to loader's DDIs
+            %for obj in tbl['functions']:
+            %if 'condition' in obj:
+#if ${th.subt(n, tags, obj['condition'])}
+            %endif
+            pDdiTable->${th.append_ws(th.make_pfn_name(n, tags, obj), 43)} = ${th.make_func_name(n, tags, obj)};
+            %if 'condition' in obj:
+#endif
+            %endif
+            %endfor
         }
+        else
+        {
+            // return pointers directly to driver's DDIs
+            *pDdiTable = ${x}_loader::loader.drivers.front().${n}DdiTable.${tbl['name']};
+        }
+    }
+
+    // If the validation layer is enabled, then intercept the loader's DDIs
+    if(( ${X}_RESULT_SUCCESS == result ) && ( nullptr != ${x}_loader::loader.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<${tbl['pfn']}>(
+            GET_FUNCTION_PTR(${x}_loader::loader.validationLayer, "${tbl['export']['name']}") );
+        result = getTable( version, pDdiTable );
     }
 
     return result;

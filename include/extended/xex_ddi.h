@@ -59,13 +59,13 @@ typedef struct _xex_global_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xexGetGlobalProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xex_global_dditable_t* ptable                   ///< [in,out] pointer to table of DDI function pointers
+    xex_global_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -112,13 +112,13 @@ typedef struct _xex_command_graph_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xexGetCommandGraphProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xex_command_graph_dditable_t* ptable            ///< [in,out] pointer to table of DDI function pointers
+    xex_command_graph_dditable_t* pDdiTable         ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////

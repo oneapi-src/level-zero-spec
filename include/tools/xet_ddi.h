@@ -59,13 +59,13 @@ typedef struct _xet_global_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetGlobalProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_global_dditable_t* ptable                   ///< [in,out] pointer to table of DDI function pointers
+    xet_global_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -98,13 +98,13 @@ typedef struct _xet_device_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetDeviceProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_device_dditable_t* ptable                   ///< [in,out] pointer to table of DDI function pointers
+    xet_device_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -161,13 +161,13 @@ typedef struct _xet_command_list_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetCommandListProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_command_list_dditable_t* ptable             ///< [in,out] pointer to table of DDI function pointers
+    xet_command_list_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -228,13 +228,13 @@ typedef struct _xet_metric_group_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricGroupProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_group_dditable_t* ptable             ///< [in,out] pointer to table of DDI function pointers
+    xet_metric_group_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -275,13 +275,13 @@ typedef struct _xet_metric_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_dditable_t* ptable                   ///< [in,out] pointer to table of DDI function pointers
+    xet_metric_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -332,13 +332,13 @@ typedef struct _xet_metric_tracer_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricTracerProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_tracer_dditable_t* ptable            ///< [in,out] pointer to table of DDI function pointers
+    xet_metric_tracer_dditable_t* pDdiTable         ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -387,13 +387,13 @@ typedef struct _xet_metric_query_pool_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricQueryPoolProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_query_pool_dditable_t* ptable        ///< [in,out] pointer to table of DDI function pointers
+    xet_metric_query_pool_dditable_t* pDdiTable     ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -427,13 +427,13 @@ typedef struct _xet_metric_query_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetMetricQueryProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_query_dditable_t* ptable             ///< [in,out] pointer to table of DDI function pointers
+    xet_metric_query_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -708,13 +708,13 @@ typedef struct _xet_power_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetPowerProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_power_dditable_t* ptable                    ///< [in,out] pointer to table of DDI function pointers
+    xet_power_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -808,13 +808,13 @@ typedef struct _xet_freq_domain_dditable_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + invalid value for version
-///         + nullptr for ptable
+///         + nullptr for pDdiTable
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
 xetGetFreqDomainProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_freq_domain_dditable_t* ptable              ///< [in,out] pointer to table of DDI function pointers
+    xet_freq_domain_dditable_t* pDdiTable           ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
