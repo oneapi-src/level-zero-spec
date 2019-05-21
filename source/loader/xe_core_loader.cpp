@@ -68,7 +68,7 @@ xeGetGlobalProcAddrTable(
         {
             static auto getTable = reinterpret_cast<xe_pfnGetGlobalProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetGlobalProcAddrTable") );
-            result = getTable( version, &drv.xeDdiTable.Global ); // todo: attach to handle
+            result = getTable( version, &drv.xeDdiTable.Global );
         }
 
         // If the validation layer is enabled, then intercept the device-driver DDI tables
@@ -117,7 +117,7 @@ xeGetDeviceProcAddrTable(
         {
             static auto getTable = reinterpret_cast<xe_pfnGetDeviceProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetDeviceProcAddrTable") );
-            result = getTable( version, &drv.xeDdiTable.Device ); // todo: attach to handle
+            result = getTable( version, &drv.xeDdiTable.Device );
         }
 
         // If the validation layer is enabled, then intercept the device-driver DDI tables
@@ -166,7 +166,7 @@ xeGetDeviceGroupProcAddrTable(
         {
             static auto getTable = reinterpret_cast<xe_pfnGetDeviceGroupProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetDeviceGroupProcAddrTable") );
-            result = getTable( version, &drv.xeDdiTable.DeviceGroup ); // todo: attach to handle
+            result = getTable( version, &drv.xeDdiTable.DeviceGroup );
         }
 
         // If the validation layer is enabled, then intercept the device-driver DDI tables
@@ -215,7 +215,7 @@ xeGetCommandQueueProcAddrTable(
         {
             static auto getTable = reinterpret_cast<xe_pfnGetCommandQueueProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetCommandQueueProcAddrTable") );
-            result = getTable( version, &drv.xeDdiTable.CommandQueue ); // todo: attach to handle
+            result = getTable( version, &drv.xeDdiTable.CommandQueue );
         }
 
         // If the validation layer is enabled, then intercept the device-driver DDI tables
@@ -264,7 +264,7 @@ xeGetCommandListProcAddrTable(
         {
             static auto getTable = reinterpret_cast<xe_pfnGetCommandListProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetCommandListProcAddrTable") );
-            result = getTable( version, &drv.xeDdiTable.CommandList ); // todo: attach to handle
+            result = getTable( version, &drv.xeDdiTable.CommandList );
         }
 
         // If the validation layer is enabled, then intercept the device-driver DDI tables
@@ -313,7 +313,7 @@ xeGetFenceProcAddrTable(
         {
             static auto getTable = reinterpret_cast<xe_pfnGetFenceProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetFenceProcAddrTable") );
-            result = getTable( version, &drv.xeDdiTable.Fence ); // todo: attach to handle
+            result = getTable( version, &drv.xeDdiTable.Fence );
         }
 
         // If the validation layer is enabled, then intercept the device-driver DDI tables
@@ -362,7 +362,7 @@ xeGetEventPoolProcAddrTable(
         {
             static auto getTable = reinterpret_cast<xe_pfnGetEventPoolProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetEventPoolProcAddrTable") );
-            result = getTable( version, &drv.xeDdiTable.EventPool ); // todo: attach to handle
+            result = getTable( version, &drv.xeDdiTable.EventPool );
         }
 
         // If the validation layer is enabled, then intercept the device-driver DDI tables
@@ -411,7 +411,7 @@ xeGetEventProcAddrTable(
         {
             static auto getTable = reinterpret_cast<xe_pfnGetEventProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetEventProcAddrTable") );
-            result = getTable( version, &drv.xeDdiTable.Event ); // todo: attach to handle
+            result = getTable( version, &drv.xeDdiTable.Event );
         }
 
         // If the validation layer is enabled, then intercept the device-driver DDI tables
@@ -460,7 +460,7 @@ xeGetImageProcAddrTable(
         {
             static auto getTable = reinterpret_cast<xe_pfnGetImageProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetImageProcAddrTable") );
-            result = getTable( version, &drv.xeDdiTable.Image ); // todo: attach to handle
+            result = getTable( version, &drv.xeDdiTable.Image );
         }
 
         // If the validation layer is enabled, then intercept the device-driver DDI tables
@@ -509,7 +509,7 @@ xeGetModuleProcAddrTable(
         {
             static auto getTable = reinterpret_cast<xe_pfnGetModuleProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetModuleProcAddrTable") );
-            result = getTable( version, &drv.xeDdiTable.Module ); // todo: attach to handle
+            result = getTable( version, &drv.xeDdiTable.Module );
         }
 
         // If the validation layer is enabled, then intercept the device-driver DDI tables
@@ -558,7 +558,7 @@ xeGetModuleBuildLogProcAddrTable(
         {
             static auto getTable = reinterpret_cast<xe_pfnGetModuleBuildLogProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetModuleBuildLogProcAddrTable") );
-            result = getTable( version, &drv.xeDdiTable.ModuleBuildLog ); // todo: attach to handle
+            result = getTable( version, &drv.xeDdiTable.ModuleBuildLog );
         }
 
         // If the validation layer is enabled, then intercept the device-driver DDI tables
@@ -607,7 +607,7 @@ xeGetFunctionProcAddrTable(
         {
             static auto getTable = reinterpret_cast<xe_pfnGetFunctionProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetFunctionProcAddrTable") );
-            result = getTable( version, &drv.xeDdiTable.Function ); // todo: attach to handle
+            result = getTable( version, &drv.xeDdiTable.Function );
         }
 
         // If the validation layer is enabled, then intercept the device-driver DDI tables
@@ -656,7 +656,7 @@ xeGetSamplerProcAddrTable(
         {
             static auto getTable = reinterpret_cast<xe_pfnGetSamplerProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetSamplerProcAddrTable") );
-            result = getTable( version, &drv.xeDdiTable.Sampler ); // todo: attach to handle
+            result = getTable( version, &drv.xeDdiTable.Sampler );
         }
 
         // If the validation layer is enabled, then intercept the device-driver DDI tables

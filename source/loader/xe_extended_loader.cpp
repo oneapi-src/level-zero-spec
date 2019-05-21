@@ -68,7 +68,7 @@ xexGetGlobalProcAddrTable(
         {
             static auto getTable = reinterpret_cast<xex_pfnGetGlobalProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xexGetGlobalProcAddrTable") );
-            result = getTable( version, &drv.xexDdiTable.Global ); // todo: attach to handle
+            result = getTable( version, &drv.xexDdiTable.Global );
         }
 
         // If the validation layer is enabled, then intercept the device-driver DDI tables
@@ -117,7 +117,7 @@ xexGetCommandGraphProcAddrTable(
         {
             static auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xexGetCommandGraphProcAddrTable") );
-            result = getTable( version, &drv.xexDdiTable.CommandGraph ); // todo: attach to handle
+            result = getTable( version, &drv.xexDdiTable.CommandGraph );
         }
 
         // If the validation layer is enabled, then intercept the device-driver DDI tables

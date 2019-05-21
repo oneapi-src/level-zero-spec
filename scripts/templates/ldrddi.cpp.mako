@@ -79,7 +79,7 @@ ${tbl['export']['name']}(
         {
             static auto getTable = reinterpret_cast<${tbl['pfn']}>(
                 GET_FUNCTION_PTR( drv.handle, "${tbl['export']['name']}") );
-            result = getTable( version, &drv.${n}DdiTable.${tbl['name']} ); // todo: attach to handle
+            result = getTable( version, &drv.${n}DdiTable.${tbl['name']} );
         }
 
         // If the validation layer is enabled, then intercept the device-driver DDI tables
