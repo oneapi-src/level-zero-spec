@@ -188,8 +188,11 @@ The export function and table definitions are defined in "${x}_ddi.h".
 ## --validate=off
 The loader is dynamically linked with the application using the "${x}_loader.dll" (windows) or "${x}_loader.so" (linux).
 ## --validate=on
-The loader is vendor agnostic, but must be aware of the names of vendor-specific common driver names. 
+The loader is vendor agnostic, but must be aware of the names of vendor-specific device driver names. 
 (Note: these are currently hard-coded but a registration method will be adopted when multiple vendors are supported.)
+
+The loader dynamically loads each vendor's device driver(s) present in the system and queries each per-process function pointer table(s).
+If only one device driver needs to be loaded, then the loader layer may be entirely bypassed.
 
 The following diagram illustrates the expected loading sequence:  
 ![Loader](../images/intro_loader.png?raw=true)  
@@ -197,21 +200,9 @@ The following diagram illustrates the expected loading sequence:
 
 Thus, the loader's internal function pointer table entries may point to:
     + validation layer intercepts (if enabled),
-    + common driver intercepts (e.g., if more than one supported device type are present in the system),
     + instrumentation layer intercepts (if enabled),
     + device driver exports,
     + or any combination of the above
-
-${"##"} Common Driver
-The common driver determines which other vendor's device driver(s) need to be loaded, based on which device types are present in the system and recognized by the common driver.
-The common driver contain vendor-specific implementations of a subset of APIs (such as memory allocation) and use private DDIs for notifying device drivers of these events.
-The common driver may be bypassed entirely if there is only one device driver needed.
-
-## --validate=off
-The common driver is dynamically linked using a _${x}_vendor_com.dll_ (windows) / _${x}_vendor_com.so_ (linux);
-where _vendor_ is a name chosen by the device vendor.
-For example, Intel GPUs use the name: "${x}_intc_com".
-## --validate=on
 
 ${"##"} Device Drivers
 The device driver(s) contain the device-specific implementations of the APIs.
