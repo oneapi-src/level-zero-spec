@@ -48,10 +48,10 @@ extern "C" {
 __xedllexport xe_result_t __xecall
 xetGetGlobalProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_global_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
+    xet_global_dditable_t* ptable                   ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xetGlobal;
+    auto& mytable = xe_layer::val.xetDdiTable.Global;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -83,10 +83,10 @@ xetGetGlobalProcAddrTable(
 __xedllexport xe_result_t __xecall
 xetGetDeviceProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_device_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
+    xet_device_dditable_t* ptable                   ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xetDevice;
+    auto& mytable = xe_layer::val.xetDdiTable.Device;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -118,10 +118,10 @@ xetGetDeviceProcAddrTable(
 __xedllexport xe_result_t __xecall
 xetGetCommandListProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_command_list_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
+    xet_command_list_dditable_t* ptable             ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xetCommandList;
+    auto& mytable = xe_layer::val.xetDdiTable.CommandList;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -162,10 +162,10 @@ xetGetCommandListProcAddrTable(
 __xedllexport xe_result_t __xecall
 xetGetMetricGroupProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_group_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
+    xet_metric_group_dditable_t* ptable             ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xetMetricGroup;
+    auto& mytable = xe_layer::val.xetDdiTable.MetricGroup;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -206,10 +206,10 @@ xetGetMetricGroupProcAddrTable(
 __xedllexport xe_result_t __xecall
 xetGetMetricProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
+    xet_metric_dditable_t* ptable                   ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xetMetric;
+    auto& mytable = xe_layer::val.xetDdiTable.Metric;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -244,10 +244,10 @@ xetGetMetricProcAddrTable(
 __xedllexport xe_result_t __xecall
 xetGetMetricTracerProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_tracer_apitable_t* ptable            ///< [in,out] pointer to table of API function pointers
+    xet_metric_tracer_dditable_t* ptable            ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xetMetricTracer;
+    auto& mytable = xe_layer::val.xetDdiTable.MetricTracer;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -285,10 +285,10 @@ xetGetMetricTracerProcAddrTable(
 __xedllexport xe_result_t __xecall
 xetGetMetricQueryPoolProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_query_pool_apitable_t* ptable        ///< [in,out] pointer to table of API function pointers
+    xet_metric_query_pool_dditable_t* ptable        ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xetMetricQueryPool;
+    auto& mytable = xe_layer::val.xetDdiTable.MetricQueryPool;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -326,10 +326,10 @@ xetGetMetricQueryPoolProcAddrTable(
 __xedllexport xe_result_t __xecall
 xetGetMetricQueryProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_query_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
+    xet_metric_query_dditable_t* ptable             ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xetMetricQuery;
+    auto& mytable = xe_layer::val.xetDdiTable.MetricQuery;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -361,10 +361,10 @@ xetGetMetricQueryProcAddrTable(
 __xedllexport xe_result_t __xecall
 xetGetPowerProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_power_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
+    xet_power_dditable_t* ptable                    ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xetPower;
+    auto& mytable = xe_layer::val.xetDdiTable.Power;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -480,10 +480,10 @@ xetGetPowerProcAddrTable(
 __xedllexport xe_result_t __xecall
 xetGetFreqDomainProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_freq_domain_apitable_t* ptable              ///< [in,out] pointer to table of API function pointers
+    xet_freq_domain_dditable_t* ptable              ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xetFreqDomain;
+    auto& mytable = xe_layer::val.xetDdiTable.FreqDomain;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -529,7 +529,7 @@ xetInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    auto pfnInit = xe_layer::val.xetGlobal.pfnInit;
+    auto pfnInit = xe_layer::val.xetDdiTable.Global.pfnInit;
 
     if( nullptr == pfnInit )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -549,7 +549,7 @@ xetMetricGroupGetCount(
     uint32_t* pCount                                ///< [out] number of metric groups supported by the device
     )
 {
-    auto pfnGetCount = xe_layer::val.xetMetricGroup.pfnGetCount;
+    auto pfnGetCount = xe_layer::val.xetDdiTable.MetricGroup.pfnGetCount;
 
     if( nullptr == pfnGetCount )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -576,7 +576,7 @@ xetMetricGroupGet(
     xet_metric_group_handle_t* phMetricGroup        ///< [out] metric group handle
     )
 {
-    auto pfnGet = xe_layer::val.xetMetricGroup.pfnGet;
+    auto pfnGet = xe_layer::val.xetDdiTable.MetricGroup.pfnGet;
 
     if( nullptr == pfnGet )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -602,7 +602,7 @@ xetMetricGroupGetProperties(
     xet_metric_group_properties_t* pProperties      ///< [out] metric group properties
     )
 {
-    auto pfnGetProperties = xe_layer::val.xetMetricGroup.pfnGetProperties;
+    auto pfnGetProperties = xe_layer::val.xetDdiTable.MetricGroup.pfnGetProperties;
 
     if( nullptr == pfnGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -629,7 +629,7 @@ xetMetricGet(
     xet_metric_handle_t* phMetric                   ///< [out] handle of metric
     )
 {
-    auto pfnGet = xe_layer::val.xetMetric.pfnGet;
+    auto pfnGet = xe_layer::val.xetDdiTable.Metric.pfnGet;
 
     if( nullptr == pfnGet )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -655,7 +655,7 @@ xetMetricGetProperties(
     xet_metric_properties_t* pProperties            ///< [out] metric properties
     )
 {
-    auto pfnGetProperties = xe_layer::val.xetMetric.pfnGetProperties;
+    auto pfnGetProperties = xe_layer::val.xetDdiTable.Metric.pfnGetProperties;
 
     if( nullptr == pfnGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -685,7 +685,7 @@ xetMetricGroupCalculateData(
     xet_typed_value_t* pCalculatedData              ///< [in,out] calculated metrics
     )
 {
-    auto pfnCalculateData = xe_layer::val.xetMetricGroup.pfnCalculateData;
+    auto pfnCalculateData = xe_layer::val.xetDdiTable.MetricGroup.pfnCalculateData;
 
     if( nullptr == pfnCalculateData )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -719,7 +719,7 @@ xetDeviceActivateMetricGroups(
                                                     ///< to deactivate.
     )
 {
-    auto pfnActivateMetricGroups = xe_layer::val.xetDevice.pfnActivateMetricGroups;
+    auto pfnActivateMetricGroups = xe_layer::val.xetDdiTable.Device.pfnActivateMetricGroups;
 
     if( nullptr == pfnActivateMetricGroups )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -748,7 +748,7 @@ xetMetricTracerOpen(
     xet_metric_tracer_handle_t* phMetricTracer      ///< [out] handle of metric tracer
     )
 {
-    auto pfnOpen = xe_layer::val.xetMetricTracer.pfnOpen;
+    auto pfnOpen = xe_layer::val.xetDdiTable.MetricTracer.pfnOpen;
 
     if( nullptr == pfnOpen )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -784,7 +784,7 @@ xetCommandListAppendMetricTracerMarker(
     uint32_t value                                  ///< [in] tracer marker value
     )
 {
-    auto pfnAppendMetricTracerMarker = xe_layer::val.xetCommandList.pfnAppendMetricTracerMarker;
+    auto pfnAppendMetricTracerMarker = xe_layer::val.xetDdiTable.CommandList.pfnAppendMetricTracerMarker;
 
     if( nullptr == pfnAppendMetricTracerMarker )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -809,7 +809,7 @@ xetMetricTracerClose(
     xet_metric_tracer_handle_t hMetricTracer        ///< [in] handle of the metric tracer
     )
 {
-    auto pfnClose = xe_layer::val.xetMetricTracer.pfnClose;
+    auto pfnClose = xe_layer::val.xetDdiTable.MetricTracer.pfnClose;
 
     if( nullptr == pfnClose )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -834,7 +834,7 @@ xetMetricTracerReadData(
     uint8_t* pRawData                               ///< [in,out] raw data buffer for reports
     )
 {
-    auto pfnReadData = xe_layer::val.xetMetricTracer.pfnReadData;
+    auto pfnReadData = xe_layer::val.xetDdiTable.MetricTracer.pfnReadData;
 
     if( nullptr == pfnReadData )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -864,7 +864,7 @@ xetMetricQueryPoolCreate(
     xet_metric_query_pool_handle_t* phMetricQueryPool   ///< [out] handle of metric query pool
     )
 {
-    auto pfnCreate = xe_layer::val.xetMetricQueryPool.pfnCreate;
+    auto pfnCreate = xe_layer::val.xetDdiTable.MetricQueryPool.pfnCreate;
 
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -895,7 +895,7 @@ xetMetricQueryPoolDestroy(
     xet_metric_query_pool_handle_t hMetricQueryPool ///< [in] handle of the metric query pool
     )
 {
-    auto pfnDestroy = xe_layer::val.xetMetricQueryPool.pfnDestroy;
+    auto pfnDestroy = xe_layer::val.xetDdiTable.MetricQueryPool.pfnDestroy;
 
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -919,7 +919,7 @@ xetMetricQueryPoolGetMetricQuery(
     xet_metric_query_handle_t* phMetricQuery        ///< [out] handle of metric query
     )
 {
-    auto pfnGetMetricQuery = xe_layer::val.xetMetricQueryPool.pfnGetMetricQuery;
+    auto pfnGetMetricQuery = xe_layer::val.xetDdiTable.MetricQueryPool.pfnGetMetricQuery;
 
     if( nullptr == pfnGetMetricQuery )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -945,7 +945,7 @@ xetCommandListAppendMetricQueryBegin(
     xet_metric_query_handle_t hMetricQuery          ///< [in] handle of the metric query
     )
 {
-    auto pfnAppendMetricQueryBegin = xe_layer::val.xetCommandList.pfnAppendMetricQueryBegin;
+    auto pfnAppendMetricQueryBegin = xe_layer::val.xetDdiTable.CommandList.pfnAppendMetricQueryBegin;
 
     if( nullptr == pfnAppendMetricQueryBegin )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -972,7 +972,7 @@ xetCommandListAppendMetricQueryEnd(
     xe_event_handle_t hCompletionEvent              ///< [in] handle of the completion event to signal
     )
 {
-    auto pfnAppendMetricQueryEnd = xe_layer::val.xetCommandList.pfnAppendMetricQueryEnd;
+    auto pfnAppendMetricQueryEnd = xe_layer::val.xetDdiTable.CommandList.pfnAppendMetricQueryEnd;
 
     if( nullptr == pfnAppendMetricQueryEnd )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1000,7 +1000,7 @@ xetCommandListAppendMetricMemoryBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
 {
-    auto pfnAppendMetricMemoryBarrier = xe_layer::val.xetCommandList.pfnAppendMetricMemoryBarrier;
+    auto pfnAppendMetricMemoryBarrier = xe_layer::val.xetDdiTable.CommandList.pfnAppendMetricMemoryBarrier;
 
     if( nullptr == pfnAppendMetricMemoryBarrier )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1025,7 +1025,7 @@ xetMetricQueryGetData(
     uint8_t* pRawData                               ///< [in,out] query result data in raw format
     )
 {
-    auto pfnGetData = xe_layer::val.xetMetricQuery.pfnGetData;
+    auto pfnGetData = xe_layer::val.xetDdiTable.MetricQuery.pfnGetData;
 
     if( nullptr == pfnGetData )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1055,7 +1055,7 @@ xetPowerCreate(
     xet_power_handle_t* pPowerHandle                ///< [out] handle for accessing power features of the device
     )
 {
-    auto pfnCreate = xe_layer::val.xetPower.pfnCreate;
+    auto pfnCreate = xe_layer::val.xetDdiTable.Power.pfnCreate;
 
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1080,7 +1080,7 @@ xetPowerDestroy(
     xet_power_handle_t hPower                       ///< [in] handle of the power object to destroy
     )
 {
-    auto pfnDestroy = xe_layer::val.xetPower.pfnDestroy;
+    auto pfnDestroy = xe_layer::val.xetDdiTable.Power.pfnDestroy;
 
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1103,7 +1103,7 @@ xetPowerGetAveragePowerLimit(
     xet_power_average_limit_t* pLimit               ///< [out] information about the average power limit
     )
 {
-    auto pfnGetAveragePowerLimit = xe_layer::val.xetPower.pfnGetAveragePowerLimit;
+    auto pfnGetAveragePowerLimit = xe_layer::val.xetDdiTable.Power.pfnGetAveragePowerLimit;
 
     if( nullptr == pfnGetAveragePowerLimit )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1129,7 +1129,7 @@ xetPowerGetBurstPowerLimit(
     xet_power_burst_limit_t* pLimit                 ///< [out] information about the burst power limit
     )
 {
-    auto pfnGetBurstPowerLimit = xe_layer::val.xetPower.pfnGetBurstPowerLimit;
+    auto pfnGetBurstPowerLimit = xe_layer::val.xetDdiTable.Power.pfnGetBurstPowerLimit;
 
     if( nullptr == pfnGetBurstPowerLimit )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1155,7 +1155,7 @@ xetPowerGetPeakPowerLimit(
     xet_power_peak_limit_t* pLimit                  ///< [out] information about the peak power limit
     )
 {
-    auto pfnGetPeakPowerLimit = xe_layer::val.xetPower.pfnGetPeakPowerLimit;
+    auto pfnGetPeakPowerLimit = xe_layer::val.xetDdiTable.Power.pfnGetPeakPowerLimit;
 
     if( nullptr == pfnGetPeakPowerLimit )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1181,7 +1181,7 @@ xetPowerGetAllPowerLimits(
     xet_power_limits_t* pLimits                     ///< [out] information about the average/burst/peak power limits
     )
 {
-    auto pfnGetAllPowerLimits = xe_layer::val.xetPower.pfnGetAllPowerLimits;
+    auto pfnGetAllPowerLimits = xe_layer::val.xetDdiTable.Power.pfnGetAllPowerLimits;
 
     if( nullptr == pfnGetAllPowerLimits )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1207,7 +1207,7 @@ xetPowerGetDefaultPowerLimits(
     xet_power_limits_t* pLimits                     ///< [out] information about the default average/burst/peak power limits
     )
 {
-    auto pfnGetDefaultPowerLimits = xe_layer::val.xetPower.pfnGetDefaultPowerLimits;
+    auto pfnGetDefaultPowerLimits = xe_layer::val.xetDdiTable.Power.pfnGetDefaultPowerLimits;
 
     if( nullptr == pfnGetDefaultPowerLimits )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1233,7 +1233,7 @@ xetPowerSetAveragePowerLimit(
     xet_power_average_limit_t* pLimit               ///< [in] information about the average power limit
     )
 {
-    auto pfnSetAveragePowerLimit = xe_layer::val.xetPower.pfnSetAveragePowerLimit;
+    auto pfnSetAveragePowerLimit = xe_layer::val.xetDdiTable.Power.pfnSetAveragePowerLimit;
 
     if( nullptr == pfnSetAveragePowerLimit )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1259,7 +1259,7 @@ xetPowerSetBurstPowerLimit(
     xet_power_burst_limit_t* pLimit                 ///< [in] information about the burst power limit
     )
 {
-    auto pfnSetBurstPowerLimit = xe_layer::val.xetPower.pfnSetBurstPowerLimit;
+    auto pfnSetBurstPowerLimit = xe_layer::val.xetDdiTable.Power.pfnSetBurstPowerLimit;
 
     if( nullptr == pfnSetBurstPowerLimit )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1285,7 +1285,7 @@ xetPowerSetPeakPowerLimit(
     xet_power_peak_limit_t* pLimit                  ///< [in] information about the peak power limit
     )
 {
-    auto pfnSetPeakPowerLimit = xe_layer::val.xetPower.pfnSetPeakPowerLimit;
+    auto pfnSetPeakPowerLimit = xe_layer::val.xetDdiTable.Power.pfnSetPeakPowerLimit;
 
     if( nullptr == pfnSetPeakPowerLimit )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1311,7 +1311,7 @@ xetPowerSetPowerLimits(
     xet_power_limits_t* pLimits                     ///< [in] information about the average/burst/peak power limits
     )
 {
-    auto pfnSetPowerLimits = xe_layer::val.xetPower.pfnSetPowerLimits;
+    auto pfnSetPowerLimits = xe_layer::val.xetDdiTable.Power.pfnSetPowerLimits;
 
     if( nullptr == pfnSetPowerLimits )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1337,7 +1337,7 @@ xetPowerGetEnergyCounter(
     uint64_t* pEnergy                               ///< [out] the energy counter in millijoules
     )
 {
-    auto pfnGetEnergyCounter = xe_layer::val.xetPower.pfnGetEnergyCounter;
+    auto pfnGetEnergyCounter = xe_layer::val.xetDdiTable.Power.pfnGetEnergyCounter;
 
     if( nullptr == pfnGetEnergyCounter )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1363,7 +1363,7 @@ xetPowerGetTurboMode(
     xet_turbo_mode_t* pTurboMode                    ///< [out] turbo mode currently in effect
     )
 {
-    auto pfnGetTurboMode = xe_layer::val.xetPower.pfnGetTurboMode;
+    auto pfnGetTurboMode = xe_layer::val.xetDdiTable.Power.pfnGetTurboMode;
 
     if( nullptr == pfnGetTurboMode )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1389,7 +1389,7 @@ xetPowerSetTurboMode(
     xet_turbo_mode_t pTurboMode                     ///< [in] new turbo mode
     )
 {
-    auto pfnSetTurboMode = xe_layer::val.xetPower.pfnSetTurboMode;
+    auto pfnSetTurboMode = xe_layer::val.xetDdiTable.Power.pfnSetTurboMode;
 
     if( nullptr == pfnSetTurboMode )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1412,7 +1412,7 @@ xetPowerGetFreqDomainCount(
     uint32_t* pNumFreqDomains                       ///< [out] the number of frequency domains
     )
 {
-    auto pfnGetFreqDomainCount = xe_layer::val.xetPower.pfnGetFreqDomainCount;
+    auto pfnGetFreqDomainCount = xe_layer::val.xetDdiTable.Power.pfnGetFreqDomainCount;
 
     if( nullptr == pfnGetFreqDomainCount )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1439,7 +1439,7 @@ xetPowerGetFreqDomain(
     xet_freq_domain_handle_t* phFreqDomain          ///< [out] pointer to handle of frequency domain object
     )
 {
-    auto pfnGetFreqDomain = xe_layer::val.xetPower.pfnGetFreqDomain;
+    auto pfnGetFreqDomain = xe_layer::val.xetDdiTable.Power.pfnGetFreqDomain;
 
     if( nullptr == pfnGetFreqDomain )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1465,7 +1465,7 @@ xetFreqDomainGetProperties(
     xet_freq_domain_properties_t* pFreqDomainProperties ///< [out] pointer to properties for the frequency domain
     )
 {
-    auto pfnGetProperties = xe_layer::val.xetFreqDomain.pfnGetProperties;
+    auto pfnGetProperties = xe_layer::val.xetDdiTable.FreqDomain.pfnGetProperties;
 
     if( nullptr == pfnGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1492,7 +1492,7 @@ xetFreqDomainGetSourceFreqDomain(
                                                     ///< will be returned
     )
 {
-    auto pfnGetSourceFreqDomain = xe_layer::val.xetFreqDomain.pfnGetSourceFreqDomain;
+    auto pfnGetSourceFreqDomain = xe_layer::val.xetDdiTable.FreqDomain.pfnGetSourceFreqDomain;
 
     if( nullptr == pfnGetSourceFreqDomain )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1519,7 +1519,7 @@ xetFreqDomainGetSupportedClocks(
     uint32_t* pClocks                               ///< [out] pointer to array of frequencies
     )
 {
-    auto pfnGetSupportedClocks = xe_layer::val.xetFreqDomain.pfnGetSupportedClocks;
+    auto pfnGetSupportedClocks = xe_layer::val.xetDdiTable.FreqDomain.pfnGetSupportedClocks;
 
     if( nullptr == pfnGetSupportedClocks )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1546,7 +1546,7 @@ xetFreqDomainGetSupportedClockDividers(
     xet_clock_divider_t* pDividers                  ///< [out] pointer to array of dividers
     )
 {
-    auto pfnGetSupportedClockDividers = xe_layer::val.xetFreqDomain.pfnGetSupportedClockDividers;
+    auto pfnGetSupportedClockDividers = xe_layer::val.xetDdiTable.FreqDomain.pfnGetSupportedClockDividers;
 
     if( nullptr == pfnGetSupportedClockDividers )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1573,7 +1573,7 @@ xetFreqDomainGetClockRange(
     uint32_t* pMaxClock                             ///< [out] max clock frequency in units of MHz
     )
 {
-    auto pfnGetClockRange = xe_layer::val.xetFreqDomain.pfnGetClockRange;
+    auto pfnGetClockRange = xe_layer::val.xetDdiTable.FreqDomain.pfnGetClockRange;
 
     if( nullptr == pfnGetClockRange )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1603,7 +1603,7 @@ xetFreqDomainSetClockRange(
     uint32_t maxClock                               ///< [in] max clock frequency in units of MHz
     )
 {
-    auto pfnSetClockRange = xe_layer::val.xetFreqDomain.pfnSetClockRange;
+    auto pfnSetClockRange = xe_layer::val.xetDdiTable.FreqDomain.pfnSetClockRange;
 
     if( nullptr == pfnSetClockRange )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1626,7 +1626,7 @@ xetFreqDomainSetClockDivider(
     xet_clock_divider_t* pClockDividerRequest       ///< [out] pointer to frequency divider request
     )
 {
-    auto pfnSetClockDivider = xe_layer::val.xetFreqDomain.pfnSetClockDivider;
+    auto pfnSetClockDivider = xe_layer::val.xetDdiTable.FreqDomain.pfnSetClockDivider;
 
     if( nullptr == pfnSetClockDivider )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1654,7 +1654,7 @@ xetFreqDomainGetCurrentFrequency(
     xet_freq_throttle_reasons_t* pFreqThrottleReasons   ///< [out] the reason the resolved frequency is lower than the request
     )
 {
-    auto pfnGetCurrentFrequency = xe_layer::val.xetFreqDomain.pfnGetCurrentFrequency;
+    auto pfnGetCurrentFrequency = xe_layer::val.xetDdiTable.FreqDomain.pfnGetCurrentFrequency;
 
     if( nullptr == pfnGetCurrentFrequency )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1686,7 +1686,7 @@ xetPowerFanCount(
     uint32_t* pFanCount                             ///< [out] the number of fans on the device
     )
 {
-    auto pfnFanCount = xe_layer::val.xetPower.pfnFanCount;
+    auto pfnFanCount = xe_layer::val.xetDdiTable.Power.pfnFanCount;
 
     if( nullptr == pfnFanCount )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1713,7 +1713,7 @@ xetPowerFanGetProperties(
     xet_fan_properties_t* pFanProperties            ///< [out] pointer to storage for fan properties
     )
 {
-    auto pfnFanGetProperties = xe_layer::val.xetPower.pfnFanGetProperties;
+    auto pfnFanGetProperties = xe_layer::val.xetDdiTable.Power.pfnFanGetProperties;
 
     if( nullptr == pfnFanGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1743,7 +1743,7 @@ xetPowerFanGetSpeedTable(
     xet_fan_point_t* pFanPoints                     ///< [out] pointer to an array of temperature/fan-speed points
     )
 {
-    auto pfnFanGetSpeedTable = xe_layer::val.xetPower.pfnFanGetSpeedTable;
+    auto pfnFanGetSpeedTable = xe_layer::val.xetDdiTable.Power.pfnFanGetSpeedTable;
 
     if( nullptr == pfnFanGetSpeedTable )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1774,7 +1774,7 @@ xetPowerFanSetSpeedTable(
     xet_fan_point_t* pFanPoints                     ///< [in] pointer to an array of temperature/fan-speed points
     )
 {
-    auto pfnFanSetSpeedTable = xe_layer::val.xetPower.pfnFanSetSpeedTable;
+    auto pfnFanSetSpeedTable = xe_layer::val.xetDdiTable.Power.pfnFanSetSpeedTable;
 
     if( nullptr == pfnFanSetSpeedTable )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1804,7 +1804,7 @@ xetPowerFanGetSpeed(
     xet_fan_speed_info_t* pFanSpeed                 ///< [out] pointer to an array of current fan speeds
     )
 {
-    auto pfnFanGetSpeed = xe_layer::val.xetPower.pfnFanGetSpeed;
+    auto pfnFanGetSpeed = xe_layer::val.xetDdiTable.Power.pfnFanGetSpeed;
 
     if( nullptr == pfnFanGetSpeed )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1833,7 +1833,7 @@ xetPowerFanSetSpeed(
     xet_fan_speed_info_t* pFanSpeed                 ///< [in] pointer to an array of current fan speeds
     )
 {
-    auto pfnFanSetSpeed = xe_layer::val.xetPower.pfnFanSetSpeed;
+    auto pfnFanSetSpeed = xe_layer::val.xetDdiTable.Power.pfnFanSetSpeed;
 
     if( nullptr == pfnFanSetSpeed )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1859,7 +1859,7 @@ xetPowerTemperatureSensorCount(
     uint32_t* pSensorCount                          ///< [out] the number of temperature sensors on the device
     )
 {
-    auto pfnTemperatureSensorCount = xe_layer::val.xetPower.pfnTemperatureSensorCount;
+    auto pfnTemperatureSensorCount = xe_layer::val.xetDdiTable.Power.pfnTemperatureSensorCount;
 
     if( nullptr == pfnTemperatureSensorCount )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1886,7 +1886,7 @@ xetPowerGetTemperatureProperties(
     xet_temperature_properties_t* pProperties       ///< [out] pointer to properties for this sensor
     )
 {
-    auto pfnGetTemperatureProperties = xe_layer::val.xetPower.pfnGetTemperatureProperties;
+    auto pfnGetTemperatureProperties = xe_layer::val.xetDdiTable.Power.pfnGetTemperatureProperties;
 
     if( nullptr == pfnGetTemperatureProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1915,7 +1915,7 @@ xetPowerGetTemperature(
     uint16_t* pTemperatures                         ///< [out] pointer to an array of temperatures in units of degrees celsius
     )
 {
-    auto pfnGetTemperature = xe_layer::val.xetPower.pfnGetTemperature;
+    auto pfnGetTemperature = xe_layer::val.xetDdiTable.Power.pfnGetTemperature;
 
     if( nullptr == pfnGetTemperature )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1943,7 +1943,7 @@ xetPowerSetTemperatureThreshold(
                                                     ///< will be throttled
     )
 {
-    auto pfnSetTemperatureThreshold = xe_layer::val.xetPower.pfnSetTemperatureThreshold;
+    auto pfnSetTemperatureThreshold = xe_layer::val.xetDdiTable.Power.pfnSetTemperatureThreshold;
 
     if( nullptr == pfnSetTemperatureThreshold )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1966,7 +1966,7 @@ xetPowerActivityCount(
     uint32_t* pActivityCount                        ///< [out] the number of activity counters on the device
     )
 {
-    auto pfnActivityCount = xe_layer::val.xetPower.pfnActivityCount;
+    auto pfnActivityCount = xe_layer::val.xetDdiTable.Power.pfnActivityCount;
 
     if( nullptr == pfnActivityCount )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1993,7 +1993,7 @@ xetPowerGetActivityProperties(
     xet_activity_properties_t* pProperties          ///< [out] pointer to properties for this activity counter
     )
 {
-    auto pfnGetActivityProperties = xe_layer::val.xetPower.pfnGetActivityProperties;
+    auto pfnGetActivityProperties = xe_layer::val.xetDdiTable.Power.pfnGetActivityProperties;
 
     if( nullptr == pfnGetActivityProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2022,7 +2022,7 @@ xetPowerGetActivityCounters(
     xet_activity_counters_t* pCounters              ///< [out] pointer to an array of activity counter data
     )
 {
-    auto pfnGetActivityCounters = xe_layer::val.xetPower.pfnGetActivityCounters;
+    auto pfnGetActivityCounters = xe_layer::val.xetDdiTable.Power.pfnGetActivityCounters;
 
     if( nullptr == pfnGetActivityCounters )
         return XE_RESULT_ERROR_UNSUPPORTED;

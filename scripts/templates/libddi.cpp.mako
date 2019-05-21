@@ -56,7 +56,7 @@ namespace ${n}_lib
         {
             auto getTable = reinterpret_cast<${tbl['pfn']}>(
                 GET_FUNCTION_PTR(loader, "${tbl['export']['name']}") );
-            result = getTable( ${X}_API_VERSION_1_0, &${n}${tbl['name']} );
+            result = getTable( ${X}_API_VERSION_1_0, &ddiTable.${tbl['name']} );
         }
 
     %endfor

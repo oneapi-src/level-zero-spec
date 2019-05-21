@@ -39,18 +39,6 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-typedef struct _xet_global_apitable_t               xet_global_apitable_t;
-typedef struct _xet_device_apitable_t               xet_device_apitable_t;
-typedef struct _xet_command_list_apitable_t         xet_command_list_apitable_t;
-typedef struct _xet_metric_group_apitable_t         xet_metric_group_apitable_t;
-typedef struct _xet_metric_apitable_t               xet_metric_apitable_t;
-typedef struct _xet_metric_tracer_apitable_t        xet_metric_tracer_apitable_t;
-typedef struct _xet_metric_query_pool_apitable_t    xet_metric_query_pool_apitable_t;
-typedef struct _xet_metric_query_apitable_t         xet_metric_query_apitable_t;
-typedef struct _xet_power_apitable_t                xet_power_apitable_t;
-typedef struct _xet_freq_domain_apitable_t          xet_freq_domain_apitable_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetInit 
 typedef xe_result_t (__xecall *xet_pfnInit_t)(
     xe_init_flag_t
@@ -58,11 +46,10 @@ typedef xe_result_t (__xecall *xet_pfnInit_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Global functions pointers
-typedef struct _xet_global_apitable_t
+typedef struct _xet_global_dditable_t
 {
     xet_pfnInit_t                                               pfnInit;
-
-} xet_global_apitable_t;
+} xet_global_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Global table
@@ -78,14 +65,14 @@ typedef struct _xet_global_apitable_t
 __xedllexport xe_result_t __xecall
 xetGetGlobalProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_global_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
+    xet_global_dditable_t* ptable                   ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetGetGlobalProcAddrTable
 typedef xe_result_t (__xecall *xet_pfnGetGlobalProcAddrTable_t)(
     xe_api_version_t,
-    xet_global_apitable_t*
+    xet_global_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -98,16 +85,10 @@ typedef xe_result_t (__xecall *xet_pfnDeviceActivateMetricGroups_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Device functions pointers
-typedef struct _xet_device_apitable_t
+typedef struct _xet_device_dditable_t
 {
     xet_pfnDeviceActivateMetricGroups_t                         pfnActivateMetricGroups;
-
-    xet_metric_group_apitable_t*                                pMetricGroup;
-    xet_metric_tracer_apitable_t*                               pMetricTracer;
-    xet_metric_query_pool_apitable_t*                           pMetricQueryPool;
-    xet_metric_query_apitable_t*                                pMetricQuery;
-    xet_power_apitable_t*                                       pPower;
-} xet_device_apitable_t;
+} xet_device_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Device table
@@ -123,14 +104,14 @@ typedef struct _xet_device_apitable_t
 __xedllexport xe_result_t __xecall
 xetGetDeviceProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_device_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
+    xet_device_dditable_t* ptable                   ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetGetDeviceProcAddrTable
 typedef xe_result_t (__xecall *xet_pfnGetDeviceProcAddrTable_t)(
     xe_api_version_t,
-    xet_device_apitable_t*
+    xet_device_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -164,14 +145,13 @@ typedef xe_result_t (__xecall *xet_pfnCommandListAppendMetricMemoryBarrier_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of CommandList functions pointers
-typedef struct _xet_command_list_apitable_t
+typedef struct _xet_command_list_dditable_t
 {
     xet_pfnCommandListAppendMetricTracerMarker_t                pfnAppendMetricTracerMarker;
     xet_pfnCommandListAppendMetricQueryBegin_t                  pfnAppendMetricQueryBegin;
     xet_pfnCommandListAppendMetricQueryEnd_t                    pfnAppendMetricQueryEnd;
     xet_pfnCommandListAppendMetricMemoryBarrier_t               pfnAppendMetricMemoryBarrier;
-
-} xet_command_list_apitable_t;
+} xet_command_list_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's CommandList table
@@ -187,14 +167,14 @@ typedef struct _xet_command_list_apitable_t
 __xedllexport xe_result_t __xecall
 xetGetCommandListProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_command_list_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
+    xet_command_list_dditable_t* ptable             ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetGetCommandListProcAddrTable
 typedef xe_result_t (__xecall *xet_pfnGetCommandListProcAddrTable_t)(
     xe_api_version_t,
-    xet_command_list_apitable_t*
+    xet_command_list_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -232,15 +212,13 @@ typedef xe_result_t (__xecall *xet_pfnMetricGroupCalculateData_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of MetricGroup functions pointers
-typedef struct _xet_metric_group_apitable_t
+typedef struct _xet_metric_group_dditable_t
 {
     xet_pfnMetricGroupGetCount_t                                pfnGetCount;
     xet_pfnMetricGroupGet_t                                     pfnGet;
     xet_pfnMetricGroupGetProperties_t                           pfnGetProperties;
     xet_pfnMetricGroupCalculateData_t                           pfnCalculateData;
-
-    xet_metric_apitable_t*                                      pMetric;
-} xet_metric_group_apitable_t;
+} xet_metric_group_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's MetricGroup table
@@ -256,14 +234,14 @@ typedef struct _xet_metric_group_apitable_t
 __xedllexport xe_result_t __xecall
 xetGetMetricGroupProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_group_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
+    xet_metric_group_dditable_t* ptable             ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetGetMetricGroupProcAddrTable
 typedef xe_result_t (__xecall *xet_pfnGetMetricGroupProcAddrTable_t)(
     xe_api_version_t,
-    xet_metric_group_apitable_t*
+    xet_metric_group_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -283,12 +261,11 @@ typedef xe_result_t (__xecall *xet_pfnMetricGetProperties_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Metric functions pointers
-typedef struct _xet_metric_apitable_t
+typedef struct _xet_metric_dditable_t
 {
     xet_pfnMetricGet_t                                          pfnGet;
     xet_pfnMetricGetProperties_t                                pfnGetProperties;
-
-} xet_metric_apitable_t;
+} xet_metric_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Metric table
@@ -304,14 +281,14 @@ typedef struct _xet_metric_apitable_t
 __xedllexport xe_result_t __xecall
 xetGetMetricProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
+    xet_metric_dditable_t* ptable                   ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetGetMetricProcAddrTable
 typedef xe_result_t (__xecall *xet_pfnGetMetricProcAddrTable_t)(
     xe_api_version_t,
-    xet_metric_apitable_t*
+    xet_metric_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -340,13 +317,12 @@ typedef xe_result_t (__xecall *xet_pfnMetricTracerReadData_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of MetricTracer functions pointers
-typedef struct _xet_metric_tracer_apitable_t
+typedef struct _xet_metric_tracer_dditable_t
 {
     xet_pfnMetricTracerOpen_t                                   pfnOpen;
     xet_pfnMetricTracerClose_t                                  pfnClose;
     xet_pfnMetricTracerReadData_t                               pfnReadData;
-
-} xet_metric_tracer_apitable_t;
+} xet_metric_tracer_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's MetricTracer table
@@ -362,14 +338,14 @@ typedef struct _xet_metric_tracer_apitable_t
 __xedllexport xe_result_t __xecall
 xetGetMetricTracerProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_tracer_apitable_t* ptable            ///< [in,out] pointer to table of API function pointers
+    xet_metric_tracer_dditable_t* ptable            ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetGetMetricTracerProcAddrTable
 typedef xe_result_t (__xecall *xet_pfnGetMetricTracerProcAddrTable_t)(
     xe_api_version_t,
-    xet_metric_tracer_apitable_t*
+    xet_metric_tracer_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -396,13 +372,12 @@ typedef xe_result_t (__xecall *xet_pfnMetricQueryPoolGetMetricQuery_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of MetricQueryPool functions pointers
-typedef struct _xet_metric_query_pool_apitable_t
+typedef struct _xet_metric_query_pool_dditable_t
 {
     xet_pfnMetricQueryPoolCreate_t                              pfnCreate;
     xet_pfnMetricQueryPoolDestroy_t                             pfnDestroy;
     xet_pfnMetricQueryPoolGetMetricQuery_t                      pfnGetMetricQuery;
-
-} xet_metric_query_pool_apitable_t;
+} xet_metric_query_pool_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's MetricQueryPool table
@@ -418,14 +393,14 @@ typedef struct _xet_metric_query_pool_apitable_t
 __xedllexport xe_result_t __xecall
 xetGetMetricQueryPoolProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_query_pool_apitable_t* ptable        ///< [in,out] pointer to table of API function pointers
+    xet_metric_query_pool_dditable_t* ptable        ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetGetMetricQueryPoolProcAddrTable
 typedef xe_result_t (__xecall *xet_pfnGetMetricQueryPoolProcAddrTable_t)(
     xe_api_version_t,
-    xet_metric_query_pool_apitable_t*
+    xet_metric_query_pool_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -439,11 +414,10 @@ typedef xe_result_t (__xecall *xet_pfnMetricQueryGetData_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of MetricQuery functions pointers
-typedef struct _xet_metric_query_apitable_t
+typedef struct _xet_metric_query_dditable_t
 {
     xet_pfnMetricQueryGetData_t                                 pfnGetData;
-
-} xet_metric_query_apitable_t;
+} xet_metric_query_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's MetricQuery table
@@ -459,14 +433,14 @@ typedef struct _xet_metric_query_apitable_t
 __xedllexport xe_result_t __xecall
 xetGetMetricQueryProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_metric_query_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
+    xet_metric_query_dditable_t* ptable             ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetGetMetricQueryProcAddrTable
 typedef xe_result_t (__xecall *xet_pfnGetMetricQueryProcAddrTable_t)(
     xe_api_version_t,
-    xet_metric_query_apitable_t*
+    xet_metric_query_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -693,7 +667,7 @@ typedef xe_result_t (__xecall *xet_pfnPowerGetActivityCounters_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Power functions pointers
-typedef struct _xet_power_apitable_t
+typedef struct _xet_power_dditable_t
 {
     xet_pfnPowerCreate_t                                        pfnCreate;
     xet_pfnPowerDestroy_t                                       pfnDestroy;
@@ -724,9 +698,7 @@ typedef struct _xet_power_apitable_t
     xet_pfnPowerActivityCount_t                                 pfnActivityCount;
     xet_pfnPowerGetActivityProperties_t                         pfnGetActivityProperties;
     xet_pfnPowerGetActivityCounters_t                           pfnGetActivityCounters;
-
-    xet_freq_domain_apitable_t*                                 pFreqDomain;
-} xet_power_apitable_t;
+} xet_power_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Power table
@@ -742,14 +714,14 @@ typedef struct _xet_power_apitable_t
 __xedllexport xe_result_t __xecall
 xetGetPowerProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_power_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
+    xet_power_dditable_t* ptable                    ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetGetPowerProcAddrTable
 typedef xe_result_t (__xecall *xet_pfnGetPowerProcAddrTable_t)(
     xe_api_version_t,
-    xet_power_apitable_t*
+    xet_power_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -816,7 +788,7 @@ typedef xe_result_t (__xecall *xet_pfnFreqDomainGetCurrentFrequency_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of FreqDomain functions pointers
-typedef struct _xet_freq_domain_apitable_t
+typedef struct _xet_freq_domain_dditable_t
 {
     xet_pfnFreqDomainGetProperties_t                            pfnGetProperties;
     xet_pfnFreqDomainGetSourceFreqDomain_t                      pfnGetSourceFreqDomain;
@@ -826,8 +798,7 @@ typedef struct _xet_freq_domain_apitable_t
     xet_pfnFreqDomainSetClockRange_t                            pfnSetClockRange;
     xet_pfnFreqDomainSetClockDivider_t                          pfnSetClockDivider;
     xet_pfnFreqDomainGetCurrentFrequency_t                      pfnGetCurrentFrequency;
-
-} xet_freq_domain_apitable_t;
+} xet_freq_domain_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's FreqDomain table
@@ -843,15 +814,31 @@ typedef struct _xet_freq_domain_apitable_t
 __xedllexport xe_result_t __xecall
 xetGetFreqDomainProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xet_freq_domain_apitable_t* ptable              ///< [in,out] pointer to table of API function pointers
+    xet_freq_domain_dditable_t* ptable              ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetGetFreqDomainProcAddrTable
 typedef xe_result_t (__xecall *xet_pfnGetFreqDomainProcAddrTable_t)(
     xe_api_version_t,
-    xet_freq_domain_apitable_t*
+    xet_freq_domain_dditable_t*
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief 
+typedef struct _xet_dditable_t
+{
+    xet_global_dditable_t               Global;
+    xet_device_dditable_t               Device;
+    xet_command_list_dditable_t         CommandList;
+    xet_metric_group_dditable_t         MetricGroup;
+    xet_metric_dditable_t               Metric;
+    xet_metric_tracer_dditable_t        MetricTracer;
+    xet_metric_query_pool_dditable_t    MetricQueryPool;
+    xet_metric_query_dditable_t         MetricQuery;
+    xet_power_dditable_t                Power;
+    xet_freq_domain_dditable_t          FreqDomain;
+} xet_dditable_t;
 
 #if defined(__cplusplus)
 } // extern "C"

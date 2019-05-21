@@ -60,7 +60,7 @@ xeEventPoolCreate(
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
     )
 {
-    auto pfnCreate = xe_lib::lib.xeEventPool.pfnCreate;
+    auto pfnCreate = xe_lib::lib.ddiTable.EventPool.pfnCreate;
 
 #if _DEBUG
     if( nullptr == pfnCreate )
@@ -97,7 +97,7 @@ xeEventPoolDestroy(
     xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object to destroy
     )
 {
-    auto pfnDestroy = xe_lib::lib.xeEventPool.pfnDestroy;
+    auto pfnDestroy = xe_lib::lib.ddiTable.EventPool.pfnDestroy;
 
 #if _DEBUG
     if( nullptr == pfnDestroy )
@@ -140,7 +140,7 @@ xeEventCreate(
     xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
     )
 {
-    auto pfnCreate = xe_lib::lib.xeEvent.pfnCreate;
+    auto pfnCreate = xe_lib::lib.ddiTable.Event.pfnCreate;
 
 #if _DEBUG
     if( nullptr == pfnCreate )
@@ -180,7 +180,7 @@ xeEventDestroy(
     xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
     )
 {
-    auto pfnDestroy = xe_lib::lib.xeEvent.pfnDestroy;
+    auto pfnDestroy = xe_lib::lib.ddiTable.Event.pfnDestroy;
 
 #if _DEBUG
     if( nullptr == pfnDestroy )
@@ -215,7 +215,7 @@ xeEventPoolGetIpcHandle(
     xe_ipc_event_pool_handle_t* phIpc               ///< [out] Returned IPC event handle
     )
 {
-    auto pfnGetIpcHandle = xe_lib::lib.xeEventPool.pfnGetIpcHandle;
+    auto pfnGetIpcHandle = xe_lib::lib.ddiTable.EventPool.pfnGetIpcHandle;
 
 #if _DEBUG
     if( nullptr == pfnGetIpcHandle )
@@ -254,7 +254,7 @@ xeEventPoolOpenIpcHandle(
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
     )
 {
-    auto pfnOpenIpcHandle = xe_lib::lib.xeEventPool.pfnOpenIpcHandle;
+    auto pfnOpenIpcHandle = xe_lib::lib.ddiTable.EventPool.pfnOpenIpcHandle;
 
 #if _DEBUG
     if( nullptr == pfnOpenIpcHandle )
@@ -289,7 +289,7 @@ xeEventPoolCloseIpcHandle(
     xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object
     )
 {
-    auto pfnCloseIpcHandle = xe_lib::lib.xeEventPool.pfnCloseIpcHandle;
+    auto pfnCloseIpcHandle = xe_lib::lib.ddiTable.EventPool.pfnCloseIpcHandle;
 
 #if _DEBUG
     if( nullptr == pfnCloseIpcHandle )
@@ -327,7 +327,7 @@ xeCommandListAppendSignalEvent(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    auto pfnAppendSignalEvent = xe_lib::lib.xeCommandList.pfnAppendSignalEvent;
+    auto pfnAppendSignalEvent = xe_lib::lib.ddiTable.CommandList.pfnAppendSignalEvent;
 
 #if _DEBUG
     if( nullptr == pfnAppendSignalEvent )
@@ -361,7 +361,7 @@ xeCommandListAppendWaitOnEvents(
                                                     ///< continuing
     )
 {
-    auto pfnAppendWaitOnEvents = xe_lib::lib.xeCommandList.pfnAppendWaitOnEvents;
+    auto pfnAppendWaitOnEvents = xe_lib::lib.ddiTable.CommandList.pfnAppendWaitOnEvents;
 
 #if _DEBUG
     if( nullptr == pfnAppendWaitOnEvents )
@@ -394,7 +394,7 @@ xeEventHostSignal(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    auto pfnHostSignal = xe_lib::lib.xeEvent.pfnHostSignal;
+    auto pfnHostSignal = xe_lib::lib.ddiTable.Event.pfnHostSignal;
 
 #if _DEBUG
     if( nullptr == pfnHostSignal )
@@ -435,7 +435,7 @@ xeEventHostSynchronize(
                                                     ///< is lost.
     )
 {
-    auto pfnHostSynchronize = xe_lib::lib.xeEvent.pfnHostSynchronize;
+    auto pfnHostSynchronize = xe_lib::lib.ddiTable.Event.pfnHostSynchronize;
 
 #if _DEBUG
     if( nullptr == pfnHostSynchronize )
@@ -472,7 +472,7 @@ xeEventQueryStatus(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    auto pfnQueryStatus = xe_lib::lib.xeEvent.pfnQueryStatus;
+    auto pfnQueryStatus = xe_lib::lib.ddiTable.Event.pfnQueryStatus;
 
 #if _DEBUG
     if( nullptr == pfnQueryStatus )
@@ -508,7 +508,7 @@ xeCommandListAppendEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    auto pfnAppendEventReset = xe_lib::lib.xeCommandList.pfnAppendEventReset;
+    auto pfnAppendEventReset = xe_lib::lib.ddiTable.CommandList.pfnAppendEventReset;
 
 #if _DEBUG
     if( nullptr == pfnAppendEventReset )
@@ -541,7 +541,7 @@ xeEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    auto pfnReset = xe_lib::lib.xeEvent.pfnReset;
+    auto pfnReset = xe_lib::lib.ddiTable.Event.pfnReset;
 
 #if _DEBUG
     if( nullptr == pfnReset )

@@ -51,7 +51,7 @@ xetMetricGroupGetCount(
     uint32_t* pCount                                ///< [out] number of metric groups supported by the device
     )
 {
-    auto pfnGetCount = xet_lib::lib.xetMetricGroup.pfnGetCount;
+    auto pfnGetCount = xet_lib::lib.ddiTable.MetricGroup.pfnGetCount;
 
 #if _DEBUG
     if( nullptr == pfnGetCount )
@@ -83,7 +83,7 @@ xetMetricGroupGet(
     xet_metric_group_handle_t* phMetricGroup        ///< [out] metric group handle
     )
 {
-    auto pfnGet = xet_lib::lib.xetMetricGroup.pfnGet;
+    auto pfnGet = xet_lib::lib.ddiTable.MetricGroup.pfnGet;
 
 #if _DEBUG
     if( nullptr == pfnGet )
@@ -114,7 +114,7 @@ xetMetricGroupGetProperties(
     xet_metric_group_properties_t* pProperties      ///< [out] metric group properties
     )
 {
-    auto pfnGetProperties = xet_lib::lib.xetMetricGroup.pfnGetProperties;
+    auto pfnGetProperties = xet_lib::lib.ddiTable.MetricGroup.pfnGetProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetProperties )
@@ -146,7 +146,7 @@ xetMetricGet(
     xet_metric_handle_t* phMetric                   ///< [out] handle of metric
     )
 {
-    auto pfnGet = xet_lib::lib.xetMetric.pfnGet;
+    auto pfnGet = xet_lib::lib.ddiTable.Metric.pfnGet;
 
 #if _DEBUG
     if( nullptr == pfnGet )
@@ -177,7 +177,7 @@ xetMetricGetProperties(
     xet_metric_properties_t* pProperties            ///< [out] metric properties
     )
 {
-    auto pfnGetProperties = xet_lib::lib.xetMetric.pfnGetProperties;
+    auto pfnGetProperties = xet_lib::lib.ddiTable.Metric.pfnGetProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetProperties )
@@ -215,7 +215,7 @@ xetMetricGroupCalculateData(
     xet_typed_value_t* pCalculatedData              ///< [in,out] calculated metrics
     )
 {
-    auto pfnCalculateData = xet_lib::lib.xetMetricGroup.pfnCalculateData;
+    auto pfnCalculateData = xet_lib::lib.ddiTable.MetricGroup.pfnCalculateData;
 
 #if _DEBUG
     if( nullptr == pfnCalculateData )
@@ -251,7 +251,7 @@ xetDeviceActivateMetricGroups(
                                                     ///< to deactivate.
     )
 {
-    auto pfnActivateMetricGroups = xet_lib::lib.xetDevice.pfnActivateMetricGroups;
+    auto pfnActivateMetricGroups = xet_lib::lib.ddiTable.Device.pfnActivateMetricGroups;
 
 #if _DEBUG
     if( nullptr == pfnActivateMetricGroups )
@@ -289,7 +289,7 @@ xetMetricTracerOpen(
     xet_metric_tracer_handle_t* phMetricTracer      ///< [out] handle of metric tracer
     )
 {
-    auto pfnOpen = xet_lib::lib.xetMetricTracer.pfnOpen;
+    auto pfnOpen = xet_lib::lib.ddiTable.MetricTracer.pfnOpen;
 
 #if _DEBUG
     if( nullptr == pfnOpen )
@@ -322,7 +322,7 @@ xetCommandListAppendMetricTracerMarker(
     uint32_t value                                  ///< [in] tracer marker value
     )
 {
-    auto pfnAppendMetricTracerMarker = xet_lib::lib.xetCommandList.pfnAppendMetricTracerMarker;
+    auto pfnAppendMetricTracerMarker = xet_lib::lib.ddiTable.CommandList.pfnAppendMetricTracerMarker;
 
 #if _DEBUG
     if( nullptr == pfnAppendMetricTracerMarker )
@@ -352,7 +352,7 @@ xetMetricTracerClose(
     xet_metric_tracer_handle_t hMetricTracer        ///< [in] handle of the metric tracer
     )
 {
-    auto pfnClose = xet_lib::lib.xetMetricTracer.pfnClose;
+    auto pfnClose = xet_lib::lib.ddiTable.MetricTracer.pfnClose;
 
 #if _DEBUG
     if( nullptr == pfnClose )
@@ -386,7 +386,7 @@ xetMetricTracerReadData(
     uint8_t* pRawData                               ///< [in,out] raw data buffer for reports
     )
 {
-    auto pfnReadData = xet_lib::lib.xetMetricTracer.pfnReadData;
+    auto pfnReadData = xet_lib::lib.ddiTable.MetricTracer.pfnReadData;
 
 #if _DEBUG
     if( nullptr == pfnReadData )
@@ -420,7 +420,7 @@ xetMetricQueryPoolCreate(
     xet_metric_query_pool_handle_t* phMetricQueryPool   ///< [out] handle of metric query pool
     )
 {
-    auto pfnCreate = xet_lib::lib.xetMetricQueryPool.pfnCreate;
+    auto pfnCreate = xet_lib::lib.ddiTable.MetricQueryPool.pfnCreate;
 
 #if _DEBUG
     if( nullptr == pfnCreate )
@@ -450,7 +450,7 @@ xetMetricQueryPoolDestroy(
     xet_metric_query_pool_handle_t hMetricQueryPool ///< [in] handle of the metric query pool
     )
 {
-    auto pfnDestroy = xet_lib::lib.xetMetricQueryPool.pfnDestroy;
+    auto pfnDestroy = xet_lib::lib.ddiTable.MetricQueryPool.pfnDestroy;
 
 #if _DEBUG
     if( nullptr == pfnDestroy )
@@ -482,7 +482,7 @@ xetMetricQueryPoolGetMetricQuery(
     xet_metric_query_handle_t* phMetricQuery        ///< [out] handle of metric query
     )
 {
-    auto pfnGetMetricQuery = xet_lib::lib.xetMetricQueryPool.pfnGetMetricQuery;
+    auto pfnGetMetricQuery = xet_lib::lib.ddiTable.MetricQueryPool.pfnGetMetricQuery;
 
 #if _DEBUG
     if( nullptr == pfnGetMetricQuery )
@@ -514,7 +514,7 @@ xetCommandListAppendMetricQueryBegin(
     xet_metric_query_handle_t hMetricQuery          ///< [in] handle of the metric query
     )
 {
-    auto pfnAppendMetricQueryBegin = xet_lib::lib.xetCommandList.pfnAppendMetricQueryBegin;
+    auto pfnAppendMetricQueryBegin = xet_lib::lib.ddiTable.CommandList.pfnAppendMetricQueryBegin;
 
 #if _DEBUG
     if( nullptr == pfnAppendMetricQueryBegin )
@@ -548,7 +548,7 @@ xetCommandListAppendMetricQueryEnd(
     xe_event_handle_t hCompletionEvent              ///< [in] handle of the completion event to signal
     )
 {
-    auto pfnAppendMetricQueryEnd = xet_lib::lib.xetCommandList.pfnAppendMetricQueryEnd;
+    auto pfnAppendMetricQueryEnd = xet_lib::lib.ddiTable.CommandList.pfnAppendMetricQueryEnd;
 
 #if _DEBUG
     if( nullptr == pfnAppendMetricQueryEnd )
@@ -578,7 +578,7 @@ xetCommandListAppendMetricMemoryBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
 {
-    auto pfnAppendMetricMemoryBarrier = xet_lib::lib.xetCommandList.pfnAppendMetricMemoryBarrier;
+    auto pfnAppendMetricMemoryBarrier = xet_lib::lib.ddiTable.CommandList.pfnAppendMetricMemoryBarrier;
 
 #if _DEBUG
     if( nullptr == pfnAppendMetricMemoryBarrier )
@@ -612,7 +612,7 @@ xetMetricQueryGetData(
     uint8_t* pRawData                               ///< [in,out] query result data in raw format
     )
 {
-    auto pfnGetData = xet_lib::lib.xetMetricQuery.pfnGetData;
+    auto pfnGetData = xet_lib::lib.ddiTable.MetricQuery.pfnGetData;
 
 #if _DEBUG
     if( nullptr == pfnGetData )

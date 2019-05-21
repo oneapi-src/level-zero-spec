@@ -48,10 +48,10 @@ extern "C" {
 __xedllexport xe_result_t __xecall
 xexGetGlobalProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xex_global_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
+    xex_global_dditable_t* ptable                   ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xexGlobal;
+    auto& mytable = xe_layer::val.xexDdiTable.Global;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -70,38 +70,6 @@ xexGetGlobalProcAddrTable(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Device table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for ptable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xexGetDeviceProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xex_device_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
-    )
-{
-    auto& mytable = xe_layer::val.xexDevice;
-
-#ifdef _DEBUG
-    if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    if( xe_layer::val.version < version )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
-
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's CommandGraph table
 ///        with current process' addresses
 ///
@@ -115,10 +83,10 @@ xexGetDeviceProcAddrTable(
 __xedllexport xe_result_t __xecall
 xexGetCommandGraphProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xex_command_graph_apitable_t* ptable            ///< [in,out] pointer to table of API function pointers
+    xex_command_graph_dditable_t* ptable            ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xexCommandGraph;
+    auto& mytable = xe_layer::val.xexDdiTable.CommandGraph;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -149,7 +117,7 @@ xexInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    auto pfnInit = xe_layer::val.xexGlobal.pfnInit;
+    auto pfnInit = xe_layer::val.xexDdiTable.Global.pfnInit;
 
     if( nullptr == pfnInit )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -170,7 +138,7 @@ xexCommandGraphCreate(
     xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
     )
 {
-    auto pfnCreate = xe_layer::val.xexCommandGraph.pfnCreate;
+    auto pfnCreate = xe_layer::val.xexDdiTable.CommandGraph.pfnCreate;
 
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -201,7 +169,7 @@ xexCommandGraphDestroy(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to destroy
     )
 {
-    auto pfnDestroy = xe_layer::val.xexCommandGraph.pfnDestroy;
+    auto pfnDestroy = xe_layer::val.xexDdiTable.CommandGraph.pfnDestroy;
 
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -223,7 +191,7 @@ xexCommandGraphClose(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
     )
 {
-    auto pfnClose = xe_layer::val.xexCommandGraph.pfnClose;
+    auto pfnClose = xe_layer::val.xexDdiTable.CommandGraph.pfnClose;
 
     if( nullptr == pfnClose )
         return XE_RESULT_ERROR_UNSUPPORTED;

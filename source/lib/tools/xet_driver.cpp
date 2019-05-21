@@ -66,7 +66,7 @@ xetInit(
     if( XE_RESULT_SUCCESS != result )
         return result;
 
-    auto pfnInit = xet_lib::lib.xetGlobal.pfnInit;
+    auto pfnInit = xet_lib::lib.ddiTable.Global.pfnInit;
 
 #if _DEBUG
     if( nullptr == pfnInit )

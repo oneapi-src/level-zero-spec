@@ -48,7 +48,7 @@ extern "C" {
 __xedllexport xe_result_t __xecall
 xexGetGlobalProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xex_global_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
+    xex_global_dditable_t* ptable                   ///< [in,out] pointer to table of DDI function pointers
     )
 {
 #ifdef _DEBUG
@@ -79,50 +79,6 @@ xexGetGlobalProcAddrTable(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Device table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for ptable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xexGetDeviceProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xex_device_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
-    )
-{
-#ifdef _DEBUG
-    if( nullptr == ptable )
-        return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    if( xe_loader::loader.version < version )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
-
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    if( nullptr != xe_loader::loader.commonDriver )
-    {
-        static auto getTable = reinterpret_cast<xex_pfnGetDeviceProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xexGetDeviceProcAddrTable") );
-        result = getTable( version, ptable );
-    }
-
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
-    {
-        static auto getTable = reinterpret_cast<xex_pfnGetDeviceProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xexGetDeviceProcAddrTable") );
-        result = getTable( version, ptable );
-    }
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's CommandGraph table
 ///        with current process' addresses
 ///
@@ -136,7 +92,7 @@ xexGetDeviceProcAddrTable(
 __xedllexport xe_result_t __xecall
 xexGetCommandGraphProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xex_command_graph_apitable_t* ptable            ///< [in,out] pointer to table of API function pointers
+    xex_command_graph_dditable_t* ptable            ///< [in,out] pointer to table of DDI function pointers
     )
 {
 #ifdef _DEBUG
@@ -173,7 +129,7 @@ xexInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    auto pfnInit = xe_loader::loader.xexGlobal.pfnInit;
+    auto pfnInit = xe_loader::loader.xexGlobalDdiTable.pfnInit;
     
     
     auto result = pfnInit( flags );
@@ -189,7 +145,7 @@ xexCommandGraphCreate(
     xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
     )
 {
-    auto pfnCreate = std::get<1>( *reinterpret_cast<xex_device_object_t*>( hDevice ) )->pCommandGraph->pfnCreate;
+    auto pfnCreate = std::get<1>( *reinterpret_cast<xex_device_object_t*>( hDevice ) )->CommandGraph.pfnCreate;
     
     hDevice = std::get<0>( *reinterpret_cast<xex_device_object_t*>( hDevice ) );
     
@@ -206,7 +162,7 @@ xexCommandGraphDestroy(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to destroy
     )
 {
-    auto pfnDestroy = std::get<1>( *reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph ) )->pfnDestroy;
+    auto pfnDestroy = std::get<1>( *reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph ) )->CommandGraph.pfnDestroy;
     
     hCommandGraph = std::get<0>( *reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph ) );
     
@@ -221,7 +177,7 @@ xexCommandGraphClose(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
     )
 {
-    auto pfnClose = std::get<1>( *reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph ) )->pfnClose;
+    auto pfnClose = std::get<1>( *reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph ) )->CommandGraph.pfnClose;
     
     hCommandGraph = std::get<0>( *reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph ) );
     

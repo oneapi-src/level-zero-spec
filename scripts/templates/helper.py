@@ -800,39 +800,16 @@ def get_table_name(namespace, tags, obj):
     return name
 
 """
-Private:
-    returns a list of dict for all tables owned by cls
-"""
-def _get_table_owns(namespace, tags, cls, meta):
-    owns = []
-    if 'owns' in meta['class'][cls]:
-        for ocls in meta['class'][cls]['owns']:
-            name = get_table_name(namespace, tags, {'class': ocls})
-            table = "%s_%s_apitable_t"%(namespace, _camel_to_snake(name))
-            owns.append({
-                'name': name,
-                'type': table
-            })
-    return owns
-
-"""
 Public:
     returns a list of dict of each pfntables needed
 """
 def get_pfntables(specs, meta, namespace, tags):
     tables = []
     for cls in sorted(meta['class'], key=lambda x: meta['class'][x]['ordinal']):
-        # only include tables for cls in this namespace
-        RE_EXTRACT_TAG = r"^(\$[^A-Z])\w*"
-        t = re.sub(RE_EXTRACT_TAG, r"\1", cls)
-        if not (t in tags and re.match(namespace, tags[t])):
-            continue
-
         objs = get_class_function_objs(specs, cls)
-        owns = _get_table_owns(namespace, tags, cls, meta)
-        if len(objs) > 0 or len(owns) > 0:
+        if len(objs) > 0:
             name = get_table_name(namespace, tags, {'class': cls})
-            table = "%s_%s_apitable_t"%(namespace, _camel_to_snake(name))
+            table = "%s_%s_dditable_t"%(namespace, _camel_to_snake(name))
 
             params = []
             params.append({
@@ -843,7 +820,7 @@ def get_pfntables(specs, meta, namespace, tags):
             params.append({
                 'type': "%s*"%table,
                 'name': "ptable",
-                'desc': "[in,out] pointer to table of API function pointers"
+                'desc': "[in,out] pointer to table of DDI function pointers"
                 })
             export = {
                 'name': "%sGet%sProcAddrTable"%(namespace, name),
@@ -857,8 +834,7 @@ def get_pfntables(specs, meta, namespace, tags):
                 'type': table,
                 'export': export,
                 'pfn': pfn,
-                'functions': objs,
-                'owns': owns
+                'functions': objs
             })
     return tables
 
@@ -872,7 +848,7 @@ def make_loader_prologue_lines(namespace, tags, obj, meta, loader):
     tblname = get_table_name(namespace, tags, obj)
     pfnname = make_pfn_name(namespace, tags, obj)
     if re.match(r"Global.*", tblname):
-        lines.append("auto %s = %s.%s%s.%s;"%(pfnname, loader, namespace, tblname, pfnname))
+        lines.append("auto %s = %s.%s%sDdiTable.%s;"%(pfnname, loader, namespace, tblname, pfnname))
         lines.append("")
 
     params = _filter_param_list(obj['params'], ["in"])
@@ -880,9 +856,9 @@ def make_loader_prologue_lines(namespace, tags, obj, meta, loader):
         is_handle = re.match(r".*_handle_t", item['type'])
 
         tname = _remove_const_ptr(item['type'])
-        hcls = meta['handle'][tname]['class'] if is_handle and tname in meta['handle'] else ""
+        cls = meta['handle'][tname]['class'] if is_handle and tname in meta['handle'] else ""
 
-        if is_handle and len(hcls) > 0:
+        if is_handle and len(cls) > 0:
             name = subt(namespace, tags, item['name'])
             tname = _remove_const_ptr(subt(namespace, tags, item['type']))
 
@@ -901,12 +877,7 @@ def make_loader_prologue_lines(namespace, tags, obj, meta, loader):
                     lines.append("%s = ( %s ) ? std::get<0>( *reinterpret_cast<%s*>( %s ) ) : nullptr;"%(name, name, obj_name, name))
                 else:
                     if i == 0:
-                        prologue = ""
-                        RE_REMOVE_TAG = r"^\$[^A-Z](\w+)"
-                        cls = obj['class']
-                        if re.sub(RE_REMOVE_TAG, r"\1", hcls) != re.sub(RE_REMOVE_TAG, r"\1", cls):
-                            prologue = "p%s->"%get_table_name(namespace, tags, {'class': cls})
-
+                        prologue = "%s."%get_table_name(namespace, tags, {'class': obj['class']})
                         lines.append("auto %s = std::get<1>( *reinterpret_cast<%s*>( %s ) )->%s%s;"%(pfnname, obj_name, name, prologue, pfnname))
                         lines.append("")
 

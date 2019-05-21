@@ -58,7 +58,7 @@ xeDeviceMakeMemoryResident(
     size_t size                                     ///< [in] size in bytes to make resident
     )
 {
-    auto pfnMakeMemoryResident = xe_lib::lib.xeDevice.pfnMakeMemoryResident;
+    auto pfnMakeMemoryResident = xe_lib::lib.ddiTable.Device.pfnMakeMemoryResident;
 
 #if _DEBUG
     if( nullptr == pfnMakeMemoryResident )
@@ -93,7 +93,7 @@ xeDeviceEvictMemory(
     size_t size                                     ///< [in] size in bytes to evict
     )
 {
-    auto pfnEvictMemory = xe_lib::lib.xeDevice.pfnEvictMemory;
+    auto pfnEvictMemory = xe_lib::lib.ddiTable.Device.pfnEvictMemory;
 
 #if _DEBUG
     if( nullptr == pfnEvictMemory )
@@ -126,7 +126,7 @@ xeDeviceMakeImageResident(
     xe_image_handle_t hImage                        ///< [in] handle of image to make resident
     )
 {
-    auto pfnMakeImageResident = xe_lib::lib.xeDevice.pfnMakeImageResident;
+    auto pfnMakeImageResident = xe_lib::lib.ddiTable.Device.pfnMakeImageResident;
 
 #if _DEBUG
     if( nullptr == pfnMakeImageResident )
@@ -161,7 +161,7 @@ xeDeviceEvictImage(
     xe_image_handle_t hImage                        ///< [in] handle of image to make evict
     )
 {
-    auto pfnEvictImage = xe_lib::lib.xeDevice.pfnEvictImage;
+    auto pfnEvictImage = xe_lib::lib.ddiTable.Device.pfnEvictImage;
 
 #if _DEBUG
     if( nullptr == pfnEvictImage )

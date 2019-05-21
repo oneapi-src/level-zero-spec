@@ -48,9 +48,7 @@ namespace xex_lib
 
         xe_result_t Init();
 
-        xex_global_apitable_t           xexGlobal = {};
-        xex_device_apitable_t           xexDevice = {};
-        xex_command_graph_apitable_t    xexCommandGraph = {};
+        xex_dditable_t  ddiTable = {};
     };
 
     extern Library lib;

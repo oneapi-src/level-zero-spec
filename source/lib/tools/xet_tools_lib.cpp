@@ -46,70 +46,70 @@ namespace xet_lib
         {
             auto getTable = reinterpret_cast<xet_pfnGetGlobalProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "xetGetGlobalProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &xetGlobal );
+            result = getTable( XE_API_VERSION_1_0, &ddiTable.Global );
         }
 
         if( XE_RESULT_SUCCESS == result )
         {
             auto getTable = reinterpret_cast<xet_pfnGetDeviceProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "xetGetDeviceProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &xetDevice );
+            result = getTable( XE_API_VERSION_1_0, &ddiTable.Device );
         }
 
         if( XE_RESULT_SUCCESS == result )
         {
             auto getTable = reinterpret_cast<xet_pfnGetCommandListProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "xetGetCommandListProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &xetCommandList );
+            result = getTable( XE_API_VERSION_1_0, &ddiTable.CommandList );
         }
 
         if( XE_RESULT_SUCCESS == result )
         {
             auto getTable = reinterpret_cast<xet_pfnGetMetricGroupProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "xetGetMetricGroupProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &xetMetricGroup );
+            result = getTable( XE_API_VERSION_1_0, &ddiTable.MetricGroup );
         }
 
         if( XE_RESULT_SUCCESS == result )
         {
             auto getTable = reinterpret_cast<xet_pfnGetMetricProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "xetGetMetricProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &xetMetric );
+            result = getTable( XE_API_VERSION_1_0, &ddiTable.Metric );
         }
 
         if( XE_RESULT_SUCCESS == result )
         {
             auto getTable = reinterpret_cast<xet_pfnGetMetricTracerProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "xetGetMetricTracerProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &xetMetricTracer );
+            result = getTable( XE_API_VERSION_1_0, &ddiTable.MetricTracer );
         }
 
         if( XE_RESULT_SUCCESS == result )
         {
             auto getTable = reinterpret_cast<xet_pfnGetMetricQueryPoolProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "xetGetMetricQueryPoolProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &xetMetricQueryPool );
+            result = getTable( XE_API_VERSION_1_0, &ddiTable.MetricQueryPool );
         }
 
         if( XE_RESULT_SUCCESS == result )
         {
             auto getTable = reinterpret_cast<xet_pfnGetMetricQueryProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "xetGetMetricQueryProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &xetMetricQuery );
+            result = getTable( XE_API_VERSION_1_0, &ddiTable.MetricQuery );
         }
 
         if( XE_RESULT_SUCCESS == result )
         {
             auto getTable = reinterpret_cast<xet_pfnGetPowerProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "xetGetPowerProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &xetPower );
+            result = getTable( XE_API_VERSION_1_0, &ddiTable.Power );
         }
 
         if( XE_RESULT_SUCCESS == result )
         {
             auto getTable = reinterpret_cast<xet_pfnGetFreqDomainProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "xetGetFreqDomainProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &xetFreqDomain );
+            result = getTable( XE_API_VERSION_1_0, &ddiTable.FreqDomain );
         }
 
         return result;

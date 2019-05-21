@@ -46,21 +46,14 @@ namespace xex_lib
         {
             auto getTable = reinterpret_cast<xex_pfnGetGlobalProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "xexGetGlobalProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &xexGlobal );
-        }
-
-        if( XE_RESULT_SUCCESS == result )
-        {
-            auto getTable = reinterpret_cast<xex_pfnGetDeviceProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "xexGetDeviceProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &xexDevice );
+            result = getTable( XE_API_VERSION_1_0, &ddiTable.Global );
         }
 
         if( XE_RESULT_SUCCESS == result )
         {
             auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "xexGetCommandGraphProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &xexCommandGraph );
+            result = getTable( XE_API_VERSION_1_0, &ddiTable.CommandGraph );
         }
 
         return result;

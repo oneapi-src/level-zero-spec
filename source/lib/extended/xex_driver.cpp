@@ -66,7 +66,7 @@ xexInit(
     if( XE_RESULT_SUCCESS != result )
         return result;
 
-    auto pfnInit = xex_lib::lib.xexGlobal.pfnInit;
+    auto pfnInit = xex_lib::lib.ddiTable.Global.pfnInit;
 
 #if _DEBUG
     if( nullptr == pfnInit )

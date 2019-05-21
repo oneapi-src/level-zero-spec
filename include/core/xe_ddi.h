@@ -39,21 +39,6 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-typedef struct _xe_global_apitable_t                xe_global_apitable_t;
-typedef struct _xe_device_apitable_t                xe_device_apitable_t;
-typedef struct _xe_device_group_apitable_t          xe_device_group_apitable_t;
-typedef struct _xe_command_queue_apitable_t         xe_command_queue_apitable_t;
-typedef struct _xe_command_list_apitable_t          xe_command_list_apitable_t;
-typedef struct _xe_fence_apitable_t                 xe_fence_apitable_t;
-typedef struct _xe_event_pool_apitable_t            xe_event_pool_apitable_t;
-typedef struct _xe_event_apitable_t                 xe_event_apitable_t;
-typedef struct _xe_image_apitable_t                 xe_image_apitable_t;
-typedef struct _xe_module_apitable_t                xe_module_apitable_t;
-typedef struct _xe_module_build_log_apitable_t      xe_module_build_log_apitable_t;
-typedef struct _xe_function_apitable_t              xe_function_apitable_t;
-typedef struct _xe_sampler_apitable_t               xe_sampler_apitable_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeInit 
 typedef xe_result_t (__xecall *xe_pfnInit_t)(
     xe_init_flag_t
@@ -68,12 +53,11 @@ typedef xe_result_t (__xecall *xe_pfnGetDeviceGroups_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Global functions pointers
-typedef struct _xe_global_apitable_t
+typedef struct _xe_global_dditable_t
 {
     xe_pfnInit_t                                                pfnInit;
     xe_pfnGetDeviceGroups_t                                     pfnGetDeviceGroups;
-
-} xe_global_apitable_t;
+} xe_global_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Global table
@@ -89,14 +73,14 @@ typedef struct _xe_global_apitable_t
 __xedllexport xe_result_t __xecall
 xeGetGlobalProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_global_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
+    xe_global_dditable_t* ptable                    ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetGlobalProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetGlobalProcAddrTable_t)(
     xe_api_version_t,
-    xe_global_apitable_t*
+    xe_global_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -208,7 +192,7 @@ typedef xe_result_t (__xecall *xe_pfnDeviceEvictImage_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Device functions pointers
-typedef struct _xe_device_apitable_t
+typedef struct _xe_device_dditable_t
 {
     xe_pfnDeviceGetSubDevice_t                                  pfnGetSubDevice;
     xe_pfnDeviceGetP2PProperties_t                              pfnGetP2PProperties;
@@ -229,14 +213,7 @@ typedef struct _xe_device_apitable_t
     xe_pfnDeviceEvictMemory_t                                   pfnEvictMemory;
     xe_pfnDeviceMakeImageResident_t                             pfnMakeImageResident;
     xe_pfnDeviceEvictImage_t                                    pfnEvictImage;
-
-    xe_command_list_apitable_t*                                 pCommandList;
-    xe_command_queue_apitable_t*                                pCommandQueue;
-    xe_event_pool_apitable_t*                                   pEventPool;
-    xe_image_apitable_t*                                        pImage;
-    xe_module_apitable_t*                                       pModule;
-    xe_sampler_apitable_t*                                      pSampler;
-} xe_device_apitable_t;
+} xe_device_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Device table
@@ -252,14 +229,14 @@ typedef struct _xe_device_apitable_t
 __xedllexport xe_result_t __xecall
 xeGetDeviceProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_device_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
+    xe_device_dditable_t* ptable                    ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetDeviceProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetDeviceProcAddrTable_t)(
     xe_api_version_t,
-    xe_device_apitable_t*
+    xe_device_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -389,7 +366,7 @@ typedef xe_result_t (__xecall *xe_pfnDeviceGroupCloseMemIpcHandle_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of DeviceGroup functions pointers
-typedef struct _xe_device_group_apitable_t
+typedef struct _xe_device_group_dditable_t
 {
     xe_pfnDeviceGroupGetDriverVersion_t                         pfnGetDriverVersion;
     xe_pfnDeviceGroupGetDevices_t                               pfnGetDevices;
@@ -406,9 +383,7 @@ typedef struct _xe_device_group_apitable_t
     xe_pfnDeviceGroupGetMemIpcHandle_t                          pfnGetMemIpcHandle;
     xe_pfnDeviceGroupOpenMemIpcHandle_t                         pfnOpenMemIpcHandle;
     xe_pfnDeviceGroupCloseMemIpcHandle_t                        pfnCloseMemIpcHandle;
-
-    xe_device_apitable_t*                                       pDevice;
-} xe_device_group_apitable_t;
+} xe_device_group_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's DeviceGroup table
@@ -424,14 +399,14 @@ typedef struct _xe_device_group_apitable_t
 __xedllexport xe_result_t __xecall
 xeGetDeviceGroupProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_device_group_apitable_t* ptable              ///< [in,out] pointer to table of API function pointers
+    xe_device_group_dditable_t* ptable              ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetDeviceGroupProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetDeviceGroupProcAddrTable_t)(
     xe_api_version_t,
-    xe_device_group_apitable_t*
+    xe_device_group_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -466,15 +441,13 @@ typedef xe_result_t (__xecall *xe_pfnCommandQueueSynchronize_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of CommandQueue functions pointers
-typedef struct _xe_command_queue_apitable_t
+typedef struct _xe_command_queue_dditable_t
 {
     xe_pfnCommandQueueCreate_t                                  pfnCreate;
     xe_pfnCommandQueueDestroy_t                                 pfnDestroy;
     xe_pfnCommandQueueExecuteCommandLists_t                     pfnExecuteCommandLists;
     xe_pfnCommandQueueSynchronize_t                             pfnSynchronize;
-
-    xe_fence_apitable_t*                                        pFence;
-} xe_command_queue_apitable_t;
+} xe_command_queue_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's CommandQueue table
@@ -490,14 +463,14 @@ typedef struct _xe_command_queue_apitable_t
 __xedllexport xe_result_t __xecall
 xeGetCommandQueueProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_command_queue_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
+    xe_command_queue_dditable_t* ptable             ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetCommandQueueProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetCommandQueueProcAddrTable_t)(
     xe_api_version_t,
-    xe_command_queue_apitable_t*
+    xe_command_queue_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -746,7 +719,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchHostFunction_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of CommandList functions pointers
-typedef struct _xe_command_list_apitable_t
+typedef struct _xe_command_list_dditable_t
 {
     xe_pfnCommandListCreate_t                                   pfnCreate;
     xe_pfnCommandListCreateImmediate_t                          pfnCreateImmediate;
@@ -775,8 +748,7 @@ typedef struct _xe_command_list_apitable_t
     xe_pfnCommandListAppendLaunchFunctionIndirect_t             pfnAppendLaunchFunctionIndirect;
     xe_pfnCommandListAppendLaunchMultipleFunctionsIndirect_t    pfnAppendLaunchMultipleFunctionsIndirect;
     xe_pfnCommandListAppendLaunchHostFunction_t                 pfnAppendLaunchHostFunction;
-
-} xe_command_list_apitable_t;
+} xe_command_list_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's CommandList table
@@ -792,14 +764,14 @@ typedef struct _xe_command_list_apitable_t
 __xedllexport xe_result_t __xecall
 xeGetCommandListProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_command_list_apitable_t* ptable              ///< [in,out] pointer to table of API function pointers
+    xe_command_list_dditable_t* ptable              ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetCommandListProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetCommandListProcAddrTable_t)(
     xe_api_version_t,
-    xe_command_list_apitable_t*
+    xe_command_list_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -837,15 +809,14 @@ typedef xe_result_t (__xecall *xe_pfnFenceReset_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Fence functions pointers
-typedef struct _xe_fence_apitable_t
+typedef struct _xe_fence_dditable_t
 {
     xe_pfnFenceCreate_t                                         pfnCreate;
     xe_pfnFenceDestroy_t                                        pfnDestroy;
     xe_pfnFenceHostSynchronize_t                                pfnHostSynchronize;
     xe_pfnFenceQueryStatus_t                                    pfnQueryStatus;
     xe_pfnFenceReset_t                                          pfnReset;
-
-} xe_fence_apitable_t;
+} xe_fence_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Fence table
@@ -861,14 +832,14 @@ typedef struct _xe_fence_apitable_t
 __xedllexport xe_result_t __xecall
 xeGetFenceProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_fence_apitable_t* ptable                     ///< [in,out] pointer to table of API function pointers
+    xe_fence_dditable_t* ptable                     ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetFenceProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetFenceProcAddrTable_t)(
     xe_api_version_t,
-    xe_fence_apitable_t*
+    xe_fence_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -908,16 +879,14 @@ typedef xe_result_t (__xecall *xe_pfnEventPoolCloseIpcHandle_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of EventPool functions pointers
-typedef struct _xe_event_pool_apitable_t
+typedef struct _xe_event_pool_dditable_t
 {
     xe_pfnEventPoolCreate_t                                     pfnCreate;
     xe_pfnEventPoolDestroy_t                                    pfnDestroy;
     xe_pfnEventPoolGetIpcHandle_t                               pfnGetIpcHandle;
     xe_pfnEventPoolOpenIpcHandle_t                              pfnOpenIpcHandle;
     xe_pfnEventPoolCloseIpcHandle_t                             pfnCloseIpcHandle;
-
-    xe_event_apitable_t*                                        pEvent;
-} xe_event_pool_apitable_t;
+} xe_event_pool_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's EventPool table
@@ -933,14 +902,14 @@ typedef struct _xe_event_pool_apitable_t
 __xedllexport xe_result_t __xecall
 xeGetEventPoolProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_event_pool_apitable_t* ptable                ///< [in,out] pointer to table of API function pointers
+    xe_event_pool_dditable_t* ptable                ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetEventPoolProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetEventPoolProcAddrTable_t)(
     xe_api_version_t,
-    xe_event_pool_apitable_t*
+    xe_event_pool_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -984,7 +953,7 @@ typedef xe_result_t (__xecall *xe_pfnEventReset_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Event functions pointers
-typedef struct _xe_event_apitable_t
+typedef struct _xe_event_dditable_t
 {
     xe_pfnEventCreate_t                                         pfnCreate;
     xe_pfnEventDestroy_t                                        pfnDestroy;
@@ -992,8 +961,7 @@ typedef struct _xe_event_apitable_t
     xe_pfnEventHostSynchronize_t                                pfnHostSynchronize;
     xe_pfnEventQueryStatus_t                                    pfnQueryStatus;
     xe_pfnEventReset_t                                          pfnReset;
-
-} xe_event_apitable_t;
+} xe_event_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Event table
@@ -1009,14 +977,14 @@ typedef struct _xe_event_apitable_t
 __xedllexport xe_result_t __xecall
 xeGetEventProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_event_apitable_t* ptable                     ///< [in,out] pointer to table of API function pointers
+    xe_event_dditable_t* ptable                     ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetEventProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetEventProcAddrTable_t)(
     xe_api_version_t,
-    xe_event_apitable_t*
+    xe_event_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1043,13 +1011,12 @@ typedef xe_result_t (__xecall *xe_pfnImageDestroy_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Image functions pointers
-typedef struct _xe_image_apitable_t
+typedef struct _xe_image_dditable_t
 {
     xe_pfnImageGetProperties_t                                  pfnGetProperties;
     xe_pfnImageCreate_t                                         pfnCreate;
     xe_pfnImageDestroy_t                                        pfnDestroy;
-
-} xe_image_apitable_t;
+} xe_image_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Image table
@@ -1065,14 +1032,14 @@ typedef struct _xe_image_apitable_t
 __xedllexport xe_result_t __xecall
 xeGetImageProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_image_apitable_t* ptable                     ///< [in,out] pointer to table of API function pointers
+    xe_image_dditable_t* ptable                     ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetImageProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetImageProcAddrTable_t)(
     xe_api_version_t,
-    xe_image_apitable_t*
+    xe_image_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1116,17 +1083,14 @@ typedef xe_result_t (__xecall *xe_pfnModuleGetFunctionPointer_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Module functions pointers
-typedef struct _xe_module_apitable_t
+typedef struct _xe_module_dditable_t
 {
     xe_pfnModuleCreate_t                                        pfnCreate;
     xe_pfnModuleDestroy_t                                       pfnDestroy;
     xe_pfnModuleGetNativeBinary_t                               pfnGetNativeBinary;
     xe_pfnModuleGetGlobalPointer_t                              pfnGetGlobalPointer;
     xe_pfnModuleGetFunctionPointer_t                            pfnGetFunctionPointer;
-
-    xe_module_build_log_apitable_t*                             pModuleBuildLog;
-    xe_function_apitable_t*                                     pFunction;
-} xe_module_apitable_t;
+} xe_module_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Module table
@@ -1142,14 +1106,14 @@ typedef struct _xe_module_apitable_t
 __xedllexport xe_result_t __xecall
 xeGetModuleProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_module_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
+    xe_module_dditable_t* ptable                    ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetModuleProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetModuleProcAddrTable_t)(
     xe_api_version_t,
-    xe_module_apitable_t*
+    xe_module_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1168,12 +1132,11 @@ typedef xe_result_t (__xecall *xe_pfnModuleBuildLogGetString_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of ModuleBuildLog functions pointers
-typedef struct _xe_module_build_log_apitable_t
+typedef struct _xe_module_build_log_dditable_t
 {
     xe_pfnModuleBuildLogDestroy_t                               pfnDestroy;
     xe_pfnModuleBuildLogGetString_t                             pfnGetString;
-
-} xe_module_build_log_apitable_t;
+} xe_module_build_log_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's ModuleBuildLog table
@@ -1189,14 +1152,14 @@ typedef struct _xe_module_build_log_apitable_t
 __xedllexport xe_result_t __xecall
 xeGetModuleBuildLogProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_module_build_log_apitable_t* ptable          ///< [in,out] pointer to table of API function pointers
+    xe_module_build_log_dditable_t* ptable          ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetModuleBuildLogProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetModuleBuildLogProcAddrTable_t)(
     xe_api_version_t,
-    xe_module_build_log_apitable_t*
+    xe_module_build_log_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1261,7 +1224,7 @@ typedef xe_result_t (__xecall *xe_pfnFunctionGetAttribute_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Function functions pointers
-typedef struct _xe_function_apitable_t
+typedef struct _xe_function_dditable_t
 {
     xe_pfnFunctionCreate_t                                      pfnCreate;
     xe_pfnFunctionDestroy_t                                     pfnDestroy;
@@ -1270,8 +1233,7 @@ typedef struct _xe_function_apitable_t
     xe_pfnFunctionSetArgumentValue_t                            pfnSetArgumentValue;
     xe_pfnFunctionSetAttribute_t                                pfnSetAttribute;
     xe_pfnFunctionGetAttribute_t                                pfnGetAttribute;
-
-} xe_function_apitable_t;
+} xe_function_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Function table
@@ -1287,14 +1249,14 @@ typedef struct _xe_function_apitable_t
 __xedllexport xe_result_t __xecall
 xeGetFunctionProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_function_apitable_t* ptable                  ///< [in,out] pointer to table of API function pointers
+    xe_function_dditable_t* ptable                  ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetFunctionProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetFunctionProcAddrTable_t)(
     xe_api_version_t,
-    xe_function_apitable_t*
+    xe_function_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1313,12 +1275,11 @@ typedef xe_result_t (__xecall *xe_pfnSamplerDestroy_t)(
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Sampler functions pointers
-typedef struct _xe_sampler_apitable_t
+typedef struct _xe_sampler_dditable_t
 {
     xe_pfnSamplerCreate_t                                       pfnCreate;
     xe_pfnSamplerDestroy_t                                      pfnDestroy;
-
-} xe_sampler_apitable_t;
+} xe_sampler_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Sampler table
@@ -1334,15 +1295,34 @@ typedef struct _xe_sampler_apitable_t
 __xedllexport xe_result_t __xecall
 xeGetSamplerProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_sampler_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
+    xe_sampler_dditable_t* ptable                   ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeGetSamplerProcAddrTable
 typedef xe_result_t (__xecall *xe_pfnGetSamplerProcAddrTable_t)(
     xe_api_version_t,
-    xe_sampler_apitable_t*
+    xe_sampler_dditable_t*
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief 
+typedef struct _xe_dditable_t
+{
+    xe_global_dditable_t                Global;
+    xe_device_dditable_t                Device;
+    xe_device_group_dditable_t          DeviceGroup;
+    xe_command_queue_dditable_t         CommandQueue;
+    xe_command_list_dditable_t          CommandList;
+    xe_fence_dditable_t                 Fence;
+    xe_event_pool_dditable_t            EventPool;
+    xe_event_dditable_t                 Event;
+    xe_image_dditable_t                 Image;
+    xe_module_dditable_t                Module;
+    xe_module_build_log_dditable_t      ModuleBuildLog;
+    xe_function_dditable_t              Function;
+    xe_sampler_dditable_t               Sampler;
+} xe_dditable_t;
 
 #if defined(__cplusplus)
 } // extern "C"

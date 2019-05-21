@@ -62,7 +62,7 @@ ${tbl['export']['name']}(
     %endfor
     )
 {
-    auto& mytable = ${x}_layer::val.${n}${tbl['name']};
+    auto& mytable = ${x}_layer::val.${n}DdiTable.${tbl['name']};
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -102,7 +102,7 @@ ${th.make_func_name(n, tags, obj)}(
     %endfor
     )
 {
-    auto ${th.make_pfn_name(n, tags, obj)} = ${x}_layer::val.${n}${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
+    auto ${th.make_pfn_name(n, tags, obj)} = ${x}_layer::val.${n}DdiTable.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
 
     if( nullptr == ${th.make_pfn_name(n, tags, obj)} )
         return ${X}_RESULT_ERROR_UNSUPPORTED;

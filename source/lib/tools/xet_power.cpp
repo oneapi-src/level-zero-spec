@@ -62,7 +62,7 @@ xetPowerCreate(
     xet_power_handle_t* pPowerHandle                ///< [out] handle for accessing power features of the device
     )
 {
-    auto pfnCreate = xet_lib::lib.xetPower.pfnCreate;
+    auto pfnCreate = xet_lib::lib.ddiTable.Power.pfnCreate;
 
 #if _DEBUG
     if( nullptr == pfnCreate )
@@ -92,7 +92,7 @@ xetPowerDestroy(
     xet_power_handle_t hPower                       ///< [in] handle of the power object to destroy
     )
 {
-    auto pfnDestroy = xet_lib::lib.xetPower.pfnDestroy;
+    auto pfnDestroy = xet_lib::lib.ddiTable.Power.pfnDestroy;
 
 #if _DEBUG
     if( nullptr == pfnDestroy )
@@ -119,7 +119,7 @@ xetPowerGetAveragePowerLimit(
     xet_power_average_limit_t* pLimit               ///< [out] information about the average power limit
     )
 {
-    auto pfnGetAveragePowerLimit = xet_lib::lib.xetPower.pfnGetAveragePowerLimit;
+    auto pfnGetAveragePowerLimit = xet_lib::lib.ddiTable.Power.pfnGetAveragePowerLimit;
 
 #if _DEBUG
     if( nullptr == pfnGetAveragePowerLimit )
@@ -146,7 +146,7 @@ xetPowerGetBurstPowerLimit(
     xet_power_burst_limit_t* pLimit                 ///< [out] information about the burst power limit
     )
 {
-    auto pfnGetBurstPowerLimit = xet_lib::lib.xetPower.pfnGetBurstPowerLimit;
+    auto pfnGetBurstPowerLimit = xet_lib::lib.ddiTable.Power.pfnGetBurstPowerLimit;
 
 #if _DEBUG
     if( nullptr == pfnGetBurstPowerLimit )
@@ -173,7 +173,7 @@ xetPowerGetPeakPowerLimit(
     xet_power_peak_limit_t* pLimit                  ///< [out] information about the peak power limit
     )
 {
-    auto pfnGetPeakPowerLimit = xet_lib::lib.xetPower.pfnGetPeakPowerLimit;
+    auto pfnGetPeakPowerLimit = xet_lib::lib.ddiTable.Power.pfnGetPeakPowerLimit;
 
 #if _DEBUG
     if( nullptr == pfnGetPeakPowerLimit )
@@ -200,7 +200,7 @@ xetPowerGetAllPowerLimits(
     xet_power_limits_t* pLimits                     ///< [out] information about the average/burst/peak power limits
     )
 {
-    auto pfnGetAllPowerLimits = xet_lib::lib.xetPower.pfnGetAllPowerLimits;
+    auto pfnGetAllPowerLimits = xet_lib::lib.ddiTable.Power.pfnGetAllPowerLimits;
 
 #if _DEBUG
     if( nullptr == pfnGetAllPowerLimits )
@@ -227,7 +227,7 @@ xetPowerGetDefaultPowerLimits(
     xet_power_limits_t* pLimits                     ///< [out] information about the default average/burst/peak power limits
     )
 {
-    auto pfnGetDefaultPowerLimits = xet_lib::lib.xetPower.pfnGetDefaultPowerLimits;
+    auto pfnGetDefaultPowerLimits = xet_lib::lib.ddiTable.Power.pfnGetDefaultPowerLimits;
 
 #if _DEBUG
     if( nullptr == pfnGetDefaultPowerLimits )
@@ -254,7 +254,7 @@ xetPowerSetAveragePowerLimit(
     xet_power_average_limit_t* pLimit               ///< [in] information about the average power limit
     )
 {
-    auto pfnSetAveragePowerLimit = xet_lib::lib.xetPower.pfnSetAveragePowerLimit;
+    auto pfnSetAveragePowerLimit = xet_lib::lib.ddiTable.Power.pfnSetAveragePowerLimit;
 
 #if _DEBUG
     if( nullptr == pfnSetAveragePowerLimit )
@@ -281,7 +281,7 @@ xetPowerSetBurstPowerLimit(
     xet_power_burst_limit_t* pLimit                 ///< [in] information about the burst power limit
     )
 {
-    auto pfnSetBurstPowerLimit = xet_lib::lib.xetPower.pfnSetBurstPowerLimit;
+    auto pfnSetBurstPowerLimit = xet_lib::lib.ddiTable.Power.pfnSetBurstPowerLimit;
 
 #if _DEBUG
     if( nullptr == pfnSetBurstPowerLimit )
@@ -308,7 +308,7 @@ xetPowerSetPeakPowerLimit(
     xet_power_peak_limit_t* pLimit                  ///< [in] information about the peak power limit
     )
 {
-    auto pfnSetPeakPowerLimit = xet_lib::lib.xetPower.pfnSetPeakPowerLimit;
+    auto pfnSetPeakPowerLimit = xet_lib::lib.ddiTable.Power.pfnSetPeakPowerLimit;
 
 #if _DEBUG
     if( nullptr == pfnSetPeakPowerLimit )
@@ -335,7 +335,7 @@ xetPowerSetPowerLimits(
     xet_power_limits_t* pLimits                     ///< [in] information about the average/burst/peak power limits
     )
 {
-    auto pfnSetPowerLimits = xet_lib::lib.xetPower.pfnSetPowerLimits;
+    auto pfnSetPowerLimits = xet_lib::lib.ddiTable.Power.pfnSetPowerLimits;
 
 #if _DEBUG
     if( nullptr == pfnSetPowerLimits )
@@ -366,7 +366,7 @@ xetPowerGetEnergyCounter(
     uint64_t* pEnergy                               ///< [out] the energy counter in millijoules
     )
 {
-    auto pfnGetEnergyCounter = xet_lib::lib.xetPower.pfnGetEnergyCounter;
+    auto pfnGetEnergyCounter = xet_lib::lib.ddiTable.Power.pfnGetEnergyCounter;
 
 #if _DEBUG
     if( nullptr == pfnGetEnergyCounter )
@@ -393,7 +393,7 @@ xetPowerGetTurboMode(
     xet_turbo_mode_t* pTurboMode                    ///< [out] turbo mode currently in effect
     )
 {
-    auto pfnGetTurboMode = xet_lib::lib.xetPower.pfnGetTurboMode;
+    auto pfnGetTurboMode = xet_lib::lib.ddiTable.Power.pfnGetTurboMode;
 
 #if _DEBUG
     if( nullptr == pfnGetTurboMode )
@@ -419,7 +419,7 @@ xetPowerSetTurboMode(
     xet_turbo_mode_t pTurboMode                     ///< [in] new turbo mode
     )
 {
-    auto pfnSetTurboMode = xet_lib::lib.xetPower.pfnSetTurboMode;
+    auto pfnSetTurboMode = xet_lib::lib.ddiTable.Power.pfnSetTurboMode;
 
 #if _DEBUG
     if( nullptr == pfnSetTurboMode )
@@ -446,7 +446,7 @@ xetPowerGetFreqDomainCount(
     uint32_t* pNumFreqDomains                       ///< [out] the number of frequency domains
     )
 {
-    auto pfnGetFreqDomainCount = xet_lib::lib.xetPower.pfnGetFreqDomainCount;
+    auto pfnGetFreqDomainCount = xet_lib::lib.ddiTable.Power.pfnGetFreqDomainCount;
 
 #if _DEBUG
     if( nullptr == pfnGetFreqDomainCount )
@@ -474,7 +474,7 @@ xetPowerGetFreqDomain(
     xet_freq_domain_handle_t* phFreqDomain          ///< [out] pointer to handle of frequency domain object
     )
 {
-    auto pfnGetFreqDomain = xet_lib::lib.xetPower.pfnGetFreqDomain;
+    auto pfnGetFreqDomain = xet_lib::lib.ddiTable.Power.pfnGetFreqDomain;
 
 #if _DEBUG
     if( nullptr == pfnGetFreqDomain )
@@ -501,7 +501,7 @@ xetFreqDomainGetProperties(
     xet_freq_domain_properties_t* pFreqDomainProperties ///< [out] pointer to properties for the frequency domain
     )
 {
-    auto pfnGetProperties = xet_lib::lib.xetFreqDomain.pfnGetProperties;
+    auto pfnGetProperties = xet_lib::lib.ddiTable.FreqDomain.pfnGetProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetProperties )
@@ -530,7 +530,7 @@ xetFreqDomainGetSourceFreqDomain(
                                                     ///< will be returned
     )
 {
-    auto pfnGetSourceFreqDomain = xet_lib::lib.xetFreqDomain.pfnGetSourceFreqDomain;
+    auto pfnGetSourceFreqDomain = xet_lib::lib.ddiTable.FreqDomain.pfnGetSourceFreqDomain;
 
 #if _DEBUG
     if( nullptr == pfnGetSourceFreqDomain )
@@ -563,7 +563,7 @@ xetFreqDomainGetSupportedClocks(
     uint32_t* pClocks                               ///< [out] pointer to array of frequencies
     )
 {
-    auto pfnGetSupportedClocks = xet_lib::lib.xetFreqDomain.pfnGetSupportedClocks;
+    auto pfnGetSupportedClocks = xet_lib::lib.ddiTable.FreqDomain.pfnGetSupportedClocks;
 
 #if _DEBUG
     if( nullptr == pfnGetSupportedClocks )
@@ -596,7 +596,7 @@ xetFreqDomainGetSupportedClockDividers(
     xet_clock_divider_t* pDividers                  ///< [out] pointer to array of dividers
     )
 {
-    auto pfnGetSupportedClockDividers = xet_lib::lib.xetFreqDomain.pfnGetSupportedClockDividers;
+    auto pfnGetSupportedClockDividers = xet_lib::lib.ddiTable.FreqDomain.pfnGetSupportedClockDividers;
 
 #if _DEBUG
     if( nullptr == pfnGetSupportedClockDividers )
@@ -626,7 +626,7 @@ xetFreqDomainGetClockRange(
     uint32_t* pMaxClock                             ///< [out] max clock frequency in units of MHz
     )
 {
-    auto pfnGetClockRange = xet_lib::lib.xetFreqDomain.pfnGetClockRange;
+    auto pfnGetClockRange = xet_lib::lib.ddiTable.FreqDomain.pfnGetClockRange;
 
 #if _DEBUG
     if( nullptr == pfnGetClockRange )
@@ -664,7 +664,7 @@ xetFreqDomainSetClockRange(
     uint32_t maxClock                               ///< [in] max clock frequency in units of MHz
     )
 {
-    auto pfnSetClockRange = xet_lib::lib.xetFreqDomain.pfnSetClockRange;
+    auto pfnSetClockRange = xet_lib::lib.ddiTable.FreqDomain.pfnSetClockRange;
 
 #if _DEBUG
     if( nullptr == pfnSetClockRange )
@@ -698,7 +698,7 @@ xetFreqDomainSetClockDivider(
     xet_clock_divider_t* pClockDividerRequest       ///< [out] pointer to frequency divider request
     )
 {
-    auto pfnSetClockDivider = xet_lib::lib.xetFreqDomain.pfnSetClockDivider;
+    auto pfnSetClockDivider = xet_lib::lib.ddiTable.FreqDomain.pfnSetClockDivider;
 
 #if _DEBUG
     if( nullptr == pfnSetClockDivider )
@@ -729,7 +729,7 @@ xetFreqDomainGetCurrentFrequency(
     xet_freq_throttle_reasons_t* pFreqThrottleReasons   ///< [out] the reason the resolved frequency is lower than the request
     )
 {
-    auto pfnGetCurrentFrequency = xet_lib::lib.xetFreqDomain.pfnGetCurrentFrequency;
+    auto pfnGetCurrentFrequency = xet_lib::lib.ddiTable.FreqDomain.pfnGetCurrentFrequency;
 
 #if _DEBUG
     if( nullptr == pfnGetCurrentFrequency )
@@ -756,7 +756,7 @@ xetPowerFanCount(
     uint32_t* pFanCount                             ///< [out] the number of fans on the device
     )
 {
-    auto pfnFanCount = xet_lib::lib.xetPower.pfnFanCount;
+    auto pfnFanCount = xet_lib::lib.ddiTable.Power.pfnFanCount;
 
 #if _DEBUG
     if( nullptr == pfnFanCount )
@@ -784,7 +784,7 @@ xetPowerFanGetProperties(
     xet_fan_properties_t* pFanProperties            ///< [out] pointer to storage for fan properties
     )
 {
-    auto pfnFanGetProperties = xet_lib::lib.xetPower.pfnFanGetProperties;
+    auto pfnFanGetProperties = xet_lib::lib.ddiTable.Power.pfnFanGetProperties;
 
 #if _DEBUG
     if( nullptr == pfnFanGetProperties )
@@ -820,7 +820,7 @@ xetPowerFanGetSpeedTable(
     xet_fan_point_t* pFanPoints                     ///< [out] pointer to an array of temperature/fan-speed points
     )
 {
-    auto pfnFanGetSpeedTable = xet_lib::lib.xetPower.pfnFanGetSpeedTable;
+    auto pfnFanGetSpeedTable = xet_lib::lib.ddiTable.Power.pfnFanGetSpeedTable;
 
 #if _DEBUG
     if( nullptr == pfnFanGetSpeedTable )
@@ -854,7 +854,7 @@ xetPowerFanSetSpeedTable(
     xet_fan_point_t* pFanPoints                     ///< [in] pointer to an array of temperature/fan-speed points
     )
 {
-    auto pfnFanSetSpeedTable = xet_lib::lib.xetPower.pfnFanSetSpeedTable;
+    auto pfnFanSetSpeedTable = xet_lib::lib.ddiTable.Power.pfnFanSetSpeedTable;
 
 #if _DEBUG
     if( nullptr == pfnFanSetSpeedTable )
@@ -888,7 +888,7 @@ xetPowerFanGetSpeed(
     xet_fan_speed_info_t* pFanSpeed                 ///< [out] pointer to an array of current fan speeds
     )
 {
-    auto pfnFanGetSpeed = xet_lib::lib.xetPower.pfnFanGetSpeed;
+    auto pfnFanGetSpeed = xet_lib::lib.ddiTable.Power.pfnFanGetSpeed;
 
 #if _DEBUG
     if( nullptr == pfnFanGetSpeed )
@@ -922,7 +922,7 @@ xetPowerFanSetSpeed(
     xet_fan_speed_info_t* pFanSpeed                 ///< [in] pointer to an array of current fan speeds
     )
 {
-    auto pfnFanSetSpeed = xet_lib::lib.xetPower.pfnFanSetSpeed;
+    auto pfnFanSetSpeed = xet_lib::lib.ddiTable.Power.pfnFanSetSpeed;
 
 #if _DEBUG
     if( nullptr == pfnFanSetSpeed )
@@ -949,7 +949,7 @@ xetPowerTemperatureSensorCount(
     uint32_t* pSensorCount                          ///< [out] the number of temperature sensors on the device
     )
 {
-    auto pfnTemperatureSensorCount = xet_lib::lib.xetPower.pfnTemperatureSensorCount;
+    auto pfnTemperatureSensorCount = xet_lib::lib.ddiTable.Power.pfnTemperatureSensorCount;
 
 #if _DEBUG
     if( nullptr == pfnTemperatureSensorCount )
@@ -981,7 +981,7 @@ xetPowerGetTemperatureProperties(
     xet_temperature_properties_t* pProperties       ///< [out] pointer to properties for this sensor
     )
 {
-    auto pfnGetTemperatureProperties = xet_lib::lib.xetPower.pfnGetTemperatureProperties;
+    auto pfnGetTemperatureProperties = xet_lib::lib.ddiTable.Power.pfnGetTemperatureProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetTemperatureProperties )
@@ -1015,7 +1015,7 @@ xetPowerGetTemperature(
     uint16_t* pTemperatures                         ///< [out] pointer to an array of temperatures in units of degrees celsius
     )
 {
-    auto pfnGetTemperature = xet_lib::lib.xetPower.pfnGetTemperature;
+    auto pfnGetTemperature = xet_lib::lib.ddiTable.Power.pfnGetTemperature;
 
 #if _DEBUG
     if( nullptr == pfnGetTemperature )
@@ -1050,7 +1050,7 @@ xetPowerSetTemperatureThreshold(
                                                     ///< will be throttled
     )
 {
-    auto pfnSetTemperatureThreshold = xet_lib::lib.xetPower.pfnSetTemperatureThreshold;
+    auto pfnSetTemperatureThreshold = xet_lib::lib.ddiTable.Power.pfnSetTemperatureThreshold;
 
 #if _DEBUG
     if( nullptr == pfnSetTemperatureThreshold )
@@ -1077,7 +1077,7 @@ xetPowerActivityCount(
     uint32_t* pActivityCount                        ///< [out] the number of activity counters on the device
     )
 {
-    auto pfnActivityCount = xet_lib::lib.xetPower.pfnActivityCount;
+    auto pfnActivityCount = xet_lib::lib.ddiTable.Power.pfnActivityCount;
 
 #if _DEBUG
     if( nullptr == pfnActivityCount )
@@ -1109,7 +1109,7 @@ xetPowerGetActivityProperties(
     xet_activity_properties_t* pProperties          ///< [out] pointer to properties for this activity counter
     )
 {
-    auto pfnGetActivityProperties = xet_lib::lib.xetPower.pfnGetActivityProperties;
+    auto pfnGetActivityProperties = xet_lib::lib.ddiTable.Power.pfnGetActivityProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetActivityProperties )
@@ -1143,7 +1143,7 @@ xetPowerGetActivityCounters(
     xet_activity_counters_t* pCounters              ///< [out] pointer to an array of activity counter data
     )
 {
-    auto pfnGetActivityCounters = xet_lib::lib.xetPower.pfnGetActivityCounters;
+    auto pfnGetActivityCounters = xet_lib::lib.ddiTable.Power.pfnGetActivityCounters;
 
 #if _DEBUG
     if( nullptr == pfnGetActivityCounters )

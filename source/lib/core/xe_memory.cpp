@@ -71,7 +71,7 @@ xeDeviceGroupAllocSharedMem(
     void** ptr                                      ///< [out] pointer to shared allocation
     )
 {
-    auto pfnAllocSharedMem = xe_lib::lib.xeDeviceGroup.pfnAllocSharedMem;
+    auto pfnAllocSharedMem = xe_lib::lib.ddiTable.DeviceGroup.pfnAllocSharedMem;
 
 #if _DEBUG
     if( nullptr == pfnAllocSharedMem )
@@ -117,7 +117,7 @@ xeDeviceGroupAllocDeviceMem(
     void** ptr                                      ///< [out] pointer to device allocation
     )
 {
-    auto pfnAllocDeviceMem = xe_lib::lib.xeDeviceGroup.pfnAllocDeviceMem;
+    auto pfnAllocDeviceMem = xe_lib::lib.ddiTable.DeviceGroup.pfnAllocDeviceMem;
 
 #if _DEBUG
     if( nullptr == pfnAllocDeviceMem )
@@ -162,7 +162,7 @@ xeDeviceGroupAllocHostMem(
     void** ptr                                      ///< [out] pointer to host allocation
     )
 {
-    auto pfnAllocHostMem = xe_lib::lib.xeDeviceGroup.pfnAllocHostMem;
+    auto pfnAllocHostMem = xe_lib::lib.ddiTable.DeviceGroup.pfnAllocHostMem;
 
 #if _DEBUG
     if( nullptr == pfnAllocHostMem )
@@ -202,7 +202,7 @@ xeDeviceGroupFreeMem(
     const void* ptr                                 ///< [in] pointer to memory to free
     )
 {
-    auto pfnFreeMem = xe_lib::lib.xeDeviceGroup.pfnFreeMem;
+    auto pfnFreeMem = xe_lib::lib.ddiTable.DeviceGroup.pfnFreeMem;
 
 #if _DEBUG
     if( nullptr == pfnFreeMem )
@@ -238,7 +238,7 @@ xeDeviceGroupGetMemProperties(
     xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
     )
 {
-    auto pfnGetMemProperties = xe_lib::lib.xeDeviceGroup.pfnGetMemProperties;
+    auto pfnGetMemProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetMemProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetMemProperties )
@@ -274,7 +274,7 @@ xeDeviceGroupGetMemAddressRange(
     size_t* pSize                                   ///< [in,out][optional] size of the allocation
     )
 {
-    auto pfnGetMemAddressRange = xe_lib::lib.xeDeviceGroup.pfnGetMemAddressRange;
+    auto pfnGetMemAddressRange = xe_lib::lib.ddiTable.DeviceGroup.pfnGetMemAddressRange;
 
 #if _DEBUG
     if( nullptr == pfnGetMemAddressRange )
@@ -313,7 +313,7 @@ xeDeviceGroupGetMemIpcHandle(
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
     )
 {
-    auto pfnGetMemIpcHandle = xe_lib::lib.xeDeviceGroup.pfnGetMemIpcHandle;
+    auto pfnGetMemIpcHandle = xe_lib::lib.ddiTable.DeviceGroup.pfnGetMemIpcHandle;
 
 #if _DEBUG
     if( nullptr == pfnGetMemIpcHandle )
@@ -359,7 +359,7 @@ xeDeviceGroupOpenMemIpcHandle(
     void** ptr                                      ///< [out] pointer to device allocation in this process
     )
 {
-    auto pfnOpenMemIpcHandle = xe_lib::lib.xeDeviceGroup.pfnOpenMemIpcHandle;
+    auto pfnOpenMemIpcHandle = xe_lib::lib.ddiTable.DeviceGroup.pfnOpenMemIpcHandle;
 
 #if _DEBUG
     if( nullptr == pfnOpenMemIpcHandle )
@@ -396,7 +396,7 @@ xeDeviceGroupCloseMemIpcHandle(
     const void* ptr                                 ///< [in] pointer to device allocation in this process
     )
 {
-    auto pfnCloseMemIpcHandle = xe_lib::lib.xeDeviceGroup.pfnCloseMemIpcHandle;
+    auto pfnCloseMemIpcHandle = xe_lib::lib.ddiTable.DeviceGroup.pfnCloseMemIpcHandle;
 
 #if _DEBUG
     if( nullptr == pfnCloseMemIpcHandle )

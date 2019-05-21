@@ -80,7 +80,7 @@ ${th.make_func_name(n, tags, obj)}(
         return result;
 
 %endif
-    auto ${th.make_pfn_name(n, tags, obj)} = ${n}_lib::lib.${n}${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
+    auto ${th.make_pfn_name(n, tags, obj)} = ${n}_lib::lib.ddiTable.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
 
 #if _DEBUG
     if( nullptr == ${th.make_pfn_name(n, tags, obj)} )

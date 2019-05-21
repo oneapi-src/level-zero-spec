@@ -48,10 +48,10 @@ extern "C" {
 __xedllexport xe_result_t __xecall
 xeGetGlobalProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_global_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
+    xe_global_dditable_t* ptable                    ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeGlobal;
+    auto& mytable = xe_layer::val.xeDdiTable.Global;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -86,10 +86,10 @@ xeGetGlobalProcAddrTable(
 __xedllexport xe_result_t __xecall
 xeGetDeviceProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_device_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
+    xe_device_dditable_t* ptable                    ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeDevice;
+    auto& mytable = xe_layer::val.xeDdiTable.Device;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -163,10 +163,10 @@ xeGetDeviceProcAddrTable(
 __xedllexport xe_result_t __xecall
 xeGetDeviceGroupProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_device_group_apitable_t* ptable              ///< [in,out] pointer to table of API function pointers
+    xe_device_group_dditable_t* ptable              ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeDeviceGroup;
+    auto& mytable = xe_layer::val.xeDdiTable.DeviceGroup;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -240,10 +240,10 @@ xeGetDeviceGroupProcAddrTable(
 __xedllexport xe_result_t __xecall
 xeGetCommandQueueProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_command_queue_apitable_t* ptable             ///< [in,out] pointer to table of API function pointers
+    xe_command_queue_dditable_t* ptable             ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeCommandQueue;
+    auto& mytable = xe_layer::val.xeDdiTable.CommandQueue;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -284,10 +284,10 @@ xeGetCommandQueueProcAddrTable(
 __xedllexport xe_result_t __xecall
 xeGetCommandListProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_command_list_apitable_t* ptable              ///< [in,out] pointer to table of API function pointers
+    xe_command_list_dditable_t* ptable              ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeCommandList;
+    auto& mytable = xe_layer::val.xeDdiTable.CommandList;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -397,10 +397,10 @@ xeGetCommandListProcAddrTable(
 __xedllexport xe_result_t __xecall
 xeGetFenceProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_fence_apitable_t* ptable                     ///< [in,out] pointer to table of API function pointers
+    xe_fence_dditable_t* ptable                     ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeFence;
+    auto& mytable = xe_layer::val.xeDdiTable.Fence;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -444,10 +444,10 @@ xeGetFenceProcAddrTable(
 __xedllexport xe_result_t __xecall
 xeGetEventPoolProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_event_pool_apitable_t* ptable                ///< [in,out] pointer to table of API function pointers
+    xe_event_pool_dditable_t* ptable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeEventPool;
+    auto& mytable = xe_layer::val.xeDdiTable.EventPool;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -491,10 +491,10 @@ xeGetEventPoolProcAddrTable(
 __xedllexport xe_result_t __xecall
 xeGetEventProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_event_apitable_t* ptable                     ///< [in,out] pointer to table of API function pointers
+    xe_event_dditable_t* ptable                     ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeEvent;
+    auto& mytable = xe_layer::val.xeDdiTable.Event;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -541,10 +541,10 @@ xeGetEventProcAddrTable(
 __xedllexport xe_result_t __xecall
 xeGetImageProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_image_apitable_t* ptable                     ///< [in,out] pointer to table of API function pointers
+    xe_image_dditable_t* ptable                     ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeImage;
+    auto& mytable = xe_layer::val.xeDdiTable.Image;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -582,10 +582,10 @@ xeGetImageProcAddrTable(
 __xedllexport xe_result_t __xecall
 xeGetModuleProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_module_apitable_t* ptable                    ///< [in,out] pointer to table of API function pointers
+    xe_module_dditable_t* ptable                    ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeModule;
+    auto& mytable = xe_layer::val.xeDdiTable.Module;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -629,10 +629,10 @@ xeGetModuleProcAddrTable(
 __xedllexport xe_result_t __xecall
 xeGetModuleBuildLogProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_module_build_log_apitable_t* ptable          ///< [in,out] pointer to table of API function pointers
+    xe_module_build_log_dditable_t* ptable          ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeModuleBuildLog;
+    auto& mytable = xe_layer::val.xeDdiTable.ModuleBuildLog;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -667,10 +667,10 @@ xeGetModuleBuildLogProcAddrTable(
 __xedllexport xe_result_t __xecall
 xeGetFunctionProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_function_apitable_t* ptable                  ///< [in,out] pointer to table of API function pointers
+    xe_function_dditable_t* ptable                  ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeFunction;
+    auto& mytable = xe_layer::val.xeDdiTable.Function;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -720,10 +720,10 @@ xeGetFunctionProcAddrTable(
 __xedllexport xe_result_t __xecall
 xeGetSamplerProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_sampler_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
+    xe_sampler_dditable_t* ptable                   ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& mytable = xe_layer::val.xeSampler;
+    auto& mytable = xe_layer::val.xeDdiTable.Sampler;
 
 #ifdef _DEBUG
     if( nullptr == ptable )
@@ -751,7 +751,7 @@ xeInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    auto pfnInit = xe_layer::val.xeGlobal.pfnInit;
+    auto pfnInit = xe_layer::val.xeDdiTable.Global.pfnInit;
 
     if( nullptr == pfnInit )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -771,7 +771,7 @@ xeDeviceGroupGetDriverVersion(
     uint32_t* version                               ///< [out] driver version
     )
 {
-    auto pfnGetDriverVersion = xe_layer::val.xeDeviceGroup.pfnGetDriverVersion;
+    auto pfnGetDriverVersion = xe_layer::val.xeDdiTable.DeviceGroup.pfnGetDriverVersion;
 
     if( nullptr == pfnGetDriverVersion )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -801,7 +801,7 @@ xeGetDeviceGroups(
     xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
     )
 {
-    auto pfnGetDeviceGroups = xe_layer::val.xeGlobal.pfnGetDeviceGroups;
+    auto pfnGetDeviceGroups = xe_layer::val.xeDdiTable.Global.pfnGetDeviceGroups;
 
     if( nullptr == pfnGetDeviceGroups )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -829,7 +829,7 @@ xeDeviceGroupGetDevices(
     xe_device_handle_t* pDevices                    ///< [in,out][optional][range(0, *pCount)] array of handle of devices
     )
 {
-    auto pfnGetDevices = xe_layer::val.xeDeviceGroup.pfnGetDevices;
+    auto pfnGetDevices = xe_layer::val.xeDdiTable.DeviceGroup.pfnGetDevices;
 
     if( nullptr == pfnGetDevices )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -856,7 +856,7 @@ xeDeviceGetSubDevice(
     xe_device_handle_t* phSubDevice                 ///< [out] pointer to handle of sub-device object.
     )
 {
-    auto pfnGetSubDevice = xe_layer::val.xeDevice.pfnGetSubDevice;
+    auto pfnGetSubDevice = xe_layer::val.xeDdiTable.Device.pfnGetSubDevice;
 
     if( nullptr == pfnGetSubDevice )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -882,7 +882,7 @@ xeDeviceGroupGetApiVersion(
     xe_api_version_t* version                       ///< [out] api version
     )
 {
-    auto pfnGetApiVersion = xe_layer::val.xeDeviceGroup.pfnGetApiVersion;
+    auto pfnGetApiVersion = xe_layer::val.xeDdiTable.DeviceGroup.pfnGetApiVersion;
 
     if( nullptr == pfnGetApiVersion )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -908,7 +908,7 @@ xeDeviceGroupGetProperties(
     xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
     )
 {
-    auto pfnGetProperties = xe_layer::val.xeDeviceGroup.pfnGetProperties;
+    auto pfnGetProperties = xe_layer::val.xeDdiTable.DeviceGroup.pfnGetProperties;
 
     if( nullptr == pfnGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -934,7 +934,7 @@ xeDeviceGroupGetComputeProperties(
     xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
     )
 {
-    auto pfnGetComputeProperties = xe_layer::val.xeDeviceGroup.pfnGetComputeProperties;
+    auto pfnGetComputeProperties = xe_layer::val.xeDdiTable.DeviceGroup.pfnGetComputeProperties;
 
     if( nullptr == pfnGetComputeProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -960,7 +960,7 @@ xeDeviceGroupGetMemoryProperties(
     xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
     )
 {
-    auto pfnGetMemoryProperties = xe_layer::val.xeDeviceGroup.pfnGetMemoryProperties;
+    auto pfnGetMemoryProperties = xe_layer::val.xeDdiTable.DeviceGroup.pfnGetMemoryProperties;
 
     if( nullptr == pfnGetMemoryProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -987,7 +987,7 @@ xeDeviceGetP2PProperties(
     xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
     )
 {
-    auto pfnGetP2PProperties = xe_layer::val.xeDevice.pfnGetP2PProperties;
+    auto pfnGetP2PProperties = xe_layer::val.xeDdiTable.Device.pfnGetP2PProperties;
 
     if( nullptr == pfnGetP2PProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1017,7 +1017,7 @@ xeDeviceCanAccessPeer(
     xe_bool_t* value                                ///< [out] returned access capability
     )
 {
-    auto pfnCanAccessPeer = xe_layer::val.xeDevice.pfnCanAccessPeer;
+    auto pfnCanAccessPeer = xe_layer::val.xeDdiTable.Device.pfnCanAccessPeer;
 
     if( nullptr == pfnCanAccessPeer )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1046,7 +1046,7 @@ xeDeviceSetIntermediateCacheConfig(
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     )
 {
-    auto pfnSetIntermediateCacheConfig = xe_layer::val.xeDevice.pfnSetIntermediateCacheConfig;
+    auto pfnSetIntermediateCacheConfig = xe_layer::val.xeDdiTable.Device.pfnSetIntermediateCacheConfig;
 
     if( nullptr == pfnSetIntermediateCacheConfig )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1069,7 +1069,7 @@ xeDeviceSetLastLevelCacheConfig(
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     )
 {
-    auto pfnSetLastLevelCacheConfig = xe_layer::val.xeDevice.pfnSetLastLevelCacheConfig;
+    auto pfnSetLastLevelCacheConfig = xe_layer::val.xeDdiTable.Device.pfnSetLastLevelCacheConfig;
 
     if( nullptr == pfnSetLastLevelCacheConfig )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1093,7 +1093,7 @@ xeCommandQueueCreate(
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     )
 {
-    auto pfnCreate = xe_layer::val.xeCommandQueue.pfnCreate;
+    auto pfnCreate = xe_layer::val.xeDdiTable.CommandQueue.pfnCreate;
 
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1124,7 +1124,7 @@ xeCommandQueueDestroy(
     xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
     )
 {
-    auto pfnDestroy = xe_layer::val.xeCommandQueue.pfnDestroy;
+    auto pfnDestroy = xe_layer::val.xeDdiTable.CommandQueue.pfnDestroy;
 
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1150,7 +1150,7 @@ xeCommandQueueExecuteCommandLists(
     xe_fence_handle_t hFence                        ///< [in][optional] handle of the fence to signal on completion
     )
 {
-    auto pfnExecuteCommandLists = xe_layer::val.xeCommandQueue.pfnExecuteCommandLists;
+    auto pfnExecuteCommandLists = xe_layer::val.xeDdiTable.CommandQueue.pfnExecuteCommandLists;
 
     if( nullptr == pfnExecuteCommandLists )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1180,7 +1180,7 @@ xeCommandQueueSynchronize(
                                                     ///< is lost.
     )
 {
-    auto pfnSynchronize = xe_layer::val.xeCommandQueue.pfnSynchronize;
+    auto pfnSynchronize = xe_layer::val.xeDdiTable.CommandQueue.pfnSynchronize;
 
     if( nullptr == pfnSynchronize )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1204,7 +1204,7 @@ xeCommandListCreate(
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     )
 {
-    auto pfnCreate = xe_layer::val.xeCommandList.pfnCreate;
+    auto pfnCreate = xe_layer::val.xeDdiTable.CommandList.pfnCreate;
 
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1237,7 +1237,7 @@ xeCommandListCreateImmediate(
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     )
 {
-    auto pfnCreateImmediate = xe_layer::val.xeCommandList.pfnCreateImmediate;
+    auto pfnCreateImmediate = xe_layer::val.xeDdiTable.CommandList.pfnCreateImmediate;
 
     if( nullptr == pfnCreateImmediate )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1268,7 +1268,7 @@ xeCommandListDestroy(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
     )
 {
-    auto pfnDestroy = xe_layer::val.xeCommandList.pfnDestroy;
+    auto pfnDestroy = xe_layer::val.xeDdiTable.CommandList.pfnDestroy;
 
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1290,7 +1290,7 @@ xeCommandListClose(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
     )
 {
-    auto pfnClose = xe_layer::val.xeCommandList.pfnClose;
+    auto pfnClose = xe_layer::val.xeDdiTable.CommandList.pfnClose;
 
     if( nullptr == pfnClose )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1312,7 +1312,7 @@ xeCommandListReset(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
     )
 {
-    auto pfnReset = xe_layer::val.xeCommandList.pfnReset;
+    auto pfnReset = xe_layer::val.xeDdiTable.CommandList.pfnReset;
 
     if( nullptr == pfnReset )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1336,7 +1336,7 @@ xeCommandListSetParameter(
     uint32_t value                                  ///< [in] value of attribute
     )
 {
-    auto pfnSetParameter = xe_layer::val.xeCommandList.pfnSetParameter;
+    auto pfnSetParameter = xe_layer::val.xeDdiTable.CommandList.pfnSetParameter;
 
     if( nullptr == pfnSetParameter )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1360,7 +1360,7 @@ xeCommandListGetParameter(
     uint32_t* value                                 ///< [out] value of attribute
     )
 {
-    auto pfnGetParameter = xe_layer::val.xeCommandList.pfnGetParameter;
+    auto pfnGetParameter = xe_layer::val.xeDdiTable.CommandList.pfnGetParameter;
 
     if( nullptr == pfnGetParameter )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1385,7 +1385,7 @@ xeCommandListResetParameters(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
 {
-    auto pfnResetParameters = xe_layer::val.xeCommandList.pfnResetParameters;
+    auto pfnResetParameters = xe_layer::val.xeDdiTable.CommandList.pfnResetParameters;
 
     if( nullptr == pfnResetParameters )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1409,7 +1409,7 @@ xeCommandListReserveSpace(
     void** ptr                                      ///< [out] pointer to command buffer space reserved
     )
 {
-    auto pfnReserveSpace = xe_layer::val.xeCommandList.pfnReserveSpace;
+    auto pfnReserveSpace = xe_layer::val.xeDdiTable.CommandList.pfnReserveSpace;
 
     if( nullptr == pfnReserveSpace )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1438,7 +1438,7 @@ xeCommandListAppendBarrier(
                                                     ///< on before executing barrier
     )
 {
-    auto pfnAppendBarrier = xe_layer::val.xeCommandList.pfnAppendBarrier;
+    auto pfnAppendBarrier = xe_layer::val.xeDdiTable.CommandList.pfnAppendBarrier;
 
     if( nullptr == pfnAppendBarrier )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1467,7 +1467,7 @@ xeCommandListAppendMemoryRangesBarrier(
                                                     ///< on before executing barrier
     )
 {
-    auto pfnAppendMemoryRangesBarrier = xe_layer::val.xeCommandList.pfnAppendMemoryRangesBarrier;
+    auto pfnAppendMemoryRangesBarrier = xe_layer::val.xeDdiTable.CommandList.pfnAppendMemoryRangesBarrier;
 
     if( nullptr == pfnAppendMemoryRangesBarrier )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1495,7 +1495,7 @@ xeDeviceSystemBarrier(
     xe_device_handle_t hDevice                      ///< [in] handle of the device
     )
 {
-    auto pfnSystemBarrier = xe_layer::val.xeDevice.pfnSystemBarrier;
+    auto pfnSystemBarrier = xe_layer::val.xeDdiTable.Device.pfnSystemBarrier;
 
     if( nullptr == pfnSystemBarrier )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1521,7 +1521,7 @@ xeDeviceRegisterCLMemory(
     void** ptr                                      ///< [out] pointer to device allocation
     )
 {
-    auto pfnRegisterCLMemory = xe_layer::val.xeDevice.pfnRegisterCLMemory;
+    auto pfnRegisterCLMemory = xe_layer::val.xeDdiTable.Device.pfnRegisterCLMemory;
 
     if( nullptr == pfnRegisterCLMemory )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1551,7 +1551,7 @@ xeDeviceRegisterCLProgram(
     xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
     )
 {
-    auto pfnRegisterCLProgram = xe_layer::val.xeDevice.pfnRegisterCLProgram;
+    auto pfnRegisterCLProgram = xe_layer::val.xeDdiTable.Device.pfnRegisterCLProgram;
 
     if( nullptr == pfnRegisterCLProgram )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1581,7 +1581,7 @@ xeDeviceRegisterCLCommandQueue(
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     )
 {
-    auto pfnRegisterCLCommandQueue = xe_layer::val.xeDevice.pfnRegisterCLCommandQueue;
+    auto pfnRegisterCLCommandQueue = xe_layer::val.xeDdiTable.Device.pfnRegisterCLCommandQueue;
 
     if( nullptr == pfnRegisterCLCommandQueue )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1611,7 +1611,7 @@ xeCommandListAppendMemoryCopy(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    auto pfnAppendMemoryCopy = xe_layer::val.xeCommandList.pfnAppendMemoryCopy;
+    auto pfnAppendMemoryCopy = xe_layer::val.xeDdiTable.CommandList.pfnAppendMemoryCopy;
 
     if( nullptr == pfnAppendMemoryCopy )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1643,7 +1643,7 @@ xeCommandListAppendMemorySet(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    auto pfnAppendMemorySet = xe_layer::val.xeCommandList.pfnAppendMemorySet;
+    auto pfnAppendMemorySet = xe_layer::val.xeDdiTable.CommandList.pfnAppendMemorySet;
 
     if( nullptr == pfnAppendMemorySet )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1675,7 +1675,7 @@ xeCommandListAppendMemoryCopyRegion(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    auto pfnAppendMemoryCopyRegion = xe_layer::val.xeCommandList.pfnAppendMemoryCopyRegion;
+    auto pfnAppendMemoryCopyRegion = xe_layer::val.xeDdiTable.CommandList.pfnAppendMemoryCopyRegion;
 
     if( nullptr == pfnAppendMemoryCopyRegion )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1712,7 +1712,7 @@ xeCommandListAppendImageCopy(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    auto pfnAppendImageCopy = xe_layer::val.xeCommandList.pfnAppendImageCopy;
+    auto pfnAppendImageCopy = xe_layer::val.xeDdiTable.CommandList.pfnAppendImageCopy;
 
     if( nullptr == pfnAppendImageCopy )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1745,7 +1745,7 @@ xeCommandListAppendImageCopyRegion(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    auto pfnAppendImageCopyRegion = xe_layer::val.xeCommandList.pfnAppendImageCopyRegion;
+    auto pfnAppendImageCopyRegion = xe_layer::val.xeDdiTable.CommandList.pfnAppendImageCopyRegion;
 
     if( nullptr == pfnAppendImageCopyRegion )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1777,7 +1777,7 @@ xeCommandListAppendImageCopyToMemory(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    auto pfnAppendImageCopyToMemory = xe_layer::val.xeCommandList.pfnAppendImageCopyToMemory;
+    auto pfnAppendImageCopyToMemory = xe_layer::val.xeDdiTable.CommandList.pfnAppendImageCopyToMemory;
 
     if( nullptr == pfnAppendImageCopyToMemory )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1809,7 +1809,7 @@ xeCommandListAppendImageCopyFromMemory(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    auto pfnAppendImageCopyFromMemory = xe_layer::val.xeCommandList.pfnAppendImageCopyFromMemory;
+    auto pfnAppendImageCopyFromMemory = xe_layer::val.xeDdiTable.CommandList.pfnAppendImageCopyFromMemory;
 
     if( nullptr == pfnAppendImageCopyFromMemory )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1839,7 +1839,7 @@ xeCommandListAppendMemoryPrefetch(
     size_t count                                    ///< [in] size in bytes of the memory range to prefetch
     )
 {
-    auto pfnAppendMemoryPrefetch = xe_layer::val.xeCommandList.pfnAppendMemoryPrefetch;
+    auto pfnAppendMemoryPrefetch = xe_layer::val.xeDdiTable.CommandList.pfnAppendMemoryPrefetch;
 
     if( nullptr == pfnAppendMemoryPrefetch )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1868,7 +1868,7 @@ xeCommandListAppendMemAdvise(
     xe_memory_advice_t advice                       ///< [in] Memory advice for the memory range
     )
 {
-    auto pfnAppendMemAdvise = xe_layer::val.xeCommandList.pfnAppendMemAdvise;
+    auto pfnAppendMemAdvise = xe_layer::val.xeDdiTable.CommandList.pfnAppendMemAdvise;
 
     if( nullptr == pfnAppendMemAdvise )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1898,7 +1898,7 @@ xeEventPoolCreate(
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
     )
 {
-    auto pfnCreate = xe_layer::val.xeEventPool.pfnCreate;
+    auto pfnCreate = xe_layer::val.xeDdiTable.EventPool.pfnCreate;
 
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1929,7 +1929,7 @@ xeEventPoolDestroy(
     xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object to destroy
     )
 {
-    auto pfnDestroy = xe_layer::val.xeEventPool.pfnDestroy;
+    auto pfnDestroy = xe_layer::val.xeDdiTable.EventPool.pfnDestroy;
 
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1953,7 +1953,7 @@ xeEventCreate(
     xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
     )
 {
-    auto pfnCreate = xe_layer::val.xeEvent.pfnCreate;
+    auto pfnCreate = xe_layer::val.xeDdiTable.Event.pfnCreate;
 
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -1984,7 +1984,7 @@ xeEventDestroy(
     xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
     )
 {
-    auto pfnDestroy = xe_layer::val.xeEvent.pfnDestroy;
+    auto pfnDestroy = xe_layer::val.xeDdiTable.Event.pfnDestroy;
 
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2007,7 +2007,7 @@ xeEventPoolGetIpcHandle(
     xe_ipc_event_pool_handle_t* phIpc               ///< [out] Returned IPC event handle
     )
 {
-    auto pfnGetIpcHandle = xe_layer::val.xeEventPool.pfnGetIpcHandle;
+    auto pfnGetIpcHandle = xe_layer::val.xeDdiTable.EventPool.pfnGetIpcHandle;
 
     if( nullptr == pfnGetIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2034,7 +2034,7 @@ xeEventPoolOpenIpcHandle(
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
     )
 {
-    auto pfnOpenIpcHandle = xe_layer::val.xeEventPool.pfnOpenIpcHandle;
+    auto pfnOpenIpcHandle = xe_layer::val.xeDdiTable.EventPool.pfnOpenIpcHandle;
 
     if( nullptr == pfnOpenIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2062,7 +2062,7 @@ xeEventPoolCloseIpcHandle(
     xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object
     )
 {
-    auto pfnCloseIpcHandle = xe_layer::val.xeEventPool.pfnCloseIpcHandle;
+    auto pfnCloseIpcHandle = xe_layer::val.xeDdiTable.EventPool.pfnCloseIpcHandle;
 
     if( nullptr == pfnCloseIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2085,7 +2085,7 @@ xeCommandListAppendSignalEvent(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    auto pfnAppendSignalEvent = xe_layer::val.xeCommandList.pfnAppendSignalEvent;
+    auto pfnAppendSignalEvent = xe_layer::val.xeDdiTable.CommandList.pfnAppendSignalEvent;
 
     if( nullptr == pfnAppendSignalEvent )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2113,7 +2113,7 @@ xeCommandListAppendWaitOnEvents(
                                                     ///< continuing
     )
 {
-    auto pfnAppendWaitOnEvents = xe_layer::val.xeCommandList.pfnAppendWaitOnEvents;
+    auto pfnAppendWaitOnEvents = xe_layer::val.xeDdiTable.CommandList.pfnAppendWaitOnEvents;
 
     if( nullptr == pfnAppendWaitOnEvents )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2138,7 +2138,7 @@ xeEventHostSignal(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    auto pfnHostSignal = xe_layer::val.xeEvent.pfnHostSignal;
+    auto pfnHostSignal = xe_layer::val.xeDdiTable.Event.pfnHostSignal;
 
     if( nullptr == pfnHostSignal )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2165,7 +2165,7 @@ xeEventHostSynchronize(
                                                     ///< is lost.
     )
 {
-    auto pfnHostSynchronize = xe_layer::val.xeEvent.pfnHostSynchronize;
+    auto pfnHostSynchronize = xe_layer::val.xeDdiTable.Event.pfnHostSynchronize;
 
     if( nullptr == pfnHostSynchronize )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2187,7 +2187,7 @@ xeEventQueryStatus(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    auto pfnQueryStatus = xe_layer::val.xeEvent.pfnQueryStatus;
+    auto pfnQueryStatus = xe_layer::val.xeDdiTable.Event.pfnQueryStatus;
 
     if( nullptr == pfnQueryStatus )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2210,7 +2210,7 @@ xeCommandListAppendEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    auto pfnAppendEventReset = xe_layer::val.xeCommandList.pfnAppendEventReset;
+    auto pfnAppendEventReset = xe_layer::val.xeDdiTable.CommandList.pfnAppendEventReset;
 
     if( nullptr == pfnAppendEventReset )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2235,7 +2235,7 @@ xeEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    auto pfnReset = xe_layer::val.xeEvent.pfnReset;
+    auto pfnReset = xe_layer::val.xeDdiTable.Event.pfnReset;
 
     if( nullptr == pfnReset )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2259,7 +2259,7 @@ xeFenceCreate(
     xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
     )
 {
-    auto pfnCreate = xe_layer::val.xeFence.pfnCreate;
+    auto pfnCreate = xe_layer::val.xeDdiTable.Fence.pfnCreate;
 
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2290,7 +2290,7 @@ xeFenceDestroy(
     xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
     )
 {
-    auto pfnDestroy = xe_layer::val.xeFence.pfnDestroy;
+    auto pfnDestroy = xe_layer::val.xeDdiTable.Fence.pfnDestroy;
 
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2317,7 +2317,7 @@ xeFenceHostSynchronize(
                                                     ///< is lost.
     )
 {
-    auto pfnHostSynchronize = xe_layer::val.xeFence.pfnHostSynchronize;
+    auto pfnHostSynchronize = xe_layer::val.xeDdiTable.Fence.pfnHostSynchronize;
 
     if( nullptr == pfnHostSynchronize )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2339,7 +2339,7 @@ xeFenceQueryStatus(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
-    auto pfnQueryStatus = xe_layer::val.xeFence.pfnQueryStatus;
+    auto pfnQueryStatus = xe_layer::val.xeDdiTable.Fence.pfnQueryStatus;
 
     if( nullptr == pfnQueryStatus )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2361,7 +2361,7 @@ xeFenceReset(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
-    auto pfnReset = xe_layer::val.xeFence.pfnReset;
+    auto pfnReset = xe_layer::val.xeDdiTable.Fence.pfnReset;
 
     if( nullptr == pfnReset )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2385,7 +2385,7 @@ xeImageGetProperties(
     xe_image_properties_t* pImageProperties         ///< [out] pointer to image properties
     )
 {
-    auto pfnGetProperties = xe_layer::val.xeImage.pfnGetProperties;
+    auto pfnGetProperties = xe_layer::val.xeDdiTable.Image.pfnGetProperties;
 
     if( nullptr == pfnGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2418,7 +2418,7 @@ xeImageCreate(
     xe_image_handle_t* phImage                      ///< [out] pointer to handle of image object created
     )
 {
-    auto pfnCreate = xe_layer::val.xeImage.pfnCreate;
+    auto pfnCreate = xe_layer::val.xeDdiTable.Image.pfnCreate;
 
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2449,7 +2449,7 @@ xeImageDestroy(
     xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
     )
 {
-    auto pfnDestroy = xe_layer::val.xeImage.pfnDestroy;
+    auto pfnDestroy = xe_layer::val.xeDdiTable.Image.pfnDestroy;
 
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2477,7 +2477,7 @@ xeDeviceGroupAllocSharedMem(
     void** ptr                                      ///< [out] pointer to shared allocation
     )
 {
-    auto pfnAllocSharedMem = xe_layer::val.xeDeviceGroup.pfnAllocSharedMem;
+    auto pfnAllocSharedMem = xe_layer::val.xeDdiTable.DeviceGroup.pfnAllocSharedMem;
 
     if( nullptr == pfnAllocSharedMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2510,7 +2510,7 @@ xeDeviceGroupAllocDeviceMem(
     void** ptr                                      ///< [out] pointer to device allocation
     )
 {
-    auto pfnAllocDeviceMem = xe_layer::val.xeDeviceGroup.pfnAllocDeviceMem;
+    auto pfnAllocDeviceMem = xe_layer::val.xeDdiTable.DeviceGroup.pfnAllocDeviceMem;
 
     if( nullptr == pfnAllocDeviceMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2542,7 +2542,7 @@ xeDeviceGroupAllocHostMem(
     void** ptr                                      ///< [out] pointer to host allocation
     )
 {
-    auto pfnAllocHostMem = xe_layer::val.xeDeviceGroup.pfnAllocHostMem;
+    auto pfnAllocHostMem = xe_layer::val.xeDdiTable.DeviceGroup.pfnAllocHostMem;
 
     if( nullptr == pfnAllocHostMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2568,7 +2568,7 @@ xeDeviceGroupFreeMem(
     const void* ptr                                 ///< [in] pointer to memory to free
     )
 {
-    auto pfnFreeMem = xe_layer::val.xeDeviceGroup.pfnFreeMem;
+    auto pfnFreeMem = xe_layer::val.xeDdiTable.DeviceGroup.pfnFreeMem;
 
     if( nullptr == pfnFreeMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2595,7 +2595,7 @@ xeDeviceGroupGetMemProperties(
     xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
     )
 {
-    auto pfnGetMemProperties = xe_layer::val.xeDeviceGroup.pfnGetMemProperties;
+    auto pfnGetMemProperties = xe_layer::val.xeDdiTable.DeviceGroup.pfnGetMemProperties;
 
     if( nullptr == pfnGetMemProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2626,7 +2626,7 @@ xeDeviceGroupGetMemAddressRange(
     size_t* pSize                                   ///< [in,out][optional] size of the allocation
     )
 {
-    auto pfnGetMemAddressRange = xe_layer::val.xeDeviceGroup.pfnGetMemAddressRange;
+    auto pfnGetMemAddressRange = xe_layer::val.xeDdiTable.DeviceGroup.pfnGetMemAddressRange;
 
     if( nullptr == pfnGetMemAddressRange )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2653,7 +2653,7 @@ xeDeviceGroupGetMemIpcHandle(
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
     )
 {
-    auto pfnGetMemIpcHandle = xe_layer::val.xeDeviceGroup.pfnGetMemIpcHandle;
+    auto pfnGetMemIpcHandle = xe_layer::val.xeDdiTable.DeviceGroup.pfnGetMemIpcHandle;
 
     if( nullptr == pfnGetMemIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2685,7 +2685,7 @@ xeDeviceGroupOpenMemIpcHandle(
     void** ptr                                      ///< [out] pointer to device allocation in this process
     )
 {
-    auto pfnOpenMemIpcHandle = xe_layer::val.xeDeviceGroup.pfnOpenMemIpcHandle;
+    auto pfnOpenMemIpcHandle = xe_layer::val.xeDdiTable.DeviceGroup.pfnOpenMemIpcHandle;
 
     if( nullptr == pfnOpenMemIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2717,7 +2717,7 @@ xeDeviceGroupCloseMemIpcHandle(
     const void* ptr                                 ///< [in] pointer to device allocation in this process
     )
 {
-    auto pfnCloseMemIpcHandle = xe_layer::val.xeDeviceGroup.pfnCloseMemIpcHandle;
+    auto pfnCloseMemIpcHandle = xe_layer::val.xeDdiTable.DeviceGroup.pfnCloseMemIpcHandle;
 
     if( nullptr == pfnCloseMemIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2745,7 +2745,7 @@ xeModuleCreate(
     xe_module_build_log_handle_t* phBuildLog        ///< [in,out][optional] pointer to handle of module's build log.
     )
 {
-    auto pfnCreate = xe_layer::val.xeModule.pfnCreate;
+    auto pfnCreate = xe_layer::val.xeDdiTable.Module.pfnCreate;
 
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2776,7 +2776,7 @@ xeModuleDestroy(
     xe_module_handle_t hModule                      ///< [in] handle of the module
     )
 {
-    auto pfnDestroy = xe_layer::val.xeModule.pfnDestroy;
+    auto pfnDestroy = xe_layer::val.xeDdiTable.Module.pfnDestroy;
 
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2798,7 +2798,7 @@ xeModuleBuildLogDestroy(
     xe_module_build_log_handle_t hModuleBuildLog    ///< [in] handle of the module build log object.
     )
 {
-    auto pfnDestroy = xe_layer::val.xeModuleBuildLog.pfnDestroy;
+    auto pfnDestroy = xe_layer::val.xeDdiTable.ModuleBuildLog.pfnDestroy;
 
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2822,7 +2822,7 @@ xeModuleBuildLogGetString(
     char* pBuildLog                                 ///< [in,out][optional] pointer to null-terminated string of the log.
     )
 {
-    auto pfnGetString = xe_layer::val.xeModuleBuildLog.pfnGetString;
+    auto pfnGetString = xe_layer::val.xeDdiTable.ModuleBuildLog.pfnGetString;
 
     if( nullptr == pfnGetString )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2849,7 +2849,7 @@ xeModuleGetNativeBinary(
     uint8_t* pModuleNativeBinary                    ///< [in,out][optional] byte pointer to native binary
     )
 {
-    auto pfnGetNativeBinary = xe_layer::val.xeModule.pfnGetNativeBinary;
+    auto pfnGetNativeBinary = xe_layer::val.xeDdiTable.Module.pfnGetNativeBinary;
 
     if( nullptr == pfnGetNativeBinary )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2876,7 +2876,7 @@ xeModuleGetGlobalPointer(
     void** pPtr                                     ///< [out] device visible pointer
     )
 {
-    auto pfnGetGlobalPointer = xe_layer::val.xeModule.pfnGetGlobalPointer;
+    auto pfnGetGlobalPointer = xe_layer::val.xeDdiTable.Module.pfnGetGlobalPointer;
 
     if( nullptr == pfnGetGlobalPointer )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2906,7 +2906,7 @@ xeFunctionCreate(
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object
     )
 {
-    auto pfnCreate = xe_layer::val.xeFunction.pfnCreate;
+    auto pfnCreate = xe_layer::val.xeDdiTable.Function.pfnCreate;
 
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2937,7 +2937,7 @@ xeFunctionDestroy(
     xe_function_handle_t hFunction                  ///< [in] handle of the function object
     )
 {
-    auto pfnDestroy = xe_layer::val.xeFunction.pfnDestroy;
+    auto pfnDestroy = xe_layer::val.xeDdiTable.Function.pfnDestroy;
 
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2961,7 +2961,7 @@ xeModuleGetFunctionPointer(
     void** pfnFunction                              ///< [out] pointer to function.
     )
 {
-    auto pfnGetFunctionPointer = xe_layer::val.xeModule.pfnGetFunctionPointer;
+    auto pfnGetFunctionPointer = xe_layer::val.xeDdiTable.Module.pfnGetFunctionPointer;
 
     if( nullptr == pfnGetFunctionPointer )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -2992,7 +2992,7 @@ xeFunctionSetGroupSize(
     uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this function.
     )
 {
-    auto pfnSetGroupSize = xe_layer::val.xeFunction.pfnSetGroupSize;
+    auto pfnSetGroupSize = xe_layer::val.xeDdiTable.Function.pfnSetGroupSize;
 
     if( nullptr == pfnSetGroupSize )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -3020,7 +3020,7 @@ xeFunctionSuggestGroupSize(
     uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
     )
 {
-    auto pfnSuggestGroupSize = xe_layer::val.xeFunction.pfnSuggestGroupSize;
+    auto pfnSuggestGroupSize = xe_layer::val.xeDdiTable.Function.pfnSuggestGroupSize;
 
     if( nullptr == pfnSuggestGroupSize )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -3055,7 +3055,7 @@ xeFunctionSetArgumentValue(
                                                     ///< null then argument value is considered null.
     )
 {
-    auto pfnSetArgumentValue = xe_layer::val.xeFunction.pfnSetArgumentValue;
+    auto pfnSetArgumentValue = xe_layer::val.xeDdiTable.Function.pfnSetArgumentValue;
 
     if( nullptr == pfnSetArgumentValue )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -3079,7 +3079,7 @@ xeFunctionSetAttribute(
     uint32_t value                                  ///< [in] attribute value to set
     )
 {
-    auto pfnSetAttribute = xe_layer::val.xeFunction.pfnSetAttribute;
+    auto pfnSetAttribute = xe_layer::val.xeDdiTable.Function.pfnSetAttribute;
 
     if( nullptr == pfnSetAttribute )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -3103,7 +3103,7 @@ xeFunctionGetAttribute(
     uint32_t* pValue                                ///< [out] returned attribute value
     )
 {
-    auto pfnGetAttribute = xe_layer::val.xeFunction.pfnGetAttribute;
+    auto pfnGetAttribute = xe_layer::val.xeDdiTable.Function.pfnGetAttribute;
 
     if( nullptr == pfnGetAttribute )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -3134,7 +3134,7 @@ xeCommandListAppendLaunchFunction(
                                                     ///< on before launching
     )
 {
-    auto pfnAppendLaunchFunction = xe_layer::val.xeCommandList.pfnAppendLaunchFunction;
+    auto pfnAppendLaunchFunction = xe_layer::val.xeDdiTable.CommandList.pfnAppendLaunchFunction;
 
     if( nullptr == pfnAppendLaunchFunction )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -3168,7 +3168,7 @@ xeCommandListAppendLaunchFunctionIndirect(
                                                     ///< on before launching
     )
 {
-    auto pfnAppendLaunchFunctionIndirect = xe_layer::val.xeCommandList.pfnAppendLaunchFunctionIndirect;
+    auto pfnAppendLaunchFunctionIndirect = xe_layer::val.xeDdiTable.CommandList.pfnAppendLaunchFunctionIndirect;
 
     if( nullptr == pfnAppendLaunchFunctionIndirect )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -3207,7 +3207,7 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
                                                     ///< on before launching
     )
 {
-    auto pfnAppendLaunchMultipleFunctionsIndirect = xe_layer::val.xeCommandList.pfnAppendLaunchMultipleFunctionsIndirect;
+    auto pfnAppendLaunchMultipleFunctionsIndirect = xe_layer::val.xeDdiTable.CommandList.pfnAppendLaunchMultipleFunctionsIndirect;
 
     if( nullptr == pfnAppendLaunchMultipleFunctionsIndirect )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -3244,7 +3244,7 @@ xeCommandListAppendLaunchHostFunction(
                                                     ///< on before launching
     )
 {
-    auto pfnAppendLaunchHostFunction = xe_layer::val.xeCommandList.pfnAppendLaunchHostFunction;
+    auto pfnAppendLaunchHostFunction = xe_layer::val.xeDdiTable.CommandList.pfnAppendLaunchHostFunction;
 
     if( nullptr == pfnAppendLaunchHostFunction )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -3271,7 +3271,7 @@ xeDeviceMakeMemoryResident(
     size_t size                                     ///< [in] size in bytes to make resident
     )
 {
-    auto pfnMakeMemoryResident = xe_layer::val.xeDevice.pfnMakeMemoryResident;
+    auto pfnMakeMemoryResident = xe_layer::val.xeDdiTable.Device.pfnMakeMemoryResident;
 
     if( nullptr == pfnMakeMemoryResident )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -3298,7 +3298,7 @@ xeDeviceEvictMemory(
     size_t size                                     ///< [in] size in bytes to evict
     )
 {
-    auto pfnEvictMemory = xe_layer::val.xeDevice.pfnEvictMemory;
+    auto pfnEvictMemory = xe_layer::val.xeDdiTable.Device.pfnEvictMemory;
 
     if( nullptr == pfnEvictMemory )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -3324,7 +3324,7 @@ xeDeviceMakeImageResident(
     xe_image_handle_t hImage                        ///< [in] handle of image to make resident
     )
 {
-    auto pfnMakeImageResident = xe_layer::val.xeDevice.pfnMakeImageResident;
+    auto pfnMakeImageResident = xe_layer::val.xeDdiTable.Device.pfnMakeImageResident;
 
     if( nullptr == pfnMakeImageResident )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -3350,7 +3350,7 @@ xeDeviceEvictImage(
     xe_image_handle_t hImage                        ///< [in] handle of image to make evict
     )
 {
-    auto pfnEvictImage = xe_layer::val.xeDevice.pfnEvictImage;
+    auto pfnEvictImage = xe_layer::val.xeDdiTable.Device.pfnEvictImage;
 
     if( nullptr == pfnEvictImage )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -3377,7 +3377,7 @@ xeSamplerCreate(
     xe_sampler_handle_t* phSampler                  ///< [out] handle of the sampler
     )
 {
-    auto pfnCreate = xe_layer::val.xeSampler.pfnCreate;
+    auto pfnCreate = xe_layer::val.xeDdiTable.Sampler.pfnCreate;
 
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
@@ -3408,7 +3408,7 @@ xeSamplerDestroy(
     xe_sampler_handle_t hSampler                    ///< [in] handle of the sampler
     )
 {
-    auto pfnDestroy = xe_layer::val.xeSampler.pfnDestroy;
+    auto pfnDestroy = xe_layer::val.xeDdiTable.Sampler.pfnDestroy;
 
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;

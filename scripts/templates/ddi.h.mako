@@ -47,11 +47,6 @@ from templates import helper as th
 extern "C" {
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-%for tbl in th.get_pfntables(specs, meta, n, tags):
-typedef struct _${th.append_ws(tbl['type'], 35)} ${tbl['type']};
-%endfor
-
 %for tbl in th.get_pfntables(specs, meta, n, tags):
 %for obj in tbl['functions']:
 ///////////////////////////////////////////////////////////////////////////////
@@ -82,10 +77,6 @@ typedef struct _${tbl['type']}
     #endif // ${th.subt(n, tags, obj['condition'])}
     %endif
     %endfor
-
-    %for obj in tbl['owns']:
-    ${th.append_ws(obj['type']+"*", 59)} p${obj['name']};
-    %endfor
 } ${tbl['type']};
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -115,6 +106,15 @@ typedef ${x}_result_t (__${x}call *${tbl['pfn']})(
     );
 
 %endfor
+///////////////////////////////////////////////////////////////////////////////
+/// @brief 
+typedef struct _${n}_dditable_t
+{
+%for tbl in th.get_pfntables(specs, meta, n, tags):
+    ${th.append_ws(tbl['type'], 35)} ${tbl['name']};
+%endfor
+} ${n}_dditable_t;
+
 #if defined(__cplusplus)
 } // extern "C"
 #endif

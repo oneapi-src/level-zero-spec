@@ -66,7 +66,7 @@ xeGetDeviceGroups(
     xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
     )
 {
-    auto pfnGetDeviceGroups = xe_lib::lib.xeGlobal.pfnGetDeviceGroups;
+    auto pfnGetDeviceGroups = xe_lib::lib.ddiTable.Global.pfnGetDeviceGroups;
 
 #if _DEBUG
     if( nullptr == pfnGetDeviceGroups )
@@ -107,7 +107,7 @@ xeDeviceGroupGetDevices(
     xe_device_handle_t* pDevices                    ///< [in,out][optional][range(0, *pCount)] array of handle of devices
     )
 {
-    auto pfnGetDevices = xe_lib::lib.xeDeviceGroup.pfnGetDevices;
+    auto pfnGetDevices = xe_lib::lib.ddiTable.DeviceGroup.pfnGetDevices;
 
 #if _DEBUG
     if( nullptr == pfnGetDevices )
@@ -144,7 +144,7 @@ xeDeviceGetSubDevice(
     xe_device_handle_t* phSubDevice                 ///< [out] pointer to handle of sub-device object.
     )
 {
-    auto pfnGetSubDevice = xe_lib::lib.xeDevice.pfnGetSubDevice;
+    auto pfnGetSubDevice = xe_lib::lib.ddiTable.Device.pfnGetSubDevice;
 
 #if _DEBUG
     if( nullptr == pfnGetSubDevice )
@@ -179,7 +179,7 @@ xeDeviceGroupGetApiVersion(
     xe_api_version_t* version                       ///< [out] api version
     )
 {
-    auto pfnGetApiVersion = xe_lib::lib.xeDeviceGroup.pfnGetApiVersion;
+    auto pfnGetApiVersion = xe_lib::lib.ddiTable.DeviceGroup.pfnGetApiVersion;
 
 #if _DEBUG
     if( nullptr == pfnGetApiVersion )
@@ -216,7 +216,7 @@ xeDeviceGroupGetProperties(
     xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
     )
 {
-    auto pfnGetProperties = xe_lib::lib.xeDeviceGroup.pfnGetProperties;
+    auto pfnGetProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetProperties )
@@ -252,7 +252,7 @@ xeDeviceGroupGetComputeProperties(
     xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
     )
 {
-    auto pfnGetComputeProperties = xe_lib::lib.xeDeviceGroup.pfnGetComputeProperties;
+    auto pfnGetComputeProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetComputeProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetComputeProperties )
@@ -289,7 +289,7 @@ xeDeviceGroupGetMemoryProperties(
     xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
     )
 {
-    auto pfnGetMemoryProperties = xe_lib::lib.xeDeviceGroup.pfnGetMemoryProperties;
+    auto pfnGetMemoryProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetMemoryProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetMemoryProperties )
@@ -327,7 +327,7 @@ xeDeviceGetP2PProperties(
     xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
     )
 {
-    auto pfnGetP2PProperties = xe_lib::lib.xeDevice.pfnGetP2PProperties;
+    auto pfnGetP2PProperties = xe_lib::lib.ddiTable.Device.pfnGetP2PProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetP2PProperties )
@@ -364,7 +364,7 @@ xeDeviceCanAccessPeer(
     xe_bool_t* value                                ///< [out] returned access capability
     )
 {
-    auto pfnCanAccessPeer = xe_lib::lib.xeDevice.pfnCanAccessPeer;
+    auto pfnCanAccessPeer = xe_lib::lib.ddiTable.Device.pfnCanAccessPeer;
 
 #if _DEBUG
     if( nullptr == pfnCanAccessPeer )
@@ -399,7 +399,7 @@ xeDeviceSetIntermediateCacheConfig(
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     )
 {
-    auto pfnSetIntermediateCacheConfig = xe_lib::lib.xeDevice.pfnSetIntermediateCacheConfig;
+    auto pfnSetIntermediateCacheConfig = xe_lib::lib.ddiTable.Device.pfnSetIntermediateCacheConfig;
 
 #if _DEBUG
     if( nullptr == pfnSetIntermediateCacheConfig )
@@ -434,7 +434,7 @@ xeDeviceSetLastLevelCacheConfig(
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     )
 {
-    auto pfnSetLastLevelCacheConfig = xe_lib::lib.xeDevice.pfnSetLastLevelCacheConfig;
+    auto pfnSetLastLevelCacheConfig = xe_lib::lib.ddiTable.Device.pfnSetLastLevelCacheConfig;
 
 #if _DEBUG
     if( nullptr == pfnSetLastLevelCacheConfig )

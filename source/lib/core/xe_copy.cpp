@@ -69,7 +69,7 @@ xeCommandListAppendMemoryCopy(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    auto pfnAppendMemoryCopy = xe_lib::lib.xeCommandList.pfnAppendMemoryCopy;
+    auto pfnAppendMemoryCopy = xe_lib::lib.ddiTable.CommandList.pfnAppendMemoryCopy;
 
 #if _DEBUG
     if( nullptr == pfnAppendMemoryCopy )
@@ -113,7 +113,7 @@ xeCommandListAppendMemorySet(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    auto pfnAppendMemorySet = xe_lib::lib.xeCommandList.pfnAppendMemorySet;
+    auto pfnAppendMemorySet = xe_lib::lib.ddiTable.CommandList.pfnAppendMemorySet;
 
 #if _DEBUG
     if( nullptr == pfnAppendMemorySet )
@@ -158,7 +158,7 @@ xeCommandListAppendMemoryCopyRegion(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    auto pfnAppendMemoryCopyRegion = xe_lib::lib.xeCommandList.pfnAppendMemoryCopyRegion;
+    auto pfnAppendMemoryCopyRegion = xe_lib::lib.ddiTable.CommandList.pfnAppendMemoryCopyRegion;
 
 #if _DEBUG
     if( nullptr == pfnAppendMemoryCopyRegion )
@@ -197,7 +197,7 @@ xeCommandListAppendImageCopy(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    auto pfnAppendImageCopy = xe_lib::lib.xeCommandList.pfnAppendImageCopy;
+    auto pfnAppendImageCopy = xe_lib::lib.ddiTable.CommandList.pfnAppendImageCopy;
 
 #if _DEBUG
     if( nullptr == pfnAppendImageCopy )
@@ -234,7 +234,7 @@ xeCommandListAppendImageCopyRegion(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    auto pfnAppendImageCopyRegion = xe_lib::lib.xeCommandList.pfnAppendImageCopyRegion;
+    auto pfnAppendImageCopyRegion = xe_lib::lib.ddiTable.CommandList.pfnAppendImageCopyRegion;
 
 #if _DEBUG
     if( nullptr == pfnAppendImageCopyRegion )
@@ -276,7 +276,7 @@ xeCommandListAppendImageCopyToMemory(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    auto pfnAppendImageCopyToMemory = xe_lib::lib.xeCommandList.pfnAppendImageCopyToMemory;
+    auto pfnAppendImageCopyToMemory = xe_lib::lib.ddiTable.CommandList.pfnAppendImageCopyToMemory;
 
 #if _DEBUG
     if( nullptr == pfnAppendImageCopyToMemory )
@@ -318,7 +318,7 @@ xeCommandListAppendImageCopyFromMemory(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    auto pfnAppendImageCopyFromMemory = xe_lib::lib.xeCommandList.pfnAppendImageCopyFromMemory;
+    auto pfnAppendImageCopyFromMemory = xe_lib::lib.ddiTable.CommandList.pfnAppendImageCopyFromMemory;
 
 #if _DEBUG
     if( nullptr == pfnAppendImageCopyFromMemory )
@@ -369,7 +369,7 @@ xeCommandListAppendMemoryPrefetch(
     size_t count                                    ///< [in] size in bytes of the memory range to prefetch
     )
 {
-    auto pfnAppendMemoryPrefetch = xe_lib::lib.xeCommandList.pfnAppendMemoryPrefetch;
+    auto pfnAppendMemoryPrefetch = xe_lib::lib.ddiTable.CommandList.pfnAppendMemoryPrefetch;
 
 #if _DEBUG
     if( nullptr == pfnAppendMemoryPrefetch )
@@ -421,7 +421,7 @@ xeCommandListAppendMemAdvise(
     xe_memory_advice_t advice                       ///< [in] Memory advice for the memory range
     )
 {
-    auto pfnAppendMemAdvise = xe_lib::lib.xeCommandList.pfnAppendMemAdvise;
+    auto pfnAppendMemAdvise = xe_lib::lib.ddiTable.CommandList.pfnAppendMemAdvise;
 
 #if _DEBUG
     if( nullptr == pfnAppendMemAdvise )
