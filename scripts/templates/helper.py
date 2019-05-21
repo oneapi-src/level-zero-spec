@@ -1,6 +1,32 @@
 import re
 
 """
+    Extracts traits from a spec object
+"""
+class obj_traits:
+
+    @staticmethod
+    def is_function(obj):
+        try:
+            return True if re.match(r"function", obj['type']) else False
+        except:
+            return False
+
+    @staticmethod
+    def is_class(obj):
+        try:
+            return True if re.match(r"class", obj['type']) else False
+        except:
+            return False
+
+    @staticmethod
+    def class_name(obj):
+        try:
+            return obj['class']
+        except:
+            return None
+
+"""
     Extracts traits from a class name
 """
 class class_traits:
@@ -447,10 +473,10 @@ def _get_type_name(namespace, tags, obj, item, cpp=False, meta=None):
             is_handle = type_traits.is_handle(item['type'])
 
             is_inscope = False
-            if re.match(r"class", obj['type']):     # if the obj _is_ a class
-                is_inscope = cname == obj['name']       # then is the item's class this obj? 
-            elif 'class' in obj and not is_global:  # else if the obj belongs to a class
-                is_inscope = cname == obj['class']      # then is the item's class the same as the obj?
+            if obj_traits.is_class(obj):                        # if the obj _is_ a class
+                is_inscope = cname == obj['name']                   # then is the item's class this obj? 
+            elif not is_global:                                 # else if the obj belongs to a class
+                is_inscope = cname == obj_traits.class_name(obj)    # then is the item's class the same as the obj?
 
             cname = subt(namespace, tags, cname, cpp=cpp)   # remove tags from class name
 
@@ -458,7 +484,7 @@ def _get_type_name(namespace, tags, obj, item, cpp=False, meta=None):
                 # need to prepend the class name to the type
                 name = _add_class(name, cname)
 
-            elif is_handle and not re.match(r"class", obj['type']):
+            elif is_handle and not obj_traits.is_class(obj):
                 # convert handles to class pointers
                 name = "%s*"%cname
 
@@ -560,8 +586,7 @@ def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None, for
             if is_handle:
                 name = re.sub(r"\bh([A-Z]\w+)", r"p\1", name) # change "hName" to "pName"
 
-            is_optional = param_traits.is_optional(item)
-            if decl and is_optional:
+            if decl and param_traits.is_optional(item):
                 is_pointer = type_traits.is_pointer(item['type'])
                 if is_pointer or is_handle:
                     init += "= nullptr"
@@ -605,6 +630,7 @@ def make_param_call_str(namespace, tags, prologue, obj, cpp=False):
     names = []
     if len(prologue) > 0:
         names.append(prologue)
+
     params = make_param_lines(namespace, tags, obj, cpp=cpp, format=["name"])
     if len(params) > 0 and params[0] != "void":
         names.extend(params)
@@ -735,8 +761,7 @@ def make_param_checks(namespace, tags, obj, comment=False, cpp=False):
     checks[eus] = []
 
     for item in obj['params']:
-        is_optional = re.match(r".*\[optional\].*", item['desc'])
-        if not is_optional:
+        if not param_traits.is_optional(item):
             is_pointer = type_traits.is_pointer(item['type'])
             is_handle = type_traits.is_handle(item['type'])
             is_desc = type_traits.is_descriptor(item['type'])
@@ -840,8 +865,8 @@ Public:
     returns the name of a function
 """
 def make_func_name(namespace, tags, obj, cpp=False):
-    if not cpp and 'class' in obj:
-        cname = obj['class']
+    if not cpp:
+        cname = obj_traits.class_name(obj)
     else:
         cname = ""
     return subt(namespace, tags, "%s%s"%(cname, obj['name']), cpp=cpp)
@@ -899,14 +924,15 @@ def get_class_function_objs(specs, cname):
     buckets = dict() # bucket per function ordinals
     for s in specs:
         for obj in s['objects']:
-            is_function = re.match("function", obj['type'])
-            match_cls = 'class' in obj and cname == obj['class']
+            is_function = obj_traits.is_function(obj)
+            match_cls = cname == obj_traits.class_name(obj)
             if is_function and match_cls:
                 # append to bucket
                 ordinal = obj['ordinal'] if 'ordinal' in obj else '9999'
                 if ordinal not in buckets:
                     buckets[ordinal] = []
                 buckets[ordinal].append(obj)
+
     # finally, generate a single list that is storted by ordinal
     objs = []
     for k, v in sorted(buckets.items()):
@@ -918,10 +944,7 @@ Public:
     returns string name of table for function object
 """
 def get_table_name(namespace, tags, obj):
-    if 'class' in obj:
-        cname = obj['class']
-    else:
-        cname = ""
+    cname = obj_traits.class_name(obj)
     name = subt(namespace, tags, cname, cpp=True) # i.e., "$x" -> ""
     name = name if len(name) > 0 else "Global"
     return name
@@ -996,8 +1019,7 @@ def make_loader_prologue_lines(namespace, tags, obj, meta, loader):
                 lines.append("for( size_t i = %s; ( nullptr != %s ) && ( i < %s ); ++i )"%(range_start, name, range_end))
                 lines.append("    %s[ i ] = std::get<0>( *reinterpret_cast<%s*>( %s[ i ] ) );"%(name, obj_name, name))
             else:
-                is_optional = re.match(r".*\[optional\].*", item['desc'])
-                if is_optional:
+                if param_traits.is_optional(item):
                     lines.append("%s = ( %s ) ? std::get<0>( *reinterpret_cast<%s*>( %s ) ) : nullptr;"%(name, name, obj_name, name))
                 else:
                     if i == 0:
@@ -1036,8 +1058,7 @@ def make_loader_epilogue_lines(namespace, tags, obj, meta):
                 lines.append("    %s[ i ] = reinterpret_cast<%s>( new %s( %s[ i ], nullptr ) );"%(name, tname, obj_name, name))
 
             else:
-                is_optional = re.match(r".*\[optional\].*", item['desc'])
-                if is_optional:
+                if param_traits.is_optional(item):
                     lines.append("if( nullptr != %s ) *%s = reinterpret_cast<%s>( new %s( *%s, nullptr ) );"%(name, name, tname, obj_name, name))
                 else:
                     lines.append("*%s = reinterpret_cast<%s>( new %s( *%s, nullptr ) );"%(name, tname, obj_name, name))
