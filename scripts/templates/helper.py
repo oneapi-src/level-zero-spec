@@ -992,15 +992,11 @@ def get_pfntables(specs, meta, namespace, tags):
 Public:
     returns a list of c++ strings for converting loader input parameters
 """
-def make_loader_prologue_lines(namespace, tags, obj, meta, loader):
+def make_loader_prologue_lines(namespace, tags, obj, meta):
     lines = []
 
     tblname = get_table_name(namespace, tags, obj)
     pfnname = make_pfn_name(namespace, tags, obj)
-    if re.match(r"Global.*", tblname):
-        lines.append("auto %s = %s.%s%sDdiTable.%s;"%(pfnname, loader, namespace, tblname, pfnname))
-        lines.append("")
-
     params = _filter_param_list(obj['params'], ["in"])
     for i, item in enumerate(params):
         is_handle = type_traits.is_handle(item['type'])

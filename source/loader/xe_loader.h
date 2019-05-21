@@ -30,6 +30,7 @@
 #pragma once
 #endif
 #include <tuple>
+#include <vector>
 #include "xe_ddi.h"
 #include "xex_ddi.h"
 #include "xet_ddi.h"
@@ -72,11 +73,18 @@ namespace xe_loader
     public:
         xe_api_version_t version = XE_API_VERSION_1_0;
 
-        HMODULE commonDriver = nullptr;
+        std::vector<HMODULE> drivers;
+
         HMODULE validationLayer = nullptr;
 
         Loader();
         ~Loader();
+
+        xe_result_t xeInit( xe_init_flag_t flags );
+        xe_result_t xexInit( xe_init_flag_t flags );
+        xe_result_t xetInit( xe_init_flag_t flags );
+
+        xe_result_t xeGetDeviceGroups( uint32_t* pCount, xe_device_group_handle_t* pDeviceGroups );
 
         xe_global_dditable_t   xeGlobalDdiTable = {};
         xex_global_dditable_t  xexGlobalDdiTable = {};

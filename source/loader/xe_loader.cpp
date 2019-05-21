@@ -43,7 +43,13 @@ namespace xe_loader
     ///////////////////////////////////////////////////////////////////////////////
     Loader::Loader()
     {
-        commonDriver = LOAD_DRIVER_LIBRARY( known_driver_names[ 0 ] );
+        drivers.reserve( num_known_driver_names );
+        for( auto name : known_driver_names )
+        {
+            auto handle = LOAD_DRIVER_LIBRARY( name );
+            if( NULL != handle )
+                drivers.emplace_back( handle );
+        }
 
         if( getenv_tobool( "XE_ENABLE_VALIDATION_LAYER" ) )
             validationLayer = LOAD_DRIVER_LIBRARY( MAKE_DRIVER_NAME( "xe_validation_layer" ) );
@@ -53,7 +59,36 @@ namespace xe_loader
     Loader::~Loader()
     {
         FREE_DRIVER_LIBRARY( validationLayer );
-        FREE_DRIVER_LIBRARY( commonDriver );
+
+        for( auto handle : drivers )
+            FREE_DRIVER_LIBRARY( handle );
     };
+
+    //////////////////////////////////////////////////////////////////////////
+    xe_result_t Loader::xeInit( xe_init_flag_t flags )
+    {
+        return XE_RESULT_SUCCESS;
+    }
+
+    //////////////////////////////////////////////////////////////////////////
+    xe_result_t Loader::xexInit( xe_init_flag_t flags )
+    {
+        return XE_RESULT_SUCCESS;
+    }
+
+    //////////////////////////////////////////////////////////////////////////
+    xe_result_t Loader::xetInit( xe_init_flag_t flags )
+    {
+        return XE_RESULT_SUCCESS;
+    }
+
+    //////////////////////////////////////////////////////////////////////////
+    xe_result_t Loader::xeGetDeviceGroups(
+        uint32_t* pCount,
+        xe_device_group_handle_t* pDeviceGroups )
+    {
+        return XE_RESULT_SUCCESS;
+    }
+
 
 } // namespace xe_loader

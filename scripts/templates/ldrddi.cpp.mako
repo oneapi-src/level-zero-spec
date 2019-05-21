@@ -73,10 +73,10 @@ ${tbl['export']['name']}(
     ${x}_result_t result = ${X}_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != ${x}_loader::loader.commonDriver )
+    for( auto handle : ${x}_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<${tbl['pfn']}>(
-            GET_FUNCTION_PTR(${x}_loader::loader.commonDriver, "${tbl['export']['name']}") );
+            GET_FUNCTION_PTR( handle, "${tbl['export']['name']}") );
         result = getTable( version, ptable );
     }
 
@@ -105,7 +105,12 @@ ${th.make_func_name(n, tags, obj)}(
     %endfor
     )
 {
-    %for line in th.make_loader_prologue_lines(n, tags, obj, meta, th.subt(namespace, tags, "$x_loader::loader")):
+    %if re.match(r"Global.*", th.get_table_name(n, tags, obj)):
+    // global functions need to be handled manually by the loader
+    auto result = ${x}_loader::loader.${th.make_func_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
+
+    %else:
+    %for line in th.make_loader_prologue_lines(n, tags, obj, meta):
     ${line}
     %endfor
     auto result = ${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
@@ -113,7 +118,8 @@ ${th.make_func_name(n, tags, obj)}(
     %for line in th.make_loader_epilogue_lines(n, tags, obj, meta):
     ${line}
     %endfor
-    return ${X}_RESULT_SUCCESS;
+    %endif
+    return result;
 }
 %if 'condition' in obj:
 #endif // ${th.subt(n, tags, obj['condition'])}

@@ -62,10 +62,10 @@ xetGetGlobalProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetGlobalProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xetGetGlobalProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xetGetGlobalProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -108,10 +108,10 @@ xetGetDeviceProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetDeviceProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xetGetDeviceProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xetGetDeviceProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -154,10 +154,10 @@ xetGetCommandListProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetCommandListProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xetGetCommandListProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xetGetCommandListProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -200,10 +200,10 @@ xetGetMetricGroupProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricGroupProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xetGetMetricGroupProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xetGetMetricGroupProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -246,10 +246,10 @@ xetGetMetricProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xetGetMetricProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xetGetMetricProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -292,10 +292,10 @@ xetGetMetricTracerProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricTracerProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xetGetMetricTracerProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xetGetMetricTracerProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -338,10 +338,10 @@ xetGetMetricQueryPoolProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricQueryPoolProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xetGetMetricQueryPoolProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xetGetMetricQueryPoolProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -384,10 +384,10 @@ xetGetMetricQueryProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricQueryProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xetGetMetricQueryProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xetGetMetricQueryProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -430,10 +430,10 @@ xetGetPowerProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetPowerProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xetGetPowerProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xetGetPowerProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -476,10 +476,10 @@ xetGetFreqDomainProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetFreqDomainProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xetGetFreqDomainProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xetGetFreqDomainProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -501,12 +501,10 @@ xetInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    auto pfnInit = xe_loader::loader.xetGlobalDdiTable.pfnInit;
-    
-    
-    auto result = pfnInit( flags );
+    // global functions need to be handled manually by the loader
+    auto result = xe_loader::loader.xetInit( flags );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricGroupGetCount
@@ -522,7 +520,7 @@ xetMetricGroupGetCount(
     
     auto result = pfnGetCount( hDevice, pCount );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricGroupGet
@@ -541,7 +539,7 @@ xetMetricGroupGet(
 
     *phMetricGroup = reinterpret_cast<xet_metric_group_handle_t>( new xet_metric_group_object_t( *phMetricGroup, nullptr ) );
     
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricGroupGetProperties
@@ -557,7 +555,7 @@ xetMetricGroupGetProperties(
     
     auto result = pfnGetProperties( hMetricGroup, pProperties );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricGet
@@ -576,7 +574,7 @@ xetMetricGet(
 
     *phMetric = reinterpret_cast<xet_metric_handle_t>( new xet_metric_object_t( *phMetric, nullptr ) );
     
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricGetProperties
@@ -592,7 +590,7 @@ xetMetricGetProperties(
     
     auto result = pfnGetProperties( hMetric, pProperties );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricGroupCalculateData
@@ -612,7 +610,7 @@ xetMetricGroupCalculateData(
     
     auto result = pfnCalculateData( hMetricGroup, pReportCount, rawDataSize, pRawData, calculatedDataSize, pCalculatedData );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetDeviceActivateMetricGroups
@@ -632,7 +630,7 @@ xetDeviceActivateMetricGroups(
     
     auto result = pfnActivateMetricGroups( hDevice, count, phMetricGroups );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricTracerOpen
@@ -654,7 +652,7 @@ xetMetricTracerOpen(
 
     *phMetricTracer = reinterpret_cast<xet_metric_tracer_handle_t>( new xet_metric_tracer_object_t( *phMetricTracer, nullptr ) );
     
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetCommandListAppendMetricTracerMarker
@@ -672,7 +670,7 @@ xetCommandListAppendMetricTracerMarker(
     
     auto result = pfnAppendMetricTracerMarker( hCommandList, hMetricTracer, value );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricTracerClose
@@ -687,7 +685,7 @@ xetMetricTracerClose(
     
     auto result = pfnClose( hMetricTracer );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricTracerReadData
@@ -705,7 +703,7 @@ xetMetricTracerReadData(
     
     auto result = pfnReadData( hMetricTracer, pReportCount, rawDataSize, pRawData );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricQueryPoolCreate
@@ -724,7 +722,7 @@ xetMetricQueryPoolCreate(
 
     *phMetricQueryPool = reinterpret_cast<xet_metric_query_pool_handle_t>( new xet_metric_query_pool_object_t( *phMetricQueryPool, nullptr ) );
     
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricQueryPoolDestroy
@@ -739,7 +737,7 @@ xetMetricQueryPoolDestroy(
     
     auto result = pfnDestroy( hMetricQueryPool );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricQueryPoolGetMetricQuery
@@ -758,7 +756,7 @@ xetMetricQueryPoolGetMetricQuery(
 
     *phMetricQuery = reinterpret_cast<xet_metric_query_handle_t>( new xet_metric_query_object_t( *phMetricQuery, nullptr ) );
     
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetCommandListAppendMetricQueryBegin
@@ -775,7 +773,7 @@ xetCommandListAppendMetricQueryBegin(
     
     auto result = pfnAppendMetricQueryBegin( hCommandList, hMetricQuery );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetCommandListAppendMetricQueryEnd
@@ -794,7 +792,7 @@ xetCommandListAppendMetricQueryEnd(
     
     auto result = pfnAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetCommandListAppendMetricMemoryBarrier
@@ -809,7 +807,7 @@ xetCommandListAppendMetricMemoryBarrier(
     
     auto result = pfnAppendMetricMemoryBarrier( hCommandList );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricQueryGetData
@@ -827,7 +825,7 @@ xetMetricQueryGetData(
     
     auto result = pfnGetData( hMetricQuery, pReportCount, rawDataSize, pRawData );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerCreate
@@ -846,7 +844,7 @@ xetPowerCreate(
 
     *pPowerHandle = reinterpret_cast<xet_power_handle_t>( new xet_power_object_t( *pPowerHandle, nullptr ) );
     
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerDestroy
@@ -861,7 +859,7 @@ xetPowerDestroy(
     
     auto result = pfnDestroy( hPower );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetAveragePowerLimit
@@ -877,7 +875,7 @@ xetPowerGetAveragePowerLimit(
     
     auto result = pfnGetAveragePowerLimit( hPower, pLimit );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetBurstPowerLimit
@@ -893,7 +891,7 @@ xetPowerGetBurstPowerLimit(
     
     auto result = pfnGetBurstPowerLimit( hPower, pLimit );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetPeakPowerLimit
@@ -909,7 +907,7 @@ xetPowerGetPeakPowerLimit(
     
     auto result = pfnGetPeakPowerLimit( hPower, pLimit );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetAllPowerLimits
@@ -925,7 +923,7 @@ xetPowerGetAllPowerLimits(
     
     auto result = pfnGetAllPowerLimits( hPower, pLimits );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetDefaultPowerLimits
@@ -941,7 +939,7 @@ xetPowerGetDefaultPowerLimits(
     
     auto result = pfnGetDefaultPowerLimits( hPower, pLimits );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerSetAveragePowerLimit
@@ -957,7 +955,7 @@ xetPowerSetAveragePowerLimit(
     
     auto result = pfnSetAveragePowerLimit( hPower, pLimit );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerSetBurstPowerLimit
@@ -973,7 +971,7 @@ xetPowerSetBurstPowerLimit(
     
     auto result = pfnSetBurstPowerLimit( hPower, pLimit );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerSetPeakPowerLimit
@@ -989,7 +987,7 @@ xetPowerSetPeakPowerLimit(
     
     auto result = pfnSetPeakPowerLimit( hPower, pLimit );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerSetPowerLimits
@@ -1005,7 +1003,7 @@ xetPowerSetPowerLimits(
     
     auto result = pfnSetPowerLimits( hPower, pLimits );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetEnergyCounter
@@ -1021,7 +1019,7 @@ xetPowerGetEnergyCounter(
     
     auto result = pfnGetEnergyCounter( hPower, pEnergy );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetTurboMode
@@ -1037,7 +1035,7 @@ xetPowerGetTurboMode(
     
     auto result = pfnGetTurboMode( hPower, pTurboMode );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerSetTurboMode
@@ -1053,7 +1051,7 @@ xetPowerSetTurboMode(
     
     auto result = pfnSetTurboMode( hPower, pTurboMode );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetFreqDomainCount
@@ -1069,7 +1067,7 @@ xetPowerGetFreqDomainCount(
     
     auto result = pfnGetFreqDomainCount( hPower, pNumFreqDomains );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetFreqDomain
@@ -1088,7 +1086,7 @@ xetPowerGetFreqDomain(
 
     *phFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>( new xet_freq_domain_object_t( *phFreqDomain, nullptr ) );
     
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetFreqDomainGetProperties
@@ -1104,7 +1102,7 @@ xetFreqDomainGetProperties(
     
     auto result = pfnGetProperties( hFreqDomain, pFreqDomainProperties );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetFreqDomainGetSourceFreqDomain
@@ -1123,7 +1121,7 @@ xetFreqDomainGetSourceFreqDomain(
 
     *phSrcFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>( new xet_freq_domain_object_t( *phSrcFreqDomain, nullptr ) );
     
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetFreqDomainGetSupportedClocks
@@ -1140,7 +1138,7 @@ xetFreqDomainGetSupportedClocks(
     
     auto result = pfnGetSupportedClocks( hFreqDomain, numClockPoints, pClocks );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetFreqDomainGetSupportedClockDividers
@@ -1157,7 +1155,7 @@ xetFreqDomainGetSupportedClockDividers(
     
     auto result = pfnGetSupportedClockDividers( hFreqDomain, numClockDividers, pDividers );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetFreqDomainGetClockRange
@@ -1174,7 +1172,7 @@ xetFreqDomainGetClockRange(
     
     auto result = pfnGetClockRange( hFreqDomain, pMinClock, pMaxClock );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetFreqDomainSetClockRange
@@ -1191,7 +1189,7 @@ xetFreqDomainSetClockRange(
     
     auto result = pfnSetClockRange( hFreqDomain, minClock, maxClock );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetFreqDomainSetClockDivider
@@ -1207,7 +1205,7 @@ xetFreqDomainSetClockDivider(
     
     auto result = pfnSetClockDivider( hFreqDomain, pClockDividerRequest );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetFreqDomainGetCurrentFrequency
@@ -1225,7 +1223,7 @@ xetFreqDomainGetCurrentFrequency(
     
     auto result = pfnGetCurrentFrequency( hFreqDomain, pFreqRequest, pFreqResolved, pFreqThrottleReasons );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerFanCount
@@ -1241,7 +1239,7 @@ xetPowerFanCount(
     
     auto result = pfnFanCount( hPower, pFanCount );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerFanGetProperties
@@ -1258,7 +1256,7 @@ xetPowerFanGetProperties(
     
     auto result = pfnFanGetProperties( hPower, fanIndex, pFanProperties );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerFanGetSpeedTable
@@ -1278,7 +1276,7 @@ xetPowerFanGetSpeedTable(
     
     auto result = pfnFanGetSpeedTable( hPower, fanIndex, fanSpeedInRpm, pNumFanPoints, pFanPoints );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerFanSetSpeedTable
@@ -1296,7 +1294,7 @@ xetPowerFanSetSpeedTable(
     
     auto result = pfnFanSetSpeedTable( hPower, fanIndex, numFanPoints, pFanPoints );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerFanGetSpeed
@@ -1316,7 +1314,7 @@ xetPowerFanGetSpeed(
     
     auto result = pfnFanGetSpeed( hPower, startFanIndex, numFans, fanSpeedInRpm, pFanSpeed );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerFanSetSpeed
@@ -1335,7 +1333,7 @@ xetPowerFanSetSpeed(
     
     auto result = pfnFanSetSpeed( hPower, startFanIndex, numFans, pFanSpeed );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerTemperatureSensorCount
@@ -1351,7 +1349,7 @@ xetPowerTemperatureSensorCount(
     
     auto result = pfnTemperatureSensorCount( hPower, pSensorCount );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetTemperatureProperties
@@ -1368,7 +1366,7 @@ xetPowerGetTemperatureProperties(
     
     auto result = pfnGetTemperatureProperties( hPower, sensorIndex, pProperties );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetTemperature
@@ -1387,7 +1385,7 @@ xetPowerGetTemperature(
     
     auto result = pfnGetTemperature( hPower, startSensorIndex, numSensors, pTemperatures );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerSetTemperatureThreshold
@@ -1405,7 +1403,7 @@ xetPowerSetTemperatureThreshold(
     
     auto result = pfnSetTemperatureThreshold( hPower, sensorIndex, maxTemperature );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerActivityCount
@@ -1421,7 +1419,7 @@ xetPowerActivityCount(
     
     auto result = pfnActivityCount( hPower, pActivityCount );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetActivityProperties
@@ -1438,7 +1436,7 @@ xetPowerGetActivityProperties(
     
     auto result = pfnGetActivityProperties( hPower, activityIndex, pProperties );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetActivityCounters
@@ -1457,7 +1455,7 @@ xetPowerGetActivityCounters(
     
     auto result = pfnGetActivityCounters( hPower, startCounterIndex, numCounters, pCounters );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 #if defined(__cplusplus)
 };

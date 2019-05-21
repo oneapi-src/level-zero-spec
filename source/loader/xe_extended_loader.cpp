@@ -62,10 +62,10 @@ xexGetGlobalProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xex_pfnGetGlobalProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xexGetGlobalProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xexGetGlobalProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -108,10 +108,10 @@ xexGetCommandGraphProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xexGetCommandGraphProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xexGetCommandGraphProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -133,12 +133,10 @@ xexInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    auto pfnInit = xe_loader::loader.xexGlobalDdiTable.pfnInit;
-    
-    
-    auto result = pfnInit( flags );
+    // global functions need to be handled manually by the loader
+    auto result = xe_loader::loader.xexInit( flags );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xexCommandGraphCreate
@@ -157,7 +155,7 @@ xexCommandGraphCreate(
 
     *phCommandGraph = reinterpret_cast<xex_command_graph_handle_t>( new xex_command_graph_object_t( *phCommandGraph, nullptr ) );
     
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xexCommandGraphDestroy
@@ -172,7 +170,7 @@ xexCommandGraphDestroy(
     
     auto result = pfnDestroy( hCommandGraph );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xexCommandGraphClose
@@ -187,7 +185,7 @@ xexCommandGraphClose(
     
     auto result = pfnClose( hCommandGraph );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 #if defined(__cplusplus)
 };

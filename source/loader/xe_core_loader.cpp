@@ -62,10 +62,10 @@ xeGetGlobalProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xe_pfnGetGlobalProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xeGetGlobalProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xeGetGlobalProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -108,10 +108,10 @@ xeGetDeviceProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xe_pfnGetDeviceProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xeGetDeviceProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xeGetDeviceProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -154,10 +154,10 @@ xeGetDeviceGroupProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xe_pfnGetDeviceGroupProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xeGetDeviceGroupProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xeGetDeviceGroupProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -200,10 +200,10 @@ xeGetCommandQueueProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xe_pfnGetCommandQueueProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xeGetCommandQueueProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xeGetCommandQueueProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -246,10 +246,10 @@ xeGetCommandListProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xe_pfnGetCommandListProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xeGetCommandListProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xeGetCommandListProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -292,10 +292,10 @@ xeGetFenceProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xe_pfnGetFenceProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xeGetFenceProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xeGetFenceProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -338,10 +338,10 @@ xeGetEventPoolProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xe_pfnGetEventPoolProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xeGetEventPoolProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xeGetEventPoolProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -384,10 +384,10 @@ xeGetEventProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xe_pfnGetEventProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xeGetEventProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xeGetEventProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -430,10 +430,10 @@ xeGetImageProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xe_pfnGetImageProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xeGetImageProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xeGetImageProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -476,10 +476,10 @@ xeGetModuleProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xe_pfnGetModuleProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xeGetModuleProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xeGetModuleProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -522,10 +522,10 @@ xeGetModuleBuildLogProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xe_pfnGetModuleBuildLogProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xeGetModuleBuildLogProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xeGetModuleBuildLogProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -568,10 +568,10 @@ xeGetFunctionProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xe_pfnGetFunctionProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xeGetFunctionProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xeGetFunctionProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -614,10 +614,10 @@ xeGetSamplerProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    if( nullptr != xe_loader::loader.commonDriver )
+    for( auto handle : xe_loader::loader.drivers )
     {
         static auto getTable = reinterpret_cast<xe_pfnGetSamplerProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.commonDriver, "xeGetSamplerProcAddrTable") );
+            GET_FUNCTION_PTR( handle, "xeGetSamplerProcAddrTable") );
         result = getTable( version, ptable );
     }
 
@@ -639,12 +639,10 @@ xeInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    auto pfnInit = xe_loader::loader.xeGlobalDdiTable.pfnInit;
-    
-    
-    auto result = pfnInit( flags );
+    // global functions need to be handled manually by the loader
+    auto result = xe_loader::loader.xeInit( flags );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupGetDriverVersion
@@ -660,7 +658,7 @@ xeDeviceGroupGetDriverVersion(
     
     auto result = pfnGetDriverVersion( hDeviceGroup, version );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeGetDeviceGroups
@@ -674,12 +672,10 @@ xeGetDeviceGroups(
     xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
     )
 {
-    auto pfnGetDeviceGroups = xe_loader::loader.xeGlobalDdiTable.pfnGetDeviceGroups;
-    
-    
-    auto result = pfnGetDeviceGroups( pCount, pDeviceGroups );
+    // global functions need to be handled manually by the loader
+    auto result = xe_loader::loader.xeGetDeviceGroups( pCount, pDeviceGroups );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupGetDevices
@@ -700,7 +696,7 @@ xeDeviceGroupGetDevices(
     
     auto result = pfnGetDevices( hDeviceGroup, pCount, pDevices );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGetSubDevice
@@ -719,7 +715,7 @@ xeDeviceGetSubDevice(
 
     *phSubDevice = reinterpret_cast<xe_device_handle_t>( new xe_device_object_t( *phSubDevice, nullptr ) );
     
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupGetApiVersion
@@ -735,7 +731,7 @@ xeDeviceGroupGetApiVersion(
     
     auto result = pfnGetApiVersion( hDeviceGroup, version );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupGetProperties
@@ -751,7 +747,7 @@ xeDeviceGroupGetProperties(
     
     auto result = pfnGetProperties( hDeviceGroup, pDeviceProperties );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupGetComputeProperties
@@ -767,7 +763,7 @@ xeDeviceGroupGetComputeProperties(
     
     auto result = pfnGetComputeProperties( hDeviceGroup, pComputeProperties );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupGetMemoryProperties
@@ -783,7 +779,7 @@ xeDeviceGroupGetMemoryProperties(
     
     auto result = pfnGetMemoryProperties( hDeviceGroup, pMemProperties );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGetP2PProperties
@@ -801,7 +797,7 @@ xeDeviceGetP2PProperties(
     
     auto result = pfnGetP2PProperties( hDevice, hPeerDevice, pP2PProperties );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceCanAccessPeer
@@ -819,7 +815,7 @@ xeDeviceCanAccessPeer(
     
     auto result = pfnCanAccessPeer( hDevice, hPeerDevice, value );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceSetIntermediateCacheConfig
@@ -835,7 +831,7 @@ xeDeviceSetIntermediateCacheConfig(
     
     auto result = pfnSetIntermediateCacheConfig( hDevice, CacheConfig );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceSetLastLevelCacheConfig
@@ -851,7 +847,7 @@ xeDeviceSetLastLevelCacheConfig(
     
     auto result = pfnSetLastLevelCacheConfig( hDevice, CacheConfig );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandQueueCreate
@@ -870,7 +866,7 @@ xeCommandQueueCreate(
 
     *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>( new xe_command_queue_object_t( *phCommandQueue, nullptr ) );
     
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandQueueDestroy
@@ -885,7 +881,7 @@ xeCommandQueueDestroy(
     
     auto result = pfnDestroy( hCommandQueue );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandQueueExecuteCommandLists
@@ -907,7 +903,7 @@ xeCommandQueueExecuteCommandLists(
     
     auto result = pfnExecuteCommandLists( hCommandQueue, numCommandLists, phCommandLists, hFence );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandQueueSynchronize
@@ -927,7 +923,7 @@ xeCommandQueueSynchronize(
     
     auto result = pfnSynchronize( hCommandQueue, timeout );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListCreate
@@ -946,7 +942,7 @@ xeCommandListCreate(
 
     *phCommandList = reinterpret_cast<xe_command_list_handle_t>( new xe_command_list_object_t( *phCommandList, nullptr ) );
     
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListCreateImmediate
@@ -965,7 +961,7 @@ xeCommandListCreateImmediate(
 
     *phCommandList = reinterpret_cast<xe_command_list_handle_t>( new xe_command_list_object_t( *phCommandList, nullptr ) );
     
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListDestroy
@@ -980,7 +976,7 @@ xeCommandListDestroy(
     
     auto result = pfnDestroy( hCommandList );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListClose
@@ -995,7 +991,7 @@ xeCommandListClose(
     
     auto result = pfnClose( hCommandList );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListReset
@@ -1010,7 +1006,7 @@ xeCommandListReset(
     
     auto result = pfnReset( hCommandList );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListSetParameter
@@ -1027,7 +1023,7 @@ xeCommandListSetParameter(
     
     auto result = pfnSetParameter( hCommandList, parameter, value );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListGetParameter
@@ -1044,7 +1040,7 @@ xeCommandListGetParameter(
     
     auto result = pfnGetParameter( hCommandList, parameter, value );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListResetParameters
@@ -1059,7 +1055,7 @@ xeCommandListResetParameters(
     
     auto result = pfnResetParameters( hCommandList );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListReserveSpace
@@ -1076,7 +1072,7 @@ xeCommandListReserveSpace(
     
     auto result = pfnReserveSpace( hCommandList, size, ptr );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendBarrier
@@ -1098,7 +1094,7 @@ xeCommandListAppendBarrier(
     
     auto result = pfnAppendBarrier( hCommandList, hSignalEvent, numWaitEvents, phWaitEvents );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendMemoryRangesBarrier
@@ -1123,7 +1119,7 @@ xeCommandListAppendMemoryRangesBarrier(
     
     auto result = pfnAppendMemoryRangesBarrier( hCommandList, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceSystemBarrier
@@ -1138,7 +1134,7 @@ xeDeviceSystemBarrier(
     
     auto result = pfnSystemBarrier( hDevice );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceRegisterCLMemory
@@ -1157,7 +1153,7 @@ xeDeviceRegisterCLMemory(
     
     auto result = pfnRegisterCLMemory( hDevice, context, mem, ptr );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 #endif // XE_ENABLE_OCL_INTEROP
 ///////////////////////////////////////////////////////////////////////////////
@@ -1179,7 +1175,7 @@ xeDeviceRegisterCLProgram(
 
     *phModule = reinterpret_cast<xe_module_handle_t>( new xe_module_object_t( *phModule, nullptr ) );
     
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 #endif // XE_ENABLE_OCL_INTEROP
 ///////////////////////////////////////////////////////////////////////////////
@@ -1201,7 +1197,7 @@ xeDeviceRegisterCLCommandQueue(
 
     *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>( new xe_command_queue_object_t( *phCommandQueue, nullptr ) );
     
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 #endif // XE_ENABLE_OCL_INTEROP
 ///////////////////////////////////////////////////////////////////////////////
@@ -1222,7 +1218,7 @@ xeCommandListAppendMemoryCopy(
     
     auto result = pfnAppendMemoryCopy( hCommandList, dstptr, srcptr, size, hEvent );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendMemorySet
@@ -1242,7 +1238,7 @@ xeCommandListAppendMemorySet(
     
     auto result = pfnAppendMemorySet( hCommandList, ptr, value, size, hEvent );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendMemoryCopyRegion
@@ -1265,7 +1261,7 @@ xeCommandListAppendMemoryCopyRegion(
     
     auto result = pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, srcptr, srcRegion, srcPitch, hEvent );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendImageCopy
@@ -1286,7 +1282,7 @@ xeCommandListAppendImageCopy(
     
     auto result = pfnAppendImageCopy( hCommandList, hDstImage, hSrcImage, hEvent );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendImageCopyRegion
@@ -1309,7 +1305,7 @@ xeCommandListAppendImageCopyRegion(
     
     auto result = pfnAppendImageCopyRegion( hCommandList, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hEvent );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendImageCopyToMemory
@@ -1330,7 +1326,7 @@ xeCommandListAppendImageCopyToMemory(
     
     auto result = pfnAppendImageCopyToMemory( hCommandList, dstptr, hSrcImage, pSrcRegion, hEvent );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendImageCopyFromMemory
@@ -1351,7 +1347,7 @@ xeCommandListAppendImageCopyFromMemory(
     
     auto result = pfnAppendImageCopyFromMemory( hCommandList, hDstImage, srcptr, pDstRegion, hEvent );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendMemoryPrefetch
@@ -1368,7 +1364,7 @@ xeCommandListAppendMemoryPrefetch(
     
     auto result = pfnAppendMemoryPrefetch( hCommandList, ptr, count );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendMemAdvise
@@ -1388,7 +1384,7 @@ xeCommandListAppendMemAdvise(
     
     auto result = pfnAppendMemAdvise( hCommandList, hDevice, ptr, size, advice );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeEventPoolCreate
@@ -1407,7 +1403,7 @@ xeEventPoolCreate(
 
     *phEventPool = reinterpret_cast<xe_event_pool_handle_t>( new xe_event_pool_object_t( *phEventPool, nullptr ) );
     
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeEventPoolDestroy
@@ -1422,7 +1418,7 @@ xeEventPoolDestroy(
     
     auto result = pfnDestroy( hEventPool );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeEventCreate
@@ -1441,7 +1437,7 @@ xeEventCreate(
 
     *phEvent = reinterpret_cast<xe_event_handle_t>( new xe_event_object_t( *phEvent, nullptr ) );
     
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeEventDestroy
@@ -1456,7 +1452,7 @@ xeEventDestroy(
     
     auto result = pfnDestroy( hEvent );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeEventPoolGetIpcHandle
@@ -1472,7 +1468,7 @@ xeEventPoolGetIpcHandle(
     
     auto result = pfnGetIpcHandle( hEventPool, phIpc );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeEventPoolOpenIpcHandle
@@ -1491,7 +1487,7 @@ xeEventPoolOpenIpcHandle(
 
     *phEventPool = reinterpret_cast<xe_event_pool_handle_t>( new xe_event_pool_object_t( *phEventPool, nullptr ) );
     
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeEventPoolCloseIpcHandle
@@ -1506,7 +1502,7 @@ xeEventPoolCloseIpcHandle(
     
     auto result = pfnCloseIpcHandle( hEventPool );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendSignalEvent
@@ -1523,7 +1519,7 @@ xeCommandListAppendSignalEvent(
     
     auto result = pfnAppendSignalEvent( hCommandList, hEvent );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendWaitOnEvents
@@ -1543,7 +1539,7 @@ xeCommandListAppendWaitOnEvents(
     
     auto result = pfnAppendWaitOnEvents( hCommandList, numEvents, phEvents );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeEventHostSignal
@@ -1558,7 +1554,7 @@ xeEventHostSignal(
     
     auto result = pfnHostSignal( hEvent );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeEventHostSynchronize
@@ -1578,7 +1574,7 @@ xeEventHostSynchronize(
     
     auto result = pfnHostSynchronize( hEvent, timeout );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeEventQueryStatus
@@ -1593,7 +1589,7 @@ xeEventQueryStatus(
     
     auto result = pfnQueryStatus( hEvent );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendEventReset
@@ -1610,7 +1606,7 @@ xeCommandListAppendEventReset(
     
     auto result = pfnAppendEventReset( hCommandList, hEvent );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeEventReset
@@ -1625,7 +1621,7 @@ xeEventReset(
     
     auto result = pfnReset( hEvent );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFenceCreate
@@ -1644,7 +1640,7 @@ xeFenceCreate(
 
     *phFence = reinterpret_cast<xe_fence_handle_t>( new xe_fence_object_t( *phFence, nullptr ) );
     
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFenceDestroy
@@ -1659,7 +1655,7 @@ xeFenceDestroy(
     
     auto result = pfnDestroy( hFence );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFenceHostSynchronize
@@ -1679,7 +1675,7 @@ xeFenceHostSynchronize(
     
     auto result = pfnHostSynchronize( hFence, timeout );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFenceQueryStatus
@@ -1694,7 +1690,7 @@ xeFenceQueryStatus(
     
     auto result = pfnQueryStatus( hFence );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFenceReset
@@ -1709,7 +1705,7 @@ xeFenceReset(
     
     auto result = pfnReset( hFence );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeImageGetProperties
@@ -1726,7 +1722,7 @@ xeImageGetProperties(
     
     auto result = pfnGetProperties( hDevice, desc, pImageProperties );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeImageCreate
@@ -1745,7 +1741,7 @@ xeImageCreate(
 
     *phImage = reinterpret_cast<xe_image_handle_t>( new xe_image_object_t( *phImage, nullptr ) );
     
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeImageDestroy
@@ -1760,7 +1756,7 @@ xeImageDestroy(
     
     auto result = pfnDestroy( hImage );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupAllocSharedMem
@@ -1782,7 +1778,7 @@ xeDeviceGroupAllocSharedMem(
     
     auto result = pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, host_flags, size, alignment, ptr );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupAllocDeviceMem
@@ -1803,7 +1799,7 @@ xeDeviceGroupAllocDeviceMem(
     
     auto result = pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, size, alignment, ptr );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupAllocHostMem
@@ -1822,7 +1818,7 @@ xeDeviceGroupAllocHostMem(
     
     auto result = pfnAllocHostMem( hDeviceGroup, flags, size, alignment, ptr );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupFreeMem
@@ -1838,7 +1834,7 @@ xeDeviceGroupFreeMem(
     
     auto result = pfnFreeMem( hDeviceGroup, ptr );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupGetMemProperties
@@ -1855,7 +1851,7 @@ xeDeviceGroupGetMemProperties(
     
     auto result = pfnGetMemProperties( hDeviceGroup, ptr, pMemProperties );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupGetMemAddressRange
@@ -1873,7 +1869,7 @@ xeDeviceGroupGetMemAddressRange(
     
     auto result = pfnGetMemAddressRange( hDeviceGroup, ptr, pBase, pSize );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupGetMemIpcHandle
@@ -1890,7 +1886,7 @@ xeDeviceGroupGetMemIpcHandle(
     
     auto result = pfnGetMemIpcHandle( hDeviceGroup, ptr, pIpcHandle );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupOpenMemIpcHandle
@@ -1910,7 +1906,7 @@ xeDeviceGroupOpenMemIpcHandle(
     
     auto result = pfnOpenMemIpcHandle( hDeviceGroup, hDevice, handle, flags, ptr );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupCloseMemIpcHandle
@@ -1926,7 +1922,7 @@ xeDeviceGroupCloseMemIpcHandle(
     
     auto result = pfnCloseMemIpcHandle( hDeviceGroup, ptr );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeModuleCreate
@@ -1946,7 +1942,7 @@ xeModuleCreate(
 
     *phModule = reinterpret_cast<xe_module_handle_t>( new xe_module_object_t( *phModule, nullptr ) );
     
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeModuleDestroy
@@ -1961,7 +1957,7 @@ xeModuleDestroy(
     
     auto result = pfnDestroy( hModule );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeModuleBuildLogDestroy
@@ -1976,7 +1972,7 @@ xeModuleBuildLogDestroy(
     
     auto result = pfnDestroy( hModuleBuildLog );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeModuleBuildLogGetString
@@ -1993,7 +1989,7 @@ xeModuleBuildLogGetString(
     
     auto result = pfnGetString( hModuleBuildLog, pSize, pBuildLog );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeModuleGetNativeBinary
@@ -2010,7 +2006,7 @@ xeModuleGetNativeBinary(
     
     auto result = pfnGetNativeBinary( hModule, pSize, pModuleNativeBinary );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeModuleGetGlobalPointer
@@ -2027,7 +2023,7 @@ xeModuleGetGlobalPointer(
     
     auto result = pfnGetGlobalPointer( hModule, pGlobalName, pPtr );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFunctionCreate
@@ -2046,7 +2042,7 @@ xeFunctionCreate(
 
     *phFunction = reinterpret_cast<xe_function_handle_t>( new xe_function_object_t( *phFunction, nullptr ) );
     
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFunctionDestroy
@@ -2061,7 +2057,7 @@ xeFunctionDestroy(
     
     auto result = pfnDestroy( hFunction );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeModuleGetFunctionPointer
@@ -2078,7 +2074,7 @@ xeModuleGetFunctionPointer(
     
     auto result = pfnGetFunctionPointer( hModule, pFunctionName, pfnFunction );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFunctionSetGroupSize
@@ -2096,7 +2092,7 @@ xeFunctionSetGroupSize(
     
     auto result = pfnSetGroupSize( hFunction, groupSizeX, groupSizeY, groupSizeZ );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFunctionSuggestGroupSize
@@ -2117,7 +2113,7 @@ xeFunctionSuggestGroupSize(
     
     auto result = pfnSuggestGroupSize( hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFunctionSetArgumentValue
@@ -2136,7 +2132,7 @@ xeFunctionSetArgumentValue(
     
     auto result = pfnSetArgumentValue( hFunction, argIndex, argSize, pArgValue );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFunctionSetAttribute
@@ -2153,7 +2149,7 @@ xeFunctionSetAttribute(
     
     auto result = pfnSetAttribute( hFunction, attr, value );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFunctionGetAttribute
@@ -2170,7 +2166,7 @@ xeFunctionGetAttribute(
     
     auto result = pfnGetAttribute( hFunction, attr, pValue );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendLaunchFunction
@@ -2195,7 +2191,7 @@ xeCommandListAppendLaunchFunction(
     
     auto result = pfnAppendLaunchFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendLaunchFunctionIndirect
@@ -2220,7 +2216,7 @@ xeCommandListAppendLaunchFunctionIndirect(
     
     auto result = pfnAppendLaunchFunctionIndirect( hCommandList, hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendLaunchMultipleFunctionsIndirect
@@ -2251,7 +2247,7 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
     
     auto result = pfnAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendLaunchHostFunction
@@ -2275,7 +2271,7 @@ xeCommandListAppendLaunchHostFunction(
     
     auto result = pfnAppendLaunchHostFunction( hCommandList, pfnHostFunc, pUserData, hSignalEvent, numWaitEvents, phWaitEvents );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceMakeMemoryResident
@@ -2292,7 +2288,7 @@ xeDeviceMakeMemoryResident(
     
     auto result = pfnMakeMemoryResident( hDevice, ptr, size );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceEvictMemory
@@ -2309,7 +2305,7 @@ xeDeviceEvictMemory(
     
     auto result = pfnEvictMemory( hDevice, ptr, size );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceMakeImageResident
@@ -2326,7 +2322,7 @@ xeDeviceMakeImageResident(
     
     auto result = pfnMakeImageResident( hDevice, hImage );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceEvictImage
@@ -2343,7 +2339,7 @@ xeDeviceEvictImage(
     
     auto result = pfnEvictImage( hDevice, hImage );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeSamplerCreate
@@ -2362,7 +2358,7 @@ xeSamplerCreate(
 
     *phSampler = reinterpret_cast<xe_sampler_handle_t>( new xe_sampler_object_t( *phSampler, nullptr ) );
     
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeSamplerDestroy
@@ -2377,7 +2373,7 @@ xeSamplerDestroy(
     
     auto result = pfnDestroy( hSampler );
 
-    return XE_RESULT_SUCCESS;
+    return result;
 }
 #if defined(__cplusplus)
 };
