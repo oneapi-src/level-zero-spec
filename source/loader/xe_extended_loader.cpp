@@ -66,7 +66,7 @@ xexGetGlobalProcAddrTable(
     {
         static auto getTable = reinterpret_cast<xex_pfnGetGlobalProcAddrTable_t>(
             GET_FUNCTION_PTR( handle, "xexGetGlobalProcAddrTable") );
-        result = getTable( version, ptable );
+        result = getTable( version, ptable ); // todo: attach to handle
     }
 
     // If the validation layer is enabled, then intercept the device-driver DDI tables
@@ -112,7 +112,7 @@ xexGetCommandGraphProcAddrTable(
     {
         static auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
             GET_FUNCTION_PTR( handle, "xexGetCommandGraphProcAddrTable") );
-        result = getTable( version, ptable );
+        result = getTable( version, ptable ); // todo: attach to handle
     }
 
     // If the validation layer is enabled, then intercept the device-driver DDI tables
@@ -147,13 +147,17 @@ xexCommandGraphCreate(
     xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
     )
 {
-    auto pfnCreate = std::get<1>( *reinterpret_cast<xex_device_object_t*>( hDevice ) )->CommandGraph.pfnCreate;
+    // extract driver's function pointer
+    auto pfnCreate = reinterpret_cast<xex_device_object_t*>( hDevice )->dditable->CommandGraph.pfnCreate;
     
-    hDevice = std::get<0>( *reinterpret_cast<xex_device_object_t*>( hDevice ) );
+    // convert loader handle to driver handle
+    hDevice = reinterpret_cast<xex_device_object_t*>( hDevice )->handle;
     
+    // forward to device-driver
     auto result = pfnCreate( hDevice, desc, phCommandGraph );
 
-    *phCommandGraph = reinterpret_cast<xex_command_graph_handle_t>( new xex_command_graph_object_t( *phCommandGraph, nullptr ) );
+    // convert driver handle to new loader handle
+    *phCommandGraph = reinterpret_cast<xex_command_graph_handle_t>( /*temp:*/new xex_command_graph_object_t { *phCommandGraph, /*todo:*/nullptr } );
     
     return result;
 }
@@ -164,10 +168,13 @@ xexCommandGraphDestroy(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to destroy
     )
 {
-    auto pfnDestroy = std::get<1>( *reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph ) )->CommandGraph.pfnDestroy;
+    // extract driver's function pointer
+    auto pfnDestroy = reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph )->dditable->CommandGraph.pfnDestroy;
     
-    hCommandGraph = std::get<0>( *reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph ) );
+    // convert loader handle to driver handle
+    hCommandGraph = reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph )->handle;
     
+    // forward to device-driver
     auto result = pfnDestroy( hCommandGraph );
 
     return result;
@@ -179,10 +186,13 @@ xexCommandGraphClose(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
     )
 {
-    auto pfnClose = std::get<1>( *reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph ) )->CommandGraph.pfnClose;
+    // extract driver's function pointer
+    auto pfnClose = reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph )->dditable->CommandGraph.pfnClose;
     
-    hCommandGraph = std::get<0>( *reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph ) );
+    // convert loader handle to driver handle
+    hCommandGraph = reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph )->handle;
     
+    // forward to device-driver
     auto result = pfnClose( hCommandGraph );
 
     return result;

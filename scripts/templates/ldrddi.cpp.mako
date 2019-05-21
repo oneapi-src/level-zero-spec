@@ -77,7 +77,7 @@ ${tbl['export']['name']}(
     {
         static auto getTable = reinterpret_cast<${tbl['pfn']}>(
             GET_FUNCTION_PTR( handle, "${tbl['export']['name']}") );
-        result = getTable( version, ptable );
+        result = getTable( version, ptable ); // todo: attach to handle
     }
 
     // If the validation layer is enabled, then intercept the device-driver DDI tables
@@ -113,6 +113,7 @@ ${th.make_func_name(n, tags, obj)}(
     %for line in th.make_loader_prologue_lines(n, tags, obj, meta):
     ${line}
     %endfor
+    // forward to device-driver
     auto result = ${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
 
     %for line in th.make_loader_epilogue_lines(n, tags, obj, meta):

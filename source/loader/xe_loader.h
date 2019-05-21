@@ -29,7 +29,6 @@
 #if defined(__cplusplus)
 #pragma once
 #endif
-#include <tuple>
 #include <vector>
 #include "xe_ddi.h"
 #include "xex_ddi.h"
@@ -37,32 +36,50 @@
 #include "xe_util.h"
 
 //////////////////////////////////////////////////////////////////////////
-using xe_device_group_object_t      = std::tuple < xe_device_group_handle_t, xe_dditable_t* >;
-using xe_device_object_t            = std::tuple < xe_device_handle_t, xe_dditable_t* >;
-using xe_command_list_object_t      = std::tuple < xe_command_list_handle_t, xe_dditable_t* >;
-using xe_command_queue_object_t     = std::tuple < xe_command_queue_handle_t, xe_dditable_t* >;
-using xe_fence_object_t             = std::tuple < xe_fence_handle_t, xe_dditable_t* >;
-using xe_event_pool_object_t        = std::tuple < xe_event_pool_handle_t, xe_dditable_t* >;
-using xe_event_object_t             = std::tuple < xe_event_handle_t, xe_dditable_t* >;
-using xe_image_object_t             = std::tuple < xe_image_handle_t, xe_dditable_t* >;
-using xe_module_object_t            = std::tuple < xe_module_handle_t, xe_dditable_t* >;
-using xe_module_build_log_object_t  = std::tuple < xe_module_build_log_handle_t, xe_dditable_t* >;
-using xe_function_object_t          = std::tuple < xe_function_handle_t, xe_dditable_t* >;
-using xe_sampler_object_t           = std::tuple < xe_sampler_handle_t, xe_dditable_t* >;
+template<typename handle_t, typename dditable_t>
+struct _loader_object_t
+{
+    handle_t    handle;
+    dditable_t* dditable;
+};
 
-using xex_device_object_t           = std::tuple < xe_device_handle_t, xex_dditable_t* >;
-using xex_command_graph_object_t    = std::tuple < xex_command_graph_handle_t, xex_dditable_t* >;
+template<typename handle_t>
+using xe_loader_object_t = _loader_object_t < handle_t, xe_dditable_t >;
 
-using xet_device_object_t               = std::tuple < xe_device_handle_t, xet_dditable_t* >;
-using xet_command_list_object_t         = std::tuple < xe_command_list_handle_t, xet_dditable_t* >;
-using xet_event_object_t                = std::tuple < xe_event_handle_t, xet_dditable_t* >;
-using xet_metric_group_object_t         = std::tuple < xet_metric_group_handle_t, xet_dditable_t* >;
-using xet_metric_object_t               = std::tuple < xet_metric_handle_t, xet_dditable_t* >;
-using xet_metric_tracer_object_t        = std::tuple < xet_metric_tracer_handle_t, xet_dditable_t* >;
-using xet_metric_query_pool_object_t    = std::tuple < xet_metric_query_pool_handle_t, xet_dditable_t* >;
-using xet_metric_query_object_t         = std::tuple < xet_metric_query_handle_t, xet_dditable_t* >;
-using xet_power_object_t                = std::tuple < xet_power_handle_t, xet_dditable_t* >;
-using xet_freq_domain_object_t          = std::tuple < xet_freq_domain_handle_t, xet_dditable_t* >;
+template<typename handle_t>
+using xex_loader_object_t = _loader_object_t < handle_t, xex_dditable_t >;
+
+template<typename handle_t>
+using xet_loader_object_t = _loader_object_t < handle_t, xet_dditable_t >;
+
+
+//////////////////////////////////////////////////////////////////////////
+using xe_device_group_object_t      = xe_loader_object_t < xe_device_group_handle_t >;
+using xe_device_object_t            = xe_loader_object_t < xe_device_handle_t >;
+using xe_command_list_object_t      = xe_loader_object_t < xe_command_list_handle_t >;
+using xe_command_queue_object_t     = xe_loader_object_t < xe_command_queue_handle_t >;
+using xe_fence_object_t             = xe_loader_object_t < xe_fence_handle_t >;
+using xe_event_pool_object_t        = xe_loader_object_t < xe_event_pool_handle_t >;
+using xe_event_object_t             = xe_loader_object_t < xe_event_handle_t >;
+using xe_image_object_t             = xe_loader_object_t < xe_image_handle_t >;
+using xe_module_object_t            = xe_loader_object_t < xe_module_handle_t >;
+using xe_module_build_log_object_t  = xe_loader_object_t < xe_module_build_log_handle_t >;
+using xe_function_object_t          = xe_loader_object_t < xe_function_handle_t >;
+using xe_sampler_object_t           = xe_loader_object_t < xe_sampler_handle_t >;
+
+using xex_device_object_t           = xex_loader_object_t < xe_device_handle_t >;
+using xex_command_graph_object_t    = xex_loader_object_t < xex_command_graph_handle_t >;
+
+using xet_device_object_t               = xet_loader_object_t < xe_device_handle_t >;
+using xet_command_list_object_t         = xet_loader_object_t < xe_command_list_handle_t >;
+using xet_event_object_t                = xet_loader_object_t < xe_event_handle_t >;
+using xet_metric_group_object_t         = xet_loader_object_t < xet_metric_group_handle_t >;
+using xet_metric_object_t               = xet_loader_object_t < xet_metric_handle_t >;
+using xet_metric_tracer_object_t        = xet_loader_object_t < xet_metric_tracer_handle_t >;
+using xet_metric_query_pool_object_t    = xet_loader_object_t < xet_metric_query_pool_handle_t >;
+using xet_metric_query_object_t         = xet_loader_object_t < xet_metric_query_handle_t >;
+using xet_power_object_t                = xet_loader_object_t < xet_power_handle_t >;
+using xet_freq_domain_object_t          = xet_loader_object_t < xet_freq_domain_handle_t >;
 
 
 namespace xe_loader
@@ -73,7 +90,7 @@ namespace xe_loader
     public:
         xe_api_version_t version = XE_API_VERSION_1_0;
 
-        std::vector<HMODULE> drivers;
+        std::vector<HMODULE> drivers; // todo: change to be tuple with each driver's dditable
 
         HMODULE validationLayer = nullptr;
 
@@ -86,6 +103,7 @@ namespace xe_loader
 
         xe_result_t xeGetDeviceGroups( uint32_t* pCount, xe_device_group_handle_t* pDeviceGroups );
 
+        // todo: when lib calls "gettable", need to perform for each driver, and return pointer to loader ddis (script changes)
         xe_global_dditable_t   xeGlobalDdiTable = {};
         xex_global_dditable_t  xexGlobalDdiTable = {};
         xet_global_dditable_t  xetGlobalDdiTable = {};
