@@ -107,7 +107,7 @@ typedef ${x}_result_t (__${x}call *${tbl['pfn']})(
 
 %endfor
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief 
+/// @brief Container for all DDI tables
 typedef struct _${n}_dditable_t
 {
 %for tbl in th.get_pfntables(specs, meta, n, tags):

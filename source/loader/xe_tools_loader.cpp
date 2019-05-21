@@ -61,6 +61,7 @@ xetGetGlobalProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
+    // Load the device-driver DDI tables
     if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetGlobalProcAddrTable_t>(
@@ -68,6 +69,7 @@ xetGetGlobalProcAddrTable(
         result = getTable( version, ptable );
     }
 
+    // If the validation layer is enabled, then intercept the device-driver DDI tables
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetGlobalProcAddrTable_t>(
@@ -105,6 +107,7 @@ xetGetDeviceProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
+    // Load the device-driver DDI tables
     if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetDeviceProcAddrTable_t>(
@@ -112,6 +115,7 @@ xetGetDeviceProcAddrTable(
         result = getTable( version, ptable );
     }
 
+    // If the validation layer is enabled, then intercept the device-driver DDI tables
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetDeviceProcAddrTable_t>(
@@ -149,6 +153,7 @@ xetGetCommandListProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
+    // Load the device-driver DDI tables
     if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetCommandListProcAddrTable_t>(
@@ -156,6 +161,7 @@ xetGetCommandListProcAddrTable(
         result = getTable( version, ptable );
     }
 
+    // If the validation layer is enabled, then intercept the device-driver DDI tables
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetCommandListProcAddrTable_t>(
@@ -193,6 +199,7 @@ xetGetMetricGroupProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
+    // Load the device-driver DDI tables
     if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricGroupProcAddrTable_t>(
@@ -200,6 +207,7 @@ xetGetMetricGroupProcAddrTable(
         result = getTable( version, ptable );
     }
 
+    // If the validation layer is enabled, then intercept the device-driver DDI tables
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricGroupProcAddrTable_t>(
@@ -237,6 +245,7 @@ xetGetMetricProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
+    // Load the device-driver DDI tables
     if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricProcAddrTable_t>(
@@ -244,6 +253,7 @@ xetGetMetricProcAddrTable(
         result = getTable( version, ptable );
     }
 
+    // If the validation layer is enabled, then intercept the device-driver DDI tables
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricProcAddrTable_t>(
@@ -281,6 +291,7 @@ xetGetMetricTracerProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
+    // Load the device-driver DDI tables
     if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricTracerProcAddrTable_t>(
@@ -288,6 +299,7 @@ xetGetMetricTracerProcAddrTable(
         result = getTable( version, ptable );
     }
 
+    // If the validation layer is enabled, then intercept the device-driver DDI tables
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricTracerProcAddrTable_t>(
@@ -325,6 +337,7 @@ xetGetMetricQueryPoolProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
+    // Load the device-driver DDI tables
     if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricQueryPoolProcAddrTable_t>(
@@ -332,6 +345,7 @@ xetGetMetricQueryPoolProcAddrTable(
         result = getTable( version, ptable );
     }
 
+    // If the validation layer is enabled, then intercept the device-driver DDI tables
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricQueryPoolProcAddrTable_t>(
@@ -369,6 +383,7 @@ xetGetMetricQueryProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
+    // Load the device-driver DDI tables
     if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricQueryProcAddrTable_t>(
@@ -376,6 +391,7 @@ xetGetMetricQueryProcAddrTable(
         result = getTable( version, ptable );
     }
 
+    // If the validation layer is enabled, then intercept the device-driver DDI tables
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricQueryProcAddrTable_t>(
@@ -413,6 +429,7 @@ xetGetPowerProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
+    // Load the device-driver DDI tables
     if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetPowerProcAddrTable_t>(
@@ -420,6 +437,7 @@ xetGetPowerProcAddrTable(
         result = getTable( version, ptable );
     }
 
+    // If the validation layer is enabled, then intercept the device-driver DDI tables
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetPowerProcAddrTable_t>(
@@ -457,6 +475,7 @@ xetGetFreqDomainProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
+    // Load the device-driver DDI tables
     if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xet_pfnGetFreqDomainProcAddrTable_t>(
@@ -464,6 +483,7 @@ xetGetFreqDomainProcAddrTable(
         result = getTable( version, ptable );
     }
 
+    // If the validation layer is enabled, then intercept the device-driver DDI tables
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetFreqDomainProcAddrTable_t>(

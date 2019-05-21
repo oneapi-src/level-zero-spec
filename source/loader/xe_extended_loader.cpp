@@ -61,6 +61,7 @@ xexGetGlobalProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
+    // Load the device-driver DDI tables
     if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xex_pfnGetGlobalProcAddrTable_t>(
@@ -68,6 +69,7 @@ xexGetGlobalProcAddrTable(
         result = getTable( version, ptable );
     }
 
+    // If the validation layer is enabled, then intercept the device-driver DDI tables
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xex_pfnGetGlobalProcAddrTable_t>(
@@ -105,6 +107,7 @@ xexGetCommandGraphProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
+    // Load the device-driver DDI tables
     if( nullptr != xe_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
@@ -112,6 +115,7 @@ xexGetCommandGraphProcAddrTable(
         result = getTable( version, ptable );
     }
 
+    // If the validation layer is enabled, then intercept the device-driver DDI tables
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(

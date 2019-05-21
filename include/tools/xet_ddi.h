@@ -825,7 +825,7 @@ typedef xe_result_t (__xecall *xet_pfnGetFreqDomainProcAddrTable_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief 
+/// @brief Container for all DDI tables
 typedef struct _xet_dditable_t
 {
     xet_global_dditable_t               Global;

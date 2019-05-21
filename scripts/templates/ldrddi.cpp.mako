@@ -72,6 +72,7 @@ ${tbl['export']['name']}(
 
     ${x}_result_t result = ${X}_RESULT_SUCCESS;
 
+    // Load the device-driver DDI tables
     if( nullptr != ${x}_loader::loader.commonDriver )
     {
         static auto getTable = reinterpret_cast<${tbl['pfn']}>(
@@ -79,6 +80,7 @@ ${tbl['export']['name']}(
         result = getTable( version, ptable );
     }
 
+    // If the validation layer is enabled, then intercept the device-driver DDI tables
     if(( ${X}_RESULT_SUCCESS == result ) && ( nullptr != ${x}_loader::loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<${tbl['pfn']}>(

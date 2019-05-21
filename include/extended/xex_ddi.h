@@ -129,7 +129,7 @@ typedef xe_result_t (__xecall *xex_pfnGetCommandGraphProcAddrTable_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief 
+/// @brief Container for all DDI tables
 typedef struct _xex_dditable_t
 {
     xex_global_dditable_t               Global;

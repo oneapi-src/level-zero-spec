@@ -1306,7 +1306,7 @@ typedef xe_result_t (__xecall *xe_pfnGetSamplerProcAddrTable_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief 
+/// @brief Container for all DDI tables
 typedef struct _xe_dditable_t
 {
     xe_global_dditable_t                Global;
