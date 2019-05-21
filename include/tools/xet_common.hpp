@@ -101,12 +101,6 @@ namespace xet
     struct _freq_domain_handle_t;
     using freq_domain_handle_t = _freq_domain_handle_t*;
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle of sysman object
-    class Sysman;
-    struct _sysman_handle_t;
-    using sysman_handle_t = _sysman_handle_t*;
-
 } // namespace xet
 
 #ifdef _DEBUG

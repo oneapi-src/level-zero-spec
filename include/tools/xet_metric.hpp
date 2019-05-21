@@ -285,13 +285,13 @@ namespace xet
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         metric_handle_t m_handle;                       ///< handle of metric object
-        Device* m_pDevice;                              ///< [in] pointer to owner object
+        MetricGroup* m_pMetricGroup;                    ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         Metric( void ) = delete;
         Metric( 
-            Device* pDevice                                 ///< [in] pointer to owner object
+            MetricGroup* pMetricGroup                       ///< [in] pointer to owner object
             );
 
         ~Metric( void ) = default;
@@ -304,7 +304,7 @@ namespace xet
 
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
-        auto getDevice( void ) const { return m_pDevice; }
+        auto getMetricgroup( void ) const { return m_pMetricGroup; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Returns metric from a given metric group.

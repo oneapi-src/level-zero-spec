@@ -635,13 +635,13 @@ members:
 type: class
 desc: "C++ wrapper for metric"
 name: $tMetric
-owner: $tDevice
+owner: $tMetricGroup
 members:
     - type: $t_metric_handle_t
       name: handle
       desc: "handle of metric object" 
-    - type: $tDevice*
-      name: pDevice
+    - type: $tMetricGroup*
+      name: pMetricGroup
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class

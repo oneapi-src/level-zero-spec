@@ -112,13 +112,6 @@ namespace xet_lib
             result = getTable( XE_API_VERSION_1_0, &xetFreqDomain );
         }
 
-        if( XE_RESULT_SUCCESS == result )
-        {
-            auto getTable = reinterpret_cast<xet_pfnGetSysmanProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "xetGetSysmanProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &xetSysman );
-        }
-
         return result;
     }
 } // namespace xet_lib

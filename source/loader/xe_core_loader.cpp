@@ -616,7 +616,7 @@ xeInit(
     auto pfnInit = xe_loader::loader.xeGlobal.pfnInit;
     
     
-    //auto result = pfnInit( flags );
+    auto result = pfnInit( flags );
 
     return XE_RESULT_SUCCESS;
 }
@@ -632,7 +632,7 @@ xeDeviceGroupGetDriverVersion(
     
     hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     
-    //auto result = pfnGetDriverVersion( hDeviceGroup, version );
+    auto result = pfnGetDriverVersion( hDeviceGroup, version );
 
     return XE_RESULT_SUCCESS;
 }
@@ -651,7 +651,7 @@ xeGetDeviceGroups(
     auto pfnGetDeviceGroups = xe_loader::loader.xeGlobal.pfnGetDeviceGroups;
     
     
-    //auto result = pfnGetDeviceGroups( pCount, pDeviceGroups );
+    auto result = pfnGetDeviceGroups( pCount, pDeviceGroups );
 
     return XE_RESULT_SUCCESS;
 }
@@ -672,7 +672,7 @@ xeDeviceGroupGetDevices(
     
     hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     
-    //auto result = pfnGetDevices( hDeviceGroup, pCount, pDevices );
+    auto result = pfnGetDevices( hDeviceGroup, pCount, pDevices );
 
     return XE_RESULT_SUCCESS;
 }
@@ -689,7 +689,7 @@ xeDeviceGetSubDevice(
     
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnGetSubDevice( hDevice, ordinal, phSubDevice );
+    auto result = pfnGetSubDevice( hDevice, ordinal, phSubDevice );
 
     *phSubDevice = reinterpret_cast<xe_device_handle_t>( new xe_device_object_t( *phSubDevice, nullptr ) );
     
@@ -707,7 +707,7 @@ xeDeviceGroupGetApiVersion(
     
     hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     
-    //auto result = pfnGetApiVersion( hDeviceGroup, version );
+    auto result = pfnGetApiVersion( hDeviceGroup, version );
 
     return XE_RESULT_SUCCESS;
 }
@@ -723,7 +723,7 @@ xeDeviceGroupGetProperties(
     
     hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     
-    //auto result = pfnGetProperties( hDeviceGroup, pDeviceProperties );
+    auto result = pfnGetProperties( hDeviceGroup, pDeviceProperties );
 
     return XE_RESULT_SUCCESS;
 }
@@ -739,7 +739,7 @@ xeDeviceGroupGetComputeProperties(
     
     hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     
-    //auto result = pfnGetComputeProperties( hDeviceGroup, pComputeProperties );
+    auto result = pfnGetComputeProperties( hDeviceGroup, pComputeProperties );
 
     return XE_RESULT_SUCCESS;
 }
@@ -755,7 +755,7 @@ xeDeviceGroupGetMemoryProperties(
     
     hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     
-    //auto result = pfnGetMemoryProperties( hDeviceGroup, pMemProperties );
+    auto result = pfnGetMemoryProperties( hDeviceGroup, pMemProperties );
 
     return XE_RESULT_SUCCESS;
 }
@@ -773,7 +773,7 @@ xeDeviceGetP2PProperties(
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     hPeerDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hPeerDevice ) );
     
-    //auto result = pfnGetP2PProperties( hDevice, hPeerDevice, pP2PProperties );
+    auto result = pfnGetP2PProperties( hDevice, hPeerDevice, pP2PProperties );
 
     return XE_RESULT_SUCCESS;
 }
@@ -791,7 +791,7 @@ xeDeviceCanAccessPeer(
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     hPeerDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hPeerDevice ) );
     
-    //auto result = pfnCanAccessPeer( hDevice, hPeerDevice, value );
+    auto result = pfnCanAccessPeer( hDevice, hPeerDevice, value );
 
     return XE_RESULT_SUCCESS;
 }
@@ -807,7 +807,7 @@ xeDeviceSetIntermediateCacheConfig(
     
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnSetIntermediateCacheConfig( hDevice, CacheConfig );
+    auto result = pfnSetIntermediateCacheConfig( hDevice, CacheConfig );
 
     return XE_RESULT_SUCCESS;
 }
@@ -823,7 +823,7 @@ xeDeviceSetLastLevelCacheConfig(
     
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnSetLastLevelCacheConfig( hDevice, CacheConfig );
+    auto result = pfnSetLastLevelCacheConfig( hDevice, CacheConfig );
 
     return XE_RESULT_SUCCESS;
 }
@@ -840,7 +840,7 @@ xeCommandQueueCreate(
     
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnCreate( hDevice, desc, phCommandQueue );
+    auto result = pfnCreate( hDevice, desc, phCommandQueue );
 
     *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>( new xe_command_queue_object_t( *phCommandQueue, nullptr ) );
     
@@ -857,7 +857,7 @@ xeCommandQueueDestroy(
     
     hCommandQueue = std::get<0>( *reinterpret_cast<xe_command_queue_object_t*>( hCommandQueue ) );
     
-    //auto result = pfnDestroy( hCommandQueue );
+    auto result = pfnDestroy( hCommandQueue );
 
     return XE_RESULT_SUCCESS;
 }
@@ -879,7 +879,7 @@ xeCommandQueueExecuteCommandLists(
         phCommandLists[ i ] = std::get<0>( *reinterpret_cast<xe_command_list_object_t*>( phCommandLists[ i ] ) );
     hFence = ( hFence ) ? std::get<0>( *reinterpret_cast<xe_fence_object_t*>( hFence ) ) : nullptr;
     
-    //auto result = pfnExecuteCommandLists( hCommandQueue, numCommandLists, phCommandLists, hFence );
+    auto result = pfnExecuteCommandLists( hCommandQueue, numCommandLists, phCommandLists, hFence );
 
     return XE_RESULT_SUCCESS;
 }
@@ -899,7 +899,7 @@ xeCommandQueueSynchronize(
     
     hCommandQueue = std::get<0>( *reinterpret_cast<xe_command_queue_object_t*>( hCommandQueue ) );
     
-    //auto result = pfnSynchronize( hCommandQueue, timeout );
+    auto result = pfnSynchronize( hCommandQueue, timeout );
 
     return XE_RESULT_SUCCESS;
 }
@@ -916,7 +916,7 @@ xeCommandListCreate(
     
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnCreate( hDevice, desc, phCommandList );
+    auto result = pfnCreate( hDevice, desc, phCommandList );
 
     *phCommandList = reinterpret_cast<xe_command_list_handle_t>( new xe_command_list_object_t( *phCommandList, nullptr ) );
     
@@ -935,7 +935,7 @@ xeCommandListCreateImmediate(
     
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnCreateImmediate( hDevice, desc, phCommandList );
+    auto result = pfnCreateImmediate( hDevice, desc, phCommandList );
 
     *phCommandList = reinterpret_cast<xe_command_list_handle_t>( new xe_command_list_object_t( *phCommandList, nullptr ) );
     
@@ -952,7 +952,7 @@ xeCommandListDestroy(
     
     hCommandList = std::get<0>( *reinterpret_cast<xe_command_list_object_t*>( hCommandList ) );
     
-    //auto result = pfnDestroy( hCommandList );
+    auto result = pfnDestroy( hCommandList );
 
     return XE_RESULT_SUCCESS;
 }
@@ -967,7 +967,7 @@ xeCommandListClose(
     
     hCommandList = std::get<0>( *reinterpret_cast<xe_command_list_object_t*>( hCommandList ) );
     
-    //auto result = pfnClose( hCommandList );
+    auto result = pfnClose( hCommandList );
 
     return XE_RESULT_SUCCESS;
 }
@@ -982,7 +982,7 @@ xeCommandListReset(
     
     hCommandList = std::get<0>( *reinterpret_cast<xe_command_list_object_t*>( hCommandList ) );
     
-    //auto result = pfnReset( hCommandList );
+    auto result = pfnReset( hCommandList );
 
     return XE_RESULT_SUCCESS;
 }
@@ -999,7 +999,7 @@ xeCommandListSetParameter(
     
     hCommandList = std::get<0>( *reinterpret_cast<xe_command_list_object_t*>( hCommandList ) );
     
-    //auto result = pfnSetParameter( hCommandList, parameter, value );
+    auto result = pfnSetParameter( hCommandList, parameter, value );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1016,7 +1016,7 @@ xeCommandListGetParameter(
     
     hCommandList = std::get<0>( *reinterpret_cast<xe_command_list_object_t*>( hCommandList ) );
     
-    //auto result = pfnGetParameter( hCommandList, parameter, value );
+    auto result = pfnGetParameter( hCommandList, parameter, value );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1031,7 +1031,7 @@ xeCommandListResetParameters(
     
     hCommandList = std::get<0>( *reinterpret_cast<xe_command_list_object_t*>( hCommandList ) );
     
-    //auto result = pfnResetParameters( hCommandList );
+    auto result = pfnResetParameters( hCommandList );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1048,7 +1048,7 @@ xeCommandListReserveSpace(
     
     hCommandList = std::get<0>( *reinterpret_cast<xe_command_list_object_t*>( hCommandList ) );
     
-    //auto result = pfnReserveSpace( hCommandList, size, ptr );
+    auto result = pfnReserveSpace( hCommandList, size, ptr );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1070,7 +1070,7 @@ xeCommandListAppendBarrier(
     for( size_t i = 0; ( nullptr != phWaitEvents ) && ( i < numWaitEvents ); ++i )
         phWaitEvents[ i ] = std::get<0>( *reinterpret_cast<xe_event_object_t*>( phWaitEvents[ i ] ) );
     
-    //auto result = pfnAppendBarrier( hCommandList, hSignalEvent, numWaitEvents, phWaitEvents );
+    auto result = pfnAppendBarrier( hCommandList, hSignalEvent, numWaitEvents, phWaitEvents );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1095,7 +1095,7 @@ xeCommandListAppendMemoryRangesBarrier(
     for( size_t i = 0; ( nullptr != phWaitEvents ) && ( i < numWaitEvents ); ++i )
         phWaitEvents[ i ] = std::get<0>( *reinterpret_cast<xe_event_object_t*>( phWaitEvents[ i ] ) );
     
-    //auto result = pfnAppendMemoryRangesBarrier( hCommandList, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents );
+    auto result = pfnAppendMemoryRangesBarrier( hCommandList, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1110,7 +1110,7 @@ xeDeviceSystemBarrier(
     
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnSystemBarrier( hDevice );
+    auto result = pfnSystemBarrier( hDevice );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1129,7 +1129,7 @@ xeDeviceRegisterCLMemory(
     
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnRegisterCLMemory( hDevice, context, mem, ptr );
+    auto result = pfnRegisterCLMemory( hDevice, context, mem, ptr );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1149,7 +1149,7 @@ xeDeviceRegisterCLProgram(
     
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnRegisterCLProgram( hDevice, context, program, phModule );
+    auto result = pfnRegisterCLProgram( hDevice, context, program, phModule );
 
     *phModule = reinterpret_cast<xe_module_handle_t>( new xe_module_object_t( *phModule, nullptr ) );
     
@@ -1171,7 +1171,7 @@ xeDeviceRegisterCLCommandQueue(
     
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
+    auto result = pfnRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
 
     *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>( new xe_command_queue_object_t( *phCommandQueue, nullptr ) );
     
@@ -1194,7 +1194,7 @@ xeCommandListAppendMemoryCopy(
     hCommandList = std::get<0>( *reinterpret_cast<xe_command_list_object_t*>( hCommandList ) );
     hEvent = ( hEvent ) ? std::get<0>( *reinterpret_cast<xe_event_object_t*>( hEvent ) ) : nullptr;
     
-    //auto result = pfnAppendMemoryCopy( hCommandList, dstptr, srcptr, size, hEvent );
+    auto result = pfnAppendMemoryCopy( hCommandList, dstptr, srcptr, size, hEvent );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1214,7 +1214,7 @@ xeCommandListAppendMemorySet(
     hCommandList = std::get<0>( *reinterpret_cast<xe_command_list_object_t*>( hCommandList ) );
     hEvent = ( hEvent ) ? std::get<0>( *reinterpret_cast<xe_event_object_t*>( hEvent ) ) : nullptr;
     
-    //auto result = pfnAppendMemorySet( hCommandList, ptr, value, size, hEvent );
+    auto result = pfnAppendMemorySet( hCommandList, ptr, value, size, hEvent );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1237,7 +1237,7 @@ xeCommandListAppendMemoryCopyRegion(
     hCommandList = std::get<0>( *reinterpret_cast<xe_command_list_object_t*>( hCommandList ) );
     hEvent = ( hEvent ) ? std::get<0>( *reinterpret_cast<xe_event_object_t*>( hEvent ) ) : nullptr;
     
-    //auto result = pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, srcptr, srcRegion, srcPitch, hEvent );
+    auto result = pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, srcptr, srcRegion, srcPitch, hEvent );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1258,7 +1258,7 @@ xeCommandListAppendImageCopy(
     hSrcImage = std::get<0>( *reinterpret_cast<xe_image_object_t*>( hSrcImage ) );
     hEvent = ( hEvent ) ? std::get<0>( *reinterpret_cast<xe_event_object_t*>( hEvent ) ) : nullptr;
     
-    //auto result = pfnAppendImageCopy( hCommandList, hDstImage, hSrcImage, hEvent );
+    auto result = pfnAppendImageCopy( hCommandList, hDstImage, hSrcImage, hEvent );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1281,7 +1281,7 @@ xeCommandListAppendImageCopyRegion(
     hSrcImage = std::get<0>( *reinterpret_cast<xe_image_object_t*>( hSrcImage ) );
     hEvent = ( hEvent ) ? std::get<0>( *reinterpret_cast<xe_event_object_t*>( hEvent ) ) : nullptr;
     
-    //auto result = pfnAppendImageCopyRegion( hCommandList, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hEvent );
+    auto result = pfnAppendImageCopyRegion( hCommandList, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hEvent );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1302,7 +1302,7 @@ xeCommandListAppendImageCopyToMemory(
     hSrcImage = std::get<0>( *reinterpret_cast<xe_image_object_t*>( hSrcImage ) );
     hEvent = ( hEvent ) ? std::get<0>( *reinterpret_cast<xe_event_object_t*>( hEvent ) ) : nullptr;
     
-    //auto result = pfnAppendImageCopyToMemory( hCommandList, dstptr, hSrcImage, pSrcRegion, hEvent );
+    auto result = pfnAppendImageCopyToMemory( hCommandList, dstptr, hSrcImage, pSrcRegion, hEvent );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1323,7 +1323,7 @@ xeCommandListAppendImageCopyFromMemory(
     hDstImage = std::get<0>( *reinterpret_cast<xe_image_object_t*>( hDstImage ) );
     hEvent = ( hEvent ) ? std::get<0>( *reinterpret_cast<xe_event_object_t*>( hEvent ) ) : nullptr;
     
-    //auto result = pfnAppendImageCopyFromMemory( hCommandList, hDstImage, srcptr, pDstRegion, hEvent );
+    auto result = pfnAppendImageCopyFromMemory( hCommandList, hDstImage, srcptr, pDstRegion, hEvent );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1340,7 +1340,7 @@ xeCommandListAppendMemoryPrefetch(
     
     hCommandList = std::get<0>( *reinterpret_cast<xe_command_list_object_t*>( hCommandList ) );
     
-    //auto result = pfnAppendMemoryPrefetch( hCommandList, ptr, count );
+    auto result = pfnAppendMemoryPrefetch( hCommandList, ptr, count );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1360,7 +1360,7 @@ xeCommandListAppendMemAdvise(
     hCommandList = std::get<0>( *reinterpret_cast<xe_command_list_object_t*>( hCommandList ) );
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnAppendMemAdvise( hCommandList, hDevice, ptr, size, advice );
+    auto result = pfnAppendMemAdvise( hCommandList, hDevice, ptr, size, advice );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1377,7 +1377,7 @@ xeEventPoolCreate(
     
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnCreate( hDevice, desc, phEventPool );
+    auto result = pfnCreate( hDevice, desc, phEventPool );
 
     *phEventPool = reinterpret_cast<xe_event_pool_handle_t>( new xe_event_pool_object_t( *phEventPool, nullptr ) );
     
@@ -1394,7 +1394,7 @@ xeEventPoolDestroy(
     
     hEventPool = std::get<0>( *reinterpret_cast<xe_event_pool_object_t*>( hEventPool ) );
     
-    //auto result = pfnDestroy( hEventPool );
+    auto result = pfnDestroy( hEventPool );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1407,11 +1407,11 @@ xeEventCreate(
     xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
     )
 {
-    auto pfnCreate = std::get<1>( *reinterpret_cast<xe_event_pool_object_t*>( hEventPool ) )->pfnCreate;
+    auto pfnCreate = std::get<1>( *reinterpret_cast<xe_event_pool_object_t*>( hEventPool ) )->pEvent->pfnCreate;
     
     hEventPool = std::get<0>( *reinterpret_cast<xe_event_pool_object_t*>( hEventPool ) );
     
-    //auto result = pfnCreate( hEventPool, desc, phEvent );
+    auto result = pfnCreate( hEventPool, desc, phEvent );
 
     *phEvent = reinterpret_cast<xe_event_handle_t>( new xe_event_object_t( *phEvent, nullptr ) );
     
@@ -1428,7 +1428,7 @@ xeEventDestroy(
     
     hEvent = std::get<0>( *reinterpret_cast<xe_event_object_t*>( hEvent ) );
     
-    //auto result = pfnDestroy( hEvent );
+    auto result = pfnDestroy( hEvent );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1444,7 +1444,7 @@ xeEventPoolGetIpcHandle(
     
     hEventPool = std::get<0>( *reinterpret_cast<xe_event_pool_object_t*>( hEventPool ) );
     
-    //auto result = pfnGetIpcHandle( hEventPool, phIpc );
+    auto result = pfnGetIpcHandle( hEventPool, phIpc );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1461,7 +1461,7 @@ xeEventPoolOpenIpcHandle(
     
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnOpenIpcHandle( hDevice, hIpc, phEventPool );
+    auto result = pfnOpenIpcHandle( hDevice, hIpc, phEventPool );
 
     *phEventPool = reinterpret_cast<xe_event_pool_handle_t>( new xe_event_pool_object_t( *phEventPool, nullptr ) );
     
@@ -1478,7 +1478,7 @@ xeEventPoolCloseIpcHandle(
     
     hEventPool = std::get<0>( *reinterpret_cast<xe_event_pool_object_t*>( hEventPool ) );
     
-    //auto result = pfnCloseIpcHandle( hEventPool );
+    auto result = pfnCloseIpcHandle( hEventPool );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1495,7 +1495,7 @@ xeCommandListAppendSignalEvent(
     hCommandList = std::get<0>( *reinterpret_cast<xe_command_list_object_t*>( hCommandList ) );
     hEvent = std::get<0>( *reinterpret_cast<xe_event_object_t*>( hEvent ) );
     
-    //auto result = pfnAppendSignalEvent( hCommandList, hEvent );
+    auto result = pfnAppendSignalEvent( hCommandList, hEvent );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1515,7 +1515,7 @@ xeCommandListAppendWaitOnEvents(
     for( size_t i = 0; ( nullptr != phEvents ) && ( i < numEvents ); ++i )
         phEvents[ i ] = std::get<0>( *reinterpret_cast<xe_event_object_t*>( phEvents[ i ] ) );
     
-    //auto result = pfnAppendWaitOnEvents( hCommandList, numEvents, phEvents );
+    auto result = pfnAppendWaitOnEvents( hCommandList, numEvents, phEvents );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1530,7 +1530,7 @@ xeEventHostSignal(
     
     hEvent = std::get<0>( *reinterpret_cast<xe_event_object_t*>( hEvent ) );
     
-    //auto result = pfnHostSignal( hEvent );
+    auto result = pfnHostSignal( hEvent );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1550,7 +1550,7 @@ xeEventHostSynchronize(
     
     hEvent = std::get<0>( *reinterpret_cast<xe_event_object_t*>( hEvent ) );
     
-    //auto result = pfnHostSynchronize( hEvent, timeout );
+    auto result = pfnHostSynchronize( hEvent, timeout );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1565,7 +1565,7 @@ xeEventQueryStatus(
     
     hEvent = std::get<0>( *reinterpret_cast<xe_event_object_t*>( hEvent ) );
     
-    //auto result = pfnQueryStatus( hEvent );
+    auto result = pfnQueryStatus( hEvent );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1582,7 +1582,7 @@ xeCommandListAppendEventReset(
     hCommandList = std::get<0>( *reinterpret_cast<xe_command_list_object_t*>( hCommandList ) );
     hEvent = std::get<0>( *reinterpret_cast<xe_event_object_t*>( hEvent ) );
     
-    //auto result = pfnAppendEventReset( hCommandList, hEvent );
+    auto result = pfnAppendEventReset( hCommandList, hEvent );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1597,7 +1597,7 @@ xeEventReset(
     
     hEvent = std::get<0>( *reinterpret_cast<xe_event_object_t*>( hEvent ) );
     
-    //auto result = pfnReset( hEvent );
+    auto result = pfnReset( hEvent );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1614,7 +1614,7 @@ xeFenceCreate(
     
     hCommandQueue = std::get<0>( *reinterpret_cast<xe_command_queue_object_t*>( hCommandQueue ) );
     
-    //auto result = pfnCreate( hCommandQueue, desc, phFence );
+    auto result = pfnCreate( hCommandQueue, desc, phFence );
 
     *phFence = reinterpret_cast<xe_fence_handle_t>( new xe_fence_object_t( *phFence, nullptr ) );
     
@@ -1631,7 +1631,7 @@ xeFenceDestroy(
     
     hFence = std::get<0>( *reinterpret_cast<xe_fence_object_t*>( hFence ) );
     
-    //auto result = pfnDestroy( hFence );
+    auto result = pfnDestroy( hFence );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1651,7 +1651,7 @@ xeFenceHostSynchronize(
     
     hFence = std::get<0>( *reinterpret_cast<xe_fence_object_t*>( hFence ) );
     
-    //auto result = pfnHostSynchronize( hFence, timeout );
+    auto result = pfnHostSynchronize( hFence, timeout );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1666,7 +1666,7 @@ xeFenceQueryStatus(
     
     hFence = std::get<0>( *reinterpret_cast<xe_fence_object_t*>( hFence ) );
     
-    //auto result = pfnQueryStatus( hFence );
+    auto result = pfnQueryStatus( hFence );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1681,7 +1681,7 @@ xeFenceReset(
     
     hFence = std::get<0>( *reinterpret_cast<xe_fence_object_t*>( hFence ) );
     
-    //auto result = pfnReset( hFence );
+    auto result = pfnReset( hFence );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1698,7 +1698,7 @@ xeImageGetProperties(
     
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnGetProperties( hDevice, desc, pImageProperties );
+    auto result = pfnGetProperties( hDevice, desc, pImageProperties );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1715,7 +1715,7 @@ xeImageCreate(
     
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnCreate( hDevice, desc, phImage );
+    auto result = pfnCreate( hDevice, desc, phImage );
 
     *phImage = reinterpret_cast<xe_image_handle_t>( new xe_image_object_t( *phImage, nullptr ) );
     
@@ -1732,7 +1732,7 @@ xeImageDestroy(
     
     hImage = std::get<0>( *reinterpret_cast<xe_image_object_t*>( hImage ) );
     
-    //auto result = pfnDestroy( hImage );
+    auto result = pfnDestroy( hImage );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1754,7 +1754,7 @@ xeDeviceGroupAllocSharedMem(
     hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, host_flags, size, alignment, ptr );
+    auto result = pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, host_flags, size, alignment, ptr );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1775,7 +1775,7 @@ xeDeviceGroupAllocDeviceMem(
     hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, size, alignment, ptr );
+    auto result = pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, size, alignment, ptr );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1794,7 +1794,7 @@ xeDeviceGroupAllocHostMem(
     
     hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     
-    //auto result = pfnAllocHostMem( hDeviceGroup, flags, size, alignment, ptr );
+    auto result = pfnAllocHostMem( hDeviceGroup, flags, size, alignment, ptr );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1810,7 +1810,7 @@ xeDeviceGroupFreeMem(
     
     hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     
-    //auto result = pfnFreeMem( hDeviceGroup, ptr );
+    auto result = pfnFreeMem( hDeviceGroup, ptr );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1827,7 +1827,7 @@ xeDeviceGroupGetMemProperties(
     
     hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     
-    //auto result = pfnGetMemProperties( hDeviceGroup, ptr, pMemProperties );
+    auto result = pfnGetMemProperties( hDeviceGroup, ptr, pMemProperties );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1845,7 +1845,7 @@ xeDeviceGroupGetMemAddressRange(
     
     hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     
-    //auto result = pfnGetMemAddressRange( hDeviceGroup, ptr, pBase, pSize );
+    auto result = pfnGetMemAddressRange( hDeviceGroup, ptr, pBase, pSize );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1862,7 +1862,7 @@ xeDeviceGroupGetMemIpcHandle(
     
     hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     
-    //auto result = pfnGetMemIpcHandle( hDeviceGroup, ptr, pIpcHandle );
+    auto result = pfnGetMemIpcHandle( hDeviceGroup, ptr, pIpcHandle );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1882,7 +1882,7 @@ xeDeviceGroupOpenMemIpcHandle(
     hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnOpenMemIpcHandle( hDeviceGroup, hDevice, handle, flags, ptr );
+    auto result = pfnOpenMemIpcHandle( hDeviceGroup, hDevice, handle, flags, ptr );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1898,7 +1898,7 @@ xeDeviceGroupCloseMemIpcHandle(
     
     hDeviceGroup = std::get<0>( *reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup ) );
     
-    //auto result = pfnCloseMemIpcHandle( hDeviceGroup, ptr );
+    auto result = pfnCloseMemIpcHandle( hDeviceGroup, ptr );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1916,7 +1916,7 @@ xeModuleCreate(
     
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnCreate( hDevice, pDesc, phModule, phBuildLog );
+    auto result = pfnCreate( hDevice, pDesc, phModule, phBuildLog );
 
     *phModule = reinterpret_cast<xe_module_handle_t>( new xe_module_object_t( *phModule, nullptr ) );
     
@@ -1933,7 +1933,7 @@ xeModuleDestroy(
     
     hModule = std::get<0>( *reinterpret_cast<xe_module_object_t*>( hModule ) );
     
-    //auto result = pfnDestroy( hModule );
+    auto result = pfnDestroy( hModule );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1948,7 +1948,7 @@ xeModuleBuildLogDestroy(
     
     hModuleBuildLog = std::get<0>( *reinterpret_cast<xe_module_build_log_object_t*>( hModuleBuildLog ) );
     
-    //auto result = pfnDestroy( hModuleBuildLog );
+    auto result = pfnDestroy( hModuleBuildLog );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1965,7 +1965,7 @@ xeModuleBuildLogGetString(
     
     hModuleBuildLog = std::get<0>( *reinterpret_cast<xe_module_build_log_object_t*>( hModuleBuildLog ) );
     
-    //auto result = pfnGetString( hModuleBuildLog, pSize, pBuildLog );
+    auto result = pfnGetString( hModuleBuildLog, pSize, pBuildLog );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1982,7 +1982,7 @@ xeModuleGetNativeBinary(
     
     hModule = std::get<0>( *reinterpret_cast<xe_module_object_t*>( hModule ) );
     
-    //auto result = pfnGetNativeBinary( hModule, pSize, pModuleNativeBinary );
+    auto result = pfnGetNativeBinary( hModule, pSize, pModuleNativeBinary );
 
     return XE_RESULT_SUCCESS;
 }
@@ -1999,7 +1999,7 @@ xeModuleGetGlobalPointer(
     
     hModule = std::get<0>( *reinterpret_cast<xe_module_object_t*>( hModule ) );
     
-    //auto result = pfnGetGlobalPointer( hModule, pGlobalName, pPtr );
+    auto result = pfnGetGlobalPointer( hModule, pGlobalName, pPtr );
 
     return XE_RESULT_SUCCESS;
 }
@@ -2016,7 +2016,7 @@ xeFunctionCreate(
     
     hModule = std::get<0>( *reinterpret_cast<xe_module_object_t*>( hModule ) );
     
-    //auto result = pfnCreate( hModule, pDesc, phFunction );
+    auto result = pfnCreate( hModule, pDesc, phFunction );
 
     *phFunction = reinterpret_cast<xe_function_handle_t>( new xe_function_object_t( *phFunction, nullptr ) );
     
@@ -2033,7 +2033,7 @@ xeFunctionDestroy(
     
     hFunction = std::get<0>( *reinterpret_cast<xe_function_object_t*>( hFunction ) );
     
-    //auto result = pfnDestroy( hFunction );
+    auto result = pfnDestroy( hFunction );
 
     return XE_RESULT_SUCCESS;
 }
@@ -2050,7 +2050,7 @@ xeModuleGetFunctionPointer(
     
     hModule = std::get<0>( *reinterpret_cast<xe_module_object_t*>( hModule ) );
     
-    //auto result = pfnGetFunctionPointer( hModule, pFunctionName, pfnFunction );
+    auto result = pfnGetFunctionPointer( hModule, pFunctionName, pfnFunction );
 
     return XE_RESULT_SUCCESS;
 }
@@ -2068,7 +2068,7 @@ xeFunctionSetGroupSize(
     
     hFunction = std::get<0>( *reinterpret_cast<xe_function_object_t*>( hFunction ) );
     
-    //auto result = pfnSetGroupSize( hFunction, groupSizeX, groupSizeY, groupSizeZ );
+    auto result = pfnSetGroupSize( hFunction, groupSizeX, groupSizeY, groupSizeZ );
 
     return XE_RESULT_SUCCESS;
 }
@@ -2089,7 +2089,7 @@ xeFunctionSuggestGroupSize(
     
     hFunction = std::get<0>( *reinterpret_cast<xe_function_object_t*>( hFunction ) );
     
-    //auto result = pfnSuggestGroupSize( hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
+    auto result = pfnSuggestGroupSize( hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
 
     return XE_RESULT_SUCCESS;
 }
@@ -2097,14 +2097,18 @@ xeFunctionSuggestGroupSize(
 /// @brief Intercept function for xeFunctionSetArgumentValue
 xe_result_t __xecall
 xeFunctionSetArgumentValue(
-    xe_function_handle_t hFunction,                 ///< [in,out] handle of the function args object.
+    xe_function_handle_t hFunction,                 ///< [in] handle of the function args object.
     uint32_t argIndex,                              ///< [in] argument index in range [0, num args - 1]
     size_t argSize,                                 ///< [in] size of argument type
     const void* pArgValue                           ///< [in][optional] argument value represented as matching arg type. If
                                                     ///< null then argument value is considered null.
     )
 {
-    //auto result = pfnSetArgumentValue( hFunction, argIndex, argSize, pArgValue );
+    auto pfnSetArgumentValue = std::get<1>( *reinterpret_cast<xe_function_object_t*>( hFunction ) )->pfnSetArgumentValue;
+    
+    hFunction = std::get<0>( *reinterpret_cast<xe_function_object_t*>( hFunction ) );
+    
+    auto result = pfnSetArgumentValue( hFunction, argIndex, argSize, pArgValue );
 
     return XE_RESULT_SUCCESS;
 }
@@ -2112,12 +2116,16 @@ xeFunctionSetArgumentValue(
 /// @brief Intercept function for xeFunctionSetAttribute
 xe_result_t __xecall
 xeFunctionSetAttribute(
-    xe_function_handle_t hFunction,                 ///< [in,out] handle of the function.
+    xe_function_handle_t hFunction,                 ///< [in] handle of the function.
     xe_function_set_attribute_t attr,               ///< [in] attribute to set
     uint32_t value                                  ///< [in] attribute value to set
     )
 {
-    //auto result = pfnSetAttribute( hFunction, attr, value );
+    auto pfnSetAttribute = std::get<1>( *reinterpret_cast<xe_function_object_t*>( hFunction ) )->pfnSetAttribute;
+    
+    hFunction = std::get<0>( *reinterpret_cast<xe_function_object_t*>( hFunction ) );
+    
+    auto result = pfnSetAttribute( hFunction, attr, value );
 
     return XE_RESULT_SUCCESS;
 }
@@ -2134,7 +2142,7 @@ xeFunctionGetAttribute(
     
     hFunction = std::get<0>( *reinterpret_cast<xe_function_object_t*>( hFunction ) );
     
-    //auto result = pfnGetAttribute( hFunction, attr, pValue );
+    auto result = pfnGetAttribute( hFunction, attr, pValue );
 
     return XE_RESULT_SUCCESS;
 }
@@ -2159,7 +2167,7 @@ xeCommandListAppendLaunchFunction(
     for( size_t i = 0; ( nullptr != phWaitEvents ) && ( i < numWaitEvents ); ++i )
         phWaitEvents[ i ] = std::get<0>( *reinterpret_cast<xe_event_object_t*>( phWaitEvents[ i ] ) );
     
-    //auto result = pfnAppendLaunchFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
+    auto result = pfnAppendLaunchFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
 
     return XE_RESULT_SUCCESS;
 }
@@ -2184,7 +2192,7 @@ xeCommandListAppendLaunchFunctionIndirect(
     for( size_t i = 0; ( nullptr != phWaitEvents ) && ( i < numWaitEvents ); ++i )
         phWaitEvents[ i ] = std::get<0>( *reinterpret_cast<xe_event_object_t*>( phWaitEvents[ i ] ) );
     
-    //auto result = pfnAppendLaunchFunctionIndirect( hCommandList, hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+    auto result = pfnAppendLaunchFunctionIndirect( hCommandList, hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
 
     return XE_RESULT_SUCCESS;
 }
@@ -2215,7 +2223,7 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
     for( size_t i = 0; ( nullptr != phWaitEvents ) && ( i < numWaitEvents ); ++i )
         phWaitEvents[ i ] = std::get<0>( *reinterpret_cast<xe_event_object_t*>( phWaitEvents[ i ] ) );
     
-    //auto result = pfnAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+    auto result = pfnAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
 
     return XE_RESULT_SUCCESS;
 }
@@ -2239,7 +2247,7 @@ xeCommandListAppendLaunchHostFunction(
     for( size_t i = 0; ( nullptr != phWaitEvents ) && ( i < numWaitEvents ); ++i )
         phWaitEvents[ i ] = std::get<0>( *reinterpret_cast<xe_event_object_t*>( phWaitEvents[ i ] ) );
     
-    //auto result = pfnAppendLaunchHostFunction( hCommandList, pfnHostFunc, pUserData, hSignalEvent, numWaitEvents, phWaitEvents );
+    auto result = pfnAppendLaunchHostFunction( hCommandList, pfnHostFunc, pUserData, hSignalEvent, numWaitEvents, phWaitEvents );
 
     return XE_RESULT_SUCCESS;
 }
@@ -2256,7 +2264,7 @@ xeDeviceMakeMemoryResident(
     
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnMakeMemoryResident( hDevice, ptr, size );
+    auto result = pfnMakeMemoryResident( hDevice, ptr, size );
 
     return XE_RESULT_SUCCESS;
 }
@@ -2273,7 +2281,7 @@ xeDeviceEvictMemory(
     
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnEvictMemory( hDevice, ptr, size );
+    auto result = pfnEvictMemory( hDevice, ptr, size );
 
     return XE_RESULT_SUCCESS;
 }
@@ -2290,7 +2298,7 @@ xeDeviceMakeImageResident(
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     hImage = std::get<0>( *reinterpret_cast<xe_image_object_t*>( hImage ) );
     
-    //auto result = pfnMakeImageResident( hDevice, hImage );
+    auto result = pfnMakeImageResident( hDevice, hImage );
 
     return XE_RESULT_SUCCESS;
 }
@@ -2307,7 +2315,7 @@ xeDeviceEvictImage(
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     hImage = std::get<0>( *reinterpret_cast<xe_image_object_t*>( hImage ) );
     
-    //auto result = pfnEvictImage( hDevice, hImage );
+    auto result = pfnEvictImage( hDevice, hImage );
 
     return XE_RESULT_SUCCESS;
 }
@@ -2324,7 +2332,7 @@ xeSamplerCreate(
     
     hDevice = std::get<0>( *reinterpret_cast<xe_device_object_t*>( hDevice ) );
     
-    //auto result = pfnCreate( hDevice, pDesc, phSampler );
+    auto result = pfnCreate( hDevice, pDesc, phSampler );
 
     *phSampler = reinterpret_cast<xe_sampler_handle_t>( new xe_sampler_object_t( *phSampler, nullptr ) );
     
@@ -2341,7 +2349,7 @@ xeSamplerDestroy(
     
     hSampler = std::get<0>( *reinterpret_cast<xe_sampler_object_t*>( hSampler ) );
     
-    //auto result = pfnDestroy( hSampler );
+    auto result = pfnDestroy( hSampler );
 
     return XE_RESULT_SUCCESS;
 }

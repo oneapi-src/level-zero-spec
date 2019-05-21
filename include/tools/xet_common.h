@@ -83,10 +83,6 @@ typedef struct _xet_power_handle_t *xet_power_handle_t;
 typedef struct _xet_freq_domain_handle_t *xet_freq_domain_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle of sysman object
-typedef struct _xet_sysman_handle_t *xet_sysman_handle_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_metric_group_properties_t
 typedef struct _xet_metric_group_properties_t xet_metric_group_properties_t;
 

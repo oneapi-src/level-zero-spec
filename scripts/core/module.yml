@@ -368,7 +368,7 @@ details:
 params:
     - type: "$x_function_handle_t"
       name: hFunction
-      desc: "[in,out] handle of the function args object."
+      desc: "[in] handle of the function args object."
     - type: "uint32_t"
       name: argIndex
       desc: "[in] argument index in range [0, num args - 1]"
@@ -410,7 +410,7 @@ details:
 params:
     - type: "$x_function_handle_t"
       name: hFunction
-      desc: "[in,out] handle of the function."
+      desc: "[in] handle of the function."
     - type: "$x_function_set_attribute_t"
       name: attr
       desc: "[in] attribute to set"

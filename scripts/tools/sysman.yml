@@ -1,24 +1,15 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for System Management"
---- #--------------------------------------------------------------------------
-type: function
-desc: "temp"
-name: foo
-class: $tSysman
-params:
-    - type: void*
-      name: blob
-      desc: "[in]"
---- #--------------------------------------------------------------------------
-type: class
-desc: "C++ wrapper for sysman"
-name: $tSysman
-owner: $tDevice
-members:
-    - type: $t_sysman_handle_t
-      name: handle
-      desc: "handle of sysman object"
-    - type: $tDevice*
-      name: pDevice
-      desc: "[in] pointer to owner object"
+# --- #--------------------------------------------------------------------------
+# type: class
+# desc: "C++ wrapper for sysman"
+# name: $tSysman
+# owner: $tDevice
+# members:
+#     - type: $t_sysman_handle_t
+#       name: handle
+#       desc: "handle of sysman object"
+#     - type: $tDevice*
+#       name: pDevice
+#       desc: "[in] pointer to owner object"

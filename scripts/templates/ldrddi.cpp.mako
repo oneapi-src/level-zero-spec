@@ -106,7 +106,7 @@ ${th.make_func_name(n, tags, obj)}(
     %for line in th.make_loader_prologue_lines(n, tags, obj, meta, th.subt(namespace, tags, "$x_loader::loader")):
     ${line}
     %endfor
-    //auto result = ${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
+    auto result = ${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
 
     %for line in th.make_loader_epilogue_lines(n, tags, obj, meta):
     ${line}

@@ -904,7 +904,7 @@ def make_loader_prologue_lines(namespace, tags, obj, meta, loader):
                         prologue = ""
                         RE_REMOVE_TAG = r"^\$[^A-Z](\w+)"
                         cls = obj['class']
-                        if not re.match(re.sub(RE_REMOVE_TAG, r"\1", cls), re.sub(RE_REMOVE_TAG, r"\1", hcls)):
+                        if re.sub(RE_REMOVE_TAG, r"\1", hcls) != re.sub(RE_REMOVE_TAG, r"\1", cls):
                             prologue = "p%s->"%get_table_name(namespace, tags, {'class': cls})
 
                         lines.append("auto %s = std::get<1>( *reinterpret_cast<%s*>( %s ) )->%s%s;"%(pfnname, obj_name, name, prologue, pfnname))

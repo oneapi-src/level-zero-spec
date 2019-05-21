@@ -49,7 +49,6 @@ typedef struct _xet_metric_query_pool_apitable_t    xet_metric_query_pool_apitab
 typedef struct _xet_metric_query_apitable_t         xet_metric_query_apitable_t;
 typedef struct _xet_power_apitable_t                xet_power_apitable_t;
 typedef struct _xet_freq_domain_apitable_t          xet_freq_domain_apitable_t;
-typedef struct _xet_sysman_apitable_t               xet_sysman_apitable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetInit 
@@ -104,12 +103,10 @@ typedef struct _xet_device_apitable_t
     xet_pfnDeviceActivateMetricGroups_t                         pfnActivateMetricGroups;
 
     xet_metric_group_apitable_t*                                pMetricGroup;
-    xet_metric_apitable_t*                                      pMetric;
     xet_metric_tracer_apitable_t*                               pMetricTracer;
     xet_metric_query_pool_apitable_t*                           pMetricQueryPool;
     xet_metric_query_apitable_t*                                pMetricQuery;
     xet_power_apitable_t*                                       pPower;
-    xet_sysman_apitable_t*                                      pSysman;
 } xet_device_apitable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -242,6 +239,7 @@ typedef struct _xet_metric_group_apitable_t
     xet_pfnMetricGroupGetProperties_t                           pfnGetProperties;
     xet_pfnMetricGroupCalculateData_t                           pfnCalculateData;
 
+    xet_metric_apitable_t*                                      pMetric;
 } xet_metric_group_apitable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -853,44 +851,6 @@ xetGetFreqDomainProcAddrTable(
 typedef xe_result_t (__xecall *xet_pfnGetFreqDomainProcAddrTable_t)(
     xe_api_version_t,
     xet_freq_domain_apitable_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanfoo 
-typedef xe_result_t (__xecall *xet_pfnSysmanfoo_t)(
-    void*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Table of Sysman functions pointers
-typedef struct _xet_sysman_apitable_t
-{
-    xet_pfnSysmanfoo_t                                          pfnfoo;
-
-} xet_sysman_apitable_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's Sysman table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for ptable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xetGetSysmanProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xet_sysman_apitable_t* ptable                   ///< [in,out] pointer to table of API function pointers
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetGetSysmanProcAddrTable
-typedef xe_result_t (__xecall *xet_pfnGetSysmanProcAddrTable_t)(
-    xe_api_version_t,
-    xet_sysman_apitable_t*
     );
 
 #if defined(__cplusplus)

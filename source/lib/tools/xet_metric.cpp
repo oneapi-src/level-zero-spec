@@ -636,9 +636,9 @@ namespace xet
 
     ///////////////////////////////////////////////////////////////////////////////
     Metric::Metric( 
-        Device* pDevice                                 ///< [in] pointer to owner object
+        MetricGroup* pMetricGroup                       ///< [in] pointer to owner object
         ) :
-        m_pDevice( pDevice )
+        m_pMetricGroup( pMetricGroup )
     {
     }
 

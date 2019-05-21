@@ -41,50 +41,9 @@
 
 namespace xet
 {
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for sysman
-    class Sysman
-    {
-    public:
-
-    protected:
-        ///////////////////////////////////////////////////////////////////////////////
-        sysman_handle_t m_handle;                       ///< handle of sysman object
-        Device* m_pDevice;                              ///< [in] pointer to owner object
-
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        Sysman( void ) = delete;
-        Sysman( 
-            Device* pDevice                                 ///< [in] pointer to owner object
-            );
-
-        ~Sysman( void ) = default;
-
-        Sysman( Sysman const& other ) = delete;
-        void operator=( Sysman const& other ) = delete;
-
-        Sysman( Sysman&& other ) = delete;
-        void operator=( Sysman&& other ) = delete;
-
-        ///////////////////////////////////////////////////////////////////////////////
-        auto getHandle( void ) const { return m_handle; }
-        auto getDevice( void ) const { return m_pDevice; }
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief temp
-        /// @throws result_t
-        void __xecall
-        foo(
-            void
-            );
-
-    };
-
 } // namespace xet
 
 #ifdef _DEBUG
-
 #endif // _DEBUG
 #endif // defined(__cplusplus)
 #endif // _XET_SYSMAN_HPP

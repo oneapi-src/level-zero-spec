@@ -75,7 +75,7 @@ namespace xe_layer
         xet_metric_query_apitable_t         xetMetricQuery = {};
         xet_power_apitable_t                xetPower = {};
         xet_freq_domain_apitable_t          xetFreqDomain = {};
-        xet_sysman_apitable_t               xetSysman = {};
+        //xet_sysman_apitable_t               xetSysman = {};
 
         Validation();
         ~Validation();

@@ -176,7 +176,7 @@ xexInit(
     auto pfnInit = xe_loader::loader.xexGlobal.pfnInit;
     
     
-    //auto result = pfnInit( flags );
+    auto result = pfnInit( flags );
 
     return XE_RESULT_SUCCESS;
 }
@@ -193,7 +193,7 @@ xexCommandGraphCreate(
     
     hDevice = std::get<0>( *reinterpret_cast<xex_device_object_t*>( hDevice ) );
     
-    //auto result = pfnCreate( hDevice, desc, phCommandGraph );
+    auto result = pfnCreate( hDevice, desc, phCommandGraph );
 
     *phCommandGraph = reinterpret_cast<xex_command_graph_handle_t>( new xex_command_graph_object_t( *phCommandGraph, nullptr ) );
     
@@ -210,7 +210,7 @@ xexCommandGraphDestroy(
     
     hCommandGraph = std::get<0>( *reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph ) );
     
-    //auto result = pfnDestroy( hCommandGraph );
+    auto result = pfnDestroy( hCommandGraph );
 
     return XE_RESULT_SUCCESS;
 }
@@ -225,7 +225,7 @@ xexCommandGraphClose(
     
     hCommandGraph = std::get<0>( *reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph ) );
     
-    //auto result = pfnClose( hCommandGraph );
+    auto result = pfnClose( hCommandGraph );
 
     return XE_RESULT_SUCCESS;
 }
