@@ -62,19 +62,22 @@ xexGetGlobalProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto handle : xe_loader::loader.drivers )
+    for( auto& drv : xe_loader::loader.drivers )
     {
-        static auto getTable = reinterpret_cast<xex_pfnGetGlobalProcAddrTable_t>(
-            GET_FUNCTION_PTR( handle, "xexGetGlobalProcAddrTable") );
-        result = getTable( version, ptable ); // todo: attach to handle
-    }
+        if( XE_RESULT_SUCCESS == result )
+        {
+            static auto getTable = reinterpret_cast<xex_pfnGetGlobalProcAddrTable_t>(
+                GET_FUNCTION_PTR( drv.handle, "xexGetGlobalProcAddrTable") );
+            result = getTable( version, &drv.xexDdiTable.Global ); // todo: attach to handle
+        }
 
-    // If the validation layer is enabled, then intercept the device-driver DDI tables
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
-    {
-        static auto getTable = reinterpret_cast<xex_pfnGetGlobalProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xexGetGlobalProcAddrTable") );
-        result = getTable( version, ptable );
+        // If the validation layer is enabled, then intercept the device-driver DDI tables
+        if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+        {
+            static auto getTable = reinterpret_cast<xex_pfnGetGlobalProcAddrTable_t>(
+                GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xexGetGlobalProcAddrTable") );
+            result = getTable( version, &drv.xexDdiTable.Global );
+        }
     }
 
     return result;
@@ -108,19 +111,22 @@ xexGetCommandGraphProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto handle : xe_loader::loader.drivers )
+    for( auto& drv : xe_loader::loader.drivers )
     {
-        static auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
-            GET_FUNCTION_PTR( handle, "xexGetCommandGraphProcAddrTable") );
-        result = getTable( version, ptable ); // todo: attach to handle
-    }
+        if( XE_RESULT_SUCCESS == result )
+        {
+            static auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
+                GET_FUNCTION_PTR( drv.handle, "xexGetCommandGraphProcAddrTable") );
+            result = getTable( version, &drv.xexDdiTable.CommandGraph ); // todo: attach to handle
+        }
 
-    // If the validation layer is enabled, then intercept the device-driver DDI tables
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
-    {
-        static auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xexGetCommandGraphProcAddrTable") );
-        result = getTable( version, ptable );
+        // If the validation layer is enabled, then intercept the device-driver DDI tables
+        if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+        {
+            static auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
+                GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xexGetCommandGraphProcAddrTable") );
+            result = getTable( version, &drv.xexDdiTable.CommandGraph );
+        }
     }
 
     return result;

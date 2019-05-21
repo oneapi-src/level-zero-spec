@@ -73,19 +73,22 @@ ${tbl['export']['name']}(
     ${x}_result_t result = ${X}_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto handle : ${x}_loader::loader.drivers )
+    for( auto& drv : ${x}_loader::loader.drivers )
     {
-        static auto getTable = reinterpret_cast<${tbl['pfn']}>(
-            GET_FUNCTION_PTR( handle, "${tbl['export']['name']}") );
-        result = getTable( version, ptable ); // todo: attach to handle
-    }
+        if( ${X}_RESULT_SUCCESS == result )
+        {
+            static auto getTable = reinterpret_cast<${tbl['pfn']}>(
+                GET_FUNCTION_PTR( drv.handle, "${tbl['export']['name']}") );
+            result = getTable( version, &drv.${n}DdiTable.${tbl['name']} ); // todo: attach to handle
+        }
 
-    // If the validation layer is enabled, then intercept the device-driver DDI tables
-    if(( ${X}_RESULT_SUCCESS == result ) && ( nullptr != ${x}_loader::loader.validationLayer ))
-    {
-        static auto getTable = reinterpret_cast<${tbl['pfn']}>(
-            GET_FUNCTION_PTR(${x}_loader::loader.validationLayer, "${tbl['export']['name']}") );
-        result = getTable( version, ptable );
+        // If the validation layer is enabled, then intercept the device-driver DDI tables
+        if(( ${X}_RESULT_SUCCESS == result ) && ( nullptr != ${x}_loader::loader.validationLayer ))
+        {
+            static auto getTable = reinterpret_cast<${tbl['pfn']}>(
+                GET_FUNCTION_PTR(${x}_loader::loader.validationLayer, "${tbl['export']['name']}") );
+            result = getTable( version, &drv.${n}DdiTable.${tbl['name']} );
+        }
     }
 
     return result;

@@ -84,13 +84,25 @@ using xet_freq_domain_object_t          = xet_loader_object_t < xet_freq_domain_
 
 namespace xe_loader
 {
+    //////////////////////////////////////////////////////////////////////////
+    struct _driver_object_t
+    {
+        HMODULE handle = NULL;
+
+        xe_dditable_t   xeDdiTable = {};
+        xex_dditable_t  xexDdiTable = {};
+        xet_dditable_t  xetDdiTable = {};
+    };
+
+    using driver_vector_t = std::vector< _driver_object_t >;
+
     ///////////////////////////////////////////////////////////////////////////////
     class Loader
     {
     public:
         xe_api_version_t version = XE_API_VERSION_1_0;
 
-        std::vector<HMODULE> drivers; // todo: change to be tuple with each driver's dditable
+        driver_vector_t drivers; // todo: change to be tuple with each driver's dditable
 
         HMODULE validationLayer = nullptr;
 

@@ -48,7 +48,11 @@ namespace xe_loader
         {
             auto handle = LOAD_DRIVER_LIBRARY( name );
             if( NULL != handle )
-                drivers.emplace_back( handle );
+            {
+                drivers.emplace_back();
+                drivers.rbegin()->handle = handle;
+            }
+                
         }
 
         if( getenv_tobool( "XE_ENABLE_VALIDATION_LAYER" ) )
@@ -60,8 +64,8 @@ namespace xe_loader
     {
         FREE_DRIVER_LIBRARY( validationLayer );
 
-        for( auto handle : drivers )
-            FREE_DRIVER_LIBRARY( handle );
+        for( auto& drv : drivers )
+            FREE_DRIVER_LIBRARY( drv.handle );
     };
 
     //////////////////////////////////////////////////////////////////////////
