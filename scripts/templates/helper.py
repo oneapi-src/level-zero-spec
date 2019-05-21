@@ -1,6 +1,162 @@
 import re
 
 """
+    Extracts traits from a class name
+"""
+class class_traits:
+
+    @staticmethod
+    def is_global(name, tags):
+        try:
+            return True if name in tags else False
+        except:
+            return False
+
+    @staticmethod
+    def is_namespace(name, namespace, tags):
+        try:
+            return tags[name] == namespace
+        except:
+            return False
+
+"""
+    Extracts traits from a type name
+"""
+class type_traits:
+    RE_HANDLE   = r"(.*)handle_t"
+    RE_POINTER  = r"(.*\w+)\*+"
+    RE_DESC     = r"(.*)desc_t.*"
+
+    @classmethod
+    def is_handle(cls, name):
+        try:
+            return True if re.match(cls.RE_HANDLE, name) else False
+        except:
+            return False
+
+    @classmethod
+    def is_pointer(cls, name):
+        try:
+            return True if re.match(cls.RE_POINTER, name) else False
+        except:
+            return False
+
+    @classmethod
+    def is_descriptor(cls, name):
+        try:
+            return True if re.match(cls.RE_DESC, name) else False
+        except:
+            return False
+
+    @staticmethod
+    def find_class_name(name, meta):
+        try:
+            name = _remove_const_ptr(name)
+            for group in meta:
+                if name in meta[group]:
+                    return meta[group][name]['class']
+            return None
+        except:
+            return None
+
+"""
+    Extracts traits from a value name
+"""
+class value_traits:
+    RE_BIT      = r".*BIT\((.*)\)"
+    RE_MACRO    = r"(\$\w+)\(.*\)"
+    RE_ARRAY    = r"(.*)\[(.*)\]"
+
+    @classmethod
+    def is_bit(cls, name):
+        try:
+            return True if re.match(cls.RE_BIT, name) else False
+        except:
+            return False
+
+    @classmethod
+    def is_macro(cls, name, meta):
+        try:
+            name = re.sub(cls.RE_MACRO, r"\1", name)  # removes '()' part of macros
+            name = re.sub(cls.RE_ARRAY, r"\2", name)  # extracts from '[]' part of arrays
+            return True if name in meta['macro'] else False
+        except:
+            return False
+
+    @classmethod
+    def is_array(cls, name):
+        try:
+            return True if re.match(cls.RE_ARRAY, name) else False
+        except:
+            return False
+
+    @classmethod
+    def find_enum_name(cls, name, meta):
+        try:
+            name = re.sub(cls.RE_ARRAY, r"\1", name) # removes '[]' part of arrays
+            # if the value is an etor, return the name of the enum
+            for e in meta['enum']:
+                if name in meta['enum'][e]['types']:
+                    return e
+            return None
+        except:
+            return None
+
+"""
+    Extracts traits from a parameter object
+"""
+class param_traits:
+    RE_OPTIONAL = r".*\[optional\].*"
+    RE_RANGE    = r".*\[range\((.+),\s*(.+)\)\].*"
+
+    @classmethod
+    def is_optional(cls, item):
+        try:
+            return True if re.match(cls.RE_OPTIONAL, item['desc']) else False
+        except:
+            return False
+
+    @classmethod
+    def is_range(cls, item):
+        try:
+            return True if re.match(cls.RE_RANGE, item['desc']) else False
+        except:
+            return False
+
+    @classmethod
+    def range_start(cls, item):
+        try:
+            return re.sub(cls.RE_RANGE, r"\1", item['desc'])
+        except:
+            return None
+
+    @classmethod
+    def range_end(cls, item):
+        try:
+            return re.sub(cls.RE_RANGE, r"\2", item['desc'])
+        except:
+            return None
+
+"""
+    Extracts traits from a function object
+"""
+class function_traits:
+
+    @staticmethod
+    def is_static(item):
+        try:
+            return True if re.match(r"static", item['decl']) else False
+        except:
+            return False
+
+    @staticmethod
+    def is_global(item, tags):
+        try:
+            return True if item['class'] in tags else False
+        except:
+            return False
+
+"""
 Public:
     substitues each tag['key'] with tag['value']
     if cpp, then remove each tag['key'] if matches namespace
@@ -118,25 +274,6 @@ def extract_objs(specs, value):
 
 """
 Private:
-    returns the type to which value belongs, if it is known
-    i.e. if the value is an etor, return the name of the enum
-"""
-def _convert_value_to_type(value, meta):
-    if meta and '$' in value:
-        value = re.sub(r"(\$\w+)\(.*\)", r"\1", value)  # removes '()' part of macros
-        value = re.sub(r"\w+\[(\$\w+)\]", r"\1", value) # extracts array size '[]' part of types
-        for group in meta:
-            if value in meta[group]:
-                return group, value
-            if 'class' == group:
-                continue
-            for name in meta[group]:
-                if value in meta[group][name]['types']:
-                    return group, name
-    return None, None
-
-"""
-Private:
     removes 'const' from c++ type
 """
 def _remove_const(name):
@@ -154,11 +291,11 @@ def _remove_const_ptr(name):
 """
 Private:
     adds class name to type
-    e.g., "const type*" -> "const cls::type*"
+    e.g., "const type*" -> "const cname::type*"
 """
-def _add_class(name, cls):
+def _add_class(name, cname):
     words = name.split(" ")
-    words[-1] = "%s::%s"%(cls, words[-1])
+    words[-1] = "%s::%s"%(cname, words[-1])
     return " ".join(words)
 
 """
@@ -166,26 +303,12 @@ Private:
     removes class name from type
     e.g., "const cls_type*" -> "const type*"
 """
-def _remove_class(name, cls):
-    if cls:
-        RE_CLS = r"(.*)(%s_)(\w+)"%_camel_to_snake(cls) # remove "cls_" part
+def _remove_class(name, cname):
+    if cname:
+        RE_CLS = r"(.*)(%s_)(\w+)"%_camel_to_snake(cname) # remove "cls_" part
         if re.match(RE_CLS, name):
             name = re.sub(RE_CLS, r"\1\3", name)
     return name
-
-"""
-Private:
-    returns the class to which the type belongs, if it is known
-"""
-def _get_class_of_type(name, meta):
-    if meta and '$' in name:
-        name = _remove_const_ptr(name)
-        for group in meta:
-            if 'class' == group:
-                continue
-            if name in meta[group]:
-                return group, meta[group][name]['class']
-    return None, None
 
 """
 Public:
@@ -207,8 +330,8 @@ def make_type_name(namespace, tags, obj, cpp=False):
 
     # if c++, remove class part of name
     if cpp and 'class' in obj:
-        cls = subt(namespace, tags, obj['class'], cpp=cpp)
-        name = _remove_class(name, cls)
+        cname = subt(namespace, tags, obj['class'], cpp=cpp)
+        name = _remove_class(name, cname)
     return name
 
 """
@@ -231,19 +354,23 @@ Private:
     returns c/c++ name of value
 """
 def _get_value_name(namespace, tags, value, cpp, meta):
-    group, name = _convert_value_to_type(value, meta)
-    if 'macro' == group:
-        value = subt(namespace, tags, value)
-    elif 'enum' == group:
-        # e.g., "ETOR_NAME" -> "ENUM_NAME::ETOR_NAME"
-        enum = subt(namespace, tags, name, cpp=cpp)
-        if cpp:
-            # e.g., "CLS_ENUM_NAME" -> "ENUM_NAME"
-            # todo: this is assuming the cls name is not needed - same cls, same namespace
-            group, cls = _get_class_of_type(name, meta)
-            cls = subt(namespace, tags, cls, cpp=cpp)
-            enum = _remove_class(enum, cls)
-        value = "%s::%s"%(enum, make_etor_name(namespace, tags, name, value, cpp))
+    if cpp:
+        if value_traits.is_macro(value, meta):
+            value = subt(namespace, tags, value)
+        else:
+            name = value_traits.find_enum_name(value, meta)
+            if name:
+                # e.g., "ETOR_NAME" -> "ENUM_NAME::ETOR_NAME"
+                enum = subt(namespace, tags, name, cpp=cpp)
+
+                # e.g., "CLS_ENUM_NAME" -> "ENUM_NAME"
+                # todo: this is assuming the class name is not needed - same class, same namespace
+                cname = type_traits.find_class_name(name, meta)
+                cname = subt(namespace, tags, cname, cpp=cpp)
+                enum = _remove_class(enum, cname)
+                value = "%s::%s"%(enum, make_etor_name(namespace, tags, name, value, cpp))
+            else:
+                value = subt(namespace, tags, value, cpp=cpp)
     else:
         value = subt(namespace, tags, value, cpp=cpp)
     return value
@@ -273,10 +400,10 @@ def make_etor_lines(namespace, tags, obj, cpp=False, meta=None):
 Public:
     returns a list of c++ strings for converting each enumerator in an enumeration to a std::string
 """
-def make_etor_debug_lines(namespace, tags, cls, obj):
+def make_etor_debug_lines(namespace, tags, cname, obj):
     prologue = "%s::"%namespace
-    if cls:
-        prologue += "%s::"%make_class_name(namespace, tags, cls)
+    if cname:
+        prologue += "%s::"%make_class_name(namespace, tags, cname)
     prologue += make_type_name(namespace, tags, obj, cpp=True)
 
     etors = []
@@ -285,8 +412,7 @@ def make_etor_debug_lines(namespace, tags, cls, obj):
         name = make_etor_name(namespace, tags, obj['name'], item['name'], cpp=True)
         etors.append("%s::%s"%(prologue, name))
         if 'value' in item:
-            if re.match(r".*BIT\(.*\)", item['value']):
-                bitfield = True
+            bitfield |= value_traits.is_bit(item['value'])
 
     lines = []
     if bitfield:
@@ -314,31 +440,31 @@ Private:
 def _get_type_name(namespace, tags, obj, item, cpp=False, meta=None):
     name = subt(namespace, tags, item['type'], cpp=cpp)
     if cpp:
-        group, cls = _get_class_of_type(item['type'], meta)
-        is_global = cls in tags
-        is_namespace = is_global and tags[cls] == namespace   # cls == namespace? e.g., cls == "$x"
-        is_handle = re.match(r".*handle_t", item['type'])
+        cname = type_traits.find_class_name(item['type'], meta)
+        if cname:
+            is_global = class_traits.is_global(cname, tags)
+            is_namespace = class_traits.is_namespace(cname, namespace, tags)  # cname == namespace? e.g., cname == "$x"
+            is_handle = type_traits.is_handle(item['type'])
 
-        is_inscope = False
-        if re.match(r"class", obj['type']):     # if the obj _is_ a class
-            is_inscope = cls == obj['name']     #   then is the item's class this obj? 
-        elif 'class' in obj and not is_global:  # else if the obj belongs to a class
-            is_inscope = cls == obj['class']    #   then is the item's class the same as the obj?
+            is_inscope = False
+            if re.match(r"class", obj['type']):     # if the obj _is_ a class
+                is_inscope = cname == obj['name']       # then is the item's class this obj? 
+            elif 'class' in obj and not is_global:  # else if the obj belongs to a class
+                is_inscope = cname == obj['class']      # then is the item's class the same as the obj?
 
-        if cls:
-            cls = subt(namespace, tags, cls, cpp=cpp)   # remove tags from class name
+            cname = subt(namespace, tags, cname, cpp=cpp)   # remove tags from class name
 
             if not (is_global or is_namespace or is_handle or is_inscope):
                 # need to prepend the class name to the type
-                name = _add_class(name, cls)
+                name = _add_class(name, cname)
 
             elif is_handle and not re.match(r"class", obj['type']):
                 # convert handles to class pointers
-                name = "%s*"%cls
+                name = "%s*"%cname
 
             if not is_handle:
                 # remove the verbose class part from the type name
-                name = _remove_class(name, cls)
+                name = _remove_class(name, cname)
 
     return name
 
@@ -384,7 +510,7 @@ def make_member_function_lines(namespace, tags, obj, prefix=""):
     for item in obj['members']:
         name = subt(namespace, tags, item['name'], cpp=True)
 
-        is_pointer = re.match(r".*\w+\*+", item['type'])
+        is_pointer = type_traits.is_pointer(item['type'])
         if is_pointer and re.match(r"p\w+", name):  # if this is a pointer and starts with 'p',
             fname = name[1:].title()                # then remove the 'p' part of the name
         else:
@@ -415,8 +541,8 @@ def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None, for
     lines = []
 
     if cpp:
-        is_static = 'decl' in obj and re.match(r"static", obj['decl'])
-        is_global = 'class' in obj and obj['class'] in tags
+        is_static = function_traits.is_static(obj)
+        is_global = function_traits.is_global(obj, tags)
         if is_static or is_global:
             params = _filter_param_list(obj['params'], ["in", "in,out"])
         else:
@@ -430,13 +556,13 @@ def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None, for
         init = ""
 
         if cpp:
-            is_handle = re.match(r".*handle_t", item['type'])
+            is_handle = type_traits.is_handle(item['type'])
             if is_handle:
                 name = re.sub(r"\bh([A-Z]\w+)", r"p\1", name) # change "hName" to "pName"
 
-            is_optional = re.match(r".*\[optional\].*", item['desc'])
+            is_optional = param_traits.is_optional(item)
             if decl and is_optional:
-                is_pointer = re.match(r".*\w+\*+", item['type'])
+                is_pointer = type_traits.is_pointer(item['type'])
                 if is_pointer or is_handle:
                     init += "= nullptr"
                 else:
@@ -512,8 +638,9 @@ def make_ctor_param_lines(namespace, tags, obj, meta=None):
     for i, item in enumerate(params):
         name = subt(namespace, tags, item['name'])
         tname = _get_type_name(namespace, tags, obj, item, True, meta)
-        if re.match(r"\w*desc_t", tname):
-            tname = "const %s&"%tname
+
+        if type_traits.is_descriptor(tname):
+            tname = "const %s&"%tname # e.g., "xe_event_desc_t*" -> "const desc_t&"
 
         if i < len(params)-1:
             prologue = "%s %s,"%(tname, name)
@@ -610,9 +737,9 @@ def make_param_checks(namespace, tags, obj, comment=False, cpp=False):
     for item in obj['params']:
         is_optional = re.match(r".*\[optional\].*", item['desc'])
         if not is_optional:
-            is_pointer = re.match(r".*\w+\*+", item['type'])
-            is_handle = re.match(r".*handle_t", item['type'])
-            is_desc =re.match(r".*desc_t.*", item['type'])
+            is_pointer = type_traits.is_pointer(item['type'])
+            is_handle = type_traits.is_handle(item['type'])
+            is_desc = type_traits.is_descriptor(item['type'])
 
             if is_pointer:
                 checks[eip].append("nullptr == %s"%subt(namespace, tags, item['name'], comment, cpp))
@@ -689,14 +816,14 @@ def make_return_value(namespace, tags, obj, cpp=False, decl=False, meta=None):
     for p in params:
         tname = _remove_const_ptr(_get_type_name(namespace, tags, obj, p, cpp, meta))
         if cpp:
-            group, cls = _get_class_of_type(p['type'], meta)
-            is_handle = re.match(r".*handle_t", p['type'])
+            cname = type_traits.find_class_name(p['type'], meta)
+            is_handle = type_traits.is_handle(p['type'])
 
-            if cls and not decl and not is_handle:
+            if cname and not decl and not is_handle:
                 # need to prepend the class name to the type
-                tname = _add_class(tname, subt(namespace, tags, cls, cpp=cpp))
+                tname = _add_class(tname, subt(namespace, tags, cname, cpp=cpp))
 
-            elif cls and is_handle:
+            elif cname and is_handle:
                 # convert handles to class pointers
                 tname = _remove_const(_get_type_name(namespace, tags, obj, p, cpp, meta))
 
@@ -714,10 +841,10 @@ Public:
 """
 def make_func_name(namespace, tags, obj, cpp=False):
     if not cpp and 'class' in obj:
-        cls = obj['class']
+        cname = obj['class']
     else:
-        cls = ""
-    return subt(namespace, tags, "%s%s"%(cls, obj['name']), cpp=cpp)
+        cname = ""
+    return subt(namespace, tags, "%s%s"%(cname, obj['name']), cpp=cpp)
 
 """
 Public:
@@ -768,12 +895,12 @@ def make_baseclass_ctor(namespace, tags, obj):
 Public:
     returns a list of all function objs for the specified class
 """
-def get_class_function_objs(specs, cls):
+def get_class_function_objs(specs, cname):
     buckets = dict() # bucket per function ordinals
     for s in specs:
         for obj in s['objects']:
             is_function = re.match("function", obj['type'])
-            match_cls = 'class' in obj and cls == obj['class']
+            match_cls = 'class' in obj and cname == obj['class']
             if is_function and match_cls:
                 # append to bucket
                 ordinal = obj['ordinal'] if 'ordinal' in obj else '9999'
@@ -792,10 +919,10 @@ Public:
 """
 def get_table_name(namespace, tags, obj):
     if 'class' in obj:
-        cls = obj['class']
+        cname = obj['class']
     else:
-        cls = ""
-    name = subt(namespace, tags, cls, cpp=True) # i.e., "$x" -> ""
+        cname = ""
+    name = subt(namespace, tags, cname, cpp=True) # i.e., "$x" -> ""
     name = name if len(name) > 0 else "Global"
     return name
 
@@ -805,10 +932,10 @@ Public:
 """
 def get_pfntables(specs, meta, namespace, tags):
     tables = []
-    for cls in sorted(meta['class'], key=lambda x: meta['class'][x]['ordinal']):
-        objs = get_class_function_objs(specs, cls)
+    for cname in sorted(meta['class'], key=lambda x: meta['class'][x]['ordinal']):
+        objs = get_class_function_objs(specs, cname)
         if len(objs) > 0:
-            name = get_table_name(namespace, tags, {'class': cls})
+            name = get_table_name(namespace, tags, {'class': cname})
             table = "%s_%s_dditable_t"%(namespace, _camel_to_snake(name))
 
             params = []
@@ -853,22 +980,19 @@ def make_loader_prologue_lines(namespace, tags, obj, meta, loader):
 
     params = _filter_param_list(obj['params'], ["in"])
     for i, item in enumerate(params):
-        is_handle = re.match(r".*_handle_t", item['type'])
+        is_handle = type_traits.is_handle(item['type'])
+        cname = type_traits.find_class_name(item['type'], meta)
 
-        tname = _remove_const_ptr(item['type'])
-        cls = meta['handle'][tname]['class'] if is_handle and tname in meta['handle'] else ""
-
-        if is_handle and len(cls) > 0:
+        if is_handle and cname:
             name = subt(namespace, tags, item['name'])
             tname = _remove_const_ptr(subt(namespace, tags, item['type']))
 
+            # e.g., "$x_device_handle_t" -> "xet_device_object_t"
             obj_name = re.sub(r"^[^_]+_(\w+)", r"%s_\1"%namespace, re.sub(r"(\w+)_handle_t", r"\1_object_t", tname))
 
-            is_pointer = re.match(r".*\w+\*+", item['type'])
-            if is_pointer:
-                RE_RANGE = r".*\[range\((.+),\s*(.+)\)\].*"
-                range_start = re.sub(RE_RANGE, r"\1", item['desc'])
-                range_end   = re.sub(RE_RANGE, r"\2", item['desc'])
+            if type_traits.is_pointer(item['type']):
+                range_start = param_traits.range_start(item)
+                range_end   = param_traits.range_end(item)
                 lines.append("for( size_t i = %s; ( nullptr != %s ) && ( i < %s ); ++i )"%(range_start, name, range_end))
                 lines.append("    %s[ i ] = std::get<0>( *reinterpret_cast<%s*>( %s[ i ] ) );"%(name, obj_name, name))
             else:
@@ -896,21 +1020,18 @@ def make_loader_epilogue_lines(namespace, tags, obj, meta):
 
     params = _filter_param_list(obj['params'], ["out"])
     for i, item in enumerate(params):
-        is_handle = re.match(r".*_handle_t", item['type'])
+        is_handle = type_traits.is_handle(item['type'])
+        cname = type_traits.find_class_name(item['type'], meta)
 
-        tname = _remove_const_ptr(item['type'])
-        hcls = meta['handle'][tname]['class'] if is_handle and tname in meta['handle'] else ""
-
-        if is_handle and len(hcls) > 0:
+        if is_handle and cname:
             name = subt(namespace, tags, item['name'])
             tname = _remove_const_ptr(subt(namespace, tags, item['type']))
 
             obj_name = re.sub(r"^[^_]+_(\w+)", r"%s_\1"%namespace, re.sub(r"(\w+)_handle_t", r"\1_object_t", tname))
 
-            RE_RANGE = r".*\[range\((.+),\s*(.+)\)\].*"
-            if re.match(RE_RANGE, item['desc']):
-                range_start = re.sub(RE_RANGE, r"\1", item['desc'])
-                range_end   = re.sub(RE_RANGE, r"\2", item['desc'])
+            if param_traits.is_range(item):
+                range_start = param_traits.range_start(item)
+                range_end   = param_traits.range_end(item)
                 lines.append("for( size_t i = %s; ( nullptr != %s ) && ( i < %s ); ++i )"%(range_start, name, range_end))
                 lines.append("    %s[ i ] = reinterpret_cast<%s>( new %s( %s[ i ], nullptr ) );"%(name, tname, obj_name, name))
 
