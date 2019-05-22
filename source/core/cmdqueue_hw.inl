@@ -1,5 +1,6 @@
 #include "cmdlist.h"
 #include "cmdqueue_hw.h"
+#include "fence.h"
 #include "graphics_allocation.h"
 #include "runtime/command_stream/command_stream_receiver.h"
 #include "runtime/command_stream/linear_stream.h"
@@ -11,7 +12,8 @@ namespace L0 {
 template <GFXCORE_FAMILY gfxCoreFamily>
 xe_result_t CommandQueueHw<gfxCoreFamily>::createFence(const xe_fence_desc_t *desc,
                                                        xe_fence_handle_t *phFence) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
+    *phFence = Fence::create(this, desc);
+    return XE_RESULT_SUCCESS;
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily> xe_result_t CommandQueueHw<gfxCoreFamily>::destroy() {
