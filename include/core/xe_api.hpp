@@ -32,6 +32,7 @@
 #if defined(__cplusplus)
 #pragma once
 
+#include "xe_common.hpp"
 #include "xe_driver.hpp"
 #include "xe_device.hpp"
 #include "xe_cmdqueue.hpp"

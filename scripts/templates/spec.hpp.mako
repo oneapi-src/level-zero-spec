@@ -72,8 +72,6 @@ def declare_dbg(obj, tags):
 %if x != n:
 #include "${x}_api.hpp"
 %endif
-%else:
-#include "${n}_common.hpp"
 %endif
 %for item in header['includes']:
 #include "${re.sub(r"\$h", "hpp", th.subt(n, tags, item))}"

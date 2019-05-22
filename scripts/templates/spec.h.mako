@@ -52,8 +52,6 @@ from templates import helper as th
 %if x != n:
 #include "${x}_api.h"
 %endif
-%else:
-#include "${n}_common.h"
 %endif
 %for item in header['includes']:
 #include "${re.sub(r"\$h", "h", th.subt(n, tags, item))}"

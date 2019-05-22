@@ -38,9 +38,7 @@ import re
 #pragma once
 
 %for f in files:
-%if not re.match(r"\w+_common", f):
 #include "${f}"
-%endif
 %endfor
 
 #endif // defined(__cplusplus)

@@ -33,6 +33,7 @@
 #pragma once
 #endif
 
+#include "xe_common.h"
 #include "xe_driver.h"
 #include "xe_device.h"
 #include "xe_cmdqueue.h"

@@ -33,6 +33,7 @@
 #pragma once
 #endif
 
+#include "xet_common.h"
 #include "xet_driver.h"
 #include "xet_device.h"
 #include "xet_cmdlist.h"

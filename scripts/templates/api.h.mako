@@ -43,9 +43,7 @@ from templates import helper as th
 #endif
 
 %for f in files:
-%if not re.match(r"\w+_common", f):
 #include "${f}"
-%endif
 %endfor
 
 #endif // _${N}_API_H

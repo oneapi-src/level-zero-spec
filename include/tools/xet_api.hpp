@@ -32,6 +32,7 @@
 #if defined(__cplusplus)
 #pragma once
 
+#include "xet_common.hpp"
 #include "xet_driver.hpp"
 #include "xet_device.hpp"
 #include "xet_cmdlist.hpp"

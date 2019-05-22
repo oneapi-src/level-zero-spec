@@ -38,7 +38,6 @@
 #if !defined(_XE_API_H)
 #pragma message("warning: this file is not intended to be included directly")
 #endif
-#include "xe_common.h"
 
 #if defined(__cplusplus)
 extern "C" {
