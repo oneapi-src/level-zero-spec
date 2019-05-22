@@ -62,19 +62,19 @@ ${tbl['export']['name']}(
     %endfor
     )
 {
-    if( ${x}_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return ${X}_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return ${X}_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( ${x}_loader::loader.version < version )
+    if( loader.version < version )
         return ${X}_RESULT_ERROR_UNSUPPORTED;
 
     ${x}_result_t result = ${X}_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : ${x}_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( ${X}_RESULT_SUCCESS == result )
         {
@@ -86,7 +86,7 @@ ${tbl['export']['name']}(
 
     if( ${X}_RESULT_SUCCESS == result )
     {
-        if( ${x}_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             %for obj in tbl['functions']:
@@ -102,15 +102,15 @@ ${tbl['export']['name']}(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = ${x}_loader::loader.drivers.front().${n}DdiTable.${tbl['name']};
+            *pDdiTable = loader.drivers.front().${n}DdiTable.${tbl['name']};
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( ${X}_RESULT_SUCCESS == result ) && ( nullptr != ${x}_loader::loader.validationLayer ))
+    if(( ${X}_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<${tbl['pfn']}>(
-            GET_FUNCTION_PTR(${x}_loader::loader.validationLayer, "${tbl['export']['name']}") );
+            GET_FUNCTION_PTR(loader.validationLayer, "${tbl['export']['name']}") );
         result = getTable( version, pDdiTable );
     }
 
@@ -133,7 +133,7 @@ ${th.make_func_name(n, tags, obj)}(
 {
     %if re.match(r"Global.*", th.get_table_name(n, tags, obj)):
     // global functions need to be handled manually by the loader
-    auto result = ${x}_loader::loader.${th.make_func_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
+    auto result = loader.${th.make_func_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
 
     %else:
     %for i, item in enumerate(th.get_loader_prologue(n, tags, obj, meta)):
@@ -167,13 +167,17 @@ ${th.make_func_name(n, tags, obj)}(
     %if 'range' in item:
     // convert driver handles to loader handles
     for( size_t i = ${item['range'][0]}; ( nullptr != ${item['name']} ) && ( i < ${item['range'][1]} ); ++i )
-        ${item['name']}[ i ] = reinterpret_cast<${item['type']}>( ${item['obj']}::factory.get( ${item['name']}[ i ], dditable ) );
+        ${item['name']}[ i ] = reinterpret_cast<${item['type']}>(
+            ${item['obj']}::factory.get( ${item['name']}[ i ], dditable ) );
     %else:
     // convert driver handle to loader handle
     %if item['optional']:
-    if( nullptr != ${item['name']} ) *${item['name']} = reinterpret_cast<${item['type']}>( ${item['obj']}::factory.get( *${item['name']}, dditable ) );
+    if( nullptr != ${item['name']} )
+        *${item['name']} = reinterpret_cast<${item['type']}>(
+            ${item['obj']}::factory.get( *${item['name']}, dditable ) );
     %else:
-    *${item['name']} = reinterpret_cast<${item['type']}>( ${item['obj']}::factory.get( *${item['name']}, dditable ) );
+    *${item['name']} = reinterpret_cast<${item['type']}>(
+        ${item['obj']}::factory.get( *${item['name']}, dditable ) );
     %endif
     %endif
     %endif
@@ -185,6 +189,7 @@ ${th.make_func_name(n, tags, obj)}(
 %if 'condition' in obj:
 #endif // ${th.subt(n, tags, obj['condition'])}
 %endif
+
 %endfor
 #if defined(__cplusplus)
 };

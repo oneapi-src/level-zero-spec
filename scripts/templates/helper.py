@@ -1035,7 +1035,7 @@ def get_loader_epilogue(namespace, tags, obj, meta):
     if is_destroy_function:
         params = _filter_param_list(obj['params'], ["in"])
     else:
-        params = _filter_param_list(obj['params'], ["out"])
+        params = _filter_param_list(obj['params'], ["in,out", "out"])
 
     for i, item in enumerate(params):
         is_handle = type_traits.is_handle(item['type'])

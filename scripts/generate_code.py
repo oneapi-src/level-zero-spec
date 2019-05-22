@@ -153,10 +153,35 @@ def mako_loader_cpp(path, section, namespace, tags, specs, meta):
 """
 def mako_validation_layer_cpp(path, section, namespace, tags, specs, meta):
     dstpath = os.path.join(path, "validation")
+    util.makePath(dstpath)
+
     template = "valddi.cpp.mako"
     fin = os.path.join("templates", template)
 
     name = "%s_%s_layer"%(tags['$x'], section)
+    filename = "%s.cpp"%(name)
+    fout = os.path.join(dstpath, filename)
+
+    print("Generating %s..."%fout)
+    return util.makoWrite(
+        fin, fout,
+        name=name,
+        namespace=namespace,
+        tags=tags,
+        specs=specs,
+        meta=meta)
+
+"""
+    generates c/c++ files from the specification documents
+"""
+def mako_null_driver_cpp(path, section, namespace, tags, specs, meta):
+    dstpath = os.path.join(path, "null")
+    util.makePath(dstpath)
+
+    template = "nullddi.cpp.mako"
+    fin = os.path.join("templates", template)
+
+    name = "%s_%s_driver"%(tags['$x'], section)
     filename = "%s.cpp"%(name)
     fout = os.path.join(dstpath, filename)
 
@@ -233,7 +258,7 @@ def generate_loader(path, section, namespace, tags, specs, meta):
 
 """
 Entry-point:
-    generates validation layer for level_zero driver
+    generates layers for level_zero driver
 """
 def generate_layers(path, section, namespace, tags, specs, meta):
     dstpath = os.path.join(path, "layers")
@@ -241,5 +266,5 @@ def generate_layers(path, section, namespace, tags, specs, meta):
 
     loc = 0
     loc += mako_validation_layer_cpp(dstpath, section, namespace, tags, specs, meta)
+    loc += mako_null_driver_cpp(dstpath, section, namespace, tags, specs, meta)
     return loc
-

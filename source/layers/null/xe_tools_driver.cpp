@@ -21,14 +21,14 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_tools_layer.cpp
+* @file xe_tools_driver.cpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/valddi.cpp.mako
+* DO NOT EDIT: generated from /scripts/templates/nullddi.cpp.mako
 * @endcond
 *
 ******************************************************************************/
-#include "xe_layer.h"
+#include "xe_null.h"
 
 #if defined(__cplusplus)
 extern "C" {
@@ -51,17 +51,14 @@ xetGetGlobalProcAddrTable(
     xet_global_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xetDdiTable.Global;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnInit                                     = pDdiTable->pfnInit;
     pDdiTable->pfnInit                                   = xetInit;
 
     return result;
@@ -84,17 +81,14 @@ xetGetDeviceProcAddrTable(
     xet_device_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xetDdiTable.Device;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnActivateMetricGroups                     = pDdiTable->pfnActivateMetricGroups;
     pDdiTable->pfnActivateMetricGroups                   = xetDeviceActivateMetricGroups;
 
     return result;
@@ -117,26 +111,20 @@ xetGetCommandListProcAddrTable(
     xet_command_list_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xetDdiTable.CommandList;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnAppendMetricTracerMarker                 = pDdiTable->pfnAppendMetricTracerMarker;
     pDdiTable->pfnAppendMetricTracerMarker               = xetCommandListAppendMetricTracerMarker;
 
-    dditable.pfnAppendMetricQueryBegin                   = pDdiTable->pfnAppendMetricQueryBegin;
     pDdiTable->pfnAppendMetricQueryBegin                 = xetCommandListAppendMetricQueryBegin;
 
-    dditable.pfnAppendMetricQueryEnd                     = pDdiTable->pfnAppendMetricQueryEnd;
     pDdiTable->pfnAppendMetricQueryEnd                   = xetCommandListAppendMetricQueryEnd;
 
-    dditable.pfnAppendMetricMemoryBarrier                = pDdiTable->pfnAppendMetricMemoryBarrier;
     pDdiTable->pfnAppendMetricMemoryBarrier              = xetCommandListAppendMetricMemoryBarrier;
 
     return result;
@@ -159,26 +147,20 @@ xetGetMetricGroupProcAddrTable(
     xet_metric_group_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xetDdiTable.MetricGroup;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnGetCount                                 = pDdiTable->pfnGetCount;
     pDdiTable->pfnGetCount                               = xetMetricGroupGetCount;
 
-    dditable.pfnGet                                      = pDdiTable->pfnGet;
     pDdiTable->pfnGet                                    = xetMetricGroupGet;
 
-    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
     pDdiTable->pfnGetProperties                          = xetMetricGroupGetProperties;
 
-    dditable.pfnCalculateData                            = pDdiTable->pfnCalculateData;
     pDdiTable->pfnCalculateData                          = xetMetricGroupCalculateData;
 
     return result;
@@ -201,20 +183,16 @@ xetGetMetricProcAddrTable(
     xet_metric_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xetDdiTable.Metric;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnGet                                      = pDdiTable->pfnGet;
     pDdiTable->pfnGet                                    = xetMetricGet;
 
-    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
     pDdiTable->pfnGetProperties                          = xetMetricGetProperties;
 
     return result;
@@ -237,23 +215,18 @@ xetGetMetricTracerProcAddrTable(
     xet_metric_tracer_dditable_t* pDdiTable         ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xetDdiTable.MetricTracer;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnOpen                                     = pDdiTable->pfnOpen;
     pDdiTable->pfnOpen                                   = xetMetricTracerOpen;
 
-    dditable.pfnClose                                    = pDdiTable->pfnClose;
     pDdiTable->pfnClose                                  = xetMetricTracerClose;
 
-    dditable.pfnReadData                                 = pDdiTable->pfnReadData;
     pDdiTable->pfnReadData                               = xetMetricTracerReadData;
 
     return result;
@@ -276,23 +249,18 @@ xetGetMetricQueryPoolProcAddrTable(
     xet_metric_query_pool_dditable_t* pDdiTable     ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xetDdiTable.MetricQueryPool;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
     pDdiTable->pfnCreate                                 = xetMetricQueryPoolCreate;
 
-    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
     pDdiTable->pfnDestroy                                = xetMetricQueryPoolDestroy;
 
-    dditable.pfnGetMetricQuery                           = pDdiTable->pfnGetMetricQuery;
     pDdiTable->pfnGetMetricQuery                         = xetMetricQueryPoolGetMetricQuery;
 
     return result;
@@ -315,17 +283,14 @@ xetGetMetricQueryProcAddrTable(
     xet_metric_query_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xetDdiTable.MetricQuery;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnGetData                                  = pDdiTable->pfnGetData;
     pDdiTable->pfnGetData                                = xetMetricQueryGetData;
 
     return result;
@@ -348,101 +313,70 @@ xetGetPowerProcAddrTable(
     xet_power_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xetDdiTable.Power;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
     pDdiTable->pfnCreate                                 = xetPowerCreate;
 
-    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
     pDdiTable->pfnDestroy                                = xetPowerDestroy;
 
-    dditable.pfnGetAveragePowerLimit                     = pDdiTable->pfnGetAveragePowerLimit;
     pDdiTable->pfnGetAveragePowerLimit                   = xetPowerGetAveragePowerLimit;
 
-    dditable.pfnGetBurstPowerLimit                       = pDdiTable->pfnGetBurstPowerLimit;
     pDdiTable->pfnGetBurstPowerLimit                     = xetPowerGetBurstPowerLimit;
 
-    dditable.pfnGetPeakPowerLimit                        = pDdiTable->pfnGetPeakPowerLimit;
     pDdiTable->pfnGetPeakPowerLimit                      = xetPowerGetPeakPowerLimit;
 
-    dditable.pfnGetAllPowerLimits                        = pDdiTable->pfnGetAllPowerLimits;
     pDdiTable->pfnGetAllPowerLimits                      = xetPowerGetAllPowerLimits;
 
-    dditable.pfnGetDefaultPowerLimits                    = pDdiTable->pfnGetDefaultPowerLimits;
     pDdiTable->pfnGetDefaultPowerLimits                  = xetPowerGetDefaultPowerLimits;
 
-    dditable.pfnSetAveragePowerLimit                     = pDdiTable->pfnSetAveragePowerLimit;
     pDdiTable->pfnSetAveragePowerLimit                   = xetPowerSetAveragePowerLimit;
 
-    dditable.pfnSetBurstPowerLimit                       = pDdiTable->pfnSetBurstPowerLimit;
     pDdiTable->pfnSetBurstPowerLimit                     = xetPowerSetBurstPowerLimit;
 
-    dditable.pfnSetPeakPowerLimit                        = pDdiTable->pfnSetPeakPowerLimit;
     pDdiTable->pfnSetPeakPowerLimit                      = xetPowerSetPeakPowerLimit;
 
-    dditable.pfnSetPowerLimits                           = pDdiTable->pfnSetPowerLimits;
     pDdiTable->pfnSetPowerLimits                         = xetPowerSetPowerLimits;
 
-    dditable.pfnGetEnergyCounter                         = pDdiTable->pfnGetEnergyCounter;
     pDdiTable->pfnGetEnergyCounter                       = xetPowerGetEnergyCounter;
 
-    dditable.pfnGetTurboMode                             = pDdiTable->pfnGetTurboMode;
     pDdiTable->pfnGetTurboMode                           = xetPowerGetTurboMode;
 
-    dditable.pfnSetTurboMode                             = pDdiTable->pfnSetTurboMode;
     pDdiTable->pfnSetTurboMode                           = xetPowerSetTurboMode;
 
-    dditable.pfnGetFreqDomainCount                       = pDdiTable->pfnGetFreqDomainCount;
     pDdiTable->pfnGetFreqDomainCount                     = xetPowerGetFreqDomainCount;
 
-    dditable.pfnGetFreqDomain                            = pDdiTable->pfnGetFreqDomain;
     pDdiTable->pfnGetFreqDomain                          = xetPowerGetFreqDomain;
 
-    dditable.pfnFanCount                                 = pDdiTable->pfnFanCount;
     pDdiTable->pfnFanCount                               = xetPowerFanCount;
 
-    dditable.pfnFanGetProperties                         = pDdiTable->pfnFanGetProperties;
     pDdiTable->pfnFanGetProperties                       = xetPowerFanGetProperties;
 
-    dditable.pfnFanGetSpeedTable                         = pDdiTable->pfnFanGetSpeedTable;
     pDdiTable->pfnFanGetSpeedTable                       = xetPowerFanGetSpeedTable;
 
-    dditable.pfnFanSetSpeedTable                         = pDdiTable->pfnFanSetSpeedTable;
     pDdiTable->pfnFanSetSpeedTable                       = xetPowerFanSetSpeedTable;
 
-    dditable.pfnFanGetSpeed                              = pDdiTable->pfnFanGetSpeed;
     pDdiTable->pfnFanGetSpeed                            = xetPowerFanGetSpeed;
 
-    dditable.pfnFanSetSpeed                              = pDdiTable->pfnFanSetSpeed;
     pDdiTable->pfnFanSetSpeed                            = xetPowerFanSetSpeed;
 
-    dditable.pfnTemperatureSensorCount                   = pDdiTable->pfnTemperatureSensorCount;
     pDdiTable->pfnTemperatureSensorCount                 = xetPowerTemperatureSensorCount;
 
-    dditable.pfnGetTemperatureProperties                 = pDdiTable->pfnGetTemperatureProperties;
     pDdiTable->pfnGetTemperatureProperties               = xetPowerGetTemperatureProperties;
 
-    dditable.pfnGetTemperature                           = pDdiTable->pfnGetTemperature;
     pDdiTable->pfnGetTemperature                         = xetPowerGetTemperature;
 
-    dditable.pfnSetTemperatureThreshold                  = pDdiTable->pfnSetTemperatureThreshold;
     pDdiTable->pfnSetTemperatureThreshold                = xetPowerSetTemperatureThreshold;
 
-    dditable.pfnActivityCount                            = pDdiTable->pfnActivityCount;
     pDdiTable->pfnActivityCount                          = xetPowerActivityCount;
 
-    dditable.pfnGetActivityProperties                    = pDdiTable->pfnGetActivityProperties;
     pDdiTable->pfnGetActivityProperties                  = xetPowerGetActivityProperties;
 
-    dditable.pfnGetActivityCounters                      = pDdiTable->pfnGetActivityCounters;
     pDdiTable->pfnGetActivityCounters                    = xetPowerGetActivityCounters;
 
     return result;
@@ -465,38 +399,28 @@ xetGetFreqDomainProcAddrTable(
     xet_freq_domain_dditable_t* pDdiTable           ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xetDdiTable.FreqDomain;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
     pDdiTable->pfnGetProperties                          = xetFreqDomainGetProperties;
 
-    dditable.pfnGetSourceFreqDomain                      = pDdiTable->pfnGetSourceFreqDomain;
     pDdiTable->pfnGetSourceFreqDomain                    = xetFreqDomainGetSourceFreqDomain;
 
-    dditable.pfnGetSupportedClocks                       = pDdiTable->pfnGetSupportedClocks;
     pDdiTable->pfnGetSupportedClocks                     = xetFreqDomainGetSupportedClocks;
 
-    dditable.pfnGetSupportedClockDividers                = pDdiTable->pfnGetSupportedClockDividers;
     pDdiTable->pfnGetSupportedClockDividers              = xetFreqDomainGetSupportedClockDividers;
 
-    dditable.pfnGetClockRange                            = pDdiTable->pfnGetClockRange;
     pDdiTable->pfnGetClockRange                          = xetFreqDomainGetClockRange;
 
-    dditable.pfnSetClockRange                            = pDdiTable->pfnSetClockRange;
     pDdiTable->pfnSetClockRange                          = xetFreqDomainSetClockRange;
 
-    dditable.pfnSetClockDivider                          = pDdiTable->pfnSetClockDivider;
     pDdiTable->pfnSetClockDivider                        = xetFreqDomainSetClockDivider;
 
-    dditable.pfnGetCurrentFrequency                      = pDdiTable->pfnGetCurrentFrequency;
     pDdiTable->pfnGetCurrentFrequency                    = xetFreqDomainGetCurrentFrequency;
 
     return result;
@@ -509,16 +433,12 @@ xetInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    auto pfnInit = validation.xetDdiTable.Global.pfnInit;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnInit )
-        return XE_RESULT_ERROR_UNSUPPORTED;
+    // global functions need to be handled manually by the driver
+    result = driver.xetInit( flags );
 
-    if( validation.enableParameterValidation )
-    {
-    }
-
-    return pfnInit( flags );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -529,22 +449,9 @@ xetMetricGroupGetCount(
     uint32_t* pCount                                ///< [out] number of metric groups supported by the device
     )
 {
-    auto pfnGetCount = validation.xetDdiTable.MetricGroup.pfnGetCount;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetCount )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pCount )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetCount( hDevice, pCount );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -556,22 +463,10 @@ xetMetricGroupGet(
     xet_metric_group_handle_t* phMetricGroup        ///< [out] metric group handle
     )
 {
-    auto pfnGet = validation.xetDdiTable.MetricGroup.pfnGet;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGet )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phMetricGroup )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGet( hDevice, ordinal, phMetricGroup );
+    *phMetricGroup = reinterpret_cast<xet_metric_group_handle_t>( driver.get() );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -582,22 +477,9 @@ xetMetricGroupGetProperties(
     xet_metric_group_properties_t* pProperties      ///< [out] metric group properties
     )
 {
-    auto pfnGetProperties = validation.xetDdiTable.MetricGroup.pfnGetProperties;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetProperties )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hMetricGroup )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pProperties )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetProperties( hMetricGroup, pProperties );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -609,22 +491,10 @@ xetMetricGet(
     xet_metric_handle_t* phMetric                   ///< [out] handle of metric
     )
 {
-    auto pfnGet = validation.xetDdiTable.Metric.pfnGet;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGet )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hMetricGroup )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phMetric )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGet( hMetricGroup, ordinal, phMetric );
+    *phMetric = reinterpret_cast<xet_metric_handle_t>( driver.get() );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -635,22 +505,9 @@ xetMetricGetProperties(
     xet_metric_properties_t* pProperties            ///< [out] metric properties
     )
 {
-    auto pfnGetProperties = validation.xetDdiTable.Metric.pfnGetProperties;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetProperties )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hMetric )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pProperties )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetProperties( hMetric, pProperties );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -665,28 +522,9 @@ xetMetricGroupCalculateData(
     xet_typed_value_t* pCalculatedData              ///< [in,out] calculated metrics
     )
 {
-    auto pfnCalculateData = validation.xetDdiTable.MetricGroup.pfnCalculateData;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnCalculateData )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hMetricGroup )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pReportCount )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pRawData )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pCalculatedData )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnCalculateData( hMetricGroup, pReportCount, rawDataSize, pRawData, calculatedDataSize, pCalculatedData );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -699,22 +537,9 @@ xetDeviceActivateMetricGroups(
                                                     ///< to deactivate.
     )
 {
-    auto pfnActivateMetricGroups = validation.xetDdiTable.Device.pfnActivateMetricGroups;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnActivateMetricGroups )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phMetricGroups )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnActivateMetricGroups( hDevice, count, phMetricGroups );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -728,31 +553,10 @@ xetMetricTracerOpen(
     xet_metric_tracer_handle_t* phMetricTracer      ///< [out] handle of metric tracer
     )
 {
-    auto pfnOpen = validation.xetDdiTable.MetricTracer.pfnOpen;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnOpen )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pDesc )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hNotificationEvent )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phMetricTracer )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( XET_METRIC_TRACER_DESC_VERSION_CURRENT < pDesc->version )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-    }
-
-    return pfnOpen( hDevice, pDesc, hNotificationEvent, phMetricTracer );
+    *phMetricTracer = reinterpret_cast<xet_metric_tracer_handle_t>( driver.get() );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -764,22 +568,9 @@ xetCommandListAppendMetricTracerMarker(
     uint32_t value                                  ///< [in] tracer marker value
     )
 {
-    auto pfnAppendMetricTracerMarker = validation.xetDdiTable.CommandList.pfnAppendMetricTracerMarker;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAppendMetricTracerMarker )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hMetricTracer )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAppendMetricTracerMarker( hCommandList, hMetricTracer, value );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -789,19 +580,9 @@ xetMetricTracerClose(
     xet_metric_tracer_handle_t hMetricTracer        ///< [in] handle of the metric tracer
     )
 {
-    auto pfnClose = validation.xetDdiTable.MetricTracer.pfnClose;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnClose )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hMetricTracer )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnClose( hMetricTracer );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -814,25 +595,9 @@ xetMetricTracerReadData(
     uint8_t* pRawData                               ///< [in,out] raw data buffer for reports
     )
 {
-    auto pfnReadData = validation.xetDdiTable.MetricTracer.pfnReadData;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnReadData )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hMetricTracer )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pReportCount )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pRawData )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnReadData( hMetricTracer, pReportCount, rawDataSize, pRawData );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -844,28 +609,10 @@ xetMetricQueryPoolCreate(
     xet_metric_query_pool_handle_t* phMetricQueryPool   ///< [out] handle of metric query pool
     )
 {
-    auto pfnCreate = validation.xetDdiTable.MetricQueryPool.pfnCreate;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnCreate )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pDesc )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phMetricQueryPool )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( XET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT < pDesc->version )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-    }
-
-    return pfnCreate( hDevice, pDesc, phMetricQueryPool );
+    *phMetricQueryPool = reinterpret_cast<xet_metric_query_pool_handle_t>( driver.get() );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -875,19 +622,9 @@ xetMetricQueryPoolDestroy(
     xet_metric_query_pool_handle_t hMetricQueryPool ///< [in] handle of the metric query pool
     )
 {
-    auto pfnDestroy = validation.xetDdiTable.MetricQueryPool.pfnDestroy;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnDestroy )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hMetricQueryPool )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnDestroy( hMetricQueryPool );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -899,22 +636,10 @@ xetMetricQueryPoolGetMetricQuery(
     xet_metric_query_handle_t* phMetricQuery        ///< [out] handle of metric query
     )
 {
-    auto pfnGetMetricQuery = validation.xetDdiTable.MetricQueryPool.pfnGetMetricQuery;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetMetricQuery )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hMetricQueryPool )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phMetricQuery )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetMetricQuery( hMetricQueryPool, ordinal, phMetricQuery );
+    *phMetricQuery = reinterpret_cast<xet_metric_query_handle_t>( driver.get() );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -925,22 +650,9 @@ xetCommandListAppendMetricQueryBegin(
     xet_metric_query_handle_t hMetricQuery          ///< [in] handle of the metric query
     )
 {
-    auto pfnAppendMetricQueryBegin = validation.xetDdiTable.CommandList.pfnAppendMetricQueryBegin;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAppendMetricQueryBegin )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hMetricQuery )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAppendMetricQueryBegin( hCommandList, hMetricQuery );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -952,25 +664,9 @@ xetCommandListAppendMetricQueryEnd(
     xe_event_handle_t hCompletionEvent              ///< [in] handle of the completion event to signal
     )
 {
-    auto pfnAppendMetricQueryEnd = validation.xetDdiTable.CommandList.pfnAppendMetricQueryEnd;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAppendMetricQueryEnd )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hMetricQuery )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hCompletionEvent )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -980,19 +676,9 @@ xetCommandListAppendMetricMemoryBarrier(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
 {
-    auto pfnAppendMetricMemoryBarrier = validation.xetDdiTable.CommandList.pfnAppendMetricMemoryBarrier;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAppendMetricMemoryBarrier )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAppendMetricMemoryBarrier( hCommandList );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1005,25 +691,9 @@ xetMetricQueryGetData(
     uint8_t* pRawData                               ///< [in,out] query result data in raw format
     )
 {
-    auto pfnGetData = validation.xetDdiTable.MetricQuery.pfnGetData;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetData )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hMetricQuery )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pReportCount )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pRawData )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetData( hMetricQuery, pReportCount, rawDataSize, pRawData );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1035,22 +705,10 @@ xetPowerCreate(
     xet_power_handle_t* pPowerHandle                ///< [out] handle for accessing power features of the device
     )
 {
-    auto pfnCreate = validation.xetDdiTable.Power.pfnCreate;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnCreate )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pPowerHandle )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnCreate( hDevice, flags, pPowerHandle );
+    *pPowerHandle = reinterpret_cast<xet_power_handle_t>( driver.get() );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1060,19 +718,9 @@ xetPowerDestroy(
     xet_power_handle_t hPower                       ///< [in] handle of the power object to destroy
     )
 {
-    auto pfnDestroy = validation.xetDdiTable.Power.pfnDestroy;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnDestroy )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnDestroy( hPower );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1083,22 +731,9 @@ xetPowerGetAveragePowerLimit(
     xet_power_average_limit_t* pLimit               ///< [out] information about the average power limit
     )
 {
-    auto pfnGetAveragePowerLimit = validation.xetDdiTable.Power.pfnGetAveragePowerLimit;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetAveragePowerLimit )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pLimit )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetAveragePowerLimit( hPower, pLimit );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1109,22 +744,9 @@ xetPowerGetBurstPowerLimit(
     xet_power_burst_limit_t* pLimit                 ///< [out] information about the burst power limit
     )
 {
-    auto pfnGetBurstPowerLimit = validation.xetDdiTable.Power.pfnGetBurstPowerLimit;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetBurstPowerLimit )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pLimit )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetBurstPowerLimit( hPower, pLimit );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1135,22 +757,9 @@ xetPowerGetPeakPowerLimit(
     xet_power_peak_limit_t* pLimit                  ///< [out] information about the peak power limit
     )
 {
-    auto pfnGetPeakPowerLimit = validation.xetDdiTable.Power.pfnGetPeakPowerLimit;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetPeakPowerLimit )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pLimit )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetPeakPowerLimit( hPower, pLimit );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1161,22 +770,9 @@ xetPowerGetAllPowerLimits(
     xet_power_limits_t* pLimits                     ///< [out] information about the average/burst/peak power limits
     )
 {
-    auto pfnGetAllPowerLimits = validation.xetDdiTable.Power.pfnGetAllPowerLimits;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetAllPowerLimits )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pLimits )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetAllPowerLimits( hPower, pLimits );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1187,22 +783,9 @@ xetPowerGetDefaultPowerLimits(
     xet_power_limits_t* pLimits                     ///< [out] information about the default average/burst/peak power limits
     )
 {
-    auto pfnGetDefaultPowerLimits = validation.xetDdiTable.Power.pfnGetDefaultPowerLimits;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetDefaultPowerLimits )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pLimits )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetDefaultPowerLimits( hPower, pLimits );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1213,22 +796,9 @@ xetPowerSetAveragePowerLimit(
     xet_power_average_limit_t* pLimit               ///< [in] information about the average power limit
     )
 {
-    auto pfnSetAveragePowerLimit = validation.xetDdiTable.Power.pfnSetAveragePowerLimit;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnSetAveragePowerLimit )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pLimit )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnSetAveragePowerLimit( hPower, pLimit );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1239,22 +809,9 @@ xetPowerSetBurstPowerLimit(
     xet_power_burst_limit_t* pLimit                 ///< [in] information about the burst power limit
     )
 {
-    auto pfnSetBurstPowerLimit = validation.xetDdiTable.Power.pfnSetBurstPowerLimit;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnSetBurstPowerLimit )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pLimit )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnSetBurstPowerLimit( hPower, pLimit );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1265,22 +822,9 @@ xetPowerSetPeakPowerLimit(
     xet_power_peak_limit_t* pLimit                  ///< [in] information about the peak power limit
     )
 {
-    auto pfnSetPeakPowerLimit = validation.xetDdiTable.Power.pfnSetPeakPowerLimit;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnSetPeakPowerLimit )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pLimit )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnSetPeakPowerLimit( hPower, pLimit );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1291,22 +835,9 @@ xetPowerSetPowerLimits(
     xet_power_limits_t* pLimits                     ///< [in] information about the average/burst/peak power limits
     )
 {
-    auto pfnSetPowerLimits = validation.xetDdiTable.Power.pfnSetPowerLimits;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnSetPowerLimits )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pLimits )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnSetPowerLimits( hPower, pLimits );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1317,22 +848,9 @@ xetPowerGetEnergyCounter(
     uint64_t* pEnergy                               ///< [out] the energy counter in millijoules
     )
 {
-    auto pfnGetEnergyCounter = validation.xetDdiTable.Power.pfnGetEnergyCounter;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetEnergyCounter )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pEnergy )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetEnergyCounter( hPower, pEnergy );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1343,22 +861,9 @@ xetPowerGetTurboMode(
     xet_turbo_mode_t* pTurboMode                    ///< [out] turbo mode currently in effect
     )
 {
-    auto pfnGetTurboMode = validation.xetDdiTable.Power.pfnGetTurboMode;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetTurboMode )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pTurboMode )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetTurboMode( hPower, pTurboMode );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1369,19 +874,9 @@ xetPowerSetTurboMode(
     xet_turbo_mode_t pTurboMode                     ///< [in] new turbo mode
     )
 {
-    auto pfnSetTurboMode = validation.xetDdiTable.Power.pfnSetTurboMode;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnSetTurboMode )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnSetTurboMode( hPower, pTurboMode );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1392,22 +887,9 @@ xetPowerGetFreqDomainCount(
     uint32_t* pNumFreqDomains                       ///< [out] the number of frequency domains
     )
 {
-    auto pfnGetFreqDomainCount = validation.xetDdiTable.Power.pfnGetFreqDomainCount;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetFreqDomainCount )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pNumFreqDomains )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetFreqDomainCount( hPower, pNumFreqDomains );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1419,22 +901,10 @@ xetPowerGetFreqDomain(
     xet_freq_domain_handle_t* phFreqDomain          ///< [out] pointer to handle of frequency domain object
     )
 {
-    auto pfnGetFreqDomain = validation.xetDdiTable.Power.pfnGetFreqDomain;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetFreqDomain )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phFreqDomain )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetFreqDomain( hPower, ordinal, phFreqDomain );
+    *phFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>( driver.get() );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1445,22 +915,9 @@ xetFreqDomainGetProperties(
     xet_freq_domain_properties_t* pFreqDomainProperties ///< [out] pointer to properties for the frequency domain
     )
 {
-    auto pfnGetProperties = validation.xetDdiTable.FreqDomain.pfnGetProperties;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetProperties )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hFreqDomain )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pFreqDomainProperties )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetProperties( hFreqDomain, pFreqDomainProperties );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1472,22 +929,10 @@ xetFreqDomainGetSourceFreqDomain(
                                                     ///< will be returned
     )
 {
-    auto pfnGetSourceFreqDomain = validation.xetDdiTable.FreqDomain.pfnGetSourceFreqDomain;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetSourceFreqDomain )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hFreqDomain )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phSrcFreqDomain )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetSourceFreqDomain( hFreqDomain, phSrcFreqDomain );
+    *phSrcFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>( driver.get() );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1499,22 +944,9 @@ xetFreqDomainGetSupportedClocks(
     uint32_t* pClocks                               ///< [out] pointer to array of frequencies
     )
 {
-    auto pfnGetSupportedClocks = validation.xetDdiTable.FreqDomain.pfnGetSupportedClocks;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetSupportedClocks )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hFreqDomain )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pClocks )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetSupportedClocks( hFreqDomain, numClockPoints, pClocks );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1526,22 +958,9 @@ xetFreqDomainGetSupportedClockDividers(
     xet_clock_divider_t* pDividers                  ///< [out] pointer to array of dividers
     )
 {
-    auto pfnGetSupportedClockDividers = validation.xetDdiTable.FreqDomain.pfnGetSupportedClockDividers;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetSupportedClockDividers )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hFreqDomain )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pDividers )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetSupportedClockDividers( hFreqDomain, numClockDividers, pDividers );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1553,25 +972,9 @@ xetFreqDomainGetClockRange(
     uint32_t* pMaxClock                             ///< [out] max clock frequency in units of MHz
     )
 {
-    auto pfnGetClockRange = validation.xetDdiTable.FreqDomain.pfnGetClockRange;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetClockRange )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hFreqDomain )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pMinClock )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pMaxClock )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetClockRange( hFreqDomain, pMinClock, pMaxClock );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1583,19 +986,9 @@ xetFreqDomainSetClockRange(
     uint32_t maxClock                               ///< [in] max clock frequency in units of MHz
     )
 {
-    auto pfnSetClockRange = validation.xetDdiTable.FreqDomain.pfnSetClockRange;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnSetClockRange )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hFreqDomain )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnSetClockRange( hFreqDomain, minClock, maxClock );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1606,22 +999,9 @@ xetFreqDomainSetClockDivider(
     xet_clock_divider_t* pClockDividerRequest       ///< [out] pointer to frequency divider request
     )
 {
-    auto pfnSetClockDivider = validation.xetDdiTable.FreqDomain.pfnSetClockDivider;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnSetClockDivider )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hFreqDomain )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pClockDividerRequest )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnSetClockDivider( hFreqDomain, pClockDividerRequest );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1634,28 +1014,9 @@ xetFreqDomainGetCurrentFrequency(
     xet_freq_throttle_reasons_t* pFreqThrottleReasons   ///< [out] the reason the resolved frequency is lower than the request
     )
 {
-    auto pfnGetCurrentFrequency = validation.xetDdiTable.FreqDomain.pfnGetCurrentFrequency;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetCurrentFrequency )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hFreqDomain )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pFreqRequest )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pFreqResolved )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pFreqThrottleReasons )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetCurrentFrequency( hFreqDomain, pFreqRequest, pFreqResolved, pFreqThrottleReasons );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1666,22 +1027,9 @@ xetPowerFanCount(
     uint32_t* pFanCount                             ///< [out] the number of fans on the device
     )
 {
-    auto pfnFanCount = validation.xetDdiTable.Power.pfnFanCount;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnFanCount )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pFanCount )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnFanCount( hPower, pFanCount );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1693,22 +1041,9 @@ xetPowerFanGetProperties(
     xet_fan_properties_t* pFanProperties            ///< [out] pointer to storage for fan properties
     )
 {
-    auto pfnFanGetProperties = validation.xetDdiTable.Power.pfnFanGetProperties;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnFanGetProperties )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pFanProperties )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnFanGetProperties( hPower, fanIndex, pFanProperties );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1723,25 +1058,9 @@ xetPowerFanGetSpeedTable(
     xet_fan_point_t* pFanPoints                     ///< [out] pointer to an array of temperature/fan-speed points
     )
 {
-    auto pfnFanGetSpeedTable = validation.xetDdiTable.Power.pfnFanGetSpeedTable;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnFanGetSpeedTable )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pNumFanPoints )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pFanPoints )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnFanGetSpeedTable( hPower, fanIndex, fanSpeedInRpm, pNumFanPoints, pFanPoints );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1754,22 +1073,9 @@ xetPowerFanSetSpeedTable(
     xet_fan_point_t* pFanPoints                     ///< [in] pointer to an array of temperature/fan-speed points
     )
 {
-    auto pfnFanSetSpeedTable = validation.xetDdiTable.Power.pfnFanSetSpeedTable;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnFanSetSpeedTable )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pFanPoints )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnFanSetSpeedTable( hPower, fanIndex, numFanPoints, pFanPoints );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1784,22 +1090,9 @@ xetPowerFanGetSpeed(
     xet_fan_speed_info_t* pFanSpeed                 ///< [out] pointer to an array of current fan speeds
     )
 {
-    auto pfnFanGetSpeed = validation.xetDdiTable.Power.pfnFanGetSpeed;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnFanGetSpeed )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pFanSpeed )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnFanGetSpeed( hPower, startFanIndex, numFans, fanSpeedInRpm, pFanSpeed );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1813,22 +1106,9 @@ xetPowerFanSetSpeed(
     xet_fan_speed_info_t* pFanSpeed                 ///< [in] pointer to an array of current fan speeds
     )
 {
-    auto pfnFanSetSpeed = validation.xetDdiTable.Power.pfnFanSetSpeed;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnFanSetSpeed )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pFanSpeed )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnFanSetSpeed( hPower, startFanIndex, numFans, pFanSpeed );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1839,22 +1119,9 @@ xetPowerTemperatureSensorCount(
     uint32_t* pSensorCount                          ///< [out] the number of temperature sensors on the device
     )
 {
-    auto pfnTemperatureSensorCount = validation.xetDdiTable.Power.pfnTemperatureSensorCount;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnTemperatureSensorCount )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pSensorCount )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnTemperatureSensorCount( hPower, pSensorCount );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1866,22 +1133,9 @@ xetPowerGetTemperatureProperties(
     xet_temperature_properties_t* pProperties       ///< [out] pointer to properties for this sensor
     )
 {
-    auto pfnGetTemperatureProperties = validation.xetDdiTable.Power.pfnGetTemperatureProperties;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetTemperatureProperties )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pProperties )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetTemperatureProperties( hPower, sensorIndex, pProperties );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1895,22 +1149,9 @@ xetPowerGetTemperature(
     uint16_t* pTemperatures                         ///< [out] pointer to an array of temperatures in units of degrees celsius
     )
 {
-    auto pfnGetTemperature = validation.xetDdiTable.Power.pfnGetTemperature;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetTemperature )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pTemperatures )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetTemperature( hPower, startSensorIndex, numSensors, pTemperatures );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1923,19 +1164,9 @@ xetPowerSetTemperatureThreshold(
                                                     ///< will be throttled
     )
 {
-    auto pfnSetTemperatureThreshold = validation.xetDdiTable.Power.pfnSetTemperatureThreshold;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnSetTemperatureThreshold )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnSetTemperatureThreshold( hPower, sensorIndex, maxTemperature );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1946,22 +1177,9 @@ xetPowerActivityCount(
     uint32_t* pActivityCount                        ///< [out] the number of activity counters on the device
     )
 {
-    auto pfnActivityCount = validation.xetDdiTable.Power.pfnActivityCount;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnActivityCount )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pActivityCount )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnActivityCount( hPower, pActivityCount );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1973,22 +1191,9 @@ xetPowerGetActivityProperties(
     xet_activity_properties_t* pProperties          ///< [out] pointer to properties for this activity counter
     )
 {
-    auto pfnGetActivityProperties = validation.xetDdiTable.Power.pfnGetActivityProperties;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetActivityProperties )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pProperties )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetActivityProperties( hPower, activityIndex, pProperties );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2002,22 +1207,9 @@ xetPowerGetActivityCounters(
     xet_activity_counters_t* pCounters              ///< [out] pointer to an array of activity counter data
     )
 {
-    auto pfnGetActivityCounters = validation.xetDdiTable.Power.pfnGetActivityCounters;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetActivityCounters )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hPower )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pCounters )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetActivityCounters( hPower, startCounterIndex, numCounters, pCounters );
+    return result;
 }
 
 #if defined(__cplusplus)

@@ -134,41 +134,40 @@ using xet_power_object_t                = xet_loader_object_t < xet_power_handle
 using xet_freq_domain_object_t          = xet_loader_object_t < xet_freq_domain_handle_t >;
 
 
-namespace xe_loader
+//////////////////////////////////////////////////////////////////////////
+struct _driver_object_t
 {
-    //////////////////////////////////////////////////////////////////////////
-    struct _driver_object_t
-    {
-        HMODULE handle = NULL;
+    HMODULE handle = NULL;
 
-        xe_dditable_t   xeDdiTable = {};
-        xex_dditable_t  xexDdiTable = {};
-        xet_dditable_t  xetDdiTable = {};
-    };
+    xe_dditable_t   xeDdiTable = {};
+    xex_dditable_t  xexDdiTable = {};
+    xet_dditable_t  xetDdiTable = {};
+};
 
-    using driver_vector_t = std::vector< _driver_object_t >;
+using driver_vector_t = std::vector< _driver_object_t >;
 
-    ///////////////////////////////////////////////////////////////////////////////
-    class Loader
-    {
-    public:
-        xe_api_version_t version = XE_API_VERSION_1_0;
+///////////////////////////////////////////////////////////////////////////////
+class Loader
+{
+public:
+    xe_api_version_t version = XE_API_VERSION_1_0;
 
-        driver_vector_t drivers;
+    driver_vector_t drivers;
 
-        HMODULE validationLayer = nullptr;
+    HMODULE validationLayer = nullptr;
 
-        Loader();
-        ~Loader();
+    bool forceIntercept = false;
 
-        xe_result_t xeInit( xe_init_flag_t flags );
-        xe_result_t xexInit( xe_init_flag_t flags );
-        xe_result_t xetInit( xe_init_flag_t flags );
+    Loader();
+    ~Loader();
 
-        xe_result_t xeGetDeviceGroups( uint32_t* pCount, xe_device_group_handle_t* pDeviceGroups );
-    };
+    xe_result_t xeInit( xe_init_flag_t flags );
+    xe_result_t xexInit( xe_init_flag_t flags );
+    xe_result_t xetInit( xe_init_flag_t flags );
 
-    extern Loader loader;
+    xe_result_t xeGetDeviceGroups( uint32_t* pCount, xe_device_group_handle_t* pDeviceGroups );
+};
 
-} // namespace xe_loader
+extern Loader loader;
+
 #endif // _XE_LOADER_H

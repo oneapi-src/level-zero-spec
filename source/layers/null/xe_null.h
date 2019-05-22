@@ -21,38 +21,45 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_layer.h
+* @file xe_null.h
 *
 ******************************************************************************/
-#ifndef _XE_LAYER_H
-#define _XE_LAYER_H
+#ifndef _XE_NULL_H
+#define _XE_NULL_H
 #if defined(__cplusplus)
 #pragma once
 #endif
 #include "xe_ddi.h"
 #include "xex_ddi.h"
 #include "xet_ddi.h"
-#include "xe_util.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-class Validation
+class Driver
 {
 public:
     xe_api_version_t version = XE_API_VERSION_1_0;
 
-    bool enableParameterValidation = false;
-    bool enableHandleLifetime = false;
-    bool enableMemoryTracker = false;
-    bool enableThreadingValidation = false;
+    Driver() = default;
+    ~Driver() = default;
 
-    xe_dditable_t   xeDdiTable = {};
-    xex_dditable_t  xexDdiTable = {};
-    xet_dditable_t  xetDdiTable = {};
+    xe_result_t xeInit( xe_init_flag_t flags ) { return XE_RESULT_SUCCESS; }
+    xe_result_t xexInit( xe_init_flag_t flags ) { return XE_RESULT_SUCCESS; }
+    xe_result_t xetInit( xe_init_flag_t flags ) { return XE_RESULT_SUCCESS; }
 
-    Validation();
-    ~Validation();
+    xe_result_t xeGetDeviceGroups( uint32_t* pCount, xe_device_group_handle_t* pDeviceGroups )
+    {
+        if( nullptr != pCount ) *pCount = 1;
+        if( nullptr != pDeviceGroups ) *pDeviceGroups = reinterpret_cast<xe_device_group_handle_t>(-1);
+        return XE_RESULT_SUCCESS;
+    }
+
+    void* get( void )
+    {
+        static uint64_t count = 0x80800000;
+        return reinterpret_cast<void*>( ++count );
+    }
 };
 
-extern Validation validation;
+extern Driver driver;
 
-#endif // _XE_LAYER_H
+#endif // _XE_NULL_H

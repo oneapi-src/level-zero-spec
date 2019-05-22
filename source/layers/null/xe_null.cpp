@@ -21,38 +21,9 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_layer.h
+* @file xe_null.cpp
 *
 ******************************************************************************/
-#ifndef _XE_LAYER_H
-#define _XE_LAYER_H
-#if defined(__cplusplus)
-#pragma once
-#endif
-#include "xe_ddi.h"
-#include "xex_ddi.h"
-#include "xet_ddi.h"
-#include "xe_util.h"
+#include "xe_null.h"
 
-///////////////////////////////////////////////////////////////////////////////
-class Validation
-{
-public:
-    xe_api_version_t version = XE_API_VERSION_1_0;
-
-    bool enableParameterValidation = false;
-    bool enableHandleLifetime = false;
-    bool enableMemoryTracker = false;
-    bool enableThreadingValidation = false;
-
-    xe_dditable_t   xeDdiTable = {};
-    xex_dditable_t  xexDdiTable = {};
-    xet_dditable_t  xetDdiTable = {};
-
-    Validation();
-    ~Validation();
-};
-
-extern Validation validation;
-
-#endif // _XE_LAYER_H
+Driver driver;

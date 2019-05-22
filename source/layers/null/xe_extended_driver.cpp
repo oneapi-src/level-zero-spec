@@ -21,14 +21,14 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_extended_layer.cpp
+* @file xe_extended_driver.cpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/valddi.cpp.mako
+* DO NOT EDIT: generated from /scripts/templates/nullddi.cpp.mako
 * @endcond
 *
 ******************************************************************************/
-#include "xe_layer.h"
+#include "xe_null.h"
 
 #if defined(__cplusplus)
 extern "C" {
@@ -51,17 +51,14 @@ xexGetGlobalProcAddrTable(
     xex_global_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xexDdiTable.Global;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnInit                                     = pDdiTable->pfnInit;
     pDdiTable->pfnInit                                   = xexInit;
 
     return result;
@@ -84,23 +81,18 @@ xexGetCommandGraphProcAddrTable(
     xex_command_graph_dditable_t* pDdiTable         ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xexDdiTable.CommandGraph;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
     pDdiTable->pfnCreate                                 = xexCommandGraphCreate;
 
-    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
     pDdiTable->pfnDestroy                                = xexCommandGraphDestroy;
 
-    dditable.pfnClose                                    = pDdiTable->pfnClose;
     pDdiTable->pfnClose                                  = xexCommandGraphClose;
 
     return result;
@@ -113,16 +105,12 @@ xexInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    auto pfnInit = validation.xexDdiTable.Global.pfnInit;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnInit )
-        return XE_RESULT_ERROR_UNSUPPORTED;
+    // global functions need to be handled manually by the driver
+    result = driver.xexInit( flags );
 
-    if( validation.enableParameterValidation )
-    {
-    }
-
-    return pfnInit( flags );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -134,28 +122,10 @@ xexCommandGraphCreate(
     xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
     )
 {
-    auto pfnCreate = validation.xexDdiTable.CommandGraph.pfnCreate;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnCreate )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == desc )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phCommandGraph )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( XEX_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-    }
-
-    return pfnCreate( hDevice, desc, phCommandGraph );
+    *phCommandGraph = reinterpret_cast<xex_command_graph_handle_t>( driver.get() );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -165,19 +135,9 @@ xexCommandGraphDestroy(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to destroy
     )
 {
-    auto pfnDestroy = validation.xexDdiTable.CommandGraph.pfnDestroy;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnDestroy )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandGraph )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnDestroy( hCommandGraph );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -187,19 +147,9 @@ xexCommandGraphClose(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
     )
 {
-    auto pfnClose = validation.xexDdiTable.CommandGraph.pfnClose;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnClose )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandGraph )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnClose( hCommandGraph );
+    return result;
 }
 
 #if defined(__cplusplus)

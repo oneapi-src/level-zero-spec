@@ -51,19 +51,19 @@ xeGetGlobalProcAddrTable(
     xe_global_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( xe_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( xe_loader::loader.version < version )
+    if( loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : xe_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
@@ -75,7 +75,7 @@ xeGetGlobalProcAddrTable(
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( xe_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnInit                                     = xeInit;
@@ -84,15 +84,15 @@ xeGetGlobalProcAddrTable(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = xe_loader::loader.drivers.front().xeDdiTable.Global;
+            *pDdiTable = loader.drivers.front().xeDdiTable.Global;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xe_pfnGetGlobalProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xeGetGlobalProcAddrTable") );
+            GET_FUNCTION_PTR(loader.validationLayer, "xeGetGlobalProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -116,19 +116,19 @@ xeGetDeviceProcAddrTable(
     xe_device_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( xe_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( xe_loader::loader.version < version )
+    if( loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : xe_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
@@ -140,7 +140,7 @@ xeGetDeviceProcAddrTable(
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( xe_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnGetSubDevice                             = xeDeviceGetSubDevice;
@@ -166,15 +166,15 @@ xeGetDeviceProcAddrTable(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = xe_loader::loader.drivers.front().xeDdiTable.Device;
+            *pDdiTable = loader.drivers.front().xeDdiTable.Device;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xe_pfnGetDeviceProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xeGetDeviceProcAddrTable") );
+            GET_FUNCTION_PTR(loader.validationLayer, "xeGetDeviceProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -198,19 +198,19 @@ xeGetDeviceGroupProcAddrTable(
     xe_device_group_dditable_t* pDdiTable           ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( xe_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( xe_loader::loader.version < version )
+    if( loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : xe_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
@@ -222,7 +222,7 @@ xeGetDeviceGroupProcAddrTable(
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( xe_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnGetDriverVersion                         = xeDeviceGroupGetDriverVersion;
@@ -244,15 +244,15 @@ xeGetDeviceGroupProcAddrTable(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = xe_loader::loader.drivers.front().xeDdiTable.DeviceGroup;
+            *pDdiTable = loader.drivers.front().xeDdiTable.DeviceGroup;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xe_pfnGetDeviceGroupProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xeGetDeviceGroupProcAddrTable") );
+            GET_FUNCTION_PTR(loader.validationLayer, "xeGetDeviceGroupProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -276,19 +276,19 @@ xeGetCommandQueueProcAddrTable(
     xe_command_queue_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( xe_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( xe_loader::loader.version < version )
+    if( loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : xe_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
@@ -300,7 +300,7 @@ xeGetCommandQueueProcAddrTable(
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( xe_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnCreate                                   = xeCommandQueueCreate;
@@ -311,15 +311,15 @@ xeGetCommandQueueProcAddrTable(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = xe_loader::loader.drivers.front().xeDdiTable.CommandQueue;
+            *pDdiTable = loader.drivers.front().xeDdiTable.CommandQueue;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xe_pfnGetCommandQueueProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xeGetCommandQueueProcAddrTable") );
+            GET_FUNCTION_PTR(loader.validationLayer, "xeGetCommandQueueProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -343,19 +343,19 @@ xeGetCommandListProcAddrTable(
     xe_command_list_dditable_t* pDdiTable           ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( xe_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( xe_loader::loader.version < version )
+    if( loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : xe_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
@@ -367,7 +367,7 @@ xeGetCommandListProcAddrTable(
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( xe_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnCreate                                   = xeCommandListCreate;
@@ -401,15 +401,15 @@ xeGetCommandListProcAddrTable(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = xe_loader::loader.drivers.front().xeDdiTable.CommandList;
+            *pDdiTable = loader.drivers.front().xeDdiTable.CommandList;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xe_pfnGetCommandListProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xeGetCommandListProcAddrTable") );
+            GET_FUNCTION_PTR(loader.validationLayer, "xeGetCommandListProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -433,19 +433,19 @@ xeGetFenceProcAddrTable(
     xe_fence_dditable_t* pDdiTable                  ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( xe_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( xe_loader::loader.version < version )
+    if( loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : xe_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
@@ -457,7 +457,7 @@ xeGetFenceProcAddrTable(
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( xe_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnCreate                                   = xeFenceCreate;
@@ -469,15 +469,15 @@ xeGetFenceProcAddrTable(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = xe_loader::loader.drivers.front().xeDdiTable.Fence;
+            *pDdiTable = loader.drivers.front().xeDdiTable.Fence;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xe_pfnGetFenceProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xeGetFenceProcAddrTable") );
+            GET_FUNCTION_PTR(loader.validationLayer, "xeGetFenceProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -501,19 +501,19 @@ xeGetEventPoolProcAddrTable(
     xe_event_pool_dditable_t* pDdiTable             ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( xe_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( xe_loader::loader.version < version )
+    if( loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : xe_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
@@ -525,7 +525,7 @@ xeGetEventPoolProcAddrTable(
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( xe_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnCreate                                   = xeEventPoolCreate;
@@ -537,15 +537,15 @@ xeGetEventPoolProcAddrTable(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = xe_loader::loader.drivers.front().xeDdiTable.EventPool;
+            *pDdiTable = loader.drivers.front().xeDdiTable.EventPool;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xe_pfnGetEventPoolProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xeGetEventPoolProcAddrTable") );
+            GET_FUNCTION_PTR(loader.validationLayer, "xeGetEventPoolProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -569,19 +569,19 @@ xeGetEventProcAddrTable(
     xe_event_dditable_t* pDdiTable                  ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( xe_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( xe_loader::loader.version < version )
+    if( loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : xe_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
@@ -593,7 +593,7 @@ xeGetEventProcAddrTable(
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( xe_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnCreate                                   = xeEventCreate;
@@ -606,15 +606,15 @@ xeGetEventProcAddrTable(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = xe_loader::loader.drivers.front().xeDdiTable.Event;
+            *pDdiTable = loader.drivers.front().xeDdiTable.Event;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xe_pfnGetEventProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xeGetEventProcAddrTable") );
+            GET_FUNCTION_PTR(loader.validationLayer, "xeGetEventProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -638,19 +638,19 @@ xeGetImageProcAddrTable(
     xe_image_dditable_t* pDdiTable                  ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( xe_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( xe_loader::loader.version < version )
+    if( loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : xe_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
@@ -662,7 +662,7 @@ xeGetImageProcAddrTable(
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( xe_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnGetProperties                            = xeImageGetProperties;
@@ -672,15 +672,15 @@ xeGetImageProcAddrTable(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = xe_loader::loader.drivers.front().xeDdiTable.Image;
+            *pDdiTable = loader.drivers.front().xeDdiTable.Image;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xe_pfnGetImageProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xeGetImageProcAddrTable") );
+            GET_FUNCTION_PTR(loader.validationLayer, "xeGetImageProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -704,19 +704,19 @@ xeGetModuleProcAddrTable(
     xe_module_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( xe_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( xe_loader::loader.version < version )
+    if( loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : xe_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
@@ -728,7 +728,7 @@ xeGetModuleProcAddrTable(
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( xe_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnCreate                                   = xeModuleCreate;
@@ -740,15 +740,15 @@ xeGetModuleProcAddrTable(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = xe_loader::loader.drivers.front().xeDdiTable.Module;
+            *pDdiTable = loader.drivers.front().xeDdiTable.Module;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xe_pfnGetModuleProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xeGetModuleProcAddrTable") );
+            GET_FUNCTION_PTR(loader.validationLayer, "xeGetModuleProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -772,19 +772,19 @@ xeGetModuleBuildLogProcAddrTable(
     xe_module_build_log_dditable_t* pDdiTable       ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( xe_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( xe_loader::loader.version < version )
+    if( loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : xe_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
@@ -796,7 +796,7 @@ xeGetModuleBuildLogProcAddrTable(
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( xe_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnDestroy                                  = xeModuleBuildLogDestroy;
@@ -805,15 +805,15 @@ xeGetModuleBuildLogProcAddrTable(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = xe_loader::loader.drivers.front().xeDdiTable.ModuleBuildLog;
+            *pDdiTable = loader.drivers.front().xeDdiTable.ModuleBuildLog;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xe_pfnGetModuleBuildLogProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xeGetModuleBuildLogProcAddrTable") );
+            GET_FUNCTION_PTR(loader.validationLayer, "xeGetModuleBuildLogProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -837,19 +837,19 @@ xeGetFunctionProcAddrTable(
     xe_function_dditable_t* pDdiTable               ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( xe_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( xe_loader::loader.version < version )
+    if( loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : xe_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
@@ -861,7 +861,7 @@ xeGetFunctionProcAddrTable(
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( xe_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnCreate                                   = xeFunctionCreate;
@@ -875,15 +875,15 @@ xeGetFunctionProcAddrTable(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = xe_loader::loader.drivers.front().xeDdiTable.Function;
+            *pDdiTable = loader.drivers.front().xeDdiTable.Function;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xe_pfnGetFunctionProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xeGetFunctionProcAddrTable") );
+            GET_FUNCTION_PTR(loader.validationLayer, "xeGetFunctionProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -907,19 +907,19 @@ xeGetSamplerProcAddrTable(
     xe_sampler_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( xe_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( xe_loader::loader.version < version )
+    if( loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : xe_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
@@ -931,7 +931,7 @@ xeGetSamplerProcAddrTable(
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( xe_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnCreate                                   = xeSamplerCreate;
@@ -940,15 +940,15 @@ xeGetSamplerProcAddrTable(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = xe_loader::loader.drivers.front().xeDdiTable.Sampler;
+            *pDdiTable = loader.drivers.front().xeDdiTable.Sampler;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xe_pfnGetSamplerProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xeGetSamplerProcAddrTable") );
+            GET_FUNCTION_PTR(loader.validationLayer, "xeGetSamplerProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -963,10 +963,11 @@ xeInit(
     )
 {
     // global functions need to be handled manually by the loader
-    auto result = xe_loader::loader.xeInit( flags );
+    auto result = loader.xeInit( flags );
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupGetDriverVersion
 xe_result_t __xecall
@@ -986,6 +987,7 @@ xeDeviceGroupGetDriverVersion(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeGetDeviceGroups
 xe_result_t __xecall
@@ -999,10 +1001,11 @@ xeGetDeviceGroups(
     )
 {
     // global functions need to be handled manually by the loader
-    auto result = xe_loader::loader.xeGetDeviceGroups( pCount, pDeviceGroups );
+    auto result = loader.xeGetDeviceGroups( pCount, pDeviceGroups );
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupGetDevices
 xe_result_t __xecall
@@ -1025,8 +1028,14 @@ xeDeviceGroupGetDevices(
     // forward to device-driver
     auto result = dditable->DeviceGroup.pfnGetDevices( hDeviceGroup, pCount, pDevices );
 
+    // convert driver handles to loader handles
+    for( size_t i = 0; ( nullptr != pDevices ) && ( i < *pCount ); ++i )
+        pDevices[ i ] = reinterpret_cast<xe_device_handle_t>(
+            xe_device_object_t::factory.get( pDevices[ i ], dditable ) );
+
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGetSubDevice
 xe_result_t __xecall
@@ -1046,10 +1055,12 @@ xeDeviceGetSubDevice(
     auto result = dditable->Device.pfnGetSubDevice( hDevice, ordinal, phSubDevice );
 
     // convert driver handle to loader handle
-    *phSubDevice = reinterpret_cast<xe_device_handle_t>( xe_device_object_t::factory.get( *phSubDevice, dditable ) );
+    *phSubDevice = reinterpret_cast<xe_device_handle_t>(
+        xe_device_object_t::factory.get( *phSubDevice, dditable ) );
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupGetApiVersion
 xe_result_t __xecall
@@ -1069,6 +1080,7 @@ xeDeviceGroupGetApiVersion(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupGetProperties
 xe_result_t __xecall
@@ -1088,6 +1100,7 @@ xeDeviceGroupGetProperties(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupGetComputeProperties
 xe_result_t __xecall
@@ -1107,6 +1120,7 @@ xeDeviceGroupGetComputeProperties(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupGetMemoryProperties
 xe_result_t __xecall
@@ -1126,6 +1140,7 @@ xeDeviceGroupGetMemoryProperties(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGetP2PProperties
 xe_result_t __xecall
@@ -1149,6 +1164,7 @@ xeDeviceGetP2PProperties(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceCanAccessPeer
 xe_result_t __xecall
@@ -1172,6 +1188,7 @@ xeDeviceCanAccessPeer(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceSetIntermediateCacheConfig
 xe_result_t __xecall
@@ -1191,6 +1208,7 @@ xeDeviceSetIntermediateCacheConfig(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceSetLastLevelCacheConfig
 xe_result_t __xecall
@@ -1210,6 +1228,7 @@ xeDeviceSetLastLevelCacheConfig(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandQueueCreate
 xe_result_t __xecall
@@ -1229,10 +1248,12 @@ xeCommandQueueCreate(
     auto result = dditable->CommandQueue.pfnCreate( hDevice, desc, phCommandQueue );
 
     // convert driver handle to loader handle
-    *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>( xe_command_queue_object_t::factory.get( *phCommandQueue, dditable ) );
+    *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>(
+        xe_command_queue_object_t::factory.get( *phCommandQueue, dditable ) );
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandQueueDestroy
 xe_result_t __xecall
@@ -1254,6 +1275,7 @@ xeCommandQueueDestroy(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandQueueExecuteCommandLists
 xe_result_t __xecall
@@ -1283,6 +1305,7 @@ xeCommandQueueExecuteCommandLists(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandQueueSynchronize
 xe_result_t __xecall
@@ -1306,6 +1329,7 @@ xeCommandQueueSynchronize(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListCreate
 xe_result_t __xecall
@@ -1325,10 +1349,12 @@ xeCommandListCreate(
     auto result = dditable->CommandList.pfnCreate( hDevice, desc, phCommandList );
 
     // convert driver handle to loader handle
-    *phCommandList = reinterpret_cast<xe_command_list_handle_t>( xe_command_list_object_t::factory.get( *phCommandList, dditable ) );
+    *phCommandList = reinterpret_cast<xe_command_list_handle_t>(
+        xe_command_list_object_t::factory.get( *phCommandList, dditable ) );
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListCreateImmediate
 xe_result_t __xecall
@@ -1348,10 +1374,12 @@ xeCommandListCreateImmediate(
     auto result = dditable->CommandList.pfnCreateImmediate( hDevice, desc, phCommandList );
 
     // convert driver handle to loader handle
-    *phCommandList = reinterpret_cast<xe_command_list_handle_t>( xe_command_list_object_t::factory.get( *phCommandList, dditable ) );
+    *phCommandList = reinterpret_cast<xe_command_list_handle_t>(
+        xe_command_list_object_t::factory.get( *phCommandList, dditable ) );
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListDestroy
 xe_result_t __xecall
@@ -1373,6 +1401,7 @@ xeCommandListDestroy(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListClose
 xe_result_t __xecall
@@ -1391,6 +1420,7 @@ xeCommandListClose(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListReset
 xe_result_t __xecall
@@ -1409,6 +1439,7 @@ xeCommandListReset(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListSetParameter
 xe_result_t __xecall
@@ -1429,6 +1460,7 @@ xeCommandListSetParameter(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListGetParameter
 xe_result_t __xecall
@@ -1449,6 +1481,7 @@ xeCommandListGetParameter(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListResetParameters
 xe_result_t __xecall
@@ -1467,6 +1500,7 @@ xeCommandListResetParameters(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListReserveSpace
 xe_result_t __xecall
@@ -1487,6 +1521,7 @@ xeCommandListReserveSpace(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendBarrier
 xe_result_t __xecall
@@ -1516,6 +1551,7 @@ xeCommandListAppendBarrier(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendMemoryRangesBarrier
 xe_result_t __xecall
@@ -1548,6 +1584,7 @@ xeCommandListAppendMemoryRangesBarrier(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceSystemBarrier
 xe_result_t __xecall
@@ -1566,6 +1603,7 @@ xeDeviceSystemBarrier(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceRegisterCLMemory
 #if XE_ENABLE_OCL_INTEROP
@@ -1589,6 +1627,7 @@ xeDeviceRegisterCLMemory(
     return result;
 }
 #endif // XE_ENABLE_OCL_INTEROP
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceRegisterCLProgram
 #if XE_ENABLE_OCL_INTEROP
@@ -1610,11 +1649,13 @@ xeDeviceRegisterCLProgram(
     auto result = dditable->Device.pfnRegisterCLProgram( hDevice, context, program, phModule );
 
     // convert driver handle to loader handle
-    *phModule = reinterpret_cast<xe_module_handle_t>( xe_module_object_t::factory.get( *phModule, dditable ) );
+    *phModule = reinterpret_cast<xe_module_handle_t>(
+        xe_module_object_t::factory.get( *phModule, dditable ) );
 
     return result;
 }
 #endif // XE_ENABLE_OCL_INTEROP
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceRegisterCLCommandQueue
 #if XE_ENABLE_OCL_INTEROP
@@ -1636,11 +1677,13 @@ xeDeviceRegisterCLCommandQueue(
     auto result = dditable->Device.pfnRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
 
     // convert driver handle to loader handle
-    *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>( xe_command_queue_object_t::factory.get( *phCommandQueue, dditable ) );
+    *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>(
+        xe_command_queue_object_t::factory.get( *phCommandQueue, dditable ) );
 
     return result;
 }
 #endif // XE_ENABLE_OCL_INTEROP
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendMemoryCopy
 xe_result_t __xecall
@@ -1666,6 +1709,7 @@ xeCommandListAppendMemoryCopy(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendMemorySet
 xe_result_t __xecall
@@ -1691,6 +1735,7 @@ xeCommandListAppendMemorySet(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendMemoryCopyRegion
 xe_result_t __xecall
@@ -1719,6 +1764,7 @@ xeCommandListAppendMemoryCopyRegion(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendImageCopy
 xe_result_t __xecall
@@ -1749,6 +1795,7 @@ xeCommandListAppendImageCopy(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendImageCopyRegion
 xe_result_t __xecall
@@ -1781,6 +1828,7 @@ xeCommandListAppendImageCopyRegion(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendImageCopyToMemory
 xe_result_t __xecall
@@ -1809,6 +1857,7 @@ xeCommandListAppendImageCopyToMemory(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendImageCopyFromMemory
 xe_result_t __xecall
@@ -1837,6 +1886,7 @@ xeCommandListAppendImageCopyFromMemory(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendMemoryPrefetch
 xe_result_t __xecall
@@ -1857,6 +1907,7 @@ xeCommandListAppendMemoryPrefetch(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendMemAdvise
 xe_result_t __xecall
@@ -1882,6 +1933,7 @@ xeCommandListAppendMemAdvise(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeEventPoolCreate
 xe_result_t __xecall
@@ -1901,10 +1953,12 @@ xeEventPoolCreate(
     auto result = dditable->EventPool.pfnCreate( hDevice, desc, phEventPool );
 
     // convert driver handle to loader handle
-    *phEventPool = reinterpret_cast<xe_event_pool_handle_t>( xe_event_pool_object_t::factory.get( *phEventPool, dditable ) );
+    *phEventPool = reinterpret_cast<xe_event_pool_handle_t>(
+        xe_event_pool_object_t::factory.get( *phEventPool, dditable ) );
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeEventPoolDestroy
 xe_result_t __xecall
@@ -1926,6 +1980,7 @@ xeEventPoolDestroy(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeEventCreate
 xe_result_t __xecall
@@ -1945,10 +2000,12 @@ xeEventCreate(
     auto result = dditable->Event.pfnCreate( hEventPool, desc, phEvent );
 
     // convert driver handle to loader handle
-    *phEvent = reinterpret_cast<xe_event_handle_t>( xe_event_object_t::factory.get( *phEvent, dditable ) );
+    *phEvent = reinterpret_cast<xe_event_handle_t>(
+        xe_event_object_t::factory.get( *phEvent, dditable ) );
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeEventDestroy
 xe_result_t __xecall
@@ -1970,6 +2027,7 @@ xeEventDestroy(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeEventPoolGetIpcHandle
 xe_result_t __xecall
@@ -1989,6 +2047,7 @@ xeEventPoolGetIpcHandle(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeEventPoolOpenIpcHandle
 xe_result_t __xecall
@@ -2008,10 +2067,12 @@ xeEventPoolOpenIpcHandle(
     auto result = dditable->EventPool.pfnOpenIpcHandle( hDevice, hIpc, phEventPool );
 
     // convert driver handle to loader handle
-    *phEventPool = reinterpret_cast<xe_event_pool_handle_t>( xe_event_pool_object_t::factory.get( *phEventPool, dditable ) );
+    *phEventPool = reinterpret_cast<xe_event_pool_handle_t>(
+        xe_event_pool_object_t::factory.get( *phEventPool, dditable ) );
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeEventPoolCloseIpcHandle
 xe_result_t __xecall
@@ -2030,6 +2091,7 @@ xeEventPoolCloseIpcHandle(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendSignalEvent
 xe_result_t __xecall
@@ -2052,6 +2114,7 @@ xeCommandListAppendSignalEvent(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendWaitOnEvents
 xe_result_t __xecall
@@ -2077,6 +2140,7 @@ xeCommandListAppendWaitOnEvents(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeEventHostSignal
 xe_result_t __xecall
@@ -2095,6 +2159,7 @@ xeEventHostSignal(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeEventHostSynchronize
 xe_result_t __xecall
@@ -2118,6 +2183,7 @@ xeEventHostSynchronize(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeEventQueryStatus
 xe_result_t __xecall
@@ -2136,6 +2202,7 @@ xeEventQueryStatus(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendEventReset
 xe_result_t __xecall
@@ -2158,6 +2225,7 @@ xeCommandListAppendEventReset(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeEventReset
 xe_result_t __xecall
@@ -2176,6 +2244,7 @@ xeEventReset(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFenceCreate
 xe_result_t __xecall
@@ -2195,10 +2264,12 @@ xeFenceCreate(
     auto result = dditable->Fence.pfnCreate( hCommandQueue, desc, phFence );
 
     // convert driver handle to loader handle
-    *phFence = reinterpret_cast<xe_fence_handle_t>( xe_fence_object_t::factory.get( *phFence, dditable ) );
+    *phFence = reinterpret_cast<xe_fence_handle_t>(
+        xe_fence_object_t::factory.get( *phFence, dditable ) );
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFenceDestroy
 xe_result_t __xecall
@@ -2220,6 +2291,7 @@ xeFenceDestroy(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFenceHostSynchronize
 xe_result_t __xecall
@@ -2243,6 +2315,7 @@ xeFenceHostSynchronize(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFenceQueryStatus
 xe_result_t __xecall
@@ -2261,6 +2334,7 @@ xeFenceQueryStatus(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFenceReset
 xe_result_t __xecall
@@ -2279,6 +2353,7 @@ xeFenceReset(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeImageGetProperties
 xe_result_t __xecall
@@ -2299,6 +2374,7 @@ xeImageGetProperties(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeImageCreate
 xe_result_t __xecall
@@ -2318,10 +2394,12 @@ xeImageCreate(
     auto result = dditable->Image.pfnCreate( hDevice, desc, phImage );
 
     // convert driver handle to loader handle
-    *phImage = reinterpret_cast<xe_image_handle_t>( xe_image_object_t::factory.get( *phImage, dditable ) );
+    *phImage = reinterpret_cast<xe_image_handle_t>(
+        xe_image_object_t::factory.get( *phImage, dditable ) );
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeImageDestroy
 xe_result_t __xecall
@@ -2343,6 +2421,7 @@ xeImageDestroy(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupAllocSharedMem
 xe_result_t __xecall
@@ -2370,6 +2449,7 @@ xeDeviceGroupAllocSharedMem(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupAllocDeviceMem
 xe_result_t __xecall
@@ -2396,6 +2476,7 @@ xeDeviceGroupAllocDeviceMem(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupAllocHostMem
 xe_result_t __xecall
@@ -2418,6 +2499,7 @@ xeDeviceGroupAllocHostMem(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupFreeMem
 xe_result_t __xecall
@@ -2437,6 +2519,7 @@ xeDeviceGroupFreeMem(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupGetMemProperties
 xe_result_t __xecall
@@ -2457,6 +2540,7 @@ xeDeviceGroupGetMemProperties(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupGetMemAddressRange
 xe_result_t __xecall
@@ -2478,6 +2562,7 @@ xeDeviceGroupGetMemAddressRange(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupGetMemIpcHandle
 xe_result_t __xecall
@@ -2498,6 +2583,7 @@ xeDeviceGroupGetMemIpcHandle(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupOpenMemIpcHandle
 xe_result_t __xecall
@@ -2523,6 +2609,7 @@ xeDeviceGroupOpenMemIpcHandle(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceGroupCloseMemIpcHandle
 xe_result_t __xecall
@@ -2542,6 +2629,7 @@ xeDeviceGroupCloseMemIpcHandle(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeModuleCreate
 xe_result_t __xecall
@@ -2562,10 +2650,17 @@ xeModuleCreate(
     auto result = dditable->Module.pfnCreate( hDevice, pDesc, phModule, phBuildLog );
 
     // convert driver handle to loader handle
-    *phModule = reinterpret_cast<xe_module_handle_t>( xe_module_object_t::factory.get( *phModule, dditable ) );
+    *phModule = reinterpret_cast<xe_module_handle_t>(
+        xe_module_object_t::factory.get( *phModule, dditable ) );
+
+    // convert driver handle to loader handle
+    if( nullptr != phBuildLog )
+        *phBuildLog = reinterpret_cast<xe_module_build_log_handle_t>(
+            xe_module_build_log_object_t::factory.get( *phBuildLog, dditable ) );
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeModuleDestroy
 xe_result_t __xecall
@@ -2587,6 +2682,7 @@ xeModuleDestroy(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeModuleBuildLogDestroy
 xe_result_t __xecall
@@ -2608,6 +2704,7 @@ xeModuleBuildLogDestroy(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeModuleBuildLogGetString
 xe_result_t __xecall
@@ -2628,6 +2725,7 @@ xeModuleBuildLogGetString(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeModuleGetNativeBinary
 xe_result_t __xecall
@@ -2648,6 +2746,7 @@ xeModuleGetNativeBinary(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeModuleGetGlobalPointer
 xe_result_t __xecall
@@ -2668,6 +2767,7 @@ xeModuleGetGlobalPointer(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFunctionCreate
 xe_result_t __xecall
@@ -2687,10 +2787,12 @@ xeFunctionCreate(
     auto result = dditable->Function.pfnCreate( hModule, pDesc, phFunction );
 
     // convert driver handle to loader handle
-    *phFunction = reinterpret_cast<xe_function_handle_t>( xe_function_object_t::factory.get( *phFunction, dditable ) );
+    *phFunction = reinterpret_cast<xe_function_handle_t>(
+        xe_function_object_t::factory.get( *phFunction, dditable ) );
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFunctionDestroy
 xe_result_t __xecall
@@ -2712,6 +2814,7 @@ xeFunctionDestroy(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeModuleGetFunctionPointer
 xe_result_t __xecall
@@ -2732,6 +2835,7 @@ xeModuleGetFunctionPointer(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFunctionSetGroupSize
 xe_result_t __xecall
@@ -2753,6 +2857,7 @@ xeFunctionSetGroupSize(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFunctionSuggestGroupSize
 xe_result_t __xecall
@@ -2777,6 +2882,7 @@ xeFunctionSuggestGroupSize(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFunctionSetArgumentValue
 xe_result_t __xecall
@@ -2799,6 +2905,7 @@ xeFunctionSetArgumentValue(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFunctionSetAttribute
 xe_result_t __xecall
@@ -2819,6 +2926,7 @@ xeFunctionSetAttribute(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeFunctionGetAttribute
 xe_result_t __xecall
@@ -2839,6 +2947,7 @@ xeFunctionGetAttribute(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendLaunchFunction
 xe_result_t __xecall
@@ -2873,6 +2982,7 @@ xeCommandListAppendLaunchFunction(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendLaunchFunctionIndirect
 xe_result_t __xecall
@@ -2907,6 +3017,7 @@ xeCommandListAppendLaunchFunctionIndirect(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendLaunchMultipleFunctionsIndirect
 xe_result_t __xecall
@@ -2947,6 +3058,7 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeCommandListAppendLaunchHostFunction
 xe_result_t __xecall
@@ -2978,6 +3090,7 @@ xeCommandListAppendLaunchHostFunction(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceMakeMemoryResident
 xe_result_t __xecall
@@ -2998,6 +3111,7 @@ xeDeviceMakeMemoryResident(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceEvictMemory
 xe_result_t __xecall
@@ -3018,6 +3132,7 @@ xeDeviceEvictMemory(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceMakeImageResident
 xe_result_t __xecall
@@ -3040,6 +3155,7 @@ xeDeviceMakeImageResident(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeDeviceEvictImage
 xe_result_t __xecall
@@ -3062,6 +3178,7 @@ xeDeviceEvictImage(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeSamplerCreate
 xe_result_t __xecall
@@ -3081,10 +3198,12 @@ xeSamplerCreate(
     auto result = dditable->Sampler.pfnCreate( hDevice, pDesc, phSampler );
 
     // convert driver handle to loader handle
-    *phSampler = reinterpret_cast<xe_sampler_handle_t>( xe_sampler_object_t::factory.get( *phSampler, dditable ) );
+    *phSampler = reinterpret_cast<xe_sampler_handle_t>(
+        xe_sampler_object_t::factory.get( *phSampler, dditable ) );
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xeSamplerDestroy
 xe_result_t __xecall
@@ -3106,6 +3225,7 @@ xeSamplerDestroy(
 
     return result;
 }
+
 #if defined(__cplusplus)
 };
 #endif

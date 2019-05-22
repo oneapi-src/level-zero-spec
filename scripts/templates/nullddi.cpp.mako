@@ -33,11 +33,11 @@ from templates import helper as th
 * @file ${name}.cpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/valddi.cpp.mako
+* DO NOT EDIT: generated from /scripts/templates/nullddi.cpp.mako
 * @endcond
 *
 ******************************************************************************/
-#include "${x}_layer.h"
+#include "${x}_null.h"
 
 #if defined(__cplusplus)
 extern "C" {
@@ -62,12 +62,10 @@ ${tbl['export']['name']}(
     %endfor
     )
 {
-    auto& dditable = validation.${n}DdiTable.${tbl['name']};
-
     if( nullptr == pDdiTable )
         return ${X}_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return ${X}_RESULT_ERROR_UNSUPPORTED;
 
     ${x}_result_t result = ${X}_RESULT_SUCCESS;
@@ -76,7 +74,6 @@ ${tbl['export']['name']}(
     %if 'condition' in obj:
 #if ${th.subt(n, tags, obj['condition'])}
     %endif
-    dditable.${th.append_ws(th.make_pfn_name(n, tags, obj), 43)} = pDdiTable->${th.make_pfn_name(n, tags, obj)};
     pDdiTable->${th.append_ws(th.make_pfn_name(n, tags, obj), 41)} = ${th.make_func_name(n, tags, obj)};
     %if 'condition' in obj:
 #endif
@@ -100,23 +97,27 @@ ${th.make_func_name(n, tags, obj)}(
     %endfor
     )
 {
-    auto ${th.make_pfn_name(n, tags, obj)} = validation.${n}DdiTable.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
+    ${x}_result_t result = ${X}_RESULT_SUCCESS;
 
-    if( nullptr == ${th.make_pfn_name(n, tags, obj)} )
-        return ${X}_RESULT_ERROR_UNSUPPORTED;
+    %if re.match(r"Global.*", th.get_table_name(n, tags, obj)):
+    // global functions need to be handled manually by the driver
+    result = driver.${th.make_func_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
 
-    if( validation.enableParameterValidation )
-    {
-        %for key, values in th.make_param_checks(n, tags, obj).items():
-        %for val in values:
-        if( ${val} )
-            return ${key};
-
-        %endfor
-        %endfor
-    }
-
-    return ${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
+    %else:
+    %for item in th.get_loader_epilogue(n, tags, obj, meta):
+    %if 'range' in item:
+    for( size_t i = ${item['range'][0]}; ( nullptr != ${item['name']} ) && ( i < ${item['range'][1]} ); ++i )
+        ${item['name']}[ i ] = reinterpret_cast<${item['type']}>( driver.get() );
+    %elif not item['release']:
+    %if item['optional']:
+    if( nullptr != ${item['name']} ) *${item['name']} = reinterpret_cast<${item['type']}>( driver.get() );
+    %else:
+    *${item['name']} = reinterpret_cast<${item['type']}>( driver.get() );
+    %endif
+    %endif
+    %endfor
+    %endif
+    return result;
 }
 %if 'condition' in obj:
 #endif // ${th.subt(n, tags, obj['condition'])}

@@ -51,19 +51,19 @@ xetGetGlobalProcAddrTable(
     xet_global_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( xe_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( xe_loader::loader.version < version )
+    if( loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : xe_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
@@ -75,7 +75,7 @@ xetGetGlobalProcAddrTable(
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( xe_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnInit                                     = xetInit;
@@ -83,15 +83,15 @@ xetGetGlobalProcAddrTable(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = xe_loader::loader.drivers.front().xetDdiTable.Global;
+            *pDdiTable = loader.drivers.front().xetDdiTable.Global;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetGlobalProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetGlobalProcAddrTable") );
+            GET_FUNCTION_PTR(loader.validationLayer, "xetGetGlobalProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -115,19 +115,19 @@ xetGetDeviceProcAddrTable(
     xet_device_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( xe_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( xe_loader::loader.version < version )
+    if( loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : xe_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
@@ -139,7 +139,7 @@ xetGetDeviceProcAddrTable(
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( xe_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnActivateMetricGroups                     = xetDeviceActivateMetricGroups;
@@ -147,15 +147,15 @@ xetGetDeviceProcAddrTable(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = xe_loader::loader.drivers.front().xetDdiTable.Device;
+            *pDdiTable = loader.drivers.front().xetDdiTable.Device;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetDeviceProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetDeviceProcAddrTable") );
+            GET_FUNCTION_PTR(loader.validationLayer, "xetGetDeviceProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -179,19 +179,19 @@ xetGetCommandListProcAddrTable(
     xet_command_list_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( xe_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( xe_loader::loader.version < version )
+    if( loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : xe_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
@@ -203,7 +203,7 @@ xetGetCommandListProcAddrTable(
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( xe_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnAppendMetricTracerMarker                 = xetCommandListAppendMetricTracerMarker;
@@ -214,15 +214,15 @@ xetGetCommandListProcAddrTable(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = xe_loader::loader.drivers.front().xetDdiTable.CommandList;
+            *pDdiTable = loader.drivers.front().xetDdiTable.CommandList;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetCommandListProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetCommandListProcAddrTable") );
+            GET_FUNCTION_PTR(loader.validationLayer, "xetGetCommandListProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -246,19 +246,19 @@ xetGetMetricGroupProcAddrTable(
     xet_metric_group_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( xe_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( xe_loader::loader.version < version )
+    if( loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : xe_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
@@ -270,7 +270,7 @@ xetGetMetricGroupProcAddrTable(
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( xe_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnGetCount                                 = xetMetricGroupGetCount;
@@ -281,15 +281,15 @@ xetGetMetricGroupProcAddrTable(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = xe_loader::loader.drivers.front().xetDdiTable.MetricGroup;
+            *pDdiTable = loader.drivers.front().xetDdiTable.MetricGroup;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricGroupProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetMetricGroupProcAddrTable") );
+            GET_FUNCTION_PTR(loader.validationLayer, "xetGetMetricGroupProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -313,19 +313,19 @@ xetGetMetricProcAddrTable(
     xet_metric_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( xe_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( xe_loader::loader.version < version )
+    if( loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : xe_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
@@ -337,7 +337,7 @@ xetGetMetricProcAddrTable(
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( xe_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnGet                                      = xetMetricGet;
@@ -346,15 +346,15 @@ xetGetMetricProcAddrTable(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = xe_loader::loader.drivers.front().xetDdiTable.Metric;
+            *pDdiTable = loader.drivers.front().xetDdiTable.Metric;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetMetricProcAddrTable") );
+            GET_FUNCTION_PTR(loader.validationLayer, "xetGetMetricProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -378,19 +378,19 @@ xetGetMetricTracerProcAddrTable(
     xet_metric_tracer_dditable_t* pDdiTable         ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( xe_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( xe_loader::loader.version < version )
+    if( loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : xe_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
@@ -402,7 +402,7 @@ xetGetMetricTracerProcAddrTable(
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( xe_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnOpen                                     = xetMetricTracerOpen;
@@ -412,15 +412,15 @@ xetGetMetricTracerProcAddrTable(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = xe_loader::loader.drivers.front().xetDdiTable.MetricTracer;
+            *pDdiTable = loader.drivers.front().xetDdiTable.MetricTracer;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricTracerProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetMetricTracerProcAddrTable") );
+            GET_FUNCTION_PTR(loader.validationLayer, "xetGetMetricTracerProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -444,19 +444,19 @@ xetGetMetricQueryPoolProcAddrTable(
     xet_metric_query_pool_dditable_t* pDdiTable     ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( xe_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( xe_loader::loader.version < version )
+    if( loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : xe_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
@@ -468,7 +468,7 @@ xetGetMetricQueryPoolProcAddrTable(
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( xe_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnCreate                                   = xetMetricQueryPoolCreate;
@@ -478,15 +478,15 @@ xetGetMetricQueryPoolProcAddrTable(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = xe_loader::loader.drivers.front().xetDdiTable.MetricQueryPool;
+            *pDdiTable = loader.drivers.front().xetDdiTable.MetricQueryPool;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricQueryPoolProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetMetricQueryPoolProcAddrTable") );
+            GET_FUNCTION_PTR(loader.validationLayer, "xetGetMetricQueryPoolProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -510,19 +510,19 @@ xetGetMetricQueryProcAddrTable(
     xet_metric_query_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( xe_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( xe_loader::loader.version < version )
+    if( loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : xe_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
@@ -534,7 +534,7 @@ xetGetMetricQueryProcAddrTable(
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( xe_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnGetData                                  = xetMetricQueryGetData;
@@ -542,15 +542,15 @@ xetGetMetricQueryProcAddrTable(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = xe_loader::loader.drivers.front().xetDdiTable.MetricQuery;
+            *pDdiTable = loader.drivers.front().xetDdiTable.MetricQuery;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricQueryProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetMetricQueryProcAddrTable") );
+            GET_FUNCTION_PTR(loader.validationLayer, "xetGetMetricQueryProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -574,19 +574,19 @@ xetGetPowerProcAddrTable(
     xet_power_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( xe_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( xe_loader::loader.version < version )
+    if( loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : xe_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
@@ -598,7 +598,7 @@ xetGetPowerProcAddrTable(
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( xe_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnCreate                                   = xetPowerCreate;
@@ -634,15 +634,15 @@ xetGetPowerProcAddrTable(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = xe_loader::loader.drivers.front().xetDdiTable.Power;
+            *pDdiTable = loader.drivers.front().xetDdiTable.Power;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetPowerProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetPowerProcAddrTable") );
+            GET_FUNCTION_PTR(loader.validationLayer, "xetGetPowerProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -666,19 +666,19 @@ xetGetFreqDomainProcAddrTable(
     xet_freq_domain_dditable_t* pDdiTable           ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( xe_loader::loader.drivers.size() < 1 )
+    if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( xe_loader::loader.version < version )
+    if( loader.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : xe_loader::loader.drivers )
+    for( auto& drv : loader.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
@@ -690,7 +690,7 @@ xetGetFreqDomainProcAddrTable(
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( xe_loader::loader.drivers.size() > 1 )
+        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnGetProperties                            = xetFreqDomainGetProperties;
@@ -705,15 +705,15 @@ xetGetFreqDomainProcAddrTable(
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = xe_loader::loader.drivers.front().xetDdiTable.FreqDomain;
+            *pDdiTable = loader.drivers.front().xetDdiTable.FreqDomain;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != xe_loader::loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xet_pfnGetFreqDomainProcAddrTable_t>(
-            GET_FUNCTION_PTR(xe_loader::loader.validationLayer, "xetGetFreqDomainProcAddrTable") );
+            GET_FUNCTION_PTR(loader.validationLayer, "xetGetFreqDomainProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -728,10 +728,11 @@ xetInit(
     )
 {
     // global functions need to be handled manually by the loader
-    auto result = xe_loader::loader.xetInit( flags );
+    auto result = loader.xetInit( flags );
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricGroupGetCount
 xe_result_t __xecall
@@ -751,6 +752,7 @@ xetMetricGroupGetCount(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricGroupGet
 xe_result_t __xecall
@@ -770,10 +772,12 @@ xetMetricGroupGet(
     auto result = dditable->MetricGroup.pfnGet( hDevice, ordinal, phMetricGroup );
 
     // convert driver handle to loader handle
-    *phMetricGroup = reinterpret_cast<xet_metric_group_handle_t>( xet_metric_group_object_t::factory.get( *phMetricGroup, dditable ) );
+    *phMetricGroup = reinterpret_cast<xet_metric_group_handle_t>(
+        xet_metric_group_object_t::factory.get( *phMetricGroup, dditable ) );
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricGroupGetProperties
 xe_result_t __xecall
@@ -793,6 +797,7 @@ xetMetricGroupGetProperties(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricGet
 xe_result_t __xecall
@@ -812,10 +817,12 @@ xetMetricGet(
     auto result = dditable->Metric.pfnGet( hMetricGroup, ordinal, phMetric );
 
     // convert driver handle to loader handle
-    *phMetric = reinterpret_cast<xet_metric_handle_t>( xet_metric_object_t::factory.get( *phMetric, dditable ) );
+    *phMetric = reinterpret_cast<xet_metric_handle_t>(
+        xet_metric_object_t::factory.get( *phMetric, dditable ) );
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricGetProperties
 xe_result_t __xecall
@@ -835,6 +842,7 @@ xetMetricGetProperties(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricGroupCalculateData
 xe_result_t __xecall
@@ -858,6 +866,7 @@ xetMetricGroupCalculateData(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetDeviceActivateMetricGroups
 xe_result_t __xecall
@@ -883,6 +892,7 @@ xetDeviceActivateMetricGroups(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricTracerOpen
 xe_result_t __xecall
@@ -907,10 +917,12 @@ xetMetricTracerOpen(
     auto result = dditable->MetricTracer.pfnOpen( hDevice, pDesc, hNotificationEvent, phMetricTracer );
 
     // convert driver handle to loader handle
-    *phMetricTracer = reinterpret_cast<xet_metric_tracer_handle_t>( xet_metric_tracer_object_t::factory.get( *phMetricTracer, dditable ) );
+    *phMetricTracer = reinterpret_cast<xet_metric_tracer_handle_t>(
+        xet_metric_tracer_object_t::factory.get( *phMetricTracer, dditable ) );
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetCommandListAppendMetricTracerMarker
 xe_result_t __xecall
@@ -934,6 +946,7 @@ xetCommandListAppendMetricTracerMarker(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricTracerClose
 xe_result_t __xecall
@@ -952,6 +965,7 @@ xetMetricTracerClose(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricTracerReadData
 xe_result_t __xecall
@@ -973,6 +987,7 @@ xetMetricTracerReadData(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricQueryPoolCreate
 xe_result_t __xecall
@@ -992,10 +1007,12 @@ xetMetricQueryPoolCreate(
     auto result = dditable->MetricQueryPool.pfnCreate( hDevice, pDesc, phMetricQueryPool );
 
     // convert driver handle to loader handle
-    *phMetricQueryPool = reinterpret_cast<xet_metric_query_pool_handle_t>( xet_metric_query_pool_object_t::factory.get( *phMetricQueryPool, dditable ) );
+    *phMetricQueryPool = reinterpret_cast<xet_metric_query_pool_handle_t>(
+        xet_metric_query_pool_object_t::factory.get( *phMetricQueryPool, dditable ) );
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricQueryPoolDestroy
 xe_result_t __xecall
@@ -1017,6 +1034,7 @@ xetMetricQueryPoolDestroy(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricQueryPoolGetMetricQuery
 xe_result_t __xecall
@@ -1036,10 +1054,12 @@ xetMetricQueryPoolGetMetricQuery(
     auto result = dditable->MetricQueryPool.pfnGetMetricQuery( hMetricQueryPool, ordinal, phMetricQuery );
 
     // convert driver handle to loader handle
-    *phMetricQuery = reinterpret_cast<xet_metric_query_handle_t>( xet_metric_query_object_t::factory.get( *phMetricQuery, dditable ) );
+    *phMetricQuery = reinterpret_cast<xet_metric_query_handle_t>(
+        xet_metric_query_object_t::factory.get( *phMetricQuery, dditable ) );
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetCommandListAppendMetricQueryBegin
 xe_result_t __xecall
@@ -1062,6 +1082,7 @@ xetCommandListAppendMetricQueryBegin(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetCommandListAppendMetricQueryEnd
 xe_result_t __xecall
@@ -1088,6 +1109,7 @@ xetCommandListAppendMetricQueryEnd(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetCommandListAppendMetricMemoryBarrier
 xe_result_t __xecall
@@ -1106,6 +1128,7 @@ xetCommandListAppendMetricMemoryBarrier(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricQueryGetData
 xe_result_t __xecall
@@ -1127,6 +1150,7 @@ xetMetricQueryGetData(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerCreate
 xe_result_t __xecall
@@ -1146,10 +1170,12 @@ xetPowerCreate(
     auto result = dditable->Power.pfnCreate( hDevice, flags, pPowerHandle );
 
     // convert driver handle to loader handle
-    *pPowerHandle = reinterpret_cast<xet_power_handle_t>( xet_power_object_t::factory.get( *pPowerHandle, dditable ) );
+    *pPowerHandle = reinterpret_cast<xet_power_handle_t>(
+        xet_power_object_t::factory.get( *pPowerHandle, dditable ) );
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerDestroy
 xe_result_t __xecall
@@ -1171,6 +1197,7 @@ xetPowerDestroy(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetAveragePowerLimit
 xe_result_t __xecall
@@ -1190,6 +1217,7 @@ xetPowerGetAveragePowerLimit(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetBurstPowerLimit
 xe_result_t __xecall
@@ -1209,6 +1237,7 @@ xetPowerGetBurstPowerLimit(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetPeakPowerLimit
 xe_result_t __xecall
@@ -1228,6 +1257,7 @@ xetPowerGetPeakPowerLimit(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetAllPowerLimits
 xe_result_t __xecall
@@ -1247,6 +1277,7 @@ xetPowerGetAllPowerLimits(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetDefaultPowerLimits
 xe_result_t __xecall
@@ -1266,6 +1297,7 @@ xetPowerGetDefaultPowerLimits(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerSetAveragePowerLimit
 xe_result_t __xecall
@@ -1285,6 +1317,7 @@ xetPowerSetAveragePowerLimit(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerSetBurstPowerLimit
 xe_result_t __xecall
@@ -1304,6 +1337,7 @@ xetPowerSetBurstPowerLimit(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerSetPeakPowerLimit
 xe_result_t __xecall
@@ -1323,6 +1357,7 @@ xetPowerSetPeakPowerLimit(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerSetPowerLimits
 xe_result_t __xecall
@@ -1342,6 +1377,7 @@ xetPowerSetPowerLimits(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetEnergyCounter
 xe_result_t __xecall
@@ -1361,6 +1397,7 @@ xetPowerGetEnergyCounter(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetTurboMode
 xe_result_t __xecall
@@ -1380,6 +1417,7 @@ xetPowerGetTurboMode(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerSetTurboMode
 xe_result_t __xecall
@@ -1399,6 +1437,7 @@ xetPowerSetTurboMode(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetFreqDomainCount
 xe_result_t __xecall
@@ -1418,6 +1457,7 @@ xetPowerGetFreqDomainCount(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetFreqDomain
 xe_result_t __xecall
@@ -1437,10 +1477,12 @@ xetPowerGetFreqDomain(
     auto result = dditable->Power.pfnGetFreqDomain( hPower, ordinal, phFreqDomain );
 
     // convert driver handle to loader handle
-    *phFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>( xet_freq_domain_object_t::factory.get( *phFreqDomain, dditable ) );
+    *phFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>(
+        xet_freq_domain_object_t::factory.get( *phFreqDomain, dditable ) );
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetFreqDomainGetProperties
 xe_result_t __xecall
@@ -1460,6 +1502,7 @@ xetFreqDomainGetProperties(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetFreqDomainGetSourceFreqDomain
 xe_result_t __xecall
@@ -1479,10 +1522,12 @@ xetFreqDomainGetSourceFreqDomain(
     auto result = dditable->FreqDomain.pfnGetSourceFreqDomain( hFreqDomain, phSrcFreqDomain );
 
     // convert driver handle to loader handle
-    *phSrcFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>( xet_freq_domain_object_t::factory.get( *phSrcFreqDomain, dditable ) );
+    *phSrcFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>(
+        xet_freq_domain_object_t::factory.get( *phSrcFreqDomain, dditable ) );
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetFreqDomainGetSupportedClocks
 xe_result_t __xecall
@@ -1503,6 +1548,7 @@ xetFreqDomainGetSupportedClocks(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetFreqDomainGetSupportedClockDividers
 xe_result_t __xecall
@@ -1523,6 +1569,7 @@ xetFreqDomainGetSupportedClockDividers(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetFreqDomainGetClockRange
 xe_result_t __xecall
@@ -1543,6 +1590,7 @@ xetFreqDomainGetClockRange(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetFreqDomainSetClockRange
 xe_result_t __xecall
@@ -1563,6 +1611,7 @@ xetFreqDomainSetClockRange(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetFreqDomainSetClockDivider
 xe_result_t __xecall
@@ -1582,6 +1631,7 @@ xetFreqDomainSetClockDivider(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetFreqDomainGetCurrentFrequency
 xe_result_t __xecall
@@ -1603,6 +1653,7 @@ xetFreqDomainGetCurrentFrequency(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerFanCount
 xe_result_t __xecall
@@ -1622,6 +1673,7 @@ xetPowerFanCount(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerFanGetProperties
 xe_result_t __xecall
@@ -1642,6 +1694,7 @@ xetPowerFanGetProperties(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerFanGetSpeedTable
 xe_result_t __xecall
@@ -1665,6 +1718,7 @@ xetPowerFanGetSpeedTable(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerFanSetSpeedTable
 xe_result_t __xecall
@@ -1686,6 +1740,7 @@ xetPowerFanSetSpeedTable(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerFanGetSpeed
 xe_result_t __xecall
@@ -1709,6 +1764,7 @@ xetPowerFanGetSpeed(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerFanSetSpeed
 xe_result_t __xecall
@@ -1731,6 +1787,7 @@ xetPowerFanSetSpeed(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerTemperatureSensorCount
 xe_result_t __xecall
@@ -1750,6 +1807,7 @@ xetPowerTemperatureSensorCount(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetTemperatureProperties
 xe_result_t __xecall
@@ -1770,6 +1828,7 @@ xetPowerGetTemperatureProperties(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetTemperature
 xe_result_t __xecall
@@ -1792,6 +1851,7 @@ xetPowerGetTemperature(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerSetTemperatureThreshold
 xe_result_t __xecall
@@ -1813,6 +1873,7 @@ xetPowerSetTemperatureThreshold(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerActivityCount
 xe_result_t __xecall
@@ -1832,6 +1893,7 @@ xetPowerActivityCount(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetActivityProperties
 xe_result_t __xecall
@@ -1852,6 +1914,7 @@ xetPowerGetActivityProperties(
 
     return result;
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetPowerGetActivityCounters
 xe_result_t __xecall
@@ -1874,6 +1937,7 @@ xetPowerGetActivityCounters(
 
     return result;
 }
+
 #if defined(__cplusplus)
 };
 #endif

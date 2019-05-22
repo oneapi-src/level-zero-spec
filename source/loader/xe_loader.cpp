@@ -55,22 +55,32 @@ xet_power_object_t::factory_t               xet_power_object_t::factory;
 xet_freq_domain_object_t::factory_t         xet_freq_domain_object_t::factory;
 
 
-namespace xe_loader
+///////////////////////////////////////////////////////////////////////////////
+static const char* known_driver_names[] = { 
+    MAKE_DRIVER_NAME( "xe_intc_gpu" )
+};
+
+static const size_t num_known_driver_names =
+    sizeof( known_driver_names ) / sizeof( known_driver_names[ 0 ] );
+
+
+///////////////////////////////////////////////////////////////////////////////
+Loader loader;
+
+
+///////////////////////////////////////////////////////////////////////////////
+Loader::Loader()
 {
-    ///////////////////////////////////////////////////////////////////////////////
-    static const char* known_driver_names[] = { 
-        MAKE_DRIVER_NAME( "xe_intc_gpu" )
-    };
-
-    static const size_t num_known_driver_names =
-        sizeof( known_driver_names ) / sizeof( known_driver_names[ 0 ] );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    Loader loader;
-
-
-    ///////////////////////////////////////////////////////////////////////////////
-    Loader::Loader()
+    if( getenv_tobool( "XE_ENABLE_NULL_DRIVER" ) )
+    {
+        auto handle = LOAD_DRIVER_LIBRARY( MAKE_DRIVER_NAME( "xe_null" ) );
+        if( NULL != handle )
+        {
+            drivers.emplace_back();
+            drivers.rbegin()->handle = handle;
+        }
+    }
+    else
     {
         drivers.reserve( num_known_driver_names );
         for( auto name : known_driver_names )
@@ -81,103 +91,111 @@ namespace xe_loader
                 drivers.emplace_back();
                 drivers.rbegin()->handle = handle;
             }
-                
+
         }
-
-        if( getenv_tobool( "XE_ENABLE_VALIDATION_LAYER" ) )
-            validationLayer = LOAD_DRIVER_LIBRARY( MAKE_DRIVER_NAME( "xe_validation_layer" ) );
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    Loader::~Loader()
-    {
-        FREE_DRIVER_LIBRARY( validationLayer );
-
-        for( auto& drv : drivers )
-            FREE_DRIVER_LIBRARY( drv.handle );
-    };
-
-    //////////////////////////////////////////////////////////////////////////
-    xe_result_t Loader::xeInit( xe_init_flag_t flags )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        for( auto& drv : drivers )
-        {
-            if( XE_RESULT_SUCCESS == result )
-            {
-                result = drv.xeDdiTable.Global.pfnInit( flags );
-            }
-        }
-
-        return result;
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    xe_result_t Loader::xexInit( xe_init_flag_t flags )
+    if( getenv_tobool( "XE_ENABLE_VALIDATION_LAYER" ) )
     {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        for( auto& drv : drivers )
-        {
-            if( XE_RESULT_SUCCESS == result )
-            {
-                result = drv.xexDdiTable.Global.pfnInit( flags );
-            }
-        }
-
-        return result;
+        validationLayer = LOAD_DRIVER_LIBRARY( MAKE_DRIVER_NAME( "xe_validation_layer" ) );
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    xe_result_t Loader::xetInit( xe_init_flag_t flags )
+    forceIntercept = getenv_tobool( "XE_ENABLE_LOADER_INTERCEPT" );
+};
+
+///////////////////////////////////////////////////////////////////////////////
+Loader::~Loader()
+{
+    FREE_DRIVER_LIBRARY( validationLayer );
+
+    for( auto& drv : drivers )
     {
-        xe_result_t result = XE_RESULT_SUCCESS;
+        FREE_DRIVER_LIBRARY( drv.handle );
+    }
+};
 
-        for( auto& drv : drivers )
+//////////////////////////////////////////////////////////////////////////
+xe_result_t Loader::xeInit( xe_init_flag_t flags )
+{
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    for( auto& drv : drivers )
+    {
+        if( XE_RESULT_SUCCESS == result )
         {
-            if( XE_RESULT_SUCCESS == result )
-            {
-                result = drv.xetDdiTable.Global.pfnInit( flags );
-            }
+            result = drv.xeDdiTable.Global.pfnInit( flags );
         }
-
-        return result;
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    xe_result_t Loader::xeGetDeviceGroups(
-        uint32_t* pCount,
-        xe_device_group_handle_t* pDeviceGroups )
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////
+xe_result_t Loader::xexInit( xe_init_flag_t flags )
+{
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    for( auto& drv : drivers )
     {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        uint32_t total_count = 0;
-
-        for( auto& drv : drivers )
+        if( XE_RESULT_SUCCESS == result )
         {
-            uint32_t count = 0;
+            result = drv.xexDdiTable.Global.pfnInit( flags );
+        }
+    }
 
-            if( XE_RESULT_SUCCESS == result )
-            {
-                result = drv.xeDdiTable.Global.pfnGetDeviceGroups( &count, nullptr );
-            }
+    return result;
+}
 
-            if( ( 0 < *pCount ) && ( *pCount > total_count + count ) )
-                break;
+//////////////////////////////////////////////////////////////////////////
+xe_result_t Loader::xetInit( xe_init_flag_t flags )
+{
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-            if( ( XE_RESULT_SUCCESS == result ) && ( nullptr != pDeviceGroups ) )
-            {
-                result = drv.xeDdiTable.Global.pfnGetDeviceGroups( &count, &pDeviceGroups[ total_count ] );
-            }
+    for( auto& drv : drivers )
+    {
+        if( XE_RESULT_SUCCESS == result )
+        {
+            result = drv.xetDdiTable.Global.pfnInit( flags );
+        }
+    }
 
-            total_count += count;
+    return result;
+}
+
+//////////////////////////////////////////////////////////////////////////
+xe_result_t Loader::xeGetDeviceGroups(
+    uint32_t* pCount,
+    xe_device_group_handle_t* pDeviceGroups )
+{
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    uint32_t total_count = 0;
+
+    for( auto& drv : drivers )
+    {
+        uint32_t count = 0;
+
+        result = drv.xeDdiTable.Global.pfnGetDeviceGroups( &count, nullptr );
+        if( XE_RESULT_SUCCESS != result ) break;
+
+        if( ( 0 < *pCount ) && ( *pCount > total_count + count ) )
+            break;
+
+        if( nullptr != pDeviceGroups )
+        {
+            result = drv.xeDdiTable.Global.pfnGetDeviceGroups( &count, &pDeviceGroups[ total_count ] );
+            if( XE_RESULT_SUCCESS != result ) break;
+
+            for( uint32_t i = total_count; i < count; ++i )
+                pDeviceGroups[ i ] = reinterpret_cast<xe_device_group_handle_t>( 
+                    xe_device_group_object_t::factory.get( pDeviceGroups[ i ], &drv.xeDdiTable ) );
         }
 
+        total_count += count;
+    }
+
+    if( XE_RESULT_SUCCESS == result )
         *pCount = total_count;
 
-        return result;
-    }
-
-
-} // namespace xe_loader
+    return result;
+}

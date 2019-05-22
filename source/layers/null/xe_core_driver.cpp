@@ -21,14 +21,14 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_core_layer.cpp
+* @file xe_core_driver.cpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/valddi.cpp.mako
+* DO NOT EDIT: generated from /scripts/templates/nullddi.cpp.mako
 * @endcond
 *
 ******************************************************************************/
-#include "xe_layer.h"
+#include "xe_null.h"
 
 #if defined(__cplusplus)
 extern "C" {
@@ -51,20 +51,16 @@ xeGetGlobalProcAddrTable(
     xe_global_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xeDdiTable.Global;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnInit                                     = pDdiTable->pfnInit;
     pDdiTable->pfnInit                                   = xeInit;
 
-    dditable.pfnGetDeviceGroups                          = pDdiTable->pfnGetDeviceGroups;
     pDdiTable->pfnGetDeviceGroups                        = xeGetDeviceGroups;
 
     return result;
@@ -87,59 +83,44 @@ xeGetDeviceProcAddrTable(
     xe_device_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xeDdiTable.Device;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnGetSubDevice                             = pDdiTable->pfnGetSubDevice;
     pDdiTable->pfnGetSubDevice                           = xeDeviceGetSubDevice;
 
-    dditable.pfnGetP2PProperties                         = pDdiTable->pfnGetP2PProperties;
     pDdiTable->pfnGetP2PProperties                       = xeDeviceGetP2PProperties;
 
-    dditable.pfnCanAccessPeer                            = pDdiTable->pfnCanAccessPeer;
     pDdiTable->pfnCanAccessPeer                          = xeDeviceCanAccessPeer;
 
-    dditable.pfnSetIntermediateCacheConfig               = pDdiTable->pfnSetIntermediateCacheConfig;
     pDdiTable->pfnSetIntermediateCacheConfig             = xeDeviceSetIntermediateCacheConfig;
 
-    dditable.pfnSetLastLevelCacheConfig                  = pDdiTable->pfnSetLastLevelCacheConfig;
     pDdiTable->pfnSetLastLevelCacheConfig                = xeDeviceSetLastLevelCacheConfig;
 
-    dditable.pfnSystemBarrier                            = pDdiTable->pfnSystemBarrier;
     pDdiTable->pfnSystemBarrier                          = xeDeviceSystemBarrier;
 
 #if XE_ENABLE_OCL_INTEROP
-    dditable.pfnRegisterCLMemory                         = pDdiTable->pfnRegisterCLMemory;
     pDdiTable->pfnRegisterCLMemory                       = xeDeviceRegisterCLMemory;
 #endif
 
 #if XE_ENABLE_OCL_INTEROP
-    dditable.pfnRegisterCLProgram                        = pDdiTable->pfnRegisterCLProgram;
     pDdiTable->pfnRegisterCLProgram                      = xeDeviceRegisterCLProgram;
 #endif
 
 #if XE_ENABLE_OCL_INTEROP
-    dditable.pfnRegisterCLCommandQueue                   = pDdiTable->pfnRegisterCLCommandQueue;
     pDdiTable->pfnRegisterCLCommandQueue                 = xeDeviceRegisterCLCommandQueue;
 #endif
 
-    dditable.pfnMakeMemoryResident                       = pDdiTable->pfnMakeMemoryResident;
     pDdiTable->pfnMakeMemoryResident                     = xeDeviceMakeMemoryResident;
 
-    dditable.pfnEvictMemory                              = pDdiTable->pfnEvictMemory;
     pDdiTable->pfnEvictMemory                            = xeDeviceEvictMemory;
 
-    dditable.pfnMakeImageResident                        = pDdiTable->pfnMakeImageResident;
     pDdiTable->pfnMakeImageResident                      = xeDeviceMakeImageResident;
 
-    dditable.pfnEvictImage                               = pDdiTable->pfnEvictImage;
     pDdiTable->pfnEvictImage                             = xeDeviceEvictImage;
 
     return result;
@@ -162,59 +143,42 @@ xeGetDeviceGroupProcAddrTable(
     xe_device_group_dditable_t* pDdiTable           ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xeDdiTable.DeviceGroup;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnGetDriverVersion                         = pDdiTable->pfnGetDriverVersion;
     pDdiTable->pfnGetDriverVersion                       = xeDeviceGroupGetDriverVersion;
 
-    dditable.pfnGetDevices                               = pDdiTable->pfnGetDevices;
     pDdiTable->pfnGetDevices                             = xeDeviceGroupGetDevices;
 
-    dditable.pfnGetApiVersion                            = pDdiTable->pfnGetApiVersion;
     pDdiTable->pfnGetApiVersion                          = xeDeviceGroupGetApiVersion;
 
-    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
     pDdiTable->pfnGetProperties                          = xeDeviceGroupGetProperties;
 
-    dditable.pfnGetComputeProperties                     = pDdiTable->pfnGetComputeProperties;
     pDdiTable->pfnGetComputeProperties                   = xeDeviceGroupGetComputeProperties;
 
-    dditable.pfnGetMemoryProperties                      = pDdiTable->pfnGetMemoryProperties;
     pDdiTable->pfnGetMemoryProperties                    = xeDeviceGroupGetMemoryProperties;
 
-    dditable.pfnAllocSharedMem                           = pDdiTable->pfnAllocSharedMem;
     pDdiTable->pfnAllocSharedMem                         = xeDeviceGroupAllocSharedMem;
 
-    dditable.pfnAllocDeviceMem                           = pDdiTable->pfnAllocDeviceMem;
     pDdiTable->pfnAllocDeviceMem                         = xeDeviceGroupAllocDeviceMem;
 
-    dditable.pfnAllocHostMem                             = pDdiTable->pfnAllocHostMem;
     pDdiTable->pfnAllocHostMem                           = xeDeviceGroupAllocHostMem;
 
-    dditable.pfnFreeMem                                  = pDdiTable->pfnFreeMem;
     pDdiTable->pfnFreeMem                                = xeDeviceGroupFreeMem;
 
-    dditable.pfnGetMemProperties                         = pDdiTable->pfnGetMemProperties;
     pDdiTable->pfnGetMemProperties                       = xeDeviceGroupGetMemProperties;
 
-    dditable.pfnGetMemAddressRange                       = pDdiTable->pfnGetMemAddressRange;
     pDdiTable->pfnGetMemAddressRange                     = xeDeviceGroupGetMemAddressRange;
 
-    dditable.pfnGetMemIpcHandle                          = pDdiTable->pfnGetMemIpcHandle;
     pDdiTable->pfnGetMemIpcHandle                        = xeDeviceGroupGetMemIpcHandle;
 
-    dditable.pfnOpenMemIpcHandle                         = pDdiTable->pfnOpenMemIpcHandle;
     pDdiTable->pfnOpenMemIpcHandle                       = xeDeviceGroupOpenMemIpcHandle;
 
-    dditable.pfnCloseMemIpcHandle                        = pDdiTable->pfnCloseMemIpcHandle;
     pDdiTable->pfnCloseMemIpcHandle                      = xeDeviceGroupCloseMemIpcHandle;
 
     return result;
@@ -237,26 +201,20 @@ xeGetCommandQueueProcAddrTable(
     xe_command_queue_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xeDdiTable.CommandQueue;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
     pDdiTable->pfnCreate                                 = xeCommandQueueCreate;
 
-    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
     pDdiTable->pfnDestroy                                = xeCommandQueueDestroy;
 
-    dditable.pfnExecuteCommandLists                      = pDdiTable->pfnExecuteCommandLists;
     pDdiTable->pfnExecuteCommandLists                    = xeCommandQueueExecuteCommandLists;
 
-    dditable.pfnSynchronize                              = pDdiTable->pfnSynchronize;
     pDdiTable->pfnSynchronize                            = xeCommandQueueSynchronize;
 
     return result;
@@ -279,95 +237,66 @@ xeGetCommandListProcAddrTable(
     xe_command_list_dditable_t* pDdiTable           ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xeDdiTable.CommandList;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
     pDdiTable->pfnCreate                                 = xeCommandListCreate;
 
-    dditable.pfnCreateImmediate                          = pDdiTable->pfnCreateImmediate;
     pDdiTable->pfnCreateImmediate                        = xeCommandListCreateImmediate;
 
-    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
     pDdiTable->pfnDestroy                                = xeCommandListDestroy;
 
-    dditable.pfnClose                                    = pDdiTable->pfnClose;
     pDdiTable->pfnClose                                  = xeCommandListClose;
 
-    dditable.pfnReset                                    = pDdiTable->pfnReset;
     pDdiTable->pfnReset                                  = xeCommandListReset;
 
-    dditable.pfnSetParameter                             = pDdiTable->pfnSetParameter;
     pDdiTable->pfnSetParameter                           = xeCommandListSetParameter;
 
-    dditable.pfnGetParameter                             = pDdiTable->pfnGetParameter;
     pDdiTable->pfnGetParameter                           = xeCommandListGetParameter;
 
-    dditable.pfnResetParameters                          = pDdiTable->pfnResetParameters;
     pDdiTable->pfnResetParameters                        = xeCommandListResetParameters;
 
-    dditable.pfnReserveSpace                             = pDdiTable->pfnReserveSpace;
     pDdiTable->pfnReserveSpace                           = xeCommandListReserveSpace;
 
-    dditable.pfnAppendBarrier                            = pDdiTable->pfnAppendBarrier;
     pDdiTable->pfnAppendBarrier                          = xeCommandListAppendBarrier;
 
-    dditable.pfnAppendMemoryRangesBarrier                = pDdiTable->pfnAppendMemoryRangesBarrier;
     pDdiTable->pfnAppendMemoryRangesBarrier              = xeCommandListAppendMemoryRangesBarrier;
 
-    dditable.pfnAppendMemoryCopy                         = pDdiTable->pfnAppendMemoryCopy;
     pDdiTable->pfnAppendMemoryCopy                       = xeCommandListAppendMemoryCopy;
 
-    dditable.pfnAppendMemorySet                          = pDdiTable->pfnAppendMemorySet;
     pDdiTable->pfnAppendMemorySet                        = xeCommandListAppendMemorySet;
 
-    dditable.pfnAppendMemoryCopyRegion                   = pDdiTable->pfnAppendMemoryCopyRegion;
     pDdiTable->pfnAppendMemoryCopyRegion                 = xeCommandListAppendMemoryCopyRegion;
 
-    dditable.pfnAppendImageCopy                          = pDdiTable->pfnAppendImageCopy;
     pDdiTable->pfnAppendImageCopy                        = xeCommandListAppendImageCopy;
 
-    dditable.pfnAppendImageCopyRegion                    = pDdiTable->pfnAppendImageCopyRegion;
     pDdiTable->pfnAppendImageCopyRegion                  = xeCommandListAppendImageCopyRegion;
 
-    dditable.pfnAppendImageCopyToMemory                  = pDdiTable->pfnAppendImageCopyToMemory;
     pDdiTable->pfnAppendImageCopyToMemory                = xeCommandListAppendImageCopyToMemory;
 
-    dditable.pfnAppendImageCopyFromMemory                = pDdiTable->pfnAppendImageCopyFromMemory;
     pDdiTable->pfnAppendImageCopyFromMemory              = xeCommandListAppendImageCopyFromMemory;
 
-    dditable.pfnAppendMemoryPrefetch                     = pDdiTable->pfnAppendMemoryPrefetch;
     pDdiTable->pfnAppendMemoryPrefetch                   = xeCommandListAppendMemoryPrefetch;
 
-    dditable.pfnAppendMemAdvise                          = pDdiTable->pfnAppendMemAdvise;
     pDdiTable->pfnAppendMemAdvise                        = xeCommandListAppendMemAdvise;
 
-    dditable.pfnAppendSignalEvent                        = pDdiTable->pfnAppendSignalEvent;
     pDdiTable->pfnAppendSignalEvent                      = xeCommandListAppendSignalEvent;
 
-    dditable.pfnAppendWaitOnEvents                       = pDdiTable->pfnAppendWaitOnEvents;
     pDdiTable->pfnAppendWaitOnEvents                     = xeCommandListAppendWaitOnEvents;
 
-    dditable.pfnAppendEventReset                         = pDdiTable->pfnAppendEventReset;
     pDdiTable->pfnAppendEventReset                       = xeCommandListAppendEventReset;
 
-    dditable.pfnAppendLaunchFunction                     = pDdiTable->pfnAppendLaunchFunction;
     pDdiTable->pfnAppendLaunchFunction                   = xeCommandListAppendLaunchFunction;
 
-    dditable.pfnAppendLaunchFunctionIndirect             = pDdiTable->pfnAppendLaunchFunctionIndirect;
     pDdiTable->pfnAppendLaunchFunctionIndirect           = xeCommandListAppendLaunchFunctionIndirect;
 
-    dditable.pfnAppendLaunchMultipleFunctionsIndirect    = pDdiTable->pfnAppendLaunchMultipleFunctionsIndirect;
     pDdiTable->pfnAppendLaunchMultipleFunctionsIndirect  = xeCommandListAppendLaunchMultipleFunctionsIndirect;
 
-    dditable.pfnAppendLaunchHostFunction                 = pDdiTable->pfnAppendLaunchHostFunction;
     pDdiTable->pfnAppendLaunchHostFunction               = xeCommandListAppendLaunchHostFunction;
 
     return result;
@@ -390,29 +319,22 @@ xeGetFenceProcAddrTable(
     xe_fence_dditable_t* pDdiTable                  ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xeDdiTable.Fence;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
     pDdiTable->pfnCreate                                 = xeFenceCreate;
 
-    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
     pDdiTable->pfnDestroy                                = xeFenceDestroy;
 
-    dditable.pfnHostSynchronize                          = pDdiTable->pfnHostSynchronize;
     pDdiTable->pfnHostSynchronize                        = xeFenceHostSynchronize;
 
-    dditable.pfnQueryStatus                              = pDdiTable->pfnQueryStatus;
     pDdiTable->pfnQueryStatus                            = xeFenceQueryStatus;
 
-    dditable.pfnReset                                    = pDdiTable->pfnReset;
     pDdiTable->pfnReset                                  = xeFenceReset;
 
     return result;
@@ -435,29 +357,22 @@ xeGetEventPoolProcAddrTable(
     xe_event_pool_dditable_t* pDdiTable             ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xeDdiTable.EventPool;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
     pDdiTable->pfnCreate                                 = xeEventPoolCreate;
 
-    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
     pDdiTable->pfnDestroy                                = xeEventPoolDestroy;
 
-    dditable.pfnGetIpcHandle                             = pDdiTable->pfnGetIpcHandle;
     pDdiTable->pfnGetIpcHandle                           = xeEventPoolGetIpcHandle;
 
-    dditable.pfnOpenIpcHandle                            = pDdiTable->pfnOpenIpcHandle;
     pDdiTable->pfnOpenIpcHandle                          = xeEventPoolOpenIpcHandle;
 
-    dditable.pfnCloseIpcHandle                           = pDdiTable->pfnCloseIpcHandle;
     pDdiTable->pfnCloseIpcHandle                         = xeEventPoolCloseIpcHandle;
 
     return result;
@@ -480,32 +395,24 @@ xeGetEventProcAddrTable(
     xe_event_dditable_t* pDdiTable                  ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xeDdiTable.Event;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
     pDdiTable->pfnCreate                                 = xeEventCreate;
 
-    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
     pDdiTable->pfnDestroy                                = xeEventDestroy;
 
-    dditable.pfnHostSignal                               = pDdiTable->pfnHostSignal;
     pDdiTable->pfnHostSignal                             = xeEventHostSignal;
 
-    dditable.pfnHostSynchronize                          = pDdiTable->pfnHostSynchronize;
     pDdiTable->pfnHostSynchronize                        = xeEventHostSynchronize;
 
-    dditable.pfnQueryStatus                              = pDdiTable->pfnQueryStatus;
     pDdiTable->pfnQueryStatus                            = xeEventQueryStatus;
 
-    dditable.pfnReset                                    = pDdiTable->pfnReset;
     pDdiTable->pfnReset                                  = xeEventReset;
 
     return result;
@@ -528,23 +435,18 @@ xeGetImageProcAddrTable(
     xe_image_dditable_t* pDdiTable                  ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xeDdiTable.Image;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
     pDdiTable->pfnGetProperties                          = xeImageGetProperties;
 
-    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
     pDdiTable->pfnCreate                                 = xeImageCreate;
 
-    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
     pDdiTable->pfnDestroy                                = xeImageDestroy;
 
     return result;
@@ -567,29 +469,22 @@ xeGetModuleProcAddrTable(
     xe_module_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xeDdiTable.Module;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
     pDdiTable->pfnCreate                                 = xeModuleCreate;
 
-    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
     pDdiTable->pfnDestroy                                = xeModuleDestroy;
 
-    dditable.pfnGetNativeBinary                          = pDdiTable->pfnGetNativeBinary;
     pDdiTable->pfnGetNativeBinary                        = xeModuleGetNativeBinary;
 
-    dditable.pfnGetGlobalPointer                         = pDdiTable->pfnGetGlobalPointer;
     pDdiTable->pfnGetGlobalPointer                       = xeModuleGetGlobalPointer;
 
-    dditable.pfnGetFunctionPointer                       = pDdiTable->pfnGetFunctionPointer;
     pDdiTable->pfnGetFunctionPointer                     = xeModuleGetFunctionPointer;
 
     return result;
@@ -612,20 +507,16 @@ xeGetModuleBuildLogProcAddrTable(
     xe_module_build_log_dditable_t* pDdiTable       ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xeDdiTable.ModuleBuildLog;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
     pDdiTable->pfnDestroy                                = xeModuleBuildLogDestroy;
 
-    dditable.pfnGetString                                = pDdiTable->pfnGetString;
     pDdiTable->pfnGetString                              = xeModuleBuildLogGetString;
 
     return result;
@@ -648,35 +539,26 @@ xeGetFunctionProcAddrTable(
     xe_function_dditable_t* pDdiTable               ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xeDdiTable.Function;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
     pDdiTable->pfnCreate                                 = xeFunctionCreate;
 
-    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
     pDdiTable->pfnDestroy                                = xeFunctionDestroy;
 
-    dditable.pfnSetGroupSize                             = pDdiTable->pfnSetGroupSize;
     pDdiTable->pfnSetGroupSize                           = xeFunctionSetGroupSize;
 
-    dditable.pfnSuggestGroupSize                         = pDdiTable->pfnSuggestGroupSize;
     pDdiTable->pfnSuggestGroupSize                       = xeFunctionSuggestGroupSize;
 
-    dditable.pfnSetArgumentValue                         = pDdiTable->pfnSetArgumentValue;
     pDdiTable->pfnSetArgumentValue                       = xeFunctionSetArgumentValue;
 
-    dditable.pfnSetAttribute                             = pDdiTable->pfnSetAttribute;
     pDdiTable->pfnSetAttribute                           = xeFunctionSetAttribute;
 
-    dditable.pfnGetAttribute                             = pDdiTable->pfnGetAttribute;
     pDdiTable->pfnGetAttribute                           = xeFunctionGetAttribute;
 
     return result;
@@ -699,20 +581,16 @@ xeGetSamplerProcAddrTable(
     xe_sampler_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xeDdiTable.Sampler;
-
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( driver.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
     pDdiTable->pfnCreate                                 = xeSamplerCreate;
 
-    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
     pDdiTable->pfnDestroy                                = xeSamplerDestroy;
 
     return result;
@@ -725,16 +603,12 @@ xeInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    auto pfnInit = validation.xeDdiTable.Global.pfnInit;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnInit )
-        return XE_RESULT_ERROR_UNSUPPORTED;
+    // global functions need to be handled manually by the driver
+    result = driver.xeInit( flags );
 
-    if( validation.enableParameterValidation )
-    {
-    }
-
-    return pfnInit( flags );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -745,22 +619,9 @@ xeDeviceGroupGetDriverVersion(
     uint32_t* version                               ///< [out] driver version
     )
 {
-    auto pfnGetDriverVersion = validation.xeDdiTable.DeviceGroup.pfnGetDriverVersion;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetDriverVersion )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDeviceGroup )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == version )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetDriverVersion( hDeviceGroup, version );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -775,19 +636,12 @@ xeGetDeviceGroups(
     xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
     )
 {
-    auto pfnGetDeviceGroups = validation.xeDdiTable.Global.pfnGetDeviceGroups;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetDeviceGroups )
-        return XE_RESULT_ERROR_UNSUPPORTED;
+    // global functions need to be handled manually by the driver
+    result = driver.xeGetDeviceGroups( pCount, pDeviceGroups );
 
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == pCount )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetDeviceGroups( pCount, pDeviceGroups );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -803,22 +657,11 @@ xeDeviceGroupGetDevices(
     xe_device_handle_t* pDevices                    ///< [in,out][optional][range(0, *pCount)] array of handle of devices
     )
 {
-    auto pfnGetDevices = validation.xeDdiTable.DeviceGroup.pfnGetDevices;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetDevices )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDeviceGroup )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pCount )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetDevices( hDeviceGroup, pCount, pDevices );
+    for( size_t i = 0; ( nullptr != pDevices ) && ( i < *pCount ); ++i )
+        pDevices[ i ] = reinterpret_cast<xe_device_handle_t>( driver.get() );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -830,22 +673,10 @@ xeDeviceGetSubDevice(
     xe_device_handle_t* phSubDevice                 ///< [out] pointer to handle of sub-device object.
     )
 {
-    auto pfnGetSubDevice = validation.xeDdiTable.Device.pfnGetSubDevice;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetSubDevice )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phSubDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetSubDevice( hDevice, ordinal, phSubDevice );
+    *phSubDevice = reinterpret_cast<xe_device_handle_t>( driver.get() );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -856,22 +687,9 @@ xeDeviceGroupGetApiVersion(
     xe_api_version_t* version                       ///< [out] api version
     )
 {
-    auto pfnGetApiVersion = validation.xeDdiTable.DeviceGroup.pfnGetApiVersion;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetApiVersion )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDeviceGroup )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == version )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetApiVersion( hDeviceGroup, version );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -882,22 +700,9 @@ xeDeviceGroupGetProperties(
     xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
     )
 {
-    auto pfnGetProperties = validation.xeDdiTable.DeviceGroup.pfnGetProperties;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetProperties )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDeviceGroup )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pDeviceProperties )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetProperties( hDeviceGroup, pDeviceProperties );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -908,22 +713,9 @@ xeDeviceGroupGetComputeProperties(
     xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
     )
 {
-    auto pfnGetComputeProperties = validation.xeDdiTable.DeviceGroup.pfnGetComputeProperties;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetComputeProperties )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDeviceGroup )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pComputeProperties )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetComputeProperties( hDeviceGroup, pComputeProperties );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -934,22 +726,9 @@ xeDeviceGroupGetMemoryProperties(
     xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
     )
 {
-    auto pfnGetMemoryProperties = validation.xeDdiTable.DeviceGroup.pfnGetMemoryProperties;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetMemoryProperties )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDeviceGroup )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pMemProperties )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetMemoryProperties( hDeviceGroup, pMemProperties );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -961,25 +740,9 @@ xeDeviceGetP2PProperties(
     xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
     )
 {
-    auto pfnGetP2PProperties = validation.xeDdiTable.Device.pfnGetP2PProperties;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetP2PProperties )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hPeerDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pP2PProperties )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetP2PProperties( hDevice, hPeerDevice, pP2PProperties );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -991,25 +754,9 @@ xeDeviceCanAccessPeer(
     xe_bool_t* value                                ///< [out] returned access capability
     )
 {
-    auto pfnCanAccessPeer = validation.xeDdiTable.Device.pfnCanAccessPeer;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnCanAccessPeer )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hPeerDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == value )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnCanAccessPeer( hDevice, hPeerDevice, value );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1020,19 +767,9 @@ xeDeviceSetIntermediateCacheConfig(
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     )
 {
-    auto pfnSetIntermediateCacheConfig = validation.xeDdiTable.Device.pfnSetIntermediateCacheConfig;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnSetIntermediateCacheConfig )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnSetIntermediateCacheConfig( hDevice, CacheConfig );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1043,19 +780,9 @@ xeDeviceSetLastLevelCacheConfig(
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     )
 {
-    auto pfnSetLastLevelCacheConfig = validation.xeDdiTable.Device.pfnSetLastLevelCacheConfig;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnSetLastLevelCacheConfig )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnSetLastLevelCacheConfig( hDevice, CacheConfig );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1067,28 +794,10 @@ xeCommandQueueCreate(
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     )
 {
-    auto pfnCreate = validation.xeDdiTable.CommandQueue.pfnCreate;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnCreate )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == desc )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phCommandQueue )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-    }
-
-    return pfnCreate( hDevice, desc, phCommandQueue );
+    *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>( driver.get() );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1098,19 +807,9 @@ xeCommandQueueDestroy(
     xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
     )
 {
-    auto pfnDestroy = validation.xeDdiTable.CommandQueue.pfnDestroy;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnDestroy )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandQueue )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnDestroy( hCommandQueue );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1124,22 +823,9 @@ xeCommandQueueExecuteCommandLists(
     xe_fence_handle_t hFence                        ///< [in][optional] handle of the fence to signal on completion
     )
 {
-    auto pfnExecuteCommandLists = validation.xeDdiTable.CommandQueue.pfnExecuteCommandLists;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnExecuteCommandLists )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandQueue )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phCommandLists )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnExecuteCommandLists( hCommandQueue, numCommandLists, phCommandLists, hFence );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1154,19 +840,9 @@ xeCommandQueueSynchronize(
                                                     ///< is lost.
     )
 {
-    auto pfnSynchronize = validation.xeDdiTable.CommandQueue.pfnSynchronize;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnSynchronize )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandQueue )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnSynchronize( hCommandQueue, timeout );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1178,28 +854,10 @@ xeCommandListCreate(
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     )
 {
-    auto pfnCreate = validation.xeDdiTable.CommandList.pfnCreate;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnCreate )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == desc )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( XE_COMMAND_LIST_DESC_VERSION_CURRENT < desc->version )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-    }
-
-    return pfnCreate( hDevice, desc, phCommandList );
+    *phCommandList = reinterpret_cast<xe_command_list_handle_t>( driver.get() );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1211,28 +869,10 @@ xeCommandListCreateImmediate(
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     )
 {
-    auto pfnCreateImmediate = validation.xeDdiTable.CommandList.pfnCreateImmediate;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnCreateImmediate )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == desc )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-    }
-
-    return pfnCreateImmediate( hDevice, desc, phCommandList );
+    *phCommandList = reinterpret_cast<xe_command_list_handle_t>( driver.get() );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1242,19 +882,9 @@ xeCommandListDestroy(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
     )
 {
-    auto pfnDestroy = validation.xeDdiTable.CommandList.pfnDestroy;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnDestroy )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnDestroy( hCommandList );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1264,19 +894,9 @@ xeCommandListClose(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
     )
 {
-    auto pfnClose = validation.xeDdiTable.CommandList.pfnClose;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnClose )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnClose( hCommandList );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1286,19 +906,9 @@ xeCommandListReset(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
     )
 {
-    auto pfnReset = validation.xeDdiTable.CommandList.pfnReset;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnReset )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnReset( hCommandList );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1310,19 +920,9 @@ xeCommandListSetParameter(
     uint32_t value                                  ///< [in] value of attribute
     )
 {
-    auto pfnSetParameter = validation.xeDdiTable.CommandList.pfnSetParameter;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnSetParameter )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnSetParameter( hCommandList, parameter, value );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1334,22 +934,9 @@ xeCommandListGetParameter(
     uint32_t* value                                 ///< [out] value of attribute
     )
 {
-    auto pfnGetParameter = validation.xeDdiTable.CommandList.pfnGetParameter;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetParameter )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == value )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetParameter( hCommandList, parameter, value );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1359,19 +946,9 @@ xeCommandListResetParameters(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
 {
-    auto pfnResetParameters = validation.xeDdiTable.CommandList.pfnResetParameters;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnResetParameters )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnResetParameters( hCommandList );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1383,22 +960,9 @@ xeCommandListReserveSpace(
     void** ptr                                      ///< [out] pointer to command buffer space reserved
     )
 {
-    auto pfnReserveSpace = validation.xeDdiTable.CommandList.pfnReserveSpace;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnReserveSpace )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnReserveSpace( hCommandList, size, ptr );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1412,19 +976,9 @@ xeCommandListAppendBarrier(
                                                     ///< on before executing barrier
     )
 {
-    auto pfnAppendBarrier = validation.xeDdiTable.CommandList.pfnAppendBarrier;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAppendBarrier )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAppendBarrier( hCommandList, hSignalEvent, numWaitEvents, phWaitEvents );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1441,25 +995,9 @@ xeCommandListAppendMemoryRangesBarrier(
                                                     ///< on before executing barrier
     )
 {
-    auto pfnAppendMemoryRangesBarrier = validation.xeDdiTable.CommandList.pfnAppendMemoryRangesBarrier;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAppendMemoryRangesBarrier )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pRangeSizes )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pRanges )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAppendMemoryRangesBarrier( hCommandList, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1469,19 +1007,9 @@ xeDeviceSystemBarrier(
     xe_device_handle_t hDevice                      ///< [in] handle of the device
     )
 {
-    auto pfnSystemBarrier = validation.xeDdiTable.Device.pfnSystemBarrier;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnSystemBarrier )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnSystemBarrier( hDevice );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1495,22 +1023,9 @@ xeDeviceRegisterCLMemory(
     void** ptr                                      ///< [out] pointer to device allocation
     )
 {
-    auto pfnRegisterCLMemory = validation.xeDdiTable.Device.pfnRegisterCLMemory;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnRegisterCLMemory )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnRegisterCLMemory( hDevice, context, mem, ptr );
+    return result;
 }
 #endif // XE_ENABLE_OCL_INTEROP
 
@@ -1525,22 +1040,10 @@ xeDeviceRegisterCLProgram(
     xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
     )
 {
-    auto pfnRegisterCLProgram = validation.xeDdiTable.Device.pfnRegisterCLProgram;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnRegisterCLProgram )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phModule )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnRegisterCLProgram( hDevice, context, program, phModule );
+    *phModule = reinterpret_cast<xe_module_handle_t>( driver.get() );
+    return result;
 }
 #endif // XE_ENABLE_OCL_INTEROP
 
@@ -1555,22 +1058,10 @@ xeDeviceRegisterCLCommandQueue(
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     )
 {
-    auto pfnRegisterCLCommandQueue = validation.xeDdiTable.Device.pfnRegisterCLCommandQueue;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnRegisterCLCommandQueue )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phCommandQueue )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
+    *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>( driver.get() );
+    return result;
 }
 #endif // XE_ENABLE_OCL_INTEROP
 
@@ -1585,25 +1076,9 @@ xeCommandListAppendMemoryCopy(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    auto pfnAppendMemoryCopy = validation.xeDdiTable.CommandList.pfnAppendMemoryCopy;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAppendMemoryCopy )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == dstptr )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == srcptr )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAppendMemoryCopy( hCommandList, dstptr, srcptr, size, hEvent );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1617,22 +1092,9 @@ xeCommandListAppendMemorySet(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    auto pfnAppendMemorySet = validation.xeDdiTable.CommandList.pfnAppendMemorySet;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAppendMemorySet )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAppendMemorySet( hCommandList, ptr, value, size, hEvent );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1649,31 +1111,9 @@ xeCommandListAppendMemoryCopyRegion(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    auto pfnAppendMemoryCopyRegion = validation.xeDdiTable.CommandList.pfnAppendMemoryCopyRegion;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAppendMemoryCopyRegion )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == dstptr )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == dstRegion )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == srcptr )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == srcRegion )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, srcptr, srcRegion, srcPitch, hEvent );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1686,25 +1126,9 @@ xeCommandListAppendImageCopy(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    auto pfnAppendImageCopy = validation.xeDdiTable.CommandList.pfnAppendImageCopy;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAppendImageCopy )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hDstImage )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hSrcImage )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAppendImageCopy( hCommandList, hDstImage, hSrcImage, hEvent );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1719,25 +1143,9 @@ xeCommandListAppendImageCopyRegion(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    auto pfnAppendImageCopyRegion = validation.xeDdiTable.CommandList.pfnAppendImageCopyRegion;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAppendImageCopyRegion )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hDstImage )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hSrcImage )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAppendImageCopyRegion( hCommandList, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hEvent );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1751,25 +1159,9 @@ xeCommandListAppendImageCopyToMemory(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    auto pfnAppendImageCopyToMemory = validation.xeDdiTable.CommandList.pfnAppendImageCopyToMemory;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAppendImageCopyToMemory )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == dstptr )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hSrcImage )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAppendImageCopyToMemory( hCommandList, dstptr, hSrcImage, pSrcRegion, hEvent );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1783,25 +1175,9 @@ xeCommandListAppendImageCopyFromMemory(
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
-    auto pfnAppendImageCopyFromMemory = validation.xeDdiTable.CommandList.pfnAppendImageCopyFromMemory;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAppendImageCopyFromMemory )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hDstImage )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == srcptr )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAppendImageCopyFromMemory( hCommandList, hDstImage, srcptr, pDstRegion, hEvent );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1813,22 +1189,9 @@ xeCommandListAppendMemoryPrefetch(
     size_t count                                    ///< [in] size in bytes of the memory range to prefetch
     )
 {
-    auto pfnAppendMemoryPrefetch = validation.xeDdiTable.CommandList.pfnAppendMemoryPrefetch;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAppendMemoryPrefetch )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAppendMemoryPrefetch( hCommandList, ptr, count );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1842,25 +1205,9 @@ xeCommandListAppendMemAdvise(
     xe_memory_advice_t advice                       ///< [in] Memory advice for the memory range
     )
 {
-    auto pfnAppendMemAdvise = validation.xeDdiTable.CommandList.pfnAppendMemAdvise;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAppendMemAdvise )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAppendMemAdvise( hCommandList, hDevice, ptr, size, advice );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1872,28 +1219,10 @@ xeEventPoolCreate(
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
     )
 {
-    auto pfnCreate = validation.xeDdiTable.EventPool.pfnCreate;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnCreate )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == desc )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phEventPool )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( XE_EVENT_POOL_DESC_VERSION_CURRENT < desc->version )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-    }
-
-    return pfnCreate( hDevice, desc, phEventPool );
+    *phEventPool = reinterpret_cast<xe_event_pool_handle_t>( driver.get() );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1903,19 +1232,9 @@ xeEventPoolDestroy(
     xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object to destroy
     )
 {
-    auto pfnDestroy = validation.xeDdiTable.EventPool.pfnDestroy;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnDestroy )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hEventPool )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnDestroy( hEventPool );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1927,28 +1246,10 @@ xeEventCreate(
     xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
     )
 {
-    auto pfnCreate = validation.xeDdiTable.Event.pfnCreate;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnCreate )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hEventPool )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == desc )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phEvent )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( XE_EVENT_DESC_VERSION_CURRENT < desc->version )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-    }
-
-    return pfnCreate( hEventPool, desc, phEvent );
+    *phEvent = reinterpret_cast<xe_event_handle_t>( driver.get() );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1958,19 +1259,9 @@ xeEventDestroy(
     xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
     )
 {
-    auto pfnDestroy = validation.xeDdiTable.Event.pfnDestroy;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnDestroy )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hEvent )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnDestroy( hEvent );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1981,22 +1272,9 @@ xeEventPoolGetIpcHandle(
     xe_ipc_event_pool_handle_t* phIpc               ///< [out] Returned IPC event handle
     )
 {
-    auto pfnGetIpcHandle = validation.xeDdiTable.EventPool.pfnGetIpcHandle;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetIpcHandle )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hEventPool )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phIpc )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetIpcHandle( hEventPool, phIpc );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2008,25 +1286,10 @@ xeEventPoolOpenIpcHandle(
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
     )
 {
-    auto pfnOpenIpcHandle = validation.xeDdiTable.EventPool.pfnOpenIpcHandle;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnOpenIpcHandle )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hIpc )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phEventPool )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnOpenIpcHandle( hDevice, hIpc, phEventPool );
+    *phEventPool = reinterpret_cast<xe_event_pool_handle_t>( driver.get() );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2036,19 +1299,9 @@ xeEventPoolCloseIpcHandle(
     xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object
     )
 {
-    auto pfnCloseIpcHandle = validation.xeDdiTable.EventPool.pfnCloseIpcHandle;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnCloseIpcHandle )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hEventPool )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnCloseIpcHandle( hEventPool );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2059,22 +1312,9 @@ xeCommandListAppendSignalEvent(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    auto pfnAppendSignalEvent = validation.xeDdiTable.CommandList.pfnAppendSignalEvent;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAppendSignalEvent )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hEvent )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAppendSignalEvent( hCommandList, hEvent );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2087,22 +1327,9 @@ xeCommandListAppendWaitOnEvents(
                                                     ///< continuing
     )
 {
-    auto pfnAppendWaitOnEvents = validation.xeDdiTable.CommandList.pfnAppendWaitOnEvents;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAppendWaitOnEvents )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phEvents )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAppendWaitOnEvents( hCommandList, numEvents, phEvents );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2112,19 +1339,9 @@ xeEventHostSignal(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    auto pfnHostSignal = validation.xeDdiTable.Event.pfnHostSignal;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnHostSignal )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hEvent )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnHostSignal( hEvent );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2139,19 +1356,9 @@ xeEventHostSynchronize(
                                                     ///< is lost.
     )
 {
-    auto pfnHostSynchronize = validation.xeDdiTable.Event.pfnHostSynchronize;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnHostSynchronize )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hEvent )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnHostSynchronize( hEvent, timeout );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2161,19 +1368,9 @@ xeEventQueryStatus(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    auto pfnQueryStatus = validation.xeDdiTable.Event.pfnQueryStatus;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnQueryStatus )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hEvent )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnQueryStatus( hEvent );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2184,22 +1381,9 @@ xeCommandListAppendEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    auto pfnAppendEventReset = validation.xeDdiTable.CommandList.pfnAppendEventReset;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAppendEventReset )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hEvent )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAppendEventReset( hCommandList, hEvent );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2209,19 +1393,9 @@ xeEventReset(
     xe_event_handle_t hEvent                        ///< [in] handle of the event
     )
 {
-    auto pfnReset = validation.xeDdiTable.Event.pfnReset;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnReset )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hEvent )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnReset( hEvent );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2233,28 +1407,10 @@ xeFenceCreate(
     xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
     )
 {
-    auto pfnCreate = validation.xeDdiTable.Fence.pfnCreate;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnCreate )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandQueue )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == desc )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phFence )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( XE_FENCE_DESC_VERSION_CURRENT < desc->version )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-    }
-
-    return pfnCreate( hCommandQueue, desc, phFence );
+    *phFence = reinterpret_cast<xe_fence_handle_t>( driver.get() );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2264,19 +1420,9 @@ xeFenceDestroy(
     xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
     )
 {
-    auto pfnDestroy = validation.xeDdiTable.Fence.pfnDestroy;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnDestroy )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hFence )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnDestroy( hFence );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2291,19 +1437,9 @@ xeFenceHostSynchronize(
                                                     ///< is lost.
     )
 {
-    auto pfnHostSynchronize = validation.xeDdiTable.Fence.pfnHostSynchronize;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnHostSynchronize )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hFence )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnHostSynchronize( hFence, timeout );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2313,19 +1449,9 @@ xeFenceQueryStatus(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
-    auto pfnQueryStatus = validation.xeDdiTable.Fence.pfnQueryStatus;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnQueryStatus )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hFence )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnQueryStatus( hFence );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2335,19 +1461,9 @@ xeFenceReset(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
-    auto pfnReset = validation.xeDdiTable.Fence.pfnReset;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnReset )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hFence )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnReset( hFence );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2359,28 +1475,9 @@ xeImageGetProperties(
     xe_image_properties_t* pImageProperties         ///< [out] pointer to image properties
     )
 {
-    auto pfnGetProperties = validation.xeDdiTable.Image.pfnGetProperties;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetProperties )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == desc )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pImageProperties )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( XE_IMAGE_DESC_VERSION_CURRENT < desc->version )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-    }
-
-    return pfnGetProperties( hDevice, desc, pImageProperties );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2392,28 +1489,10 @@ xeImageCreate(
     xe_image_handle_t* phImage                      ///< [out] pointer to handle of image object created
     )
 {
-    auto pfnCreate = validation.xeDdiTable.Image.pfnCreate;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnCreate )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == desc )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phImage )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( XE_IMAGE_DESC_VERSION_CURRENT < desc->version )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-    }
-
-    return pfnCreate( hDevice, desc, phImage );
+    *phImage = reinterpret_cast<xe_image_handle_t>( driver.get() );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2423,19 +1502,9 @@ xeImageDestroy(
     xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
     )
 {
-    auto pfnDestroy = validation.xeDdiTable.Image.pfnDestroy;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnDestroy )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hImage )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnDestroy( hImage );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2451,25 +1520,9 @@ xeDeviceGroupAllocSharedMem(
     void** ptr                                      ///< [out] pointer to shared allocation
     )
 {
-    auto pfnAllocSharedMem = validation.xeDdiTable.DeviceGroup.pfnAllocSharedMem;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAllocSharedMem )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDeviceGroup )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, host_flags, size, alignment, ptr );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2484,25 +1537,9 @@ xeDeviceGroupAllocDeviceMem(
     void** ptr                                      ///< [out] pointer to device allocation
     )
 {
-    auto pfnAllocDeviceMem = validation.xeDdiTable.DeviceGroup.pfnAllocDeviceMem;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAllocDeviceMem )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDeviceGroup )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, size, alignment, ptr );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2516,22 +1553,9 @@ xeDeviceGroupAllocHostMem(
     void** ptr                                      ///< [out] pointer to host allocation
     )
 {
-    auto pfnAllocHostMem = validation.xeDdiTable.DeviceGroup.pfnAllocHostMem;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAllocHostMem )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDeviceGroup )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAllocHostMem( hDeviceGroup, flags, size, alignment, ptr );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2542,22 +1566,9 @@ xeDeviceGroupFreeMem(
     const void* ptr                                 ///< [in] pointer to memory to free
     )
 {
-    auto pfnFreeMem = validation.xeDdiTable.DeviceGroup.pfnFreeMem;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnFreeMem )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDeviceGroup )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnFreeMem( hDeviceGroup, ptr );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2569,25 +1580,9 @@ xeDeviceGroupGetMemProperties(
     xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
     )
 {
-    auto pfnGetMemProperties = validation.xeDdiTable.DeviceGroup.pfnGetMemProperties;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetMemProperties )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDeviceGroup )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pMemProperties )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetMemProperties( hDeviceGroup, ptr, pMemProperties );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2600,22 +1595,9 @@ xeDeviceGroupGetMemAddressRange(
     size_t* pSize                                   ///< [in,out][optional] size of the allocation
     )
 {
-    auto pfnGetMemAddressRange = validation.xeDdiTable.DeviceGroup.pfnGetMemAddressRange;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetMemAddressRange )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDeviceGroup )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetMemAddressRange( hDeviceGroup, ptr, pBase, pSize );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2627,25 +1609,9 @@ xeDeviceGroupGetMemIpcHandle(
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
     )
 {
-    auto pfnGetMemIpcHandle = validation.xeDdiTable.DeviceGroup.pfnGetMemIpcHandle;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetMemIpcHandle )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDeviceGroup )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pIpcHandle )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetMemIpcHandle( hDeviceGroup, ptr, pIpcHandle );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2659,28 +1625,9 @@ xeDeviceGroupOpenMemIpcHandle(
     void** ptr                                      ///< [out] pointer to device allocation in this process
     )
 {
-    auto pfnOpenMemIpcHandle = validation.xeDdiTable.DeviceGroup.pfnOpenMemIpcHandle;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnOpenMemIpcHandle )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDeviceGroup )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == handle )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnOpenMemIpcHandle( hDeviceGroup, hDevice, handle, flags, ptr );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2691,22 +1638,9 @@ xeDeviceGroupCloseMemIpcHandle(
     const void* ptr                                 ///< [in] pointer to device allocation in this process
     )
 {
-    auto pfnCloseMemIpcHandle = validation.xeDdiTable.DeviceGroup.pfnCloseMemIpcHandle;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnCloseMemIpcHandle )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDeviceGroup )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnCloseMemIpcHandle( hDeviceGroup, ptr );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2719,28 +1653,11 @@ xeModuleCreate(
     xe_module_build_log_handle_t* phBuildLog        ///< [in,out][optional] pointer to handle of module's build log.
     )
 {
-    auto pfnCreate = validation.xeDdiTable.Module.pfnCreate;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnCreate )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pDesc )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phModule )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( XE_MODULE_DESC_VERSION_CURRENT < pDesc->version )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-    }
-
-    return pfnCreate( hDevice, pDesc, phModule, phBuildLog );
+    *phModule = reinterpret_cast<xe_module_handle_t>( driver.get() );
+    if( nullptr != phBuildLog ) *phBuildLog = reinterpret_cast<xe_module_build_log_handle_t>( driver.get() );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2750,19 +1667,9 @@ xeModuleDestroy(
     xe_module_handle_t hModule                      ///< [in] handle of the module
     )
 {
-    auto pfnDestroy = validation.xeDdiTable.Module.pfnDestroy;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnDestroy )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hModule )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnDestroy( hModule );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2772,19 +1679,9 @@ xeModuleBuildLogDestroy(
     xe_module_build_log_handle_t hModuleBuildLog    ///< [in] handle of the module build log object.
     )
 {
-    auto pfnDestroy = validation.xeDdiTable.ModuleBuildLog.pfnDestroy;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnDestroy )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hModuleBuildLog )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnDestroy( hModuleBuildLog );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2796,22 +1693,9 @@ xeModuleBuildLogGetString(
     char* pBuildLog                                 ///< [in,out][optional] pointer to null-terminated string of the log.
     )
 {
-    auto pfnGetString = validation.xeDdiTable.ModuleBuildLog.pfnGetString;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetString )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hModuleBuildLog )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pSize )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetString( hModuleBuildLog, pSize, pBuildLog );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2823,22 +1707,9 @@ xeModuleGetNativeBinary(
     uint8_t* pModuleNativeBinary                    ///< [in,out][optional] byte pointer to native binary
     )
 {
-    auto pfnGetNativeBinary = validation.xeDdiTable.Module.pfnGetNativeBinary;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetNativeBinary )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hModule )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pSize )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetNativeBinary( hModule, pSize, pModuleNativeBinary );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2850,25 +1721,9 @@ xeModuleGetGlobalPointer(
     void** pPtr                                     ///< [out] device visible pointer
     )
 {
-    auto pfnGetGlobalPointer = validation.xeDdiTable.Module.pfnGetGlobalPointer;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetGlobalPointer )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hModule )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pGlobalName )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pPtr )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetGlobalPointer( hModule, pGlobalName, pPtr );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2880,28 +1735,10 @@ xeFunctionCreate(
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object
     )
 {
-    auto pfnCreate = validation.xeDdiTable.Function.pfnCreate;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnCreate )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hModule )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pDesc )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phFunction )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( XE_FUNCTION_DESC_VERSION_CURRENT < pDesc->version )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-    }
-
-    return pfnCreate( hModule, pDesc, phFunction );
+    *phFunction = reinterpret_cast<xe_function_handle_t>( driver.get() );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2911,19 +1748,9 @@ xeFunctionDestroy(
     xe_function_handle_t hFunction                  ///< [in] handle of the function object
     )
 {
-    auto pfnDestroy = validation.xeDdiTable.Function.pfnDestroy;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnDestroy )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hFunction )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnDestroy( hFunction );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2935,25 +1762,9 @@ xeModuleGetFunctionPointer(
     void** pfnFunction                              ///< [out] pointer to function.
     )
 {
-    auto pfnGetFunctionPointer = validation.xeDdiTable.Module.pfnGetFunctionPointer;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetFunctionPointer )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hModule )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pFunctionName )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pfnFunction )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetFunctionPointer( hModule, pFunctionName, pfnFunction );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2966,19 +1777,9 @@ xeFunctionSetGroupSize(
     uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this function.
     )
 {
-    auto pfnSetGroupSize = validation.xeDdiTable.Function.pfnSetGroupSize;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnSetGroupSize )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hFunction )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnSetGroupSize( hFunction, groupSizeX, groupSizeY, groupSizeZ );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2994,28 +1795,9 @@ xeFunctionSuggestGroupSize(
     uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
     )
 {
-    auto pfnSuggestGroupSize = validation.xeDdiTable.Function.pfnSuggestGroupSize;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnSuggestGroupSize )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hFunction )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == groupSizeX )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == groupSizeY )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == groupSizeZ )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnSuggestGroupSize( hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3029,19 +1811,9 @@ xeFunctionSetArgumentValue(
                                                     ///< null then argument value is considered null.
     )
 {
-    auto pfnSetArgumentValue = validation.xeDdiTable.Function.pfnSetArgumentValue;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnSetArgumentValue )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hFunction )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnSetArgumentValue( hFunction, argIndex, argSize, pArgValue );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3053,19 +1825,9 @@ xeFunctionSetAttribute(
     uint32_t value                                  ///< [in] attribute value to set
     )
 {
-    auto pfnSetAttribute = validation.xeDdiTable.Function.pfnSetAttribute;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnSetAttribute )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hFunction )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnSetAttribute( hFunction, attr, value );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3077,22 +1839,9 @@ xeFunctionGetAttribute(
     uint32_t* pValue                                ///< [out] returned attribute value
     )
 {
-    auto pfnGetAttribute = validation.xeDdiTable.Function.pfnGetAttribute;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnGetAttribute )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hFunction )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pValue )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnGetAttribute( hFunction, attr, pValue );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3108,25 +1857,9 @@ xeCommandListAppendLaunchFunction(
                                                     ///< on before launching
     )
 {
-    auto pfnAppendLaunchFunction = validation.xeDdiTable.CommandList.pfnAppendLaunchFunction;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAppendLaunchFunction )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hFunction )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pLaunchFuncArgs )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAppendLaunchFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3142,25 +1875,9 @@ xeCommandListAppendLaunchFunctionIndirect(
                                                     ///< on before launching
     )
 {
-    auto pfnAppendLaunchFunctionIndirect = validation.xeDdiTable.CommandList.pfnAppendLaunchFunctionIndirect;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAppendLaunchFunctionIndirect )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hFunction )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pLaunchArgumentsBuffer )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAppendLaunchFunctionIndirect( hCommandList, hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3181,28 +1898,9 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
                                                     ///< on before launching
     )
 {
-    auto pfnAppendLaunchMultipleFunctionsIndirect = validation.xeDdiTable.CommandList.pfnAppendLaunchMultipleFunctionsIndirect;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAppendLaunchMultipleFunctionsIndirect )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phFunctions )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pNumLaunchArguments )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pLaunchArgumentsBuffer )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3218,22 +1916,9 @@ xeCommandListAppendLaunchHostFunction(
                                                     ///< on before launching
     )
 {
-    auto pfnAppendLaunchHostFunction = validation.xeDdiTable.CommandList.pfnAppendLaunchHostFunction;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnAppendLaunchHostFunction )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandList )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pUserData )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnAppendLaunchHostFunction( hCommandList, pfnHostFunc, pUserData, hSignalEvent, numWaitEvents, phWaitEvents );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3245,22 +1930,9 @@ xeDeviceMakeMemoryResident(
     size_t size                                     ///< [in] size in bytes to make resident
     )
 {
-    auto pfnMakeMemoryResident = validation.xeDdiTable.Device.pfnMakeMemoryResident;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnMakeMemoryResident )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnMakeMemoryResident( hDevice, ptr, size );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3272,22 +1944,9 @@ xeDeviceEvictMemory(
     size_t size                                     ///< [in] size in bytes to evict
     )
 {
-    auto pfnEvictMemory = validation.xeDdiTable.Device.pfnEvictMemory;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnEvictMemory )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == ptr )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnEvictMemory( hDevice, ptr, size );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3298,22 +1957,9 @@ xeDeviceMakeImageResident(
     xe_image_handle_t hImage                        ///< [in] handle of image to make resident
     )
 {
-    auto pfnMakeImageResident = validation.xeDdiTable.Device.pfnMakeImageResident;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnMakeImageResident )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hImage )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnMakeImageResident( hDevice, hImage );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3324,22 +1970,9 @@ xeDeviceEvictImage(
     xe_image_handle_t hImage                        ///< [in] handle of image to make evict
     )
 {
-    auto pfnEvictImage = validation.xeDdiTable.Device.pfnEvictImage;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnEvictImage )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == hImage )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnEvictImage( hDevice, hImage );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3351,28 +1984,10 @@ xeSamplerCreate(
     xe_sampler_handle_t* phSampler                  ///< [out] handle of the sampler
     )
 {
-    auto pfnCreate = validation.xeDdiTable.Sampler.pfnCreate;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnCreate )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == pDesc )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phSampler )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( XE_SAMPLER_DESC_VERSION_CURRENT < pDesc->version )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-    }
-
-    return pfnCreate( hDevice, pDesc, phSampler );
+    *phSampler = reinterpret_cast<xe_sampler_handle_t>( driver.get() );
+    return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3382,19 +1997,9 @@ xeSamplerDestroy(
     xe_sampler_handle_t hSampler                    ///< [in] handle of the sampler
     )
 {
-    auto pfnDestroy = validation.xeDdiTable.Sampler.pfnDestroy;
+    xe_result_t result = XE_RESULT_SUCCESS;
 
-    if( nullptr == pfnDestroy )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hSampler )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnDestroy( hSampler );
+    return result;
 }
 
 #if defined(__cplusplus)
