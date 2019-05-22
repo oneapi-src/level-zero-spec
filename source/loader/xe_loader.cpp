@@ -27,32 +27,32 @@
 #include "xe_loader.h"
 
 //////////////////////////////////////////////////////////////////////////
-xe_device_group_object_t::map_t     xe_device_group_object_t::map;
-xe_device_object_t::map_t           xe_device_object_t::map;
-xe_command_list_object_t::map_t     xe_command_list_object_t::map;
-xe_command_queue_object_t::map_t    xe_command_queue_object_t::map;
-xe_fence_object_t::map_t            xe_fence_object_t::map;
-xe_event_pool_object_t::map_t       xe_event_pool_object_t::map;
-xe_event_object_t::map_t            xe_event_object_t::map;
-xe_image_object_t::map_t            xe_image_object_t::map;
-xe_module_object_t::map_t           xe_module_object_t::map;
-xe_module_build_log_object_t::map_t xe_module_build_log_object_t::map;
-xe_function_object_t::map_t         xe_function_object_t::map;
-xe_sampler_object_t::map_t          xe_sampler_object_t::map;
+xe_device_group_object_t::factory_t     xe_device_group_object_t::factory;
+xe_device_object_t::factory_t           xe_device_object_t::factory;
+xe_command_list_object_t::factory_t     xe_command_list_object_t::factory;
+xe_command_queue_object_t::factory_t    xe_command_queue_object_t::factory;
+xe_fence_object_t::factory_t            xe_fence_object_t::factory;
+xe_event_pool_object_t::factory_t       xe_event_pool_object_t::factory;
+xe_event_object_t::factory_t            xe_event_object_t::factory;
+xe_image_object_t::factory_t            xe_image_object_t::factory;
+xe_module_object_t::factory_t           xe_module_object_t::factory;
+xe_module_build_log_object_t::factory_t xe_module_build_log_object_t::factory;
+xe_function_object_t::factory_t         xe_function_object_t::factory;
+xe_sampler_object_t::factory_t          xe_sampler_object_t::factory;
 
-xex_device_object_t::map_t          xex_device_object_t::map;
-xex_command_graph_object_t::map_t   xex_command_graph_object_t::map;
+xex_device_object_t::factory_t          xex_device_object_t::factory;
+xex_command_graph_object_t::factory_t   xex_command_graph_object_t::factory;
 
-xet_device_object_t::map_t              xet_device_object_t::map;
-xet_command_list_object_t::map_t        xet_command_list_object_t::map;
-xet_event_object_t::map_t               xet_event_object_t::map;
-xet_metric_group_object_t::map_t        xet_metric_group_object_t::map;
-xet_metric_object_t::map_t              xet_metric_object_t::map;
-xet_metric_tracer_object_t::map_t       xet_metric_tracer_object_t::map;
-xet_metric_query_pool_object_t::map_t   xet_metric_query_pool_object_t::map;
-xet_metric_query_object_t::map_t        xet_metric_query_object_t::map;
-xet_power_object_t::map_t               xet_power_object_t::map;
-xet_freq_domain_object_t::map_t         xet_freq_domain_object_t::map;
+xet_device_object_t::factory_t              xet_device_object_t::factory;
+xet_command_list_object_t::factory_t        xet_command_list_object_t::factory;
+xet_event_object_t::factory_t               xet_event_object_t::factory;
+xet_metric_group_object_t::factory_t        xet_metric_group_object_t::factory;
+xet_metric_object_t::factory_t              xet_metric_object_t::factory;
+xet_metric_tracer_object_t::factory_t       xet_metric_tracer_object_t::factory;
+xet_metric_query_pool_object_t::factory_t   xet_metric_query_pool_object_t::factory;
+xet_metric_query_object_t::factory_t        xet_metric_query_object_t::factory;
+xet_power_object_t::factory_t               xet_power_object_t::factory;
+xet_freq_domain_object_t::factory_t         xet_freq_domain_object_t::factory;
 
 
 namespace xe_loader

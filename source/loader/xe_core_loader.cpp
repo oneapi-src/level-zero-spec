@@ -1045,8 +1045,8 @@ xeDeviceGetSubDevice(
     // forward to device-driver
     auto result = dditable->Device.pfnGetSubDevice( hDevice, ordinal, phSubDevice );
 
-    // convert driver handle to new loader handle
-    *phSubDevice = reinterpret_cast<xe_device_handle_t>( xe_device_object_t::get( *phSubDevice, dditable ) );
+    // convert driver handle to loader handle
+    *phSubDevice = reinterpret_cast<xe_device_handle_t>( xe_device_object_t::factory.get( *phSubDevice, dditable ) );
     
     return result;
 }
@@ -1228,8 +1228,8 @@ xeCommandQueueCreate(
     // forward to device-driver
     auto result = dditable->CommandQueue.pfnCreate( hDevice, desc, phCommandQueue );
 
-    // convert driver handle to new loader handle
-    *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>( xe_command_queue_object_t::get( *phCommandQueue, dditable ) );
+    // convert driver handle to loader handle
+    *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>( xe_command_queue_object_t::factory.get( *phCommandQueue, dditable ) );
     
     return result;
 }
@@ -1249,6 +1249,9 @@ xeCommandQueueDestroy(
     // forward to device-driver
     auto result = dditable->CommandQueue.pfnDestroy( hCommandQueue );
 
+    // release loader handle
+    xe_command_queue_object_t::factory.release( hCommandQueue );
+    
     return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -1320,8 +1323,8 @@ xeCommandListCreate(
     // forward to device-driver
     auto result = dditable->CommandList.pfnCreate( hDevice, desc, phCommandList );
 
-    // convert driver handle to new loader handle
-    *phCommandList = reinterpret_cast<xe_command_list_handle_t>( xe_command_list_object_t::get( *phCommandList, dditable ) );
+    // convert driver handle to loader handle
+    *phCommandList = reinterpret_cast<xe_command_list_handle_t>( xe_command_list_object_t::factory.get( *phCommandList, dditable ) );
     
     return result;
 }
@@ -1343,8 +1346,8 @@ xeCommandListCreateImmediate(
     // forward to device-driver
     auto result = dditable->CommandList.pfnCreateImmediate( hDevice, desc, phCommandList );
 
-    // convert driver handle to new loader handle
-    *phCommandList = reinterpret_cast<xe_command_list_handle_t>( xe_command_list_object_t::get( *phCommandList, dditable ) );
+    // convert driver handle to loader handle
+    *phCommandList = reinterpret_cast<xe_command_list_handle_t>( xe_command_list_object_t::factory.get( *phCommandList, dditable ) );
     
     return result;
 }
@@ -1364,6 +1367,9 @@ xeCommandListDestroy(
     // forward to device-driver
     auto result = dditable->CommandList.pfnDestroy( hCommandList );
 
+    // release loader handle
+    xe_command_list_object_t::factory.release( hCommandList );
+    
     return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -1600,8 +1606,8 @@ xeDeviceRegisterCLProgram(
     // forward to device-driver
     auto result = dditable->Device.pfnRegisterCLProgram( hDevice, context, program, phModule );
 
-    // convert driver handle to new loader handle
-    *phModule = reinterpret_cast<xe_module_handle_t>( xe_module_object_t::get( *phModule, dditable ) );
+    // convert driver handle to loader handle
+    *phModule = reinterpret_cast<xe_module_handle_t>( xe_module_object_t::factory.get( *phModule, dditable ) );
     
     return result;
 }
@@ -1626,8 +1632,8 @@ xeDeviceRegisterCLCommandQueue(
     // forward to device-driver
     auto result = dditable->Device.pfnRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
 
-    // convert driver handle to new loader handle
-    *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>( xe_command_queue_object_t::get( *phCommandQueue, dditable ) );
+    // convert driver handle to loader handle
+    *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>( xe_command_queue_object_t::factory.get( *phCommandQueue, dditable ) );
     
     return result;
 }
@@ -1884,8 +1890,8 @@ xeEventPoolCreate(
     // forward to device-driver
     auto result = dditable->EventPool.pfnCreate( hDevice, desc, phEventPool );
 
-    // convert driver handle to new loader handle
-    *phEventPool = reinterpret_cast<xe_event_pool_handle_t>( xe_event_pool_object_t::get( *phEventPool, dditable ) );
+    // convert driver handle to loader handle
+    *phEventPool = reinterpret_cast<xe_event_pool_handle_t>( xe_event_pool_object_t::factory.get( *phEventPool, dditable ) );
     
     return result;
 }
@@ -1905,6 +1911,9 @@ xeEventPoolDestroy(
     // forward to device-driver
     auto result = dditable->EventPool.pfnDestroy( hEventPool );
 
+    // release loader handle
+    xe_event_pool_object_t::factory.release( hEventPool );
+    
     return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -1925,8 +1934,8 @@ xeEventCreate(
     // forward to device-driver
     auto result = dditable->Event.pfnCreate( hEventPool, desc, phEvent );
 
-    // convert driver handle to new loader handle
-    *phEvent = reinterpret_cast<xe_event_handle_t>( xe_event_object_t::get( *phEvent, dditable ) );
+    // convert driver handle to loader handle
+    *phEvent = reinterpret_cast<xe_event_handle_t>( xe_event_object_t::factory.get( *phEvent, dditable ) );
     
     return result;
 }
@@ -1946,6 +1955,9 @@ xeEventDestroy(
     // forward to device-driver
     auto result = dditable->Event.pfnDestroy( hEvent );
 
+    // release loader handle
+    xe_event_object_t::factory.release( hEvent );
+    
     return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -1985,8 +1997,8 @@ xeEventPoolOpenIpcHandle(
     // forward to device-driver
     auto result = dditable->EventPool.pfnOpenIpcHandle( hDevice, hIpc, phEventPool );
 
-    // convert driver handle to new loader handle
-    *phEventPool = reinterpret_cast<xe_event_pool_handle_t>( xe_event_pool_object_t::get( *phEventPool, dditable ) );
+    // convert driver handle to loader handle
+    *phEventPool = reinterpret_cast<xe_event_pool_handle_t>( xe_event_pool_object_t::factory.get( *phEventPool, dditable ) );
     
     return result;
 }
@@ -2172,8 +2184,8 @@ xeFenceCreate(
     // forward to device-driver
     auto result = dditable->Fence.pfnCreate( hCommandQueue, desc, phFence );
 
-    // convert driver handle to new loader handle
-    *phFence = reinterpret_cast<xe_fence_handle_t>( xe_fence_object_t::get( *phFence, dditable ) );
+    // convert driver handle to loader handle
+    *phFence = reinterpret_cast<xe_fence_handle_t>( xe_fence_object_t::factory.get( *phFence, dditable ) );
     
     return result;
 }
@@ -2193,6 +2205,9 @@ xeFenceDestroy(
     // forward to device-driver
     auto result = dditable->Fence.pfnDestroy( hFence );
 
+    // release loader handle
+    xe_fence_object_t::factory.release( hFence );
+    
     return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -2292,8 +2307,8 @@ xeImageCreate(
     // forward to device-driver
     auto result = dditable->Image.pfnCreate( hDevice, desc, phImage );
 
-    // convert driver handle to new loader handle
-    *phImage = reinterpret_cast<xe_image_handle_t>( xe_image_object_t::get( *phImage, dditable ) );
+    // convert driver handle to loader handle
+    *phImage = reinterpret_cast<xe_image_handle_t>( xe_image_object_t::factory.get( *phImage, dditable ) );
     
     return result;
 }
@@ -2313,6 +2328,9 @@ xeImageDestroy(
     // forward to device-driver
     auto result = dditable->Image.pfnDestroy( hImage );
 
+    // release loader handle
+    xe_image_object_t::factory.release( hImage );
+    
     return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -2533,8 +2551,8 @@ xeModuleCreate(
     // forward to device-driver
     auto result = dditable->Module.pfnCreate( hDevice, pDesc, phModule, phBuildLog );
 
-    // convert driver handle to new loader handle
-    *phModule = reinterpret_cast<xe_module_handle_t>( xe_module_object_t::get( *phModule, dditable ) );
+    // convert driver handle to loader handle
+    *phModule = reinterpret_cast<xe_module_handle_t>( xe_module_object_t::factory.get( *phModule, dditable ) );
     
     return result;
 }
@@ -2554,6 +2572,9 @@ xeModuleDestroy(
     // forward to device-driver
     auto result = dditable->Module.pfnDestroy( hModule );
 
+    // release loader handle
+    xe_module_object_t::factory.release( hModule );
+    
     return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -2572,6 +2593,9 @@ xeModuleBuildLogDestroy(
     // forward to device-driver
     auto result = dditable->ModuleBuildLog.pfnDestroy( hModuleBuildLog );
 
+    // release loader handle
+    xe_module_build_log_object_t::factory.release( hModuleBuildLog );
+    
     return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -2652,8 +2676,8 @@ xeFunctionCreate(
     // forward to device-driver
     auto result = dditable->Function.pfnCreate( hModule, pDesc, phFunction );
 
-    // convert driver handle to new loader handle
-    *phFunction = reinterpret_cast<xe_function_handle_t>( xe_function_object_t::get( *phFunction, dditable ) );
+    // convert driver handle to loader handle
+    *phFunction = reinterpret_cast<xe_function_handle_t>( xe_function_object_t::factory.get( *phFunction, dditable ) );
     
     return result;
 }
@@ -2673,6 +2697,9 @@ xeFunctionDestroy(
     // forward to device-driver
     auto result = dditable->Function.pfnDestroy( hFunction );
 
+    // release loader handle
+    xe_function_object_t::factory.release( hFunction );
+    
     return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -3039,8 +3066,8 @@ xeSamplerCreate(
     // forward to device-driver
     auto result = dditable->Sampler.pfnCreate( hDevice, pDesc, phSampler );
 
-    // convert driver handle to new loader handle
-    *phSampler = reinterpret_cast<xe_sampler_handle_t>( xe_sampler_object_t::get( *phSampler, dditable ) );
+    // convert driver handle to loader handle
+    *phSampler = reinterpret_cast<xe_sampler_handle_t>( xe_sampler_object_t::factory.get( *phSampler, dditable ) );
     
     return result;
 }
@@ -3060,6 +3087,9 @@ xeSamplerDestroy(
     // forward to device-driver
     auto result = dditable->Sampler.pfnDestroy( hSampler );
 
+    // release loader handle
+    xe_sampler_object_t::factory.release( hSampler );
+    
     return result;
 }
 #if defined(__cplusplus)

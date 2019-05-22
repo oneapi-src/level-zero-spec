@@ -1037,7 +1037,12 @@ Public:
 def make_loader_epilogue_lines(namespace, tags, obj, meta):
     lines = []
 
-    params = _filter_param_list(obj['params'], ["out"])
+    is_destroy_function = re.match(r"Destroy", obj['name'])
+    if is_destroy_function:
+        params = _filter_param_list(obj['params'], ["in"])
+    else:
+        params = _filter_param_list(obj['params'], ["out"])
+
     for i, item in enumerate(params):
         is_handle = type_traits.is_handle(item['type'])
         cname = type_traits.find_class_name(item['type'], meta)
@@ -1049,19 +1054,26 @@ def make_loader_epilogue_lines(namespace, tags, obj, meta):
             obj_name = re.sub(r"^[^_]+_(\w+)", r"%s_\1"%namespace, re.sub(r"(\w+)_handle_t", r"\1_object_t", tname))
 
             if param_traits.is_range(item):
-                range_start = param_traits.range_start(item)
-                range_end   = param_traits.range_end(item)
-                lines.append("// convert driver handles to new loader handles")
-                lines.append("for( size_t i = %s; ( nullptr != %s ) && ( i < %s ); ++i )"%(range_start, name, range_end))
-                lines.append("    %s[ i ] = reinterpret_cast<%s>( %s::get( %s[ i ], dditable ) );"%(name, tname, obj_name, name))
-                lines.append("")
+                if is_destroy_function:
+                    lines.append("#pragma message(__FILE__ \"[\" STRING(LINE) \"]: unhandled handle release\")")
+                else:
+                    range_start = param_traits.range_start(item)
+                    range_end   = param_traits.range_end(item)
+                    lines.append("// convert driver handles to loader handles")
+                    lines.append("for( size_t i = %s; ( nullptr != %s ) && ( i < %s ); ++i )"%(range_start, name, range_end))
+                    lines.append("    %s[ i ] = reinterpret_cast<%s>( %s::factory.get( %s[ i ], dditable ) );"%(name, tname, obj_name, name))
+                    lines.append("")
 
             else:
-                lines.append("// convert driver handle to new loader handle")
-                if param_traits.is_optional(item):
-                    lines.append("if( nullptr != %s ) *%s = reinterpret_cast<%s>( %s::get( *%s, dditable ) );"%(name, name, tname, obj_name, name))
+                if is_destroy_function:
+                    lines.append("// release loader handle")
+                    lines.append("%s::factory.release( %s );"%(obj_name, name))
                 else:
-                    lines.append("*%s = reinterpret_cast<%s>( %s::get( *%s, dditable ) );"%(name, tname, obj_name, name))
+                    lines.append("// convert driver handle to loader handle")
+                    if param_traits.is_optional(item):
+                        lines.append("if( nullptr != %s ) *%s = reinterpret_cast<%s>( %s::factory.get( *%s, dditable ) );"%(name, name, tname, obj_name, name))
+                    else:
+                        lines.append("*%s = reinterpret_cast<%s>( %s::factory.get( *%s, dditable ) );"%(name, tname, obj_name, name))
                 lines.append("")
 
     return lines

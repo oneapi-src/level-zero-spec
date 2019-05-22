@@ -40,35 +40,59 @@
 #include "xe_util.h"
 
 //////////////////////////////////////////////////////////////////////////
-template<typename handle_t, typename dditable_t>
-class _loader_object_t
+template<typename _object_t>
+class _loader_factory_t
 {
+protected:
+    // container for unique loader handles
+    using ptr_t = std::unique_ptr < _object_t >;
+    using map_t = std::unordered_map < size_t, ptr_t >;
+    
+    map_t map;
+    std::mutex mut;
+
 public:
-    const handle_t    handle;
-    const dditable_t* dditable;
+    _loader_factory_t() = default;
+    ~_loader_factory_t() = default;
 
-    // ctors
-    _loader_object_t() = delete;
-    _loader_object_t( const handle_t h, const dditable_t* p ) : handle(h), dditable(p) { }
-    ~_loader_object_t() = default;
-
-    // factory
-    static _loader_object_t* get( const handle_t h, const dditable_t* p )
+    typename _object_t* get( 
+        typename _object_t::handle_t h,
+        typename _object_t::dditable_t t )
     {
-        static std::mutex mut;
         std::lock_guard<std::mutex> lk( mut );
 
         auto key = reinterpret_cast<size_t>( h );
-        auto ptr = std::make_unique<_loader_object_t>( h, p );
+        auto ptr = std::make_unique<_object_t>( h, t );
         auto iter = map.emplace( key, std::move( ptr ) ).first;
         return iter->second.get();
     }
 
-protected:
-    // container for unique loader handles
-    using ptr_t = std::unique_ptr < _loader_object_t >;
-    using map_t = std::unordered_map < size_t, ptr_t >;
-    static map_t map;
+    void release( 
+        typename _object_t::handle_t h )
+    {
+        std::lock_guard<std::mutex> lk( mut );
+        auto key = reinterpret_cast<size_t>( h );
+        map.erase( key );
+    }
+};
+
+//////////////////////////////////////////////////////////////////////////
+template<typename _handle_t, typename _dditable_t>
+class _loader_object_t
+{
+public:
+    using handle_t = const _handle_t;
+    using dditable_t = const _dditable_t*;
+
+    handle_t    handle;
+    dditable_t  dditable;
+
+    _loader_object_t() = delete;
+    _loader_object_t( handle_t h, dditable_t t ) : handle(h), dditable(t) { }
+    ~_loader_object_t() = default;
+
+    using factory_t = _loader_factory_t< _loader_object_t>;
+    static factory_t factory;
 };
 
 template<typename handle_t>
