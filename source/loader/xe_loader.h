@@ -114,11 +114,6 @@ namespace xe_loader
         xe_result_t xetInit( xe_init_flag_t flags );
 
         xe_result_t xeGetDeviceGroups( uint32_t* pCount, xe_device_group_handle_t* pDeviceGroups );
-
-        // todo: when lib calls "gettable", need to perform for each driver, and return pointer to loader ddis (script changes)
-        xe_global_dditable_t   xeGlobalDdiTable = {};
-        xex_global_dditable_t  xexGlobalDdiTable = {};
-        xet_global_dditable_t  xetGlobalDdiTable = {};
     };
 
     extern Loader loader;

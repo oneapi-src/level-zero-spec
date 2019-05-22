@@ -71,18 +71,21 @@ namespace xe_loader
     //////////////////////////////////////////////////////////////////////////
     xe_result_t Loader::xeInit( xe_init_flag_t flags )
     {
+        // for each driver, call xeInit
         return XE_RESULT_SUCCESS;
     }
 
     //////////////////////////////////////////////////////////////////////////
     xe_result_t Loader::xexInit( xe_init_flag_t flags )
     {
+        // for each driver, call xexInit
         return XE_RESULT_SUCCESS;
     }
 
     //////////////////////////////////////////////////////////////////////////
     xe_result_t Loader::xetInit( xe_init_flag_t flags )
     {
+        // for each driver, call xetInit
         return XE_RESULT_SUCCESS;
     }
 
@@ -91,6 +94,8 @@ namespace xe_loader
         uint32_t* pCount,
         xe_device_group_handle_t* pDeviceGroups )
     {
+        // for each driver, call xeGetDeviceGroups
+        // return sum of all
         return XE_RESULT_SUCCESS;
     }
 
