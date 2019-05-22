@@ -33,7 +33,7 @@ from templates import helper as th
 * @file ${name}.cpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/validation.cpp.mako
+* DO NOT EDIT: generated from /scripts/templates/valddi.cpp.mako
 * @endcond
 *
 ******************************************************************************/
@@ -64,13 +64,11 @@ ${tbl['export']['name']}(
 {
     auto& dditable = ${x}_layer::val.${n}DdiTable.${tbl['name']};
 
-#ifdef _DEBUG
     if( nullptr == pDdiTable )
         return ${X}_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( ${x}_layer::val.version < version )
         return ${X}_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     ${x}_result_t result = ${X}_RESULT_SUCCESS;
 

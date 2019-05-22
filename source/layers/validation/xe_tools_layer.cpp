@@ -24,7 +24,7 @@
 * @file xe_tools_layer.cpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/validation.cpp.mako
+* DO NOT EDIT: generated from /scripts/templates/valddi.cpp.mako
 * @endcond
 *
 ******************************************************************************/
@@ -53,13 +53,11 @@ xetGetGlobalProcAddrTable(
 {
     auto& dditable = xe_layer::val.xetDdiTable.Global;
 
-#ifdef _DEBUG
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -88,13 +86,11 @@ xetGetDeviceProcAddrTable(
 {
     auto& dditable = xe_layer::val.xetDdiTable.Device;
 
-#ifdef _DEBUG
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -123,13 +119,11 @@ xetGetCommandListProcAddrTable(
 {
     auto& dditable = xe_layer::val.xetDdiTable.CommandList;
 
-#ifdef _DEBUG
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -167,13 +161,11 @@ xetGetMetricGroupProcAddrTable(
 {
     auto& dditable = xe_layer::val.xetDdiTable.MetricGroup;
 
-#ifdef _DEBUG
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -211,13 +203,11 @@ xetGetMetricProcAddrTable(
 {
     auto& dditable = xe_layer::val.xetDdiTable.Metric;
 
-#ifdef _DEBUG
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -249,13 +239,11 @@ xetGetMetricTracerProcAddrTable(
 {
     auto& dditable = xe_layer::val.xetDdiTable.MetricTracer;
 
-#ifdef _DEBUG
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -290,13 +278,11 @@ xetGetMetricQueryPoolProcAddrTable(
 {
     auto& dditable = xe_layer::val.xetDdiTable.MetricQueryPool;
 
-#ifdef _DEBUG
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -331,13 +317,11 @@ xetGetMetricQueryProcAddrTable(
 {
     auto& dditable = xe_layer::val.xetDdiTable.MetricQuery;
 
-#ifdef _DEBUG
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -366,13 +350,11 @@ xetGetPowerProcAddrTable(
 {
     auto& dditable = xe_layer::val.xetDdiTable.Power;
 
-#ifdef _DEBUG
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -485,13 +467,11 @@ xetGetFreqDomainProcAddrTable(
 {
     auto& dditable = xe_layer::val.xetDdiTable.FreqDomain;
 
-#ifdef _DEBUG
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 

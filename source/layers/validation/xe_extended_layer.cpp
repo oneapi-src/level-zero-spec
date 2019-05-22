@@ -24,7 +24,7 @@
 * @file xe_extended_layer.cpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/validation.cpp.mako
+* DO NOT EDIT: generated from /scripts/templates/valddi.cpp.mako
 * @endcond
 *
 ******************************************************************************/
@@ -53,13 +53,11 @@ xexGetGlobalProcAddrTable(
 {
     auto& dditable = xe_layer::val.xexDdiTable.Global;
 
-#ifdef _DEBUG
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
@@ -88,13 +86,11 @@ xexGetCommandGraphProcAddrTable(
 {
     auto& dditable = xe_layer::val.xexDdiTable.CommandGraph;
 
-#ifdef _DEBUG
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
     if( xe_layer::val.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
