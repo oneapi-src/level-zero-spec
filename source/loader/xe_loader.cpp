@@ -71,22 +71,49 @@ namespace xe_loader
     //////////////////////////////////////////////////////////////////////////
     xe_result_t Loader::xeInit( xe_init_flag_t flags )
     {
-        // for each driver, call xeInit
-        return XE_RESULT_SUCCESS;
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        for( auto& drv : drivers )
+        {
+            if( XE_RESULT_SUCCESS == result )
+            {
+                result = drv.xeDdiTable.Global.pfnInit( flags );
+            }
+        }
+
+        return result;
     }
 
     //////////////////////////////////////////////////////////////////////////
     xe_result_t Loader::xexInit( xe_init_flag_t flags )
     {
-        // for each driver, call xexInit
-        return XE_RESULT_SUCCESS;
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        for( auto& drv : drivers )
+        {
+            if( XE_RESULT_SUCCESS == result )
+            {
+                result = drv.xexDdiTable.Global.pfnInit( flags );
+            }
+        }
+
+        return result;
     }
 
     //////////////////////////////////////////////////////////////////////////
     xe_result_t Loader::xetInit( xe_init_flag_t flags )
     {
-        // for each driver, call xetInit
-        return XE_RESULT_SUCCESS;
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        for( auto& drv : drivers )
+        {
+            if( XE_RESULT_SUCCESS == result )
+            {
+                result = drv.xetDdiTable.Global.pfnInit( flags );
+            }
+        }
+
+        return result;
     }
 
     //////////////////////////////////////////////////////////////////////////
@@ -94,9 +121,33 @@ namespace xe_loader
         uint32_t* pCount,
         xe_device_group_handle_t* pDeviceGroups )
     {
-        // for each driver, call xeGetDeviceGroups
-        // return sum of all
-        return XE_RESULT_SUCCESS;
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        uint32_t total_count = 0;
+
+        for( auto& drv : drivers )
+        {
+            uint32_t count = 0;
+
+            if( XE_RESULT_SUCCESS == result )
+            {
+                result = drv.xeDdiTable.Global.pfnGetDeviceGroups( &count, nullptr );
+            }
+
+            if( ( 0 < *pCount ) && ( *pCount > total_count + count ) )
+                break;
+
+            if( ( XE_RESULT_SUCCESS == result ) && ( nullptr != pDeviceGroups ) )
+            {
+                result = drv.xeDdiTable.Global.pfnGetDeviceGroups( &count, &pDeviceGroups[ total_count ] );
+            }
+
+            total_count += count;
+        }
+
+        *pCount = total_count;
+
+        return result;
     }
 
 
