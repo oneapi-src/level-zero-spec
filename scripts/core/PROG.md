@@ -249,7 +249,7 @@ ${"###"} Creation
   ::${x}_device_properties_t.numAsyncComputeEngines.
 - The maximum number of simultaneous copy command queues per device is queried from 
   ::${x}_device_properties_t.numAsyncCopyEngines.
-- All command lists executed on a command queue are gaurenteed to only execute on its 
+- All command lists executed on a command queue are guaranteed to only execute on its 
   single, physical input stream; e.g., copy commands in a compute command list / queue will
   execute via the compute engine, not the copy engine.
 
@@ -402,7 +402,7 @@ A fence is a heavyweight synchronization primitive used to communicate to the ho
 - A fence is associated with a single command queue.
 - A fence can only be signaled from a device's command queue (e.g. between execution of command lists)
   and can only be waited upon from the host.
-- A fence gaurentees both execution completion and memory coherency, across the device and host, prior to being signalled.
+- A fence guarantees both execution completion and memory coherency, across the device and host, prior to being signalled.
 - A fence only has two states: not signaled and signaled.
 - A fence can only be reset from the Host.
 - A fence cannot be shared across processes.
@@ -1057,7 +1057,7 @@ Note, there is no guaranteed address equivalence for the values of `dptr` in eac
 ${"###"} Events
 The following code examples demonstrate how to use the event IPC APIs:
 
-1. First, the event pool is create, packaged, and sent on the sending process:
+1. First, the event pool is created, packaged, and sent on the sending process:
 ```c
     // create event pool
     ${x}_event_pool_desc_t eventPoolDesc = {
@@ -1085,7 +1085,7 @@ The following code examples demonstrate how to use the event IPC APIs:
     ${x}EventPoolOpenIpcHandle(hDevice, hIpcEvent, &hEventPool);
 ```
 
-3. Each process may now refer to the same device event allocation via its handle.
+3. Each process may now refer to the same device event allocation via its handle.  
     a. receiving process creates event at location 
 ```c
     ${x}_event_handle_t hEvent;
