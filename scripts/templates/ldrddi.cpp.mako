@@ -136,14 +136,48 @@ ${th.make_func_name(n, tags, obj)}(
     auto result = ${x}_loader::loader.${th.make_func_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
 
     %else:
-    %for line in th.make_loader_prologue_lines(n, tags, obj, meta):
-    ${line}
+    %for i, item in enumerate(th.get_loader_prologue(n, tags, obj, meta)):
+    %if 0 == i:
+    // extract driver's function pointer table
+    auto dditable = reinterpret_cast<${item['obj']}*>( ${item['name']} )->dditable;
+
+    %endif
+    %if 'range' in item:
+    // convert loader handles to driver handles
+    for( size_t i = ${item['range'][0]}; ( nullptr != ${item['name']} ) && ( i < ${item['range'][1]} ); ++i )
+        ${item['name']}[ i ] = reinterpret_cast<${item['obj']}*>( ${item['name']}[ i ] )->handle;
+    %else:
+    // convert loader handle to driver handle
+    %if item['optional']:
+    ${item['name']} = ( ${item['name']} ) ? reinterpret_cast<${item['obj']}*>( ${item['name']} )->handle : nullptr;
+    %else:
+    ${item['name']} = reinterpret_cast<${item['obj']}*>( ${item['name']} )->handle;
+    %endif
+    %endif
+
     %endfor
     // forward to device-driver
     auto result = dditable->${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
 
-    %for line in th.make_loader_epilogue_lines(n, tags, obj, meta):
-    ${line}
+    %for item in th.get_loader_epilogue(n, tags, obj, meta):
+    %if item['release']:
+    // release loader handle
+    ${item['obj']}::factory.release( ${item['name']} );
+    %else:
+    %if 'range' in item:
+    // convert driver handles to loader handles
+    for( size_t i = ${item['range'][0]}; ( nullptr != ${item['name']} ) && ( i < ${item['range'][1]} ); ++i )
+        ${item['name']}[ i ] = reinterpret_cast<${item['type']}>( ${item['obj']}::factory.get( ${item['name']}[ i ], dditable ) );
+    %else:
+    // convert driver handle to loader handle
+    %if item['optional']:
+    if( nullptr != ${item['name']} ) *${item['name']} = reinterpret_cast<${item['type']}>( ${item['obj']}::factory.get( *${item['name']}, dditable ) );
+    %else:
+    *${item['name']} = reinterpret_cast<${item['type']}>( ${item['obj']}::factory.get( *${item['name']}, dditable ) );
+    %endif
+    %endif
+    %endif
+
     %endfor
     %endif
     return result;

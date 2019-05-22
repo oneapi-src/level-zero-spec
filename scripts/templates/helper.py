@@ -990,13 +990,13 @@ def get_pfntables(specs, meta, namespace, tags):
 
 """
 Public:
-    returns a list of c++ strings for converting loader input parameters
+    returns a list of dict for converting loader input parameters
 """
-def make_loader_prologue_lines(namespace, tags, obj, meta):
-    lines = []
+def get_loader_prologue(namespace, tags, obj, meta):
+    prologue = []
 
     params = _filter_param_list(obj['params'], ["in"])
-    for i, item in enumerate(params):
+    for item in params:
         is_handle = type_traits.is_handle(item['type'])
         cname = type_traits.find_class_name(item['type'], meta)
 
@@ -1010,34 +1010,28 @@ def make_loader_prologue_lines(namespace, tags, obj, meta):
             if type_traits.is_pointer(item['type']):
                 range_start = param_traits.range_start(item)
                 range_end   = param_traits.range_end(item)
-                lines.append("// convert loader handles to driver handles")
-                lines.append("for( size_t i = %s; ( nullptr != %s ) && ( i < %s ); ++i )"%(range_start, name, range_end))
-                lines.append("    %s[ i ] = reinterpret_cast<%s*>( %s[ i ] )->handle;"%(name, obj_name, name))
-                lines.append("")
+                prologue.append({
+                    'name': name,
+                    'obj': obj_name,
+                    'range': (range_start, range_end)
+                })
             else:
-                if param_traits.is_optional(item):
-                    lines.append("%s = ( %s ) ? reinterpret_cast<%s*>( %s )->handle : nullptr;"%(name, name, obj_name, name))
-                    lines.append("")
-                else:
-                    if i == 0:
-                        lines.append("// extract driver's function pointer table")
-                        lines.append("auto dditable = reinterpret_cast<%s*>( %s )->dditable;"%(obj_name, name))
-                        lines.append("")
+                prologue.append({
+                    'name': name,
+                    'obj': obj_name,
+                    'optional': param_traits.is_optional(item)
+                })
 
-                    lines.append("// convert loader handle to driver handle")
-                    lines.append("%s = reinterpret_cast<%s*>( %s )->handle;"%(name, obj_name, name))
-                    lines.append("")
-
-    return lines
+    return prologue
 
 """
 Public:
-    returns a list of c++ strings for converting loader output parameters
+    returns a list of dict for converting loader output parameters
 """
-def make_loader_epilogue_lines(namespace, tags, obj, meta):
-    lines = []
+def get_loader_epilogue(namespace, tags, obj, meta):
+    epilogue = []
 
-    is_destroy_function = re.match(r"Destroy", obj['name'])
+    is_destroy_function = True if re.match(r"Destroy", obj['name']) else False
     if is_destroy_function:
         params = _filter_param_list(obj['params'], ["in"])
     else:
@@ -1054,26 +1048,22 @@ def make_loader_epilogue_lines(namespace, tags, obj, meta):
             obj_name = re.sub(r"^[^_]+_(\w+)", r"%s_\1"%namespace, re.sub(r"(\w+)_handle_t", r"\1_object_t", tname))
 
             if param_traits.is_range(item):
-                if is_destroy_function:
-                    lines.append("#pragma message(__FILE__ \"[\" STRING(LINE) \"]: unhandled handle release\")")
-                else:
-                    range_start = param_traits.range_start(item)
-                    range_end   = param_traits.range_end(item)
-                    lines.append("// convert driver handles to loader handles")
-                    lines.append("for( size_t i = %s; ( nullptr != %s ) && ( i < %s ); ++i )"%(range_start, name, range_end))
-                    lines.append("    %s[ i ] = reinterpret_cast<%s>( %s::factory.get( %s[ i ], dditable ) );"%(name, tname, obj_name, name))
-                    lines.append("")
-
+                range_start = param_traits.range_start(item)
+                range_end   = param_traits.range_end(item)
+                epilogue.append({
+                    'name': name,
+                    'type': tname,
+                    'obj': obj_name,
+                    'release': is_destroy_function,
+                    'range': (range_start, range_end)
+                })
             else:
-                if is_destroy_function:
-                    lines.append("// release loader handle")
-                    lines.append("%s::factory.release( %s );"%(obj_name, name))
-                else:
-                    lines.append("// convert driver handle to loader handle")
-                    if param_traits.is_optional(item):
-                        lines.append("if( nullptr != %s ) *%s = reinterpret_cast<%s>( %s::factory.get( *%s, dditable ) );"%(name, name, tname, obj_name, name))
-                    else:
-                        lines.append("*%s = reinterpret_cast<%s>( %s::factory.get( *%s, dditable ) );"%(name, tname, obj_name, name))
-                lines.append("")
+                epilogue.append({
+                    'name': name,
+                    'type': tname,
+                    'obj': obj_name,
+                    'release': is_destroy_function,
+                    'optional': param_traits.is_optional(item)
+                })
 
-    return lines
+    return epilogue

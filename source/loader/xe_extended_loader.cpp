@@ -187,16 +187,16 @@ xexCommandGraphCreate(
 {
     // extract driver's function pointer table
     auto dditable = reinterpret_cast<xex_device_object_t*>( hDevice )->dditable;
-    
+
     // convert loader handle to driver handle
     hDevice = reinterpret_cast<xex_device_object_t*>( hDevice )->handle;
-    
+
     // forward to device-driver
     auto result = dditable->CommandGraph.pfnCreate( hDevice, desc, phCommandGraph );
 
     // convert driver handle to loader handle
     *phCommandGraph = reinterpret_cast<xex_command_graph_handle_t>( xex_command_graph_object_t::factory.get( *phCommandGraph, dditable ) );
-    
+
     return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -208,16 +208,16 @@ xexCommandGraphDestroy(
 {
     // extract driver's function pointer table
     auto dditable = reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph )->dditable;
-    
+
     // convert loader handle to driver handle
     hCommandGraph = reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph )->handle;
-    
+
     // forward to device-driver
     auto result = dditable->CommandGraph.pfnDestroy( hCommandGraph );
 
     // release loader handle
     xex_command_graph_object_t::factory.release( hCommandGraph );
-    
+
     return result;
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -229,10 +229,10 @@ xexCommandGraphClose(
 {
     // extract driver's function pointer table
     auto dditable = reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph )->dditable;
-    
+
     // convert loader handle to driver handle
     hCommandGraph = reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph )->handle;
-    
+
     // forward to device-driver
     auto result = dditable->CommandGraph.pfnClose( hCommandGraph );
 
