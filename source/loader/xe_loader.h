@@ -29,7 +29,11 @@
 #if defined(__cplusplus)
 #pragma once
 #endif
+#include <memory>
 #include <vector>
+#include <unordered_map>
+#include <mutex>
+
 #include "xe_ddi.h"
 #include "xex_ddi.h"
 #include "xet_ddi.h"
@@ -37,10 +41,34 @@
 
 //////////////////////////////////////////////////////////////////////////
 template<typename handle_t, typename dditable_t>
-struct _loader_object_t
+class _loader_object_t
 {
-    handle_t    handle;
-    dditable_t* dditable;
+public:
+    const handle_t    handle;
+    const dditable_t* dditable;
+
+    // ctors
+    _loader_object_t() = delete;
+    _loader_object_t( const handle_t h, const dditable_t* p ) : handle(h), dditable(p) { }
+    ~_loader_object_t() = default;
+
+    // factory
+    static _loader_object_t* get( const handle_t h, const dditable_t* p )
+    {
+        static std::mutex mut;
+        std::lock_guard<std::mutex> lk( mut );
+
+        auto key = reinterpret_cast<size_t>( h );
+        auto ptr = std::make_unique<_loader_object_t>( h, p );
+        auto iter = map.emplace( key, std::move( ptr ) ).first;
+        return iter->second.get();
+    }
+
+protected:
+    // container for unique loader handles
+    using ptr_t = std::unique_ptr < _loader_object_t >;
+    using map_t = std::unordered_map < size_t, ptr_t >;
+    static map_t map;
 };
 
 template<typename handle_t>

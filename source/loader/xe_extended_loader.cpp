@@ -195,7 +195,7 @@ xexCommandGraphCreate(
     auto result = dditable->CommandGraph.pfnCreate( hDevice, desc, phCommandGraph );
 
     // convert driver handle to new loader handle
-    *phCommandGraph = reinterpret_cast<xex_command_graph_handle_t>( /*temp:*/new xex_command_graph_object_t { *phCommandGraph, dditable } );
+    *phCommandGraph = reinterpret_cast<xex_command_graph_handle_t>( xex_command_graph_object_t::get( *phCommandGraph, dditable ) );
     
     return result;
 }

@@ -770,7 +770,7 @@ xetMetricGroupGet(
     auto result = dditable->MetricGroup.pfnGet( hDevice, ordinal, phMetricGroup );
 
     // convert driver handle to new loader handle
-    *phMetricGroup = reinterpret_cast<xet_metric_group_handle_t>( /*temp:*/new xet_metric_group_object_t { *phMetricGroup, dditable } );
+    *phMetricGroup = reinterpret_cast<xet_metric_group_handle_t>( xet_metric_group_object_t::get( *phMetricGroup, dditable ) );
     
     return result;
 }
@@ -812,7 +812,7 @@ xetMetricGet(
     auto result = dditable->Metric.pfnGet( hMetricGroup, ordinal, phMetric );
 
     // convert driver handle to new loader handle
-    *phMetric = reinterpret_cast<xet_metric_handle_t>( /*temp:*/new xet_metric_object_t { *phMetric, dditable } );
+    *phMetric = reinterpret_cast<xet_metric_handle_t>( xet_metric_object_t::get( *phMetric, dditable ) );
     
     return result;
 }
@@ -907,7 +907,7 @@ xetMetricTracerOpen(
     auto result = dditable->MetricTracer.pfnOpen( hDevice, pDesc, hNotificationEvent, phMetricTracer );
 
     // convert driver handle to new loader handle
-    *phMetricTracer = reinterpret_cast<xet_metric_tracer_handle_t>( /*temp:*/new xet_metric_tracer_object_t { *phMetricTracer, dditable } );
+    *phMetricTracer = reinterpret_cast<xet_metric_tracer_handle_t>( xet_metric_tracer_object_t::get( *phMetricTracer, dditable ) );
     
     return result;
 }
@@ -992,7 +992,7 @@ xetMetricQueryPoolCreate(
     auto result = dditable->MetricQueryPool.pfnCreate( hDevice, pDesc, phMetricQueryPool );
 
     // convert driver handle to new loader handle
-    *phMetricQueryPool = reinterpret_cast<xet_metric_query_pool_handle_t>( /*temp:*/new xet_metric_query_pool_object_t { *phMetricQueryPool, dditable } );
+    *phMetricQueryPool = reinterpret_cast<xet_metric_query_pool_handle_t>( xet_metric_query_pool_object_t::get( *phMetricQueryPool, dditable ) );
     
     return result;
 }
@@ -1033,7 +1033,7 @@ xetMetricQueryPoolGetMetricQuery(
     auto result = dditable->MetricQueryPool.pfnGetMetricQuery( hMetricQueryPool, ordinal, phMetricQuery );
 
     // convert driver handle to new loader handle
-    *phMetricQuery = reinterpret_cast<xet_metric_query_handle_t>( /*temp:*/new xet_metric_query_object_t { *phMetricQuery, dditable } );
+    *phMetricQuery = reinterpret_cast<xet_metric_query_handle_t>( xet_metric_query_object_t::get( *phMetricQuery, dditable ) );
     
     return result;
 }
@@ -1143,7 +1143,7 @@ xetPowerCreate(
     auto result = dditable->Power.pfnCreate( hDevice, flags, pPowerHandle );
 
     // convert driver handle to new loader handle
-    *pPowerHandle = reinterpret_cast<xet_power_handle_t>( /*temp:*/new xet_power_object_t { *pPowerHandle, dditable } );
+    *pPowerHandle = reinterpret_cast<xet_power_handle_t>( xet_power_object_t::get( *pPowerHandle, dditable ) );
     
     return result;
 }
@@ -1431,7 +1431,7 @@ xetPowerGetFreqDomain(
     auto result = dditable->Power.pfnGetFreqDomain( hPower, ordinal, phFreqDomain );
 
     // convert driver handle to new loader handle
-    *phFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>( /*temp:*/new xet_freq_domain_object_t { *phFreqDomain, dditable } );
+    *phFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>( xet_freq_domain_object_t::get( *phFreqDomain, dditable ) );
     
     return result;
 }
@@ -1473,7 +1473,7 @@ xetFreqDomainGetSourceFreqDomain(
     auto result = dditable->FreqDomain.pfnGetSourceFreqDomain( hFreqDomain, phSrcFreqDomain );
 
     // convert driver handle to new loader handle
-    *phSrcFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>( /*temp:*/new xet_freq_domain_object_t { *phSrcFreqDomain, dditable } );
+    *phSrcFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>( xet_freq_domain_object_t::get( *phSrcFreqDomain, dditable ) );
     
     return result;
 }

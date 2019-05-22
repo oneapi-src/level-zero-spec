@@ -1046,7 +1046,7 @@ xeDeviceGetSubDevice(
     auto result = dditable->Device.pfnGetSubDevice( hDevice, ordinal, phSubDevice );
 
     // convert driver handle to new loader handle
-    *phSubDevice = reinterpret_cast<xe_device_handle_t>( /*temp:*/new xe_device_object_t { *phSubDevice, dditable } );
+    *phSubDevice = reinterpret_cast<xe_device_handle_t>( xe_device_object_t::get( *phSubDevice, dditable ) );
     
     return result;
 }
@@ -1229,7 +1229,7 @@ xeCommandQueueCreate(
     auto result = dditable->CommandQueue.pfnCreate( hDevice, desc, phCommandQueue );
 
     // convert driver handle to new loader handle
-    *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>( /*temp:*/new xe_command_queue_object_t { *phCommandQueue, dditable } );
+    *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>( xe_command_queue_object_t::get( *phCommandQueue, dditable ) );
     
     return result;
 }
@@ -1321,7 +1321,7 @@ xeCommandListCreate(
     auto result = dditable->CommandList.pfnCreate( hDevice, desc, phCommandList );
 
     // convert driver handle to new loader handle
-    *phCommandList = reinterpret_cast<xe_command_list_handle_t>( /*temp:*/new xe_command_list_object_t { *phCommandList, dditable } );
+    *phCommandList = reinterpret_cast<xe_command_list_handle_t>( xe_command_list_object_t::get( *phCommandList, dditable ) );
     
     return result;
 }
@@ -1344,7 +1344,7 @@ xeCommandListCreateImmediate(
     auto result = dditable->CommandList.pfnCreateImmediate( hDevice, desc, phCommandList );
 
     // convert driver handle to new loader handle
-    *phCommandList = reinterpret_cast<xe_command_list_handle_t>( /*temp:*/new xe_command_list_object_t { *phCommandList, dditable } );
+    *phCommandList = reinterpret_cast<xe_command_list_handle_t>( xe_command_list_object_t::get( *phCommandList, dditable ) );
     
     return result;
 }
@@ -1601,7 +1601,7 @@ xeDeviceRegisterCLProgram(
     auto result = dditable->Device.pfnRegisterCLProgram( hDevice, context, program, phModule );
 
     // convert driver handle to new loader handle
-    *phModule = reinterpret_cast<xe_module_handle_t>( /*temp:*/new xe_module_object_t { *phModule, dditable } );
+    *phModule = reinterpret_cast<xe_module_handle_t>( xe_module_object_t::get( *phModule, dditable ) );
     
     return result;
 }
@@ -1627,7 +1627,7 @@ xeDeviceRegisterCLCommandQueue(
     auto result = dditable->Device.pfnRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
 
     // convert driver handle to new loader handle
-    *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>( /*temp:*/new xe_command_queue_object_t { *phCommandQueue, dditable } );
+    *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>( xe_command_queue_object_t::get( *phCommandQueue, dditable ) );
     
     return result;
 }
@@ -1885,7 +1885,7 @@ xeEventPoolCreate(
     auto result = dditable->EventPool.pfnCreate( hDevice, desc, phEventPool );
 
     // convert driver handle to new loader handle
-    *phEventPool = reinterpret_cast<xe_event_pool_handle_t>( /*temp:*/new xe_event_pool_object_t { *phEventPool, dditable } );
+    *phEventPool = reinterpret_cast<xe_event_pool_handle_t>( xe_event_pool_object_t::get( *phEventPool, dditable ) );
     
     return result;
 }
@@ -1926,7 +1926,7 @@ xeEventCreate(
     auto result = dditable->Event.pfnCreate( hEventPool, desc, phEvent );
 
     // convert driver handle to new loader handle
-    *phEvent = reinterpret_cast<xe_event_handle_t>( /*temp:*/new xe_event_object_t { *phEvent, dditable } );
+    *phEvent = reinterpret_cast<xe_event_handle_t>( xe_event_object_t::get( *phEvent, dditable ) );
     
     return result;
 }
@@ -1986,7 +1986,7 @@ xeEventPoolOpenIpcHandle(
     auto result = dditable->EventPool.pfnOpenIpcHandle( hDevice, hIpc, phEventPool );
 
     // convert driver handle to new loader handle
-    *phEventPool = reinterpret_cast<xe_event_pool_handle_t>( /*temp:*/new xe_event_pool_object_t { *phEventPool, dditable } );
+    *phEventPool = reinterpret_cast<xe_event_pool_handle_t>( xe_event_pool_object_t::get( *phEventPool, dditable ) );
     
     return result;
 }
@@ -2173,7 +2173,7 @@ xeFenceCreate(
     auto result = dditable->Fence.pfnCreate( hCommandQueue, desc, phFence );
 
     // convert driver handle to new loader handle
-    *phFence = reinterpret_cast<xe_fence_handle_t>( /*temp:*/new xe_fence_object_t { *phFence, dditable } );
+    *phFence = reinterpret_cast<xe_fence_handle_t>( xe_fence_object_t::get( *phFence, dditable ) );
     
     return result;
 }
@@ -2293,7 +2293,7 @@ xeImageCreate(
     auto result = dditable->Image.pfnCreate( hDevice, desc, phImage );
 
     // convert driver handle to new loader handle
-    *phImage = reinterpret_cast<xe_image_handle_t>( /*temp:*/new xe_image_object_t { *phImage, dditable } );
+    *phImage = reinterpret_cast<xe_image_handle_t>( xe_image_object_t::get( *phImage, dditable ) );
     
     return result;
 }
@@ -2534,7 +2534,7 @@ xeModuleCreate(
     auto result = dditable->Module.pfnCreate( hDevice, pDesc, phModule, phBuildLog );
 
     // convert driver handle to new loader handle
-    *phModule = reinterpret_cast<xe_module_handle_t>( /*temp:*/new xe_module_object_t { *phModule, dditable } );
+    *phModule = reinterpret_cast<xe_module_handle_t>( xe_module_object_t::get( *phModule, dditable ) );
     
     return result;
 }
@@ -2653,7 +2653,7 @@ xeFunctionCreate(
     auto result = dditable->Function.pfnCreate( hModule, pDesc, phFunction );
 
     // convert driver handle to new loader handle
-    *phFunction = reinterpret_cast<xe_function_handle_t>( /*temp:*/new xe_function_object_t { *phFunction, dditable } );
+    *phFunction = reinterpret_cast<xe_function_handle_t>( xe_function_object_t::get( *phFunction, dditable ) );
     
     return result;
 }
@@ -3040,7 +3040,7 @@ xeSamplerCreate(
     auto result = dditable->Sampler.pfnCreate( hDevice, pDesc, phSampler );
 
     // convert driver handle to new loader handle
-    *phSampler = reinterpret_cast<xe_sampler_handle_t>( /*temp:*/new xe_sampler_object_t { *phSampler, dditable } );
+    *phSampler = reinterpret_cast<xe_sampler_handle_t>( xe_sampler_object_t::get( *phSampler, dditable ) );
     
     return result;
 }

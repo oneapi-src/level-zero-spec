@@ -1053,15 +1053,15 @@ def make_loader_epilogue_lines(namespace, tags, obj, meta):
                 range_end   = param_traits.range_end(item)
                 lines.append("// convert driver handles to new loader handles")
                 lines.append("for( size_t i = %s; ( nullptr != %s ) && ( i < %s ); ++i )"%(range_start, name, range_end))
-                lines.append("    %s[ i ] = reinterpret_cast<%s>( /*temp:*/new %s { %s[ i ], dditable } );"%(name, tname, obj_name, name))
+                lines.append("    %s[ i ] = reinterpret_cast<%s>( %s::get( %s[ i ], dditable ) );"%(name, tname, obj_name, name))
                 lines.append("")
 
             else:
                 lines.append("// convert driver handle to new loader handle")
                 if param_traits.is_optional(item):
-                    lines.append("if( nullptr != %s ) *%s = reinterpret_cast<%s>( /*temp:*/new %s { *%s, dditable } );"%(name, name, tname, obj_name, name))
+                    lines.append("if( nullptr != %s ) *%s = reinterpret_cast<%s>( %s::get( *%s, dditable ) );"%(name, name, tname, obj_name, name))
                 else:
-                    lines.append("*%s = reinterpret_cast<%s>( /*temp:*/new %s { *%s, dditable } );"%(name, tname, obj_name, name))
+                    lines.append("*%s = reinterpret_cast<%s>( %s::get( *%s, dditable ) );"%(name, tname, obj_name, name))
                 lines.append("")
 
     return lines
