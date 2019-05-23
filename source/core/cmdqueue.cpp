@@ -126,7 +126,7 @@ CommandQueue *CommandQueue::create(uint32_t productFamily, Device *device, void 
 
 xe_result_t fenceCreate(xe_command_queue_handle_t hCommandQueue, const xe_fence_desc_t *desc,
                         xe_fence_handle_t *phFence) {
-    auto commandQueue = static_cast<CommandQueueImp *> (CommandQueue::fromHandle(hCommandQueue));
+    auto commandQueue = static_cast<CommandQueueImp *>(CommandQueue::fromHandle(hCommandQueue));
     return commandQueue->createFence(desc, phFence);
 }
 

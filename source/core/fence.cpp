@@ -4,10 +4,12 @@
 namespace L0 {
 
 struct FenceImp : public Fence {
-    FenceImp(CommandQueueImp *cmdQueue) : cmdQueue(cmdQueue) {
-    }
+    FenceImp(CommandQueueImp *cmdQueue) : cmdQueue(cmdQueue) {}
 
-    xe_result_t destroy() override { delete this; return XE_RESULT_SUCCESS; }
+    xe_result_t destroy() override {
+        delete this;
+        return XE_RESULT_SUCCESS;
+    }
 
     xe_result_t hostSynchronize(uint32_t timeout) override { return XE_RESULT_ERROR_UNSUPPORTED; }
 
@@ -15,7 +17,10 @@ struct FenceImp : public Fence {
         return XE_RESULT_ERROR_UNSUPPORTED;
     }
 
-    xe_result_t queryStatus() override { return XE_RESULT_ERROR_UNSUPPORTED; }
+    xe_result_t queryStatus() override {
+        auto hostAddr = static_cast<uint64_t *>(allocation->getHostAddress());
+        return *hostAddr == Fence::STATE_CLEARED ? XE_RESULT_NOT_READY : XE_RESULT_SUCCESS;
+    }
 
     xe_result_t queryValue() override { return XE_RESULT_ERROR_UNSUPPORTED; }
 
@@ -27,21 +32,22 @@ struct FenceImp : public Fence {
 
     bool initialize();
 
-    protected:
-        CommandQueueImp *cmdQueue;
+  protected:
+    CommandQueueImp *cmdQueue;
 };
 
 Fence *Fence::create(CommandQueueImp *cmdQueue, const xe_fence_desc_t *desc) {
     auto fence = new FenceImp(cmdQueue);
-
     assert(fence);
+
+    fence->initialize();
+
     return fence;
 }
 
 bool FenceImp::initialize() {
     assert(globalMemoryManager);
-    allocation =
-    globalMemoryManager->allocateManagedMemory(cmdQueue->getDevice(), 64u, 64u);
+    allocation = globalMemoryManager->allocateManagedMemory(cmdQueue->getDevice(), 64u, 64u);
     assert(allocation);
 
     reset();

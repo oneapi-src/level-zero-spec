@@ -26,9 +26,7 @@ struct CommandQueueImp : public CommandQueue {
 
     void initialize();
 
-    Device *getDevice() {
-        return device;
-    }
+    Device *getDevice() { return device; }
 
     Substream getCmdSubstream(size_t size);
 

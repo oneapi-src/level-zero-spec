@@ -17,6 +17,8 @@ add_executable(${TARGET_NAME}
     mock_driver.h
     mock_event.cpp
     mock_event.h
+    mock_fence.cpp
+    mock_fence.h
     mock_function.cpp
     mock_function.h
     mock_image.cpp
@@ -47,6 +49,7 @@ add_executable(${TARGET_NAME}
     test_encode_l3state.cpp
     test_encode_set_mmio.cpp
     test_event.cpp
+    test_fence.cpp
     test_function.cpp
     test_function_pointers.cpp
     test_graphics_allocation.cpp
