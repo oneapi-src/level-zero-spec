@@ -31,15 +31,13 @@ static void print_enable_events(std::string counter_name) {
               << std::endl << std::endl;
 }
 
-static void error_handler_function(std::string function_name,
-                                   std::string counter_name,int ret) {
+static void error_handler_counter(std::string function_name,
+                                  std::string counter_name,int ret) {
         std::cout << "ERROR: "
                   << function_name
                   << " failed with "
                   << ret << std::endl;
-        if (ret == PAPI_ECMP_DISABLED) {
-            print_enable_events(counter_name);
-        }
+        print_enable_events(counter_name);
 }
 
 HardwareCounter::HardwareCounter() {
@@ -59,13 +57,13 @@ HardwareCounter::HardwareCounter() {
     /* Add Total Instructions Executed to the event_set */
     ret = PAPI_add_event(event_set, PAPI_TOT_INS);
     if (ret != PAPI_OK) {
-        error_handler_function("PAPI_add_event", "PAPI_TOT_INS", ret);
+        error_handler_counter("PAPI_add_event", "PAPI_TOT_INS", ret);
     }
 
     /* Add Total Cycles event to the event_set */
     ret = PAPI_add_event(event_set, PAPI_TOT_CYC);
     if (ret != PAPI_OK) {
-        error_handler_function("PAPI_add_event", "PAPI_TOT_CYC", ret);
+        error_handler_counter("PAPI_add_event", "PAPI_TOT_CYC", ret);
     }
 
     number_active_events = 0;
