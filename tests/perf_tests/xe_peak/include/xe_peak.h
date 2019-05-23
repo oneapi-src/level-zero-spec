@@ -131,6 +131,15 @@ public:
   void xe_peak_dp_compute(L0Context &context);
   void xe_peak_int_compute(L0Context &context);
   void xe_peak_transfer_bw(L0Context &context);
+
+private:
+
+void _transfer_bw_gpu_copy(L0Context &context, void *destination_buffer,
+                           void *source_buffer, size_t buffer_size);
+void _transfer_bw_host_copy(void *destination_buffer, void *source_buffer,
+                            size_t buffer_size);
+void _transfer_bw_shared_memory(L0Context &context,
+                                std::vector<float> local_memory);
 };
 
 
