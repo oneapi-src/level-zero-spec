@@ -6,6 +6,11 @@ namespace L0 {
 struct FenceImp : public Fence {
     FenceImp(CommandQueueImp *cmdQueue) : cmdQueue(cmdQueue) {}
 
+    ~FenceImp() {
+        globalMemoryManager->freeGraphicsAllocation(allocation);
+        allocation = nullptr;
+    }
+
     xe_result_t destroy() override {
         delete this;
         return XE_RESULT_SUCCESS;

@@ -12,6 +12,11 @@ namespace L0 {
 struct EventImp : public Event {
     EventImp(Device *device) : device(device) {}
 
+    ~EventImp() {
+        globalMemoryManager->freeGraphicsAllocation(allocation);
+        allocation = nullptr;
+    }
+
     xe_result_t hostSignal() override;
 
     xe_result_t hostSynchronize(uint32_t timeout) override;
