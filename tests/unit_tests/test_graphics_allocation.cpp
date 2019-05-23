@@ -13,7 +13,7 @@ TEST(GraphicsAllocation, ctor) {
 
 TEST(GraphicsAllocation, ctorWrapper) {
     uint8_t buffer[1024];
-    NEO::GraphicsAllocation graphicsAllocation(NEO::GraphicsAllocation::AllocationType::UNDECIDED,
+    NEO::GraphicsAllocation graphicsAllocation(NEO::GraphicsAllocation::AllocationType::INTERNAL_HOST_MEMORY,
                                                buffer, sizeof(buffer), 0, 1, false);
     GraphicsAllocation allocation(&graphicsAllocation);
 

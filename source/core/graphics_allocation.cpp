@@ -8,7 +8,7 @@ GraphicsAllocation::GraphicsAllocation(NEO::GraphicsAllocation *allocationRT)
     : allocationRT(allocationRT) {}
 
 GraphicsAllocation::GraphicsAllocation(void *buffer, size_t size) {
-    allocationRT = new NEO::GraphicsAllocation(NEO::GraphicsAllocation::AllocationType::UNDECIDED,
+    allocationRT = new NEO::GraphicsAllocation(NEO::GraphicsAllocation::AllocationType::INTERNAL_HOST_MEMORY,
                                                buffer, reinterpret_cast<uint64_t>(buffer), 0, size,
                                                MemoryPool::System4KBPages, true);
 }

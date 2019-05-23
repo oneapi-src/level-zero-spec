@@ -42,11 +42,8 @@ struct Environment : public ::testing::Environment {
         hwInfo.capabilityTable.defaultPreemptionMode = NEO::PreemptionMode::ThreadGroup;
 
         // Initialize hardwareInfo
-        NEO::hardwareInfoSetup[productFamily](&sysInfo, &skuTable, true, "default");
+        NEO::hardwareInfoSetup[productFamily](&hwInfo, true, "default");
 
-        // Replace original hardwareInfo with our clone
-        hwInfo.pSysInfo = &sysInfo;
-        hwInfo.pSkuTable = &skuTable;
         NEO::platformDevices[0] = &hwInfo;
     }
 };

@@ -35,7 +35,7 @@ struct MemoryManagerImp : public MemoryManager {
     GraphicsAllocation *allocateDeviceMemory(Device *device, size_t size,
                                              size_t alignment) override {
         NEO::AllocationProperties properties(size,
-                                             NEO::GraphicsAllocation::AllocationType::UNDECIDED);
+                                             NEO::GraphicsAllocation::AllocationType::INTERNAL_HOST_MEMORY);
         properties.alignment = alignment;
 
         auto allocation = new GraphicsAllocation(
@@ -49,7 +49,7 @@ struct MemoryManagerImp : public MemoryManager {
     GraphicsAllocation *allocateManagedMemory(Device *device, size_t size,
                                               size_t alignment) override {
         NEO::AllocationProperties properties(size,
-                                             NEO::GraphicsAllocation::AllocationType::UNDECIDED);
+                                             NEO::GraphicsAllocation::AllocationType::INTERNAL_HOST_MEMORY);
         properties.alignment = alignment;
 
         auto allocation = new GraphicsAllocation(
@@ -69,7 +69,7 @@ struct MemoryManagerImp : public MemoryManager {
         //        * How are handle fragmented allocations handled (aka tripple allocations) ?
         auto allocation =
             new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemoryWithProperties(
-                {false, size, NEO::GraphicsAllocation::AllocationType::UNDECIDED}, buffer));
+                {false, size, NEO::GraphicsAllocation::AllocationType::INTERNAL_HOST_MEMORY}, buffer));
         allocation->setAllocatedFromFault(true);
         insertAllocation(buffer, allocation);
         allocation->setDevice(device);
