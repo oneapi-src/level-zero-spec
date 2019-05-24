@@ -17,13 +17,6 @@ struct Event : public _xe_event_handle_t {
     virtual xe_result_t destroy();
     virtual xe_result_t hostSignal() { return XE_RESULT_ERROR_UNSUPPORTED; }
     virtual xe_result_t hostSynchronize(uint32_t timeout) { return XE_RESULT_ERROR_UNSUPPORTED; }
-    virtual xe_result_t queryElapsedTime(xe_event_handle_t hEventEnd, double *pTime) {
-        return XE_RESULT_ERROR_UNSUPPORTED;
-    }
-    virtual xe_result_t queryMetricsData(xe_event_handle_t hEventEnd, size_t reportSize,
-                                         uint32_t *pReportData) {
-        return XE_RESULT_ERROR_UNSUPPORTED;
-    }
     virtual xe_result_t queryStatus() { return XE_RESULT_ERROR_UNSUPPORTED; }
     virtual xe_result_t reset() { return XE_RESULT_ERROR_UNSUPPORTED; }
 
@@ -64,12 +57,6 @@ struct EventPool : public _xe_event_pool_handle_t {
 
     inline xe_event_pool_handle_t toHandle() { return this; }
 };
-
-xe_result_t eventQueryElapsedTime(xe_event_handle_t hEventStart, xe_event_handle_t hEventEnd,
-                                  double *pTime);
-
-xe_result_t eventQueryMetricsData(xe_event_handle_t hEventStart, xe_event_handle_t hEventEnd,
-                                  size_t reportSize, uint32_t *pReportData);
 
 xe_result_t eventPoolOpenIpcHandle(xe_device_handle_t hDevice, xe_ipc_event_pool_handle_t hIpc,
                                    xe_event_pool_handle_t *phEventPool);

@@ -37,7 +37,18 @@ TEST(Fence_reset, fenceStateIsCleared) {
     auto result = fence->reset();
     ASSERT_EQ(XE_RESULT_SUCCESS, result);
 
-    EXPECT_EQ(fence->queryStatus(), XE_RESULT_NOT_READY);
+    auto hostAddr = static_cast<uint64_t *>(fence->allocation->getHostAddress());
+    EXPECT_EQ(*hostAddr, Fence::STATE_CLEARED);
+}
+
+TEST(Fence_queryStatus, invalidParameterAsFenceNotEnqueued) {
+    Mock<CommandQueue> cmdqueue;
+    xe_fence_desc_t desc;
+    desc.version = XE_FENCE_DESC_VERSION_CURRENT;
+
+    auto fence = whitebox_cast(Fence::create(&cmdqueue, &desc));
+    ASSERT_NE(fence, nullptr);
+    EXPECT_EQ(fence->queryStatus(), XE_RESULT_ERROR_INVALID_PARAMETER);
 }
 
 } // namespace ult

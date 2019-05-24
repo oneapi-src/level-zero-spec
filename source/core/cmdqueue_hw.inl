@@ -27,13 +27,23 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::executeCommandLists(
     using GfxFamily = typename NEO::GfxFamilyMapper<gfxCoreFamily>::GfxFamily;
     using MI_BATCH_BUFFER_START = typename GfxFamily::MI_BATCH_BUFFER_START;
     using MI_BATCH_BUFFER_END = typename GfxFamily::MI_BATCH_BUFFER_END;
+    using PIPE_CONTROL = typename GfxFamily::PIPE_CONTROL;
+    using POST_SYNC_OPERATION = typename PIPE_CONTROL::POST_SYNC_OPERATION;
 
     size_t sizeEstimate =
-        sizeof(MI_BATCH_BUFFER_END) + numCommandLists * sizeof(MI_BATCH_BUFFER_START);
+        sizeof(MI_BATCH_BUFFER_END) +
+        sizeof(PIPE_CONTROL) + sizeof(POST_SYNC_OPERATION) +
+        numCommandLists * sizeof(MI_BATCH_BUFFER_START);
     Substream substream = getCmdSubstream(sizeEstimate);
 
     NEO::ResidencyContainer residencyContainer;
-    residencyContainer.reserve(16 * numCommandLists);
+
+    // padding if we need for a fence signal
+    if (hFence) {
+        residencyContainer.reserve((16 * numCommandLists) + 2);
+    } else {
+        residencyContainer.reserve(16 * numCommandLists);
+    }
 
     for (auto i = 0u; i < numCommandLists; ++i) {
         MI_BATCH_BUFFER_START cmd = GfxFamily::cmdInitBatchBufferStart;
@@ -59,6 +69,34 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::executeCommandLists(
                 residencyContainer.push_back(alloc);
             }
         }
+    }
+
+    // If validfence handle provided, append a flush with memory write
+    if (hFence) {
+        auto fence = Fence::fromHandle(hFence);
+        assert(fence);
+
+        PIPE_CONTROL cmd = GfxFamily::cmdInitPipeControl;
+        uint64_t gpuAddress = fence->getGpuAddress();
+
+        cmd.setPostSyncOperation(POST_SYNC_OPERATION::POST_SYNC_OPERATION_WRITE_IMMEDIATE_DATA);
+        cmd.setImmediateData(Fence::STATE_SIGNALED);
+        cmd.setCommandStreamerStallEnable(true);
+        cmd.setDcFlushEnable(true);
+        cmd.setAddressHigh(gpuAddress >> 32u);
+        cmd.setAddress(uint32_t(gpuAddress));
+
+        auto buffer = substream.getSpaceForCmd<PIPE_CONTROL>();
+        *(PIPE_CONTROL *)buffer = cmd;
+
+        auto fenceAlloc = &fence->getAllocation();
+        if (residencyContainer.end() == std::find(residencyContainer.begin(),
+                                                  residencyContainer.end(),
+                                                  fenceAlloc->allocationRT)) {
+            residencyContainer.push_back(fenceAlloc->allocationRT);
+        }
+
+        fence->enqueueState = Fence::ENQUEUE_READY;
     }
 
     {

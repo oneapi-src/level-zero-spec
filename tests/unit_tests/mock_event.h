@@ -30,9 +30,6 @@ template <> struct Mock<Event> : public Event {
     MOCK_METHOD0(destroy, xe_result_t());
     MOCK_METHOD0(hostSignal, xe_result_t());
     MOCK_METHOD1(hostSynchronize, xe_result_t(uint32_t timeout));
-    MOCK_METHOD2(queryElapsedTime, xe_result_t(xe_event_handle_t hEventEnd, double *pTime));
-    MOCK_METHOD3(queryMetricsData, xe_result_t(xe_event_handle_t hEventEnd, size_t reportSize,
-                                               uint32_t *pReportData));
     MOCK_METHOD0(queryStatus, xe_result_t());
     MOCK_METHOD0(reset, xe_result_t());
 

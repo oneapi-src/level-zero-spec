@@ -72,13 +72,6 @@ void createCmdQueueAndCmdList(xe_device_handle_t &device,
     SUCCESS_OR_TERMINATE(xeCommandListCreate(device, &cmdListDesc, &cmdList));
 }
 
-void createEventPoolAndEvent(xe_device_handle_t &device,
-                             xe_event_pool_handle_t &event_pool,
-                             xe_event_handle_t *event) {
-
-
-}
-
 bool testEvents(xe_device_handle_t &device) {
     constexpr size_t allocSize = 4096;
     constexpr size_t bytesPerThread = sizeof(char);
@@ -160,8 +153,6 @@ bool testEvents(xe_device_handle_t &device) {
         cmdList, function, &dispatchTraits, nullptr, 0, nullptr));
 
     // Create Event Pool and kernel launch event
-    //createEventPoolAndEvent(device, kernel_launch_event_pool,
-    //                        &kernel_launch_event);
     result = xeEventPoolCreate(device, &event_pool_desc,
                          &kernel_launch_event_pool);
     if (result) {

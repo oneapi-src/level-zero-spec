@@ -16,18 +16,16 @@ struct FenceImp : public Fence {
         return XE_RESULT_SUCCESS;
     }
 
-    xe_result_t hostSynchronize(uint32_t timeout) override { return XE_RESULT_ERROR_UNSUPPORTED; }
-
-    xe_result_t queryElapsedTime(xe_fence_handle_t hFenceEnd, double *pTime) override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
-    }
+    xe_result_t hostSynchronize(uint32_t timeout) override;
 
     xe_result_t queryStatus() override {
+        if (enqueueState == Fence::ENQUEUE_NOT_READY) {
+            return XE_RESULT_ERROR_INVALID_PARAMETER;
+        }
+
         auto hostAddr = static_cast<uint64_t *>(allocation->getHostAddress());
         return *hostAddr == Fence::STATE_CLEARED ? XE_RESULT_NOT_READY : XE_RESULT_SUCCESS;
     }
-
-    xe_result_t queryValue() override { return XE_RESULT_ERROR_UNSUPPORTED; }
 
     xe_result_t reset() override;
 
@@ -57,6 +55,8 @@ bool FenceImp::initialize() {
 
     reset();
 
+    enqueueState = Fence::ENQUEUE_NOT_READY;
+
     return true;
 }
 
@@ -70,9 +70,38 @@ xe_result_t FenceImp::reset() {
     return XE_RESULT_SUCCESS;
 }
 
-xe_result_t fenceQueryElapsedTime(xe_fence_handle_t hFenceStart, xe_fence_handle_t hFenceEnd,
-                                  double *pTime) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
+xe_result_t FenceImp::hostSynchronize(uint32_t timeout) {
+    uint32_t timeArg = timeout;
+    std::chrono::high_resolution_clock::time_point time1, time2;
+    int64_t timeDiff = 0;
+    xe_result_t ret = XE_RESULT_NOT_READY;
+
+    if (enqueueState == Fence::ENQUEUE_NOT_READY) {
+        return XE_RESULT_ERROR_INVALID_PARAMETER;
+    }
+
+    if (timeout == 0) {
+        return queryStatus();
+    }
+
+    /* Block until timeout. If Event is Signaled, then return immediately */
+    time1 = std::chrono::high_resolution_clock::now();
+    while (timeDiff < timeout) {
+        ret = queryStatus();
+        if (ret == XE_RESULT_SUCCESS) {
+            return XE_RESULT_SUCCESS;
+        }
+
+        std::this_thread::yield();
+        _mm_pause();
+
+        time2 = std::chrono::high_resolution_clock::now();
+        // TODO: We may need to use nanosecs here. Pending gitlab issue
+        // resolution
+        timeDiff = std::chrono::duration_cast<std::chrono::microseconds>(time2 - time1).count();
+    }
+
+    return ret;
 }
 
 xe_result_t fenceDestroy(xe_fence_handle_t phFence) {

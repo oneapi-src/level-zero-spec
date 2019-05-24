@@ -12,11 +12,7 @@ struct Fence : public _xe_fence_handle_t {
     static Fence *create(CommandQueueImp *cmdQueue, const xe_fence_desc_t *desc);
     virtual xe_result_t destroy() = 0;
     virtual xe_result_t hostSynchronize(uint32_t timeout) = 0;
-    virtual xe_result_t queryElapsedTime(xe_fence_handle_t hFenceEnd, double *pTime) {
-        return XE_RESULT_ERROR_UNSUPPORTED;
-    }
     virtual xe_result_t queryStatus() = 0;
-    virtual xe_result_t queryValue() { return XE_RESULT_ERROR_UNSUPPORTED; }
     virtual xe_result_t reset() = 0;
 
     static Fence *fromHandle(xe_fence_handle_t handle) { return static_cast<Fence *>(handle); }
@@ -29,12 +25,20 @@ struct Fence : public _xe_fence_handle_t {
         STATE_INITIAL = STATE_CLEARED
     };
 
+    enum EnqueueState : uint32_t { ENQUEUE_NOT_READY = 0u, ENQUEUE_READY };
+
+    GraphicsAllocation &getAllocation() { return *allocation; }
+
+    uint64_t getGpuAddress() {
+        assert(allocation);
+        return allocation->getGpuAddress();
+    }
+
+    uint32_t enqueueState;
+
   protected:
     GraphicsAllocation *allocation = nullptr;
 };
-
-xe_result_t fenceQueryElapsedTime(xe_fence_handle_t hFenceStart, xe_fence_handle_t hFenceEnd,
-                                  double *pTime);
 
 xe_result_t fenceDestroy(xe_fence_handle_t *phFence);
 

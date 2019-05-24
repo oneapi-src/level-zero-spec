@@ -21,15 +21,6 @@ struct EventImp : public Event {
 
     xe_result_t hostSynchronize(uint32_t timeout) override;
 
-    xe_result_t queryElapsedTime(xe_event_handle_t hEventEnd, double *pTime) override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
-    }
-
-    xe_result_t queryMetricsData(xe_event_handle_t hEventEnd, size_t reportSize,
-                                 uint32_t *pReportData) override {
-        return XE_RESULT_ERROR_UNSUPPORTED;
-    }
-
     xe_result_t queryStatus() override {
         auto hostAddress = static_cast<uint64_t *>(allocation->getHostAddress());
 
@@ -176,15 +167,6 @@ EventPool *EventPool::create(Device *device, const xe_event_pool_desc_t *desc) {
     assert(eventPool);
 
     return eventPool;
-}
-xe_result_t eventQueryElapsedTime(xe_event_handle_t hEventStart, xe_event_handle_t hEventEnd,
-                                  double *pTime) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
-}
-
-xe_result_t eventQueryMetricsData(xe_event_handle_t hEventStart, xe_event_handle_t hEventEnd,
-                                  size_t reportSize, uint32_t *pReportData) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
 xe_result_t eventPoolOpenIpcHandle(xe_device_handle_t hDevice, xe_ipc_event_pool_handle_t hIpc,
