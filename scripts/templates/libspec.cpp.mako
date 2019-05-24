@@ -145,8 +145,10 @@ namespace ${n}
     {
         <%
             return_value = th.make_return_value(n, tags, obj, cpp=True, decl=True, meta=meta)
-        %>// auto result = ::${th.make_func_name(n, tags, obj)}( ${th.make_param_call_str(n, tags, "handle", obj, True)} );
-        // if( ::${X}_RESULT_SUCCESS != result ) throw exception(result, "${n}::${th.subt(n, tags, obj['class'], cpp=True)}::${th.subt(n, tags, obj['name'], cpp=True)}");
+        %>result_t result = result_t::SUCCESS;
+
+        // auto result = ::${th.make_func_name(n, tags, obj)}( ${th.make_param_call_str(n, tags, "handle", obj, True)} );
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "${n}::${th.subt(n, tags, obj['class'], cpp=True)}::${th.subt(n, tags, obj['name'], cpp=True)}" );
         %if not re.match("void$", return_value):
 
         %if re.match(r"(.*)\btuple\b(.*)", return_value) or re.match(r".*\w+_t$", return_value):
@@ -167,8 +169,10 @@ namespace ${n}
     {
         <%
             return_value = th.make_return_value(n, tags, obj, cpp=True, decl=True, meta=meta)
-        %>// auto result = ::${th.make_func_name(n, tags, obj)}( ${th.make_param_call_str(n, tags, "handle", obj, True)} );
-        // if( ::${X}_RESULT_SUCCESS != result ) throw exception(result, "${th.subt(n, tags, obj['name'], cpp=True)}");
+        %>result_t result = result_t::SUCCESS;
+
+        // auto result = ::${th.make_func_name(n, tags, obj)}( ${th.make_param_call_str(n, tags, "handle", obj, True)} );
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "${n}::${th.subt(n, tags, obj['class'], cpp=True)}::${th.subt(n, tags, obj['name'], cpp=True)}" );
         %if not re.match("void$", return_value):
 
         %if re.match(r"(.*)\btuple\b(.*)", return_value) or re.match(r".*\w+_t$", return_value):

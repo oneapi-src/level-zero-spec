@@ -151,8 +151,10 @@ namespace xe
         cl_mem mem                                      ///< [in] the OpenCL memory to register
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceRegisterCLMemory( handle, context, mem );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLMemory");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::RegisterCLMemory" );
 
         return (void*)0;
     }
@@ -172,8 +174,10 @@ namespace xe
         cl_program program                              ///< [in] the OpenCL program to register
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceRegisterCLProgram( handle, context, program );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLProgram");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::RegisterCLProgram" );
 
         return (Module*)0;
     }
@@ -193,8 +197,10 @@ namespace xe
         cl_command_queue command_queue                  ///< [in] the OpenCL command queue to register
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceRegisterCLCommandQueue( handle, context, command_queue );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::RegisterCLCommandQueue");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::RegisterCLCommandQueue" );
 
         return (CommandQueue*)0;
     }

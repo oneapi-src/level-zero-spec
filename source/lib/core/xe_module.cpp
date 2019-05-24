@@ -838,8 +838,10 @@ namespace xe
         ModuleBuildLog* phBuildLog                      ///< [in,out][optional] pointer to pointer to module's build log.
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeModuleCreate( handle, pDevice, pDesc, phBuildLog );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::Create");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Module::Create" );
 
         return (Module*)0;
     }
@@ -866,8 +868,10 @@ namespace xe
         Module* pModule                                 ///< [in] pointer to the module
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeModuleDestroy( handle, pModule );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::Destroy");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Module::Destroy" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -890,8 +894,10 @@ namespace xe
         ModuleBuildLog* pModuleBuildLog                 ///< [in] pointer to the module build log object.
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeModuleBuildLogDestroy( handle, pModuleBuildLog );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::ModuleBuildLog::Destroy");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::ModuleBuildLog::Destroy" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -910,8 +916,10 @@ namespace xe
         char* pBuildLog                                 ///< [in,out][optional] pointer to null-terminated string of the log.
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeModuleBuildLogGetString( handle, pSize, pBuildLog );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::ModuleBuildLog::GetString");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::ModuleBuildLog::GetString" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -937,8 +945,10 @@ namespace xe
         uint8_t* pModuleNativeBinary                    ///< [in,out][optional] byte pointer to native binary
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeModuleGetNativeBinary( handle, pSize, pModuleNativeBinary );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::GetNativeBinary");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Module::GetNativeBinary" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -957,8 +967,10 @@ namespace xe
         const char* pGlobalName                         ///< [in] name of function in global
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeModuleGetGlobalPointer( handle, pGlobalName );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::GetGlobalPointer");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Module::GetGlobalPointer" );
 
         return (void*)0;
     }
@@ -985,8 +997,10 @@ namespace xe
         const desc_t* pDesc                             ///< [in] pointer to function descriptor
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeFunctionCreate( handle, pModule, pDesc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Function::Create");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::Create" );
 
         return (Function*)0;
     }
@@ -1009,8 +1023,10 @@ namespace xe
         Function* pFunction                             ///< [in] pointer to the function object
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeFunctionDestroy( handle, pFunction );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Function::Destroy");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::Destroy" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1030,8 +1046,10 @@ namespace xe
         const char* pFunctionName                       ///< [in] Name of function to retrieve function pointer for.
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeModuleGetFunctionPointer( handle, pFunctionName );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Module::GetFunctionPointer");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Module::GetFunctionPointer" );
 
         return (void*)0;
     }
@@ -1054,8 +1072,10 @@ namespace xe
         uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this function.
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeFunctionSetGroupSize( handle, groupSizeX, groupSizeY, groupSizeZ );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Function::SetGroupSize");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::SetGroupSize" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1081,8 +1101,10 @@ namespace xe
         uint32_t globalSizeZ                            ///< [in] global width for Z dimension.
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeFunctionSuggestGroupSize( handle, globalSizeX, globalSizeY, globalSizeZ );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Function::SuggestGroupSize");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::SuggestGroupSize" );
 
         return std::tuple<uint32_t, uint32_t, uint32_t>{};
     }
@@ -1104,8 +1126,10 @@ namespace xe
                                                         ///< null then argument value is considered null.
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeFunctionSetArgumentValue( handle, argIndex, argSize, pArgValue );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Function::SetArgumentValue");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::SetArgumentValue" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1127,8 +1151,10 @@ namespace xe
         uint32_t value                                  ///< [in] attribute value to set
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeFunctionSetAttribute( handle, attr, value );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Function::SetAttribute");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::SetAttribute" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1151,8 +1177,10 @@ namespace xe
         get_attribute_t attr                            ///< [in] attribute to query
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeFunctionGetAttribute( handle, attr );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Function::GetAttribute");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::GetAttribute" );
 
         return uint32_t{};
     }
@@ -1182,8 +1210,10 @@ namespace xe
                                                         ///< on before launching
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListAppendLaunchFunction( handle, pFunction, pLaunchFuncArgs, pSignalEvent, numWaitEvents, phWaitEvents );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendLaunchFunction");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendLaunchFunction" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1214,8 +1244,10 @@ namespace xe
                                                         ///< on before launching
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListAppendLaunchFunctionIndirect( handle, pFunction, pLaunchArgumentsBuffer, pSignalEvent, numWaitEvents, phWaitEvents );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendLaunchFunctionIndirect");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendLaunchFunctionIndirect" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1252,8 +1284,10 @@ namespace xe
                                                         ///< on before launching
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListAppendLaunchMultipleFunctionsIndirect( handle, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, pSignalEvent, numWaitEvents, phWaitEvents );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendLaunchMultipleFunctionsIndirect");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendLaunchMultipleFunctionsIndirect" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1282,8 +1316,10 @@ namespace xe
                                                         ///< on before launching
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListAppendLaunchHostFunction( handle, pfnHostFunc, pUserData, pSignalEvent, numWaitEvents, phWaitEvents );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendLaunchHostFunction");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendLaunchHostFunction" );
     }
 
 } // namespace xe

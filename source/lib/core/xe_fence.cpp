@@ -258,8 +258,10 @@ namespace xe
         const desc_t* desc                              ///< [in] pointer to fence descriptor
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeFenceCreate( handle, pCommandQueue, desc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Fence::Create");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Fence::Create" );
 
         return (Fence*)0;
     }
@@ -286,8 +288,10 @@ namespace xe
         Fence* pFence                                   ///< [in] pointer to fence object to destroy
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeFenceDestroy( handle, pFence );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Fence::Destroy");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Fence::Destroy" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -311,8 +315,10 @@ namespace xe
                                                         ///< is lost.
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeFenceHostSynchronize( handle, timeout );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Fence::HostSynchronize");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Fence::HostSynchronize" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -332,8 +338,10 @@ namespace xe
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeFenceQueryStatus( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Fence::QueryStatus");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Fence::QueryStatus" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -353,8 +361,10 @@ namespace xe
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeFenceReset( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Fence::Reset");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Fence::Reset" );
     }
 
 } // namespace xe

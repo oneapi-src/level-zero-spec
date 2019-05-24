@@ -37,12 +37,6 @@
 #if !defined(_XEX_API_HPP)
 #pragma message("warning: this file is not intended to be included directly")
 #endif
-#include <stdint.h>
-#include <string.h>
-#include <tuple>
-#ifdef _DEBUG
-#include <string>
-#endif
 #include "xe_api.hpp"
 
 namespace xex
@@ -57,5 +51,12 @@ namespace xex
 
 #ifdef _DEBUG
 #endif // _DEBUG
+
+namespace xex
+{
+    using result_t = xe::result_t;
+    using exception_t = xe::exception_t;
+
+} // namespace xex
 #endif // defined(__cplusplus)
 #endif // _XEX_COMMON_HPP

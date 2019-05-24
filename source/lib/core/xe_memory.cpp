@@ -436,8 +436,10 @@ namespace xe
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceGroupAllocSharedMem( handle, pDevice, device_flags, host_flags, size, alignment );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::AllocSharedMem");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::AllocSharedMem" );
 
         return (void*)0;
     }
@@ -467,8 +469,10 @@ namespace xe
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceGroupAllocDeviceMem( handle, pDevice, flags, size, alignment );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::AllocDeviceMem");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::AllocDeviceMem" );
 
         return (void*)0;
     }
@@ -498,8 +502,10 @@ namespace xe
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceGroupAllocHostMem( handle, flags, size, alignment );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::AllocHostMem");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::AllocHostMem" );
 
         return (void*)0;
     }
@@ -526,8 +532,10 @@ namespace xe
         const void* ptr                                 ///< [in] pointer to memory to free
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceGroupFreeMem( handle, ptr );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::FreeMem");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::FreeMem" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -549,8 +557,10 @@ namespace xe
         const void* ptr                                 ///< [in] Pointer to query
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceGroupGetMemProperties( handle, ptr );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::GetMemProperties");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetMemProperties" );
 
         return memory_allocation_properties_t{};
     }
@@ -573,8 +583,10 @@ namespace xe
         size_t* pSize                                   ///< [in,out][optional] size of the allocation
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceGroupGetMemAddressRange( handle, ptr, pBase, pSize );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::GetMemAddressRange");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetMemAddressRange" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -599,8 +611,10 @@ namespace xe
         const void* ptr                                 ///< [in] Pointer to the device memory allocation
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceGroupGetMemIpcHandle( handle, ptr );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::GetMemIpcHandle");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetMemIpcHandle" );
 
         return ipc_mem_handle_t{};
     }
@@ -631,8 +645,10 @@ namespace xe
         ipc_memory_flag_t flags                         ///< [in] flags controlling the operation
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceGroupOpenMemIpcHandle( handle, pDevice, handle, flags );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::OpenMemIpcHandle");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::OpenMemIpcHandle" );
 
         return (void*)0;
     }
@@ -656,8 +672,10 @@ namespace xe
         const void* ptr                                 ///< [in] pointer to device allocation in this process
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceGroupCloseMemIpcHandle( handle, ptr );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::CloseMemIpcHandle");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::CloseMemIpcHandle" );
     }
 
 } // namespace xe

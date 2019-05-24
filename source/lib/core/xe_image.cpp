@@ -173,8 +173,10 @@ namespace xe
         const desc_t* desc                              ///< [in] pointer to image descriptor
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeImageGetProperties( handle, pDevice, desc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Image::GetProperties");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Image::GetProperties" );
 
         return properties_t{};
     }
@@ -200,8 +202,10 @@ namespace xe
         const desc_t* desc                              ///< [in] pointer to image descriptor
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeImageCreate( handle, pDevice, desc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Image::Create");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Image::Create" );
 
         return (Image*)0;
     }
@@ -224,8 +228,10 @@ namespace xe
         Image* pImage                                   ///< [in] pointer to image object to destroy
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeImageDestroy( handle, pImage );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Image::Destroy");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Image::Destroy" );
     }
 
 } // namespace xe

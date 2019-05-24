@@ -63,13 +63,16 @@ def declare_dbg(obj, tags):
 #pragma message("warning: this file is not intended to be included directly")
 #endif
 %if re.match(r"common", name):
+%if n == x:
 #include <stdint.h>
 #include <string.h>
+#include <exception>
 #include <tuple>
 #ifdef _DEBUG
 #include <string>
+#include <sstream>
 #endif
-%if x != n:
+%else:
 #include "${x}_api.hpp"
 %endif
 %endif
@@ -367,5 +370,49 @@ namespace ${n}
 %endif  ## declare_dbg
 %endfor ## obj in objects
 #endif // _DEBUG
+%if re.match(r"common", name):
+
+namespace ${n}
+{
+    %if n == x:
+    ///////////////////////////////////////////////////////////////////////////////
+    class exception_t : public std::exception
+    {
+    protected:
+        static std::string formatted( std::string msg, const char* file, const char* line, const char* func )
+        {
+        #ifdef _DEBUG
+            const size_t len = msg.length() + std::strlen(file) + std::strlen(line) + std::strlen(func) + 32;
+            std::string str;
+            str.reserve(len);
+
+            std::stringstream ss(str);
+            ss << file << "(" << line << ") : exception : " << func << " " << msg;
+            return ss.str();
+        #else
+            return msg;
+        #endif
+        }
+
+        const result_t _result;
+
+    public:
+        exception_t() = delete;
+
+        exception_t( result_t result, const char* file, const char* line, const char* func )
+            : std::exception( formatted(to_string(result), file, line, func).c_str() ),
+            _result(result)
+        {
+        }
+
+        result_t value() const { return _result; }
+    };
+    %else:
+    using result_t = ${x}::result_t;
+    using exception_t = ${x}::exception_t;
+    %endif
+
+} // namespace ${n}
+%endif
 #endif // defined(__cplusplus)
 #endif // _${N}_${name.upper()}_HPP

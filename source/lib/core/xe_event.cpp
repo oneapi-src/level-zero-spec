@@ -590,8 +590,10 @@ namespace xe
         const desc_t* desc                              ///< [in] pointer to event pool descriptor
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeEventPoolCreate( handle, pDevice, desc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::EventPool::Create");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::EventPool::Create" );
 
         return (EventPool*)0;
     }
@@ -617,8 +619,10 @@ namespace xe
         EventPool* pEventPool                           ///< [in] pointer to event pool object to destroy
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeEventPoolDestroy( handle, pEventPool );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::EventPool::Destroy");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::EventPool::Destroy" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -646,8 +650,10 @@ namespace xe
         const desc_t* desc                              ///< [in] pointer to event descriptor
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeEventCreate( handle, pEventPool, desc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::Create");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Event::Create" );
 
         return (Event*)0;
     }
@@ -676,8 +682,10 @@ namespace xe
         Event* pEvent                                   ///< [in] pointer to event object to destroy
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeEventDestroy( handle, pEvent );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::Destroy");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Event::Destroy" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -700,8 +708,10 @@ namespace xe
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeEventPoolGetIpcHandle( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::EventPool::GetIpcHandle");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::EventPool::GetIpcHandle" );
 
         return ipc_event_pool_handle_t{};
     }
@@ -729,8 +739,10 @@ namespace xe
         ipc_event_pool_handle_t pIpc                    ///< [in] IPC event handle
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeEventPoolOpenIpcHandle( handle, pDevice, pIpc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::EventPool::OpenIpcHandle");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::EventPool::OpenIpcHandle" );
 
         return (EventPool*)0;
     }
@@ -754,8 +766,10 @@ namespace xe
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeEventPoolCloseIpcHandle( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::EventPool::CloseIpcHandle");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::EventPool::CloseIpcHandle" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -778,8 +792,10 @@ namespace xe
         Event* pEvent                                   ///< [in] pointer to the event
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListAppendSignalEvent( handle, pEvent );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendSignalEvent");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendSignalEvent" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -798,8 +814,10 @@ namespace xe
                                                         ///< continuing
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListAppendWaitOnEvents( handle, numEvents, phEvents );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendWaitOnEvents");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendWaitOnEvents" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -819,8 +837,10 @@ namespace xe
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeEventHostSignal( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::HostSignal");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Event::HostSignal" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -845,8 +865,10 @@ namespace xe
                                                         ///< is lost.
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeEventHostSynchronize( handle, timeout );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::HostSynchronize");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Event::HostSynchronize" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -868,8 +890,10 @@ namespace xe
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeEventQueryStatus( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::QueryStatus");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Event::QueryStatus" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -890,8 +914,10 @@ namespace xe
         Event* pEvent                                   ///< [in] pointer to the event
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListAppendEventReset( handle, pEvent );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendEventReset");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendEventReset" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -911,8 +937,10 @@ namespace xe
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeEventReset( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Event::Reset");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Event::Reset" );
     }
 
 } // namespace xe

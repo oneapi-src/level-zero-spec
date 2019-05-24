@@ -228,8 +228,10 @@ namespace xe
         const desc_t* desc                              ///< [in] pointer to command queue descriptor
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandQueueCreate( handle, pDevice, desc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandQueue::Create");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandQueue::Create" );
 
         return (CommandQueue*)0;
     }
@@ -257,8 +259,10 @@ namespace xe
         CommandQueue* pCommandQueue                     ///< [in] pointer to command queue object to destroy
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandQueueDestroy( handle, pCommandQueue );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandQueue::Destroy");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandQueue::Destroy" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -281,8 +285,10 @@ namespace xe
         Fence* pFence                                   ///< [in][optional] pointer to the fence to signal on completion
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandQueueExecuteCommandLists( handle, numCommandLists, phCommandLists, pFence );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandQueue::ExecuteCommandLists");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandQueue::ExecuteCommandLists" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -302,8 +308,10 @@ namespace xe
                                                         ///< is lost.
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandQueueSynchronize( handle, timeout );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandQueue::Synchronize");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandQueue::Synchronize" );
     }
 
 } // namespace xe

@@ -168,8 +168,10 @@ namespace xex
         const desc_t* desc                              ///< [in] pointer to command graph descriptor
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xexCommandGraphCreate( handle, pDevice, desc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xex::CommandGraph::Create");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xex::CommandGraph::Create" );
 
         return (CommandGraph*)0;
     }
@@ -190,8 +192,10 @@ namespace xex
         CommandGraph* pCommandGraph                     ///< [in] pointer to command graph object to destroy
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xexCommandGraphDestroy( handle, pCommandGraph );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xex::CommandGraph::Destroy");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xex::CommandGraph::Destroy" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -211,8 +215,10 @@ namespace xex
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xexCommandGraphClose( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xex::CommandGraph::Close");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xex::CommandGraph::Close" );
     }
 
 } // namespace xex

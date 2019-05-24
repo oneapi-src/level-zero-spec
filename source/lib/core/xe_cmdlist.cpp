@@ -387,8 +387,10 @@ namespace xe
         const desc_t* desc                              ///< [in] pointer to command list descriptor
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListCreate( handle, pDevice, desc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::Create");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::Create" );
 
         return (CommandList*)0;
     }
@@ -413,8 +415,10 @@ namespace xe
         const CommandQueue::desc_t* desc                ///< [in] pointer to command queue descriptor
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListCreateImmediate( handle, pDevice, desc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::CreateImmediate");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::CreateImmediate" );
 
         return (CommandList*)0;
     }
@@ -437,8 +441,10 @@ namespace xe
         CommandList* pCommandList                       ///< [in] pointer to command list object to destroy
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListDestroy( handle, pCommandList );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::Destroy");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::Destroy" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -455,8 +461,10 @@ namespace xe
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListClose( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::Close");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::Close" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -476,8 +484,10 @@ namespace xe
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListReset( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::Reset");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::Reset" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -501,8 +511,10 @@ namespace xe
         uint32_t value                                  ///< [in] value of attribute
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListSetParameter( handle, parameter, value );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::SetParameter");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::SetParameter" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -528,8 +540,10 @@ namespace xe
         parameter_t parameter                           ///< [in] parameter to retrieve
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListGetParameter( handle, parameter );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::GetParameter");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::GetParameter" );
 
         return uint32_t{};
     }
@@ -548,8 +562,10 @@ namespace xe
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListResetParameters( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::ResetParameters");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::ResetParameters" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -571,8 +587,10 @@ namespace xe
         size_t size                                     ///< [in] size (in bytes) to reserve
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListReserveSpace( handle, size );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::ReserveSpace");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::ReserveSpace" );
 
         return (void*)0;
     }

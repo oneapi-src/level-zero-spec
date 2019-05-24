@@ -148,8 +148,10 @@ namespace xe
         const desc_t* pDesc                             ///< [in] pointer to sampler descriptor
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeSamplerCreate( handle, pDevice, pDesc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Sampler::Create");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Sampler::Create" );
 
         return (Sampler*)0;
     }
@@ -176,8 +178,10 @@ namespace xe
         Sampler* pSampler                               ///< [in] pointer to the sampler
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeSamplerDestroy( handle, pSampler );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Sampler::Destroy");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Sampler::Destroy" );
     }
 
 } // namespace xe

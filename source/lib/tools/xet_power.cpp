@@ -1196,8 +1196,10 @@ namespace xet
         uint32_t flags                                  ///< [in] bitfield of ::power_init_flags_t
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerCreate( handle, pDevice, flags );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::Create");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::Create" );
 
         return (Power*)0;
     }
@@ -1216,8 +1218,10 @@ namespace xet
         Power* pPower                                   ///< [in] pointer to the power object to destroy
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerDestroy( handle, pPower );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::Destroy");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::Destroy" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1232,8 +1236,10 @@ namespace xet
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerGetAveragePowerLimit( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetAveragePowerLimit");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::GetAveragePowerLimit" );
 
         return average_limit_t{};
     }
@@ -1250,8 +1256,10 @@ namespace xet
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerGetBurstPowerLimit( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetBurstPowerLimit");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::GetBurstPowerLimit" );
 
         return burst_limit_t{};
     }
@@ -1268,8 +1276,10 @@ namespace xet
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerGetPeakPowerLimit( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetPeakPowerLimit");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::GetPeakPowerLimit" );
 
         return peak_limit_t{};
     }
@@ -1286,8 +1296,10 @@ namespace xet
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerGetAllPowerLimits( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetAllPowerLimits");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::GetAllPowerLimits" );
 
         return limits_t{};
     }
@@ -1304,8 +1316,10 @@ namespace xet
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerGetDefaultPowerLimits( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetDefaultPowerLimits");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::GetDefaultPowerLimits" );
 
         return limits_t{};
     }
@@ -1319,8 +1333,10 @@ namespace xet
         average_limit_t* pLimit                         ///< [in] information about the average power limit
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerSetAveragePowerLimit( handle, pLimit );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::SetAveragePowerLimit");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::SetAveragePowerLimit" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1332,8 +1348,10 @@ namespace xet
         burst_limit_t* pLimit                           ///< [in] information about the burst power limit
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerSetBurstPowerLimit( handle, pLimit );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::SetBurstPowerLimit");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::SetBurstPowerLimit" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1345,8 +1363,10 @@ namespace xet
         peak_limit_t* pLimit                            ///< [in] information about the peak power limit
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerSetPeakPowerLimit( handle, pLimit );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::SetPeakPowerLimit");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::SetPeakPowerLimit" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1358,8 +1378,10 @@ namespace xet
         limits_t* pLimits                               ///< [in] information about the average/burst/peak power limits
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerSetPowerLimits( handle, pLimits );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::SetPowerLimits");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::SetPowerLimits" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1378,8 +1400,10 @@ namespace xet
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerGetEnergyCounter( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetEnergyCounter");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::GetEnergyCounter" );
 
         return uint64_t{};
     }
@@ -1396,8 +1420,10 @@ namespace xet
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerGetTurboMode( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetTurboMode");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::GetTurboMode" );
 
         return turbo_mode_t{};
     }
@@ -1411,8 +1437,10 @@ namespace xet
         turbo_mode_t pTurboMode                         ///< [in] new turbo mode
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerSetTurboMode( handle, pTurboMode );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::SetTurboMode");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::SetTurboMode" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1427,8 +1455,10 @@ namespace xet
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerGetFreqDomainCount( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetFreqDomainCount");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::GetFreqDomainCount" );
 
         return uint32_t{};
     }
@@ -1445,8 +1475,10 @@ namespace xet
         uint32_t ordinal                                ///< [in] frequency domain index [0 .. ::PowerGetFreqDomainCount - 1]
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerGetFreqDomain( handle, ordinal );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetFreqDomain");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::GetFreqDomain" );
 
         return (FreqDomain*)0;
     }
@@ -1463,8 +1495,10 @@ namespace xet
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetFreqDomainGetProperties( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::FreqDomain::GetProperties");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::FreqDomain::GetProperties" );
 
         return properties_t{};
     }
@@ -1482,8 +1516,10 @@ namespace xet
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetFreqDomainGetSourceFreqDomain( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::FreqDomain::GetSourceFreqDomain");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::FreqDomain::GetSourceFreqDomain" );
 
         return (FreqDomain*)0;
     }
@@ -1505,8 +1541,10 @@ namespace xet
         uint32_t numClockPoints                         ///< [in] number of elements in pClocks
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetFreqDomainGetSupportedClocks( handle, numClockPoints );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::FreqDomain::GetSupportedClocks");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::FreqDomain::GetSupportedClocks" );
 
         return uint32_t{};
     }
@@ -1528,8 +1566,10 @@ namespace xet
         uint32_t numClockDividers                       ///< [in] number of elements in pDividers
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetFreqDomainGetSupportedClockDividers( handle, numClockDividers );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::FreqDomain::GetSupportedClockDividers");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::FreqDomain::GetSupportedClockDividers" );
 
         return clock_divider_t{};
     }
@@ -1548,8 +1588,10 @@ namespace xet
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetFreqDomainGetClockRange( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::FreqDomain::GetClockRange");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::FreqDomain::GetClockRange" );
 
         return std::tuple<uint32_t, uint32_t>{};
     }
@@ -1575,8 +1617,10 @@ namespace xet
         uint32_t maxClock                               ///< [in] max clock frequency in units of MHz
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetFreqDomainSetClockRange( handle, minClock, maxClock );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::FreqDomain::SetClockRange");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::FreqDomain::SetClockRange" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1598,8 +1642,10 @@ namespace xet
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetFreqDomainSetClockDivider( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::FreqDomain::SetClockDivider");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::FreqDomain::SetClockDivider" );
 
         return clock_divider_t{};
     }
@@ -1618,8 +1664,10 @@ namespace xet
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetFreqDomainGetCurrentFrequency( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::FreqDomain::GetCurrentFrequency");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::FreqDomain::GetCurrentFrequency" );
 
         return std::tuple<uint32_t, uint32_t, freq_throttle_reasons_t>{};
     }
@@ -1636,8 +1684,10 @@ namespace xet
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerFanCount( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::FanCount");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::FanCount" );
 
         return uint32_t{};
     }
@@ -1654,8 +1704,10 @@ namespace xet
         uint32_t fanIndex                               ///< [in] fan index [0 .. ::PowerFanCount - 1]
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerFanGetProperties( handle, fanIndex );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::FanGetProperties");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::FanGetProperties" );
 
         return fan_properties_t{};
     }
@@ -1679,8 +1731,10 @@ namespace xet
                                                         ///< number of elements returned
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerFanGetSpeedTable( handle, fanIndex, fanSpeedInRpm, pNumFanPoints );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::FanGetSpeedTable");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::FanGetSpeedTable" );
 
         return fan_point_t{};
     }
@@ -1701,8 +1755,10 @@ namespace xet
         fan_point_t* pFanPoints                         ///< [in] pointer to an array of temperature/fan-speed points
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerFanSetSpeedTable( handle, fanIndex, numFanPoints, pFanPoints );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::FanSetSpeedTable");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::FanSetSpeedTable" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1723,8 +1779,10 @@ namespace xet
         xe::bool_t fanSpeedInRpm                        ///< [in] true will request fan speeds in RPM, otherwise in percentage
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerFanGetSpeed( handle, startFanIndex, numFans, fanSpeedInRpm );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::FanGetSpeed");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::FanGetSpeed" );
 
         return fan_speed_info_t{};
     }
@@ -1745,8 +1803,10 @@ namespace xet
         fan_speed_info_t* pFanSpeed                     ///< [in] pointer to an array of current fan speeds
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerFanSetSpeed( handle, startFanIndex, numFans, pFanSpeed );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::FanSetSpeed");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::FanSetSpeed" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1761,8 +1821,10 @@ namespace xet
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerTemperatureSensorCount( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::TemperatureSensorCount");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::TemperatureSensorCount" );
 
         return uint32_t{};
     }
@@ -1783,8 +1845,10 @@ namespace xet
         uint32_t sensorIndex                            ///< [in] sensor index [0 .. ::PowerTemperatureSensorCount]
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerGetTemperatureProperties( handle, sensorIndex );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetTemperatureProperties");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::GetTemperatureProperties" );
 
         return temperature_properties_t{};
     }
@@ -1807,8 +1871,10 @@ namespace xet
                                                         ///< (startSensorIndex)..(startSensorIndex + numSensors - 1)
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerGetTemperature( handle, startSensorIndex, numSensors );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetTemperature");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::GetTemperature" );
 
         return uint16_t{};
     }
@@ -1831,8 +1897,10 @@ namespace xet
                                                         ///< will be throttled
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerSetTemperatureThreshold( handle, sensorIndex, maxTemperature );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::SetTemperatureThreshold");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::SetTemperatureThreshold" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1847,8 +1915,10 @@ namespace xet
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerActivityCount( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::ActivityCount");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::ActivityCount" );
 
         return uint32_t{};
     }
@@ -1869,8 +1939,10 @@ namespace xet
         uint32_t activityIndex                          ///< [in] activity counter index [0 .. ::PowerActivityCount]
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerGetActivityProperties( handle, activityIndex );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetActivityProperties");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::GetActivityProperties" );
 
         return activity_properties_t{};
     }
@@ -1893,8 +1965,10 @@ namespace xet
                                                         ///< (startCounterIndex)..(startCounterIndex + numCounters - 1)
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetPowerGetActivityCounters( handle, startCounterIndex, numCounters );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Power::GetActivityCounters");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::GetActivityCounters" );
 
         return activity_counters_t{};
     }

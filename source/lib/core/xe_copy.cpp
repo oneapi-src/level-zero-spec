@@ -461,8 +461,10 @@ namespace xe
         Event* pEvent                                   ///< [in][optional] pointer to the event to signal on completion
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListAppendMemoryCopy( handle, dstptr, srcptr, size, pEvent );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemoryCopy");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendMemoryCopy" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -491,8 +493,10 @@ namespace xe
         Event* pEvent                                   ///< [in][optional] pointer to the event to signal on completion
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListAppendMemorySet( handle, ptr, value, size, pEvent );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemorySet");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendMemorySet" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -519,8 +523,10 @@ namespace xe
         Event* pEvent                                   ///< [in][optional] pointer to the event to signal on completion
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListAppendMemoryCopyRegion( handle, dstptr, dstRegion, dstPitch, srcptr, srcRegion, srcPitch, pEvent );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemoryCopyRegion");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendMemoryCopyRegion" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -543,8 +549,10 @@ namespace xe
         Event* pEvent                                   ///< [in][optional] pointer to the event to signal on completion
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListAppendImageCopy( handle, pDstImage, pSrcImage, pEvent );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendImageCopy");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendImageCopy" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -565,8 +573,10 @@ namespace xe
         Event* pEvent                                   ///< [in][optional] pointer to the event to signal on completion
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListAppendImageCopyRegion( handle, pDstImage, pSrcImage, pDstRegion, pSrcRegion, pEvent );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendImageCopyRegion");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendImageCopyRegion" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -592,8 +602,10 @@ namespace xe
         Event* pEvent                                   ///< [in][optional] pointer to the event to signal on completion
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListAppendImageCopyToMemory( handle, dstptr, pSrcImage, pSrcRegion, pEvent );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendImageCopyToMemory");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendImageCopyToMemory" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -619,8 +631,10 @@ namespace xe
         Event* pEvent                                   ///< [in][optional] pointer to the event to signal on completion
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListAppendImageCopyFromMemory( handle, pDstImage, srcptr, pDstRegion, pEvent );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendImageCopyFromMemory");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendImageCopyFromMemory" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -656,8 +670,10 @@ namespace xe
         size_t count                                    ///< [in] size in bytes of the memory range to prefetch
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListAppendMemoryPrefetch( handle, ptr, count );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemoryPrefetch");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendMemoryPrefetch" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -692,8 +708,10 @@ namespace xe
         memory_advice_t advice                          ///< [in] Memory advice for the memory range
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListAppendMemAdvise( handle, pDevice, ptr, size, advice );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemAdvise");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendMemAdvise" );
     }
 
 } // namespace xe

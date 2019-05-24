@@ -197,8 +197,10 @@ namespace xe
                                                         ///< on before executing barrier
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListAppendBarrier( handle, pSignalEvent, numWaitEvents, phWaitEvents );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendBarrier");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendBarrier" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -229,8 +231,10 @@ namespace xe
                                                         ///< on before executing barrier
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeCommandListAppendMemoryRangesBarrier( handle, numRanges, pRangeSizes, pRanges, pSignalEvent, numWaitEvents, phWaitEvents );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::CommandList::AppendMemoryRangesBarrier");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendMemoryRangesBarrier" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -252,8 +256,10 @@ namespace xe
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceSystemBarrier( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::SystemBarrier");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::SystemBarrier" );
     }
 
 } // namespace xe

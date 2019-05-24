@@ -39,9 +39,11 @@
 #endif
 #include <stdint.h>
 #include <string.h>
+#include <exception>
 #include <tuple>
 #ifdef _DEBUG
 #include <string>
+#include <sstream>
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -213,5 +215,42 @@ namespace xe
     std::string to_string( xe::result_t val );
 
 #endif // _DEBUG
+
+namespace xe
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    class exception_t : public std::exception
+    {
+    protected:
+        static std::string formatted( std::string msg, const char* file, const char* line, const char* func )
+        {
+        #ifdef _DEBUG
+            const size_t len = msg.length() + std::strlen(file) + std::strlen(line) + std::strlen(func) + 32;
+            std::string str;
+            str.reserve(len);
+
+            std::stringstream ss(str);
+            ss << file << "(" << line << ") : exception : " << func << " " << msg;
+            return ss.str();
+        #else
+            return msg;
+        #endif
+        }
+
+        const result_t _result;
+
+    public:
+        exception_t() = delete;
+
+        exception_t( result_t result, const char* file, const char* line, const char* func )
+            : std::exception( formatted(to_string(result), file, line, func).c_str() ),
+            _result(result)
+        {
+        }
+
+        result_t value() const { return _result; }
+    };
+
+} // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_COMMON_HPP

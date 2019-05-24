@@ -490,8 +490,10 @@ namespace xe
                                                         ///< groups
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeGetDeviceGroups( handle, pCount, pDeviceGroups );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "GetDeviceGroups");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::::GetDeviceGroups" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -516,8 +518,10 @@ namespace xe
         Device* pDevices                                ///< [in,out][optional][range(0, *pCount)] array of pointer to devices
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceGroupGetDevices( handle, pCount, pDevices );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::GetDevices");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetDevices" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -540,8 +544,10 @@ namespace xe
         uint32_t ordinal                                ///< [in] ordinal of sub-device to retrieve
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceGetSubDevice( handle, ordinal );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetSubDevice");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::GetSubDevice" );
 
         return (Device*)0;
     }
@@ -566,8 +572,10 @@ namespace xe
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceGroupGetApiVersion( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::GetApiVersion");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetApiVersion" );
 
         return api_version_t{};
     }
@@ -594,8 +602,10 @@ namespace xe
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceGroupGetProperties( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::GetProperties");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetProperties" );
 
         return device_properties_t{};
     }
@@ -621,8 +631,10 @@ namespace xe
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceGroupGetComputeProperties( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::GetComputeProperties");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetComputeProperties" );
 
         return device_compute_properties_t{};
     }
@@ -649,8 +661,10 @@ namespace xe
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceGroupGetMemoryProperties( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::DeviceGroup::GetMemoryProperties");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetMemoryProperties" );
 
         return device_memory_properties_t{};
     }
@@ -676,8 +690,10 @@ namespace xe
         Device* pPeerDevice                             ///< [in] pointer to the peer device with the allocation
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceGetP2PProperties( handle, pPeerDevice );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::GetP2PProperties");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::GetP2PProperties" );
 
         return p2p_properties_t{};
     }
@@ -702,8 +718,10 @@ namespace xe
         Device* pPeerDevice                             ///< [in] pointer to the peer device with the allocation
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceCanAccessPeer( handle, pPeerDevice );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::CanAccessPeer");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::CanAccessPeer" );
 
         return bool_t{};
     }
@@ -725,8 +743,10 @@ namespace xe
         cache_config_t CacheConfig                      ///< [in] CacheConfig
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceSetIntermediateCacheConfig( handle, CacheConfig );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::SetIntermediateCacheConfig");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::SetIntermediateCacheConfig" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -746,8 +766,10 @@ namespace xe
         cache_config_t CacheConfig                      ///< [in] CacheConfig
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceSetLastLevelCacheConfig( handle, CacheConfig );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::SetLastLevelCacheConfig");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::SetLastLevelCacheConfig" );
     }
 
 } // namespace xe

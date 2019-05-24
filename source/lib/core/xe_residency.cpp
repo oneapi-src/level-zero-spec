@@ -191,8 +191,10 @@ namespace xe
         size_t size                                     ///< [in] size in bytes to make resident
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceMakeMemoryResident( handle, ptr, size );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::MakeMemoryResident");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::MakeMemoryResident" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -212,8 +214,10 @@ namespace xe
         size_t size                                     ///< [in] size in bytes to evict
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceEvictMemory( handle, ptr, size );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::EvictMemory");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::EvictMemory" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -231,8 +235,10 @@ namespace xe
         Image* pImage                                   ///< [in] pointer to image to make resident
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceMakeImageResident( handle, pImage );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::MakeImageResident");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::MakeImageResident" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -252,8 +258,10 @@ namespace xe
         Image* pImage                                   ///< [in] pointer to image to make evict
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xeDeviceEvictImage( handle, pImage );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xe::Device::EvictImage");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::EvictImage" );
     }
 
 } // namespace xe

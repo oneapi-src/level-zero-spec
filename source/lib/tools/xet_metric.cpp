@@ -678,8 +678,10 @@ namespace xet
         xe::Device* pDevice                             ///< [in] pointer to the device object
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetMetricGroupGetCount( handle, pDevice );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricGroup::GetCount");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricGroup::GetCount" );
 
         return uint32_t{};
     }
@@ -700,8 +702,10 @@ namespace xet
         uint32_t ordinal                                ///< [in] metric group index
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetMetricGroupGet( handle, pDevice, ordinal );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricGroup::Get");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricGroup::Get" );
 
         return (MetricGroup*)0;
     }
@@ -721,8 +725,10 @@ namespace xet
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetMetricGroupGetProperties( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricGroup::GetProperties");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricGroup::GetProperties" );
 
         return properties_t{};
     }
@@ -743,8 +749,10 @@ namespace xet
         uint32_t ordinal                                ///< [in] metric index
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetMetricGet( handle, pMetricGroup, ordinal );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Metric::Get");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Metric::Get" );
 
         return (Metric*)0;
     }
@@ -764,8 +772,10 @@ namespace xet
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetMetricGetProperties( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Metric::GetProperties");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Metric::GetProperties" );
 
         return properties_t{};
     }
@@ -787,8 +797,10 @@ namespace xet
         typed_value_t* pCalculatedData                  ///< [in,out] calculated metrics
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetMetricGroupCalculateData( handle, pReportCount, rawDataSize, pRawData, calculatedDataSize, pCalculatedData );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricGroup::CalculateData");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricGroup::CalculateData" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -808,8 +820,10 @@ namespace xet
                                                         ///< to deactivate.
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetDeviceActivateMetricGroups( handle, count, phMetricGroups );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::Device::ActivateMetricGroups");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Device::ActivateMetricGroups" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -831,8 +845,10 @@ namespace xet
                                                         ///< to host type.
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetMetricTracerOpen( handle, pDevice, pDesc, pNotificationEvent );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricTracer::Open");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricTracer::Open" );
 
         return (MetricTracer*)0;
     }
@@ -851,8 +867,10 @@ namespace xet
         uint32_t value                                  ///< [in] tracer marker value
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetCommandListAppendMetricTracerMarker( handle, pMetricTracer, value );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::CommandList::AppendMetricTracerMarker");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::CommandList::AppendMetricTracerMarker" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -868,8 +886,10 @@ namespace xet
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetMetricTracerClose( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricTracer::Close");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricTracer::Close" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -886,8 +906,10 @@ namespace xet
         uint8_t* pRawData                               ///< [in,out] raw data buffer for reports
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetMetricTracerReadData( handle, pReportCount, rawDataSize, pRawData );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricTracer::ReadData");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricTracer::ReadData" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -906,8 +928,10 @@ namespace xet
         desc_t* pDesc                                   ///< [in] metric query pool creation data
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetMetricQueryPoolCreate( handle, pDevice, pDesc );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricQueryPool::Create");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricQueryPool::Create" );
 
         return (MetricQueryPool*)0;
     }
@@ -925,8 +949,10 @@ namespace xet
         MetricQueryPool* pMetricQueryPool               ///< [in] pointer to the metric query pool
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetMetricQueryPoolDestroy( handle, pMetricQueryPool );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricQueryPool::Destroy");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricQueryPool::Destroy" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -944,8 +970,10 @@ namespace xet
         uint32_t ordinal                                ///< [in] index of the query within the pool
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetMetricQueryPoolGetMetricQuery( handle, ordinal );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricQueryPool::GetMetricQuery");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricQueryPool::GetMetricQuery" );
 
         return (MetricQuery*)0;
     }
@@ -963,8 +991,10 @@ namespace xet
         MetricQuery* pMetricQuery                       ///< [in] pointer to the metric query
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetCommandListAppendMetricQueryBegin( handle, pMetricQuery );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::CommandList::AppendMetricQueryBegin");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::CommandList::AppendMetricQueryBegin" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -981,8 +1011,10 @@ namespace xet
         xe::Event* pCompletionEvent                     ///< [in] pointer to the completion event to signal
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetCommandListAppendMetricQueryEnd( handle, pMetricQuery, pCompletionEvent );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::CommandList::AppendMetricQueryEnd");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::CommandList::AppendMetricQueryEnd" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -998,8 +1030,10 @@ namespace xet
         void
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetCommandListAppendMetricMemoryBarrier( handle );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::CommandList::AppendMetricMemoryBarrier");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::CommandList::AppendMetricMemoryBarrier" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1016,8 +1050,10 @@ namespace xet
         uint8_t* pRawData                               ///< [in,out] query result data in raw format
         )
     {
+        result_t result = result_t::SUCCESS;
+
         // auto result = ::xetMetricQueryGetData( handle, pReportCount, rawDataSize, pRawData );
-        // if( ::XE_RESULT_SUCCESS != result ) throw exception(result, "xet::MetricQuery::GetData");
+        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricQuery::GetData" );
     }
 
 } // namespace xet
