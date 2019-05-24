@@ -68,10 +68,11 @@ void CommandQueueImp::submitBatchBuffer(size_t offset) {
     NEO::BatchBuffer batchBuffer(allocation->allocationRT, offset, 0u, nullptr, false, false,
                                  NEO::QueueThrottle::HIGH, commandStream->getUsed(), commandStream);
     NEO::ResidencyContainer residencyContainer;
-    commandStreamReceiver->flush(batchBuffer, residencyContainer);
-
-    // FIXME: Remove direct access to taskCount.
-    this->taskCount = ++commandStreamReceiver->taskCount;
+    if(!this->flush(batchBuffer, residencyContainer)) {
+        commandStreamReceiver->flush(batchBuffer, residencyContainer);
+        // FIXME: Remove direct access to taskCount.
+        this->taskCount = ++commandStreamReceiver->taskCount;
+    }
 }
 
 xe_result_t CommandQueueImp::synchronize(uint32_t timeout) {

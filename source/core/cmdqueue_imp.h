@@ -2,6 +2,9 @@
 #include "cmdqueue.h"
 
 #include "substream.h"
+#include "runtime/command_stream/submissions_aggregator.h"
+#include "runtime/memory_manager/memory_constants.h"
+#include "runtime/command_stream/submissions_aggregator.h"
 
 #include <vector>
 
@@ -31,6 +34,7 @@ struct CommandQueueImp : public CommandQueue {
     Substream getCmdSubstream(size_t size);
 
     virtual void makeCoherent(NEO::GraphicsAllocation &gfxAllocation) {}
+    virtual bool flush(NEO::BatchBuffer &batchBuffer, NEO::ResidencyContainer &allocationsForResidency) { return false;}
 
   protected:
     void processCoherency(CommandList *);
