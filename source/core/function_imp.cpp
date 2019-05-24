@@ -15,7 +15,7 @@
 #include "printf_handler.h"
 
 #include "runtime/context/context.h"
-#include "runtime/helpers/basic_math.h"
+#include "core/helpers/basic_math.h"
 #include "runtime/helpers/per_thread_data.h"
 #include "runtime/helpers/string.h"
 #include "runtime/kernel/kernel.h"

@@ -32,11 +32,11 @@ struct Environment : public ::testing::Environment {
         // Clone default device information
         assert(NEO::hardwareInfoTable[productFamily]);
         hwInfo = *NEO::hardwareInfoTable[productFamily];
-        sysInfo = *hwInfo.pSysInfo;
-        skuTable = *hwInfo.pSkuTable;
+        sysInfo = hwInfo.gtSystemInfo;
+        skuTable = hwInfo.featureTable;
 
-        productFamily = hwInfo.pPlatform->eProductFamily;
-        renderCoreFamily = hwInfo.pPlatform->eRenderCoreFamily;
+        productFamily = hwInfo.platform.eProductFamily;
+        renderCoreFamily = hwInfo.platform.eRenderCoreFamily;
 
         // Disable mid-thread preemption
         hwInfo.capabilityTable.defaultPreemptionMode = NEO::PreemptionMode::ThreadGroup;

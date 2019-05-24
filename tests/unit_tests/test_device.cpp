@@ -103,11 +103,11 @@ TEST(MaxHwTrheads, getMaxHwThreads) {
 
     auto hwInfo = deviceRT->getHardwareInfo();
 
-    uint32_t threadsPerEU = (hwInfo.pSysInfo->ThreadCount / hwInfo.pSysInfo->EUCount) +
+    uint32_t threadsPerEU = (hwInfo.gtSystemInfo.ThreadCount / hwInfo.gtSystemInfo.EUCount) +
                             hwInfo.capabilityTable.extraQuantityThreadsPerEU;
     uint32_t value = device->getMaxNumHwThreads();
 
-    uint32_t expected = hwInfo.pSysInfo->EUCount * threadsPerEU;
+    uint32_t expected = hwInfo.gtSystemInfo.EUCount * threadsPerEU;
     EXPECT_EQ(expected, value);
 }
 

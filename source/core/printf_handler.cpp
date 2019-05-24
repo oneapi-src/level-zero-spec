@@ -10,7 +10,7 @@ namespace L0 {
 
 // TODO : Refactor in NEO to not need such heavy objects on the interface
 struct DummyDevice : NEO::Device {
-    DummyDevice() : NEO::Device(hwInfo, nullptr, 0) {}
+    DummyDevice() : NEO::Device(nullptr, 0) {}
     NEO::HardwareInfo hwInfo;
 };
 

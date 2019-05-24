@@ -191,7 +191,7 @@ TEST_P(ModuleCreateBufArg, onlineCompilationModuleTest) {
     funDesc.version = XE_FUNCTION_DESC_VERSION_CURRENT;
     funDesc.pFunctionName = functionName.c_str();
     auto function = whitebox_cast(
-        Function::create(deviceRT->getHardwareInfo().pPlatform->eProductFamily, module, &funDesc));
+        Function::create(deviceRT->getHardwareInfo().platform.eProductFamily, module, &funDesc));
     ASSERT_NE(nullptr, function);
 
     auto dst = globalMemoryManager->allocateDeviceMemory(device, 4096u, 4096u);
@@ -302,7 +302,7 @@ TEST_P(ModuleCreateImageArg, onlineCompilationModuleTest) {
     funDesc.version = XE_FUNCTION_DESC_VERSION_CURRENT;
     funDesc.pFunctionName = functionName.c_str();
     auto function = whitebox_cast(
-        Function::create(deviceRT->getHardwareInfo().pPlatform->eProductFamily, module, &funDesc));
+        Function::create(deviceRT->getHardwareInfo().platform.eProductFamily, module, &funDesc));
     ASSERT_NE(nullptr, function);
 
     xe_image_desc_t imgDesc = {};
@@ -509,7 +509,7 @@ TEST_F(ModuleOnlineCompiled, functionReturnsCorrectThreadGroupParameters) {
     funDesc.pFunctionName = "memcpy_bytes";
 
     auto function = std::unique_ptr<Function>(whitebox_cast(Function::create(
-        deviceRT->getHardwareInfo().pPlatform->eProductFamily, module.get(), &funDesc)));
+        deviceRT->getHardwareInfo().platform.eProductFamily, module.get(), &funDesc)));
     ASSERT_NE(nullptr, function);
 
     function->setGroupSize(5u, 7u, 13u);

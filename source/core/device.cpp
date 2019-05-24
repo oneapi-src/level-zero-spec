@@ -44,7 +44,7 @@ struct DeviceImp : public Device {
 
     xe_result_t createCommandList(const xe_command_list_desc_t *desc,
                                   xe_command_list_handle_t *commandList) override {
-        auto productFamily = deviceRT->getHardwareInfo().pPlatform->eProductFamily;
+        auto productFamily = deviceRT->getHardwareInfo().platform.eProductFamily;
         *commandList = CommandList::create(productFamily, this);
 
         return XE_RESULT_SUCCESS;
@@ -52,7 +52,7 @@ struct DeviceImp : public Device {
 
     xe_result_t createCommandQueue(const xe_command_queue_desc_t *desc,
                                    xe_command_queue_handle_t *commandQueue) override {
-        auto productFamily = deviceRT->getHardwareInfo().pPlatform->eProductFamily;
+        auto productFamily = deviceRT->getHardwareInfo().platform.eProductFamily;
 
         auto executionEnvironment = deviceRT->getExecutionEnvironment();
         auto csrRT = executionEnvironment->commandStreamReceivers[0][0].get();
@@ -69,7 +69,7 @@ struct DeviceImp : public Device {
     }
 
     xe_result_t createImage(const xe_image_desc_t *desc, xe_image_handle_t *phImage) override {
-        auto productFamily = deviceRT->getHardwareInfo().pPlatform->eProductFamily;
+        auto productFamily = deviceRT->getHardwareInfo().platform.eProductFamily;
         *phImage = Image::create(productFamily, this, desc);
 
         return XE_RESULT_SUCCESS;
@@ -144,7 +144,7 @@ struct DeviceImp : public Device {
         assert(pMemProperties->version == XE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT);
         const auto &deviceInfo = this->deviceRT->getDeviceInfo();
         const auto &hardwareInfo = this->deviceRT->getHardwareInfo();
-        auto &hwHelper = NEO::HwHelper::get(hardwareInfo.pPlatform->eRenderCoreFamily);
+        auto &hwHelper = NEO::HwHelper::get(hardwareInfo.platform.eRenderCoreFamily);
         auto enableLocalMemory = hwHelper.getEnableLocalMemory(hardwareInfo);
 
         pMemProperties->unifiedMemory =
@@ -187,7 +187,7 @@ struct DeviceImp : public Device {
         assert(pDeviceProperties->version == XE_DEVICE_PROPERTIES_VERSION_CURRENT);
         const auto &deviceInfo = this->deviceRT->getDeviceInfo();
         const auto &hardwareInfo = this->deviceRT->getHardwareInfo();
-        auto &hwHelper = NEO::HwHelper::get(hardwareInfo.pPlatform->eRenderCoreFamily);
+        auto &hwHelper = NEO::HwHelper::get(hardwareInfo.platform.eRenderCoreFamily);
         auto enableLocalMemory = hwHelper.getEnableLocalMemory(hardwareInfo);
 
         memcpy_s(pDeviceProperties->name, sizeof(pDeviceProperties->name), deviceInfo.name,
@@ -212,10 +212,10 @@ struct DeviceImp : public Device {
             1; //  hwHelper.getCopyEngineInstances().size(); // NEO refactor
         pDeviceProperties->maxCommandQueuePriority = 0; // map to cl_khr_priority_hints ?
         pDeviceProperties->numThreadsPerEU = deviceInfo.numThreadsPerEU;
-        pDeviceProperties->numEUsPerSubslice = hardwareInfo.pSysInfo->MaxEuPerSubSlice;
+        pDeviceProperties->numEUsPerSubslice = hardwareInfo.gtSystemInfo.MaxEuPerSubSlice;
         pDeviceProperties->numSubslicesPerSlice =
-            hardwareInfo.pSysInfo->SubSliceCount / hardwareInfo.pSysInfo->SliceCount;
-        pDeviceProperties->numSlicesPerTile = hardwareInfo.pSysInfo->SliceCount;
+            hardwareInfo.gtSystemInfo.SubSliceCount / hardwareInfo.gtSystemInfo.SliceCount;
+        pDeviceProperties->numSlicesPerTile = hardwareInfo.gtSystemInfo.SliceCount;
         // pDeviceProperties->numTiles; ///< [out] Number of tiles for this device. TODO : Add
         // support
         return XE_RESULT_SUCCESS;
@@ -256,7 +256,7 @@ struct DeviceImp : public Device {
 
     NEO::HwHelper &getHwHelper() override {
         const auto &hardwareInfo = deviceRT->getHardwareInfo();
-        return NEO::HwHelper::get(hardwareInfo.pPlatform->eRenderCoreFamily);
+        return NEO::HwHelper::get(hardwareInfo.platform.eRenderCoreFamily);
     }
 
     uint32_t getMaxNumHwThreads() const override { return maxNumHwThreads; }
@@ -309,7 +309,7 @@ struct DeviceImp : public Device {
         void *csrRT = executionEnvironment->commandStreamReceivers[deviceIndex][csrIndex].get();
 
         *phCommandQueue = CommandQueue::create(
-            commandQueueRT->getDevice().getHardwareInfo().pPlatform->eProductFamily, this, csrRT);
+            commandQueueRT->getDevice().getHardwareInfo().platform.eProductFamily, this, csrRT);
 
         return XE_RESULT_SUCCESS;
     }
@@ -324,9 +324,9 @@ struct DeviceImp : public Device {
 
 // TODO: Refactor in NEO - remove dependency on template parameter
 static uint32_t getMaxThreadsForVfe(const NEO::HardwareInfo &hwInfo) {
-    uint32_t threadsPerEU = (hwInfo.pSysInfo->ThreadCount / hwInfo.pSysInfo->EUCount) +
+    uint32_t threadsPerEU = (hwInfo.gtSystemInfo.ThreadCount / hwInfo.gtSystemInfo.EUCount) +
                             hwInfo.capabilityTable.extraQuantityThreadsPerEU;
-    return hwInfo.pSysInfo->EUCount * threadsPerEU;
+    return hwInfo.gtSystemInfo.EUCount * threadsPerEU;
 }
 
 Device *Device::create(void *ptr) {

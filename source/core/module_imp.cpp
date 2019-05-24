@@ -178,7 +178,7 @@ ModuleImp::ModuleImp(Device *device, void *deviceRT, ModuleBuildLog *moduleBuild
     : device(device), progRT(NEO_temporary::LightweightOclProgram::create(deviceRT)),
       moduleBuildLog(moduleBuildLog) {
     productFamily =
-        reinterpret_cast<NEO::Device *>(deviceRT)->getHardwareInfo().pPlatform->eProductFamily;
+        reinterpret_cast<NEO::Device *>(deviceRT)->getHardwareInfo().platform.eProductFamily;
 }
 
 ModuleImp::~ModuleImp() {
