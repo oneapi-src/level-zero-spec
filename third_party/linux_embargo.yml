@@ -34,7 +34,7 @@ components:
     clean_on_sync: false
     dest_dir: third_party/compute_runtime
     repository: ssh://gerrit-gfx.intel.com:29418/gfx/compute/neo
-    revision: 78f3d1e9aa010a9c22f638ef7e6ee31905f8ed32
+    revision: 9ffd58ad33dc476acba8bbda0f83bd70d8578056
     type: git
 converter: E-1180
 version: '1'

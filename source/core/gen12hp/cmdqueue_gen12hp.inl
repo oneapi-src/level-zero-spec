@@ -52,7 +52,7 @@ template <> void CommandQueueHw<IGFX_GEN12_CORE>::dispatchTaskCountWrite(bool fl
     commandStreamReceiver->setLatestSentTaskCount(taskCountToWrite);
     commandStreamReceiver->flush(batchBuffer, residencyContainer);
     commandStreamReceiver->makeSurfacePackNonResident(residencyContainer);
-    commandStreamReceiver->makeCoherent(*commandStreamReceiver->getTagAllocation());
+    commandStreamReceiver->waitForTaskCountWithKmdNotifyFallback(0, 0, false, false);
     return;
 }
 

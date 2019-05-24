@@ -50,7 +50,7 @@ void CommandQueueImp::processCoherency(CommandList *c) {
     auto commandStreamReceiver = static_cast<NEO::CommandStreamReceiver *>(csrRT);
     auto &residencyContainer = commandList->getResidencyContainer();
     for (auto allocation : residencyContainer) {
-        commandStreamReceiver->makeCoherent(*allocation);
+        this->makeCoherent(*allocation);
     }
 }
 

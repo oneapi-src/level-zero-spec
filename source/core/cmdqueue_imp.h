@@ -30,6 +30,8 @@ struct CommandQueueImp : public CommandQueue {
 
     Substream getCmdSubstream(size_t size);
 
+    virtual void makeCoherent(NEO::GraphicsAllocation &gfxAllocation) {}
+
   protected:
     void processCoherency(CommandList *);
     void submitBatchBuffer(size_t offset);

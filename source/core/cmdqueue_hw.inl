@@ -147,7 +147,7 @@ void CommandQueueHw<gfxCoreFamily>::dispatchTaskCountWrite(bool flushDataCache) 
     commandStreamReceiver->setLatestSentTaskCount(taskCountToWrite);
     commandStreamReceiver->flush(batchBuffer, residencyContainer);
     commandStreamReceiver->makeSurfacePackNonResident(residencyContainer);
-    commandStreamReceiver->makeCoherent(*commandStreamReceiver->getTagAllocation());
+    commandStreamReceiver->waitForTaskCountWithKmdNotifyFallback(0, 0, false, false);
     return;
 }
 
