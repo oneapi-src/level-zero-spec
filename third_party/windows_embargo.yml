@@ -4,12 +4,12 @@ components:
     clean_on_sync: true
     dest_dir: third_party/aub_stream
     repository: ssh://gerrit-gfx.intel.com:29418/mirrors/gitlab-intel/aubstream
-    revision: c1771e336e8075884469c37b8683f358336ad21b
+    revision: bc3eedd27d54948991516ff4c6f5835eea1cc22c
     type: git
   gmmlib:
     asset_name: gmmlib
     asset_path: gfx-sandbox-igk/neo/build/mainline
-    asset_version: intel-gmmlib-19.1.1-1239
+    asset_version: intel-gmmlib-19.1.1-1244
     clean_on_sync: true
     dest_dir: third_party/gmmlib
     root_url: https://gfx-assets.igk.intel.com/artifactory
@@ -17,7 +17,7 @@ components:
   igc:
     asset_name: igc
     asset_path: gfx-sandbox-igk/neo/build/mainline
-    asset_version: dbf7f8fe3cf36e9d945d258d2e3f531fffe91246-1239
+    asset_version: dbf7f8fe3cf36e9d945d258d2e3f531fffe91246-1244
     clean_on_sync: true
     dest_dir: third_party/igc
     root_url: https://gfx-assets.igk.intel.com/artifactory
@@ -34,7 +34,7 @@ components:
     clean_on_sync: false
     dest_dir: third_party/compute_runtime
     repository: ssh://gerrit-gfx.intel.com:29418/gfx/compute/neo
-    revision: ddcef137f0d2258a6eb345507fde28a02967f26a
+    revision: a1bb59d9cdcd978e7b4f408033013e8d59bd3956
     type: git
   wdk:
     asset_name: wdk

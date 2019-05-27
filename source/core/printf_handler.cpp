@@ -36,7 +36,9 @@ void PrintfHandler::printOutput(PtrRef<FunctionImmutableData> function,
     NEO::Device *deviceRT = nullptr;
     DummyKernel kernel{&dummyProgram, *function->getKernelInfoRT().weakRef<NEO::KernelInfo>(),
                        deviceRT};
-    NEO::PrintFormatter printfFormatter{kernel, *printfBuffer->allocationRT};
+    NEO::PrintFormatter printfFormatter{static_cast<uint8_t *>(printfBuffer->getHostAddress()),
+            static_cast<uint32_t>(printfBuffer->getSize()), kernel.is32Bit(),
+            kernel.getKernelInfo().patchInfo.stringDataMap};
     printfFormatter.printKernelOutput();
 
     // reset to initial state after printing
