@@ -17,7 +17,7 @@ xe_result_t hostMemAlloc(xe_host_mem_alloc_flag_t flags, size_t size, size_t ali
 xe_result_t ipcCloseMemHandle(const void *ptr) { return XE_RESULT_ERROR_UNSUPPORTED; }
 
 xe_result_t ipcGetMemHandle(const void *ptr, xe_ipc_mem_handle_t *pIpcHandle) {
-    auto ipc = IPC::create();
+    auto ipc = L0MemoryManagerSepecifics::create();
     return ipc->ipcGetMemHandle(ptr, pIpcHandle);
 }
 
@@ -26,13 +26,30 @@ xe_result_t ipcOpenMemHandle(xe_device_handle_t hDevice, xe_ipc_mem_handle_t han
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
-xe_result_t deviceMemAlloc(xe_device_handle_t hDevice, xe_device_mem_alloc_flag_t flags, size_t size,
-                     size_t alignment, void **ptr) {
+xe_result_t deviceMemAlloc(xe_device_handle_t hDevice, xe_device_mem_alloc_flag_t flags,
+                           size_t size, size_t alignment, void **ptr) {
+    void *buffer;
     auto device = Device::fromHandle(hDevice);
+    auto l0mms = L0MemoryManagerSepecifics::create();
+    std::string shmFileName;
+    GraphicsAllocation *allocation;
+
     assert(device);
     assert(globalMemoryManager);
 
-    auto allocation = globalMemoryManager->allocateManagedMemory(device, size, alignment);
+    // Allocate shred memory (so later can be shared with other proc using IPC)
+    buffer = l0mms->allocateShMemory(size, alignment, shmFileName);
+    /*FIXME: there is no Windows support for l0mms->allocateShMemor. So, until there is one,
+    /* on failure, it will fallback to normal allocations without support for IPC. However,
+     * must be updated to fail here
+     */
+    if (buffer != nullptr) {
+        allocation = globalMemoryManager->allocateManagedMemoryFromFault(device, buffer, size);
+        allocation->shmFileName = shmFileName;
+    } else {
+        allocation = globalMemoryManager->allocateManagedMemory(device, size, alignment);
+    }
+
     assert(allocation);
     allocation->allocType = AllocationType::DEVICE;
 

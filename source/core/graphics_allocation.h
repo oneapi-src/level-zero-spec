@@ -65,6 +65,8 @@ struct GraphicsAllocation : public MemAllocation {
     bool allocatedFromFault = false;
     NEO::GraphicsAllocation *allocationRT = nullptr;
     Device *deviceOwner;
+
+    std::string shmFileName;
 };
 
 } // namespace L0

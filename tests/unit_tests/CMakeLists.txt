@@ -101,12 +101,22 @@ else()
     )
 endif()
 
-target_link_libraries(${TARGET_NAME} 
-    compute_runtime_mockable
-    compute_runtime_mockable_extra
-    ${HW_LIBS_ULT}
-    gmock
-)
+if (UNIX)
+    target_link_libraries(${TARGET_NAME} 
+        compute_runtime_mockable
+        compute_runtime_mockable_extra
+        ${HW_LIBS_ULT}
+        gmock
+        rt
+    )
+else()
+    target_link_libraries(${TARGET_NAME} 
+        compute_runtime_mockable
+        compute_runtime_mockable_extra
+        ${HW_LIBS_ULT}
+        gmock
+    )
+endif()
 
 if(AUB_STREAM_SUPPORT)
     target_sources(${TARGET_NAME}

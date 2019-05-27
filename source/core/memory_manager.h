@@ -5,6 +5,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <iostream>
 
 namespace NEO {
 class GraphicsAllocation;
@@ -40,12 +41,13 @@ struct MemoryManager {
 
 extern MemoryManager *globalMemoryManager;
 
-struct IPC {
+struct L0MemoryManagerSepecifics {
 
   public:
-    static IPC *create();
+    static L0MemoryManagerSepecifics *create();
     virtual xe_result_t ipcGetMemHandle(const void *ptr, xe_ipc_mem_handle_t *pIpcHandle) = 0;
+    virtual void *allocateShMemory(size_t size, size_t alignment, std::string &shmFileName) = 0;
+    virtual void freeShMemory(GraphicsAllocation *graphAllocation) = 0;
 };
-
 
 } // namespace L0

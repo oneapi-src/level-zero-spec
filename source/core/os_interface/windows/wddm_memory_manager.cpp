@@ -2,10 +2,19 @@
 
 namespace L0 {
 
-IPC *IPC::create() { return new WinIPC(); }
-xe_result_t WinIPC::ipcGetMemHandle(const void *ptr, xe_ipc_mem_handle_t *pIpcHandle) {
+L0MemoryManagerSepecifics *L0MemoryManagerSepecifics::create() {
+    return new WddmL0MemoryManagerSepecifics();
+}
+
+xe_result_t WddmL0MemoryManagerSepecifics::ipcGetMemHandle(const void *ptr, xe_ipc_mem_handle_t *pIpcHandle) {
 
     return XE_RESULT_ERROR_UNSUPPORTED;
 }
 
+void *WddmL0MemoryManagerSepecifics::allocateShMemory(size_t size, size_t alignment,
+                                                      std::string &shmFileName) {
+    return nullptr;
+}
+
+void WddmL0MemoryManagerSepecifics::freeShMemory(GraphicsAllocation *allocation) { ; }
 } // namespace L0

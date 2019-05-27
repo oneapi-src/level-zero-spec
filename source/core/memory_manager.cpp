@@ -20,8 +20,8 @@ MemoryManager *globalMemoryManager = nullptr;
 struct MemoryManagerImp : public MemoryManager {
 
     void insertAllocation(void *ptr, MemAllocation *allocation) {
-        allocationTracker.insert(std::pair<void *,
-                MemAllocation *>(allocation->getHostAddress(), allocation));
+        allocationTracker.insert(
+            std::pair<void *, MemAllocation *>(allocation->getHostAddress(), allocation));
     }
 
     void *allocateHostMemory(size_t size, size_t alignment) override {
@@ -188,7 +188,15 @@ struct MemoryManagerImp : public MemoryManager {
             MemAllocation *allocation = it->second;
             if (allocation->allocType == AllocationType::DEVICE ||
                 allocation->allocType == AllocationType::SHARED) {
-                freeGraphicsAllocation(static_cast<GraphicsAllocation *>(allocation));
+                GraphicsAllocation *graphicAllocation =
+                    static_cast<GraphicsAllocation *>(allocation);
+                // Extra step to clean /dev/shm for DEVICE type of allocation
+                if (allocation->allocType == AllocationType::DEVICE) {
+                    auto l0mms = L0MemoryManagerSepecifics::create();
+                    l0mms->freeShMemory(graphicAllocation);
+                }
+
+                freeGraphicsAllocation(graphicAllocation);
             } else {
                 freeHostMemory(allocation);
             }
@@ -199,7 +207,8 @@ struct MemoryManagerImp : public MemoryManager {
         : memoryManagerRT(static_cast<NEO::MemoryManager *>(memoryManagerRT)) {}
 
     NEO::MemoryManager *memoryManagerRT;
-protected:
+
+  protected:
     std::map<void *, L0::MemAllocation *> allocationTracker;
 };
 

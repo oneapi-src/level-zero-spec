@@ -35,7 +35,7 @@ if(UNIX)
         PRIVATE
             ${COMPUTE_RUNTIME_DIR}/runtime/dll/linux/drm_neo_create.cpp
     )
-    set(OS_SPECIFIC_LIBS dl pthread)
+    set(OS_SPECIFIC_LIBS dl pthread rt)
     target_include_directories(${TARGET_NAME} PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/source/os_interface/linux
         ${I915_INCLUDES_DIR}
