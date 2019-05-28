@@ -34,6 +34,7 @@ add_executable(${TARGET_NAME}
     test.h
     test_cmdlist.cpp
     test_cmdlist_close.cpp
+    test_cmdlist_copy.cpp
     test_cmdlist_encodedispatchfunction.cpp
     test_cmdlist_encodeeventreset.cpp
     test_cmdlist_encodesignalevent.cpp
