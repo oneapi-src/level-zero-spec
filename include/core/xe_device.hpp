@@ -914,58 +914,58 @@ namespace xe
 } // namespace xe
 
 #ifdef _DEBUG
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::api_version_t to std::string
-    std::string to_string( xe::DeviceGroup::api_version_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts DeviceGroup::api_version_t to std::string
+std::string to_string( xe::DeviceGroup::api_version_t val );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::device_properties_version_t to std::string
-    std::string to_string( xe::DeviceGroup::device_properties_version_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts DeviceGroup::device_properties_version_t to std::string
+std::string to_string( xe::DeviceGroup::device_properties_version_t val );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::device_type_t to std::string
-    std::string to_string( xe::DeviceGroup::device_type_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts DeviceGroup::device_type_t to std::string
+std::string to_string( xe::DeviceGroup::device_type_t val );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::device_compute_properties_version_t to std::string
-    std::string to_string( xe::DeviceGroup::device_compute_properties_version_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts DeviceGroup::device_compute_properties_version_t to std::string
+std::string to_string( xe::DeviceGroup::device_compute_properties_version_t val );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::device_memory_properties_version_t to std::string
-    std::string to_string( xe::DeviceGroup::device_memory_properties_version_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts DeviceGroup::device_memory_properties_version_t to std::string
+std::string to_string( xe::DeviceGroup::device_memory_properties_version_t val );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::memory_access_capabilities_t to std::string
-    std::string to_string( xe::DeviceGroup::memory_access_capabilities_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts DeviceGroup::memory_access_capabilities_t to std::string
+std::string to_string( xe::DeviceGroup::memory_access_capabilities_t val );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::device_mem_alloc_flag_t to std::string
-    std::string to_string( xe::DeviceGroup::device_mem_alloc_flag_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts DeviceGroup::device_mem_alloc_flag_t to std::string
+std::string to_string( xe::DeviceGroup::device_mem_alloc_flag_t val );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::host_mem_alloc_flag_t to std::string
-    std::string to_string( xe::DeviceGroup::host_mem_alloc_flag_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts DeviceGroup::host_mem_alloc_flag_t to std::string
+std::string to_string( xe::DeviceGroup::host_mem_alloc_flag_t val );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::memory_allocation_properties_version_t to std::string
-    std::string to_string( xe::DeviceGroup::memory_allocation_properties_version_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts DeviceGroup::memory_allocation_properties_version_t to std::string
+std::string to_string( xe::DeviceGroup::memory_allocation_properties_version_t val );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::memory_type_t to std::string
-    std::string to_string( xe::DeviceGroup::memory_type_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts DeviceGroup::memory_type_t to std::string
+std::string to_string( xe::DeviceGroup::memory_type_t val );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::ipc_memory_flag_t to std::string
-    std::string to_string( xe::DeviceGroup::ipc_memory_flag_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts DeviceGroup::ipc_memory_flag_t to std::string
+std::string to_string( xe::DeviceGroup::ipc_memory_flag_t val );
 
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Device::p2p_properties_version_t to std::string
-    std::string to_string( xe::Device::p2p_properties_version_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts Device::p2p_properties_version_t to std::string
+std::string to_string( xe::Device::p2p_properties_version_t val );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Device::cache_config_t to std::string
-    std::string to_string( xe::Device::cache_config_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts Device::cache_config_t to std::string
+std::string to_string( xe::Device::cache_config_t val );
 
 
 #endif // _DEBUG

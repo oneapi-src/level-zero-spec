@@ -224,29 +224,29 @@ namespace xex
 } // namespace xex
 
 #ifdef _DEBUG
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts CommandGraph::desc_version_t to std::string
-    std::string to_string( xex::CommandGraph::desc_version_t val )
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts CommandGraph::desc_version_t to std::string
+std::string to_string( xex::CommandGraph::desc_version_t val )
+{
+    switch( val )
     {
-        switch( val )
-        {
-        case xex::CommandGraph::desc_version_t::CURRENT:
-            return std::string("xex::CommandGraph::desc_version_t::CURRENT");
-        };
-        return std::string("xex::CommandGraph::desc_version_t::?");
-    }
+    case xex::CommandGraph::desc_version_t::CURRENT:
+        return std::string("xex::CommandGraph::desc_version_t::CURRENT");
+    };
+    return std::string("xex::CommandGraph::desc_version_t::?");
+}
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts CommandGraph::flag_t to std::string
-    std::string to_string( xex::CommandGraph::flag_t val )
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts CommandGraph::flag_t to std::string
+std::string to_string( xex::CommandGraph::flag_t val )
+{
+    switch( val )
     {
-        switch( val )
-        {
-        case xex::CommandGraph::flag_t::NONE:
-            return std::string("xex::CommandGraph::flag_t::NONE");
-        };
-        return std::string("xex::CommandGraph::flag_t::?");
-    }
+    case xex::CommandGraph::flag_t::NONE:
+        return std::string("xex::CommandGraph::flag_t::NONE");
+    };
+    return std::string("xex::CommandGraph::flag_t::?");
+}
 
 
 #endif // _DEBUG

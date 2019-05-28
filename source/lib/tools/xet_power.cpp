@@ -1976,162 +1976,162 @@ namespace xet
 } // namespace xet
 
 #ifdef _DEBUG
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts fan_capabilities_t to std::string
-    std::string to_string( xet::fan_capabilities_t val )
-    {
-        const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
-        std::string str;
-        if( static_cast<uint32_t>(xet::fan_capabilities_t::GET_SPEED_PERCENTAGE) & bits )
-            str += "xet::fan_capabilities_t::GET_SPEED_PERCENTAGE | ";
-        if( static_cast<uint32_t>(xet::fan_capabilities_t::SET_SPEED_PERCENTAGE) & bits )
-            str += "xet::fan_capabilities_t::SET_SPEED_PERCENTAGE | ";
-        if( static_cast<uint32_t>(xet::fan_capabilities_t::GET_SPEED_RPM) & bits )
-            str += "xet::fan_capabilities_t::GET_SPEED_RPM | ";
-        if( static_cast<uint32_t>(xet::fan_capabilities_t::SET_SPEED_RPM) & bits )
-            str += "xet::fan_capabilities_t::SET_SPEED_RPM | ";
-        if( static_cast<uint32_t>(xet::fan_capabilities_t::HAVE_TEMPERATURE_SPEED_TABLE) & bits )
-            str += "xet::fan_capabilities_t::HAVE_TEMPERATURE_SPEED_TABLE | ";
-        return "{ " + str.substr(0, str.size() - 3) + " }";
-    }
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts fan_capabilities_t to std::string
+std::string to_string( xet::fan_capabilities_t val )
+{
+    const auto bits = static_cast<uint32_t>( val );
+    if( 0 == bits ) return std::string("{}");
+    std::string str;
+    if( static_cast<uint32_t>(xet::fan_capabilities_t::GET_SPEED_PERCENTAGE) & bits )
+        str += "xet::fan_capabilities_t::GET_SPEED_PERCENTAGE | ";
+    if( static_cast<uint32_t>(xet::fan_capabilities_t::SET_SPEED_PERCENTAGE) & bits )
+        str += "xet::fan_capabilities_t::SET_SPEED_PERCENTAGE | ";
+    if( static_cast<uint32_t>(xet::fan_capabilities_t::GET_SPEED_RPM) & bits )
+        str += "xet::fan_capabilities_t::GET_SPEED_RPM | ";
+    if( static_cast<uint32_t>(xet::fan_capabilities_t::SET_SPEED_RPM) & bits )
+        str += "xet::fan_capabilities_t::SET_SPEED_RPM | ";
+    if( static_cast<uint32_t>(xet::fan_capabilities_t::HAVE_TEMPERATURE_SPEED_TABLE) & bits )
+        str += "xet::fan_capabilities_t::HAVE_TEMPERATURE_SPEED_TABLE | ";
+    return "{ " + str.substr(0, str.size() - 3) + " }";
+}
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts fan_speed_mode_t to std::string
-    std::string to_string( xet::fan_speed_mode_t val )
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts fan_speed_mode_t to std::string
+std::string to_string( xet::fan_speed_mode_t val )
+{
+    switch( val )
     {
-        switch( val )
-        {
-        case xet::fan_speed_mode_t::AUTO:
-            return std::string("xet::fan_speed_mode_t::AUTO");
-        case xet::fan_speed_mode_t::FIXED:
-            return std::string("xet::fan_speed_mode_t::FIXED");
-        };
-        return std::string("xet::fan_speed_mode_t::?");
-    }
+    case xet::fan_speed_mode_t::AUTO:
+        return std::string("xet::fan_speed_mode_t::AUTO");
+    case xet::fan_speed_mode_t::FIXED:
+        return std::string("xet::fan_speed_mode_t::FIXED");
+    };
+    return std::string("xet::fan_speed_mode_t::?");
+}
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Power::init_flags_t to std::string
-    std::string to_string( xet::Power::init_flags_t val )
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts Power::init_flags_t to std::string
+std::string to_string( xet::Power::init_flags_t val )
+{
+    const auto bits = static_cast<uint32_t>( val );
+    if( 0 == bits ) return std::string("{}");
+    std::string str;
+    if( static_cast<uint32_t>(xet::Power::init_flags_t::NONE) & bits )
+        str += "xet::Power::init_flags_t::NONE | ";
+    if( static_cast<uint32_t>(xet::Power::init_flags_t::WRITE) & bits )
+        str += "xet::Power::init_flags_t::WRITE | ";
+    return "{ " + str.substr(0, str.size() - 3) + " }";
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts Power::gpu_domain_t to std::string
+std::string to_string( xet::Power::gpu_domain_t val )
+{
+    const auto bits = static_cast<uint32_t>( val );
+    if( 0 == bits ) return std::string("{}");
+    std::string str;
+    if( static_cast<uint32_t>(xet::Power::gpu_domain_t::BASE) & bits )
+        str += "xet::Power::gpu_domain_t::BASE | ";
+    if( static_cast<uint32_t>(xet::Power::gpu_domain_t::VIDEO_DECODE) & bits )
+        str += "xet::Power::gpu_domain_t::VIDEO_DECODE | ";
+    if( static_cast<uint32_t>(xet::Power::gpu_domain_t::VIDEO_ENCODE) & bits )
+        str += "xet::Power::gpu_domain_t::VIDEO_ENCODE | ";
+    if( static_cast<uint32_t>(xet::Power::gpu_domain_t::VIDEO_PROCESSING) & bits )
+        str += "xet::Power::gpu_domain_t::VIDEO_PROCESSING | ";
+    if( static_cast<uint32_t>(xet::Power::gpu_domain_t::_3D_FIXED_FUNCTION) & bits )
+        str += "xet::Power::gpu_domain_t::_3D_FIXED_FUNCTION | ";
+    if( static_cast<uint32_t>(xet::Power::gpu_domain_t::_3D_RENDER) & bits )
+        str += "xet::Power::gpu_domain_t::_3D_RENDER | ";
+    if( static_cast<uint32_t>(xet::Power::gpu_domain_t::COMPUTE) & bits )
+        str += "xet::Power::gpu_domain_t::COMPUTE | ";
+    if( static_cast<uint32_t>(xet::Power::gpu_domain_t::SYSTOLIC_ARRAY) & bits )
+        str += "xet::Power::gpu_domain_t::SYSTOLIC_ARRAY | ";
+    if( static_cast<uint32_t>(xet::Power::gpu_domain_t::RAYTRACING) & bits )
+        str += "xet::Power::gpu_domain_t::RAYTRACING | ";
+    if( static_cast<uint32_t>(xet::Power::gpu_domain_t::LOCAL_MEMORY) & bits )
+        str += "xet::Power::gpu_domain_t::LOCAL_MEMORY | ";
+    if( static_cast<uint32_t>(xet::Power::gpu_domain_t::BASE_CHIPLET_LINK) & bits )
+        str += "xet::Power::gpu_domain_t::BASE_CHIPLET_LINK | ";
+    return "{ " + str.substr(0, str.size() - 3) + " }";
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts Power::average_limit_version_t to std::string
+std::string to_string( xet::Power::average_limit_version_t val )
+{
+    switch( val )
     {
-        const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
-        std::string str;
-        if( static_cast<uint32_t>(xet::Power::init_flags_t::NONE) & bits )
-            str += "xet::Power::init_flags_t::NONE | ";
-        if( static_cast<uint32_t>(xet::Power::init_flags_t::WRITE) & bits )
-            str += "xet::Power::init_flags_t::WRITE | ";
-        return "{ " + str.substr(0, str.size() - 3) + " }";
-    }
+    case xet::Power::average_limit_version_t::AVERAGE_POWER_LIMIT_VERSION_CURRENT:
+        return std::string("xet::Power::average_limit_version_t::AVERAGE_POWER_LIMIT_VERSION_CURRENT");
+    };
+    return std::string("xet::Power::average_limit_version_t::?");
+}
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Power::gpu_domain_t to std::string
-    std::string to_string( xet::Power::gpu_domain_t val )
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts Power::turbo_mode_t to std::string
+std::string to_string( xet::Power::turbo_mode_t val )
+{
+    switch( val )
     {
-        const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
-        std::string str;
-        if( static_cast<uint32_t>(xet::Power::gpu_domain_t::BASE) & bits )
-            str += "xet::Power::gpu_domain_t::BASE | ";
-        if( static_cast<uint32_t>(xet::Power::gpu_domain_t::VIDEO_DECODE) & bits )
-            str += "xet::Power::gpu_domain_t::VIDEO_DECODE | ";
-        if( static_cast<uint32_t>(xet::Power::gpu_domain_t::VIDEO_ENCODE) & bits )
-            str += "xet::Power::gpu_domain_t::VIDEO_ENCODE | ";
-        if( static_cast<uint32_t>(xet::Power::gpu_domain_t::VIDEO_PROCESSING) & bits )
-            str += "xet::Power::gpu_domain_t::VIDEO_PROCESSING | ";
-        if( static_cast<uint32_t>(xet::Power::gpu_domain_t::_3D_FIXED_FUNCTION) & bits )
-            str += "xet::Power::gpu_domain_t::_3D_FIXED_FUNCTION | ";
-        if( static_cast<uint32_t>(xet::Power::gpu_domain_t::_3D_RENDER) & bits )
-            str += "xet::Power::gpu_domain_t::_3D_RENDER | ";
-        if( static_cast<uint32_t>(xet::Power::gpu_domain_t::COMPUTE) & bits )
-            str += "xet::Power::gpu_domain_t::COMPUTE | ";
-        if( static_cast<uint32_t>(xet::Power::gpu_domain_t::SYSTOLIC_ARRAY) & bits )
-            str += "xet::Power::gpu_domain_t::SYSTOLIC_ARRAY | ";
-        if( static_cast<uint32_t>(xet::Power::gpu_domain_t::RAYTRACING) & bits )
-            str += "xet::Power::gpu_domain_t::RAYTRACING | ";
-        if( static_cast<uint32_t>(xet::Power::gpu_domain_t::LOCAL_MEMORY) & bits )
-            str += "xet::Power::gpu_domain_t::LOCAL_MEMORY | ";
-        if( static_cast<uint32_t>(xet::Power::gpu_domain_t::BASE_CHIPLET_LINK) & bits )
-            str += "xet::Power::gpu_domain_t::BASE_CHIPLET_LINK | ";
-        return "{ " + str.substr(0, str.size() - 3) + " }";
-    }
+    case xet::Power::turbo_mode_t::DISABLED:
+        return std::string("xet::Power::turbo_mode_t::DISABLED");
+    case xet::Power::turbo_mode_t::DEFAULT:
+        return std::string("xet::Power::turbo_mode_t::DEFAULT");
+    case xet::Power::turbo_mode_t::MIN_PERFORMANCE:
+        return std::string("xet::Power::turbo_mode_t::MIN_PERFORMANCE");
+    case xet::Power::turbo_mode_t::EFFICIENT_PERFORMANCE:
+        return std::string("xet::Power::turbo_mode_t::EFFICIENT_PERFORMANCE");
+    case xet::Power::turbo_mode_t::AGGRESSIVE_PERFORMANCE:
+        return std::string("xet::Power::turbo_mode_t::AGGRESSIVE_PERFORMANCE");
+    case xet::Power::turbo_mode_t::MAX_PERFORMANCE:
+        return std::string("xet::Power::turbo_mode_t::MAX_PERFORMANCE");
+    };
+    return std::string("xet::Power::turbo_mode_t::?");
+}
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Power::average_limit_version_t to std::string
-    std::string to_string( xet::Power::average_limit_version_t val )
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts FreqDomain::clock_type_t to std::string
+std::string to_string( xet::FreqDomain::clock_type_t val )
+{
+    switch( val )
     {
-        switch( val )
-        {
-        case xet::Power::average_limit_version_t::AVERAGE_POWER_LIMIT_VERSION_CURRENT:
-            return std::string("xet::Power::average_limit_version_t::AVERAGE_POWER_LIMIT_VERSION_CURRENT");
-        };
-        return std::string("xet::Power::average_limit_version_t::?");
-    }
+    case xet::FreqDomain::clock_type_t::FIXED:
+        return std::string("xet::FreqDomain::clock_type_t::FIXED");
+    case xet::FreqDomain::clock_type_t::PLL:
+        return std::string("xet::FreqDomain::clock_type_t::PLL");
+    case xet::FreqDomain::clock_type_t::DIVIDER:
+        return std::string("xet::FreqDomain::clock_type_t::DIVIDER");
+    };
+    return std::string("xet::FreqDomain::clock_type_t::?");
+}
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Power::turbo_mode_t to std::string
-    std::string to_string( xet::Power::turbo_mode_t val )
-    {
-        switch( val )
-        {
-        case xet::Power::turbo_mode_t::DISABLED:
-            return std::string("xet::Power::turbo_mode_t::DISABLED");
-        case xet::Power::turbo_mode_t::DEFAULT:
-            return std::string("xet::Power::turbo_mode_t::DEFAULT");
-        case xet::Power::turbo_mode_t::MIN_PERFORMANCE:
-            return std::string("xet::Power::turbo_mode_t::MIN_PERFORMANCE");
-        case xet::Power::turbo_mode_t::EFFICIENT_PERFORMANCE:
-            return std::string("xet::Power::turbo_mode_t::EFFICIENT_PERFORMANCE");
-        case xet::Power::turbo_mode_t::AGGRESSIVE_PERFORMANCE:
-            return std::string("xet::Power::turbo_mode_t::AGGRESSIVE_PERFORMANCE");
-        case xet::Power::turbo_mode_t::MAX_PERFORMANCE:
-            return std::string("xet::Power::turbo_mode_t::MAX_PERFORMANCE");
-        };
-        return std::string("xet::Power::turbo_mode_t::?");
-    }
-
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts FreqDomain::clock_type_t to std::string
-    std::string to_string( xet::FreqDomain::clock_type_t val )
-    {
-        switch( val )
-        {
-        case xet::FreqDomain::clock_type_t::FIXED:
-            return std::string("xet::FreqDomain::clock_type_t::FIXED");
-        case xet::FreqDomain::clock_type_t::PLL:
-            return std::string("xet::FreqDomain::clock_type_t::PLL");
-        case xet::FreqDomain::clock_type_t::DIVIDER:
-            return std::string("xet::FreqDomain::clock_type_t::DIVIDER");
-        };
-        return std::string("xet::FreqDomain::clock_type_t::?");
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts FreqDomain::freq_throttle_reasons_t to std::string
-    std::string to_string( xet::FreqDomain::freq_throttle_reasons_t val )
-    {
-        const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
-        std::string str;
-        if( static_cast<uint32_t>(xet::FreqDomain::freq_throttle_reasons_t::NONE) & bits )
-            str += "xet::FreqDomain::freq_throttle_reasons_t::NONE | ";
-        if( static_cast<uint32_t>(xet::FreqDomain::freq_throttle_reasons_t::AVE_PWR_CAP) & bits )
-            str += "xet::FreqDomain::freq_throttle_reasons_t::AVE_PWR_CAP | ";
-        if( static_cast<uint32_t>(xet::FreqDomain::freq_throttle_reasons_t::BURST_PWR_CAP) & bits )
-            str += "xet::FreqDomain::freq_throttle_reasons_t::BURST_PWR_CAP | ";
-        if( static_cast<uint32_t>(xet::FreqDomain::freq_throttle_reasons_t::CURRENT_LIMIT) & bits )
-            str += "xet::FreqDomain::freq_throttle_reasons_t::CURRENT_LIMIT | ";
-        if( static_cast<uint32_t>(xet::FreqDomain::freq_throttle_reasons_t::THERMAL_LIMIT) & bits )
-            str += "xet::FreqDomain::freq_throttle_reasons_t::THERMAL_LIMIT | ";
-        if( static_cast<uint32_t>(xet::FreqDomain::freq_throttle_reasons_t::PSU_ALERT) & bits )
-            str += "xet::FreqDomain::freq_throttle_reasons_t::PSU_ALERT | ";
-        if( static_cast<uint32_t>(xet::FreqDomain::freq_throttle_reasons_t::SW_RANGE) & bits )
-            str += "xet::FreqDomain::freq_throttle_reasons_t::SW_RANGE | ";
-        if( static_cast<uint32_t>(xet::FreqDomain::freq_throttle_reasons_t::HW_RANGE) & bits )
-            str += "xet::FreqDomain::freq_throttle_reasons_t::HW_RANGE | ";
-        return "{ " + str.substr(0, str.size() - 3) + " }";
-    }
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts FreqDomain::freq_throttle_reasons_t to std::string
+std::string to_string( xet::FreqDomain::freq_throttle_reasons_t val )
+{
+    const auto bits = static_cast<uint32_t>( val );
+    if( 0 == bits ) return std::string("{}");
+    std::string str;
+    if( static_cast<uint32_t>(xet::FreqDomain::freq_throttle_reasons_t::NONE) & bits )
+        str += "xet::FreqDomain::freq_throttle_reasons_t::NONE | ";
+    if( static_cast<uint32_t>(xet::FreqDomain::freq_throttle_reasons_t::AVE_PWR_CAP) & bits )
+        str += "xet::FreqDomain::freq_throttle_reasons_t::AVE_PWR_CAP | ";
+    if( static_cast<uint32_t>(xet::FreqDomain::freq_throttle_reasons_t::BURST_PWR_CAP) & bits )
+        str += "xet::FreqDomain::freq_throttle_reasons_t::BURST_PWR_CAP | ";
+    if( static_cast<uint32_t>(xet::FreqDomain::freq_throttle_reasons_t::CURRENT_LIMIT) & bits )
+        str += "xet::FreqDomain::freq_throttle_reasons_t::CURRENT_LIMIT | ";
+    if( static_cast<uint32_t>(xet::FreqDomain::freq_throttle_reasons_t::THERMAL_LIMIT) & bits )
+        str += "xet::FreqDomain::freq_throttle_reasons_t::THERMAL_LIMIT | ";
+    if( static_cast<uint32_t>(xet::FreqDomain::freq_throttle_reasons_t::PSU_ALERT) & bits )
+        str += "xet::FreqDomain::freq_throttle_reasons_t::PSU_ALERT | ";
+    if( static_cast<uint32_t>(xet::FreqDomain::freq_throttle_reasons_t::SW_RANGE) & bits )
+        str += "xet::FreqDomain::freq_throttle_reasons_t::SW_RANGE | ";
+    if( static_cast<uint32_t>(xet::FreqDomain::freq_throttle_reasons_t::HW_RANGE) & bits )
+        str += "xet::FreqDomain::freq_throttle_reasons_t::HW_RANGE | ";
+    return "{ " + str.substr(0, str.size() - 3) + " }";
+}
 
 
 #endif // _DEBUG

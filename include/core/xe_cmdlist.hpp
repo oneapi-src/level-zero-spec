@@ -766,21 +766,21 @@ namespace xe
 } // namespace xe
 
 #ifdef _DEBUG
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts CommandList::desc_version_t to std::string
-    std::string to_string( xe::CommandList::desc_version_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts CommandList::desc_version_t to std::string
+std::string to_string( xe::CommandList::desc_version_t val );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts CommandList::flag_t to std::string
-    std::string to_string( xe::CommandList::flag_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts CommandList::flag_t to std::string
+std::string to_string( xe::CommandList::flag_t val );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts CommandList::parameter_t to std::string
-    std::string to_string( xe::CommandList::parameter_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts CommandList::parameter_t to std::string
+std::string to_string( xe::CommandList::parameter_t val );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts CommandList::memory_advice_t to std::string
-    std::string to_string( xe::CommandList::memory_advice_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts CommandList::memory_advice_t to std::string
+std::string to_string( xe::CommandList::memory_advice_t val );
 
 
 #endif // _DEBUG

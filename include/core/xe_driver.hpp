@@ -73,9 +73,9 @@ namespace xe
 } // namespace xe
 
 #ifdef _DEBUG
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts init_flag_t to std::string
-    std::string to_string( xe::init_flag_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts init_flag_t to std::string
+std::string to_string( xe::init_flag_t val );
 
 #endif // _DEBUG
 #endif // defined(__cplusplus)

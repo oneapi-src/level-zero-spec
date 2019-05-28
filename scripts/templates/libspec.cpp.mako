@@ -194,44 +194,44 @@ namespace ${n}
 #ifdef _DEBUG
 %for obj in objects:
 %if declare_dbg(obj, tags):
-    ## ENUM #######################################################################
-    %if re.match(r"enum", obj['type']):
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts ${th.make_type_name(n, tags, obj, cpp=True)} to std::string
-    ## CONDITION-START ############################################################
+## ENUM #######################################################################
+%if re.match(r"enum", obj['type']):
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts ${th.make_type_name(n, tags, obj, cpp=True)} to std::string
+## CONDITION-START ############################################################
 %if 'condition' in obj:
 #if ${th.subt(n, tags, obj['condition'])}
 %endif
-    std::string to_string( ${n}::${th.make_type_name(n, tags, obj, cpp=True)} val )
-    {
-        %for line in th.make_etor_debug_lines(n, tags, None, obj):
-        ${line}
-        %endfor
-    }
-    ## CONDITION-END ##############################################################
+std::string to_string( ${n}::${th.make_type_name(n, tags, obj, cpp=True)} val )
+{
+    %for line in th.make_etor_debug_lines(n, tags, None, obj):
+    ${line}
+    %endfor
+}
+## CONDITION-END ##############################################################
 %if 'condition' in obj:
 #endif // ${th.subt(n, tags, obj['condition'])}
 %endif
-    ## CLASS ######################################################################
-    %elif re.match(r"class", obj['type']):
-    %for e in th.filter_items(th.extract_objs(specs, r"enum"), 'class', obj['name']):
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts ${th.make_class_name(n, tags, obj)}::${th.make_type_name(n, tags, e, cpp=True)} to std::string
+## CLASS ######################################################################
+%elif re.match(r"class", obj['type']):
+%for e in th.filter_items(th.extract_objs(specs, r"enum"), 'class', obj['name']):
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts ${th.make_class_name(n, tags, obj)}::${th.make_type_name(n, tags, e, cpp=True)} to std::string
 %if 'condition' in e:
 #if ${th.subt(n, tags, e['condition'])}
 %endif
-    std::string to_string( ${n}::${th.make_class_name(n, tags, obj)}::${th.make_type_name(n, tags, e, cpp=True)} val )
-    {
-        %for line in th.make_etor_debug_lines(n, tags, obj, e):
-        ${line}
-        %endfor
-    }
+std::string to_string( ${n}::${th.make_class_name(n, tags, obj)}::${th.make_type_name(n, tags, e, cpp=True)} val )
+{
+    %for line in th.make_etor_debug_lines(n, tags, obj, e):
+    ${line}
+    %endfor
+}
 %if 'condition' in e:
 #endif // ${th.subt(n, tags, e['condition'])}
 %endif
 
-    %endfor
-    %endif
+%endfor
+%endif
 
 %endif  ## declare_dbg
 %endfor ## obj in objects

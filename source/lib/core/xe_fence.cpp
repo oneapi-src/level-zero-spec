@@ -370,29 +370,29 @@ namespace xe
 } // namespace xe
 
 #ifdef _DEBUG
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Fence::desc_version_t to std::string
-    std::string to_string( xe::Fence::desc_version_t val )
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts Fence::desc_version_t to std::string
+std::string to_string( xe::Fence::desc_version_t val )
+{
+    switch( val )
     {
-        switch( val )
-        {
-        case xe::Fence::desc_version_t::CURRENT:
-            return std::string("xe::Fence::desc_version_t::CURRENT");
-        };
-        return std::string("xe::Fence::desc_version_t::?");
-    }
+    case xe::Fence::desc_version_t::CURRENT:
+        return std::string("xe::Fence::desc_version_t::CURRENT");
+    };
+    return std::string("xe::Fence::desc_version_t::?");
+}
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Fence::flag_t to std::string
-    std::string to_string( xe::Fence::flag_t val )
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts Fence::flag_t to std::string
+std::string to_string( xe::Fence::flag_t val )
+{
+    switch( val )
     {
-        switch( val )
-        {
-        case xe::Fence::flag_t::NONE:
-            return std::string("xe::Fence::flag_t::NONE");
-        };
-        return std::string("xe::Fence::flag_t::?");
-    }
+    case xe::Fence::flag_t::NONE:
+        return std::string("xe::Fence::flag_t::NONE");
+    };
+    return std::string("xe::Fence::flag_t::?");
+}
 
 
 #endif // _DEBUG

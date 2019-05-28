@@ -159,17 +159,17 @@ namespace xe
 } // namespace xe
 
 #ifdef _DEBUG
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sampler::desc_version_t to std::string
-    std::string to_string( xe::Sampler::desc_version_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts Sampler::desc_version_t to std::string
+std::string to_string( xe::Sampler::desc_version_t val );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sampler::address_mode_t to std::string
-    std::string to_string( xe::Sampler::address_mode_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts Sampler::address_mode_t to std::string
+std::string to_string( xe::Sampler::address_mode_t val );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sampler::filter_mode_t to std::string
-    std::string to_string( xe::Sampler::filter_mode_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts Sampler::filter_mode_t to std::string
+std::string to_string( xe::Sampler::filter_mode_t val );
 
 
 #endif // _DEBUG

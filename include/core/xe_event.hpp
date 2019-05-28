@@ -388,22 +388,22 @@ namespace xe
 } // namespace xe
 
 #ifdef _DEBUG
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts EventPool::desc_version_t to std::string
-    std::string to_string( xe::EventPool::desc_version_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts EventPool::desc_version_t to std::string
+std::string to_string( xe::EventPool::desc_version_t val );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts EventPool::flag_t to std::string
-    std::string to_string( xe::EventPool::flag_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts EventPool::flag_t to std::string
+std::string to_string( xe::EventPool::flag_t val );
 
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Event::desc_version_t to std::string
-    std::string to_string( xe::Event::desc_version_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts Event::desc_version_t to std::string
+std::string to_string( xe::Event::desc_version_t val );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Event::scope_flag_t to std::string
-    std::string to_string( xe::Event::scope_flag_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts Event::scope_flag_t to std::string
+std::string to_string( xe::Event::scope_flag_t val );
 
 
 #endif // _DEBUG

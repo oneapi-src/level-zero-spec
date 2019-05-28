@@ -196,13 +196,13 @@ namespace xe
 } // namespace xe
 
 #ifdef _DEBUG
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Fence::desc_version_t to std::string
-    std::string to_string( xe::Fence::desc_version_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts Fence::desc_version_t to std::string
+std::string to_string( xe::Fence::desc_version_t val );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Fence::flag_t to std::string
-    std::string to_string( xe::Fence::flag_t val );
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Converts Fence::flag_t to std::string
+std::string to_string( xe::Fence::flag_t val );
 
 
 #endif // _DEBUG
