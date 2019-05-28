@@ -195,7 +195,6 @@ struct MemoryManagerImp : public MemoryManager {
                     auto l0mms = L0MemoryManagerSepecifics::create();
                     l0mms->freeShMemory(graphicAllocation);
                 }
-
                 freeGraphicsAllocation(graphicAllocation);
             } else {
                 freeHostMemory(allocation);
