@@ -727,7 +727,22 @@ xe_result_t CommandListCoreFamily<gfxCoreFamily>::appendMemorySet(void *ptr, int
                                                                   xe_event_handle_t hEvent,
                                                                   uint32_t numWaitEvents,
                                                                   xe_event_handle_t *phWaitEvents) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
+
+    // Confirm dstptr has been previously allocated
+    MemAllocation *allocation = globalMemoryManager->findMemAllocation(ptr);
+    if (allocation == nullptr)
+        return XE_RESULT_ERROR_UNINITIALIZED;
+
+    // Create buffer and allocation with init values
+    uint8_t *initBuffer = new uint8_t[size];
+    assert(initBuffer);
+    memset(initBuffer, static_cast<int>(size), static_cast<uint8_t>(value));
+    auto initAlloc = globalMemoryManager->allocateManagedMemoryFromFault(device, initBuffer, size);
+    assert(initAlloc);
+    initAlloc->setFlagInternalMemory();
+    this->deallocationContainer.push_back(initAlloc);
+
+    return appendMemoryCopy(ptr, initBuffer, size, hEvent, numWaitEvents, phWaitEvents);
 }
 
 template <GFXCORE_FAMILY gfxCoreFamily>

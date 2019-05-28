@@ -63,9 +63,13 @@ struct GraphicsAllocation : public MemAllocation {
 
     void setDevice(Device *device) { deviceOwner = device; }
 
+    void setFlagInternalMemory() { internalUse = true; }
+    bool getFlagInternalMemory() { return internalUse; }
+
     bool allocatedFromFault = false;
     NEO::GraphicsAllocation *allocationRT = nullptr;
     Device *deviceOwner;
+    bool internalUse = false;
 
     // Fields Used for IPC
     size_t alignment;

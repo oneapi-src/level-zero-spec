@@ -164,7 +164,13 @@ struct MemoryManagerImp : public MemoryManager {
     }
 
     void freeGraphicsAllocation(GraphicsAllocation *allocation) {
+        void *ptr = allocation->getHostAddress();
         eraseAllocation(allocation->getHostAddress());
+
+        if (allocation->getFlagInternalMemory()) {
+            uint8_t *charPtr = reinterpret_cast<uint8_t*>(ptr);
+            delete[] charPtr;
+        }
 
         memoryManagerRT->freeGraphicsMemory(
             static_cast<NEO::GraphicsAllocation *>(allocation->allocationRT));
