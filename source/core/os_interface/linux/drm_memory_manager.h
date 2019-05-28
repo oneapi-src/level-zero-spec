@@ -6,8 +6,10 @@
 
 #include "runtime/os_interface/linux/drm_allocation.h"
 #include "runtime/os_interface/linux/drm_buffer_object.h"
+#include "runtime/memory_manager/memory_constants.h"
+#include "runtime/helpers/aligned_memory.h"
 
-#include "drm/i915_drm.h"
+#include "drm/i915_drm.h" //FIXME Most likely not needed.
 
 #include "graphics_allocation.h"
 #include "memory_manager.h"
