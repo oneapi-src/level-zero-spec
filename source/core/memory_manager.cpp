@@ -63,13 +63,14 @@ struct MemoryManagerImp : public MemoryManager {
     GraphicsAllocation *allocateManagedMemoryFromFault(Device *device, void *buffer,
                                                        size_t size) override {
         // TODO :
-        //        * How are allocations removed from this list?
-        //        * What if we encouter the same allocation multiple times but with different sizes
-        //        (note : it's a valid and very probable scenario)
         //        * How are handle fragmented allocations handled (aka tripple allocations) ?
-        auto allocation =
-            new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemoryWithProperties(
-                {false, size, NEO::GraphicsAllocation::AllocationType::INTERNAL_HOST_MEMORY}, buffer));
+        GraphicsAllocation *allocation = findGraphicsAllocation(buffer);
+        if (allocation)
+            return allocation;
+
+        allocation = new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemoryWithProperties(
+                {false, size, NEO::GraphicsAllocation::AllocationType::INTERNAL_HOST_MEMORY},
+                        buffer));
         allocation->setAllocatedFromFault(true);
         insertAllocation(buffer, allocation);
         allocation->setDevice(device);
