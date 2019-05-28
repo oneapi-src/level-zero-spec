@@ -32,18 +32,19 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::executeCommandLists(
 
     size_t sizeEstimate =
         sizeof(MI_BATCH_BUFFER_END) +
-        sizeof(PIPE_CONTROL) + sizeof(POST_SYNC_OPERATION) +
         numCommandLists * sizeof(MI_BATCH_BUFFER_START);
-    Substream substream = getCmdSubstream(sizeEstimate);
 
     NEO::ResidencyContainer residencyContainer;
 
     // padding if we need for a fence signal
     if (hFence) {
         residencyContainer.reserve((16 * numCommandLists) + 2);
+        sizeEstimate += sizeof(POST_SYNC_OPERATION) + sizeof(PIPE_CONTROL);
     } else {
         residencyContainer.reserve(16 * numCommandLists);
     }
+
+    Substream substream = getCmdSubstream(sizeEstimate);
 
     for (auto i = 0u; i < numCommandLists; ++i) {
         MI_BATCH_BUFFER_START cmd = GfxFamily::cmdInitBatchBufferStart;
