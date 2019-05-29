@@ -66,6 +66,8 @@ struct GraphicsAllocation : public MemAllocation {
     NEO::GraphicsAllocation *allocationRT = nullptr;
     Device *deviceOwner;
 
+    // Fields Used for IPC
+    size_t alignment;
     std::string shmFileName;
 };
 

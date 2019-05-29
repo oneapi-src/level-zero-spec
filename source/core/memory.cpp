@@ -14,7 +14,10 @@ xe_result_t hostMemAlloc(xe_host_mem_alloc_flag_t flags, size_t size, size_t ali
     return XE_RESULT_SUCCESS;
 }
 
-xe_result_t ipcCloseMemHandle(const void *ptr) { return XE_RESULT_ERROR_UNSUPPORTED; }
+xe_result_t ipcCloseMemHandle(const void *ptr) {
+    auto ipc = L0MemoryManagerSepecifics::create();
+    return ipc->ipcCloseMemHandle(ptr);
+}
 
 xe_result_t ipcGetMemHandle(const void *ptr, xe_ipc_mem_handle_t *pIpcHandle) {
     auto ipc = L0MemoryManagerSepecifics::create();
@@ -23,32 +26,38 @@ xe_result_t ipcGetMemHandle(const void *ptr, xe_ipc_mem_handle_t *pIpcHandle) {
 
 xe_result_t ipcOpenMemHandle(xe_device_handle_t hDevice, xe_ipc_mem_handle_t handle,
                              xe_ipc_memory_flag_t flags, void **ptr) {
-    return XE_RESULT_ERROR_UNSUPPORTED;
+    auto ipc = L0MemoryManagerSepecifics::create();
+    return ipc->ipcOpenMemHandle(hDevice, handle, flags, ptr);
 }
 
 xe_result_t deviceMemAlloc(xe_device_handle_t hDevice, xe_device_mem_alloc_flag_t flags,
                            size_t size, size_t alignment, void **ptr) {
-    void *buffer;
+
     auto device = Device::fromHandle(hDevice);
-    auto l0mms = L0MemoryManagerSepecifics::create();
-    std::string shmFileName;
     GraphicsAllocation *allocation;
 
     assert(device);
     assert(globalMemoryManager);
 
+    /*FIXME: there is no Windows support for l0mms->allocateShMemory. So, until there is one,
+    /* use normal allocations without support for IPC.
+    */
+#if defined(__linux__)
+    void *buffer;
+    auto l0mms = L0MemoryManagerSepecifics::create();
+    std::string shmFileName;
     // Allocate shred memory (so later can be shared with other proc using IPC)
     buffer = l0mms->allocateShMemory(size, alignment, shmFileName);
-    /*FIXME: there is no Windows support for l0mms->allocateShMemor. So, until there is one,
-    /* on failure, it will fallback to normal allocations without support for IPC. However,
-     * must be updated to fail here
-     */
-    if (buffer != nullptr) {
-        allocation = globalMemoryManager->allocateManagedMemoryFromFault(device, buffer, size);
-        allocation->shmFileName = shmFileName;
-    } else {
-        allocation = globalMemoryManager->allocateManagedMemory(device, size, alignment);
+    if (buffer == nullptr) {
+        return XE_RESULT_ERROR_UNKNOWN;
     }
+    allocation = globalMemoryManager->allocateManagedMemoryFromFault(device, buffer, size);
+    allocation->shmFileName = shmFileName;
+    allocation->alignment = alignment;
+    delete l0mms;
+#else
+    allocation = globalMemoryManager->allocateManagedMemory(device, size, alignment);
+#endif
 
     assert(allocation);
     allocation->allocType = AllocationType::DEVICE;

@@ -7,7 +7,7 @@
 
 struct _xe_ipc_mem_handle_t {};
 
-struct WddmIpcHande : _xe_ipc_mem_handle_t {
+struct WddmIpcHandle : _xe_ipc_mem_handle_t {
     int fd;
 };
 
@@ -16,9 +16,11 @@ namespace L0 {
 class WddmL0MemoryManagerSepecifics : public L0MemoryManagerSepecifics {
   public:
     xe_result_t ipcGetMemHandle(const void *ptr, xe_ipc_mem_handle_t *pIpcHandle) override;
-    virtual void *allocateShMemory(size_t size, size_t alignment,
-                                   std::string &shmFileName) override;
-    virtual void freeShMemory(GraphicsAllocation *graphAllocation) override;
+    xe_result_t ipcOpenMemHandle(xe_device_handle_t hDevice, xe_ipc_mem_handle_t handle,
+                                 xe_ipc_memory_flag_t flags, void **ptr) override;
+    xe_result_t ipcCloseMemHandle(const void *ptr) override;
+    void *allocateShMemory(size_t size, size_t alignment, std::string &shmFileName) override;
+    void freeShMemory(GraphicsAllocation *graphAllocation) override;
 };
 
 } // namespace L0

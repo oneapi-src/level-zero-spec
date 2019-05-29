@@ -38,8 +38,8 @@ struct MemoryManagerImp : public MemoryManager {
 
     GraphicsAllocation *allocateDeviceMemory(Device *device, size_t size,
                                              size_t alignment) override {
-        NEO::AllocationProperties properties(size,
-                                             NEO::GraphicsAllocation::AllocationType::INTERNAL_HOST_MEMORY);
+        NEO::AllocationProperties properties(
+            size, NEO::GraphicsAllocation::AllocationType::INTERNAL_HOST_MEMORY);
         properties.alignment = alignment;
 
         auto allocation = new GraphicsAllocation(
@@ -52,8 +52,8 @@ struct MemoryManagerImp : public MemoryManager {
 
     GraphicsAllocation *allocateManagedMemory(Device *device, size_t size,
                                               size_t alignment) override {
-        NEO::AllocationProperties properties(size,
-                                             NEO::GraphicsAllocation::AllocationType::INTERNAL_HOST_MEMORY);
+        NEO::AllocationProperties properties(
+            size, NEO::GraphicsAllocation::AllocationType::INTERNAL_HOST_MEMORY);
         properties.alignment = alignment;
 
         auto allocation = new GraphicsAllocation(
@@ -198,6 +198,7 @@ struct MemoryManagerImp : public MemoryManager {
                 if (allocation->allocType == AllocationType::DEVICE) {
                     auto l0mms = L0MemoryManagerSepecifics::create();
                     l0mms->freeShMemory(graphicAllocation);
+                    delete l0mms;
                 }
                 freeGraphicsAllocation(graphicAllocation);
             } else {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "xe_common.h"
+#include "xe_memory.h"
 #include "ptr.h"
 
 #include <cstddef>
@@ -46,6 +47,9 @@ struct L0MemoryManagerSepecifics {
   public:
     static L0MemoryManagerSepecifics *create();
     virtual xe_result_t ipcGetMemHandle(const void *ptr, xe_ipc_mem_handle_t *pIpcHandle) = 0;
+    virtual xe_result_t ipcOpenMemHandle(xe_device_handle_t hDevice, xe_ipc_mem_handle_t handle,
+                                         xe_ipc_memory_flag_t flags, void **ptr) = 0;
+    virtual xe_result_t ipcCloseMemHandle(const void *ptr) = 0;
     virtual void *allocateShMemory(size_t size, size_t alignment, std::string &shmFileName) = 0;
     virtual void freeShMemory(GraphicsAllocation *graphAllocation) = 0;
 };

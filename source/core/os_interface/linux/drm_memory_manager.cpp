@@ -5,32 +5,71 @@ namespace L0 {
 L0MemoryManagerSepecifics *L0MemoryManagerSepecifics::create() {
     return new DrmL0MemoryManagerSepecifics();
 }
+
 xe_result_t DrmL0MemoryManagerSepecifics::ipcGetMemHandle(const void *ptr,
                                                           xe_ipc_mem_handle_t *pIpcHandle) {
 
     GraphicsAllocation *allocation = globalMemoryManager->findGraphicsAllocation(ptr);
-    int gem_handle =
-        static_cast<NEO::DrmAllocation *>(allocation->allocationRT)->getBO()->peekHandle();
-    auto drm =
-        static_cast<NEO::ExecutionEnvironment *>(allocation->getDevice()->getExecEnvironment())
-            ->osInterface->get()
-            ->getDrm();
-    drm_prime_handle prime_handle = {0, 0, 0};
-    prime_handle.handle = gem_handle;
 
-    auto ret = drm->ioctl(DRM_IOCTL_PRIME_HANDLE_TO_FD, &prime_handle);
-    if (ret != 0) {
-        int err = errno; // Do something with errno?
+    DrmIpcHandle *handle = new DrmIpcHandle;
+    handle->shmFileName = allocation->shmFileName;
+    handle->alignment = allocation->alignment;
+    handle->size = allocation->getSize();
+
+    // FIXME Need to associate the pIpcHandle with the Graphics allocation so it is freed as
+    // xe_memFree()
+    *pIpcHandle = handle;
+
+    return XE_RESULT_SUCCESS;
+}
+
+xe_result_t DrmL0MemoryManagerSepecifics::ipcOpenMemHandle(xe_device_handle_t hDevice,
+                                                           xe_ipc_mem_handle_t handle,
+                                                           xe_ipc_memory_flag_t flags, void **ptr) {
+
+    /*NOTE: hDevice and flags are unused*/
+
+    const char *shmFileName = static_cast<DrmIpcHandle *>(handle)->shmFileName.data();
+    size_t alignment = static_cast<DrmIpcHandle *>(handle)->alignment;
+    size_t size = static_cast<DrmIpcHandle *>(handle)->size;
+    int shmFileDescriptor = -1;
+    void *shmBuffer;
+
+    const size_t minAlignment = MemoryConstants::allocationAlignment;
+    size_t cAlignment = alignUp(std::max(alignment, minAlignment), minAlignment);
+    // When size == 0 allocate allocationAlignment
+    // It's needed to prevent overlapping pages with user pointers
+    size_t cSize = std::max(alignUp(size, minAlignment), minAlignment);
+
+    shmFileDescriptor = openShmFile(shmFileName);
+    if (shmFileDescriptor < 0) {
         assert(0);
         return XE_RESULT_ERROR_UNKNOWN;
     }
 
-    *pIpcHandle = static_cast<xe_ipc_mem_handle_t>(malloc(sizeof(DrmIpcHande)));
-    assert(*pIpcHandle);
+    shmBuffer = memoryMapShmFile(cSize, cAlignment, shmFileDescriptor);
+    if (nullptr == shmBuffer) {
+        assert(0);
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 
-    // FIXME Need to associate the pIpcHandle with the Graphics allocation so it is freed as
-    // xe_memFree()
-    static_cast<DrmIpcHande *>(*pIpcHandle)->fd = prime_handle.fd;
+    *ptr = shmBuffer;
+
+    return XE_RESULT_SUCCESS;
+}
+
+xe_result_t DrmL0MemoryManagerSepecifics::ipcCloseMemHandle(const void *ptr) {
+
+    void *ptrCopy = const_cast<void *>(ptr);
+    void *realAddress = reinterpret_cast<void **>(ptrCopy)[-1];
+    uintptr_t sizeStoredAddress =
+        reinterpret_cast<uintptr_t>(ptrCopy) - (sizeof(void *) + sizeof(size_t));
+    size_t size = *(reinterpret_cast<size_t *>(sizeStoredAddress));
+
+    if (munmap(realAddress, size)) {
+        assert(0);
+        return XE_RESULT_ERROR_UNKNOWN;
+    }
 
     return XE_RESULT_SUCCESS;
 }
@@ -61,16 +100,21 @@ void *DrmL0MemoryManagerSepecifics::memoryMapShmFile(size_t size, size_t alignme
 
     mapPtr = mmap(NULL, total_size, PROT_READ | PROT_WRITE, MAP_SHARED, shmFileDescriptor, 0);
     if (mapPtr == MAP_FAILED) {
+        assert(0);
         return nullptr;
     }
     close(shmFileDescriptor);
-    memset((void *)mapPtr, 0, total_size);
 
     alignedPtr = reinterpret_cast<uintptr_t>(mapPtr) + alignment;
     alignedPtr -= alignedPtr % alignment;
 
     // Store the original pointer to facilitate deallocation
     reinterpret_cast<void **>(alignedPtr)[-1] = mapPtr;
+
+    // Also store the size, needed at ipcCloseMemHandle()
+    uintptr_t sizeStoredAddress =
+        reinterpret_cast<uintptr_t>(alignedPtr) - (sizeof(void *) + sizeof(size_t));
+    *(reinterpret_cast<size_t *>(sizeStoredAddress)) = total_size;
 
     return reinterpret_cast<void *>(alignedPtr);
 }
@@ -87,7 +131,6 @@ void *DrmL0MemoryManagerSepecifics::allocateShMemory(size_t size, size_t alignme
     // It's needed to prevent overlapping pages with user pointers
     size_t cSize = std::max(alignUp(size, minAlignment), minAlignment);
 
-    // Create unique file name
     if (snprintf(localFileName, sizeof(localFileName), "/L0_shm.%d%x%d", (int)getuid(),
                  (int)getpid(), DrmL0MemoryManagerSepecifics::shmFileCounter) < 0) {
 
@@ -96,7 +139,8 @@ void *DrmL0MemoryManagerSepecifics::allocateShMemory(size_t size, size_t alignme
     }
 
     // Open a fle in /dev/shm/*
-    if ((shmFileDescriptor = openShmFile(localFileName)) < 0) {
+    shmFileDescriptor = openShmFile(localFileName);
+    if (shmFileDescriptor < 0) {
         assert(0);
         return nullptr;
     }
@@ -108,7 +152,8 @@ void *DrmL0MemoryManagerSepecifics::allocateShMemory(size_t size, size_t alignme
     }
 
     // Map the /dev/shm/* file to memory
-    if ((shmBuffer = memoryMapShmFile(cSize, cAlignment, shmFileDescriptor)) == nullptr) {
+    shmBuffer = memoryMapShmFile(cSize, cAlignment, shmFileDescriptor);
+    if (nullptr == shmBuffer) {
         assert(0);
         return nullptr;
     }
@@ -119,12 +164,16 @@ void *DrmL0MemoryManagerSepecifics::allocateShMemory(size_t size, size_t alignme
 
 void DrmL0MemoryManagerSepecifics::freeShMemory(GraphicsAllocation *allocation) {
 
-    auto hostAddress = allocation->getHostAddress();
-    auto originalAddress = reinterpret_cast<char **>(hostAddress)[-1];
+    auto userAddress = allocation->getHostAddress();
+    auto realAddress = reinterpret_cast<char **>(userAddress)[-1];
+    uintptr_t sizeStoredAddress =
+        reinterpret_cast<uintptr_t>(userAddress) - (sizeof(void *) + sizeof(size_t));
+    size_t size = *(reinterpret_cast<size_t *>(sizeStoredAddress));
 
-    if (munmap(originalAddress, allocation->getSize())) {
+    if (munmap(reinterpret_cast<void *>(realAddress), size)) {
         assert(0);
     }
+
     if (shm_unlink(allocation->shmFileName.data())) {
         assert(0);
     }
