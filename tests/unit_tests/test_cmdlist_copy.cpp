@@ -51,5 +51,27 @@ TEST_F(CommandListAppendCopy, checksMemoryCopyFromHeapToHostDstHappens) {
     delete[] src;
 }
 
+TEST_F(CommandListAppendCopy, checksMemoryCopyForMemoryFromDifferentDevicesHappens) {
+    Mock<Device> device0;
+    Mock<Device> device1;
+    Mock<CommandList> commandList;
+    size_t bufferSize = 4096u;
+    auto dstAlloc = globalMemoryManager->allocateDeviceMemory(&device0, bufferSize, 64);
+    ASSERT_NE(nullptr, dstAlloc);
+    void *dst = reinterpret_cast<void *>(dstAlloc->getGpuAddress());
+    auto srcAlloc = globalMemoryManager->allocateDeviceMemory(&device1, bufferSize, 64);
+    ASSERT_NE(nullptr, srcAlloc);
+    void *src = reinterpret_cast<void *>(srcAlloc->getGpuAddress());
+
+    EXPECT_CALL(commandList, appendMemoryCopy(_, _, _, _, _, _)).Times(1);
+
+    auto res =
+        xeCommandListAppendMemoryCopy(&commandList, dst, src, bufferSize, nullptr, 0, nullptr);
+    ASSERT_EQ(XE_RESULT_SUCCESS, res);
+
+    globalMemoryManager->freeGraphicsAllocation(dstAlloc);
+    globalMemoryManager->freeGraphicsAllocation(srcAlloc);
+}
+
 } // namespace ult
 } // namespace L0
