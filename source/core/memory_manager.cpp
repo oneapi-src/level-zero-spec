@@ -19,15 +19,19 @@ MemoryManager *globalMemoryManager = nullptr;
 
 struct MemoryManagerImp : public MemoryManager {
 
-    void insertAllocation(void *ptr, MemAllocation *allocation) {
+    void insertAllocation(MemAllocation *allocation) {
         allocationTracker.insert(
             std::pair<void *, MemAllocation *>(allocation->getHostAddress(), allocation));
+    }
+
+    void eraseAllocation(void *ptr) {
+        allocationTracker.erase(ptr);
     }
 
     void *allocateHostMemory(size_t size, size_t alignment) override {
         void *buffer = this->memoryManagerRT->allocateSystemMemory(size, alignment);
         HostAllocation *allocation = new HostAllocation(buffer, size);
-        insertAllocation(allocation->getHostAddress(), allocation);
+        insertAllocation(allocation);
 
         return buffer;
     }
@@ -40,7 +44,7 @@ struct MemoryManagerImp : public MemoryManager {
 
         auto allocation = new GraphicsAllocation(
             memoryManagerRT->allocateGraphicsMemoryWithProperties(properties));
-        insertAllocation(allocation->getHostAddress(), allocation);
+        insertAllocation(allocation);
         allocation->setDevice(device);
 
         return allocation;
@@ -54,7 +58,7 @@ struct MemoryManagerImp : public MemoryManager {
 
         auto allocation = new GraphicsAllocation(
             memoryManagerRT->allocateGraphicsMemoryWithProperties(properties));
-        insertAllocation(allocation->getHostAddress(), allocation);
+        insertAllocation(allocation);
         allocation->setDevice(device);
 
         return allocation;
@@ -72,7 +76,7 @@ struct MemoryManagerImp : public MemoryManager {
                 {false, size, NEO::GraphicsAllocation::AllocationType::INTERNAL_HOST_MEMORY},
                         buffer));
         allocation->setAllocatedFromFault(true);
-        insertAllocation(buffer, allocation);
+        insertAllocation(allocation);
         allocation->setDevice(device);
 
         return allocation;
@@ -167,15 +171,14 @@ struct MemoryManagerImp : public MemoryManager {
         memoryManagerRT->freeGraphicsMemory(
             static_cast<NEO::GraphicsAllocation *>(allocation->allocationRT));
 
-        void *ptr = allocation->getHostAddress();
-        allocationTracker.erase(ptr);
+        eraseAllocation(allocation->getHostAddress());
 
         delete allocation;
     }
 
     void freeHostMemory(MemAllocation *allocation) {
         void *ptr = allocation->getHostAddress();
-        allocationTracker.erase(ptr);
+        eraseAllocation(ptr);
 
         delete allocation;
 

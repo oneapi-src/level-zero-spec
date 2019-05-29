@@ -74,7 +74,7 @@ GraphicsAllocation *MockMemoryManager::doCreateGraphicsAllocation(Device *device
                                                                   size_t alignment) {
     auto buffer = alignedMalloc(size, alignment);
     auto allocation = new GraphicsAllocation(buffer, size);
-    track(allocation);
+    insertAllocation(allocation);
     return allocation;
 }
 
@@ -89,7 +89,7 @@ PtrOwn<GraphicsAllocation>
 MockMemoryManager::doCreateGraphicsAllocationForPrivateMemory(size_t size) {
     auto buffer = alignedMalloc(size, 64);
     auto allocation = new GraphicsAllocation(buffer, size);
-    track(allocation);
+    insertAllocation(allocation);
     return PtrOwn<L0::GraphicsAllocation>(allocation);
 }
 
@@ -97,7 +97,7 @@ void MockMemoryManager::doFreeGraphicsAllocation(L0::GraphicsAllocation *allocat
     assert(allocation);
     auto buffer = reinterpret_cast<uint8_t *>(allocation->getGpuAddress());
     alignedFree(buffer);
-    drop(allocation);
+    eraseAllocation(allocation);
 }
 
 void MockMemoryManager::doFreeHostMemory(L0::MemAllocation *allocation) {
@@ -111,9 +111,27 @@ void MockMemoryManager::doFreePtr(const void *ptr) {
 }
 
 L0::MemAllocation *MockMemoryManager::doFindMemAllocation(const void *ptr) {
-    auto it = allocationTracker.find(const_cast<void *>(ptr));
-    if (it != allocationTracker.end())
-        return it->second;
+    // Check if there are any elements
+    if (allocationTracker.size() == 0) {
+        return nullptr;
+    }
+
+    auto allocLower = allocationTracker.lower_bound(const_cast<void *>(ptr));
+
+    // Check if ptr is alloc's base address
+    if (ptr == allocLower->first)
+        return allocLower->second;
+
+    // Check now for ranges
+    if (allocLower != allocationTracker.begin())
+        allocLower--;
+
+    uint64_t arithPtr = reinterpret_cast<uint64_t>(ptr);
+    uint64_t allocBase = reinterpret_cast<uint64_t>(allocLower->first);
+
+    if ((arithPtr >= allocBase) && (arithPtr < (allocBase + allocLower->second->getSize())))
+        return allocLower->second;
+
     return nullptr;
 }
 
@@ -124,14 +142,13 @@ L0::GraphicsAllocation *MockMemoryManager::doFindGraphicsAllocation(const void *
     return nullptr;
 }
 
-void MockMemoryManager::track(L0::GraphicsAllocation *alloc) {
-    allocationTracker.insert(std::pair<void *,
-                MemAllocation *>(alloc->getHostAddress(),
-                        static_cast<L0::MemAllocation *>(alloc)));
+void MockMemoryManager::insertAllocation(MemAllocation *allocation) {
+        allocationTracker.insert(
+            std::pair<void *, MemAllocation *>(allocation->getHostAddress(), allocation));
 }
 
-void MockMemoryManager::drop(void *ptr) {
-    allocationTracker.erase(ptr);
+void MockMemoryManager::eraseAllocation(void *ptr) {
+        allocationTracker.erase(ptr);
 }
 
 Mock<MemoryManager>::~Mock() {}

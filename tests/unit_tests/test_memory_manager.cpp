@@ -8,9 +8,9 @@
 namespace L0 {
 namespace ult {
 
-struct MemoryManagerAllocateHostMemory : public GlobalFixtureTest {};
+struct MemoryManagerAllocateMemory : public GlobalFixtureTest {};
 
-TEST_F(MemoryManagerAllocateHostMemory, returnsHostBuffer) {
+TEST_F(MemoryManagerAllocateMemory, returnsHostBuffer) {
     auto platform = NEO::constructPlatform();
     auto success = platform->initialize();
     ASSERT_TRUE(success);
@@ -21,9 +21,7 @@ TEST_F(MemoryManagerAllocateHostMemory, returnsHostBuffer) {
     globalMemoryManager->freeMemory(ptr);
 }
 
-struct MemoryManagerAllocateDeviceMemory : public GlobalFixtureTest {};
-
-TEST_F(MemoryManagerAllocateDeviceMemory, returnsGraphicsAllocation) {
+TEST_F(MemoryManagerAllocateMemory, returnsGraphicsAllocation) {
     auto platform = NEO::constructPlatform();
     auto success = platform->initialize();
     ASSERT_TRUE(success);
@@ -40,9 +38,7 @@ TEST_F(MemoryManagerAllocateDeviceMemory, returnsGraphicsAllocation) {
     delete device;
 }
 
-struct MemoryManagerGetAddressRange : public GlobalFixtureTest {};
-
-TEST_F(MemoryManagerGetAddressRange, returnsRange) {
+TEST_F(MemoryManagerAllocateMemory, returnsRange) {
     auto platform = NEO::constructPlatform();
     auto success = platform->initialize();
     ASSERT_TRUE(success);
@@ -65,5 +61,34 @@ TEST_F(MemoryManagerGetAddressRange, returnsRange) {
 
     delete device;
 }
+
+TEST_F(MemoryManagerAllocateMemory, lookForAllocationForAddressOtherThanBase) {
+    auto platform = NEO::constructPlatform();
+    auto success = platform->initialize();
+    ASSERT_TRUE(success);
+
+    auto deviceRT = platform->getDevice(0);
+    ASSERT_NE(nullptr, deviceRT);
+    auto device = Device::create(deviceRT);
+
+    size_t bufferSize = 4096u;
+    auto allocation = globalMemoryManager->allocateDeviceMemory(device, bufferSize, 16u);
+    EXPECT_NE(nullptr, allocation);
+
+    uint64_t allocAddress = reinterpret_cast<uint64_t>(allocation->getHostAddress());
+
+    void *testAddress = reinterpret_cast<void *>(allocAddress + bufferSize / 2);
+    auto alloc = globalMemoryManager->findGraphicsAllocation(testAddress);
+    ASSERT_NE(alloc, nullptr);
+
+    testAddress = reinterpret_cast<void *>(allocAddress + bufferSize * 2);
+    alloc = globalMemoryManager->findGraphicsAllocation(testAddress);
+    ASSERT_EQ(alloc, nullptr);
+
+    globalMemoryManager->freeGraphicsAllocation(allocation);
+
+    delete device;
+}
+
 } // namespace ult
 } // namespace L0

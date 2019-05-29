@@ -58,8 +58,9 @@ template <> struct Mock<MemoryManager> : public MemoryManager {
     L0::MemAllocation *doFindMemAllocation(const void *ptr);
     xe_result_t doGetAddressRange(const void *ptr, void **pBase, size_t *pSize);
 
-    void track(L0::GraphicsAllocation *alloc);
-    void drop(void *ptr);
+    void insertAllocation(L0::MemAllocation *allocation);
+    void eraseAllocation(void *ptr);
+
     std::map<void *, L0::MemAllocation *> allocationTracker;
 };
 
