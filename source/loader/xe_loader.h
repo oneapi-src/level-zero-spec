@@ -55,7 +55,7 @@ public:
     _loader_factory_t() = default;
     ~_loader_factory_t() = default;
 
-    typename _object_t* get( 
+    _object_t* get(
         typename _object_t::handle_t h,
         typename _object_t::dditable_t t )
     {

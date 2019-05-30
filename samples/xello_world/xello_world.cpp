@@ -3,10 +3,10 @@
 
 int main()
 {
-    putenv( "XE_ENABLE_NULL_DRIVER=1" );
-    putenv( "XE_ENABLE_LOADER_INTERCEPT=1" );
-    putenv( "XE_ENABLE_VALIDATION_LAYER=1" );
-    putenv( "XE_ENABLE_PARAMETER_VALIDATION=1" );
+    putenv( const_cast<char *>("XE_ENABLE_NULL_DRIVER=1") );
+    putenv( const_cast<char *>("XE_ENABLE_LOADER_INTERCEPT=1") );
+    putenv( const_cast<char *>("XE_ENABLE_VALIDATION_LAYER=1") );
+    putenv( const_cast<char *>("XE_ENABLE_PARAMETER_VALIDATION=1") );
 
     // Initialize the driver
     xeInit( XE_INIT_FLAG_NONE );
