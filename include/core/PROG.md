@@ -31,7 +31,7 @@ NOTE: Sample code in this document contains little or no error checking for brev
     + [Device Residency](#res)
     + [OpenCL Interoperability](#oi)
     + [Inter-Process Communication](#ipc)
-    + [Peer Access and P2P Queries](#peer)
+    + [Peer-to-Peer Access and Queries](#peer)
 * [Experimental](#exp)
 
 # <a name="dd">Devices</a>
@@ -1112,7 +1112,7 @@ The following code examples demonstrate how to use the event IPC APIs:
     xeEventPoolDestroy(hEventPool);
 ```
 
-## <a name="peer">Peer Access and P2P Queries</a>
+## <a name="peer">Peer-to-Peer Access and Queries</a>
 Devices may be linked together within a node by a scale-up fabric and depending on the configuration,
 the fabric can support atomics, compute kernel remote access, and data copies.
 
