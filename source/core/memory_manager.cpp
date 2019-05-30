@@ -24,9 +24,7 @@ struct MemoryManagerImp : public MemoryManager {
             std::pair<void *, MemAllocation *>(allocation->getHostAddress(), allocation));
     }
 
-    void eraseAllocation(void *ptr) {
-        allocationTracker.erase(ptr);
-    }
+    void eraseAllocation(void *ptr) { allocationTracker.erase(ptr); }
 
     void *allocateHostMemory(size_t size, size_t alignment) override {
         void *buffer = this->memoryManagerRT->allocateSystemMemory(size, alignment);
@@ -73,8 +71,7 @@ struct MemoryManagerImp : public MemoryManager {
             return allocation;
 
         allocation = new GraphicsAllocation(memoryManagerRT->allocateGraphicsMemoryWithProperties(
-                {false, size, NEO::GraphicsAllocation::AllocationType::INTERNAL_HOST_MEMORY},
-                        buffer));
+            {false, size, NEO::GraphicsAllocation::AllocationType::INTERNAL_HOST_MEMORY}, buffer));
         allocation->setAllocatedFromFault(true);
         insertAllocation(allocation);
         allocation->setDevice(device);
@@ -114,7 +111,7 @@ struct MemoryManagerImp : public MemoryManager {
         auto allocLower = allocationTracker.lower_bound(const_cast<void *>(ptr));
 
         // Check if ptr is alloc's base address
-        if (ptr == allocLower->first)
+        if (allocLower != allocationTracker.end() && ptr == allocLower->first)
             return allocLower->second;
 
         // Check now for ranges

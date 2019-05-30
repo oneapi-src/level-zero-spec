@@ -32,8 +32,7 @@ MockMemoryManager::Mock() {
     EXPECT_CALL(*this, freeHostMemory)
         .WillRepeatedly(Invoke(this, &MockMemoryManager::doFreeHostMemory));
 
-    EXPECT_CALL(*this, freeMemory)
-        .WillRepeatedly(Invoke(this, &MockMemoryManager::doFreePtr));
+    EXPECT_CALL(*this, freeMemory).WillRepeatedly(Invoke(this, &MockMemoryManager::doFreePtr));
 
     EXPECT_CALL(*this, getIsaHeapGpuAddress).Times(AnyNumber());
 
@@ -106,7 +105,7 @@ void MockMemoryManager::doFreeHostMemory(L0::MemAllocation *allocation) {
 
 void MockMemoryManager::doFreePtr(const void *ptr) {
     auto it = allocationTracker.find(const_cast<void *>(ptr));
-    assert (it != allocationTracker.end());
+    assert(it != allocationTracker.end());
     doFreeGraphicsAllocation(static_cast<GraphicsAllocation *>(it->second));
 }
 
@@ -119,7 +118,7 @@ L0::MemAllocation *MockMemoryManager::doFindMemAllocation(const void *ptr) {
     auto allocLower = allocationTracker.lower_bound(const_cast<void *>(ptr));
 
     // Check if ptr is alloc's base address
-    if (ptr == allocLower->first)
+    if (allocLower != allocationTracker.end() && ptr == allocLower->first)
         return allocLower->second;
 
     // Check now for ranges
@@ -143,13 +142,11 @@ L0::GraphicsAllocation *MockMemoryManager::doFindGraphicsAllocation(const void *
 }
 
 void MockMemoryManager::insertAllocation(MemAllocation *allocation) {
-        allocationTracker.insert(
-            std::pair<void *, MemAllocation *>(allocation->getHostAddress(), allocation));
+    allocationTracker.insert(
+        std::pair<void *, MemAllocation *>(allocation->getHostAddress(), allocation));
 }
 
-void MockMemoryManager::eraseAllocation(void *ptr) {
-        allocationTracker.erase(ptr);
-}
+void MockMemoryManager::eraseAllocation(void *ptr) { allocationTracker.erase(ptr); }
 
 Mock<MemoryManager>::~Mock() {}
 
