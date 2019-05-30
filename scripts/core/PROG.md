@@ -35,6 +35,7 @@ ${"##"} Table of Contents
     + [Device Residency](#res)
     + [OpenCL Interoperability](#oi)
     + [Inter-Process Communication](#ipc)
+    + [Peer Access and P2P Queries](#peer)
 * [Experimental](#exp)
 
 ${"#"} <a name="dd">Devices</a>
@@ -1116,6 +1117,18 @@ The following code examples demonstrate how to use the event IPC APIs:
     ${x}EventDestroy(hEvent);
     ${x}EventPoolDestroy(hEventPool);
 ```
+
+${"##"} <a name="peer">Peer Access and P2P Queries</a>
+Devices may be linked together within a node by a scale-up fabric and depending on the configuration,
+the fabric can support atomics, compute kernel remote access, and data copies.
+
+The following P2P functionalities are provided through the API:
+    - Check for existence of peer-to-peer fabric between two devices.
+        - ${x}DeviceCanAccessPeer
+    - Query remote memory access and atomic capabilities for peer-to-peer
+        - ${x}DeviceGetP2PProperties
+    - Copy data between devices over peer-to-peer fabric.
+        - ${x}CommandListAppendMemoryCopy
 
 ${"#"} <a name="exp">Experimental</a>
 The following experimental features are provided only for the development and refinement of future APIs.
