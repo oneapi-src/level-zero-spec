@@ -22,6 +22,14 @@ components:
     dest_dir: third_party/igc
     root_url: https://gfx-assets.igk.intel.com/artifactory
     type: artifactory
+  instrumentation:
+    asset_name: instrumentation
+    asset_path: gfx-sandbox-igk/neo/build/mainline
+    asset_version: 33e9d79610669074a84c7c0a13f68b95dc43e6e2-1244
+    clean_on_sync: true
+    dest_dir: third_party/instrumentation
+    root_url: http://gfx-assets.igk.intel.com/artifactory
+    type: artifactory
   googletest:
     branch: master
     clean_on_sync: false
