@@ -26,58 +26,6 @@
 ******************************************************************************/
 #include "xe_loader.h"
 
-//////////////////////////////////////////////////////////////////////////
-template<>
-xe_device_group_object_t::factory_t     xe_device_group_object_t::factory;
-template<>
-xe_device_object_t::factory_t           xe_device_object_t::factory;
-template<>
-xe_command_list_object_t::factory_t     xe_command_list_object_t::factory;
-template<>
-xe_command_queue_object_t::factory_t    xe_command_queue_object_t::factory;
-template<>
-xe_fence_object_t::factory_t            xe_fence_object_t::factory;
-template<>
-xe_event_pool_object_t::factory_t       xe_event_pool_object_t::factory;
-template<>
-xe_event_object_t::factory_t            xe_event_object_t::factory;
-template<>
-xe_image_object_t::factory_t            xe_image_object_t::factory;
-template<>
-xe_module_object_t::factory_t           xe_module_object_t::factory;
-template<>
-xe_module_build_log_object_t::factory_t xe_module_build_log_object_t::factory;
-template<>
-xe_function_object_t::factory_t         xe_function_object_t::factory;
-template<>
-xe_sampler_object_t::factory_t          xe_sampler_object_t::factory;
-
-template<>
-xex_device_object_t::factory_t          xex_device_object_t::factory;
-template<>
-xex_command_graph_object_t::factory_t   xex_command_graph_object_t::factory;
-
-template<>
-xet_device_object_t::factory_t              xet_device_object_t::factory;
-template<>
-xet_command_list_object_t::factory_t        xet_command_list_object_t::factory;
-template<>
-xet_event_object_t::factory_t               xet_event_object_t::factory;
-template<>
-xet_metric_group_object_t::factory_t        xet_metric_group_object_t::factory;
-template<>
-xet_metric_object_t::factory_t              xet_metric_object_t::factory;
-template<>
-xet_metric_tracer_object_t::factory_t       xet_metric_tracer_object_t::factory;
-template<>
-xet_metric_query_pool_object_t::factory_t   xet_metric_query_pool_object_t::factory;
-template<>
-xet_metric_query_object_t::factory_t        xet_metric_query_object_t::factory;
-template<>
-xet_power_object_t::factory_t               xet_power_object_t::factory;
-template<>
-xet_freq_domain_object_t::factory_t         xet_freq_domain_object_t::factory;
-
 ///////////////////////////////////////////////////////////////////////////////
 static const char* known_driver_names[] = { 
     MAKE_DRIVER_NAME( "xe_intc_gpu" )
