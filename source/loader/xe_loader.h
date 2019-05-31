@@ -95,10 +95,6 @@ public:
     static factory_t factory;
 };
 
-template<typename _handle_t, typename _dditable_t>
-_loader_factory_t< _loader_object_t<_handle_t, _dditable_t>>
-_loader_object_t<_handle_t, _dditable_t>::factory;
-
 template<typename handle_t>
 using xe_loader_object_t = _loader_object_t < handle_t, xe_dditable_t >;
 
