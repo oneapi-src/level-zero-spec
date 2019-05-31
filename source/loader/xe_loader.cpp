@@ -28,7 +28,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 static const char* known_driver_names[] = { 
-    MAKE_DRIVER_NAME( "xe_intc_gpu" )
+    MAKE_DRIVER_NAME( "level_zero" )
 };
 
 static const size_t num_known_driver_names =
@@ -38,13 +38,15 @@ static const size_t num_known_driver_names =
 ///////////////////////////////////////////////////////////////////////////////
 Loader loader;
 
-
+#include <iostream>
 ///////////////////////////////////////////////////////////////////////////////
 Loader::Loader()
 {
+    std::cout << "97 loader() XE_ENABLE_NULL_DRIVER" << getenv_tobool( "XE_ENABLE_NULL_DRIVER" ) << "\n";
     if( getenv_tobool( "XE_ENABLE_NULL_DRIVER" ) )
     {
         auto handle = LOAD_DRIVER_LIBRARY( MAKE_DRIVER_NAME( "xe_null" ) );
+        std::cout << "null handle " << std::hex << handle << "\n";
         if( NULL != handle )
         {
             drivers.emplace_back();
@@ -56,7 +58,9 @@ Loader::Loader()
         drivers.reserve( num_known_driver_names );
         for( auto name : known_driver_names )
         {
+            std::cout << "loading " << name << "\n";
             auto handle = LOAD_DRIVER_LIBRARY( name );
+            std::cout << "handle " << std::hex << handle << "\n";
             if( NULL != handle )
             {
                 drivers.emplace_back();
@@ -68,10 +72,12 @@ Loader::Loader()
 
     if( getenv_tobool( "XE_ENABLE_VALIDATION_LAYER" ) )
     {
+        std::cout << "validation layer\n";
         validationLayer = LOAD_DRIVER_LIBRARY( MAKE_DRIVER_NAME( "xe_validation_layer" ) );
     }
 
     forceIntercept = getenv_tobool( "XE_ENABLE_LOADER_INTERCEPT" );
+    std::cout << "forceIntercept " << forceIntercept << "\n";
 };
 
 ///////////////////////////////////////////////////////////////////////////////

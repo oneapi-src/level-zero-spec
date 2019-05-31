@@ -29,11 +29,11 @@
 *
 ******************************************************************************/
 #include "xe_loader.h"
-
+#include <iostream>
 #if defined(__cplusplus)
 extern "C" {
 #endif
-
+//
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Global table
 ///        with current process' addresses
@@ -51,6 +51,7 @@ xeGetGlobalProcAddrTable(
     xe_global_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     )
 {
+    std::cout << "source/loader/xe_core_loader.cpp xeGetGlobalProcAddrTable\n";
     if( loader.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
@@ -83,8 +84,10 @@ xeGetGlobalProcAddrTable(
         }
         else
         {
+            std::cout << "return pointers directly to driver's DDIs\n";
             // return pointers directly to driver's DDIs
             *pDdiTable = loader.drivers.front().xeDdiTable.Global;
+            std::cout << "pDdiTable " << std::hex << reinterpret_cast<void *>(pDdiTable) << "\n";
         }
     }
 

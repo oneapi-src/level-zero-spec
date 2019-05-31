@@ -31,6 +31,9 @@
 *
 ******************************************************************************/
 #include "xe_lib.h"
+#include <iostream>
+
+static int a = 0;
 
 extern "C" {
 
@@ -62,11 +65,14 @@ xeInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
+    std::cout << "66 xeInit\n";
     auto result = xe_lib::lib.Init();
     if( XE_RESULT_SUCCESS != result )
         return result;
 
     auto pfnInit = xe_lib::lib.ddiTable.Global.pfnInit;
+
+    std::cout << "73 xeInit\n";
 
 #if _DEBUG
     if( nullptr == pfnInit )
@@ -74,6 +80,7 @@ xeInit(
 #endif
 
     return pfnInit( flags );
+    //return XE_RESULT_SUCCESS;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
