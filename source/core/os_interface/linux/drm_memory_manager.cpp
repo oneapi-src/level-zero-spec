@@ -77,11 +77,12 @@ xe_result_t DrmL0MemoryManagerSepecifics::ipcCloseMemHandle(const void *ptr) {
 int DrmL0MemoryManagerSepecifics::openShmFile(const char *shmFileName, bool mustExist) {
     int shmFileDescriptor;
 
-    //ipcOpenMemHandle must make sure the file already exixts, becuse the filename
+    //ipcOpenMemHandle must make sure the file already exists, because the filename
     // may be corrupt and shm_open will NOT fail.
     if (mustExist){
         shmFileDescriptor = shm_open(shmFileName, O_RDWR | O_CREAT| O_EXCL, S_IRUSR | S_IWUSR);
         if (shmFileDescriptor > 0)  {
+            close(shmFileDescriptor);
             if (shm_unlink(shmFileName)) {
                 assert(0);
             }
@@ -118,6 +119,7 @@ void *DrmL0MemoryManagerSepecifics::memoryMapShmFile(size_t size, size_t alignme
         assert(0);
         return nullptr;
     }
+    // No need to keep the fd open. 
     close(shmFileDescriptor);
 
     alignedPtr = reinterpret_cast<uintptr_t>(mapPtr) + alignment;
@@ -149,27 +151,23 @@ void *DrmL0MemoryManagerSepecifics::allocateShMemory(size_t size, size_t alignme
     if (snprintf(localFileName, sizeof(localFileName), "/L0_shm.%d%x%d", (int)getuid(),
                  (int)getpid(), DrmL0MemoryManagerSepecifics::shmFileCounter) < 0) {
 
-        assert(0);
         return nullptr;
     }
 
     // Open a fle in /dev/shm/*
     shmFileDescriptor = openShmFile(localFileName, false);
     if (shmFileDescriptor < 0) {
-        assert(0);
         return nullptr;
     }
 
     // Set the size of the shm file
     if (ftruncate(shmFileDescriptor, cSize + cAlignment) != 0) {
-        assert(0);
         return nullptr;
     }
 
     // Map the /dev/shm/* file to memory
     shmBuffer = memoryMapShmFile(cSize, cAlignment, shmFileDescriptor);
     if (nullptr == shmBuffer) {
-        assert(0);
         return nullptr;
     }
     shmFileName = localFileName;
