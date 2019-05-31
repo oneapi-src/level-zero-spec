@@ -29,7 +29,6 @@
 *
 ******************************************************************************/
 #include "xe_null.h"
-#include <iostream>
 
 #if defined(__cplusplus)
 extern "C" {
@@ -42,7 +41,6 @@ xeInit_null(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    std::cout << "610 xeInit\n";
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // global functions need to be handled manually by the driver
@@ -1459,7 +1457,6 @@ xeGetGlobalProcAddrTable(
     xe_global_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    std::cout << "layers/null/xe_core_driver.cpp xeGetGlobalProcAddrTable\n";
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 

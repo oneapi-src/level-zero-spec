@@ -29,17 +29,13 @@
 *
 ******************************************************************************/
 #include "xe_lib.h"
-#include <iostream>
+
 namespace xe_lib
 {
     ///////////////////////////////////////////////////////////////////////////////
     xe_result_t Library::Init()
     {
-        std::cout << "38 MAKE_DRIVER_NAME( xe_loader ) = " << MAKE_DRIVER_NAME( "xe_loader" ) << "\n";
         loader = LOAD_DRIVER_LIBRARY( MAKE_DRIVER_NAME( "xe_loader" ) );
-        std::cout << "loader " << std::hex << loader << "\n";
-        /* char * err = dlerror();
-        std::cout << "err " << err << "\n"; */
 
         if( NULL == loader )
             return XE_RESULT_ERROR_UNINITIALIZED;
@@ -137,7 +133,6 @@ namespace xe_lib
             result = getTable( XE_API_VERSION_1_0, &ddiTable.Sampler );
         }
 
-        std::cout << "finish loading syms from table\n";
         return result;
     }
 } // namespace xe_lib
