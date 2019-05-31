@@ -9,6 +9,7 @@ endif()
 set (TEST_TARGETS
     xello_world #Dynamically thunking xelloWorld application
     xello_copy #Basic example with copy buffer feature
+    xello_ipc_copy #Basic example with IPC API and copy buffer feature
     xello_function_pointers #Basic example with function pointers
     xello_image #Basic example with image kernel
     xello_copy_image #Basic example with copy image features
@@ -21,6 +22,12 @@ set (TEST_TARGETS
 )
 
 foreach(TEST ${TEST_TARGETS})
+    if(MSVC)
+        if(${TEST} STREQUAL  "xello_ipc_copy")
+            continue()
+        endif()
+    endif()
+
     add_executable(${TEST} ${TEST}.cpp)
 
     if(MSVC)
@@ -41,7 +48,9 @@ foreach(TEST ${TEST_TARGETS})
     if(MSVC)
         set(RUN_TEST $<TARGET_FILE:${TEST}> --aub)
     else()
-        set(RUN_TEST LD_LIBRARY_PATH=$<TARGET_FILE_DIR:${TEST}> $<TARGET_FILE:${TEST}> --aub)
+        if(NOT ${TEST} STREQUAL  "xello_ipc_copy")
+            set(RUN_TEST LD_LIBRARY_PATH=$<TARGET_FILE_DIR:${TEST}> $<TARGET_FILE:${TEST}> --aub)
+        endif()
     endif()
 
     set(TEST_DIR ${CUSTOM_COMMAND_BINARY_DIR}/${TEST}_aub_test_ats)
