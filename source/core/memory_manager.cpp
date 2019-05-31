@@ -165,10 +165,10 @@ struct MemoryManagerImp : public MemoryManager {
     }
 
     void freeGraphicsAllocation(GraphicsAllocation *allocation) {
+        eraseAllocation(allocation->getHostAddress());
+
         memoryManagerRT->freeGraphicsMemory(
             static_cast<NEO::GraphicsAllocation *>(allocation->allocationRT));
-
-        eraseAllocation(allocation->getHostAddress());
 
         delete allocation;
     }
