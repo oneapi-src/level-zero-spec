@@ -17,9 +17,9 @@
 struct _xe_ipc_mem_handle_t {};
 
 struct DrmIpcHandle : _xe_ipc_mem_handle_t {
-    std::string shmFileName;
     size_t alignment;
     size_t size;
+    char shmFileName[255];
 };
 
 namespace L0 {
@@ -36,7 +36,7 @@ class DrmL0MemoryManagerSepecifics : public L0MemoryManagerSepecifics {
     static unsigned int shmFileCounter;
 
   protected:
-    int openShmFile(const char *shmFileName);
+    int openShmFile(const char *shmFileName, bool mustExist);
     void *memoryMapShmFile(size_t size, size_t alignment, int shmFileDescriptor);
 };
 

@@ -12,7 +12,7 @@ xe_result_t DrmL0MemoryManagerSepecifics::ipcGetMemHandle(const void *ptr,
     GraphicsAllocation *allocation = globalMemoryManager->findGraphicsAllocation(ptr);
 
     DrmIpcHandle *handle = new DrmIpcHandle;
-    handle->shmFileName = allocation->shmFileName;
+    strncpy(handle->shmFileName, allocation->shmFileName.c_str(), allocation->shmFileName.length () + 1);
     handle->alignment = allocation->alignment;
     handle->size = allocation->getSize();
 
@@ -29,7 +29,7 @@ xe_result_t DrmL0MemoryManagerSepecifics::ipcOpenMemHandle(xe_device_handle_t hD
 
     /*NOTE: hDevice and flags are unused*/
 
-    const char *shmFileName = static_cast<DrmIpcHandle *>(handle)->shmFileName.data();
+    const char *shmFileName = static_cast<DrmIpcHandle *>(handle)->shmFileName;
     size_t alignment = static_cast<DrmIpcHandle *>(handle)->alignment;
     size_t size = static_cast<DrmIpcHandle *>(handle)->size;
     int shmFileDescriptor = -1;
@@ -41,7 +41,7 @@ xe_result_t DrmL0MemoryManagerSepecifics::ipcOpenMemHandle(xe_device_handle_t hD
     // It's needed to prevent overlapping pages with user pointers
     size_t cSize = std::max(alignUp(size, minAlignment), minAlignment);
 
-    shmFileDescriptor = openShmFile(shmFileName);
+    shmFileDescriptor = openShmFile(shmFileName, true);
     if (shmFileDescriptor < 0) {
         assert(0);
         return XE_RESULT_ERROR_UNKNOWN;
@@ -74,8 +74,20 @@ xe_result_t DrmL0MemoryManagerSepecifics::ipcCloseMemHandle(const void *ptr) {
     return XE_RESULT_SUCCESS;
 }
 
-int DrmL0MemoryManagerSepecifics::openShmFile(const char *shmFileName) {
+int DrmL0MemoryManagerSepecifics::openShmFile(const char *shmFileName, bool mustExist) {
     int shmFileDescriptor;
+
+    //ipcOpenMemHandle must make sure the file already exixts, becuse the filename
+    // may be corrupt and shm_open will NOT fail.
+    if (mustExist){
+        shmFileDescriptor = shm_open(shmFileName, O_RDWR | O_CREAT| O_EXCL, S_IRUSR | S_IWUSR);
+        if (shmFileDescriptor > 0)  {
+            if (shm_unlink(shmFileName)) {
+                assert(0);
+            }
+            return -1;
+        }
+    }
 
     shmFileDescriptor = shm_open(shmFileName, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
     if (shmFileDescriptor > 0) {
@@ -86,6 +98,9 @@ int DrmL0MemoryManagerSepecifics::openShmFile(const char *shmFileName) {
         if (getuid() != st.st_uid) {
             return -1;
         }
+    }
+    else{
+        return -1;
     }
 
     return shmFileDescriptor;
@@ -139,7 +154,7 @@ void *DrmL0MemoryManagerSepecifics::allocateShMemory(size_t size, size_t alignme
     }
 
     // Open a fle in /dev/shm/*
-    shmFileDescriptor = openShmFile(localFileName);
+    shmFileDescriptor = openShmFile(localFileName, false);
     if (shmFileDescriptor < 0) {
         assert(0);
         return nullptr;
