@@ -101,10 +101,11 @@ namespace xex
         xe::init_flag_t flags                           ///< [in] initialization flags
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xexInit(
+            static_cast<xe_init_flag_t>( flags ) ) );
 
-        // auto result = ::xexInit( handle, flags );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xex::::Init" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xex::::Init" );
     }
 
 } // namespace xex

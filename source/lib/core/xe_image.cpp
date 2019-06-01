@@ -148,11 +148,13 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     Image::Image( 
+        image_handle_t handle,                          ///< [in] handle of image object
         Device* pDevice,                                ///< [in] pointer to owner object
-        const desc_t& desc                              ///< [in] descriptor of the image object
+        const desc_t* desc                              ///< [in] descriptor of the image object
         ) :
+        m_handle( handle ),
         m_pDevice( pDevice ),
-        m_desc( desc )
+        m_desc( ( desc ) ? *desc : desc_t{} )
     {
     }
 
@@ -173,12 +175,17 @@ namespace xe
         const desc_t* desc                              ///< [in] pointer to image descriptor
         )
     {
-        result_t result = result_t::SUCCESS;
+        xe_image_properties_t imageProperties;
 
-        // auto result = ::xeImageGetProperties( handle, pDevice, desc );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Image::GetProperties" );
+        auto result = static_cast<result_t>( ::xeImageGetProperties(
+            reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
+            reinterpret_cast<const xe_image_desc_t*>( desc ),
+            &imageProperties ) );
 
-        return properties_t{};
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Image::GetProperties" );
+
+        return *reinterpret_cast<properties_t*>( &imageProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -193,7 +200,7 @@ namespace xe
     ///     - clCreateImage
     /// 
     /// @returns
-    ///     - Image: pointer to handle of image object created
+    ///     - Image*: pointer to handle of image object created
     /// 
     /// @throws result_t
     Image* __xecall
@@ -202,12 +209,19 @@ namespace xe
         const desc_t* desc                              ///< [in] pointer to image descriptor
         )
     {
-        result_t result = result_t::SUCCESS;
+        xe_image_handle_t hImage;
 
-        // auto result = ::xeImageCreate( handle, pDevice, desc );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Image::Create" );
+        auto result = static_cast<result_t>( ::xeImageCreate(
+            reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
+            reinterpret_cast<const xe_image_desc_t*>( desc ),
+            &hImage ) );
 
-        return (Image*)0;
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Image::Create" );
+
+        auto pImage = new Image( reinterpret_cast<image_handle_t>( hImage ), pDevice, desc );
+
+        return pImage;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -228,10 +242,13 @@ namespace xe
         Image* pImage                                   ///< [in] pointer to image object to destroy
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeImageDestroy(
+            reinterpret_cast<xe_image_handle_t>( pImage->getHandle() ) ) );
 
-        // auto result = ::xeImageDestroy( handle, pImage );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Image::Destroy" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Image::Destroy" );
+
+        delete pImage;
     }
 
 } // namespace xe

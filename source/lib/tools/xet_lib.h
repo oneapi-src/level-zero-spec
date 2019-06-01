@@ -32,6 +32,7 @@
 #include "xet_api.hpp"
 #include "xet_ddi.h"
 #include "xe_util.h"
+#include <vector>
 
 namespace xet_lib
 {

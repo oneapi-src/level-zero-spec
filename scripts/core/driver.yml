@@ -40,7 +40,7 @@ type: function
 desc: "Returns the current version of the installed driver for the specified device group."
 class: $xDeviceGroup
 name: GetDriverVersion
-ordinal: "0"
+ordinal: "1"
 details:
     - "The driver version is a non-zero, monotonically increasing value where higher values always indicate a more recent version."
     - "The application may call this function from simultaneous threads."

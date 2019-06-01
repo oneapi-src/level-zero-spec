@@ -64,9 +64,6 @@ xeGetGlobalProcAddrTable(
     dditable.pfnInit                                     = pDdiTable->pfnInit;
     pDdiTable->pfnInit                                   = xeInit;
 
-    dditable.pfnGetDeviceGroups                          = pDdiTable->pfnGetDeviceGroups;
-    pDdiTable->pfnGetDeviceGroups                        = xeGetDeviceGroups;
-
     return result;
 }
 
@@ -96,6 +93,9 @@ xeGetDeviceProcAddrTable(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
+
+    dditable.pfnGet                                      = pDdiTable->pfnGet;
+    pDdiTable->pfnGet                                    = xeDeviceGet;
 
     dditable.pfnGetSubDevice                             = pDdiTable->pfnGetSubDevice;
     pDdiTable->pfnGetSubDevice                           = xeDeviceGetSubDevice;
@@ -172,11 +172,11 @@ xeGetDeviceGroupProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
+    dditable.pfnGet                                      = pDdiTable->pfnGet;
+    pDdiTable->pfnGet                                    = xeDeviceGroupGet;
+
     dditable.pfnGetDriverVersion                         = pDdiTable->pfnGetDriverVersion;
     pDdiTable->pfnGetDriverVersion                       = xeDeviceGroupGetDriverVersion;
-
-    dditable.pfnGetDevices                               = pDdiTable->pfnGetDevices;
-    pDdiTable->pfnGetDevices                             = xeDeviceGroupGetDevices;
 
     dditable.pfnGetApiVersion                            = pDdiTable->pfnGetApiVersion;
     pDdiTable->pfnGetApiVersion                          = xeDeviceGroupGetApiVersion;
@@ -764,20 +764,20 @@ xeDeviceGroupGetDriverVersion(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeGetDeviceGroups
+/// @brief Intercept function for xeDeviceGroupGet
 xe_result_t __xecall
-xeGetDeviceGroups(
+xeDeviceGroupGet(
     uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of device groups available.
                                                     ///< if count is non-zero, then driver will only retrieve that number of
                                                     ///< device groups.
-    xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
+    xe_device_group_handle_t* phDeviceGroups        ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
     )
 {
-    auto pfnGetDeviceGroups = validation.xeDdiTable.Global.pfnGetDeviceGroups;
+    auto pfnGet = validation.xeDdiTable.DeviceGroup.pfnGet;
 
-    if( nullptr == pfnGetDeviceGroups )
+    if( nullptr == pfnGet )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     if( validation.enableParameterValidation )
@@ -787,25 +787,25 @@ xeGetDeviceGroups(
 
     }
 
-    return pfnGetDeviceGroups( pCount, pDeviceGroups );
+    return pfnGet( pCount, phDeviceGroups );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeDeviceGroupGetDevices
+/// @brief Intercept function for xeDeviceGet
 xe_result_t __xecall
-xeDeviceGroupGetDevices(
+xeDeviceGet(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of device groups available.
                                                     ///< if count is non-zero, then driver will only retrieve that number of
                                                     ///< device groups.
-    xe_device_handle_t* pDevices                    ///< [in,out][optional][range(0, *pCount)] array of handle of devices
+    xe_device_handle_t* phDevices                   ///< [in,out][optional][range(0, *pCount)] array of handle of devices
     )
 {
-    auto pfnGetDevices = validation.xeDdiTable.DeviceGroup.pfnGetDevices;
+    auto pfnGet = validation.xeDdiTable.Device.pfnGet;
 
-    if( nullptr == pfnGetDevices )
+    if( nullptr == pfnGet )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     if( validation.enableParameterValidation )
@@ -818,7 +818,7 @@ xeDeviceGroupGetDevices(
 
     }
 
-    return pfnGetDevices( hDeviceGroup, pCount, pDevices );
+    return pfnGet( hDeviceGroup, pCount, phDevices );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1207,7 +1207,7 @@ xeCommandListCreate(
 xe_result_t __xecall
 xeCommandListCreateImmediate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
+    const xe_command_queue_desc_t* altdesc,         ///< [in] pointer to command queue descriptor
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     )
 {
@@ -1221,18 +1221,18 @@ xeCommandListCreateImmediate(
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-        if( nullptr == desc )
+        if( nullptr == altdesc )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phCommandList )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-        if( XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version )
+        if( XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < altdesc->version )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
     }
 
-    return pfnCreateImmediate( hDevice, desc, phCommandList );
+    return pfnCreateImmediate( hDevice, altdesc, phCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2714,9 +2714,9 @@ xeDeviceGroupCloseMemIpcHandle(
 xe_result_t __xecall
 xeModuleCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    const xe_module_desc_t* pDesc,                  ///< [in] pointer to module descriptor
+    const xe_module_desc_t* desc,                   ///< [in] pointer to module descriptor
     xe_module_handle_t* phModule,                   ///< [out] pointer to handle of module object created
-    xe_module_build_log_handle_t* phBuildLog        ///< [in,out][optional] pointer to handle of module's build log.
+    xe_module_build_log_handle_t* phBuildLog        ///< [out][optional] pointer to handle of module's build log.
     )
 {
     auto pfnCreate = validation.xeDdiTable.Module.pfnCreate;
@@ -2729,18 +2729,18 @@ xeModuleCreate(
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-        if( nullptr == pDesc )
+        if( nullptr == desc )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phModule )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-        if( XE_MODULE_DESC_VERSION_CURRENT < pDesc->version )
+        if( XE_MODULE_DESC_VERSION_CURRENT < desc->version )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
     }
 
-    return pfnCreate( hDevice, pDesc, phModule, phBuildLog );
+    return pfnCreate( hDevice, desc, phModule, phBuildLog );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2876,7 +2876,7 @@ xeModuleGetGlobalPointer(
 xe_result_t __xecall
 xeFunctionCreate(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
-    const xe_function_desc_t* pDesc,                ///< [in] pointer to function descriptor
+    const xe_function_desc_t* desc,                 ///< [in] pointer to function descriptor
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object
     )
 {
@@ -2890,18 +2890,18 @@ xeFunctionCreate(
         if( nullptr == hModule )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-        if( nullptr == pDesc )
+        if( nullptr == desc )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phFunction )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-        if( XE_FUNCTION_DESC_VERSION_CURRENT < pDesc->version )
+        if( XE_FUNCTION_DESC_VERSION_CURRENT < desc->version )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
     }
 
-    return pfnCreate( hModule, pDesc, phFunction );
+    return pfnCreate( hModule, desc, phFunction );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3347,7 +3347,7 @@ xeDeviceEvictImage(
 xe_result_t __xecall
 xeSamplerCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    const xe_sampler_desc_t* pDesc,                 ///< [in] pointer to sampler descriptor
+    const xe_sampler_desc_t* desc,                  ///< [in] pointer to sampler descriptor
     xe_sampler_handle_t* phSampler                  ///< [out] handle of the sampler
     )
 {
@@ -3361,18 +3361,18 @@ xeSamplerCreate(
         if( nullptr == hDevice )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-        if( nullptr == pDesc )
+        if( nullptr == desc )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         if( nullptr == phSampler )
             return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-        if( XE_SAMPLER_DESC_VERSION_CURRENT < pDesc->version )
+        if( XE_SAMPLER_DESC_VERSION_CURRENT < desc->version )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
     }
 
-    return pfnCreate( hDevice, pDesc, phSampler );
+    return pfnCreate( hDevice, desc, phSampler );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

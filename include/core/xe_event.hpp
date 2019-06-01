@@ -76,16 +76,17 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        event_pool_handle_t m_handle = nullptr;         ///< handle of event pool object
+        event_pool_handle_t m_handle;                   ///< [in] handle of event pool object
         Device* m_pDevice;                              ///< [in] pointer to owner object
-        desc_t m_desc;                                  ///< [in] descriptor of the event object
+        desc_t m_desc;                                  ///< [in] descriptor of the event pool object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         EventPool( void ) = delete;
         EventPool( 
+            event_pool_handle_t handle,                     ///< [in] handle of event pool object
             Device* pDevice,                                ///< [in] pointer to owner object
-            const desc_t& desc                              ///< [in] descriptor of the event object
+            const desc_t* desc                              ///< [in] descriptor of the event pool object
             );
 
         ~EventPool( void ) = default;
@@ -108,7 +109,7 @@ namespace xe
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @returns
-        ///     - EventPool: pointer handle of event pool object created
+        ///     - EventPool*: pointer handle of event pool object created
         /// 
         /// @throws result_t
         static EventPool* __xecall
@@ -169,7 +170,7 @@ namespace xe
         ///   _Analogues_
         ///     - **cuIpcOpenMemHandle**
         /// @returns
-        ///     - EventPool: pointer handle of event pool object created
+        ///     - EventPool*: pointer handle of event pool object created
         /// 
         /// @throws result_t
         static EventPool* __xecall
@@ -243,14 +244,17 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        event_handle_t m_handle = nullptr;              ///< handle of event object
+        event_handle_t m_handle;                        ///< [in] handle of event object
         EventPool* m_pEventPool;                        ///< [in] pointer to owner object
+        desc_t m_desc;                                  ///< [in] descriptor of the event object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         Event( void ) = delete;
         Event( 
-            EventPool* pEventPool                           ///< [in] pointer to owner object
+            event_handle_t handle,                          ///< [in] handle of event object
+            EventPool* pEventPool,                          ///< [in] pointer to owner object
+            const desc_t* desc                              ///< [in] descriptor of the event object
             );
 
         ~Event( void ) = default;
@@ -264,6 +268,7 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
         auto getEventpool( void ) const { return m_pEventPool; }
+        auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Creates an event on the device.
@@ -280,7 +285,7 @@ namespace xe
         ///     - vkCreateEvent
         ///     - cuEventCreate
         /// @returns
-        ///     - Event: pointer to handle of event object created
+        ///     - Event*: pointer to handle of event object created
         /// 
         /// @throws result_t
         static Event* __xecall

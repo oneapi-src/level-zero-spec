@@ -131,58 +131,76 @@ namespace ${n}
     %for line in th.make_returns_lines(n, tags, obj, cpp=True, meta=meta):
     /// ${line}
     %endfor
-    ## MEMBER FUNCTION ########################################################
-    %if 'class' in obj and obj['class'] not in tags:
     %if 'tparams' in obj:
     template<${th.make_tparams_line(n, tags, obj)}>
     %endif
-    ${th.make_return_value(n, tags, obj, cpp=True, meta=meta)} __${x}call
+    ${th.make_return_type(n, tags, obj, cpp=True, meta=meta)} __${x}call
+    %if 'class' in obj and obj['class'] not in tags:
     ${th.subt(n, tags, obj['class'], cpp=True)}::${th.make_func_name(n, tags, obj, cpp=True)}(
-        %for line in th.make_param_lines(n, tags, obj, cpp=True, meta=meta):
-        ${line}
-        %endfor
-        )
-    {
-        <%
-            return_value = th.make_return_value(n, tags, obj, cpp=True, decl=True, meta=meta)
-        %>result_t result = result_t::SUCCESS;
-
-        // auto result = ::${th.make_func_name(n, tags, obj)}( ${th.make_param_call_str(n, tags, "handle", obj, True)} );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "${n}::${th.subt(n, tags, obj['class'], cpp=True)}::${th.subt(n, tags, obj['name'], cpp=True)}" );
-        %if not re.match("void$", return_value):
-
-        %if re.match(r"(.*)\btuple\b(.*)", return_value) or re.match(r".*\w+_t$", return_value):
-        return ${return_value}{};
-        %else:
-        return (${return_value})0;
-        %endif
-        %endif
-    }
-    ## GLOBAL FUNCTION ########################################################
     %else:
-    ${th.make_return_value(n, tags, obj, cpp=True, meta=meta)} __${x}call
     ${th.make_func_name(n, tags, obj, cpp=True)}(
+    %endif
         %for line in th.make_param_lines(n, tags, obj, cpp=True, meta=meta):
         ${line}
         %endfor
-        )
+        )<%
+        wparams, rvalue = th.make_wrapper_params(n, tags, obj, meta)
+%>
     {
-        <%
-            return_value = th.make_return_value(n, tags, obj, cpp=True, decl=True, meta=meta)
-        %>result_t result = result_t::SUCCESS;
-
-        // auto result = ::${th.make_func_name(n, tags, obj)}( ${th.make_param_call_str(n, tags, "handle", obj, True)} );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "${n}::${th.subt(n, tags, obj['class'], cpp=True)}::${th.subt(n, tags, obj['name'], cpp=True)}" );
-        %if not re.match("void$", return_value):
-
-        %if re.match(r"(.*)\btuple\b(.*)", return_value) or re.match(r".*\w+_t$", return_value):
-        return ${return_value}{};
+        %for item in wparams:
+        %if 'local' in item:
+        %if 'range' in item:
+        thread_local std::vector<${item['ctype']}> ${item['local']};
+        %if 'init' in item:
+        ${item['local']}.resize( 0 );
+        ${item['local']}.reserve( ${item['range'][1]} );
+        for( uint32_t i = ${item['range'][0]}; i < ${item['range'][1]}; ++i )
+            %if item['optional']:
+            ${item['local']}.emplace_back( ( ${item['init']} ) ? reinterpret_cast<${item['ctype']}>( ${item['init']}[ i ]->getHandle() ) : nullptr );
+            %else:
+            ${item['local']}.emplace_back( reinterpret_cast<${item['ctype']}>( ${item['init']}[ i ]->getHandle() ) );
+            %endif
         %else:
-        return (${return_value})0;
+        ${item['local']}.resize( ( ${item['name']} ) ? ${item['range'][1]} : 0 );
         %endif
+        %else:
+        ${item['ctype']} ${item['local']};
+        %endif
+
+        %endif
+        %endfor
+        auto result = static_cast<result_t>( ::${th.make_func_name(n, tags, obj)}(
+            ${",\n            ".join(th.extract_items(wparams, 'arg'))} ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "${n}::${th.subt(n, tags, obj['class'], cpp=True)}::${th.subt(n, tags, obj['name'], cpp=True)}" );
+        %for item in wparams:
+        %if 'class' in item:
+
+        %if 'range' in item:
+        %if item['optional']:
+        for( uint32_t i = ${item['range'][0]}; ( ${item['name']} ) && ( i < ${item['range'][1]} ); ++i )
+            ${item['name']}[ i ] = new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, objects, item))} );
+        %else:
+        for( uint32_t i = ${item['range'][0]}; i < ${item['range'][1]}; ++i )
+            ${item['name']}[ i ] = new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, objects, item))} );
+        %endif
+
+        %elif item['release']:
+        delete ${item['name']};
+        %elif item['optional']:
+        if( ${item['name']} )
+            *${item['name']} =  new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, objects, item))} );
+        %else:
+        auto ${item['name']} = new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, objects, item))} );
+        %endif
+        %endif
+        %endfor
+        %if len(rvalue) > 0:
+
+        return ${rvalue};
         %endif
     }
-    %endif
 %if 'condition' in obj:
 #endif // ${th.subt(n, tags, obj['condition'])}
 %endif

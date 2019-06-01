@@ -5,8 +5,10 @@ ordinal: "1"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves device groups"
-class: $x
-name: GetDeviceGroups
+class: $xDeviceGroup
+name: Get
+decl: static
+ordinal: "0"
 analogue:
     - clGetDeviceIDs
 details:
@@ -22,13 +24,14 @@ params:
             if count is zero, then the driver will update the value with the total number of device groups available.
             if count is non-zero, then driver will only retrieve that number of device groups.
     - type: "$x_device_group_handle_t*"
-      name: pDeviceGroups
+      name: phDeviceGroups
       desc: "[in,out][optional][range(0, *pCount)] array of handle of device groups"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves devices within a device group"
-class: $xDeviceGroup
-name: GetDevices
+class: $xDevice
+name: Get
+decl: static
 ordinal: "0"
 analogue:
     - "**cuDeviceGet**"
@@ -46,7 +49,7 @@ params:
             if count is zero, then the driver will update the value with the total number of device groups available.
             if count is non-zero, then driver will only retrieve that number of device groups.
     - type: "$x_device_handle_t*"
-      name: pDevices
+      name: phDevices
       desc: "[in,out][optional][range(0, *pCount)] array of handle of devices"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
@@ -548,8 +551,7 @@ name: $xDeviceGroup
 members:
     - type: $x_device_group_handle_t
       name: handle
-      desc: "handle of device group object"
-      init: nullptr
+      desc: "[in] handle of device group object"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for device"
@@ -558,8 +560,7 @@ owner: $xDeviceGroup
 members:
     - type: $x_device_handle_t
       name: handle
-      desc: "handle of device object"
-      init: nullptr
+      desc: "[in] handle of device object"
     - type: $xDeviceGroup*
       name: pDeviceGroup
       desc: "[in] pointer to owner object"

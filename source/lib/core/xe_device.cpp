@@ -57,23 +57,23 @@ extern "C" {
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeGetDeviceGroups(
+xeDeviceGroupGet(
     uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of device groups available.
                                                     ///< if count is non-zero, then driver will only retrieve that number of
                                                     ///< device groups.
-    xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
+    xe_device_group_handle_t* phDeviceGroups        ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
     )
 {
-    auto pfnGetDeviceGroups = xe_lib::lib.ddiTable.Global.pfnGetDeviceGroups;
+    auto pfnGet = xe_lib::lib.ddiTable.DeviceGroup.pfnGet;
 
 #if _DEBUG
-    if( nullptr == pfnGetDeviceGroups )
+    if( nullptr == pfnGet )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnGetDeviceGroups( pCount, pDeviceGroups );
+    return pfnGet( pCount, phDeviceGroups );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -97,24 +97,24 @@ xeGetDeviceGroups(
 ///         + count is out of range reported by ::xeDeviceGroupGetDevices
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetDevices(
+xeDeviceGet(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of device groups available.
                                                     ///< if count is non-zero, then driver will only retrieve that number of
                                                     ///< device groups.
-    xe_device_handle_t* pDevices                    ///< [in,out][optional][range(0, *pCount)] array of handle of devices
+    xe_device_handle_t* phDevices                   ///< [in,out][optional][range(0, *pCount)] array of handle of devices
     )
 {
-    auto pfnGetDevices = xe_lib::lib.ddiTable.DeviceGroup.pfnGetDevices;
+    auto pfnGet = xe_lib::lib.ddiTable.Device.pfnGet;
 
 #if _DEBUG
-    if( nullptr == pfnGetDevices )
+    if( nullptr == pfnGet )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnGetDevices( hDeviceGroup, pCount, pDevices );
+    return pfnGet( hDeviceGroup, pCount, phDevices );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -450,15 +450,18 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     DeviceGroup::DeviceGroup( 
-        void
-        )
+        device_group_handle_t handle                    ///< [in] handle of device group object
+        ) :
+        m_handle( handle )
     {
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     Device::Device( 
+        device_handle_t handle,                         ///< [in] handle of device object
         DeviceGroup* pDeviceGroup                       ///< [in] pointer to owner object
         ) :
+        m_handle( handle ),
         m_pDeviceGroup( pDeviceGroup )
     {
     }
@@ -480,20 +483,29 @@ namespace xe
     /// 
     /// @throws result_t
     void __xecall
-    GetDeviceGroups(
+    DeviceGroup::Get(
         uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of device groups available.
                                                         ///< if count is non-zero, then driver will only retrieve that number of
                                                         ///< device groups.
-        DeviceGroup* pDeviceGroups                      ///< [in,out][optional][range(0, *pCount)] array of pointer to device
+        DeviceGroup** ppDeviceGroups                    ///< [in,out][optional][range(0, *pCount)] array of pointer to device
                                                         ///< groups
         )
     {
-        result_t result = result_t::SUCCESS;
+        thread_local std::vector<xe_device_group_handle_t> hDeviceGroups;
+        hDeviceGroups.resize( ( ppDeviceGroups ) ? *pCount : 0 );
 
-        // auto result = ::xeGetDeviceGroups( handle, pCount, pDeviceGroups );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::::GetDeviceGroups" );
+        auto result = static_cast<result_t>( ::xeDeviceGroupGet(
+            pCount,
+            hDeviceGroups.data() ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::Get" );
+
+        for( uint32_t i = 0; ( ppDeviceGroups ) && ( i < *pCount ); ++i )
+            ppDeviceGroups[ i ] = new DeviceGroup( reinterpret_cast<device_group_handle_t>( hDeviceGroups[ i ] ) );
+
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -509,19 +521,30 @@ namespace xe
     /// 
     /// @throws result_t
     void __xecall
-    DeviceGroup::GetDevices(
+    Device::Get(
+        DeviceGroup* pDeviceGroup,                      ///< [in] pointer to the device group object
         uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of device groups available.
                                                         ///< if count is non-zero, then driver will only retrieve that number of
                                                         ///< device groups.
-        Device* pDevices                                ///< [in,out][optional][range(0, *pCount)] array of pointer to devices
+        Device** ppDevices                              ///< [in,out][optional][range(0, *pCount)] array of pointer to devices
         )
     {
-        result_t result = result_t::SUCCESS;
+        thread_local std::vector<xe_device_handle_t> hDevices;
+        hDevices.resize( ( ppDevices ) ? *pCount : 0 );
 
-        // auto result = ::xeDeviceGroupGetDevices( handle, pCount, pDevices );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetDevices" );
+        auto result = static_cast<result_t>( ::xeDeviceGet(
+            reinterpret_cast<xe_device_group_handle_t>( pDeviceGroup->getHandle() ),
+            pCount,
+            hDevices.data() ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::Get" );
+
+        for( uint32_t i = 0; ( ppDevices ) && ( i < *pCount ); ++i )
+            ppDevices[ i ] = new Device( reinterpret_cast<device_handle_t>( hDevices[ i ] ), pDeviceGroup );
+
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -536,7 +559,7 @@ namespace xe
     ///     - clCreateSubDevices
     /// 
     /// @returns
-    ///     - Device: pointer to handle of sub-device object.
+    ///     - Device*: pointer to handle of sub-device object.
     /// 
     /// @throws result_t
     Device* __xecall
@@ -544,12 +567,19 @@ namespace xe
         uint32_t ordinal                                ///< [in] ordinal of sub-device to retrieve
         )
     {
-        result_t result = result_t::SUCCESS;
+        xe_device_handle_t hSubDevice;
 
-        // auto result = ::xeDeviceGetSubDevice( handle, ordinal );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::GetSubDevice" );
+        auto result = static_cast<result_t>( ::xeDeviceGetSubDevice(
+            reinterpret_cast<xe_device_handle_t>( getHandle() ),
+            ordinal,
+            &hSubDevice ) );
 
-        return (Device*)0;
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::GetSubDevice" );
+
+        auto pSubDevice = new Device( reinterpret_cast<device_handle_t>( hSubDevice ), nullptr );
+
+        return pSubDevice;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -572,12 +602,16 @@ namespace xe
         void
         )
     {
-        result_t result = result_t::SUCCESS;
+        xe_api_version_t version;
 
-        // auto result = ::xeDeviceGroupGetApiVersion( handle );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetApiVersion" );
+        auto result = static_cast<result_t>( ::xeDeviceGroupGetApiVersion(
+            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+            &version ) );
 
-        return api_version_t{};
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetApiVersion" );
+
+        return *reinterpret_cast<api_version_t*>( &version );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -602,12 +636,16 @@ namespace xe
         void
         )
     {
-        result_t result = result_t::SUCCESS;
+        xe_device_properties_t deviceProperties;
 
-        // auto result = ::xeDeviceGroupGetProperties( handle );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetProperties" );
+        auto result = static_cast<result_t>( ::xeDeviceGroupGetProperties(
+            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+            &deviceProperties ) );
 
-        return device_properties_t{};
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetProperties" );
+
+        return *reinterpret_cast<device_properties_t*>( &deviceProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -631,12 +669,16 @@ namespace xe
         void
         )
     {
-        result_t result = result_t::SUCCESS;
+        xe_device_compute_properties_t computeProperties;
 
-        // auto result = ::xeDeviceGroupGetComputeProperties( handle );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetComputeProperties" );
+        auto result = static_cast<result_t>( ::xeDeviceGroupGetComputeProperties(
+            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+            &computeProperties ) );
 
-        return device_compute_properties_t{};
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetComputeProperties" );
+
+        return *reinterpret_cast<device_compute_properties_t*>( &computeProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -661,12 +703,16 @@ namespace xe
         void
         )
     {
-        result_t result = result_t::SUCCESS;
+        xe_device_memory_properties_t memProperties;
 
-        // auto result = ::xeDeviceGroupGetMemoryProperties( handle );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetMemoryProperties" );
+        auto result = static_cast<result_t>( ::xeDeviceGroupGetMemoryProperties(
+            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+            &memProperties ) );
 
-        return device_memory_properties_t{};
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetMemoryProperties" );
+
+        return *reinterpret_cast<device_memory_properties_t*>( &memProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -690,12 +736,17 @@ namespace xe
         Device* pPeerDevice                             ///< [in] pointer to the peer device with the allocation
         )
     {
-        result_t result = result_t::SUCCESS;
+        xe_device_p2p_properties_t p2PProperties;
 
-        // auto result = ::xeDeviceGetP2PProperties( handle, pPeerDevice );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::GetP2PProperties" );
+        auto result = static_cast<result_t>( ::xeDeviceGetP2PProperties(
+            reinterpret_cast<xe_device_handle_t>( getHandle() ),
+            reinterpret_cast<xe_device_handle_t>( getHandle() ),
+            &p2PProperties ) );
 
-        return p2p_properties_t{};
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::GetP2PProperties" );
+
+        return *reinterpret_cast<p2p_properties_t*>( &p2PProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -718,12 +769,17 @@ namespace xe
         Device* pPeerDevice                             ///< [in] pointer to the peer device with the allocation
         )
     {
-        result_t result = result_t::SUCCESS;
+        xe_bool_t value;
 
-        // auto result = ::xeDeviceCanAccessPeer( handle, pPeerDevice );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::CanAccessPeer" );
+        auto result = static_cast<result_t>( ::xeDeviceCanAccessPeer(
+            reinterpret_cast<xe_device_handle_t>( getHandle() ),
+            reinterpret_cast<xe_device_handle_t>( getHandle() ),
+            &value ) );
 
-        return bool_t{};
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::CanAccessPeer" );
+
+        return *reinterpret_cast<bool_t*>( &value );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -743,10 +799,12 @@ namespace xe
         cache_config_t CacheConfig                      ///< [in] CacheConfig
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeDeviceSetIntermediateCacheConfig(
+            reinterpret_cast<xe_device_handle_t>( getHandle() ),
+            static_cast<xe_cache_config_t>( CacheConfig ) ) );
 
-        // auto result = ::xeDeviceSetIntermediateCacheConfig( handle, CacheConfig );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::SetIntermediateCacheConfig" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::SetIntermediateCacheConfig" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -766,10 +824,12 @@ namespace xe
         cache_config_t CacheConfig                      ///< [in] CacheConfig
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeDeviceSetLastLevelCacheConfig(
+            reinterpret_cast<xe_device_handle_t>( getHandle() ),
+            static_cast<xe_cache_config_t>( CacheConfig ) ) );
 
-        // auto result = ::xeDeviceSetLastLevelCacheConfig( handle, CacheConfig );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::SetLastLevelCacheConfig" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::SetLastLevelCacheConfig" );
     }
 
 } // namespace xe

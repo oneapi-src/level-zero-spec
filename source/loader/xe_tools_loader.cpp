@@ -727,9 +727,15 @@ xetInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    // global functions need to be handled manually by the loader
-    auto result = loader.xetInit( flags );
+    xe_result_t result = XE_RESULT_SUCCESS;
 
+    for( auto& drv : loader.drivers )
+    {
+        if( XE_RESULT_SUCCESS == result )
+        {
+            result = drv.xetDdiTable.Global.pfnInit( flags );
+        }
+    }
     return result;
 }
 

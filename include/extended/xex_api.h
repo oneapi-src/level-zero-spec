@@ -35,7 +35,6 @@
 
 #include "xex_common.h"
 #include "xex_driver.h"
-#include "xex_device.h"
 #include "xex_cmdgraph.h"
 
 #endif // _XEX_API_H

@@ -309,8 +309,7 @@ owner: $xDevice
 members:
     - type: $x_image_handle_t
       name: handle
-      desc: "handle of image object"
-      init: nullptr
+      desc: "[in] handle of image object"
     - type: $xDevice*
       name: pDevice
       desc: "[in] pointer to owner object"

@@ -88,7 +88,7 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        sampler_handle_t m_handle = nullptr;            ///< handle of the sample object
+        sampler_handle_t m_handle;                      ///< [in] handle of the sample object
         Device* m_pDevice;                              ///< [in] pointer to owner object
         desc_t m_desc;                                  ///< [in] sampler descriptor
 
@@ -96,8 +96,9 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         Sampler( void ) = delete;
         Sampler( 
+            sampler_handle_t handle,                        ///< [in] handle of the sample object
             Device* pDevice,                                ///< [in] pointer to owner object
-            const desc_t& desc                              ///< [in] sampler descriptor
+            const desc_t* desc                              ///< [in] sampler descriptor
             );
 
         ~Sampler( void ) = default;
@@ -124,13 +125,13 @@ namespace xe
         ///   _Analogues_
         ///     - **cuTexObjectCreate**
         /// @returns
-        ///     - Sampler: handle of the sampler
+        ///     - Sampler*: handle of the sampler
         /// 
         /// @throws result_t
         static Sampler* __xecall
         Create(
             Device* pDevice,                                ///< [in] pointer to the device
-            const desc_t* pDesc                             ///< [in] pointer to sampler descriptor
+            const desc_t* desc                              ///< [in] pointer to sampler descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////

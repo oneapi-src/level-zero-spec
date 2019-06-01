@@ -60,6 +60,14 @@ class type_traits:
         except:
             return False
 
+    @staticmethod
+    def is_class_handle(name, meta):
+        try:
+            name = _remove_const_ptr(name)
+            return len(meta['handle'][name]['class']) > 0
+        except:
+            return False
+
     @classmethod
     def is_pointer(cls, name):
         try:
@@ -132,8 +140,32 @@ class value_traits:
     Extracts traits from a parameter object
 """
 class param_traits:
+    RE_IN       = r"^\[in\].*"
+    RE_OUT      = r"^\[out\].*"
+    RE_INOUT    = r"^\[in,out\].*"
     RE_OPTIONAL = r".*\[optional\].*"
     RE_RANGE    = r".*\[range\((.+),\s*(.+)\)\].*"
+
+    @classmethod
+    def is_input(cls, item):
+        try:
+            return True if re.match(cls.RE_IN, item['desc']) else False
+        except:
+            return False
+
+    @classmethod
+    def is_output(cls, item):
+        try:
+            return True if re.match(cls.RE_OUT, item['desc']) else False
+        except:
+            return False
+
+    @classmethod
+    def is_inoutput(cls, item):
+        try:
+            return True if re.match(cls.RE_INOUT, item['desc']) else False
+        except:
+            return False
 
     @classmethod
     def is_optional(cls, item):
@@ -303,16 +335,27 @@ Private:
     removes 'const' from c++ type
 """
 def _remove_const(name):
+    name = name.split(" ")[-1]
+    return name
 
-    return name.split(" ")[-1]
+"""
+Private:
+    removes '*' from c++ type
+"""
+def _remove_ptr(name, last=True):
+    if last:
+        name = re.sub(r"(.*)\*$", r"\1", name) # removes only last '*'
+    else:
+        name = re.sub(r"\*", "", name) # removes all '*'
+    return name
 
 """
 Private:
     removes 'const' and '*' from c++ type
 """
 def _remove_const_ptr(name):
-
-    return re.sub(r"(.*)\*", r"\1", _remove_const(name))
+    name = _remove_ptr(_remove_const(name))
+    return name
 
 """
 Private:
@@ -463,7 +506,7 @@ def make_etor_debug_lines(namespace, tags, cname, obj):
 Private:
     returns c/c++ name of any type
 """
-def _get_type_name(namespace, tags, obj, item, cpp=False, meta=None):
+def _get_type_name(namespace, tags, obj, item, cpp=False, meta=None, handle_to_class=True):
     name = subt(namespace, tags, item['type'], cpp=cpp)
     if cpp:
         cname = type_traits.find_class_name(item['type'], meta)
@@ -484,9 +527,9 @@ def _get_type_name(namespace, tags, obj, item, cpp=False, meta=None):
                 # need to prepend the class name to the type
                 name = _add_class(name, cname)
 
-            elif is_handle and not obj_traits.is_class(obj):
+            elif handle_to_class and is_handle and not obj_traits.is_class(obj):
                 # convert handles to class pointers
-                name = "%s*"%cname
+                name = re.sub(r"(const\s*)?(\w*:?:?\w+)(\**)", r"\1%s*\3"%cname, name) # e.g., const name* -> const cname**
 
             if not is_handle:
                 # remove the verbose class part from the type name
@@ -549,14 +592,30 @@ def make_member_function_lines(namespace, tags, obj, prefix=""):
 Private:
     returns the list of parameters, filtering based on desc tags
 """
-def _filter_param_list(params, filters=["in", "in,out", "out"]):
+def _filter_param_list(params, filters1=["[in]", "[in,out]", "[out]"], filters2=[""]):
     lst = []
     for p in params:
-        for f in filters:
-            if re.match(r"\[%s\]"%f, p['desc']):
-                lst.append(p)
+        for f1 in filters1:
+            if f1 in p['desc']:
+                for f2 in filters2:
+                    if f2 in p['desc']:
+                        lst.append(p)
+                        break
                 break
     return lst
+
+"""
+Private:
+    returns c/c++ name of parameter
+"""
+def _get_param_name(namespace, tags, item, cpp):
+    name = subt(namespace, tags, item['name'], cpp=cpp)
+    if cpp and type_traits.is_handle(item['type']):
+        name = re.sub(r"\bh([A-Z]\w+)", r"p\1", name) # change "hName" to "pName"
+        name = re.sub(r"\bph([A-Z]\w+)", r"pp\1", name) # change "phName" to "ppName"
+        if param_traits.is_output(item) and not param_traits.is_optional(item):
+            name = re.sub(r"p(p[A-Z]\w+)", r"\1", name) #change ppName to pName
+    return name
 
 """
 Public:
@@ -569,25 +628,20 @@ def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None, for
     if cpp:
         is_static = function_traits.is_static(obj)
         is_global = function_traits.is_global(obj, tags)
-        if is_static or is_global:
-            params = _filter_param_list(obj['params'], ["in", "in,out"])
-        else:
-            params = _filter_param_list(obj['params'][1:], ["in", "in,out"])
+        params = obj['params'] if is_static or is_global else obj['params'][1:]
+        params = _filter_param_list(params, ["[in]", "[in,out]"]) + _filter_param_list(params, ["[out]"], ["[optional"])
     else:
         params = obj['params']
 
     for i, item in enumerate(params):
-        name = subt(namespace, tags, item['name'], cpp=cpp)
+        name = _get_param_name(namespace, tags, item, cpp=cpp)
         tname = _get_type_name(namespace, tags, obj, item, cpp, meta)
         init = ""
 
         if cpp:
-            is_handle = type_traits.is_handle(item['type'])
-            if is_handle:
-                name = re.sub(r"\bh([A-Z]\w+)", r"p\1", name) # change "hName" to "pName"
-
             if decl and param_traits.is_optional(item):
                 is_pointer = type_traits.is_pointer(item['type'])
+                is_handle = type_traits.is_handle(item['type'])
                 if is_pointer or is_handle:
                     init += "= nullptr"
                 else:
@@ -616,25 +670,9 @@ def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None, for
         else:
             lines.append(prologue)
 
-    if len(lines) > 0:
-        return lines
-    else:
-        return ["void"]
-
-"""
-Public:
-    returns a string of parameter names for passing to a c++ function
-    format: "PARAM0, PARAM1, PARAM2"
-"""
-def make_param_call_str(namespace, tags, prologue, obj, cpp=False):
-    names = []
-    if len(prologue) > 0:
-        names.append(prologue)
-
-    params = make_param_lines(namespace, tags, obj, cpp=cpp, format=["name"])
-    if len(params) > 0 and params[0] != "void":
-        names.extend(params)
-    return ", ".join(names)
+    if "type" in format and len(lines) == 0:
+        lines = ["void"]
+    return lines
 
 """
 Public:
@@ -650,7 +688,7 @@ Public:
     returns True if ctor has parameters
 """
 def has_ctor_params(obj):
-    params = _filter_param_list(obj['members'] if 'members' in obj else [], ["in"])
+    params = _filter_param_list(obj['members'] if 'members' in obj else [], ["[in]"])
     return len(params) > 0
 
 """
@@ -658,29 +696,37 @@ Public:
     returns a list of c++ strings for ctor parameters of members
     format: "TYPE NAME, ///< DESCRIPTION"
 """
-def make_ctor_param_lines(namespace, tags, obj, meta=None):
+def make_ctor_param_lines(namespace, tags, obj, meta=None, format=["type", "name", "delim", "desc"]):
     lines = []
-    params = _filter_param_list(obj['members'] if 'members' in obj else [], ["in"])
+    params = _filter_param_list(obj['members'] if 'members' in obj else [], ["[in]"])
     for i, item in enumerate(params):
         name = subt(namespace, tags, item['name'])
         tname = _get_type_name(namespace, tags, obj, item, True, meta)
 
         if type_traits.is_descriptor(tname):
-            tname = "const %s&"%tname # e.g., "xe_event_desc_t*" -> "const desc_t&"
+            tname = "const %s*"%tname # e.g., "xe_event_desc_t*" -> "const desc_t*"
 
-        if i < len(params)-1:
-            prologue = "%s %s,"%(tname, name)
+        words = []
+        if "type" in format:
+            words.append(tname)
+        if "name" in format:
+            words.append(name)
+
+        prologue = " ".join(words)
+        if "delim" in format:
+            if i < len(params)-1:
+                prologue += ","
+
+        if "desc" in format:
+            for line in split_line(subt(namespace, tags, item['desc'], True), 70):
+                lines.append("%s///< %s"%(append_ws(prologue, 48), line))
+                prologue = ""
         else:
-            prologue = "%s %s"%(tname, name)
+            lines.append(prologue)
 
-        for line in split_line(subt(namespace, tags, item['desc'], True), 70):
-            lines.append("%s///< %s"%(append_ws(prologue, 48), line))
-            prologue = ""
-
-    if len(lines) > 0:
-        return lines
-    else:
-        return ["void"]
+    if "type" in format and len(lines) == 0:
+        lines = ["void"]
+    return lines
 
 """
 Public:
@@ -689,16 +735,264 @@ Public:
 """
 def make_ctor_param_init_lines(namespace, tags, obj, prefix="", meta=None):
     lines = []
-    params = _filter_param_list(obj['members'] if 'members' in obj else [], ["in"])
+    params = _filter_param_list(obj['members'] if 'members' in obj else [], ["[in]"])
     for i, item in enumerate(params):
         name = subt(namespace, tags, item['name'])
+        tname = _get_type_name(namespace, tags, obj, item, cpp=True, meta=meta)
 
-        if i < len(params)-1:
-            lines.append("%s( %s ),"%(prefix+name, name))
-        else:
-            lines.append("%s( %s )"%(prefix+name, name))
+        member = prefix+name
+        if type_traits.is_descriptor(tname):
+            name = "( %s ) ? *%s : desc_t{}"%(name, name)
+
+        delim = "," if i < len(params)-1 else ""
+        lines.append("%s( %s )%s"%(member, name, delim))
 
     return lines
+
+"""
+Private:
+    returns c/c++ name of local variable from parameter name
+"""
+def _get_local_name(name):
+    name = re.sub(r"\bp([A-Z]\w+)", r"\1", name) # change pName to Name
+    name = re.sub(r"\bp([hA-Z]\w+)", r"\1", name) # change phName to hName
+    name = re.sub(r"\bp(p[A-Z]\w+)", r"\1", name) # change ppName to pName
+    name = name[0].lower() + name[1:] # change Name to name
+    return name
+
+"""
+Public:
+    returns a list of dict for declaring local variables in c++ wrapper
+"""
+def make_wrapper_params(namespace, tags, obj, meta):
+    params = []
+    returns = []
+
+    # if the input parameter is a class,
+    # then need to use getHandle
+    # if the input parameter is an array of classes
+    # then need to create a std::vector of handles
+
+    # if the output parameter is a class,
+    # then need to create a local handle then call the ctor
+    # if the output parameter is an array of classes
+    # then need to create a std::vector to receive handles(s) then call the ctor for each
+
+    # if the parameter is an input and the cpp type is different than the c type,
+    # then need to use static_cast or reinterpret_cast
+
+    # if the parameter is an output
+    # then need to create a local variable
+
+    is_static = function_traits.is_static(obj)
+    is_global = function_traits.is_global(obj, tags)
+
+    is_destroy_function = True if re.match(r"Destroy", obj['name']) else False
+
+    for i, item in enumerate(obj['params']):
+        c_name = _get_param_name(namespace, tags, item, cpp=False)
+        cpp_name = _get_param_name(namespace, tags, item, cpp=True)
+
+        c_tname = _get_type_name(namespace, tags, obj, item, cpp=False, meta=meta)
+        cpp_tname = _get_type_name(namespace, tags, obj, item, cpp=True, meta=meta, handle_to_class=False)
+        cpp_cname = _get_type_name(namespace, tags, obj, item, cpp=True, meta=meta)
+
+        local_name = _get_local_name(c_name)
+
+        if param_traits.is_range(item):
+            range_start = param_traits.range_start(item)
+            range_end   = param_traits.range_end(item)
+            if type_traits.is_class_handle(item['type'], meta):
+                if param_traits.is_output(item) or param_traits.is_inoutput(item):
+                    if param_traits.is_optional(item):
+                        params.append({
+                            'local': local_name,
+                            'ctype': _remove_const_ptr(c_tname),
+                            'cpptype': _remove_const_ptr(cpp_tname),
+                            'range': (range_start, range_end),
+                            'optional': True,
+                            'arg': "%s.data()"%(local_name),
+                            'class': _remove_ptr(cpp_cname, False),
+                            'name': cpp_name
+                        })
+                    else:
+                        params.append({
+                            'local': local_name,
+                            'ctype': _remove_const_ptr(c_tname),
+                            'cpptype': _remove_const_ptr(cpp_tname),
+                            'range': (range_start, range_end),
+                            'optional': False,
+                            'arg': "%s.data()"%(local_name),
+                            'class': _remove_ptr(cpp_cname, False),
+                            'name': cpp_name
+                        })
+                        if param_traits.is_output(item):
+                            returns.append(cpp_name)
+
+                elif param_traits.is_optional(item):
+                    params.append({
+                        'local': local_name,
+                        'ctype': _remove_const_ptr(c_tname),
+                        'cpptype': _remove_const_ptr(cpp_tname),
+                        'range': (range_start, range_end),
+                        'init': cpp_name,
+                        'optional': True,
+                        'arg': "%s.data()"%(local_name)
+                    })
+                else:
+                    params.append({
+                        'local': local_name,
+                        'ctype': _remove_const_ptr(c_tname),
+                        'cpptype': _remove_const_ptr(cpp_tname),
+                        'range': (range_start, range_end),
+                        'init': cpp_name,
+                        'optional': False,
+                        'arg': "%s.data()"%(local_name)
+                    })
+
+            elif param_traits.is_output(item):
+                params.append({
+                    'local': local_name,
+                    'ctype': _remove_const_ptr(c_tname),
+                    'cpptype': _remove_const_ptr(cpp_tname),
+                    'range': (range_start, range_end),
+                    'optional': param_traits.is_optional(item),
+                    'arg': "%s.data()"%(local_name)
+                })
+                returns.append(cpp_name)
+
+            elif c_tname != cpp_tname:
+                params.append({
+                    'arg': "reinterpret_cast<%s>( %s )"%(c_tname, cpp_name)
+                })
+
+            else:
+                params.append({
+                    'arg': cpp_name
+                })
+
+        else:
+            if type_traits.is_class_handle(item['type'], meta):
+                is_this_handle = type_traits.find_class_name(item['type'], meta) == obj_traits.class_name(obj)
+                if param_traits.is_output(item):
+                    if param_traits.is_optional(item):
+                        params.append({
+                            'local': local_name,
+                            'ctype': _remove_const_ptr(c_tname),
+                            'cpptype': _remove_const_ptr(cpp_tname),
+                            'optional': True,
+                            'arg': "( %s ) ? &%s : nullptr"%(cpp_name, local_name),
+                            'release': False,
+                            'class': _remove_ptr(cpp_cname, False),
+                            'name': cpp_name
+                        })
+                    else:
+                        params.append({
+                            'local': local_name,
+                            'ctype': _remove_const_ptr(c_tname),
+                            'cpptype': _remove_const_ptr(cpp_tname),
+                            'optional': False,
+                            'arg': "&%s"%(local_name),
+                            'release': False,
+                            'class': _remove_ptr(cpp_cname, False),
+                            'name': cpp_name
+                        })
+                        returns.append(cpp_name)
+                elif param_traits.is_optional(item):
+                    params.append({
+                        'arg': "( %s ) ? reinterpret_cast<%s>( %s->getHandle() ) : nullptr"%(cpp_name, c_tname, cpp_name)
+                    })
+                elif (not is_static and not is_global) and is_this_handle:
+                    params.append({
+                        'arg': "reinterpret_cast<%s>( getHandle() )"%(c_tname)
+                    })
+                elif is_destroy_function:
+                    params.append({
+                        'arg': "reinterpret_cast<%s>( %s->getHandle() )"%(c_tname, cpp_name),
+                        'release': True,
+                        'class': _remove_ptr(cpp_cname, False),
+                        'name': cpp_name
+                    })
+                else:
+                    params.append({
+                        'arg': "reinterpret_cast<%s>( %s->getHandle() )"%(c_tname, cpp_name)
+                    })
+
+            elif param_traits.is_output(item):
+                params.append({
+                    'local': local_name,
+                    'ctype': _remove_const_ptr(c_tname),
+                    'cpptype': _remove_const_ptr(cpp_tname),
+                    'arg': "&%s"%(local_name),
+                    'name': local_name
+                })
+                if c_tname != cpp_tname:
+                    if type_traits.is_pointer(_remove_ptr(item['type'])) or type_traits.is_handle(item['type']):
+                        returns.append("reinterpret_cast<%s>( %s )"%(_remove_const_ptr(cpp_tname), local_name))
+                    else:
+                        returns.append("*reinterpret_cast<%s*>( &%s )"%(_remove_const_ptr(cpp_tname), local_name))
+                else:
+                    returns.append(local_name)
+
+            elif c_tname != cpp_tname:
+                if type_traits.is_pointer(item['type']) or type_traits.is_handle(item['type']):
+                    params.append({
+                        'arg': "reinterpret_cast<%s>( %s )"%(c_tname, cpp_name)
+                    })
+                else:
+                    params.append({
+                        'arg': "static_cast<%s>( %s )"%(c_tname, cpp_name)
+                    })
+
+            else:
+                params.append({
+                    'arg': cpp_name
+                })
+
+    if len(returns) == 0:
+        rvalue = ""
+    elif len(returns) > 1:
+        rvalue = "std::make_tuple( %s )"%", ".join(returns)
+    else:
+        rvalue = "%s"%returns[0]
+
+    return params, rvalue
+
+"""
+Public:
+    returns a list of c++ strings of ctor arguments in c++ wrapper
+"""
+def make_wrapper_ctor_params(namespace, tags, obj, meta, objects, wparam):
+    params = []
+
+    # find, extract the class obj that owns this obj
+    cobj = None
+    for item in filter_items(objects, 'type', 'class'):
+        if re.match(r".*%s$"%wparam['class'], item['name']):
+            cobj = item
+            break
+    if not cobj:
+        return params
+
+    # generate list of names for each parameter of the current function
+    oparams = [ _get_param_name(namespace, tags, item, cpp=True) for item in obj['params'] ]
+
+    # walk the ctor parameter names
+    cparams = make_ctor_param_lines(namespace, tags, cobj, meta=meta, format=['name'])
+    for i, name in enumerate(cparams):
+        if name == "handle":
+            if 'range' in wparam:
+                params.append("reinterpret_cast<%s>( %s[ i ] )"%(wparam['cpptype'], wparam['local']))
+            else:
+                params.append("reinterpret_cast<%s>( %s )"%(wparam['cpptype'], wparam['local']))
+
+        elif name in oparams:
+            params.append(name)
+
+        else:
+            params.append("nullptr")
+
+    return params
 
 """
 Public:
@@ -784,7 +1078,7 @@ Public:
 def make_returns_lines(namespace, tags, obj, cpp=False, meta=None):
     lines = []
     if cpp:
-        params = _filter_param_list(obj['params'], ["out"])
+        params = _filter_param_list(obj['params'], ["[out]"])
         if len(params) > 0:
             lines.append("@returns")
             for p in params:
@@ -829,32 +1123,32 @@ def make_returns_lines(namespace, tags, obj, cpp=False, meta=None):
 Public:
     returns c++ string for declaring function return type
 """
-def make_return_value(namespace, tags, obj, cpp=False, decl=False, meta=None):
+def make_return_type(namespace, tags, obj, cpp=False, decl=False, meta=None):
     # only "return" the parameters declared as "out"
-    params = _filter_param_list(obj['params'], ["out"])
-
-    # if none exist, then just return "void"
-    if len(params) == 0:
-        return "void"
+    params = _filter_param_list(obj['params'], ["[out]"])
 
     types = []
     for p in params:
-        tname = _remove_const_ptr(_get_type_name(namespace, tags, obj, p, cpp, meta))
-        if cpp:
-            cname = type_traits.find_class_name(p['type'], meta)
-            is_handle = type_traits.is_handle(p['type'])
+        if not param_traits.is_optional(p):
+            tname = _remove_const_ptr(_get_type_name(namespace, tags, obj, p, cpp, meta))
+            if cpp:
+                cname = type_traits.find_class_name(p['type'], meta)
+                is_handle = type_traits.is_handle(p['type'])
 
-            if cname and not decl and not is_handle:
-                # need to prepend the class name to the type
-                tname = _add_class(tname, subt(namespace, tags, cname, cpp=cpp))
+                if cname and not decl and not is_handle:
+                    # need to prepend the class name to the type
+                    tname = _add_class(tname, subt(namespace, tags, cname, cpp=cpp))
 
-            elif cname and is_handle:
-                # convert handles to class pointers
-                tname = _remove_const(_get_type_name(namespace, tags, obj, p, cpp, meta))
+                elif cname and is_handle:
+                    # convert handles to class pointers
+                    tname = _remove_const_ptr(_get_type_name(namespace, tags, obj, p, cpp, meta))
 
-        types.append(tname)
+            types.append(tname)
 
-    if len(types) > 1:
+    if len(types) == 0:
+        # if none exist, then just return "void"
+        return "void"
+    elif len(types) > 1:
         # if more than one return value, then return a tuple of values
         return "std::tuple<%s>"%", ".join(types)
     else:
@@ -995,12 +1289,9 @@ Public:
 def get_loader_prologue(namespace, tags, obj, meta):
     prologue = []
 
-    params = _filter_param_list(obj['params'], ["in"])
+    params = _filter_param_list(obj['params'], ["[in]"])
     for item in params:
-        is_handle = type_traits.is_handle(item['type'])
-        cname = type_traits.find_class_name(item['type'], meta)
-
-        if is_handle and cname:
+        if type_traits.is_class_handle(item['type'], meta):
             name = subt(namespace, tags, item['name'])
             tname = _remove_const_ptr(subt(namespace, tags, item['type']))
 
@@ -1033,15 +1324,12 @@ def get_loader_epilogue(namespace, tags, obj, meta):
 
     is_destroy_function = True if re.match(r"Destroy", obj['name']) else False
     if is_destroy_function:
-        params = _filter_param_list(obj['params'], ["in"])
+        params = _filter_param_list(obj['params'], ["[in]"])
     else:
-        params = _filter_param_list(obj['params'], ["in,out", "out"])
+        params = _filter_param_list(obj['params'], ["[in,out]", "[out]"])
 
     for i, item in enumerate(params):
-        is_handle = type_traits.is_handle(item['type'])
-        cname = type_traits.find_class_name(item['type'], meta)
-
-        if is_handle and cname:
+        if type_traits.is_class_handle(item['type'], meta):
             name = subt(namespace, tags, item['name'])
             tname = _remove_const_ptr(subt(namespace, tags, item['type']))
 

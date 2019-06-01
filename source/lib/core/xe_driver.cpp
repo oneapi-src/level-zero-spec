@@ -139,10 +139,11 @@ namespace xe
         init_flag_t flags                               ///< [in] initialization flags
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeInit(
+            static_cast<xe_init_flag_t>( flags ) ) );
 
-        // auto result = ::xeInit( handle, flags );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::::Init" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::::Init" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -168,12 +169,16 @@ namespace xe
         void
         )
     {
-        result_t result = result_t::SUCCESS;
+        uint32_t version;
 
-        // auto result = ::xeDeviceGroupGetDriverVersion( handle );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetDriverVersion" );
+        auto result = static_cast<result_t>( ::xeDeviceGroupGetDriverVersion(
+            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+            &version ) );
 
-        return uint32_t{};
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetDriverVersion" );
+
+        return version;
     }
 
 } // namespace xe

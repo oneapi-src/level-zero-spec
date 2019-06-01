@@ -193,8 +193,7 @@ owner: $xDevice
 members:
     - type: $x_command_queue_handle_t
       name: handle
-      desc: "handle of command queue object"
-      init: nullptr
+      desc: "[in] handle of command queue object"
     - type: $xDevice*
       name: pDevice
       desc: "[in] pointer to owner object"

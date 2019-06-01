@@ -116,16 +116,16 @@ xeCommandListCreate(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
-///         + nullptr == desc
+///         + nullptr == altdesc
 ///         + nullptr == phCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version
+///         + ::XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < altdesc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
 xeCommandListCreateImmediate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
+    const xe_command_queue_desc_t* altdesc,         ///< [in] pointer to command queue descriptor
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     );
 

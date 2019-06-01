@@ -66,11 +66,11 @@ The following sample code demonstrates a basic initialization and device discove
 
     // Discover all the device groups and devices
     uint32_t groupCount = 0;
-    ${x}GetDeviceGroups(&groupCount, nullptr);
+    ${x}DeviceGroupGet(&groupCount, nullptr);
 
     ${x}_device_group_handle_t* allDeviceGroups = (${x}_device_group_handle_t*)
         malloc(groupCount * sizeof(${x}_device_group_handle_t));
-    ${x}GetDeviceGroups(&groupCount, allDeviceGroups);
+    ${x}DeviceGroupGet(&groupCount, allDeviceGroups);
 
 
     // Find the first GPU device group
@@ -91,7 +91,7 @@ The following sample code demonstrates a basic initialization and device discove
     // Get the first device within the device group
     ${x}_device_handle_t hDevice = nullptr;
     uint32_t deviceCount = 1;
-    ${x}DeviceGroupGetDevices(hDeviceGroup, &deviceCount, &hDevice);
+    ${x}DeviceGet(hDeviceGroup, &deviceCount, &hDevice);
 
     ...
 

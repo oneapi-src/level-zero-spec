@@ -61,8 +61,6 @@ xeGetGlobalProcAddrTable(
 
     pDdiTable->pfnInit                                   = xeInit;
 
-    pDdiTable->pfnGetDeviceGroups                        = xeGetDeviceGroups;
-
     return result;
 }
 
@@ -90,6 +88,8 @@ xeGetDeviceProcAddrTable(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
+
+    pDdiTable->pfnGet                                    = xeDeviceGet;
 
     pDdiTable->pfnGetSubDevice                           = xeDeviceGetSubDevice;
 
@@ -151,9 +151,9 @@ xeGetDeviceGroupProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    pDdiTable->pfnGetDriverVersion                       = xeDeviceGroupGetDriverVersion;
+    pDdiTable->pfnGet                                    = xeDeviceGroupGet;
 
-    pDdiTable->pfnGetDevices                             = xeDeviceGroupGetDevices;
+    pDdiTable->pfnGetDriverVersion                       = xeDeviceGroupGetDriverVersion;
 
     pDdiTable->pfnGetApiVersion                          = xeDeviceGroupGetApiVersion;
 
@@ -625,42 +625,41 @@ xeDeviceGroupGetDriverVersion(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeGetDeviceGroups
+/// @brief Intercept function for xeDeviceGroupGet
 xe_result_t __xecall
-xeGetDeviceGroups(
+xeDeviceGroupGet(
     uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of device groups available.
                                                     ///< if count is non-zero, then driver will only retrieve that number of
                                                     ///< device groups.
-    xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
+    xe_device_group_handle_t* phDeviceGroups        ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
     )
 {
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    // global functions need to be handled manually by the driver
-    result = driver.xeGetDeviceGroups( pCount, pDeviceGroups );
-
+    for( size_t i = 0; ( nullptr != phDeviceGroups ) && ( i < *pCount ); ++i )
+        phDeviceGroups[ i ] = reinterpret_cast<xe_device_group_handle_t>( driver.get() );
     return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeDeviceGroupGetDevices
+/// @brief Intercept function for xeDeviceGet
 xe_result_t __xecall
-xeDeviceGroupGetDevices(
+xeDeviceGet(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of device groups available.
                                                     ///< if count is non-zero, then driver will only retrieve that number of
                                                     ///< device groups.
-    xe_device_handle_t* pDevices                    ///< [in,out][optional][range(0, *pCount)] array of handle of devices
+    xe_device_handle_t* phDevices                   ///< [in,out][optional][range(0, *pCount)] array of handle of devices
     )
 {
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    for( size_t i = 0; ( nullptr != pDevices ) && ( i < *pCount ); ++i )
-        pDevices[ i ] = reinterpret_cast<xe_device_handle_t>( driver.get() );
+    for( size_t i = 0; ( nullptr != phDevices ) && ( i < *pCount ); ++i )
+        phDevices[ i ] = reinterpret_cast<xe_device_handle_t>( driver.get() );
     return result;
 }
 
@@ -865,7 +864,7 @@ xeCommandListCreate(
 xe_result_t __xecall
 xeCommandListCreateImmediate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
+    const xe_command_queue_desc_t* altdesc,         ///< [in] pointer to command queue descriptor
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     )
 {
@@ -1648,9 +1647,9 @@ xeDeviceGroupCloseMemIpcHandle(
 xe_result_t __xecall
 xeModuleCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    const xe_module_desc_t* pDesc,                  ///< [in] pointer to module descriptor
+    const xe_module_desc_t* desc,                   ///< [in] pointer to module descriptor
     xe_module_handle_t* phModule,                   ///< [out] pointer to handle of module object created
-    xe_module_build_log_handle_t* phBuildLog        ///< [in,out][optional] pointer to handle of module's build log.
+    xe_module_build_log_handle_t* phBuildLog        ///< [out][optional] pointer to handle of module's build log.
     )
 {
     xe_result_t result = XE_RESULT_SUCCESS;
@@ -1731,7 +1730,7 @@ xeModuleGetGlobalPointer(
 xe_result_t __xecall
 xeFunctionCreate(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
-    const xe_function_desc_t* pDesc,                ///< [in] pointer to function descriptor
+    const xe_function_desc_t* desc,                 ///< [in] pointer to function descriptor
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object
     )
 {
@@ -1980,7 +1979,7 @@ xeDeviceEvictImage(
 xe_result_t __xecall
 xeSamplerCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    const xe_sampler_desc_t* pDesc,                 ///< [in] pointer to sampler descriptor
+    const xe_sampler_desc_t* desc,                  ///< [in] pointer to sampler descriptor
     xe_sampler_handle_t* phSampler                  ///< [out] handle of the sampler
     )
 {

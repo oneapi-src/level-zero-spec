@@ -73,7 +73,7 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        fence_handle_t m_handle = nullptr;              ///< handle of fence object
+        fence_handle_t m_handle;                        ///< [in] handle of fence object
         CommandQueue* m_pCommandQueue;                  ///< [in] pointer to owner object
         desc_t m_desc;                                  ///< [in] descriptor of the fence object
 
@@ -81,8 +81,9 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         Fence( void ) = delete;
         Fence( 
+            fence_handle_t handle,                          ///< [in] handle of fence object
             CommandQueue* pCommandQueue,                    ///< [in] pointer to owner object
-            const desc_t& desc                              ///< [in] descriptor of the fence object
+            const desc_t* desc                              ///< [in] descriptor of the fence object
             );
 
         ~Fence( void ) = default;
@@ -109,7 +110,7 @@ namespace xe
         ///   _Analogues_
         ///     - **vkCreateFence**
         /// @returns
-        ///     - Fence: pointer to handle of fence object created
+        ///     - Fence*: pointer to handle of fence object created
         /// 
         /// @throws result_t
         static Fence* __xecall

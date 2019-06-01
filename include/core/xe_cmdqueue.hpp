@@ -108,7 +108,7 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        command_queue_handle_t m_handle = nullptr;      ///< handle of command queue object
+        command_queue_handle_t m_handle;                ///< [in] handle of command queue object
         Device* m_pDevice;                              ///< [in] pointer to owner object
         desc_t m_desc;                                  ///< [in] descriptor of the command queue object
 
@@ -116,8 +116,9 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         CommandQueue( void ) = delete;
         CommandQueue( 
+            command_queue_handle_t handle,                  ///< [in] handle of command queue object
             Device* pDevice,                                ///< [in] pointer to owner object
-            const desc_t& desc                              ///< [in] descriptor of the command queue object
+            const desc_t* desc                              ///< [in] descriptor of the command queue object
             );
 
         ~CommandQueue( void ) = default;
@@ -146,7 +147,7 @@ namespace xe
         ///     - cuCtxCreate
         ///     - cuCtxGetCurrent
         /// @returns
-        ///     - CommandQueue: pointer to handle of command queue object created
+        ///     - CommandQueue*: pointer to handle of command queue object created
         /// 
         /// @throws result_t
         static CommandQueue* __xecall
@@ -191,7 +192,7 @@ namespace xe
         void __xecall
         ExecuteCommandLists(
             uint32_t numCommandLists,                       ///< [in] number of command lists to execute
-            CommandList* phCommandLists,                    ///< [in][range(0, numCommandLists)] list of handles of the command lists
+            CommandList** ppCommandLists,                   ///< [in][range(0, numCommandLists)] list of handles of the command lists
                                                             ///< to execute
             Fence* pFence = nullptr                         ///< [in][optional] pointer to the fence to signal on completion
             );

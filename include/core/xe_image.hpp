@@ -200,7 +200,7 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        image_handle_t m_handle = nullptr;              ///< handle of image object
+        image_handle_t m_handle;                        ///< [in] handle of image object
         Device* m_pDevice;                              ///< [in] pointer to owner object
         desc_t m_desc;                                  ///< [in] descriptor of the image object
 
@@ -208,8 +208,9 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         Image( void ) = delete;
         Image( 
+            image_handle_t handle,                          ///< [in] handle of image object
             Device* pDevice,                                ///< [in] pointer to owner object
-            const desc_t& desc                              ///< [in] descriptor of the image object
+            const desc_t* desc                              ///< [in] descriptor of the image object
             );
 
         ~Image( void ) = default;
@@ -252,7 +253,7 @@ namespace xe
         ///   _Analogues_
         ///     - clCreateImage
         /// @returns
-        ///     - Image: pointer to handle of image object created
+        ///     - Image*: pointer to handle of image object created
         /// 
         /// @throws result_t
         static Image* __xecall

@@ -87,13 +87,13 @@ params:
 type: class
 desc: "C++ wrapper for command graph"
 name: $eCommandGraph
-owner: $eDevice
+owner: $xDevice
 members:
     - type: $e_command_graph_handle_t
       name: handle
       desc: "handle of command graph object"
       init: nullptr
-    - type: $eDevice*
+    - type: $xDevice*
       name: pDevice
       desc: "[in] pointer to owner object"
     - type: $e_command_graph_desc_t

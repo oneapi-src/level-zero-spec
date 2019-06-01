@@ -229,11 +229,13 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     Fence::Fence( 
+        fence_handle_t handle,                          ///< [in] handle of fence object
         CommandQueue* pCommandQueue,                    ///< [in] pointer to owner object
-        const desc_t& desc                              ///< [in] descriptor of the fence object
+        const desc_t* desc                              ///< [in] descriptor of the fence object
         ) :
+        m_handle( handle ),
         m_pCommandQueue( pCommandQueue ),
-        m_desc( desc )
+        m_desc( ( desc ) ? *desc : desc_t{} )
     {
     }
 
@@ -249,7 +251,7 @@ namespace xe
     ///     - **vkCreateFence**
     /// 
     /// @returns
-    ///     - Fence: pointer to handle of fence object created
+    ///     - Fence*: pointer to handle of fence object created
     /// 
     /// @throws result_t
     Fence* __xecall
@@ -258,12 +260,19 @@ namespace xe
         const desc_t* desc                              ///< [in] pointer to fence descriptor
         )
     {
-        result_t result = result_t::SUCCESS;
+        xe_fence_handle_t hFence;
 
-        // auto result = ::xeFenceCreate( handle, pCommandQueue, desc );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Fence::Create" );
+        auto result = static_cast<result_t>( ::xeFenceCreate(
+            reinterpret_cast<xe_command_queue_handle_t>( pCommandQueue->getHandle() ),
+            reinterpret_cast<const xe_fence_desc_t*>( desc ),
+            &hFence ) );
 
-        return (Fence*)0;
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Fence::Create" );
+
+        auto pFence = new Fence( reinterpret_cast<fence_handle_t>( hFence ), pCommandQueue, desc );
+
+        return pFence;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -288,10 +297,13 @@ namespace xe
         Fence* pFence                                   ///< [in] pointer to fence object to destroy
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeFenceDestroy(
+            reinterpret_cast<xe_fence_handle_t>( pFence->getHandle() ) ) );
 
-        // auto result = ::xeFenceDestroy( handle, pFence );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Fence::Destroy" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Fence::Destroy" );
+
+        delete pFence;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -315,10 +327,12 @@ namespace xe
                                                         ///< is lost.
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeFenceHostSynchronize(
+            reinterpret_cast<xe_fence_handle_t>( getHandle() ),
+            timeout ) );
 
-        // auto result = ::xeFenceHostSynchronize( handle, timeout );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Fence::HostSynchronize" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Fence::HostSynchronize" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -338,10 +352,11 @@ namespace xe
         void
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeFenceQueryStatus(
+            reinterpret_cast<xe_fence_handle_t>( getHandle() ) ) );
 
-        // auto result = ::xeFenceQueryStatus( handle );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Fence::QueryStatus" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Fence::QueryStatus" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -361,10 +376,11 @@ namespace xe
         void
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeFenceReset(
+            reinterpret_cast<xe_fence_handle_t>( getHandle() ) ) );
 
-        // auto result = ::xeFenceReset( handle );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Fence::Reset" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Fence::Reset" );
     }
 
 } // namespace xe

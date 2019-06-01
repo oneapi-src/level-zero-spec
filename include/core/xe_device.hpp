@@ -59,33 +59,6 @@
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieves device groups
-    /// 
-    /// @details
-    ///     - A device group represents a collection of physical, homogeneous
-    ///       devices.
-    ///     - The application may pass nullptr for pDeviceGroups when only querying
-    ///       the number of device groups.
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - clGetDeviceIDs
-    /// 
-    /// @throws result_t
-    void __xecall
-    GetDeviceGroups(
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of device groups available.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of
-                                                        ///< device groups.
-        DeviceGroup* pDeviceGroups = nullptr            ///< [in,out][optional][range(0, *pCount)] array of pointer to device
-                                                        ///< groups
-        );
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for device group
     class DeviceGroup
     {
@@ -299,12 +272,13 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        device_group_handle_t m_handle = nullptr;       ///< handle of device group object
+        device_group_handle_t m_handle;                 ///< [in] handle of device group object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
+        DeviceGroup( void ) = delete;
         DeviceGroup( 
-            void
+            device_group_handle_t handle                    ///< [in] handle of device group object
             );
 
         ~DeviceGroup( void ) = default;
@@ -317,6 +291,32 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Retrieves device groups
+        /// 
+        /// @details
+        ///     - A device group represents a collection of physical, homogeneous
+        ///       devices.
+        ///     - The application may pass nullptr for pDeviceGroups when only querying
+        ///       the number of device groups.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - clGetDeviceIDs
+        /// @throws result_t
+        static void __xecall
+        Get(
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of device groups available.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of
+                                                            ///< device groups.
+            DeviceGroup** ppDeviceGroups = nullptr          ///< [in,out][optional][range(0, *pCount)] array of pointer to device
+                                                            ///< groups
+            );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Returns the current version of the installed driver for the specified
@@ -338,27 +338,6 @@ namespace xe
         uint32_t __xecall
         GetDriverVersion(
             void
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Retrieves devices within a device group
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - **cuDeviceGet**
-        /// @throws result_t
-        void __xecall
-        GetDevices(
-            uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
-                                                            ///< if count is zero, then the driver will update the value with the total
-                                                            ///< number of device groups available.
-                                                            ///< if count is non-zero, then driver will only retrieve that number of
-                                                            ///< device groups.
-            Device* pDevices = nullptr                      ///< [in,out][optional][range(0, *pCount)] array of pointer to devices
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -676,13 +655,14 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        device_handle_t m_handle = nullptr;             ///< handle of device object
+        device_handle_t m_handle;                       ///< [in] handle of device object
         DeviceGroup* m_pDeviceGroup;                    ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         Device( void ) = delete;
         Device( 
+            device_handle_t handle,                         ///< [in] handle of device object
             DeviceGroup* pDeviceGroup                       ///< [in] pointer to owner object
             );
 
@@ -699,6 +679,28 @@ namespace xe
         auto getDevicegroup( void ) const { return m_pDeviceGroup; }
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Retrieves devices within a device group
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuDeviceGet**
+        /// @throws result_t
+        static void __xecall
+        Get(
+            DeviceGroup* pDeviceGroup,                      ///< [in] pointer to the device group object
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of device groups available.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of
+                                                            ///< device groups.
+            Device** ppDevices = nullptr                    ///< [in,out][optional][range(0, *pCount)] array of pointer to devices
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Retrieves a sub-device from a device
         /// 
         /// @details
@@ -709,7 +711,7 @@ namespace xe
         ///   _Analogues_
         ///     - clCreateSubDevices
         /// @returns
-        ///     - Device: pointer to handle of sub-device object.
+        ///     - Device*: pointer to handle of sub-device object.
         /// 
         /// @throws result_t
         Device* __xecall
@@ -824,7 +826,7 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Registers OpenCL program with Xe::
         /// @returns
-        ///     - Module: pointer to handle of module object created
+        ///     - Module*: pointer to handle of module object created
         /// 
         /// @throws result_t
         Module* __xecall
@@ -838,7 +840,7 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Registers OpenCL command queue with Xe::
         /// @returns
-        ///     - CommandQueue: pointer to handle of command queue object created
+        ///     - CommandQueue*: pointer to handle of command queue object created
         /// 
         /// @throws result_t
         CommandQueue* __xecall

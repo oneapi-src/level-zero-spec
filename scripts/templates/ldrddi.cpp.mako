@@ -131,9 +131,46 @@ ${th.make_func_name(n, tags, obj)}(
     %endfor
     )
 {
-    %if re.match(r"Global.*", th.get_table_name(n, tags, obj)):
-    // global functions need to be handled manually by the loader
-    auto result = loader.${th.make_func_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
+    %if re.match(r"Init", obj['name']):
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    for( auto& drv : loader.drivers )
+    {
+        if( XE_RESULT_SUCCESS == result )
+        {
+            result = drv.${n}DdiTable.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
+        }
+    }
+    %elif re.match(r"\w+DeviceGroupGet$", th.make_func_name(n, tags, obj)):
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    uint32_t total_count = 0;
+
+    for( auto& drv : loader.drivers )
+    {
+        uint32_t count = 0;
+
+        result = drv.${n}DdiTable.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)}( &count, nullptr );
+        if( XE_RESULT_SUCCESS != result ) break;
+
+        if( ( 0 < *${obj['params'][0]['name']} ) && ( *${obj['params'][0]['name']} > total_count + count ) )
+            break;
+
+        if( nullptr != ${obj['params'][1]['name']} )
+        {
+            result = drv.${n}DdiTable.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)}( &count, &${obj['params'][1]['name']}[ total_count ] );
+            if( XE_RESULT_SUCCESS != result ) break;
+
+            for( uint32_t i = total_count; i < count; ++i )
+                ${obj['params'][1]['name']}[ i ] = reinterpret_cast<${n}_device_group_handle_t>( 
+                    ${n}_device_group_object_t::factory.get( ${obj['params'][1]['name']}[ i ], &drv.${n}DdiTable ) );
+        }
+
+        total_count += count;
+    }
+
+    if( XE_RESULT_SUCCESS == result )
+        *${obj['params'][0]['name']} = total_count;
 
     %else:
     %for i, item in enumerate(th.get_loader_prologue(n, tags, obj, meta)):

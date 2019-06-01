@@ -557,19 +557,25 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     EventPool::EventPool( 
+        event_pool_handle_t handle,                     ///< [in] handle of event pool object
         Device* pDevice,                                ///< [in] pointer to owner object
-        const desc_t& desc                              ///< [in] descriptor of the event object
+        const desc_t* desc                              ///< [in] descriptor of the event pool object
         ) :
+        m_handle( handle ),
         m_pDevice( pDevice ),
-        m_desc( desc )
+        m_desc( ( desc ) ? *desc : desc_t{} )
     {
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     Event::Event( 
-        EventPool* pEventPool                           ///< [in] pointer to owner object
+        event_handle_t handle,                          ///< [in] handle of event object
+        EventPool* pEventPool,                          ///< [in] pointer to owner object
+        const desc_t* desc                              ///< [in] descriptor of the event object
         ) :
-        m_pEventPool( pEventPool )
+        m_handle( handle ),
+        m_pEventPool( pEventPool ),
+        m_desc( ( desc ) ? *desc : desc_t{} )
     {
     }
 
@@ -581,7 +587,7 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @returns
-    ///     - EventPool: pointer handle of event pool object created
+    ///     - EventPool*: pointer handle of event pool object created
     /// 
     /// @throws result_t
     EventPool* __xecall
@@ -590,12 +596,19 @@ namespace xe
         const desc_t* desc                              ///< [in] pointer to event pool descriptor
         )
     {
-        result_t result = result_t::SUCCESS;
+        xe_event_pool_handle_t hEventPool;
 
-        // auto result = ::xeEventPoolCreate( handle, pDevice, desc );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::EventPool::Create" );
+        auto result = static_cast<result_t>( ::xeEventPoolCreate(
+            reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
+            reinterpret_cast<const xe_event_pool_desc_t*>( desc ),
+            &hEventPool ) );
 
-        return (EventPool*)0;
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::EventPool::Create" );
+
+        auto pEventPool = new EventPool( reinterpret_cast<event_pool_handle_t>( hEventPool ), pDevice, desc );
+
+        return pEventPool;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -619,10 +632,13 @@ namespace xe
         EventPool* pEventPool                           ///< [in] pointer to event pool object to destroy
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeEventPoolDestroy(
+            reinterpret_cast<xe_event_pool_handle_t>( pEventPool->getHandle() ) ) );
 
-        // auto result = ::xeEventPoolDestroy( handle, pEventPool );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::EventPool::Destroy" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::EventPool::Destroy" );
+
+        delete pEventPool;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -641,7 +657,7 @@ namespace xe
     ///     - cuEventCreate
     /// 
     /// @returns
-    ///     - Event: pointer to handle of event object created
+    ///     - Event*: pointer to handle of event object created
     /// 
     /// @throws result_t
     Event* __xecall
@@ -650,12 +666,19 @@ namespace xe
         const desc_t* desc                              ///< [in] pointer to event descriptor
         )
     {
-        result_t result = result_t::SUCCESS;
+        xe_event_handle_t hEvent;
 
-        // auto result = ::xeEventCreate( handle, pEventPool, desc );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Event::Create" );
+        auto result = static_cast<result_t>( ::xeEventCreate(
+            reinterpret_cast<xe_event_pool_handle_t>( pEventPool->getHandle() ),
+            reinterpret_cast<const xe_event_desc_t*>( desc ),
+            &hEvent ) );
 
-        return (Event*)0;
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Event::Create" );
+
+        auto pEvent = new Event( reinterpret_cast<event_handle_t>( hEvent ), pEventPool, desc );
+
+        return pEvent;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -682,10 +705,13 @@ namespace xe
         Event* pEvent                                   ///< [in] pointer to event object to destroy
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeEventDestroy(
+            reinterpret_cast<xe_event_handle_t>( pEvent->getHandle() ) ) );
 
-        // auto result = ::xeEventDestroy( handle, pEvent );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Event::Destroy" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Event::Destroy" );
+
+        delete pEvent;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -708,12 +734,16 @@ namespace xe
         void
         )
     {
-        result_t result = result_t::SUCCESS;
+        xe_ipc_event_pool_handle_t hIpc;
 
-        // auto result = ::xeEventPoolGetIpcHandle( handle );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::EventPool::GetIpcHandle" );
+        auto result = static_cast<result_t>( ::xeEventPoolGetIpcHandle(
+            reinterpret_cast<xe_event_pool_handle_t>( getHandle() ),
+            &hIpc ) );
 
-        return ipc_event_pool_handle_t{};
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::EventPool::GetIpcHandle" );
+
+        return reinterpret_cast<ipc_event_pool_handle_t>( hIpc );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -730,7 +760,7 @@ namespace xe
     ///     - **cuIpcOpenMemHandle**
     /// 
     /// @returns
-    ///     - EventPool: pointer handle of event pool object created
+    ///     - EventPool*: pointer handle of event pool object created
     /// 
     /// @throws result_t
     EventPool* __xecall
@@ -739,12 +769,19 @@ namespace xe
         ipc_event_pool_handle_t pIpc                    ///< [in] IPC event handle
         )
     {
-        result_t result = result_t::SUCCESS;
+        xe_event_pool_handle_t hEventPool;
 
-        // auto result = ::xeEventPoolOpenIpcHandle( handle, pDevice, pIpc );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::EventPool::OpenIpcHandle" );
+        auto result = static_cast<result_t>( ::xeEventPoolOpenIpcHandle(
+            reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
+            reinterpret_cast<xe_ipc_event_pool_handle_t>( pIpc ),
+            &hEventPool ) );
 
-        return (EventPool*)0;
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::EventPool::OpenIpcHandle" );
+
+        auto pEventPool = new EventPool( reinterpret_cast<event_pool_handle_t>( hEventPool ), pDevice, nullptr );
+
+        return pEventPool;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -766,10 +803,11 @@ namespace xe
         void
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeEventPoolCloseIpcHandle(
+            reinterpret_cast<xe_event_pool_handle_t>( getHandle() ) ) );
 
-        // auto result = ::xeEventPoolCloseIpcHandle( handle );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::EventPool::CloseIpcHandle" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::EventPool::CloseIpcHandle" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -792,10 +830,12 @@ namespace xe
         Event* pEvent                                   ///< [in] pointer to the event
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeCommandListAppendSignalEvent(
+            reinterpret_cast<xe_command_list_handle_t>( getHandle() ),
+            reinterpret_cast<xe_event_handle_t>( pEvent->getHandle() ) ) );
 
-        // auto result = ::xeCommandListAppendSignalEvent( handle, pEvent );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendSignalEvent" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendSignalEvent" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -810,14 +850,23 @@ namespace xe
     void __xecall
     CommandList::AppendWaitOnEvents(
         uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
-        Event* phEvents                                 ///< [in][range(0, numEvents)] pointer to the events to wait on before
+        Event** ppEvents                                ///< [in][range(0, numEvents)] pointer to the events to wait on before
                                                         ///< continuing
         )
     {
-        result_t result = result_t::SUCCESS;
+        thread_local std::vector<xe_event_handle_t> hEvents;
+        hEvents.resize( 0 );
+        hEvents.reserve( numEvents );
+        for( uint32_t i = 0; i < numEvents; ++i )
+            hEvents.emplace_back( reinterpret_cast<xe_event_handle_t>( ppEvents[ i ]->getHandle() ) );
 
-        // auto result = ::xeCommandListAppendWaitOnEvents( handle, numEvents, phEvents );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendWaitOnEvents" );
+        auto result = static_cast<result_t>( ::xeCommandListAppendWaitOnEvents(
+            reinterpret_cast<xe_command_list_handle_t>( getHandle() ),
+            numEvents,
+            hEvents.data() ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendWaitOnEvents" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -837,10 +886,11 @@ namespace xe
         void
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeEventHostSignal(
+            reinterpret_cast<xe_event_handle_t>( getHandle() ) ) );
 
-        // auto result = ::xeEventHostSignal( handle );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Event::HostSignal" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Event::HostSignal" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -865,10 +915,12 @@ namespace xe
                                                         ///< is lost.
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeEventHostSynchronize(
+            reinterpret_cast<xe_event_handle_t>( getHandle() ),
+            timeout ) );
 
-        // auto result = ::xeEventHostSynchronize( handle, timeout );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Event::HostSynchronize" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Event::HostSynchronize" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -890,10 +942,11 @@ namespace xe
         void
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeEventQueryStatus(
+            reinterpret_cast<xe_event_handle_t>( getHandle() ) ) );
 
-        // auto result = ::xeEventQueryStatus( handle );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Event::QueryStatus" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Event::QueryStatus" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -914,10 +967,12 @@ namespace xe
         Event* pEvent                                   ///< [in] pointer to the event
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeCommandListAppendEventReset(
+            reinterpret_cast<xe_command_list_handle_t>( getHandle() ),
+            reinterpret_cast<xe_event_handle_t>( pEvent->getHandle() ) ) );
 
-        // auto result = ::xeCommandListAppendEventReset( handle, pEvent );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendEventReset" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendEventReset" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -937,10 +992,11 @@ namespace xe
         void
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeEventReset(
+            reinterpret_cast<xe_event_handle_t>( getHandle() ) ) );
 
-        // auto result = ::xeEventReset( handle );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Event::Reset" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Event::Reset" );
     }
 
 } // namespace xe

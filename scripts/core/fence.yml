@@ -145,8 +145,7 @@ owner: $xCommandQueue
 members:
     - type: $x_fence_handle_t
       name: handle
-      desc: "handle of fence object"
-      init: nullptr
+      desc: "[in] handle of fence object"
     - type: $xCommandQueue*
       name: pCommandQueue
       desc: "[in] pointer to owner object"

@@ -72,14 +72,14 @@ params:
       name: hDevice
       desc: "[in] handle of the device"
     - type: "const $x_module_desc_t*"
-      name: pDesc
+      name: desc
       desc: "[in] pointer to module descriptor"
     - type: "$x_module_handle_t*"
       name: phModule
       desc: "[out] pointer to handle of module object created"
     - type: "$x_module_build_log_handle_t*"
       name: phBuildLog
-      desc: "[in,out][optional] pointer to handle of module's build log."
+      desc: "[out][optional] pointer to handle of module's build log."
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid pDesc->format"
@@ -254,7 +254,7 @@ params:
       name: hModule
       desc: "[in] handle of the module"
     - type: "const $x_function_desc_t*"
-      name: pDesc
+      name: desc
       desc: "[in] pointer to function descriptor"
     - type: "$x_function_handle_t*"
       name:  phFunction
@@ -634,8 +634,7 @@ owner: $xDevice
 members:
     - type: $x_module_handle_t
       name: handle
-      desc: "handle of module object"
-      init: nullptr
+      desc: "[in] handle of module object"
     - type: $xDevice*
       name: pDevice
       desc: "[in] pointer to owner object"
@@ -650,8 +649,7 @@ owner: $xModule
 members:
     - type: $x_module_build_log_handle_t
       name: handle
-      desc: "handle of the buildlog object"
-      init: nullptr
+      desc: "[in] handle of the buildlog object"
     - type: $xModule*
       name: pModule
       desc: "[in] pointer to owner object"
@@ -663,8 +661,7 @@ owner: $xModule
 members:
     - type: $x_function_handle_t
       name: handle
-      desc: "handle of function object"
-      init: nullptr
+      desc: "[in] handle of function object"
     - type: $xModule*
       name: pModule
       desc: "[in] pointer to owner object"

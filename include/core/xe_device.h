@@ -66,13 +66,13 @@ extern "C" {
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeGetDeviceGroups(
+xeDeviceGroupGet(
     uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of device groups available.
                                                     ///< if count is non-zero, then driver will only retrieve that number of
                                                     ///< device groups.
-    xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
+    xe_device_group_handle_t* phDeviceGroups        ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -96,14 +96,14 @@ xeGetDeviceGroups(
 ///         + count is out of range reported by ::xeDeviceGroupGetDevices
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetDevices(
+xeDeviceGet(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of device groups available.
                                                     ///< if count is non-zero, then driver will only retrieve that number of
                                                     ///< device groups.
-    xe_device_handle_t* pDevices                    ///< [in,out][optional][range(0, *pCount)] array of handle of devices
+    xe_device_handle_t* phDevices                   ///< [in,out][optional][range(0, *pCount)] array of handle of devices
     );
 
 ///////////////////////////////////////////////////////////////////////////////

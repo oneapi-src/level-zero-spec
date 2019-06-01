@@ -32,6 +32,7 @@
 #include "xe_api.hpp"
 #include "xe_ddi.h"
 #include "xe_util.h"
+#include <vector>
 
 namespace xe_lib
 {

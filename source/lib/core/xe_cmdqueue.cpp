@@ -197,11 +197,13 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     CommandQueue::CommandQueue( 
+        command_queue_handle_t handle,                  ///< [in] handle of command queue object
         Device* pDevice,                                ///< [in] pointer to owner object
-        const desc_t& desc                              ///< [in] descriptor of the command queue object
+        const desc_t* desc                              ///< [in] descriptor of the command queue object
         ) :
+        m_handle( handle ),
         m_pDevice( pDevice ),
-        m_desc( desc )
+        m_desc( ( desc ) ? *desc : desc_t{} )
     {
     }
 
@@ -219,7 +221,7 @@ namespace xe
     ///     - cuCtxGetCurrent
     /// 
     /// @returns
-    ///     - CommandQueue: pointer to handle of command queue object created
+    ///     - CommandQueue*: pointer to handle of command queue object created
     /// 
     /// @throws result_t
     CommandQueue* __xecall
@@ -228,12 +230,19 @@ namespace xe
         const desc_t* desc                              ///< [in] pointer to command queue descriptor
         )
     {
-        result_t result = result_t::SUCCESS;
+        xe_command_queue_handle_t hCommandQueue;
 
-        // auto result = ::xeCommandQueueCreate( handle, pDevice, desc );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandQueue::Create" );
+        auto result = static_cast<result_t>( ::xeCommandQueueCreate(
+            reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
+            reinterpret_cast<const xe_command_queue_desc_t*>( desc ),
+            &hCommandQueue ) );
 
-        return (CommandQueue*)0;
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandQueue::Create" );
+
+        auto pCommandQueue = new CommandQueue( reinterpret_cast<command_queue_handle_t>( hCommandQueue ), pDevice, desc );
+
+        return pCommandQueue;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -259,10 +268,13 @@ namespace xe
         CommandQueue* pCommandQueue                     ///< [in] pointer to command queue object to destroy
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeCommandQueueDestroy(
+            reinterpret_cast<xe_command_queue_handle_t>( pCommandQueue->getHandle() ) ) );
 
-        // auto result = ::xeCommandQueueDestroy( handle, pCommandQueue );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandQueue::Destroy" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandQueue::Destroy" );
+
+        delete pCommandQueue;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -280,15 +292,25 @@ namespace xe
     void __xecall
     CommandQueue::ExecuteCommandLists(
         uint32_t numCommandLists,                       ///< [in] number of command lists to execute
-        CommandList* phCommandLists,                    ///< [in][range(0, numCommandLists)] list of handles of the command lists
+        CommandList** ppCommandLists,                   ///< [in][range(0, numCommandLists)] list of handles of the command lists
                                                         ///< to execute
         Fence* pFence                                   ///< [in][optional] pointer to the fence to signal on completion
         )
     {
-        result_t result = result_t::SUCCESS;
+        thread_local std::vector<xe_command_list_handle_t> hCommandLists;
+        hCommandLists.resize( 0 );
+        hCommandLists.reserve( numCommandLists );
+        for( uint32_t i = 0; i < numCommandLists; ++i )
+            hCommandLists.emplace_back( reinterpret_cast<xe_command_list_handle_t>( ppCommandLists[ i ]->getHandle() ) );
 
-        // auto result = ::xeCommandQueueExecuteCommandLists( handle, numCommandLists, phCommandLists, pFence );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandQueue::ExecuteCommandLists" );
+        auto result = static_cast<result_t>( ::xeCommandQueueExecuteCommandLists(
+            reinterpret_cast<xe_command_queue_handle_t>( getHandle() ),
+            numCommandLists,
+            hCommandLists.data(),
+            ( pFence ) ? reinterpret_cast<xe_fence_handle_t>( pFence->getHandle() ) : nullptr ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandQueue::ExecuteCommandLists" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -308,10 +330,12 @@ namespace xe
                                                         ///< is lost.
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeCommandQueueSynchronize(
+            reinterpret_cast<xe_command_queue_handle_t>( getHandle() ),
+            timeout ) );
 
-        // auto result = ::xeCommandQueueSynchronize( handle, timeout );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandQueue::Synchronize" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandQueue::Synchronize" );
     }
 
 } // namespace xe

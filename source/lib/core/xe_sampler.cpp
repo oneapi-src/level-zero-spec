@@ -51,17 +51,17 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
-///         + nullptr == pDesc
+///         + nullptr == desc
 ///         + nullptr == phSampler
 ///         + invalid pDesc->addressMode
 ///         + invalid pDesc->filterMode
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_SAMPLER_DESC_VERSION_CURRENT < pDesc->version
+///         + ::XE_SAMPLER_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 xe_result_t __xecall
 xeSamplerCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    const xe_sampler_desc_t* pDesc,                 ///< [in] pointer to sampler descriptor
+    const xe_sampler_desc_t* desc,                  ///< [in] pointer to sampler descriptor
     xe_sampler_handle_t* phSampler                  ///< [out] handle of the sampler
     )
 {
@@ -72,7 +72,7 @@ xeSamplerCreate(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnCreate( hDevice, pDesc, phSampler );
+    return pfnCreate( hDevice, desc, phSampler );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -119,11 +119,13 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     Sampler::Sampler( 
+        sampler_handle_t handle,                        ///< [in] handle of the sample object
         Device* pDevice,                                ///< [in] pointer to owner object
-        const desc_t& desc                              ///< [in] sampler descriptor
+        const desc_t* desc                              ///< [in] sampler descriptor
         ) :
+        m_handle( handle ),
         m_pDevice( pDevice ),
-        m_desc( desc )
+        m_desc( ( desc ) ? *desc : desc_t{} )
     {
     }
 
@@ -139,21 +141,28 @@ namespace xe
     ///     - **cuTexObjectCreate**
     /// 
     /// @returns
-    ///     - Sampler: handle of the sampler
+    ///     - Sampler*: handle of the sampler
     /// 
     /// @throws result_t
     Sampler* __xecall
     Sampler::Create(
         Device* pDevice,                                ///< [in] pointer to the device
-        const desc_t* pDesc                             ///< [in] pointer to sampler descriptor
+        const desc_t* desc                              ///< [in] pointer to sampler descriptor
         )
     {
-        result_t result = result_t::SUCCESS;
+        xe_sampler_handle_t hSampler;
 
-        // auto result = ::xeSamplerCreate( handle, pDevice, pDesc );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Sampler::Create" );
+        auto result = static_cast<result_t>( ::xeSamplerCreate(
+            reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
+            reinterpret_cast<const xe_sampler_desc_t*>( desc ),
+            &hSampler ) );
 
-        return (Sampler*)0;
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Sampler::Create" );
+
+        auto pSampler = new Sampler( reinterpret_cast<sampler_handle_t>( hSampler ), pDevice, desc );
+
+        return pSampler;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -178,10 +187,13 @@ namespace xe
         Sampler* pSampler                               ///< [in] pointer to the sampler
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeSamplerDestroy(
+            reinterpret_cast<xe_sampler_handle_t>( pSampler->getHandle() ) ) );
 
-        // auto result = ::xeSamplerDestroy( handle, pSampler );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Sampler::Destroy" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Sampler::Destroy" );
+
+        delete pSampler;
     }
 
 } // namespace xe

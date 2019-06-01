@@ -45,18 +45,10 @@ typedef xe_result_t (__xecall *xe_pfnInit_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeGetDeviceGroups 
-typedef xe_result_t (__xecall *xe_pfnGetDeviceGroups_t)(
-    uint32_t*,
-    xe_device_group_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Global functions pointers
 typedef struct _xe_global_dditable_t
 {
     xe_pfnInit_t                                                pfnInit;
-    xe_pfnGetDeviceGroups_t                                     pfnGetDeviceGroups;
 } xe_global_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -81,6 +73,14 @@ xeGetGlobalProcAddrTable(
 typedef xe_result_t (__xecall *xe_pfnGetGlobalProcAddrTable_t)(
     xe_api_version_t,
     xe_global_dditable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeDeviceGet 
+typedef xe_result_t (__xecall *xe_pfnDeviceGet_t)(
+    xe_device_group_handle_t,
+    uint32_t*,
+    xe_device_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -194,6 +194,7 @@ typedef xe_result_t (__xecall *xe_pfnDeviceEvictImage_t)(
 /// @brief Table of Device functions pointers
 typedef struct _xe_device_dditable_t
 {
+    xe_pfnDeviceGet_t                                           pfnGet;
     xe_pfnDeviceGetSubDevice_t                                  pfnGetSubDevice;
     xe_pfnDeviceGetP2PProperties_t                              pfnGetP2PProperties;
     xe_pfnDeviceCanAccessPeer_t                                 pfnCanAccessPeer;
@@ -240,18 +241,17 @@ typedef xe_result_t (__xecall *xe_pfnGetDeviceProcAddrTable_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeDeviceGroupGet 
+typedef xe_result_t (__xecall *xe_pfnDeviceGroupGet_t)(
+    uint32_t*,
+    xe_device_group_handle_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeDeviceGroupGetDriverVersion 
 typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetDriverVersion_t)(
     xe_device_group_handle_t,
     uint32_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupGetDevices 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetDevices_t)(
-    xe_device_group_handle_t,
-    uint32_t*,
-    xe_device_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -368,8 +368,8 @@ typedef xe_result_t (__xecall *xe_pfnDeviceGroupCloseMemIpcHandle_t)(
 /// @brief Table of DeviceGroup functions pointers
 typedef struct _xe_device_group_dditable_t
 {
+    xe_pfnDeviceGroupGet_t                                      pfnGet;
     xe_pfnDeviceGroupGetDriverVersion_t                         pfnGetDriverVersion;
-    xe_pfnDeviceGroupGetDevices_t                               pfnGetDevices;
     xe_pfnDeviceGroupGetApiVersion_t                            pfnGetApiVersion;
     xe_pfnDeviceGroupGetProperties_t                            pfnGetProperties;
     xe_pfnDeviceGroupGetComputeProperties_t                     pfnGetComputeProperties;

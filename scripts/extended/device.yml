@@ -1,9 +1,0 @@
---- #--------------------------------------------------------------------------
-type: header
-desc: "Intel $OneApi Level-Zero Extended APIs for Device"
-ordinal: "1"
---- #--------------------------------------------------------------------------
-type: class
-desc: "C++ wrapper for device"
-name: $eDevice
-base: $xDevice

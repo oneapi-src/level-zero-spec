@@ -148,7 +148,7 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        command_list_handle_t m_handle = nullptr;       ///< handle of command list object
+        command_list_handle_t m_handle;                 ///< [in] handle of command list object
         Device* m_pDevice;                              ///< [in] pointer to owner object
         desc_t m_desc;                                  ///< [in] descriptor of the command list object
 
@@ -156,8 +156,9 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         CommandList( void ) = delete;
         CommandList( 
+            command_list_handle_t handle,                   ///< [in] handle of command list object
             Device* pDevice,                                ///< [in] pointer to owner object
-            const desc_t& desc                              ///< [in] descriptor of the command list object
+            const desc_t* desc                              ///< [in] descriptor of the command list object
             );
 
         ~CommandList( void ) = default;
@@ -182,7 +183,7 @@ namespace xe
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @returns
-        ///     - CommandList: pointer to handle of command list object created
+        ///     - CommandList*: pointer to handle of command list object created
         /// 
         /// @throws result_t
         static CommandList* __xecall
@@ -201,13 +202,13 @@ namespace xe
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @returns
-        ///     - CommandList: pointer to handle of command list object created
+        ///     - CommandList*: pointer to handle of command list object created
         /// 
         /// @throws result_t
         static CommandList* __xecall
         CreateImmediate(
             Device* pDevice,                                ///< [in] pointer to the device object
-            const CommandQueue::desc_t* desc                ///< [in] pointer to command queue descriptor
+            const CommandQueue::desc_t* altdesc             ///< [in] pointer to command queue descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -354,7 +355,7 @@ namespace xe
         AppendBarrier(
             Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before executing barrier
-            Event* phWaitEvents = nullptr                   ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+            Event** ppWaitEvents = nullptr                  ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
                                                             ///< on before executing barrier
             );
 
@@ -381,7 +382,7 @@ namespace xe
             const void** pRanges,                           ///< [in][range(0, numRanges)] array of memory ranges
             Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before executing barrier
-            Event* phWaitEvents = nullptr                   ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+            Event** ppWaitEvents = nullptr                  ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
                                                             ///< on before executing barrier
             );
 
@@ -631,7 +632,7 @@ namespace xe
         void __xecall
         AppendWaitOnEvents(
             uint32_t numEvents,                             ///< [in] number of events to wait on before continuing
-            Event* phEvents                                 ///< [in][range(0, numEvents)] pointer to the events to wait on before
+            Event** ppEvents                                ///< [in][range(0, numEvents)] pointer to the events to wait on before
                                                             ///< continuing
             );
 
@@ -672,7 +673,7 @@ namespace xe
             const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] launch function arguments.
             Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
-            Event* phWaitEvents = nullptr                   ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+            Event** ppWaitEvents = nullptr                  ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
                                                             ///< on before launching
             );
 
@@ -699,7 +700,7 @@ namespace xe
             const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain launch arguments
             Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
-            Event* phWaitEvents = nullptr                   ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+            Event** ppWaitEvents = nullptr                  ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
                                                             ///< on before launching
             );
 
@@ -724,7 +725,7 @@ namespace xe
         void __xecall
         AppendLaunchMultipleFunctionsIndirect(
             uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
-            Function* phFunctions,                          ///< [in][range(0, numFunctions)] handles of the function objects
+            Function** ppFunctions,                         ///< [in][range(0, numFunctions)] handles of the function objects
             const uint32_t* pNumLaunchArguments,            ///< [in] pointer to device memory location that will contain the actual
                                                             ///< number of launch arguments; value must be less-than or equal-to
                                                             ///< numFunctions
@@ -732,7 +733,7 @@ namespace xe
                                                             ///< contain a contiguous array of launch arguments
             Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
-            Event* phWaitEvents = nullptr                   ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+            Event** ppWaitEvents = nullptr                  ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
                                                             ///< on before launching
             );
 
@@ -757,7 +758,7 @@ namespace xe
             void* pUserData,                                ///< [in] pointer to user data to pass to host function.
             Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
             uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
-            Event* phWaitEvents = nullptr                   ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+            Event** ppWaitEvents = nullptr                  ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
                                                             ///< on before launching
             );
 

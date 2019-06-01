@@ -191,10 +191,13 @@ namespace xe
         size_t size                                     ///< [in] size in bytes to make resident
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeDeviceMakeMemoryResident(
+            reinterpret_cast<xe_device_handle_t>( getHandle() ),
+            ptr,
+            size ) );
 
-        // auto result = ::xeDeviceMakeMemoryResident( handle, ptr, size );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::MakeMemoryResident" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::MakeMemoryResident" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -214,10 +217,13 @@ namespace xe
         size_t size                                     ///< [in] size in bytes to evict
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeDeviceEvictMemory(
+            reinterpret_cast<xe_device_handle_t>( getHandle() ),
+            ptr,
+            size ) );
 
-        // auto result = ::xeDeviceEvictMemory( handle, ptr, size );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::EvictMemory" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::EvictMemory" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -235,10 +241,12 @@ namespace xe
         Image* pImage                                   ///< [in] pointer to image to make resident
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeDeviceMakeImageResident(
+            reinterpret_cast<xe_device_handle_t>( getHandle() ),
+            reinterpret_cast<xe_image_handle_t>( pImage->getHandle() ) ) );
 
-        // auto result = ::xeDeviceMakeImageResident( handle, pImage );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::MakeImageResident" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::MakeImageResident" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -258,10 +266,12 @@ namespace xe
         Image* pImage                                   ///< [in] pointer to image to make evict
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeDeviceEvictImage(
+            reinterpret_cast<xe_device_handle_t>( getHandle() ),
+            reinterpret_cast<xe_image_handle_t>( pImage->getHandle() ) ) );
 
-        // auto result = ::xeDeviceEvictImage( handle, pImage );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::EvictImage" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::EvictImage" );
     }
 
 } // namespace xe

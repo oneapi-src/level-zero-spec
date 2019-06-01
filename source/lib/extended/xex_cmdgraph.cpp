@@ -142,11 +142,11 @@ namespace xex
 {
     ///////////////////////////////////////////////////////////////////////////////
     CommandGraph::CommandGraph( 
-        Device* pDevice,                                ///< [in] pointer to owner object
-        const desc_t& desc                              ///< [in] descriptor of the command graph object
+        xe::Device* pDevice,                            ///< [in] pointer to owner object
+        const desc_t* desc                              ///< [in] descriptor of the command graph object
         ) :
         m_pDevice( pDevice ),
-        m_desc( desc )
+        m_desc( ( desc ) ? *desc : desc_t{} )
     {
     }
 
@@ -159,7 +159,7 @@ namespace xex
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @returns
-    ///     - CommandGraph: pointer to handle of command graph object created
+    ///     - CommandGraph*: pointer to handle of command graph object created
     /// 
     /// @throws result_t
     CommandGraph* __xecall
@@ -168,12 +168,19 @@ namespace xex
         const desc_t* desc                              ///< [in] pointer to command graph descriptor
         )
     {
-        result_t result = result_t::SUCCESS;
+        xex_command_graph_handle_t hCommandGraph;
 
-        // auto result = ::xexCommandGraphCreate( handle, pDevice, desc );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xex::CommandGraph::Create" );
+        auto result = static_cast<result_t>( ::xexCommandGraphCreate(
+            reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
+            reinterpret_cast<const xex_command_graph_desc_t*>( desc ),
+            &hCommandGraph ) );
 
-        return (CommandGraph*)0;
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xex::CommandGraph::Create" );
+
+        auto pCommandGraph = new CommandGraph( pDevice, desc );
+
+        return pCommandGraph;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -192,10 +199,13 @@ namespace xex
         CommandGraph* pCommandGraph                     ///< [in] pointer to command graph object to destroy
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xexCommandGraphDestroy(
+            reinterpret_cast<xex_command_graph_handle_t>( pCommandGraph->getHandle() ) ) );
 
-        // auto result = ::xexCommandGraphDestroy( handle, pCommandGraph );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xex::CommandGraph::Destroy" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xex::CommandGraph::Destroy" );
+
+        delete pCommandGraph;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -215,10 +225,11 @@ namespace xex
         void
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xexCommandGraphClose(
+            reinterpret_cast<xex_command_graph_handle_t>( getHandle() ) ) );
 
-        // auto result = ::xexCommandGraphClose( handle );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xex::CommandGraph::Close" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xex::CommandGraph::Close" );
     }
 
 } // namespace xex

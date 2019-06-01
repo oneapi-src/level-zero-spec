@@ -302,7 +302,7 @@ namespace xet
         ///     - **nvmlInit**
         ///     - **rsmi_init**
         /// @returns
-        ///     - Power: handle for accessing power features of the device
+        ///     - Power*: handle for accessing power features of the device
         /// 
         /// @throws result_t
         static Power* __xecall
@@ -459,7 +459,7 @@ namespace xet
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get an object to a frequency domain on a device
         /// @returns
-        ///     - FreqDomain: pointer to handle of frequency domain object
+        ///     - FreqDomain*: pointer to handle of frequency domain object
         /// 
         /// @throws result_t
         FreqDomain* __xecall
@@ -776,7 +776,7 @@ namespace xet
         /// @brief Get the source frequency domain handle for a frequency domain of type
         ///        ::CLOCK_TYPE_DIVIDER
         /// @returns
-        ///     - FreqDomain: pointer to a handle where the source frequency domain handle will be returned
+        ///     - FreqDomain*: pointer to a handle where the source frequency domain handle will be returned
         /// 
         /// @throws result_t
         FreqDomain* __xecall

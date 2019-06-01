@@ -160,12 +160,6 @@ public:
 
     Loader();
     ~Loader();
-
-    xe_result_t xeInit( xe_init_flag_t flags );
-    xe_result_t xexInit( xe_init_flag_t flags );
-    xe_result_t xetInit( xe_init_flag_t flags );
-
-    xe_result_t xeGetDeviceGroups( uint32_t* pCount, xe_device_group_handle_t* pDeviceGroups );
 };
 
 extern Loader loader;

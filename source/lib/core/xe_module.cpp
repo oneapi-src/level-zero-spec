@@ -65,14 +65,14 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
-///         + nullptr == pDesc
+///         + nullptr == desc
 ///         + nullptr == phModule
 ///         + invalid pDesc->format
 ///         + nullptr == pDesc->pInputModule
 ///         + nullptr == pDesc->phModule
 ///         + 0 == pDesc->inputSize
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_MODULE_DESC_VERSION_CURRENT < pDesc->version
+///         + ::XE_MODULE_DESC_VERSION_CURRENT < desc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 ///     - ::XE_RESULT_ERROR_MODULE_BUILD_FAILURE
@@ -80,9 +80,9 @@ extern "C" {
 xe_result_t __xecall
 xeModuleCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    const xe_module_desc_t* pDesc,                  ///< [in] pointer to module descriptor
+    const xe_module_desc_t* desc,                   ///< [in] pointer to module descriptor
     xe_module_handle_t* phModule,                   ///< [out] pointer to handle of module object created
-    xe_module_build_log_handle_t* phBuildLog        ///< [in,out][optional] pointer to handle of module's build log.
+    xe_module_build_log_handle_t* phBuildLog        ///< [out][optional] pointer to handle of module's build log.
     )
 {
     auto pfnCreate = xe_lib::lib.ddiTable.Module.pfnCreate;
@@ -92,7 +92,7 @@ xeModuleCreate(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnCreate( hDevice, pDesc, phModule, phBuildLog );
+    return pfnCreate( hDevice, desc, phModule, phBuildLog );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -301,16 +301,16 @@ xeModuleGetGlobalPointer(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hModule
-///         + nullptr == pDesc
+///         + nullptr == desc
 ///         + nullptr == phFunction
 ///         + nullptr == pDesc->pFunctionName
 ///         + invalid value for pDesc->pFunctionName
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_FUNCTION_DESC_VERSION_CURRENT < pDesc->version
+///         + ::XE_FUNCTION_DESC_VERSION_CURRENT < desc->version
 xe_result_t __xecall
 xeFunctionCreate(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
-    const xe_function_desc_t* pDesc,                ///< [in] pointer to function descriptor
+    const xe_function_desc_t* desc,                 ///< [in] pointer to function descriptor
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object
     )
 {
@@ -321,7 +321,7 @@ xeFunctionCreate(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnCreate( hModule, pDesc, phFunction );
+    return pfnCreate( hModule, desc, phFunction );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -776,29 +776,35 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     Module::Module( 
+        module_handle_t handle,                         ///< [in] handle of module object
         Device* pDevice,                                ///< [in] pointer to owner object
-        const desc_t& desc                              ///< [in] descriptor of the module object
+        const desc_t* desc                              ///< [in] descriptor of the module object
         ) :
+        m_handle( handle ),
         m_pDevice( pDevice ),
-        m_desc( desc )
+        m_desc( ( desc ) ? *desc : desc_t{} )
     {
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     ModuleBuildLog::ModuleBuildLog( 
+        module_build_log_handle_t handle,               ///< [in] handle of the buildlog object
         Module* pModule                                 ///< [in] pointer to owner object
         ) :
+        m_handle( handle ),
         m_pModule( pModule )
     {
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     Function::Function( 
+        function_handle_t handle,                       ///< [in] handle of function object
         Module* pModule,                                ///< [in] pointer to owner object
-        const desc_t& desc                              ///< [in] descriptor of the function object
+        const desc_t* desc                              ///< [in] descriptor of the function object
         ) :
+        m_handle( handle ),
         m_pModule( pModule ),
-        m_desc( desc )
+        m_desc( ( desc ) ? *desc : desc_t{} )
     {
     }
 
@@ -828,22 +834,36 @@ namespace xe
     ///     - **cuModuleLoad**
     /// 
     /// @returns
-    ///     - Module: pointer to handle of module object created
+    ///     - Module*: pointer to handle of module object created
+    ///     - ModuleBuildLog*: pointer to handle of module's build log.
     /// 
     /// @throws result_t
     Module* __xecall
     Module::Create(
         Device* pDevice,                                ///< [in] pointer to the device
-        const desc_t* pDesc,                            ///< [in] pointer to module descriptor
-        ModuleBuildLog* phBuildLog                      ///< [in,out][optional] pointer to pointer to module's build log.
+        const desc_t* desc,                             ///< [in] pointer to module descriptor
+        ModuleBuildLog** ppBuildLog                     ///< [out][optional] pointer to pointer to module's build log.
         )
     {
-        result_t result = result_t::SUCCESS;
+        xe_module_handle_t hModule;
 
-        // auto result = ::xeModuleCreate( handle, pDevice, pDesc, phBuildLog );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Module::Create" );
+        xe_module_build_log_handle_t hBuildLog;
 
-        return (Module*)0;
+        auto result = static_cast<result_t>( ::xeModuleCreate(
+            reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
+            reinterpret_cast<const xe_module_desc_t*>( desc ),
+            &hModule,
+            ( ppBuildLog ) ? &hBuildLog : nullptr ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Module::Create" );
+
+        auto pModule = new Module( reinterpret_cast<module_handle_t>( hModule ), pDevice, desc );
+
+        if( ppBuildLog )
+            *ppBuildLog =  new ModuleBuildLog( reinterpret_cast<module_build_log_handle_t>( hBuildLog ), pModule );
+
+        return pModule;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -868,10 +888,13 @@ namespace xe
         Module* pModule                                 ///< [in] pointer to the module
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeModuleDestroy(
+            reinterpret_cast<xe_module_handle_t>( pModule->getHandle() ) ) );
 
-        // auto result = ::xeModuleDestroy( handle, pModule );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Module::Destroy" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Module::Destroy" );
+
+        delete pModule;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -894,10 +917,13 @@ namespace xe
         ModuleBuildLog* pModuleBuildLog                 ///< [in] pointer to the module build log object.
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeModuleBuildLogDestroy(
+            reinterpret_cast<xe_module_build_log_handle_t>( pModuleBuildLog->getHandle() ) ) );
 
-        // auto result = ::xeModuleBuildLogDestroy( handle, pModuleBuildLog );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::ModuleBuildLog::Destroy" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::ModuleBuildLog::Destroy" );
+
+        delete pModuleBuildLog;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -916,10 +942,13 @@ namespace xe
         char* pBuildLog                                 ///< [in,out][optional] pointer to null-terminated string of the log.
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeModuleBuildLogGetString(
+            reinterpret_cast<xe_module_build_log_handle_t>( getHandle() ),
+            pSize,
+            pBuildLog ) );
 
-        // auto result = ::xeModuleBuildLogGetString( handle, pSize, pBuildLog );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::ModuleBuildLog::GetString" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::ModuleBuildLog::GetString" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -945,10 +974,13 @@ namespace xe
         uint8_t* pModuleNativeBinary                    ///< [in,out][optional] byte pointer to native binary
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeModuleGetNativeBinary(
+            reinterpret_cast<xe_module_handle_t>( getHandle() ),
+            pSize,
+            pModuleNativeBinary ) );
 
-        // auto result = ::xeModuleGetNativeBinary( handle, pSize, pModuleNativeBinary );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Module::GetNativeBinary" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Module::GetNativeBinary" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -967,12 +999,17 @@ namespace xe
         const char* pGlobalName                         ///< [in] name of function in global
         )
     {
-        result_t result = result_t::SUCCESS;
+        void* ptr;
 
-        // auto result = ::xeModuleGetGlobalPointer( handle, pGlobalName );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Module::GetGlobalPointer" );
+        auto result = static_cast<result_t>( ::xeModuleGetGlobalPointer(
+            reinterpret_cast<xe_module_handle_t>( getHandle() ),
+            pGlobalName,
+            &ptr ) );
 
-        return (void*)0;
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Module::GetGlobalPointer" );
+
+        return ptr;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -988,21 +1025,28 @@ namespace xe
     ///     - **cuModuleGetFunction**
     /// 
     /// @returns
-    ///     - Function: handle of the Function object
+    ///     - Function*: handle of the Function object
     /// 
     /// @throws result_t
     Function* __xecall
     Function::Create(
         Module* pModule,                                ///< [in] pointer to the module
-        const desc_t* pDesc                             ///< [in] pointer to function descriptor
+        const desc_t* desc                              ///< [in] pointer to function descriptor
         )
     {
-        result_t result = result_t::SUCCESS;
+        xe_function_handle_t hFunction;
 
-        // auto result = ::xeFunctionCreate( handle, pModule, pDesc );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::Create" );
+        auto result = static_cast<result_t>( ::xeFunctionCreate(
+            reinterpret_cast<xe_module_handle_t>( pModule->getHandle() ),
+            reinterpret_cast<const xe_function_desc_t*>( desc ),
+            &hFunction ) );
 
-        return (Function*)0;
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::Create" );
+
+        auto pFunction = new Function( reinterpret_cast<function_handle_t>( hFunction ), pModule, desc );
+
+        return pFunction;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1023,10 +1067,13 @@ namespace xe
         Function* pFunction                             ///< [in] pointer to the function object
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeFunctionDestroy(
+            reinterpret_cast<xe_function_handle_t>( pFunction->getHandle() ) ) );
 
-        // auto result = ::xeFunctionDestroy( handle, pFunction );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::Destroy" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::Destroy" );
+
+        delete pFunction;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1046,12 +1093,17 @@ namespace xe
         const char* pFunctionName                       ///< [in] Name of function to retrieve function pointer for.
         )
     {
-        result_t result = result_t::SUCCESS;
+        void* pfnFunction;
 
-        // auto result = ::xeModuleGetFunctionPointer( handle, pFunctionName );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Module::GetFunctionPointer" );
+        auto result = static_cast<result_t>( ::xeModuleGetFunctionPointer(
+            reinterpret_cast<xe_module_handle_t>( getHandle() ),
+            pFunctionName,
+            &pfnFunction ) );
 
-        return (void*)0;
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Module::GetFunctionPointer" );
+
+        return pfnFunction;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1072,10 +1124,14 @@ namespace xe
         uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this function.
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeFunctionSetGroupSize(
+            reinterpret_cast<xe_function_handle_t>( getHandle() ),
+            groupSizeX,
+            groupSizeY,
+            groupSizeZ ) );
 
-        // auto result = ::xeFunctionSetGroupSize( handle, groupSizeX, groupSizeY, groupSizeZ );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::SetGroupSize" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::SetGroupSize" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1101,12 +1157,25 @@ namespace xe
         uint32_t globalSizeZ                            ///< [in] global width for Z dimension.
         )
     {
-        result_t result = result_t::SUCCESS;
+        uint32_t groupSizeX;
 
-        // auto result = ::xeFunctionSuggestGroupSize( handle, globalSizeX, globalSizeY, globalSizeZ );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::SuggestGroupSize" );
+        uint32_t groupSizeY;
 
-        return std::tuple<uint32_t, uint32_t, uint32_t>{};
+        uint32_t groupSizeZ;
+
+        auto result = static_cast<result_t>( ::xeFunctionSuggestGroupSize(
+            reinterpret_cast<xe_function_handle_t>( getHandle() ),
+            globalSizeX,
+            globalSizeY,
+            globalSizeZ,
+            &groupSizeX,
+            &groupSizeY,
+            &groupSizeZ ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::SuggestGroupSize" );
+
+        return std::make_tuple( groupSizeX, groupSizeY, groupSizeZ );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1126,10 +1195,14 @@ namespace xe
                                                         ///< null then argument value is considered null.
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeFunctionSetArgumentValue(
+            reinterpret_cast<xe_function_handle_t>( getHandle() ),
+            argIndex,
+            argSize,
+            pArgValue ) );
 
-        // auto result = ::xeFunctionSetArgumentValue( handle, argIndex, argSize, pArgValue );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::SetArgumentValue" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::SetArgumentValue" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1151,10 +1224,13 @@ namespace xe
         uint32_t value                                  ///< [in] attribute value to set
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeFunctionSetAttribute(
+            reinterpret_cast<xe_function_handle_t>( getHandle() ),
+            static_cast<xe_function_set_attribute_t>( attr ),
+            value ) );
 
-        // auto result = ::xeFunctionSetAttribute( handle, attr, value );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::SetAttribute" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::SetAttribute" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1177,12 +1253,17 @@ namespace xe
         get_attribute_t attr                            ///< [in] attribute to query
         )
     {
-        result_t result = result_t::SUCCESS;
+        uint32_t value;
 
-        // auto result = ::xeFunctionGetAttribute( handle, attr );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::GetAttribute" );
+        auto result = static_cast<result_t>( ::xeFunctionGetAttribute(
+            reinterpret_cast<xe_function_handle_t>( getHandle() ),
+            static_cast<xe_function_get_attribute_t>( attr ),
+            &value ) );
 
-        return uint32_t{};
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::GetAttribute" );
+
+        return value;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1206,14 +1287,26 @@ namespace xe
         const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] launch function arguments.
         Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        Event* phWaitEvents                             ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+        Event** ppWaitEvents                            ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
                                                         ///< on before launching
         )
     {
-        result_t result = result_t::SUCCESS;
+        thread_local std::vector<xe_event_handle_t> hWaitEvents;
+        hWaitEvents.resize( 0 );
+        hWaitEvents.reserve( numWaitEvents );
+        for( uint32_t i = 0; i < numWaitEvents; ++i )
+            hWaitEvents.emplace_back( ( ppWaitEvents ) ? reinterpret_cast<xe_event_handle_t>( ppWaitEvents[ i ]->getHandle() ) : nullptr );
 
-        // auto result = ::xeCommandListAppendLaunchFunction( handle, pFunction, pLaunchFuncArgs, pSignalEvent, numWaitEvents, phWaitEvents );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendLaunchFunction" );
+        auto result = static_cast<result_t>( ::xeCommandListAppendLaunchFunction(
+            reinterpret_cast<xe_command_list_handle_t>( getHandle() ),
+            reinterpret_cast<xe_function_handle_t>( pFunction->getHandle() ),
+            reinterpret_cast<const xe_thread_group_dimensions_t*>( pLaunchFuncArgs ),
+            ( pSignalEvent ) ? reinterpret_cast<xe_event_handle_t>( pSignalEvent->getHandle() ) : nullptr,
+            numWaitEvents,
+            hWaitEvents.data() ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendLaunchFunction" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1240,14 +1333,26 @@ namespace xe
         const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in] pointer to device buffer that will contain launch arguments
         Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        Event* phWaitEvents                             ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+        Event** ppWaitEvents                            ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
                                                         ///< on before launching
         )
     {
-        result_t result = result_t::SUCCESS;
+        thread_local std::vector<xe_event_handle_t> hWaitEvents;
+        hWaitEvents.resize( 0 );
+        hWaitEvents.reserve( numWaitEvents );
+        for( uint32_t i = 0; i < numWaitEvents; ++i )
+            hWaitEvents.emplace_back( ( ppWaitEvents ) ? reinterpret_cast<xe_event_handle_t>( ppWaitEvents[ i ]->getHandle() ) : nullptr );
 
-        // auto result = ::xeCommandListAppendLaunchFunctionIndirect( handle, pFunction, pLaunchArgumentsBuffer, pSignalEvent, numWaitEvents, phWaitEvents );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendLaunchFunctionIndirect" );
+        auto result = static_cast<result_t>( ::xeCommandListAppendLaunchFunctionIndirect(
+            reinterpret_cast<xe_command_list_handle_t>( getHandle() ),
+            reinterpret_cast<xe_function_handle_t>( pFunction->getHandle() ),
+            reinterpret_cast<const xe_thread_group_dimensions_t*>( pLaunchArgumentsBuffer ),
+            ( pSignalEvent ) ? reinterpret_cast<xe_event_handle_t>( pSignalEvent->getHandle() ) : nullptr,
+            numWaitEvents,
+            hWaitEvents.data() ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendLaunchFunctionIndirect" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1272,7 +1377,7 @@ namespace xe
     void __xecall
     CommandList::AppendLaunchMultipleFunctionsIndirect(
         uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
-        Function* phFunctions,                          ///< [in][range(0, numFunctions)] handles of the function objects
+        Function** ppFunctions,                         ///< [in][range(0, numFunctions)] handles of the function objects
         const uint32_t* pNumLaunchArguments,            ///< [in] pointer to device memory location that will contain the actual
                                                         ///< number of launch arguments; value must be less-than or equal-to
                                                         ///< numFunctions
@@ -1280,14 +1385,34 @@ namespace xe
                                                         ///< contain a contiguous array of launch arguments
         Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        Event* phWaitEvents                             ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+        Event** ppWaitEvents                            ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
                                                         ///< on before launching
         )
     {
-        result_t result = result_t::SUCCESS;
+        thread_local std::vector<xe_function_handle_t> hFunctions;
+        hFunctions.resize( 0 );
+        hFunctions.reserve( numFunctions );
+        for( uint32_t i = 0; i < numFunctions; ++i )
+            hFunctions.emplace_back( reinterpret_cast<xe_function_handle_t>( ppFunctions[ i ]->getHandle() ) );
 
-        // auto result = ::xeCommandListAppendLaunchMultipleFunctionsIndirect( handle, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, pSignalEvent, numWaitEvents, phWaitEvents );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendLaunchMultipleFunctionsIndirect" );
+        thread_local std::vector<xe_event_handle_t> hWaitEvents;
+        hWaitEvents.resize( 0 );
+        hWaitEvents.reserve( numWaitEvents );
+        for( uint32_t i = 0; i < numWaitEvents; ++i )
+            hWaitEvents.emplace_back( ( ppWaitEvents ) ? reinterpret_cast<xe_event_handle_t>( ppWaitEvents[ i ]->getHandle() ) : nullptr );
+
+        auto result = static_cast<result_t>( ::xeCommandListAppendLaunchMultipleFunctionsIndirect(
+            reinterpret_cast<xe_command_list_handle_t>( getHandle() ),
+            numFunctions,
+            hFunctions.data(),
+            pNumLaunchArguments,
+            reinterpret_cast<const xe_thread_group_dimensions_t*>( pLaunchArgumentsBuffer ),
+            ( pSignalEvent ) ? reinterpret_cast<xe_event_handle_t>( pSignalEvent->getHandle() ) : nullptr,
+            numWaitEvents,
+            hWaitEvents.data() ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendLaunchMultipleFunctionsIndirect" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1312,14 +1437,26 @@ namespace xe
         void* pUserData,                                ///< [in] pointer to user data to pass to host function.
         Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
-        Event* phWaitEvents                             ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+        Event** ppWaitEvents                            ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
                                                         ///< on before launching
         )
     {
-        result_t result = result_t::SUCCESS;
+        thread_local std::vector<xe_event_handle_t> hWaitEvents;
+        hWaitEvents.resize( 0 );
+        hWaitEvents.reserve( numWaitEvents );
+        for( uint32_t i = 0; i < numWaitEvents; ++i )
+            hWaitEvents.emplace_back( ( ppWaitEvents ) ? reinterpret_cast<xe_event_handle_t>( ppWaitEvents[ i ]->getHandle() ) : nullptr );
 
-        // auto result = ::xeCommandListAppendLaunchHostFunction( handle, pfnHostFunc, pUserData, pSignalEvent, numWaitEvents, phWaitEvents );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendLaunchHostFunction" );
+        auto result = static_cast<result_t>( ::xeCommandListAppendLaunchHostFunction(
+            reinterpret_cast<xe_command_list_handle_t>( getHandle() ),
+            static_cast<xe_host_pfn_t>( pfnHostFunc ),
+            pUserData,
+            ( pSignalEvent ) ? reinterpret_cast<xe_event_handle_t>( pSignalEvent->getHandle() ) : nullptr,
+            numWaitEvents,
+            hWaitEvents.data() ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendLaunchHostFunction" );
     }
 
 } // namespace xe

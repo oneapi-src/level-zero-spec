@@ -34,7 +34,6 @@
 
 #include "xex_common.hpp"
 #include "xex_driver.hpp"
-#include "xex_device.hpp"
 #include "xex_cmdgraph.hpp"
 
 #endif // defined(__cplusplus)

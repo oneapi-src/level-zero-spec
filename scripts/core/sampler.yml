@@ -75,7 +75,7 @@ params:
       name: hDevice
       desc: "[in] handle of the device"
     - type: "const $x_sampler_desc_t*"
-      name: pDesc
+      name: desc
       desc: "[in] pointer to sampler descriptor"
     - type: "$x_sampler_handle_t*"
       name: phSampler
@@ -111,8 +111,7 @@ owner: $xDevice
 members:
     - type: $x_sampler_handle_t
       name: handle
-      desc: "handle of the sample object"
-      init: nullptr
+      desc: "[in] handle of the sample object"
     - type: $xDevice*
       name: pDevice
       desc: "[in] pointer to owner object"

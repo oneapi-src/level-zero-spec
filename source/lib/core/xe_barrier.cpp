@@ -193,14 +193,24 @@ namespace xe
     CommandList::AppendBarrier(
         Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
-        Event* phWaitEvents                             ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+        Event** ppWaitEvents                            ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
                                                         ///< on before executing barrier
         )
     {
-        result_t result = result_t::SUCCESS;
+        thread_local std::vector<xe_event_handle_t> hWaitEvents;
+        hWaitEvents.resize( 0 );
+        hWaitEvents.reserve( numWaitEvents );
+        for( uint32_t i = 0; i < numWaitEvents; ++i )
+            hWaitEvents.emplace_back( ( ppWaitEvents ) ? reinterpret_cast<xe_event_handle_t>( ppWaitEvents[ i ]->getHandle() ) : nullptr );
 
-        // auto result = ::xeCommandListAppendBarrier( handle, pSignalEvent, numWaitEvents, phWaitEvents );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendBarrier" );
+        auto result = static_cast<result_t>( ::xeCommandListAppendBarrier(
+            reinterpret_cast<xe_command_list_handle_t>( getHandle() ),
+            ( pSignalEvent ) ? reinterpret_cast<xe_event_handle_t>( pSignalEvent->getHandle() ) : nullptr,
+            numWaitEvents,
+            hWaitEvents.data() ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendBarrier" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -227,14 +237,27 @@ namespace xe
         const void** pRanges,                           ///< [in][range(0, numRanges)] array of memory ranges
         Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
         uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before executing barrier
-        Event* phWaitEvents                             ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+        Event** ppWaitEvents                            ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
                                                         ///< on before executing barrier
         )
     {
-        result_t result = result_t::SUCCESS;
+        thread_local std::vector<xe_event_handle_t> hWaitEvents;
+        hWaitEvents.resize( 0 );
+        hWaitEvents.reserve( numWaitEvents );
+        for( uint32_t i = 0; i < numWaitEvents; ++i )
+            hWaitEvents.emplace_back( ( ppWaitEvents ) ? reinterpret_cast<xe_event_handle_t>( ppWaitEvents[ i ]->getHandle() ) : nullptr );
 
-        // auto result = ::xeCommandListAppendMemoryRangesBarrier( handle, numRanges, pRangeSizes, pRanges, pSignalEvent, numWaitEvents, phWaitEvents );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendMemoryRangesBarrier" );
+        auto result = static_cast<result_t>( ::xeCommandListAppendMemoryRangesBarrier(
+            reinterpret_cast<xe_command_list_handle_t>( getHandle() ),
+            numRanges,
+            pRangeSizes,
+            pRanges,
+            ( pSignalEvent ) ? reinterpret_cast<xe_event_handle_t>( pSignalEvent->getHandle() ) : nullptr,
+            numWaitEvents,
+            hWaitEvents.data() ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendMemoryRangesBarrier" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -256,10 +279,11 @@ namespace xe
         void
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeDeviceSystemBarrier(
+            reinterpret_cast<xe_device_handle_t>( getHandle() ) ) );
 
-        // auto result = ::xeDeviceSystemBarrier( handle );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::SystemBarrier" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::SystemBarrier" );
     }
 
 } // namespace xe

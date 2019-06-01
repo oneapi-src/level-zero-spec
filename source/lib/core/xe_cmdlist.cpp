@@ -88,16 +88,16 @@ xeCommandListCreate(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
-///         + nullptr == desc
+///         + nullptr == altdesc
 ///         + nullptr == phCommandList
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + ::XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < desc->version
+///         + ::XE_COMMAND_QUEUE_DESC_VERSION_CURRENT < altdesc->version
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
 xeCommandListCreateImmediate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
+    const xe_command_queue_desc_t* altdesc,         ///< [in] pointer to command queue descriptor
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     )
 {
@@ -108,7 +108,7 @@ xeCommandListCreateImmediate(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnCreateImmediate( hDevice, desc, phCommandList );
+    return pfnCreateImmediate( hDevice, altdesc, phCommandList );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -360,11 +360,13 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
     CommandList::CommandList( 
+        command_list_handle_t handle,                   ///< [in] handle of command list object
         Device* pDevice,                                ///< [in] pointer to owner object
-        const desc_t& desc                              ///< [in] descriptor of the command list object
+        const desc_t* desc                              ///< [in] descriptor of the command list object
         ) :
+        m_handle( handle ),
         m_pDevice( pDevice ),
-        m_desc( desc )
+        m_desc( ( desc ) ? *desc : desc_t{} )
     {
     }
 
@@ -378,7 +380,7 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @returns
-    ///     - CommandList: pointer to handle of command list object created
+    ///     - CommandList*: pointer to handle of command list object created
     /// 
     /// @throws result_t
     CommandList* __xecall
@@ -387,12 +389,19 @@ namespace xe
         const desc_t* desc                              ///< [in] pointer to command list descriptor
         )
     {
-        result_t result = result_t::SUCCESS;
+        xe_command_list_handle_t hCommandList;
 
-        // auto result = ::xeCommandListCreate( handle, pDevice, desc );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::Create" );
+        auto result = static_cast<result_t>( ::xeCommandListCreate(
+            reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
+            reinterpret_cast<const xe_command_list_desc_t*>( desc ),
+            &hCommandList ) );
 
-        return (CommandList*)0;
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::Create" );
+
+        auto pCommandList = new CommandList( reinterpret_cast<command_list_handle_t>( hCommandList ), pDevice, desc );
+
+        return pCommandList;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -406,21 +415,28 @@ namespace xe
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @returns
-    ///     - CommandList: pointer to handle of command list object created
+    ///     - CommandList*: pointer to handle of command list object created
     /// 
     /// @throws result_t
     CommandList* __xecall
     CommandList::CreateImmediate(
         Device* pDevice,                                ///< [in] pointer to the device object
-        const CommandQueue::desc_t* desc                ///< [in] pointer to command queue descriptor
+        const CommandQueue::desc_t* altdesc             ///< [in] pointer to command queue descriptor
         )
     {
-        result_t result = result_t::SUCCESS;
+        xe_command_list_handle_t hCommandList;
 
-        // auto result = ::xeCommandListCreateImmediate( handle, pDevice, desc );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::CreateImmediate" );
+        auto result = static_cast<result_t>( ::xeCommandListCreateImmediate(
+            reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
+            reinterpret_cast<const xe_command_queue_desc_t*>( altdesc ),
+            &hCommandList ) );
 
-        return (CommandList*)0;
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::CreateImmediate" );
+
+        auto pCommandList = new CommandList( reinterpret_cast<command_list_handle_t>( hCommandList ), pDevice, nullptr );
+
+        return pCommandList;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -441,10 +457,13 @@ namespace xe
         CommandList* pCommandList                       ///< [in] pointer to command list object to destroy
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeCommandListDestroy(
+            reinterpret_cast<xe_command_list_handle_t>( pCommandList->getHandle() ) ) );
 
-        // auto result = ::xeCommandListDestroy( handle, pCommandList );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::Destroy" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::Destroy" );
+
+        delete pCommandList;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -461,10 +480,11 @@ namespace xe
         void
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeCommandListClose(
+            reinterpret_cast<xe_command_list_handle_t>( getHandle() ) ) );
 
-        // auto result = ::xeCommandListClose( handle );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::Close" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::Close" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -484,10 +504,11 @@ namespace xe
         void
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeCommandListReset(
+            reinterpret_cast<xe_command_list_handle_t>( getHandle() ) ) );
 
-        // auto result = ::xeCommandListReset( handle );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::Reset" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::Reset" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -511,10 +532,13 @@ namespace xe
         uint32_t value                                  ///< [in] value of attribute
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeCommandListSetParameter(
+            reinterpret_cast<xe_command_list_handle_t>( getHandle() ),
+            static_cast<xe_command_list_parameter_t>( parameter ),
+            value ) );
 
-        // auto result = ::xeCommandListSetParameter( handle, parameter, value );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::SetParameter" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::SetParameter" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -540,12 +564,17 @@ namespace xe
         parameter_t parameter                           ///< [in] parameter to retrieve
         )
     {
-        result_t result = result_t::SUCCESS;
+        uint32_t value;
 
-        // auto result = ::xeCommandListGetParameter( handle, parameter );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::GetParameter" );
+        auto result = static_cast<result_t>( ::xeCommandListGetParameter(
+            reinterpret_cast<xe_command_list_handle_t>( getHandle() ),
+            static_cast<xe_command_list_parameter_t>( parameter ),
+            &value ) );
 
-        return uint32_t{};
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::GetParameter" );
+
+        return value;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -562,10 +591,11 @@ namespace xe
         void
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xeCommandListResetParameters(
+            reinterpret_cast<xe_command_list_handle_t>( getHandle() ) ) );
 
-        // auto result = ::xeCommandListResetParameters( handle );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::ResetParameters" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::ResetParameters" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -587,12 +617,17 @@ namespace xe
         size_t size                                     ///< [in] size (in bytes) to reserve
         )
     {
-        result_t result = result_t::SUCCESS;
+        void* ptr;
 
-        // auto result = ::xeCommandListReserveSpace( handle, size );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::ReserveSpace" );
+        auto result = static_cast<result_t>( ::xeCommandListReserveSpace(
+            reinterpret_cast<xe_command_list_handle_t>( getHandle() ),
+            size,
+            &ptr ) );
 
-        return (void*)0;
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::ReserveSpace" );
+
+        return ptr;
     }
 
 } // namespace xe

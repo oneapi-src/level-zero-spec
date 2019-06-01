@@ -78,7 +78,7 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        module_handle_t m_handle = nullptr;             ///< handle of module object
+        module_handle_t m_handle;                       ///< [in] handle of module object
         Device* m_pDevice;                              ///< [in] pointer to owner object
         desc_t m_desc;                                  ///< [in] descriptor of the module object
 
@@ -86,8 +86,9 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         Module( void ) = delete;
         Module( 
+            module_handle_t handle,                         ///< [in] handle of module object
             Device* pDevice,                                ///< [in] pointer to owner object
-            const desc_t& desc                              ///< [in] descriptor of the module object
+            const desc_t* desc                              ///< [in] descriptor of the module object
             );
 
         ~Module( void ) = default;
@@ -128,14 +129,15 @@ namespace xe
         ///   _Analogues_
         ///     - **cuModuleLoad**
         /// @returns
-        ///     - Module: pointer to handle of module object created
+        ///     - Module*: pointer to handle of module object created
+        ///     - ModuleBuildLog*: pointer to handle of module's build log.
         /// 
         /// @throws result_t
         static Module* __xecall
         Create(
             Device* pDevice,                                ///< [in] pointer to the device
-            const desc_t* pDesc,                            ///< [in] pointer to module descriptor
-            ModuleBuildLog* phBuildLog = nullptr            ///< [in,out][optional] pointer to pointer to module's build log.
+            const desc_t* desc,                             ///< [in] pointer to module descriptor
+            ModuleBuildLog** ppBuildLog = nullptr           ///< [out][optional] pointer to pointer to module's build log.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -222,13 +224,14 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        module_build_log_handle_t m_handle = nullptr;   ///< handle of the buildlog object
+        module_build_log_handle_t m_handle;             ///< [in] handle of the buildlog object
         Module* m_pModule;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         ModuleBuildLog( void ) = delete;
         ModuleBuildLog( 
+            module_build_log_handle_t handle,               ///< [in] handle of the buildlog object
             Module* pModule                                 ///< [in] pointer to owner object
             );
 
@@ -349,7 +352,7 @@ namespace xe
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        function_handle_t m_handle = nullptr;           ///< handle of function object
+        function_handle_t m_handle;                     ///< [in] handle of function object
         Module* m_pModule;                              ///< [in] pointer to owner object
         desc_t m_desc;                                  ///< [in] descriptor of the function object
 
@@ -357,8 +360,9 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         Function( void ) = delete;
         Function( 
+            function_handle_t handle,                       ///< [in] handle of function object
             Module* pModule,                                ///< [in] pointer to owner object
-            const desc_t& desc                              ///< [in] descriptor of the function object
+            const desc_t* desc                              ///< [in] descriptor of the function object
             );
 
         ~Function( void ) = default;
@@ -386,13 +390,13 @@ namespace xe
         ///   _Analogues_
         ///     - **cuModuleGetFunction**
         /// @returns
-        ///     - Function: handle of the Function object
+        ///     - Function*: handle of the Function object
         /// 
         /// @throws result_t
         static Function* __xecall
         Create(
             Module* pModule,                                ///< [in] pointer to the module
-            const desc_t* pDesc                             ///< [in] pointer to function descriptor
+            const desc_t* desc                              ///< [in] pointer to function descriptor
             );
 
         ///////////////////////////////////////////////////////////////////////////////

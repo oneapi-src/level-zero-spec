@@ -80,7 +80,7 @@ params:
       name: hDevice
       desc: "[in] handle of the device object"
     - type: "const $x_command_queue_desc_t*"
-      name: desc
+      name: altdesc
       desc: "[in] pointer to command queue descriptor"
     - type: $x_command_list_handle_t*
       name: phCommandList
@@ -237,8 +237,7 @@ owner: $xDevice
 members:
     - type: $x_command_list_handle_t
       name: handle
-      desc: "handle of command list object"
-      init: nullptr
+      desc: "[in] handle of command list object"
     - type: $xDevice*
       name: pDevice
       desc: "[in] pointer to owner object"

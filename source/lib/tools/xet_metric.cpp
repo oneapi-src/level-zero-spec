@@ -678,12 +678,16 @@ namespace xet
         xe::Device* pDevice                             ///< [in] pointer to the device object
         )
     {
-        result_t result = result_t::SUCCESS;
+        uint32_t count;
 
-        // auto result = ::xetMetricGroupGetCount( handle, pDevice );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricGroup::GetCount" );
+        auto result = static_cast<result_t>( ::xetMetricGroupGetCount(
+            reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
+            &count ) );
 
-        return uint32_t{};
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricGroup::GetCount" );
+
+        return count;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -693,7 +697,7 @@ namespace xet
     ///     - The application may call this function from simultaneous threads.
     /// 
     /// @returns
-    ///     - MetricGroup: metric group handle
+    ///     - MetricGroup*: metric group handle
     /// 
     /// @throws result_t
     MetricGroup* __xecall
@@ -702,12 +706,19 @@ namespace xet
         uint32_t ordinal                                ///< [in] metric group index
         )
     {
-        result_t result = result_t::SUCCESS;
+        xet_metric_group_handle_t hMetricGroup;
 
-        // auto result = ::xetMetricGroupGet( handle, pDevice, ordinal );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricGroup::Get" );
+        auto result = static_cast<result_t>( ::xetMetricGroupGet(
+            reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
+            ordinal,
+            &hMetricGroup ) );
 
-        return (MetricGroup*)0;
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricGroup::Get" );
+
+        auto pMetricGroup = new MetricGroup( pDevice );
+
+        return pMetricGroup;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -725,12 +736,16 @@ namespace xet
         void
         )
     {
-        result_t result = result_t::SUCCESS;
+        xet_metric_group_properties_t properties;
 
-        // auto result = ::xetMetricGroupGetProperties( handle );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricGroup::GetProperties" );
+        auto result = static_cast<result_t>( ::xetMetricGroupGetProperties(
+            reinterpret_cast<xet_metric_group_handle_t>( getHandle() ),
+            &properties ) );
 
-        return properties_t{};
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricGroup::GetProperties" );
+
+        return *reinterpret_cast<properties_t*>( &properties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -740,7 +755,7 @@ namespace xet
     ///     - The application may call this function from simultaneous threads.
     /// 
     /// @returns
-    ///     - Metric: handle of metric
+    ///     - Metric*: handle of metric
     /// 
     /// @throws result_t
     Metric* __xecall
@@ -749,12 +764,19 @@ namespace xet
         uint32_t ordinal                                ///< [in] metric index
         )
     {
-        result_t result = result_t::SUCCESS;
+        xet_metric_handle_t hMetric;
 
-        // auto result = ::xetMetricGet( handle, pMetricGroup, ordinal );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Metric::Get" );
+        auto result = static_cast<result_t>( ::xetMetricGet(
+            reinterpret_cast<xet_metric_group_handle_t>( pMetricGroup->getHandle() ),
+            ordinal,
+            &hMetric ) );
 
-        return (Metric*)0;
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Metric::Get" );
+
+        auto pMetric = new Metric( pMetricGroup );
+
+        return pMetric;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -772,12 +794,16 @@ namespace xet
         void
         )
     {
-        result_t result = result_t::SUCCESS;
+        xet_metric_properties_t properties;
 
-        // auto result = ::xetMetricGetProperties( handle );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Metric::GetProperties" );
+        auto result = static_cast<result_t>( ::xetMetricGetProperties(
+            reinterpret_cast<xet_metric_handle_t>( getHandle() ),
+            &properties ) );
 
-        return properties_t{};
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Metric::GetProperties" );
+
+        return *reinterpret_cast<properties_t*>( &properties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -797,10 +823,16 @@ namespace xet
         typed_value_t* pCalculatedData                  ///< [in,out] calculated metrics
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xetMetricGroupCalculateData(
+            reinterpret_cast<xet_metric_group_handle_t>( getHandle() ),
+            pReportCount,
+            rawDataSize,
+            pRawData,
+            calculatedDataSize,
+            reinterpret_cast<xet_typed_value_t*>( pCalculatedData ) ) );
 
-        // auto result = ::xetMetricGroupCalculateData( handle, pReportCount, rawDataSize, pRawData, calculatedDataSize, pCalculatedData );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricGroup::CalculateData" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricGroup::CalculateData" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -816,14 +848,23 @@ namespace xet
     void __xecall
     Device::ActivateMetricGroups(
         uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
-        MetricGroup* phMetricGroups                     ///< [in][range(0, count)] handles of the metric groups to activate. NULL
+        MetricGroup** ppMetricGroups                    ///< [in][range(0, count)] handles of the metric groups to activate. NULL
                                                         ///< to deactivate.
         )
     {
-        result_t result = result_t::SUCCESS;
+        thread_local std::vector<xet_metric_group_handle_t> hMetricGroups;
+        hMetricGroups.resize( 0 );
+        hMetricGroups.reserve( count );
+        for( uint32_t i = 0; i < count; ++i )
+            hMetricGroups.emplace_back( reinterpret_cast<xet_metric_group_handle_t>( ppMetricGroups[ i ]->getHandle() ) );
 
-        // auto result = ::xetDeviceActivateMetricGroups( handle, count, phMetricGroups );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Device::ActivateMetricGroups" );
+        auto result = static_cast<result_t>( ::xetDeviceActivateMetricGroups(
+            reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
+            count,
+            hMetricGroups.data() ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Device::ActivateMetricGroups" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -834,7 +875,7 @@ namespace xet
     ///       threads with the same device handle.
     /// 
     /// @returns
-    ///     - MetricTracer: handle of metric tracer
+    ///     - MetricTracer*: handle of metric tracer
     /// 
     /// @throws result_t
     MetricTracer* __xecall
@@ -845,12 +886,20 @@ namespace xet
                                                         ///< to host type.
         )
     {
-        result_t result = result_t::SUCCESS;
+        xet_metric_tracer_handle_t hMetricTracer;
 
-        // auto result = ::xetMetricTracerOpen( handle, pDevice, pDesc, pNotificationEvent );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricTracer::Open" );
+        auto result = static_cast<result_t>( ::xetMetricTracerOpen(
+            reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
+            reinterpret_cast<xet_metric_tracer_desc_t*>( pDesc ),
+            reinterpret_cast<xe_event_handle_t>( pNotificationEvent->getHandle() ),
+            &hMetricTracer ) );
 
-        return (MetricTracer*)0;
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricTracer::Open" );
+
+        auto pMetricTracer = new MetricTracer( pDevice );
+
+        return pMetricTracer;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -867,10 +916,13 @@ namespace xet
         uint32_t value                                  ///< [in] tracer marker value
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xetCommandListAppendMetricTracerMarker(
+            reinterpret_cast<xe_command_list_handle_t>( pCommandList->getHandle() ),
+            reinterpret_cast<xet_metric_tracer_handle_t>( pMetricTracer->getHandle() ),
+            value ) );
 
-        // auto result = ::xetCommandListAppendMetricTracerMarker( handle, pMetricTracer, value );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::CommandList::AppendMetricTracerMarker" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::CommandList::AppendMetricTracerMarker" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -886,10 +938,11 @@ namespace xet
         void
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xetMetricTracerClose(
+            reinterpret_cast<xet_metric_tracer_handle_t>( getHandle() ) ) );
 
-        // auto result = ::xetMetricTracerClose( handle );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricTracer::Close" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricTracer::Close" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -906,10 +959,14 @@ namespace xet
         uint8_t* pRawData                               ///< [in,out] raw data buffer for reports
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xetMetricTracerReadData(
+            reinterpret_cast<xet_metric_tracer_handle_t>( getHandle() ),
+            pReportCount,
+            rawDataSize,
+            pRawData ) );
 
-        // auto result = ::xetMetricTracerReadData( handle, pReportCount, rawDataSize, pRawData );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricTracer::ReadData" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricTracer::ReadData" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -919,7 +976,7 @@ namespace xet
     ///     - The application may call this function from simultaneous threads.
     /// 
     /// @returns
-    ///     - MetricQueryPool: handle of metric query pool
+    ///     - MetricQueryPool*: handle of metric query pool
     /// 
     /// @throws result_t
     MetricQueryPool* __xecall
@@ -928,12 +985,19 @@ namespace xet
         desc_t* pDesc                                   ///< [in] metric query pool creation data
         )
     {
-        result_t result = result_t::SUCCESS;
+        xet_metric_query_pool_handle_t hMetricQueryPool;
 
-        // auto result = ::xetMetricQueryPoolCreate( handle, pDevice, pDesc );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricQueryPool::Create" );
+        auto result = static_cast<result_t>( ::xetMetricQueryPoolCreate(
+            reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
+            reinterpret_cast<xet_metric_query_pool_desc_t*>( pDesc ),
+            &hMetricQueryPool ) );
 
-        return (MetricQueryPool*)0;
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricQueryPool::Create" );
+
+        auto pMetricQueryPool = new MetricQueryPool( pDevice );
+
+        return pMetricQueryPool;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -949,10 +1013,13 @@ namespace xet
         MetricQueryPool* pMetricQueryPool               ///< [in] pointer to the metric query pool
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xetMetricQueryPoolDestroy(
+            reinterpret_cast<xet_metric_query_pool_handle_t>( pMetricQueryPool->getHandle() ) ) );
 
-        // auto result = ::xetMetricQueryPoolDestroy( handle, pMetricQueryPool );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricQueryPool::Destroy" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricQueryPool::Destroy" );
+
+        delete pMetricQueryPool;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -962,7 +1029,7 @@ namespace xet
     ///     - The application may call this function from simultaneous threads.
     /// 
     /// @returns
-    ///     - MetricQuery: handle of metric query
+    ///     - MetricQuery*: handle of metric query
     /// 
     /// @throws result_t
     MetricQuery* __xecall
@@ -970,12 +1037,19 @@ namespace xet
         uint32_t ordinal                                ///< [in] index of the query within the pool
         )
     {
-        result_t result = result_t::SUCCESS;
+        xet_metric_query_handle_t hMetricQuery;
 
-        // auto result = ::xetMetricQueryPoolGetMetricQuery( handle, ordinal );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricQueryPool::GetMetricQuery" );
+        auto result = static_cast<result_t>( ::xetMetricQueryPoolGetMetricQuery(
+            reinterpret_cast<xet_metric_query_pool_handle_t>( getHandle() ),
+            ordinal,
+            &hMetricQuery ) );
 
-        return (MetricQuery*)0;
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricQueryPool::GetMetricQuery" );
+
+        auto pMetricQuery = new MetricQuery( nullptr );
+
+        return pMetricQuery;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -991,10 +1065,12 @@ namespace xet
         MetricQuery* pMetricQuery                       ///< [in] pointer to the metric query
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xetCommandListAppendMetricQueryBegin(
+            reinterpret_cast<xe_command_list_handle_t>( pCommandList->getHandle() ),
+            reinterpret_cast<xet_metric_query_handle_t>( pMetricQuery->getHandle() ) ) );
 
-        // auto result = ::xetCommandListAppendMetricQueryBegin( handle, pMetricQuery );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::CommandList::AppendMetricQueryBegin" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::CommandList::AppendMetricQueryBegin" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1011,10 +1087,13 @@ namespace xet
         xe::Event* pCompletionEvent                     ///< [in] pointer to the completion event to signal
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xetCommandListAppendMetricQueryEnd(
+            reinterpret_cast<xe_command_list_handle_t>( pCommandList->getHandle() ),
+            reinterpret_cast<xet_metric_query_handle_t>( pMetricQuery->getHandle() ),
+            reinterpret_cast<xe_event_handle_t>( pCompletionEvent->getHandle() ) ) );
 
-        // auto result = ::xetCommandListAppendMetricQueryEnd( handle, pMetricQuery, pCompletionEvent );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::CommandList::AppendMetricQueryEnd" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::CommandList::AppendMetricQueryEnd" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1030,10 +1109,11 @@ namespace xet
         void
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xetCommandListAppendMetricMemoryBarrier(
+            reinterpret_cast<xe_command_list_handle_t>( pCommandList->getHandle() ) ) );
 
-        // auto result = ::xetCommandListAppendMetricMemoryBarrier( handle );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::CommandList::AppendMetricMemoryBarrier" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::CommandList::AppendMetricMemoryBarrier" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1050,10 +1130,14 @@ namespace xet
         uint8_t* pRawData                               ///< [in,out] query result data in raw format
         )
     {
-        result_t result = result_t::SUCCESS;
+        auto result = static_cast<result_t>( ::xetMetricQueryGetData(
+            reinterpret_cast<xet_metric_query_handle_t>( getHandle() ),
+            pReportCount,
+            rawDataSize,
+            pRawData ) );
 
-        // auto result = ::xetMetricQueryGetData( handle, pReportCount, rawDataSize, pRawData );
-        if( result_t::SUCCESS != result ) throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricQuery::GetData" );
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricQuery::GetData" );
     }
 
 } // namespace xet

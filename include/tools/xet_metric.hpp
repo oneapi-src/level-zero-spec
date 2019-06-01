@@ -196,7 +196,7 @@ namespace xet
         /// @details
         ///     - The application may call this function from simultaneous threads.
         /// @returns
-        ///     - MetricGroup: metric group handle
+        ///     - MetricGroup*: metric group handle
         /// 
         /// @throws result_t
         static MetricGroup* __xecall
@@ -311,7 +311,7 @@ namespace xet
         /// @details
         ///     - The application may call this function from simultaneous threads.
         /// @returns
-        ///     - Metric: handle of metric
+        ///     - Metric*: handle of metric
         /// 
         /// @throws result_t
         static Metric* __xecall
@@ -393,7 +393,7 @@ namespace xet
         ///     - The application may **not** call this function from simultaneous
         ///       threads with the same device handle.
         /// @returns
-        ///     - MetricTracer: handle of metric tracer
+        ///     - MetricTracer*: handle of metric tracer
         /// 
         /// @throws result_t
         static MetricTracer* __xecall
@@ -495,7 +495,7 @@ namespace xet
         /// @details
         ///     - The application may call this function from simultaneous threads.
         /// @returns
-        ///     - MetricQueryPool: handle of metric query pool
+        ///     - MetricQueryPool*: handle of metric query pool
         /// 
         /// @throws result_t
         static MetricQueryPool* __xecall
@@ -522,7 +522,7 @@ namespace xet
         /// @details
         ///     - The application may call this function from simultaneous threads.
         /// @returns
-        ///     - MetricQuery: handle of metric query
+        ///     - MetricQuery*: handle of metric query
         /// 
         /// @throws result_t
         MetricQuery* __xecall

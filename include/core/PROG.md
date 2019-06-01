@@ -62,11 +62,11 @@ The following sample code demonstrates a basic initialization and device discove
 
     // Discover all the device groups and devices
     uint32_t groupCount = 0;
-    xeGetDeviceGroups(&groupCount, nullptr);
+    xeDeviceGroupGet(&groupCount, nullptr);
 
     xe_device_group_handle_t* allDeviceGroups = (xe_device_group_handle_t*)
         malloc(groupCount * sizeof(xe_device_group_handle_t));
-    xeGetDeviceGroups(&groupCount, allDeviceGroups);
+    xeDeviceGroupGet(&groupCount, allDeviceGroups);
 
 
     // Find the first GPU device group
@@ -87,7 +87,7 @@ The following sample code demonstrates a basic initialization and device discove
     // Get the first device within the device group
     xe_device_handle_t hDevice = nullptr;
     uint32_t deviceCount = 1;
-    xeDeviceGroupGetDevices(hDeviceGroup, &deviceCount, &hDevice);
+    xeDeviceGet(hDeviceGroup, &deviceCount, &hDevice);
 
     ...
 

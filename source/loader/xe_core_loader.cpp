@@ -79,7 +79,6 @@ xeGetGlobalProcAddrTable(
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnInit                                     = xeInit;
-            pDdiTable->pfnGetDeviceGroups                          = xeGetDeviceGroups;
         }
         else
         {
@@ -143,6 +142,7 @@ xeGetDeviceProcAddrTable(
         if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
+            pDdiTable->pfnGet                                      = xeDeviceGet;
             pDdiTable->pfnGetSubDevice                             = xeDeviceGetSubDevice;
             pDdiTable->pfnGetP2PProperties                         = xeDeviceGetP2PProperties;
             pDdiTable->pfnCanAccessPeer                            = xeDeviceCanAccessPeer;
@@ -225,8 +225,8 @@ xeGetDeviceGroupProcAddrTable(
         if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
+            pDdiTable->pfnGet                                      = xeDeviceGroupGet;
             pDdiTable->pfnGetDriverVersion                         = xeDeviceGroupGetDriverVersion;
-            pDdiTable->pfnGetDevices                               = xeDeviceGroupGetDevices;
             pDdiTable->pfnGetApiVersion                            = xeDeviceGroupGetApiVersion;
             pDdiTable->pfnGetProperties                            = xeDeviceGroupGetProperties;
             pDdiTable->pfnGetComputeProperties                     = xeDeviceGroupGetComputeProperties;
@@ -962,9 +962,15 @@ xeInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    // global functions need to be handled manually by the loader
-    auto result = loader.xeInit( flags );
+    xe_result_t result = XE_RESULT_SUCCESS;
 
+    for( auto& drv : loader.drivers )
+    {
+        if( XE_RESULT_SUCCESS == result )
+        {
+            result = drv.xeDdiTable.Global.pfnInit( flags );
+        }
+    }
     return result;
 }
 
@@ -989,34 +995,61 @@ xeDeviceGroupGetDriverVersion(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeGetDeviceGroups
+/// @brief Intercept function for xeDeviceGroupGet
 xe_result_t __xecall
-xeGetDeviceGroups(
+xeDeviceGroupGet(
     uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of device groups available.
                                                     ///< if count is non-zero, then driver will only retrieve that number of
                                                     ///< device groups.
-    xe_device_group_handle_t* pDeviceGroups         ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
+    xe_device_group_handle_t* phDeviceGroups        ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
     )
 {
-    // global functions need to be handled manually by the loader
-    auto result = loader.xeGetDeviceGroups( pCount, pDeviceGroups );
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    uint32_t total_count = 0;
+
+    for( auto& drv : loader.drivers )
+    {
+        uint32_t count = 0;
+
+        result = drv.xeDdiTable.DeviceGroup.pfnGet( &count, nullptr );
+        if( XE_RESULT_SUCCESS != result ) break;
+
+        if( ( 0 < *pCount ) && ( *pCount > total_count + count ) )
+            break;
+
+        if( nullptr != phDeviceGroups )
+        {
+            result = drv.xeDdiTable.DeviceGroup.pfnGet( &count, &phDeviceGroups[ total_count ] );
+            if( XE_RESULT_SUCCESS != result ) break;
+
+            for( uint32_t i = total_count; i < count; ++i )
+                phDeviceGroups[ i ] = reinterpret_cast<xe_device_group_handle_t>( 
+                    xe_device_group_object_t::factory.get( phDeviceGroups[ i ], &drv.xeDdiTable ) );
+        }
+
+        total_count += count;
+    }
+
+    if( XE_RESULT_SUCCESS == result )
+        *pCount = total_count;
 
     return result;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xeDeviceGroupGetDevices
+/// @brief Intercept function for xeDeviceGet
 xe_result_t __xecall
-xeDeviceGroupGetDevices(
+xeDeviceGet(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of device groups available.
                                                     ///< if count is non-zero, then driver will only retrieve that number of
                                                     ///< device groups.
-    xe_device_handle_t* pDevices                    ///< [in,out][optional][range(0, *pCount)] array of handle of devices
+    xe_device_handle_t* phDevices                   ///< [in,out][optional][range(0, *pCount)] array of handle of devices
     )
 {
     // extract driver's function pointer table
@@ -1026,12 +1059,12 @@ xeDeviceGroupGetDevices(
     hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
 
     // forward to device-driver
-    auto result = dditable->DeviceGroup.pfnGetDevices( hDeviceGroup, pCount, pDevices );
+    auto result = dditable->Device.pfnGet( hDeviceGroup, pCount, phDevices );
 
     // convert driver handles to loader handles
-    for( size_t i = 0; ( nullptr != pDevices ) && ( i < *pCount ); ++i )
-        pDevices[ i ] = reinterpret_cast<xe_device_handle_t>(
-            xe_device_object_t::factory.get( pDevices[ i ], dditable ) );
+    for( size_t i = 0; ( nullptr != phDevices ) && ( i < *pCount ); ++i )
+        phDevices[ i ] = reinterpret_cast<xe_device_handle_t>(
+            xe_device_object_t::factory.get( phDevices[ i ], dditable ) );
 
     return result;
 }
@@ -1360,7 +1393,7 @@ xeCommandListCreate(
 xe_result_t __xecall
 xeCommandListCreateImmediate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    const xe_command_queue_desc_t* desc,            ///< [in] pointer to command queue descriptor
+    const xe_command_queue_desc_t* altdesc,         ///< [in] pointer to command queue descriptor
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     )
 {
@@ -1371,7 +1404,7 @@ xeCommandListCreateImmediate(
     hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
     // forward to device-driver
-    auto result = dditable->CommandList.pfnCreateImmediate( hDevice, desc, phCommandList );
+    auto result = dditable->CommandList.pfnCreateImmediate( hDevice, altdesc, phCommandList );
 
     // convert driver handle to loader handle
     *phCommandList = reinterpret_cast<xe_command_list_handle_t>(
@@ -2635,9 +2668,9 @@ xeDeviceGroupCloseMemIpcHandle(
 xe_result_t __xecall
 xeModuleCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    const xe_module_desc_t* pDesc,                  ///< [in] pointer to module descriptor
+    const xe_module_desc_t* desc,                   ///< [in] pointer to module descriptor
     xe_module_handle_t* phModule,                   ///< [out] pointer to handle of module object created
-    xe_module_build_log_handle_t* phBuildLog        ///< [in,out][optional] pointer to handle of module's build log.
+    xe_module_build_log_handle_t* phBuildLog        ///< [out][optional] pointer to handle of module's build log.
     )
 {
     // extract driver's function pointer table
@@ -2647,7 +2680,7 @@ xeModuleCreate(
     hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
     // forward to device-driver
-    auto result = dditable->Module.pfnCreate( hDevice, pDesc, phModule, phBuildLog );
+    auto result = dditable->Module.pfnCreate( hDevice, desc, phModule, phBuildLog );
 
     // convert driver handle to loader handle
     *phModule = reinterpret_cast<xe_module_handle_t>(
@@ -2773,7 +2806,7 @@ xeModuleGetGlobalPointer(
 xe_result_t __xecall
 xeFunctionCreate(
     xe_module_handle_t hModule,                     ///< [in] handle of the module
-    const xe_function_desc_t* pDesc,                ///< [in] pointer to function descriptor
+    const xe_function_desc_t* desc,                 ///< [in] pointer to function descriptor
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object
     )
 {
@@ -2784,7 +2817,7 @@ xeFunctionCreate(
     hModule = reinterpret_cast<xe_module_object_t*>( hModule )->handle;
 
     // forward to device-driver
-    auto result = dditable->Function.pfnCreate( hModule, pDesc, phFunction );
+    auto result = dditable->Function.pfnCreate( hModule, desc, phFunction );
 
     // convert driver handle to loader handle
     *phFunction = reinterpret_cast<xe_function_handle_t>(
@@ -3184,7 +3217,7 @@ xeDeviceEvictImage(
 xe_result_t __xecall
 xeSamplerCreate(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    const xe_sampler_desc_t* pDesc,                 ///< [in] pointer to sampler descriptor
+    const xe_sampler_desc_t* desc,                  ///< [in] pointer to sampler descriptor
     xe_sampler_handle_t* phSampler                  ///< [out] handle of the sampler
     )
 {
@@ -3195,7 +3228,7 @@ xeSamplerCreate(
     hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
     // forward to device-driver
-    auto result = dditable->Sampler.pfnCreate( hDevice, pDesc, phSampler );
+    auto result = dditable->Sampler.pfnCreate( hDevice, desc, phSampler );
 
     // convert driver handle to loader handle
     *phSampler = reinterpret_cast<xe_sampler_handle_t>(

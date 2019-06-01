@@ -14,7 +14,7 @@ int main()
     // Get the first device group
     uint32_t groupCount = 1;
     xe_device_group_handle_t hDeviceGroup = nullptr;
-    xeGetDeviceGroups( &groupCount, &hDeviceGroup );
+    xeDeviceGroupGet( &groupCount, &hDeviceGroup );
 
     xe_device_properties_t device_properties = {};
     xeDeviceGroupGetProperties( hDeviceGroup, &device_properties );
@@ -27,7 +27,7 @@ int main()
     // Get the first device within the device group
     xe_device_handle_t hDevice = nullptr;
     uint32_t deviceCount = 1;
-    xeDeviceGroupGetDevices( hDeviceGroup, &deviceCount, &hDevice );
+    xeDeviceGet( hDeviceGroup, &deviceCount, &hDevice );
 
     return 0;
 }
