@@ -201,10 +201,16 @@ xexCommandGraphCreate(
     // forward to device-driver
     auto result = dditable->CommandGraph.pfnCreate( hDevice, desc, phCommandGraph );
 
-    // convert driver handle to loader handle
-    *phCommandGraph = reinterpret_cast<xex_command_graph_handle_t>(
-        xex_command_graph_object_t::factory.get( *phCommandGraph, dditable ) );
-
+    try
+    {
+        // convert driver handle to loader handle
+        *phCommandGraph = reinterpret_cast<xex_command_graph_handle_t>(
+            xex_command_graph_object_t::factory.get( *phCommandGraph, dditable ) );
+    }
+    catch( std::bad_alloc& )
+    {
+        result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
     return result;
 }
 
@@ -226,7 +232,6 @@ xexCommandGraphDestroy(
 
     // release loader handle
     xex_command_graph_object_t::factory.release( hCommandGraph );
-
     return result;
 }
 

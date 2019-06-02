@@ -132,17 +132,17 @@ ${th.make_func_name(n, tags, obj)}(
     )
 {
     %if re.match(r"Init", obj['name']):
-    xe_result_t result = XE_RESULT_SUCCESS;
+    xe_result_t result = ${X}_RESULT_SUCCESS;
 
     for( auto& drv : loader.drivers )
     {
-        if( XE_RESULT_SUCCESS == result )
+        if( ${X}_RESULT_SUCCESS == result )
         {
             result = drv.${n}DdiTable.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
         }
     }
     %elif re.match(r"\w+DeviceGroupGet$", th.make_func_name(n, tags, obj)):
-    xe_result_t result = XE_RESULT_SUCCESS;
+    xe_result_t result = ${X}_RESULT_SUCCESS;
 
     uint32_t total_count = 0;
 
@@ -151,7 +151,7 @@ ${th.make_func_name(n, tags, obj)}(
         uint32_t count = 0;
 
         result = drv.${n}DdiTable.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)}( &count, nullptr );
-        if( XE_RESULT_SUCCESS != result ) break;
+        if( ${X}_RESULT_SUCCESS != result ) break;
 
         if( ( 0 < *${obj['params'][0]['name']} ) && ( *${obj['params'][0]['name']} > total_count + count ) )
             break;
@@ -159,17 +159,24 @@ ${th.make_func_name(n, tags, obj)}(
         if( nullptr != ${obj['params'][1]['name']} )
         {
             result = drv.${n}DdiTable.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)}( &count, &${obj['params'][1]['name']}[ total_count ] );
-            if( XE_RESULT_SUCCESS != result ) break;
+            if( ${X}_RESULT_SUCCESS != result ) break;
 
-            for( uint32_t i = total_count; i < count; ++i )
-                ${obj['params'][1]['name']}[ i ] = reinterpret_cast<${n}_device_group_handle_t>( 
-                    ${n}_device_group_object_t::factory.get( ${obj['params'][1]['name']}[ i ], &drv.${n}DdiTable ) );
+            try
+            {
+                for( uint32_t i = total_count; i < count; ++i )
+                    ${obj['params'][1]['name']}[ i ] = reinterpret_cast<${n}_device_group_handle_t>( 
+                        ${n}_device_group_object_t::factory.get( ${obj['params'][1]['name']}[ i ], &drv.${n}DdiTable ) );
+            }
+            catch( std::bad_alloc& )
+            {
+                result = ${X}_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+            }
         }
 
         total_count += count;
     }
 
-    if( XE_RESULT_SUCCESS == result )
+    if( ${X}_RESULT_SUCCESS == result )
         *${obj['params'][0]['name']} = total_count;
 
     %else:
@@ -201,24 +208,30 @@ ${th.make_func_name(n, tags, obj)}(
     // release loader handle
     ${item['obj']}::factory.release( ${item['name']} );
     %else:
-    %if 'range' in item:
-    // convert driver handles to loader handles
-    for( size_t i = ${item['range'][0]}; ( nullptr != ${item['name']} ) && ( i < ${item['range'][1]} ); ++i )
-        ${item['name']}[ i ] = reinterpret_cast<${item['type']}>(
-            ${item['obj']}::factory.get( ${item['name']}[ i ], dditable ) );
-    %else:
-    // convert driver handle to loader handle
-    %if item['optional']:
-    if( nullptr != ${item['name']} )
+    try
+    {
+        %if 'range' in item:
+        // convert driver handles to loader handles
+        for( size_t i = ${item['range'][0]}; ( nullptr != ${item['name']} ) && ( i < ${item['range'][1]} ); ++i )
+            ${item['name']}[ i ] = reinterpret_cast<${item['type']}>(
+                ${item['obj']}::factory.get( ${item['name']}[ i ], dditable ) );
+        %else:
+        // convert driver handle to loader handle
+        %if item['optional']:
+        if( nullptr != ${item['name']} )
+            *${item['name']} = reinterpret_cast<${item['type']}>(
+                ${item['obj']}::factory.get( *${item['name']}, dditable ) );
+        %else:
         *${item['name']} = reinterpret_cast<${item['type']}>(
             ${item['obj']}::factory.get( *${item['name']}, dditable ) );
-    %else:
-    *${item['name']} = reinterpret_cast<${item['type']}>(
-        ${item['obj']}::factory.get( *${item['name']}, dditable ) );
+        %endif
+        %endif
+    }
+    catch( std::bad_alloc& )
+    {
+        result = ${X}_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
     %endif
-    %endif
-    %endif
-
     %endfor
     %endif
     return result;

@@ -1025,9 +1025,16 @@ xeDeviceGroupGet(
             result = drv.xeDdiTable.DeviceGroup.pfnGet( &count, &phDeviceGroups[ total_count ] );
             if( XE_RESULT_SUCCESS != result ) break;
 
-            for( uint32_t i = total_count; i < count; ++i )
-                phDeviceGroups[ i ] = reinterpret_cast<xe_device_group_handle_t>( 
-                    xe_device_group_object_t::factory.get( phDeviceGroups[ i ], &drv.xeDdiTable ) );
+            try
+            {
+                for( uint32_t i = total_count; i < count; ++i )
+                    phDeviceGroups[ i ] = reinterpret_cast<xe_device_group_handle_t>( 
+                        xe_device_group_object_t::factory.get( phDeviceGroups[ i ], &drv.xeDdiTable ) );
+            }
+            catch( std::bad_alloc& )
+            {
+                result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+            }
         }
 
         total_count += count;
@@ -1061,11 +1068,17 @@ xeDeviceGet(
     // forward to device-driver
     auto result = dditable->Device.pfnGet( hDeviceGroup, pCount, phDevices );
 
-    // convert driver handles to loader handles
-    for( size_t i = 0; ( nullptr != phDevices ) && ( i < *pCount ); ++i )
-        phDevices[ i ] = reinterpret_cast<xe_device_handle_t>(
-            xe_device_object_t::factory.get( phDevices[ i ], dditable ) );
-
+    try
+    {
+        // convert driver handles to loader handles
+        for( size_t i = 0; ( nullptr != phDevices ) && ( i < *pCount ); ++i )
+            phDevices[ i ] = reinterpret_cast<xe_device_handle_t>(
+                xe_device_object_t::factory.get( phDevices[ i ], dditable ) );
+    }
+    catch( std::bad_alloc& )
+    {
+        result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
     return result;
 }
 
@@ -1087,10 +1100,16 @@ xeDeviceGetSubDevice(
     // forward to device-driver
     auto result = dditable->Device.pfnGetSubDevice( hDevice, ordinal, phSubDevice );
 
-    // convert driver handle to loader handle
-    *phSubDevice = reinterpret_cast<xe_device_handle_t>(
-        xe_device_object_t::factory.get( *phSubDevice, dditable ) );
-
+    try
+    {
+        // convert driver handle to loader handle
+        *phSubDevice = reinterpret_cast<xe_device_handle_t>(
+            xe_device_object_t::factory.get( *phSubDevice, dditable ) );
+    }
+    catch( std::bad_alloc& )
+    {
+        result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
     return result;
 }
 
@@ -1280,10 +1299,16 @@ xeCommandQueueCreate(
     // forward to device-driver
     auto result = dditable->CommandQueue.pfnCreate( hDevice, desc, phCommandQueue );
 
-    // convert driver handle to loader handle
-    *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>(
-        xe_command_queue_object_t::factory.get( *phCommandQueue, dditable ) );
-
+    try
+    {
+        // convert driver handle to loader handle
+        *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>(
+            xe_command_queue_object_t::factory.get( *phCommandQueue, dditable ) );
+    }
+    catch( std::bad_alloc& )
+    {
+        result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
     return result;
 }
 
@@ -1305,7 +1330,6 @@ xeCommandQueueDestroy(
 
     // release loader handle
     xe_command_queue_object_t::factory.release( hCommandQueue );
-
     return result;
 }
 
@@ -1381,10 +1405,16 @@ xeCommandListCreate(
     // forward to device-driver
     auto result = dditable->CommandList.pfnCreate( hDevice, desc, phCommandList );
 
-    // convert driver handle to loader handle
-    *phCommandList = reinterpret_cast<xe_command_list_handle_t>(
-        xe_command_list_object_t::factory.get( *phCommandList, dditable ) );
-
+    try
+    {
+        // convert driver handle to loader handle
+        *phCommandList = reinterpret_cast<xe_command_list_handle_t>(
+            xe_command_list_object_t::factory.get( *phCommandList, dditable ) );
+    }
+    catch( std::bad_alloc& )
+    {
+        result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
     return result;
 }
 
@@ -1406,10 +1436,16 @@ xeCommandListCreateImmediate(
     // forward to device-driver
     auto result = dditable->CommandList.pfnCreateImmediate( hDevice, altdesc, phCommandList );
 
-    // convert driver handle to loader handle
-    *phCommandList = reinterpret_cast<xe_command_list_handle_t>(
-        xe_command_list_object_t::factory.get( *phCommandList, dditable ) );
-
+    try
+    {
+        // convert driver handle to loader handle
+        *phCommandList = reinterpret_cast<xe_command_list_handle_t>(
+            xe_command_list_object_t::factory.get( *phCommandList, dditable ) );
+    }
+    catch( std::bad_alloc& )
+    {
+        result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
     return result;
 }
 
@@ -1431,7 +1467,6 @@ xeCommandListDestroy(
 
     // release loader handle
     xe_command_list_object_t::factory.release( hCommandList );
-
     return result;
 }
 
@@ -1681,10 +1716,16 @@ xeDeviceRegisterCLProgram(
     // forward to device-driver
     auto result = dditable->Device.pfnRegisterCLProgram( hDevice, context, program, phModule );
 
-    // convert driver handle to loader handle
-    *phModule = reinterpret_cast<xe_module_handle_t>(
-        xe_module_object_t::factory.get( *phModule, dditable ) );
-
+    try
+    {
+        // convert driver handle to loader handle
+        *phModule = reinterpret_cast<xe_module_handle_t>(
+            xe_module_object_t::factory.get( *phModule, dditable ) );
+    }
+    catch( std::bad_alloc& )
+    {
+        result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
     return result;
 }
 #endif // XE_ENABLE_OCL_INTEROP
@@ -1709,10 +1750,16 @@ xeDeviceRegisterCLCommandQueue(
     // forward to device-driver
     auto result = dditable->Device.pfnRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
 
-    // convert driver handle to loader handle
-    *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>(
-        xe_command_queue_object_t::factory.get( *phCommandQueue, dditable ) );
-
+    try
+    {
+        // convert driver handle to loader handle
+        *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>(
+            xe_command_queue_object_t::factory.get( *phCommandQueue, dditable ) );
+    }
+    catch( std::bad_alloc& )
+    {
+        result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
     return result;
 }
 #endif // XE_ENABLE_OCL_INTEROP
@@ -1985,10 +2032,16 @@ xeEventPoolCreate(
     // forward to device-driver
     auto result = dditable->EventPool.pfnCreate( hDevice, desc, phEventPool );
 
-    // convert driver handle to loader handle
-    *phEventPool = reinterpret_cast<xe_event_pool_handle_t>(
-        xe_event_pool_object_t::factory.get( *phEventPool, dditable ) );
-
+    try
+    {
+        // convert driver handle to loader handle
+        *phEventPool = reinterpret_cast<xe_event_pool_handle_t>(
+            xe_event_pool_object_t::factory.get( *phEventPool, dditable ) );
+    }
+    catch( std::bad_alloc& )
+    {
+        result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
     return result;
 }
 
@@ -2010,7 +2063,6 @@ xeEventPoolDestroy(
 
     // release loader handle
     xe_event_pool_object_t::factory.release( hEventPool );
-
     return result;
 }
 
@@ -2032,10 +2084,16 @@ xeEventCreate(
     // forward to device-driver
     auto result = dditable->Event.pfnCreate( hEventPool, desc, phEvent );
 
-    // convert driver handle to loader handle
-    *phEvent = reinterpret_cast<xe_event_handle_t>(
-        xe_event_object_t::factory.get( *phEvent, dditable ) );
-
+    try
+    {
+        // convert driver handle to loader handle
+        *phEvent = reinterpret_cast<xe_event_handle_t>(
+            xe_event_object_t::factory.get( *phEvent, dditable ) );
+    }
+    catch( std::bad_alloc& )
+    {
+        result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
     return result;
 }
 
@@ -2057,7 +2115,6 @@ xeEventDestroy(
 
     // release loader handle
     xe_event_object_t::factory.release( hEvent );
-
     return result;
 }
 
@@ -2099,10 +2156,16 @@ xeEventPoolOpenIpcHandle(
     // forward to device-driver
     auto result = dditable->EventPool.pfnOpenIpcHandle( hDevice, hIpc, phEventPool );
 
-    // convert driver handle to loader handle
-    *phEventPool = reinterpret_cast<xe_event_pool_handle_t>(
-        xe_event_pool_object_t::factory.get( *phEventPool, dditable ) );
-
+    try
+    {
+        // convert driver handle to loader handle
+        *phEventPool = reinterpret_cast<xe_event_pool_handle_t>(
+            xe_event_pool_object_t::factory.get( *phEventPool, dditable ) );
+    }
+    catch( std::bad_alloc& )
+    {
+        result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
     return result;
 }
 
@@ -2296,10 +2359,16 @@ xeFenceCreate(
     // forward to device-driver
     auto result = dditable->Fence.pfnCreate( hCommandQueue, desc, phFence );
 
-    // convert driver handle to loader handle
-    *phFence = reinterpret_cast<xe_fence_handle_t>(
-        xe_fence_object_t::factory.get( *phFence, dditable ) );
-
+    try
+    {
+        // convert driver handle to loader handle
+        *phFence = reinterpret_cast<xe_fence_handle_t>(
+            xe_fence_object_t::factory.get( *phFence, dditable ) );
+    }
+    catch( std::bad_alloc& )
+    {
+        result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
     return result;
 }
 
@@ -2321,7 +2390,6 @@ xeFenceDestroy(
 
     // release loader handle
     xe_fence_object_t::factory.release( hFence );
-
     return result;
 }
 
@@ -2426,10 +2494,16 @@ xeImageCreate(
     // forward to device-driver
     auto result = dditable->Image.pfnCreate( hDevice, desc, phImage );
 
-    // convert driver handle to loader handle
-    *phImage = reinterpret_cast<xe_image_handle_t>(
-        xe_image_object_t::factory.get( *phImage, dditable ) );
-
+    try
+    {
+        // convert driver handle to loader handle
+        *phImage = reinterpret_cast<xe_image_handle_t>(
+            xe_image_object_t::factory.get( *phImage, dditable ) );
+    }
+    catch( std::bad_alloc& )
+    {
+        result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
     return result;
 }
 
@@ -2451,7 +2525,6 @@ xeImageDestroy(
 
     // release loader handle
     xe_image_object_t::factory.release( hImage );
-
     return result;
 }
 
@@ -2682,15 +2755,27 @@ xeModuleCreate(
     // forward to device-driver
     auto result = dditable->Module.pfnCreate( hDevice, desc, phModule, phBuildLog );
 
-    // convert driver handle to loader handle
-    *phModule = reinterpret_cast<xe_module_handle_t>(
-        xe_module_object_t::factory.get( *phModule, dditable ) );
-
-    // convert driver handle to loader handle
-    if( nullptr != phBuildLog )
-        *phBuildLog = reinterpret_cast<xe_module_build_log_handle_t>(
-            xe_module_build_log_object_t::factory.get( *phBuildLog, dditable ) );
-
+    try
+    {
+        // convert driver handle to loader handle
+        *phModule = reinterpret_cast<xe_module_handle_t>(
+            xe_module_object_t::factory.get( *phModule, dditable ) );
+    }
+    catch( std::bad_alloc& )
+    {
+        result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
+    try
+    {
+        // convert driver handle to loader handle
+        if( nullptr != phBuildLog )
+            *phBuildLog = reinterpret_cast<xe_module_build_log_handle_t>(
+                xe_module_build_log_object_t::factory.get( *phBuildLog, dditable ) );
+    }
+    catch( std::bad_alloc& )
+    {
+        result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
     return result;
 }
 
@@ -2712,7 +2797,6 @@ xeModuleDestroy(
 
     // release loader handle
     xe_module_object_t::factory.release( hModule );
-
     return result;
 }
 
@@ -2734,7 +2818,6 @@ xeModuleBuildLogDestroy(
 
     // release loader handle
     xe_module_build_log_object_t::factory.release( hModuleBuildLog );
-
     return result;
 }
 
@@ -2819,10 +2902,16 @@ xeFunctionCreate(
     // forward to device-driver
     auto result = dditable->Function.pfnCreate( hModule, desc, phFunction );
 
-    // convert driver handle to loader handle
-    *phFunction = reinterpret_cast<xe_function_handle_t>(
-        xe_function_object_t::factory.get( *phFunction, dditable ) );
-
+    try
+    {
+        // convert driver handle to loader handle
+        *phFunction = reinterpret_cast<xe_function_handle_t>(
+            xe_function_object_t::factory.get( *phFunction, dditable ) );
+    }
+    catch( std::bad_alloc& )
+    {
+        result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
     return result;
 }
 
@@ -2844,7 +2933,6 @@ xeFunctionDestroy(
 
     // release loader handle
     xe_function_object_t::factory.release( hFunction );
-
     return result;
 }
 
@@ -3230,10 +3318,16 @@ xeSamplerCreate(
     // forward to device-driver
     auto result = dditable->Sampler.pfnCreate( hDevice, desc, phSampler );
 
-    // convert driver handle to loader handle
-    *phSampler = reinterpret_cast<xe_sampler_handle_t>(
-        xe_sampler_object_t::factory.get( *phSampler, dditable ) );
-
+    try
+    {
+        // convert driver handle to loader handle
+        *phSampler = reinterpret_cast<xe_sampler_handle_t>(
+            xe_sampler_object_t::factory.get( *phSampler, dditable ) );
+    }
+    catch( std::bad_alloc& )
+    {
+        result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+    }
     return result;
 }
 
@@ -3255,7 +3349,6 @@ xeSamplerDestroy(
 
     // release loader handle
     xe_sampler_object_t::factory.release( hSampler );
-
     return result;
 }
 
