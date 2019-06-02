@@ -145,6 +145,7 @@ class param_traits:
     RE_INOUT    = r"^\[in,out\].*"
     RE_OPTIONAL = r".*\[optional\].*"
     RE_RANGE    = r".*\[range\((.+),\s*(.+)\)\].*"
+    RE_RELEASE  = r".*\[release\].*"
 
     @classmethod
     def is_input(cls, item):
@@ -194,6 +195,12 @@ class param_traits:
             return re.sub(cls.RE_RANGE, r"\2", item['desc'])
         except:
             return None
+    @classmethod
+    def is_release(cls, item):
+        try:
+            return True if re.match(cls.RE_RELEASE, item['desc']) else False
+        except:
+            return False
 
 """
     Extracts traits from a function object
@@ -787,8 +794,6 @@ def make_wrapper_params(namespace, tags, obj, meta):
     is_static = function_traits.is_static(obj)
     is_global = function_traits.is_global(obj, tags)
 
-    is_destroy_function = True if re.match(r"Destroy", obj['name']) else False
-
     for i, item in enumerate(obj['params']):
         c_name = _get_param_name(namespace, tags, item, cpp=False)
         cpp_name = _get_param_name(namespace, tags, item, cpp=True)
@@ -906,7 +911,7 @@ def make_wrapper_params(namespace, tags, obj, meta):
                     params.append({
                         'arg': "reinterpret_cast<%s>( getHandle() )"%(c_tname)
                     })
-                elif is_destroy_function:
+                elif param_traits.is_release(item):
                     params.append({
                         'arg': "reinterpret_cast<%s>( %s->getHandle() )"%(c_tname, cpp_name),
                         'release': True,
@@ -1322,36 +1327,31 @@ Public:
 def get_loader_epilogue(namespace, tags, obj, meta):
     epilogue = []
 
-    is_destroy_function = True if re.match(r"Destroy", obj['name']) else False
-    if is_destroy_function:
-        params = _filter_param_list(obj['params'], ["[in]"])
-    else:
-        params = _filter_param_list(obj['params'], ["[in,out]", "[out]"])
+    for i, item in enumerate(obj['params']):
+        if param_traits.is_release(item) or param_traits.is_output(item) or param_traits.is_inoutput(item):
+            if type_traits.is_class_handle(item['type'], meta):
+                name = subt(namespace, tags, item['name'])
+                tname = _remove_const_ptr(subt(namespace, tags, item['type']))
 
-    for i, item in enumerate(params):
-        if type_traits.is_class_handle(item['type'], meta):
-            name = subt(namespace, tags, item['name'])
-            tname = _remove_const_ptr(subt(namespace, tags, item['type']))
+                obj_name = re.sub(r"^[^_]+_(\w+)", r"%s_\1"%namespace, re.sub(r"(\w+)_handle_t", r"\1_object_t", tname))
 
-            obj_name = re.sub(r"^[^_]+_(\w+)", r"%s_\1"%namespace, re.sub(r"(\w+)_handle_t", r"\1_object_t", tname))
-
-            if param_traits.is_range(item):
-                range_start = param_traits.range_start(item)
-                range_end   = param_traits.range_end(item)
-                epilogue.append({
-                    'name': name,
-                    'type': tname,
-                    'obj': obj_name,
-                    'release': is_destroy_function,
-                    'range': (range_start, range_end)
-                })
-            else:
-                epilogue.append({
-                    'name': name,
-                    'type': tname,
-                    'obj': obj_name,
-                    'release': is_destroy_function,
-                    'optional': param_traits.is_optional(item)
-                })
+                if param_traits.is_range(item):
+                    range_start = param_traits.range_start(item)
+                    range_end   = param_traits.range_end(item)
+                    epilogue.append({
+                        'name': name,
+                        'type': tname,
+                        'obj': obj_name,
+                        'release': param_traits.is_release(item),
+                        'range': (range_start, range_end)
+                    })
+                else:
+                    epilogue.append({
+                        'name': name,
+                        'type': tname,
+                        'obj': obj_name,
+                        'release': param_traits.is_release(item),
+                        'optional': param_traits.is_optional(item)
+                    })
 
     return epilogue

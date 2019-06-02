@@ -124,7 +124,7 @@ xeFenceCreate(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeFenceDestroy(
-    xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
+    xe_fence_handle_t hFence                        ///< [in][release] handle of fence object to destroy
     );
 
 ///////////////////////////////////////////////////////////////////////////////

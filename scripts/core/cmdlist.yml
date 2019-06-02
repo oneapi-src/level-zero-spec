@@ -103,7 +103,7 @@ details:
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
-      desc: "[in] handle of command list object to destroy"
+      desc: "[in][release] handle of command list object to destroy"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Closes a command list; ready to be executed by a command queue."

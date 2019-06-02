@@ -139,7 +139,7 @@ xeSamplerCreate(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeSamplerDestroy(
-    xe_sampler_handle_t hSampler                    ///< [in] handle of the sampler
+    xe_sampler_handle_t hSampler                    ///< [in][release] handle of the sampler
     );
 
 #if defined(__cplusplus)

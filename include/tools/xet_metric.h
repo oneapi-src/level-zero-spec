@@ -531,7 +531,7 @@ xetMetricQueryPoolCreate(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetMetricQueryPoolDestroy(
-    xet_metric_query_pool_handle_t hMetricQueryPool ///< [in] handle of the metric query pool
+    xet_metric_query_pool_handle_t hMetricQueryPool ///< [in][release] handle of the metric query pool
     );
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -102,7 +102,7 @@ details:
 params:
     - type: "$x_sampler_handle_t"
       name: hSampler
-      desc: "[in] handle of the sampler"
+      desc: "[in][release] handle of the sampler"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "c++ wrapper for sampler"

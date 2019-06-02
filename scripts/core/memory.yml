@@ -160,7 +160,7 @@ params:
       desc: "[in] handle of the device group object"
     - type: "const void*"
       name: ptr
-      desc: "[in] pointer to memory to free"
+      desc: "[in][release] pointer to memory to free"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $x_memory_allocation_properties_t"
@@ -320,4 +320,4 @@ params:
       desc: "[in] handle of the device group object"
     - type: "const void*"
       name: ptr
-      desc: "[in] pointer to device allocation in this process"
+      desc: "[in][release] pointer to device allocation in this process"

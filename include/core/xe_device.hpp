@@ -512,7 +512,7 @@ namespace xe
         /// @throws result_t
         void __xecall
         FreeMem(
-            const void* ptr                                 ///< [in] pointer to memory to free
+            const void* ptr                                 ///< [in][release] pointer to memory to free
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -611,7 +611,7 @@ namespace xe
         /// @throws result_t
         void __xecall
         CloseMemIpcHandle(
-            const void* ptr                                 ///< [in] pointer to device allocation in this process
+            const void* ptr                                 ///< [in][release] pointer to device allocation in this process
             );
 
     };

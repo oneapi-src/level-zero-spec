@@ -50,7 +50,7 @@ analogue:
 params:
     - type: $t_power_handle_t
       name: hPower
-      desc: "[in] handle of the power object to destroy"
+      desc: "[in][release] handle of the power object to destroy"
 
 --- #--------------------------------------------------------------------------
 type: enum

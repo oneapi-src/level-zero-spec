@@ -175,7 +175,7 @@ namespace xe
         /// @throws result_t
         static void __xecall
         Destroy(
-            CommandQueue* pCommandQueue                     ///< [in] pointer to command queue object to destroy
+            CommandQueue* pCommandQueue                     ///< [in][release] pointer to command queue object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////

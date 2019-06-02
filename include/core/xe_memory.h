@@ -199,7 +199,7 @@ xeDeviceGroupAllocHostMem(
 xe_result_t __xecall
 xeDeviceGroupFreeMem(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    const void* ptr                                 ///< [in] pointer to memory to free
+    const void* ptr                                 ///< [in][release] pointer to memory to free
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -382,7 +382,7 @@ xeDeviceGroupOpenMemIpcHandle(
 xe_result_t __xecall
 xeDeviceGroupCloseMemIpcHandle(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    const void* ptr                                 ///< [in] pointer to device allocation in this process
+    const void* ptr                                 ///< [in][release] pointer to device allocation in this process
     );
 
 #if defined(__cplusplus)

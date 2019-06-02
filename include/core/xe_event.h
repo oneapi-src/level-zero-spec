@@ -121,7 +121,7 @@ xeEventPoolCreate(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeEventPoolDestroy(
-    xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object to destroy
+    xe_event_pool_handle_t hEventPool               ///< [in][release] handle of event pool object to destroy
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -221,7 +221,7 @@ xeEventCreate(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeEventDestroy(
-    xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
+    xe_event_handle_t hEvent                        ///< [in][release] handle of event object to destroy
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -300,7 +300,7 @@ xeEventPoolOpenIpcHandle(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeEventPoolCloseIpcHandle(
-    xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object
+    xe_event_pool_handle_t hEventPool               ///< [in][release] handle of event pool object
     );
 
 ///////////////////////////////////////////////////////////////////////////////

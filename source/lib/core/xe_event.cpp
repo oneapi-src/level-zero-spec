@@ -94,7 +94,7 @@ xeEventPoolCreate(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeEventPoolDestroy(
-    xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object to destroy
+    xe_event_pool_handle_t hEventPool               ///< [in][release] handle of event pool object to destroy
     )
 {
     auto pfnDestroy = xe_lib::lib.ddiTable.EventPool.pfnDestroy;
@@ -177,7 +177,7 @@ xeEventCreate(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeEventDestroy(
-    xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
+    xe_event_handle_t hEvent                        ///< [in][release] handle of event object to destroy
     )
 {
     auto pfnDestroy = xe_lib::lib.ddiTable.Event.pfnDestroy;
@@ -286,7 +286,7 @@ xeEventPoolOpenIpcHandle(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeEventPoolCloseIpcHandle(
-    xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object
+    xe_event_pool_handle_t hEventPool               ///< [in][release] handle of event pool object
     )
 {
     auto pfnCloseIpcHandle = xe_lib::lib.ddiTable.EventPool.pfnCloseIpcHandle;
@@ -641,7 +641,7 @@ namespace xe
     /// @throws result_t
     void __xecall
     EventPool::Destroy(
-        EventPool* pEventPool                           ///< [in] pointer to event pool object to destroy
+        EventPool* pEventPool                           ///< [in][release] pointer to event pool object to destroy
         )
     {
         auto result = static_cast<result_t>( ::xeEventPoolDestroy(
@@ -726,7 +726,7 @@ namespace xe
     /// @throws result_t
     void __xecall
     Event::Destroy(
-        Event* pEvent                                   ///< [in] pointer to event object to destroy
+        Event* pEvent                                   ///< [in][release] pointer to event object to destroy
         )
     {
         auto result = static_cast<result_t>( ::xeEventDestroy(

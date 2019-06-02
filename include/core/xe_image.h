@@ -270,7 +270,7 @@ xeImageCreate(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeImageDestroy(
-    xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
+    xe_image_handle_t hImage                        ///< [in][release] handle of image object to destroy
     );
 
 #if defined(__cplusplus)

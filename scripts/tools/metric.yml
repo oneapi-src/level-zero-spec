@@ -520,7 +520,7 @@ details:
 params:
     - type: "$t_metric_query_pool_handle_t"
       name: hMetricQueryPool
-      desc: "[in] handle of the metric query pool"
+      desc: "[in][release] handle of the metric query pool"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid metric query pool handle"

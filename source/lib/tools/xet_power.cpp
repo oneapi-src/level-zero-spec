@@ -89,7 +89,7 @@ xetPowerCreate(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetPowerDestroy(
-    xet_power_handle_t hPower                       ///< [in] handle of the power object to destroy
+    xet_power_handle_t hPower                       ///< [in][release] handle of the power object to destroy
     )
 {
     auto pfnDestroy = xet_lib::lib.ddiTable.Power.pfnDestroy;
@@ -1234,7 +1234,7 @@ namespace xet
     /// @throws result_t
     void __xecall
     Power::Destroy(
-        Power* pPower                                   ///< [in] pointer to the power object to destroy
+        Power* pPower                                   ///< [in][release] pointer to the power object to destroy
         )
     {
         auto result = static_cast<result_t>( ::xetPowerDestroy(

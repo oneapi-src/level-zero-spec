@@ -321,7 +321,7 @@ namespace xet
         /// @throws result_t
         static void __xecall
         Destroy(
-            Power* pPower                                   ///< [in] pointer to the power object to destroy
+            Power* pPower                                   ///< [in][release] pointer to the power object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////

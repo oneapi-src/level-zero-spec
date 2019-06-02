@@ -68,7 +68,7 @@ details:
 params:
     - type: $e_command_graph_handle_t
       name: hCommandGraph
-      desc: "[in] handle of command graph object to destroy"
+      desc: "[in][release] handle of command graph object to destroy"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Closes a command graph; ready to be executed by a command queue."

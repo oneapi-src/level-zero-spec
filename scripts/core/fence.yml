@@ -75,7 +75,7 @@ analogue:
 params:
     - type: $x_fence_handle_t
       name: hFence
-      desc: "[in] handle of fence object to destroy"
+      desc: "[in][release] handle of fence object to destroy"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "fence is enqueued in a command queue"

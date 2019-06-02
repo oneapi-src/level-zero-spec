@@ -447,7 +447,7 @@ xetMetricQueryPoolCreate(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetMetricQueryPoolDestroy(
-    xet_metric_query_pool_handle_t hMetricQueryPool ///< [in] handle of the metric query pool
+    xet_metric_query_pool_handle_t hMetricQueryPool ///< [in][release] handle of the metric query pool
     )
 {
     auto pfnDestroy = xet_lib::lib.ddiTable.MetricQueryPool.pfnDestroy;
@@ -1058,7 +1058,7 @@ namespace xet
     /// @throws result_t
     void __xecall
     MetricQueryPool::Destroy(
-        MetricQueryPool* pMetricQueryPool               ///< [in] pointer to the metric query pool
+        MetricQueryPool* pMetricQueryPool               ///< [in][release] pointer to the metric query pool
         )
     {
         auto result = static_cast<result_t>( ::xetMetricQueryPoolDestroy(

@@ -225,7 +225,7 @@ namespace xe
         /// @throws result_t
         static void __xecall
         Destroy(
-            CommandList* pCommandList                       ///< [in] pointer to command list object to destroy
+            CommandList* pCommandList                       ///< [in][release] pointer to command list object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////

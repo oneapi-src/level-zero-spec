@@ -132,7 +132,7 @@ xeCommandListCreateImmediate(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeCommandListDestroy(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
+    xe_command_list_handle_t hCommandList           ///< [in][release] handle of command list object to destroy
     )
 {
     auto pfnDestroy = xe_lib::lib.ddiTable.CommandList.pfnDestroy;
@@ -478,7 +478,7 @@ namespace xe
     /// @throws result_t
     void __xecall
     CommandList::Destroy(
-        CommandList* pCommandList                       ///< [in] pointer to command list object to destroy
+        CommandList* pCommandList                       ///< [in][release] pointer to command list object to destroy
         )
     {
         auto result = static_cast<result_t>( ::xeCommandListDestroy(

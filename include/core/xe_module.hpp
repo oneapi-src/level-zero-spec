@@ -158,7 +158,7 @@ namespace xe
         /// @throws result_t
         static void __xecall
         Destroy(
-            Module* pModule                                 ///< [in] pointer to the module
+            Module* pModule                                 ///< [in][release] pointer to the module
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -263,7 +263,7 @@ namespace xe
         /// @throws result_t
         static void __xecall
         Destroy(
-            ModuleBuildLog* pModuleBuildLog                 ///< [in] pointer to the module build log object.
+            ModuleBuildLog* pModuleBuildLog                 ///< [in][release] pointer to the module build log object.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -413,7 +413,7 @@ namespace xe
         /// @throws result_t
         static void __xecall
         Destroy(
-            Function* pFunction                             ///< [in] pointer to the function object
+            Function* pFunction                             ///< [in][release] pointer to the function object
             );
 
         ///////////////////////////////////////////////////////////////////////////////

@@ -81,7 +81,7 @@ details:
 params:
     - type: $x_event_pool_handle_t
       name: hEventPool
-      desc: "[in] handle of event pool object to destroy"
+      desc: "[in][release] handle of event pool object to destroy"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $x_event_desc_t"
@@ -176,7 +176,7 @@ analogue:
 params:
     - type: $x_event_handle_t
       name: hEvent
-      desc: "[in] handle of event object to destroy"
+      desc: "[in][release] handle of event object to destroy"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Gets an IPC event pool handle for the specified event handle that can be shared with another process."
@@ -227,7 +227,7 @@ details:
 params:
     - type: $x_event_pool_handle_t
       name: hEventPool
-      desc: "[in] handle of event pool object"
+      desc: "[in][release] handle of event pool object"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Appends a signal of the event from the device into a command list."

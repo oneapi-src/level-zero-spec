@@ -129,7 +129,7 @@ xeImageCreate(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeImageDestroy(
-    xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
+    xe_image_handle_t hImage                        ///< [in][release] handle of image object to destroy
     )
 {
     auto pfnDestroy = xe_lib::lib.ddiTable.Image.pfnDestroy;
@@ -251,7 +251,7 @@ namespace xe
     /// @throws result_t
     void __xecall
     Image::Destroy(
-        Image* pImage                                   ///< [in] pointer to image object to destroy
+        Image* pImage                                   ///< [in][release] pointer to image object to destroy
         )
     {
         auto result = static_cast<result_t>( ::xeImageDestroy(

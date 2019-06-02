@@ -132,7 +132,7 @@ xexCommandGraphCreate(
 /// @brief Intercept function for xexCommandGraphDestroy
 xe_result_t __xecall
 xexCommandGraphDestroy(
-    xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to destroy
+    xex_command_graph_handle_t hCommandGraph        ///< [in][release] handle of command graph object to destroy
     )
 {
     xe_result_t result = XE_RESULT_SUCCESS;

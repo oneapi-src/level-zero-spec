@@ -513,7 +513,7 @@ namespace xet
         /// @throws result_t
         static void __xecall
         Destroy(
-            MetricQueryPool* pMetricQueryPool               ///< [in] pointer to the metric query pool
+            MetricQueryPool* pMetricQueryPool               ///< [in][release] pointer to the metric query pool
             );
 
         ///////////////////////////////////////////////////////////////////////////////

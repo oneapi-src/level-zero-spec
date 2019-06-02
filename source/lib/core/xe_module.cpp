@@ -120,7 +120,7 @@ xeModuleCreate(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeModuleDestroy(
-    xe_module_handle_t hModule                      ///< [in] handle of the module
+    xe_module_handle_t hModule                      ///< [in][release] handle of the module
     )
 {
     auto pfnDestroy = xe_lib::lib.ddiTable.Module.pfnDestroy;
@@ -156,7 +156,7 @@ xeModuleDestroy(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeModuleBuildLogDestroy(
-    xe_module_build_log_handle_t hModuleBuildLog    ///< [in] handle of the module build log object.
+    xe_module_build_log_handle_t hModuleBuildLog    ///< [in][release] handle of the module build log object.
     )
 {
     auto pfnDestroy = xe_lib::lib.ddiTable.ModuleBuildLog.pfnDestroy;
@@ -345,7 +345,7 @@ xeFunctionCreate(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeFunctionDestroy(
-    xe_function_handle_t hFunction                  ///< [in] handle of the function object
+    xe_function_handle_t hFunction                  ///< [in][release] handle of the function object
     )
 {
     auto pfnDestroy = xe_lib::lib.ddiTable.Function.pfnDestroy;
@@ -913,7 +913,7 @@ namespace xe
     /// @throws result_t
     void __xecall
     Module::Destroy(
-        Module* pModule                                 ///< [in] pointer to the module
+        Module* pModule                                 ///< [in][release] pointer to the module
         )
     {
         auto result = static_cast<result_t>( ::xeModuleDestroy(
@@ -942,7 +942,7 @@ namespace xe
     /// @throws result_t
     void __xecall
     ModuleBuildLog::Destroy(
-        ModuleBuildLog* pModuleBuildLog                 ///< [in] pointer to the module build log object.
+        ModuleBuildLog* pModuleBuildLog                 ///< [in][release] pointer to the module build log object.
         )
     {
         auto result = static_cast<result_t>( ::xeModuleBuildLogDestroy(
@@ -1104,7 +1104,7 @@ namespace xe
     /// @throws result_t
     void __xecall
     Function::Destroy(
-        Function* pFunction                             ///< [in] pointer to the function object
+        Function* pFunction                             ///< [in][release] pointer to the function object
         )
     {
         auto result = static_cast<result_t>( ::xeFunctionDestroy(

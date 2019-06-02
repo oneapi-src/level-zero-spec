@@ -137,7 +137,7 @@ namespace xe
         /// @throws result_t
         static void __xecall
         Destroy(
-            Fence* pFence                                   ///< [in] pointer to fence object to destroy
+            Fence* pFence                                   ///< [in][release] pointer to fence object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////

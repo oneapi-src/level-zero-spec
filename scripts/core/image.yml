@@ -300,7 +300,7 @@ details:
 params:
     - type: $x_image_handle_t
       name: hImage
-      desc: "[in] handle of image object to destroy"
+      desc: "[in][release] handle of image object to destroy"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for image"

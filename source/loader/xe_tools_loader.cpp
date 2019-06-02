@@ -1047,7 +1047,7 @@ xetMetricQueryPoolCreate(
 /// @brief Intercept function for xetMetricQueryPoolDestroy
 xe_result_t __xecall
 xetMetricQueryPoolDestroy(
-    xet_metric_query_pool_handle_t hMetricQueryPool ///< [in] handle of the metric query pool
+    xet_metric_query_pool_handle_t hMetricQueryPool ///< [in][release] handle of the metric query pool
     )
 {
     // extract driver's function pointer table
@@ -1221,7 +1221,7 @@ xetPowerCreate(
 /// @brief Intercept function for xetPowerDestroy
 xe_result_t __xecall
 xetPowerDestroy(
-    xet_power_handle_t hPower                       ///< [in] handle of the power object to destroy
+    xet_power_handle_t hPower                       ///< [in][release] handle of the power object to destroy
     )
 {
     // extract driver's function pointer table

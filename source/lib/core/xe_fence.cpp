@@ -100,7 +100,7 @@ xeFenceCreate(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeFenceDestroy(
-    xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
+    xe_fence_handle_t hFence                        ///< [in][release] handle of fence object to destroy
     )
 {
     auto pfnDestroy = xe_lib::lib.ddiTable.Fence.pfnDestroy;
@@ -306,7 +306,7 @@ namespace xe
     /// @throws result_t
     void __xecall
     Fence::Destroy(
-        Fence* pFence                                   ///< [in] pointer to fence object to destroy
+        Fence* pFence                                   ///< [in][release] pointer to fence object to destroy
         )
     {
         auto result = static_cast<result_t>( ::xeFenceDestroy(

@@ -149,7 +149,7 @@ xeModuleCreate(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeModuleDestroy(
-    xe_module_handle_t hModule                      ///< [in] handle of the module
+    xe_module_handle_t hModule                      ///< [in][release] handle of the module
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -175,7 +175,7 @@ xeModuleDestroy(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeModuleBuildLogDestroy(
-    xe_module_build_log_handle_t hModuleBuildLog    ///< [in] handle of the module build log object.
+    xe_module_build_log_handle_t hModuleBuildLog    ///< [in][release] handle of the module build log object.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -341,7 +341,7 @@ xeFunctionCreate(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeFunctionDestroy(
-    xe_function_handle_t hFunction                  ///< [in] handle of the function object
+    xe_function_handle_t hFunction                  ///< [in][release] handle of the function object
     );
 
 ///////////////////////////////////////////////////////////////////////////////

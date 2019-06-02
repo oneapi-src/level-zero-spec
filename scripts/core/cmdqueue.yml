@@ -134,7 +134,7 @@ details:
 params:
     - type: $x_command_queue_handle_t
       name: hCommandQueue
-      desc: "[in] handle of command queue object to destroy"
+      desc: "[in][release] handle of command queue object to destroy"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Executes a command list in a command queue."

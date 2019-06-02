@@ -127,7 +127,7 @@ namespace xex
         /// @throws result_t
         static void __xecall
         Destroy(
-            CommandGraph* pCommandGraph                     ///< [in] pointer to command graph object to destroy
+            CommandGraph* pCommandGraph                     ///< [in][release] pointer to command graph object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////

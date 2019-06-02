@@ -100,7 +100,7 @@ xeSamplerCreate(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeSamplerDestroy(
-    xe_sampler_handle_t hSampler                    ///< [in] handle of the sampler
+    xe_sampler_handle_t hSampler                    ///< [in][release] handle of the sampler
     )
 {
     auto pfnDestroy = xe_lib::lib.ddiTable.Sampler.pfnDestroy;
@@ -196,7 +196,7 @@ namespace xe
     /// @throws result_t
     void __xecall
     Sampler::Destroy(
-        Sampler* pSampler                               ///< [in] pointer to the sampler
+        Sampler* pSampler                               ///< [in][release] pointer to the sampler
         )
     {
         auto result = static_cast<result_t>( ::xeSamplerDestroy(

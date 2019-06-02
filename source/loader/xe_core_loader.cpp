@@ -1316,7 +1316,7 @@ xeCommandQueueCreate(
 /// @brief Intercept function for xeCommandQueueDestroy
 xe_result_t __xecall
 xeCommandQueueDestroy(
-    xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
+    xe_command_queue_handle_t hCommandQueue         ///< [in][release] handle of command queue object to destroy
     )
 {
     // extract driver's function pointer table
@@ -1453,7 +1453,7 @@ xeCommandListCreateImmediate(
 /// @brief Intercept function for xeCommandListDestroy
 xe_result_t __xecall
 xeCommandListDestroy(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
+    xe_command_list_handle_t hCommandList           ///< [in][release] handle of command list object to destroy
     )
 {
     // extract driver's function pointer table
@@ -2049,7 +2049,7 @@ xeEventPoolCreate(
 /// @brief Intercept function for xeEventPoolDestroy
 xe_result_t __xecall
 xeEventPoolDestroy(
-    xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object to destroy
+    xe_event_pool_handle_t hEventPool               ///< [in][release] handle of event pool object to destroy
     )
 {
     // extract driver's function pointer table
@@ -2101,7 +2101,7 @@ xeEventCreate(
 /// @brief Intercept function for xeEventDestroy
 xe_result_t __xecall
 xeEventDestroy(
-    xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
+    xe_event_handle_t hEvent                        ///< [in][release] handle of event object to destroy
     )
 {
     // extract driver's function pointer table
@@ -2173,7 +2173,7 @@ xeEventPoolOpenIpcHandle(
 /// @brief Intercept function for xeEventPoolCloseIpcHandle
 xe_result_t __xecall
 xeEventPoolCloseIpcHandle(
-    xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object
+    xe_event_pool_handle_t hEventPool               ///< [in][release] handle of event pool object
     )
 {
     // extract driver's function pointer table
@@ -2185,6 +2185,8 @@ xeEventPoolCloseIpcHandle(
     // forward to device-driver
     auto result = dditable->EventPool.pfnCloseIpcHandle( hEventPool );
 
+    // release loader handle
+    xe_event_pool_object_t::factory.release( hEventPool );
     return result;
 }
 
@@ -2376,7 +2378,7 @@ xeFenceCreate(
 /// @brief Intercept function for xeFenceDestroy
 xe_result_t __xecall
 xeFenceDestroy(
-    xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
+    xe_fence_handle_t hFence                        ///< [in][release] handle of fence object to destroy
     )
 {
     // extract driver's function pointer table
@@ -2511,7 +2513,7 @@ xeImageCreate(
 /// @brief Intercept function for xeImageDestroy
 xe_result_t __xecall
 xeImageDestroy(
-    xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
+    xe_image_handle_t hImage                        ///< [in][release] handle of image object to destroy
     )
 {
     // extract driver's function pointer table
@@ -2611,7 +2613,7 @@ xeDeviceGroupAllocHostMem(
 xe_result_t __xecall
 xeDeviceGroupFreeMem(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    const void* ptr                                 ///< [in] pointer to memory to free
+    const void* ptr                                 ///< [in][release] pointer to memory to free
     )
 {
     // extract driver's function pointer table
@@ -2721,7 +2723,7 @@ xeDeviceGroupOpenMemIpcHandle(
 xe_result_t __xecall
 xeDeviceGroupCloseMemIpcHandle(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    const void* ptr                                 ///< [in] pointer to device allocation in this process
+    const void* ptr                                 ///< [in][release] pointer to device allocation in this process
     )
 {
     // extract driver's function pointer table
@@ -2783,7 +2785,7 @@ xeModuleCreate(
 /// @brief Intercept function for xeModuleDestroy
 xe_result_t __xecall
 xeModuleDestroy(
-    xe_module_handle_t hModule                      ///< [in] handle of the module
+    xe_module_handle_t hModule                      ///< [in][release] handle of the module
     )
 {
     // extract driver's function pointer table
@@ -2804,7 +2806,7 @@ xeModuleDestroy(
 /// @brief Intercept function for xeModuleBuildLogDestroy
 xe_result_t __xecall
 xeModuleBuildLogDestroy(
-    xe_module_build_log_handle_t hModuleBuildLog    ///< [in] handle of the module build log object.
+    xe_module_build_log_handle_t hModuleBuildLog    ///< [in][release] handle of the module build log object.
     )
 {
     // extract driver's function pointer table
@@ -2919,7 +2921,7 @@ xeFunctionCreate(
 /// @brief Intercept function for xeFunctionDestroy
 xe_result_t __xecall
 xeFunctionDestroy(
-    xe_function_handle_t hFunction                  ///< [in] handle of the function object
+    xe_function_handle_t hFunction                  ///< [in][release] handle of the function object
     )
 {
     // extract driver's function pointer table
@@ -3335,7 +3337,7 @@ xeSamplerCreate(
 /// @brief Intercept function for xeSamplerDestroy
 xe_result_t __xecall
 xeSamplerDestroy(
-    xe_sampler_handle_t hSampler                    ///< [in] handle of the sampler
+    xe_sampler_handle_t hSampler                    ///< [in][release] handle of the sampler
     )
 {
     // extract driver's function pointer table

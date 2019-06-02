@@ -1095,7 +1095,7 @@ xeCommandQueueCreate(
 /// @brief Intercept function for xeCommandQueueDestroy
 xe_result_t __xecall
 xeCommandQueueDestroy(
-    xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
+    xe_command_queue_handle_t hCommandQueue         ///< [in][release] handle of command queue object to destroy
     )
 {
     auto pfnDestroy = validation.xeDdiTable.CommandQueue.pfnDestroy;
@@ -1239,7 +1239,7 @@ xeCommandListCreateImmediate(
 /// @brief Intercept function for xeCommandListDestroy
 xe_result_t __xecall
 xeCommandListDestroy(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to destroy
+    xe_command_list_handle_t hCommandList           ///< [in][release] handle of command list object to destroy
     )
 {
     auto pfnDestroy = validation.xeDdiTable.CommandList.pfnDestroy;
@@ -1900,7 +1900,7 @@ xeEventPoolCreate(
 /// @brief Intercept function for xeEventPoolDestroy
 xe_result_t __xecall
 xeEventPoolDestroy(
-    xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object to destroy
+    xe_event_pool_handle_t hEventPool               ///< [in][release] handle of event pool object to destroy
     )
 {
     auto pfnDestroy = validation.xeDdiTable.EventPool.pfnDestroy;
@@ -1955,7 +1955,7 @@ xeEventCreate(
 /// @brief Intercept function for xeEventDestroy
 xe_result_t __xecall
 xeEventDestroy(
-    xe_event_handle_t hEvent                        ///< [in] handle of event object to destroy
+    xe_event_handle_t hEvent                        ///< [in][release] handle of event object to destroy
     )
 {
     auto pfnDestroy = validation.xeDdiTable.Event.pfnDestroy;
@@ -2033,7 +2033,7 @@ xeEventPoolOpenIpcHandle(
 /// @brief Intercept function for xeEventPoolCloseIpcHandle
 xe_result_t __xecall
 xeEventPoolCloseIpcHandle(
-    xe_event_pool_handle_t hEventPool               ///< [in] handle of event pool object
+    xe_event_pool_handle_t hEventPool               ///< [in][release] handle of event pool object
     )
 {
     auto pfnCloseIpcHandle = validation.xeDdiTable.EventPool.pfnCloseIpcHandle;
@@ -2261,7 +2261,7 @@ xeFenceCreate(
 /// @brief Intercept function for xeFenceDestroy
 xe_result_t __xecall
 xeFenceDestroy(
-    xe_fence_handle_t hFence                        ///< [in] handle of fence object to destroy
+    xe_fence_handle_t hFence                        ///< [in][release] handle of fence object to destroy
     )
 {
     auto pfnDestroy = validation.xeDdiTable.Fence.pfnDestroy;
@@ -2420,7 +2420,7 @@ xeImageCreate(
 /// @brief Intercept function for xeImageDestroy
 xe_result_t __xecall
 xeImageDestroy(
-    xe_image_handle_t hImage                        ///< [in] handle of image object to destroy
+    xe_image_handle_t hImage                        ///< [in][release] handle of image object to destroy
     )
 {
     auto pfnDestroy = validation.xeDdiTable.Image.pfnDestroy;
@@ -2539,7 +2539,7 @@ xeDeviceGroupAllocHostMem(
 xe_result_t __xecall
 xeDeviceGroupFreeMem(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    const void* ptr                                 ///< [in] pointer to memory to free
+    const void* ptr                                 ///< [in][release] pointer to memory to free
     )
 {
     auto pfnFreeMem = validation.xeDdiTable.DeviceGroup.pfnFreeMem;
@@ -2688,7 +2688,7 @@ xeDeviceGroupOpenMemIpcHandle(
 xe_result_t __xecall
 xeDeviceGroupCloseMemIpcHandle(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    const void* ptr                                 ///< [in] pointer to device allocation in this process
+    const void* ptr                                 ///< [in][release] pointer to device allocation in this process
     )
 {
     auto pfnCloseMemIpcHandle = validation.xeDdiTable.DeviceGroup.pfnCloseMemIpcHandle;
@@ -2747,7 +2747,7 @@ xeModuleCreate(
 /// @brief Intercept function for xeModuleDestroy
 xe_result_t __xecall
 xeModuleDestroy(
-    xe_module_handle_t hModule                      ///< [in] handle of the module
+    xe_module_handle_t hModule                      ///< [in][release] handle of the module
     )
 {
     auto pfnDestroy = validation.xeDdiTable.Module.pfnDestroy;
@@ -2769,7 +2769,7 @@ xeModuleDestroy(
 /// @brief Intercept function for xeModuleBuildLogDestroy
 xe_result_t __xecall
 xeModuleBuildLogDestroy(
-    xe_module_build_log_handle_t hModuleBuildLog    ///< [in] handle of the module build log object.
+    xe_module_build_log_handle_t hModuleBuildLog    ///< [in][release] handle of the module build log object.
     )
 {
     auto pfnDestroy = validation.xeDdiTable.ModuleBuildLog.pfnDestroy;
@@ -2908,7 +2908,7 @@ xeFunctionCreate(
 /// @brief Intercept function for xeFunctionDestroy
 xe_result_t __xecall
 xeFunctionDestroy(
-    xe_function_handle_t hFunction                  ///< [in] handle of the function object
+    xe_function_handle_t hFunction                  ///< [in][release] handle of the function object
     )
 {
     auto pfnDestroy = validation.xeDdiTable.Function.pfnDestroy;
@@ -3379,7 +3379,7 @@ xeSamplerCreate(
 /// @brief Intercept function for xeSamplerDestroy
 xe_result_t __xecall
 xeSamplerDestroy(
-    xe_sampler_handle_t hSampler                    ///< [in] handle of the sampler
+    xe_sampler_handle_t hSampler                    ///< [in][release] handle of the sampler
     )
 {
     auto pfnDestroy = validation.xeDdiTable.Sampler.pfnDestroy;

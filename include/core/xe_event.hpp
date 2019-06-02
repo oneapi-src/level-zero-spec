@@ -135,7 +135,7 @@ namespace xe
         /// @throws result_t
         static void __xecall
         Destroy(
-            EventPool* pEventPool                           ///< [in] pointer to event pool object to destroy
+            EventPool* pEventPool                           ///< [in][release] pointer to event pool object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -314,7 +314,7 @@ namespace xe
         /// @throws result_t
         static void __xecall
         Destroy(
-            Event* pEvent                                   ///< [in] pointer to event object to destroy
+            Event* pEvent                                   ///< [in][release] pointer to event object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////

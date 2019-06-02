@@ -107,7 +107,7 @@ details:
 params:
     - type: "$x_module_handle_t"
       name: hModule
-      desc: "[in] handle of the module"
+      desc: "[in][release] handle of the module"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys module build log object"
@@ -124,7 +124,7 @@ details:
 params:
     - type: "$x_module_build_log_handle_t"
       name: hModuleBuildLog
-      desc: "[in] handle of the module build log object."
+      desc: "[in][release] handle of the module build log object."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves text string for build log."
@@ -278,7 +278,7 @@ details:
 params:
     - type: "$x_function_handle_t"
       name: hFunction
-      desc: "[in] handle of the function object"  
+      desc: "[in][release] handle of the function object"  
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieve function pointer from Module by name"

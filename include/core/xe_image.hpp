@@ -276,7 +276,7 @@ namespace xe
         /// @throws result_t
         static void __xecall
         Destroy(
-            Image* pImage                                   ///< [in] pointer to image object to destroy
+            Image* pImage                                   ///< [in][release] pointer to image object to destroy
             );
 
     };

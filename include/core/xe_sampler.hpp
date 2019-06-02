@@ -152,7 +152,7 @@ namespace xe
         /// @throws result_t
         static void __xecall
         Destroy(
-            Sampler* pSampler                               ///< [in] pointer to the sampler
+            Sampler* pSampler                               ///< [in][release] pointer to the sampler
             );
 
     };

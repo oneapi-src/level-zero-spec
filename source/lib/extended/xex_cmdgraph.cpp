@@ -90,7 +90,7 @@ xexCommandGraphCreate(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xexCommandGraphDestroy(
-    xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to destroy
+    xex_command_graph_handle_t hCommandGraph        ///< [in][release] handle of command graph object to destroy
     )
 {
     auto pfnDestroy = xex_lib::lib.ddiTable.CommandGraph.pfnDestroy;
@@ -208,7 +208,7 @@ namespace xex
     /// @throws result_t
     void __xecall
     CommandGraph::Destroy(
-        CommandGraph* pCommandGraph                     ///< [in] pointer to command graph object to destroy
+        CommandGraph* pCommandGraph                     ///< [in][release] pointer to command graph object to destroy
         )
     {
         auto result = static_cast<result_t>( ::xexCommandGraphDestroy(

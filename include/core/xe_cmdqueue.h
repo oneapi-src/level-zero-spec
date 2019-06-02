@@ -161,7 +161,7 @@ xeCommandQueueCreate(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeCommandQueueDestroy(
-    xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
+    xe_command_queue_handle_t hCommandQueue         ///< [in][release] handle of command queue object to destroy
     );
 
 ///////////////////////////////////////////////////////////////////////////////

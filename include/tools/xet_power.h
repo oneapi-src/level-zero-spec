@@ -97,7 +97,7 @@ xetPowerCreate(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetPowerDestroy(
-    xet_power_handle_t hPower                       ///< [in] handle of the power object to destroy
+    xet_power_handle_t hPower                       ///< [in][release] handle of the power object to destroy
     );
 
 ///////////////////////////////////////////////////////////////////////////////

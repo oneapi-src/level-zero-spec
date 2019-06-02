@@ -102,7 +102,7 @@ xeCommandQueueCreate(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeCommandQueueDestroy(
-    xe_command_queue_handle_t hCommandQueue         ///< [in] handle of command queue object to destroy
+    xe_command_queue_handle_t hCommandQueue         ///< [in][release] handle of command queue object to destroy
     )
 {
     auto pfnDestroy = xe_lib::lib.ddiTable.CommandQueue.pfnDestroy;
@@ -277,7 +277,7 @@ namespace xe
     /// @throws result_t
     void __xecall
     CommandQueue::Destroy(
-        CommandQueue* pCommandQueue                     ///< [in] pointer to command queue object to destroy
+        CommandQueue* pCommandQueue                     ///< [in][release] pointer to command queue object to destroy
         )
     {
         auto result = static_cast<result_t>( ::xeCommandQueueDestroy(
