@@ -89,6 +89,13 @@ def generate_meta(d, ordinal, meta):
 
         meta['class'][name]['ordinal'] = ordinal
 
+        if'base' in d:
+            base = d['base']
+            if 'child' not in meta['class'][base]:
+                meta['class'][base]['child'] = []
+
+            meta['class'][base]['child'].append(name)
+
         if 'members' in d:
             meta['class'][name]['members'] = []
 

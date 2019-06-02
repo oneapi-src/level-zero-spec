@@ -35,33 +35,6 @@
 extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns metric group count for a given device.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
-///         + nullptr == pCount
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetMetricGroupGetCount(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    uint32_t* pCount                                ///< [out] number of metric groups supported by the device
-    )
-{
-    auto pfnGetCount = xet_lib::lib.ddiTable.MetricGroup.pfnGetCount;
-
-#if _DEBUG
-    if( nullptr == pfnGetCount )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
-
-    return pfnGetCount( hDevice, pCount );
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Returns metric group handle for a device.
 /// 
 /// @details
@@ -73,14 +46,18 @@ xetMetricGroupGetCount(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
-///         + nullptr == phMetricGroup
+///         + nullptr == pCount
 ///         + devices do not contain a given metric group
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetMetricGroupGet(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    uint32_t ordinal,                               ///< [in] metric group index
-    xet_metric_group_handle_t* phMetricGroup        ///< [out] metric group handle
+    xet_device_handle_t hDevice,                    ///< [in] handle of the device
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of metric groups.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of metric groups available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of
+                                                    ///< metric groups.
+    xet_metric_group_handle_t* phMetricGroup        ///< [in,out][optional][range(0, *pCount)] array of handle of metric groups
     )
 {
     auto pfnGet = xet_lib::lib.ddiTable.MetricGroup.pfnGet;
@@ -90,7 +67,7 @@ xetMetricGroupGet(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnGet( hDevice, ordinal, phMetricGroup );
+    return pfnGet( hDevice, pCount, phMetricGroup );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -125,7 +102,7 @@ xetMetricGroupGetProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns metric from a given metric group.
+/// @brief Retrieves metric from a given metric group.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -142,7 +119,8 @@ xetMetricGroupGetProperties(
 xe_result_t __xecall
 xetMetricGet(
     xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
-    uint32_t ordinal,                               ///< [in] metric index
+    uint32_t ordinal,                               ///< [in] ordinal of metric to retrieve; must be less than
+                                                    ///< ::xet_metric_group_properties_t::metricCount
     xet_metric_handle_t* phMetric                   ///< [out] handle of metric
     )
 {
@@ -245,7 +223,7 @@ xetMetricGroupCalculateData(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetDeviceActivateMetricGroups(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    xet_device_handle_t hDevice,                    ///< [in] handle of the device
     uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
     xet_metric_group_handle_t* phMetricGroups       ///< [in][range(0, count)] handles of the metric groups to activate. NULL
                                                     ///< to deactivate.
@@ -282,7 +260,7 @@ xetDeviceActivateMetricGroups(
 ///         + ::XET_METRIC_TRACER_DESC_VERSION_CURRENT < pDesc->version
 xe_result_t __xecall
 xetMetricTracerOpen(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    xet_device_handle_t hDevice,                    ///< [in] handle of the device
     xet_metric_tracer_desc_t* pDesc,                ///< [in,out] metric tracer descriptor
     xe_event_handle_t hNotificationEvent,           ///< [in] event used for report availability notification. Must be device
                                                     ///< to host type.
@@ -317,7 +295,7 @@ xetMetricTracerOpen(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetCommandListAppendMetricTracerMarker(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    xet_command_list_handle_t hCommandList,         ///< [in] handle of the command list
     xet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
     uint32_t value                                  ///< [in] tracer marker value
     )
@@ -415,7 +393,7 @@ xetMetricTracerReadData(
 ///         + ::XET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT < pDesc->version
 xe_result_t __xecall
 xetMetricQueryPoolCreate(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    xet_device_handle_t hDevice,                    ///< [in] handle of the device
     xet_metric_query_pool_desc_t* pDesc,            ///< [in] metric query pool creation data
     xet_metric_query_pool_handle_t* phMetricQueryPool   ///< [out] handle of metric query pool
     )
@@ -478,7 +456,7 @@ xetMetricQueryPoolDestroy(
 xe_result_t __xecall
 xetMetricQueryPoolGetMetricQuery(
     xet_metric_query_pool_handle_t hMetricQueryPool,///< [in] handle of the metric query pool
-    uint32_t ordinal,                               ///< [in] index of the query within the pool
+    uint32_t index,                                 ///< [in] index of the query within the pool
     xet_metric_query_handle_t* phMetricQuery        ///< [out] handle of metric query
     )
 {
@@ -489,7 +467,7 @@ xetMetricQueryPoolGetMetricQuery(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnGetMetricQuery( hMetricQueryPool, ordinal, phMetricQuery );
+    return pfnGetMetricQuery( hMetricQueryPool, index, phMetricQuery );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -510,7 +488,7 @@ xetMetricQueryPoolGetMetricQuery(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetCommandListAppendMetricQueryBegin(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    xet_command_list_handle_t hCommandList,         ///< [in] handle of the command list
     xet_metric_query_handle_t hMetricQuery          ///< [in] handle of the metric query
     )
 {
@@ -543,7 +521,7 @@ xetCommandListAppendMetricQueryBegin(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetCommandListAppendMetricQueryEnd(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    xet_command_list_handle_t hCommandList,         ///< [in] handle of the command list
     xet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
     xe_event_handle_t hCompletionEvent              ///< [in] handle of the completion event to signal
     )
@@ -575,7 +553,7 @@ xetCommandListAppendMetricQueryEnd(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetCommandListAppendMetricMemoryBarrier(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
+    xet_command_list_handle_t hCommandList          ///< [in] handle of the command list
     )
 {
     auto pfnAppendMetricMemoryBarrier = xet_lib::lib.ddiTable.CommandList.pfnAppendMetricMemoryBarrier;
@@ -667,70 +645,53 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Returns metric group count for a given device.
-    /// 
-    /// @returns
-    ///     - uint32_t: number of metric groups supported by the device
-    /// 
-    /// @throws result_t
-    uint32_t __xecall
-    MetricGroup::GetCount(
-        xe::Device* pDevice                             ///< [in] pointer to the device object
-        )
-    {
-        uint32_t count;
-
-        auto result = static_cast<result_t>( ::xetMetricGroupGetCount(
-            reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
-            &count ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricGroup::GetCount" );
-
-        return count;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Returns metric group handle for a device.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
     /// 
-    /// @returns
-    ///     - MetricGroup*: metric group handle
-    /// 
     /// @throws result_t
-    MetricGroup* __xecall
+    void __xecall
     MetricGroup::Get(
-        xe::Device* pDevice,                            ///< [in] pointer to the device
-        uint32_t ordinal                                ///< [in] metric group index
+        Device* pDevice,                                ///< [in] pointer to the device
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of metric groups.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of metric groups available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of
+                                                        ///< metric groups.
+        MetricGroup** ppMetricGroup                     ///< [in,out][optional][range(0, *pCount)] array of pointer to metric
+                                                        ///< groups
         )
     {
-        xet_metric_group_handle_t hMetricGroup;
+        thread_local std::vector<xet_metric_group_handle_t> hMetricGroup;
+        hMetricGroup.resize( ( ppMetricGroup ) ? *pCount : 0 );
 
         auto result = static_cast<result_t>( ::xetMetricGroupGet(
-            reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
-            ordinal,
-            &hMetricGroup ) );
+            reinterpret_cast<xet_device_handle_t>( pDevice->getHandle() ),
+            pCount,
+            hMetricGroup.data() ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricGroup::Get" );
 
-        MetricGroup* pMetricGroup = nullptr;
+        for( uint32_t i = 0; ( ppMetricGroup ) && ( i < *pCount ); ++i )
+            ppMetricGroup[ i ] = nullptr;
 
         try
         {
-            pMetricGroup = new MetricGroup( pDevice );
+            for( uint32_t i = 0; ( ppMetricGroup ) && ( i < *pCount ); ++i )
+                ppMetricGroup[ i ] = new MetricGroup( pDevice );
         }
         catch( std::bad_alloc& )
         {
-            delete pMetricGroup;
-            pMetricGroup = nullptr;
+            for( uint32_t i = 0; ( ppMetricGroup ) && ( i < *pCount ); ++i )
+            {
+                delete ppMetricGroup[ i ];
+                ppMetricGroup[ i ] = nullptr;
+            }
 
             throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xet::MetricGroup::Get" );
         }
-
-        return pMetricGroup;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -761,7 +722,7 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Returns metric from a given metric group.
+    /// @brief Retrieves metric from a given metric group.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -773,7 +734,8 @@ namespace xet
     Metric* __xecall
     Metric::Get(
         MetricGroup* pMetricGroup,                      ///< [in] pointer to the metric group
-        uint32_t ordinal                                ///< [in] metric index
+        uint32_t ordinal                                ///< [in] ordinal of metric to retrieve; must be less than
+                                                        ///< ::metric_group_properties_t::metricCount
         )
     {
         xet_metric_handle_t hMetric;
@@ -883,7 +845,7 @@ namespace xet
             hMetricGroups.emplace_back( reinterpret_cast<xet_metric_group_handle_t>( ppMetricGroups[ i ]->getHandle() ) );
 
         auto result = static_cast<result_t>( ::xetDeviceActivateMetricGroups(
-            reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
+            reinterpret_cast<xet_device_handle_t>( getHandle() ),
             count,
             hMetricGroups.data() ) );
 
@@ -904,7 +866,7 @@ namespace xet
     /// @throws result_t
     MetricTracer* __xecall
     MetricTracer::Open(
-        xe::Device* pDevice,                            ///< [in] pointer to the device
+        Device* pDevice,                                ///< [in] pointer to the device
         desc_t* pDesc,                                  ///< [in,out] metric tracer descriptor
         xe::Event* pNotificationEvent                   ///< [in] event used for report availability notification. Must be device
                                                         ///< to host type.
@@ -913,7 +875,7 @@ namespace xet
         xet_metric_tracer_handle_t hMetricTracer;
 
         auto result = static_cast<result_t>( ::xetMetricTracerOpen(
-            reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
+            reinterpret_cast<xet_device_handle_t>( pDevice->getHandle() ),
             reinterpret_cast<xet_metric_tracer_desc_t*>( pDesc ),
             reinterpret_cast<xe_event_handle_t>( pNotificationEvent->getHandle() ),
             &hMetricTracer ) );
@@ -953,7 +915,7 @@ namespace xet
         )
     {
         auto result = static_cast<result_t>( ::xetCommandListAppendMetricTracerMarker(
-            reinterpret_cast<xe_command_list_handle_t>( pCommandList->getHandle() ),
+            reinterpret_cast<xet_command_list_handle_t>( getHandle() ),
             reinterpret_cast<xet_metric_tracer_handle_t>( pMetricTracer->getHandle() ),
             value ) );
 
@@ -1017,14 +979,14 @@ namespace xet
     /// @throws result_t
     MetricQueryPool* __xecall
     MetricQueryPool::Create(
-        xe::Device* pDevice,                            ///< [in] pointer to the device
+        Device* pDevice,                                ///< [in] pointer to the device
         desc_t* pDesc                                   ///< [in] metric query pool creation data
         )
     {
         xet_metric_query_pool_handle_t hMetricQueryPool;
 
         auto result = static_cast<result_t>( ::xetMetricQueryPoolCreate(
-            reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
+            reinterpret_cast<xet_device_handle_t>( pDevice->getHandle() ),
             reinterpret_cast<xet_metric_query_pool_desc_t*>( pDesc ),
             &hMetricQueryPool ) );
 
@@ -1082,14 +1044,14 @@ namespace xet
     /// @throws result_t
     MetricQuery* __xecall
     MetricQueryPool::GetMetricQuery(
-        uint32_t ordinal                                ///< [in] index of the query within the pool
+        uint32_t index                                  ///< [in] index of the query within the pool
         )
     {
         xet_metric_query_handle_t hMetricQuery;
 
         auto result = static_cast<result_t>( ::xetMetricQueryPoolGetMetricQuery(
             reinterpret_cast<xet_metric_query_pool_handle_t>( getHandle() ),
-            ordinal,
+            index,
             &hMetricQuery ) );
 
         if( result_t::SUCCESS != result )
@@ -1126,7 +1088,7 @@ namespace xet
         )
     {
         auto result = static_cast<result_t>( ::xetCommandListAppendMetricQueryBegin(
-            reinterpret_cast<xe_command_list_handle_t>( pCommandList->getHandle() ),
+            reinterpret_cast<xet_command_list_handle_t>( getHandle() ),
             reinterpret_cast<xet_metric_query_handle_t>( pMetricQuery->getHandle() ) ) );
 
         if( result_t::SUCCESS != result )
@@ -1148,7 +1110,7 @@ namespace xet
         )
     {
         auto result = static_cast<result_t>( ::xetCommandListAppendMetricQueryEnd(
-            reinterpret_cast<xe_command_list_handle_t>( pCommandList->getHandle() ),
+            reinterpret_cast<xet_command_list_handle_t>( getHandle() ),
             reinterpret_cast<xet_metric_query_handle_t>( pMetricQuery->getHandle() ),
             reinterpret_cast<xe_event_handle_t>( pCompletionEvent->getHandle() ) ) );
 
@@ -1170,7 +1132,7 @@ namespace xet
         )
     {
         auto result = static_cast<result_t>( ::xetCommandListAppendMetricMemoryBarrier(
-            reinterpret_cast<xe_command_list_handle_t>( pCommandList->getHandle() ) ) );
+            reinterpret_cast<xet_command_list_handle_t>( getHandle() ) ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::CommandList::AppendMetricMemoryBarrier" );

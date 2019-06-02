@@ -716,7 +716,8 @@ namespace xe
         /// @throws result_t
         Device* __xecall
         GetSubDevice(
-            uint32_t ordinal                                ///< [in] ordinal of sub-device to retrieve
+            uint32_t ordinal                                ///< [in] ordinal of sub-device to retrieve; must be less than
+                                                            ///< ::device_properties_t::numSubDevices
             );
 
         ///////////////////////////////////////////////////////////////////////////////

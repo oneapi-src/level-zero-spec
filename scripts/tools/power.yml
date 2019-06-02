@@ -26,7 +26,7 @@ details:
     - "Initializes internal structures to support power management features."
     - "Error $X_RESULT_ERROR_UNSUPPORTED is returned if the device does not support access to power management features."
 params:
-    - type: $x_device_handle_t
+    - type: $t_device_handle_t
       name: hDevice
       desc: "[in] handle of the device object"
     - type: "uint32_t"
@@ -37,7 +37,6 @@ params:
       desc: "[out] handle for accessing power features of the device"
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED
-
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Deletes a power object"
@@ -51,7 +50,6 @@ params:
     - type: $t_power_handle_t
       name: hPower
       desc: "[in][release] handle of the power object to destroy"
-
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "GPU domains"
@@ -91,7 +89,6 @@ etors:
     - name: $T_GPU_DOMAIN_BASE_CHIPLET_LINK
       value: "$X_BIT( 10 )"
       desc: "link between base die and chiplet"
-
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $t_power_average_limit_t"
@@ -285,9 +282,6 @@ params:
     - type: uint64_t*
       name: pEnergy
       desc: "[out] the energy counter in millijoules"
-
-
-
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Turbo (dynamic hardware frequency management) modes"
@@ -331,7 +325,6 @@ params:
     - type: $t_turbo_mode_t
       name: pTurboMode
       desc: "[in] new turbo mode"
-
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Clock types"
@@ -422,31 +415,23 @@ members:
       desc: "[in,out] denominator of the ratio"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the number of frequency domains on the device"
-class: $tPower
-name: GetFreqDomainCount
+desc: "Retrieves frequency domains on a device"
+class: $tFreqDomain
+name: Get
+decl: static
 params:
     - type: $t_power_handle_t
       name: hPower
       desc: "[in] handle of the power object"
-    - type: uint32_t*
-      name: pNumFreqDomains
-      desc: "[out] the number of frequency domains"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get an object to a frequency domain on a device"
-class: $tPower
-name: GetFreqDomain
-params:
-    - type: $t_power_handle_t
-      name: hPower
-      desc: "[in] handle of the power object"
-    - type: uint32_t
-      name: ordinal
-      desc: "[in] frequency domain index [0 .. $tPowerGetFreqDomainCount - 1]"
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of frequency domains.
+            if count is zero, then the driver will update the value with the total number of frequency domains available.
+            if count is non-zero, then driver will only retrieve that number of frequency domains.
     - type: $t_freq_domain_handle_t*
       name: phFreqDomain
-      desc: "[out] pointer to handle of frequency domain object"
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of frequency domains"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the properties for a frequency domain"
@@ -573,7 +558,6 @@ params:
     - type: $t_freq_throttle_reasons_t*
       name: pFreqThrottleReasons
       desc: "[out] the reason the resolved frequency is lower than the request"
-
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Fan capabilities"
@@ -763,9 +747,6 @@ params:
     - type: $t_fan_speed_info_t*
       name: pFanSpeed
       desc: "[in] pointer to an array of current fan speeds"
-
-
-
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Temperature sensor properties"
@@ -855,7 +836,6 @@ params:
     - type: uint16_t
       name: maxTemperature
       desc: "[in] temperature threshold in degrees celsius beyond which frequency will be throttled"
-      
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Activity counter properties"
@@ -935,7 +915,6 @@ params:
     - type: $t_activity_counters_t*
       name: pCounters
       desc: "[out] pointer to an array of activity counter data"
-
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for power"

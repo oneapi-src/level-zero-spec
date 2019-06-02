@@ -3,19 +3,6 @@ type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for Metric"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Returns metric group count for a given device."
-class: $tMetricGroup
-name: GetCount
-decl: static
-params:
-    - type: $x_device_handle_t
-      name: hDevice
-      desc: "[in] handle of the device object"
-    - type: uint32_t*
-      name: pCount
-      desc: "[out] number of metric groups supported by the device"
---- #--------------------------------------------------------------------------
-type: function
 desc: "Returns metric group handle for a device."
 class: $tMetricGroup
 name: Get
@@ -23,15 +10,18 @@ decl: static
 details:
     - "The application may call this function from simultaneous threads."
 params:
-    - type: "$x_device_handle_t"
+    - type: "$t_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
-    - type: uint32_t
-      name: ordinal
-      desc: "[in] metric group index"
+    - type: uint32_t*
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of metric groups.
+            if count is zero, then the driver will update the value with the total number of metric groups available.
+            if count is non-zero, then driver will only retrieve that number of metric groups.
     - type: "$t_metric_group_handle_t*"
       name: phMetricGroup
-      desc: "[out] metric group handle"
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of metric groups"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "devices do not contain a given metric group"
@@ -255,7 +245,7 @@ members:
       desc: "[out] metric result units"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Returns metric from a given metric group."
+desc: "Retrieves metric from a given metric group."
 class: $tMetric
 name: Get
 decl: static
@@ -267,7 +257,7 @@ params:
       desc: "[in] handle of the metric group"
     - type: uint32_t
       name: ordinal
-      desc: "[in] metric index"
+      desc: "[in] ordinal of metric to retrieve; must be less than $t_metric_group_properties_t::metricCount"
     - type: "$t_metric_handle_t*"
       name: phMetric
       desc: "[out] handle of metric"
@@ -329,7 +319,7 @@ details:
     - "MetricGroup must be active until MetricQueryGetDeta and $tMetricTracerClose."
     - "Conflicting metric groups cannot be activated, in such case tha call would fail."
 params:
-    - type: "$x_device_handle_t"
+    - type: "$t_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
     - type: uint32_t
@@ -378,7 +368,7 @@ decl: static
 details:
     - "The application may **not** call this function from simultaneous threads with the same device handle."
 params:
-    - type: "$x_device_handle_t"
+    - type: "$t_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
     - type: "$t_metric_tracer_desc_t*"
@@ -401,7 +391,7 @@ name: AppendMetricTracerMarker
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
 params:
-    - type: "$x_command_list_handle_t"
+    - type: "$t_command_list_handle_t"
       name: hCommandList
       desc: "[in] handle of the command list"
     - type: "$t_metric_tracer_handle_t"
@@ -497,7 +487,7 @@ decl: static
 details:
     - "The application may call this function from simultaneous threads."
 params:
-    - type: "$x_device_handle_t"
+    - type: "$t_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
     - type: "$t_metric_query_pool_desc_t*"
@@ -536,7 +526,7 @@ params:
       name: hMetricQueryPool
       desc: "[in] handle of the metric query pool"
     - type: uint32_t
-      name: ordinal
+      name: index
       desc: "[in] index of the query within the pool"
     - type: "$t_metric_query_handle_t*"
       name: phMetricQuery
@@ -552,7 +542,7 @@ name: AppendMetricQueryBegin
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
 params:
-    - type: "$x_command_list_handle_t"
+    - type: "$t_command_list_handle_t"
       name: hCommandList
       desc: "[in] handle of the command list"
     - type: "$t_metric_query_handle_t"
@@ -569,7 +559,7 @@ name: AppendMetricQueryEnd
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
 params:
-    - type: "$x_command_list_handle_t"
+    - type: "$t_command_list_handle_t"
       name: hCommandList
       desc: "[in] handle of the command list"
     - type: "$t_metric_query_handle_t"
@@ -589,7 +579,7 @@ name: AppendMetricMemoryBarrier
 details:
     - "The application may **not** call this function from simultaneous threads with the same command list handle."
 params:
-    - type: "$x_command_list_handle_t"
+    - type: "$t_command_list_handle_t"
       name: hCommandList
       desc: "[in] handle of the command list"
 returns:

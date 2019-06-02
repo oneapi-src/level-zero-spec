@@ -78,7 +78,7 @@ typedef xe_result_t (__xecall *xet_pfnGetGlobalProcAddrTable_t)(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetDeviceActivateMetricGroups 
 typedef xe_result_t (__xecall *xet_pfnDeviceActivateMetricGroups_t)(
-    xe_device_handle_t,
+    xet_device_handle_t,
     uint32_t,
     xet_metric_group_handle_t*
     );
@@ -117,7 +117,7 @@ typedef xe_result_t (__xecall *xet_pfnGetDeviceProcAddrTable_t)(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetCommandListAppendMetricTracerMarker 
 typedef xe_result_t (__xecall *xet_pfnCommandListAppendMetricTracerMarker_t)(
-    xe_command_list_handle_t,
+    xet_command_list_handle_t,
     xet_metric_tracer_handle_t,
     uint32_t
     );
@@ -125,14 +125,14 @@ typedef xe_result_t (__xecall *xet_pfnCommandListAppendMetricTracerMarker_t)(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetCommandListAppendMetricQueryBegin 
 typedef xe_result_t (__xecall *xet_pfnCommandListAppendMetricQueryBegin_t)(
-    xe_command_list_handle_t,
+    xet_command_list_handle_t,
     xet_metric_query_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetCommandListAppendMetricQueryEnd 
 typedef xe_result_t (__xecall *xet_pfnCommandListAppendMetricQueryEnd_t)(
-    xe_command_list_handle_t,
+    xet_command_list_handle_t,
     xet_metric_query_handle_t,
     xe_event_handle_t
     );
@@ -140,7 +140,7 @@ typedef xe_result_t (__xecall *xet_pfnCommandListAppendMetricQueryEnd_t)(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetCommandListAppendMetricMemoryBarrier 
 typedef xe_result_t (__xecall *xet_pfnCommandListAppendMetricMemoryBarrier_t)(
-    xe_command_list_handle_t
+    xet_command_list_handle_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -178,17 +178,10 @@ typedef xe_result_t (__xecall *xet_pfnGetCommandListProcAddrTable_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetMetricGroupGetCount 
-typedef xe_result_t (__xecall *xet_pfnMetricGroupGetCount_t)(
-    xe_device_handle_t,
-    uint32_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetMetricGroupGet 
 typedef xe_result_t (__xecall *xet_pfnMetricGroupGet_t)(
-    xe_device_handle_t,
-    uint32_t,
+    xet_device_handle_t,
+    uint32_t*,
     xet_metric_group_handle_t*
     );
 
@@ -214,7 +207,6 @@ typedef xe_result_t (__xecall *xet_pfnMetricGroupCalculateData_t)(
 /// @brief Table of MetricGroup functions pointers
 typedef struct _xet_metric_group_dditable_t
 {
-    xet_pfnMetricGroupGetCount_t                                pfnGetCount;
     xet_pfnMetricGroupGet_t                                     pfnGet;
     xet_pfnMetricGroupGetProperties_t                           pfnGetProperties;
     xet_pfnMetricGroupCalculateData_t                           pfnCalculateData;
@@ -294,7 +286,7 @@ typedef xe_result_t (__xecall *xet_pfnGetMetricProcAddrTable_t)(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetMetricTracerOpen 
 typedef xe_result_t (__xecall *xet_pfnMetricTracerOpen_t)(
-    xe_device_handle_t,
+    xet_device_handle_t,
     xet_metric_tracer_desc_t*,
     xe_event_handle_t,
     xet_metric_tracer_handle_t*
@@ -351,7 +343,7 @@ typedef xe_result_t (__xecall *xet_pfnGetMetricTracerProcAddrTable_t)(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetMetricQueryPoolCreate 
 typedef xe_result_t (__xecall *xet_pfnMetricQueryPoolCreate_t)(
-    xe_device_handle_t,
+    xet_device_handle_t,
     xet_metric_query_pool_desc_t*,
     xet_metric_query_pool_handle_t*
     );
@@ -446,7 +438,7 @@ typedef xe_result_t (__xecall *xet_pfnGetMetricQueryProcAddrTable_t)(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetPowerCreate 
 typedef xe_result_t (__xecall *xet_pfnPowerCreate_t)(
-    xe_device_handle_t,
+    xet_device_handle_t,
     uint32_t,
     xet_power_handle_t*
     );
@@ -539,21 +531,6 @@ typedef xe_result_t (__xecall *xet_pfnPowerGetTurboMode_t)(
 typedef xe_result_t (__xecall *xet_pfnPowerSetTurboMode_t)(
     xet_power_handle_t,
     xet_turbo_mode_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerGetFreqDomainCount 
-typedef xe_result_t (__xecall *xet_pfnPowerGetFreqDomainCount_t)(
-    xet_power_handle_t,
-    uint32_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetPowerGetFreqDomain 
-typedef xe_result_t (__xecall *xet_pfnPowerGetFreqDomain_t)(
-    xet_power_handle_t,
-    uint32_t,
-    xet_freq_domain_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -683,8 +660,6 @@ typedef struct _xet_power_dditable_t
     xet_pfnPowerGetEnergyCounter_t                              pfnGetEnergyCounter;
     xet_pfnPowerGetTurboMode_t                                  pfnGetTurboMode;
     xet_pfnPowerSetTurboMode_t                                  pfnSetTurboMode;
-    xet_pfnPowerGetFreqDomainCount_t                            pfnGetFreqDomainCount;
-    xet_pfnPowerGetFreqDomain_t                                 pfnGetFreqDomain;
     xet_pfnPowerFanCount_t                                      pfnFanCount;
     xet_pfnPowerFanGetProperties_t                              pfnFanGetProperties;
     xet_pfnPowerFanGetSpeedTable_t                              pfnFanGetSpeedTable;
@@ -722,6 +697,14 @@ xetGetPowerProcAddrTable(
 typedef xe_result_t (__xecall *xet_pfnGetPowerProcAddrTable_t)(
     xe_api_version_t,
     xet_power_dditable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetFreqDomainGet 
+typedef xe_result_t (__xecall *xet_pfnFreqDomainGet_t)(
+    xet_power_handle_t,
+    uint32_t*,
+    xet_freq_domain_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -790,6 +773,7 @@ typedef xe_result_t (__xecall *xet_pfnFreqDomainGetCurrentFrequency_t)(
 /// @brief Table of FreqDomain functions pointers
 typedef struct _xet_freq_domain_dditable_t
 {
+    xet_pfnFreqDomainGet_t                                      pfnGet;
     xet_pfnFreqDomainGetProperties_t                            pfnGetProperties;
     xet_pfnFreqDomainGetSourceFreqDomain_t                      pfnGetSourceFreqDomain;
     xet_pfnFreqDomainGetSupportedClocks_t                       pfnGetSupportedClocks;

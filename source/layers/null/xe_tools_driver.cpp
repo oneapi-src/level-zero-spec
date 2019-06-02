@@ -155,8 +155,6 @@ xetGetMetricGroupProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    pDdiTable->pfnGetCount                               = xetMetricGroupGetCount;
-
     pDdiTable->pfnGet                                    = xetMetricGroupGet;
 
     pDdiTable->pfnGetProperties                          = xetMetricGroupGetProperties;
@@ -349,10 +347,6 @@ xetGetPowerProcAddrTable(
 
     pDdiTable->pfnSetTurboMode                           = xetPowerSetTurboMode;
 
-    pDdiTable->pfnGetFreqDomainCount                     = xetPowerGetFreqDomainCount;
-
-    pDdiTable->pfnGetFreqDomain                          = xetPowerGetFreqDomain;
-
     pDdiTable->pfnFanCount                               = xetPowerFanCount;
 
     pDdiTable->pfnFanGetProperties                       = xetPowerFanGetProperties;
@@ -407,6 +401,8 @@ xetGetFreqDomainProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
+    pDdiTable->pfnGet                                    = xetFreqDomainGet;
+
     pDdiTable->pfnGetProperties                          = xetFreqDomainGetProperties;
 
     pDdiTable->pfnGetSourceFreqDomain                    = xetFreqDomainGetSourceFreqDomain;
@@ -442,30 +438,22 @@ xetInit(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xetMetricGroupGetCount
-xe_result_t __xecall
-xetMetricGroupGetCount(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    uint32_t* pCount                                ///< [out] number of metric groups supported by the device
-    )
-{
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricGroupGet
 xe_result_t __xecall
 xetMetricGroupGet(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    uint32_t ordinal,                               ///< [in] metric group index
-    xet_metric_group_handle_t* phMetricGroup        ///< [out] metric group handle
+    xet_device_handle_t hDevice,                    ///< [in] handle of the device
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of metric groups.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of metric groups available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of
+                                                    ///< metric groups.
+    xet_metric_group_handle_t* phMetricGroup        ///< [in,out][optional][range(0, *pCount)] array of handle of metric groups
     )
 {
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    *phMetricGroup = reinterpret_cast<xet_metric_group_handle_t>( driver.get() );
+    for( size_t i = 0; ( nullptr != phMetricGroup ) && ( i < *pCount ); ++i )
+        phMetricGroup[ i ] = reinterpret_cast<xet_metric_group_handle_t>( driver.get() );
     return result;
 }
 
@@ -487,7 +475,8 @@ xetMetricGroupGetProperties(
 xe_result_t __xecall
 xetMetricGet(
     xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
-    uint32_t ordinal,                               ///< [in] metric index
+    uint32_t ordinal,                               ///< [in] ordinal of metric to retrieve; must be less than
+                                                    ///< ::xet_metric_group_properties_t::metricCount
     xet_metric_handle_t* phMetric                   ///< [out] handle of metric
     )
 {
@@ -531,7 +520,7 @@ xetMetricGroupCalculateData(
 /// @brief Intercept function for xetDeviceActivateMetricGroups
 xe_result_t __xecall
 xetDeviceActivateMetricGroups(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    xet_device_handle_t hDevice,                    ///< [in] handle of the device
     uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
     xet_metric_group_handle_t* phMetricGroups       ///< [in][range(0, count)] handles of the metric groups to activate. NULL
                                                     ///< to deactivate.
@@ -546,7 +535,7 @@ xetDeviceActivateMetricGroups(
 /// @brief Intercept function for xetMetricTracerOpen
 xe_result_t __xecall
 xetMetricTracerOpen(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    xet_device_handle_t hDevice,                    ///< [in] handle of the device
     xet_metric_tracer_desc_t* pDesc,                ///< [in,out] metric tracer descriptor
     xe_event_handle_t hNotificationEvent,           ///< [in] event used for report availability notification. Must be device
                                                     ///< to host type.
@@ -563,7 +552,7 @@ xetMetricTracerOpen(
 /// @brief Intercept function for xetCommandListAppendMetricTracerMarker
 xe_result_t __xecall
 xetCommandListAppendMetricTracerMarker(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    xet_command_list_handle_t hCommandList,         ///< [in] handle of the command list
     xet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
     uint32_t value                                  ///< [in] tracer marker value
     )
@@ -604,7 +593,7 @@ xetMetricTracerReadData(
 /// @brief Intercept function for xetMetricQueryPoolCreate
 xe_result_t __xecall
 xetMetricQueryPoolCreate(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    xet_device_handle_t hDevice,                    ///< [in] handle of the device
     xet_metric_query_pool_desc_t* pDesc,            ///< [in] metric query pool creation data
     xet_metric_query_pool_handle_t* phMetricQueryPool   ///< [out] handle of metric query pool
     )
@@ -632,7 +621,7 @@ xetMetricQueryPoolDestroy(
 xe_result_t __xecall
 xetMetricQueryPoolGetMetricQuery(
     xet_metric_query_pool_handle_t hMetricQueryPool,///< [in] handle of the metric query pool
-    uint32_t ordinal,                               ///< [in] index of the query within the pool
+    uint32_t index,                                 ///< [in] index of the query within the pool
     xet_metric_query_handle_t* phMetricQuery        ///< [out] handle of metric query
     )
 {
@@ -646,7 +635,7 @@ xetMetricQueryPoolGetMetricQuery(
 /// @brief Intercept function for xetCommandListAppendMetricQueryBegin
 xe_result_t __xecall
 xetCommandListAppendMetricQueryBegin(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    xet_command_list_handle_t hCommandList,         ///< [in] handle of the command list
     xet_metric_query_handle_t hMetricQuery          ///< [in] handle of the metric query
     )
 {
@@ -659,7 +648,7 @@ xetCommandListAppendMetricQueryBegin(
 /// @brief Intercept function for xetCommandListAppendMetricQueryEnd
 xe_result_t __xecall
 xetCommandListAppendMetricQueryEnd(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    xet_command_list_handle_t hCommandList,         ///< [in] handle of the command list
     xet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
     xe_event_handle_t hCompletionEvent              ///< [in] handle of the completion event to signal
     )
@@ -673,7 +662,7 @@ xetCommandListAppendMetricQueryEnd(
 /// @brief Intercept function for xetCommandListAppendMetricMemoryBarrier
 xe_result_t __xecall
 xetCommandListAppendMetricMemoryBarrier(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
+    xet_command_list_handle_t hCommandList          ///< [in] handle of the command list
     )
 {
     xe_result_t result = XE_RESULT_SUCCESS;
@@ -700,7 +689,7 @@ xetMetricQueryGetData(
 /// @brief Intercept function for xetPowerCreate
 xe_result_t __xecall
 xetPowerCreate(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+    xet_device_handle_t hDevice,                    ///< [in] handle of the device object
     uint32_t flags,                                 ///< [in] bitfield of ::xet_power_init_flags_t
     xet_power_handle_t* pPowerHandle                ///< [out] handle for accessing power features of the device
     )
@@ -880,30 +869,23 @@ xetPowerSetTurboMode(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xetPowerGetFreqDomainCount
+/// @brief Intercept function for xetFreqDomainGet
 xe_result_t __xecall
-xetPowerGetFreqDomainCount(
+xetFreqDomainGet(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t* pNumFreqDomains                       ///< [out] the number of frequency domains
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of frequency domains.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of frequency domains available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of
+                                                    ///< frequency domains.
+    xet_freq_domain_handle_t* phFreqDomain          ///< [in,out][optional][range(0, *pCount)] array of handle of frequency
+                                                    ///< domains
     )
 {
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xetPowerGetFreqDomain
-xe_result_t __xecall
-xetPowerGetFreqDomain(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t ordinal,                               ///< [in] frequency domain index [0 .. ::xetPowerGetFreqDomainCount - 1]
-    xet_freq_domain_handle_t* phFreqDomain          ///< [out] pointer to handle of frequency domain object
-    )
-{
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    *phFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>( driver.get() );
+    for( size_t i = 0; ( nullptr != phFreqDomain ) && ( i < *pCount ); ++i )
+        phFreqDomain[ i ] = reinterpret_cast<xet_freq_domain_handle_t>( driver.get() );
     return result;
 }
 

@@ -307,7 +307,7 @@ namespace xet
         /// @throws result_t
         static Power* __xecall
         Create(
-            xe::Device* pDevice,                            ///< [in] pointer to the device object
+            Device* pDevice,                                ///< [in] pointer to the device object
             uint32_t flags                                  ///< [in] bitfield of ::power_init_flags_t
             );
 
@@ -443,28 +443,6 @@ namespace xet
         void __xecall
         SetTurboMode(
             turbo_mode_t pTurboMode                         ///< [in] new turbo mode
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the number of frequency domains on the device
-        /// @returns
-        ///     - uint32_t: the number of frequency domains
-        /// 
-        /// @throws result_t
-        uint32_t __xecall
-        GetFreqDomainCount(
-            void
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get an object to a frequency domain on a device
-        /// @returns
-        ///     - FreqDomain*: pointer to handle of frequency domain object
-        /// 
-        /// @throws result_t
-        FreqDomain* __xecall
-        GetFreqDomain(
-            uint32_t ordinal                                ///< [in] frequency domain index [0 .. ::PowerGetFreqDomainCount - 1]
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -760,6 +738,21 @@ namespace xet
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
         auto getPower( void ) const { return m_pPower; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Retrieves frequency domains on a device
+        /// @throws result_t
+        static void __xecall
+        Get(
+            Power* pPower,                                  ///< [in] pointer to the power object
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of frequency domains.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of frequency domains available.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of
+                                                            ///< frequency domains.
+            FreqDomain** ppFreqDomain = nullptr             ///< [in,out][optional][range(0, *pCount)] array of pointer to frequency
+                                                            ///< domains
+            );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get the properties for a frequency domain

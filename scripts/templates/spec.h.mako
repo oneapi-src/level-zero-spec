@@ -129,7 +129,11 @@ ${th.make_func_name(n, tags, obj)}(
     );
 ## HANDLE #####################################################################
 %elif re.match(r"handle", obj['type']):
+%if 'alias' in obj:
+typedef ${th.subt(n, tags, obj['alias'])} ${th.subt(n, tags, obj['name'])};
+%else:
 typedef struct _${th.subt(n, tags, obj['name'])} *${th.subt(n, tags, obj['name'])};
+%endif
 %endif
 ## CONDITION-END ##############################################################
 %if 'condition' in obj:

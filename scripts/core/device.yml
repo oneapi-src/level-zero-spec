@@ -71,7 +71,7 @@ params:
       desc: "[in] handle of the device object"
     - type: uint32_t
       name: ordinal
-      desc: "[in] ordinal of sub-device to retrieve"
+      desc: "[in] ordinal of sub-device to retrieve; must be less than $x_device_properties_t::numSubDevices"
     - type: "$x_device_handle_t*"
       name: phSubDevice
       desc: "[out] pointer to handle of sub-device object."

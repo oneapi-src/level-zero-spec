@@ -75,7 +75,7 @@ typedef enum _xet_power_init_flags_t
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetPowerCreate(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+    xet_device_handle_t hDevice,                    ///< [in] handle of the device object
     uint32_t flags,                                 ///< [in] bitfield of ::xet_power_init_flags_t
     xet_power_handle_t* pPowerHandle                ///< [out] handle for accessing power features of the device
     );
@@ -480,7 +480,7 @@ typedef struct _xet_clock_divider_t
 } xet_clock_divider_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the number of frequency domains on the device
+/// @brief Retrieves frequency domains on a device
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -488,30 +488,18 @@ typedef struct _xet_clock_divider_t
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
-///         + nullptr == pNumFreqDomains
+///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetPowerGetFreqDomainCount(
+xetFreqDomainGet(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t* pNumFreqDomains                       ///< [out] the number of frequency domains
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get an object to a frequency domain on a device
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hPower
-///         + nullptr == phFreqDomain
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetPowerGetFreqDomain(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t ordinal,                               ///< [in] frequency domain index [0 .. ::xetPowerGetFreqDomainCount - 1]
-    xet_freq_domain_handle_t* phFreqDomain          ///< [out] pointer to handle of frequency domain object
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of frequency domains.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of frequency domains available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of
+                                                    ///< frequency domains.
+    xet_freq_domain_handle_t* phFreqDomain          ///< [in,out][optional][range(0, *pCount)] array of handle of frequency
+                                                    ///< domains
     );
 
 ///////////////////////////////////////////////////////////////////////////////

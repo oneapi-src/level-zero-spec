@@ -180,29 +180,21 @@ namespace xet
         auto getDevice( void ) const { return m_pDevice; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Returns metric group count for a given device.
-        /// @returns
-        ///     - uint32_t: number of metric groups supported by the device
-        /// 
-        /// @throws result_t
-        static uint32_t __xecall
-        GetCount(
-            xe::Device* pDevice                             ///< [in] pointer to the device object
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Returns metric group handle for a device.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
-        /// @returns
-        ///     - MetricGroup*: metric group handle
-        /// 
         /// @throws result_t
-        static MetricGroup* __xecall
+        static void __xecall
         Get(
-            xe::Device* pDevice,                            ///< [in] pointer to the device
-            uint32_t ordinal                                ///< [in] metric group index
+            Device* pDevice,                                ///< [in] pointer to the device
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of metric groups.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of metric groups available.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of
+                                                            ///< metric groups.
+            MetricGroup** ppMetricGroup = nullptr           ///< [in,out][optional][range(0, *pCount)] array of pointer to metric
+                                                            ///< groups
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -306,7 +298,7 @@ namespace xet
         auto getMetricgroup( void ) const { return m_pMetricGroup; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Returns metric from a given metric group.
+        /// @brief Retrieves metric from a given metric group.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -317,7 +309,8 @@ namespace xet
         static Metric* __xecall
         Get(
             MetricGroup* pMetricGroup,                      ///< [in] pointer to the metric group
-            uint32_t ordinal                                ///< [in] metric index
+            uint32_t ordinal                                ///< [in] ordinal of metric to retrieve; must be less than
+                                                            ///< ::metric_group_properties_t::metricCount
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -398,7 +391,7 @@ namespace xet
         /// @throws result_t
         static MetricTracer* __xecall
         Open(
-            xe::Device* pDevice,                            ///< [in] pointer to the device
+            Device* pDevice,                                ///< [in] pointer to the device
             desc_t* pDesc,                                  ///< [in,out] metric tracer descriptor
             xe::Event* pNotificationEvent                   ///< [in] event used for report availability notification. Must be device
                                                             ///< to host type.
@@ -500,7 +493,7 @@ namespace xet
         /// @throws result_t
         static MetricQueryPool* __xecall
         Create(
-            xe::Device* pDevice,                            ///< [in] pointer to the device
+            Device* pDevice,                                ///< [in] pointer to the device
             desc_t* pDesc                                   ///< [in] metric query pool creation data
             );
 
@@ -527,7 +520,7 @@ namespace xet
         /// @throws result_t
         MetricQuery* __xecall
         GetMetricQuery(
-            uint32_t ordinal                                ///< [in] index of the query within the pool
+            uint32_t index                                  ///< [in] index of the query within the pool
             );
 
     };

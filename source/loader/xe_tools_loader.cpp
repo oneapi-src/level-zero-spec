@@ -273,7 +273,6 @@ xetGetMetricGroupProcAddrTable(
         if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
-            pDdiTable->pfnGetCount                                 = xetMetricGroupGetCount;
             pDdiTable->pfnGet                                      = xetMetricGroupGet;
             pDdiTable->pfnGetProperties                            = xetMetricGroupGetProperties;
             pDdiTable->pfnCalculateData                            = xetMetricGroupCalculateData;
@@ -615,8 +614,6 @@ xetGetPowerProcAddrTable(
             pDdiTable->pfnGetEnergyCounter                         = xetPowerGetEnergyCounter;
             pDdiTable->pfnGetTurboMode                             = xetPowerGetTurboMode;
             pDdiTable->pfnSetTurboMode                             = xetPowerSetTurboMode;
-            pDdiTable->pfnGetFreqDomainCount                       = xetPowerGetFreqDomainCount;
-            pDdiTable->pfnGetFreqDomain                            = xetPowerGetFreqDomain;
             pDdiTable->pfnFanCount                                 = xetPowerFanCount;
             pDdiTable->pfnFanGetProperties                         = xetPowerFanGetProperties;
             pDdiTable->pfnFanGetSpeedTable                         = xetPowerFanGetSpeedTable;
@@ -693,6 +690,7 @@ xetGetFreqDomainProcAddrTable(
         if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
         {
             // return pointers to loader's DDIs
+            pDdiTable->pfnGet                                      = xetFreqDomainGet;
             pDdiTable->pfnGetProperties                            = xetFreqDomainGetProperties;
             pDdiTable->pfnGetSourceFreqDomain                      = xetFreqDomainGetSourceFreqDomain;
             pDdiTable->pfnGetSupportedClocks                       = xetFreqDomainGetSupportedClocks;
@@ -740,32 +738,16 @@ xetInit(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xetMetricGroupGetCount
-xe_result_t __xecall
-xetMetricGroupGetCount(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    uint32_t* pCount                                ///< [out] number of metric groups supported by the device
-    )
-{
-    // extract driver's function pointer table
-    auto dditable = reinterpret_cast<xet_device_object_t*>( hDevice )->dditable;
-
-    // convert loader handle to driver handle
-    hDevice = reinterpret_cast<xet_device_object_t*>( hDevice )->handle;
-
-    // forward to device-driver
-    auto result = dditable->MetricGroup.pfnGetCount( hDevice, pCount );
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Intercept function for xetMetricGroupGet
 xe_result_t __xecall
 xetMetricGroupGet(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
-    uint32_t ordinal,                               ///< [in] metric group index
-    xet_metric_group_handle_t* phMetricGroup        ///< [out] metric group handle
+    xet_device_handle_t hDevice,                    ///< [in] handle of the device
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of metric groups.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of metric groups available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of
+                                                    ///< metric groups.
+    xet_metric_group_handle_t* phMetricGroup        ///< [in,out][optional][range(0, *pCount)] array of handle of metric groups
     )
 {
     // extract driver's function pointer table
@@ -775,13 +757,14 @@ xetMetricGroupGet(
     hDevice = reinterpret_cast<xet_device_object_t*>( hDevice )->handle;
 
     // forward to device-driver
-    auto result = dditable->MetricGroup.pfnGet( hDevice, ordinal, phMetricGroup );
+    auto result = dditable->MetricGroup.pfnGet( hDevice, pCount, phMetricGroup );
 
     try
     {
-        // convert driver handle to loader handle
-        *phMetricGroup = reinterpret_cast<xet_metric_group_handle_t>(
-            xet_metric_group_object_t::factory.get( *phMetricGroup, dditable ) );
+        // convert driver handles to loader handles
+        for( size_t i = 0; ( nullptr != phMetricGroup ) && ( i < *pCount ); ++i )
+            phMetricGroup[ i ] = reinterpret_cast<xet_metric_group_handle_t>(
+                xet_metric_group_object_t::factory.get( phMetricGroup[ i ], dditable ) );
     }
     catch( std::bad_alloc& )
     {
@@ -815,7 +798,8 @@ xetMetricGroupGetProperties(
 xe_result_t __xecall
 xetMetricGet(
     xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
-    uint32_t ordinal,                               ///< [in] metric index
+    uint32_t ordinal,                               ///< [in] ordinal of metric to retrieve; must be less than
+                                                    ///< ::xet_metric_group_properties_t::metricCount
     xet_metric_handle_t* phMetric                   ///< [out] handle of metric
     )
 {
@@ -889,7 +873,7 @@ xetMetricGroupCalculateData(
 /// @brief Intercept function for xetDeviceActivateMetricGroups
 xe_result_t __xecall
 xetDeviceActivateMetricGroups(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    xet_device_handle_t hDevice,                    ///< [in] handle of the device
     uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
     xet_metric_group_handle_t* phMetricGroups       ///< [in][range(0, count)] handles of the metric groups to activate. NULL
                                                     ///< to deactivate.
@@ -915,7 +899,7 @@ xetDeviceActivateMetricGroups(
 /// @brief Intercept function for xetMetricTracerOpen
 xe_result_t __xecall
 xetMetricTracerOpen(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    xet_device_handle_t hDevice,                    ///< [in] handle of the device
     xet_metric_tracer_desc_t* pDesc,                ///< [in,out] metric tracer descriptor
     xe_event_handle_t hNotificationEvent,           ///< [in] event used for report availability notification. Must be device
                                                     ///< to host type.
@@ -951,7 +935,7 @@ xetMetricTracerOpen(
 /// @brief Intercept function for xetCommandListAppendMetricTracerMarker
 xe_result_t __xecall
 xetCommandListAppendMetricTracerMarker(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    xet_command_list_handle_t hCommandList,         ///< [in] handle of the command list
     xet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
     uint32_t value                                  ///< [in] tracer marker value
     )
@@ -1016,7 +1000,7 @@ xetMetricTracerReadData(
 /// @brief Intercept function for xetMetricQueryPoolCreate
 xe_result_t __xecall
 xetMetricQueryPoolCreate(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    xet_device_handle_t hDevice,                    ///< [in] handle of the device
     xet_metric_query_pool_desc_t* pDesc,            ///< [in] metric query pool creation data
     xet_metric_query_pool_handle_t* phMetricQueryPool   ///< [out] handle of metric query pool
     )
@@ -1069,7 +1053,7 @@ xetMetricQueryPoolDestroy(
 xe_result_t __xecall
 xetMetricQueryPoolGetMetricQuery(
     xet_metric_query_pool_handle_t hMetricQueryPool,///< [in] handle of the metric query pool
-    uint32_t ordinal,                               ///< [in] index of the query within the pool
+    uint32_t index,                                 ///< [in] index of the query within the pool
     xet_metric_query_handle_t* phMetricQuery        ///< [out] handle of metric query
     )
 {
@@ -1080,7 +1064,7 @@ xetMetricQueryPoolGetMetricQuery(
     hMetricQueryPool = reinterpret_cast<xet_metric_query_pool_object_t*>( hMetricQueryPool )->handle;
 
     // forward to device-driver
-    auto result = dditable->MetricQueryPool.pfnGetMetricQuery( hMetricQueryPool, ordinal, phMetricQuery );
+    auto result = dditable->MetricQueryPool.pfnGetMetricQuery( hMetricQueryPool, index, phMetricQuery );
 
     try
     {
@@ -1099,7 +1083,7 @@ xetMetricQueryPoolGetMetricQuery(
 /// @brief Intercept function for xetCommandListAppendMetricQueryBegin
 xe_result_t __xecall
 xetCommandListAppendMetricQueryBegin(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    xet_command_list_handle_t hCommandList,         ///< [in] handle of the command list
     xet_metric_query_handle_t hMetricQuery          ///< [in] handle of the metric query
     )
 {
@@ -1122,7 +1106,7 @@ xetCommandListAppendMetricQueryBegin(
 /// @brief Intercept function for xetCommandListAppendMetricQueryEnd
 xe_result_t __xecall
 xetCommandListAppendMetricQueryEnd(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    xet_command_list_handle_t hCommandList,         ///< [in] handle of the command list
     xet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
     xe_event_handle_t hCompletionEvent              ///< [in] handle of the completion event to signal
     )
@@ -1149,7 +1133,7 @@ xetCommandListAppendMetricQueryEnd(
 /// @brief Intercept function for xetCommandListAppendMetricMemoryBarrier
 xe_result_t __xecall
 xetCommandListAppendMetricMemoryBarrier(
-    xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
+    xet_command_list_handle_t hCommandList          ///< [in] handle of the command list
     )
 {
     // extract driver's function pointer table
@@ -1190,7 +1174,7 @@ xetMetricQueryGetData(
 /// @brief Intercept function for xetPowerCreate
 xe_result_t __xecall
 xetPowerCreate(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+    xet_device_handle_t hDevice,                    ///< [in] handle of the device object
     uint32_t flags,                                 ///< [in] bitfield of ::xet_power_init_flags_t
     xet_power_handle_t* pPowerHandle                ///< [out] handle for accessing power features of the device
     )
@@ -1479,11 +1463,17 @@ xetPowerSetTurboMode(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xetPowerGetFreqDomainCount
+/// @brief Intercept function for xetFreqDomainGet
 xe_result_t __xecall
-xetPowerGetFreqDomainCount(
+xetFreqDomainGet(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t* pNumFreqDomains                       ///< [out] the number of frequency domains
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of frequency domains.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of frequency domains available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of
+                                                    ///< frequency domains.
+    xet_freq_domain_handle_t* phFreqDomain          ///< [in,out][optional][range(0, *pCount)] array of handle of frequency
+                                                    ///< domains
     )
 {
     // extract driver's function pointer table
@@ -1493,34 +1483,14 @@ xetPowerGetFreqDomainCount(
     hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
 
     // forward to device-driver
-    auto result = dditable->Power.pfnGetFreqDomainCount( hPower, pNumFreqDomains );
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xetPowerGetFreqDomain
-xe_result_t __xecall
-xetPowerGetFreqDomain(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t ordinal,                               ///< [in] frequency domain index [0 .. ::xetPowerGetFreqDomainCount - 1]
-    xet_freq_domain_handle_t* phFreqDomain          ///< [out] pointer to handle of frequency domain object
-    )
-{
-    // extract driver's function pointer table
-    auto dditable = reinterpret_cast<xet_power_object_t*>( hPower )->dditable;
-
-    // convert loader handle to driver handle
-    hPower = reinterpret_cast<xet_power_object_t*>( hPower )->handle;
-
-    // forward to device-driver
-    auto result = dditable->Power.pfnGetFreqDomain( hPower, ordinal, phFreqDomain );
+    auto result = dditable->FreqDomain.pfnGet( hPower, pCount, phFreqDomain );
 
     try
     {
-        // convert driver handle to loader handle
-        *phFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>(
-            xet_freq_domain_object_t::factory.get( *phFreqDomain, dditable ) );
+        // convert driver handles to loader handles
+        for( size_t i = 0; ( nullptr != phFreqDomain ) && ( i < *pCount ); ++i )
+            phFreqDomain[ i ] = reinterpret_cast<xet_freq_domain_handle_t>(
+                xet_freq_domain_object_t::factory.get( phFreqDomain[ i ], dditable ) );
     }
     catch( std::bad_alloc& )
     {

@@ -140,7 +140,8 @@ xeDeviceGet(
 xe_result_t __xecall
 xeDeviceGetSubDevice(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve
+    uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve; must be less than
+                                                    ///< ::xe_device_properties_t::numSubDevices
     xe_device_handle_t* phSubDevice                 ///< [out] pointer to handle of sub-device object.
     )
 {
@@ -594,7 +595,8 @@ namespace xe
     /// @throws result_t
     Device* __xecall
     Device::GetSubDevice(
-        uint32_t ordinal                                ///< [in] ordinal of sub-device to retrieve
+        uint32_t ordinal                                ///< [in] ordinal of sub-device to retrieve; must be less than
+                                                        ///< ::device_properties_t::numSubDevices
         )
     {
         xe_device_handle_t hSubDevice;

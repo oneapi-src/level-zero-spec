@@ -57,7 +57,7 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetPowerCreate(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+    xet_device_handle_t hDevice,                    ///< [in] handle of the device object
     uint32_t flags,                                 ///< [in] bitfield of ::xet_power_init_flags_t
     xet_power_handle_t* pPowerHandle                ///< [out] handle for accessing power features of the device
     )
@@ -430,7 +430,7 @@ xetPowerSetTurboMode(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the number of frequency domains on the device
+/// @brief Retrieves frequency domains on a device
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -438,50 +438,28 @@ xetPowerSetTurboMode(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hPower
-///         + nullptr == pNumFreqDomains
+///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetPowerGetFreqDomainCount(
+xetFreqDomainGet(
     xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t* pNumFreqDomains                       ///< [out] the number of frequency domains
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of frequency domains.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of frequency domains available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of
+                                                    ///< frequency domains.
+    xet_freq_domain_handle_t* phFreqDomain          ///< [in,out][optional][range(0, *pCount)] array of handle of frequency
+                                                    ///< domains
     )
 {
-    auto pfnGetFreqDomainCount = xet_lib::lib.ddiTable.Power.pfnGetFreqDomainCount;
+    auto pfnGet = xet_lib::lib.ddiTable.FreqDomain.pfnGet;
 
 #if _DEBUG
-    if( nullptr == pfnGetFreqDomainCount )
+    if( nullptr == pfnGet )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnGetFreqDomainCount( hPower, pNumFreqDomains );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get an object to a frequency domain on a device
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hPower
-///         + nullptr == phFreqDomain
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetPowerGetFreqDomain(
-    xet_power_handle_t hPower,                      ///< [in] handle of the power object
-    uint32_t ordinal,                               ///< [in] frequency domain index [0 .. ::xetPowerGetFreqDomainCount - 1]
-    xet_freq_domain_handle_t* phFreqDomain          ///< [out] pointer to handle of frequency domain object
-    )
-{
-    auto pfnGetFreqDomain = xet_lib::lib.ddiTable.Power.pfnGetFreqDomain;
-
-#if _DEBUG
-    if( nullptr == pfnGetFreqDomain )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
-
-    return pfnGetFreqDomain( hPower, ordinal, phFreqDomain );
+    return pfnGet( hPower, pCount, phFreqDomain );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1192,14 +1170,14 @@ namespace xet
     /// @throws result_t
     Power* __xecall
     Power::Create(
-        xe::Device* pDevice,                            ///< [in] pointer to the device object
+        Device* pDevice,                                ///< [in] pointer to the device object
         uint32_t flags                                  ///< [in] bitfield of ::power_init_flags_t
         )
     {
         xet_power_handle_t powerHandle;
 
         auto result = static_cast<result_t>( ::xetPowerCreate(
-            reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
+            reinterpret_cast<xet_device_handle_t>( pDevice->getHandle() ),
             flags,
             &powerHandle ) );
 
@@ -1504,66 +1482,50 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get the number of frequency domains on the device
-    /// 
-    /// @returns
-    ///     - uint32_t: the number of frequency domains
+    /// @brief Retrieves frequency domains on a device
     /// 
     /// @throws result_t
-    uint32_t __xecall
-    Power::GetFreqDomainCount(
-        void
+    void __xecall
+    FreqDomain::Get(
+        Power* pPower,                                  ///< [in] pointer to the power object
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of frequency domains.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of frequency domains available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of
+                                                        ///< frequency domains.
+        FreqDomain** ppFreqDomain                       ///< [in,out][optional][range(0, *pCount)] array of pointer to frequency
+                                                        ///< domains
         )
     {
-        uint32_t numFreqDomains;
+        thread_local std::vector<xet_freq_domain_handle_t> hFreqDomain;
+        hFreqDomain.resize( ( ppFreqDomain ) ? *pCount : 0 );
 
-        auto result = static_cast<result_t>( ::xetPowerGetFreqDomainCount(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
-            &numFreqDomains ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::GetFreqDomainCount" );
-
-        return numFreqDomains;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get an object to a frequency domain on a device
-    /// 
-    /// @returns
-    ///     - FreqDomain*: pointer to handle of frequency domain object
-    /// 
-    /// @throws result_t
-    FreqDomain* __xecall
-    Power::GetFreqDomain(
-        uint32_t ordinal                                ///< [in] frequency domain index [0 .. ::PowerGetFreqDomainCount - 1]
-        )
-    {
-        xet_freq_domain_handle_t hFreqDomain;
-
-        auto result = static_cast<result_t>( ::xetPowerGetFreqDomain(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
-            ordinal,
-            &hFreqDomain ) );
+        auto result = static_cast<result_t>( ::xetFreqDomainGet(
+            reinterpret_cast<xet_power_handle_t>( pPower->getHandle() ),
+            pCount,
+            hFreqDomain.data() ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::GetFreqDomain" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::FreqDomain::Get" );
 
-        FreqDomain* pFreqDomain = nullptr;
+        for( uint32_t i = 0; ( ppFreqDomain ) && ( i < *pCount ); ++i )
+            ppFreqDomain[ i ] = nullptr;
 
         try
         {
-            pFreqDomain = new FreqDomain( pPower );
+            for( uint32_t i = 0; ( ppFreqDomain ) && ( i < *pCount ); ++i )
+                ppFreqDomain[ i ] = new FreqDomain( pPower );
         }
         catch( std::bad_alloc& )
         {
-            delete pFreqDomain;
-            pFreqDomain = nullptr;
+            for( uint32_t i = 0; ( ppFreqDomain ) && ( i < *pCount ); ++i )
+            {
+                delete ppFreqDomain[ i ];
+                ppFreqDomain[ i ] = nullptr;
+            }
 
-            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xet::Power::GetFreqDomain" );
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xet::FreqDomain::Get" );
         }
-
-        return pFreqDomain;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
