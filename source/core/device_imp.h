@@ -44,6 +44,9 @@ struct DeviceImp : public Device {
     xe_result_t registerCLCommandQueue(cl_context context, cl_command_queue command_queue,
                                        xe_command_queue_handle_t *phCommandQueue) override;
 
+    xe_result_t activateMetricGroups(uint32_t count,
+                                     xet_metric_group_handle_t *phMetricGroups) override;
+
     NEO::Device *deviceRT = nullptr;
     bool isSubdevice = false;
     void *execEnvironment = nullptr;

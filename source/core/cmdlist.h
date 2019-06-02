@@ -2,6 +2,7 @@
 #include "xe_cmdlist.h"
 #include "xe_copy.h"
 #include "xe_module.h"
+#include "xet_api.h"
 #include "cmdcontainer.h"
 #include "device.h"
 #include "function.h"
@@ -72,6 +73,13 @@ struct CommandList : public CommandContainer {
     virtual xe_result_t reset() = 0;
     virtual xe_result_t resetParameters() = 0;
     virtual xe_result_t setParameter(xe_command_list_parameter_t parameter, uint32_t value) = 0;
+
+    virtual xe_result_t appendMetricMemoryBarrier() = 0;
+    virtual xe_result_t appendMetricTracerMarker(xet_metric_tracer_handle_t hMetricTracer,
+                                                 uint32_t value) = 0;
+    virtual xe_result_t appendMetricQueryBegin(xet_metric_query_handle_t hMetricQuery) = 0;
+    virtual xe_result_t appendMetricQueryEnd(xet_metric_query_handle_t hMetricQuery,
+                                             xe_event_handle_t hCompletionEvent) = 0;
 
     static CommandList *create(uint32_t productFamily, Device *device);
 

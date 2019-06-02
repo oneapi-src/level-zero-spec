@@ -93,6 +93,13 @@ template <> struct Mock<CommandList> : public CommandList {
     MOCK_METHOD0(resetParameters, xe_result_t());
     MOCK_METHOD2(setParameter, xe_result_t(xe_command_list_parameter_t parameter, uint32_t value));
 
+    MOCK_METHOD0(appendMetricMemoryBarrier, xe_result_t());
+    MOCK_METHOD2(appendMetricTracerMarker,
+                 xe_result_t(xet_metric_tracer_handle_t hMetricTracer, uint32_t value));
+    MOCK_METHOD1(appendMetricQueryBegin, xe_result_t(xet_metric_query_handle_t hMetricQuery));
+    MOCK_METHOD2(appendMetricQueryEnd, xe_result_t(xet_metric_query_handle_t hMetricQuery,
+                                                   xe_event_handle_t hCompletionEvent));
+
     uint8_t *batchBuffer = nullptr;
     GraphicsAllocation *mockAllocation = nullptr;
 };

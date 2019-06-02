@@ -237,6 +237,11 @@ xe_result_t DeviceImp::getImageProperties(const xe_image_desc_t *desc,
 
 xe_result_t DeviceImp::systemBarrier() { return XE_RESULT_ERROR_UNSUPPORTED; }
 
+xe_result_t DeviceImp::activateMetricGroups(uint32_t count,
+                                            xet_metric_group_handle_t *phMetricGroups) {
+    return XE_RESULT_ERROR_UNSUPPORTED;
+}
+
 void *DeviceImp::getExecEnvironment() { return execEnvironment; }
 
 PtrRef<BuiltinFunctionsLib> DeviceImp::getBuiltinFunctionsLib() { return builtins.weakRef(); }

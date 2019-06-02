@@ -20,6 +20,22 @@ xe_result_t CommandListImp::destroy() {
     return XE_RESULT_SUCCESS;
 }
 
+xe_result_t CommandListImp::appendMetricMemoryBarrier() { return XE_RESULT_ERROR_UNSUPPORTED; }
+
+xe_result_t CommandListImp::appendMetricTracerMarker(xet_metric_tracer_handle_t hMetricTracer,
+                                                     uint32_t value) {
+    return XE_RESULT_ERROR_UNSUPPORTED;
+}
+
+xe_result_t CommandListImp::appendMetricQueryBegin(xet_metric_query_handle_t hMetricQuery) {
+    return XE_RESULT_ERROR_UNSUPPORTED;
+}
+
+xe_result_t CommandListImp::appendMetricQueryEnd(xet_metric_query_handle_t hMetricQuery,
+                                                 xe_event_handle_t hCompletionEvent) {
+    return XE_RESULT_ERROR_UNSUPPORTED;
+}
+
 CommandList *CommandList::create(uint32_t productFamily, Device *device) {
     CommandListAllocatorFn allocator = nullptr;
     if (productFamily < IGFX_MAX_PRODUCT) {

@@ -1,5 +1,6 @@
 #pragma once
 #include "xe_api.h"
+#include "xet_api.h"
 
 #include "driver.h"
 #include "ptr.h"
@@ -69,6 +70,9 @@ struct Device : _xe_device_handle_t {
     virtual uint32_t getMaxNumHwThreads() const = 0;
 
     virtual NEO::HwHelper &getHwHelper() = 0;
+
+    virtual xe_result_t activateMetricGroups(uint32_t count,
+                                             xet_metric_group_handle_t *phMetricGroups) = 0;
 
     static Device *fromHandle(xe_device_handle_t handle) { return static_cast<Device *>(handle); }
 

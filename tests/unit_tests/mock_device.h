@@ -67,6 +67,9 @@ template <> struct Mock<Device> : public Device {
     MOCK_METHOD0(getMOCSMapper, PtrRef<MOCSMapper>());
     MOCK_CONST_METHOD0(getMaxNumHwThreads, uint32_t());
 
+    MOCK_METHOD2(activateMetricGroups,
+                 xe_result_t(uint32_t count, xet_metric_group_handle_t *phMetricGroups));
+
     void *deviceRT;
     void *csrRT;
 };
