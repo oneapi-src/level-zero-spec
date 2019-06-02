@@ -36,6 +36,8 @@
 #if !defined(XET_NULLDRV)
 #include "metric.h"
 #endif
+#include "cmdlist.h"
+#include "device.h"
 
 #include <exception>    // @todo: move to common and/or precompiled header
 #include <new>

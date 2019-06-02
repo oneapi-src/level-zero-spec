@@ -54,6 +54,7 @@ target_link_libraries(${TARGET_NAME}
 )
 
 add_subdirectory(core)
+add_subdirectory(tools)
 
 # Recreate ocloc as shared lib
 get_target_property(OCLOC_SOURCES ocloc SOURCES)
