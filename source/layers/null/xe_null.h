@@ -46,13 +46,6 @@ public:
     xe_result_t xexInit( xe_init_flag_t flags ) { return XE_RESULT_SUCCESS; }
     xe_result_t xetInit( xe_init_flag_t flags ) { return XE_RESULT_SUCCESS; }
 
-    xe_result_t xeGetDeviceGroups( uint32_t* pCount, xe_device_group_handle_t* pDeviceGroups )
-    {
-        if( nullptr != pCount ) *pCount = 1;
-        if( nullptr != pDeviceGroups ) *pDeviceGroups = reinterpret_cast<xe_device_group_handle_t>(-1);
-        return XE_RESULT_SUCCESS;
-    }
-
     void* get( void )
     {
         static uint64_t count = 0x80800000;

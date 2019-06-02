@@ -125,6 +125,7 @@ xexCommandGraphCreate(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     *phCommandGraph = reinterpret_cast<xex_command_graph_handle_t>( driver.get() );
+
     return result;
 }
 
@@ -136,6 +137,7 @@ xexCommandGraphDestroy(
     )
 {
     xe_result_t result = XE_RESULT_SUCCESS;
+
 
     return result;
 }

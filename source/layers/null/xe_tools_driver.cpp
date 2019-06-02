@@ -454,6 +454,7 @@ xetMetricGroupGet(
 
     for( size_t i = 0; ( nullptr != phMetricGroup ) && ( i < *pCount ); ++i )
         phMetricGroup[ i ] = reinterpret_cast<xet_metric_group_handle_t>( driver.get() );
+
     return result;
 }
 
@@ -483,6 +484,7 @@ xetMetricGet(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     *phMetric = reinterpret_cast<xet_metric_handle_t>( driver.get() );
+
     return result;
 }
 
@@ -545,6 +547,7 @@ xetMetricTracerOpen(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     *phMetricTracer = reinterpret_cast<xet_metric_tracer_handle_t>( driver.get() );
+
     return result;
 }
 
@@ -601,6 +604,7 @@ xetMetricQueryPoolCreate(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     *phMetricQueryPool = reinterpret_cast<xet_metric_query_pool_handle_t>( driver.get() );
+
     return result;
 }
 
@@ -612,6 +616,7 @@ xetMetricQueryPoolDestroy(
     )
 {
     xe_result_t result = XE_RESULT_SUCCESS;
+
 
     return result;
 }
@@ -628,6 +633,7 @@ xetMetricQueryPoolGetMetricQuery(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     *phMetricQuery = reinterpret_cast<xet_metric_query_handle_t>( driver.get() );
+
     return result;
 }
 
@@ -697,6 +703,7 @@ xetPowerCreate(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     *pPowerHandle = reinterpret_cast<xet_power_handle_t>( driver.get() );
+
     return result;
 }
 
@@ -708,6 +715,7 @@ xetPowerDestroy(
     )
 {
     xe_result_t result = XE_RESULT_SUCCESS;
+
 
     return result;
 }
@@ -886,6 +894,7 @@ xetFreqDomainGet(
 
     for( size_t i = 0; ( nullptr != phFreqDomain ) && ( i < *pCount ); ++i )
         phFreqDomain[ i ] = reinterpret_cast<xet_freq_domain_handle_t>( driver.get() );
+
     return result;
 }
 
@@ -914,6 +923,7 @@ xetFreqDomainGetSourceFreqDomain(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     *phSrcFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>( driver.get() );
+
     return result;
 }
 

@@ -638,8 +638,9 @@ xeDeviceGroupGet(
 {
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    for( size_t i = 0; ( nullptr != phDeviceGroups ) && ( i < *pCount ); ++i )
-        phDeviceGroups[ i ] = reinterpret_cast<xe_device_group_handle_t>( driver.get() );
+    if( nullptr != pCount ) *pCount = 1;
+    if( nullptr != phDeviceGroups ) *phDeviceGroups = reinterpret_cast<xe_device_group_handle_t>( driver.get() );
+
     return result;
 }
 
@@ -660,6 +661,7 @@ xeDeviceGet(
 
     for( size_t i = 0; ( nullptr != phDevices ) && ( i < *pCount ); ++i )
         phDevices[ i ] = reinterpret_cast<xe_device_handle_t>( driver.get() );
+
     return result;
 }
 
@@ -676,6 +678,7 @@ xeDeviceGetSubDevice(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     *phSubDevice = reinterpret_cast<xe_device_handle_t>( driver.get() );
+
     return result;
 }
 
@@ -797,6 +800,7 @@ xeCommandQueueCreate(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>( driver.get() );
+
     return result;
 }
 
@@ -808,6 +812,7 @@ xeCommandQueueDestroy(
     )
 {
     xe_result_t result = XE_RESULT_SUCCESS;
+
 
     return result;
 }
@@ -857,6 +862,7 @@ xeCommandListCreate(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     *phCommandList = reinterpret_cast<xe_command_list_handle_t>( driver.get() );
+
     return result;
 }
 
@@ -872,6 +878,7 @@ xeCommandListCreateImmediate(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     *phCommandList = reinterpret_cast<xe_command_list_handle_t>( driver.get() );
+
     return result;
 }
 
@@ -883,6 +890,7 @@ xeCommandListDestroy(
     )
 {
     xe_result_t result = XE_RESULT_SUCCESS;
+
 
     return result;
 }
@@ -1043,6 +1051,7 @@ xeDeviceRegisterCLProgram(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     *phModule = reinterpret_cast<xe_module_handle_t>( driver.get() );
+
     return result;
 }
 #endif // XE_ENABLE_OCL_INTEROP
@@ -1061,6 +1070,7 @@ xeDeviceRegisterCLCommandQueue(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>( driver.get() );
+
     return result;
 }
 #endif // XE_ENABLE_OCL_INTEROP
@@ -1222,6 +1232,7 @@ xeEventPoolCreate(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     *phEventPool = reinterpret_cast<xe_event_pool_handle_t>( driver.get() );
+
     return result;
 }
 
@@ -1233,6 +1244,7 @@ xeEventPoolDestroy(
     )
 {
     xe_result_t result = XE_RESULT_SUCCESS;
+
 
     return result;
 }
@@ -1249,6 +1261,7 @@ xeEventCreate(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     *phEvent = reinterpret_cast<xe_event_handle_t>( driver.get() );
+
     return result;
 }
 
@@ -1260,6 +1273,7 @@ xeEventDestroy(
     )
 {
     xe_result_t result = XE_RESULT_SUCCESS;
+
 
     return result;
 }
@@ -1289,6 +1303,7 @@ xeEventPoolOpenIpcHandle(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     *phEventPool = reinterpret_cast<xe_event_pool_handle_t>( driver.get() );
+
     return result;
 }
 
@@ -1300,6 +1315,7 @@ xeEventPoolCloseIpcHandle(
     )
 {
     xe_result_t result = XE_RESULT_SUCCESS;
+
 
     return result;
 }
@@ -1410,6 +1426,7 @@ xeFenceCreate(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     *phFence = reinterpret_cast<xe_fence_handle_t>( driver.get() );
+
     return result;
 }
 
@@ -1421,6 +1438,7 @@ xeFenceDestroy(
     )
 {
     xe_result_t result = XE_RESULT_SUCCESS;
+
 
     return result;
 }
@@ -1492,6 +1510,7 @@ xeImageCreate(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     *phImage = reinterpret_cast<xe_image_handle_t>( driver.get() );
+
     return result;
 }
 
@@ -1503,6 +1522,7 @@ xeImageDestroy(
     )
 {
     xe_result_t result = XE_RESULT_SUCCESS;
+
 
     return result;
 }
@@ -1656,7 +1676,9 @@ xeModuleCreate(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     *phModule = reinterpret_cast<xe_module_handle_t>( driver.get() );
+
     if( nullptr != phBuildLog ) *phBuildLog = reinterpret_cast<xe_module_build_log_handle_t>( driver.get() );
+
     return result;
 }
 
@@ -1669,6 +1691,7 @@ xeModuleDestroy(
 {
     xe_result_t result = XE_RESULT_SUCCESS;
 
+
     return result;
 }
 
@@ -1680,6 +1703,7 @@ xeModuleBuildLogDestroy(
     )
 {
     xe_result_t result = XE_RESULT_SUCCESS;
+
 
     return result;
 }
@@ -1738,6 +1762,7 @@ xeFunctionCreate(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     *phFunction = reinterpret_cast<xe_function_handle_t>( driver.get() );
+
     return result;
 }
 
@@ -1749,6 +1774,7 @@ xeFunctionDestroy(
     )
 {
     xe_result_t result = XE_RESULT_SUCCESS;
+
 
     return result;
 }
@@ -1987,6 +2013,7 @@ xeSamplerCreate(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     *phSampler = reinterpret_cast<xe_sampler_handle_t>( driver.get() );
+
     return result;
 }
 
@@ -1998,6 +2025,7 @@ xeSamplerDestroy(
     )
 {
     xe_result_t result = XE_RESULT_SUCCESS;
+
 
     return result;
 }

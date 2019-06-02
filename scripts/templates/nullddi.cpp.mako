@@ -103,6 +103,10 @@ ${th.make_func_name(n, tags, obj)}(
     // global functions need to be handled manually by the driver
     result = driver.${th.make_func_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
 
+    %elif re.match(r"\w+DeviceGroupGet$", th.make_func_name(n, tags, obj)):
+    if( nullptr != pCount ) *pCount = 1;
+    if( nullptr != phDeviceGroups ) *phDeviceGroups = reinterpret_cast<${x}_device_group_handle_t>( driver.get() );
+
     %else:
     %for item in th.get_loader_epilogue(n, tags, obj, meta):
     %if 'range' in item:
@@ -115,6 +119,7 @@ ${th.make_func_name(n, tags, obj)}(
     *${item['name']} = reinterpret_cast<${item['type']}>( driver.get() );
     %endif
     %endif
+
     %endfor
     %endif
     return result;
