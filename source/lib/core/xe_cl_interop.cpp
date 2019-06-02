@@ -191,7 +191,19 @@ namespace xe
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::RegisterCLProgram" );
 
-        auto pModule = new Module(  );
+        Module* pModule = nullptr;
+
+        try
+        {
+            pModule = new Module(  );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pModule;
+            pModule = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Device::RegisterCLProgram" );
+        }
 
         return pModule;
     }
@@ -222,7 +234,19 @@ namespace xe
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::RegisterCLCommandQueue" );
 
-        auto pCommandQueue = new CommandQueue(  );
+        CommandQueue* pCommandQueue = nullptr;
+
+        try
+        {
+            pCommandQueue = new CommandQueue(  );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pCommandQueue;
+            pCommandQueue = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Device::RegisterCLCommandQueue" );
+        }
 
         return pCommandQueue;
     }

@@ -240,7 +240,19 @@ namespace xe
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandQueue::Create" );
 
-        auto pCommandQueue = new CommandQueue( reinterpret_cast<command_queue_handle_t>( hCommandQueue ), pDevice, desc );
+        CommandQueue* pCommandQueue = nullptr;
+
+        try
+        {
+            pCommandQueue = new CommandQueue( reinterpret_cast<command_queue_handle_t>( hCommandQueue ), pDevice, desc );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pCommandQueue;
+            pCommandQueue = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::CommandQueue::Create" );
+        }
 
         return pCommandQueue;
     }

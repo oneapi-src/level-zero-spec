@@ -160,7 +160,19 @@ namespace xe
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Sampler::Create" );
 
-        auto pSampler = new Sampler( reinterpret_cast<sampler_handle_t>( hSampler ), pDevice, desc );
+        Sampler* pSampler = nullptr;
+
+        try
+        {
+            pSampler = new Sampler( reinterpret_cast<sampler_handle_t>( hSampler ), pDevice, desc );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pSampler;
+            pSampler = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Sampler::Create" );
+        }
 
         return pSampler;
     }

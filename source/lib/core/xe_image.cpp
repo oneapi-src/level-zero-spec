@@ -219,7 +219,19 @@ namespace xe
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Image::Create" );
 
-        auto pImage = new Image( reinterpret_cast<image_handle_t>( hImage ), pDevice, desc );
+        Image* pImage = nullptr;
+
+        try
+        {
+            pImage = new Image( reinterpret_cast<image_handle_t>( hImage ), pDevice, desc );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pImage;
+            pImage = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Image::Create" );
+        }
 
         return pImage;
     }

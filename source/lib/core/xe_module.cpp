@@ -858,10 +858,38 @@ namespace xe
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Module::Create" );
 
-        auto pModule = new Module( reinterpret_cast<module_handle_t>( hModule ), pDevice, desc );
+        Module* pModule = nullptr;
+
+        try
+        {
+            pModule = new Module( reinterpret_cast<module_handle_t>( hModule ), pDevice, desc );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pModule;
+            pModule = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Module::Create" );
+        }
 
         if( ppBuildLog )
-            *ppBuildLog =  new ModuleBuildLog( reinterpret_cast<module_build_log_handle_t>( hBuildLog ), pModule );
+            *ppBuildLog =  nullptr;
+
+        try
+        {
+            if( ppBuildLog )
+                *ppBuildLog =  new ModuleBuildLog( reinterpret_cast<module_build_log_handle_t>( hBuildLog ), pModule );
+        }
+        catch( std::bad_alloc& )
+        {
+            if( ppBuildLog )
+            {
+                delete *ppBuildLog;
+                *ppBuildLog =  nullptr;
+            }
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Module::Create" );
+        }
 
         return pModule;
     }
@@ -1044,7 +1072,19 @@ namespace xe
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Function::Create" );
 
-        auto pFunction = new Function( reinterpret_cast<function_handle_t>( hFunction ), pModule, desc );
+        Function* pFunction = nullptr;
+
+        try
+        {
+            pFunction = new Function( reinterpret_cast<function_handle_t>( hFunction ), pModule, desc );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pFunction;
+            pFunction = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Function::Create" );
+        }
 
         return pFunction;
     }

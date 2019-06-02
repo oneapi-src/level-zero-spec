@@ -716,7 +716,19 @@ namespace xet
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricGroup::Get" );
 
-        auto pMetricGroup = new MetricGroup( pDevice );
+        MetricGroup* pMetricGroup = nullptr;
+
+        try
+        {
+            pMetricGroup = new MetricGroup( pDevice );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pMetricGroup;
+            pMetricGroup = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xet::MetricGroup::Get" );
+        }
 
         return pMetricGroup;
     }
@@ -774,7 +786,19 @@ namespace xet
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Metric::Get" );
 
-        auto pMetric = new Metric( pMetricGroup );
+        Metric* pMetric = nullptr;
+
+        try
+        {
+            pMetric = new Metric( pMetricGroup );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pMetric;
+            pMetric = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xet::Metric::Get" );
+        }
 
         return pMetric;
     }
@@ -897,7 +921,19 @@ namespace xet
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricTracer::Open" );
 
-        auto pMetricTracer = new MetricTracer( pDevice );
+        MetricTracer* pMetricTracer = nullptr;
+
+        try
+        {
+            pMetricTracer = new MetricTracer( pDevice );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pMetricTracer;
+            pMetricTracer = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xet::MetricTracer::Open" );
+        }
 
         return pMetricTracer;
     }
@@ -995,7 +1031,19 @@ namespace xet
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricQueryPool::Create" );
 
-        auto pMetricQueryPool = new MetricQueryPool( pDevice );
+        MetricQueryPool* pMetricQueryPool = nullptr;
+
+        try
+        {
+            pMetricQueryPool = new MetricQueryPool( pDevice );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pMetricQueryPool;
+            pMetricQueryPool = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xet::MetricQueryPool::Create" );
+        }
 
         return pMetricQueryPool;
     }
@@ -1047,7 +1095,19 @@ namespace xet
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricQueryPool::GetMetricQuery" );
 
-        auto pMetricQuery = new MetricQuery( nullptr );
+        MetricQuery* pMetricQuery = nullptr;
+
+        try
+        {
+            pMetricQuery = new MetricQuery( nullptr );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pMetricQuery;
+            pMetricQuery = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xet::MetricQueryPool::GetMetricQuery" );
+        }
 
         return pMetricQuery;
     }

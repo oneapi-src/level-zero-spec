@@ -399,7 +399,19 @@ namespace xe
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::Create" );
 
-        auto pCommandList = new CommandList( reinterpret_cast<command_list_handle_t>( hCommandList ), pDevice, desc );
+        CommandList* pCommandList = nullptr;
+
+        try
+        {
+            pCommandList = new CommandList( reinterpret_cast<command_list_handle_t>( hCommandList ), pDevice, desc );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pCommandList;
+            pCommandList = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::CommandList::Create" );
+        }
 
         return pCommandList;
     }
@@ -434,7 +446,19 @@ namespace xe
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::CreateImmediate" );
 
-        auto pCommandList = new CommandList( reinterpret_cast<command_list_handle_t>( hCommandList ), pDevice, nullptr );
+        CommandList* pCommandList = nullptr;
+
+        try
+        {
+            pCommandList = new CommandList( reinterpret_cast<command_list_handle_t>( hCommandList ), pDevice, nullptr );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pCommandList;
+            pCommandList = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::CommandList::CreateImmediate" );
+        }
 
         return pCommandList;
     }

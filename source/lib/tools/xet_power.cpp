@@ -1206,7 +1206,19 @@ namespace xet
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::Create" );
 
-        auto pPowerHandle = new Power( pDevice );
+        Power* pPowerHandle = nullptr;
+
+        try
+        {
+            pPowerHandle = new Power( pDevice );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pPowerHandle;
+            pPowerHandle = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xet::Power::Create" );
+        }
 
         return pPowerHandle;
     }
@@ -1537,7 +1549,19 @@ namespace xet
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::GetFreqDomain" );
 
-        auto pFreqDomain = new FreqDomain( pPower );
+        FreqDomain* pFreqDomain = nullptr;
+
+        try
+        {
+            pFreqDomain = new FreqDomain( pPower );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pFreqDomain;
+            pFreqDomain = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xet::Power::GetFreqDomain" );
+        }
 
         return pFreqDomain;
     }
@@ -1588,7 +1612,19 @@ namespace xet
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::FreqDomain::GetSourceFreqDomain" );
 
-        auto pSrcFreqDomain = new FreqDomain( nullptr );
+        FreqDomain* pSrcFreqDomain = nullptr;
+
+        try
+        {
+            pSrcFreqDomain = new FreqDomain( nullptr );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pSrcFreqDomain;
+            pSrcFreqDomain = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xet::FreqDomain::GetSourceFreqDomain" );
+        }
 
         return pSrcFreqDomain;
     }

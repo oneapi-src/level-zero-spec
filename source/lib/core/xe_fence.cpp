@@ -270,7 +270,19 @@ namespace xe
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Fence::Create" );
 
-        auto pFence = new Fence( reinterpret_cast<fence_handle_t>( hFence ), pCommandQueue, desc );
+        Fence* pFence = nullptr;
+
+        try
+        {
+            pFence = new Fence( reinterpret_cast<fence_handle_t>( hFence ), pCommandQueue, desc );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pFence;
+            pFence = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Fence::Create" );
+        }
 
         return pFence;
     }

@@ -606,7 +606,19 @@ namespace xe
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::EventPool::Create" );
 
-        auto pEventPool = new EventPool( reinterpret_cast<event_pool_handle_t>( hEventPool ), pDevice, desc );
+        EventPool* pEventPool = nullptr;
+
+        try
+        {
+            pEventPool = new EventPool( reinterpret_cast<event_pool_handle_t>( hEventPool ), pDevice, desc );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pEventPool;
+            pEventPool = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::EventPool::Create" );
+        }
 
         return pEventPool;
     }
@@ -676,7 +688,19 @@ namespace xe
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Event::Create" );
 
-        auto pEvent = new Event( reinterpret_cast<event_handle_t>( hEvent ), pEventPool, desc );
+        Event* pEvent = nullptr;
+
+        try
+        {
+            pEvent = new Event( reinterpret_cast<event_handle_t>( hEvent ), pEventPool, desc );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pEvent;
+            pEvent = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Event::Create" );
+        }
 
         return pEvent;
     }
@@ -779,7 +803,19 @@ namespace xe
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::EventPool::OpenIpcHandle" );
 
-        auto pEventPool = new EventPool( reinterpret_cast<event_pool_handle_t>( hEventPool ), pDevice, nullptr );
+        EventPool* pEventPool = nullptr;
+
+        try
+        {
+            pEventPool = new EventPool( reinterpret_cast<event_pool_handle_t>( hEventPool ), pDevice, nullptr );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pEventPool;
+            pEventPool = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::EventPool::OpenIpcHandle" );
+        }
 
         return pEventPool;
     }

@@ -178,7 +178,19 @@ namespace xex
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xex::CommandGraph::Create" );
 
-        auto pCommandGraph = new CommandGraph( pDevice, desc );
+        CommandGraph* pCommandGraph = nullptr;
+
+        try
+        {
+            pCommandGraph = new CommandGraph( pDevice, desc );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pCommandGraph;
+            pCommandGraph = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xex::CommandGraph::Create" );
+        }
 
         return pCommandGraph;
     }

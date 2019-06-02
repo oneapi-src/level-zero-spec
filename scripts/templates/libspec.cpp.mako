@@ -177,22 +177,70 @@ namespace ${n}
         %for item in wparams:
         %if 'class' in item:
 
+        %if 'release' in item and item['release']:
+        delete ${item['name']};
+        %else:
         %if 'range' in item:
         %if item['optional']:
         for( uint32_t i = ${item['range'][0]}; ( ${item['name']} ) && ( i < ${item['range'][1]} ); ++i )
-            ${item['name']}[ i ] = new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, objects, item))} );
+            ${item['name']}[ i ] = nullptr;
         %else:
         for( uint32_t i = ${item['range'][0]}; i < ${item['range'][1]}; ++i )
-            ${item['name']}[ i ] = new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, objects, item))} );
+            ${item['name']}[ i ] = nullptr;
         %endif
-
-        %elif item['release']:
-        delete ${item['name']};
         %elif item['optional']:
         if( ${item['name']} )
-            *${item['name']} =  new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, objects, item))} );
+            *${item['name']} =  nullptr;
         %else:
-        auto ${item['name']} = new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, objects, item))} );
+        ${item['class']}* ${item['name']} = nullptr;
+        %endif
+
+        try
+        {
+            %if 'range' in item:
+            %if item['optional']:
+            for( uint32_t i = ${item['range'][0]}; ( ${item['name']} ) && ( i < ${item['range'][1]} ); ++i )
+                ${item['name']}[ i ] = new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, objects, item))} );
+            %else:
+            for( uint32_t i = ${item['range'][0]}; i < ${item['range'][1]}; ++i )
+                ${item['name']}[ i ] = new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, objects, item))} );
+            %endif
+            %elif item['optional']:
+            if( ${item['name']} )
+                *${item['name']} =  new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, objects, item))} );
+            %else:
+            ${item['name']} = new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, objects, item))} );
+            %endif
+        }
+        catch( std::bad_alloc& )
+        {
+            %if 'range' in item:
+            %if item['optional']:
+            for( uint32_t i = ${item['range'][0]}; ( ${item['name']} ) && ( i < ${item['range'][1]} ); ++i )
+            {
+                delete ${item['name']}[ i ];
+                ${item['name']}[ i ] = nullptr;
+            }
+            %else:
+            for( uint32_t i = ${item['range'][0]}; i < ${item['range'][1]}; ++i )
+            {
+                delete ${item['name']}[ i ];
+                ${item['name']}[ i ] = nullptr;
+            }
+            %endif
+            %elif item['optional']:
+            if( ${item['name']} )
+            {
+                delete *${item['name']};
+                *${item['name']} =  nullptr;
+            }
+            %else:
+            delete ${item['name']};
+            ${item['name']} = nullptr;
+            %endif
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "${n}::${th.subt(n, tags, obj['class'], cpp=True)}::${th.subt(n, tags, obj['name'], cpp=True)}" );
+        }
         %endif
         %endif
         %endfor
