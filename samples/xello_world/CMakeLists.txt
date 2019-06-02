@@ -12,6 +12,12 @@ if(MSVC)
     )
 endif()
 
+if(WIN32)
+target_link_libraries(${TARGET_NAME}
+    xe_api
+)
+else()
 target_link_libraries(${TARGET_NAME}
     xe_api dl
 )
+endif()
