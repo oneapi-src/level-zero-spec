@@ -13,5 +13,5 @@ if(MSVC)
 endif()
 
 target_link_libraries(${TARGET_NAME}
-    xe_api
+    xe_api dl
 )

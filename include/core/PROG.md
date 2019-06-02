@@ -31,6 +31,7 @@ NOTE: Sample code in this document contains little or no error checking for brev
     + [Device Residency](#res)
     + [OpenCL Interoperability](#oi)
     + [Inter-Process Communication](#ipc)
+    + [Peer-to-Peer Access and Queries](#peer)
 * [Experimental](#exp)
 
 # <a name="dd">Devices</a>
@@ -1110,6 +1111,18 @@ The following code examples demonstrate how to use the event IPC APIs:
     xeEventDestroy(hEvent);
     xeEventPoolDestroy(hEventPool);
 ```
+
+## <a name="peer">Peer-to-Peer Access and Queries</a>
+Devices may be linked together within a node by a scale-up fabric and depending on the configuration,
+the fabric can support atomics, compute kernel remote access, and data copies.
+
+The following P2P functionalities are provided through the API:
+    - Check for existence of peer-to-peer fabric between two devices.
+        - xeDeviceCanAccessPeer
+    - Query remote memory access and atomic capabilities for peer-to-peer
+        - xeDeviceGetP2PProperties
+    - Copy data between devices over peer-to-peer fabric.
+        - xeCommandListAppendMemoryCopy
 
 # <a name="exp">Experimental</a>
 The following experimental features are provided only for the development and refinement of future APIs.

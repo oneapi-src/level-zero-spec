@@ -744,6 +744,18 @@ namespace xe
         /// @brief Queries if one device can directly access peer device allocations
         /// 
         /// @details
+        ///     - Any device can access any other device within a node through a
+        ///       scale-up fabric.
+        ///     - The following are conditions for CanAccessPeer query.
+        ///         + If both device and peer device are the same then return true.
+        ///         + If both sub-device and peer sub-device are the same then return
+        ///           true.
+        ///         + If both are sub-devices and share the same parent device then
+        ///           return true.
+        ///         + If both device and remote device are connected by a scale-up
+        ///           fabric then true, if pci-e then false.
+        ///         + If both sub-device and remote parent device (and vice-versa) are
+        ///           connected by a scale-up fabric then true, if pci-e then false.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// 
