@@ -190,16 +190,16 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetProperties
+    /// @brief Intercept function for xeDeviceGroupGetDeviceProperties
     xe_result_t __xecall
-    xeDeviceGroupGetProperties(
+    xeDeviceGroupGetDeviceProperties(
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
         xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
         )
     {
-        auto pfnGetProperties = context.xeDdiTable.DeviceGroup.pfnGetProperties;
+        auto pfnGetDeviceProperties = context.xeDdiTable.DeviceGroup.pfnGetDeviceProperties;
 
-        if( nullptr == pfnGetProperties )
+        if( nullptr == pfnGetDeviceProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -212,7 +212,7 @@ namespace layer
 
         }
 
-        return pfnGetProperties( hDeviceGroup, pDeviceProperties );
+        return pfnGetDeviceProperties( hDeviceGroup, pDeviceProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -246,7 +246,13 @@ namespace layer
     xe_result_t __xecall
     xeDeviceGroupGetMemoryProperties(
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-        xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of memory properties supported.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of memory properties available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of
+                                                        ///< memory properties.
+        xe_device_memory_properties_t* pMemProperties   ///< [in,out][optional][range(0, *pCount)] array of query results for
+                                                        ///< memory properties
         )
     {
         auto pfnGetMemoryProperties = context.xeDdiTable.DeviceGroup.pfnGetMemoryProperties;
@@ -259,12 +265,64 @@ namespace layer
             if( nullptr == hDeviceGroup )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pMemProperties )
+            if( nullptr == pCount )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetMemoryProperties( hDeviceGroup, pMemProperties );
+        return pfnGetMemoryProperties( hDeviceGroup, pCount, pMemProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeDeviceGroupGetMemoryAccessProperties
+    xe_result_t __xecall
+    xeDeviceGroupGetMemoryAccessProperties(
+        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+        xe_device_memory_access_properties_t* pMemAccessProperties  ///< [out] query result for memory access properties
+        )
+    {
+        auto pfnGetMemoryAccessProperties = context.xeDdiTable.DeviceGroup.pfnGetMemoryAccessProperties;
+
+        if( nullptr == pfnGetMemoryAccessProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDeviceGroup )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pMemAccessProperties )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetMemoryAccessProperties( hDeviceGroup, pMemAccessProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeDeviceGroupGetCacheProperties
+    xe_result_t __xecall
+    xeDeviceGroupGetCacheProperties(
+        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+        xe_device_cache_properties_t* pCacheProperties  ///< [out] query result for cache properties
+        )
+    {
+        auto pfnGetCacheProperties = context.xeDdiTable.DeviceGroup.pfnGetCacheProperties;
+
+        if( nullptr == pfnGetCacheProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDeviceGroup )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCacheProperties )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetCacheProperties( hDeviceGroup, pCacheProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1790,6 +1848,8 @@ namespace layer
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
         xe_device_handle_t hDevice,                     ///< [in] handle of a device
         xe_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
+        uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
+                                                        ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
         xe_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
@@ -1814,7 +1874,7 @@ namespace layer
 
         }
 
-        return pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, host_flags, size, alignment, ptr );
+        return pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, ordinal, host_flags, size, alignment, ptr );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1824,6 +1884,8 @@ namespace layer
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
         xe_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
+        uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
+                                                        ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
         void** ptr                                      ///< [out] pointer to device allocation
@@ -1847,7 +1909,7 @@ namespace layer
 
         }
 
-        return pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, size, alignment, ptr );
+        return pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, ordinal, size, alignment, ptr );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2896,14 +2958,20 @@ xeGetDeviceGroupProcAddrTable(
     dditable.pfnGetApiVersion                            = pDdiTable->pfnGetApiVersion;
     pDdiTable->pfnGetApiVersion                          = layer::xeDeviceGroupGetApiVersion;
 
-    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
-    pDdiTable->pfnGetProperties                          = layer::xeDeviceGroupGetProperties;
+    dditable.pfnGetDeviceProperties                      = pDdiTable->pfnGetDeviceProperties;
+    pDdiTable->pfnGetDeviceProperties                    = layer::xeDeviceGroupGetDeviceProperties;
 
     dditable.pfnGetComputeProperties                     = pDdiTable->pfnGetComputeProperties;
     pDdiTable->pfnGetComputeProperties                   = layer::xeDeviceGroupGetComputeProperties;
 
     dditable.pfnGetMemoryProperties                      = pDdiTable->pfnGetMemoryProperties;
     pDdiTable->pfnGetMemoryProperties                    = layer::xeDeviceGroupGetMemoryProperties;
+
+    dditable.pfnGetMemoryAccessProperties                = pDdiTable->pfnGetMemoryAccessProperties;
+    pDdiTable->pfnGetMemoryAccessProperties              = layer::xeDeviceGroupGetMemoryAccessProperties;
+
+    dditable.pfnGetCacheProperties                       = pDdiTable->pfnGetCacheProperties;
+    pDdiTable->pfnGetCacheProperties                     = layer::xeDeviceGroupGetCacheProperties;
 
     dditable.pfnGetImageProperties                       = pDdiTable->pfnGetImageProperties;
     pDdiTable->pfnGetImageProperties                     = layer::xeDeviceGroupGetImageProperties;

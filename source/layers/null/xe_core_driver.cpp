@@ -132,9 +132,9 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetProperties
+    /// @brief Intercept function for xeDeviceGroupGetDeviceProperties
     xe_result_t __xecall
-    xeDeviceGroupGetProperties(
+    xeDeviceGroupGetDeviceProperties(
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
         xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
         )
@@ -162,7 +162,39 @@ namespace driver
     xe_result_t __xecall
     xeDeviceGroupGetMemoryProperties(
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-        xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of memory properties supported.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of memory properties available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of
+                                                        ///< memory properties.
+        xe_device_memory_properties_t* pMemProperties   ///< [in,out][optional][range(0, *pCount)] array of query results for
+                                                        ///< memory properties
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeDeviceGroupGetMemoryAccessProperties
+    xe_result_t __xecall
+    xeDeviceGroupGetMemoryAccessProperties(
+        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+        xe_device_memory_access_properties_t* pMemAccessProperties  ///< [out] query result for memory access properties
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeDeviceGroupGetCacheProperties
+    xe_result_t __xecall
+    xeDeviceGroupGetCacheProperties(
+        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+        xe_device_cache_properties_t* pCacheProperties  ///< [out] query result for cache properties
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -987,6 +1019,8 @@ namespace driver
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
         xe_device_handle_t hDevice,                     ///< [in] handle of a device
         xe_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
+        uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
+                                                        ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
         xe_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
@@ -1005,6 +1039,8 @@ namespace driver
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
         xe_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
+        uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
+                                                        ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
         void** ptr                                      ///< [out] pointer to device allocation
@@ -1615,11 +1651,15 @@ xeGetDeviceGroupProcAddrTable(
 
     pDdiTable->pfnGetApiVersion                          = driver::xeDeviceGroupGetApiVersion;
 
-    pDdiTable->pfnGetProperties                          = driver::xeDeviceGroupGetProperties;
+    pDdiTable->pfnGetDeviceProperties                    = driver::xeDeviceGroupGetDeviceProperties;
 
     pDdiTable->pfnGetComputeProperties                   = driver::xeDeviceGroupGetComputeProperties;
 
     pDdiTable->pfnGetMemoryProperties                    = driver::xeDeviceGroupGetMemoryProperties;
+
+    pDdiTable->pfnGetMemoryAccessProperties              = driver::xeDeviceGroupGetMemoryAccessProperties;
+
+    pDdiTable->pfnGetCacheProperties                     = driver::xeDeviceGroupGetCacheProperties;
 
     pDdiTable->pfnGetImageProperties                     = driver::xeDeviceGroupGetImageProperties;
 

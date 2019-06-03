@@ -262,8 +262,8 @@ typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetApiVersion_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupGetProperties 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetProperties_t)(
+/// @brief Function-pointer for xeDeviceGroupGetDeviceProperties 
+typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetDeviceProperties_t)(
     xe_device_group_handle_t,
     xe_device_properties_t*
     );
@@ -279,7 +279,22 @@ typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetComputeProperties_t)(
 /// @brief Function-pointer for xeDeviceGroupGetMemoryProperties 
 typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetMemoryProperties_t)(
     xe_device_group_handle_t,
+    uint32_t*,
     xe_device_memory_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeDeviceGroupGetMemoryAccessProperties 
+typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetMemoryAccessProperties_t)(
+    xe_device_group_handle_t,
+    xe_device_memory_access_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeDeviceGroupGetCacheProperties 
+typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetCacheProperties_t)(
+    xe_device_group_handle_t,
+    xe_device_cache_properties_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -295,6 +310,7 @@ typedef xe_result_t (__xecall *xe_pfnDeviceGroupAllocSharedMem_t)(
     xe_device_group_handle_t,
     xe_device_handle_t,
     xe_device_mem_alloc_flag_t,
+    uint32_t,
     xe_host_mem_alloc_flag_t,
     size_t,
     size_t,
@@ -307,6 +323,7 @@ typedef xe_result_t (__xecall *xe_pfnDeviceGroupAllocDeviceMem_t)(
     xe_device_group_handle_t,
     xe_device_handle_t,
     xe_device_mem_alloc_flag_t,
+    uint32_t,
     size_t,
     size_t,
     void**
@@ -379,9 +396,11 @@ typedef struct _xe_device_group_dditable_t
     xe_pfnDeviceGroupGet_t                                      pfnGet;
     xe_pfnDeviceGroupGetDriverVersion_t                         pfnGetDriverVersion;
     xe_pfnDeviceGroupGetApiVersion_t                            pfnGetApiVersion;
-    xe_pfnDeviceGroupGetProperties_t                            pfnGetProperties;
+    xe_pfnDeviceGroupGetDeviceProperties_t                      pfnGetDeviceProperties;
     xe_pfnDeviceGroupGetComputeProperties_t                     pfnGetComputeProperties;
     xe_pfnDeviceGroupGetMemoryProperties_t                      pfnGetMemoryProperties;
+    xe_pfnDeviceGroupGetMemoryAccessProperties_t                pfnGetMemoryAccessProperties;
+    xe_pfnDeviceGroupGetCacheProperties_t                       pfnGetCacheProperties;
     xe_pfnDeviceGroupGetImageProperties_t                       pfnGetImageProperties;
     xe_pfnDeviceGroupAllocSharedMem_t                           pfnAllocSharedMem;
     xe_pfnDeviceGroupAllocDeviceMem_t                           pfnAllocDeviceMem;

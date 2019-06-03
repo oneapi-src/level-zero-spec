@@ -209,7 +209,7 @@ typedef struct _xe_device_uuid_t
 #endif // XE_MAX_DEVICE_NAME
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Device properties queried using ::xeDeviceGroupGetProperties
+/// @brief Device properties queried using ::xeDeviceGroupGetDeviceProperties
 typedef struct _xe_device_properties_t
 {
     xe_device_properties_version_t version;         ///< [in] ::XE_DEVICE_PROPERTIES_VERSION_CURRENT
@@ -221,9 +221,8 @@ typedef struct _xe_device_properties_t
     xe_bool_t isSubdevice;                          ///< [out] Is this a subdevice.
     uint32_t numSubDevices;                         ///< [out] Number of sub-devices.
     uint32_t coreClockRate;                         ///< [out] Clock rate for device core.
-    uint32_t memClockRate;                          ///< [out] Clock rate for device global memory
-    uint32_t memGlobalBusWidth;                     ///< [out] Bus width between core and memory.
-    uint64_t totalLocalMemSize;                     ///< [out] Total memory size in bytes.
+    xe_bool_t unifiedMemory;                        ///< [out] Host and device share same physical memory.
+    xe_bool_t onDemandPageFaults;                   ///< [out] Device supports on-demand page-faulting.
     uint32_t maxCommandQueues;                      ///< [out] Maximum number of logical command queues.
     uint32_t numAsyncComputeEngines;                ///< [out] Number of asynchronous compute engines
     uint32_t numAsyncCopyEngines;                   ///< [out] Number of asynchronous copy engines
@@ -240,7 +239,7 @@ typedef struct _xe_device_properties_t
 } xe_device_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves attributes of the device
+/// @brief Retrieves attributes of all devices in the device group.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -261,7 +260,7 @@ typedef struct _xe_device_properties_t
 ///         + nullptr == pDeviceProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetProperties(
+xeDeviceGroupGetDeviceProperties(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
     );
@@ -302,7 +301,7 @@ typedef struct _xe_device_compute_properties_t
 } xe_device_compute_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves compute attributes of the device group
+/// @brief Retrieves compute attributes of all devices in the device group.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -336,6 +335,61 @@ typedef enum _xe_device_memory_properties_version_t
 } xe_device_memory_properties_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Device local memory properties queried using
+///        ::xeDeviceGroupGetMemoryProperties
+typedef struct _xe_device_memory_properties_t
+{
+    xe_device_memory_properties_version_t version;  ///< [in] ::XE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
+    uint32_t memClockRate;                          ///< [out] Clock rate for device global memory
+    uint32_t memGlobalBusWidth;                     ///< [out] Bus width between core and memory.
+    uint64_t totalSize;                             ///< [out] Total memory size in bytes.
+
+} xe_device_memory_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves local memory attributes of all devices in the device group.
+/// 
+/// @details
+///     - Properties are reported for each physical memory type supported by the
+///       device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuDeviceGetAttribute**
+///     - cuDeviceTotalMem
+///     - clGetDeviceInfo
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDeviceGroup
+///         + nullptr == pCount
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeDeviceGroupGetMemoryProperties(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of memory properties supported.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of memory properties available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of
+                                                    ///< memory properties.
+    xe_device_memory_properties_t* pMemProperties   ///< [in,out][optional][range(0, *pCount)] array of query results for
+                                                    ///< memory properties
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::xe_device_memory_access_properties_t
+typedef enum _xe_device_memory_access_properties_version_t
+{
+    XE_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+
+} xe_device_memory_access_properties_version_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Memory access capabilities
 /// 
 /// @details
@@ -352,29 +406,21 @@ typedef enum _xe_memory_access_capabilities_t
 } xe_memory_access_capabilities_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Device memory properties queried using
-///        ::xeDeviceGroupGetMemoryProperties
-typedef struct _xe_device_memory_properties_t
+/// @brief Device memory access properties queried using
+///        ::xeDeviceGroupGetMemoryAccessProperties
+typedef struct _xe_device_memory_access_properties_t
 {
-    xe_device_memory_properties_version_t version;  ///< [in] ::XE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
-    xe_bool_t unifiedMemory;                        ///< [out] Host and device share same physical memory.
-    xe_bool_t onDemandPageFaults;                   ///< [out] Device supports on-demand page-faulting.
+    xe_device_memory_access_properties_version_t version;   ///< [in] ::XE_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT
     xe_memory_access_capabilities_t hostAllocCapabilities;  ///< [out] Bitfield describing host memory capabilities
     xe_memory_access_capabilities_t deviceAllocCapabilities;///< [out] Bitfield describing device memory capabilities
     xe_memory_access_capabilities_t sharedSingleDeviceAllocCapabilities;///< [out] Bitfield describing shared (single-device) memory capabilities
     xe_memory_access_capabilities_t sharedCrossDeviceAllocCapabilities; ///< [out] Bitfield describing shared (cross-device) memory capabilities
     xe_memory_access_capabilities_t sharedSystemDeviceAllocCapabilities;///< [out] Bitfield describing shared (system) memory capabilities
-    uint32_t intermediateCacheSize;                 ///< [out] Per-cache Intermediate Cache (L1/L2) size, in bytes
-    xe_bool_t intermediateCacheControl;             ///< [out] Support User control on Intermediate Cache (i.e. Resize SLM
-                                                    ///< section vs Generic Cache)
-    uint32_t lastLevelCacheSize;                    ///< [out] Per-cache Last Level Cache (L3) size, in bytes
-    xe_bool_t lastLevelCacheSizeControl;            ///< [out] Support User control on Last Level Cache (i.e. Resize SLM
-                                                    ///< section vs Generic Cache).
 
-} xe_device_memory_properties_t;
+} xe_device_memory_access_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves memory attributes of the device
+/// @brief Retrieves memory access attributes of all devices in the device group.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -392,12 +438,62 @@ typedef struct _xe_device_memory_properties_t
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDeviceGroup
-///         + nullptr == pMemProperties
+///         + nullptr == pMemAccessProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetMemoryProperties(
+xeDeviceGroupGetMemoryAccessProperties(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
+    xe_device_memory_access_properties_t* pMemAccessProperties  ///< [out] query result for memory access properties
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::xe_device_cache_properties_t
+typedef enum _xe_device_cache_properties_version_t
+{
+    XE_DEVICE_CACHE_PROPERTIES_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+
+} xe_device_cache_properties_version_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Device cache properties queried using
+///        ::xeDeviceGroupGetCacheProperties
+typedef struct _xe_device_cache_properties_t
+{
+    xe_device_cache_properties_version_t version;   ///< [in] ::XE_DEVICE_CACHE_PROPERTIES_VERSION_CURRENT
+    uint32_t intermediateCacheSize;                 ///< [out] Per-cache Intermediate Cache (L1/L2) size, in bytes
+    xe_bool_t intermediateCacheControl;             ///< [out] Support User control on Intermediate Cache (i.e. Resize SLM
+                                                    ///< section vs Generic Cache)
+    uint32_t lastLevelCacheSize;                    ///< [out] Per-cache Last Level Cache (L3) size, in bytes
+    xe_bool_t lastLevelCacheSizeControl;            ///< [out] Support User control on Last Level Cache (i.e. Resize SLM
+                                                    ///< section vs Generic Cache).
+
+} xe_device_cache_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves cache attributes of the device
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuDeviceGetAttribute**
+///     - cuDeviceTotalMem
+///     - clGetDeviceInfo
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDeviceGroup
+///         + nullptr == pCacheProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeDeviceGroupGetCacheProperties(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xe_device_cache_properties_t* pCacheProperties  ///< [out] query result for cache properties
     );
 
 ///////////////////////////////////////////////////////////////////////////////

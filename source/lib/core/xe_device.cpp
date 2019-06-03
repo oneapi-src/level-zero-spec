@@ -191,7 +191,7 @@ xeDeviceGroupGetApiVersion(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves attributes of the device
+/// @brief Retrieves attributes of all devices in the device group.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -212,23 +212,23 @@ xeDeviceGroupGetApiVersion(
 ///         + nullptr == pDeviceProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetProperties(
+xeDeviceGroupGetDeviceProperties(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
     )
 {
-    auto pfnGetProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetProperties;
+    auto pfnGetDeviceProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetDeviceProperties;
 
 #if _DEBUG
-    if( nullptr == pfnGetProperties )
+    if( nullptr == pfnGetDeviceProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnGetProperties( hDeviceGroup, pDeviceProperties );
+    return pfnGetDeviceProperties( hDeviceGroup, pDeviceProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves compute attributes of the device group
+/// @brief Retrieves compute attributes of all devices in the device group.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -264,7 +264,52 @@ xeDeviceGroupGetComputeProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves memory attributes of the device
+/// @brief Retrieves local memory attributes of all devices in the device group.
+/// 
+/// @details
+///     - Properties are reported for each physical memory type supported by the
+///       device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuDeviceGetAttribute**
+///     - cuDeviceTotalMem
+///     - clGetDeviceInfo
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDeviceGroup
+///         + nullptr == pCount
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeDeviceGroupGetMemoryProperties(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of memory properties supported.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of memory properties available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of
+                                                    ///< memory properties.
+    xe_device_memory_properties_t* pMemProperties   ///< [in,out][optional][range(0, *pCount)] array of query results for
+                                                    ///< memory properties
+    )
+{
+    auto pfnGetMemoryProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetMemoryProperties;
+
+#if _DEBUG
+    if( nullptr == pfnGetMemoryProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return pfnGetMemoryProperties( hDeviceGroup, pCount, pMemProperties );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves memory access attributes of all devices in the device group.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -282,22 +327,59 @@ xeDeviceGroupGetComputeProperties(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDeviceGroup
-///         + nullptr == pMemProperties
+///         + nullptr == pMemAccessProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetMemoryProperties(
+xeDeviceGroupGetMemoryAccessProperties(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
+    xe_device_memory_access_properties_t* pMemAccessProperties  ///< [out] query result for memory access properties
     )
 {
-    auto pfnGetMemoryProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetMemoryProperties;
+    auto pfnGetMemoryAccessProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetMemoryAccessProperties;
 
 #if _DEBUG
-    if( nullptr == pfnGetMemoryProperties )
+    if( nullptr == pfnGetMemoryAccessProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnGetMemoryProperties( hDeviceGroup, pMemProperties );
+    return pfnGetMemoryAccessProperties( hDeviceGroup, pMemAccessProperties );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves cache attributes of the device
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuDeviceGetAttribute**
+///     - cuDeviceTotalMem
+///     - clGetDeviceInfo
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDeviceGroup
+///         + nullptr == pCacheProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeDeviceGroupGetCacheProperties(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xe_device_cache_properties_t* pCacheProperties  ///< [out] query result for cache properties
+    )
+{
+    auto pfnGetCacheProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetCacheProperties;
+
+#if _DEBUG
+    if( nullptr == pfnGetCacheProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return pfnGetCacheProperties( hDeviceGroup, pCacheProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -706,7 +788,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieves attributes of the device
+    /// @brief Retrieves attributes of all devices in the device group.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -723,24 +805,24 @@ namespace xe
     /// 
     /// @throws result_t
     DeviceGroup::device_properties_t __xecall
-    DeviceGroup::GetProperties(
+    DeviceGroup::GetDeviceProperties(
         void
         )
     {
         xe_device_properties_t deviceProperties;
 
-        auto result = static_cast<result_t>( ::xeDeviceGroupGetProperties(
+        auto result = static_cast<result_t>( ::xeDeviceGroupGetDeviceProperties(
             reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
             &deviceProperties ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetProperties" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetDeviceProperties" );
 
         return *reinterpret_cast<device_properties_t*>( &deviceProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieves compute attributes of the device group
+    /// @brief Retrieves compute attributes of all devices in the device group.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -773,7 +855,43 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieves memory attributes of the device
+    /// @brief Retrieves local memory attributes of all devices in the device group.
+    /// 
+    /// @details
+    ///     - Properties are reported for each physical memory type supported by the
+    ///       device.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuDeviceGetAttribute**
+    ///     - cuDeviceTotalMem
+    ///     - clGetDeviceInfo
+    /// 
+    /// @throws result_t
+    void __xecall
+    DeviceGroup::GetMemoryProperties(
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of memory properties supported.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of memory properties available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of
+                                                        ///< memory properties.
+        device_memory_properties_t* pMemProperties      ///< [in,out][optional][range(0, *pCount)] array of query results for
+                                                        ///< memory properties
+        )
+    {
+        auto result = static_cast<result_t>( ::xeDeviceGroupGetMemoryProperties(
+            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+            pCount,
+            reinterpret_cast<xe_device_memory_properties_t*>( pMemProperties ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetMemoryProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Retrieves memory access attributes of all devices in the device group.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -786,24 +904,58 @@ namespace xe
     ///     - clGetDeviceInfo
     /// 
     /// @returns
-    ///     - device_memory_properties_t: query result for compute properties
+    ///     - device_memory_access_properties_t: query result for memory access properties
     /// 
     /// @throws result_t
-    DeviceGroup::device_memory_properties_t __xecall
-    DeviceGroup::GetMemoryProperties(
+    DeviceGroup::device_memory_access_properties_t __xecall
+    DeviceGroup::GetMemoryAccessProperties(
         void
         )
     {
-        xe_device_memory_properties_t memProperties;
+        xe_device_memory_access_properties_t memAccessProperties;
 
-        auto result = static_cast<result_t>( ::xeDeviceGroupGetMemoryProperties(
+        auto result = static_cast<result_t>( ::xeDeviceGroupGetMemoryAccessProperties(
             reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
-            &memProperties ) );
+            &memAccessProperties ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetMemoryProperties" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetMemoryAccessProperties" );
 
-        return *reinterpret_cast<device_memory_properties_t*>( &memProperties );
+        return *reinterpret_cast<device_memory_access_properties_t*>( &memAccessProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Retrieves cache attributes of the device
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuDeviceGetAttribute**
+    ///     - cuDeviceTotalMem
+    ///     - clGetDeviceInfo
+    /// 
+    /// @returns
+    ///     - device_cache_properties_t: query result for cache properties
+    /// 
+    /// @throws result_t
+    DeviceGroup::device_cache_properties_t __xecall
+    DeviceGroup::GetCacheProperties(
+        void
+        )
+    {
+        xe_device_cache_properties_t cacheProperties;
+
+        auto result = static_cast<result_t>( ::xeDeviceGroupGetCacheProperties(
+            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+            &cacheProperties ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetCacheProperties" );
+
+        return *reinterpret_cast<device_cache_properties_t*>( &cacheProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1077,6 +1229,26 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::device_memory_access_properties_version_t to std::string
+    string to_string( const xe::DeviceGroup::device_memory_access_properties_version_t val )
+    {
+        string str;
+
+        switch( val )
+        {
+        case xe::DeviceGroup::device_memory_access_properties_version_t::CURRENT:
+            str = "xe::DeviceGroup::device_memory_access_properties_version_t::CURRENT";
+            break;
+
+        default:
+            str = "xe::DeviceGroup::device_memory_access_properties_version_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts xe::DeviceGroup::memory_access_capabilities_t to std::string
     string to_string( const xe::DeviceGroup::memory_access_capabilities_t val )
     {
@@ -1101,6 +1273,26 @@ namespace std
             str += "xe::DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ATOMIC_ACCESS | ";
 
         return "{ " + str.substr(0, str.size() - 3) + " }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::device_cache_properties_version_t to std::string
+    string to_string( const xe::DeviceGroup::device_cache_properties_version_t val )
+    {
+        string str;
+
+        switch( val )
+        {
+        case xe::DeviceGroup::device_cache_properties_version_t::CURRENT:
+            str = "xe::DeviceGroup::device_cache_properties_version_t::CURRENT";
+            break;
+
+        default:
+            str = "xe::DeviceGroup::device_cache_properties_version_t::?";
+            break;
+        };
+
+        return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1295,16 +1487,12 @@ namespace std
         str += to_string(val.coreClockRate);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_properties_t::memClockRate : ";
-        str += to_string(val.memClockRate);
+        str += "xe::DeviceGroup::device_properties_t::unifiedMemory : ";
+        str += to_string(val.unifiedMemory);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_properties_t::memGlobalBusWidth : ";
-        str += to_string(val.memGlobalBusWidth);
-        str += "\n";
-        
-        str += "xe::DeviceGroup::device_properties_t::totalLocalMemSize : ";
-        str += to_string(val.totalLocalMemSize);
+        str += "xe::DeviceGroup::device_properties_t::onDemandPageFaults : ";
+        str += to_string(val.onDemandPageFaults);
         str += "\n";
         
         str += "xe::DeviceGroup::device_properties_t::maxCommandQueues : ";
@@ -1417,47 +1605,77 @@ namespace std
         str += to_string(val.version);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_memory_properties_t::unifiedMemory : ";
-        str += to_string(val.unifiedMemory);
+        str += "xe::DeviceGroup::device_memory_properties_t::memClockRate : ";
+        str += to_string(val.memClockRate);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_memory_properties_t::onDemandPageFaults : ";
-        str += to_string(val.onDemandPageFaults);
+        str += "xe::DeviceGroup::device_memory_properties_t::memGlobalBusWidth : ";
+        str += to_string(val.memGlobalBusWidth);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_memory_properties_t::hostAllocCapabilities : ";
+        str += "xe::DeviceGroup::device_memory_properties_t::totalSize : ";
+        str += to_string(val.totalSize);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::device_memory_access_properties_t to std::string
+    string to_string( const xe::DeviceGroup::device_memory_access_properties_t val )
+    {
+        string str;
+        
+        str += "xe::DeviceGroup::device_memory_access_properties_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "xe::DeviceGroup::device_memory_access_properties_t::hostAllocCapabilities : ";
         str += to_string(val.hostAllocCapabilities);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_memory_properties_t::deviceAllocCapabilities : ";
+        str += "xe::DeviceGroup::device_memory_access_properties_t::deviceAllocCapabilities : ";
         str += to_string(val.deviceAllocCapabilities);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_memory_properties_t::sharedSingleDeviceAllocCapabilities : ";
+        str += "xe::DeviceGroup::device_memory_access_properties_t::sharedSingleDeviceAllocCapabilities : ";
         str += to_string(val.sharedSingleDeviceAllocCapabilities);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_memory_properties_t::sharedCrossDeviceAllocCapabilities : ";
+        str += "xe::DeviceGroup::device_memory_access_properties_t::sharedCrossDeviceAllocCapabilities : ";
         str += to_string(val.sharedCrossDeviceAllocCapabilities);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_memory_properties_t::sharedSystemDeviceAllocCapabilities : ";
+        str += "xe::DeviceGroup::device_memory_access_properties_t::sharedSystemDeviceAllocCapabilities : ";
         str += to_string(val.sharedSystemDeviceAllocCapabilities);
         str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::device_cache_properties_t to std::string
+    string to_string( const xe::DeviceGroup::device_cache_properties_t val )
+    {
+        string str;
         
-        str += "xe::DeviceGroup::device_memory_properties_t::intermediateCacheSize : ";
+        str += "xe::DeviceGroup::device_cache_properties_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "xe::DeviceGroup::device_cache_properties_t::intermediateCacheSize : ";
         str += to_string(val.intermediateCacheSize);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_memory_properties_t::intermediateCacheControl : ";
+        str += "xe::DeviceGroup::device_cache_properties_t::intermediateCacheControl : ";
         str += to_string(val.intermediateCacheControl);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_memory_properties_t::lastLevelCacheSize : ";
+        str += "xe::DeviceGroup::device_cache_properties_t::lastLevelCacheSize : ";
         str += to_string(val.lastLevelCacheSize);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_memory_properties_t::lastLevelCacheSizeControl : ";
+        str += "xe::DeviceGroup::device_cache_properties_t::lastLevelCacheSizeControl : ";
         str += to_string(val.lastLevelCacheSizeControl);
         str += "\n";
 

@@ -27,26 +27,49 @@ int main()
     }
 
     // Get the first device group
-    uint32_t groupCount = 1;
-    xe::DeviceGroup* pDeviceGroup = nullptr;
-    xe::DeviceGroup::Get( &groupCount, &pDeviceGroup );
+    uint32_t groupCount = 0;
+    xe::DeviceGroup::Get( &groupCount, nullptr );
 
-    std::cout << "Driver version: " << pDeviceGroup->GetDriverVersion() << "\n";
-    std::cout << "API version: " << std::to_string( pDeviceGroup->GetApiVersion() ) << "\n";
+    auto ppDeviceGroup = new xe::DeviceGroup*[ groupCount ];
+    xe::DeviceGroup::Get( &groupCount, ppDeviceGroup );
 
-    auto device_properties = pDeviceGroup->GetProperties();
-    std::cout << std::to_string( device_properties ) << "\n";
+    for( uint32_t grp = 0; grp < groupCount; ++grp )
+    {
+        auto pDeviceGroup = ppDeviceGroup[ grp ];
 
-    auto compute_properties = pDeviceGroup->GetComputeProperties();
-    std::cout << std::to_string( compute_properties ) << "\n";
+        std::cout << "Driver version: " << pDeviceGroup->GetDriverVersion() << "\n";
+        std::cout << "API version: " << std::to_string( pDeviceGroup->GetApiVersion() ) << "\n";
 
-    auto memory_properties = pDeviceGroup->GetMemoryProperties();
-    std::cout << std::to_string( memory_properties ) << "\n";
+        auto device_properties = pDeviceGroup->GetDeviceProperties();
+        std::cout << std::to_string( device_properties ) << "\n";
+
+        auto compute_properties = pDeviceGroup->GetComputeProperties();
+        std::cout << std::to_string( compute_properties ) << "\n";
+
+        uint32_t memoryCount = 0;
+        pDeviceGroup->GetMemoryProperties( &memoryCount, nullptr );
+        auto pMemoryProperties = new xe::DeviceGroup::device_memory_properties_t[ memoryCount ];
+        pDeviceGroup->GetMemoryProperties( &memoryCount, pMemoryProperties );
+        for( uint32_t mem = 0; mem < memoryCount; ++mem )
+        {
+            std::cout << std::to_string( pMemoryProperties[ mem ] ) << "\n";
+        }
+
+        auto memory_access_properties = pDeviceGroup->GetMemoryAccessProperties();
+        std::cout << std::to_string( memory_access_properties ) << "\n";
+
+        auto cache_properties = pDeviceGroup->GetCacheProperties();
+        std::cout << std::to_string( cache_properties ) << "\n";
+
+        auto image_properties = pDeviceGroup->GetImageProperties();
+        std::cout << std::to_string( image_properties ) << "\n";
+    }
 
     // Get the first device within the device group
     uint32_t deviceCount = 1;
     xe::Device* pDevice = nullptr;
-    xe::Device::Get( pDeviceGroup, &deviceCount, &pDevice );
+    xe::Device::Get( ppDeviceGroup[ 0 ], &deviceCount, &pDevice );
 
+    delete[] ppDeviceGroup;
     return 0;
 }

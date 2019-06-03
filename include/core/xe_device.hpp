@@ -109,6 +109,14 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief API version of ::device_memory_access_properties_t
+        enum class device_memory_access_properties_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Memory access capabilities
         /// 
         /// @details
@@ -121,6 +129,14 @@ namespace xe
             MEMORY_ATOMIC_ACCESS = XE_BIT( 1 ),             ///< Supports atomic access
             MEMORY_CONCURRENT_ACCESS = XE_BIT( 2 ),         ///< Supports concurrent access
             MEMORY_CONCURRENT_ATOMIC_ACCESS = XE_BIT( 3 ),  ///< Supports concurrent atomic access
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief API version of ::device_cache_properties_t
+        enum class device_cache_properties_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
@@ -189,7 +205,7 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Device properties queried using ::DeviceGroupGetProperties
+        /// @brief Device properties queried using ::DeviceGroupGetDeviceProperties
         struct device_properties_t
         {
             device_properties_version_t version = device_properties_version_t::CURRENT; ///< [in] ::DEVICE_PROPERTIES_VERSION_CURRENT
@@ -201,9 +217,8 @@ namespace xe
             bool_t isSubdevice;                             ///< [out] Is this a subdevice.
             uint32_t numSubDevices;                         ///< [out] Number of sub-devices.
             uint32_t coreClockRate;                         ///< [out] Clock rate for device core.
-            uint32_t memClockRate;                          ///< [out] Clock rate for device global memory
-            uint32_t memGlobalBusWidth;                     ///< [out] Bus width between core and memory.
-            uint64_t totalLocalMemSize;                     ///< [out] Total memory size in bytes.
+            bool_t unifiedMemory;                           ///< [out] Host and device share same physical memory.
+            bool_t onDemandPageFaults;                      ///< [out] Device supports on-demand page-faulting.
             uint32_t maxCommandQueues;                      ///< [out] Maximum number of logical command queues.
             uint32_t numAsyncComputeEngines;                ///< [out] Number of asynchronous compute engines
             uint32_t numAsyncCopyEngines;                   ///< [out] Number of asynchronous copy engines
@@ -241,18 +256,36 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Device memory properties queried using
+        /// @brief Device local memory properties queried using
         ///        ::DeviceGroupGetMemoryProperties
         struct device_memory_properties_t
         {
             device_memory_properties_version_t version = device_memory_properties_version_t::CURRENT;   ///< [in] ::DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
-            bool_t unifiedMemory;                           ///< [out] Host and device share same physical memory.
-            bool_t onDemandPageFaults;                      ///< [out] Device supports on-demand page-faulting.
+            uint32_t memClockRate;                          ///< [out] Clock rate for device global memory
+            uint32_t memGlobalBusWidth;                     ///< [out] Bus width between core and memory.
+            uint64_t totalSize;                             ///< [out] Total memory size in bytes.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Device memory access properties queried using
+        ///        ::DeviceGroupGetMemoryAccessProperties
+        struct device_memory_access_properties_t
+        {
+            device_memory_access_properties_version_t version = device_memory_access_properties_version_t::CURRENT; ///< [in] ::DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT
             memory_access_capabilities_t hostAllocCapabilities; ///< [out] Bitfield describing host memory capabilities
             memory_access_capabilities_t deviceAllocCapabilities;   ///< [out] Bitfield describing device memory capabilities
             memory_access_capabilities_t sharedSingleDeviceAllocCapabilities;   ///< [out] Bitfield describing shared (single-device) memory capabilities
             memory_access_capabilities_t sharedCrossDeviceAllocCapabilities;///< [out] Bitfield describing shared (cross-device) memory capabilities
             memory_access_capabilities_t sharedSystemDeviceAllocCapabilities;   ///< [out] Bitfield describing shared (system) memory capabilities
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Device cache properties queried using ::DeviceGroupGetCacheProperties
+        struct device_cache_properties_t
+        {
+            device_cache_properties_version_t version = device_cache_properties_version_t::CURRENT; ///< [in] ::DEVICE_CACHE_PROPERTIES_VERSION_CURRENT
             uint32_t intermediateCacheSize;                 ///< [out] Per-cache Intermediate Cache (L1/L2) size, in bytes
             bool_t intermediateCacheControl;                ///< [out] Support User control on Intermediate Cache (i.e. Resize SLM
                                                             ///< section vs Generic Cache)
@@ -378,7 +411,7 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Retrieves attributes of the device
+        /// @brief Retrieves attributes of all devices in the device group.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -394,12 +427,12 @@ namespace xe
         /// 
         /// @throws result_t
         device_properties_t __xecall
-        GetProperties(
+        GetDeviceProperties(
             void
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Retrieves compute attributes of the device group
+        /// @brief Retrieves compute attributes of all devices in the device group.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -419,7 +452,33 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Retrieves memory attributes of the device
+        /// @brief Retrieves local memory attributes of all devices in the device group.
+        /// 
+        /// @details
+        ///     - Properties are reported for each physical memory type supported by the
+        ///       device.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuDeviceGetAttribute**
+        ///     - cuDeviceTotalMem
+        ///     - clGetDeviceInfo
+        /// @throws result_t
+        void __xecall
+        GetMemoryProperties(
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of memory properties supported.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of memory properties available.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of
+                                                            ///< memory properties.
+            device_memory_properties_t* pMemProperties = nullptr///< [in,out][optional][range(0, *pCount)] array of query results for
+                                                            ///< memory properties
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Retrieves memory access attributes of all devices in the device group.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -431,11 +490,32 @@ namespace xe
         ///     - cuDeviceTotalMem
         ///     - clGetDeviceInfo
         /// @returns
-        ///     - device_memory_properties_t: query result for compute properties
+        ///     - device_memory_access_properties_t: query result for memory access properties
         /// 
         /// @throws result_t
-        device_memory_properties_t __xecall
-        GetMemoryProperties(
+        device_memory_access_properties_t __xecall
+        GetMemoryAccessProperties(
+            void
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Retrieves cache attributes of the device
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuDeviceGetAttribute**
+        ///     - cuDeviceTotalMem
+        ///     - clGetDeviceInfo
+        /// @returns
+        ///     - device_cache_properties_t: query result for cache properties
+        /// 
+        /// @throws result_t
+        device_cache_properties_t __xecall
+        GetCacheProperties(
             void
             );
 
@@ -482,6 +562,8 @@ namespace xe
         AllocSharedMem(
             Device* pDevice,                                ///< [in] pointer to a device
             device_mem_alloc_flag_t device_flags,           ///< [in] flags specifying additional device allocation controls
+            uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
+                                                            ///< must be less than the count returned from ::DeviceGroupGetMemoryProperties
             host_mem_alloc_flag_t host_flags,               ///< [in] flags specifying additional host allocation controls
             size_t size,                                    ///< [in] size in bytes to allocate
             size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
@@ -507,6 +589,8 @@ namespace xe
         AllocDeviceMem(
             Device* pDevice,                                ///< [in] pointer to the device
             device_mem_alloc_flag_t flags,                  ///< [in] flags specifying additional allocation controls
+            uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
+                                                            ///< must be less than the count returned from ::DeviceGroupGetMemoryProperties
             size_t size,                                    ///< [in] size in bytes to allocate
             size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
             );
@@ -1008,12 +1092,28 @@ namespace std
     string to_string( const xe::DeviceGroup::device_memory_properties_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::device_memory_properties_t to std::string
+    string to_string( const xe::DeviceGroup::device_memory_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::device_memory_access_properties_version_t to std::string
+    string to_string( const xe::DeviceGroup::device_memory_access_properties_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts xe::DeviceGroup::memory_access_capabilities_t to std::string
     string to_string( const xe::DeviceGroup::memory_access_capabilities_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::DeviceGroup::device_memory_properties_t to std::string
-    string to_string( const xe::DeviceGroup::device_memory_properties_t val );
+    /// @brief Converts xe::DeviceGroup::device_memory_access_properties_t to std::string
+    string to_string( const xe::DeviceGroup::device_memory_access_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::device_cache_properties_version_t to std::string
+    string to_string( const xe::DeviceGroup::device_cache_properties_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::device_cache_properties_t to std::string
+    string to_string( const xe::DeviceGroup::device_cache_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts xe::DeviceGroup::device_image_properties_version_t to std::string

@@ -82,7 +82,7 @@ The following sample code demonstrates a basic initialization and device discove
     ${x}_device_group_handle_t hDeviceGroup = nullptr;
     for(uint32_t i = 0; i < groupCount; ++i) {
         ${x}_device_properties_t device_properties;
-        ${x}DeviceGroupGetProperties(allDeviceGroups[i], &device_properties);
+        ${x}DeviceGroupGetDeviceProperties(allDeviceGroups[i], &device_properties);
     
         if(${X}_DEVICE_TYPE_GPU == device_properties.type) {
             hDeviceGroup = allDeviceGroups[i];
@@ -807,7 +807,7 @@ device to generate the parameters.
     ${x}_thread_group_dimensions_t* pIndirectArgs;
     
     ...
-    ${x}DeviceGroupAllocDeviceMem(hDeviceGroup, hDevice, flags, sizeof(${x}_thread_group_dimensions_t), sizeof(uint32_t), &pIndirectArgs);
+    ${x}DeviceGroupAllocDeviceMem(hDeviceGroup, hDevice, flags, 0, sizeof(${x}_thread_group_dimensions_t), sizeof(uint32_t), &pIndirectArgs);
 
     // Append function
     ${x}CommandListAppendLaunchFunctionIndirect(hCommandList, hFunction, &pIndirectArgs, nullptr, 0, nullptr);
@@ -854,7 +854,7 @@ there are no distinction between sub-devices and devices.
 ![Subdevice](../images/core_subdevice.png?raw=true)  
 @image latex core_subdevice.png
 
-Query device properties using ::${x}DeviceGroupGetProperties to confirm subdevices are supported with
+Query device properties using ::${x}DeviceGroupGetDeviceProperties to confirm subdevices are supported with
 ::${x}_device_properties_t.numSubDevices. Use ::${x}DeviceGetSubDevice to obtain a sub-device handle.
 There are additional device properties in ::${x}_device_properties_t for sub-devices to confirm a
 device is a sub-device and to query the id. This is useful when needing to pass a sub-device
@@ -873,11 +873,11 @@ physical compute queue on the device or sub-device to map the logical queue to. 
 ::${x}_device_properties_t.numAsyncComputeEngines from the sub-device to determine how to set this ordinal.
 See ::${x}_command_queue_desc_t for more details.
 
-A 16-byte unique device identifier (uuid) can be obtained for a device or sub-device using ::${x}DeviceGroupGetProperties.
+A 16-byte unique device identifier (uuid) can be obtained for a device or sub-device using ::${x}DeviceGroupGetDeviceProperties.
 
 ```c
     ...
-    ${x}DeviceGroupGetProperties(device, &deviceProps);
+    ${x}DeviceGroupGetDeviceProperties(device, &deviceProps);
     ...
 
     // Code assumes a specific device configuration.
@@ -889,13 +889,13 @@ A 16-byte unique device identifier (uuid) can be obtained for a device or sub-de
 
     // Query sub-device properties.
     ${x}_device_properties_t subdeviceProps;
-    ${x}DeviceGroupGetProperties(subdevice, &subdeviceProps);
+    ${x}DeviceGroupGetDeviceProperties(subdevice, &subdeviceProps);
 
     assert(subdeviceProps.isSubdevice == true); // Ensure that we have a handle to a sub-device.
     assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
 
     void* pMemForSubDevice2;
-    ${x}DeviceGroupAllocDeviceMem(hDeviceGroup, subDevice, ${X}_DEVICE_MEM_ALLOC_FLAG_DEFAULT, memSize, sizeof(uint32_t), &pMemForSubDevice2);
+    ${x}DeviceGroupAllocDeviceMem(hDeviceGroup, subDevice, ${X}_DEVICE_MEM_ALLOC_FLAG_DEFAULT, 0, memSize, sizeof(uint32_t), &pMemForSubDevice2);
     ...
 
     ...
@@ -1027,7 +1027,7 @@ The following code examples demonstrate how to use the memory IPC APIs:
 1. First, the allocation is made, packaged, and sent on the sending process:
 ```c
     void* dptr = nullptr;
-    ${x}DeviceGroupAllocDeviceMem(hDeviceGroup, hDevice, flags, size, alignment, &dptr);
+    ${x}DeviceGroupAllocDeviceMem(hDeviceGroup, hDevice, flags, 0, size, alignment, &dptr);
 
     ${x}_ipc_mem_handle_t hIPC;
     ${x}DeviceGroupGetMemIpcHandle(hDeviceGroup, dptr, &hIPC);

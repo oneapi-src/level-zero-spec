@@ -69,6 +69,8 @@ xeDeviceGroupAllocSharedMem(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     xe_device_handle_t hDevice,                     ///< [in] handle of a device
     xe_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
+    uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
+                                                    ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
     xe_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
@@ -82,7 +84,7 @@ xeDeviceGroupAllocSharedMem(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, host_flags, size, alignment, ptr );
+    return pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, ordinal, host_flags, size, alignment, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -116,6 +118,8 @@ xeDeviceGroupAllocDeviceMem(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
+    uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
+                                                    ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
     void** ptr                                      ///< [out] pointer to device allocation
@@ -128,7 +132,7 @@ xeDeviceGroupAllocDeviceMem(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, size, alignment, ptr );
+    return pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, ordinal, size, alignment, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -441,6 +445,8 @@ namespace xe
     DeviceGroup::AllocSharedMem(
         Device* pDevice,                                ///< [in] pointer to a device
         device_mem_alloc_flag_t device_flags,           ///< [in] flags specifying additional device allocation controls
+        uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
+                                                        ///< must be less than the count returned from ::DeviceGroupGetMemoryProperties
         host_mem_alloc_flag_t host_flags,               ///< [in] flags specifying additional host allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
@@ -452,6 +458,7 @@ namespace xe
             reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
             reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
             static_cast<xe_device_mem_alloc_flag_t>( device_flags ),
+            ordinal,
             static_cast<xe_host_mem_alloc_flag_t>( host_flags ),
             size,
             alignment,
@@ -484,6 +491,8 @@ namespace xe
     DeviceGroup::AllocDeviceMem(
         Device* pDevice,                                ///< [in] pointer to the device
         device_mem_alloc_flag_t flags,                  ///< [in] flags specifying additional allocation controls
+        uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
+                                                        ///< must be less than the count returned from ::DeviceGroupGetMemoryProperties
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
         )
@@ -494,6 +503,7 @@ namespace xe
             reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
             reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
             static_cast<xe_device_mem_alloc_flag_t>( flags ),
+            ordinal,
             size,
             alignment,
             &ptr ) );

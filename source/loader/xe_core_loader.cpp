@@ -226,9 +226,9 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetProperties
+    /// @brief Intercept function for xeDeviceGroupGetDeviceProperties
     xe_result_t __xecall
-    xeDeviceGroupGetProperties(
+    xeDeviceGroupGetDeviceProperties(
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
         xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
         )
@@ -240,7 +240,7 @@ namespace loader
         hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.DeviceGroup.pfnGetProperties( hDeviceGroup, pDeviceProperties );
+        auto result = dditable->xe.DeviceGroup.pfnGetDeviceProperties( hDeviceGroup, pDeviceProperties );
 
         return result;
     }
@@ -270,7 +270,13 @@ namespace loader
     xe_result_t __xecall
     xeDeviceGroupGetMemoryProperties(
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-        xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of memory properties supported.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of memory properties available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of
+                                                        ///< memory properties.
+        xe_device_memory_properties_t* pMemProperties   ///< [in,out][optional][range(0, *pCount)] array of query results for
+                                                        ///< memory properties
         )
     {
         // extract driver's function pointer table
@@ -280,7 +286,47 @@ namespace loader
         hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.DeviceGroup.pfnGetMemoryProperties( hDeviceGroup, pMemProperties );
+        auto result = dditable->xe.DeviceGroup.pfnGetMemoryProperties( hDeviceGroup, pCount, pMemProperties );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeDeviceGroupGetMemoryAccessProperties
+    xe_result_t __xecall
+    xeDeviceGroupGetMemoryAccessProperties(
+        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+        xe_device_memory_access_properties_t* pMemAccessProperties  ///< [out] query result for memory access properties
+        )
+    {
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+
+        // convert loader handle to driver handle
+        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
+
+        // forward to device-driver
+        auto result = dditable->xe.DeviceGroup.pfnGetMemoryAccessProperties( hDeviceGroup, pMemAccessProperties );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeDeviceGroupGetCacheProperties
+    xe_result_t __xecall
+    xeDeviceGroupGetCacheProperties(
+        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+        xe_device_cache_properties_t* pCacheProperties  ///< [out] query result for cache properties
+        )
+    {
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+
+        // convert loader handle to driver handle
+        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
+
+        // forward to device-driver
+        auto result = dditable->xe.DeviceGroup.pfnGetCacheProperties( hDeviceGroup, pCacheProperties );
 
         return result;
     }
@@ -1657,6 +1703,8 @@ namespace loader
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
         xe_device_handle_t hDevice,                     ///< [in] handle of a device
         xe_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
+        uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
+                                                        ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
         xe_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
@@ -1673,7 +1721,7 @@ namespace loader
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.DeviceGroup.pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, host_flags, size, alignment, ptr );
+        auto result = dditable->xe.DeviceGroup.pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, ordinal, host_flags, size, alignment, ptr );
 
         return result;
     }
@@ -1685,6 +1733,8 @@ namespace loader
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
         xe_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
+        uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
+                                                        ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
         void** ptr                                      ///< [out] pointer to device allocation
@@ -1700,7 +1750,7 @@ namespace loader
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.DeviceGroup.pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, size, alignment, ptr );
+        auto result = dditable->xe.DeviceGroup.pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, ordinal, size, alignment, ptr );
 
         return result;
     }
@@ -2686,9 +2736,11 @@ xeGetDeviceGroupProcAddrTable(
             pDdiTable->pfnGet                                      = loader::xeDeviceGroupGet;
             pDdiTable->pfnGetDriverVersion                         = loader::xeDeviceGroupGetDriverVersion;
             pDdiTable->pfnGetApiVersion                            = loader::xeDeviceGroupGetApiVersion;
-            pDdiTable->pfnGetProperties                            = loader::xeDeviceGroupGetProperties;
+            pDdiTable->pfnGetDeviceProperties                      = loader::xeDeviceGroupGetDeviceProperties;
             pDdiTable->pfnGetComputeProperties                     = loader::xeDeviceGroupGetComputeProperties;
             pDdiTable->pfnGetMemoryProperties                      = loader::xeDeviceGroupGetMemoryProperties;
+            pDdiTable->pfnGetMemoryAccessProperties                = loader::xeDeviceGroupGetMemoryAccessProperties;
+            pDdiTable->pfnGetCacheProperties                       = loader::xeDeviceGroupGetCacheProperties;
             pDdiTable->pfnGetImageProperties                       = loader::xeDeviceGroupGetImageProperties;
             pDdiTable->pfnAllocSharedMem                           = loader::xeDeviceGroupAllocSharedMem;
             pDdiTable->pfnAllocDeviceMem                           = loader::xeDeviceGroupAllocDeviceMem;
