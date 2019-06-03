@@ -21,51 +21,19 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_loader.h
+* @file xe_extended_loader.h
+*
+* @cond DEV
+* DO NOT EDIT: generated from /scripts/templates/ldrddi.h.mako
+* @endcond
 *
 ******************************************************************************/
 #pragma once
-#include <memory>
-#include <vector>
-
-#include "xe_ddi.h"
-#include "xex_ddi.h"
-#include "xet_ddi.h"
-#include "xe_util.h"
-
-#include "xe_object.h"
-#include "xe_core_loader.h"
-#include "xe_extended_loader.h"
-#include "xe_tools_loader.h"
 
 namespace loader
 {
-    //////////////////////////////////////////////////////////////////////////
-    struct driver_t
-    {
-        HMODULE handle = NULL;
-
-        dditable_t dditable = {};
-    };
-
-    using driver_vector_t = std::vector< driver_t >;
-
     ///////////////////////////////////////////////////////////////////////////////
-    class context_t
-    {
-    public:
-        xe_api_version_t version = XE_API_VERSION_1_0;
-
-        driver_vector_t drivers;
-
-        HMODULE validationLayer = nullptr;
-
-        bool forceIntercept = false;
-
-        context_t();
-        ~context_t();
-    };
-
-    extern context_t context;
+    using xex_command_graph_object_t          = object_t < xex_command_graph_handle_t >;
+    using xex_command_graph_factory_t         = factory_t < xex_command_graph_object_t >;
 
 }

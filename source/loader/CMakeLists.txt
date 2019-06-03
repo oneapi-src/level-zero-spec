@@ -2,6 +2,7 @@ set(TARGET_NAME xe_loader)
 
 add_library(${TARGET_NAME}
     SHARED
+        ${CMAKE_CURRENT_SOURCE_DIR}/xe_object.h
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_loader.h
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_loader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_core_loader.cpp

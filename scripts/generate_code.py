@@ -132,6 +132,23 @@ def mako_cmake_cpp(path, namespace, files):
     generates c/c++ files from the specification documents
 """
 def mako_loader_cpp(path, section, namespace, tags, specs, meta):
+    loc = 0
+    template = "ldrddi.h.mako"
+    fin = os.path.join("templates", template)
+
+    name = "%s_%s_loader"%(tags['$x'], section)
+    filename = "%s.h"%(name)
+    fout = os.path.join(path, filename)
+
+    print("Generating %s..."%fout)
+    loc += util.makoWrite(
+        fin, fout,
+        name=name,
+        namespace=namespace,
+        tags=tags,
+        specs=specs,
+        meta=meta)
+
     template = "ldrddi.cpp.mako"
     fin = os.path.join("templates", template)
 
@@ -140,13 +157,14 @@ def mako_loader_cpp(path, section, namespace, tags, specs, meta):
     fout = os.path.join(path, filename)
 
     print("Generating %s..."%fout)
-    return util.makoWrite(
+    loc += util.makoWrite(
         fin, fout,
         name=name,
         namespace=namespace,
         tags=tags,
         specs=specs,
         meta=meta)
+    return loc
 
 """
     generates c/c++ files from the specification documents

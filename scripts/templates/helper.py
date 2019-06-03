@@ -1300,8 +1300,8 @@ def get_loader_prologue(namespace, tags, obj, meta):
             name = subt(namespace, tags, item['name'])
             tname = _remove_const_ptr(subt(namespace, tags, item['type']))
 
-            # e.g., "$x_device_handle_t" -> "xet_device_object_t"
-            obj_name = re.sub(r"^[^_]+_(\w+)", r"%s_\1"%namespace, re.sub(r"(\w+)_handle_t", r"\1_object_t", tname))
+            # e.g., "xe_device_handle_t" -> "xe_device_object_t"
+            obj_name = re.sub(r"(\w+)_handle_t", r"\1_object_t", tname)
 
             if type_traits.is_pointer(item['type']):
                 range_start = param_traits.range_start(item)
@@ -1333,7 +1333,8 @@ def get_loader_epilogue(namespace, tags, obj, meta):
                 name = subt(namespace, tags, item['name'])
                 tname = _remove_const_ptr(subt(namespace, tags, item['type']))
 
-                obj_name = re.sub(r"^[^_]+_(\w+)", r"%s_\1"%namespace, re.sub(r"(\w+)_handle_t", r"\1_object_t", tname))
+                obj_name = re.sub(r"(\w+)_handle_t", r"\1_object_t", tname)
+                fty_name = re.sub(r"(\w+)_handle_t", r"\1_factory", tname)
 
                 if param_traits.is_range(item):
                     range_start = param_traits.range_start(item)
@@ -1342,6 +1343,7 @@ def get_loader_epilogue(namespace, tags, obj, meta):
                         'name': name,
                         'type': tname,
                         'obj': obj_name,
+                        'factory': fty_name,
                         'release': param_traits.is_release(item),
                         'range': (range_start, range_end)
                     })
@@ -1350,6 +1352,7 @@ def get_loader_epilogue(namespace, tags, obj, meta):
                         'name': name,
                         'type': tname,
                         'obj': obj_name,
+                        'factory': fty_name,
                         'release': param_traits.is_release(item),
                         'optional': param_traits.is_optional(item)
                     })

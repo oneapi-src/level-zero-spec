@@ -24,11 +24,108 @@
 * @file xe_extended_loader.cpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/loader.cpp.mako
+* DO NOT EDIT: generated from /scripts/templates/ldrddi.cpp.mako
 * @endcond
 *
 ******************************************************************************/
 #include "xe_loader.h"
+
+namespace loader
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    xex_command_graph_factory_t         xex_command_graph_factory;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xexInit
+    xe_result_t __xecall
+    xexInit(
+        xe_init_flag_t flags                            ///< [in] initialization flags
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        for( auto& drv : context.drivers )
+        {
+            if( XE_RESULT_SUCCESS == result )
+            {
+                result = drv.dditable.xex.Global.pfnInit( flags );
+            }
+        }
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xexCommandGraphCreate
+    xe_result_t __xecall
+    xexCommandGraphCreate(
+        xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+        const xex_command_graph_desc_t* desc,           ///< [in] pointer to command graph descriptor
+        xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
+        )
+    {
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+
+        // convert loader handle to driver handle
+        hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
+
+        // forward to device-driver
+        auto result = dditable->xex.CommandGraph.pfnCreate( hDevice, desc, phCommandGraph );
+
+        try
+        {
+            // convert driver handle to loader handle
+            *phCommandGraph = reinterpret_cast<xex_command_graph_handle_t>(
+                xex_command_graph_factory.get( *phCommandGraph, dditable ) );
+        }
+        catch( std::bad_alloc& )
+        {
+            result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+        }
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xexCommandGraphDestroy
+    xe_result_t __xecall
+    xexCommandGraphDestroy(
+        xex_command_graph_handle_t hCommandGraph        ///< [in][release] handle of command graph object to destroy
+        )
+    {
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph )->dditable;
+
+        // convert loader handle to driver handle
+        hCommandGraph = reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph )->handle;
+
+        // forward to device-driver
+        auto result = dditable->xex.CommandGraph.pfnDestroy( hCommandGraph );
+
+        // release loader handle
+        xex_command_graph_factory.release( hCommandGraph );
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xexCommandGraphClose
+    xe_result_t __xecall
+    xexCommandGraphClose(
+        xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
+        )
+    {
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph )->dditable;
+
+        // convert loader handle to driver handle
+        hCommandGraph = reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph )->handle;
+
+        // forward to device-driver
+        auto result = dditable->xex.CommandGraph.pfnClose( hCommandGraph );
+
+        return result;
+    }
+
+} // namespace loader
 
 #if defined(__cplusplus)
 extern "C" {
@@ -51,47 +148,47 @@ xexGetGlobalProcAddrTable(
     xex_global_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( loader.drivers.size() < 1 )
+    if( loader::context.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( loader.version < version )
+    if( loader::context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : loader.drivers )
+    for( auto& drv : loader::context.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
             static auto getTable = reinterpret_cast<xex_pfnGetGlobalProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xexGetGlobalProcAddrTable") );
-            result = getTable( version, &drv.xexDdiTable.Global );
+            result = getTable( version, &drv.dditable.xex.Global );
         }
     }
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
+        if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
         {
             // return pointers to loader's DDIs
-            pDdiTable->pfnInit                                     = xexInit;
+            pDdiTable->pfnInit                                     = loader::xexInit;
         }
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = loader.drivers.front().xexDdiTable.Global;
+            *pDdiTable = loader::context.drivers.front().dditable.xex.Global;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xex_pfnGetGlobalProcAddrTable_t>(
-            GET_FUNCTION_PTR(loader.validationLayer, "xexGetGlobalProcAddrTable") );
+            GET_FUNCTION_PTR(loader::context.validationLayer, "xexGetGlobalProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -115,144 +212,55 @@ xexGetCommandGraphProcAddrTable(
     xex_command_graph_dditable_t* pDdiTable         ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    if( loader.drivers.size() < 1 )
+    if( loader::context.drivers.size() < 1 )
         return XE_RESULT_ERROR_UNINITIALIZED;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( loader.version < version )
+    if( loader::context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     // Load the device-driver DDI tables
-    for( auto& drv : loader.drivers )
+    for( auto& drv : loader::context.drivers )
     {
         if( XE_RESULT_SUCCESS == result )
         {
             static auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xexGetCommandGraphProcAddrTable") );
-            result = getTable( version, &drv.xexDdiTable.CommandGraph );
+            result = getTable( version, &drv.dditable.xex.CommandGraph );
         }
     }
 
     if( XE_RESULT_SUCCESS == result )
     {
-        if( ( loader.drivers.size() > 1 ) || loader.forceIntercept )
+        if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
         {
             // return pointers to loader's DDIs
-            pDdiTable->pfnCreate                                   = xexCommandGraphCreate;
-            pDdiTable->pfnDestroy                                  = xexCommandGraphDestroy;
-            pDdiTable->pfnClose                                    = xexCommandGraphClose;
+            pDdiTable->pfnCreate                                   = loader::xexCommandGraphCreate;
+            pDdiTable->pfnDestroy                                  = loader::xexCommandGraphDestroy;
+            pDdiTable->pfnClose                                    = loader::xexCommandGraphClose;
         }
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = loader.drivers.front().xexDdiTable.CommandGraph;
+            *pDdiTable = loader::context.drivers.front().dditable.xex.CommandGraph;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader.validationLayer ))
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
     {
         static auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
-            GET_FUNCTION_PTR(loader.validationLayer, "xexGetCommandGraphProcAddrTable") );
+            GET_FUNCTION_PTR(loader::context.validationLayer, "xexGetCommandGraphProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
     return result;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xexInit
-xe_result_t __xecall
-xexInit(
-    xe_init_flag_t flags                            ///< [in] initialization flags
-    )
-{
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    for( auto& drv : loader.drivers )
-    {
-        if( XE_RESULT_SUCCESS == result )
-        {
-            result = drv.xexDdiTable.Global.pfnInit( flags );
-        }
-    }
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xexCommandGraphCreate
-xe_result_t __xecall
-xexCommandGraphCreate(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    const xex_command_graph_desc_t* desc,           ///< [in] pointer to command graph descriptor
-    xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
-    )
-{
-    // extract driver's function pointer table
-    auto dditable = reinterpret_cast<xex_device_object_t*>( hDevice )->dditable;
-
-    // convert loader handle to driver handle
-    hDevice = reinterpret_cast<xex_device_object_t*>( hDevice )->handle;
-
-    // forward to device-driver
-    auto result = dditable->CommandGraph.pfnCreate( hDevice, desc, phCommandGraph );
-
-    try
-    {
-        // convert driver handle to loader handle
-        *phCommandGraph = reinterpret_cast<xex_command_graph_handle_t>(
-            xex_command_graph_object_t::factory.get( *phCommandGraph, dditable ) );
-    }
-    catch( std::bad_alloc& )
-    {
-        result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-    }
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xexCommandGraphDestroy
-xe_result_t __xecall
-xexCommandGraphDestroy(
-    xex_command_graph_handle_t hCommandGraph        ///< [in][release] handle of command graph object to destroy
-    )
-{
-    // extract driver's function pointer table
-    auto dditable = reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph )->dditable;
-
-    // convert loader handle to driver handle
-    hCommandGraph = reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph )->handle;
-
-    // forward to device-driver
-    auto result = dditable->CommandGraph.pfnDestroy( hCommandGraph );
-
-    // release loader handle
-    xex_command_graph_object_t::factory.release( hCommandGraph );
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xexCommandGraphClose
-xe_result_t __xecall
-xexCommandGraphClose(
-    xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
-    )
-{
-    // extract driver's function pointer table
-    auto dditable = reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph )->dditable;
-
-    // convert loader handle to driver handle
-    hCommandGraph = reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph )->handle;
-
-    // forward to device-driver
-    auto result = dditable->CommandGraph.pfnClose( hCommandGraph );
-
-    return result;
-}
 
 #if defined(__cplusplus)
 };

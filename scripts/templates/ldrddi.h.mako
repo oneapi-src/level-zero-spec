@@ -1,4 +1,13 @@
-/**************************************************************************//**
+<%!
+import re
+from templates import helper as th
+%><%
+    n=namespace
+    N=n.upper()
+
+    x=tags['$x']
+    X=x.upper()
+%>/**************************************************************************//**
 * INTEL CONFIDENTIAL  
 * Copyright 2019  
 * Intel Corporation All Rights Reserved.  
@@ -21,51 +30,27 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_loader.h
+* @file ${name}.h
+*
+* @cond DEV
+* DO NOT EDIT: generated from /scripts/templates/ldrddi.h.mako
+* @endcond
 *
 ******************************************************************************/
 #pragma once
-#include <memory>
-#include <vector>
-
-#include "xe_ddi.h"
-#include "xex_ddi.h"
-#include "xet_ddi.h"
-#include "xe_util.h"
-
-#include "xe_object.h"
-#include "xe_core_loader.h"
-#include "xe_extended_loader.h"
-#include "xe_tools_loader.h"
 
 namespace loader
 {
-    //////////////////////////////////////////////////////////////////////////
-    struct driver_t
-    {
-        HMODULE handle = NULL;
-
-        dditable_t dditable = {};
-    };
-
-    using driver_vector_t = std::vector< driver_t >;
-
     ///////////////////////////////////////////////////////////////////////////////
-    class context_t
-    {
-    public:
-        xe_api_version_t version = XE_API_VERSION_1_0;
+    %for obj in th.extract_objs(specs, r"handle"):
+    %if 'class' in obj:
+    <%
+        _handle_t = th.subt(n, tags, obj['name'])
+        _object_t = re.sub(r"(\w+)_handle_t", r"\1_object_t", _handle_t)
+        _factory_t = re.sub(r"(\w+)_handle_t", r"\1_factory_t", _handle_t)
+    %>using ${th.append_ws(_object_t, 35)} = object_t < ${_handle_t} >;
+    using ${th.append_ws(_factory_t, 35)} = factory_t < ${_object_t} >;
 
-        driver_vector_t drivers;
-
-        HMODULE validationLayer = nullptr;
-
-        bool forceIntercept = false;
-
-        context_t();
-        ~context_t();
-    };
-
-    extern context_t context;
-
+    %endif
+    %endfor
 }

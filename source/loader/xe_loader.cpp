@@ -26,113 +26,64 @@
 ******************************************************************************/
 #include "xe_loader.h"
 
-//////////////////////////////////////////////////////////////////////////
-template<>
-xe_device_group_object_t::factory_t     xe_device_group_object_t::factory;
-template<>
-xe_device_object_t::factory_t           xe_device_object_t::factory;
-template<>
-xe_command_list_object_t::factory_t     xe_command_list_object_t::factory;
-template<>
-xe_command_queue_object_t::factory_t    xe_command_queue_object_t::factory;
-template<>
-xe_fence_object_t::factory_t            xe_fence_object_t::factory;
-template<>
-xe_event_pool_object_t::factory_t       xe_event_pool_object_t::factory;
-template<>
-xe_event_object_t::factory_t            xe_event_object_t::factory;
-template<>
-xe_image_object_t::factory_t            xe_image_object_t::factory;
-template<>
-xe_module_object_t::factory_t           xe_module_object_t::factory;
-template<>
-xe_module_build_log_object_t::factory_t xe_module_build_log_object_t::factory;
-template<>
-xe_function_object_t::factory_t         xe_function_object_t::factory;
-template<>
-xe_sampler_object_t::factory_t          xe_sampler_object_t::factory;
-
-template<>
-xex_device_object_t::factory_t          xex_device_object_t::factory;
-template<>
-xex_command_graph_object_t::factory_t   xex_command_graph_object_t::factory;
-
-template<>
-xet_device_object_t::factory_t              xet_device_object_t::factory;
-template<>
-xet_command_list_object_t::factory_t        xet_command_list_object_t::factory;
-template<>
-xet_event_object_t::factory_t               xet_event_object_t::factory;
-template<>
-xet_metric_group_object_t::factory_t        xet_metric_group_object_t::factory;
-template<>
-xet_metric_object_t::factory_t              xet_metric_object_t::factory;
-template<>
-xet_metric_tracer_object_t::factory_t       xet_metric_tracer_object_t::factory;
-template<>
-xet_metric_query_pool_object_t::factory_t   xet_metric_query_pool_object_t::factory;
-template<>
-xet_metric_query_object_t::factory_t        xet_metric_query_object_t::factory;
-template<>
-xet_power_object_t::factory_t               xet_power_object_t::factory;
-template<>
-xet_freq_domain_object_t::factory_t         xet_freq_domain_object_t::factory;
-
-///////////////////////////////////////////////////////////////////////////////
-static const char* known_driver_names[] = { 
-    MAKE_DRIVER_NAME( "xe_intc_gpu" )
-};
-
-static const size_t num_known_driver_names =
-    sizeof( known_driver_names ) / sizeof( known_driver_names[ 0 ] );
-
-
-///////////////////////////////////////////////////////////////////////////////
-Loader loader;
-
-
-///////////////////////////////////////////////////////////////////////////////
-Loader::Loader()
+namespace loader
 {
-    if( getenv_tobool( "XE_ENABLE_NULL_DRIVER" ) )
+    ///////////////////////////////////////////////////////////////////////////////
+    static const char* known_driver_names[] = {
+        MAKE_DRIVER_NAME( "xe_intc_gpu" )
+    };
+
+    static const size_t num_known_driver_names =
+        sizeof( known_driver_names ) / sizeof( known_driver_names[ 0 ] );
+
+
+    ///////////////////////////////////////////////////////////////////////////////
+    context_t context;
+
+
+    ///////////////////////////////////////////////////////////////////////////////
+    context_t::context_t()
     {
-        auto handle = LOAD_DRIVER_LIBRARY( MAKE_DRIVER_NAME( "xe_null" ) );
-        if( NULL != handle )
+        if( getenv_tobool( "XE_ENABLE_NULL_DRIVER" ) )
         {
-            drivers.emplace_back();
-            drivers.rbegin()->handle = handle;
-        }
-    }
-    else
-    {
-        drivers.reserve( num_known_driver_names );
-        for( auto name : known_driver_names )
-        {
-            auto handle = LOAD_DRIVER_LIBRARY( name );
+            auto handle = LOAD_DRIVER_LIBRARY( MAKE_DRIVER_NAME( "xe_null" ) );
             if( NULL != handle )
             {
                 drivers.emplace_back();
                 drivers.rbegin()->handle = handle;
             }
-
         }
-    }
+        else
+        {
+            drivers.reserve( num_known_driver_names );
+            for( auto name : known_driver_names )
+            {
+                auto handle = LOAD_DRIVER_LIBRARY( name );
+                if( NULL != handle )
+                {
+                    drivers.emplace_back();
+                    drivers.rbegin()->handle = handle;
+                }
 
-    if( getenv_tobool( "XE_ENABLE_VALIDATION_LAYER" ) )
+            }
+        }
+
+        if( getenv_tobool( "XE_ENABLE_VALIDATION_LAYER" ) )
+        {
+            validationLayer = LOAD_DRIVER_LIBRARY( MAKE_DRIVER_NAME( "xe_validation_layer" ) );
+        }
+
+        forceIntercept = getenv_tobool( "XE_ENABLE_LOADER_INTERCEPT" );
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    context_t::~context_t()
     {
-        validationLayer = LOAD_DRIVER_LIBRARY( MAKE_DRIVER_NAME( "xe_validation_layer" ) );
-    }
+        FREE_DRIVER_LIBRARY( validationLayer );
 
-    forceIntercept = getenv_tobool( "XE_ENABLE_LOADER_INTERCEPT" );
-};
-
-///////////////////////////////////////////////////////////////////////////////
-Loader::~Loader()
-{
-    FREE_DRIVER_LIBRARY( validationLayer );
-
-    for( auto& drv : drivers )
-    {
-        FREE_DRIVER_LIBRARY( drv.handle );
-    }
-};
+        for( auto& drv : drivers )
+        {
+            FREE_DRIVER_LIBRARY( drv.handle );
+        }
+    };
+}
