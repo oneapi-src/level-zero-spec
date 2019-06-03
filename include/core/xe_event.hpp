@@ -103,7 +103,7 @@ namespace xe
         auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Creates a pool for a set of event(s) on the device.
+        /// @brief Creates a pool for a set of event(s) for the device group.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -114,8 +114,12 @@ namespace xe
         /// @throws result_t
         static EventPool* __xecall
         Create(
-            Device* pDevice,                                ///< [in] pointer to the device
-            const desc_t* desc                              ///< [in] pointer to event pool descriptor
+            DeviceGroup* pDeviceGroup,                      ///< [in] pointer to the device group
+            const desc_t* desc,                             ///< [in] pointer to event pool descriptor
+            uint32_t numDevices,                            ///< [in] number of device handles
+            Device** ppDevices = nullptr                    ///< [in][optional][range(0, numDevices)] array of device handles which
+                                                            ///< have visibility to the event pool.
+                                                            ///< if nullptr, then event pool is visible to all devices in the device group.
             );
 
         ///////////////////////////////////////////////////////////////////////////////

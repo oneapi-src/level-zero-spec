@@ -44,7 +44,7 @@ members:
       desc: "[in] number of events within the pool"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates a pool for a set of event(s) on the device."
+desc: "Creates a pool for a set of event(s) for the device group."
 class: $xEventPool
 name: Create
 decl: static
@@ -53,12 +53,20 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $x_device_handle_t
-      name: hDevice
-      desc: "[in] handle of the device"
+    - type: $x_device_group_handle_t
+      name: hDeviceGroup
+      desc: "[in] handle of the device group"
     - type: "const $x_event_pool_desc_t*"
       name: desc
       desc: "[in] pointer to event pool descriptor"
+    - type: uint32_t
+      name: numDevices
+      desc: "[in] number of device handles"
+    - type: $x_device_handle_t*
+      name: phDevices
+      desc: |
+            [in][optional][range(0, numDevices)] array of device handles which have visibility to the event pool.
+            if nullptr, then event pool is visible to all devices in the device group.
     - type: "$x_event_pool_handle_t*"
       name: phEventPool
       desc: "[out] pointer handle of event pool object created"

@@ -35,7 +35,7 @@
 extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates a pool for a set of event(s) on the device.
+/// @brief Creates a pool for a set of event(s) for the device group.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -46,7 +46,7 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
+///         + nullptr == hDeviceGroup
 ///         + nullptr == desc
 ///         + nullptr == phEventPool
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -55,8 +55,12 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
 xeEventPoolCreate(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group
     const xe_event_pool_desc_t* desc,               ///< [in] pointer to event pool descriptor
+    uint32_t numDevices,                            ///< [in] number of device handles
+    xe_device_handle_t* phDevices,                  ///< [in][optional][range(0, numDevices)] array of device handles which
+                                                    ///< have visibility to the event pool.
+                                                    ///< if nullptr, then event pool is visible to all devices in the device group.
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
     )
 {
@@ -67,7 +71,7 @@ xeEventPoolCreate(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnCreate( hDevice, desc, phEventPool );
+    return pfnCreate( hDeviceGroup, desc, numDevices, phDevices, phEventPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -580,7 +584,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Creates a pool for a set of event(s) on the device.
+    /// @brief Creates a pool for a set of event(s) for the device group.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -592,15 +596,27 @@ namespace xe
     /// @throws result_t
     EventPool* __xecall
     EventPool::Create(
-        Device* pDevice,                                ///< [in] pointer to the device
-        const desc_t* desc                              ///< [in] pointer to event pool descriptor
+        DeviceGroup* pDeviceGroup,                      ///< [in] pointer to the device group
+        const desc_t* desc,                             ///< [in] pointer to event pool descriptor
+        uint32_t numDevices,                            ///< [in] number of device handles
+        Device** ppDevices                              ///< [in][optional][range(0, numDevices)] array of device handles which
+                                                        ///< have visibility to the event pool.
+                                                        ///< if nullptr, then event pool is visible to all devices in the device group.
         )
     {
+        thread_local std::vector<xe_device_handle_t> hDevices;
+        hDevices.resize( 0 );
+        hDevices.reserve( numDevices );
+        for( uint32_t i = 0; i < numDevices; ++i )
+            hDevices.emplace_back( ( ppDevices ) ? reinterpret_cast<xe_device_handle_t>( ppDevices[ i ]->getHandle() ) : nullptr );
+
         xe_event_pool_handle_t hEventPool;
 
         auto result = static_cast<result_t>( ::xeEventPoolCreate(
-            reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
+            reinterpret_cast<xe_device_group_handle_t>( pDeviceGroup->getHandle() ),
             reinterpret_cast<const xe_event_pool_desc_t*>( desc ),
+            numDevices,
+            hDevices.data(),
             &hEventPool ) );
 
         if( result_t::SUCCESS != result )
@@ -610,7 +626,7 @@ namespace xe
 
         try
         {
-            pEventPool = new EventPool( reinterpret_cast<event_pool_handle_t>( hEventPool ), pDevice, desc );
+            pEventPool = new EventPool( reinterpret_cast<event_pool_handle_t>( hEventPool ), nullptr, desc );
         }
         catch( std::bad_alloc& )
         {

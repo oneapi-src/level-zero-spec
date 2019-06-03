@@ -107,6 +107,8 @@ typedef struct _xe_command_queue_desc_t
 /// @brief Creates a command queue on the device.
 /// 
 /// @details
+///     - The command queue can only be used on the device on which it was
+///       created.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 

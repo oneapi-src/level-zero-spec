@@ -71,6 +71,10 @@ typedef enum _xe_host_mem_alloc_flag_t
 /// @details
 ///     - Shared allocations share ownership between the host and one or more
 ///       devices.
+///     - By default, shared allocations are visible to all devices in the
+///       device group.
+///     - A shared allocation can be restricted to be only visible to the host
+///       and a single device by specifying a single device handle.
 ///     - The application may call this function from simultaneous threads.
 /// 
 /// @remarks
@@ -93,7 +97,7 @@ typedef enum _xe_host_mem_alloc_flag_t
 xe_result_t __xecall
 xeDeviceGroupAllocSharedMem(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    xe_device_handle_t hDevice,                     ///< [in] handle of a device
     xe_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
     xe_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
@@ -142,7 +146,8 @@ xeDeviceGroupAllocDeviceMem(
 /// 
 /// @details
 ///     - A host allocation is owned by the host process.
-///     - Host allocations are accessible by the host and all devices.
+///     - Host allocations are accessible by the host and all devices within the
+///       device group.
 ///     - Host allocations are frequently used as staging areas to transfer data
 ///       to or from devices.
 ///     - The application may call this function from simultaneous threads.

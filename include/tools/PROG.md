@@ -190,7 +190,7 @@ The following sample code demonstrates a basic sequence for time based collectio
         xetDeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
 
         // Create notification event
-        xeEventPoolCreate( hDevice, &eventPoolDesc, &hEventPool );
+        xeEventPoolCreate( hDeviceGroup, &eventPoolDesc, 1, &hDevice, &hEventPool );
         eventDesc.index  = 0;
         eventDesc.signal = XE_EVENT_SCOPE_FLAG_HOST;
         eventDesc.wait   = XE_EVENT_SCOPE_FLAG_HOST; 
@@ -275,7 +275,7 @@ The following sample code demonstrates a basic sequence for query based collecti
         xetMetricQueryPoolCreate( hDevice, &queryPoolDesc, &hMetricQueryPool );
         eventPoolDesc.flags = XE_EVENT_POOL_FLAG_DEFAULT;
         eventPoolDesc.count = 1000;
-        xeEventPoolCreate( hDevice, &eventPoolDesc, &hEventPool );
+        xeEventPoolCreate( hDeviceGroup, &eventPoolDesc, 1, &hDevice, &hEventPool );
 
         // Write BEGIN metric query to command list 
         xetMetricQueryPoolGetMetricQuery( hMetricQueryPool, 0 /*slot*/, &hMetricQuery );

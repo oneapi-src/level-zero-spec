@@ -845,8 +845,10 @@ typedef xe_result_t (__xecall *xe_pfnGetFenceProcAddrTable_t)(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeEventPoolCreate 
 typedef xe_result_t (__xecall *xe_pfnEventPoolCreate_t)(
-    xe_device_handle_t,
+    xe_device_group_handle_t,
     const xe_event_pool_desc_t*,
+    uint32_t,
+    xe_device_handle_t*,
     xe_event_pool_handle_t*
     );
 

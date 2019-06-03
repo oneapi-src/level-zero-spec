@@ -53,7 +53,11 @@ A device represents a physical device in the system that support ${OneApi}.
 - The application is responsible for sharing memory and explicit submission and synchronization across multiple devices.
 - Device may expose sub-devices that allow finer-grained partition and control; such as each tile of a multi-tile devices.
 
-${"##"} Initialization
+The following diagram illustrates the relationship between the device group, device and other objects described in this document.
+![Device](../images/core_device.png?raw=true)  
+@image latex core_device.png
+
+${"##"} Initialization and Discovery
 The driver must be initialized by calling ::${x}Init before any other function.
 This function will load and initialize all ${OneApi} driver(s) in the system for all threads in the current process.
 Simultaneous calls to ::${x}Init are thread-safe and only one instance of driver(s) will be loaded per-process.
@@ -198,7 +202,7 @@ and avoids exposing these details in the API in a backwards compatible fashion.
     ${x}ImageCreate(hDevice, &imageDesc, &hImage);
 
     // upload contents from host pointer
-    ${x}CommandListAppendImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData, nullptr, 0, nullptr);
+    ${x}CommandListAppendImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData, nullptr);
     ...
 ```
 
@@ -467,7 +471,7 @@ The following sample code demonstrates a sequence for creation and submission of
         1
     };
     ${x}_event_pool_handle_t hEventPool;
-    ${x}EventPoolCreate(hDevice, &eventPoolDesc, &hEventPool);
+    ${x}EventPoolCreate(hDeviceGroup, &eventPoolDesc, 0, nullptr, &hEventPool);
 
     ${x}_event_desc_t eventDesc = {
         ${X}_EVENT_DESC_VERSION_CURRENT,
@@ -1067,7 +1071,7 @@ The following code examples demonstrate how to use the event IPC APIs:
         10
     };
     ${x}_event_pool_handle_t hEventPool;
-    ${x}EventPoolCreate(hDevice, &eventPoolDesc, &hEventPool);
+    ${x}EventPoolCreate(hDeviceGroup, &eventPoolDesc, 1, &hDevice, &hEventPool);
  
     // get IPC handle and send to another process
     ${x}_ipc_event_pool_handle_t hIpcEvent;
@@ -1124,11 +1128,11 @@ the fabric can support atomics, compute kernel remote access, and data copies.
 
 The following P2P functionalities are provided through the API:
     - Check for existence of peer-to-peer fabric between two devices.
-        - ${x}DeviceCanAccessPeer
+        - ::${x}DeviceCanAccessPeer
     - Query remote memory access and atomic capabilities for peer-to-peer
-        - ${x}DeviceGetP2PProperties
+        - ::${x}DeviceGetP2PProperties
     - Copy data between devices over peer-to-peer fabric.
-        - ${x}CommandListAppendMemoryCopy
+        - ::${x}CommandListAppendMemoryCopy
 
 ${"#"} <a name="exp">Experimental</a>
 The following experimental features are provided only for the development and refinement of future APIs.

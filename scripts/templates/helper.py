@@ -144,7 +144,7 @@ class param_traits:
     RE_OUT      = r"^\[out\].*"
     RE_INOUT    = r"^\[in,out\].*"
     RE_OPTIONAL = r".*\[optional\].*"
-    RE_RANGE    = r".*\[range\((.+),\s*(.+)\)\].*"
+    RE_RANGE    = r".*\[range\((.+),\s*(.+)\)\][\S\s]*"
     RE_RELEASE  = r".*\[release\].*"
 
     @classmethod

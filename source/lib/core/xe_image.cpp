@@ -72,6 +72,9 @@ xeImageGetProperties(
 /// @brief Creates a image object on the device.
 /// 
 /// @details
+///     - The image is only visible to the device on which it was created.
+///     - The image can be copied to another device using the
+///       ::::xeCommandListAppendImageCopy functions.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -192,6 +195,9 @@ namespace xe
     /// @brief Creates a image object on the device.
     /// 
     /// @details
+    ///     - The image is only visible to the device on which it was created.
+    ///     - The image can be copied to another device using the
+    ///       ::::CommandListAppendImageCopy functions.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 

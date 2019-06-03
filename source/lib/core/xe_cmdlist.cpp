@@ -39,6 +39,8 @@ extern "C" {
 ///        command queue.
 /// 
 /// @details
+///     - The command list can only be used on the device on which it was
+///       created.
 ///     - The command list is created in the 'open' state.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
@@ -77,6 +79,8 @@ xeCommandListCreate(
 ///        for immediate submission of commands.
 /// 
 /// @details
+///     - The command list can only be used on the device on which it was
+///       created.
 ///     - The command list is created in the 'open' state and never needs to be
 ///       closed.
 ///     - The application may call this function from simultaneous threads.
@@ -375,6 +379,8 @@ namespace xe
     ///        command queue.
     /// 
     /// @details
+    ///     - The command list can only be used on the device on which it was
+    ///       created.
     ///     - The command list is created in the 'open' state.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
@@ -421,6 +427,8 @@ namespace xe
     ///        for immediate submission of commands.
     /// 
     /// @details
+    ///     - The command list can only be used on the device on which it was
+    ///       created.
     ///     - The command list is created in the 'open' state and never needs to be
     ///       closed.
     ///     - The application may call this function from simultaneous threads.

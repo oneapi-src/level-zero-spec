@@ -72,7 +72,7 @@ typedef struct _xe_event_pool_desc_t
 } xe_event_pool_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates a pool for a set of event(s) on the device.
+/// @brief Creates a pool for a set of event(s) for the device group.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -83,7 +83,7 @@ typedef struct _xe_event_pool_desc_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
+///         + nullptr == hDeviceGroup
 ///         + nullptr == desc
 ///         + nullptr == phEventPool
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -92,8 +92,12 @@ typedef struct _xe_event_pool_desc_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
 xeEventPoolCreate(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group
     const xe_event_pool_desc_t* desc,               ///< [in] pointer to event pool descriptor
+    uint32_t numDevices,                            ///< [in] number of device handles
+    xe_device_handle_t* phDevices,                  ///< [in][optional][range(0, numDevices)] array of device handles which
+                                                    ///< have visibility to the event pool.
+                                                    ///< if nullptr, then event pool is visible to all devices in the device group.
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
     );
 

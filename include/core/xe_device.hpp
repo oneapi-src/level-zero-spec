@@ -428,6 +428,10 @@ namespace xe
         /// @details
         ///     - Shared allocations share ownership between the host and one or more
         ///       devices.
+        ///     - By default, shared allocations are visible to all devices in the
+        ///       device group.
+        ///     - A shared allocation can be restricted to be only visible to the host
+        ///       and a single device by specifying a single device handle.
         ///     - The application may call this function from simultaneous threads.
         /// 
         /// @remarks
@@ -439,7 +443,7 @@ namespace xe
         /// @throws result_t
         void* __xecall
         AllocSharedMem(
-            Device* pDevice,                                ///< [in] pointer to the device
+            Device* pDevice,                                ///< [in] pointer to a device
             device_mem_alloc_flag_t device_flags,           ///< [in] flags specifying additional device allocation controls
             host_mem_alloc_flag_t host_flags,               ///< [in] flags specifying additional host allocation controls
             size_t size,                                    ///< [in] size in bytes to allocate
@@ -475,7 +479,8 @@ namespace xe
         /// 
         /// @details
         ///     - A host allocation is owned by the host process.
-        ///     - Host allocations are accessible by the host and all devices.
+        ///     - Host allocations are accessible by the host and all devices within the
+        ///       device group.
         ///     - Host allocations are frequently used as staging areas to transfer data
         ///       to or from devices.
         ///     - The application may call this function from simultaneous threads.

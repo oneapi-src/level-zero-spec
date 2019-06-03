@@ -49,7 +49,11 @@ A device represents a physical device in the system that support Xe.
 - The application is responsible for sharing memory and explicit submission and synchronization across multiple devices.
 - Device may expose sub-devices that allow finer-grained partition and control; such as each tile of a multi-tile devices.
 
-## Initialization
+The following diagram illustrates the relationship between the device group, device and other objects described in this document.
+![Device](../images/core_device.png?raw=true)  
+@image latex core_device.png
+
+## Initialization and Discovery
 The driver must be initialized by calling ::xeInit before any other function.
 This function will load and initialize all Xe driver(s) in the system for all threads in the current process.
 Simultaneous calls to ::xeInit are thread-safe and only one instance of driver(s) will be loaded per-process.
@@ -194,7 +198,7 @@ and avoids exposing these details in the API in a backwards compatible fashion.
     xeImageCreate(hDevice, &imageDesc, &hImage);
 
     // upload contents from host pointer
-    xeCommandListAppendImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData, nullptr, 0, nullptr);
+    xeCommandListAppendImageCopyFromMemory(hCommandList, hImage, nullptr, pImageData, nullptr);
     ...
 ```
 
@@ -463,7 +467,7 @@ The following sample code demonstrates a sequence for creation and submission of
         1
     };
     xe_event_pool_handle_t hEventPool;
-    xeEventPoolCreate(hDevice, &eventPoolDesc, &hEventPool);
+    xeEventPoolCreate(hDeviceGroup, &eventPoolDesc, 0, nullptr, &hEventPool);
 
     xe_event_desc_t eventDesc = {
         XE_EVENT_DESC_VERSION_CURRENT,
@@ -1061,7 +1065,7 @@ The following code examples demonstrate how to use the event IPC APIs:
         10
     };
     xe_event_pool_handle_t hEventPool;
-    xeEventPoolCreate(hDevice, &eventPoolDesc, &hEventPool);
+    xeEventPoolCreate(hDeviceGroup, &eventPoolDesc, 1, &hDevice, &hEventPool);
  
     // get IPC handle and send to another process
     xe_ipc_event_pool_handle_t hIpcEvent;
@@ -1118,11 +1122,11 @@ the fabric can support atomics, compute kernel remote access, and data copies.
 
 The following P2P functionalities are provided through the API:
     - Check for existence of peer-to-peer fabric between two devices.
-        - xeDeviceCanAccessPeer
+        - ::xeDeviceCanAccessPeer
     - Query remote memory access and atomic capabilities for peer-to-peer
-        - xeDeviceGetP2PProperties
+        - ::xeDeviceGetP2PProperties
     - Copy data between devices over peer-to-peer fabric.
-        - xeCommandListAppendMemoryCopy
+        - ::xeCommandListAppendMemoryCopy
 
 # <a name="exp">Experimental</a>
 The following experimental features are provided only for the development and refinement of future APIs.

@@ -108,22 +108,20 @@ namespace xe
         /// @brief Creates module object from an input IL or native binary.
         /// 
         /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        ///     - This function will create and compile the module object.
-        ///     - A build log can optionally be returned to the caller. Caller is
-        ///       responsible for destroying build log using ::ModuleBuildLogDestroy
-        ///     - Device memory will be allocated for module during creation.
-        ///     - A module can be created directly from native binary format.
-        ///     - A native binary object can be retrieved from a module using
-        ///       ::ModuleGetNativeBinary. This can be cached to disk and to create new
-        ///       modules.
+        ///     - Compiles the module for execution on the device.
+        ///     - The module can only be used on the device on which it was created.
+        ///     - The module can be copied to other devices within the same device group
+        ///       by using ::ModuleGetNativeBinary.
         ///     - The following build options are supported:
         ///         + "--opt-disable" - Disable optimizations
         ///         + "--opt-greater-than-4GB-buffer-required" - Use 64-bit offset
         ///           calculations for buffers.
         ///         + "--opt-large-register-file" - Increase number of registers
         ///           available to threads.
+        ///     - A build log can optionally be returned to the caller. The caller is
+        ///       responsible for destroying build log using ::ModuleBuildLogDestroy.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
         /// 
         /// @remarks
         ///   _Analogues_
@@ -165,17 +163,16 @@ namespace xe
         /// @brief Retrieve native binary from Module.
         /// 
         /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        ///     - The caller can pass nullptr for pModuleNativeBinary when querying only
-        ///       for size.
-        ///     - The implementation will copy the native binary into a buffer supplied
-        ///       by the caller.
-        ///     - The memory for the native binary output is associated with the module.
         ///     - The native binary output can be cached to disk and new modules can be
         ///       later constructed from the cached copy.
         ///     - The native binary will retain debugging information that is associated
         ///       with a module.
+        ///     - The caller can pass nullptr for pModuleNativeBinary when querying only
+        ///       for size.
+        ///     - The implementation will copy the native binary into a buffer supplied
+        ///       by the caller.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
         GetNativeBinary(
@@ -202,9 +199,11 @@ namespace xe
         /// @brief Retrieve function pointer from Module by name
         /// 
         /// @details
+        ///     - The function pointer is unique for the device on which the module was
+        ///       created.
+        ///     - The function pointer is no longer valid if module is destroyed.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
-        ///     - Function pointer is no longer valid if Module is destroyed.
         /// @returns
         ///     - void*: pointer to function.
         /// 
@@ -251,10 +250,8 @@ namespace xe
         /// @brief Destroys module build log object
         /// 
         /// @details
-        ///     - The application is responsible for making sure the device is not
-        ///       currently referencing the build log before it is deleted
-        ///     - The implementation of this function will immediately free all Host and
-        ///       Device allocations associated with this object
+        ///     - The implementation of this function will immediately free all Host
+        ///       allocations associated with this object
         ///     - The application may **not** call this function from simultaneous
         ///       threads with the same build log handle.
         ///     - The implementation of this function should be lock-free.
@@ -270,10 +267,10 @@ namespace xe
         /// @brief Retrieves text string for build log.
         /// 
         /// @details
+        ///     - The caller can pass nullptr for pBuildLog when querying only for size.
+        ///     - The caller must provide memory for build log.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
-        ///     - The caller must provide memory for build log.
-        ///     - The caller can pass nullptr for pBuildLog when querying only for size.
         /// @throws result_t
         void __xecall
         GetString(
@@ -384,7 +381,6 @@ namespace xe
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
-        ///     - Function objects should be destroyed before the Module is destroyed.
         /// 
         /// @remarks
         ///   _Analogues_
@@ -403,6 +399,7 @@ namespace xe
         /// @brief Destroys Function object
         /// 
         /// @details
+        ///     - All functions must be destroyed before the module is destroyed.
         ///     - The application is responsible for making sure the device is not
         ///       currently referencing the function before it is deleted
         ///     - The implementation of this function will immediately free all Host and
@@ -420,11 +417,11 @@ namespace xe
         /// @brief Set group size for Function.
         /// 
         /// @details
-        ///     - The implementation of this function will immediately free all Host and
-        ///       Device allocations associated with this function
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same function handle.
         ///     - The implementation of this function should be lock-free.
-        ///     - This can be called multiple times. The driver copies the group size
-        ///       information when appending functions into a command list.
+        ///     - The implementation will copy the group size information into a command
+        ///       list when the function is appended.
         /// @throws result_t
         void __xecall
         SetGroupSize(
@@ -462,6 +459,8 @@ namespace xe
         ///     - This function may **not** be called from simultaneous threads with the
         ///       same function handle.
         ///     - The implementation of this function should be lock-free.
+        ///     - The implementation will copy the arguments into a command list when
+        ///       the function is appended.
         /// @throws result_t
         void __xecall
         SetArgumentValue(
