@@ -24,35 +24,41 @@
 * @file xe_null.h
 *
 ******************************************************************************/
-#ifndef _XE_NULL_H
-#define _XE_NULL_H
-#if defined(__cplusplus)
 #pragma once
-#endif
 #include "xe_ddi.h"
 #include "xex_ddi.h"
 #include "xet_ddi.h"
 
-///////////////////////////////////////////////////////////////////////////////
-class Driver
+namespace driver
 {
-public:
-    xe_api_version_t version = XE_API_VERSION_1_0;
-
-    Driver() = default;
-    ~Driver() = default;
-
-    xe_result_t xeInit( xe_init_flag_t flags ) { return XE_RESULT_SUCCESS; }
-    xe_result_t xexInit( xe_init_flag_t flags ) { return XE_RESULT_SUCCESS; }
-    xe_result_t xetInit( xe_init_flag_t flags ) { return XE_RESULT_SUCCESS; }
-
-    void* get( void )
+    ///////////////////////////////////////////////////////////////////////////////
+    class context_t
     {
-        static uint64_t count = 0x80800000;
-        return reinterpret_cast<void*>( ++count );
-    }
-};
+    public:
+        xe_api_version_t version = XE_API_VERSION_1_0;
 
-extern Driver driver;
+        context_t() = default;
+        ~context_t() = default;
 
-#endif // _XE_NULL_H
+        xe_result_t xeInit( xe_init_flag_t flags )
+        {
+            return XE_RESULT_SUCCESS;
+        }
+        xe_result_t xexInit( xe_init_flag_t flags )
+        {
+            return XE_RESULT_SUCCESS;
+        }
+        xe_result_t xetInit( xe_init_flag_t flags )
+        {
+            return XE_RESULT_SUCCESS;
+        }
+
+        void* get( void )
+        {
+            static uint64_t count = 0x80800000;
+            return reinterpret_cast<void*>( ++count );
+        }
+    };
+
+    extern context_t context;
+}

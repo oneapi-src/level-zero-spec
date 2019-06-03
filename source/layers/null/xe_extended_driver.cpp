@@ -30,6 +30,66 @@
 ******************************************************************************/
 #include "xe_null.h"
 
+namespace driver
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xexInit
+    xe_result_t __xecall
+    xexInit(
+        xe_init_flag_t flags                            ///< [in] initialization flags
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // global functions need to be handled manually by the driver
+        result = context.xexInit( flags );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xexCommandGraphCreate
+    xe_result_t __xecall
+    xexCommandGraphCreate(
+        xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+        const xex_command_graph_desc_t* desc,           ///< [in] pointer to command graph descriptor
+        xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        *phCommandGraph = reinterpret_cast<xex_command_graph_handle_t>( context.get() );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xexCommandGraphDestroy
+    xe_result_t __xecall
+    xexCommandGraphDestroy(
+        xex_command_graph_handle_t hCommandGraph        ///< [in][release] handle of command graph object to destroy
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xexCommandGraphClose
+    xe_result_t __xecall
+    xexCommandGraphClose(
+        xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        return result;
+    }
+
+} // namespace driver
+
 #if defined(__cplusplus)
 extern "C" {
 #endif
@@ -54,12 +114,12 @@ xexGetGlobalProcAddrTable(
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( driver.version < version )
+    if( driver::context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    pDdiTable->pfnInit                                   = xexInit;
+    pDdiTable->pfnInit                                   = driver::xexInit;
 
     return result;
 }
@@ -84,72 +144,16 @@ xexGetCommandGraphProcAddrTable(
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( driver.version < version )
+    if( driver::context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    pDdiTable->pfnCreate                                 = xexCommandGraphCreate;
+    pDdiTable->pfnCreate                                 = driver::xexCommandGraphCreate;
 
-    pDdiTable->pfnDestroy                                = xexCommandGraphDestroy;
+    pDdiTable->pfnDestroy                                = driver::xexCommandGraphDestroy;
 
-    pDdiTable->pfnClose                                  = xexCommandGraphClose;
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xexInit
-xe_result_t __xecall
-xexInit(
-    xe_init_flag_t flags                            ///< [in] initialization flags
-    )
-{
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    // global functions need to be handled manually by the driver
-    result = driver.xexInit( flags );
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xexCommandGraphCreate
-xe_result_t __xecall
-xexCommandGraphCreate(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    const xex_command_graph_desc_t* desc,           ///< [in] pointer to command graph descriptor
-    xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
-    )
-{
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    *phCommandGraph = reinterpret_cast<xex_command_graph_handle_t>( driver.get() );
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xexCommandGraphDestroy
-xe_result_t __xecall
-xexCommandGraphDestroy(
-    xex_command_graph_handle_t hCommandGraph        ///< [in][release] handle of command graph object to destroy
-    )
-{
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xexCommandGraphClose
-xe_result_t __xecall
-xexCommandGraphClose(
-    xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
-    )
-{
-    xe_result_t result = XE_RESULT_SUCCESS;
+    pDdiTable->pfnClose                                  = driver::xexCommandGraphClose;
 
     return result;
 }

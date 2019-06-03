@@ -39,6 +39,55 @@ from templates import helper as th
 ******************************************************************************/
 #include "${x}_null.h"
 
+namespace driver
+{
+    %for obj in th.extract_objs(specs, r"function"):
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for ${th.make_func_name(n, tags, obj)}
+    %if 'condition' in obj:
+    #if ${th.subt(n, tags, obj['condition'])}
+    %endif
+    ${x}_result_t __${x}call
+    ${th.make_func_name(n, tags, obj)}(
+        %for line in th.make_param_lines(n, tags, obj):
+        ${line}
+        %endfor
+        )
+    {
+        ${x}_result_t result = ${X}_RESULT_SUCCESS;
+
+        %if re.match(r"Global.*", th.get_table_name(n, tags, obj)):
+        // global functions need to be handled manually by the driver
+        result = context.${th.make_func_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
+
+        %elif re.match(r"\w+DeviceGroupGet$", th.make_func_name(n, tags, obj)):
+        if( nullptr != pCount ) *pCount = 1;
+        if( nullptr != phDeviceGroups ) *phDeviceGroups = reinterpret_cast<${x}_device_group_handle_t>( context.get() );
+
+        %else:
+        %for item in th.get_loader_epilogue(n, tags, obj, meta):
+        %if 'range' in item:
+        for( size_t i = ${item['range'][0]}; ( nullptr != ${item['name']} ) && ( i < ${item['range'][1]} ); ++i )
+            ${item['name']}[ i ] = reinterpret_cast<${item['type']}>( context.get() );
+        %elif not item['release']:
+        %if item['optional']:
+        if( nullptr != ${item['name']} ) *${item['name']} = reinterpret_cast<${item['type']}>( context.get() );
+        %else:
+        *${item['name']} = reinterpret_cast<${item['type']}>( context.get() );
+        %endif
+        %endif
+
+        %endfor
+        %endif
+        return result;
+    }
+    %if 'condition' in obj:
+    #endif // ${th.subt(n, tags, obj['condition'])}
+    %endif
+
+    %endfor
+} // namespace driver
+
 #if defined(__cplusplus)
 extern "C" {
 #endif
@@ -65,7 +114,7 @@ ${tbl['export']['name']}(
     if( nullptr == pDdiTable )
         return ${X}_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( driver.version < version )
+    if( driver::context.version < version )
         return ${X}_RESULT_ERROR_UNSUPPORTED;
 
     ${x}_result_t result = ${X}_RESULT_SUCCESS;
@@ -74,7 +123,7 @@ ${tbl['export']['name']}(
     %if 'condition' in obj:
 #if ${th.subt(n, tags, obj['condition'])}
     %endif
-    pDdiTable->${th.append_ws(th.make_pfn_name(n, tags, obj), 41)} = ${th.make_func_name(n, tags, obj)};
+    pDdiTable->${th.append_ws(th.make_pfn_name(n, tags, obj), 41)} = driver::${th.make_func_name(n, tags, obj)};
     %if 'condition' in obj:
 #endif
     %endif
@@ -82,51 +131,6 @@ ${tbl['export']['name']}(
     %endfor
     return result;
 }
-
-%endfor
-%for obj in th.extract_objs(specs, r"function"):
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for ${th.make_func_name(n, tags, obj)}
-%if 'condition' in obj:
-#if ${th.subt(n, tags, obj['condition'])}
-%endif
-${x}_result_t __${x}call
-${th.make_func_name(n, tags, obj)}(
-    %for line in th.make_param_lines(n, tags, obj):
-    ${line}
-    %endfor
-    )
-{
-    ${x}_result_t result = ${X}_RESULT_SUCCESS;
-
-    %if re.match(r"Global.*", th.get_table_name(n, tags, obj)):
-    // global functions need to be handled manually by the driver
-    result = driver.${th.make_func_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
-
-    %elif re.match(r"\w+DeviceGroupGet$", th.make_func_name(n, tags, obj)):
-    if( nullptr != pCount ) *pCount = 1;
-    if( nullptr != phDeviceGroups ) *phDeviceGroups = reinterpret_cast<${x}_device_group_handle_t>( driver.get() );
-
-    %else:
-    %for item in th.get_loader_epilogue(n, tags, obj, meta):
-    %if 'range' in item:
-    for( size_t i = ${item['range'][0]}; ( nullptr != ${item['name']} ) && ( i < ${item['range'][1]} ); ++i )
-        ${item['name']}[ i ] = reinterpret_cast<${item['type']}>( driver.get() );
-    %elif not item['release']:
-    %if item['optional']:
-    if( nullptr != ${item['name']} ) *${item['name']} = reinterpret_cast<${item['type']}>( driver.get() );
-    %else:
-    *${item['name']} = reinterpret_cast<${item['type']}>( driver.get() );
-    %endif
-    %endif
-
-    %endfor
-    %endif
-    return result;
-}
-%if 'condition' in obj:
-#endif // ${th.subt(n, tags, obj['condition'])}
-%endif
 
 %endfor
 #if defined(__cplusplus)

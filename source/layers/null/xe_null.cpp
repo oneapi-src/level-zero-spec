@@ -26,4 +26,7 @@
 ******************************************************************************/
 #include "xe_null.h"
 
-Driver driver;
+namespace driver
+{
+    context_t context;
+}
