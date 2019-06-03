@@ -56,6 +56,11 @@ params:
     - type: "$x_device_mem_alloc_flag_t"
       name: device_flags
       desc: "[in] flags specifying additional device allocation controls"
+    - type: uint32_t
+      name: ordinal
+      desc: |
+            [in] ordinal of the device's local memory to allocate from;
+            must be less than the count returned from $xDeviceGroupGetMemoryProperties
     - type: "$x_host_mem_alloc_flag_t"
       name: host_flags
       desc: "[in] flags specifying additional host allocation controls"
@@ -95,6 +100,11 @@ params:
     - type: "$x_device_mem_alloc_flag_t"
       name: flags
       desc: "[in] flags specifying additional allocation controls"
+    - type: uint32_t
+      name: ordinal
+      desc: |
+            [in] ordinal of the device's local memory to allocate from;
+            must be less than the count returned from $xDeviceGroupGetMemoryProperties
     - type: size_t
       name: size
       desc: "[in] size in bytes to allocate"
