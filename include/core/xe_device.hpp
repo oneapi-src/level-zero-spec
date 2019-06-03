@@ -116,6 +116,7 @@ namespace xe
         ///       allocations
         enum class memory_access_capabilities_t
         {
+            MEMORY_ACCESS_NONE = 0,                         ///< Access not supported
             MEMORY_ACCESS = XE_BIT( 0 ),                    ///< Supports load/store access
             MEMORY_ATOMIC_ACCESS = XE_BIT( 1 ),             ///< Supports atomic access
             MEMORY_CONCURRENT_ACCESS = XE_BIT( 2 ),         ///< Supports concurrent access

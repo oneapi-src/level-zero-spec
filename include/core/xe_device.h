@@ -343,6 +343,7 @@ typedef enum _xe_device_memory_properties_version_t
 ///       allocations
 typedef enum _xe_memory_access_capabilities_t
 {
+    XE_MEMORY_ACCESS_NONE = 0,                      ///< Access not supported
     XE_MEMORY_ACCESS = XE_BIT( 0 ),                 ///< Supports load/store access
     XE_MEMORY_ATOMIC_ACCESS = XE_BIT( 1 ),          ///< Supports atomic access
     XE_MEMORY_CONCURRENT_ACCESS = XE_BIT( 2 ),      ///< Supports concurrent access

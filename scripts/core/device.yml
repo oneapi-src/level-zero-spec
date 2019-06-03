@@ -332,6 +332,9 @@ name: $x_memory_access_capabilities_t
 details:
     - "Supported access capabilities for different types of memory allocations"
 etors:
+    - name: $X_MEMORY_ACCESS_NONE
+      value: "0"
+      desc: "Access not supported"
     - name: $X_MEMORY_ACCESS
       value: "$X_BIT( 0 )"
       desc: "Supports load/store access"

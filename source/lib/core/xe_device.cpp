@@ -1018,6 +1018,9 @@ namespace std
 
         string str;
         
+        if( static_cast<uint32_t>(xe::DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS_NONE) & bits )
+            str += "xe::DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS_NONE | ";
+        
         if( static_cast<uint32_t>(xe::DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS) & bits )
             str += "xe::DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS | ";
         
