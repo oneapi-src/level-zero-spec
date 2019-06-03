@@ -34,10 +34,15 @@
 #define _XET_GTPIN_HPP
 #if defined(__cplusplus)
 #pragma once
-#include "xet_common.hpp"
+#if !defined(_XET_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 
 namespace xet
 {
 } // namespace xet
+
+#ifdef _DEBUG
+#endif // _DEBUG
 #endif // defined(__cplusplus)
 #endif // _XET_GTPIN_HPP

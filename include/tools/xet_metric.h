@@ -48,7 +48,7 @@ extern "C" {
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -68,7 +68,7 @@ xetMetricGroupGetCount(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///         + nullptr == phMetricGroup
 ///         + devices do not contain a given metric group
@@ -81,21 +81,25 @@ xetMetricGroupGet(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_MAX_METRIC_GROUP_NAME
 /// @brief Maximum metric group name string size
 #define XET_MAX_METRIC_GROUP_NAME  256
+#endif // XET_MAX_METRIC_GROUP_NAME
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_MAX_METRIC_GROUP_DESCRIPTION
 /// @brief Maximum metric group description string size
 #define XET_MAX_METRIC_GROUP_DESCRIPTION  256
+#endif // XET_MAX_METRIC_GROUP_DESCRIPTION
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Metric group sampling type
-typedef enum _xet_metric_group_sampling_type
+typedef enum _xet_metric_group_sampling_type_t
 {
     XET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED = XE_BIT(0), ///< Event based sampling
     XET_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED = XE_BIT(1),  ///< Time based sampling
 
-} xet_metric_group_sampling_type;
+} xet_metric_group_sampling_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xet_metric_group_properties_t
@@ -112,7 +116,7 @@ typedef struct _xet_metric_group_properties_t
     xet_metric_group_properties_version_t version;  ///< [in] ::XET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT
     char name[XET_MAX_METRIC_GROUP_NAME];           ///< [out] metric group name
     char description[XET_MAX_METRIC_GROUP_DESCRIPTION]; ///< [out] metric group description
-    xet_metric_group_sampling_type samplingType;    ///< [out] metric group sampling type
+    xet_metric_group_sampling_type_t samplingType;  ///< [out] metric group sampling type
     uint32_t domain;                                ///< [out] metric group domain number. Cannot use simultaneous metric
                                                     ///< groups from different domains.
     uint32_t metricCount;                           ///< [out] metric count belonging to this group
@@ -131,7 +135,7 @@ typedef struct _xet_metric_group_properties_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hMetricGroup
 ///         + nullptr == pProperties
 ///         + invalid metric group handle
@@ -143,20 +147,28 @@ xetMetricGroupGetProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_MAX_METRIC_NAME
 /// @brief Maximum metric name string size
 #define XET_MAX_METRIC_NAME  256
+#endif // XET_MAX_METRIC_NAME
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_MAX_METRIC_DESCRIPTION
 /// @brief Maximum metric description string size
 #define XET_MAX_METRIC_DESCRIPTION  256
+#endif // XET_MAX_METRIC_DESCRIPTION
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_MAX_METRIC_COMPONENT
 /// @brief Maximum metric component string size
 #define XET_MAX_METRIC_COMPONENT  256
+#endif // XET_MAX_METRIC_COMPONENT
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_MAX_METRIC_RESULT_UNITS
 /// @brief Maximum metric result units string size
 #define XET_MAX_METRIC_RESULT_UNITS  256
+#endif // XET_MAX_METRIC_RESULT_UNITS
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Metric types
@@ -246,7 +258,7 @@ typedef struct _xet_metric_properties_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hMetricGroup
 ///         + nullptr == phMetric
 ///         + invalid metric group handle
@@ -268,7 +280,7 @@ xetMetricGet(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hMetric
 ///         + nullptr == pProperties
 ///         + invalid handle
@@ -290,7 +302,7 @@ xetMetricGetProperties(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hMetricGroup
 ///         + nullptr == pReportCount
 ///         + nullptr == pRawData
@@ -320,7 +332,7 @@ xetMetricGroupCalculateData(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///         + nullptr == phMetricGroups
 ///         + invalid metric groups
@@ -329,7 +341,8 @@ __xedllport xe_result_t __xecall
 xetDeviceActivateMetricGroups(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
-    xet_metric_group_handle_t* phMetricGroups       ///< [in] handles of the metric groups to activate. NULL to deactivate.
+    xet_metric_group_handle_t* phMetricGroups       ///< [in][range(0, count)] handles of the metric groups to activate. NULL
+                                                    ///< to deactivate.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -363,7 +376,7 @@ typedef struct _xet_metric_tracer_desc_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///         + nullptr == pDesc
 ///         + nullptr == hNotificationEvent
@@ -391,7 +404,7 @@ xetMetricTracerOpen(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///         + nullptr == hMetricTracer
 ///         + command list do not support metric tracer
@@ -414,7 +427,7 @@ xetCommandListAppendMetricTracerMarker(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hMetricTracer
 ///         + invalid metric tracer handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -433,7 +446,7 @@ xetMetricTracerClose(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hMetricTracer
 ///         + nullptr == pReportCount
 ///         + nullptr == pRawData
@@ -485,7 +498,7 @@ typedef struct _xet_metric_query_pool_desc_t
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///         + nullptr == pDesc
 ///         + nullptr == phMetricQueryPool
@@ -510,7 +523,7 @@ xetMetricQueryPoolCreate(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hMetricQueryPool
 ///         + invalid metric query pool handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -529,7 +542,7 @@ xetMetricQueryPoolDestroy(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hMetricQueryPool
 ///         + nullptr == phMetricQuery
 ///         + invalid device handle
@@ -552,7 +565,7 @@ xetMetricQueryPoolGetMetricQuery(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///         + nullptr == hMetricQuery
 ///         + invalid handle
@@ -574,7 +587,7 @@ xetCommandListAppendMetricQueryBegin(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///         + nullptr == hMetricQuery
 ///         + nullptr == hCompletionEvent
@@ -598,7 +611,7 @@ xetCommandListAppendMetricQueryEnd(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///         + invalid command list handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -617,7 +630,7 @@ xetCommandListAppendMetricMemoryBarrier(
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_PARAMETER
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hMetricQuery
 ///         + nullptr == pReportCount
 ///         + nullptr == pRawData

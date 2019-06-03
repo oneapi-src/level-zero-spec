@@ -34,7 +34,9 @@
 #define _XET_CMDLIST_HPP
 #if defined(__cplusplus)
 #pragma once
-#include "xet_common.hpp"
+#if !defined(_XET_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 
 namespace xet
 {
@@ -42,9 +44,13 @@ namespace xet
     /// @brief C++ wrapper for command list
     class CommandList : public xe::CommandList
     {
-    protected:
+    public:
 
-        CommandList( void ) = delete;
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
         using xe::CommandList::CommandList;
 
         ~CommandList( void ) = default;
@@ -55,38 +61,54 @@ namespace xet
         CommandList( CommandList&& other ) = delete;
         void operator=( CommandList&& other ) = delete;
 
-    public:
+        ///////////////////////////////////////////////////////////////////////////////
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetCommandListAppendMetricTracerMarker
+        /// @brief Append metric tracer marker to a given command list.
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
         /// @throws result_t
-        inline void
+        void __xecall
         AppendMetricTracerMarker(
-            metric_tracer_handle_t hMetricTracer,           ///< [in] handle of the metric tracer
+            MetricTracer* pMetricTracer,                    ///< [in] pointer to the metric tracer
             uint32_t value                                  ///< [in] tracer marker value
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetCommandListAppendMetricQueryBegin
+        /// @brief Appends metric query begin commands to command list.
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
         /// @throws result_t
-        inline void
+        void __xecall
         AppendMetricQueryBegin(
-            metric_query_handle_t hMetricQuery              ///< [in] handle of the metric query
+            MetricQuery* pMetricQuery                       ///< [in] pointer to the metric query
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetCommandListAppendMetricQueryEnd
+        /// @brief Appends metric query end commands to command list.
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
         /// @throws result_t
-        inline void
+        void __xecall
         AppendMetricQueryEnd(
-            metric_query_handle_t hMetricQuery,             ///< [in] handle of the metric query
-            xe::event_handle_t hCompletionEvent             ///< [in] handle of the completion event to signal
+            MetricQuery* pMetricQuery,                      ///< [in] pointer to the metric query
+            xe::Event* pCompletionEvent                     ///< [in] pointer to the completion event to signal
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief C++ wrapper for ::xetCommandListAppendMetricMemoryBarrier
+        /// @brief Appends metric query commands to flush all caches.
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same command list handle.
         /// @throws result_t
-        inline void
+        void __xecall
         AppendMetricMemoryBarrier(
             void
             );
@@ -94,5 +116,9 @@ namespace xet
     };
 
 } // namespace xet
+
+#ifdef _DEBUG
+
+#endif // _DEBUG
 #endif // defined(__cplusplus)
 #endif // _XET_CMDLIST_HPP

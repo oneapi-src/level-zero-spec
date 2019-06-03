@@ -20,15 +20,15 @@
 * or otherwise. Any license under such intellectual property rights must be
 * express and approved by Intel in writing.
 *
-* @file xet_all.h
+* @file xet_api.h
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/api_all.h.mako
+* DO NOT EDIT: generated from /scripts/tools
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XET_ALL_H
-#define _XET_ALL_H
+#ifndef _XET_API_H
+#define _XET_API_H
 #if defined(__cplusplus)
 #pragma once
 #endif
@@ -39,4 +39,4 @@
 #include "xet_gtpin.h"
 #include "xet_metric.h"
 
-#endif // _XET_ALL_H
+#endif // _XET_API_H
