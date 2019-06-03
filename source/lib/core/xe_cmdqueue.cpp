@@ -357,12 +357,15 @@ namespace xe
 /// @brief Converts CommandQueue::desc_version_t to std::string
 std::string to_string( xe::CommandQueue::desc_version_t val )
 {
+    std::string str;
     switch( val )
     {
     case xe::CommandQueue::desc_version_t::CURRENT:
-        return std::string("xe::CommandQueue::desc_version_t::CURRENT");
+        str = "xe::CommandQueue::desc_version_t::CURRENT";
+    default:
+        str = "xe::CommandQueue::desc_version_t::?";
     };
-    return std::string("xe::CommandQueue::desc_version_t::?");
+    return str;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -371,15 +374,20 @@ std::string to_string( xe::CommandQueue::flag_t val )
 {
     const auto bits = static_cast<uint32_t>( val );
     if( 0 == bits ) return std::string("{}");
+
     std::string str;
     if( static_cast<uint32_t>(xe::CommandQueue::flag_t::NONE) & bits )
         str += "xe::CommandQueue::flag_t::NONE | ";
+
     if( static_cast<uint32_t>(xe::CommandQueue::flag_t::COPY_ONLY) & bits )
         str += "xe::CommandQueue::flag_t::COPY_ONLY | ";
+
     if( static_cast<uint32_t>(xe::CommandQueue::flag_t::LOGICAL_ONLY) & bits )
         str += "xe::CommandQueue::flag_t::LOGICAL_ONLY | ";
+
     if( static_cast<uint32_t>(xe::CommandQueue::flag_t::SINGLE_SLICE_ONLY) & bits )
         str += "xe::CommandQueue::flag_t::SINGLE_SLICE_ONLY | ";
+
     return "{ " + str.substr(0, str.size() - 3) + " }";
 }
 
@@ -387,32 +395,38 @@ std::string to_string( xe::CommandQueue::flag_t val )
 /// @brief Converts CommandQueue::mode_t to std::string
 std::string to_string( xe::CommandQueue::mode_t val )
 {
+    std::string str;
     switch( val )
     {
     case xe::CommandQueue::mode_t::DEFAULT:
-        return std::string("xe::CommandQueue::mode_t::DEFAULT");
+        str = "xe::CommandQueue::mode_t::DEFAULT";
     case xe::CommandQueue::mode_t::SYNCHRONOUS:
-        return std::string("xe::CommandQueue::mode_t::SYNCHRONOUS");
+        str = "xe::CommandQueue::mode_t::SYNCHRONOUS";
     case xe::CommandQueue::mode_t::ASYNCHRONOUS:
-        return std::string("xe::CommandQueue::mode_t::ASYNCHRONOUS");
+        str = "xe::CommandQueue::mode_t::ASYNCHRONOUS";
+    default:
+        str = "xe::CommandQueue::mode_t::?";
     };
-    return std::string("xe::CommandQueue::mode_t::?");
+    return str;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Converts CommandQueue::priority_t to std::string
 std::string to_string( xe::CommandQueue::priority_t val )
 {
+    std::string str;
     switch( val )
     {
     case xe::CommandQueue::priority_t::NORMAL:
-        return std::string("xe::CommandQueue::priority_t::NORMAL");
+        str = "xe::CommandQueue::priority_t::NORMAL";
     case xe::CommandQueue::priority_t::LOW:
-        return std::string("xe::CommandQueue::priority_t::LOW");
+        str = "xe::CommandQueue::priority_t::LOW";
     case xe::CommandQueue::priority_t::HIGH:
-        return std::string("xe::CommandQueue::priority_t::HIGH");
+        str = "xe::CommandQueue::priority_t::HIGH";
+    default:
+        str = "xe::CommandQueue::priority_t::?";
     };
-    return std::string("xe::CommandQueue::priority_t::?");
+    return str;
 }
 
 

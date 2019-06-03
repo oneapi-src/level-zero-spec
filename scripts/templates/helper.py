@@ -474,40 +474,13 @@ def make_etor_lines(namespace, tags, obj, cpp=False, meta=None):
 
 """
 Public:
-    returns a list of c++ strings for converting each enumerator in an enumeration to a std::string
+    determines whether the enumeration represents a bitfield
 """
-def make_etor_debug_lines(namespace, tags, cname, obj):
-    prologue = "%s::"%namespace
-    if cname:
-        prologue += "%s::"%make_class_name(namespace, tags, cname)
-    prologue += make_type_name(namespace, tags, obj, cpp=True)
-
-    etors = []
-    bitfield = False
+def is_enum_bitfield(obj):
     for item in obj['etors']:
-        name = make_etor_name(namespace, tags, obj['name'], item['name'], cpp=True)
-        etors.append("%s::%s"%(prologue, name))
-        if 'value' in item:
-            bitfield |= value_traits.is_bit(item['value'])
-
-    lines = []
-    if bitfield:
-        lines.append("const auto bits = static_cast<uint32_t>( val );")
-        lines.append("if( 0 == bits ) return std::string(\"{}\");")
-        lines.append("std::string str;")
-        for item in etors:
-            lines.append("if( static_cast<uint32_t>(%s) & bits )"%item)
-            lines.append("    str += \"%s | \";"%item)
-        lines.append("return \"{ \" + str.substr(0, str.size() - 3) + \" }\";")
-    else:
-        lines.append("switch( val )")
-        lines.append("{")
-        for item in etors:
-            lines.append("case %s:"%item)
-            lines.append("    return std::string(\"%s\");"%item)
-        lines.append("};")
-        lines.append("return std::string(\"%s::?\");"%prologue)
-    return lines
+        if 'value' in item and value_traits.is_bit(item['value']):
+            return True
+    return False
 
 """
 Private:

@@ -402,24 +402,30 @@ namespace xe
 /// @brief Converts Fence::desc_version_t to std::string
 std::string to_string( xe::Fence::desc_version_t val )
 {
+    std::string str;
     switch( val )
     {
     case xe::Fence::desc_version_t::CURRENT:
-        return std::string("xe::Fence::desc_version_t::CURRENT");
+        str = "xe::Fence::desc_version_t::CURRENT";
+    default:
+        str = "xe::Fence::desc_version_t::?";
     };
-    return std::string("xe::Fence::desc_version_t::?");
+    return str;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Converts Fence::flag_t to std::string
 std::string to_string( xe::Fence::flag_t val )
 {
+    std::string str;
     switch( val )
     {
     case xe::Fence::flag_t::NONE:
-        return std::string("xe::Fence::flag_t::NONE");
+        str = "xe::Fence::flag_t::NONE";
+    default:
+        str = "xe::Fence::flag_t::?";
     };
-    return std::string("xe::Fence::flag_t::?");
+    return str;
 }
 
 

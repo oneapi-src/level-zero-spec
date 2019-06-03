@@ -268,11 +268,38 @@ namespace ${n}
 %if 'condition' in obj:
 #if ${th.subt(n, tags, obj['condition'])}
 %endif
-std::string to_string( ${n}::${th.make_type_name(n, tags, obj, cpp=True)} val )
+<%
+    tname = "%s::%s"%(n, th.make_type_name(n, tags, obj, cpp=True))
+%>std::string to_string( ${tname} val )
 {
-    %for line in th.make_etor_debug_lines(n, tags, None, obj):
-    ${line}
+    %if th.is_enum_bitfield(obj):
+    const auto bits = static_cast<uint32_t>( val );
+    if( 0 == bits ) return std::string("{}");
+
+    std::string str;
+    %for item in obj['etors']:
+    <%
+        ename = th.make_etor_name(n, tags, obj['name'], item['name'], cpp=True)
+    %>if( static_cast<uint32_t>(${tname}::${ename}) & bits )
+        str += "${tname}::${ename} | ";
+
     %endfor
+    return "{ " + str.substr(0, str.size() - 3) + " }";
+    %else:
+    std::string str;
+    switch( val )
+    {
+    %for item in obj['etors']:
+    <%
+        ename = th.make_etor_name(n, tags, obj['name'], item['name'], cpp=True)
+    %>case ${tname}::${ename}:
+        str = "${tname}::${ename}";
+    %endfor
+    default:
+        str = "${tname}::?";
+    };
+    return str;
+    %endif
 }
 ## CONDITION-END ##############################################################
 %if 'condition' in obj:
@@ -286,11 +313,38 @@ std::string to_string( ${n}::${th.make_type_name(n, tags, obj, cpp=True)} val )
 %if 'condition' in e:
 #if ${th.subt(n, tags, e['condition'])}
 %endif
-std::string to_string( ${n}::${th.make_class_name(n, tags, obj)}::${th.make_type_name(n, tags, e, cpp=True)} val )
+<%
+    tname = "%s::%s::%s"%(n, th.make_class_name(n, tags, obj), th.make_type_name(n, tags, e, cpp=True))
+%>std::string to_string( ${tname} val )
 {
-    %for line in th.make_etor_debug_lines(n, tags, obj, e):
-    ${line}
+    %if th.is_enum_bitfield(e):
+    const auto bits = static_cast<uint32_t>( val );
+    if( 0 == bits ) return std::string("{}");
+
+    std::string str;
+    %for item in e['etors']:
+    <%
+        ename = th.make_etor_name(n, tags, e['name'], item['name'], cpp=True)
+    %>if( static_cast<uint32_t>(${tname}::${ename}) & bits )
+        str += "${tname}::${ename} | ";
+
     %endfor
+    return "{ " + str.substr(0, str.size() - 3) + " }";
+    %else:
+    std::string str;
+    switch( val )
+    {
+    %for item in e['etors']:
+    <%
+        ename = th.make_etor_name(n, tags, e['name'], item['name'], cpp=True)
+    %>case ${tname}::${ename}:
+        str = "${tname}::${ename}";
+    %endfor
+    default:
+        str = "${tname}::?";
+    };
+    return str;
+    %endif
 }
 %if 'condition' in e:
 #endif // ${th.subt(n, tags, e['condition'])}

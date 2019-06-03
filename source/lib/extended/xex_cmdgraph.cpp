@@ -251,24 +251,30 @@ namespace xex
 /// @brief Converts CommandGraph::desc_version_t to std::string
 std::string to_string( xex::CommandGraph::desc_version_t val )
 {
+    std::string str;
     switch( val )
     {
     case xex::CommandGraph::desc_version_t::CURRENT:
-        return std::string("xex::CommandGraph::desc_version_t::CURRENT");
+        str = "xex::CommandGraph::desc_version_t::CURRENT";
+    default:
+        str = "xex::CommandGraph::desc_version_t::?";
     };
-    return std::string("xex::CommandGraph::desc_version_t::?");
+    return str;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Converts CommandGraph::flag_t to std::string
 std::string to_string( xex::CommandGraph::flag_t val )
 {
+    std::string str;
     switch( val )
     {
     case xex::CommandGraph::flag_t::NONE:
-        return std::string("xex::CommandGraph::flag_t::NONE");
+        str = "xex::CommandGraph::flag_t::NONE";
+    default:
+        str = "xex::CommandGraph::flag_t::?";
     };
-    return std::string("xex::CommandGraph::flag_t::?");
+    return str;
 }
 
 

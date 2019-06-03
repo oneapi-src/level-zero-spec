@@ -1506,26 +1506,32 @@ namespace xe
 /// @brief Converts Module::desc_version_t to std::string
 std::string to_string( xe::Module::desc_version_t val )
 {
+    std::string str;
     switch( val )
     {
     case xe::Module::desc_version_t::CURRENT:
-        return std::string("xe::Module::desc_version_t::CURRENT");
+        str = "xe::Module::desc_version_t::CURRENT";
+    default:
+        str = "xe::Module::desc_version_t::?";
     };
-    return std::string("xe::Module::desc_version_t::?");
+    return str;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Converts Module::format_t to std::string
 std::string to_string( xe::Module::format_t val )
 {
+    std::string str;
     switch( val )
     {
     case xe::Module::format_t::IL_SPIRV:
-        return std::string("xe::Module::format_t::IL_SPIRV");
+        str = "xe::Module::format_t::IL_SPIRV";
     case xe::Module::format_t::NATIVE:
-        return std::string("xe::Module::format_t::NATIVE");
+        str = "xe::Module::format_t::NATIVE";
+    default:
+        str = "xe::Module::format_t::?";
     };
-    return std::string("xe::Module::format_t::?");
+    return str;
 }
 
 
@@ -1534,64 +1540,76 @@ std::string to_string( xe::Module::format_t val )
 /// @brief Converts Function::desc_version_t to std::string
 std::string to_string( xe::Function::desc_version_t val )
 {
+    std::string str;
     switch( val )
     {
     case xe::Function::desc_version_t::CURRENT:
-        return std::string("xe::Function::desc_version_t::CURRENT");
+        str = "xe::Function::desc_version_t::CURRENT";
+    default:
+        str = "xe::Function::desc_version_t::?";
     };
-    return std::string("xe::Function::desc_version_t::?");
+    return str;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Converts Function::flag_t to std::string
 std::string to_string( xe::Function::flag_t val )
 {
+    std::string str;
     switch( val )
     {
     case xe::Function::flag_t::NONE:
-        return std::string("xe::Function::flag_t::NONE");
+        str = "xe::Function::flag_t::NONE";
     case xe::Function::flag_t::FORCE_RESIDENCY:
-        return std::string("xe::Function::flag_t::FORCE_RESIDENCY");
+        str = "xe::Function::flag_t::FORCE_RESIDENCY";
+    default:
+        str = "xe::Function::flag_t::?";
     };
-    return std::string("xe::Function::flag_t::?");
+    return str;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Converts Function::set_attribute_t to std::string
 std::string to_string( xe::Function::set_attribute_t val )
 {
+    std::string str;
     switch( val )
     {
     case xe::Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS:
-        return std::string("xe::Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS");
+        str = "xe::Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS";
     case xe::Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS:
-        return std::string("xe::Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS");
+        str = "xe::Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS";
     case xe::Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_SHARED_ACCESS:
-        return std::string("xe::Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_SHARED_ACCESS");
+        str = "xe::Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_SHARED_ACCESS";
+    default:
+        str = "xe::Function::set_attribute_t::?";
     };
-    return std::string("xe::Function::set_attribute_t::?");
+    return str;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Converts Function::get_attribute_t to std::string
 std::string to_string( xe::Function::get_attribute_t val )
 {
+    std::string str;
     switch( val )
     {
     case xe::Function::get_attribute_t::FUNCTION_GET_ATTR_MAX_REGS_USED:
-        return std::string("xe::Function::get_attribute_t::FUNCTION_GET_ATTR_MAX_REGS_USED");
+        str = "xe::Function::get_attribute_t::FUNCTION_GET_ATTR_MAX_REGS_USED";
     case xe::Function::get_attribute_t::FUNCTION_GET_ATTR_NUM_THREAD_DIMENSIONS:
-        return std::string("xe::Function::get_attribute_t::FUNCTION_GET_ATTR_NUM_THREAD_DIMENSIONS");
+        str = "xe::Function::get_attribute_t::FUNCTION_GET_ATTR_NUM_THREAD_DIMENSIONS";
     case xe::Function::get_attribute_t::FUNCTION_GET_ATTR_MAX_SHARED_MEM_SIZE:
-        return std::string("xe::Function::get_attribute_t::FUNCTION_GET_ATTR_MAX_SHARED_MEM_SIZE");
+        str = "xe::Function::get_attribute_t::FUNCTION_GET_ATTR_MAX_SHARED_MEM_SIZE";
     case xe::Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_SPILL_FILL:
-        return std::string("xe::Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_SPILL_FILL");
+        str = "xe::Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_SPILL_FILL";
     case xe::Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_BARRIERS:
-        return std::string("xe::Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_BARRIERS");
+        str = "xe::Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_BARRIERS";
     case xe::Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_DPAS:
-        return std::string("xe::Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_DPAS");
+        str = "xe::Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_DPAS";
+    default:
+        str = "xe::Function::get_attribute_t::?";
     };
-    return std::string("xe::Function::get_attribute_t::?");
+    return str;
 }
 
 

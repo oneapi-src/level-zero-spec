@@ -1042,12 +1042,15 @@ namespace xe
 /// @brief Converts EventPool::desc_version_t to std::string
 std::string to_string( xe::EventPool::desc_version_t val )
 {
+    std::string str;
     switch( val )
     {
     case xe::EventPool::desc_version_t::CURRENT:
-        return std::string("xe::EventPool::desc_version_t::CURRENT");
+        str = "xe::EventPool::desc_version_t::CURRENT";
+    default:
+        str = "xe::EventPool::desc_version_t::?";
     };
-    return std::string("xe::EventPool::desc_version_t::?");
+    return str;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1056,13 +1059,17 @@ std::string to_string( xe::EventPool::flag_t val )
 {
     const auto bits = static_cast<uint32_t>( val );
     if( 0 == bits ) return std::string("{}");
+
     std::string str;
     if( static_cast<uint32_t>(xe::EventPool::flag_t::DEFAULT) & bits )
         str += "xe::EventPool::flag_t::DEFAULT | ";
+
     if( static_cast<uint32_t>(xe::EventPool::flag_t::HOST_VISIBLE) & bits )
         str += "xe::EventPool::flag_t::HOST_VISIBLE | ";
+
     if( static_cast<uint32_t>(xe::EventPool::flag_t::IPC) & bits )
         str += "xe::EventPool::flag_t::IPC | ";
+
     return "{ " + str.substr(0, str.size() - 3) + " }";
 }
 
@@ -1071,12 +1078,15 @@ std::string to_string( xe::EventPool::flag_t val )
 /// @brief Converts Event::desc_version_t to std::string
 std::string to_string( xe::Event::desc_version_t val )
 {
+    std::string str;
     switch( val )
     {
     case xe::Event::desc_version_t::CURRENT:
-        return std::string("xe::Event::desc_version_t::CURRENT");
+        str = "xe::Event::desc_version_t::CURRENT";
+    default:
+        str = "xe::Event::desc_version_t::?";
     };
-    return std::string("xe::Event::desc_version_t::?");
+    return str;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1085,15 +1095,20 @@ std::string to_string( xe::Event::scope_flag_t val )
 {
     const auto bits = static_cast<uint32_t>( val );
     if( 0 == bits ) return std::string("{}");
+
     std::string str;
     if( static_cast<uint32_t>(xe::Event::scope_flag_t::NONE) & bits )
         str += "xe::Event::scope_flag_t::NONE | ";
+
     if( static_cast<uint32_t>(xe::Event::scope_flag_t::SUBDEVICE) & bits )
         str += "xe::Event::scope_flag_t::SUBDEVICE | ";
+
     if( static_cast<uint32_t>(xe::Event::scope_flag_t::DEVICE) & bits )
         str += "xe::Event::scope_flag_t::DEVICE | ";
+
     if( static_cast<uint32_t>(xe::Event::scope_flag_t::HOST) & bits )
         str += "xe::Event::scope_flag_t::HOST | ";
+
     return "{ " + str.substr(0, str.size() - 3) + " }";
 }
 

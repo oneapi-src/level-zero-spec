@@ -215,44 +215,53 @@ namespace xe
 /// @brief Converts Sampler::desc_version_t to std::string
 std::string to_string( xe::Sampler::desc_version_t val )
 {
+    std::string str;
     switch( val )
     {
     case xe::Sampler::desc_version_t::CURRENT:
-        return std::string("xe::Sampler::desc_version_t::CURRENT");
+        str = "xe::Sampler::desc_version_t::CURRENT";
+    default:
+        str = "xe::Sampler::desc_version_t::?";
     };
-    return std::string("xe::Sampler::desc_version_t::?");
+    return str;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Converts Sampler::address_mode_t to std::string
 std::string to_string( xe::Sampler::address_mode_t val )
 {
+    std::string str;
     switch( val )
     {
     case xe::Sampler::address_mode_t::NONE:
-        return std::string("xe::Sampler::address_mode_t::NONE");
+        str = "xe::Sampler::address_mode_t::NONE";
     case xe::Sampler::address_mode_t::REPEAT:
-        return std::string("xe::Sampler::address_mode_t::REPEAT");
+        str = "xe::Sampler::address_mode_t::REPEAT";
     case xe::Sampler::address_mode_t::CLAMP:
-        return std::string("xe::Sampler::address_mode_t::CLAMP");
+        str = "xe::Sampler::address_mode_t::CLAMP";
     case xe::Sampler::address_mode_t::MIRROR:
-        return std::string("xe::Sampler::address_mode_t::MIRROR");
+        str = "xe::Sampler::address_mode_t::MIRROR";
+    default:
+        str = "xe::Sampler::address_mode_t::?";
     };
-    return std::string("xe::Sampler::address_mode_t::?");
+    return str;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Converts Sampler::filter_mode_t to std::string
 std::string to_string( xe::Sampler::filter_mode_t val )
 {
+    std::string str;
     switch( val )
     {
     case xe::Sampler::filter_mode_t::NEAREST:
-        return std::string("xe::Sampler::filter_mode_t::NEAREST");
+        str = "xe::Sampler::filter_mode_t::NEAREST";
     case xe::Sampler::filter_mode_t::LINEAR:
-        return std::string("xe::Sampler::filter_mode_t::LINEAR");
+        str = "xe::Sampler::filter_mode_t::LINEAR";
+    default:
+        str = "xe::Sampler::filter_mode_t::?";
     };
-    return std::string("xe::Sampler::filter_mode_t::?");
+    return str;
 }
 
 

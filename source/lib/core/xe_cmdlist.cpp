@@ -661,12 +661,15 @@ namespace xe
 /// @brief Converts CommandList::desc_version_t to std::string
 std::string to_string( xe::CommandList::desc_version_t val )
 {
+    std::string str;
     switch( val )
     {
     case xe::CommandList::desc_version_t::CURRENT:
-        return std::string("xe::CommandList::desc_version_t::CURRENT");
+        str = "xe::CommandList::desc_version_t::CURRENT";
+    default:
+        str = "xe::CommandList::desc_version_t::?";
     };
-    return std::string("xe::CommandList::desc_version_t::?");
+    return str;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -675,13 +678,17 @@ std::string to_string( xe::CommandList::flag_t val )
 {
     const auto bits = static_cast<uint32_t>( val );
     if( 0 == bits ) return std::string("{}");
+
     std::string str;
     if( static_cast<uint32_t>(xe::CommandList::flag_t::NONE) & bits )
         str += "xe::CommandList::flag_t::NONE | ";
+
     if( static_cast<uint32_t>(xe::CommandList::flag_t::COPY_ONLY) & bits )
         str += "xe::CommandList::flag_t::COPY_ONLY | ";
+
     if( static_cast<uint32_t>(xe::CommandList::flag_t::RELAXED_ORDERING) & bits )
         str += "xe::CommandList::flag_t::RELAXED_ORDERING | ";
+
     return "{ " + str.substr(0, str.size() - 3) + " }";
 }
 
@@ -689,42 +696,48 @@ std::string to_string( xe::CommandList::flag_t val )
 /// @brief Converts CommandList::parameter_t to std::string
 std::string to_string( xe::CommandList::parameter_t val )
 {
+    std::string str;
     switch( val )
     {
     case xe::CommandList::parameter_t::TBD:
-        return std::string("xe::CommandList::parameter_t::TBD");
+        str = "xe::CommandList::parameter_t::TBD";
+    default:
+        str = "xe::CommandList::parameter_t::?";
     };
-    return std::string("xe::CommandList::parameter_t::?");
+    return str;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Converts CommandList::memory_advice_t to std::string
 std::string to_string( xe::CommandList::memory_advice_t val )
 {
+    std::string str;
     switch( val )
     {
     case xe::CommandList::memory_advice_t::SET_READ_MOSTLY:
-        return std::string("xe::CommandList::memory_advice_t::SET_READ_MOSTLY");
+        str = "xe::CommandList::memory_advice_t::SET_READ_MOSTLY";
     case xe::CommandList::memory_advice_t::CLEAR_READ_MOSTLY:
-        return std::string("xe::CommandList::memory_advice_t::CLEAR_READ_MOSTLY");
+        str = "xe::CommandList::memory_advice_t::CLEAR_READ_MOSTLY";
     case xe::CommandList::memory_advice_t::SET_PREFERRED_LOCATION:
-        return std::string("xe::CommandList::memory_advice_t::SET_PREFERRED_LOCATION");
+        str = "xe::CommandList::memory_advice_t::SET_PREFERRED_LOCATION";
     case xe::CommandList::memory_advice_t::CLEAR_PREFERRED_LOCATION:
-        return std::string("xe::CommandList::memory_advice_t::CLEAR_PREFERRED_LOCATION");
+        str = "xe::CommandList::memory_advice_t::CLEAR_PREFERRED_LOCATION";
     case xe::CommandList::memory_advice_t::SET_ACCESSED_BY:
-        return std::string("xe::CommandList::memory_advice_t::SET_ACCESSED_BY");
+        str = "xe::CommandList::memory_advice_t::SET_ACCESSED_BY";
     case xe::CommandList::memory_advice_t::CLEAR_ACCESSED_BY:
-        return std::string("xe::CommandList::memory_advice_t::CLEAR_ACCESSED_BY");
+        str = "xe::CommandList::memory_advice_t::CLEAR_ACCESSED_BY";
     case xe::CommandList::memory_advice_t::SET_NON_ATOMIC_MOSTLY:
-        return std::string("xe::CommandList::memory_advice_t::SET_NON_ATOMIC_MOSTLY");
+        str = "xe::CommandList::memory_advice_t::SET_NON_ATOMIC_MOSTLY";
     case xe::CommandList::memory_advice_t::CLEAR_NON_ATOMIC_MOSTLY:
-        return std::string("xe::CommandList::memory_advice_t::CLEAR_NON_ATOMIC_MOSTLY");
+        str = "xe::CommandList::memory_advice_t::CLEAR_NON_ATOMIC_MOSTLY";
     case xe::CommandList::memory_advice_t::BIAS_CACHED:
-        return std::string("xe::CommandList::memory_advice_t::BIAS_CACHED");
+        str = "xe::CommandList::memory_advice_t::BIAS_CACHED";
     case xe::CommandList::memory_advice_t::BIAS_UNCACHED:
-        return std::string("xe::CommandList::memory_advice_t::BIAS_UNCACHED");
+        str = "xe::CommandList::memory_advice_t::BIAS_UNCACHED";
+    default:
+        str = "xe::CommandList::memory_advice_t::?";
     };
-    return std::string("xe::CommandList::memory_advice_t::?");
+    return str;
 }
 
 

@@ -190,11 +190,14 @@ std::string to_string( xe::init_flag_t val )
 {
     const auto bits = static_cast<uint32_t>( val );
     if( 0 == bits ) return std::string("{}");
+
     std::string str;
     if( static_cast<uint32_t>(xe::init_flag_t::NONE) & bits )
         str += "xe::init_flag_t::NONE | ";
+
     if( static_cast<uint32_t>(xe::init_flag_t::GPU_ONLY) & bits )
         str += "xe::init_flag_t::GPU_ONLY | ";
+
     return "{ " + str.substr(0, str.size() - 3) + " }";
 }
 

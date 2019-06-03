@@ -45,30 +45,33 @@ namespace xe
 /// @brief Converts result_t to std::string
 std::string to_string( xe::result_t val )
 {
+    std::string str;
     switch( val )
     {
     case xe::result_t::SUCCESS:
-        return std::string("xe::result_t::SUCCESS");
+        str = "xe::result_t::SUCCESS";
     case xe::result_t::NOT_READY:
-        return std::string("xe::result_t::NOT_READY");
+        str = "xe::result_t::NOT_READY";
     case xe::result_t::ERROR_UNINITIALIZED:
-        return std::string("xe::result_t::ERROR_UNINITIALIZED");
+        str = "xe::result_t::ERROR_UNINITIALIZED";
     case xe::result_t::ERROR_DEVICE_LOST:
-        return std::string("xe::result_t::ERROR_DEVICE_LOST");
+        str = "xe::result_t::ERROR_DEVICE_LOST";
     case xe::result_t::ERROR_UNSUPPORTED:
-        return std::string("xe::result_t::ERROR_UNSUPPORTED");
+        str = "xe::result_t::ERROR_UNSUPPORTED";
     case xe::result_t::ERROR_INVALID_ARGUMENT:
-        return std::string("xe::result_t::ERROR_INVALID_ARGUMENT");
+        str = "xe::result_t::ERROR_INVALID_ARGUMENT";
     case xe::result_t::ERROR_OUT_OF_HOST_MEMORY:
-        return std::string("xe::result_t::ERROR_OUT_OF_HOST_MEMORY");
+        str = "xe::result_t::ERROR_OUT_OF_HOST_MEMORY";
     case xe::result_t::ERROR_OUT_OF_DEVICE_MEMORY:
-        return std::string("xe::result_t::ERROR_OUT_OF_DEVICE_MEMORY");
+        str = "xe::result_t::ERROR_OUT_OF_DEVICE_MEMORY";
     case xe::result_t::ERROR_MODULE_BUILD_FAILURE:
-        return std::string("xe::result_t::ERROR_MODULE_BUILD_FAILURE");
+        str = "xe::result_t::ERROR_MODULE_BUILD_FAILURE";
     case xe::result_t::ERROR_UNKNOWN:
-        return std::string("xe::result_t::ERROR_UNKNOWN");
+        str = "xe::result_t::ERROR_UNKNOWN";
+    default:
+        str = "xe::result_t::?";
     };
-    return std::string("xe::result_t::?");
+    return str;
 }
 
 #endif // _DEBUG
