@@ -138,7 +138,6 @@ struct MemoryManagerImp : public MemoryManager {
 
             return XE_RESULT_SUCCESS;
         }
-
         return XE_RESULT_ERROR_UNKNOWN;
     }
 
