@@ -38,5 +38,6 @@
 #include "xet_device.h"
 #include "xet_gtpin.h"
 #include "xet_metric.h"
+#include "xet_power.h"
 
 #endif // _XET_API_H

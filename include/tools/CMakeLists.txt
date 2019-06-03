@@ -13,4 +13,5 @@ target_sources(${TARGET_NAME}
     ${CMAKE_CURRENT_SOURCE_DIR}/xet_gtpin.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/xet_metric.h
     ${CMAKE_CURRENT_SOURCE_DIR}/xet_metric.inl
+    ${CMAKE_CURRENT_SOURCE_DIR}/xet_power.h
 )
