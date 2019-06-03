@@ -286,6 +286,26 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeDeviceGroupGetImageProperties
+    xe_result_t __xecall
+    xeDeviceGroupGetImageProperties(
+        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+        xe_device_image_properties_t* pImageProperties  ///< [out] query result for image properties
+        )
+    {
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+
+        // convert loader handle to driver handle
+        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
+
+        // forward to device-driver
+        auto result = dditable->xe.DeviceGroup.pfnGetImageProperties( hDeviceGroup, pImageProperties );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xeDeviceGetP2PProperties
     xe_result_t __xecall
     xeDeviceGetP2PProperties(
@@ -2669,6 +2689,7 @@ xeGetDeviceGroupProcAddrTable(
             pDdiTable->pfnGetProperties                            = loader::xeDeviceGroupGetProperties;
             pDdiTable->pfnGetComputeProperties                     = loader::xeDeviceGroupGetComputeProperties;
             pDdiTable->pfnGetMemoryProperties                      = loader::xeDeviceGroupGetMemoryProperties;
+            pDdiTable->pfnGetImageProperties                       = loader::xeDeviceGroupGetImageProperties;
             pDdiTable->pfnAllocSharedMem                           = loader::xeDeviceGroupAllocSharedMem;
             pDdiTable->pfnAllocDeviceMem                           = loader::xeDeviceGroupAllocDeviceMem;
             pDdiTable->pfnAllocHostMem                             = loader::xeDeviceGroupAllocHostMem;

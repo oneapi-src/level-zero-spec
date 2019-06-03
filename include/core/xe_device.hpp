@@ -125,6 +125,14 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief API version of ::device_image_properties_t
+        enum class device_image_properties_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Supported device memory allocation flags
         enum class device_mem_alloc_flag_t
         {
@@ -240,10 +248,6 @@ namespace xe
             device_memory_properties_version_t version = device_memory_properties_version_t::CURRENT;   ///< [in] ::DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
             bool_t unifiedMemory;                           ///< [out] Host and device share same physical memory.
             bool_t onDemandPageFaults;                      ///< [out] Device supports on-demand page-faulting.
-            uint32_t maxImageDims1D;                        ///< [out] Maximum image dimensions for 1D resources.
-            uint32_t maxImageDims2D;                        ///< [out] Maximum image dimensions for 2D resources.
-            uint32_t maxImageDims3D;                        ///< [out] Maximum image dimensions for 3D resources.
-            uint32_t maxImageArraySlices;                   ///< [out] Maximum image array slices
             memory_access_capabilities_t hostAllocCapabilities; ///< [out] Bitfield describing host memory capabilities
             memory_access_capabilities_t deviceAllocCapabilities;   ///< [out] Bitfield describing device memory capabilities
             memory_access_capabilities_t sharedSingleDeviceAllocCapabilities;   ///< [out] Bitfield describing shared (single-device) memory capabilities
@@ -255,6 +259,20 @@ namespace xe
             uint32_t lastLevelCacheSize;                    ///< [out] Per-cache Last Level Cache (L3) size, in bytes
             bool_t lastLevelCacheSizeControl;               ///< [out] Support User control on Last Level Cache (i.e. Resize SLM
                                                             ///< section vs Generic Cache).
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Device image properties queried using
+        ///        ::DeviceGroupGetComputeProperties
+        struct device_image_properties_t
+        {
+            device_image_properties_version_t version = device_image_properties_version_t::CURRENT; ///< [in] ::DEVICE_IMAGE_PROPERTIES_VERSION_CURRENT
+            bool_t isSupported;                             ///< [out] Is images supported by device.
+            uint32_t maxImageDims1D;                        ///< [out] Maximum image dimensions for 1D resources.
+            uint32_t maxImageDims2D;                        ///< [out] Maximum image dimensions for 2D resources.
+            uint32_t maxImageDims3D;                        ///< [out] Maximum image dimensions for 3D resources.
+            uint32_t maxImageArraySlices;                   ///< [out] Maximum image array slices
 
         };
 
@@ -418,6 +436,25 @@ namespace xe
         /// @throws result_t
         device_memory_properties_t __xecall
         GetMemoryProperties(
+            void
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Retrieves image attributes of the device
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuDeviceGetAttribute**
+        /// @returns
+        ///     - device_image_properties_t: query result for image properties
+        /// 
+        /// @throws result_t
+        device_image_properties_t __xecall
+        GetImageProperties(
             void
             );
 
@@ -977,6 +1014,14 @@ namespace std
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts xe::DeviceGroup::device_memory_properties_t to std::string
     string to_string( const xe::DeviceGroup::device_memory_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::device_image_properties_version_t to std::string
+    string to_string( const xe::DeviceGroup::device_image_properties_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::device_image_properties_t to std::string
+    string to_string( const xe::DeviceGroup::device_image_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts xe::DeviceGroup::device_mem_alloc_flag_t to std::string

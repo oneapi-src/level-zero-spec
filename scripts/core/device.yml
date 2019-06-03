@@ -550,6 +550,58 @@ params:
       desc: "[out] query result for cache properties"
 --- #--------------------------------------------------------------------------
 type: enum
+desc: "API version of $x_device_image_properties_t"
+class: $xDeviceGroup
+name: $x_device_image_properties_version_t
+etors:
+    - name: $X_DEVICE_IMAGE_PROPERTIES_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device image properties queried using $xDeviceGroupGetComputeProperties"
+class: $xDeviceGroup
+name: $x_device_image_properties_t
+members:
+    - type: $x_device_image_properties_version_t
+      name: version
+      desc: "[in] $X_DEVICE_IMAGE_PROPERTIES_VERSION_CURRENT"
+      init: $X_DEVICE_IMAGE_PROPERTIES_VERSION_CURRENT
+    - type: $x_bool_t
+      name: isSupported
+      desc: "[out] Is images supported by device."
+    - type: uint32_t
+      name: maxImageDims1D
+      desc: "[out] Maximum image dimensions for 1D resources."
+    - type: uint32_t
+      name: maxImageDims2D
+      desc: "[out] Maximum image dimensions for 2D resources."
+    - type: uint32_t
+      name: maxImageDims3D
+      desc: "[out] Maximum image dimensions for 3D resources."
+    - type: uint32_t
+      name: maxImageArraySlices
+      desc: "[out] Maximum image array slices"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves image attributes of the device"
+class: $xDeviceGroup
+name: GetImageProperties
+ordinal: "1"
+analogue:
+    - "**cuDeviceGetAttribute**"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_device_group_handle_t
+      name: hDeviceGroup
+      desc: "[in] handle of the device group object"
+    - type: "$x_device_image_properties_t*"
+      name: pImageProperties
+      desc: "[out] query result for image properties"
+--- #--------------------------------------------------------------------------
+type: enum
 desc: "API version of $x_device_p2p_properties_t"
 class: $xDevice
 name: $x_device_p2p_properties_version_t

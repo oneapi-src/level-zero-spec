@@ -268,6 +268,32 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeDeviceGroupGetImageProperties
+    xe_result_t __xecall
+    xeDeviceGroupGetImageProperties(
+        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+        xe_device_image_properties_t* pImageProperties  ///< [out] query result for image properties
+        )
+    {
+        auto pfnGetImageProperties = context.xeDdiTable.DeviceGroup.pfnGetImageProperties;
+
+        if( nullptr == pfnGetImageProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDeviceGroup )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pImageProperties )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetImageProperties( hDeviceGroup, pImageProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xeDeviceGetP2PProperties
     xe_result_t __xecall
     xeDeviceGetP2PProperties(
@@ -2878,6 +2904,9 @@ xeGetDeviceGroupProcAddrTable(
 
     dditable.pfnGetMemoryProperties                      = pDdiTable->pfnGetMemoryProperties;
     pDdiTable->pfnGetMemoryProperties                    = layer::xeDeviceGroupGetMemoryProperties;
+
+    dditable.pfnGetImageProperties                       = pDdiTable->pfnGetImageProperties;
+    pDdiTable->pfnGetImageProperties                     = layer::xeDeviceGroupGetImageProperties;
 
     dditable.pfnAllocSharedMem                           = pDdiTable->pfnAllocSharedMem;
     pDdiTable->pfnAllocSharedMem                         = layer::xeDeviceGroupAllocSharedMem;

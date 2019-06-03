@@ -359,10 +359,6 @@ typedef struct _xe_device_memory_properties_t
     xe_device_memory_properties_version_t version;  ///< [in] ::XE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
     xe_bool_t unifiedMemory;                        ///< [out] Host and device share same physical memory.
     xe_bool_t onDemandPageFaults;                   ///< [out] Device supports on-demand page-faulting.
-    uint32_t maxImageDims1D;                        ///< [out] Maximum image dimensions for 1D resources.
-    uint32_t maxImageDims2D;                        ///< [out] Maximum image dimensions for 2D resources.
-    uint32_t maxImageDims3D;                        ///< [out] Maximum image dimensions for 3D resources.
-    uint32_t maxImageArraySlices;                   ///< [out] Maximum image array slices
     xe_memory_access_capabilities_t hostAllocCapabilities;  ///< [out] Bitfield describing host memory capabilities
     xe_memory_access_capabilities_t deviceAllocCapabilities;///< [out] Bitfield describing device memory capabilities
     xe_memory_access_capabilities_t sharedSingleDeviceAllocCapabilities;///< [out] Bitfield describing shared (single-device) memory capabilities
@@ -402,6 +398,53 @@ xe_result_t __xecall
 xeDeviceGroupGetMemoryProperties(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
     xe_device_memory_properties_t* pMemProperties   ///< [out] query result for compute properties
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::xe_device_image_properties_t
+typedef enum _xe_device_image_properties_version_t
+{
+    XE_DEVICE_IMAGE_PROPERTIES_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+
+} xe_device_image_properties_version_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Device image properties queried using
+///        ::xeDeviceGroupGetComputeProperties
+typedef struct _xe_device_image_properties_t
+{
+    xe_device_image_properties_version_t version;   ///< [in] ::XE_DEVICE_IMAGE_PROPERTIES_VERSION_CURRENT
+    xe_bool_t isSupported;                          ///< [out] Is images supported by device.
+    uint32_t maxImageDims1D;                        ///< [out] Maximum image dimensions for 1D resources.
+    uint32_t maxImageDims2D;                        ///< [out] Maximum image dimensions for 2D resources.
+    uint32_t maxImageDims3D;                        ///< [out] Maximum image dimensions for 3D resources.
+    uint32_t maxImageArraySlices;                   ///< [out] Maximum image array slices
+
+} xe_device_image_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves image attributes of the device
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuDeviceGetAttribute**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDeviceGroup
+///         + nullptr == pImageProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeDeviceGroupGetImageProperties(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xe_device_image_properties_t* pImageProperties  ///< [out] query result for image properties
     );
 
 ///////////////////////////////////////////////////////////////////////////////

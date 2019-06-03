@@ -301,6 +301,41 @@ xeDeviceGroupGetMemoryProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves image attributes of the device
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuDeviceGetAttribute**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDeviceGroup
+///         + nullptr == pImageProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeDeviceGroupGetImageProperties(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xe_device_image_properties_t* pImageProperties  ///< [out] query result for image properties
+    )
+{
+    auto pfnGetImageProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetImageProperties;
+
+#if _DEBUG
+    if( nullptr == pfnGetImageProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return pfnGetImageProperties( hDeviceGroup, pImageProperties );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves Peer-to-Peer properties between one device and a peer
 ///        devices
 /// 
@@ -772,6 +807,38 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Retrieves image attributes of the device
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuDeviceGetAttribute**
+    /// 
+    /// @returns
+    ///     - device_image_properties_t: query result for image properties
+    /// 
+    /// @throws result_t
+    DeviceGroup::device_image_properties_t __xecall
+    DeviceGroup::GetImageProperties(
+        void
+        )
+    {
+        xe_device_image_properties_t imageProperties;
+
+        auto result = static_cast<result_t>( ::xeDeviceGroupGetImageProperties(
+            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+            &imageProperties ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetImageProperties" );
+
+        return *reinterpret_cast<device_image_properties_t*>( &imageProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Retrieves Peer-to-Peer properties between one device and a peer
     ///        devices
     /// 
@@ -1034,6 +1101,26 @@ namespace std
             str += "xe::DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ATOMIC_ACCESS | ";
 
         return "{ " + str.substr(0, str.size() - 3) + " }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::device_image_properties_version_t to std::string
+    string to_string( const xe::DeviceGroup::device_image_properties_version_t val )
+    {
+        string str;
+
+        switch( val )
+        {
+        case xe::DeviceGroup::device_image_properties_version_t::CURRENT:
+            str = "xe::DeviceGroup::device_image_properties_version_t::CURRENT";
+            break;
+
+        default:
+            str = "xe::DeviceGroup::device_image_properties_version_t::?";
+            break;
+        };
+
+        return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1338,22 +1425,6 @@ namespace std
         str += to_string(val.onDemandPageFaults);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_memory_properties_t::maxImageDims1D : ";
-        str += to_string(val.maxImageDims1D);
-        str += "\n";
-        
-        str += "xe::DeviceGroup::device_memory_properties_t::maxImageDims2D : ";
-        str += to_string(val.maxImageDims2D);
-        str += "\n";
-        
-        str += "xe::DeviceGroup::device_memory_properties_t::maxImageDims3D : ";
-        str += to_string(val.maxImageDims3D);
-        str += "\n";
-        
-        str += "xe::DeviceGroup::device_memory_properties_t::maxImageArraySlices : ";
-        str += to_string(val.maxImageArraySlices);
-        str += "\n";
-        
         str += "xe::DeviceGroup::device_memory_properties_t::hostAllocCapabilities : ";
         str += to_string(val.hostAllocCapabilities);
         str += "\n";
@@ -1388,6 +1459,39 @@ namespace std
         
         str += "xe::DeviceGroup::device_memory_properties_t::lastLevelCacheSizeControl : ";
         str += to_string(val.lastLevelCacheSizeControl);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::device_image_properties_t to std::string
+    string to_string( const xe::DeviceGroup::device_image_properties_t val )
+    {
+        string str;
+        
+        str += "xe::DeviceGroup::device_image_properties_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "xe::DeviceGroup::device_image_properties_t::isSupported : ";
+        str += to_string(val.isSupported);
+        str += "\n";
+        
+        str += "xe::DeviceGroup::device_image_properties_t::maxImageDims1D : ";
+        str += to_string(val.maxImageDims1D);
+        str += "\n";
+        
+        str += "xe::DeviceGroup::device_image_properties_t::maxImageDims2D : ";
+        str += to_string(val.maxImageDims2D);
+        str += "\n";
+        
+        str += "xe::DeviceGroup::device_image_properties_t::maxImageDims3D : ";
+        str += to_string(val.maxImageDims3D);
+        str += "\n";
+        
+        str += "xe::DeviceGroup::device_image_properties_t::maxImageArraySlices : ";
+        str += to_string(val.maxImageArraySlices);
         str += "\n";
 
         return str;
