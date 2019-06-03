@@ -177,13 +177,13 @@ namespace xe
             type_t type;                                    ///< [in] image type
             format_desc_t format;                           ///< [in] image format
             size_t width = 0;                               ///< [in] width in pixels, see
-                                                            ///< ::device_memory_properties_t::maxImageDims1D/2D/3D
+                                                            ///< ::device_image_properties_t::maxImageDims1D/2D/3D
             size_t height = 0;                              ///< [in] height in pixels (2D or 3D only), see
-                                                            ///< ::device_memory_properties_t::maxImageDims2D/3D
+                                                            ///< ::device_image_properties_t::maxImageDims2D/3D
             size_t depth = 0;                               ///< [in] depth in pixels (3D only), see
-                                                            ///< ::device_memory_properties_t::maxImageDims3D
+                                                            ///< ::device_image_properties_t::maxImageDims3D
             size_t arraylevels = 1;                         ///< [in] array levels (array types only), see
-                                                            ///< ::device_memory_properties_t::maxImageArraySlices
+                                                            ///< ::device_image_properties_t::maxImageArraySlices
             size_t miplevels = 0;                           ///< [in] mipmap levels (must be 0)
 
         };

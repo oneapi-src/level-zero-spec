@@ -171,6 +171,19 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeDeviceGroupGetImageProperties
+    xe_result_t __xecall
+    xeDeviceGroupGetImageProperties(
+        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+        xe_device_image_properties_t* pImageProperties  ///< [out] query result for image properties
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xeDeviceGetP2PProperties
     xe_result_t __xecall
     xeDeviceGetP2PProperties(
@@ -1607,6 +1620,8 @@ xeGetDeviceGroupProcAddrTable(
     pDdiTable->pfnGetComputeProperties                   = driver::xeDeviceGroupGetComputeProperties;
 
     pDdiTable->pfnGetMemoryProperties                    = driver::xeDeviceGroupGetMemoryProperties;
+
+    pDdiTable->pfnGetImageProperties                     = driver::xeDeviceGroupGetImageProperties;
 
     pDdiTable->pfnAllocSharedMem                         = driver::xeDeviceGroupAllocSharedMem;
 
