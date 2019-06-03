@@ -34,6 +34,8 @@ set(L0_RUNTIME_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/copy.h
     ${CMAKE_CURRENT_SOURCE_DIR}/device.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/device.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/device_imp.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/device_imp.h
     ${CMAKE_CURRENT_SOURCE_DIR}/driver.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/driver.h
     ${CMAKE_CURRENT_SOURCE_DIR}/driver_imp.h

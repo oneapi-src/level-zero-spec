@@ -1,13 +1,5 @@
 #pragma once
-//#include "xe_cmdgraph.h"
-#include "xe_cl_interop.h"
-#include "xe_cmdlist.h"
-#include "xe_cmdqueue.h"
-#include "xe_device.h"
-#include "xe_event.h"
-#include "xe_image.h"
-#include "xe_module.h"
-#include "xe_sampler.h"
+#include "xe_api.h"
 
 #include "driver.h"
 #include "ptr.h"
