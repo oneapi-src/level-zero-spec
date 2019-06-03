@@ -519,6 +519,19 @@ def _get_type_name(namespace, tags, obj, item, cpp=False, meta=None, handle_to_c
 
 """
 Public:
+    returns c/c++ name of member of struct/class
+"""
+def make_member_name(namespace, tags, item, prefix="", cpp=False, meta=None, remove_array=False):
+    if cpp and value_traits.is_macro(item['name'], meta):
+        name = subt(namespace, tags, prefix+item['name'])
+        if remove_array:
+            name = re.sub(r"(\w+)\[\w+\]", r"\1", name)
+    else:
+        name = subt(namespace, tags, prefix+item['name'], cpp=cpp)
+    return name
+
+"""
+Public:
     returns a list of c++ strings for each member of a structure or class
     format: "TYPE NAME = INIT, ///< DESCRIPTION"
 """
@@ -528,11 +541,7 @@ def make_member_lines(namespace, tags, obj, prefix="", cpp=False, meta=None):
         return lines
 
     for item in obj['members']:
-        if cpp:
-            name = _get_value_name(namespace, tags, prefix+item['name'], cpp, meta)
-        else:
-            name = subt(namespace, tags, prefix+item['name'], cpp=cpp)
-        
+        name = make_member_name(namespace, tags, item, prefix, cpp, meta)
         tname = _get_type_name(namespace, tags, obj, item, cpp, meta)
 
         if cpp and 'init' in item:
@@ -940,17 +949,20 @@ def make_wrapper_params(namespace, tags, obj, meta):
 Public:
     returns a list of c++ strings of ctor arguments in c++ wrapper
 """
-def make_wrapper_ctor_params(namespace, tags, obj, meta, objects, wparam):
+def make_wrapper_ctor_params(namespace, tags, obj, meta, specs, wparam):
     params = []
 
     # find, extract the class obj that owns this obj
     cobj = None
-    for item in filter_items(objects, 'type', 'class'):
+    for item in extract_objs(specs, r"class"):
         if re.match(r".*%s$"%wparam['class'], item['name']):
             cobj = item
             break
     if not cobj:
         return params
+
+    is_static = function_traits.is_static(obj)
+    is_global = function_traits.is_global(obj, tags)
 
     # generate list of names for each parameter of the current function
     oparams = [ _get_param_name(namespace, tags, item, cpp=True) for item in obj['params'] ]
@@ -965,7 +977,10 @@ def make_wrapper_ctor_params(namespace, tags, obj, meta, objects, wparam):
                 params.append("reinterpret_cast<%s>( %s )"%(wparam['cpptype'], wparam['local']))
 
         elif name in oparams:
-            params.append(name)
+            if (not is_static and not is_global) and (0 == oparams.index(name)):
+                params.append("this")
+            else:
+                params.append(name)
 
         else:
             params.append("nullptr")

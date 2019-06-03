@@ -239,8 +239,9 @@ xeDeviceGroupFreeMem(
 xe_result_t __xecall
 xeDeviceGroupGetMemProperties(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    const void* ptr,                                ///< [in] Pointer to query
-    xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
+    const void* ptr,                                ///< [in] memory pointer to query
+    xe_memory_allocation_properties_t* pMemProperties,  ///< [out] query result for memory allocation properties
+    xe_device_handle_t* phDevice                    ///< [out][optional] device associated with this allocation
     )
 {
     auto pfnGetMemProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetMemProperties;
@@ -250,7 +251,7 @@ xeDeviceGroupGetMemProperties(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnGetMemProperties( hDeviceGroup, ptr, pMemProperties );
+    return pfnGetMemProperties( hDeviceGroup, ptr, pMemProperties, phDevice );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -274,7 +275,7 @@ xeDeviceGroupGetMemProperties(
 xe_result_t __xecall
 xeDeviceGroupGetMemAddressRange(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    const void* ptr,                                ///< [in] Pointer to query
+    const void* ptr,                                ///< [in] memory pointer to query
     void** pBase,                                   ///< [in,out][optional] base address of the allocation
     size_t* pSize                                   ///< [in,out][optional] size of the allocation
     )
@@ -314,7 +315,7 @@ xeDeviceGroupGetMemAddressRange(
 xe_result_t __xecall
 xeDeviceGroupGetMemIpcHandle(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    const void* ptr,                                ///< [in] Pointer to the device memory allocation
+    const void* ptr,                                ///< [in] pointer to the device memory allocation
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
     )
 {
@@ -585,23 +586,47 @@ namespace xe
     ///     - **cuPointerGetAttribute**
     /// 
     /// @returns
-    ///     - memory_allocation_properties_t: Query result for memory allocation properties
+    ///     - memory_allocation_properties_t: query result for memory allocation properties
+    ///     - Device*: device associated with this allocation
     /// 
     /// @throws result_t
     DeviceGroup::memory_allocation_properties_t __xecall
     DeviceGroup::GetMemProperties(
-        const void* ptr                                 ///< [in] Pointer to query
+        const void* ptr,                                ///< [in] memory pointer to query
+        Device** ppDevice                               ///< [out][optional] device associated with this allocation
         )
     {
         xe_memory_allocation_properties_t memProperties;
 
+        xe_device_handle_t hDevice;
+
         auto result = static_cast<result_t>( ::xeDeviceGroupGetMemProperties(
             reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
             ptr,
-            &memProperties ) );
+            &memProperties,
+            ( ppDevice ) ? &hDevice : nullptr ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetMemProperties" );
+
+        if( ppDevice )
+            *ppDevice =  nullptr;
+
+        try
+        {
+            if( ppDevice )
+                *ppDevice =  new Device( reinterpret_cast<device_handle_t>( hDevice ), this );
+        }
+        catch( std::bad_alloc& )
+        {
+            if( ppDevice )
+            {
+                delete *ppDevice;
+                *ppDevice =  nullptr;
+            }
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetMemProperties" );
+        }
 
         return *reinterpret_cast<memory_allocation_properties_t*>( &memProperties );
     }
@@ -619,7 +644,7 @@ namespace xe
     /// @throws result_t
     void __xecall
     DeviceGroup::GetMemAddressRange(
-        const void* ptr,                                ///< [in] Pointer to query
+        const void* ptr,                                ///< [in] memory pointer to query
         void** pBase,                                   ///< [in,out][optional] base address of the allocation
         size_t* pSize                                   ///< [in,out][optional] size of the allocation
         )
@@ -653,7 +678,7 @@ namespace xe
     /// @throws result_t
     ipc_mem_handle_t __xecall
     DeviceGroup::GetMemIpcHandle(
-        const void* ptr                                 ///< [in] Pointer to the device memory allocation
+        const void* ptr                                 ///< [in] pointer to the device memory allocation
         )
     {
         xe_ipc_mem_handle_t ipcHandle;
@@ -740,4 +765,7 @@ namespace xe
 } // namespace xe
 
 #ifdef _DEBUG
+namespace std
+{
+} // namespace std
 #endif // _DEBUG

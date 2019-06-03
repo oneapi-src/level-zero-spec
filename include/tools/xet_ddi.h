@@ -287,6 +287,7 @@ typedef xe_result_t (__xecall *xet_pfnGetMetricProcAddrTable_t)(
 /// @brief Function-pointer for xetMetricTracerOpen 
 typedef xe_result_t (__xecall *xet_pfnMetricTracerOpen_t)(
     xet_device_handle_t,
+    xet_metric_group_handle_t,
     xet_metric_tracer_desc_t*,
     xe_event_handle_t,
     xet_metric_tracer_handle_t*
@@ -344,6 +345,7 @@ typedef xe_result_t (__xecall *xet_pfnGetMetricTracerProcAddrTable_t)(
 /// @brief Function-pointer for xetMetricQueryPoolCreate 
 typedef xe_result_t (__xecall *xet_pfnMetricQueryPoolCreate_t)(
     xet_device_handle_t,
+    xet_metric_group_handle_t,
     xet_metric_query_pool_desc_t*,
     xet_metric_query_pool_handle_t*
     );

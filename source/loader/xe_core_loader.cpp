@@ -1733,8 +1733,9 @@ namespace loader
     xe_result_t __xecall
     xeDeviceGroupGetMemProperties(
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-        const void* ptr,                                ///< [in] Pointer to query
-        xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
+        const void* ptr,                                ///< [in] memory pointer to query
+        xe_memory_allocation_properties_t* pMemProperties,  ///< [out] query result for memory allocation properties
+        xe_device_handle_t* phDevice                    ///< [out][optional] device associated with this allocation
         )
     {
         // extract driver's function pointer table
@@ -1744,8 +1745,19 @@ namespace loader
         hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.DeviceGroup.pfnGetMemProperties( hDeviceGroup, ptr, pMemProperties );
+        auto result = dditable->xe.DeviceGroup.pfnGetMemProperties( hDeviceGroup, ptr, pMemProperties, phDevice );
 
+        try
+        {
+            // convert driver handle to loader handle
+            if( nullptr != phDevice )
+                *phDevice = reinterpret_cast<xe_device_handle_t>(
+                    xe_device_factory.get( *phDevice, dditable ) );
+        }
+        catch( std::bad_alloc& )
+        {
+            result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+        }
         return result;
     }
 
@@ -1754,7 +1766,7 @@ namespace loader
     xe_result_t __xecall
     xeDeviceGroupGetMemAddressRange(
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-        const void* ptr,                                ///< [in] Pointer to query
+        const void* ptr,                                ///< [in] memory pointer to query
         void** pBase,                                   ///< [in,out][optional] base address of the allocation
         size_t* pSize                                   ///< [in,out][optional] size of the allocation
         )
@@ -1776,7 +1788,7 @@ namespace loader
     xe_result_t __xecall
     xeDeviceGroupGetMemIpcHandle(
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-        const void* ptr,                                ///< [in] Pointer to the device memory allocation
+        const void* ptr,                                ///< [in] pointer to the device memory allocation
         xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
         )
     {

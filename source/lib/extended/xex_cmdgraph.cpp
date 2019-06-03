@@ -247,35 +247,64 @@ namespace xex
 } // namespace xex
 
 #ifdef _DEBUG
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts CommandGraph::desc_version_t to std::string
-std::string to_string( xex::CommandGraph::desc_version_t val )
+namespace std
 {
-    std::string str;
-    switch( val )
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xex::CommandGraph::desc_version_t to std::string
+    string to_string( const xex::CommandGraph::desc_version_t val )
     {
-    case xex::CommandGraph::desc_version_t::CURRENT:
-        str = "xex::CommandGraph::desc_version_t::CURRENT";
-    default:
-        str = "xex::CommandGraph::desc_version_t::?";
-    };
-    return str;
-}
+        string str;
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts CommandGraph::flag_t to std::string
-std::string to_string( xex::CommandGraph::flag_t val )
-{
-    std::string str;
-    switch( val )
+        switch( val )
+        {
+        case xex::CommandGraph::desc_version_t::CURRENT:
+            str = "xex::CommandGraph::desc_version_t::CURRENT";
+            break;
+
+        default:
+            str = "xex::CommandGraph::desc_version_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xex::CommandGraph::flag_t to std::string
+    string to_string( const xex::CommandGraph::flag_t val )
     {
-    case xex::CommandGraph::flag_t::NONE:
-        str = "xex::CommandGraph::flag_t::NONE";
-    default:
-        str = "xex::CommandGraph::flag_t::?";
-    };
-    return str;
-}
+        string str;
 
+        switch( val )
+        {
+        case xex::CommandGraph::flag_t::NONE:
+            str = "xex::CommandGraph::flag_t::NONE";
+            break;
 
+        default:
+            str = "xex::CommandGraph::flag_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xex::CommandGraph::desc_t to std::string
+    string to_string( const xex::CommandGraph::desc_t val )
+    {
+        string str;
+        
+        str += "xex::CommandGraph::desc_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "xex::CommandGraph::desc_t::flags : ";
+        str += to_string(val.flags);
+        str += "\n";
+
+        return str;
+    }
+
+} // namespace std
 #endif // _DEBUG

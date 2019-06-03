@@ -77,7 +77,7 @@ namespace xe
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         event_pool_handle_t m_handle;                   ///< [in] handle of event pool object
-        Device* m_pDevice;                              ///< [in] pointer to owner object
+        DeviceGroup* m_pDeviceGroup;                    ///< [in] pointer to owner object
         desc_t m_desc;                                  ///< [in] descriptor of the event pool object
 
     public:
@@ -85,7 +85,7 @@ namespace xe
         EventPool( void ) = delete;
         EventPool( 
             event_pool_handle_t handle,                     ///< [in] handle of event pool object
-            Device* pDevice,                                ///< [in] pointer to owner object
+            DeviceGroup* pDeviceGroup,                      ///< [in] pointer to owner object
             const desc_t* desc                              ///< [in] descriptor of the event pool object
             );
 
@@ -99,7 +99,7 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
-        auto getDevice( void ) const { return m_pDevice; }
+        auto getDevicegroup( void ) const { return m_pDeviceGroup; }
         auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -397,24 +397,33 @@ namespace xe
 } // namespace xe
 
 #ifdef _DEBUG
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts EventPool::desc_version_t to std::string
-std::string to_string( xe::EventPool::desc_version_t val );
+namespace std
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::EventPool::desc_version_t to std::string
+    string to_string( const xe::EventPool::desc_version_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts EventPool::flag_t to std::string
-std::string to_string( xe::EventPool::flag_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::EventPool::flag_t to std::string
+    string to_string( const xe::EventPool::flag_t val );
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::EventPool::desc_t to std::string
+    string to_string( const xe::EventPool::desc_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Event::desc_version_t to std::string
-std::string to_string( xe::Event::desc_version_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Event::desc_version_t to std::string
+    string to_string( const xe::Event::desc_version_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Event::scope_flag_t to std::string
-std::string to_string( xe::Event::scope_flag_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Event::scope_flag_t to std::string
+    string to_string( const xe::Event::scope_flag_t val );
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Event::desc_t to std::string
+    string to_string( const xe::Event::desc_t val );
 
+} // namespace std
 #endif // _DEBUG
 #endif // defined(__cplusplus)
 #endif // _XE_EVENT_HPP

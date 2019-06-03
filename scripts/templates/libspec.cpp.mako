@@ -2,11 +2,11 @@
 import re
 from templates import helper as th
 
-def declare_dbg(obj, tags):
+def define_dbg(obj, tags):
     if re.match("class", obj['type']):
         return True
     if 'class' not in obj or obj['class'] in tags:
-        return re.match("enum", obj['type'])
+        return re.match("enum", obj['type']) or re.match("struct|union", obj['type'])
     return False
 
 %><%
@@ -200,16 +200,16 @@ namespace ${n}
             %if 'range' in item:
             %if item['optional']:
             for( uint32_t i = ${item['range'][0]}; ( ${item['name']} ) && ( i < ${item['range'][1]} ); ++i )
-                ${item['name']}[ i ] = new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, objects, item))} );
+                ${item['name']}[ i ] = new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, specs, item))} );
             %else:
             for( uint32_t i = ${item['range'][0]}; i < ${item['range'][1]}; ++i )
-                ${item['name']}[ i ] = new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, objects, item))} );
+                ${item['name']}[ i ] = new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, specs, item))} );
             %endif
             %elif item['optional']:
             if( ${item['name']} )
-                *${item['name']} =  new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, objects, item))} );
+                *${item['name']} =  new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, specs, item))} );
             %else:
-            ${item['name']} = new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, objects, item))} );
+            ${item['name']} = new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, specs, item))} );
             %endif
         }
         catch( std::bad_alloc& )
@@ -258,101 +258,199 @@ namespace ${n}
 
 ## DEBUG ######################################################################
 #ifdef _DEBUG
-%for obj in objects:
-%if declare_dbg(obj, tags):
-## ENUM #######################################################################
-%if re.match(r"enum", obj['type']):
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts ${th.make_type_name(n, tags, obj, cpp=True)} to std::string
-## CONDITION-START ############################################################
-%if 'condition' in obj:
-#if ${th.subt(n, tags, obj['condition'])}
-%endif
-<%
-    tname = "%s::%s"%(n, th.make_type_name(n, tags, obj, cpp=True))
-%>std::string to_string( ${tname} val )
+namespace std
 {
-    %if th.is_enum_bitfield(obj):
-    const auto bits = static_cast<uint32_t>( val );
-    if( 0 == bits ) return std::string("{}");
-
-    std::string str;
-    %for item in obj['etors']:
+    %for obj in objects:
+    %if define_dbg(obj, tags):
+    %if re.match(r"enum", obj['type']) or re.match(r"struct|union", obj['type']):
     <%
-        ename = th.make_etor_name(n, tags, obj['name'], item['name'], cpp=True)
-    %>if( static_cast<uint32_t>(${tname}::${ename}) & bits )
-        str += "${tname}::${ename} | ";
-
-    %endfor
-    return "{ " + str.substr(0, str.size() - 3) + " }";
-    %else:
-    std::string str;
-    switch( val )
-    {
-    %for item in obj['etors']:
-    <%
-        ename = th.make_etor_name(n, tags, obj['name'], item['name'], cpp=True)
-    %>case ${tname}::${ename}:
-        str = "${tname}::${ename}";
-    %endfor
-    default:
-        str = "${tname}::?";
-    };
-    return str;
+        tname = "%s::%s"%(n, th.make_type_name(n, tags, obj, cpp=True))
+    %>///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts ${tname} to std::string
+    ## CONDITION-START ############################################################
+    %if 'condition' in obj:
+    #if ${th.subt(n, tags, obj['condition'])}
     %endif
-}
-## CONDITION-END ##############################################################
-%if 'condition' in obj:
-#endif // ${th.subt(n, tags, obj['condition'])}
-%endif
-## CLASS ######################################################################
-%elif re.match(r"class", obj['type']):
-%for e in th.filter_items(th.extract_objs(specs, r"enum"), 'class', obj['name']):
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts ${th.make_class_name(n, tags, obj)}::${th.make_type_name(n, tags, e, cpp=True)} to std::string
-%if 'condition' in e:
-#if ${th.subt(n, tags, e['condition'])}
-%endif
-<%
-    tname = "%s::%s::%s"%(n, th.make_class_name(n, tags, obj), th.make_type_name(n, tags, e, cpp=True))
-%>std::string to_string( ${tname} val )
-{
-    %if th.is_enum_bitfield(e):
-    const auto bits = static_cast<uint32_t>( val );
-    if( 0 == bits ) return std::string("{}");
-
-    std::string str;
-    %for item in e['etors']:
-    <%
-        ename = th.make_etor_name(n, tags, e['name'], item['name'], cpp=True)
-    %>if( static_cast<uint32_t>(${tname}::${ename}) & bits )
-        str += "${tname}::${ename} | ";
-
-    %endfor
-    return "{ " + str.substr(0, str.size() - 3) + " }";
-    %else:
-    std::string str;
-    switch( val )
+    string to_string( const ${tname} val )
     {
-    %for item in e['etors']:
-    <%
-        ename = th.make_etor_name(n, tags, e['name'], item['name'], cpp=True)
-    %>case ${tname}::${ename}:
-        str = "${tname}::${ename}";
-    %endfor
-    default:
-        str = "${tname}::?";
-    };
-    return str;
+        ## ENUM #######################################################################
+        %if re.match(r"enum", obj['type']):
+        %if th.is_enum_bitfield(obj):
+        const auto bits = static_cast<uint32_t>( val );
+        if( 0 == bits ) return string("{}");
+
+        string str;
+        %for item in obj['etors']:
+        <%
+            ename = th.make_etor_name(n, tags, obj['name'], item['name'], cpp=True)
+        %>
+        if( static_cast<uint32_t>(${tname}::${ename}) & bits )
+            str += "${tname}::${ename} | ";
+        %endfor
+
+        return "{ " + str.substr(0, str.size() - 3) + " }";
+        %else:
+        string str;
+
+        switch( val )
+        {
+        %for item in obj['etors']:
+        <%
+            ename = th.make_etor_name(n, tags, obj['name'], item['name'], cpp=True)
+        %>case ${tname}::${ename}:
+            str = "${tname}::${ename}";
+            break;
+
+        %endfor
+        default:
+            str = "${tname}::?";
+            break;
+        };
+
+        return str;
+        %endif
+        ## STRUCT/UNION ############################################################
+        %else:
+        string str;
+        %for item in obj['members']:
+        <%
+            mname = th.make_member_name(n, tags, item, cpp=True, meta=meta, remove_array=True)
+        %>
+        str += "${tname}::${mname} : ";
+        %if "char" in item['type']:
+        str += val.${mname};
+        %elif th.type_traits.is_pointer(item['type']):
+        str += ptr_to_string(val.${mname});
+        %else:
+        str += to_string(val.${mname});
+        %endif
+        str += "\n";
+        %endfor
+
+        return str;
+        %endif
+    }
+    ## CONDITION-END ##############################################################
+    %if 'condition' in obj:
+    #endif // ${th.subt(n, tags, obj['condition'])}
     %endif
-}
-%if 'condition' in e:
-#endif // ${th.subt(n, tags, e['condition'])}
-%endif
 
-%endfor
-%endif
+    ## CLASS ######################################################################
+    %elif re.match(r"class", obj['type']):
+    ## ENUM #######################################################################
+    %for e in th.filter_items(th.extract_objs(specs, r"enum"), 'class', obj['name']):
+    <%
+        tname = "%s::%s::%s"%(n, th.make_class_name(n, tags, obj), th.make_type_name(n, tags, e, cpp=True))
+    %>///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts ${tname} to std::string
+    %if 'condition' in e:
+    #if ${th.subt(n, tags, e['condition'])}
+    %endif
+    string to_string( const ${tname} val )
+    {
+        %if th.is_enum_bitfield(e):
+        const auto bits = static_cast<uint32_t>( val );
+        if( 0 == bits ) return string("{}");
 
-%endif  ## declare_dbg
-%endfor ## obj in objects
+        string str;
+        %for item in e['etors']:
+        <%
+            ename = th.make_etor_name(n, tags, e['name'], item['name'], cpp=True)
+        %>
+        if( static_cast<uint32_t>(${tname}::${ename}) & bits )
+            str += "${tname}::${ename} | ";
+        %endfor
+
+        return "{ " + str.substr(0, str.size() - 3) + " }";
+        %else:
+        string str;
+
+        switch( val )
+        {
+        %for item in e['etors']:
+        <%
+            ename = th.make_etor_name(n, tags, e['name'], item['name'], cpp=True)
+        %>case ${tname}::${ename}:
+            str = "${tname}::${ename}";
+            break;
+
+        %endfor
+        default:
+            str = "${tname}::?";
+            break;
+        };
+
+        return str;
+        %endif
+    }
+    %if 'condition' in e:
+    #endif // ${th.subt(n, tags, e['condition'])}
+    %endif
+
+    %endfor ## enum
+    ## STRUCT/UNION ############################################################
+    %for s in th.filter_items(th.extract_objs(specs, r"struct|union"), 'class', obj['name']):
+    <%
+        tname = "%s::%s::%s"%(n, th.make_class_name(n, tags, obj), th.make_type_name(n, tags, s, cpp=True))
+    %>///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts ${tname} to std::string
+    %if 'condition' in s:
+    #if ${th.subt(n, tags, s['condition'])}
+    %endif
+    string to_string( const ${tname} val )
+    {
+        string str;
+        %for item in s['members']:
+        <%
+            mname = th.make_member_name(n, tags, item, cpp=True, meta=meta, remove_array=True)
+        %>
+        str += "${tname}::${mname} : ";
+        %if "char" in item['type']:
+        str += val.${mname};
+        %elif th.type_traits.is_pointer(item['type']):
+        str += ptr_to_string(val.${mname});
+        %else:
+        str += to_string(val.${mname});
+        %endif
+        str += "\n";
+        %endfor
+
+        return str;
+    }
+    %if 'condition' in s:
+    #endif // ${th.subt(n, tags, s['condition'])}
+    %endif
+
+    %endfor ## struct
+    %endif  ## class
+    %endif  ## define_dbg
+    %endfor ## obj in objects
+} // namespace std
 #endif // _DEBUG
+## EXCEPTION ##############################################################
+%if re.match(r"common", name) and (n == x):
+namespace ${n}
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    std::string exception_t::formatted(
+        const result_t result,
+        const char* file,
+        const char* line,
+        const char* func )
+    {
+        std::string msg = std::to_string(result);
+        const size_t len = msg.length() + std::strlen(file) + std::strlen(line) + std::strlen(func) + 32;
+
+        std::string str;
+        str.reserve(len);
+        str = file;
+        str += "(";
+        str += line;
+        str += ") : exception : ";
+        str += func;
+        str += " ";
+        str += msg;
+        return str;
+    }
+} // namespace ${n}
+%endif

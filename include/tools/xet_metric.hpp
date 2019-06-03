@@ -347,10 +347,9 @@ namespace xet
         struct desc_t
         {
             desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::METRIC_TRACER_DESC_VERSION_CURRENT
-            MetricGroup* hMetricGroup;                      ///< [in] handle of the metric group
             uint32_t notifyEveryNReports;                   ///< [in,out] number of collected reports after which notification event
                                                             ///< will be signalled
-            uint32_t samplingPeriodNs;                      ///< [in,out] tracer sampling period in nanoseconds
+            uint32_t samplingPeriod;                        ///< [in,out] tracer sampling period in nanoseconds
 
         };
 
@@ -392,6 +391,7 @@ namespace xet
         static MetricTracer* __xecall
         Open(
             Device* pDevice,                                ///< [in] pointer to the device
+            MetricGroup* pMetricGroup,                      ///< [in] pointer to the metric group
             desc_t* pDesc,                                  ///< [in,out] metric tracer descriptor
             xe::Event* pNotificationEvent                   ///< [in] event used for report availability notification. Must be device
                                                             ///< to host type.
@@ -452,7 +452,6 @@ namespace xet
         {
             desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::METRIC_QUERY_POOL_DESC_VERSION_CURRENT
             flag_t flags;                                   ///< [in] Query pool type.
-            MetricGroup* hMetricGroup;                      ///< [in] Metric group associated with the query object.
             uint32_t count;                                 ///< [in] Internal slots count within query pool object.
 
         };
@@ -494,6 +493,7 @@ namespace xet
         static MetricQueryPool* __xecall
         Create(
             Device* pDevice,                                ///< [in] pointer to the device
+            MetricGroup* pMetricGroup,                      ///< [in] metric group associated with the query object.
             desc_t* pDesc                                   ///< [in] metric query pool creation data
             );
 
@@ -573,47 +573,69 @@ namespace xet
 } // namespace xet
 
 #ifdef _DEBUG
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts value_type_t to std::string
-std::string to_string( xet::value_type_t val );
+namespace std
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::value_type_t to std::string
+    string to_string( const xet::value_type_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts typed_value_version_t to std::string
-std::string to_string( xet::typed_value_version_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::typed_value_version_t to std::string
+    string to_string( const xet::typed_value_version_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts MetricGroup::sampling_type_t to std::string
-std::string to_string( xet::MetricGroup::sampling_type_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::value_t to std::string
+    string to_string( const xet::value_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts MetricGroup::properties_version_t to std::string
-std::string to_string( xet::MetricGroup::properties_version_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::typed_value_t to std::string
+    string to_string( const xet::typed_value_t val );
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::MetricGroup::sampling_type_t to std::string
+    string to_string( const xet::MetricGroup::sampling_type_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Metric::type_t to std::string
-std::string to_string( xet::Metric::type_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::MetricGroup::properties_version_t to std::string
+    string to_string( const xet::MetricGroup::properties_version_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Metric::properties_version_t to std::string
-std::string to_string( xet::Metric::properties_version_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::MetricGroup::properties_t to std::string
+    string to_string( const xet::MetricGroup::properties_t val );
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::Metric::type_t to std::string
+    string to_string( const xet::Metric::type_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts MetricTracer::desc_version_t to std::string
-std::string to_string( xet::MetricTracer::desc_version_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::Metric::properties_version_t to std::string
+    string to_string( const xet::Metric::properties_version_t val );
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::Metric::properties_t to std::string
+    string to_string( const xet::Metric::properties_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts MetricQueryPool::flag_t to std::string
-std::string to_string( xet::MetricQueryPool::flag_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::MetricTracer::desc_version_t to std::string
+    string to_string( const xet::MetricTracer::desc_version_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts MetricQueryPool::desc_version_t to std::string
-std::string to_string( xet::MetricQueryPool::desc_version_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::MetricTracer::desc_t to std::string
+    string to_string( const xet::MetricTracer::desc_t val );
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::MetricQueryPool::flag_t to std::string
+    string to_string( const xet::MetricQueryPool::flag_t val );
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::MetricQueryPool::desc_version_t to std::string
+    string to_string( const xet::MetricQueryPool::desc_version_t val );
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::MetricQueryPool::desc_t to std::string
+    string to_string( const xet::MetricQueryPool::desc_t val );
+
+} // namespace std
 #endif // _DEBUG
 #endif // defined(__cplusplus)
 #endif // _XET_METRIC_HPP

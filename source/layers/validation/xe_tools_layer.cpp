@@ -231,6 +231,7 @@ namespace layer
     xe_result_t __xecall
     xetMetricTracerOpen(
         xet_device_handle_t hDevice,                    ///< [in] handle of the device
+        xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
         xet_metric_tracer_desc_t* pDesc,                ///< [in,out] metric tracer descriptor
         xe_event_handle_t hNotificationEvent,           ///< [in] event used for report availability notification. Must be device
                                                         ///< to host type.
@@ -247,6 +248,9 @@ namespace layer
             if( nullptr == hDevice )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
+            if( nullptr == hMetricGroup )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
             if( nullptr == pDesc )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
@@ -261,7 +265,7 @@ namespace layer
 
         }
 
-        return pfnOpen( hDevice, pDesc, hNotificationEvent, phMetricTracer );
+        return pfnOpen( hDevice, hMetricGroup, pDesc, hNotificationEvent, phMetricTracer );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -349,6 +353,7 @@ namespace layer
     xe_result_t __xecall
     xetMetricQueryPoolCreate(
         xet_device_handle_t hDevice,                    ///< [in] handle of the device
+        xet_metric_group_handle_t hMetricGroup,         ///< [in] metric group associated with the query object.
         xet_metric_query_pool_desc_t* pDesc,            ///< [in] metric query pool creation data
         xet_metric_query_pool_handle_t* phMetricQueryPool   ///< [out] handle of metric query pool
         )
@@ -363,6 +368,9 @@ namespace layer
             if( nullptr == hDevice )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
+            if( nullptr == hMetricGroup )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
             if( nullptr == pDesc )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
@@ -374,7 +382,7 @@ namespace layer
 
         }
 
-        return pfnCreate( hDevice, pDesc, phMetricQueryPool );
+        return pfnCreate( hDevice, hMetricGroup, pDesc, phMetricQueryPool );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

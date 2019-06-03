@@ -232,9 +232,8 @@ typedef enum _xe_memory_type_t
 typedef struct _xe_memory_allocation_properties_t
 {
     xe_memory_allocation_properties_version_t version;  ///< [in] ::XE_MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT
-    xe_memory_type_t type;                          ///< [out] Type of allocated memory
-    xe_device_handle_t device;                      ///< [out] Device handle associated with this allocation (optional)
-    uint64_t id;                                    ///< [out] Identifier for this allocation
+    xe_memory_type_t type;                          ///< [out] type of allocated memory
+    uint64_t id;                                    ///< [out] identifier for this allocation
 
 } xe_memory_allocation_properties_t;
 
@@ -260,8 +259,9 @@ typedef struct _xe_memory_allocation_properties_t
 xe_result_t __xecall
 xeDeviceGroupGetMemProperties(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    const void* ptr,                                ///< [in] Pointer to query
-    xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
+    const void* ptr,                                ///< [in] memory pointer to query
+    xe_memory_allocation_properties_t* pMemProperties,  ///< [out] query result for memory allocation properties
+    xe_device_handle_t* phDevice                    ///< [out][optional] device associated with this allocation
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -285,7 +285,7 @@ xeDeviceGroupGetMemProperties(
 xe_result_t __xecall
 xeDeviceGroupGetMemAddressRange(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    const void* ptr,                                ///< [in] Pointer to query
+    const void* ptr,                                ///< [in] memory pointer to query
     void** pBase,                                   ///< [in,out][optional] base address of the allocation
     size_t* pSize                                   ///< [in,out][optional] size of the allocation
     );
@@ -315,7 +315,7 @@ xeDeviceGroupGetMemAddressRange(
 xe_result_t __xecall
 xeDeviceGroupGetMemIpcHandle(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    const void* ptr,                                ///< [in] Pointer to the device memory allocation
+    const void* ptr,                                ///< [in] pointer to the device memory allocation
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
     );
 

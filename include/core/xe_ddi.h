@@ -327,7 +327,8 @@ typedef xe_result_t (__xecall *xe_pfnDeviceGroupFreeMem_t)(
 typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetMemProperties_t)(
     xe_device_group_handle_t,
     const void*,
-    xe_memory_allocation_properties_t*
+    xe_memory_allocation_properties_t*,
+    xe_device_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////

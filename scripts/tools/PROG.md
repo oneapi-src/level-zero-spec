@@ -203,10 +203,9 @@ The following sample code demonstrates a basic sequence for time based collectio
         ${x}EventCreate( hEventPool, &eventDesc, &hNotificationEvent );
         
         // Open time based sampling
-        metricTracerDescriptor.hMetricGroup     	= hMetricGroup;
-        metricTracerDescriptor.samplingPeriodNs 	= 1000;
+        metricTracerDescriptor.samplingPeriod   	= 1000;
         metricTracerDescriptor.notifyEveryNReports  = 32768;
-        ${t}MetricTracerOpen( hDevice, &metricTracerDescriptor, hNotificationEvent, &hMetricTracer );
+        ${t}MetricTracerOpen( hDevice, hMetricGroup, &metricTracerDescriptor, hNotificationEvent, &hMetricTracer );
 
         // Run your workload, in this example we assume the data for the whole experiment fits in the device buffer
         Workload(hDevice);
@@ -276,9 +275,8 @@ The following sample code demonstrates a basic sequence for query based collecti
 
         // Create metric query pool & completion event
         queryPoolDesc.flags        = ${T}_METRIC_QUERY_POOL_FLAG_PERFORMANCE;
-        queryPoolDesc.hMetricGroup = hMetricGroup;
         queryPoolDesc.count        = 1000;
-        ${t}MetricQueryPoolCreate( hDevice, &queryPoolDesc, &hMetricQueryPool );
+        ${t}MetricQueryPoolCreate( hDevice, hMetricGroup, &queryPoolDesc, &hMetricQueryPool );
         eventPoolDesc.flags = ${X}_EVENT_POOL_FLAG_DEFAULT;
         eventPoolDesc.count = 1000;
         ${x}EventPoolCreate( hDeviceGroup, &eventPoolDesc, 1, &hDevice, &hEventPool );

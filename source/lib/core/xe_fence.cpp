@@ -398,35 +398,64 @@ namespace xe
 } // namespace xe
 
 #ifdef _DEBUG
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Fence::desc_version_t to std::string
-std::string to_string( xe::Fence::desc_version_t val )
+namespace std
 {
-    std::string str;
-    switch( val )
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Fence::desc_version_t to std::string
+    string to_string( const xe::Fence::desc_version_t val )
     {
-    case xe::Fence::desc_version_t::CURRENT:
-        str = "xe::Fence::desc_version_t::CURRENT";
-    default:
-        str = "xe::Fence::desc_version_t::?";
-    };
-    return str;
-}
+        string str;
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Fence::flag_t to std::string
-std::string to_string( xe::Fence::flag_t val )
-{
-    std::string str;
-    switch( val )
+        switch( val )
+        {
+        case xe::Fence::desc_version_t::CURRENT:
+            str = "xe::Fence::desc_version_t::CURRENT";
+            break;
+
+        default:
+            str = "xe::Fence::desc_version_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Fence::flag_t to std::string
+    string to_string( const xe::Fence::flag_t val )
     {
-    case xe::Fence::flag_t::NONE:
-        str = "xe::Fence::flag_t::NONE";
-    default:
-        str = "xe::Fence::flag_t::?";
-    };
-    return str;
-}
+        string str;
 
+        switch( val )
+        {
+        case xe::Fence::flag_t::NONE:
+            str = "xe::Fence::flag_t::NONE";
+            break;
 
+        default:
+            str = "xe::Fence::flag_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Fence::desc_t to std::string
+    string to_string( const xe::Fence::desc_t val )
+    {
+        string str;
+        
+        str += "xe::Fence::desc_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "xe::Fence::desc_t::flags : ";
+        str += to_string(val.flags);
+        str += "\n";
+
+        return str;
+    }
+
+} // namespace std
 #endif // _DEBUG

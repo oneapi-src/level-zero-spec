@@ -64,6 +64,9 @@ namespace xet
 } // namespace xet
 
 #ifdef _DEBUG
+namespace std
+{
+} // namespace std
 #endif // _DEBUG
 #endif // defined(__cplusplus)
 #endif // _XET_DRIVER_HPP

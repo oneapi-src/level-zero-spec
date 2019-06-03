@@ -220,23 +220,29 @@ namespace xe
 } // namespace xe
 
 #ifdef _DEBUG
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts CommandQueue::desc_version_t to std::string
-std::string to_string( xe::CommandQueue::desc_version_t val );
+namespace std
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::CommandQueue::desc_version_t to std::string
+    string to_string( const xe::CommandQueue::desc_version_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts CommandQueue::flag_t to std::string
-std::string to_string( xe::CommandQueue::flag_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::CommandQueue::flag_t to std::string
+    string to_string( const xe::CommandQueue::flag_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts CommandQueue::mode_t to std::string
-std::string to_string( xe::CommandQueue::mode_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::CommandQueue::mode_t to std::string
+    string to_string( const xe::CommandQueue::mode_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts CommandQueue::priority_t to std::string
-std::string to_string( xe::CommandQueue::priority_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::CommandQueue::priority_t to std::string
+    string to_string( const xe::CommandQueue::priority_t val );
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::CommandQueue::desc_t to std::string
+    string to_string( const xe::CommandQueue::desc_t val );
 
+} // namespace std
 #endif // _DEBUG
 #endif // defined(__cplusplus)
 #endif // _XE_CMDQUEUE_HPP

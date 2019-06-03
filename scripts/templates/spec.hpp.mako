@@ -15,7 +15,7 @@ def declare_dbg(obj, tags):
     if re.match("class", obj['type']):
         return True
     if 'class' not in obj or obj['class'] in tags:
-        return re.match("enum", obj['type'])
+        return re.match("enum", obj['type']) or re.match("struct|union", obj['type'])
     return False
 
 %><%
@@ -70,7 +70,6 @@ def declare_dbg(obj, tags):
 #include <tuple>
 #ifdef _DEBUG
 #include <string>
-#include <sstream>
 #endif
 %else:
 #include "${x}_api.hpp"
@@ -336,40 +335,45 @@ namespace ${n}
 
 ## DEBUG ######################################################################
 #ifdef _DEBUG
-%for obj in objects:
-%if declare_dbg(obj, tags):
-## ENUM #######################################################################
-%if re.match(r"enum", obj['type']):
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts ${th.make_type_name(n, tags, obj, cpp=True)} to std::string
-## CONDITION-START ############################################################
-%if 'condition' in obj:
-#if ${th.subt(n, tags, obj['condition'])}
-%endif
-std::string to_string( ${n}::${th.make_type_name(n, tags, obj, cpp=True)} val );
-## CONDITION-END ##############################################################
-%if 'condition' in obj:
-#endif // ${th.subt(n, tags, obj['condition'])}
-%endif
-## CLASS ######################################################################
-%elif re.match(r"class", obj['type']):
-%for e in th.filter_items(th.extract_objs(specs, r"enum"), 'class', obj['name']):
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts ${th.make_class_name(n, tags, obj)}::${th.make_type_name(n, tags, e, cpp=True)} to std::string
-%if 'condition' in e:
-#if ${th.subt(n, tags, e['condition'])}
-%endif
-std::string to_string( ${n}::${th.make_class_name(n, tags, obj)}::${th.make_type_name(n, tags, e, cpp=True)} val );
-%if 'condition' in e:
-#endif // ${th.subt(n, tags, e['condition'])}
-%endif
+namespace std
+{
+    %for obj in objects:
+    %if declare_dbg(obj, tags):
+    %if re.match(r"enum", obj['type']) or re.match(r"struct|union", obj['type']):
+    <%
+        tname = "%s::%s"%(n, th.make_type_name(n, tags, obj, cpp=True))
+    %>///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts ${tname} to std::string
+    %if 'condition' in obj:
+    #if ${th.subt(n, tags, obj['condition'])}
+    %endif
+    string to_string( const ${tname} val );
+    %if 'condition' in obj:
+    #endif // ${th.subt(n, tags, obj['condition'])}
+    %endif
 
-%endfor
-%endif
+    ## CLASS ######################################################################
+    %elif re.match(r"class", obj['type']):
+    %for t in th.filter_items(th.extract_objs(specs, r"enum|struct|union"), 'class', obj['name']):
+    <%
+        tname = "%s::%s::%s"%(n, th.make_class_name(n, tags, obj), th.make_type_name(n, tags, t, cpp=True))
+    %>///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts ${tname} to std::string
+    %if 'condition' in t:
+    #if ${th.subt(n, tags, t['condition'])}
+    %endif
+    string to_string( const ${tname} val );
+    %if 'condition' in t:
+    #endif // ${th.subt(n, tags, t['condition'])}
+    %endif
 
-%endif  ## declare_dbg
-%endfor ## obj in objects
+    %endfor
+    %endif  ## class
+    %endif  ## declare_dbg
+    %endfor ## obj in objects
+} // namespace std
 #endif // _DEBUG
+## EXCEPTION ##############################################################
 %if re.match(r"common", name):
 
 namespace ${n}
@@ -380,18 +384,7 @@ namespace ${n}
     {
     protected:
     #ifdef _DEBUG
-        static std::string formatted( result_t result, const char* file, const char* line, const char* func )
-        {
-            std::string msg = to_string(result);
-            const size_t len = msg.length() + std::strlen(file) + std::strlen(line) + std::strlen(func) + 32;
-
-            std::string str;
-            str.reserve(len);
-            std::stringstream ss(str);
-
-            ss << file << "(" << line << ") : exception : " << func << " " << msg;
-            return ss.str();
-        }
+        static std::string formatted( const result_t, const char*, const char*, const char* );
         const std::string _msg;
     #endif
 
@@ -400,7 +393,7 @@ namespace ${n}
     public:
         exception_t() = delete;
 
-        exception_t( result_t result, const char* file, const char* line, const char* func )
+        exception_t( const result_t result, const char* file, const char* line, const char* func )
             : std::exception(),
         #ifdef _DEBUG
             _msg( formatted(result, file, line, func) ),

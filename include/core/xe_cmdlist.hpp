@@ -771,23 +771,41 @@ namespace xe
 } // namespace xe
 
 #ifdef _DEBUG
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts CommandList::desc_version_t to std::string
-std::string to_string( xe::CommandList::desc_version_t val );
+namespace std
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::CommandList::desc_version_t to std::string
+    string to_string( const xe::CommandList::desc_version_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts CommandList::flag_t to std::string
-std::string to_string( xe::CommandList::flag_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::CommandList::flag_t to std::string
+    string to_string( const xe::CommandList::flag_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts CommandList::parameter_t to std::string
-std::string to_string( xe::CommandList::parameter_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::CommandList::desc_t to std::string
+    string to_string( const xe::CommandList::desc_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts CommandList::memory_advice_t to std::string
-std::string to_string( xe::CommandList::memory_advice_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::CommandList::parameter_t to std::string
+    string to_string( const xe::CommandList::parameter_t val );
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::CommandList::copy_region_t to std::string
+    string to_string( const xe::CommandList::copy_region_t val );
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::CommandList::image_region_t to std::string
+    string to_string( const xe::CommandList::image_region_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::CommandList::memory_advice_t to std::string
+    string to_string( const xe::CommandList::memory_advice_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::CommandList::thread_group_dimensions_t to std::string
+    string to_string( const xe::CommandList::thread_group_dimensions_t val );
+
+} // namespace std
 #endif // _DEBUG
 #endif // defined(__cplusplus)
 #endif // _XE_CMDLIST_HPP

@@ -287,39 +287,53 @@ namespace xe
 } // namespace xe
 
 #ifdef _DEBUG
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Image::desc_version_t to std::string
-std::string to_string( xe::Image::desc_version_t val );
+namespace std
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Image::desc_version_t to std::string
+    string to_string( const xe::Image::desc_version_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Image::flag_t to std::string
-std::string to_string( xe::Image::flag_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Image::flag_t to std::string
+    string to_string( const xe::Image::flag_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Image::type_t to std::string
-std::string to_string( xe::Image::type_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Image::type_t to std::string
+    string to_string( const xe::Image::type_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Image::format_layout_t to std::string
-std::string to_string( xe::Image::format_layout_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Image::format_layout_t to std::string
+    string to_string( const xe::Image::format_layout_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Image::format_type_t to std::string
-std::string to_string( xe::Image::format_type_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Image::format_type_t to std::string
+    string to_string( const xe::Image::format_type_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Image::format_swizzle_t to std::string
-std::string to_string( xe::Image::format_swizzle_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Image::format_swizzle_t to std::string
+    string to_string( const xe::Image::format_swizzle_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Image::properties_version_t to std::string
-std::string to_string( xe::Image::properties_version_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Image::format_desc_t to std::string
+    string to_string( const xe::Image::format_desc_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Image::sampler_filter_flags_t to std::string
-std::string to_string( xe::Image::sampler_filter_flags_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Image::desc_t to std::string
+    string to_string( const xe::Image::desc_t val );
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Image::properties_version_t to std::string
+    string to_string( const xe::Image::properties_version_t val );
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Image::sampler_filter_flags_t to std::string
+    string to_string( const xe::Image::sampler_filter_flags_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Image::properties_t to std::string
+    string to_string( const xe::Image::properties_t val );
+
+} // namespace std
 #endif // _DEBUG
 #endif // defined(__cplusplus)
 #endif // _XE_IMAGE_HPP

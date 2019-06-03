@@ -213,58 +213,108 @@ namespace xe
 } // namespace xe
 
 #ifdef _DEBUG
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Sampler::desc_version_t to std::string
-std::string to_string( xe::Sampler::desc_version_t val )
+namespace std
 {
-    std::string str;
-    switch( val )
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Sampler::desc_version_t to std::string
+    string to_string( const xe::Sampler::desc_version_t val )
     {
-    case xe::Sampler::desc_version_t::CURRENT:
-        str = "xe::Sampler::desc_version_t::CURRENT";
-    default:
-        str = "xe::Sampler::desc_version_t::?";
-    };
-    return str;
-}
+        string str;
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Sampler::address_mode_t to std::string
-std::string to_string( xe::Sampler::address_mode_t val )
-{
-    std::string str;
-    switch( val )
+        switch( val )
+        {
+        case xe::Sampler::desc_version_t::CURRENT:
+            str = "xe::Sampler::desc_version_t::CURRENT";
+            break;
+
+        default:
+            str = "xe::Sampler::desc_version_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Sampler::address_mode_t to std::string
+    string to_string( const xe::Sampler::address_mode_t val )
     {
-    case xe::Sampler::address_mode_t::NONE:
-        str = "xe::Sampler::address_mode_t::NONE";
-    case xe::Sampler::address_mode_t::REPEAT:
-        str = "xe::Sampler::address_mode_t::REPEAT";
-    case xe::Sampler::address_mode_t::CLAMP:
-        str = "xe::Sampler::address_mode_t::CLAMP";
-    case xe::Sampler::address_mode_t::MIRROR:
-        str = "xe::Sampler::address_mode_t::MIRROR";
-    default:
-        str = "xe::Sampler::address_mode_t::?";
-    };
-    return str;
-}
+        string str;
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Sampler::filter_mode_t to std::string
-std::string to_string( xe::Sampler::filter_mode_t val )
-{
-    std::string str;
-    switch( val )
+        switch( val )
+        {
+        case xe::Sampler::address_mode_t::NONE:
+            str = "xe::Sampler::address_mode_t::NONE";
+            break;
+
+        case xe::Sampler::address_mode_t::REPEAT:
+            str = "xe::Sampler::address_mode_t::REPEAT";
+            break;
+
+        case xe::Sampler::address_mode_t::CLAMP:
+            str = "xe::Sampler::address_mode_t::CLAMP";
+            break;
+
+        case xe::Sampler::address_mode_t::MIRROR:
+            str = "xe::Sampler::address_mode_t::MIRROR";
+            break;
+
+        default:
+            str = "xe::Sampler::address_mode_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Sampler::filter_mode_t to std::string
+    string to_string( const xe::Sampler::filter_mode_t val )
     {
-    case xe::Sampler::filter_mode_t::NEAREST:
-        str = "xe::Sampler::filter_mode_t::NEAREST";
-    case xe::Sampler::filter_mode_t::LINEAR:
-        str = "xe::Sampler::filter_mode_t::LINEAR";
-    default:
-        str = "xe::Sampler::filter_mode_t::?";
-    };
-    return str;
-}
+        string str;
 
+        switch( val )
+        {
+        case xe::Sampler::filter_mode_t::NEAREST:
+            str = "xe::Sampler::filter_mode_t::NEAREST";
+            break;
 
+        case xe::Sampler::filter_mode_t::LINEAR:
+            str = "xe::Sampler::filter_mode_t::LINEAR";
+            break;
+
+        default:
+            str = "xe::Sampler::filter_mode_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Sampler::desc_t to std::string
+    string to_string( const xe::Sampler::desc_t val )
+    {
+        string str;
+        
+        str += "xe::Sampler::desc_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "xe::Sampler::desc_t::addressMode : ";
+        str += to_string(val.addressMode);
+        str += "\n";
+        
+        str += "xe::Sampler::desc_t::filterMode : ";
+        str += to_string(val.filterMode);
+        str += "\n";
+        
+        str += "xe::Sampler::desc_t::isNormalized : ";
+        str += to_string(val.isNormalized);
+        str += "\n";
+
+        return str;
+    }
+
+} // namespace std
 #endif // _DEBUG

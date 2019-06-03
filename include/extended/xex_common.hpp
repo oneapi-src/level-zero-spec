@@ -50,6 +50,9 @@ namespace xex
 } // namespace xex
 
 #ifdef _DEBUG
+namespace std
+{
+} // namespace std
 #endif // _DEBUG
 
 namespace xex

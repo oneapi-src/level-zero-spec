@@ -197,10 +197,9 @@ The following sample code demonstrates a basic sequence for time based collectio
         xeEventCreate( hEventPool, &eventDesc, &hNotificationEvent );
         
         // Open time based sampling
-        metricTracerDescriptor.hMetricGroup     	= hMetricGroup;
-        metricTracerDescriptor.samplingPeriodNs 	= 1000;
+        metricTracerDescriptor.samplingPeriod   	= 1000;
         metricTracerDescriptor.notifyEveryNReports  = 32768;
-        xetMetricTracerOpen( hDevice, &metricTracerDescriptor, hNotificationEvent, &hMetricTracer );
+        xetMetricTracerOpen( hDevice, hMetricGroup, &metricTracerDescriptor, hNotificationEvent, &hMetricTracer );
 
         // Run your workload, in this example we assume the data for the whole experiment fits in the device buffer
         Workload(hDevice);
@@ -270,9 +269,8 @@ The following sample code demonstrates a basic sequence for query based collecti
 
         // Create metric query pool & completion event
         queryPoolDesc.flags        = XET_METRIC_QUERY_POOL_FLAG_PERFORMANCE;
-        queryPoolDesc.hMetricGroup = hMetricGroup;
         queryPoolDesc.count        = 1000;
-        xetMetricQueryPoolCreate( hDevice, &queryPoolDesc, &hMetricQueryPool );
+        xetMetricQueryPoolCreate( hDevice, hMetricGroup, &queryPoolDesc, &hMetricQueryPool );
         eventPoolDesc.flags = XE_EVENT_POOL_FLAG_DEFAULT;
         eventPoolDesc.count = 1000;
         xeEventPoolCreate( hDeviceGroup, &eventPoolDesc, 1, &hDevice, &hEventPool );

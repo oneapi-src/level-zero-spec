@@ -1884,8 +1884,9 @@ namespace layer
     xe_result_t __xecall
     xeDeviceGroupGetMemProperties(
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-        const void* ptr,                                ///< [in] Pointer to query
-        xe_memory_allocation_properties_t* pMemProperties   ///< [out] Query result for memory allocation properties
+        const void* ptr,                                ///< [in] memory pointer to query
+        xe_memory_allocation_properties_t* pMemProperties,  ///< [out] query result for memory allocation properties
+        xe_device_handle_t* phDevice                    ///< [out][optional] device associated with this allocation
         )
     {
         auto pfnGetMemProperties = context.xeDdiTable.DeviceGroup.pfnGetMemProperties;
@@ -1906,7 +1907,7 @@ namespace layer
 
         }
 
-        return pfnGetMemProperties( hDeviceGroup, ptr, pMemProperties );
+        return pfnGetMemProperties( hDeviceGroup, ptr, pMemProperties, phDevice );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1914,7 +1915,7 @@ namespace layer
     xe_result_t __xecall
     xeDeviceGroupGetMemAddressRange(
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-        const void* ptr,                                ///< [in] Pointer to query
+        const void* ptr,                                ///< [in] memory pointer to query
         void** pBase,                                   ///< [in,out][optional] base address of the allocation
         size_t* pSize                                   ///< [in,out][optional] size of the allocation
         )
@@ -1942,7 +1943,7 @@ namespace layer
     xe_result_t __xecall
     xeDeviceGroupGetMemIpcHandle(
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-        const void* ptr,                                ///< [in] Pointer to the device memory allocation
+        const void* ptr,                                ///< [in] pointer to the device memory allocation
         xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
         )
     {

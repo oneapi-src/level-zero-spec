@@ -199,13 +199,10 @@ members:
       init: "$X_MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT"
     - type: $x_memory_type_t
       name: type
-      desc: "[out] Type of allocated memory"
-    - type: $x_device_handle_t
-      name: device
-      desc: "[out] Device handle associated with this allocation (optional)"
+      desc: "[out] type of allocated memory"
     - type: uint64_t
       name: id
-      desc: "[out] Identifier for this allocation"
+      desc: "[out] identifier for this allocation"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves attributes of a memory allocation"
@@ -221,10 +218,13 @@ params:
       desc: "[in] handle of the device group object"
     - type: "const void*"
       name: ptr
-      desc: "[in] Pointer to query"
+      desc: "[in] memory pointer to query"
     - type: "$x_memory_allocation_properties_t*"
       name: pMemProperties
-      desc: "[out] Query result for memory allocation properties"
+      desc: "[out] query result for memory allocation properties"
+    - type: "$x_device_handle_t*"
+      name: phDevice
+      desc: "[out][optional] device associated with this allocation"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves the base address and/or size of an allocation"
@@ -240,7 +240,7 @@ params:
       desc: "[in] handle of the device group object"
     - type: "const void*"
       name: ptr
-      desc: "[in] Pointer to query"
+      desc: "[in] memory pointer to query"
     - type: "void**"
       name: pBase
       desc: "[in,out][optional] base address of the allocation"
@@ -263,7 +263,7 @@ params:
       desc: "[in] handle of the device group object"
     - type: "const void*"
       name: ptr
-      desc: "[in] Pointer to the device memory allocation"
+      desc: "[in] pointer to the device memory allocation"
     - type: $x_ipc_mem_handle_t*
       name: pIpcHandle
       desc: "[out] Returned IPC memory handle"

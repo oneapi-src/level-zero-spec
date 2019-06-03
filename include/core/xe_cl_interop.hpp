@@ -43,6 +43,9 @@ namespace xe
 } // namespace xe
 
 #ifdef _DEBUG
+namespace std
+{
+} // namespace std
 #endif // _DEBUG
 #endif // defined(__cplusplus)
 #endif // _XE_CL_INTEROP_HPP

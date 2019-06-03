@@ -252,6 +252,7 @@ xetDeviceActivateMetricGroups(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
+///         + nullptr == hMetricGroup
 ///         + nullptr == pDesc
 ///         + nullptr == hNotificationEvent
 ///         + nullptr == phMetricTracer
@@ -261,6 +262,7 @@ xetDeviceActivateMetricGroups(
 xe_result_t __xecall
 xetMetricTracerOpen(
     xet_device_handle_t hDevice,                    ///< [in] handle of the device
+    xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
     xet_metric_tracer_desc_t* pDesc,                ///< [in,out] metric tracer descriptor
     xe_event_handle_t hNotificationEvent,           ///< [in] event used for report availability notification. Must be device
                                                     ///< to host type.
@@ -274,7 +276,7 @@ xetMetricTracerOpen(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnOpen( hDevice, pDesc, hNotificationEvent, phMetricTracer );
+    return pfnOpen( hDevice, hMetricGroup, pDesc, hNotificationEvent, phMetricTracer );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -386,6 +388,7 @@ xetMetricTracerReadData(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
+///         + nullptr == hMetricGroup
 ///         + nullptr == pDesc
 ///         + nullptr == phMetricQueryPool
 ///         + invalid device handle
@@ -394,6 +397,7 @@ xetMetricTracerReadData(
 xe_result_t __xecall
 xetMetricQueryPoolCreate(
     xet_device_handle_t hDevice,                    ///< [in] handle of the device
+    xet_metric_group_handle_t hMetricGroup,         ///< [in] metric group associated with the query object.
     xet_metric_query_pool_desc_t* pDesc,            ///< [in] metric query pool creation data
     xet_metric_query_pool_handle_t* phMetricQueryPool   ///< [out] handle of metric query pool
     )
@@ -405,7 +409,7 @@ xetMetricQueryPoolCreate(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnCreate( hDevice, pDesc, phMetricQueryPool );
+    return pfnCreate( hDevice, hMetricGroup, pDesc, phMetricQueryPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -867,6 +871,7 @@ namespace xet
     MetricTracer* __xecall
     MetricTracer::Open(
         Device* pDevice,                                ///< [in] pointer to the device
+        MetricGroup* pMetricGroup,                      ///< [in] pointer to the metric group
         desc_t* pDesc,                                  ///< [in,out] metric tracer descriptor
         xe::Event* pNotificationEvent                   ///< [in] event used for report availability notification. Must be device
                                                         ///< to host type.
@@ -876,6 +881,7 @@ namespace xet
 
         auto result = static_cast<result_t>( ::xetMetricTracerOpen(
             reinterpret_cast<xet_device_handle_t>( pDevice->getHandle() ),
+            reinterpret_cast<xet_metric_group_handle_t>( pMetricGroup->getHandle() ),
             reinterpret_cast<xet_metric_tracer_desc_t*>( pDesc ),
             reinterpret_cast<xe_event_handle_t>( pNotificationEvent->getHandle() ),
             &hMetricTracer ) );
@@ -980,6 +986,7 @@ namespace xet
     MetricQueryPool* __xecall
     MetricQueryPool::Create(
         Device* pDevice,                                ///< [in] pointer to the device
+        MetricGroup* pMetricGroup,                      ///< [in] metric group associated with the query object.
         desc_t* pDesc                                   ///< [in] metric query pool creation data
         )
     {
@@ -987,6 +994,7 @@ namespace xet
 
         auto result = static_cast<result_t>( ::xetMetricQueryPoolCreate(
             reinterpret_cast<xet_device_handle_t>( pDevice->getHandle() ),
+            reinterpret_cast<xet_metric_group_handle_t>( pMetricGroup->getHandle() ),
             reinterpret_cast<xet_metric_query_pool_desc_t*>( pDesc ),
             &hMetricQueryPool ) );
 
@@ -1165,168 +1173,399 @@ namespace xet
 } // namespace xet
 
 #ifdef _DEBUG
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts value_type_t to std::string
-std::string to_string( xet::value_type_t val )
+namespace std
 {
-    std::string str;
-    switch( val )
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::value_type_t to std::string
+    string to_string( const xet::value_type_t val )
     {
-    case xet::value_type_t::UINT32:
-        str = "xet::value_type_t::UINT32";
-    case xet::value_type_t::UINT64:
-        str = "xet::value_type_t::UINT64";
-    case xet::value_type_t::FLOAT:
-        str = "xet::value_type_t::FLOAT";
-    case xet::value_type_t::BOOL:
-        str = "xet::value_type_t::BOOL";
-    default:
-        str = "xet::value_type_t::?";
-    };
-    return str;
-}
+        string str;
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts typed_value_version_t to std::string
-std::string to_string( xet::typed_value_version_t val )
-{
-    std::string str;
-    switch( val )
+        switch( val )
+        {
+        case xet::value_type_t::UINT32:
+            str = "xet::value_type_t::UINT32";
+            break;
+
+        case xet::value_type_t::UINT64:
+            str = "xet::value_type_t::UINT64";
+            break;
+
+        case xet::value_type_t::FLOAT:
+            str = "xet::value_type_t::FLOAT";
+            break;
+
+        case xet::value_type_t::BOOL:
+            str = "xet::value_type_t::BOOL";
+            break;
+
+        default:
+            str = "xet::value_type_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::typed_value_version_t to std::string
+    string to_string( const xet::typed_value_version_t val )
     {
-    case xet::typed_value_version_t::CURRENT:
-        str = "xet::typed_value_version_t::CURRENT";
-    default:
-        str = "xet::typed_value_version_t::?";
-    };
-    return str;
-}
+        string str;
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts MetricGroup::sampling_type_t to std::string
-std::string to_string( xet::MetricGroup::sampling_type_t val )
-{
-    const auto bits = static_cast<uint32_t>( val );
-    if( 0 == bits ) return std::string("{}");
+        switch( val )
+        {
+        case xet::typed_value_version_t::CURRENT:
+            str = "xet::typed_value_version_t::CURRENT";
+            break;
 
-    std::string str;
-    if( static_cast<uint32_t>(xet::MetricGroup::sampling_type_t::EVENT_BASED) & bits )
-        str += "xet::MetricGroup::sampling_type_t::EVENT_BASED | ";
+        default:
+            str = "xet::typed_value_version_t::?";
+            break;
+        };
 
-    if( static_cast<uint32_t>(xet::MetricGroup::sampling_type_t::TIME_BASED) & bits )
-        str += "xet::MetricGroup::sampling_type_t::TIME_BASED | ";
+        return str;
+    }
 
-    return "{ " + str.substr(0, str.size() - 3) + " }";
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts MetricGroup::properties_version_t to std::string
-std::string to_string( xet::MetricGroup::properties_version_t val )
-{
-    std::string str;
-    switch( val )
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::value_t to std::string
+    string to_string( const xet::value_t val )
     {
-    case xet::MetricGroup::properties_version_t::CURRENT:
-        str = "xet::MetricGroup::properties_version_t::CURRENT";
-    default:
-        str = "xet::MetricGroup::properties_version_t::?";
-    };
-    return str;
-}
+        string str;
+        
+        str += "xet::value_t::valueUInt32 : ";
+        str += to_string(val.valueUInt32);
+        str += "\n";
+        
+        str += "xet::value_t::valueUInt64 : ";
+        str += to_string(val.valueUInt64);
+        str += "\n";
+        
+        str += "xet::value_t::valueFloat : ";
+        str += to_string(val.valueFloat);
+        str += "\n";
+        
+        str += "xet::value_t::valueBool : ";
+        str += to_string(val.valueBool);
+        str += "\n";
 
+        return str;
+    }
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Metric::type_t to std::string
-std::string to_string( xet::Metric::type_t val )
-{
-    std::string str;
-    switch( val )
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::typed_value_t to std::string
+    string to_string( const xet::typed_value_t val )
     {
-    case xet::Metric::type_t::DURATION:
-        str = "xet::Metric::type_t::DURATION";
-    case xet::Metric::type_t::EVENT:
-        str = "xet::Metric::type_t::EVENT";
-    case xet::Metric::type_t::EVENT_WITH_RANGE:
-        str = "xet::Metric::type_t::EVENT_WITH_RANGE";
-    case xet::Metric::type_t::THROUGHPUT:
-        str = "xet::Metric::type_t::THROUGHPUT";
-    case xet::Metric::type_t::TIMESTAMP:
-        str = "xet::Metric::type_t::TIMESTAMP";
-    case xet::Metric::type_t::FLAG:
-        str = "xet::Metric::type_t::FLAG";
-    case xet::Metric::type_t::RATIO:
-        str = "xet::Metric::type_t::RATIO";
-    case xet::Metric::type_t::RAW:
-        str = "xet::Metric::type_t::RAW";
-    default:
-        str = "xet::Metric::type_t::?";
-    };
-    return str;
-}
+        string str;
+        
+        str += "xet::typed_value_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "xet::typed_value_t::type : ";
+        str += to_string(val.type);
+        str += "\n";
+        
+        str += "xet::typed_value_t::value : ";
+        str += to_string(val.value);
+        str += "\n";
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Metric::properties_version_t to std::string
-std::string to_string( xet::Metric::properties_version_t val )
-{
-    std::string str;
-    switch( val )
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::MetricGroup::sampling_type_t to std::string
+    string to_string( const xet::MetricGroup::sampling_type_t val )
     {
-    case xet::Metric::properties_version_t::CURRENT:
-        str = "xet::Metric::properties_version_t::CURRENT";
-    default:
-        str = "xet::Metric::properties_version_t::?";
-    };
-    return str;
-}
+        const auto bits = static_cast<uint32_t>( val );
+        if( 0 == bits ) return string("{}");
 
+        string str;
+        
+        if( static_cast<uint32_t>(xet::MetricGroup::sampling_type_t::EVENT_BASED) & bits )
+            str += "xet::MetricGroup::sampling_type_t::EVENT_BASED | ";
+        
+        if( static_cast<uint32_t>(xet::MetricGroup::sampling_type_t::TIME_BASED) & bits )
+            str += "xet::MetricGroup::sampling_type_t::TIME_BASED | ";
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts MetricTracer::desc_version_t to std::string
-std::string to_string( xet::MetricTracer::desc_version_t val )
-{
-    std::string str;
-    switch( val )
+        return "{ " + str.substr(0, str.size() - 3) + " }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::MetricGroup::properties_version_t to std::string
+    string to_string( const xet::MetricGroup::properties_version_t val )
     {
-    case xet::MetricTracer::desc_version_t::CURRENT:
-        str = "xet::MetricTracer::desc_version_t::CURRENT";
-    default:
-        str = "xet::MetricTracer::desc_version_t::?";
-    };
-    return str;
-}
+        string str;
 
+        switch( val )
+        {
+        case xet::MetricGroup::properties_version_t::CURRENT:
+            str = "xet::MetricGroup::properties_version_t::CURRENT";
+            break;
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts MetricQueryPool::flag_t to std::string
-std::string to_string( xet::MetricQueryPool::flag_t val )
-{
-    std::string str;
-    switch( val )
+        default:
+            str = "xet::MetricGroup::properties_version_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::MetricGroup::properties_t to std::string
+    string to_string( const xet::MetricGroup::properties_t val )
     {
-    case xet::MetricQueryPool::flag_t::PERFORMANCE:
-        str = "xet::MetricQueryPool::flag_t::PERFORMANCE";
-    case xet::MetricQueryPool::flag_t::SKIP_EXECUTION:
-        str = "xet::MetricQueryPool::flag_t::SKIP_EXECUTION";
-    default:
-        str = "xet::MetricQueryPool::flag_t::?";
-    };
-    return str;
-}
+        string str;
+        
+        str += "xet::MetricGroup::properties_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "xet::MetricGroup::properties_t::name : ";
+        str += val.name;
+        str += "\n";
+        
+        str += "xet::MetricGroup::properties_t::description : ";
+        str += val.description;
+        str += "\n";
+        
+        str += "xet::MetricGroup::properties_t::samplingType : ";
+        str += to_string(val.samplingType);
+        str += "\n";
+        
+        str += "xet::MetricGroup::properties_t::domain : ";
+        str += to_string(val.domain);
+        str += "\n";
+        
+        str += "xet::MetricGroup::properties_t::metricCount : ";
+        str += to_string(val.metricCount);
+        str += "\n";
+        
+        str += "xet::MetricGroup::properties_t::rawReportSize : ";
+        str += to_string(val.rawReportSize);
+        str += "\n";
+        
+        str += "xet::MetricGroup::properties_t::calculatedReportSize : ";
+        str += to_string(val.calculatedReportSize);
+        str += "\n";
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts MetricQueryPool::desc_version_t to std::string
-std::string to_string( xet::MetricQueryPool::desc_version_t val )
-{
-    std::string str;
-    switch( val )
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::Metric::type_t to std::string
+    string to_string( const xet::Metric::type_t val )
     {
-    case xet::MetricQueryPool::desc_version_t::CURRENT:
-        str = "xet::MetricQueryPool::desc_version_t::CURRENT";
-    default:
-        str = "xet::MetricQueryPool::desc_version_t::?";
-    };
-    return str;
-}
+        string str;
 
+        switch( val )
+        {
+        case xet::Metric::type_t::DURATION:
+            str = "xet::Metric::type_t::DURATION";
+            break;
 
+        case xet::Metric::type_t::EVENT:
+            str = "xet::Metric::type_t::EVENT";
+            break;
 
+        case xet::Metric::type_t::EVENT_WITH_RANGE:
+            str = "xet::Metric::type_t::EVENT_WITH_RANGE";
+            break;
+
+        case xet::Metric::type_t::THROUGHPUT:
+            str = "xet::Metric::type_t::THROUGHPUT";
+            break;
+
+        case xet::Metric::type_t::TIMESTAMP:
+            str = "xet::Metric::type_t::TIMESTAMP";
+            break;
+
+        case xet::Metric::type_t::FLAG:
+            str = "xet::Metric::type_t::FLAG";
+            break;
+
+        case xet::Metric::type_t::RATIO:
+            str = "xet::Metric::type_t::RATIO";
+            break;
+
+        case xet::Metric::type_t::RAW:
+            str = "xet::Metric::type_t::RAW";
+            break;
+
+        default:
+            str = "xet::Metric::type_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::Metric::properties_version_t to std::string
+    string to_string( const xet::Metric::properties_version_t val )
+    {
+        string str;
+
+        switch( val )
+        {
+        case xet::Metric::properties_version_t::CURRENT:
+            str = "xet::Metric::properties_version_t::CURRENT";
+            break;
+
+        default:
+            str = "xet::Metric::properties_version_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::Metric::properties_t to std::string
+    string to_string( const xet::Metric::properties_t val )
+    {
+        string str;
+        
+        str += "xet::Metric::properties_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "xet::Metric::properties_t::name : ";
+        str += val.name;
+        str += "\n";
+        
+        str += "xet::Metric::properties_t::description : ";
+        str += val.description;
+        str += "\n";
+        
+        str += "xet::Metric::properties_t::component : ";
+        str += val.component;
+        str += "\n";
+        
+        str += "xet::Metric::properties_t::tierNumber : ";
+        str += to_string(val.tierNumber);
+        str += "\n";
+        
+        str += "xet::Metric::properties_t::metricType : ";
+        str += to_string(val.metricType);
+        str += "\n";
+        
+        str += "xet::Metric::properties_t::resultType : ";
+        str += to_string(val.resultType);
+        str += "\n";
+        
+        str += "xet::Metric::properties_t::resultUnits : ";
+        str += val.resultUnits;
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::MetricTracer::desc_version_t to std::string
+    string to_string( const xet::MetricTracer::desc_version_t val )
+    {
+        string str;
+
+        switch( val )
+        {
+        case xet::MetricTracer::desc_version_t::CURRENT:
+            str = "xet::MetricTracer::desc_version_t::CURRENT";
+            break;
+
+        default:
+            str = "xet::MetricTracer::desc_version_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::MetricTracer::desc_t to std::string
+    string to_string( const xet::MetricTracer::desc_t val )
+    {
+        string str;
+        
+        str += "xet::MetricTracer::desc_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "xet::MetricTracer::desc_t::notifyEveryNReports : ";
+        str += to_string(val.notifyEveryNReports);
+        str += "\n";
+        
+        str += "xet::MetricTracer::desc_t::samplingPeriod : ";
+        str += to_string(val.samplingPeriod);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::MetricQueryPool::flag_t to std::string
+    string to_string( const xet::MetricQueryPool::flag_t val )
+    {
+        string str;
+
+        switch( val )
+        {
+        case xet::MetricQueryPool::flag_t::PERFORMANCE:
+            str = "xet::MetricQueryPool::flag_t::PERFORMANCE";
+            break;
+
+        case xet::MetricQueryPool::flag_t::SKIP_EXECUTION:
+            str = "xet::MetricQueryPool::flag_t::SKIP_EXECUTION";
+            break;
+
+        default:
+            str = "xet::MetricQueryPool::flag_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::MetricQueryPool::desc_version_t to std::string
+    string to_string( const xet::MetricQueryPool::desc_version_t val )
+    {
+        string str;
+
+        switch( val )
+        {
+        case xet::MetricQueryPool::desc_version_t::CURRENT:
+            str = "xet::MetricQueryPool::desc_version_t::CURRENT";
+            break;
+
+        default:
+            str = "xet::MetricQueryPool::desc_version_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xet::MetricQueryPool::desc_t to std::string
+    string to_string( const xet::MetricQueryPool::desc_t val )
+    {
+        string str;
+        
+        str += "xet::MetricQueryPool::desc_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "xet::MetricQueryPool::desc_t::flags : ";
+        str += to_string(val.flags);
+        str += "\n";
+        
+        str += "xet::MetricQueryPool::desc_t::count : ";
+        str += to_string(val.count);
+        str += "\n";
+
+        return str;
+    }
+
+} // namespace std
 #endif // _DEBUG

@@ -263,9 +263,8 @@ namespace xe
         struct memory_allocation_properties_t
         {
             memory_allocation_properties_version_t version = memory_allocation_properties_version_t::CURRENT;   ///< [in] ::MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT
-            memory_type_t type;                             ///< [out] Type of allocated memory
-            Device* device;                                 ///< [out] Device handle associated with this allocation (optional)
-            uint64_t id;                                    ///< [out] Identifier for this allocation
+            memory_type_t type;                             ///< [out] type of allocated memory
+            uint64_t id;                                    ///< [out] identifier for this allocation
 
         };
 
@@ -530,12 +529,14 @@ namespace xe
         ///   _Analogues_
         ///     - **cuPointerGetAttribute**
         /// @returns
-        ///     - memory_allocation_properties_t: Query result for memory allocation properties
+        ///     - memory_allocation_properties_t: query result for memory allocation properties
+        ///     - Device*: device associated with this allocation
         /// 
         /// @throws result_t
         memory_allocation_properties_t __xecall
         GetMemProperties(
-            const void* ptr                                 ///< [in] Pointer to query
+            const void* ptr,                                ///< [in] memory pointer to query
+            Device** ppDevice = nullptr                     ///< [out][optional] device associated with this allocation
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -550,7 +551,7 @@ namespace xe
         /// @throws result_t
         void __xecall
         GetMemAddressRange(
-            const void* ptr,                                ///< [in] Pointer to query
+            const void* ptr,                                ///< [in] memory pointer to query
             void** pBase = nullptr,                         ///< [in,out][optional] base address of the allocation
             size_t* pSize = nullptr                         ///< [in,out][optional] size of the allocation
             );
@@ -573,7 +574,7 @@ namespace xe
         /// @throws result_t
         ipc_mem_handle_t __xecall
         GetMemIpcHandle(
-            const void* ptr                                 ///< [in] Pointer to the device memory allocation
+            const void* ptr                                 ///< [in] pointer to the device memory allocation
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -934,60 +935,85 @@ namespace xe
 } // namespace xe
 
 #ifdef _DEBUG
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts DeviceGroup::api_version_t to std::string
-std::string to_string( xe::DeviceGroup::api_version_t val );
+namespace std
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::api_version_t to std::string
+    string to_string( const xe::DeviceGroup::api_version_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts DeviceGroup::device_properties_version_t to std::string
-std::string to_string( xe::DeviceGroup::device_properties_version_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::device_properties_version_t to std::string
+    string to_string( const xe::DeviceGroup::device_properties_version_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts DeviceGroup::device_type_t to std::string
-std::string to_string( xe::DeviceGroup::device_type_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::device_type_t to std::string
+    string to_string( const xe::DeviceGroup::device_type_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts DeviceGroup::device_compute_properties_version_t to std::string
-std::string to_string( xe::DeviceGroup::device_compute_properties_version_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::device_uuid_t to std::string
+    string to_string( const xe::DeviceGroup::device_uuid_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts DeviceGroup::device_memory_properties_version_t to std::string
-std::string to_string( xe::DeviceGroup::device_memory_properties_version_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::device_properties_t to std::string
+    string to_string( const xe::DeviceGroup::device_properties_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts DeviceGroup::memory_access_capabilities_t to std::string
-std::string to_string( xe::DeviceGroup::memory_access_capabilities_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::device_compute_properties_version_t to std::string
+    string to_string( const xe::DeviceGroup::device_compute_properties_version_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts DeviceGroup::device_mem_alloc_flag_t to std::string
-std::string to_string( xe::DeviceGroup::device_mem_alloc_flag_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::device_compute_properties_t to std::string
+    string to_string( const xe::DeviceGroup::device_compute_properties_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts DeviceGroup::host_mem_alloc_flag_t to std::string
-std::string to_string( xe::DeviceGroup::host_mem_alloc_flag_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::device_memory_properties_version_t to std::string
+    string to_string( const xe::DeviceGroup::device_memory_properties_version_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts DeviceGroup::memory_allocation_properties_version_t to std::string
-std::string to_string( xe::DeviceGroup::memory_allocation_properties_version_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::memory_access_capabilities_t to std::string
+    string to_string( const xe::DeviceGroup::memory_access_capabilities_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts DeviceGroup::memory_type_t to std::string
-std::string to_string( xe::DeviceGroup::memory_type_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::device_memory_properties_t to std::string
+    string to_string( const xe::DeviceGroup::device_memory_properties_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts DeviceGroup::ipc_memory_flag_t to std::string
-std::string to_string( xe::DeviceGroup::ipc_memory_flag_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::device_mem_alloc_flag_t to std::string
+    string to_string( const xe::DeviceGroup::device_mem_alloc_flag_t val );
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::host_mem_alloc_flag_t to std::string
+    string to_string( const xe::DeviceGroup::host_mem_alloc_flag_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Device::p2p_properties_version_t to std::string
-std::string to_string( xe::Device::p2p_properties_version_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::memory_allocation_properties_version_t to std::string
+    string to_string( const xe::DeviceGroup::memory_allocation_properties_version_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Device::cache_config_t to std::string
-std::string to_string( xe::Device::cache_config_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::memory_type_t to std::string
+    string to_string( const xe::DeviceGroup::memory_type_t val );
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::memory_allocation_properties_t to std::string
+    string to_string( const xe::DeviceGroup::memory_allocation_properties_t val );
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::DeviceGroup::ipc_memory_flag_t to std::string
+    string to_string( const xe::DeviceGroup::ipc_memory_flag_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Device::p2p_properties_version_t to std::string
+    string to_string( const xe::Device::p2p_properties_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Device::p2p_properties_t to std::string
+    string to_string( const xe::Device::p2p_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Device::cache_config_t to std::string
+    string to_string( const xe::Device::cache_config_t val );
+
+} // namespace std
 #endif // _DEBUG
 #endif // defined(__cplusplus)
 #endif // _XE_DEVICE_HPP

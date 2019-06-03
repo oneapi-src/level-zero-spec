@@ -43,7 +43,6 @@
 #include <tuple>
 #ifdef _DEBUG
 #include <string>
-#include <sstream>
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -210,10 +209,13 @@ namespace xe
 } // namespace xe
 
 #ifdef _DEBUG
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts result_t to std::string
-std::string to_string( xe::result_t val );
+namespace std
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::result_t to std::string
+    string to_string( const xe::result_t val );
 
+} // namespace std
 #endif // _DEBUG
 
 namespace xe
@@ -223,18 +225,7 @@ namespace xe
     {
     protected:
     #ifdef _DEBUG
-        static std::string formatted( result_t result, const char* file, const char* line, const char* func )
-        {
-            std::string msg = to_string(result);
-            const size_t len = msg.length() + std::strlen(file) + std::strlen(line) + std::strlen(func) + 32;
-
-            std::string str;
-            str.reserve(len);
-            std::stringstream ss(str);
-
-            ss << file << "(" << line << ") : exception : " << func << " " << msg;
-            return ss.str();
-        }
+        static std::string formatted( const result_t, const char*, const char*, const char* );
         const std::string _msg;
     #endif
 
@@ -243,7 +234,7 @@ namespace xe
     public:
         exception_t() = delete;
 
-        exception_t( result_t result, const char* file, const char* line, const char* func )
+        exception_t( const result_t result, const char* file, const char* line, const char* func )
             : std::exception(),
         #ifdef _DEBUG
             _msg( formatted(result, file, line, func) ),

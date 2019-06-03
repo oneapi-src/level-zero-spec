@@ -148,6 +148,7 @@ namespace driver
     xe_result_t __xecall
     xetMetricTracerOpen(
         xet_device_handle_t hDevice,                    ///< [in] handle of the device
+        xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
         xet_metric_tracer_desc_t* pDesc,                ///< [in,out] metric tracer descriptor
         xe_event_handle_t hNotificationEvent,           ///< [in] event used for report availability notification. Must be device
                                                         ///< to host type.
@@ -207,6 +208,7 @@ namespace driver
     xe_result_t __xecall
     xetMetricQueryPoolCreate(
         xet_device_handle_t hDevice,                    ///< [in] handle of the device
+        xet_metric_group_handle_t hMetricGroup,         ///< [in] metric group associated with the query object.
         xet_metric_query_pool_desc_t* pDesc,            ///< [in] metric query pool creation data
         xet_metric_query_pool_handle_t* phMetricQueryPool   ///< [out] handle of metric query pool
         )

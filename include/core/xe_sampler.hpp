@@ -161,19 +161,25 @@ namespace xe
 } // namespace xe
 
 #ifdef _DEBUG
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Sampler::desc_version_t to std::string
-std::string to_string( xe::Sampler::desc_version_t val );
+namespace std
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Sampler::desc_version_t to std::string
+    string to_string( const xe::Sampler::desc_version_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Sampler::address_mode_t to std::string
-std::string to_string( xe::Sampler::address_mode_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Sampler::address_mode_t to std::string
+    string to_string( const xe::Sampler::address_mode_t val );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Converts Sampler::filter_mode_t to std::string
-std::string to_string( xe::Sampler::filter_mode_t val );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Sampler::filter_mode_t to std::string
+    string to_string( const xe::Sampler::filter_mode_t val );
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts xe::Sampler::desc_t to std::string
+    string to_string( const xe::Sampler::desc_t val );
 
+} // namespace std
 #endif // _DEBUG
 #endif // defined(__cplusplus)
 #endif // _XE_SAMPLER_HPP

@@ -13,20 +13,35 @@ int main()
         putenv( const_cast<char *>( "XE_ENABLE_PARAMETER_VALIDATION=1" ) );
     }
 
-    // Initialize the driver
-    xe::Init( xe::init_flag_t::NONE );
-    std::cout << "Driver initialized\n";
+    try
+    {
+        // Initialize the driver
+        xe::Init( xe::init_flag_t::NONE );
+        std::cout << "Driver initialized\n";
+    }
+    catch( const xe::exception_t& e)
+    {
+        std::cout << "Driver not initialized!\n";
+        std::cout << e.what();
+        return -1;
+    }
 
     // Get the first device group
     uint32_t groupCount = 1;
     xe::DeviceGroup* pDeviceGroup = nullptr;
     xe::DeviceGroup::Get( &groupCount, &pDeviceGroup );
 
+    std::cout << "Driver version: " << pDeviceGroup->GetDriverVersion() << "\n";
+    std::cout << "API version: " << std::to_string( pDeviceGroup->GetApiVersion() ) << "\n";
+
     auto device_properties = pDeviceGroup->GetProperties();
-    // todo: to_string( device_properties );
+    std::cout << std::to_string( device_properties ) << "\n";
 
     auto compute_properties = pDeviceGroup->GetComputeProperties();
-    // todo: to_string( compute_properties );
+    std::cout << std::to_string( compute_properties ) << "\n";
+
+    auto memory_properties = pDeviceGroup->GetMemoryProperties();
+    std::cout << std::to_string( memory_properties ) << "\n";
 
     // Get the first device within the device group
     uint32_t deviceCount = 1;

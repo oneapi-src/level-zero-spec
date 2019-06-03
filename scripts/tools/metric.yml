@@ -350,14 +350,11 @@ members:
       name: version
       desc: "[in] $T_METRIC_TRACER_DESC_VERSION_CURRENT"
       init: $T_METRIC_TRACER_DESC_VERSION_CURRENT
-    - type: "$t_metric_group_handle_t"
-      name: "hMetricGroup"
-      desc: "[in] handle of the metric group"
     - type: uint32_t
       name: "notifyEveryNReports"
       desc: "[in,out] number of collected reports after which notification event will be signalled"
     - type: uint32_t
-      name: "samplingPeriodNs"
+      name: "samplingPeriod"
       desc: "[in,out] tracer sampling period in nanoseconds"
 --- #--------------------------------------------------------------------------
 type: function
@@ -371,6 +368,9 @@ params:
     - type: "$t_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
+    - type: "$t_metric_group_handle_t"
+      name: "hMetricGroup"
+      desc: "[in] handle of the metric group"
     - type: "$t_metric_tracer_desc_t*"
       name: pDesc
       desc: "[in,out] metric tracer descriptor"
@@ -472,9 +472,6 @@ members:
     - type: $t_metric_query_pool_flag_t
       name: flags
       desc: "[in] Query pool type."
-    - type: $t_metric_group_handle_t
-      name: "hMetricGroup"
-      desc: "[in] Metric group associated with the query object."
     - type: uint32_t
       name: "count"
       desc: "[in] Internal slots count within query pool object."
@@ -490,6 +487,9 @@ params:
     - type: "$t_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
+    - type: $t_metric_group_handle_t
+      name: "hMetricGroup"
+      desc: "[in] metric group associated with the query object."
     - type: "$t_metric_query_pool_desc_t*"
       name: pDesc
       desc: "[in] metric query pool creation data"

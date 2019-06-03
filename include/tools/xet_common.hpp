@@ -98,6 +98,9 @@ namespace xet
 } // namespace xet
 
 #ifdef _DEBUG
+namespace std
+{
+} // namespace std
 #endif // _DEBUG
 
 namespace xet
