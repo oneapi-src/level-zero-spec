@@ -39,6 +39,46 @@ from templates import helper as th
 ******************************************************************************/
 #include "${x}_layer.h"
 
+namespace layer
+{
+    %for obj in th.extract_objs(specs, r"function"):
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for ${th.make_func_name(n, tags, obj)}
+    %if 'condition' in obj:
+    #if ${th.subt(n, tags, obj['condition'])}
+    %endif
+    ${x}_result_t __${x}call
+    ${th.make_func_name(n, tags, obj)}(
+        %for line in th.make_param_lines(n, tags, obj):
+        ${line}
+        %endfor
+        )
+    {
+        auto ${th.make_pfn_name(n, tags, obj)} = context.${n}DdiTable.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
+
+        if( nullptr == ${th.make_pfn_name(n, tags, obj)} )
+            return ${X}_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            %for key, values in th.make_param_checks(n, tags, obj).items():
+            %for val in values:
+            if( ${val} )
+                return ${key};
+
+            %endfor
+            %endfor
+        }
+
+        return ${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
+    }
+    %if 'condition' in obj:
+    #endif // ${th.subt(n, tags, obj['condition'])}
+    %endif
+
+    %endfor
+} // namespace layer
+
 #if defined(__cplusplus)
 extern "C" {
 #endif
@@ -62,12 +102,12 @@ ${tbl['export']['name']}(
     %endfor
     )
 {
-    auto& dditable = validation.${n}DdiTable.${tbl['name']};
+    auto& dditable = layer::context.${n}DdiTable.${tbl['name']};
 
     if( nullptr == pDdiTable )
         return ${X}_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( layer::context.version < version )
         return ${X}_RESULT_ERROR_UNSUPPORTED;
 
     ${x}_result_t result = ${X}_RESULT_SUCCESS;
@@ -77,7 +117,7 @@ ${tbl['export']['name']}(
 #if ${th.subt(n, tags, obj['condition'])}
     %endif
     dditable.${th.append_ws(th.make_pfn_name(n, tags, obj), 43)} = pDdiTable->${th.make_pfn_name(n, tags, obj)};
-    pDdiTable->${th.append_ws(th.make_pfn_name(n, tags, obj), 41)} = ${th.make_func_name(n, tags, obj)};
+    pDdiTable->${th.append_ws(th.make_pfn_name(n, tags, obj), 41)} = layer::${th.make_func_name(n, tags, obj)};
     %if 'condition' in obj:
 #endif
     %endif
@@ -85,42 +125,6 @@ ${tbl['export']['name']}(
     %endfor
     return result;
 }
-
-%endfor
-%for obj in th.extract_objs(specs, r"function"):
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for ${th.make_func_name(n, tags, obj)}
-%if 'condition' in obj:
-#if ${th.subt(n, tags, obj['condition'])}
-%endif
-${x}_result_t __${x}call
-${th.make_func_name(n, tags, obj)}(
-    %for line in th.make_param_lines(n, tags, obj):
-    ${line}
-    %endfor
-    )
-{
-    auto ${th.make_pfn_name(n, tags, obj)} = validation.${n}DdiTable.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
-
-    if( nullptr == ${th.make_pfn_name(n, tags, obj)} )
-        return ${X}_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        %for key, values in th.make_param_checks(n, tags, obj).items():
-        %for val in values:
-        if( ${val} )
-            return ${key};
-
-        %endfor
-        %endfor
-    }
-
-    return ${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
-}
-%if 'condition' in obj:
-#endif // ${th.subt(n, tags, obj['condition'])}
-%endif
 
 %endfor
 #if defined(__cplusplus)

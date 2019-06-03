@@ -30,6 +30,106 @@
 ******************************************************************************/
 #include "xe_layer.h"
 
+namespace layer
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xexInit
+    xe_result_t __xecall
+    xexInit(
+        xe_init_flag_t flags                            ///< [in] initialization flags
+        )
+    {
+        auto pfnInit = context.xexDdiTable.Global.pfnInit;
+
+        if( nullptr == pfnInit )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+        }
+
+        return pfnInit( flags );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xexCommandGraphCreate
+    xe_result_t __xecall
+    xexCommandGraphCreate(
+        xe_device_handle_t hDevice,                     ///< [in] handle of the device object
+        const xex_command_graph_desc_t* desc,           ///< [in] pointer to command graph descriptor
+        xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
+        )
+    {
+        auto pfnCreate = context.xexDdiTable.CommandGraph.pfnCreate;
+
+        if( nullptr == pfnCreate )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDevice )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == desc )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == phCommandGraph )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( XEX_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version )
+                return XE_RESULT_ERROR_UNSUPPORTED;
+
+        }
+
+        return pfnCreate( hDevice, desc, phCommandGraph );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xexCommandGraphDestroy
+    xe_result_t __xecall
+    xexCommandGraphDestroy(
+        xex_command_graph_handle_t hCommandGraph        ///< [in][release] handle of command graph object to destroy
+        )
+    {
+        auto pfnDestroy = context.xexDdiTable.CommandGraph.pfnDestroy;
+
+        if( nullptr == pfnDestroy )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hCommandGraph )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnDestroy( hCommandGraph );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xexCommandGraphClose
+    xe_result_t __xecall
+    xexCommandGraphClose(
+        xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
+        )
+    {
+        auto pfnClose = context.xexDdiTable.CommandGraph.pfnClose;
+
+        if( nullptr == pfnClose )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hCommandGraph )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnClose( hCommandGraph );
+    }
+
+} // namespace layer
+
 #if defined(__cplusplus)
 extern "C" {
 #endif
@@ -51,18 +151,18 @@ xexGetGlobalProcAddrTable(
     xex_global_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xexDdiTable.Global;
+    auto& dditable = layer::context.xexDdiTable.Global;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( layer::context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     dditable.pfnInit                                     = pDdiTable->pfnInit;
-    pDdiTable->pfnInit                                   = xexInit;
+    pDdiTable->pfnInit                                   = layer::xexInit;
 
     return result;
 }
@@ -84,122 +184,26 @@ xexGetCommandGraphProcAddrTable(
     xex_command_graph_dditable_t* pDdiTable         ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = validation.xexDdiTable.CommandGraph;
+    auto& dditable = layer::context.xexDdiTable.CommandGraph;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-    if( validation.version < version )
+    if( layer::context.version < version )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
     dditable.pfnCreate                                   = pDdiTable->pfnCreate;
-    pDdiTable->pfnCreate                                 = xexCommandGraphCreate;
+    pDdiTable->pfnCreate                                 = layer::xexCommandGraphCreate;
 
     dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
-    pDdiTable->pfnDestroy                                = xexCommandGraphDestroy;
+    pDdiTable->pfnDestroy                                = layer::xexCommandGraphDestroy;
 
     dditable.pfnClose                                    = pDdiTable->pfnClose;
-    pDdiTable->pfnClose                                  = xexCommandGraphClose;
+    pDdiTable->pfnClose                                  = layer::xexCommandGraphClose;
 
     return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xexInit
-xe_result_t __xecall
-xexInit(
-    xe_init_flag_t flags                            ///< [in] initialization flags
-    )
-{
-    auto pfnInit = validation.xexDdiTable.Global.pfnInit;
-
-    if( nullptr == pfnInit )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-    }
-
-    return pfnInit( flags );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xexCommandGraphCreate
-xe_result_t __xecall
-xexCommandGraphCreate(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    const xex_command_graph_desc_t* desc,           ///< [in] pointer to command graph descriptor
-    xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
-    )
-{
-    auto pfnCreate = validation.xexDdiTable.CommandGraph.pfnCreate;
-
-    if( nullptr == pfnCreate )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hDevice )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == desc )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( nullptr == phCommandGraph )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        if( XEX_COMMAND_GRAPH_DESC_VERSION_CURRENT < desc->version )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-    }
-
-    return pfnCreate( hDevice, desc, phCommandGraph );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xexCommandGraphDestroy
-xe_result_t __xecall
-xexCommandGraphDestroy(
-    xex_command_graph_handle_t hCommandGraph        ///< [in][release] handle of command graph object to destroy
-    )
-{
-    auto pfnDestroy = validation.xexDdiTable.CommandGraph.pfnDestroy;
-
-    if( nullptr == pfnDestroy )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandGraph )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnDestroy( hCommandGraph );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Intercept function for xexCommandGraphClose
-xe_result_t __xecall
-xexCommandGraphClose(
-    xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
-    )
-{
-    auto pfnClose = validation.xexDdiTable.CommandGraph.pfnClose;
-
-    if( nullptr == pfnClose )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    if( validation.enableParameterValidation )
-    {
-        if( nullptr == hCommandGraph )
-            return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    }
-
-    return pfnClose( hCommandGraph );
 }
 
 #if defined(__cplusplus)

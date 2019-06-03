@@ -24,35 +24,32 @@
 * @file xe_layer.h
 *
 ******************************************************************************/
-#ifndef _XE_LAYER_H
-#define _XE_LAYER_H
-#if defined(__cplusplus)
 #pragma once
-#endif
 #include "xe_ddi.h"
 #include "xex_ddi.h"
 #include "xet_ddi.h"
 #include "xe_util.h"
 
-///////////////////////////////////////////////////////////////////////////////
-class Validation
+namespace layer
 {
-public:
-    xe_api_version_t version = XE_API_VERSION_1_0;
+    ///////////////////////////////////////////////////////////////////////////////
+    class context_t
+    {
+    public:
+        xe_api_version_t version = XE_API_VERSION_1_0;
 
-    bool enableParameterValidation = false;
-    bool enableHandleLifetime = false;
-    bool enableMemoryTracker = false;
-    bool enableThreadingValidation = false;
+        bool enableParameterValidation = false;
+        bool enableHandleLifetime = false;
+        bool enableMemoryTracker = false;
+        bool enableThreadingValidation = false;
 
-    xe_dditable_t   xeDdiTable = {};
-    xex_dditable_t  xexDdiTable = {};
-    xet_dditable_t  xetDdiTable = {};
+        xe_dditable_t   xeDdiTable = {};
+        xex_dditable_t  xexDdiTable = {};
+        xet_dditable_t  xetDdiTable = {};
 
-    Validation();
-    ~Validation();
-};
+        context_t();
+        ~context_t();
+    };
 
-extern Validation validation;
-
-#endif // _XE_LAYER_H
+    extern context_t context;
+}
