@@ -3,15 +3,24 @@ import shutil
 import util
 import re
 
-"""
-    convert from tag'd item to symbol name
-"""
-def convert_to_symbol(str):
-    str = re.sub(r"\$\{x\}(.*)", r"$x\1", str)
-    str = re.sub(r"\$\{X\}(.*)", r"$X\1", str)
-    if re.match(r"\$[x|X]_$", str):
-        str = ""
-    return str
+RE_ENABLE   = r"^\#\#\s*\-\-validate\s*\=\s*on$"
+RE_DISABLE  = r"^\#\#\s*\-\-validate\s*\=\s*off$"
+
+RE_PYCODE_BLOCK_BEGIN = r"^\<\%$"
+RE_PYCODE_BLOCK_END   = r"^\%\>$"
+
+RE_INVALID_TAG_FORMAT  = r".*(\$\w).*"
+RE_EXTRACT_TAG_NAME    = r"\$\{(\w)\}"
+RE_PROPER_TAG_FORMAT   = r".*"+RE_EXTRACT_TAG_NAME+r".*"
+
+RE_DOXY_LINK    = r".*\:\:\$\{\w\}.*"
+
+RE_CODE_BLOCK_BEGIN = r"^\`\`\`c$"
+RE_CODE_BLOCK_END   = r"^\`\`\`$"
+
+RE_EXTRACT_NAME     = r"\$\{\w\}\w+"
+RE_EXTRACT_PARAMS   = r"\w+\((.*)\)\;"
+
 
 """
     determines if the symbol is known
@@ -32,22 +41,8 @@ def find_symbol_type(name, meta):
     validate the markdown file
 """
 def validate_md(fpath, meta):
-    RE_ENABLE   = r"^\#\#\s*\-\-validate\s*\=\s*on$"
-    RE_DISABLE  = r"^\#\#\s*\-\-validate\s*\=\s*off$"
-    RE_PYCODE_BLOCK_BEGIN = r"^\<\%$"
-    RE_PYCODE_BLOCK_END   = r"^\%\>$"
     enable = True
-
-    RE_INVALID_TAG  = r".*\$x.*"
-    RE_ANY_TAG      = r".*\$\{x\}.*"
-    RE_DOXY_LINK    = r".*\:\:\$\{x\}.*"
-
-    RE_CODE_BLOCK_BEGIN = r"^\`\`\`c$"
-    RE_CODE_BLOCK_END   = r"^\`\`\`$"
     code_block = False
-
-    RE_EXTRACT_NAME     = r"\$\{[x|X]\}\w+"
-    RE_EXTRACT_PARAMS   = r"\w+\((.*)\)\;"
 
     for iline, line in enumerate(util.textRead(fpath)):
         if re.match(RE_ENABLE, line) or re.match(RE_PYCODE_BLOCK_END, line):
@@ -67,15 +62,15 @@ def validate_md(fpath, meta):
         if not enable:
             continue
 
-        if re.match(RE_INVALID_TAG, line.lower()):
-            print("%s(%s) : error : invalid $x tag used"%(fpath, iline+1))
+        if re.match(RE_INVALID_TAG_FORMAT, line):
+            print("%s(%s) : error : invalid %s tag used"%(fpath, iline+1, re.sub(RE_INVALID_TAG, r"\1", line)))
 
-        if re.match(RE_ANY_TAG, line.lower()):
+        if re.match(RE_PROPER_TAG_FORMAT, line):
             words = re.findall(RE_EXTRACT_NAME, line)
             for word in words:
-                symbol = convert_to_symbol(word)
-                symbol_type = find_symbol_type(symbol, meta)
+                symbol = re.sub(RE_EXTRACT_TAG_NAME, r"$\1", word)
                 if symbol:
+                    symbol_type = find_symbol_type(symbol, meta)
                     if not symbol_type:
                         print("%s(%s) : error : symbol '%s' not found"%(fpath, iline+1, symbol))
 
@@ -85,8 +80,8 @@ def validate_md(fpath, meta):
                             print("%s(%s) : error : %s parameter count mismatch - %s actual vs. %s expected"%(fpath, iline+1, symbol, len(words), len(meta['function'][symbol]['types'])))
 
             if not code_block:
-                 if not re.match(RE_DOXY_LINK, line.lower()):
-                    print("%s(%s) : warning : doxygen link not used"%(fpath, iline+1))
+                 if not re.match(RE_DOXY_LINK, line):
+                    print("%s(%s) : warning : doxygen link not used"%(fpath, iline+1, ))
 
 """
 Entry-point:

@@ -87,13 +87,14 @@ When enumerating Metric tree to find a desired Metric Group, it's important to k
 which sampling type it will be used. 
 
 To enumerate through the Metric tree:
-1. Call ::xetMetricGroupGetCount with ::xe_device_handle_t to obtain Metric Group count.
-2. Iterate over all available Metric Groups using ::xetMetricGroupGet.
+1. Call ::xetMetricGroupGet to obtain Metric Group count.
+2. Call ::xetMetricGroupGet to obtain all Metric Groups.
+3. Iterate over all available Metric Groups.
     - At this point it's possible to check e.g. Metric Group name, domain or sampling type.
-3. For each Metric Group obtain their Metric count calling ::xetMetricGroupGetProperties with
+4. For each Metric Group obtain their Metric count calling ::xetMetricGroupGetProperties with
    Metric Group handle (::xet_metric_group_handle_t) and checking ::xet_metric_group_properties_t.metricCount.
-4. Iterate over available Metrics using ::xetMetricGet with parent Metric Group (::xet_metric_group_handle_t).
-5. Check Metric properties (e.g. name, description) calling ::xetMetricGetProperties with parent
+5. Iterate over available Metrics using ::xetMetricGet with parent Metric Group (::xet_metric_group_handle_t).
+6. Check Metric properties (e.g. name, description) calling ::xetMetricGetProperties with parent
    Metric (::xet_metric_handle_t).
 
 
@@ -105,19 +106,16 @@ for selecting a preferred metric group for a specific type of measurements.
     {
         // Obtain available metric group count for the specific device - 'hDevice'
         uint32_t metricGroupCount = 0;
-        xetMetricGroupGetCount( hDevice, &metricGroupCount );
+        xetMetricGroupGet( hDevice, &metricGroupCount, nullptr );
 
-        *phMetricGroup = nullptr;
+        xet_metric_group_handle_t* phMetricGroups = malloc(metricGroupCount * sizeof(xet_metric_group_handle_t));
 
         // Interate over all metric groups available for the 'hDevice'
         for( uint32_t i = 0; i < metricGroupCount; i++ )
         {   
-            xet_metric_group_handle_t hMetricGroup = nullptr;
-            xet_metric_group_properties_t metricGroupProperties = {XET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT};
-
             // Get metric group under index 'i' and its properties
-            xetMetricGroupGet( hDevice, i, &hMetricGroup );
-            xetMetricGroupGetProperties( hMetricGroup, &metricGroupProperties );
+            xet_metric_group_properties_t metricGroupProperties = {XET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT};
+            xetMetricGroupGetProperties( phMetricGroups[i], &metricGroupProperties );
 
             printf("Metric Group: %s\n", metricGroupProperties.name);
 
@@ -127,23 +125,13 @@ for selecting a preferred metric group for a specific type of measurements.
                 // Check whether the obtained metric group has the desired name
                 if( strcmp( pMetricGroupName, metricGroupProperties.name ) == 0 )
                 {
-                    *phMetricGroup = hMetricGroup;
-                }
-
-	            // Interate over all metrics within the 'hMetricGroup'
-                for(uint32_t j = 0; j < metricGroupProperties.metricCount; j++)	
-                {
-                    xet_metric_handle_t metricHandle = nullptr;
-                    xet_metric_properties_t metricProperties = {XET_METRIC_PROPERTIES_VERSION_CURRENT};   
-
-                    // Get metric under index 'j' and its properties
-                    xetMetricGet(hMetricGroup, j, &metricHandle);
-                    xetMetricGetProperties(metricHandle, &metricProperties);
-
-                    printf("Metric: %s\n", metricProperties.name);
+                    *phMetricGroup = phMetricGroups[i];
+                    break;
                 }
             }
         }
+
+        free(phMetricGroups);
     }
 ```
 
@@ -199,7 +187,7 @@ The following sample code demonstrates a basic sequence for time based collectio
         xetMetricGroupGetProperties( hMetricGroup, &metricGroupProperties );
 
         // Configure the HW
-        xetDeviceActivateMetricGroup( hDevice, 1 /* count */, &hMetricGroup );
+        xetDeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
 
         // Create notification event
         xeEventPoolCreate( hDevice, &eventPoolDesc, &hEventPool );
@@ -228,7 +216,7 @@ The following sample code demonstrates a basic sequence for time based collectio
         xetMetricTracerReadData( hMetricTracer, &reportCount, 0, nullptr ); // first check how many reports are available
         uint32_t size = metricGroupProperties.rawReportSize * reportCount;
         uint8_t* rawData = malloc(size); 
-        xetMetricTracerGetData( hMetricTracer, &reportCount, size, rawData );
+        xetMetricTracerReadData( hMetricTracer, &reportCount, size, rawData );
 
         // Close metric tracer
         xetMetricTracerClose( hMetricTracer );   
@@ -240,7 +228,7 @@ The following sample code demonstrates a basic sequence for time based collectio
 
         // Calculate metric data
         uint32_t calculatedDataSize = 0;
-        xetMetricGroupCalculateData( hMetricGroup, &reportCount, size, &calculatedDataSize, nullptr );
+        xetMetricGroupCalculateData( hMetricGroup, &reportCount, size, rawData, &calculatedDataSize, nullptr );
         xet_typed_value_t* calculatedData = (xet_typed_value_t*)malloc( calculatedDataSize );
         xetMetricGroupCalculateData( hMetricGroup, &reportCount, size, rawData, &calculatedDataSize, calculatedData );
     }
@@ -359,7 +347,7 @@ for application processing. To calculate metric values use ::xetMetricGroupCalcu
  - calculatedDataSize - buffer size for calculated reports
  - pCalculatedData - buffer for calculated reports allocated by the user
 ```c
-    xetMetricGroupCalculateData( hMetricTracer, &reportCount, rawDataSize, pRawData );
+    xetMetricGroupCalculateData( hMetricTracer, &reportCount, rawDataSize, pRawData, &calculatedDataSize, pCalculatedData  );
 ```
 
 

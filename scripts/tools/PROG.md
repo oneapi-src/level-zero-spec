@@ -93,13 +93,14 @@ When enumerating Metric tree to find a desired Metric Group, it's important to k
 which sampling type it will be used. 
 
 To enumerate through the Metric tree:
-1. Call ::${t}MetricGroupGetCount with ::${x}_device_handle_t to obtain Metric Group count.
-2. Iterate over all available Metric Groups using ::${t}MetricGroupGet.
+1. Call ::${t}MetricGroupGet to obtain Metric Group count.
+2. Call ::${t}MetricGroupGet to obtain all Metric Groups.
+3. Iterate over all available Metric Groups.
     - At this point it's possible to check e.g. Metric Group name, domain or sampling type.
-3. For each Metric Group obtain their Metric count calling ::${t}MetricGroupGetProperties with
+4. For each Metric Group obtain their Metric count calling ::${t}MetricGroupGetProperties with
    Metric Group handle (::${t}_metric_group_handle_t) and checking ::${t}_metric_group_properties_t.metricCount.
-4. Iterate over available Metrics using ::${t}MetricGet with parent Metric Group (::${t}_metric_group_handle_t).
-5. Check Metric properties (e.g. name, description) calling ::${t}MetricGetProperties with parent
+5. Iterate over available Metrics using ::${t}MetricGet with parent Metric Group (::${t}_metric_group_handle_t).
+6. Check Metric properties (e.g. name, description) calling ::${t}MetricGetProperties with parent
    Metric (::${t}_metric_handle_t).
 
 
@@ -111,19 +112,16 @@ for selecting a preferred metric group for a specific type of measurements.
     {
         // Obtain available metric group count for the specific device - 'hDevice'
         uint32_t metricGroupCount = 0;
-        ${t}MetricGroupGetCount( hDevice, &metricGroupCount );
+        ${t}MetricGroupGet( hDevice, &metricGroupCount, nullptr );
 
-        *phMetricGroup = nullptr;
+        ${t}_metric_group_handle_t* phMetricGroups = malloc(metricGroupCount * sizeof(${t}_metric_group_handle_t));
 
         // Interate over all metric groups available for the 'hDevice'
         for( uint32_t i = 0; i < metricGroupCount; i++ )
         {   
-            ${t}_metric_group_handle_t hMetricGroup = nullptr;
-            ${t}_metric_group_properties_t metricGroupProperties = {${T}_METRIC_GROUP_PROPERTIES_VERSION_CURRENT};
-
             // Get metric group under index 'i' and its properties
-            ${t}MetricGroupGet( hDevice, i, &hMetricGroup );
-            ${t}MetricGroupGetProperties( hMetricGroup, &metricGroupProperties );
+            ${t}_metric_group_properties_t metricGroupProperties = {${T}_METRIC_GROUP_PROPERTIES_VERSION_CURRENT};
+            ${t}MetricGroupGetProperties( phMetricGroups[i], &metricGroupProperties );
 
             printf("Metric Group: %s\n", metricGroupProperties.name);
 
@@ -133,23 +131,13 @@ for selecting a preferred metric group for a specific type of measurements.
                 // Check whether the obtained metric group has the desired name
                 if( strcmp( pMetricGroupName, metricGroupProperties.name ) == 0 )
                 {
-                    *phMetricGroup = hMetricGroup;
-                }
-
-	            // Interate over all metrics within the 'hMetricGroup'
-                for(uint32_t j = 0; j < metricGroupProperties.metricCount; j++)	
-                {
-                    ${t}_metric_handle_t metricHandle = nullptr;
-                    ${t}_metric_properties_t metricProperties = {${T}_METRIC_PROPERTIES_VERSION_CURRENT};   
-
-                    // Get metric under index 'j' and its properties
-                    ${t}MetricGet(hMetricGroup, j, &metricHandle);
-                    ${t}MetricGetProperties(metricHandle, &metricProperties);
-
-                    printf("Metric: %s\n", metricProperties.name);
+                    *phMetricGroup = phMetricGroups[i];
+                    break;
                 }
             }
         }
+
+        free(phMetricGroups);
     }
 ```
 
@@ -205,7 +193,7 @@ The following sample code demonstrates a basic sequence for time based collectio
         ${t}MetricGroupGetProperties( hMetricGroup, &metricGroupProperties );
 
         // Configure the HW
-        ${t}DeviceActivateMetricGroup( hDevice, 1 /* count */, &hMetricGroup );
+        ${t}DeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
 
         // Create notification event
         ${x}EventPoolCreate( hDevice, &eventPoolDesc, &hEventPool );
@@ -234,7 +222,7 @@ The following sample code demonstrates a basic sequence for time based collectio
         ${t}MetricTracerReadData( hMetricTracer, &reportCount, 0, nullptr ); // first check how many reports are available
         uint32_t size = metricGroupProperties.rawReportSize * reportCount;
         uint8_t* rawData = malloc(size); 
-        ${t}MetricTracerGetData( hMetricTracer, &reportCount, size, rawData );
+        ${t}MetricTracerReadData( hMetricTracer, &reportCount, size, rawData );
 
         // Close metric tracer
         ${t}MetricTracerClose( hMetricTracer );   
@@ -246,7 +234,7 @@ The following sample code demonstrates a basic sequence for time based collectio
 
         // Calculate metric data
         uint32_t calculatedDataSize = 0;
-        ${t}MetricGroupCalculateData( hMetricGroup, &reportCount, size, &calculatedDataSize, nullptr );
+        ${t}MetricGroupCalculateData( hMetricGroup, &reportCount, size, rawData, &calculatedDataSize, nullptr );
         ${t}_typed_value_t* calculatedData = (${t}_typed_value_t*)malloc( calculatedDataSize );
         ${t}MetricGroupCalculateData( hMetricGroup, &reportCount, size, rawData, &calculatedDataSize, calculatedData );
     }
@@ -365,7 +353,7 @@ for application processing. To calculate metric values use ::${t}MetricGroupCalc
  - calculatedDataSize - buffer size for calculated reports
  - pCalculatedData - buffer for calculated reports allocated by the user
 ```c
-    ${t}MetricGroupCalculateData( hMetricTracer, &reportCount, rawDataSize, pRawData );
+    ${t}MetricGroupCalculateData( hMetricTracer, &reportCount, rawDataSize, pRawData, &calculatedDataSize, pCalculatedData  );
 ```
 
 
