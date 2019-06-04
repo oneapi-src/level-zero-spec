@@ -30,20 +30,27 @@ xe_result_t CommandQueueHw<gfxCoreFamily>::executeCommandLists(
     using PIPE_CONTROL = typename GfxFamily::PIPE_CONTROL;
     using POST_SYNC_OPERATION = typename PIPE_CONTROL::POST_SYNC_OPERATION;
 
+    size_t spaceForResidency = 0;
     size_t sizeEstimate =
         sizeof(MI_BATCH_BUFFER_END) +
         numCommandLists * sizeof(MI_BATCH_BUFFER_START);
 
     NEO::ResidencyContainer residencyContainer;
 
-    // padding if we need for a fence signal
-    if (hFence) {
-        residencyContainer.reserve((16 * numCommandLists) + 2);
-        sizeEstimate += sizeof(POST_SYNC_OPERATION) + sizeof(PIPE_CONTROL);
-    } else {
-        residencyContainer.reserve(16 * numCommandLists);
+    // Get space to reserve in residency container
+    // TODO: Check if we can optimize by calculating at cmdList close time for
+    // each cmdList
+    for (auto i = 0u; i < numCommandLists; i++) {
+        auto commandList = CommandList::fromHandle(phCommandLists[i]);
+        spaceForResidency += commandList->getResidencyContainer().size();
     }
 
+    // padding for couple more commands if we need for a fence handle and
+    // reserve space
+    spaceForResidency += hFence ? 2 : 0;
+    sizeEstimate += hFence ? (sizeof(POST_SYNC_OPERATION) +
+                    sizeof(PIPE_CONTROL)) : 0;
+    residencyContainer.reserve(spaceForResidency);
     Substream substream = getCmdSubstream(sizeEstimate);
 
     for (auto i = 0u; i < numCommandLists; ++i) {
