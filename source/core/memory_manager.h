@@ -42,10 +42,10 @@ struct MemoryManager {
 
 extern MemoryManager *globalMemoryManager;
 
-struct L0MemoryManagerSepecifics {
+struct IPCMemoryManager {
 
   public:
-    static L0MemoryManagerSepecifics *create();
+    static IPCMemoryManager *create();
     virtual xe_result_t ipcGetMemHandle(const void *ptr, xe_ipc_mem_handle_t *pIpcHandle) = 0;
     virtual xe_result_t ipcOpenMemHandle(xe_device_handle_t hDevice, xe_ipc_mem_handle_t handle,
                                          xe_ipc_memory_flag_t flags, void **ptr) = 0;

@@ -2,11 +2,11 @@
 
 namespace L0 {
 
-L0MemoryManagerSepecifics *L0MemoryManagerSepecifics::create() {
-    return new DrmL0MemoryManagerSepecifics();
+IPCMemoryManager *IPCMemoryManager::create() {
+    return new DrmIPCMemoryManager();
 }
 
-xe_result_t DrmL0MemoryManagerSepecifics::ipcGetMemHandle(const void *ptr,
+xe_result_t DrmIPCMemoryManager::ipcGetMemHandle(const void *ptr,
                                                           xe_ipc_mem_handle_t *pIpcHandle) {
 
     GraphicsAllocation *allocation = globalMemoryManager->findGraphicsAllocation(ptr);
@@ -23,7 +23,7 @@ xe_result_t DrmL0MemoryManagerSepecifics::ipcGetMemHandle(const void *ptr,
     return XE_RESULT_SUCCESS;
 }
 
-xe_result_t DrmL0MemoryManagerSepecifics::ipcOpenMemHandle(xe_device_handle_t hDevice,
+xe_result_t DrmIPCMemoryManager::ipcOpenMemHandle(xe_device_handle_t hDevice,
                                                            xe_ipc_mem_handle_t handle,
                                                            xe_ipc_memory_flag_t flags, void **ptr) {
 
@@ -58,7 +58,7 @@ xe_result_t DrmL0MemoryManagerSepecifics::ipcOpenMemHandle(xe_device_handle_t hD
     return XE_RESULT_SUCCESS;
 }
 
-xe_result_t DrmL0MemoryManagerSepecifics::ipcCloseMemHandle(const void *ptr) {
+xe_result_t DrmIPCMemoryManager::ipcCloseMemHandle(const void *ptr) {
 
     void *ptrCopy = const_cast<void *>(ptr);
     void *realAddress = reinterpret_cast<void **>(ptrCopy)[-1];
@@ -74,7 +74,7 @@ xe_result_t DrmL0MemoryManagerSepecifics::ipcCloseMemHandle(const void *ptr) {
     return XE_RESULT_SUCCESS;
 }
 
-int DrmL0MemoryManagerSepecifics::openShmFile(const char *shmFileName, bool mustExist) {
+int DrmIPCMemoryManager::openShmFile(const char *shmFileName, bool mustExist) {
     int shmFileDescriptor;
 
     //ipcOpenMemHandle must make sure the file already exists, because the filename
@@ -107,7 +107,7 @@ int DrmL0MemoryManagerSepecifics::openShmFile(const char *shmFileName, bool must
     return shmFileDescriptor;
 }
 
-void *DrmL0MemoryManagerSepecifics::memoryMapShmFile(size_t size, size_t alignment,
+void *DrmIPCMemoryManager::memoryMapShmFile(size_t size, size_t alignment,
                                                      int shmFileDescriptor) {
     void *mapPtr;
     uintptr_t alignedPtr;
@@ -136,7 +136,7 @@ void *DrmL0MemoryManagerSepecifics::memoryMapShmFile(size_t size, size_t alignme
     return reinterpret_cast<void *>(alignedPtr);
 }
 
-void *DrmL0MemoryManagerSepecifics::allocateShMemory(size_t size, size_t alignment,
+void *DrmIPCMemoryManager::allocateShMemory(size_t size, size_t alignment,
                                                      std::string &shmFileName) {
     char localFileName[255];
     int shmFileDescriptor;
@@ -149,7 +149,7 @@ void *DrmL0MemoryManagerSepecifics::allocateShMemory(size_t size, size_t alignme
     size_t cSize = std::max(alignUp(size, minAlignment), minAlignment);
 
     if (snprintf(localFileName, sizeof(localFileName), "/L0_shm.%d%x%d", (int)getuid(),
-                 (int)getpid(), DrmL0MemoryManagerSepecifics::shmFileCounter) < 0) {
+                 (int)getpid(), DrmIPCMemoryManager::shmFileCounter) < 0) {
 
         return nullptr;
     }
@@ -171,11 +171,11 @@ void *DrmL0MemoryManagerSepecifics::allocateShMemory(size_t size, size_t alignme
         return nullptr;
     }
     shmFileName = localFileName;
-    DrmL0MemoryManagerSepecifics::shmFileCounter++;
+    DrmIPCMemoryManager::shmFileCounter++;
     return shmBuffer;
 }
 
-void DrmL0MemoryManagerSepecifics::freeShMemory(GraphicsAllocation *allocation) {
+void DrmIPCMemoryManager::freeShMemory(GraphicsAllocation *allocation) {
 
     auto userAddress = allocation->getHostAddress();
     auto realAddress = reinterpret_cast<char **>(userAddress)[-1];

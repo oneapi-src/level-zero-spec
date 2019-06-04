@@ -13,7 +13,7 @@ struct WddmIpcHandle : _xe_ipc_mem_handle_t {
 
 namespace L0 {
 
-class WddmL0MemoryManagerSepecifics : public L0MemoryManagerSepecifics {
+class WddmIPCMemoryManager : public IPCMemoryManager {
   public:
     xe_result_t ipcGetMemHandle(const void *ptr, xe_ipc_mem_handle_t *pIpcHandle) override;
     xe_result_t ipcOpenMemHandle(xe_device_handle_t hDevice, xe_ipc_mem_handle_t handle,

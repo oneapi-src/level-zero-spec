@@ -192,7 +192,7 @@ struct MemoryManagerImp : public MemoryManager {
                     static_cast<GraphicsAllocation *>(allocation);
                 // Extra step to clean /dev/shm for DEVICE type of allocation
                 if (allocation->allocType == AllocationType::DEVICE) {
-                    auto l0mms = L0MemoryManagerSepecifics::create();
+                    auto l0mms = IPCMemoryManager::create();
                     l0mms->freeShMemory(graphicAllocation);
                     delete l0mms;
                 }

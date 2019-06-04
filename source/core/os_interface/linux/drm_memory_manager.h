@@ -24,7 +24,7 @@ struct DrmIpcHandle : _xe_ipc_mem_handle_t {
 
 namespace L0 {
 
-class DrmL0MemoryManagerSepecifics : public L0MemoryManagerSepecifics {
+class DrmIPCMemoryManager : public IPCMemoryManager {
   public:
     xe_result_t ipcGetMemHandle(const void *ptr, xe_ipc_mem_handle_t *pIpcHandle) override;
     xe_result_t ipcOpenMemHandle(xe_device_handle_t hDevice, xe_ipc_mem_handle_t handle,
@@ -40,6 +40,6 @@ class DrmL0MemoryManagerSepecifics : public L0MemoryManagerSepecifics {
     void *memoryMapShmFile(size_t size, size_t alignment, int shmFileDescriptor);
 };
 
-unsigned int DrmL0MemoryManagerSepecifics::shmFileCounter = 0;
+unsigned int DrmIPCMemoryManager::shmFileCounter = 0;
 
 } // namespace L0
