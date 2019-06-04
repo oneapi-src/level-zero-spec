@@ -32,7 +32,7 @@ void XePeak::xe_peak_global_bw(L0Context &context) {
 
     context.create_module(binary_file);
 
-    uint64_t maxItems = MAX_DEVICE_OBJECT_SIZE / sizeof(float) / 2;
+    uint64_t maxItems = max_device_object_size(context) / sizeof(float) / 2;
     uint64_t numItems = roundToMultipleOf(
         maxItems, (context.device_compute_property.maxGroupSizeX * FETCH_PER_WI * 16),
         global_bw_max_size);

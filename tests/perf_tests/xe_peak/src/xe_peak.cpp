@@ -22,6 +22,11 @@
 #include "../include/xe_peak.h"
 #include <algorithm>
 
+#define ONE_KB   (1 * 1024ULL)
+#define EIGHT_KB (8 * ONE_KB)
+#define ONE_MB   (1 * 1024ULL * ONE_KB)
+#define FOUR_GB  (4 * 1024ULL * ONE_MB)
+
 //---------------------------------------------------------------------
 // Utility function to load the binary spv file from a path
 // and return the file as a vector for use by L0.
@@ -581,4 +586,62 @@ int main(int argc, char **argv) {
     context.clean_xe();
 
     return 0;
+}
+
+#if defined(unix) || defined(__unix__) || defined(__unix)
+
+#include <unistd.h>
+
+unsigned long long int total_available_memory()
+{
+    const long page_count = sysconf(_SC_PHYS_PAGES);
+    const long page_size  = sysconf(_SC_PAGE_SIZE);
+    const unsigned long long total_bytes = page_count * page_size;
+
+    return total_bytes;
+}
+
+#endif
+
+#if defined(_WIN64) || defined(_WIN64)
+
+#define NOMINMAX
+#include <windows.h>
+
+unsigned long long int total_available_memory()
+{
+    MEMORYSTATUSEX stat;
+    stat.dwLength = sizeof(stat);
+    GlobalMemoryStatusEx(&stat);
+
+    return stat.ullAvailVirtual;
+}
+
+#endif
+
+inline bool is_integrated_gpu(xe_device_properties_t &device_properties) {
+    return (device_properties.totalLocalMemSize == 0);
+}
+
+uint64_t max_device_object_size(L0Context &context) {
+    xe_result_t result;
+
+    xe_device_properties_t device_properties =
+        {XE_DEVICE_PROPERTIES_VERSION_CURRENT};
+
+    result = xeDeviceGetProperties(context.device, &device_properties);
+    if (result) {
+        throw std::runtime_error("xeDeviceGetProperties failed: " + result);
+    }
+
+    if (is_integrated_gpu(device_properties)) {
+        unsigned long long int total_memory = total_available_memory();
+        if (total_memory > FOUR_GB) {
+            return FOUR_GB - EIGHT_KB;
+        } else {
+            return std::max(total_memory / 4, 128 * ONE_MB);
+        }
+    } else {
+        return device_properties.totalLocalMemSize;
+    }
 }

@@ -38,9 +38,6 @@
 
 #define MIN(X, Y) (X < Y) ? X : Y
 
-/* Workaround until query of max memory size is fixed*/
-#define MAX_DEVICE_OBJECT_SIZE 3315838976
-
 #undef FETCH_2
 #undef FETCH_8
 
@@ -142,6 +139,7 @@ void _transfer_bw_shared_memory(L0Context &context,
                                 std::vector<float> local_memory);
 };
 
+uint64_t max_device_object_size(L0Context &context);
 
 #endif /* XE_PEAK_H */
 

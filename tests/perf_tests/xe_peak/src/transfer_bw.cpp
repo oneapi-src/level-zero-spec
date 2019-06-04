@@ -116,7 +116,7 @@ void XePeak::_transfer_bw_shared_memory(L0Context &context,
 void XePeak::xe_peak_transfer_bw(L0Context &context) {
     xe_result_t result = XE_RESULT_SUCCESS;
     uint64_t max_number_of_allocated_items =
-        MAX_DEVICE_OBJECT_SIZE / sizeof(float) / 2;
+        max_device_object_size(context) / sizeof(float) / 2;
     uint64_t number_of_items =
         roundToMultipleOf(max_number_of_allocated_items,
                           context.device_compute_property.maxGroupSizeX,
