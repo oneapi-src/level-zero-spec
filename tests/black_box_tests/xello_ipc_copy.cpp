@@ -15,14 +15,22 @@
 extern bool verbose;
 bool verbose = false;
 
-//Temporary: needed for for sizeof()
+// Temporary: needed for for sizeof()
 struct _xe_ipc_mem_handle_t {
     size_t alignment;
     size_t size;
     char shmFileName[255];
 };
 
-void run_client(int comm_socket, xe_device_handle_t &device) {
+void run_client(int comm_socket) {
+
+    xe_device_handle_t device;
+    xe_device_properties_t deviceProperties = {XE_DEVICE_PROPERTIES_VERSION_CURRENT};
+    SUCCESS_OR_TERMINATE(xeInit(XE_INIT_FLAG_NONE));
+    SUCCESS_OR_TERMINATE(xeDeviceGet(0, &device));
+    SUCCESS_OR_TERMINATE(xeDeviceGetProperties(device, &deviceProperties));
+    std::cout << "Client process: " << deviceProperties.name << "\n";
+
     const size_t allocSize = 4096 + 7; // +7 to brake alignment and make it harder
     char *heapBuffer = new char[allocSize];
     void *xeIpcBuffer;
@@ -42,15 +50,16 @@ void run_client(int comm_socket, xe_device_handle_t &device) {
         heapBuffer[i] = static_cast<char>(i + 1);
     }
 
-    xe_ipc_mem_handle_t pIpcHandle = static_cast<xe_ipc_mem_handle_t>(malloc (sizeof(*pIpcHandle)));
+    xe_ipc_mem_handle_t pIpcHandle = static_cast<xe_ipc_mem_handle_t>(malloc(sizeof(*pIpcHandle)));
 
-    sleep(1); //give time to the server to write
-    if (read(comm_socket, pIpcHandle,sizeof(*pIpcHandle)) < 0){
+    sleep(1); // give time to the server to write
+    if (read(comm_socket, pIpcHandle, sizeof(*pIpcHandle)) < 0) {
         perror("Clent: reading stream message");
-         assert(0);
+        assert(0);
     }
 
-    SUCCESS_OR_TERMINATE(xeIpcOpenMemHandle(device, pIpcHandle, XE_IPC_MEMORY_FLAG_NONE, &xeIpcBuffer));
+    SUCCESS_OR_TERMINATE(
+        xeIpcOpenMemHandle(device, pIpcHandle, XE_IPC_MEMORY_FLAG_NONE, &xeIpcBuffer));
     // Copy from heap to device-allocated shared buffer memory
     SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, xeIpcBuffer, heapBuffer, allocSize,
                                                        nullptr, 0, nullptr));
@@ -61,16 +70,22 @@ void run_client(int comm_socket, xe_device_handle_t &device) {
     SUCCESS_OR_TERMINATE(xeCommandQueueExecuteCommandLists(cmdQueue, 1, &cmdList, nullptr));
     SUCCESS_OR_TERMINATE(xeCommandQueueSynchronize(cmdQueue, std::numeric_limits<uint32_t>::max()));
 
-
     SUCCESS_OR_TERMINATE(xeIpcCloseMemHandle(xeIpcBuffer));
     SUCCESS_OR_TERMINATE(xeCommandListDestroy(cmdList));
     SUCCESS_OR_TERMINATE(xeCommandQueueDestroy(cmdQueue));
     delete[] heapBuffer;
     free(pIpcHandle);
-
 }
 
-void run_server(int comm_socket, xe_device_handle_t &device, bool &validRet) {
+void run_server(int comm_socket, bool &validRet) {
+
+    xe_device_handle_t device;
+    xe_device_properties_t deviceProperties = {XE_DEVICE_PROPERTIES_VERSION_CURRENT};
+    SUCCESS_OR_TERMINATE(xeInit(XE_INIT_FLAG_NONE));
+    SUCCESS_OR_TERMINATE(xeDeviceGet(0, &device));
+    SUCCESS_OR_TERMINATE(xeDeviceGetProperties(device, &deviceProperties));
+    std::cout << "Server process: " << deviceProperties.name << "\n";
+
     const size_t allocSize = 4096 + 7; // +7 to brake alignment and make it harder
     char *heapBuffer = new char[allocSize];
     void *xeBuffer = nullptr;
@@ -87,31 +102,23 @@ void run_server(int comm_socket, xe_device_handle_t &device, bool &validRet) {
     xe_command_list_desc_t cmdListDesc = {XE_COMMAND_LIST_DESC_VERSION_CURRENT};
     SUCCESS_OR_TERMINATE(xeCommandListCreate(device, &cmdListDesc, &cmdList));
 
-    SUCCESS_OR_TERMINATE(
-        xeDeviceMemAlloc(device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, allocSize, allocSize, &xeBuffer));
-
+    SUCCESS_OR_TERMINATE(xeDeviceMemAlloc(device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, allocSize,
+                                          allocSize, &xeBuffer));
 
     xe_ipc_mem_handle_t pIpcHandle;
-    SUCCESS_OR_TERMINATE(xeIpcGetMemHandle (xeBuffer, &pIpcHandle));
-/*
-     std::cout << "[xello_copy] ipc file: " << reinterpret_cast<DrmIpcHandle *>(pIpcHandle)->shmFileName  <<
-    " alignment:" <<reinterpret_cast<DrmIpcHandle *>(pIpcHandle)->alignment<<
-    " size:" <<reinterpret_cast<DrmIpcHandle *>(pIpcHandle)->size<<
-            std::endl;
- */
+    SUCCESS_OR_TERMINATE(xeIpcGetMemHandle(xeBuffer, &pIpcHandle));
 
- 
-     if (write(comm_socket, pIpcHandle ,  sizeof(*pIpcHandle)) < 0){
-         perror("server: writing on stream socket");
-         assert(0);
-     }
+    if (write(comm_socket, pIpcHandle, sizeof(*pIpcHandle)) < 0) {
+        perror("server: writing on stream socket");
+        assert(0);
+    }
 
     memset(stackBuffer, 0, allocSize);
     for (size_t i = 0; i < allocSize; ++i) {
         heapBuffer[i] = static_cast<char>(i + 1);
     }
 
-    sleep(2); //give time to client to copy to the xeBuffer
+    sleep(2); // give time to client to copy to the xeBuffer
     // Copy from device-allocated memory to stack
     SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, stackBuffer, xeBuffer, allocSize,
                                                        nullptr, 0, nullptr));
@@ -130,17 +137,10 @@ void run_server(int comm_socket, xe_device_handle_t &device, bool &validRet) {
 }
 
 int main(int argc, char *argv[]) {
-    xe_device_handle_t device0;
-    xe_device_properties_t device0Properties = {XE_DEVICE_PROPERTIES_VERSION_CURRENT};
     int child;
     int sv[2];
 
     verbose = isVerbose(argc, argv);
-
-    SUCCESS_OR_TERMINATE(xeInit(XE_INIT_FLAG_NONE));
-    SUCCESS_OR_TERMINATE(xeDeviceGet(0, &device0));
-    SUCCESS_OR_TERMINATE(xeDeviceGetProperties(device0, &device0Properties));
-    std::cout << device0Properties.name << std::endl;
 
     bool outputValidationSuccessful;
 
@@ -149,21 +149,20 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-   child = fork();
-   if (child < 0){
-     perror("fork");
-     exit(1);
-   } else if (0 == child ){
+    child = fork();
+    if (child < 0) {
+        perror("fork");
+        exit(1);
+    } else if (0 == child) {
         close(sv[0]);
-        run_client(sv[1],device0);
+        run_client(sv[1]);
         close(sv[1]);
         exit(0);
-   } else {
-       close(sv[1]);
-       run_server(sv[0],device0,outputValidationSuccessful );
-       close(sv[0]);
-   }
-//    testAppendMemoryCopy(device0, outputValidationSuccessful);
+    } else {
+        close(sv[1]);
+        run_server(sv[0], outputValidationSuccessful);
+        close(sv[0]);
+    }
 
     bool aubMode = isAubMode(argc, argv);
     if (aubMode == false)
