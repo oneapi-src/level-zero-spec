@@ -123,15 +123,15 @@ xeDeviceGet(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
-///         + nullptr == phSubDevice
+///         + nullptr == phSubdevice
 ///         + ordinal is out of range reported by device properties.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeDeviceGetSubDevice(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve; must be less than
-                                                    ///< ::xe_device_properties_t::numSubDevices
-    xe_device_handle_t* phSubDevice                 ///< [out] pointer to handle of sub-device object.
+                                                    ///< ::xe_device_properties_t::numSubdevices
+    xe_device_handle_t* phSubdevice                 ///< [out] pointer to handle of sub-device object.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -216,13 +216,13 @@ typedef struct _xe_device_properties_t
     xe_device_type_t type;                          ///< [out] generic device type
     uint32_t vendorId;                              ///< [out] vendor id from PCI configuration
     uint32_t deviceId;                              ///< [out] device id from PCI configuration
-    uint32_t subdeviceId;                           ///< [out] Subdevice id. Only valid if isSubdevice is true.
-    xe_device_uuid_t uuid;                          ///< [out] unique id for device.
-    xe_bool_t isSubdevice;                          ///< [out] Is this a subdevice.
-    uint32_t numSubDevices;                         ///< [out] Number of sub-devices.
+    xe_device_uuid_t uuid;                          ///< [out] universal unique identifier.
+    uint32_t numSubdevices;                         ///< [out] Number of sub-devices the device can be sub-divided into.
+    xe_bool_t isSubdevice;                          ///< [out] If the device handle used for query represents a sub-device.
+    uint32_t subdeviceId;                           ///< [out] sub-device id. Only valid if isSubdevice is true.
     uint32_t coreClockRate;                         ///< [out] Clock rate for device core.
-    xe_bool_t unifiedMemory;                        ///< [out] Host and device share same physical memory.
-    xe_bool_t onDemandPageFaults;                   ///< [out] Device supports on-demand page-faulting.
+    xe_bool_t unifiedMemorySupported;               ///< [out] Supports unified physical memory between Host and device.
+    xe_bool_t onDemandPageFaultsSupported;          ///< [out] Supports on-demand page-faulting.
     uint32_t maxCommandQueues;                      ///< [out] Maximum number of logical command queues.
     uint32_t numAsyncComputeEngines;                ///< [out] Number of asynchronous compute engines
     uint32_t numAsyncCopyEngines;                   ///< [out] Number of asynchronous copy engines
@@ -232,8 +232,7 @@ typedef struct _xe_device_properties_t
     uint32_t physicalEUSimdWidth;                   ///< [out] The physical EU simd width.
     uint32_t numEUsPerSubslice;                     ///< [out] Number of EUs per sub-slice.
     uint32_t numSubslicesPerSlice;                  ///< [out] Number of sub-slices per slice.
-    uint32_t numSlicesPerTile;                      ///< [out] Number of slices per tile.
-    uint32_t numTiles;                              ///< [out] Number of tiles for this device.
+    uint32_t numSlicesPerSubdevice;                 ///< [out] Number of slices per sub-device.
     char name[XE_MAX_DEVICE_NAME];                  ///< [out] Device name
 
 } xe_device_properties_t;
@@ -340,8 +339,8 @@ typedef enum _xe_device_memory_properties_version_t
 typedef struct _xe_device_memory_properties_t
 {
     xe_device_memory_properties_version_t version;  ///< [in] ::XE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
-    uint32_t memClockRate;                          ///< [out] Clock rate for device global memory
-    uint32_t memGlobalBusWidth;                     ///< [out] Bus width between core and memory.
+    uint32_t maxClockRate;                          ///< [out] Maximum clock rate for device memory.
+    uint32_t maxBusWidth;                           ///< [out] Maximum bus width between device and memory.
     uint64_t totalSize;                             ///< [out] Total memory size in bytes.
 
 } xe_device_memory_properties_t;
@@ -460,12 +459,12 @@ typedef enum _xe_device_cache_properties_version_t
 typedef struct _xe_device_cache_properties_t
 {
     xe_device_cache_properties_version_t version;   ///< [in] ::XE_DEVICE_CACHE_PROPERTIES_VERSION_CURRENT
-    uint32_t intermediateCacheSize;                 ///< [out] Per-cache Intermediate Cache (L1/L2) size, in bytes
-    xe_bool_t intermediateCacheControl;             ///< [out] Support User control on Intermediate Cache (i.e. Resize SLM
+    xe_bool_t intermediateCacheControlSupported;    ///< [out] Support User control on Intermediate Cache (i.e. Resize SLM
                                                     ///< section vs Generic Cache)
-    uint32_t lastLevelCacheSize;                    ///< [out] Per-cache Last Level Cache (L3) size, in bytes
-    xe_bool_t lastLevelCacheSizeControl;            ///< [out] Support User control on Last Level Cache (i.e. Resize SLM
+    size_t intermediateCacheSize;                   ///< [out] Per-cache Intermediate Cache (L1/L2) size, in bytes
+    xe_bool_t lastLevelCacheSizeControlSupported;   ///< [out] Support User control on Last Level Cache (i.e. Resize SLM
                                                     ///< section vs Generic Cache).
+    size_t lastLevelCacheSize;                      ///< [out] Per-cache Last Level Cache (L3) size, in bytes
 
 } xe_device_cache_properties_t;
 
@@ -510,7 +509,8 @@ typedef enum _xe_device_image_properties_version_t
 typedef struct _xe_device_image_properties_t
 {
     xe_device_image_properties_version_t version;   ///< [in] ::XE_DEVICE_IMAGE_PROPERTIES_VERSION_CURRENT
-    xe_bool_t isSupported;                          ///< [out] Is images supported by device.
+    xe_bool_t supported;                            ///< [out] Supports reading and writing of images. See
+                                                    ///< ::::xeImageGetProperties for format-specific capabilities.
     uint32_t maxImageDims1D;                        ///< [out] Maximum image dimensions for 1D resources.
     uint32_t maxImageDims2D;                        ///< [out] Maximum image dimensions for 2D resources.
     uint32_t maxImageDims3D;                        ///< [out] Maximum image dimensions for 3D resources.
@@ -556,8 +556,8 @@ typedef enum _xe_device_p2p_properties_version_t
 typedef struct _xe_device_p2p_properties_t
 {
     xe_device_p2p_properties_version_t version;     ///< [in] ::XE_DEVICE_P2P_PROPERTIES_VERSION_CURRENT
-    xe_bool_t isP2PSupported;                       ///< [out] Is P2P access supported between two devices
-    xe_bool_t isAtomicsSupported;                   ///< [out] Are atomics supported between two devices
+    xe_bool_t accessSupported;                      ///< [out] Supports access between peer devices.
+    xe_bool_t atomicsSupported;                     ///< [out] Supports atomics between peer devices.
 
 } xe_device_p2p_properties_t;
 

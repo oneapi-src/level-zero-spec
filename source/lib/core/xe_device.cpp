@@ -134,15 +134,15 @@ xeDeviceGet(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
-///         + nullptr == phSubDevice
+///         + nullptr == phSubdevice
 ///         + ordinal is out of range reported by device properties.
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeDeviceGetSubDevice(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
     uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve; must be less than
-                                                    ///< ::xe_device_properties_t::numSubDevices
-    xe_device_handle_t* phSubDevice                 ///< [out] pointer to handle of sub-device object.
+                                                    ///< ::xe_device_properties_t::numSubdevices
+    xe_device_handle_t* phSubdevice                 ///< [out] pointer to handle of sub-device object.
     )
 {
     auto pfnGetSubDevice = xe_lib::lib.ddiTable.Device.pfnGetSubDevice;
@@ -152,7 +152,7 @@ xeDeviceGetSubDevice(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnGetSubDevice( hDevice, ordinal, phSubDevice );
+    return pfnGetSubDevice( hDevice, ordinal, phSubdevice );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -725,34 +725,34 @@ namespace xe
     Device* __xecall
     Device::GetSubDevice(
         uint32_t ordinal                                ///< [in] ordinal of sub-device to retrieve; must be less than
-                                                        ///< ::device_properties_t::numSubDevices
+                                                        ///< ::device_properties_t::numSubdevices
         )
     {
-        xe_device_handle_t hSubDevice;
+        xe_device_handle_t hSubdevice;
 
         auto result = static_cast<result_t>( ::xeDeviceGetSubDevice(
             reinterpret_cast<xe_device_handle_t>( getHandle() ),
             ordinal,
-            &hSubDevice ) );
+            &hSubdevice ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::GetSubDevice" );
 
-        Device* pSubDevice = nullptr;
+        Device* pSubdevice = nullptr;
 
         try
         {
-            pSubDevice = new Device( reinterpret_cast<device_handle_t>( hSubDevice ), nullptr );
+            pSubdevice = new Device( reinterpret_cast<device_handle_t>( hSubdevice ), nullptr );
         }
         catch( std::bad_alloc& )
         {
-            delete pSubDevice;
-            pSubDevice = nullptr;
+            delete pSubdevice;
+            pSubdevice = nullptr;
 
             throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Device::GetSubDevice" );
         }
 
-        return pSubDevice;
+        return pSubdevice;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1474,32 +1474,32 @@ namespace xe
         str += std::to_string(val.deviceId);
         str += "\n";
         
-        str += "DeviceGroup::device_properties_t::subdeviceId : ";
-        str += std::to_string(val.subdeviceId);
-        str += "\n";
-        
         str += "DeviceGroup::device_properties_t::uuid : ";
         str += to_string(val.uuid);
+        str += "\n";
+        
+        str += "DeviceGroup::device_properties_t::numSubdevices : ";
+        str += std::to_string(val.numSubdevices);
         str += "\n";
         
         str += "DeviceGroup::device_properties_t::isSubdevice : ";
         str += std::to_string(val.isSubdevice);
         str += "\n";
         
-        str += "DeviceGroup::device_properties_t::numSubDevices : ";
-        str += std::to_string(val.numSubDevices);
+        str += "DeviceGroup::device_properties_t::subdeviceId : ";
+        str += std::to_string(val.subdeviceId);
         str += "\n";
         
         str += "DeviceGroup::device_properties_t::coreClockRate : ";
         str += std::to_string(val.coreClockRate);
         str += "\n";
         
-        str += "DeviceGroup::device_properties_t::unifiedMemory : ";
-        str += std::to_string(val.unifiedMemory);
+        str += "DeviceGroup::device_properties_t::unifiedMemorySupported : ";
+        str += std::to_string(val.unifiedMemorySupported);
         str += "\n";
         
-        str += "DeviceGroup::device_properties_t::onDemandPageFaults : ";
-        str += std::to_string(val.onDemandPageFaults);
+        str += "DeviceGroup::device_properties_t::onDemandPageFaultsSupported : ";
+        str += std::to_string(val.onDemandPageFaultsSupported);
         str += "\n";
         
         str += "DeviceGroup::device_properties_t::maxCommandQueues : ";
@@ -1534,12 +1534,8 @@ namespace xe
         str += std::to_string(val.numSubslicesPerSlice);
         str += "\n";
         
-        str += "DeviceGroup::device_properties_t::numSlicesPerTile : ";
-        str += std::to_string(val.numSlicesPerTile);
-        str += "\n";
-        
-        str += "DeviceGroup::device_properties_t::numTiles : ";
-        str += std::to_string(val.numTiles);
+        str += "DeviceGroup::device_properties_t::numSlicesPerSubdevice : ";
+        str += std::to_string(val.numSlicesPerSubdevice);
         str += "\n";
         
         str += "DeviceGroup::device_properties_t::name : ";
@@ -1620,12 +1616,12 @@ namespace xe
         str += to_string(val.version);
         str += "\n";
         
-        str += "DeviceGroup::device_memory_properties_t::memClockRate : ";
-        str += std::to_string(val.memClockRate);
+        str += "DeviceGroup::device_memory_properties_t::maxClockRate : ";
+        str += std::to_string(val.maxClockRate);
         str += "\n";
         
-        str += "DeviceGroup::device_memory_properties_t::memGlobalBusWidth : ";
-        str += std::to_string(val.memGlobalBusWidth);
+        str += "DeviceGroup::device_memory_properties_t::maxBusWidth : ";
+        str += std::to_string(val.maxBusWidth);
         str += "\n";
         
         str += "DeviceGroup::device_memory_properties_t::totalSize : ";
@@ -1678,20 +1674,20 @@ namespace xe
         str += to_string(val.version);
         str += "\n";
         
+        str += "DeviceGroup::device_cache_properties_t::intermediateCacheControlSupported : ";
+        str += std::to_string(val.intermediateCacheControlSupported);
+        str += "\n";
+        
         str += "DeviceGroup::device_cache_properties_t::intermediateCacheSize : ";
         str += std::to_string(val.intermediateCacheSize);
         str += "\n";
         
-        str += "DeviceGroup::device_cache_properties_t::intermediateCacheControl : ";
-        str += std::to_string(val.intermediateCacheControl);
+        str += "DeviceGroup::device_cache_properties_t::lastLevelCacheSizeControlSupported : ";
+        str += std::to_string(val.lastLevelCacheSizeControlSupported);
         str += "\n";
         
         str += "DeviceGroup::device_cache_properties_t::lastLevelCacheSize : ";
         str += std::to_string(val.lastLevelCacheSize);
-        str += "\n";
-        
-        str += "DeviceGroup::device_cache_properties_t::lastLevelCacheSizeControl : ";
-        str += std::to_string(val.lastLevelCacheSizeControl);
         str += "\n";
 
         return str;
@@ -1707,8 +1703,8 @@ namespace xe
         str += to_string(val.version);
         str += "\n";
         
-        str += "DeviceGroup::device_image_properties_t::isSupported : ";
-        str += std::to_string(val.isSupported);
+        str += "DeviceGroup::device_image_properties_t::supported : ";
+        str += std::to_string(val.supported);
         str += "\n";
         
         str += "DeviceGroup::device_image_properties_t::maxImageDims1D : ";
@@ -1802,12 +1798,12 @@ namespace xe
         str += to_string(val.version);
         str += "\n";
         
-        str += "Device::p2p_properties_t::isP2PSupported : ";
-        str += std::to_string(val.isP2PSupported);
+        str += "Device::p2p_properties_t::accessSupported : ";
+        str += std::to_string(val.accessSupported);
         str += "\n";
         
-        str += "Device::p2p_properties_t::isAtomicsSupported : ";
-        str += std::to_string(val.isAtomicsSupported);
+        str += "Device::p2p_properties_t::atomicsSupported : ";
+        str += std::to_string(val.atomicsSupported);
         str += "\n";
 
         return str;

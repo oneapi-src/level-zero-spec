@@ -179,8 +179,8 @@ namespace loader
     xeDeviceGetSubDevice(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device object
         uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve; must be less than
-                                                        ///< ::xe_device_properties_t::numSubDevices
-        xe_device_handle_t* phSubDevice                 ///< [out] pointer to handle of sub-device object.
+                                                        ///< ::xe_device_properties_t::numSubdevices
+        xe_device_handle_t* phSubdevice                 ///< [out] pointer to handle of sub-device object.
         )
     {
         // extract driver's function pointer table
@@ -190,13 +190,13 @@ namespace loader
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Device.pfnGetSubDevice( hDevice, ordinal, phSubDevice );
+        auto result = dditable->xe.Device.pfnGetSubDevice( hDevice, ordinal, phSubdevice );
 
         try
         {
             // convert driver handle to loader handle
-            *phSubDevice = reinterpret_cast<xe_device_handle_t>(
-                xe_device_factory.get( *phSubDevice, dditable ) );
+            *phSubdevice = reinterpret_cast<xe_device_handle_t>(
+                xe_device_factory.get( *phSubdevice, dditable ) );
         }
         catch( std::bad_alloc& )
         {

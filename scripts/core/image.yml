@@ -224,8 +224,14 @@ desc: "Supported sampler filtering flags"
 class: $xImage
 name: $x_image_sampler_filter_flags_t
 etors:
-    - name: $X_IMAGE_SAMPLER_FILTER_FLAGS_LINEAR
+    - name: $X_IMAGE_SAMPLER_FILTER_FLAGS_NONE
+      value: "0"
+      desc: "device does not support filtering"
+    - name: $X_IMAGE_SAMPLER_FILTER_FLAGS_POINT
       value: "$X_BIT(0)"
+      desc: "device supports point filtering"
+    - name: $X_IMAGE_SAMPLER_FILTER_FLAGS_LINEAR
+      value: "$X_BIT(1)"
       desc: "device supports linear filtering"
 --- #--------------------------------------------------------------------------
 type: struct

@@ -182,7 +182,9 @@ typedef enum _xe_image_properties_version_t
 /// @brief Supported sampler filtering flags
 typedef enum _xe_image_sampler_filter_flags_t
 {
-    XE_IMAGE_SAMPLER_FILTER_FLAGS_LINEAR = XE_BIT(0),   ///< device supports linear filtering
+    XE_IMAGE_SAMPLER_FILTER_FLAGS_NONE = 0,         ///< device does not support filtering
+    XE_IMAGE_SAMPLER_FILTER_FLAGS_POINT = XE_BIT(0),///< device supports point filtering
+    XE_IMAGE_SAMPLER_FILTER_FLAGS_LINEAR = XE_BIT(1),   ///< device supports linear filtering
 
 } xe_image_sampler_filter_flags_t;
 

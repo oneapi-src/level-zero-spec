@@ -107,13 +107,13 @@ namespace driver
     xeDeviceGetSubDevice(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device object
         uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve; must be less than
-                                                        ///< ::xe_device_properties_t::numSubDevices
-        xe_device_handle_t* phSubDevice                 ///< [out] pointer to handle of sub-device object.
+                                                        ///< ::xe_device_properties_t::numSubdevices
+        xe_device_handle_t* phSubdevice                 ///< [out] pointer to handle of sub-device object.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        *phSubDevice = reinterpret_cast<xe_device_handle_t>( context.get() );
+        *phSubdevice = reinterpret_cast<xe_device_handle_t>( context.get() );
 
         return result;
     }

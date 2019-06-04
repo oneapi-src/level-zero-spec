@@ -151,7 +151,9 @@ namespace xe
         /// @brief Supported sampler filtering flags
         enum class sampler_filter_flags_t
         {
-            LINEAR = XE_BIT(0),                             ///< device supports linear filtering
+            NONE = 0,                                       ///< device does not support filtering
+            POINT = XE_BIT(0),                              ///< device supports point filtering
+            LINEAR = XE_BIT(1),                             ///< device supports linear filtering
 
         };
 

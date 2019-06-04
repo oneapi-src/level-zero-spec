@@ -849,7 +849,7 @@ there are no distinction between sub-devices and devices.
 @image latex core_subdevice.png
 
 Query device properties using ::xeDeviceGroupGetDeviceProperties to confirm subdevices are supported with
-::xe_device_properties_t.numSubDevices. Use ::xeDeviceGetSubDevice to obtain a sub-device handle.
+::xe_device_properties_t.numSubdevices. Use ::xeDeviceGetSubDevice to obtain a sub-device handle.
 There are additional device properties in ::xe_device_properties_t for sub-devices to confirm a
 device is a sub-device and to query the id. This is useful when needing to pass a sub-device
 handle to another library.
@@ -878,18 +878,18 @@ A 16-byte unique device identifier (uuid) can be obtained for a device or sub-de
     assert(deviceProps.numSubDevices == 4);
 
     // Desire is to allocate and dispatch work to sub-device 2.
-    uint32_t subdeviceId = 2;
-    xeDeviceGetSubDevice(device, subdeviceId, &subdevice);
+    xe_device_handle_t hSubdevice;
+    xeDeviceGetSubDevice(device, 2, &hSubdevice);
 
     // Query sub-device properties.
     xe_device_properties_t subdeviceProps;
-    xeDeviceGroupGetDeviceProperties(subdevice, &subdeviceProps);
+    xeDeviceGroupGetDeviceProperties(hSubdevice, &subdeviceProps);
 
     assert(subdeviceProps.isSubdevice == true); // Ensure that we have a handle to a sub-device.
     assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
 
     void* pMemForSubDevice2;
-    xeDeviceGroupAllocDeviceMem(hDeviceGroup, subDevice, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, 0, memSize, sizeof(uint32_t), &pMemForSubDevice2);
+    xeDeviceGroupAllocDeviceMem(hDeviceGroup, hSubdevice, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, 0, memSize, sizeof(uint32_t), &pMemForSubDevice2);
     ...
 
     ...
@@ -897,7 +897,7 @@ A 16-byte unique device identifier (uuid) can be obtained for a device or sub-de
     assert(desc.ordinal < subdeviceProps.numAsyncComputeEngines);
 
     xe_command_queue_handle_t commandQueueForSubDevice2;
-    xeCommandQueueCreate(subdevice, desc, &commandQueueForSubDevice2);
+    xeCommandQueueCreate(hSubdevice, desc, &commandQueueForSubDevice2);
     ...
 ```
 
@@ -1120,7 +1120,7 @@ The following code examples demonstrate how to use the event IPC APIs:
 Devices may be linked together within a node by a scale-up fabric and depending on the configuration,
 the fabric can support atomics, compute kernel remote access, and data copies.
 
-The following P2P functionalities are provided through the API:
+The following Peer-to-Peer functionalities are provided through the API:
     - Check for existence of peer-to-peer fabric between two devices.
         - ::xeDeviceCanAccessPeer
     - Query remote memory access and atomic capabilities for peer-to-peer

@@ -212,13 +212,13 @@ namespace xe
             device_type_t type;                             ///< [out] generic device type
             uint32_t vendorId;                              ///< [out] vendor id from PCI configuration
             uint32_t deviceId;                              ///< [out] device id from PCI configuration
-            uint32_t subdeviceId;                           ///< [out] Subdevice id. Only valid if isSubdevice is true.
-            device_uuid_t uuid;                             ///< [out] unique id for device.
-            bool_t isSubdevice;                             ///< [out] Is this a subdevice.
-            uint32_t numSubDevices;                         ///< [out] Number of sub-devices.
+            device_uuid_t uuid;                             ///< [out] universal unique identifier.
+            uint32_t numSubdevices;                         ///< [out] Number of sub-devices the device can be sub-divided into.
+            bool_t isSubdevice;                             ///< [out] If the device handle used for query represents a sub-device.
+            uint32_t subdeviceId;                           ///< [out] sub-device id. Only valid if isSubdevice is true.
             uint32_t coreClockRate;                         ///< [out] Clock rate for device core.
-            bool_t unifiedMemory;                           ///< [out] Host and device share same physical memory.
-            bool_t onDemandPageFaults;                      ///< [out] Device supports on-demand page-faulting.
+            bool_t unifiedMemorySupported;                  ///< [out] Supports unified physical memory between Host and device.
+            bool_t onDemandPageFaultsSupported;             ///< [out] Supports on-demand page-faulting.
             uint32_t maxCommandQueues;                      ///< [out] Maximum number of logical command queues.
             uint32_t numAsyncComputeEngines;                ///< [out] Number of asynchronous compute engines
             uint32_t numAsyncCopyEngines;                   ///< [out] Number of asynchronous copy engines
@@ -228,8 +228,7 @@ namespace xe
             uint32_t physicalEUSimdWidth;                   ///< [out] The physical EU simd width.
             uint32_t numEUsPerSubslice;                     ///< [out] Number of EUs per sub-slice.
             uint32_t numSubslicesPerSlice;                  ///< [out] Number of sub-slices per slice.
-            uint32_t numSlicesPerTile;                      ///< [out] Number of slices per tile.
-            uint32_t numTiles;                              ///< [out] Number of tiles for this device.
+            uint32_t numSlicesPerSubdevice;                 ///< [out] Number of slices per sub-device.
             char name[XE_MAX_DEVICE_NAME];                  ///< [out] Device name
 
         };
@@ -261,8 +260,8 @@ namespace xe
         struct device_memory_properties_t
         {
             device_memory_properties_version_t version = device_memory_properties_version_t::CURRENT;   ///< [in] ::DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
-            uint32_t memClockRate;                          ///< [out] Clock rate for device global memory
-            uint32_t memGlobalBusWidth;                     ///< [out] Bus width between core and memory.
+            uint32_t maxClockRate;                          ///< [out] Maximum clock rate for device memory.
+            uint32_t maxBusWidth;                           ///< [out] Maximum bus width between device and memory.
             uint64_t totalSize;                             ///< [out] Total memory size in bytes.
 
         };
@@ -286,12 +285,12 @@ namespace xe
         struct device_cache_properties_t
         {
             device_cache_properties_version_t version = device_cache_properties_version_t::CURRENT; ///< [in] ::DEVICE_CACHE_PROPERTIES_VERSION_CURRENT
-            uint32_t intermediateCacheSize;                 ///< [out] Per-cache Intermediate Cache (L1/L2) size, in bytes
-            bool_t intermediateCacheControl;                ///< [out] Support User control on Intermediate Cache (i.e. Resize SLM
+            bool_t intermediateCacheControlSupported;       ///< [out] Support User control on Intermediate Cache (i.e. Resize SLM
                                                             ///< section vs Generic Cache)
-            uint32_t lastLevelCacheSize;                    ///< [out] Per-cache Last Level Cache (L3) size, in bytes
-            bool_t lastLevelCacheSizeControl;               ///< [out] Support User control on Last Level Cache (i.e. Resize SLM
+            size_t intermediateCacheSize;                   ///< [out] Per-cache Intermediate Cache (L1/L2) size, in bytes
+            bool_t lastLevelCacheSizeControlSupported;      ///< [out] Support User control on Last Level Cache (i.e. Resize SLM
                                                             ///< section vs Generic Cache).
+            size_t lastLevelCacheSize;                      ///< [out] Per-cache Last Level Cache (L3) size, in bytes
 
         };
 
@@ -301,7 +300,8 @@ namespace xe
         struct device_image_properties_t
         {
             device_image_properties_version_t version = device_image_properties_version_t::CURRENT; ///< [in] ::DEVICE_IMAGE_PROPERTIES_VERSION_CURRENT
-            bool_t isSupported;                             ///< [out] Is images supported by device.
+            bool_t supported;                               ///< [out] Supports reading and writing of images. See
+                                                            ///< ::::ImageGetProperties for format-specific capabilities.
             uint32_t maxImageDims1D;                        ///< [out] Maximum image dimensions for 1D resources.
             uint32_t maxImageDims2D;                        ///< [out] Maximum image dimensions for 2D resources.
             uint32_t maxImageDims3D;                        ///< [out] Maximum image dimensions for 3D resources.
@@ -775,8 +775,8 @@ namespace xe
         struct p2p_properties_t
         {
             p2p_properties_version_t version = p2p_properties_version_t::CURRENT;   ///< [in] ::DEVICE_P2P_PROPERTIES_VERSION_CURRENT
-            bool_t isP2PSupported;                          ///< [out] Is P2P access supported between two devices
-            bool_t isAtomicsSupported;                      ///< [out] Are atomics supported between two devices
+            bool_t accessSupported;                         ///< [out] Supports access between peer devices.
+            bool_t atomicsSupported;                        ///< [out] Supports atomics between peer devices.
 
         };
 
@@ -845,7 +845,7 @@ namespace xe
         Device* __xecall
         GetSubDevice(
             uint32_t ordinal                                ///< [in] ordinal of sub-device to retrieve; must be less than
-                                                            ///< ::device_properties_t::numSubDevices
+                                                            ///< ::device_properties_t::numSubdevices
             );
 
         ///////////////////////////////////////////////////////////////////////////////

@@ -855,7 +855,7 @@ there are no distinction between sub-devices and devices.
 @image latex core_subdevice.png
 
 Query device properties using ::${x}DeviceGroupGetDeviceProperties to confirm subdevices are supported with
-::${x}_device_properties_t.numSubDevices. Use ::${x}DeviceGetSubDevice to obtain a sub-device handle.
+::${x}_device_properties_t.numSubdevices. Use ::${x}DeviceGetSubDevice to obtain a sub-device handle.
 There are additional device properties in ::${x}_device_properties_t for sub-devices to confirm a
 device is a sub-device and to query the id. This is useful when needing to pass a sub-device
 handle to another library.
@@ -884,18 +884,18 @@ A 16-byte unique device identifier (uuid) can be obtained for a device or sub-de
     assert(deviceProps.numSubDevices == 4);
 
     // Desire is to allocate and dispatch work to sub-device 2.
-    uint32_t subdeviceId = 2;
-    ${x}DeviceGetSubDevice(device, subdeviceId, &subdevice);
+    ${x}_device_handle_t hSubdevice;
+    ${x}DeviceGetSubDevice(device, 2, &hSubdevice);
 
     // Query sub-device properties.
     ${x}_device_properties_t subdeviceProps;
-    ${x}DeviceGroupGetDeviceProperties(subdevice, &subdeviceProps);
+    ${x}DeviceGroupGetDeviceProperties(hSubdevice, &subdeviceProps);
 
     assert(subdeviceProps.isSubdevice == true); // Ensure that we have a handle to a sub-device.
     assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
 
     void* pMemForSubDevice2;
-    ${x}DeviceGroupAllocDeviceMem(hDeviceGroup, subDevice, ${X}_DEVICE_MEM_ALLOC_FLAG_DEFAULT, 0, memSize, sizeof(uint32_t), &pMemForSubDevice2);
+    ${x}DeviceGroupAllocDeviceMem(hDeviceGroup, hSubdevice, ${X}_DEVICE_MEM_ALLOC_FLAG_DEFAULT, 0, memSize, sizeof(uint32_t), &pMemForSubDevice2);
     ...
 
     ...
@@ -903,7 +903,7 @@ A 16-byte unique device identifier (uuid) can be obtained for a device or sub-de
     assert(desc.ordinal < subdeviceProps.numAsyncComputeEngines);
 
     ${x}_command_queue_handle_t commandQueueForSubDevice2;
-    ${x}CommandQueueCreate(subdevice, desc, &commandQueueForSubDevice2);
+    ${x}CommandQueueCreate(hSubdevice, desc, &commandQueueForSubDevice2);
     ...
 ```
 
@@ -1126,7 +1126,7 @@ ${"##"} <a name="peer">Peer-to-Peer Access and Queries</a>
 Devices may be linked together within a node by a scale-up fabric and depending on the configuration,
 the fabric can support atomics, compute kernel remote access, and data copies.
 
-The following P2P functionalities are provided through the API:
+The following Peer-to-Peer functionalities are provided through the API:
     - Check for existence of peer-to-peer fabric between two devices.
         - ::${x}DeviceCanAccessPeer
     - Query remote memory access and atomic capabilities for peer-to-peer

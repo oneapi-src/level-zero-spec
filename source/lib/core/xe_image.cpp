@@ -598,6 +598,12 @@ namespace xe
 
         std::string str;
         
+        if( static_cast<uint32_t>(Image::sampler_filter_flags_t::NONE) & bits )
+            str += "Image::sampler_filter_flags_t::NONE | ";
+        
+        if( static_cast<uint32_t>(Image::sampler_filter_flags_t::POINT) & bits )
+            str += "Image::sampler_filter_flags_t::POINT | ";
+        
         if( static_cast<uint32_t>(Image::sampler_filter_flags_t::LINEAR) & bits )
             str += "Image::sampler_filter_flags_t::LINEAR | ";
 
