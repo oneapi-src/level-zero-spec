@@ -26,11 +26,9 @@ if(UNIX)
     if(PAPI_LIB_PATH)
       set(XE_NANO_COMMON src/hardware_counter/hardware_counter_support.cpp)
       set(OS_SPECIFIC_LIBS ${OS_SPECIFIC_LIBS} ${PAPI_LIB})
+      message(STATUS "PAPI_LIB: ${PAPI_LIB}")
     else()
-      message(WARNING
-	      "xe_nano benchmarks require PAPI library. "
-	      "The library was not found; Therefore, the hardware counters "
-	      "for the benchmarks won't be available.")
+      message(STATUS "PAPI library not found: No hardware counter support ")
       set(XE_NANO_COMMON src/hardware_counter/hardware_counter_stub.cpp)
     endif()
 else()
