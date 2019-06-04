@@ -1172,35 +1172,34 @@ namespace xet
 
 } // namespace xet
 
-#ifdef _DEBUG
-namespace std
+namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::value_type_t to std::string
-    string to_string( const xet::value_type_t val )
+    /// @brief Converts value_type_t to std::string
+    std::string to_string( const value_type_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xet::value_type_t::UINT32:
-            str = "xet::value_type_t::UINT32";
+        case value_type_t::UINT32:
+            str = "value_type_t::UINT32";
             break;
 
-        case xet::value_type_t::UINT64:
-            str = "xet::value_type_t::UINT64";
+        case value_type_t::UINT64:
+            str = "value_type_t::UINT64";
             break;
 
-        case xet::value_type_t::FLOAT:
-            str = "xet::value_type_t::FLOAT";
+        case value_type_t::FLOAT:
+            str = "value_type_t::FLOAT";
             break;
 
-        case xet::value_type_t::BOOL:
-            str = "xet::value_type_t::BOOL";
+        case value_type_t::BOOL:
+            str = "value_type_t::BOOL";
             break;
 
         default:
-            str = "xet::value_type_t::?";
+            str = "value_type_t::?";
             break;
         };
 
@@ -1208,19 +1207,19 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::typed_value_version_t to std::string
-    string to_string( const xet::typed_value_version_t val )
+    /// @brief Converts typed_value_version_t to std::string
+    std::string to_string( const typed_value_version_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xet::typed_value_version_t::CURRENT:
-            str = "xet::typed_value_version_t::CURRENT";
+        case typed_value_version_t::CURRENT:
+            str = "typed_value_version_t::CURRENT";
             break;
 
         default:
-            str = "xet::typed_value_version_t::?";
+            str = "typed_value_version_t::?";
             break;
         };
 
@@ -1228,45 +1227,45 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::value_t to std::string
-    string to_string( const xet::value_t val )
+    /// @brief Converts value_t to std::string
+    std::string to_string( const value_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xet::value_t::valueUInt32 : ";
-        str += to_string(val.valueUInt32);
+        str += "value_t::valueUInt32 : ";
+        str += std::to_string(val.valueUInt32);
         str += "\n";
         
-        str += "xet::value_t::valueUInt64 : ";
-        str += to_string(val.valueUInt64);
+        str += "value_t::valueUInt64 : ";
+        str += std::to_string(val.valueUInt64);
         str += "\n";
         
-        str += "xet::value_t::valueFloat : ";
-        str += to_string(val.valueFloat);
+        str += "value_t::valueFloat : ";
+        str += std::to_string(val.valueFloat);
         str += "\n";
         
-        str += "xet::value_t::valueBool : ";
-        str += to_string(val.valueBool);
+        str += "value_t::valueBool : ";
+        str += std::to_string(val.valueBool);
         str += "\n";
 
         return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::typed_value_t to std::string
-    string to_string( const xet::typed_value_t val )
+    /// @brief Converts typed_value_t to std::string
+    std::string to_string( const typed_value_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xet::typed_value_t::version : ";
+        str += "typed_value_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "xet::typed_value_t::type : ";
+        str += "typed_value_t::type : ";
         str += to_string(val.type);
         str += "\n";
         
-        str += "xet::typed_value_t::value : ";
+        str += "typed_value_t::value : ";
         str += to_string(val.value);
         str += "\n";
 
@@ -1274,37 +1273,37 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::MetricGroup::sampling_type_t to std::string
-    string to_string( const xet::MetricGroup::sampling_type_t val )
+    /// @brief Converts MetricGroup::sampling_type_t to std::string
+    std::string to_string( const MetricGroup::sampling_type_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return string("{}");
+        if( 0 == bits ) return std::string("{}");
 
-        string str;
+        std::string str;
         
-        if( static_cast<uint32_t>(xet::MetricGroup::sampling_type_t::EVENT_BASED) & bits )
-            str += "xet::MetricGroup::sampling_type_t::EVENT_BASED | ";
+        if( static_cast<uint32_t>(MetricGroup::sampling_type_t::EVENT_BASED) & bits )
+            str += "MetricGroup::sampling_type_t::EVENT_BASED | ";
         
-        if( static_cast<uint32_t>(xet::MetricGroup::sampling_type_t::TIME_BASED) & bits )
-            str += "xet::MetricGroup::sampling_type_t::TIME_BASED | ";
+        if( static_cast<uint32_t>(MetricGroup::sampling_type_t::TIME_BASED) & bits )
+            str += "MetricGroup::sampling_type_t::TIME_BASED | ";
 
         return "{ " + str.substr(0, str.size() - 3) + " }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::MetricGroup::properties_version_t to std::string
-    string to_string( const xet::MetricGroup::properties_version_t val )
+    /// @brief Converts MetricGroup::properties_version_t to std::string
+    std::string to_string( const MetricGroup::properties_version_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xet::MetricGroup::properties_version_t::CURRENT:
-            str = "xet::MetricGroup::properties_version_t::CURRENT";
+        case MetricGroup::properties_version_t::CURRENT:
+            str = "MetricGroup::properties_version_t::CURRENT";
             break;
 
         default:
-            str = "xet::MetricGroup::properties_version_t::?";
+            str = "MetricGroup::properties_version_t::?";
             break;
         };
 
@@ -1312,88 +1311,88 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::MetricGroup::properties_t to std::string
-    string to_string( const xet::MetricGroup::properties_t val )
+    /// @brief Converts MetricGroup::properties_t to std::string
+    std::string to_string( const MetricGroup::properties_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xet::MetricGroup::properties_t::version : ";
+        str += "MetricGroup::properties_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "xet::MetricGroup::properties_t::name : ";
+        str += "MetricGroup::properties_t::name : ";
         str += val.name;
         str += "\n";
         
-        str += "xet::MetricGroup::properties_t::description : ";
+        str += "MetricGroup::properties_t::description : ";
         str += val.description;
         str += "\n";
         
-        str += "xet::MetricGroup::properties_t::samplingType : ";
+        str += "MetricGroup::properties_t::samplingType : ";
         str += to_string(val.samplingType);
         str += "\n";
         
-        str += "xet::MetricGroup::properties_t::domain : ";
-        str += to_string(val.domain);
+        str += "MetricGroup::properties_t::domain : ";
+        str += std::to_string(val.domain);
         str += "\n";
         
-        str += "xet::MetricGroup::properties_t::metricCount : ";
-        str += to_string(val.metricCount);
+        str += "MetricGroup::properties_t::metricCount : ";
+        str += std::to_string(val.metricCount);
         str += "\n";
         
-        str += "xet::MetricGroup::properties_t::rawReportSize : ";
-        str += to_string(val.rawReportSize);
+        str += "MetricGroup::properties_t::rawReportSize : ";
+        str += std::to_string(val.rawReportSize);
         str += "\n";
         
-        str += "xet::MetricGroup::properties_t::calculatedReportSize : ";
-        str += to_string(val.calculatedReportSize);
+        str += "MetricGroup::properties_t::calculatedReportSize : ";
+        str += std::to_string(val.calculatedReportSize);
         str += "\n";
 
         return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::Metric::type_t to std::string
-    string to_string( const xet::Metric::type_t val )
+    /// @brief Converts Metric::type_t to std::string
+    std::string to_string( const Metric::type_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xet::Metric::type_t::DURATION:
-            str = "xet::Metric::type_t::DURATION";
+        case Metric::type_t::DURATION:
+            str = "Metric::type_t::DURATION";
             break;
 
-        case xet::Metric::type_t::EVENT:
-            str = "xet::Metric::type_t::EVENT";
+        case Metric::type_t::EVENT:
+            str = "Metric::type_t::EVENT";
             break;
 
-        case xet::Metric::type_t::EVENT_WITH_RANGE:
-            str = "xet::Metric::type_t::EVENT_WITH_RANGE";
+        case Metric::type_t::EVENT_WITH_RANGE:
+            str = "Metric::type_t::EVENT_WITH_RANGE";
             break;
 
-        case xet::Metric::type_t::THROUGHPUT:
-            str = "xet::Metric::type_t::THROUGHPUT";
+        case Metric::type_t::THROUGHPUT:
+            str = "Metric::type_t::THROUGHPUT";
             break;
 
-        case xet::Metric::type_t::TIMESTAMP:
-            str = "xet::Metric::type_t::TIMESTAMP";
+        case Metric::type_t::TIMESTAMP:
+            str = "Metric::type_t::TIMESTAMP";
             break;
 
-        case xet::Metric::type_t::FLAG:
-            str = "xet::Metric::type_t::FLAG";
+        case Metric::type_t::FLAG:
+            str = "Metric::type_t::FLAG";
             break;
 
-        case xet::Metric::type_t::RATIO:
-            str = "xet::Metric::type_t::RATIO";
+        case Metric::type_t::RATIO:
+            str = "Metric::type_t::RATIO";
             break;
 
-        case xet::Metric::type_t::RAW:
-            str = "xet::Metric::type_t::RAW";
+        case Metric::type_t::RAW:
+            str = "Metric::type_t::RAW";
             break;
 
         default:
-            str = "xet::Metric::type_t::?";
+            str = "Metric::type_t::?";
             break;
         };
 
@@ -1401,19 +1400,19 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::Metric::properties_version_t to std::string
-    string to_string( const xet::Metric::properties_version_t val )
+    /// @brief Converts Metric::properties_version_t to std::string
+    std::string to_string( const Metric::properties_version_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xet::Metric::properties_version_t::CURRENT:
-            str = "xet::Metric::properties_version_t::CURRENT";
+        case Metric::properties_version_t::CURRENT:
+            str = "Metric::properties_version_t::CURRENT";
             break;
 
         default:
-            str = "xet::Metric::properties_version_t::?";
+            str = "Metric::properties_version_t::?";
             break;
         };
 
@@ -1421,40 +1420,40 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::Metric::properties_t to std::string
-    string to_string( const xet::Metric::properties_t val )
+    /// @brief Converts Metric::properties_t to std::string
+    std::string to_string( const Metric::properties_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xet::Metric::properties_t::version : ";
+        str += "Metric::properties_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "xet::Metric::properties_t::name : ";
+        str += "Metric::properties_t::name : ";
         str += val.name;
         str += "\n";
         
-        str += "xet::Metric::properties_t::description : ";
+        str += "Metric::properties_t::description : ";
         str += val.description;
         str += "\n";
         
-        str += "xet::Metric::properties_t::component : ";
+        str += "Metric::properties_t::component : ";
         str += val.component;
         str += "\n";
         
-        str += "xet::Metric::properties_t::tierNumber : ";
-        str += to_string(val.tierNumber);
+        str += "Metric::properties_t::tierNumber : ";
+        str += std::to_string(val.tierNumber);
         str += "\n";
         
-        str += "xet::Metric::properties_t::metricType : ";
+        str += "Metric::properties_t::metricType : ";
         str += to_string(val.metricType);
         str += "\n";
         
-        str += "xet::Metric::properties_t::resultType : ";
+        str += "Metric::properties_t::resultType : ";
         str += to_string(val.resultType);
         str += "\n";
         
-        str += "xet::Metric::properties_t::resultUnits : ";
+        str += "Metric::properties_t::resultUnits : ";
         str += val.resultUnits;
         str += "\n";
 
@@ -1462,19 +1461,19 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::MetricTracer::desc_version_t to std::string
-    string to_string( const xet::MetricTracer::desc_version_t val )
+    /// @brief Converts MetricTracer::desc_version_t to std::string
+    std::string to_string( const MetricTracer::desc_version_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xet::MetricTracer::desc_version_t::CURRENT:
-            str = "xet::MetricTracer::desc_version_t::CURRENT";
+        case MetricTracer::desc_version_t::CURRENT:
+            str = "MetricTracer::desc_version_t::CURRENT";
             break;
 
         default:
-            str = "xet::MetricTracer::desc_version_t::?";
+            str = "MetricTracer::desc_version_t::?";
             break;
         };
 
@@ -1482,44 +1481,44 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::MetricTracer::desc_t to std::string
-    string to_string( const xet::MetricTracer::desc_t val )
+    /// @brief Converts MetricTracer::desc_t to std::string
+    std::string to_string( const MetricTracer::desc_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xet::MetricTracer::desc_t::version : ";
+        str += "MetricTracer::desc_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "xet::MetricTracer::desc_t::notifyEveryNReports : ";
-        str += to_string(val.notifyEveryNReports);
+        str += "MetricTracer::desc_t::notifyEveryNReports : ";
+        str += std::to_string(val.notifyEveryNReports);
         str += "\n";
         
-        str += "xet::MetricTracer::desc_t::samplingPeriod : ";
-        str += to_string(val.samplingPeriod);
+        str += "MetricTracer::desc_t::samplingPeriod : ";
+        str += std::to_string(val.samplingPeriod);
         str += "\n";
 
         return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::MetricQueryPool::flag_t to std::string
-    string to_string( const xet::MetricQueryPool::flag_t val )
+    /// @brief Converts MetricQueryPool::flag_t to std::string
+    std::string to_string( const MetricQueryPool::flag_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xet::MetricQueryPool::flag_t::PERFORMANCE:
-            str = "xet::MetricQueryPool::flag_t::PERFORMANCE";
+        case MetricQueryPool::flag_t::PERFORMANCE:
+            str = "MetricQueryPool::flag_t::PERFORMANCE";
             break;
 
-        case xet::MetricQueryPool::flag_t::SKIP_EXECUTION:
-            str = "xet::MetricQueryPool::flag_t::SKIP_EXECUTION";
+        case MetricQueryPool::flag_t::SKIP_EXECUTION:
+            str = "MetricQueryPool::flag_t::SKIP_EXECUTION";
             break;
 
         default:
-            str = "xet::MetricQueryPool::flag_t::?";
+            str = "MetricQueryPool::flag_t::?";
             break;
         };
 
@@ -1527,19 +1526,19 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::MetricQueryPool::desc_version_t to std::string
-    string to_string( const xet::MetricQueryPool::desc_version_t val )
+    /// @brief Converts MetricQueryPool::desc_version_t to std::string
+    std::string to_string( const MetricQueryPool::desc_version_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xet::MetricQueryPool::desc_version_t::CURRENT:
-            str = "xet::MetricQueryPool::desc_version_t::CURRENT";
+        case MetricQueryPool::desc_version_t::CURRENT:
+            str = "MetricQueryPool::desc_version_t::CURRENT";
             break;
 
         default:
-            str = "xet::MetricQueryPool::desc_version_t::?";
+            str = "MetricQueryPool::desc_version_t::?";
             break;
         };
 
@@ -1547,25 +1546,24 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::MetricQueryPool::desc_t to std::string
-    string to_string( const xet::MetricQueryPool::desc_t val )
+    /// @brief Converts MetricQueryPool::desc_t to std::string
+    std::string to_string( const MetricQueryPool::desc_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xet::MetricQueryPool::desc_t::version : ";
+        str += "MetricQueryPool::desc_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "xet::MetricQueryPool::desc_t::flags : ";
+        str += "MetricQueryPool::desc_t::flags : ";
         str += to_string(val.flags);
         str += "\n";
         
-        str += "xet::MetricQueryPool::desc_t::count : ";
-        str += to_string(val.count);
+        str += "MetricQueryPool::desc_t::count : ";
+        str += std::to_string(val.count);
         str += "\n";
 
         return str;
     }
 
-} // namespace std
-#endif // _DEBUG
+} // namespace xet

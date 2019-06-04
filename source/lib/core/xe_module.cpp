@@ -31,6 +31,7 @@
 *
 ******************************************************************************/
 #include "xe_lib.h"
+#include <sstream>
 
 extern "C" {
 
@@ -1499,23 +1500,22 @@ namespace xe
 
 } // namespace xe
 
-#ifdef _DEBUG
-namespace std
+namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Module::desc_version_t to std::string
-    string to_string( const xe::Module::desc_version_t val )
+    /// @brief Converts Module::desc_version_t to std::string
+    std::string to_string( const Module::desc_version_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::Module::desc_version_t::CURRENT:
-            str = "xe::Module::desc_version_t::CURRENT";
+        case Module::desc_version_t::CURRENT:
+            str = "Module::desc_version_t::CURRENT";
             break;
 
         default:
-            str = "xe::Module::desc_version_t::?";
+            str = "Module::desc_version_t::?";
             break;
         };
 
@@ -1523,23 +1523,23 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Module::format_t to std::string
-    string to_string( const xe::Module::format_t val )
+    /// @brief Converts Module::format_t to std::string
+    std::string to_string( const Module::format_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::Module::format_t::IL_SPIRV:
-            str = "xe::Module::format_t::IL_SPIRV";
+        case Module::format_t::IL_SPIRV:
+            str = "Module::format_t::IL_SPIRV";
             break;
 
-        case xe::Module::format_t::NATIVE:
-            str = "xe::Module::format_t::NATIVE";
+        case Module::format_t::NATIVE:
+            str = "Module::format_t::NATIVE";
             break;
 
         default:
-            str = "xe::Module::format_t::?";
+            str = "Module::format_t::?";
             break;
         };
 
@@ -1547,28 +1547,32 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Module::desc_t to std::string
-    string to_string( const xe::Module::desc_t val )
+    /// @brief Converts Module::desc_t to std::string
+    std::string to_string( const Module::desc_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xe::Module::desc_t::version : ";
+        str += "Module::desc_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "xe::Module::desc_t::format : ";
+        str += "Module::desc_t::format : ";
         str += to_string(val.format);
         str += "\n";
         
-        str += "xe::Module::desc_t::inputSize : ";
-        str += to_string(val.inputSize);
+        str += "Module::desc_t::inputSize : ";
+        str += std::to_string(val.inputSize);
         str += "\n";
         
-        str += "xe::Module::desc_t::pInputModule : ";
-        str += ptr_to_string(val.pInputModule);
+        str += "Module::desc_t::pInputModule : ";
+        {
+            std::stringstream ss;
+            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pInputModule);
+            str += ss.str();
+        }
         str += "\n";
         
-        str += "xe::Module::desc_t::pBuildFlags : ";
+        str += "Module::desc_t::pBuildFlags : ";
         str += val.pBuildFlags;
         str += "\n";
 
@@ -1576,19 +1580,19 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Function::desc_version_t to std::string
-    string to_string( const xe::Function::desc_version_t val )
+    /// @brief Converts Function::desc_version_t to std::string
+    std::string to_string( const Function::desc_version_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::Function::desc_version_t::CURRENT:
-            str = "xe::Function::desc_version_t::CURRENT";
+        case Function::desc_version_t::CURRENT:
+            str = "Function::desc_version_t::CURRENT";
             break;
 
         default:
-            str = "xe::Function::desc_version_t::?";
+            str = "Function::desc_version_t::?";
             break;
         };
 
@@ -1596,23 +1600,23 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Function::flag_t to std::string
-    string to_string( const xe::Function::flag_t val )
+    /// @brief Converts Function::flag_t to std::string
+    std::string to_string( const Function::flag_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::Function::flag_t::NONE:
-            str = "xe::Function::flag_t::NONE";
+        case Function::flag_t::NONE:
+            str = "Function::flag_t::NONE";
             break;
 
-        case xe::Function::flag_t::FORCE_RESIDENCY:
-            str = "xe::Function::flag_t::FORCE_RESIDENCY";
+        case Function::flag_t::FORCE_RESIDENCY:
+            str = "Function::flag_t::FORCE_RESIDENCY";
             break;
 
         default:
-            str = "xe::Function::flag_t::?";
+            str = "Function::flag_t::?";
             break;
         };
 
@@ -1620,27 +1624,27 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Function::set_attribute_t to std::string
-    string to_string( const xe::Function::set_attribute_t val )
+    /// @brief Converts Function::set_attribute_t to std::string
+    std::string to_string( const Function::set_attribute_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS:
-            str = "xe::Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS";
+        case Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS:
+            str = "Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS";
             break;
 
-        case xe::Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS:
-            str = "xe::Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS";
+        case Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS:
+            str = "Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS";
             break;
 
-        case xe::Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_SHARED_ACCESS:
-            str = "xe::Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_SHARED_ACCESS";
+        case Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_SHARED_ACCESS:
+            str = "Function::set_attribute_t::FUNCTION_SET_ATTR_INDIRECT_SHARED_ACCESS";
             break;
 
         default:
-            str = "xe::Function::set_attribute_t::?";
+            str = "Function::set_attribute_t::?";
             break;
         };
 
@@ -1648,39 +1652,39 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Function::get_attribute_t to std::string
-    string to_string( const xe::Function::get_attribute_t val )
+    /// @brief Converts Function::get_attribute_t to std::string
+    std::string to_string( const Function::get_attribute_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::Function::get_attribute_t::FUNCTION_GET_ATTR_MAX_REGS_USED:
-            str = "xe::Function::get_attribute_t::FUNCTION_GET_ATTR_MAX_REGS_USED";
+        case Function::get_attribute_t::FUNCTION_GET_ATTR_MAX_REGS_USED:
+            str = "Function::get_attribute_t::FUNCTION_GET_ATTR_MAX_REGS_USED";
             break;
 
-        case xe::Function::get_attribute_t::FUNCTION_GET_ATTR_NUM_THREAD_DIMENSIONS:
-            str = "xe::Function::get_attribute_t::FUNCTION_GET_ATTR_NUM_THREAD_DIMENSIONS";
+        case Function::get_attribute_t::FUNCTION_GET_ATTR_NUM_THREAD_DIMENSIONS:
+            str = "Function::get_attribute_t::FUNCTION_GET_ATTR_NUM_THREAD_DIMENSIONS";
             break;
 
-        case xe::Function::get_attribute_t::FUNCTION_GET_ATTR_MAX_SHARED_MEM_SIZE:
-            str = "xe::Function::get_attribute_t::FUNCTION_GET_ATTR_MAX_SHARED_MEM_SIZE";
+        case Function::get_attribute_t::FUNCTION_GET_ATTR_MAX_SHARED_MEM_SIZE:
+            str = "Function::get_attribute_t::FUNCTION_GET_ATTR_MAX_SHARED_MEM_SIZE";
             break;
 
-        case xe::Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_SPILL_FILL:
-            str = "xe::Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_SPILL_FILL";
+        case Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_SPILL_FILL:
+            str = "Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_SPILL_FILL";
             break;
 
-        case xe::Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_BARRIERS:
-            str = "xe::Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_BARRIERS";
+        case Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_BARRIERS:
+            str = "Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_BARRIERS";
             break;
 
-        case xe::Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_DPAS:
-            str = "xe::Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_DPAS";
+        case Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_DPAS:
+            str = "Function::get_attribute_t::FUNCTION_GET_ATTR_HAS_DPAS";
             break;
 
         default:
-            str = "xe::Function::get_attribute_t::?";
+            str = "Function::get_attribute_t::?";
             break;
         };
 
@@ -1688,25 +1692,24 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Function::desc_t to std::string
-    string to_string( const xe::Function::desc_t val )
+    /// @brief Converts Function::desc_t to std::string
+    std::string to_string( const Function::desc_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xe::Function::desc_t::version : ";
+        str += "Function::desc_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "xe::Function::desc_t::flags : ";
+        str += "Function::desc_t::flags : ";
         str += to_string(val.flags);
         str += "\n";
         
-        str += "xe::Function::desc_t::pFunctionName : ";
+        str += "Function::desc_t::pFunctionName : ";
         str += val.pFunctionName;
         str += "\n";
 
         return str;
     }
 
-} // namespace std
-#endif // _DEBUG
+} // namespace xe

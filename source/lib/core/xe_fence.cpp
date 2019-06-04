@@ -397,23 +397,22 @@ namespace xe
 
 } // namespace xe
 
-#ifdef _DEBUG
-namespace std
+namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Fence::desc_version_t to std::string
-    string to_string( const xe::Fence::desc_version_t val )
+    /// @brief Converts Fence::desc_version_t to std::string
+    std::string to_string( const Fence::desc_version_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::Fence::desc_version_t::CURRENT:
-            str = "xe::Fence::desc_version_t::CURRENT";
+        case Fence::desc_version_t::CURRENT:
+            str = "Fence::desc_version_t::CURRENT";
             break;
 
         default:
-            str = "xe::Fence::desc_version_t::?";
+            str = "Fence::desc_version_t::?";
             break;
         };
 
@@ -421,19 +420,19 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Fence::flag_t to std::string
-    string to_string( const xe::Fence::flag_t val )
+    /// @brief Converts Fence::flag_t to std::string
+    std::string to_string( const Fence::flag_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::Fence::flag_t::NONE:
-            str = "xe::Fence::flag_t::NONE";
+        case Fence::flag_t::NONE:
+            str = "Fence::flag_t::NONE";
             break;
 
         default:
-            str = "xe::Fence::flag_t::?";
+            str = "Fence::flag_t::?";
             break;
         };
 
@@ -441,21 +440,20 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Fence::desc_t to std::string
-    string to_string( const xe::Fence::desc_t val )
+    /// @brief Converts Fence::desc_t to std::string
+    std::string to_string( const Fence::desc_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xe::Fence::desc_t::version : ";
+        str += "Fence::desc_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "xe::Fence::desc_t::flags : ";
+        str += "Fence::desc_t::flags : ";
         str += to_string(val.flags);
         str += "\n";
 
         return str;
     }
 
-} // namespace std
-#endif // _DEBUG
+} // namespace xe

@@ -24,11 +24,7 @@
 * @file xe_lib.h
 *
 ******************************************************************************/
-#ifndef _XE_LIB_H
-#define _XE_LIB_H
-#if defined(__cplusplus)
 #pragma once
-#endif
 #include "xe_api.hpp"
 #include "xe_ddi.h"
 #include "xe_util.h"
@@ -55,44 +51,3 @@ namespace xe_lib
     extern Library lib;
 
 } // namespace xe_lib
-
-
-///////////////////////////////////////////////////////////////////////////////
-#ifdef _DEBUG
-#include <sstream>
-#if defined(__cplusplus)
-namespace std
-{
-    inline string ptr_to_string( const void* ptr )
-    {
-        stringstream ss;
-        ss << "0x" << hex << reinterpret_cast<size_t>( ptr );
-        return ss.str();
-    }
-
-    inline string to_string( const uint8_t val[ 16 ] )
-    {
-        string str;
-        for( uint32_t i = 0; i < 16; ++i )
-        {
-            str += to_string( val[ i ] );
-            str += ", ";
-        }
-        return "{ " + str.substr( 0, str.size() - 2 ) + " }";;
-    }
-
-    inline string to_string( const uint32_t val[ 8 ] )
-    {
-        string str;
-        for( uint32_t i = 0; i < 8; ++i )
-        {
-            str += to_string( val[ i ] );
-            str += ", ";
-        }
-        return "{ " + str.substr( 0, str.size() - 2 ) + " }";;
-    }
-} // namespace std
-#endif // __cplusplus
-#endif // _DEBUG
-
-#endif // _XE_LIB_H

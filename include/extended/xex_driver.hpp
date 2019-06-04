@@ -63,10 +63,8 @@ namespace xex
 
 } // namespace xex
 
-#ifdef _DEBUG
-namespace std
+namespace xex
 {
-} // namespace std
-#endif // _DEBUG
+} // namespace xex
 #endif // defined(__cplusplus)
 #endif // _XEX_DRIVER_HPP

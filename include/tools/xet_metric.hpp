@@ -572,70 +572,68 @@ namespace xet
 
 } // namespace xet
 
-#ifdef _DEBUG
-namespace std
+namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::value_type_t to std::string
-    string to_string( const xet::value_type_t val );
+    /// @brief Converts value_type_t to std::string
+    std::string to_string( const value_type_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::typed_value_version_t to std::string
-    string to_string( const xet::typed_value_version_t val );
+    /// @brief Converts typed_value_version_t to std::string
+    std::string to_string( const typed_value_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::value_t to std::string
-    string to_string( const xet::value_t val );
+    /// @brief Converts value_t to std::string
+    std::string to_string( const value_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::typed_value_t to std::string
-    string to_string( const xet::typed_value_t val );
+    /// @brief Converts typed_value_t to std::string
+    std::string to_string( const typed_value_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::MetricGroup::sampling_type_t to std::string
-    string to_string( const xet::MetricGroup::sampling_type_t val );
+    /// @brief Converts MetricGroup::sampling_type_t to std::string
+    std::string to_string( const MetricGroup::sampling_type_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::MetricGroup::properties_version_t to std::string
-    string to_string( const xet::MetricGroup::properties_version_t val );
+    /// @brief Converts MetricGroup::properties_version_t to std::string
+    std::string to_string( const MetricGroup::properties_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::MetricGroup::properties_t to std::string
-    string to_string( const xet::MetricGroup::properties_t val );
+    /// @brief Converts MetricGroup::properties_t to std::string
+    std::string to_string( const MetricGroup::properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::Metric::type_t to std::string
-    string to_string( const xet::Metric::type_t val );
+    /// @brief Converts Metric::type_t to std::string
+    std::string to_string( const Metric::type_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::Metric::properties_version_t to std::string
-    string to_string( const xet::Metric::properties_version_t val );
+    /// @brief Converts Metric::properties_version_t to std::string
+    std::string to_string( const Metric::properties_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::Metric::properties_t to std::string
-    string to_string( const xet::Metric::properties_t val );
+    /// @brief Converts Metric::properties_t to std::string
+    std::string to_string( const Metric::properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::MetricTracer::desc_version_t to std::string
-    string to_string( const xet::MetricTracer::desc_version_t val );
+    /// @brief Converts MetricTracer::desc_version_t to std::string
+    std::string to_string( const MetricTracer::desc_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::MetricTracer::desc_t to std::string
-    string to_string( const xet::MetricTracer::desc_t val );
+    /// @brief Converts MetricTracer::desc_t to std::string
+    std::string to_string( const MetricTracer::desc_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::MetricQueryPool::flag_t to std::string
-    string to_string( const xet::MetricQueryPool::flag_t val );
+    /// @brief Converts MetricQueryPool::flag_t to std::string
+    std::string to_string( const MetricQueryPool::flag_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::MetricQueryPool::desc_version_t to std::string
-    string to_string( const xet::MetricQueryPool::desc_version_t val );
+    /// @brief Converts MetricQueryPool::desc_version_t to std::string
+    std::string to_string( const MetricQueryPool::desc_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::MetricQueryPool::desc_t to std::string
-    string to_string( const xet::MetricQueryPool::desc_t val );
+    /// @brief Converts MetricQueryPool::desc_t to std::string
+    std::string to_string( const MetricQueryPool::desc_t val );
 
-} // namespace std
-#endif // _DEBUG
+} // namespace xet
 #endif // defined(__cplusplus)
 #endif // _XET_METRIC_HPP

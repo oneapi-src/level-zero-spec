@@ -196,22 +196,20 @@ namespace xe
 
 } // namespace xe
 
-#ifdef _DEBUG
-namespace std
+namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Fence::desc_version_t to std::string
-    string to_string( const xe::Fence::desc_version_t val );
+    /// @brief Converts Fence::desc_version_t to std::string
+    std::string to_string( const Fence::desc_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Fence::flag_t to std::string
-    string to_string( const xe::Fence::flag_t val );
+    /// @brief Converts Fence::flag_t to std::string
+    std::string to_string( const Fence::flag_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Fence::desc_t to std::string
-    string to_string( const xe::Fence::desc_t val );
+    /// @brief Converts Fence::desc_t to std::string
+    std::string to_string( const Fence::desc_t val );
 
-} // namespace std
-#endif // _DEBUG
+} // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_FENCE_HPP

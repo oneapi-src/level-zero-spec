@@ -41,9 +41,7 @@
 #include <string.h>
 #include <exception>
 #include <tuple>
-#ifdef _DEBUG
 #include <string>
-#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef XE_MAKE_VERSION
@@ -208,15 +206,13 @@ namespace xe
 
 } // namespace xe
 
-#ifdef _DEBUG
-namespace std
+namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::result_t to std::string
-    string to_string( const xe::result_t val );
+    /// @brief Converts result_t to std::string
+    std::string to_string( const result_t val );
 
-} // namespace std
-#endif // _DEBUG
+} // namespace xe
 
 namespace xe
 {
@@ -224,11 +220,9 @@ namespace xe
     class exception_t : public std::exception
     {
     protected:
-    #ifdef _DEBUG
         static std::string formatted( const result_t, const char*, const char*, const char* );
-        const std::string _msg;
-    #endif
 
+        const std::string _msg;
         const result_t _result;
 
     public:
@@ -236,17 +230,12 @@ namespace xe
 
         exception_t( const result_t result, const char* file, const char* line, const char* func )
             : std::exception(),
-        #ifdef _DEBUG
             _msg( formatted(result, file, line, func) ),
-        #endif
             _result(result)
         {
         }
 
-        #ifdef _DEBUG
         const char* what() const noexcept { return _msg.c_str(); }
-        #endif
-
         result_t value() const noexcept { return _result; }
     };
 

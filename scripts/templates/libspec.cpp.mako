@@ -48,6 +48,9 @@ def define_dbg(obj, tags):
 *
 ******************************************************************************/
 #include "${n}_lib.h"
+%if (re.match(r"common", name) or re.match(r"module", name)) and (n == x):
+#include <sstream>
+%endif
 
 extern "C" {
 
@@ -257,29 +260,28 @@ namespace ${n}
 } // namespace ${n}
 
 ## DEBUG ######################################################################
-#ifdef _DEBUG
-namespace std
+namespace ${n}
 {
     %for obj in objects:
     %if define_dbg(obj, tags):
     %if re.match(r"enum", obj['type']) or re.match(r"struct|union", obj['type']):
     <%
-        tname = "%s::%s"%(n, th.make_type_name(n, tags, obj, cpp=True))
+        tname = th.make_type_name(n, tags, obj, cpp=True)
     %>///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts ${tname} to std::string
     ## CONDITION-START ############################################################
     %if 'condition' in obj:
     #if ${th.subt(n, tags, obj['condition'])}
     %endif
-    string to_string( const ${tname} val )
+    std::string to_string( const ${tname} val )
     {
         ## ENUM #######################################################################
         %if re.match(r"enum", obj['type']):
         %if th.is_enum_bitfield(obj):
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return string("{}");
+        if( 0 == bits ) return std::string("{}");
 
-        string str;
+        std::string str;
         %for item in obj['etors']:
         <%
             ename = th.make_etor_name(n, tags, obj['name'], item['name'], cpp=True)
@@ -290,7 +292,7 @@ namespace std
 
         return "{ " + str.substr(0, str.size() - 3) + " }";
         %else:
-        string str;
+        std::string str;
 
         switch( val )
         {
@@ -311,7 +313,7 @@ namespace std
         %endif
         ## STRUCT/UNION ############################################################
         %else:
-        string str;
+        std::string str;
         %for item in obj['members']:
         <%
             mname = th.make_member_name(n, tags, item, cpp=True, meta=meta, remove_array=True)
@@ -320,9 +322,25 @@ namespace std
         %if "char" in item['type']:
         str += val.${mname};
         %elif th.type_traits.is_pointer(item['type']):
-        str += ptr_to_string(val.${mname});
-        %else:
+        {
+            std::stringstream ss;
+            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.${mname});
+            str += ss.str();
+        }
+        %elif th.type_traits.is_known(item['type'], meta) and (item['type'] != "$x_bool_t"):
         str += to_string(val.${mname});
+        %elif th.value_traits.is_array(item['name']):
+        {
+            std::string tmp;
+            for( auto& entry : val.${mname} )
+            {
+                tmp += std::to_string( entry );
+                tmp += ", ";
+            }
+            str += "{ " + tmp.substr( 0, tmp.size() - 2 ) + " }";;
+        }
+        %else:
+        str += std::to_string(val.${mname});
         %endif
         str += "\n";
         %endfor
@@ -340,19 +358,19 @@ namespace std
     ## ENUM #######################################################################
     %for e in th.filter_items(th.extract_objs(specs, r"enum"), 'class', obj['name']):
     <%
-        tname = "%s::%s::%s"%(n, th.make_class_name(n, tags, obj), th.make_type_name(n, tags, e, cpp=True))
+        tname = "%s::%s"%(th.make_class_name(n, tags, obj), th.make_type_name(n, tags, e, cpp=True))
     %>///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts ${tname} to std::string
     %if 'condition' in e:
     #if ${th.subt(n, tags, e['condition'])}
     %endif
-    string to_string( const ${tname} val )
+    std::string to_string( const ${tname} val )
     {
         %if th.is_enum_bitfield(e):
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return string("{}");
+        if( 0 == bits ) return std::string("{}");
 
-        string str;
+        std::string str;
         %for item in e['etors']:
         <%
             ename = th.make_etor_name(n, tags, e['name'], item['name'], cpp=True)
@@ -363,7 +381,7 @@ namespace std
 
         return "{ " + str.substr(0, str.size() - 3) + " }";
         %else:
-        string str;
+        std::string str;
 
         switch( val )
         {
@@ -391,15 +409,15 @@ namespace std
     ## STRUCT/UNION ############################################################
     %for s in th.filter_items(th.extract_objs(specs, r"struct|union"), 'class', obj['name']):
     <%
-        tname = "%s::%s::%s"%(n, th.make_class_name(n, tags, obj), th.make_type_name(n, tags, s, cpp=True))
+        tname = "%s::%s"%(th.make_class_name(n, tags, obj), th.make_type_name(n, tags, s, cpp=True))
     %>///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts ${tname} to std::string
     %if 'condition' in s:
     #if ${th.subt(n, tags, s['condition'])}
     %endif
-    string to_string( const ${tname} val )
+    std::string to_string( const ${tname} val )
     {
-        string str;
+        std::string str;
         %for item in s['members']:
         <%
             mname = th.make_member_name(n, tags, item, cpp=True, meta=meta, remove_array=True)
@@ -408,9 +426,25 @@ namespace std
         %if "char" in item['type']:
         str += val.${mname};
         %elif th.type_traits.is_pointer(item['type']):
-        str += ptr_to_string(val.${mname});
-        %else:
+        {
+            std::stringstream ss;
+            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.${mname});
+            str += ss.str();
+        }
+        %elif th.type_traits.is_known(item['type'], meta) and (item['type'] != "$x_bool_t"):
         str += to_string(val.${mname});
+        %elif th.value_traits.is_array(item['name']):
+        {
+            std::string tmp;
+            for( auto& entry : val.${mname} )
+            {
+                tmp += std::to_string( entry );
+                tmp += ", ";
+            }
+            str += "{ " + tmp.substr( 0, tmp.size() - 2 ) + " }";;
+        }
+        %else:
+        str += std::to_string(val.${mname});
         %endif
         str += "\n";
         %endfor
@@ -425,10 +459,10 @@ namespace std
     %endif  ## class
     %endif  ## define_dbg
     %endfor ## obj in objects
-} // namespace std
-#endif // _DEBUG
+} // namespace ${n}
 ## EXCEPTION ##############################################################
 %if re.match(r"common", name) and (n == x):
+
 namespace ${n}
 {
     ///////////////////////////////////////////////////////////////////////////////
@@ -438,19 +472,13 @@ namespace ${n}
         const char* line,
         const char* func )
     {
-        std::string msg = std::to_string(result);
-        const size_t len = msg.length() + std::strlen(file) + std::strlen(line) + std::strlen(func) + 32;
-
-        std::string str;
-        str.reserve(len);
-        str = file;
-        str += "(";
-        str += line;
-        str += ") : exception : ";
-        str += func;
-        str += " ";
-        str += msg;
-        return str;
+    #ifdef _DEBUG
+        std::stringstream msg;
+        msg << file << "(" << line << ") : exception : " << func << "(" << ${x}::to_string(result) << ")";
+        return msg.str();
+    #else
+        return ${x}::to_string(result);
+    #endif
     }
 } // namespace ${n}
 %endif

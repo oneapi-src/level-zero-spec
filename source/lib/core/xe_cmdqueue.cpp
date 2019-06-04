@@ -356,23 +356,22 @@ namespace xe
 
 } // namespace xe
 
-#ifdef _DEBUG
-namespace std
+namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::CommandQueue::desc_version_t to std::string
-    string to_string( const xe::CommandQueue::desc_version_t val )
+    /// @brief Converts CommandQueue::desc_version_t to std::string
+    std::string to_string( const CommandQueue::desc_version_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::CommandQueue::desc_version_t::CURRENT:
-            str = "xe::CommandQueue::desc_version_t::CURRENT";
+        case CommandQueue::desc_version_t::CURRENT:
+            str = "CommandQueue::desc_version_t::CURRENT";
             break;
 
         default:
-            str = "xe::CommandQueue::desc_version_t::?";
+            str = "CommandQueue::desc_version_t::?";
             break;
         };
 
@@ -380,51 +379,51 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::CommandQueue::flag_t to std::string
-    string to_string( const xe::CommandQueue::flag_t val )
+    /// @brief Converts CommandQueue::flag_t to std::string
+    std::string to_string( const CommandQueue::flag_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return string("{}");
+        if( 0 == bits ) return std::string("{}");
 
-        string str;
+        std::string str;
         
-        if( static_cast<uint32_t>(xe::CommandQueue::flag_t::NONE) & bits )
-            str += "xe::CommandQueue::flag_t::NONE | ";
+        if( static_cast<uint32_t>(CommandQueue::flag_t::NONE) & bits )
+            str += "CommandQueue::flag_t::NONE | ";
         
-        if( static_cast<uint32_t>(xe::CommandQueue::flag_t::COPY_ONLY) & bits )
-            str += "xe::CommandQueue::flag_t::COPY_ONLY | ";
+        if( static_cast<uint32_t>(CommandQueue::flag_t::COPY_ONLY) & bits )
+            str += "CommandQueue::flag_t::COPY_ONLY | ";
         
-        if( static_cast<uint32_t>(xe::CommandQueue::flag_t::LOGICAL_ONLY) & bits )
-            str += "xe::CommandQueue::flag_t::LOGICAL_ONLY | ";
+        if( static_cast<uint32_t>(CommandQueue::flag_t::LOGICAL_ONLY) & bits )
+            str += "CommandQueue::flag_t::LOGICAL_ONLY | ";
         
-        if( static_cast<uint32_t>(xe::CommandQueue::flag_t::SINGLE_SLICE_ONLY) & bits )
-            str += "xe::CommandQueue::flag_t::SINGLE_SLICE_ONLY | ";
+        if( static_cast<uint32_t>(CommandQueue::flag_t::SINGLE_SLICE_ONLY) & bits )
+            str += "CommandQueue::flag_t::SINGLE_SLICE_ONLY | ";
 
         return "{ " + str.substr(0, str.size() - 3) + " }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::CommandQueue::mode_t to std::string
-    string to_string( const xe::CommandQueue::mode_t val )
+    /// @brief Converts CommandQueue::mode_t to std::string
+    std::string to_string( const CommandQueue::mode_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::CommandQueue::mode_t::DEFAULT:
-            str = "xe::CommandQueue::mode_t::DEFAULT";
+        case CommandQueue::mode_t::DEFAULT:
+            str = "CommandQueue::mode_t::DEFAULT";
             break;
 
-        case xe::CommandQueue::mode_t::SYNCHRONOUS:
-            str = "xe::CommandQueue::mode_t::SYNCHRONOUS";
+        case CommandQueue::mode_t::SYNCHRONOUS:
+            str = "CommandQueue::mode_t::SYNCHRONOUS";
             break;
 
-        case xe::CommandQueue::mode_t::ASYNCHRONOUS:
-            str = "xe::CommandQueue::mode_t::ASYNCHRONOUS";
+        case CommandQueue::mode_t::ASYNCHRONOUS:
+            str = "CommandQueue::mode_t::ASYNCHRONOUS";
             break;
 
         default:
-            str = "xe::CommandQueue::mode_t::?";
+            str = "CommandQueue::mode_t::?";
             break;
         };
 
@@ -432,27 +431,27 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::CommandQueue::priority_t to std::string
-    string to_string( const xe::CommandQueue::priority_t val )
+    /// @brief Converts CommandQueue::priority_t to std::string
+    std::string to_string( const CommandQueue::priority_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::CommandQueue::priority_t::NORMAL:
-            str = "xe::CommandQueue::priority_t::NORMAL";
+        case CommandQueue::priority_t::NORMAL:
+            str = "CommandQueue::priority_t::NORMAL";
             break;
 
-        case xe::CommandQueue::priority_t::LOW:
-            str = "xe::CommandQueue::priority_t::LOW";
+        case CommandQueue::priority_t::LOW:
+            str = "CommandQueue::priority_t::LOW";
             break;
 
-        case xe::CommandQueue::priority_t::HIGH:
-            str = "xe::CommandQueue::priority_t::HIGH";
+        case CommandQueue::priority_t::HIGH:
+            str = "CommandQueue::priority_t::HIGH";
             break;
 
         default:
-            str = "xe::CommandQueue::priority_t::?";
+            str = "CommandQueue::priority_t::?";
             break;
         };
 
@@ -460,33 +459,32 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::CommandQueue::desc_t to std::string
-    string to_string( const xe::CommandQueue::desc_t val )
+    /// @brief Converts CommandQueue::desc_t to std::string
+    std::string to_string( const CommandQueue::desc_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xe::CommandQueue::desc_t::version : ";
+        str += "CommandQueue::desc_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "xe::CommandQueue::desc_t::flags : ";
+        str += "CommandQueue::desc_t::flags : ";
         str += to_string(val.flags);
         str += "\n";
         
-        str += "xe::CommandQueue::desc_t::mode : ";
+        str += "CommandQueue::desc_t::mode : ";
         str += to_string(val.mode);
         str += "\n";
         
-        str += "xe::CommandQueue::desc_t::priority : ";
+        str += "CommandQueue::desc_t::priority : ";
         str += to_string(val.priority);
         str += "\n";
         
-        str += "xe::CommandQueue::desc_t::ordinal : ";
-        str += to_string(val.ordinal);
+        str += "CommandQueue::desc_t::ordinal : ";
+        str += std::to_string(val.ordinal);
         str += "\n";
 
         return str;
     }
 
-} // namespace std
-#endif // _DEBUG
+} // namespace xe

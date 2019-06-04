@@ -271,23 +271,22 @@ namespace xe
 
 } // namespace xe
 
-#ifdef _DEBUG
-namespace std
+namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Image::desc_version_t to std::string
-    string to_string( const xe::Image::desc_version_t val )
+    /// @brief Converts Image::desc_version_t to std::string
+    std::string to_string( const Image::desc_version_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::Image::desc_version_t::CURRENT:
-            str = "xe::Image::desc_version_t::CURRENT";
+        case Image::desc_version_t::CURRENT:
+            str = "Image::desc_version_t::CURRENT";
             break;
 
         default:
-            str = "xe::Image::desc_version_t::?";
+            str = "Image::desc_version_t::?";
             break;
         };
 
@@ -295,59 +294,59 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Image::flag_t to std::string
-    string to_string( const xe::Image::flag_t val )
+    /// @brief Converts Image::flag_t to std::string
+    std::string to_string( const Image::flag_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return string("{}");
+        if( 0 == bits ) return std::string("{}");
 
-        string str;
+        std::string str;
         
-        if( static_cast<uint32_t>(xe::Image::flag_t::PROGRAM_READ) & bits )
-            str += "xe::Image::flag_t::PROGRAM_READ | ";
+        if( static_cast<uint32_t>(Image::flag_t::PROGRAM_READ) & bits )
+            str += "Image::flag_t::PROGRAM_READ | ";
         
-        if( static_cast<uint32_t>(xe::Image::flag_t::PROGRAM_WRITE) & bits )
-            str += "xe::Image::flag_t::PROGRAM_WRITE | ";
+        if( static_cast<uint32_t>(Image::flag_t::PROGRAM_WRITE) & bits )
+            str += "Image::flag_t::PROGRAM_WRITE | ";
         
-        if( static_cast<uint32_t>(xe::Image::flag_t::BIAS_CACHED) & bits )
-            str += "xe::Image::flag_t::BIAS_CACHED | ";
+        if( static_cast<uint32_t>(Image::flag_t::BIAS_CACHED) & bits )
+            str += "Image::flag_t::BIAS_CACHED | ";
         
-        if( static_cast<uint32_t>(xe::Image::flag_t::BIAS_UNCACHED) & bits )
-            str += "xe::Image::flag_t::BIAS_UNCACHED | ";
+        if( static_cast<uint32_t>(Image::flag_t::BIAS_UNCACHED) & bits )
+            str += "Image::flag_t::BIAS_UNCACHED | ";
 
         return "{ " + str.substr(0, str.size() - 3) + " }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Image::type_t to std::string
-    string to_string( const xe::Image::type_t val )
+    /// @brief Converts Image::type_t to std::string
+    std::string to_string( const Image::type_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::Image::type_t::_1D:
-            str = "xe::Image::type_t::_1D";
+        case Image::type_t::_1D:
+            str = "Image::type_t::_1D";
             break;
 
-        case xe::Image::type_t::_1DARRAY:
-            str = "xe::Image::type_t::_1DARRAY";
+        case Image::type_t::_1DARRAY:
+            str = "Image::type_t::_1DARRAY";
             break;
 
-        case xe::Image::type_t::_2D:
-            str = "xe::Image::type_t::_2D";
+        case Image::type_t::_2D:
+            str = "Image::type_t::_2D";
             break;
 
-        case xe::Image::type_t::_2DARRAY:
-            str = "xe::Image::type_t::_2DARRAY";
+        case Image::type_t::_2DARRAY:
+            str = "Image::type_t::_2DARRAY";
             break;
 
-        case xe::Image::type_t::_3D:
-            str = "xe::Image::type_t::_3D";
+        case Image::type_t::_3D:
+            str = "Image::type_t::_3D";
             break;
 
         default:
-            str = "xe::Image::type_t::?";
+            str = "Image::type_t::?";
             break;
         };
 
@@ -355,135 +354,135 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Image::format_layout_t to std::string
-    string to_string( const xe::Image::format_layout_t val )
+    /// @brief Converts Image::format_layout_t to std::string
+    std::string to_string( const Image::format_layout_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::Image::format_layout_t::_8:
-            str = "xe::Image::format_layout_t::_8";
+        case Image::format_layout_t::_8:
+            str = "Image::format_layout_t::_8";
             break;
 
-        case xe::Image::format_layout_t::_16:
-            str = "xe::Image::format_layout_t::_16";
+        case Image::format_layout_t::_16:
+            str = "Image::format_layout_t::_16";
             break;
 
-        case xe::Image::format_layout_t::_32:
-            str = "xe::Image::format_layout_t::_32";
+        case Image::format_layout_t::_32:
+            str = "Image::format_layout_t::_32";
             break;
 
-        case xe::Image::format_layout_t::_8_8:
-            str = "xe::Image::format_layout_t::_8_8";
+        case Image::format_layout_t::_8_8:
+            str = "Image::format_layout_t::_8_8";
             break;
 
-        case xe::Image::format_layout_t::_8_8_8_8:
-            str = "xe::Image::format_layout_t::_8_8_8_8";
+        case Image::format_layout_t::_8_8_8_8:
+            str = "Image::format_layout_t::_8_8_8_8";
             break;
 
-        case xe::Image::format_layout_t::_16_16:
-            str = "xe::Image::format_layout_t::_16_16";
+        case Image::format_layout_t::_16_16:
+            str = "Image::format_layout_t::_16_16";
             break;
 
-        case xe::Image::format_layout_t::_16_16_16_16:
-            str = "xe::Image::format_layout_t::_16_16_16_16";
+        case Image::format_layout_t::_16_16_16_16:
+            str = "Image::format_layout_t::_16_16_16_16";
             break;
 
-        case xe::Image::format_layout_t::_32_32:
-            str = "xe::Image::format_layout_t::_32_32";
+        case Image::format_layout_t::_32_32:
+            str = "Image::format_layout_t::_32_32";
             break;
 
-        case xe::Image::format_layout_t::_32_32_32_32:
-            str = "xe::Image::format_layout_t::_32_32_32_32";
+        case Image::format_layout_t::_32_32_32_32:
+            str = "Image::format_layout_t::_32_32_32_32";
             break;
 
-        case xe::Image::format_layout_t::_10_10_10_2:
-            str = "xe::Image::format_layout_t::_10_10_10_2";
+        case Image::format_layout_t::_10_10_10_2:
+            str = "Image::format_layout_t::_10_10_10_2";
             break;
 
-        case xe::Image::format_layout_t::_11_11_10:
-            str = "xe::Image::format_layout_t::_11_11_10";
+        case Image::format_layout_t::_11_11_10:
+            str = "Image::format_layout_t::_11_11_10";
             break;
 
-        case xe::Image::format_layout_t::_5_6_5:
-            str = "xe::Image::format_layout_t::_5_6_5";
+        case Image::format_layout_t::_5_6_5:
+            str = "Image::format_layout_t::_5_6_5";
             break;
 
-        case xe::Image::format_layout_t::_5_5_5_1:
-            str = "xe::Image::format_layout_t::_5_5_5_1";
+        case Image::format_layout_t::_5_5_5_1:
+            str = "Image::format_layout_t::_5_5_5_1";
             break;
 
-        case xe::Image::format_layout_t::_4_4_4_4:
-            str = "xe::Image::format_layout_t::_4_4_4_4";
+        case Image::format_layout_t::_4_4_4_4:
+            str = "Image::format_layout_t::_4_4_4_4";
             break;
 
-        case xe::Image::format_layout_t::Y8:
-            str = "xe::Image::format_layout_t::Y8";
+        case Image::format_layout_t::Y8:
+            str = "Image::format_layout_t::Y8";
             break;
 
-        case xe::Image::format_layout_t::NV12:
-            str = "xe::Image::format_layout_t::NV12";
+        case Image::format_layout_t::NV12:
+            str = "Image::format_layout_t::NV12";
             break;
 
-        case xe::Image::format_layout_t::YUYV:
-            str = "xe::Image::format_layout_t::YUYV";
+        case Image::format_layout_t::YUYV:
+            str = "Image::format_layout_t::YUYV";
             break;
 
-        case xe::Image::format_layout_t::VYUY:
-            str = "xe::Image::format_layout_t::VYUY";
+        case Image::format_layout_t::VYUY:
+            str = "Image::format_layout_t::VYUY";
             break;
 
-        case xe::Image::format_layout_t::YVYU:
-            str = "xe::Image::format_layout_t::YVYU";
+        case Image::format_layout_t::YVYU:
+            str = "Image::format_layout_t::YVYU";
             break;
 
-        case xe::Image::format_layout_t::UYVY:
-            str = "xe::Image::format_layout_t::UYVY";
+        case Image::format_layout_t::UYVY:
+            str = "Image::format_layout_t::UYVY";
             break;
 
-        case xe::Image::format_layout_t::AYUV:
-            str = "xe::Image::format_layout_t::AYUV";
+        case Image::format_layout_t::AYUV:
+            str = "Image::format_layout_t::AYUV";
             break;
 
-        case xe::Image::format_layout_t::YUAV:
-            str = "xe::Image::format_layout_t::YUAV";
+        case Image::format_layout_t::YUAV:
+            str = "Image::format_layout_t::YUAV";
             break;
 
-        case xe::Image::format_layout_t::P010:
-            str = "xe::Image::format_layout_t::P010";
+        case Image::format_layout_t::P010:
+            str = "Image::format_layout_t::P010";
             break;
 
-        case xe::Image::format_layout_t::Y410:
-            str = "xe::Image::format_layout_t::Y410";
+        case Image::format_layout_t::Y410:
+            str = "Image::format_layout_t::Y410";
             break;
 
-        case xe::Image::format_layout_t::P012:
-            str = "xe::Image::format_layout_t::P012";
+        case Image::format_layout_t::P012:
+            str = "Image::format_layout_t::P012";
             break;
 
-        case xe::Image::format_layout_t::Y16:
-            str = "xe::Image::format_layout_t::Y16";
+        case Image::format_layout_t::Y16:
+            str = "Image::format_layout_t::Y16";
             break;
 
-        case xe::Image::format_layout_t::P016:
-            str = "xe::Image::format_layout_t::P016";
+        case Image::format_layout_t::P016:
+            str = "Image::format_layout_t::P016";
             break;
 
-        case xe::Image::format_layout_t::Y216:
-            str = "xe::Image::format_layout_t::Y216";
+        case Image::format_layout_t::Y216:
+            str = "Image::format_layout_t::Y216";
             break;
 
-        case xe::Image::format_layout_t::P216:
-            str = "xe::Image::format_layout_t::P216";
+        case Image::format_layout_t::P216:
+            str = "Image::format_layout_t::P216";
             break;
 
-        case xe::Image::format_layout_t::P416:
-            str = "xe::Image::format_layout_t::P416";
+        case Image::format_layout_t::P416:
+            str = "Image::format_layout_t::P416";
             break;
 
         default:
-            str = "xe::Image::format_layout_t::?";
+            str = "Image::format_layout_t::?";
             break;
         };
 
@@ -491,35 +490,35 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Image::format_type_t to std::string
-    string to_string( const xe::Image::format_type_t val )
+    /// @brief Converts Image::format_type_t to std::string
+    std::string to_string( const Image::format_type_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::Image::format_type_t::UINT:
-            str = "xe::Image::format_type_t::UINT";
+        case Image::format_type_t::UINT:
+            str = "Image::format_type_t::UINT";
             break;
 
-        case xe::Image::format_type_t::SINT:
-            str = "xe::Image::format_type_t::SINT";
+        case Image::format_type_t::SINT:
+            str = "Image::format_type_t::SINT";
             break;
 
-        case xe::Image::format_type_t::UNORM:
-            str = "xe::Image::format_type_t::UNORM";
+        case Image::format_type_t::UNORM:
+            str = "Image::format_type_t::UNORM";
             break;
 
-        case xe::Image::format_type_t::SNORM:
-            str = "xe::Image::format_type_t::SNORM";
+        case Image::format_type_t::SNORM:
+            str = "Image::format_type_t::SNORM";
             break;
 
-        case xe::Image::format_type_t::FLOAT:
-            str = "xe::Image::format_type_t::FLOAT";
+        case Image::format_type_t::FLOAT:
+            str = "Image::format_type_t::FLOAT";
             break;
 
         default:
-            str = "xe::Image::format_type_t::?";
+            str = "Image::format_type_t::?";
             break;
         };
 
@@ -527,43 +526,43 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Image::format_swizzle_t to std::string
-    string to_string( const xe::Image::format_swizzle_t val )
+    /// @brief Converts Image::format_swizzle_t to std::string
+    std::string to_string( const Image::format_swizzle_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::Image::format_swizzle_t::R:
-            str = "xe::Image::format_swizzle_t::R";
+        case Image::format_swizzle_t::R:
+            str = "Image::format_swizzle_t::R";
             break;
 
-        case xe::Image::format_swizzle_t::G:
-            str = "xe::Image::format_swizzle_t::G";
+        case Image::format_swizzle_t::G:
+            str = "Image::format_swizzle_t::G";
             break;
 
-        case xe::Image::format_swizzle_t::B:
-            str = "xe::Image::format_swizzle_t::B";
+        case Image::format_swizzle_t::B:
+            str = "Image::format_swizzle_t::B";
             break;
 
-        case xe::Image::format_swizzle_t::A:
-            str = "xe::Image::format_swizzle_t::A";
+        case Image::format_swizzle_t::A:
+            str = "Image::format_swizzle_t::A";
             break;
 
-        case xe::Image::format_swizzle_t::_0:
-            str = "xe::Image::format_swizzle_t::_0";
+        case Image::format_swizzle_t::_0:
+            str = "Image::format_swizzle_t::_0";
             break;
 
-        case xe::Image::format_swizzle_t::_1:
-            str = "xe::Image::format_swizzle_t::_1";
+        case Image::format_swizzle_t::_1:
+            str = "Image::format_swizzle_t::_1";
             break;
 
-        case xe::Image::format_swizzle_t::X:
-            str = "xe::Image::format_swizzle_t::X";
+        case Image::format_swizzle_t::X:
+            str = "Image::format_swizzle_t::X";
             break;
 
         default:
-            str = "xe::Image::format_swizzle_t::?";
+            str = "Image::format_swizzle_t::?";
             break;
         };
 
@@ -571,19 +570,19 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Image::properties_version_t to std::string
-    string to_string( const xe::Image::properties_version_t val )
+    /// @brief Converts Image::properties_version_t to std::string
+    std::string to_string( const Image::properties_version_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::Image::properties_version_t::CURRENT:
-            str = "xe::Image::properties_version_t::CURRENT";
+        case Image::properties_version_t::CURRENT:
+            str = "Image::properties_version_t::CURRENT";
             break;
 
         default:
-            str = "xe::Image::properties_version_t::?";
+            str = "Image::properties_version_t::?";
             break;
         };
 
@@ -591,47 +590,47 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Image::sampler_filter_flags_t to std::string
-    string to_string( const xe::Image::sampler_filter_flags_t val )
+    /// @brief Converts Image::sampler_filter_flags_t to std::string
+    std::string to_string( const Image::sampler_filter_flags_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return string("{}");
+        if( 0 == bits ) return std::string("{}");
 
-        string str;
+        std::string str;
         
-        if( static_cast<uint32_t>(xe::Image::sampler_filter_flags_t::LINEAR) & bits )
-            str += "xe::Image::sampler_filter_flags_t::LINEAR | ";
+        if( static_cast<uint32_t>(Image::sampler_filter_flags_t::LINEAR) & bits )
+            str += "Image::sampler_filter_flags_t::LINEAR | ";
 
         return "{ " + str.substr(0, str.size() - 3) + " }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Image::format_desc_t to std::string
-    string to_string( const xe::Image::format_desc_t val )
+    /// @brief Converts Image::format_desc_t to std::string
+    std::string to_string( const Image::format_desc_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xe::Image::format_desc_t::layout : ";
+        str += "Image::format_desc_t::layout : ";
         str += to_string(val.layout);
         str += "\n";
         
-        str += "xe::Image::format_desc_t::type : ";
+        str += "Image::format_desc_t::type : ";
         str += to_string(val.type);
         str += "\n";
         
-        str += "xe::Image::format_desc_t::x : ";
+        str += "Image::format_desc_t::x : ";
         str += to_string(val.x);
         str += "\n";
         
-        str += "xe::Image::format_desc_t::y : ";
+        str += "Image::format_desc_t::y : ";
         str += to_string(val.y);
         str += "\n";
         
-        str += "xe::Image::format_desc_t::z : ";
+        str += "Image::format_desc_t::z : ";
         str += to_string(val.z);
         str += "\n";
         
-        str += "xe::Image::format_desc_t::w : ";
+        str += "Image::format_desc_t::w : ";
         str += to_string(val.w);
         str += "\n";
 
@@ -639,66 +638,65 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Image::desc_t to std::string
-    string to_string( const xe::Image::desc_t val )
+    /// @brief Converts Image::desc_t to std::string
+    std::string to_string( const Image::desc_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xe::Image::desc_t::version : ";
+        str += "Image::desc_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "xe::Image::desc_t::flags : ";
+        str += "Image::desc_t::flags : ";
         str += to_string(val.flags);
         str += "\n";
         
-        str += "xe::Image::desc_t::type : ";
+        str += "Image::desc_t::type : ";
         str += to_string(val.type);
         str += "\n";
         
-        str += "xe::Image::desc_t::format : ";
+        str += "Image::desc_t::format : ";
         str += to_string(val.format);
         str += "\n";
         
-        str += "xe::Image::desc_t::width : ";
-        str += to_string(val.width);
+        str += "Image::desc_t::width : ";
+        str += std::to_string(val.width);
         str += "\n";
         
-        str += "xe::Image::desc_t::height : ";
-        str += to_string(val.height);
+        str += "Image::desc_t::height : ";
+        str += std::to_string(val.height);
         str += "\n";
         
-        str += "xe::Image::desc_t::depth : ";
-        str += to_string(val.depth);
+        str += "Image::desc_t::depth : ";
+        str += std::to_string(val.depth);
         str += "\n";
         
-        str += "xe::Image::desc_t::arraylevels : ";
-        str += to_string(val.arraylevels);
+        str += "Image::desc_t::arraylevels : ";
+        str += std::to_string(val.arraylevels);
         str += "\n";
         
-        str += "xe::Image::desc_t::miplevels : ";
-        str += to_string(val.miplevels);
+        str += "Image::desc_t::miplevels : ";
+        str += std::to_string(val.miplevels);
         str += "\n";
 
         return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Image::properties_t to std::string
-    string to_string( const xe::Image::properties_t val )
+    /// @brief Converts Image::properties_t to std::string
+    std::string to_string( const Image::properties_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xe::Image::properties_t::version : ";
+        str += "Image::properties_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "xe::Image::properties_t::samplerFilterFlags : ";
+        str += "Image::properties_t::samplerFilterFlags : ";
         str += to_string(val.samplerFilterFlags);
         str += "\n";
 
         return str;
     }
 
-} // namespace std
-#endif // _DEBUG
+} // namespace xe

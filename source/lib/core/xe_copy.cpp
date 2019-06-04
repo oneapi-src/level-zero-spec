@@ -762,8 +762,6 @@ namespace xe
 
 } // namespace xe
 
-#ifdef _DEBUG
-namespace std
+namespace xe
 {
-} // namespace std
-#endif // _DEBUG
+} // namespace xe

@@ -396,34 +396,32 @@ namespace xe
 
 } // namespace xe
 
-#ifdef _DEBUG
-namespace std
+namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::EventPool::desc_version_t to std::string
-    string to_string( const xe::EventPool::desc_version_t val );
+    /// @brief Converts EventPool::desc_version_t to std::string
+    std::string to_string( const EventPool::desc_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::EventPool::flag_t to std::string
-    string to_string( const xe::EventPool::flag_t val );
+    /// @brief Converts EventPool::flag_t to std::string
+    std::string to_string( const EventPool::flag_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::EventPool::desc_t to std::string
-    string to_string( const xe::EventPool::desc_t val );
+    /// @brief Converts EventPool::desc_t to std::string
+    std::string to_string( const EventPool::desc_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Event::desc_version_t to std::string
-    string to_string( const xe::Event::desc_version_t val );
+    /// @brief Converts Event::desc_version_t to std::string
+    std::string to_string( const Event::desc_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Event::scope_flag_t to std::string
-    string to_string( const xe::Event::scope_flag_t val );
+    /// @brief Converts Event::scope_flag_t to std::string
+    std::string to_string( const Event::scope_flag_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Event::desc_t to std::string
-    string to_string( const xe::Event::desc_t val );
+    /// @brief Converts Event::desc_t to std::string
+    std::string to_string( const Event::desc_t val );
 
-} // namespace std
-#endif // _DEBUG
+} // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_EVENT_HPP

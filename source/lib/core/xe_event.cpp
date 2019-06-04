@@ -1053,23 +1053,22 @@ namespace xe
 
 } // namespace xe
 
-#ifdef _DEBUG
-namespace std
+namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::EventPool::desc_version_t to std::string
-    string to_string( const xe::EventPool::desc_version_t val )
+    /// @brief Converts EventPool::desc_version_t to std::string
+    std::string to_string( const EventPool::desc_version_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::EventPool::desc_version_t::CURRENT:
-            str = "xe::EventPool::desc_version_t::CURRENT";
+        case EventPool::desc_version_t::CURRENT:
+            str = "EventPool::desc_version_t::CURRENT";
             break;
 
         default:
-            str = "xe::EventPool::desc_version_t::?";
+            str = "EventPool::desc_version_t::?";
             break;
         };
 
@@ -1077,61 +1076,61 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::EventPool::flag_t to std::string
-    string to_string( const xe::EventPool::flag_t val )
+    /// @brief Converts EventPool::flag_t to std::string
+    std::string to_string( const EventPool::flag_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return string("{}");
+        if( 0 == bits ) return std::string("{}");
 
-        string str;
+        std::string str;
         
-        if( static_cast<uint32_t>(xe::EventPool::flag_t::DEFAULT) & bits )
-            str += "xe::EventPool::flag_t::DEFAULT | ";
+        if( static_cast<uint32_t>(EventPool::flag_t::DEFAULT) & bits )
+            str += "EventPool::flag_t::DEFAULT | ";
         
-        if( static_cast<uint32_t>(xe::EventPool::flag_t::HOST_VISIBLE) & bits )
-            str += "xe::EventPool::flag_t::HOST_VISIBLE | ";
+        if( static_cast<uint32_t>(EventPool::flag_t::HOST_VISIBLE) & bits )
+            str += "EventPool::flag_t::HOST_VISIBLE | ";
         
-        if( static_cast<uint32_t>(xe::EventPool::flag_t::IPC) & bits )
-            str += "xe::EventPool::flag_t::IPC | ";
+        if( static_cast<uint32_t>(EventPool::flag_t::IPC) & bits )
+            str += "EventPool::flag_t::IPC | ";
 
         return "{ " + str.substr(0, str.size() - 3) + " }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::EventPool::desc_t to std::string
-    string to_string( const xe::EventPool::desc_t val )
+    /// @brief Converts EventPool::desc_t to std::string
+    std::string to_string( const EventPool::desc_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xe::EventPool::desc_t::version : ";
+        str += "EventPool::desc_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "xe::EventPool::desc_t::flags : ";
+        str += "EventPool::desc_t::flags : ";
         str += to_string(val.flags);
         str += "\n";
         
-        str += "xe::EventPool::desc_t::count : ";
-        str += to_string(val.count);
+        str += "EventPool::desc_t::count : ";
+        str += std::to_string(val.count);
         str += "\n";
 
         return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Event::desc_version_t to std::string
-    string to_string( const xe::Event::desc_version_t val )
+    /// @brief Converts Event::desc_version_t to std::string
+    std::string to_string( const Event::desc_version_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::Event::desc_version_t::CURRENT:
-            str = "xe::Event::desc_version_t::CURRENT";
+        case Event::desc_version_t::CURRENT:
+            str = "Event::desc_version_t::CURRENT";
             break;
 
         default:
-            str = "xe::Event::desc_version_t::?";
+            str = "Event::desc_version_t::?";
             break;
         };
 
@@ -1139,53 +1138,52 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Event::scope_flag_t to std::string
-    string to_string( const xe::Event::scope_flag_t val )
+    /// @brief Converts Event::scope_flag_t to std::string
+    std::string to_string( const Event::scope_flag_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return string("{}");
+        if( 0 == bits ) return std::string("{}");
 
-        string str;
+        std::string str;
         
-        if( static_cast<uint32_t>(xe::Event::scope_flag_t::NONE) & bits )
-            str += "xe::Event::scope_flag_t::NONE | ";
+        if( static_cast<uint32_t>(Event::scope_flag_t::NONE) & bits )
+            str += "Event::scope_flag_t::NONE | ";
         
-        if( static_cast<uint32_t>(xe::Event::scope_flag_t::SUBDEVICE) & bits )
-            str += "xe::Event::scope_flag_t::SUBDEVICE | ";
+        if( static_cast<uint32_t>(Event::scope_flag_t::SUBDEVICE) & bits )
+            str += "Event::scope_flag_t::SUBDEVICE | ";
         
-        if( static_cast<uint32_t>(xe::Event::scope_flag_t::DEVICE) & bits )
-            str += "xe::Event::scope_flag_t::DEVICE | ";
+        if( static_cast<uint32_t>(Event::scope_flag_t::DEVICE) & bits )
+            str += "Event::scope_flag_t::DEVICE | ";
         
-        if( static_cast<uint32_t>(xe::Event::scope_flag_t::HOST) & bits )
-            str += "xe::Event::scope_flag_t::HOST | ";
+        if( static_cast<uint32_t>(Event::scope_flag_t::HOST) & bits )
+            str += "Event::scope_flag_t::HOST | ";
 
         return "{ " + str.substr(0, str.size() - 3) + " }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Event::desc_t to std::string
-    string to_string( const xe::Event::desc_t val )
+    /// @brief Converts Event::desc_t to std::string
+    std::string to_string( const Event::desc_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xe::Event::desc_t::version : ";
+        str += "Event::desc_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "xe::Event::desc_t::index : ";
-        str += to_string(val.index);
+        str += "Event::desc_t::index : ";
+        str += std::to_string(val.index);
         str += "\n";
         
-        str += "xe::Event::desc_t::signal : ";
+        str += "Event::desc_t::signal : ";
         str += to_string(val.signal);
         str += "\n";
         
-        str += "xe::Event::desc_t::wait : ";
+        str += "Event::desc_t::wait : ";
         str += to_string(val.wait);
         str += "\n";
 
         return str;
     }
 
-} // namespace std
-#endif // _DEBUG
+} // namespace xe

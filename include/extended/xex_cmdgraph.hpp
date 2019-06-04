@@ -150,22 +150,20 @@ namespace xex
 
 } // namespace xex
 
-#ifdef _DEBUG
-namespace std
+namespace xex
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xex::CommandGraph::desc_version_t to std::string
-    string to_string( const xex::CommandGraph::desc_version_t val );
+    /// @brief Converts CommandGraph::desc_version_t to std::string
+    std::string to_string( const CommandGraph::desc_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xex::CommandGraph::flag_t to std::string
-    string to_string( const xex::CommandGraph::flag_t val );
+    /// @brief Converts CommandGraph::flag_t to std::string
+    std::string to_string( const CommandGraph::flag_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xex::CommandGraph::desc_t to std::string
-    string to_string( const xex::CommandGraph::desc_t val );
+    /// @brief Converts CommandGraph::desc_t to std::string
+    std::string to_string( const CommandGraph::desc_t val );
 
-} // namespace std
-#endif // _DEBUG
+} // namespace xex
 #endif // defined(__cplusplus)
 #endif // _XEX_CMDGRAPH_HPP

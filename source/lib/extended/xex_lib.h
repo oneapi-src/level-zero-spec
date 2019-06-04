@@ -24,11 +24,7 @@
 * @file xex_lib.h
 *
 ******************************************************************************/
-#ifndef _XEX_LIB_H
-#define _XEX_LIB_H
-#if defined(__cplusplus)
 #pragma once
-#endif
 #include "xex_api.hpp"
 #include "xex_ddi.h"
 #include "xe_util.h"
@@ -55,4 +51,3 @@ namespace xex_lib
     extern Library lib;
 
 } // namespace xex_lib
-#endif // _XEX_LIB_H

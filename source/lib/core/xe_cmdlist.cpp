@@ -664,23 +664,22 @@ namespace xe
 
 } // namespace xe
 
-#ifdef _DEBUG
-namespace std
+namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::CommandList::desc_version_t to std::string
-    string to_string( const xe::CommandList::desc_version_t val )
+    /// @brief Converts CommandList::desc_version_t to std::string
+    std::string to_string( const CommandList::desc_version_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::CommandList::desc_version_t::CURRENT:
-            str = "xe::CommandList::desc_version_t::CURRENT";
+        case CommandList::desc_version_t::CURRENT:
+            str = "CommandList::desc_version_t::CURRENT";
             break;
 
         default:
-            str = "xe::CommandList::desc_version_t::?";
+            str = "CommandList::desc_version_t::?";
             break;
         };
 
@@ -688,40 +687,40 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::CommandList::flag_t to std::string
-    string to_string( const xe::CommandList::flag_t val )
+    /// @brief Converts CommandList::flag_t to std::string
+    std::string to_string( const CommandList::flag_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return string("{}");
+        if( 0 == bits ) return std::string("{}");
 
-        string str;
+        std::string str;
         
-        if( static_cast<uint32_t>(xe::CommandList::flag_t::NONE) & bits )
-            str += "xe::CommandList::flag_t::NONE | ";
+        if( static_cast<uint32_t>(CommandList::flag_t::NONE) & bits )
+            str += "CommandList::flag_t::NONE | ";
         
-        if( static_cast<uint32_t>(xe::CommandList::flag_t::COPY_ONLY) & bits )
-            str += "xe::CommandList::flag_t::COPY_ONLY | ";
+        if( static_cast<uint32_t>(CommandList::flag_t::COPY_ONLY) & bits )
+            str += "CommandList::flag_t::COPY_ONLY | ";
         
-        if( static_cast<uint32_t>(xe::CommandList::flag_t::RELAXED_ORDERING) & bits )
-            str += "xe::CommandList::flag_t::RELAXED_ORDERING | ";
+        if( static_cast<uint32_t>(CommandList::flag_t::RELAXED_ORDERING) & bits )
+            str += "CommandList::flag_t::RELAXED_ORDERING | ";
 
         return "{ " + str.substr(0, str.size() - 3) + " }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::CommandList::parameter_t to std::string
-    string to_string( const xe::CommandList::parameter_t val )
+    /// @brief Converts CommandList::parameter_t to std::string
+    std::string to_string( const CommandList::parameter_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::CommandList::parameter_t::TBD:
-            str = "xe::CommandList::parameter_t::TBD";
+        case CommandList::parameter_t::TBD:
+            str = "CommandList::parameter_t::TBD";
             break;
 
         default:
-            str = "xe::CommandList::parameter_t::?";
+            str = "CommandList::parameter_t::?";
             break;
         };
 
@@ -729,55 +728,55 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::CommandList::memory_advice_t to std::string
-    string to_string( const xe::CommandList::memory_advice_t val )
+    /// @brief Converts CommandList::memory_advice_t to std::string
+    std::string to_string( const CommandList::memory_advice_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::CommandList::memory_advice_t::SET_READ_MOSTLY:
-            str = "xe::CommandList::memory_advice_t::SET_READ_MOSTLY";
+        case CommandList::memory_advice_t::SET_READ_MOSTLY:
+            str = "CommandList::memory_advice_t::SET_READ_MOSTLY";
             break;
 
-        case xe::CommandList::memory_advice_t::CLEAR_READ_MOSTLY:
-            str = "xe::CommandList::memory_advice_t::CLEAR_READ_MOSTLY";
+        case CommandList::memory_advice_t::CLEAR_READ_MOSTLY:
+            str = "CommandList::memory_advice_t::CLEAR_READ_MOSTLY";
             break;
 
-        case xe::CommandList::memory_advice_t::SET_PREFERRED_LOCATION:
-            str = "xe::CommandList::memory_advice_t::SET_PREFERRED_LOCATION";
+        case CommandList::memory_advice_t::SET_PREFERRED_LOCATION:
+            str = "CommandList::memory_advice_t::SET_PREFERRED_LOCATION";
             break;
 
-        case xe::CommandList::memory_advice_t::CLEAR_PREFERRED_LOCATION:
-            str = "xe::CommandList::memory_advice_t::CLEAR_PREFERRED_LOCATION";
+        case CommandList::memory_advice_t::CLEAR_PREFERRED_LOCATION:
+            str = "CommandList::memory_advice_t::CLEAR_PREFERRED_LOCATION";
             break;
 
-        case xe::CommandList::memory_advice_t::SET_ACCESSED_BY:
-            str = "xe::CommandList::memory_advice_t::SET_ACCESSED_BY";
+        case CommandList::memory_advice_t::SET_ACCESSED_BY:
+            str = "CommandList::memory_advice_t::SET_ACCESSED_BY";
             break;
 
-        case xe::CommandList::memory_advice_t::CLEAR_ACCESSED_BY:
-            str = "xe::CommandList::memory_advice_t::CLEAR_ACCESSED_BY";
+        case CommandList::memory_advice_t::CLEAR_ACCESSED_BY:
+            str = "CommandList::memory_advice_t::CLEAR_ACCESSED_BY";
             break;
 
-        case xe::CommandList::memory_advice_t::SET_NON_ATOMIC_MOSTLY:
-            str = "xe::CommandList::memory_advice_t::SET_NON_ATOMIC_MOSTLY";
+        case CommandList::memory_advice_t::SET_NON_ATOMIC_MOSTLY:
+            str = "CommandList::memory_advice_t::SET_NON_ATOMIC_MOSTLY";
             break;
 
-        case xe::CommandList::memory_advice_t::CLEAR_NON_ATOMIC_MOSTLY:
-            str = "xe::CommandList::memory_advice_t::CLEAR_NON_ATOMIC_MOSTLY";
+        case CommandList::memory_advice_t::CLEAR_NON_ATOMIC_MOSTLY:
+            str = "CommandList::memory_advice_t::CLEAR_NON_ATOMIC_MOSTLY";
             break;
 
-        case xe::CommandList::memory_advice_t::BIAS_CACHED:
-            str = "xe::CommandList::memory_advice_t::BIAS_CACHED";
+        case CommandList::memory_advice_t::BIAS_CACHED:
+            str = "CommandList::memory_advice_t::BIAS_CACHED";
             break;
 
-        case xe::CommandList::memory_advice_t::BIAS_UNCACHED:
-            str = "xe::CommandList::memory_advice_t::BIAS_UNCACHED";
+        case CommandList::memory_advice_t::BIAS_UNCACHED:
+            str = "CommandList::memory_advice_t::BIAS_UNCACHED";
             break;
 
         default:
-            str = "xe::CommandList::memory_advice_t::?";
+            str = "CommandList::memory_advice_t::?";
             break;
         };
 
@@ -785,16 +784,16 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::CommandList::desc_t to std::string
-    string to_string( const xe::CommandList::desc_t val )
+    /// @brief Converts CommandList::desc_t to std::string
+    std::string to_string( const CommandList::desc_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xe::CommandList::desc_t::version : ";
+        str += "CommandList::desc_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "xe::CommandList::desc_t::flags : ";
+        str += "CommandList::desc_t::flags : ";
         str += to_string(val.flags);
         str += "\n";
 
@@ -802,83 +801,82 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::CommandList::copy_region_t to std::string
-    string to_string( const xe::CommandList::copy_region_t val )
+    /// @brief Converts CommandList::copy_region_t to std::string
+    std::string to_string( const CommandList::copy_region_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xe::CommandList::copy_region_t::originX : ";
-        str += to_string(val.originX);
+        str += "CommandList::copy_region_t::originX : ";
+        str += std::to_string(val.originX);
         str += "\n";
         
-        str += "xe::CommandList::copy_region_t::originY : ";
-        str += to_string(val.originY);
+        str += "CommandList::copy_region_t::originY : ";
+        str += std::to_string(val.originY);
         str += "\n";
         
-        str += "xe::CommandList::copy_region_t::width : ";
-        str += to_string(val.width);
+        str += "CommandList::copy_region_t::width : ";
+        str += std::to_string(val.width);
         str += "\n";
         
-        str += "xe::CommandList::copy_region_t::height : ";
-        str += to_string(val.height);
+        str += "CommandList::copy_region_t::height : ";
+        str += std::to_string(val.height);
         str += "\n";
 
         return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::CommandList::image_region_t to std::string
-    string to_string( const xe::CommandList::image_region_t val )
+    /// @brief Converts CommandList::image_region_t to std::string
+    std::string to_string( const CommandList::image_region_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xe::CommandList::image_region_t::originX : ";
-        str += to_string(val.originX);
+        str += "CommandList::image_region_t::originX : ";
+        str += std::to_string(val.originX);
         str += "\n";
         
-        str += "xe::CommandList::image_region_t::originY : ";
-        str += to_string(val.originY);
+        str += "CommandList::image_region_t::originY : ";
+        str += std::to_string(val.originY);
         str += "\n";
         
-        str += "xe::CommandList::image_region_t::originZ : ";
-        str += to_string(val.originZ);
+        str += "CommandList::image_region_t::originZ : ";
+        str += std::to_string(val.originZ);
         str += "\n";
         
-        str += "xe::CommandList::image_region_t::width : ";
-        str += to_string(val.width);
+        str += "CommandList::image_region_t::width : ";
+        str += std::to_string(val.width);
         str += "\n";
         
-        str += "xe::CommandList::image_region_t::height : ";
-        str += to_string(val.height);
+        str += "CommandList::image_region_t::height : ";
+        str += std::to_string(val.height);
         str += "\n";
         
-        str += "xe::CommandList::image_region_t::depth : ";
-        str += to_string(val.depth);
+        str += "CommandList::image_region_t::depth : ";
+        str += std::to_string(val.depth);
         str += "\n";
 
         return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::CommandList::thread_group_dimensions_t to std::string
-    string to_string( const xe::CommandList::thread_group_dimensions_t val )
+    /// @brief Converts CommandList::thread_group_dimensions_t to std::string
+    std::string to_string( const CommandList::thread_group_dimensions_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xe::CommandList::thread_group_dimensions_t::groupCountX : ";
-        str += to_string(val.groupCountX);
+        str += "CommandList::thread_group_dimensions_t::groupCountX : ";
+        str += std::to_string(val.groupCountX);
         str += "\n";
         
-        str += "xe::CommandList::thread_group_dimensions_t::groupCountY : ";
-        str += to_string(val.groupCountY);
+        str += "CommandList::thread_group_dimensions_t::groupCountY : ";
+        str += std::to_string(val.groupCountY);
         str += "\n";
         
-        str += "xe::CommandList::thread_group_dimensions_t::groupCountZ : ";
-        str += to_string(val.groupCountZ);
+        str += "CommandList::thread_group_dimensions_t::groupCountZ : ";
+        str += std::to_string(val.groupCountZ);
         str += "\n";
 
         return str;
     }
 
-} // namespace std
-#endif // _DEBUG
+} // namespace xe

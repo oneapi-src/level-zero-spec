@@ -72,14 +72,12 @@ namespace xe
 
 } // namespace xe
 
-#ifdef _DEBUG
-namespace std
+namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::init_flag_t to std::string
-    string to_string( const xe::init_flag_t val );
+    /// @brief Converts init_flag_t to std::string
+    std::string to_string( const init_flag_t val );
 
-} // namespace std
-#endif // _DEBUG
+} // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_DRIVER_HPP

@@ -68,9 +68,7 @@ def declare_dbg(obj, tags):
 #include <string.h>
 #include <exception>
 #include <tuple>
-#ifdef _DEBUG
 #include <string>
-#endif
 %else:
 #include "${x}_api.hpp"
 %endif
@@ -334,20 +332,19 @@ namespace ${n}
 } // namespace ${n}
 
 ## DEBUG ######################################################################
-#ifdef _DEBUG
-namespace std
+namespace ${n}
 {
     %for obj in objects:
     %if declare_dbg(obj, tags):
     %if re.match(r"enum", obj['type']) or re.match(r"struct|union", obj['type']):
     <%
-        tname = "%s::%s"%(n, th.make_type_name(n, tags, obj, cpp=True))
+        tname = th.make_type_name(n, tags, obj, cpp=True)
     %>///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts ${tname} to std::string
     %if 'condition' in obj:
     #if ${th.subt(n, tags, obj['condition'])}
     %endif
-    string to_string( const ${tname} val );
+    std::string to_string( const ${tname} val );
     %if 'condition' in obj:
     #endif // ${th.subt(n, tags, obj['condition'])}
     %endif
@@ -356,13 +353,13 @@ namespace std
     %elif re.match(r"class", obj['type']):
     %for t in th.filter_items(th.extract_objs(specs, r"enum|struct|union"), 'class', obj['name']):
     <%
-        tname = "%s::%s::%s"%(n, th.make_class_name(n, tags, obj), th.make_type_name(n, tags, t, cpp=True))
+        tname = "%s::%s"%(th.make_class_name(n, tags, obj), th.make_type_name(n, tags, t, cpp=True))
     %>///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts ${tname} to std::string
     %if 'condition' in t:
     #if ${th.subt(n, tags, t['condition'])}
     %endif
-    string to_string( const ${tname} val );
+    std::string to_string( const ${tname} val );
     %if 'condition' in t:
     #endif // ${th.subt(n, tags, t['condition'])}
     %endif
@@ -371,8 +368,7 @@ namespace std
     %endif  ## class
     %endif  ## declare_dbg
     %endfor ## obj in objects
-} // namespace std
-#endif // _DEBUG
+} // namespace ${n}
 ## EXCEPTION ##############################################################
 %if re.match(r"common", name):
 
@@ -383,11 +379,9 @@ namespace ${n}
     class exception_t : public std::exception
     {
     protected:
-    #ifdef _DEBUG
         static std::string formatted( const result_t, const char*, const char*, const char* );
-        const std::string _msg;
-    #endif
 
+        const std::string _msg;
         const result_t _result;
 
     public:
@@ -395,17 +389,12 @@ namespace ${n}
 
         exception_t( const result_t result, const char* file, const char* line, const char* func )
             : std::exception(),
-        #ifdef _DEBUG
             _msg( formatted(result, file, line, func) ),
-        #endif
             _result(result)
         {
         }
 
-        #ifdef _DEBUG
         const char* what() const noexcept { return _msg.c_str(); }
-        #endif
-
         result_t value() const noexcept { return _result; }
     };
     %else:

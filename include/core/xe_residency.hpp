@@ -42,10 +42,8 @@ namespace xe
 {
 } // namespace xe
 
-#ifdef _DEBUG
-namespace std
+namespace xe
 {
-} // namespace std
-#endif // _DEBUG
+} // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_RESIDENCY_HPP

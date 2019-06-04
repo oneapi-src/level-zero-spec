@@ -24,11 +24,7 @@
 * @file xet_lib.h
 *
 ******************************************************************************/
-#ifndef _XET_LIB_H
-#define _XET_LIB_H
-#if defined(__cplusplus)
 #pragma once
-#endif
 #include "xet_api.hpp"
 #include "xet_ddi.h"
 #include "xe_util.h"
@@ -53,4 +49,3 @@ namespace xet_lib
     extern Library lib;
 
 } // namespace xet_lib
-#endif // _XET_LIB_H

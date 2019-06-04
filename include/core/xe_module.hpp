@@ -511,42 +511,40 @@ namespace xe
 
 } // namespace xe
 
-#ifdef _DEBUG
-namespace std
+namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Module::desc_version_t to std::string
-    string to_string( const xe::Module::desc_version_t val );
+    /// @brief Converts Module::desc_version_t to std::string
+    std::string to_string( const Module::desc_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Module::format_t to std::string
-    string to_string( const xe::Module::format_t val );
+    /// @brief Converts Module::format_t to std::string
+    std::string to_string( const Module::format_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Module::desc_t to std::string
-    string to_string( const xe::Module::desc_t val );
+    /// @brief Converts Module::desc_t to std::string
+    std::string to_string( const Module::desc_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Function::desc_version_t to std::string
-    string to_string( const xe::Function::desc_version_t val );
+    /// @brief Converts Function::desc_version_t to std::string
+    std::string to_string( const Function::desc_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Function::flag_t to std::string
-    string to_string( const xe::Function::flag_t val );
+    /// @brief Converts Function::flag_t to std::string
+    std::string to_string( const Function::flag_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Function::desc_t to std::string
-    string to_string( const xe::Function::desc_t val );
+    /// @brief Converts Function::desc_t to std::string
+    std::string to_string( const Function::desc_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Function::set_attribute_t to std::string
-    string to_string( const xe::Function::set_attribute_t val );
+    /// @brief Converts Function::set_attribute_t to std::string
+    std::string to_string( const Function::set_attribute_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Function::get_attribute_t to std::string
-    string to_string( const xe::Function::get_attribute_t val );
+    /// @brief Converts Function::get_attribute_t to std::string
+    std::string to_string( const Function::get_attribute_t val );
 
-} // namespace std
-#endif // _DEBUG
+} // namespace xe
 #endif // defined(__cplusplus)
 #endif // _XE_MODULE_HPP

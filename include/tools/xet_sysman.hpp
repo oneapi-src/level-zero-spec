@@ -42,10 +42,8 @@ namespace xet
 {
 } // namespace xet
 
-#ifdef _DEBUG
-namespace std
+namespace xet
 {
-} // namespace std
-#endif // _DEBUG
+} // namespace xet
 #endif // defined(__cplusplus)
 #endif // _XET_SYSMAN_HPP

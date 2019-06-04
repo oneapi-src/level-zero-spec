@@ -1121,23 +1121,22 @@ namespace xe
 
 } // namespace xe
 
-#ifdef _DEBUG
-namespace std
+namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::DeviceGroup::api_version_t to std::string
-    string to_string( const xe::DeviceGroup::api_version_t val )
+    /// @brief Converts DeviceGroup::api_version_t to std::string
+    std::string to_string( const DeviceGroup::api_version_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::DeviceGroup::api_version_t::_1_0:
-            str = "xe::DeviceGroup::api_version_t::_1_0";
+        case DeviceGroup::api_version_t::_1_0:
+            str = "DeviceGroup::api_version_t::_1_0";
             break;
 
         default:
-            str = "xe::DeviceGroup::api_version_t::?";
+            str = "DeviceGroup::api_version_t::?";
             break;
         };
 
@@ -1145,19 +1144,19 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::DeviceGroup::device_properties_version_t to std::string
-    string to_string( const xe::DeviceGroup::device_properties_version_t val )
+    /// @brief Converts DeviceGroup::device_properties_version_t to std::string
+    std::string to_string( const DeviceGroup::device_properties_version_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::DeviceGroup::device_properties_version_t::CURRENT:
-            str = "xe::DeviceGroup::device_properties_version_t::CURRENT";
+        case DeviceGroup::device_properties_version_t::CURRENT:
+            str = "DeviceGroup::device_properties_version_t::CURRENT";
             break;
 
         default:
-            str = "xe::DeviceGroup::device_properties_version_t::?";
+            str = "DeviceGroup::device_properties_version_t::?";
             break;
         };
 
@@ -1165,23 +1164,23 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::DeviceGroup::device_type_t to std::string
-    string to_string( const xe::DeviceGroup::device_type_t val )
+    /// @brief Converts DeviceGroup::device_type_t to std::string
+    std::string to_string( const DeviceGroup::device_type_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::DeviceGroup::device_type_t::GPU:
-            str = "xe::DeviceGroup::device_type_t::GPU";
+        case DeviceGroup::device_type_t::GPU:
+            str = "DeviceGroup::device_type_t::GPU";
             break;
 
-        case xe::DeviceGroup::device_type_t::FPGA:
-            str = "xe::DeviceGroup::device_type_t::FPGA";
+        case DeviceGroup::device_type_t::FPGA:
+            str = "DeviceGroup::device_type_t::FPGA";
             break;
 
         default:
-            str = "xe::DeviceGroup::device_type_t::?";
+            str = "DeviceGroup::device_type_t::?";
             break;
         };
 
@@ -1189,19 +1188,19 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::DeviceGroup::device_compute_properties_version_t to std::string
-    string to_string( const xe::DeviceGroup::device_compute_properties_version_t val )
+    /// @brief Converts DeviceGroup::device_compute_properties_version_t to std::string
+    std::string to_string( const DeviceGroup::device_compute_properties_version_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::DeviceGroup::device_compute_properties_version_t::CURRENT:
-            str = "xe::DeviceGroup::device_compute_properties_version_t::CURRENT";
+        case DeviceGroup::device_compute_properties_version_t::CURRENT:
+            str = "DeviceGroup::device_compute_properties_version_t::CURRENT";
             break;
 
         default:
-            str = "xe::DeviceGroup::device_compute_properties_version_t::?";
+            str = "DeviceGroup::device_compute_properties_version_t::?";
             break;
         };
 
@@ -1209,19 +1208,19 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::DeviceGroup::device_memory_properties_version_t to std::string
-    string to_string( const xe::DeviceGroup::device_memory_properties_version_t val )
+    /// @brief Converts DeviceGroup::device_memory_properties_version_t to std::string
+    std::string to_string( const DeviceGroup::device_memory_properties_version_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::DeviceGroup::device_memory_properties_version_t::CURRENT:
-            str = "xe::DeviceGroup::device_memory_properties_version_t::CURRENT";
+        case DeviceGroup::device_memory_properties_version_t::CURRENT:
+            str = "DeviceGroup::device_memory_properties_version_t::CURRENT";
             break;
 
         default:
-            str = "xe::DeviceGroup::device_memory_properties_version_t::?";
+            str = "DeviceGroup::device_memory_properties_version_t::?";
             break;
         };
 
@@ -1229,19 +1228,19 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::DeviceGroup::device_memory_access_properties_version_t to std::string
-    string to_string( const xe::DeviceGroup::device_memory_access_properties_version_t val )
+    /// @brief Converts DeviceGroup::device_memory_access_properties_version_t to std::string
+    std::string to_string( const DeviceGroup::device_memory_access_properties_version_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::DeviceGroup::device_memory_access_properties_version_t::CURRENT:
-            str = "xe::DeviceGroup::device_memory_access_properties_version_t::CURRENT";
+        case DeviceGroup::device_memory_access_properties_version_t::CURRENT:
+            str = "DeviceGroup::device_memory_access_properties_version_t::CURRENT";
             break;
 
         default:
-            str = "xe::DeviceGroup::device_memory_access_properties_version_t::?";
+            str = "DeviceGroup::device_memory_access_properties_version_t::?";
             break;
         };
 
@@ -1249,46 +1248,46 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::DeviceGroup::memory_access_capabilities_t to std::string
-    string to_string( const xe::DeviceGroup::memory_access_capabilities_t val )
+    /// @brief Converts DeviceGroup::memory_access_capabilities_t to std::string
+    std::string to_string( const DeviceGroup::memory_access_capabilities_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return string("{}");
+        if( 0 == bits ) return std::string("{}");
 
-        string str;
+        std::string str;
         
-        if( static_cast<uint32_t>(xe::DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS_NONE) & bits )
-            str += "xe::DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS_NONE | ";
+        if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS_NONE) & bits )
+            str += "DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS_NONE | ";
         
-        if( static_cast<uint32_t>(xe::DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS) & bits )
-            str += "xe::DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS | ";
+        if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS) & bits )
+            str += "DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS | ";
         
-        if( static_cast<uint32_t>(xe::DeviceGroup::memory_access_capabilities_t::MEMORY_ATOMIC_ACCESS) & bits )
-            str += "xe::DeviceGroup::memory_access_capabilities_t::MEMORY_ATOMIC_ACCESS | ";
+        if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_ATOMIC_ACCESS) & bits )
+            str += "DeviceGroup::memory_access_capabilities_t::MEMORY_ATOMIC_ACCESS | ";
         
-        if( static_cast<uint32_t>(xe::DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ACCESS) & bits )
-            str += "xe::DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ACCESS | ";
+        if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ACCESS) & bits )
+            str += "DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ACCESS | ";
         
-        if( static_cast<uint32_t>(xe::DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ATOMIC_ACCESS) & bits )
-            str += "xe::DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ATOMIC_ACCESS | ";
+        if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ATOMIC_ACCESS) & bits )
+            str += "DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ATOMIC_ACCESS | ";
 
         return "{ " + str.substr(0, str.size() - 3) + " }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::DeviceGroup::device_cache_properties_version_t to std::string
-    string to_string( const xe::DeviceGroup::device_cache_properties_version_t val )
+    /// @brief Converts DeviceGroup::device_cache_properties_version_t to std::string
+    std::string to_string( const DeviceGroup::device_cache_properties_version_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::DeviceGroup::device_cache_properties_version_t::CURRENT:
-            str = "xe::DeviceGroup::device_cache_properties_version_t::CURRENT";
+        case DeviceGroup::device_cache_properties_version_t::CURRENT:
+            str = "DeviceGroup::device_cache_properties_version_t::CURRENT";
             break;
 
         default:
-            str = "xe::DeviceGroup::device_cache_properties_version_t::?";
+            str = "DeviceGroup::device_cache_properties_version_t::?";
             break;
         };
 
@@ -1296,19 +1295,19 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::DeviceGroup::device_image_properties_version_t to std::string
-    string to_string( const xe::DeviceGroup::device_image_properties_version_t val )
+    /// @brief Converts DeviceGroup::device_image_properties_version_t to std::string
+    std::string to_string( const DeviceGroup::device_image_properties_version_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::DeviceGroup::device_image_properties_version_t::CURRENT:
-            str = "xe::DeviceGroup::device_image_properties_version_t::CURRENT";
+        case DeviceGroup::device_image_properties_version_t::CURRENT:
+            str = "DeviceGroup::device_image_properties_version_t::CURRENT";
             break;
 
         default:
-            str = "xe::DeviceGroup::device_image_properties_version_t::?";
+            str = "DeviceGroup::device_image_properties_version_t::?";
             break;
         };
 
@@ -1316,64 +1315,64 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::DeviceGroup::device_mem_alloc_flag_t to std::string
-    string to_string( const xe::DeviceGroup::device_mem_alloc_flag_t val )
+    /// @brief Converts DeviceGroup::device_mem_alloc_flag_t to std::string
+    std::string to_string( const DeviceGroup::device_mem_alloc_flag_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return string("{}");
+        if( 0 == bits ) return std::string("{}");
 
-        string str;
+        std::string str;
         
-        if( static_cast<uint32_t>(xe::DeviceGroup::device_mem_alloc_flag_t::DEFAULT) & bits )
-            str += "xe::DeviceGroup::device_mem_alloc_flag_t::DEFAULT | ";
+        if( static_cast<uint32_t>(DeviceGroup::device_mem_alloc_flag_t::DEFAULT) & bits )
+            str += "DeviceGroup::device_mem_alloc_flag_t::DEFAULT | ";
         
-        if( static_cast<uint32_t>(xe::DeviceGroup::device_mem_alloc_flag_t::BIAS_CACHED) & bits )
-            str += "xe::DeviceGroup::device_mem_alloc_flag_t::BIAS_CACHED | ";
+        if( static_cast<uint32_t>(DeviceGroup::device_mem_alloc_flag_t::BIAS_CACHED) & bits )
+            str += "DeviceGroup::device_mem_alloc_flag_t::BIAS_CACHED | ";
         
-        if( static_cast<uint32_t>(xe::DeviceGroup::device_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
-            str += "xe::DeviceGroup::device_mem_alloc_flag_t::BIAS_UNCACHED | ";
+        if( static_cast<uint32_t>(DeviceGroup::device_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
+            str += "DeviceGroup::device_mem_alloc_flag_t::BIAS_UNCACHED | ";
 
         return "{ " + str.substr(0, str.size() - 3) + " }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::DeviceGroup::host_mem_alloc_flag_t to std::string
-    string to_string( const xe::DeviceGroup::host_mem_alloc_flag_t val )
+    /// @brief Converts DeviceGroup::host_mem_alloc_flag_t to std::string
+    std::string to_string( const DeviceGroup::host_mem_alloc_flag_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return string("{}");
+        if( 0 == bits ) return std::string("{}");
 
-        string str;
+        std::string str;
         
-        if( static_cast<uint32_t>(xe::DeviceGroup::host_mem_alloc_flag_t::DEFAULT) & bits )
-            str += "xe::DeviceGroup::host_mem_alloc_flag_t::DEFAULT | ";
+        if( static_cast<uint32_t>(DeviceGroup::host_mem_alloc_flag_t::DEFAULT) & bits )
+            str += "DeviceGroup::host_mem_alloc_flag_t::DEFAULT | ";
         
-        if( static_cast<uint32_t>(xe::DeviceGroup::host_mem_alloc_flag_t::BIAS_CACHED) & bits )
-            str += "xe::DeviceGroup::host_mem_alloc_flag_t::BIAS_CACHED | ";
+        if( static_cast<uint32_t>(DeviceGroup::host_mem_alloc_flag_t::BIAS_CACHED) & bits )
+            str += "DeviceGroup::host_mem_alloc_flag_t::BIAS_CACHED | ";
         
-        if( static_cast<uint32_t>(xe::DeviceGroup::host_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
-            str += "xe::DeviceGroup::host_mem_alloc_flag_t::BIAS_UNCACHED | ";
+        if( static_cast<uint32_t>(DeviceGroup::host_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
+            str += "DeviceGroup::host_mem_alloc_flag_t::BIAS_UNCACHED | ";
         
-        if( static_cast<uint32_t>(xe::DeviceGroup::host_mem_alloc_flag_t::BIAS_WRITE_COMBINED) & bits )
-            str += "xe::DeviceGroup::host_mem_alloc_flag_t::BIAS_WRITE_COMBINED | ";
+        if( static_cast<uint32_t>(DeviceGroup::host_mem_alloc_flag_t::BIAS_WRITE_COMBINED) & bits )
+            str += "DeviceGroup::host_mem_alloc_flag_t::BIAS_WRITE_COMBINED | ";
 
         return "{ " + str.substr(0, str.size() - 3) + " }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::DeviceGroup::memory_allocation_properties_version_t to std::string
-    string to_string( const xe::DeviceGroup::memory_allocation_properties_version_t val )
+    /// @brief Converts DeviceGroup::memory_allocation_properties_version_t to std::string
+    std::string to_string( const DeviceGroup::memory_allocation_properties_version_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::DeviceGroup::memory_allocation_properties_version_t::CURRENT:
-            str = "xe::DeviceGroup::memory_allocation_properties_version_t::CURRENT";
+        case DeviceGroup::memory_allocation_properties_version_t::CURRENT:
+            str = "DeviceGroup::memory_allocation_properties_version_t::CURRENT";
             break;
 
         default:
-            str = "xe::DeviceGroup::memory_allocation_properties_version_t::?";
+            str = "DeviceGroup::memory_allocation_properties_version_t::?";
             break;
         };
 
@@ -1381,31 +1380,31 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::DeviceGroup::memory_type_t to std::string
-    string to_string( const xe::DeviceGroup::memory_type_t val )
+    /// @brief Converts DeviceGroup::memory_type_t to std::string
+    std::string to_string( const DeviceGroup::memory_type_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::DeviceGroup::memory_type_t::UNKNOWN:
-            str = "xe::DeviceGroup::memory_type_t::UNKNOWN";
+        case DeviceGroup::memory_type_t::UNKNOWN:
+            str = "DeviceGroup::memory_type_t::UNKNOWN";
             break;
 
-        case xe::DeviceGroup::memory_type_t::HOST:
-            str = "xe::DeviceGroup::memory_type_t::HOST";
+        case DeviceGroup::memory_type_t::HOST:
+            str = "DeviceGroup::memory_type_t::HOST";
             break;
 
-        case xe::DeviceGroup::memory_type_t::DEVICE:
-            str = "xe::DeviceGroup::memory_type_t::DEVICE";
+        case DeviceGroup::memory_type_t::DEVICE:
+            str = "DeviceGroup::memory_type_t::DEVICE";
             break;
 
-        case xe::DeviceGroup::memory_type_t::SHARED:
-            str = "xe::DeviceGroup::memory_type_t::SHARED";
+        case DeviceGroup::memory_type_t::SHARED:
+            str = "DeviceGroup::memory_type_t::SHARED";
             break;
 
         default:
-            str = "xe::DeviceGroup::memory_type_t::?";
+            str = "DeviceGroup::memory_type_t::?";
             break;
         };
 
@@ -1413,19 +1412,19 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::DeviceGroup::ipc_memory_flag_t to std::string
-    string to_string( const xe::DeviceGroup::ipc_memory_flag_t val )
+    /// @brief Converts DeviceGroup::ipc_memory_flag_t to std::string
+    std::string to_string( const DeviceGroup::ipc_memory_flag_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::DeviceGroup::ipc_memory_flag_t::NONE:
-            str = "xe::DeviceGroup::ipc_memory_flag_t::NONE";
+        case DeviceGroup::ipc_memory_flag_t::NONE:
+            str = "DeviceGroup::ipc_memory_flag_t::NONE";
             break;
 
         default:
-            str = "xe::DeviceGroup::ipc_memory_flag_t::?";
+            str = "DeviceGroup::ipc_memory_flag_t::?";
             break;
         };
 
@@ -1433,109 +1432,117 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::DeviceGroup::device_uuid_t to std::string
-    string to_string( const xe::DeviceGroup::device_uuid_t val )
+    /// @brief Converts DeviceGroup::device_uuid_t to std::string
+    std::string to_string( const DeviceGroup::device_uuid_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xe::DeviceGroup::device_uuid_t::id : ";
-        str += to_string(val.id);
+        str += "DeviceGroup::device_uuid_t::id : ";
+        {
+            std::string tmp;
+            for( auto& entry : val.id )
+            {
+                tmp += std::to_string( entry );
+                tmp += ", ";
+            }
+            str += "{ " + tmp.substr( 0, tmp.size() - 2 ) + " }";;
+        }
         str += "\n";
 
         return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::DeviceGroup::device_properties_t to std::string
-    string to_string( const xe::DeviceGroup::device_properties_t val )
+    /// @brief Converts DeviceGroup::device_properties_t to std::string
+    std::string to_string( const DeviceGroup::device_properties_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xe::DeviceGroup::device_properties_t::version : ";
+        str += "DeviceGroup::device_properties_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_properties_t::type : ";
+        str += "DeviceGroup::device_properties_t::type : ";
         str += to_string(val.type);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_properties_t::vendorId : ";
-        str += to_string(val.vendorId);
+        str += "DeviceGroup::device_properties_t::vendorId : ";
+        str += std::to_string(val.vendorId);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_properties_t::deviceId : ";
-        str += to_string(val.deviceId);
+        str += "DeviceGroup::device_properties_t::deviceId : ";
+        str += std::to_string(val.deviceId);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_properties_t::subdeviceId : ";
-        str += to_string(val.subdeviceId);
+        str += "DeviceGroup::device_properties_t::subdeviceId : ";
+        str += std::to_string(val.subdeviceId);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_properties_t::uuid : ";
+        str += "DeviceGroup::device_properties_t::uuid : ";
         str += to_string(val.uuid);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_properties_t::isSubdevice : ";
-        str += to_string(val.isSubdevice);
+        str += "DeviceGroup::device_properties_t::isSubdevice : ";
+        str += std::to_string(val.isSubdevice);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_properties_t::numSubDevices : ";
-        str += to_string(val.numSubDevices);
+        str += "DeviceGroup::device_properties_t::numSubDevices : ";
+        str += std::to_string(val.numSubDevices);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_properties_t::coreClockRate : ";
-        str += to_string(val.coreClockRate);
+        str += "DeviceGroup::device_properties_t::coreClockRate : ";
+        str += std::to_string(val.coreClockRate);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_properties_t::unifiedMemory : ";
-        str += to_string(val.unifiedMemory);
+        str += "DeviceGroup::device_properties_t::unifiedMemory : ";
+        str += std::to_string(val.unifiedMemory);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_properties_t::onDemandPageFaults : ";
-        str += to_string(val.onDemandPageFaults);
+        str += "DeviceGroup::device_properties_t::onDemandPageFaults : ";
+        str += std::to_string(val.onDemandPageFaults);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_properties_t::maxCommandQueues : ";
-        str += to_string(val.maxCommandQueues);
+        str += "DeviceGroup::device_properties_t::maxCommandQueues : ";
+        str += std::to_string(val.maxCommandQueues);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_properties_t::numAsyncComputeEngines : ";
-        str += to_string(val.numAsyncComputeEngines);
+        str += "DeviceGroup::device_properties_t::numAsyncComputeEngines : ";
+        str += std::to_string(val.numAsyncComputeEngines);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_properties_t::numAsyncCopyEngines : ";
-        str += to_string(val.numAsyncCopyEngines);
+        str += "DeviceGroup::device_properties_t::numAsyncCopyEngines : ";
+        str += std::to_string(val.numAsyncCopyEngines);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_properties_t::maxCommandQueuePriority : ";
-        str += to_string(val.maxCommandQueuePriority);
+        str += "DeviceGroup::device_properties_t::maxCommandQueuePriority : ";
+        str += std::to_string(val.maxCommandQueuePriority);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_properties_t::numThreadsPerEU : ";
-        str += to_string(val.numThreadsPerEU);
+        str += "DeviceGroup::device_properties_t::numThreadsPerEU : ";
+        str += std::to_string(val.numThreadsPerEU);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_properties_t::physicalEUSimdWidth : ";
-        str += to_string(val.physicalEUSimdWidth);
+        str += "DeviceGroup::device_properties_t::physicalEUSimdWidth : ";
+        str += std::to_string(val.physicalEUSimdWidth);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_properties_t::numEUsPerSubslice : ";
-        str += to_string(val.numEUsPerSubslice);
+        str += "DeviceGroup::device_properties_t::numEUsPerSubslice : ";
+        str += std::to_string(val.numEUsPerSubslice);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_properties_t::numSubslicesPerSlice : ";
-        str += to_string(val.numSubslicesPerSlice);
+        str += "DeviceGroup::device_properties_t::numSubslicesPerSlice : ";
+        str += std::to_string(val.numSubslicesPerSlice);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_properties_t::numSlicesPerTile : ";
-        str += to_string(val.numSlicesPerTile);
+        str += "DeviceGroup::device_properties_t::numSlicesPerTile : ";
+        str += std::to_string(val.numSlicesPerTile);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_properties_t::numTiles : ";
-        str += to_string(val.numTiles);
+        str += "DeviceGroup::device_properties_t::numTiles : ";
+        str += std::to_string(val.numTiles);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_properties_t::name : ";
+        str += "DeviceGroup::device_properties_t::name : ";
         str += val.name;
         str += "\n";
 
@@ -1543,110 +1550,118 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::DeviceGroup::device_compute_properties_t to std::string
-    string to_string( const xe::DeviceGroup::device_compute_properties_t val )
+    /// @brief Converts DeviceGroup::device_compute_properties_t to std::string
+    std::string to_string( const DeviceGroup::device_compute_properties_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xe::DeviceGroup::device_compute_properties_t::version : ";
+        str += "DeviceGroup::device_compute_properties_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_compute_properties_t::maxTotalGroupSize : ";
-        str += to_string(val.maxTotalGroupSize);
+        str += "DeviceGroup::device_compute_properties_t::maxTotalGroupSize : ";
+        str += std::to_string(val.maxTotalGroupSize);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_compute_properties_t::maxGroupSizeX : ";
-        str += to_string(val.maxGroupSizeX);
+        str += "DeviceGroup::device_compute_properties_t::maxGroupSizeX : ";
+        str += std::to_string(val.maxGroupSizeX);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_compute_properties_t::maxGroupSizeY : ";
-        str += to_string(val.maxGroupSizeY);
+        str += "DeviceGroup::device_compute_properties_t::maxGroupSizeY : ";
+        str += std::to_string(val.maxGroupSizeY);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_compute_properties_t::maxGroupSizeZ : ";
-        str += to_string(val.maxGroupSizeZ);
+        str += "DeviceGroup::device_compute_properties_t::maxGroupSizeZ : ";
+        str += std::to_string(val.maxGroupSizeZ);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_compute_properties_t::maxGroupCountX : ";
-        str += to_string(val.maxGroupCountX);
+        str += "DeviceGroup::device_compute_properties_t::maxGroupCountX : ";
+        str += std::to_string(val.maxGroupCountX);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_compute_properties_t::maxGroupCountY : ";
-        str += to_string(val.maxGroupCountY);
+        str += "DeviceGroup::device_compute_properties_t::maxGroupCountY : ";
+        str += std::to_string(val.maxGroupCountY);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_compute_properties_t::maxGroupCountZ : ";
-        str += to_string(val.maxGroupCountZ);
+        str += "DeviceGroup::device_compute_properties_t::maxGroupCountZ : ";
+        str += std::to_string(val.maxGroupCountZ);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_compute_properties_t::maxSharedLocalMemory : ";
-        str += to_string(val.maxSharedLocalMemory);
+        str += "DeviceGroup::device_compute_properties_t::maxSharedLocalMemory : ";
+        str += std::to_string(val.maxSharedLocalMemory);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_compute_properties_t::numSubGroupSizes : ";
-        str += to_string(val.numSubGroupSizes);
+        str += "DeviceGroup::device_compute_properties_t::numSubGroupSizes : ";
+        str += std::to_string(val.numSubGroupSizes);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_compute_properties_t::subGroupSizes : ";
-        str += to_string(val.subGroupSizes);
+        str += "DeviceGroup::device_compute_properties_t::subGroupSizes : ";
+        {
+            std::string tmp;
+            for( auto& entry : val.subGroupSizes )
+            {
+                tmp += std::to_string( entry );
+                tmp += ", ";
+            }
+            str += "{ " + tmp.substr( 0, tmp.size() - 2 ) + " }";;
+        }
         str += "\n";
 
         return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::DeviceGroup::device_memory_properties_t to std::string
-    string to_string( const xe::DeviceGroup::device_memory_properties_t val )
+    /// @brief Converts DeviceGroup::device_memory_properties_t to std::string
+    std::string to_string( const DeviceGroup::device_memory_properties_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xe::DeviceGroup::device_memory_properties_t::version : ";
+        str += "DeviceGroup::device_memory_properties_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_memory_properties_t::memClockRate : ";
-        str += to_string(val.memClockRate);
+        str += "DeviceGroup::device_memory_properties_t::memClockRate : ";
+        str += std::to_string(val.memClockRate);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_memory_properties_t::memGlobalBusWidth : ";
-        str += to_string(val.memGlobalBusWidth);
+        str += "DeviceGroup::device_memory_properties_t::memGlobalBusWidth : ";
+        str += std::to_string(val.memGlobalBusWidth);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_memory_properties_t::totalSize : ";
-        str += to_string(val.totalSize);
+        str += "DeviceGroup::device_memory_properties_t::totalSize : ";
+        str += std::to_string(val.totalSize);
         str += "\n";
 
         return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::DeviceGroup::device_memory_access_properties_t to std::string
-    string to_string( const xe::DeviceGroup::device_memory_access_properties_t val )
+    /// @brief Converts DeviceGroup::device_memory_access_properties_t to std::string
+    std::string to_string( const DeviceGroup::device_memory_access_properties_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xe::DeviceGroup::device_memory_access_properties_t::version : ";
+        str += "DeviceGroup::device_memory_access_properties_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_memory_access_properties_t::hostAllocCapabilities : ";
+        str += "DeviceGroup::device_memory_access_properties_t::hostAllocCapabilities : ";
         str += to_string(val.hostAllocCapabilities);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_memory_access_properties_t::deviceAllocCapabilities : ";
+        str += "DeviceGroup::device_memory_access_properties_t::deviceAllocCapabilities : ";
         str += to_string(val.deviceAllocCapabilities);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_memory_access_properties_t::sharedSingleDeviceAllocCapabilities : ";
+        str += "DeviceGroup::device_memory_access_properties_t::sharedSingleDeviceAllocCapabilities : ";
         str += to_string(val.sharedSingleDeviceAllocCapabilities);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_memory_access_properties_t::sharedCrossDeviceAllocCapabilities : ";
+        str += "DeviceGroup::device_memory_access_properties_t::sharedCrossDeviceAllocCapabilities : ";
         str += to_string(val.sharedCrossDeviceAllocCapabilities);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_memory_access_properties_t::sharedSystemDeviceAllocCapabilities : ";
+        str += "DeviceGroup::device_memory_access_properties_t::sharedSystemDeviceAllocCapabilities : ";
         str += to_string(val.sharedSystemDeviceAllocCapabilities);
         str += "\n";
 
@@ -1654,102 +1669,102 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::DeviceGroup::device_cache_properties_t to std::string
-    string to_string( const xe::DeviceGroup::device_cache_properties_t val )
+    /// @brief Converts DeviceGroup::device_cache_properties_t to std::string
+    std::string to_string( const DeviceGroup::device_cache_properties_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xe::DeviceGroup::device_cache_properties_t::version : ";
+        str += "DeviceGroup::device_cache_properties_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_cache_properties_t::intermediateCacheSize : ";
-        str += to_string(val.intermediateCacheSize);
+        str += "DeviceGroup::device_cache_properties_t::intermediateCacheSize : ";
+        str += std::to_string(val.intermediateCacheSize);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_cache_properties_t::intermediateCacheControl : ";
-        str += to_string(val.intermediateCacheControl);
+        str += "DeviceGroup::device_cache_properties_t::intermediateCacheControl : ";
+        str += std::to_string(val.intermediateCacheControl);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_cache_properties_t::lastLevelCacheSize : ";
-        str += to_string(val.lastLevelCacheSize);
+        str += "DeviceGroup::device_cache_properties_t::lastLevelCacheSize : ";
+        str += std::to_string(val.lastLevelCacheSize);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_cache_properties_t::lastLevelCacheSizeControl : ";
-        str += to_string(val.lastLevelCacheSizeControl);
+        str += "DeviceGroup::device_cache_properties_t::lastLevelCacheSizeControl : ";
+        str += std::to_string(val.lastLevelCacheSizeControl);
         str += "\n";
 
         return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::DeviceGroup::device_image_properties_t to std::string
-    string to_string( const xe::DeviceGroup::device_image_properties_t val )
+    /// @brief Converts DeviceGroup::device_image_properties_t to std::string
+    std::string to_string( const DeviceGroup::device_image_properties_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xe::DeviceGroup::device_image_properties_t::version : ";
+        str += "DeviceGroup::device_image_properties_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_image_properties_t::isSupported : ";
-        str += to_string(val.isSupported);
+        str += "DeviceGroup::device_image_properties_t::isSupported : ";
+        str += std::to_string(val.isSupported);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_image_properties_t::maxImageDims1D : ";
-        str += to_string(val.maxImageDims1D);
+        str += "DeviceGroup::device_image_properties_t::maxImageDims1D : ";
+        str += std::to_string(val.maxImageDims1D);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_image_properties_t::maxImageDims2D : ";
-        str += to_string(val.maxImageDims2D);
+        str += "DeviceGroup::device_image_properties_t::maxImageDims2D : ";
+        str += std::to_string(val.maxImageDims2D);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_image_properties_t::maxImageDims3D : ";
-        str += to_string(val.maxImageDims3D);
+        str += "DeviceGroup::device_image_properties_t::maxImageDims3D : ";
+        str += std::to_string(val.maxImageDims3D);
         str += "\n";
         
-        str += "xe::DeviceGroup::device_image_properties_t::maxImageArraySlices : ";
-        str += to_string(val.maxImageArraySlices);
+        str += "DeviceGroup::device_image_properties_t::maxImageArraySlices : ";
+        str += std::to_string(val.maxImageArraySlices);
         str += "\n";
 
         return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::DeviceGroup::memory_allocation_properties_t to std::string
-    string to_string( const xe::DeviceGroup::memory_allocation_properties_t val )
+    /// @brief Converts DeviceGroup::memory_allocation_properties_t to std::string
+    std::string to_string( const DeviceGroup::memory_allocation_properties_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xe::DeviceGroup::memory_allocation_properties_t::version : ";
+        str += "DeviceGroup::memory_allocation_properties_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "xe::DeviceGroup::memory_allocation_properties_t::type : ";
+        str += "DeviceGroup::memory_allocation_properties_t::type : ";
         str += to_string(val.type);
         str += "\n";
         
-        str += "xe::DeviceGroup::memory_allocation_properties_t::id : ";
-        str += to_string(val.id);
+        str += "DeviceGroup::memory_allocation_properties_t::id : ";
+        str += std::to_string(val.id);
         str += "\n";
 
         return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Device::p2p_properties_version_t to std::string
-    string to_string( const xe::Device::p2p_properties_version_t val )
+    /// @brief Converts Device::p2p_properties_version_t to std::string
+    std::string to_string( const Device::p2p_properties_version_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::Device::p2p_properties_version_t::CURRENT:
-            str = "xe::Device::p2p_properties_version_t::CURRENT";
+        case Device::p2p_properties_version_t::CURRENT:
+            str = "Device::p2p_properties_version_t::CURRENT";
             break;
 
         default:
-            str = "xe::Device::p2p_properties_version_t::?";
+            str = "Device::p2p_properties_version_t::?";
             break;
         };
 
@@ -1757,46 +1772,45 @@ namespace std
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Device::cache_config_t to std::string
-    string to_string( const xe::Device::cache_config_t val )
+    /// @brief Converts Device::cache_config_t to std::string
+    std::string to_string( const Device::cache_config_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return string("{}");
+        if( 0 == bits ) return std::string("{}");
 
-        string str;
+        std::string str;
         
-        if( static_cast<uint32_t>(xe::Device::cache_config_t::DEFAULT) & bits )
-            str += "xe::Device::cache_config_t::DEFAULT | ";
+        if( static_cast<uint32_t>(Device::cache_config_t::DEFAULT) & bits )
+            str += "Device::cache_config_t::DEFAULT | ";
         
-        if( static_cast<uint32_t>(xe::Device::cache_config_t::LARGE_SLM) & bits )
-            str += "xe::Device::cache_config_t::LARGE_SLM | ";
+        if( static_cast<uint32_t>(Device::cache_config_t::LARGE_SLM) & bits )
+            str += "Device::cache_config_t::LARGE_SLM | ";
         
-        if( static_cast<uint32_t>(xe::Device::cache_config_t::LARGE_DATA) & bits )
-            str += "xe::Device::cache_config_t::LARGE_DATA | ";
+        if( static_cast<uint32_t>(Device::cache_config_t::LARGE_DATA) & bits )
+            str += "Device::cache_config_t::LARGE_DATA | ";
 
         return "{ " + str.substr(0, str.size() - 3) + " }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::Device::p2p_properties_t to std::string
-    string to_string( const xe::Device::p2p_properties_t val )
+    /// @brief Converts Device::p2p_properties_t to std::string
+    std::string to_string( const Device::p2p_properties_t val )
     {
-        string str;
+        std::string str;
         
-        str += "xe::Device::p2p_properties_t::version : ";
+        str += "Device::p2p_properties_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "xe::Device::p2p_properties_t::isP2PSupported : ";
-        str += to_string(val.isP2PSupported);
+        str += "Device::p2p_properties_t::isP2PSupported : ";
+        str += std::to_string(val.isP2PSupported);
         str += "\n";
         
-        str += "xe::Device::p2p_properties_t::isAtomicsSupported : ";
-        str += to_string(val.isAtomicsSupported);
+        str += "Device::p2p_properties_t::isAtomicsSupported : ";
+        str += std::to_string(val.isAtomicsSupported);
         str += "\n";
 
         return str;
     }
 
-} // namespace std
-#endif // _DEBUG
+} // namespace xe

@@ -877,90 +877,88 @@ namespace xet
 
 } // namespace xet
 
-#ifdef _DEBUG
-namespace std
+namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::fan_capabilities_t to std::string
-    string to_string( const xet::fan_capabilities_t val );
+    /// @brief Converts fan_capabilities_t to std::string
+    std::string to_string( const fan_capabilities_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::fan_speed_mode_t to std::string
-    string to_string( const xet::fan_speed_mode_t val );
+    /// @brief Converts fan_speed_mode_t to std::string
+    std::string to_string( const fan_speed_mode_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::Power::init_flags_t to std::string
-    string to_string( const xet::Power::init_flags_t val );
+    /// @brief Converts Power::init_flags_t to std::string
+    std::string to_string( const Power::init_flags_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::Power::gpu_domain_t to std::string
-    string to_string( const xet::Power::gpu_domain_t val );
+    /// @brief Converts Power::gpu_domain_t to std::string
+    std::string to_string( const Power::gpu_domain_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::Power::average_limit_version_t to std::string
-    string to_string( const xet::Power::average_limit_version_t val );
+    /// @brief Converts Power::average_limit_version_t to std::string
+    std::string to_string( const Power::average_limit_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::Power::average_limit_t to std::string
-    string to_string( const xet::Power::average_limit_t val );
+    /// @brief Converts Power::average_limit_t to std::string
+    std::string to_string( const Power::average_limit_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::Power::burst_limit_t to std::string
-    string to_string( const xet::Power::burst_limit_t val );
+    /// @brief Converts Power::burst_limit_t to std::string
+    std::string to_string( const Power::burst_limit_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::Power::peak_limit_t to std::string
-    string to_string( const xet::Power::peak_limit_t val );
+    /// @brief Converts Power::peak_limit_t to std::string
+    std::string to_string( const Power::peak_limit_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::Power::limits_t to std::string
-    string to_string( const xet::Power::limits_t val );
+    /// @brief Converts Power::limits_t to std::string
+    std::string to_string( const Power::limits_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::Power::turbo_mode_t to std::string
-    string to_string( const xet::Power::turbo_mode_t val );
+    /// @brief Converts Power::turbo_mode_t to std::string
+    std::string to_string( const Power::turbo_mode_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::Power::fan_properties_t to std::string
-    string to_string( const xet::Power::fan_properties_t val );
+    /// @brief Converts Power::fan_properties_t to std::string
+    std::string to_string( const Power::fan_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::Power::fan_point_t to std::string
-    string to_string( const xet::Power::fan_point_t val );
+    /// @brief Converts Power::fan_point_t to std::string
+    std::string to_string( const Power::fan_point_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::Power::fan_speed_info_t to std::string
-    string to_string( const xet::Power::fan_speed_info_t val );
+    /// @brief Converts Power::fan_speed_info_t to std::string
+    std::string to_string( const Power::fan_speed_info_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::Power::temperature_properties_t to std::string
-    string to_string( const xet::Power::temperature_properties_t val );
+    /// @brief Converts Power::temperature_properties_t to std::string
+    std::string to_string( const Power::temperature_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::Power::activity_properties_t to std::string
-    string to_string( const xet::Power::activity_properties_t val );
+    /// @brief Converts Power::activity_properties_t to std::string
+    std::string to_string( const Power::activity_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::Power::activity_counters_t to std::string
-    string to_string( const xet::Power::activity_counters_t val );
+    /// @brief Converts Power::activity_counters_t to std::string
+    std::string to_string( const Power::activity_counters_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::FreqDomain::clock_type_t to std::string
-    string to_string( const xet::FreqDomain::clock_type_t val );
+    /// @brief Converts FreqDomain::clock_type_t to std::string
+    std::string to_string( const FreqDomain::clock_type_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::FreqDomain::freq_throttle_reasons_t to std::string
-    string to_string( const xet::FreqDomain::freq_throttle_reasons_t val );
+    /// @brief Converts FreqDomain::freq_throttle_reasons_t to std::string
+    std::string to_string( const FreqDomain::freq_throttle_reasons_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::FreqDomain::properties_t to std::string
-    string to_string( const xet::FreqDomain::properties_t val );
+    /// @brief Converts FreqDomain::properties_t to std::string
+    std::string to_string( const FreqDomain::properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xet::FreqDomain::clock_divider_t to std::string
-    string to_string( const xet::FreqDomain::clock_divider_t val );
+    /// @brief Converts FreqDomain::clock_divider_t to std::string
+    std::string to_string( const FreqDomain::clock_divider_t val );
 
-} // namespace std
-#endif // _DEBUG
+} // namespace xet
 #endif // defined(__cplusplus)
 #endif // _XET_POWER_HPP

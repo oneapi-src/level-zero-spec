@@ -83,6 +83,17 @@ class type_traits:
             return False
 
     @staticmethod
+    def is_known(name, meta):
+        try:
+            name = _remove_const_ptr(name)
+            for group in meta:
+                if name in meta[group]:
+                    return True
+            return False
+        except:
+            return False
+
+    @staticmethod
     def find_class_name(name, meta):
         try:
             name = _remove_const_ptr(name)
@@ -111,11 +122,18 @@ class value_traits:
     @classmethod
     def is_macro(cls, name, meta):
         try:
-            name = re.sub(cls.RE_MACRO, r"\1", name)  # removes '()' part of macros
-            name = re.sub(cls.RE_ARRAY, r"\2", name)  # extracts from '[]' part of arrays
+            name = cls.get_macro_name(name)
+            name = cls.get_array_length(name)
             return True if name in meta['macro'] else False
         except:
             return False
+
+    @classmethod
+    def get_macro_name(cls, name):
+        try:
+            return re.sub(cls.RE_MACRO, r"\1", name)    # 'NAME()' -> 'NAME'
+        except:
+            return name
 
     @classmethod
     def is_array(cls, name):
@@ -125,9 +143,23 @@ class value_traits:
             return False
 
     @classmethod
+    def get_array_name(cls, name):
+        try:
+            return re.sub(cls.RE_ARRAY, r"\1", name)    # 'name[len]' -> 'name'
+        except:
+            return name
+
+    @classmethod
+    def get_array_length(cls, name):
+        try:
+            return re.sub(cls.RE_ARRAY, r"\2", name)    # 'name[len]' -> 'len'
+        except:
+            return name
+
+    @classmethod
     def find_enum_name(cls, name, meta):
         try:
-            name = re.sub(cls.RE_ARRAY, r"\1", name) # removes '[]' part of arrays
+            name = cls.get_array_name(name)
             # if the value is an etor, return the name of the enum
             for e in meta['enum']:
                 if name in meta['enum'][e]['types']:
@@ -523,11 +555,13 @@ Public:
 """
 def make_member_name(namespace, tags, item, prefix="", cpp=False, meta=None, remove_array=False):
     if cpp and value_traits.is_macro(item['name'], meta):
-        name = subt(namespace, tags, prefix+item['name'])
-        if remove_array:
-            name = re.sub(r"(\w+)\[\w+\]", r"\1", name)
+        name = subt(namespace, tags, item['name'])
     else:
         name = subt(namespace, tags, prefix+item['name'], cpp=cpp)
+
+    if remove_array:
+        name = value_traits.get_array_name(name)
+
     return name
 
 """

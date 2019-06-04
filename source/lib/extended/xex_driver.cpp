@@ -110,8 +110,6 @@ namespace xex
 
 } // namespace xex
 
-#ifdef _DEBUG
-namespace std
+namespace xex
 {
-} // namespace std
-#endif // _DEBUG
+} // namespace xex

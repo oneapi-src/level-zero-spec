@@ -31,6 +31,7 @@
 *
 ******************************************************************************/
 #include "xe_lib.h"
+#include <sstream>
 
 extern "C" {
 
@@ -40,67 +41,66 @@ namespace xe
 {
 } // namespace xe
 
-#ifdef _DEBUG
-namespace std
+namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts xe::result_t to std::string
-    string to_string( const xe::result_t val )
+    /// @brief Converts result_t to std::string
+    std::string to_string( const result_t val )
     {
-        string str;
+        std::string str;
 
         switch( val )
         {
-        case xe::result_t::SUCCESS:
-            str = "xe::result_t::SUCCESS";
+        case result_t::SUCCESS:
+            str = "result_t::SUCCESS";
             break;
 
-        case xe::result_t::NOT_READY:
-            str = "xe::result_t::NOT_READY";
+        case result_t::NOT_READY:
+            str = "result_t::NOT_READY";
             break;
 
-        case xe::result_t::ERROR_UNINITIALIZED:
-            str = "xe::result_t::ERROR_UNINITIALIZED";
+        case result_t::ERROR_UNINITIALIZED:
+            str = "result_t::ERROR_UNINITIALIZED";
             break;
 
-        case xe::result_t::ERROR_DEVICE_LOST:
-            str = "xe::result_t::ERROR_DEVICE_LOST";
+        case result_t::ERROR_DEVICE_LOST:
+            str = "result_t::ERROR_DEVICE_LOST";
             break;
 
-        case xe::result_t::ERROR_UNSUPPORTED:
-            str = "xe::result_t::ERROR_UNSUPPORTED";
+        case result_t::ERROR_UNSUPPORTED:
+            str = "result_t::ERROR_UNSUPPORTED";
             break;
 
-        case xe::result_t::ERROR_INVALID_ARGUMENT:
-            str = "xe::result_t::ERROR_INVALID_ARGUMENT";
+        case result_t::ERROR_INVALID_ARGUMENT:
+            str = "result_t::ERROR_INVALID_ARGUMENT";
             break;
 
-        case xe::result_t::ERROR_OUT_OF_HOST_MEMORY:
-            str = "xe::result_t::ERROR_OUT_OF_HOST_MEMORY";
+        case result_t::ERROR_OUT_OF_HOST_MEMORY:
+            str = "result_t::ERROR_OUT_OF_HOST_MEMORY";
             break;
 
-        case xe::result_t::ERROR_OUT_OF_DEVICE_MEMORY:
-            str = "xe::result_t::ERROR_OUT_OF_DEVICE_MEMORY";
+        case result_t::ERROR_OUT_OF_DEVICE_MEMORY:
+            str = "result_t::ERROR_OUT_OF_DEVICE_MEMORY";
             break;
 
-        case xe::result_t::ERROR_MODULE_BUILD_FAILURE:
-            str = "xe::result_t::ERROR_MODULE_BUILD_FAILURE";
+        case result_t::ERROR_MODULE_BUILD_FAILURE:
+            str = "result_t::ERROR_MODULE_BUILD_FAILURE";
             break;
 
-        case xe::result_t::ERROR_UNKNOWN:
-            str = "xe::result_t::ERROR_UNKNOWN";
+        case result_t::ERROR_UNKNOWN:
+            str = "result_t::ERROR_UNKNOWN";
             break;
 
         default:
-            str = "xe::result_t::?";
+            str = "result_t::?";
             break;
         };
 
         return str;
     }
 
-} // namespace std
-#endif // _DEBUG
+} // namespace xe
+
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
@@ -110,18 +110,12 @@ namespace xe
         const char* line,
         const char* func )
     {
-        std::string msg = std::to_string(result);
-        const size_t len = msg.length() + std::strlen(file) + std::strlen(line) + std::strlen(func) + 32;
-
-        std::string str;
-        str.reserve(len);
-        str = file;
-        str += "(";
-        str += line;
-        str += ") : exception : ";
-        str += func;
-        str += " ";
-        str += msg;
-        return str;
+    #ifdef _DEBUG
+        std::stringstream msg;
+        msg << file << "(" << line << ") : exception : " << func << "(" << xe::to_string(result) << ")";
+        return msg.str();
+    #else
+        return xe::to_string(result);
+    #endif
     }
 } // namespace xe
