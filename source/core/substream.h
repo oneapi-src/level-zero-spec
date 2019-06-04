@@ -1,6 +1,6 @@
 #pragma once
 
-#include "runtime/helpers/ptr_math.h"
+#include "core/helpers/ptr_math.h"
 
 #include <cassert>
 #include <cstddef>
