@@ -193,7 +193,6 @@ ATSTEST_F(CommandListAppendLaunchFunction, copiesThreadDataToGeneralStateHeap) {
     createFunction("MemcpyBytes");
 
     using COMPUTE_WALKER = typename FamilyType::COMPUTE_WALKER;
-    using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
 
     auto heap = commandList->indirectHeaps[CommandList::GENERAL_STATE];
     heap->getSpace(COMPUTE_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE -
@@ -235,7 +234,6 @@ ATSTEST_F(CommandListAppendLaunchFunction, growsGeneralStateHeapIfNeeded) {
     createFunction("MemcpyBytes");
 
     using COMPUTE_WALKER = typename FamilyType::COMPUTE_WALKER;
-    using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
 
     auto heap = commandList->indirectHeaps[CommandList::GENERAL_STATE];
     ASSERT_EQ(0U, heap->getUsed());
@@ -275,7 +273,6 @@ ATSTEST_F(CommandListAppendLaunchFunction, growsGeneralStateHeapIfNeeded) {
 
 ATSTEST_F(CommandListAppendLaunchFunction, storesImageSampler) {
     using COMPUTE_WALKER = typename FamilyType::COMPUTE_WALKER;
-    using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
     using SAMPLER_STATE = typename FamilyType::SAMPLER_STATE;
 
     createFunction("ImageCopy");
@@ -317,7 +314,6 @@ ATSTEST_F(CommandListAppendLaunchFunction, storesImageSampler) {
 
 ATSTEST_F(CommandListAppendLaunchFunction, storesBindingTableAndSurfaceStates) {
     using COMPUTE_WALKER = typename FamilyType::COMPUTE_WALKER;
-    using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
     using BINDING_TABLE_STATE = typename FamilyType::BINDING_TABLE_STATE;
 
     createFunction("ImageCopy");
@@ -382,7 +378,6 @@ ATSTEST_F(CommandListAppendLaunchFunction, usesIsaFromInstructionHeap) {
     ASSERT_TRUE(FamilyType::PARSE::parseCommandBuffer(
         cmdList, ptrOffset(commandList->commandStream->getCpuBase(), 0), usedSpaceAfter));
     using COMPUTE_WALKER = typename FamilyType::COMPUTE_WALKER;
-    using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
 
     COMPUTE_WALKER addressValidator{};
     addressValidator.getInterfaceDescriptor().setKernelStartPointer(

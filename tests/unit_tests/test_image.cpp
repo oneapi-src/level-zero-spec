@@ -82,8 +82,6 @@ TEST_F(ImageCreate, descMatchesAllocation) {
 }
 
 HWTEST2_F(ImageCreate, descBadParamsFail, MatchAny) {
-    using RENDER_SURFACE_STATE = typename FamilyType::RENDER_SURFACE_STATE;
-
     Mock<Device> device;
 
     auto imageCore = new ImageCoreFamily<gfxCoreFamily>();
@@ -264,10 +262,8 @@ HWTEST2_F(ImageSurfaceState, descMatchesSurfaceFormats, MatchAny) {
 
 HWTEST2_F(ImageSurfaceState, copyToSSH, MatchAny) {
     using RENDER_SURFACE_STATE = typename FamilyType::RENDER_SURFACE_STATE;
-    using BINDING_TABLE_STATE = typename FamilyType::BINDING_TABLE_STATE;
     Mock<Device> device;
     uint8_t mockSSH[sizeof(RENDER_SURFACE_STATE) * 4] = {0};
-    const uint32_t bindingTableOffset = sizeof(RENDER_SURFACE_STATE) * 2;
 
     xe_image_desc_t desc = {};
 

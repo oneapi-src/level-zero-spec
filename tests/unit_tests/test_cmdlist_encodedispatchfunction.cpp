@@ -280,7 +280,7 @@ TEST_P(CommandListReset, resetCommandListResetsAfterClose) {
     ASSERT_EQ(commandListControl->dirtyHeaps, commandList->dirtyHeaps);
     ASSERT_EQ(commandListControl->slmSize, commandList->slmSize);
 
-    for (int i = 0; i < CommandContainer::NUM_HEAPS; i++) {
+    for (uint32_t i = 0; i < CommandContainer::NUM_HEAPS; i++) {
         ASSERT_NE(nullptr, commandListControl->allocationIndirectHeaps[i]);
         ASSERT_NE(nullptr, commandList->allocationIndirectHeaps[i]);
         ASSERT_EQ(commandListControl->allocationIndirectHeaps[i]->getSize(),

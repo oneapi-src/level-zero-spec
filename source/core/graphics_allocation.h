@@ -44,6 +44,7 @@ struct HostAllocation : public MemAllocation {
 };
 
 struct GraphicsAllocation : public MemAllocation {
+    virtual ~GraphicsAllocation() = default;
     GraphicsAllocation(const GraphicsAllocation &) = delete;
     GraphicsAllocation &operator=(GraphicsAllocation const &) = delete;
 

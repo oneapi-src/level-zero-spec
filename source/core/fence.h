@@ -10,6 +10,7 @@ namespace L0 {
 
 struct Fence : public _xe_fence_handle_t {
     static Fence *create(CommandQueueImp *cmdQueue, const xe_fence_desc_t *desc);
+    virtual ~Fence() = default;
     virtual xe_result_t destroy() = 0;
     virtual xe_result_t hostSynchronize(uint32_t timeout) = 0;
     virtual xe_result_t queryStatus() = 0;

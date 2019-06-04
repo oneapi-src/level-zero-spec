@@ -63,7 +63,6 @@ void XePeak::_transfer_bw_host_copy(void *destination_buffer,
                                     void *source_buffer, size_t buffer_size) {
     Timer timer;
     float gbps, timed;
-    xe_result_t result = XE_RESULT_SUCCESS;
 
     for (uint32_t i = 0; i < warmup_iterations; i++) {
         memcpy(destination_buffer, source_buffer, buffer_size);

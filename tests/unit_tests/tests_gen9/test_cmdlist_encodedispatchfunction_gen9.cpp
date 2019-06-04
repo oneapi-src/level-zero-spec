@@ -82,7 +82,6 @@ SKLTEST_F(CommandListAppendLaunchFunctionGEN9, copiesThreadDataToIndirectStateHe
     createFunction("MemcpyBytes");
 
     using GPGPU_WALKER = typename FamilyType::GPGPU_WALKER;
-    using INTERFACE_DESCRIPTOR_DATA = typename FamilyType::INTERFACE_DESCRIPTOR_DATA;
 
     auto heap = commandList->indirectHeaps[CommandList::INDIRECT_OBJECT];
     heap->getSpace(GPGPU_WALKER::INDIRECTDATASTARTADDRESS_ALIGN_SIZE -
