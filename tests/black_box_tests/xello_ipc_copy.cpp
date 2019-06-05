@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/wait.h>
 #include <assert.h>
 
 extern bool verbose;
@@ -21,6 +22,34 @@ struct _xe_ipc_mem_handle_t {
     size_t size;
     char shmFileName[255];
 };
+
+int readFromSocket(int socket, char *buffer, size_t size) {
+    size_t bytesRead = 0;
+    int result;
+    while (bytesRead < size) {
+        result = read(socket, buffer + bytesRead, size - bytesRead);
+        if (result < 0) {
+            return -1;
+        }
+
+        bytesRead += static_cast<int>(result);
+    }
+    return 0;
+}
+
+int writeToSocket(int socket, char *buffer, size_t size) {
+    size_t bytesWritten = 0;
+    int result;
+    while (bytesWritten < size) {
+        result = write(socket, buffer + bytesWritten, size - bytesWritten);
+        if (result < 0) {
+            return -1;
+        }
+
+        bytesWritten += static_cast<int>(result);
+    }
+    return 0;
+}
 
 void run_client(int comm_socket) {
 
@@ -52,8 +81,8 @@ void run_client(int comm_socket) {
 
     xe_ipc_mem_handle_t pIpcHandle = static_cast<xe_ipc_mem_handle_t>(malloc(sizeof(*pIpcHandle)));
 
-    sleep(1); // give time to the server to write
-    if (read(comm_socket, pIpcHandle, sizeof(*pIpcHandle)) < 0) {
+    if (readFromSocket(comm_socket, reinterpret_cast<char *>(pIpcHandle), sizeof(*pIpcHandle)) <
+        0) {
         perror("Clent: reading stream message");
         assert(0);
     }
@@ -84,6 +113,7 @@ void run_server(int comm_socket, bool &validRet) {
     SUCCESS_OR_TERMINATE(xeInit(XE_INIT_FLAG_NONE));
     SUCCESS_OR_TERMINATE(xeDeviceGet(0, &device));
     SUCCESS_OR_TERMINATE(xeDeviceGetProperties(device, &deviceProperties));
+    int child_status;
     std::cout << "Server process: " << deviceProperties.name << "\n";
 
     const size_t allocSize = 4096 + 7; // +7 to brake alignment and make it harder
@@ -108,7 +138,7 @@ void run_server(int comm_socket, bool &validRet) {
     xe_ipc_mem_handle_t pIpcHandle;
     SUCCESS_OR_TERMINATE(xeIpcGetMemHandle(xeBuffer, &pIpcHandle));
 
-    if (write(comm_socket, pIpcHandle, sizeof(*pIpcHandle)) < 0) {
+    if (writeToSocket(comm_socket, reinterpret_cast<char *>(pIpcHandle), sizeof(*pIpcHandle)) < 0) {
         perror("server: writing on stream socket");
         assert(0);
     }
@@ -118,7 +148,11 @@ void run_server(int comm_socket, bool &validRet) {
         heapBuffer[i] = static_cast<char>(i + 1);
     }
 
-    sleep(2); // give time to client to copy to the xeBuffer
+    // Wait for child to exit
+    if (wait(&child_status) < 0 || !(WIFEXITED(child_status))) {
+        assert(0);
+    }
+
     // Copy from device-allocated memory to stack
     SUCCESS_OR_TERMINATE(xeCommandListAppendMemoryCopy(cmdList, stackBuffer, xeBuffer, allocSize,
                                                        nullptr, 0, nullptr));
