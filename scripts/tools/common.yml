@@ -4,6 +4,12 @@ desc: "Intel $OneApi Level-Zero Tool API common types"
 ordinal: "0"
 --- #--------------------------------------------------------------------------
 type: handle
+desc: "Handle of device group object"
+class: $tDeviceGroup
+name: "$t_device_group_handle_t"
+alias: "$x_device_group_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
 desc: "Handle of device object"
 class: $tDevice
 name: "$t_device_handle_t"

@@ -33,6 +33,7 @@
 namespace loader
 {
     ///////////////////////////////////////////////////////////////////////////////
+    xet_device_group_factory_t          xet_device_group_factory;
     xet_device_factory_t                xet_device_factory;
     xet_command_list_factory_t          xet_command_list_factory;
     xet_metric_group_factory_t          xet_metric_group_factory;
@@ -66,7 +67,7 @@ namespace loader
     /// @brief Intercept function for xetMetricGroupGet
     xe_result_t __xecall
     xetMetricGroupGet(
-        xet_device_handle_t hDevice,                    ///< [in] handle of the device
+        xet_device_group_handle_t hDeviceGroup,         ///< [in] handle of the device group
         uint32_t* pCount,                               ///< [in,out] pointer to the number of metric groups.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of metric groups available.
@@ -76,13 +77,13 @@ namespace loader
         )
     {
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xet_device_object_t*>( hDevice )->dditable;
+        auto dditable = reinterpret_cast<xet_device_group_object_t*>( hDeviceGroup )->dditable;
 
         // convert loader handle to driver handle
-        hDevice = reinterpret_cast<xet_device_object_t*>( hDevice )->handle;
+        hDeviceGroup = reinterpret_cast<xet_device_group_object_t*>( hDeviceGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xet.MetricGroup.pfnGet( hDevice, pCount, phMetricGroup );
+        auto result = dditable->xet.MetricGroup.pfnGet( hDeviceGroup, pCount, phMetricGroup );
 
         try
         {
@@ -175,11 +176,11 @@ namespace loader
     xe_result_t __xecall
     xetMetricGroupCalculateData(
         xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
-        uint32_t* pReportCount,                         ///< [in,out] report count to calculate
-        uint32_t rawDataSize,                           ///< [in] raw data size
-        uint8_t* pRawData,                              ///< [in] raw data to calculate
-        uint32_t calculatedDataSize,                    ///< [in] calculated data size
-        xet_typed_value_t* pCalculatedData              ///< [in,out] calculated metrics
+        uint32_t count,                                 ///< [in,out] number of reports to calculate
+        size_t rawDataSize,                             ///< [in] size in bytes of raw data buffer
+        uint8_t* pRawData,                              ///< [in][range(0, rawDataSize)] buffer of raw data to calculate
+        size_t calculatedDataSize,                      ///< [in] size in bytes of calculated metrics
+        xet_typed_value_t* pCalculatedData              ///< [in,out][range(0, calculatedDataSize)] buffer of calculated metrics
         )
     {
         // extract driver's function pointer table
@@ -189,7 +190,7 @@ namespace loader
         hMetricGroup = reinterpret_cast<xet_metric_group_object_t*>( hMetricGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xet.MetricGroup.pfnCalculateData( hMetricGroup, pReportCount, rawDataSize, pRawData, calculatedDataSize, pCalculatedData );
+        auto result = dditable->xet.MetricGroup.pfnCalculateData( hMetricGroup, count, rawDataSize, pRawData, calculatedDataSize, pCalculatedData );
 
         return result;
     }
@@ -288,7 +289,7 @@ namespace loader
     /// @brief Intercept function for xetMetricTracerClose
     xe_result_t __xecall
     xetMetricTracerClose(
-        xet_metric_tracer_handle_t hMetricTracer        ///< [in] handle of the metric tracer
+        xet_metric_tracer_handle_t hMetricTracer        ///< [in][release] handle of the metric tracer
         )
     {
         // extract driver's function pointer table
@@ -300,6 +301,8 @@ namespace loader
         // forward to device-driver
         auto result = dditable->xet.MetricTracer.pfnClose( hMetricTracer );
 
+        // release loader handle
+        xet_metric_tracer_factory.release( hMetricTracer );
         return result;
     }
 
@@ -382,9 +385,9 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetMetricQueryPoolGetMetricQuery
+    /// @brief Intercept function for xetMetricQueryCreate
     xe_result_t __xecall
-    xetMetricQueryPoolGetMetricQuery(
+    xetMetricQueryCreate(
         xet_metric_query_pool_handle_t hMetricQueryPool,///< [in] handle of the metric query pool
         uint32_t index,                                 ///< [in] index of the query within the pool
         xet_metric_query_handle_t* phMetricQuery        ///< [out] handle of metric query
@@ -397,7 +400,7 @@ namespace loader
         hMetricQueryPool = reinterpret_cast<xet_metric_query_pool_object_t*>( hMetricQueryPool )->handle;
 
         // forward to device-driver
-        auto result = dditable->xet.MetricQueryPool.pfnGetMetricQuery( hMetricQueryPool, index, phMetricQuery );
+        auto result = dditable->xet.MetricQuery.pfnCreate( hMetricQueryPool, index, phMetricQuery );
 
         try
         {
@@ -409,6 +412,46 @@ namespace loader
         {
             result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
         }
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetMetricQueryDestroy
+    xe_result_t __xecall
+    xetMetricQueryDestroy(
+        xet_metric_query_handle_t hMetricQuery          ///< [in][release] handle of metric query
+        )
+    {
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_metric_query_object_t*>( hMetricQuery )->dditable;
+
+        // convert loader handle to driver handle
+        hMetricQuery = reinterpret_cast<xet_metric_query_object_t*>( hMetricQuery )->handle;
+
+        // forward to device-driver
+        auto result = dditable->xet.MetricQuery.pfnDestroy( hMetricQuery );
+
+        // release loader handle
+        xet_metric_query_factory.release( hMetricQuery );
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetMetricQueryReset
+    xe_result_t __xecall
+    xetMetricQueryReset(
+        xet_metric_query_handle_t hMetricQuery          ///< [in] handle of metric query
+        )
+    {
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_metric_query_object_t*>( hMetricQuery )->dditable;
+
+        // convert loader handle to driver handle
+        hMetricQuery = reinterpret_cast<xet_metric_query_object_t*>( hMetricQuery )->handle;
+
+        // forward to device-driver
+        auto result = dditable->xet.MetricQuery.pfnReset( hMetricQuery );
+
         return result;
     }
 
@@ -486,9 +529,10 @@ namespace loader
     xe_result_t __xecall
     xetMetricQueryGetData(
         xet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
-        uint32_t* pReportCount,                         ///< [in,out] report count to read/returned
-        uint32_t rawDataSize,                           ///< [in] raw data size passed by the user
-        uint8_t* pRawData                               ///< [in,out] query result data in raw format
+        uint32_t count,                                 ///< [in] number of query reports to read
+        size_t rawDataSize,                             ///< [in] size in bytes of raw data buffer
+        uint8_t* pRawData                               ///< [in,out][range(0, rawDataSize)] buffer containing query results in raw
+                                                        ///< format
         )
     {
         // extract driver's function pointer table
@@ -498,7 +542,7 @@ namespace loader
         hMetricQuery = reinterpret_cast<xet_metric_query_object_t*>( hMetricQuery )->handle;
 
         // forward to device-driver
-        auto result = dditable->xet.MetricQuery.pfnGetData( hMetricQuery, pReportCount, rawDataSize, pRawData );
+        auto result = dditable->xet.MetricQuery.pfnGetData( hMetricQuery, count, rawDataSize, pRawData );
 
         return result;
     }
@@ -1737,7 +1781,6 @@ xetGetMetricQueryPoolProcAddrTable(
             // return pointers to loader's DDIs
             pDdiTable->pfnCreate                                   = loader::xetMetricQueryPoolCreate;
             pDdiTable->pfnDestroy                                  = loader::xetMetricQueryPoolDestroy;
-            pDdiTable->pfnGetMetricQuery                           = loader::xetMetricQueryPoolGetMetricQuery;
         }
         else
         {
@@ -1801,6 +1844,9 @@ xetGetMetricQueryProcAddrTable(
         if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
         {
             // return pointers to loader's DDIs
+            pDdiTable->pfnCreate                                   = loader::xetMetricQueryCreate;
+            pDdiTable->pfnDestroy                                  = loader::xetMetricQueryDestroy;
+            pDdiTable->pfnReset                                    = loader::xetMetricQueryReset;
             pDdiTable->pfnGetData                                  = loader::xetMetricQueryGetData;
         }
         else

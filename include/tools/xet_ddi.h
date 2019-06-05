@@ -180,7 +180,7 @@ typedef xe_result_t (__xecall *xet_pfnGetCommandListProcAddrTable_t)(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetMetricGroupGet 
 typedef xe_result_t (__xecall *xet_pfnMetricGroupGet_t)(
-    xet_device_handle_t,
+    xet_device_group_handle_t,
     uint32_t*,
     xet_metric_group_handle_t*
     );
@@ -196,10 +196,10 @@ typedef xe_result_t (__xecall *xet_pfnMetricGroupGetProperties_t)(
 /// @brief Function-pointer for xetMetricGroupCalculateData 
 typedef xe_result_t (__xecall *xet_pfnMetricGroupCalculateData_t)(
     xet_metric_group_handle_t,
-    uint32_t*,
     uint32_t,
+    size_t,
     uint8_t*,
-    uint32_t,
+    size_t,
     xet_typed_value_t*
     );
 
@@ -357,20 +357,11 @@ typedef xe_result_t (__xecall *xet_pfnMetricQueryPoolDestroy_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetMetricQueryPoolGetMetricQuery 
-typedef xe_result_t (__xecall *xet_pfnMetricQueryPoolGetMetricQuery_t)(
-    xet_metric_query_pool_handle_t,
-    uint32_t,
-    xet_metric_query_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of MetricQueryPool functions pointers
 typedef struct _xet_metric_query_pool_dditable_t
 {
     xet_pfnMetricQueryPoolCreate_t                              pfnCreate;
     xet_pfnMetricQueryPoolDestroy_t                             pfnDestroy;
-    xet_pfnMetricQueryPoolGetMetricQuery_t                      pfnGetMetricQuery;
 } xet_metric_query_pool_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -398,11 +389,31 @@ typedef xe_result_t (__xecall *xet_pfnGetMetricQueryPoolProcAddrTable_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetMetricQueryCreate 
+typedef xe_result_t (__xecall *xet_pfnMetricQueryCreate_t)(
+    xet_metric_query_pool_handle_t,
+    uint32_t,
+    xet_metric_query_handle_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetMetricQueryDestroy 
+typedef xe_result_t (__xecall *xet_pfnMetricQueryDestroy_t)(
+    xet_metric_query_handle_t
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetMetricQueryReset 
+typedef xe_result_t (__xecall *xet_pfnMetricQueryReset_t)(
+    xet_metric_query_handle_t
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetMetricQueryGetData 
 typedef xe_result_t (__xecall *xet_pfnMetricQueryGetData_t)(
     xet_metric_query_handle_t,
-    uint32_t*,
     uint32_t,
+    size_t,
     uint8_t*
     );
 
@@ -410,6 +421,9 @@ typedef xe_result_t (__xecall *xet_pfnMetricQueryGetData_t)(
 /// @brief Table of MetricQuery functions pointers
 typedef struct _xet_metric_query_dditable_t
 {
+    xet_pfnMetricQueryCreate_t                                  pfnCreate;
+    xet_pfnMetricQueryDestroy_t                                 pfnDestroy;
+    xet_pfnMetricQueryReset_t                                   pfnReset;
     xet_pfnMetricQueryGetData_t                                 pfnGetData;
 } xet_metric_query_dditable_t;
 

@@ -2,15 +2,15 @@
 #include "xet_api.hpp"
 
 //////////////////////////////////////////////////////////////////////////
-inline xet::MetricGroup* findMetricGroup( xet::Device* pDevice,
+inline xet::MetricGroup* findMetricGroup( xet::DeviceGroup* pDeviceGroup,
     const xet::MetricGroup::sampling_type_t type,
     const char* name )
 {
     uint32_t groupCount = 0;
-    xet::MetricGroup::Get( pDevice, &groupCount, nullptr );
+    xet::MetricGroup::Get( pDeviceGroup, &groupCount, nullptr );
 
     auto ppMetricGroup = new xet::MetricGroup*[ groupCount ];
-    xet::MetricGroup::Get( pDevice, &groupCount, ppMetricGroup );
+    xet::MetricGroup::Get( pDeviceGroup, &groupCount, ppMetricGroup );
 
     xet::MetricGroup* found = nullptr;
 

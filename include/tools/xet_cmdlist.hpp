@@ -64,7 +64,7 @@ namespace xet
         ///////////////////////////////////////////////////////////////////////////////
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Append metric tracer marker to a given command list.
+        /// @brief Append metric tracer marker into a command list.
         /// 
         /// @details
         ///     - The application may **not** call this function from simultaneous
@@ -77,7 +77,7 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Appends metric query begin commands to command list.
+        /// @brief Appends metric query begin into a command list.
         /// 
         /// @details
         ///     - The application may **not** call this function from simultaneous
@@ -89,7 +89,7 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Appends metric query end commands to command list.
+        /// @brief Appends metric query end into a command list.
         /// 
         /// @details
         ///     - The application may **not** call this function from simultaneous

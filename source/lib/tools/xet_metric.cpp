@@ -35,7 +35,7 @@
 extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns metric group handle for a device.
+/// @brief Retrieves metric group for a device group.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -45,13 +45,13 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
+///         + nullptr == hDeviceGroup
 ///         + nullptr == pCount
 ///         + devices do not contain a given metric group
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetMetricGroupGet(
-    xet_device_handle_t hDevice,                    ///< [in] handle of the device
+    xet_device_group_handle_t hDeviceGroup,         ///< [in] handle of the device group
     uint32_t* pCount,                               ///< [in,out] pointer to the number of metric groups.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of metric groups available.
@@ -67,11 +67,11 @@ xetMetricGroupGet(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnGet( hDevice, pCount, phMetricGroup );
+    return pfnGet( hDeviceGroup, pCount, phMetricGroup );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns properties for a given metric group.
+/// @brief Retrieves attributes of a metric group.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -102,7 +102,7 @@ xetMetricGroupGetProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves metric from a given metric group.
+/// @brief Retrieves metric from a metric group.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -135,7 +135,7 @@ xetMetricGet(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns metric properties.
+/// @brief Retrieves attributes of a metric.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -178,7 +178,6 @@ xetMetricGetProperties(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hMetricGroup
-///         + nullptr == pReportCount
 ///         + nullptr == pRawData
 ///         + nullptr == pCalculatedData
 ///         + invalid metric group handle
@@ -186,11 +185,11 @@ xetMetricGetProperties(
 xe_result_t __xecall
 xetMetricGroupCalculateData(
     xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
-    uint32_t* pReportCount,                         ///< [in,out] report count to calculate
-    uint32_t rawDataSize,                           ///< [in] raw data size
-    uint8_t* pRawData,                              ///< [in] raw data to calculate
-    uint32_t calculatedDataSize,                    ///< [in] calculated data size
-    xet_typed_value_t* pCalculatedData              ///< [in,out] calculated metrics
+    uint32_t count,                                 ///< [in,out] number of reports to calculate
+    size_t rawDataSize,                             ///< [in] size in bytes of raw data buffer
+    uint8_t* pRawData,                              ///< [in][range(0, rawDataSize)] buffer of raw data to calculate
+    size_t calculatedDataSize,                      ///< [in] size in bytes of calculated metrics
+    xet_typed_value_t* pCalculatedData              ///< [in,out][range(0, calculatedDataSize)] buffer of calculated metrics
     )
 {
     auto pfnCalculateData = xet_lib::lib.ddiTable.MetricGroup.pfnCalculateData;
@@ -200,7 +199,7 @@ xetMetricGroupCalculateData(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnCalculateData( hMetricGroup, pReportCount, rawDataSize, pRawData, calculatedDataSize, pCalculatedData );
+    return pfnCalculateData( hMetricGroup, count, rawDataSize, pRawData, calculatedDataSize, pCalculatedData );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -240,7 +239,7 @@ xetDeviceActivateMetricGroups(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Opens metric tracer for a given device.
+/// @brief Opens metric tracer for a device.
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
@@ -280,7 +279,7 @@ xetMetricTracerOpen(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Append metric tracer marker to a given command list.
+/// @brief Append metric tracer marker into a command list.
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
@@ -329,7 +328,7 @@ xetCommandListAppendMetricTracerMarker(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetMetricTracerClose(
-    xet_metric_tracer_handle_t hMetricTracer        ///< [in] handle of the metric tracer
+    xet_metric_tracer_handle_t hMetricTracer        ///< [in][release] handle of the metric tracer
     )
 {
     auto pfnClose = xet_lib::lib.ddiTable.MetricTracer.pfnClose;
@@ -377,7 +376,7 @@ xetMetricTracerReadData(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates metric query pool.
+/// @brief Creates a pool of metric queries.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -413,9 +412,14 @@ xetMetricQueryPoolCreate(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Destroys query pool object.
+/// @brief Deletes a query pool object.
 /// 
 /// @details
+///     - The application is responsible for destroying all query handles
+///       created from the pool before destroying the pool itself
+///     - The application is responsible for making sure the device is not
+///       currently referencing the any query within the pool before it is
+///       deleted
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same query pool handle.
 /// 
@@ -443,7 +447,7 @@ xetMetricQueryPoolDestroy(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns metric query handle from a given metric query pool.
+/// @brief Creates metric query object.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -458,24 +462,88 @@ xetMetricQueryPoolDestroy(
 ///         + invalid device handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetMetricQueryPoolGetMetricQuery(
+xetMetricQueryCreate(
     xet_metric_query_pool_handle_t hMetricQueryPool,///< [in] handle of the metric query pool
     uint32_t index,                                 ///< [in] index of the query within the pool
     xet_metric_query_handle_t* phMetricQuery        ///< [out] handle of metric query
     )
 {
-    auto pfnGetMetricQuery = xet_lib::lib.ddiTable.MetricQueryPool.pfnGetMetricQuery;
+    auto pfnCreate = xet_lib::lib.ddiTable.MetricQuery.pfnCreate;
 
 #if _DEBUG
-    if( nullptr == pfnGetMetricQuery )
+    if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnGetMetricQuery( hMetricQueryPool, index, phMetricQuery );
+    return pfnCreate( hMetricQueryPool, index, phMetricQuery );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Appends metric query begin commands to command list.
+/// @brief Deletes a metric query object.
+/// 
+/// @details
+///     - The application is responsible for making sure the device is not
+///       currently referencing the query before it is deleted
+///     - The application may **not** call this function from simultaneous
+///       threads with the same query handle.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hMetricQuery
+///         + invalid device handle
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetMetricQueryDestroy(
+    xet_metric_query_handle_t hMetricQuery          ///< [in][release] handle of metric query
+    )
+{
+    auto pfnDestroy = xet_lib::lib.ddiTable.MetricQuery.pfnDestroy;
+
+#if _DEBUG
+    if( nullptr == pfnDestroy )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return pfnDestroy( hMetricQuery );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Resets a metric query object back to inital state.
+/// 
+/// @details
+///     - The application is responsible for making sure the device is not
+///       currently referencing the query before it is reset
+///     - The application may **not** call this function from simultaneous
+///       threads with the same query handle.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hMetricQuery
+///         + invalid device handle
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetMetricQueryReset(
+    xet_metric_query_handle_t hMetricQuery          ///< [in] handle of metric query
+    )
+{
+    auto pfnReset = xet_lib::lib.ddiTable.MetricQuery.pfnReset;
+
+#if _DEBUG
+    if( nullptr == pfnReset )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return pfnReset( hMetricQuery );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Appends metric query begin into a command list.
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
@@ -507,7 +575,7 @@ xetCommandListAppendMetricQueryBegin(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Appends metric query end commands to command list.
+/// @brief Appends metric query end into a command list.
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
@@ -571,7 +639,7 @@ xetCommandListAppendMetricMemoryBarrier(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns raw data for a given metric query slot.
+/// @brief Retrieves raw data for a given metric query slot.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -582,16 +650,16 @@ xetCommandListAppendMetricMemoryBarrier(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hMetricQuery
-///         + nullptr == pReportCount
 ///         + nullptr == pRawData
 ///         + invalid metric query handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetMetricQueryGetData(
     xet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
-    uint32_t* pReportCount,                         ///< [in,out] report count to read/returned
-    uint32_t rawDataSize,                           ///< [in] raw data size passed by the user
-    uint8_t* pRawData                               ///< [in,out] query result data in raw format
+    uint32_t count,                                 ///< [in] number of query reports to read
+    size_t rawDataSize,                             ///< [in] size in bytes of raw data buffer
+    uint8_t* pRawData                               ///< [in,out][range(0, rawDataSize)] buffer containing query results in raw
+                                                    ///< format
     )
 {
     auto pfnGetData = xet_lib::lib.ddiTable.MetricQuery.pfnGetData;
@@ -601,7 +669,7 @@ xetMetricQueryGetData(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnGetData( hMetricQuery, pReportCount, rawDataSize, pRawData );
+    return pfnGetData( hMetricQuery, count, rawDataSize, pRawData );
 }
 
 } // extern "C"
@@ -649,7 +717,7 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Returns metric group handle for a device.
+    /// @brief Retrieves metric group for a device group.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -657,7 +725,7 @@ namespace xet
     /// @throws result_t
     void __xecall
     MetricGroup::Get(
-        Device* pDevice,                                ///< [in] pointer to the device
+        DeviceGroup* pDeviceGroup,                      ///< [in] pointer to the device group
         uint32_t* pCount,                               ///< [in,out] pointer to the number of metric groups.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of metric groups available.
@@ -671,7 +739,7 @@ namespace xet
         hMetricGroup.resize( ( ppMetricGroup ) ? *pCount : 0 );
 
         auto result = static_cast<result_t>( ::xetMetricGroupGet(
-            reinterpret_cast<xet_device_handle_t>( pDevice->getHandle() ),
+            reinterpret_cast<xet_device_group_handle_t>( pDeviceGroup->getHandle() ),
             pCount,
             hMetricGroup.data() ) );
 
@@ -684,7 +752,7 @@ namespace xet
         try
         {
             for( uint32_t i = 0; ( ppMetricGroup ) && ( i < *pCount ); ++i )
-                ppMetricGroup[ i ] = new MetricGroup( pDevice );
+                ppMetricGroup[ i ] = new MetricGroup( nullptr );
         }
         catch( std::bad_alloc& )
         {
@@ -699,7 +767,7 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Returns properties for a given metric group.
+    /// @brief Retrieves attributes of a metric group.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -726,7 +794,7 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieves metric from a given metric group.
+    /// @brief Retrieves metric from a metric group.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -770,7 +838,7 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Returns metric properties.
+    /// @brief Retrieves attributes of a metric.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -806,16 +874,16 @@ namespace xet
     /// @throws result_t
     void __xecall
     MetricGroup::CalculateData(
-        uint32_t* pReportCount,                         ///< [in,out] report count to calculate
-        uint32_t rawDataSize,                           ///< [in] raw data size
-        uint8_t* pRawData,                              ///< [in] raw data to calculate
-        uint32_t calculatedDataSize,                    ///< [in] calculated data size
-        typed_value_t* pCalculatedData                  ///< [in,out] calculated metrics
+        uint32_t count,                                 ///< [in,out] number of reports to calculate
+        size_t rawDataSize,                             ///< [in] size in bytes of raw data buffer
+        uint8_t* pRawData,                              ///< [in][range(0, rawDataSize)] buffer of raw data to calculate
+        size_t calculatedDataSize,                      ///< [in] size in bytes of calculated metrics
+        typed_value_t* pCalculatedData                  ///< [in,out][range(0, calculatedDataSize)] buffer of calculated metrics
         )
     {
         auto result = static_cast<result_t>( ::xetMetricGroupCalculateData(
             reinterpret_cast<xet_metric_group_handle_t>( getHandle() ),
-            pReportCount,
+            count,
             rawDataSize,
             pRawData,
             calculatedDataSize,
@@ -858,7 +926,7 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Opens metric tracer for a given device.
+    /// @brief Opens metric tracer for a device.
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
@@ -907,7 +975,7 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Append metric tracer marker to a given command list.
+    /// @brief Append metric tracer marker into a command list.
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
@@ -974,7 +1042,7 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Creates metric query pool.
+    /// @brief Creates a pool of metric queries.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -1019,9 +1087,14 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Destroys query pool object.
+    /// @brief Deletes a query pool object.
     /// 
     /// @details
+    ///     - The application is responsible for destroying all query handles
+    ///       created from the pool before destroying the pool itself
+    ///     - The application is responsible for making sure the device is not
+    ///       currently referencing the any query within the pool before it is
+    ///       deleted
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same query pool handle.
     /// 
@@ -1041,7 +1114,7 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Returns metric query handle from a given metric query pool.
+    /// @brief Creates metric query object.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -1051,19 +1124,20 @@ namespace xet
     /// 
     /// @throws result_t
     MetricQuery* __xecall
-    MetricQueryPool::GetMetricQuery(
+    MetricQuery::Create(
+        MetricQueryPool* pMetricQueryPool,              ///< [in] pointer to the metric query pool
         uint32_t index                                  ///< [in] index of the query within the pool
         )
     {
         xet_metric_query_handle_t hMetricQuery;
 
-        auto result = static_cast<result_t>( ::xetMetricQueryPoolGetMetricQuery(
-            reinterpret_cast<xet_metric_query_pool_handle_t>( getHandle() ),
+        auto result = static_cast<result_t>( ::xetMetricQueryCreate(
+            reinterpret_cast<xet_metric_query_pool_handle_t>( pMetricQueryPool->getHandle() ),
             index,
             &hMetricQuery ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricQueryPool::GetMetricQuery" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricQuery::Create" );
 
         MetricQuery* pMetricQuery = nullptr;
 
@@ -1076,14 +1150,60 @@ namespace xet
             delete pMetricQuery;
             pMetricQuery = nullptr;
 
-            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xet::MetricQueryPool::GetMetricQuery" );
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xet::MetricQuery::Create" );
         }
 
         return pMetricQuery;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Appends metric query begin commands to command list.
+    /// @brief Deletes a metric query object.
+    /// 
+    /// @details
+    ///     - The application is responsible for making sure the device is not
+    ///       currently referencing the query before it is deleted
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same query handle.
+    /// 
+    /// @throws result_t
+    void __xecall
+    MetricQuery::Destroy(
+        MetricQuery* pMetricQuery                       ///< [in][release] pointer to metric query
+        )
+    {
+        auto result = static_cast<result_t>( ::xetMetricQueryDestroy(
+            reinterpret_cast<xet_metric_query_handle_t>( pMetricQuery->getHandle() ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricQuery::Destroy" );
+
+        delete pMetricQuery;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Resets a metric query object back to inital state.
+    /// 
+    /// @details
+    ///     - The application is responsible for making sure the device is not
+    ///       currently referencing the query before it is reset
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same query handle.
+    /// 
+    /// @throws result_t
+    void __xecall
+    MetricQuery::Reset(
+        void
+        )
+    {
+        auto result = static_cast<result_t>( ::xetMetricQueryReset(
+            reinterpret_cast<xet_metric_query_handle_t>( getHandle() ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricQuery::Reset" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Appends metric query begin into a command list.
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
@@ -1104,7 +1224,7 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Appends metric query end commands to command list.
+    /// @brief Appends metric query end into a command list.
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
@@ -1147,7 +1267,7 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Returns raw data for a given metric query slot.
+    /// @brief Retrieves raw data for a given metric query slot.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -1155,14 +1275,15 @@ namespace xet
     /// @throws result_t
     void __xecall
     MetricQuery::GetData(
-        uint32_t* pReportCount,                         ///< [in,out] report count to read/returned
-        uint32_t rawDataSize,                           ///< [in] raw data size passed by the user
-        uint8_t* pRawData                               ///< [in,out] query result data in raw format
+        uint32_t count,                                 ///< [in] number of query reports to read
+        size_t rawDataSize,                             ///< [in] size in bytes of raw data buffer
+        uint8_t* pRawData                               ///< [in,out][range(0, rawDataSize)] buffer containing query results in raw
+                                                        ///< format
         )
     {
         auto result = static_cast<result_t>( ::xetMetricQueryGetData(
             reinterpret_cast<xet_metric_query_handle_t>( getHandle() ),
-            pReportCount,
+            count,
             rawDataSize,
             pRawData ) );
 
@@ -1207,26 +1328,6 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts typed_value_version_t to std::string
-    std::string to_string( const typed_value_version_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case typed_value_version_t::CURRENT:
-            str = "typed_value_version_t::CURRENT";
-            break;
-
-        default:
-            str = "typed_value_version_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts value_t to std::string
     std::string to_string( const value_t val )
     {
@@ -1256,10 +1357,6 @@ namespace xet
     std::string to_string( const typed_value_t val )
     {
         std::string str;
-        
-        str += "typed_value_t::version : ";
-        str += to_string(val.version);
-        str += "\n";
         
         str += "typed_value_t::type : ";
         str += to_string(val.type);

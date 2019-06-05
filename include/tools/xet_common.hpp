@@ -42,6 +42,12 @@
 namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle of device group object
+    class DeviceGroup;
+    struct _device_group_handle_t;
+    using device_group_handle_t = _device_group_handle_t*;
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of device object
     class Device;
     struct _device_handle_t;

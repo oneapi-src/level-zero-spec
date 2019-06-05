@@ -33,6 +33,9 @@
 namespace loader
 {
     ///////////////////////////////////////////////////////////////////////////////
+    using xet_device_group_object_t           = object_t < xet_device_group_handle_t >;
+    using xet_device_group_factory_t          = factory_t < xet_device_group_object_t >;
+
     using xet_device_object_t                 = object_t < xet_device_handle_t >;
     using xet_device_factory_t                = factory_t < xet_device_object_t >;
 

@@ -41,6 +41,31 @@
 namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief C++ wrapper for device group
+    class DeviceGroup : public xe::DeviceGroup
+    {
+    public:
+
+    protected:
+        ///////////////////////////////////////////////////////////////////////////////
+
+    public:
+        ///////////////////////////////////////////////////////////////////////////////
+        using xe::DeviceGroup::DeviceGroup;
+
+        ~DeviceGroup( void ) = default;
+
+        DeviceGroup( DeviceGroup const& other ) = delete;
+        void operator=( DeviceGroup const& other ) = delete;
+
+        DeviceGroup( DeviceGroup&& other ) = delete;
+        void operator=( DeviceGroup&& other ) = delete;
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for device
     class Device : public xe::Device
     {

@@ -51,7 +51,7 @@ namespace driver
     /// @brief Intercept function for xetMetricGroupGet
     xe_result_t __xecall
     xetMetricGroupGet(
-        xet_device_handle_t hDevice,                    ///< [in] handle of the device
+        xet_device_group_handle_t hDeviceGroup,         ///< [in] handle of the device group
         uint32_t* pCount,                               ///< [in,out] pointer to the number of metric groups.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of metric groups available.
@@ -116,11 +116,11 @@ namespace driver
     xe_result_t __xecall
     xetMetricGroupCalculateData(
         xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
-        uint32_t* pReportCount,                         ///< [in,out] report count to calculate
-        uint32_t rawDataSize,                           ///< [in] raw data size
-        uint8_t* pRawData,                              ///< [in] raw data to calculate
-        uint32_t calculatedDataSize,                    ///< [in] calculated data size
-        xet_typed_value_t* pCalculatedData              ///< [in,out] calculated metrics
+        uint32_t count,                                 ///< [in,out] number of reports to calculate
+        size_t rawDataSize,                             ///< [in] size in bytes of raw data buffer
+        uint8_t* pRawData,                              ///< [in][range(0, rawDataSize)] buffer of raw data to calculate
+        size_t calculatedDataSize,                      ///< [in] size in bytes of calculated metrics
+        xet_typed_value_t* pCalculatedData              ///< [in,out][range(0, calculatedDataSize)] buffer of calculated metrics
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -180,10 +180,11 @@ namespace driver
     /// @brief Intercept function for xetMetricTracerClose
     xe_result_t __xecall
     xetMetricTracerClose(
-        xet_metric_tracer_handle_t hMetricTracer        ///< [in] handle of the metric tracer
+        xet_metric_tracer_handle_t hMetricTracer        ///< [in][release] handle of the metric tracer
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
 
         return result;
     }
@@ -234,9 +235,9 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetMetricQueryPoolGetMetricQuery
+    /// @brief Intercept function for xetMetricQueryCreate
     xe_result_t __xecall
-    xetMetricQueryPoolGetMetricQuery(
+    xetMetricQueryCreate(
         xet_metric_query_pool_handle_t hMetricQueryPool,///< [in] handle of the metric query pool
         uint32_t index,                                 ///< [in] index of the query within the pool
         xet_metric_query_handle_t* phMetricQuery        ///< [out] handle of metric query
@@ -245,6 +246,31 @@ namespace driver
         xe_result_t result = XE_RESULT_SUCCESS;
 
         *phMetricQuery = reinterpret_cast<xet_metric_query_handle_t>( context.get() );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetMetricQueryDestroy
+    xe_result_t __xecall
+    xetMetricQueryDestroy(
+        xet_metric_query_handle_t hMetricQuery          ///< [in][release] handle of metric query
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetMetricQueryReset
+    xe_result_t __xecall
+    xetMetricQueryReset(
+        xet_metric_query_handle_t hMetricQuery          ///< [in] handle of metric query
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
 
         return result;
     }
@@ -293,9 +319,10 @@ namespace driver
     xe_result_t __xecall
     xetMetricQueryGetData(
         xet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
-        uint32_t* pReportCount,                         ///< [in,out] report count to read/returned
-        uint32_t rawDataSize,                           ///< [in] raw data size passed by the user
-        uint8_t* pRawData                               ///< [in,out] query result data in raw format
+        uint32_t count,                                 ///< [in] number of query reports to read
+        size_t rawDataSize,                             ///< [in] size in bytes of raw data buffer
+        uint8_t* pRawData                               ///< [in,out][range(0, rawDataSize)] buffer containing query results in raw
+                                                        ///< format
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -1047,8 +1074,6 @@ xetGetMetricQueryPoolProcAddrTable(
 
     pDdiTable->pfnDestroy                                = driver::xetMetricQueryPoolDestroy;
 
-    pDdiTable->pfnGetMetricQuery                         = driver::xetMetricQueryPoolGetMetricQuery;
-
     return result;
 }
 
@@ -1076,6 +1101,12 @@ xetGetMetricQueryProcAddrTable(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
+
+    pDdiTable->pfnCreate                                 = driver::xetMetricQueryCreate;
+
+    pDdiTable->pfnDestroy                                = driver::xetMetricQueryDestroy;
+
+    pDdiTable->pfnReset                                  = driver::xetMetricQueryReset;
 
     pDdiTable->pfnGetData                                = driver::xetMetricQueryGetData;
 

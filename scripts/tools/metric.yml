@@ -3,16 +3,16 @@ type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for Metric"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Returns metric group handle for a device."
+desc: "Retrieves metric group for a device group."
 class: $tMetricGroup
 name: Get
 decl: static
 details:
     - "The application may call this function from simultaneous threads."
 params:
-    - type: "$t_device_handle_t"
-      name: hDevice
-      desc: "[in] handle of the device"
+    - type: "$t_device_group_handle_t"
+      name: hDeviceGroup
+      desc: "[in] handle of the device group"
     - type: uint32_t*
       name: pCount
       desc: |
@@ -81,15 +81,15 @@ members:
     - type: uint32_t
       name: "metricCount"
       desc: "[out] metric count belonging to this group"
-    - type: uint32_t
+    - type: size_t
       name: "rawReportSize"
       desc: "[out] size of raw report"
-    - type: uint32_t
+    - type: size_t
       name: "calculatedReportSize"
       desc: "[out] size of calculated report"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Returns properties for a given metric group."
+desc: "Retrieves attributes of a metric group."
 class: $tMetricGroup
 name: GetProperties
 details:
@@ -161,15 +161,6 @@ etors:
     - name: $T_VALUE_TYPE_BOOL
       desc: "Value type: bool"
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "API version of $t_typed_value_t"
-class: $t
-name: $t_typed_value_version_t
-etors:
-    - name: $T_TYPED_VALUE_VERSION_CURRENT
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
---- #--------------------------------------------------------------------------
 type: union
 desc: "Different value types union"
 class: $t
@@ -193,10 +184,6 @@ desc: "Typed value"
 class: $t
 name: $t_typed_value_t
 members:
-    - type: $t_typed_value_version_t
-      name: version
-      desc: "[in] $T_TYPED_VALUE_VERSION_CURRENT"
-      init: $T_TYPED_VALUE_VERSION_CURRENT
     - type: $t_value_type_t
       name: "type"
       desc: "[out] value type"
@@ -245,7 +232,7 @@ members:
       desc: "[out] metric result units"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Retrieves metric from a given metric group."
+desc: "Retrieves metric from a metric group."
 class: $tMetric
 name: Get
 decl: static
@@ -266,7 +253,7 @@ returns:
         - "invalid metric group handle"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Returns metric properties."
+desc: "Retrieves attributes of a metric."
 class: $tMetric
 name: GetProperties
 details:
@@ -292,21 +279,21 @@ params:
     - type: "$t_metric_group_handle_t"
       name: hMetricGroup
       desc: "[in] handle of the metric group"
-    - type: uint32_t*
-      name: pReportCount
-      desc: "[in,out] report count to calculate"
     - type: uint32_t
+      name: count
+      desc: "[in,out] number of reports to calculate"
+    - type: size_t
       name: rawDataSize
-      desc: "[in] raw data size"
+      desc: "[in] size in bytes of raw data buffer"
     - type: "uint8_t*"
       name: pRawData
-      desc: "[in] raw data to calculate"
-    - type: uint32_t
+      desc: "[in][range(0, rawDataSize)] buffer of raw data to calculate"
+    - type: size_t
       name: calculatedDataSize
-      desc: "[in] calculated data size"
+      desc: "[in] size in bytes of calculated metrics"
     - type: "$t_typed_value_t*"
       name: pCalculatedData
-      desc: "[in,out] calculated metrics"
+      desc: "[in,out][range(0, calculatedDataSize)] buffer of calculated metrics"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid metric group handle"
@@ -358,7 +345,7 @@ members:
       desc: "[in,out] tracer sampling period in nanoseconds"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Opens metric tracer for a given device."
+desc: "Opens metric tracer for a device."
 class: $tMetricTracer
 name: Open
 decl: static
@@ -385,7 +372,7 @@ returns:
         - "devices do not support metric tracer"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Append metric tracer marker to a given command list."
+desc: "Append metric tracer marker into a command list."
 class: $tCommandList
 name: AppendMetricTracerMarker
 details:
@@ -413,7 +400,7 @@ details:
 params:
     - type: "$t_metric_tracer_handle_t"
       name: hMetricTracer
-      desc: "[in] handle of the metric tracer"
+      desc: "[in][release] handle of the metric tracer"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid metric tracer handle"
@@ -472,12 +459,13 @@ members:
     - type: $t_metric_query_pool_flag_t
       name: flags
       desc: "[in] Query pool type."
+      init: $T_METRIC_QUERY_POOL_FLAG_PERFORMANCE
     - type: uint32_t
       name: "count"
       desc: "[in] Internal slots count within query pool object."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates metric query pool."
+desc: "Creates a pool of metric queries."
 class: $tMetricQueryPool
 name: Create
 decl: static
@@ -501,11 +489,13 @@ returns:
         - "invalid device handle"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Destroys query pool object."
+desc: "Deletes a query pool object."
 class: $tMetricQueryPool
 name: Destroy
 decl: static
 details:
+    - "The application is responsible for destroying all query handles created from the pool before destroying the pool itself"
+    - "The application is responsible for making sure the device is not currently referencing the any query within the pool before it is deleted"
     - "The application may **not** call this function from simultaneous threads with the same query pool handle."
 params:
     - type: "$t_metric_query_pool_handle_t"
@@ -516,9 +506,10 @@ returns:
         - "invalid metric query pool handle"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Returns metric query handle from a given metric query pool."
-class: $tMetricQueryPool
-name: GetMetricQuery
+desc: "Creates metric query object."
+class: $tMetricQuery
+name: Create
+decl: static
 details:
     - "The application may call this function from simultaneous threads."
 params:
@@ -536,7 +527,38 @@ returns:
         - "invalid device handle"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Appends metric query begin commands to command list."
+desc: "Deletes a metric query object."
+class: $tMetricQuery
+name: Destroy
+decl: static
+details:
+    - "The application is responsible for making sure the device is not currently referencing the query before it is deleted"
+    - "The application may **not** call this function from simultaneous threads with the same query handle."
+params:
+    - type: "$t_metric_query_handle_t"
+      name: hMetricQuery
+      desc: "[in][release] handle of metric query"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "invalid device handle"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Resets a metric query object back to inital state."
+class: $tMetricQuery
+name: Reset
+details:
+    - "The application is responsible for making sure the device is not currently referencing the query before it is reset"
+    - "The application may **not** call this function from simultaneous threads with the same query handle."
+params:
+    - type: "$t_metric_query_handle_t"
+      name: hMetricQuery
+      desc: "[in] handle of metric query"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "invalid device handle"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Appends metric query begin into a command list."
 class: $tCommandList
 name: AppendMetricQueryBegin
 details:
@@ -553,7 +575,7 @@ returns:
         - "invalid handle"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Appends metric query end commands to command list."
+desc: "Appends metric query end into a command list."
 class: $tCommandList
 name: AppendMetricQueryEnd
 details:
@@ -587,7 +609,7 @@ returns:
         - "invalid command list handle"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Returns raw data for a given metric query slot."
+desc: "Retrieves raw data for a given metric query slot."
 class: $tMetricQuery
 name: GetData
 details:
@@ -596,15 +618,15 @@ params:
     - type: "$t_metric_query_handle_t"
       name: hMetricQuery
       desc: "[in] handle of the metric query"
-    - type: uint32_t*
-      name: pReportCount
-      desc: "[in,out] report count to read/returned"
     - type: uint32_t
+      name: count
+      desc: "[in] number of query reports to read"
+    - type: size_t
       name: rawDataSize
-      desc: "[in] raw data size passed by the user"
+      desc: "[in] size in bytes of raw data buffer"
     - type: uint8_t*
       name: pRawData
-      desc: "[in,out] query result data in raw format"
+      desc: "[in,out][range(0, rawDataSize)] buffer containing query results in raw format"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid metric query handle"

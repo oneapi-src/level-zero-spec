@@ -88,14 +88,6 @@ namespace xet
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief API version of ::typed_value_t
-    enum class typed_value_version_t
-    {
-        CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
-
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Different value types union
     union value_t
     {
@@ -110,7 +102,6 @@ namespace xet
     /// @brief Typed value
     struct typed_value_t
     {
-        typed_value_version_t version = typed_value_version_t::CURRENT; ///< [in] ::TYPED_VALUE_VERSION_CURRENT
         value_type_t type;                              ///< [out] value type
         value_t value;                                  ///< [out] value of a specified type
 
@@ -149,8 +140,8 @@ namespace xet
             uint32_t domain;                                ///< [out] metric group domain number. Cannot use simultaneous metric
                                                             ///< groups from different domains.
             uint32_t metricCount;                           ///< [out] metric count belonging to this group
-            uint32_t rawReportSize;                         ///< [out] size of raw report
-            uint32_t calculatedReportSize;                  ///< [out] size of calculated report
+            size_t rawReportSize;                           ///< [out] size of raw report
+            size_t calculatedReportSize;                    ///< [out] size of calculated report
 
         };
 
@@ -180,14 +171,14 @@ namespace xet
         auto getDevice( void ) const { return m_pDevice; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Returns metric group handle for a device.
+        /// @brief Retrieves metric group for a device group.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         /// @throws result_t
         static void __xecall
         Get(
-            Device* pDevice,                                ///< [in] pointer to the device
+            DeviceGroup* pDeviceGroup,                      ///< [in] pointer to the device group
             uint32_t* pCount,                               ///< [in,out] pointer to the number of metric groups.
                                                             ///< if count is zero, then the driver will update the value with the total
                                                             ///< number of metric groups available.
@@ -198,7 +189,7 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Returns properties for a given metric group.
+        /// @brief Retrieves attributes of a metric group.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -220,11 +211,11 @@ namespace xet
         /// @throws result_t
         void __xecall
         CalculateData(
-            uint32_t* pReportCount,                         ///< [in,out] report count to calculate
-            uint32_t rawDataSize,                           ///< [in] raw data size
-            uint8_t* pRawData,                              ///< [in] raw data to calculate
-            uint32_t calculatedDataSize,                    ///< [in] calculated data size
-            typed_value_t* pCalculatedData                  ///< [in,out] calculated metrics
+            uint32_t count,                                 ///< [in,out] number of reports to calculate
+            size_t rawDataSize,                             ///< [in] size in bytes of raw data buffer
+            uint8_t* pRawData,                              ///< [in][range(0, rawDataSize)] buffer of raw data to calculate
+            size_t calculatedDataSize,                      ///< [in] size in bytes of calculated metrics
+            typed_value_t* pCalculatedData                  ///< [in,out][range(0, calculatedDataSize)] buffer of calculated metrics
             );
 
     };
@@ -298,7 +289,7 @@ namespace xet
         auto getMetricgroup( void ) const { return m_pMetricGroup; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Retrieves metric from a given metric group.
+        /// @brief Retrieves metric from a metric group.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -314,7 +305,7 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Returns metric properties.
+        /// @brief Retrieves attributes of a metric.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -379,7 +370,7 @@ namespace xet
         auto getDevice( void ) const { return m_pDevice; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Opens metric tracer for a given device.
+        /// @brief Opens metric tracer for a device.
         /// 
         /// @details
         ///     - The application may **not** call this function from simultaneous
@@ -451,7 +442,7 @@ namespace xet
         struct desc_t
         {
             desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::METRIC_QUERY_POOL_DESC_VERSION_CURRENT
-            flag_t flags;                                   ///< [in] Query pool type.
+            flag_t flags = flag_t::PERFORMANCE;             ///< [in] Query pool type.
             uint32_t count;                                 ///< [in] Internal slots count within query pool object.
 
         };
@@ -482,7 +473,7 @@ namespace xet
         auto getDevice( void ) const { return m_pDevice; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Creates metric query pool.
+        /// @brief Creates a pool of metric queries.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -498,29 +489,20 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Destroys query pool object.
+        /// @brief Deletes a query pool object.
         /// 
         /// @details
+        ///     - The application is responsible for destroying all query handles
+        ///       created from the pool before destroying the pool itself
+        ///     - The application is responsible for making sure the device is not
+        ///       currently referencing the any query within the pool before it is
+        ///       deleted
         ///     - The application may **not** call this function from simultaneous
         ///       threads with the same query pool handle.
         /// @throws result_t
         static void __xecall
         Destroy(
             MetricQueryPool* pMetricQueryPool               ///< [in][release] pointer to the metric query pool
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Returns metric query handle from a given metric query pool.
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        /// @returns
-        ///     - MetricQuery*: handle of metric query
-        /// 
-        /// @throws result_t
-        MetricQuery* __xecall
-        GetMetricQuery(
-            uint32_t index                                  ///< [in] index of the query within the pool
             );
 
     };
@@ -556,16 +538,60 @@ namespace xet
         auto getDevice( void ) const { return m_pDevice; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Returns raw data for a given metric query slot.
+        /// @brief Creates metric query object.
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        /// @returns
+        ///     - MetricQuery*: handle of metric query
+        /// 
+        /// @throws result_t
+        static MetricQuery* __xecall
+        Create(
+            MetricQueryPool* pMetricQueryPool,              ///< [in] pointer to the metric query pool
+            uint32_t index                                  ///< [in] index of the query within the pool
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Deletes a metric query object.
+        /// 
+        /// @details
+        ///     - The application is responsible for making sure the device is not
+        ///       currently referencing the query before it is deleted
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same query handle.
+        /// @throws result_t
+        static void __xecall
+        Destroy(
+            MetricQuery* pMetricQuery                       ///< [in][release] pointer to metric query
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Resets a metric query object back to inital state.
+        /// 
+        /// @details
+        ///     - The application is responsible for making sure the device is not
+        ///       currently referencing the query before it is reset
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same query handle.
+        /// @throws result_t
+        void __xecall
+        Reset(
+            void
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Retrieves raw data for a given metric query slot.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         /// @throws result_t
         void __xecall
         GetData(
-            uint32_t* pReportCount,                         ///< [in,out] report count to read/returned
-            uint32_t rawDataSize,                           ///< [in] raw data size passed by the user
-            uint8_t* pRawData                               ///< [in,out] query result data in raw format
+            uint32_t count,                                 ///< [in] number of query reports to read
+            size_t rawDataSize,                             ///< [in] size in bytes of raw data buffer
+            uint8_t* pRawData                               ///< [in,out][range(0, rawDataSize)] buffer containing query results in raw
+                                                            ///< format
             );
 
     };
@@ -577,10 +603,6 @@ namespace xet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts value_type_t to std::string
     std::string to_string( const value_type_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts typed_value_version_t to std::string
-    std::string to_string( const typed_value_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts value_t to std::string

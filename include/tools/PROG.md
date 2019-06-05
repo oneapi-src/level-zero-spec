@@ -212,10 +212,10 @@ The following sample code demonstrates a basic sequence for time based collectio
 
         // Read raw data
         uint32_t reportCount = 0;
-        xetMetricTracerReadData( hMetricTracer, &reportCount, 0, nullptr ); // first check how many reports are available
+        xetMetricTracerReadData( hMetricTracer, reportCount, 0, nullptr ); // first check how many reports are available
         uint32_t size = metricGroupProperties.rawReportSize * reportCount;
         uint8_t* rawData = malloc(size); 
-        xetMetricTracerReadData( hMetricTracer, &reportCount, size, rawData );
+        xetMetricTracerReadData( hMetricTracer, reportCount, size, rawData );
 
         // Close metric tracer
         xetMetricTracerClose( hMetricTracer );   
@@ -226,10 +226,10 @@ The following sample code demonstrates a basic sequence for time based collectio
         xetDeviceActivateMetricGroups( hDevice, 0, nullptr );
 
         // Calculate metric data
-        uint32_t calculatedDataSize = 0;
-        xetMetricGroupCalculateData( hMetricGroup, &reportCount, size, rawData, &calculatedDataSize, nullptr );
+        size_t calculatedDataSize = 0;
+        xetMetricGroupCalculateData( hMetricGroup, reportCount, size, rawData, &calculatedDataSize, nullptr );
         xet_typed_value_t* calculatedData = (xet_typed_value_t*)malloc( calculatedDataSize );
-        xetMetricGroupCalculateData( hMetricGroup, &reportCount, size, rawData, &calculatedDataSize, calculatedData );
+        xetMetricGroupCalculateData( hMetricGroup, reportCount, size, rawData, &calculatedDataSize, calculatedData );
     }
 ```
 
@@ -239,7 +239,7 @@ Query API provides a way of acquiring metrics per portions of workload delimited
 Typically, multiple queries are used to characterize a workload so the API is pool based.
 
 - A metric query pool is created and destroyed using ::xetMetricQueryPoolCreate and ::xetMetricQueryPoolDestroy calls.
-- To work with individual query object, use ::xetMetricQueryPoolGetMetricQuery to get a handle.
+- To work with individual query object, use ::xetMetricQueryCreate to get a handle.
 - Then insert BEGIN/END events into a command list using ::xetCommandListAppendMetricQueryBegin and ::xetCommandListAppendMetricQueryEnd calls.
 - Once the workload has been executed the ::xetMetricQueryGetData returns the raw data to be later processed by ::xetMetricGroupCalculateData.
 
@@ -276,7 +276,7 @@ The following sample code demonstrates a basic sequence for query based collecti
         xeEventPoolCreate( hDeviceGroup, &eventPoolDesc, 1, &hDevice, &hEventPool );
 
         // Write BEGIN metric query to command list 
-        xetMetricQueryPoolGetMetricQuery( hMetricQueryPool, 0 /*slot*/, &hMetricQuery );
+        xetMetricQueryCreate( hMetricQueryPool, 0 /*slot*/, &hMetricQuery );
         xetCommandListAppendMetricQueryBegin( hCommandList, hMetricQuery );
 
         // build your command list
@@ -294,10 +294,10 @@ The following sample code demonstrates a basic sequence for query based collecti
         xeEventHostSynchronize( hCompletionEvent, 1000 /*timeout*/ );
 
         // Read raw data
-        uint32_t rawSize = metricGroupProperties.rawReportSize;
+        size_t rawSize = metricGroupProperties.rawReportSize;
         uint8_t* rawData = malloc(rawSize); 
         uint32_t reportCount = 1;
-        xetMetricQueryGetData( hMetricQuery, &reportCount, rawSize, rawData );
+        xetMetricQueryGetData( hMetricQuery, reportCount, rawSize, rawData );
 
         // Free the resources
         xeEventDestroy( hCompletionEvent );
@@ -308,9 +308,9 @@ The following sample code demonstrates a basic sequence for query based collecti
         xetDeviceActivateMetricGroups( hDevice, 0, nullptr );
 
         // Calculate metric data
-        uint32_t calculatedDataSize = metricGroupProperties.calculatedReportSize * reportCount;
+        size_t calculatedDataSize = metricGroupProperties.calculatedReportSize * reportCount;
         xet_typed_value_t* calculatedData = (xet_typed_value_t*)malloc( calculatedDataSize );
-        xetMetricGroupCalculateData( hMetricGroup, &reportCount, rawSize, rawData, &calculatedDataSize, calculatedData );
+        xetMetricGroupCalculateData( hMetricGroup, reportCount, rawSize, rawData, &calculatedDataSize, calculatedData );
     }
 ```
 
@@ -322,30 +322,30 @@ for application processing. To calculate metric values use ::xetMetricGroupCalcu
 - In order to obtain available raw report count the user should call ::xetMetricTracerReadData or
   ::xetMetricQueryGetData with rawSize(0) and pRawData(nullptr)
 ```c
-    xetMetricTracerReadData( hMetricTracer, &reportCount, 0, nullptr );
-    xetMetricQueryGetData( hMetricQuery, &reportCount, 0, nullptr );
+    xetMetricTracerReadData( hMetricTracer, reportCount, 0, nullptr );
+    xetMetricQueryGetData( hMetricQuery, reportCount, 0, nullptr );
 ```
 
 - In order to obtain raw reports the user should use ::xetMetricTracerReadData or ::xetMetricQueryGetData
   function with below arguments:
- - pReportCount: report count to read
+ - ReportCount: report count to read
  - rawDataSize: raw buffer size allocated and passed by the user
  - pRawData: buffer for raw reports
 ```c
-    xetMetricTracerReadData( hMetricTracer, &reportCount, rawDataSize, pRawData );
-    xetMetricQueryGetData( hMetricQuery, &reportCount, rawDataSize, pRawData );
+    xetMetricTracerReadData( hMetricTracer, reportCount, rawDataSize, pRawData );
+    xetMetricQueryGetData( hMetricQuery, reportCount, rawDataSize, pRawData );
 ```
 
 - In order to calculate metrics from raw data the user should use ::xetMetricGroupCalculateData with
   below arguments:
  - hMetricGroup: handle of the metric group
- - pReportCount: report count to calculate
+ - reportCount: report count to calculate
  - rawDataSize:  buffer size with raw reports to calculate 
  - rawData: buffer with raw reports to calculate 
  - calculatedDataSize - buffer size for calculated reports
  - pCalculatedData - buffer for calculated reports allocated by the user
 ```c
-    xetMetricGroupCalculateData( hMetricTracer, &reportCount, rawDataSize, pRawData, &calculatedDataSize, pCalculatedData  );
+    xetMetricGroupCalculateData( hMetricTracer, reportCount, rawDataSize, pRawData, &calculatedDataSize, pCalculatedData  );
 ```
 
 

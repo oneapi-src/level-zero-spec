@@ -12,11 +12,15 @@ int main( int argc, char *argv[] )
         putenv( const_cast<char *>( "XE_ENABLE_PARAMETER_VALIDATION=1" ) );
     }
 
-    xe::DeviceGroup* pDeviceGroup = nullptr;
+    xet::DeviceGroup* pDeviceGroup = nullptr;
     if( init() )
-        pDeviceGroup = findDeviceGroup( xe::DeviceGroup::device_type_t::GPU );
-
+        pDeviceGroup = reinterpret_cast<xet::DeviceGroup*>( findDeviceGroup( xe::DeviceGroup::device_type_t::GPU ) );
     if( !pDeviceGroup )
+        return -1;
+
+    // Find the metric group (todo: change to device group)
+    auto pMetricGroup = findMetricGroup( pDeviceGroup, xet::MetricGroup::sampling_type_t::EVENT_BASED, "ComputeBasic" );
+    if( !pMetricGroup )
         return -1;
 
     try
@@ -24,12 +28,7 @@ int main( int argc, char *argv[] )
         // Get the first device within the device group
         xet::Device* pDevice = nullptr;
         uint32_t deviceCount = 1;
-        xe::Device::Get( pDeviceGroup, &deviceCount, reinterpret_cast<xe::Device**>(&pDevice) );
-
-        // Find the metric group (todo: change to device group)
-        auto pMetricGroup = findMetricGroup( pDevice, xet::MetricGroup::sampling_type_t::EVENT_BASED, "ComputeBasic" );
-        if( !pMetricGroup )
-            return -1;
+        xe::Device::Get( reinterpret_cast<xe::DeviceGroup*>( pDeviceGroup ), &deviceCount, reinterpret_cast<xe::Device**>( &pDevice ) );
 
         // Active the metric group on the device
         pDevice->ActivateMetricGroups( 1, &pMetricGroup );
@@ -46,7 +45,7 @@ int main( int argc, char *argv[] )
         pool_desc.flags = xe::EventPool::flag_t::HOST_VISIBLE;
         pool_desc.count = numSamples;
         auto pEventPool = std::shared_ptr<xe::EventPool>(
-            xe::EventPool::Create( pDeviceGroup, &pool_desc, 0, nullptr ),
+            xe::EventPool::Create( reinterpret_cast<xe::DeviceGroup*>( pDeviceGroup ), &pool_desc, 0, nullptr ),
             []( xe::EventPool* p ){ xe::EventPool::Destroy( p ); } );
 
         xe::Event::desc_t event_desc;
@@ -63,22 +62,24 @@ int main( int argc, char *argv[] )
             xet::MetricQueryPool::Create( pDevice, pMetricGroup, &query_pool_desc ),
             []( xet::MetricQueryPool* p ){ xet::MetricQueryPool::Destroy( p ); } );
 
-        auto pQuery = pQueryPool->GetMetricQuery( 0 ); // err: this needs to be CreateQuery
+        auto pQuery = std::shared_ptr<xet::MetricQuery>(
+            xet::MetricQuery::Create( pQueryPool.get(), 0 ),
+            []( xet::MetricQuery* p ){ xet::MetricQuery::Destroy( p ); } );
 
         // Sample data from device and wait for completion
-        pCommandList->AppendMetricQueryBegin( pQuery );
-        pCommandList->AppendMetricQueryEnd( pQuery, pEvent.get() );
+        pCommandList->AppendMetricQueryBegin( pQuery.get() );
+        pCommandList->AppendMetricQueryEnd( pQuery.get(), pEvent.get() );
         pEvent->HostSynchronize( UINT32_MAX );
 
         // Read raw data from query
         auto rawDataSize = pMetricGroup->GetProperties().rawReportSize;
         auto rawData = new uint8_t[ rawDataSize ];
-        pQuery->GetData( &numSamples, rawDataSize, rawData );
+        pQuery->GetData( numSamples, rawDataSize, rawData );
 
         // Calculate results
         auto calcDataSize = pMetricGroup->GetProperties().calculatedReportSize * numSamples;
         auto calcData = new xet::typed_value_t[ calcDataSize ];
-        pMetricGroup->CalculateData( &numSamples, rawDataSize, rawData, calcDataSize, calcData );
+        pMetricGroup->CalculateData( numSamples, rawDataSize, rawData, calcDataSize, calcData );
 
         delete[] rawData;
 
