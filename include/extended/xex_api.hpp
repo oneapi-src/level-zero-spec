@@ -20,22 +20,21 @@
 * or otherwise. Any license under such intellectual property rights must be
 * express and approved by Intel in writing.
 *
-* @file xex_all.hpp
+* @file xex_api.hpp
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/templates/api_all.hpp.mako
+* DO NOT EDIT: generated from /scripts/extended
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XEX_ALL_HPP
-#define _XEX_ALL_HPP
+#ifndef _XEX_API_HPP
+#define _XEX_API_HPP
 #if defined(__cplusplus)
 #pragma once
 
+#include "xex_common.hpp"
+#include "xex_driver.hpp"
 #include "xex_cmdgraph.hpp"
-#include "xex_device.hpp"
-#include "xex_cmdgraph.inl"
-#include "xex_device.inl"
 
 #endif // defined(__cplusplus)
-#endif // _XEX_ALL_HPP
+#endif // _XEX_API_HPP

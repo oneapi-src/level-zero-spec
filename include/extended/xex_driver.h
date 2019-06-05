@@ -21,44 +21,56 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xex_device.hpp
+* @file xex_driver.h
 *
-* @brief C++ wrapper of Intel Xe Level-Zero Extended APIs for Device
+* @brief Intel Xe Level-Zero APIs
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/extended/device.yml
+* DO NOT EDIT: generated from /scripts/extended/driver.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XEX_DEVICE_HPP
-#define _XEX_DEVICE_HPP
+#ifndef _XEX_DRIVER_H
+#define _XEX_DRIVER_H
 #if defined(__cplusplus)
 #pragma once
-#include "xex_common.hpp"
+#endif
+#include "xex_common.h"
 
-namespace xex
-{
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for device
-    class Device : public xe::Device
-    {
-    protected:
+#if defined(__cplusplus)
+extern "C" {
+#endif
 
-        Device( void ) = delete;
-        using xe::Device::Device;
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Initialize the Xe driver and must be called before any other API
+///        function.
+/// 
+/// @details
+///     - If this function is not called then all other functions will return
+///       ::XE_RESULT_ERROR_UNINITIALIZED.
+///     - Only one instance of a driver per process will be initialized.
+///     - This function is thread-safe for scenarios where multiple libraries
+///       may initialize the driver simultaneously.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuInit**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for flags
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+__xedllport xe_result_t __xecall
+xexInit(
+    xe_init_flag_t flags                            ///< [in] initialization flags
+    );
 
-        ~Device( void ) = default;
+#if defined(__cplusplus)
+} // extern "C"
+#endif
 
-        Device( Device const& other ) = delete;
-        void operator=( Device const& other ) = delete;
-
-        Device( Device&& other ) = delete;
-        void operator=( Device&& other ) = delete;
-
-    public:
-
-    };
-
-} // namespace xex
-#endif // defined(__cplusplus)
-#endif // _XEX_DEVICE_HPP
+#endif // _XEX_DRIVER_H

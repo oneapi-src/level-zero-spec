@@ -34,8 +34,9 @@
 #define _XEX_COMMON_HPP
 #if defined(__cplusplus)
 #pragma once
-#include "xex_all.h"
-#include <tuple>
+#if !defined(_XEX_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 #include "xe_api.hpp"
 
 namespace xex
@@ -43,7 +44,19 @@ namespace xex
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of driver's command graph object
     class CommandGraph;
-    using command_graph_handle_t = CommandGraph*;
+    struct _command_graph_handle_t;
+    using command_graph_handle_t = _command_graph_handle_t*;
+
+} // namespace xex
+
+namespace xex
+{
+} // namespace xex
+
+namespace xex
+{
+    using result_t = xe::result_t;
+    using exception_t = xe::exception_t;
 
 } // namespace xex
 #endif // defined(__cplusplus)

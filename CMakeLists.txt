@@ -111,6 +111,7 @@ add_custom_command(
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/core)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/tools)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/extended)
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 
 add_subdirectory(source)
