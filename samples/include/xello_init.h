@@ -18,13 +18,13 @@ inline bool argparse( int argc, char *argv[],
 }
 
 //////////////////////////////////////////////////////////////////////////
-inline bool init( void )
+inline bool init_xe( void )
 {
     try
     {
         // Initialize the driver
         xe::Init( xe::init_flag_t::NONE );
-        std::cout << "Driver initialized\n";
+        std::cout << "Driver initialized.\n";
     }
     catch( const xe::exception_t& e )
     {

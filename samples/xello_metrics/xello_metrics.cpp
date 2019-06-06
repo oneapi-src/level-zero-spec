@@ -6,14 +6,13 @@
 //////////////////////////////////////////////////////////////////////////
 int main( int argc, char *argv[] )
 {
-    if( argparse( argc, argv, "-val", "--enable_validation_layer" ) )
+    if( argparse( argc, argv, "-null", "--enable_null_driver" ) )
     {
-        putenv( const_cast<char *>( "XE_ENABLE_VALIDATION_LAYER=1" ) );
-        putenv( const_cast<char *>( "XE_ENABLE_PARAMETER_VALIDATION=1" ) );
+        putenv( const_cast<char *>( "XE_ENABLE_NULL_DRIVER=1" ) );
     }
 
     xet::DeviceGroup* pDeviceGroup = nullptr;
-    if( init() )
+    if( init_xet() )
         pDeviceGroup = reinterpret_cast<xet::DeviceGroup*>( findDeviceGroup( xe::DeviceGroup::device_type_t::GPU ) );
     if( !pDeviceGroup )
         return -1;

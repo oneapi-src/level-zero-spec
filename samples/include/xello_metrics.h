@@ -2,6 +2,27 @@
 #include "xet_api.hpp"
 
 //////////////////////////////////////////////////////////////////////////
+inline bool init_xet( void )
+{
+    if( !init_xe() )
+        return false;
+
+    try
+    {
+        // Initialize the driver
+        xet::Init( xe::init_flag_t::NONE );
+        std::cout << "Tools initialized.\n";
+    }
+    catch( const xe::exception_t& e )
+    {
+        std::cout << "Tools not initialized!\n";
+        std::cout << e.what();
+        return false;
+    }
+    return true;
+}
+
+//////////////////////////////////////////////////////////////////////////
 inline xet::MetricGroup* findMetricGroup( xet::DeviceGroup* pDeviceGroup,
     const xet::MetricGroup::sampling_type_t type,
     const char* name = "" )
