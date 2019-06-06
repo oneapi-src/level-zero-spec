@@ -1256,26 +1256,27 @@ namespace xe
     std::string to_string( const DeviceGroup::memory_access_capabilities_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
         
-        if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS_NONE) & bits )
-            str += "DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS_NONE | ";
+        if( 0 == bits )
+            str += "MEMORY_ACCESS_NONE   ";
         
         if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS) & bits )
-            str += "DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS | ";
+            str += "MEMORY_ACCESS | ";
         
         if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_ATOMIC_ACCESS) & bits )
-            str += "DeviceGroup::memory_access_capabilities_t::MEMORY_ATOMIC_ACCESS | ";
+            str += "MEMORY_ATOMIC_ACCESS | ";
         
         if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ACCESS) & bits )
-            str += "DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ACCESS | ";
+            str += "MEMORY_CONCURRENT_ACCESS | ";
         
         if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ATOMIC_ACCESS) & bits )
-            str += "DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ATOMIC_ACCESS | ";
+            str += "MEMORY_CONCURRENT_ATOMIC_ACCESS | ";
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "DeviceGroup::memory_access_capabilities_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "DeviceGroup::memory_access_capabilities_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1323,20 +1324,21 @@ namespace xe
     std::string to_string( const DeviceGroup::device_mem_alloc_flag_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
         
-        if( static_cast<uint32_t>(DeviceGroup::device_mem_alloc_flag_t::DEFAULT) & bits )
-            str += "DeviceGroup::device_mem_alloc_flag_t::DEFAULT | ";
+        if( 0 == bits )
+            str += "DEFAULT   ";
         
         if( static_cast<uint32_t>(DeviceGroup::device_mem_alloc_flag_t::BIAS_CACHED) & bits )
-            str += "DeviceGroup::device_mem_alloc_flag_t::BIAS_CACHED | ";
+            str += "BIAS_CACHED | ";
         
         if( static_cast<uint32_t>(DeviceGroup::device_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
-            str += "DeviceGroup::device_mem_alloc_flag_t::BIAS_UNCACHED | ";
+            str += "BIAS_UNCACHED | ";
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "DeviceGroup::device_mem_alloc_flag_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "DeviceGroup::device_mem_alloc_flag_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1344,23 +1346,24 @@ namespace xe
     std::string to_string( const DeviceGroup::host_mem_alloc_flag_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
         
-        if( static_cast<uint32_t>(DeviceGroup::host_mem_alloc_flag_t::DEFAULT) & bits )
-            str += "DeviceGroup::host_mem_alloc_flag_t::DEFAULT | ";
+        if( 0 == bits )
+            str += "DEFAULT   ";
         
         if( static_cast<uint32_t>(DeviceGroup::host_mem_alloc_flag_t::BIAS_CACHED) & bits )
-            str += "DeviceGroup::host_mem_alloc_flag_t::BIAS_CACHED | ";
+            str += "BIAS_CACHED | ";
         
         if( static_cast<uint32_t>(DeviceGroup::host_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
-            str += "DeviceGroup::host_mem_alloc_flag_t::BIAS_UNCACHED | ";
+            str += "BIAS_UNCACHED | ";
         
         if( static_cast<uint32_t>(DeviceGroup::host_mem_alloc_flag_t::BIAS_WRITE_COMBINED) & bits )
-            str += "DeviceGroup::host_mem_alloc_flag_t::BIAS_WRITE_COMBINED | ";
+            str += "BIAS_WRITE_COMBINED | ";
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "DeviceGroup::host_mem_alloc_flag_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "DeviceGroup::host_mem_alloc_flag_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1449,7 +1452,7 @@ namespace xe
                 tmp += std::to_string( entry );
                 tmp += ", ";
             }
-            str += "{ " + tmp.substr( 0, tmp.size() - 2 ) + " }";;
+            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
         }
         str += "\n";
 
@@ -1603,7 +1606,7 @@ namespace xe
                 tmp += std::to_string( entry );
                 tmp += ", ";
             }
-            str += "{ " + tmp.substr( 0, tmp.size() - 2 ) + " }";;
+            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
         }
         str += "\n";
 
@@ -1776,20 +1779,21 @@ namespace xe
     std::string to_string( const Device::cache_config_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
         
         if( static_cast<uint32_t>(Device::cache_config_t::DEFAULT) & bits )
-            str += "Device::cache_config_t::DEFAULT | ";
+            str += "DEFAULT | ";
         
         if( static_cast<uint32_t>(Device::cache_config_t::LARGE_SLM) & bits )
-            str += "Device::cache_config_t::LARGE_SLM | ";
+            str += "LARGE_SLM | ";
         
         if( static_cast<uint32_t>(Device::cache_config_t::LARGE_DATA) & bits )
-            str += "Device::cache_config_t::LARGE_DATA | ";
+            str += "LARGE_DATA | ";
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "Device::cache_config_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Device::cache_config_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////

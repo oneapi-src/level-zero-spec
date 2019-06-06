@@ -1080,20 +1080,21 @@ namespace xe
     std::string to_string( const EventPool::flag_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
         
-        if( static_cast<uint32_t>(EventPool::flag_t::DEFAULT) & bits )
-            str += "EventPool::flag_t::DEFAULT | ";
+        if( 0 == bits )
+            str += "DEFAULT   ";
         
         if( static_cast<uint32_t>(EventPool::flag_t::HOST_VISIBLE) & bits )
-            str += "EventPool::flag_t::HOST_VISIBLE | ";
+            str += "HOST_VISIBLE | ";
         
         if( static_cast<uint32_t>(EventPool::flag_t::IPC) & bits )
-            str += "EventPool::flag_t::IPC | ";
+            str += "IPC | ";
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "EventPool::flag_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "EventPool::flag_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1142,23 +1143,24 @@ namespace xe
     std::string to_string( const Event::scope_flag_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
         
-        if( static_cast<uint32_t>(Event::scope_flag_t::NONE) & bits )
-            str += "Event::scope_flag_t::NONE | ";
+        if( 0 == bits )
+            str += "NONE   ";
         
         if( static_cast<uint32_t>(Event::scope_flag_t::SUBDEVICE) & bits )
-            str += "Event::scope_flag_t::SUBDEVICE | ";
+            str += "SUBDEVICE | ";
         
         if( static_cast<uint32_t>(Event::scope_flag_t::DEVICE) & bits )
-            str += "Event::scope_flag_t::DEVICE | ";
+            str += "DEVICE | ";
         
         if( static_cast<uint32_t>(Event::scope_flag_t::HOST) & bits )
-            str += "Event::scope_flag_t::HOST | ";
+            str += "HOST | ";
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "Event::scope_flag_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Event::scope_flag_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////

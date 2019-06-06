@@ -2147,26 +2147,27 @@ namespace xet
     std::string to_string( const fan_capabilities_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
         
         if( static_cast<uint32_t>(fan_capabilities_t::GET_SPEED_PERCENTAGE) & bits )
-            str += "fan_capabilities_t::GET_SPEED_PERCENTAGE | ";
+            str += "GET_SPEED_PERCENTAGE | ";
         
         if( static_cast<uint32_t>(fan_capabilities_t::SET_SPEED_PERCENTAGE) & bits )
-            str += "fan_capabilities_t::SET_SPEED_PERCENTAGE | ";
+            str += "SET_SPEED_PERCENTAGE | ";
         
         if( static_cast<uint32_t>(fan_capabilities_t::GET_SPEED_RPM) & bits )
-            str += "fan_capabilities_t::GET_SPEED_RPM | ";
+            str += "GET_SPEED_RPM | ";
         
         if( static_cast<uint32_t>(fan_capabilities_t::SET_SPEED_RPM) & bits )
-            str += "fan_capabilities_t::SET_SPEED_RPM | ";
+            str += "SET_SPEED_RPM | ";
         
         if( static_cast<uint32_t>(fan_capabilities_t::HAVE_TEMPERATURE_SPEED_TABLE) & bits )
-            str += "fan_capabilities_t::HAVE_TEMPERATURE_SPEED_TABLE | ";
+            str += "HAVE_TEMPERATURE_SPEED_TABLE | ";
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "fan_capabilities_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "fan_capabilities_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2198,17 +2199,18 @@ namespace xet
     std::string to_string( const Power::init_flags_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
         
-        if( static_cast<uint32_t>(Power::init_flags_t::NONE) & bits )
-            str += "Power::init_flags_t::NONE | ";
+        if( 0 == bits )
+            str += "NONE   ";
         
         if( static_cast<uint32_t>(Power::init_flags_t::WRITE) & bits )
-            str += "Power::init_flags_t::WRITE | ";
+            str += "WRITE | ";
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "Power::init_flags_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Power::init_flags_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2216,44 +2218,45 @@ namespace xet
     std::string to_string( const Power::gpu_domain_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
         
         if( static_cast<uint32_t>(Power::gpu_domain_t::BASE) & bits )
-            str += "Power::gpu_domain_t::BASE | ";
+            str += "BASE | ";
         
         if( static_cast<uint32_t>(Power::gpu_domain_t::VIDEO_DECODE) & bits )
-            str += "Power::gpu_domain_t::VIDEO_DECODE | ";
+            str += "VIDEO_DECODE | ";
         
         if( static_cast<uint32_t>(Power::gpu_domain_t::VIDEO_ENCODE) & bits )
-            str += "Power::gpu_domain_t::VIDEO_ENCODE | ";
+            str += "VIDEO_ENCODE | ";
         
         if( static_cast<uint32_t>(Power::gpu_domain_t::VIDEO_PROCESSING) & bits )
-            str += "Power::gpu_domain_t::VIDEO_PROCESSING | ";
+            str += "VIDEO_PROCESSING | ";
         
         if( static_cast<uint32_t>(Power::gpu_domain_t::_3D_FIXED_FUNCTION) & bits )
-            str += "Power::gpu_domain_t::_3D_FIXED_FUNCTION | ";
+            str += "_3D_FIXED_FUNCTION | ";
         
         if( static_cast<uint32_t>(Power::gpu_domain_t::_3D_RENDER) & bits )
-            str += "Power::gpu_domain_t::_3D_RENDER | ";
+            str += "_3D_RENDER | ";
         
         if( static_cast<uint32_t>(Power::gpu_domain_t::COMPUTE) & bits )
-            str += "Power::gpu_domain_t::COMPUTE | ";
+            str += "COMPUTE | ";
         
         if( static_cast<uint32_t>(Power::gpu_domain_t::SYSTOLIC_ARRAY) & bits )
-            str += "Power::gpu_domain_t::SYSTOLIC_ARRAY | ";
+            str += "SYSTOLIC_ARRAY | ";
         
         if( static_cast<uint32_t>(Power::gpu_domain_t::RAYTRACING) & bits )
-            str += "Power::gpu_domain_t::RAYTRACING | ";
+            str += "RAYTRACING | ";
         
         if( static_cast<uint32_t>(Power::gpu_domain_t::LOCAL_MEMORY) & bits )
-            str += "Power::gpu_domain_t::LOCAL_MEMORY | ";
+            str += "LOCAL_MEMORY | ";
         
         if( static_cast<uint32_t>(Power::gpu_domain_t::BASE_CHIPLET_LINK) & bits )
-            str += "Power::gpu_domain_t::BASE_CHIPLET_LINK | ";
+            str += "BASE_CHIPLET_LINK | ";
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "Power::gpu_domain_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Power::gpu_domain_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2547,35 +2550,36 @@ namespace xet
     std::string to_string( const FreqDomain::freq_throttle_reasons_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
         
-        if( static_cast<uint32_t>(FreqDomain::freq_throttle_reasons_t::NONE) & bits )
-            str += "FreqDomain::freq_throttle_reasons_t::NONE | ";
+        if( 0 == bits )
+            str += "NONE   ";
         
         if( static_cast<uint32_t>(FreqDomain::freq_throttle_reasons_t::AVE_PWR_CAP) & bits )
-            str += "FreqDomain::freq_throttle_reasons_t::AVE_PWR_CAP | ";
+            str += "AVE_PWR_CAP | ";
         
         if( static_cast<uint32_t>(FreqDomain::freq_throttle_reasons_t::BURST_PWR_CAP) & bits )
-            str += "FreqDomain::freq_throttle_reasons_t::BURST_PWR_CAP | ";
+            str += "BURST_PWR_CAP | ";
         
         if( static_cast<uint32_t>(FreqDomain::freq_throttle_reasons_t::CURRENT_LIMIT) & bits )
-            str += "FreqDomain::freq_throttle_reasons_t::CURRENT_LIMIT | ";
+            str += "CURRENT_LIMIT | ";
         
         if( static_cast<uint32_t>(FreqDomain::freq_throttle_reasons_t::THERMAL_LIMIT) & bits )
-            str += "FreqDomain::freq_throttle_reasons_t::THERMAL_LIMIT | ";
+            str += "THERMAL_LIMIT | ";
         
         if( static_cast<uint32_t>(FreqDomain::freq_throttle_reasons_t::PSU_ALERT) & bits )
-            str += "FreqDomain::freq_throttle_reasons_t::PSU_ALERT | ";
+            str += "PSU_ALERT | ";
         
         if( static_cast<uint32_t>(FreqDomain::freq_throttle_reasons_t::SW_RANGE) & bits )
-            str += "FreqDomain::freq_throttle_reasons_t::SW_RANGE | ";
+            str += "SW_RANGE | ";
         
         if( static_cast<uint32_t>(FreqDomain::freq_throttle_reasons_t::HW_RANGE) & bits )
-            str += "FreqDomain::freq_throttle_reasons_t::HW_RANGE | ";
+            str += "HW_RANGE | ";
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "FreqDomain::freq_throttle_reasons_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "FreqDomain::freq_throttle_reasons_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////

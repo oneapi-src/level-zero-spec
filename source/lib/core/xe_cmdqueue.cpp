@@ -383,23 +383,24 @@ namespace xe
     std::string to_string( const CommandQueue::flag_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
         
-        if( static_cast<uint32_t>(CommandQueue::flag_t::NONE) & bits )
-            str += "CommandQueue::flag_t::NONE | ";
+        if( 0 == bits )
+            str += "NONE   ";
         
         if( static_cast<uint32_t>(CommandQueue::flag_t::COPY_ONLY) & bits )
-            str += "CommandQueue::flag_t::COPY_ONLY | ";
+            str += "COPY_ONLY | ";
         
         if( static_cast<uint32_t>(CommandQueue::flag_t::LOGICAL_ONLY) & bits )
-            str += "CommandQueue::flag_t::LOGICAL_ONLY | ";
+            str += "LOGICAL_ONLY | ";
         
         if( static_cast<uint32_t>(CommandQueue::flag_t::SINGLE_SLICE_ONLY) & bits )
-            str += "CommandQueue::flag_t::SINGLE_SLICE_ONLY | ";
+            str += "SINGLE_SLICE_ONLY | ";
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "CommandQueue::flag_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "CommandQueue::flag_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
