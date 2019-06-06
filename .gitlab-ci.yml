@@ -42,3 +42,22 @@ pages:
   tags:
     - win
   when: always
+
+linux:
+  image: loki18.04:latest
+  stage: build
+  only:
+  - branches
+  - tags
+  - merge_requests
+  tags:
+    - Linux
+  script:
+    - pwd
+    - ls -l
+    - ~/irepo/irepo select -d . third_party/linux.yml
+    - ~/irepo/irepo sync
+    - mkdir build
+    - cd build
+    - cmake -DCMAKE_BUILD_TYPE=Release ..
+    - make
