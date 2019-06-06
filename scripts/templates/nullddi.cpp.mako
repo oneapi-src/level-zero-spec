@@ -98,10 +98,10 @@ namespace driver
         *value = 0;
 
         %elif re.match(r"\w+Alloc\w+Mem", fname):
-        *ptr = _aligned_malloc( size, alignment );
+        *ptr = malloc( size );
 
         %elif re.match(r"\w+FreeMem", fname):
-        _aligned_free( ptr );
+        free( ptr );
 
         %elif re.match(r"\w+GetMemProperties", fname):
         *pMemProperties = {};

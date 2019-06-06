@@ -1049,7 +1049,7 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        *ptr = _aligned_malloc( size, alignment );
+        *ptr = malloc( size );
 
         return result;
     }
@@ -1070,7 +1070,7 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        *ptr = _aligned_malloc( size, alignment );
+        *ptr = malloc( size );
 
         return result;
     }
@@ -1088,7 +1088,7 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        *ptr = _aligned_malloc( size, alignment );
+        *ptr = malloc( size );
 
         return result;
     }
@@ -1103,7 +1103,7 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        _aligned_free( ptr );
+        free( ptr );
 
         return result;
     }
