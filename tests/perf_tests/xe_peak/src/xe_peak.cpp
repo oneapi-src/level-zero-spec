@@ -366,19 +366,19 @@ float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
     if (verbose)
         std::cout << "Group size set\n";
 
-    result = xeCommandListAppendLaunchFunction(context.command_list, function,
-                                               &workgroup_info.thread_group_dimensions, nullptr, 0, nullptr);
-    if (result) {
-        throw std::runtime_error("xeCommandListAppendLaunchFunction failed: " + result);
-    }
-    if (verbose)
-        std::cout << "Function launch appended\n";
-
     /* TODO: implement timing with event profiling for all cases*/
 
     Timer timer;
 
     if (type == TimingMeasurement::BANDWIDTH) {
+        result = xeCommandListAppendLaunchFunction(context.command_list, function,
+                                                   &workgroup_info.thread_group_dimensions, nullptr, 0, nullptr);
+        if (result) {
+            throw std::runtime_error("xeCommandListAppendLaunchFunction failed: " + result);
+        }
+        if (verbose)
+            std::cout << "Function launch appended\n";
+
         result = xeCommandListClose(context.command_list);
         if (result) {
             throw std::runtime_error("xeCommandListClose failed: " + result);
@@ -426,6 +426,14 @@ float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
         }
         if (verbose)
             std::cout << "Kernel Launch Event signal appended to command list\n";
+
+        result = xeCommandListAppendLaunchFunction(context.command_list, function,
+                                                   &workgroup_info.thread_group_dimensions, nullptr, 0, nullptr);
+        if (result) {
+            throw std::runtime_error("xeCommandListAppendLaunchFunction failed: " + result);
+        }
+        if (verbose)
+            std::cout << "Function launch appended\n";
 
         result = xeCommandListClose(context.command_list);
         if (result) {
@@ -477,6 +485,14 @@ float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
                 std::cout << "Event Reset\n";
         }
     } else if (type == TimingMeasurement::KERNEL_COMPLETE_LATENCY) {
+        result = xeCommandListAppendLaunchFunction(context.command_list, function,
+                                                   &workgroup_info.thread_group_dimensions, nullptr, 0, nullptr);
+        if (result) {
+            throw std::runtime_error("xeCommandListAppendLaunchFunction failed: " + result);
+        }
+        if (verbose)
+            std::cout << "Function launch appended\n";
+
         result = xeCommandListClose(context.command_list);
         if (result) {
             throw std::runtime_error("xeCommandListClose failed: " + result);
