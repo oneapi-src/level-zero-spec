@@ -41,9 +41,6 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        // global functions need to be handled manually by the driver
-        result = context.xetInit( flags );
-
         return result;
     }
 

@@ -36,22 +36,11 @@ namespace driver
     {
     public:
         xe_api_version_t version = XE_API_VERSION_1_0;
+        xe_device_properties_t deviceProperties;
+        xe_device_compute_properties_t computeProperties;
 
-        context_t() = default;
+        context_t();
         ~context_t() = default;
-
-        xe_result_t xeInit( xe_init_flag_t flags )
-        {
-            return XE_RESULT_SUCCESS;
-        }
-        xe_result_t xexInit( xe_init_flag_t flags )
-        {
-            return XE_RESULT_SUCCESS;
-        }
-        xe_result_t xetInit( xe_init_flag_t flags )
-        {
-            return XE_RESULT_SUCCESS;
-        }
 
         void* get( void )
         {

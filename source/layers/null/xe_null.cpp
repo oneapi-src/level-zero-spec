@@ -28,5 +28,21 @@
 
 namespace driver
 {
+    //////////////////////////////////////////////////////////////////////////
     context_t context;
+
+    //////////////////////////////////////////////////////////////////////////
+    context_t::context_t()
+    {
+        ::memset( &deviceProperties, 0, sizeof( xe_device_properties_t ) );
+        deviceProperties.version = XE_DEVICE_PROPERTIES_VERSION_CURRENT;
+        deviceProperties.type = XE_DEVICE_TYPE_GPU;
+        deviceProperties.maxCommandQueues = 1;
+        deviceProperties.numAsyncComputeEngines = 1;
+        deviceProperties.numAsyncCopyEngines = 1;
+        strcpy(deviceProperties.name, "Null Driver");
+
+        ::memset( &computeProperties, 0, sizeof( xe_device_compute_properties_t ) );
+
+    }
 }

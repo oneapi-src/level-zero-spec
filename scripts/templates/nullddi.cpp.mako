@@ -56,13 +56,22 @@ namespace driver
     {
         ${x}_result_t result = ${X}_RESULT_SUCCESS;
 
-        %if re.match(r"Global.*", th.get_table_name(n, tags, obj)):
-        // global functions need to be handled manually by the driver
-        result = context.${th.make_func_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
-
-        %elif re.match(r"\w+DeviceGroupGet$", th.make_func_name(n, tags, obj)):
+        %if re.match(r"\w+DeviceGroupGet$", th.make_func_name(n, tags, obj)):
         if( nullptr != pCount ) *pCount = 1;
         if( nullptr != phDeviceGroups ) *phDeviceGroups = reinterpret_cast<${x}_device_group_handle_t>( context.get() );
+
+        %elif re.match(r"\w+DeviceGet$", th.make_func_name(n, tags, obj)):
+        if( nullptr != pCount ) *pCount = 1;
+        if( nullptr != phDevices ) *phDevices = reinterpret_cast<${x}_device_handle_t>( context.get() );
+
+        %elif re.match(r"\w+DeviceGroupGetApiVersion", th.make_func_name(n, tags, obj)):
+        *version = context.version;
+
+        %elif re.match(r"\w+DeviceGroupGetDeviceProperties$", th.make_func_name(n, tags, obj)):
+        *pDeviceProperties = context.deviceProperties;
+
+        %elif re.match(r"\w+DeviceGroupGetComputeProperties", th.make_func_name(n, tags, obj)):
+        *pComputeProperties = context.computeProperties;
 
         %else:
         %for item in th.get_loader_epilogue(n, tags, obj, meta):

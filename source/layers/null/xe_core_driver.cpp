@@ -41,9 +41,6 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        // global functions need to be handled manually by the driver
-        result = context.xeInit( flags );
-
         return result;
     }
 
@@ -94,8 +91,8 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        for( size_t i = 0; ( nullptr != phDevices ) && ( i < *pCount ); ++i )
-            phDevices[ i ] = reinterpret_cast<xe_device_handle_t>( context.get() );
+        if( nullptr != pCount ) *pCount = 1;
+        if( nullptr != phDevices ) *phDevices = reinterpret_cast<xe_device_handle_t>( context.get() );
 
         return result;
     }
@@ -130,6 +127,8 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        *version = context.version;
+
         return result;
     }
 
@@ -143,6 +142,8 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        *pDeviceProperties = context.deviceProperties;
+
         return result;
     }
 
@@ -155,6 +156,8 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        *pComputeProperties = context.computeProperties;
 
         return result;
     }
