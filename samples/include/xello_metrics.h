@@ -4,25 +4,25 @@
 //////////////////////////////////////////////////////////////////////////
 inline xet::MetricGroup* findMetricGroup( xet::DeviceGroup* pDeviceGroup,
     const xet::MetricGroup::sampling_type_t type,
-    const char* name )
+    const char* name = "" )
 {
     uint32_t groupCount = 0;
     xet::MetricGroup::Get( pDeviceGroup, &groupCount, nullptr );
 
-    auto ppMetricGroup = new xet::MetricGroup*[ groupCount ];
-    xet::MetricGroup::Get( pDeviceGroup, &groupCount, ppMetricGroup );
+    std::vector< xet::MetricGroup*> metricGroups( groupCount );
+    xet::MetricGroup::Get( pDeviceGroup, &groupCount, metricGroups.data() );
 
     xet::MetricGroup* found = nullptr;
 
     // for each device group, find the first one matching the type
     for( uint32_t grp = 0; grp < groupCount; ++grp )
     {
-        auto pMetricGroup = ppMetricGroup[ grp ];
+        auto pMetricGroup = metricGroups[ grp ];
         auto metric_properties = pMetricGroup->GetProperties();
 
         if( 0 != ( static_cast<uint32_t>(type) & static_cast<uint32_t>(metric_properties.samplingType) ) )
         {
-            if( 0 == strcmp( name, metric_properties.name ) )
+            if( ( 0 == strlen(name) ) || ( 0 == strcmp( name, metric_properties.name ) ) )
             {
                 found = pMetricGroup;
 
@@ -36,6 +36,5 @@ inline xet::MetricGroup* findMetricGroup( xet::DeviceGroup* pDeviceGroup,
         std::cout << "Did NOT find matching " << xet::to_string( type ) << " device group!" << "\n";
     }
 
-    delete[] ppMetricGroup;
     return found;
 }

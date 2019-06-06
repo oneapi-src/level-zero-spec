@@ -18,8 +18,8 @@ int main( int argc, char *argv[] )
     if( !pDeviceGroup )
         return -1;
 
-    // Find the metric group (todo: change to device group)
-    auto pMetricGroup = findMetricGroup( pDeviceGroup, xet::MetricGroup::sampling_type_t::EVENT_BASED, "ComputeBasic" );
+    // Find an event-based metric group
+    auto pMetricGroup = findMetricGroup( pDeviceGroup, xet::MetricGroup::sampling_type_t::EVENT_BASED );
     if( !pMetricGroup )
         return -1;
 
@@ -72,25 +72,23 @@ int main( int argc, char *argv[] )
         pEvent->HostSynchronize( UINT32_MAX );
 
         // Read raw data from query
-        auto rawDataSize = pMetricGroup->GetProperties().rawReportSize;
-        auto rawData = new uint8_t[ rawDataSize ];
-        pQuery->GetData( numSamples, rawDataSize, rawData );
+        size_t rawDataSize = 0;
+        pQuery->GetData( &rawDataSize, nullptr );
+        std::vector<uint8_t> rawData( rawDataSize );
+        pQuery->GetData( &rawDataSize, rawData.data() );
 
         // Calculate results
-        auto calcDataSize = pMetricGroup->GetProperties().calculatedReportSize * numSamples;
-        auto calcData = new xet::typed_value_t[ calcDataSize ];
-        pMetricGroup->CalculateData( numSamples, rawDataSize, rawData, calcDataSize, calcData );
-
-        delete[] rawData;
+        uint32_t calcDataCount = 0;
+        xet::MetricGroup::CalculateData( pMetricGroup, rawDataSize, rawData.data(), &calcDataCount, nullptr );
+        std::vector<xet::typed_value_t> calcData( pMetricGroup->GetProperties().reportSize * calcDataCount );
+        xet::MetricGroup::CalculateData( pMetricGroup, rawDataSize, rawData.data(), &calcDataCount, calcData.data() );
 
         // Report results
         std::cout << "Compute Basic results:\n";
-        for( uint32_t i = 0; i < calcDataSize; ++i )
+        for( auto& entry : calcData )
         {
-            std::cout << xet::to_string( calcData[ i ] );
+            std::cout << xet::to_string( entry );
         }
-
-        delete[] calcData;
     }
     catch( const xe::exception_t& e )
     {

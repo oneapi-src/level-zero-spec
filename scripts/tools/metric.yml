@@ -82,11 +82,8 @@ members:
       name: "metricCount"
       desc: "[out] metric count belonging to this group"
     - type: size_t
-      name: "rawReportSize"
-      desc: "[out] size of raw report"
-    - type: size_t
-      name: "calculatedReportSize"
-      desc: "[out] size of calculated report"
+      name: "reportSize"
+      desc: "[out] size of calculated data per-report"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves attributes of a metric group."
@@ -167,16 +164,19 @@ class: $t
 name: $t_value_t
 members:
     - type: uint32_t
-      name: "valueUInt32"
+      name: "_uint32"
       desc: "[out] uint32_t value"
     - type: uint64_t
-      name: "valueUInt64"
+      name: "_uint64"
       desc: "[out] uint64_t value"
     - type: float
-      name: "valueFloat"
+      name: "_float"
       desc: "[out] float value"
+    - type: double
+      name: "_double"
+      desc: "[out] double value"
     - type: $x_bool_t
-      name: "valueBool"
+      name: "_bool"
       desc: "[out] bool value"
 --- #--------------------------------------------------------------------------
 type: struct
@@ -273,27 +273,28 @@ type: function
 desc: "Calculates counter values from raw data."
 class: $tMetricGroup
 name: CalculateData
+decl: static
 details:
-    - "The application may **not** call this function from simultaneous threads wth the same metric group handle."
+    - "The application may call this function from simultaneous threads."
 params:
     - type: "$t_metric_group_handle_t"
       name: hMetricGroup
       desc: "[in] handle of the metric group"
-    - type: uint32_t
-      name: count
-      desc: "[in,out] number of reports to calculate"
     - type: size_t
       name: rawDataSize
       desc: "[in] size in bytes of raw data buffer"
     - type: "uint8_t*"
       name: pRawData
       desc: "[in][range(0, rawDataSize)] buffer of raw data to calculate"
-    - type: size_t
-      name: calculatedDataSize
-      desc: "[in] size in bytes of calculated metrics"
+    - type: uint32_t*
+      name: pCalculatedDataCount
+      desc: |
+            [in] pointer to number of entries in calculated data buffer.
+            if count is zero, then the driver will update the value with the total number of entires to be calculated.
+            if count is non-zero, then driver will only calculate that number of entires.
     - type: "$t_typed_value_t*"
       name: pCalculatedData
-      desc: "[in,out][range(0, calculatedDataSize)] buffer of calculated metrics"
+      desc: "[in,out][range(0, *pCalculatedDataSize)] buffer of calculated data"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid metric group handle"
@@ -359,7 +360,7 @@ params:
       name: "hMetricGroup"
       desc: "[in] handle of the metric group"
     - type: "$t_metric_tracer_desc_t*"
-      name: pDesc
+      name: desc
       desc: "[in,out] metric tracer descriptor"
     - type: "$x_event_handle_t"
       name: hNotificationEvent
@@ -415,15 +416,15 @@ params:
     - type: "$t_metric_tracer_handle_t"
       name: hMetricTracer
       desc: "[in] handle of the metric tracer"
-    - type: uint32_t*
-      name: pReportCount
-      desc: "[in,out] report count to read/returned"
-    - type: uint32_t
-      name: rawDataSize
-      desc: "[in] raw data buffer size"
+    - type: size_t*
+      name: pRawDataSize
+      desc: |
+            [in,out] pointer to size in bytes of raw data requested to read.
+            if size is zero, then the driver will update the value with the total size in bytes needed for all reports available.
+            if size is non-zero, then driver will only retrieve the number of reports that fit into the buffer.
     - type: uint8_t*
       name: pRawData
-      desc: "[in,out] raw data buffer for reports"
+      desc: "[in,out][optional][range(0, *pRawDataSize)] buffer containing tracer reports in raw format"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid metric tracer handle"
@@ -478,9 +479,9 @@ params:
     - type: $t_metric_group_handle_t
       name: "hMetricGroup"
       desc: "[in] metric group associated with the query object."
-    - type: "$t_metric_query_pool_desc_t*"
-      name: pDesc
-      desc: "[in] metric query pool creation data"
+    - type: "const $t_metric_query_pool_desc_t*"
+      name: desc
+      desc: "[in] metric query pool descriptor"
     - type: "$t_metric_query_pool_handle_t*"
       name: phMetricQueryPool
       desc: "[out] handle of metric query pool"
@@ -609,7 +610,7 @@ returns:
         - "invalid command list handle"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Retrieves raw data for a given metric query slot."
+desc: "Retrieves raw data for a given metric query."
 class: $tMetricQuery
 name: GetData
 details:
@@ -618,15 +619,15 @@ params:
     - type: "$t_metric_query_handle_t"
       name: hMetricQuery
       desc: "[in] handle of the metric query"
-    - type: uint32_t
-      name: count
-      desc: "[in] number of query reports to read"
-    - type: size_t
-      name: rawDataSize
-      desc: "[in] size in bytes of raw data buffer"
+    - type: size_t*
+      name: pRawDataSize
+      desc: |
+            [in,out] pointer to size in bytes of raw data requested to read.
+            if size is zero, then the driver will update the value with the total size in bytes needed for all reports available.
+            if size is non-zero, then driver will only retrieve the number of reports that fit into the buffer.
     - type: uint8_t*
       name: pRawData
-      desc: "[in,out][range(0, rawDataSize)] buffer containing query results in raw format"
+      desc: "[in,out][optional][range(0, *pRawDataSize)] buffer containing query reports in raw format"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid metric query handle"
@@ -638,7 +639,7 @@ owner: $tDevice
 members:
     - type: $t_metric_group_handle_t
       name: handle
-      desc: "handle of metric group object" 
+      desc: "[in] handle of metric group object" 
       init: nullptr
     - type: $tDevice*
       name: pDevice
@@ -651,7 +652,7 @@ owner: $tMetricGroup
 members:
     - type: $t_metric_handle_t
       name: handle
-      desc: "handle of metric object" 
+      desc: "[in] handle of metric object" 
     - type: $tMetricGroup*
       name: pMetricGroup
       desc: "[in] pointer to owner object"
@@ -663,10 +664,13 @@ owner: $tDevice
 members:
     - type: $t_metric_tracer_handle_t
       name: handle
-      desc: "handle of metric tracer object" 
+      desc: "[in] handle of metric tracer object" 
     - type: $tDevice*
       name: pDevice
       desc: "[in] pointer to owner object"
+    - type: $t_metric_tracer_desc_t
+      name: desc
+      desc: "[in] descriptor of the metric tracer"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for metric query pool"
@@ -675,10 +679,13 @@ owner: $tDevice
 members:
     - type: $t_metric_query_pool_handle_t
       name: handle
-      desc: "handle of metric query pool object" 
+      desc: "[in] handle of metric query pool object" 
     - type: $tDevice*
       name: pDevice
       desc: "[in] pointer to owner object"
+    - type: $t_metric_query_pool_desc_t
+      name: desc
+      desc: "[in] descriptor of the metric query pool"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for metric query"
@@ -687,7 +694,7 @@ owner: $tDevice
 members:
     - type: $t_metric_query_handle_t
       name: handle
-      desc: "handle of metric query object" 
+      desc: "[in] handle of metric query object" 
     - type: $tDevice*
       name: pDevice
       desc: "[in] pointer to owner object"
