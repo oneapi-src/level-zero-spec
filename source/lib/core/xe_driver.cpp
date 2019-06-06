@@ -62,11 +62,11 @@ xeInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    auto result = xe_lib::lib.Init();
+    auto result = xe_lib::context.Init();
     if( XE_RESULT_SUCCESS != result )
         return result;
 
-    auto pfnInit = xe_lib::lib.ddiTable.Global.pfnInit;
+    auto pfnInit = xe_lib::context.ddiTable.Global.pfnInit;
 
 #if _DEBUG
     if( nullptr == pfnInit )
@@ -104,7 +104,7 @@ xeDeviceGroupGetDriverVersion(
     uint32_t* version                               ///< [out] driver version
     )
 {
-    auto pfnGetDriverVersion = xe_lib::lib.ddiTable.DeviceGroup.pfnGetDriverVersion;
+    auto pfnGetDriverVersion = xe_lib::context.ddiTable.DeviceGroup.pfnGetDriverVersion;
 
 #if _DEBUG
     if( nullptr == pfnGetDriverVersion )

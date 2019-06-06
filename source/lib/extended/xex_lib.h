@@ -32,22 +32,20 @@
 
 namespace xex_lib
 {
-    using namespace xex;
-
     ///////////////////////////////////////////////////////////////////////////////
-    class Library
+    class Context
     {
     public:
         HMODULE loader = nullptr;
 
-        Library();
-        ~Library();
+        Context();
+        ~Context();
 
         xe_result_t Init();
 
         xex_dditable_t  ddiTable = {};
     };
 
-    extern Library lib;
+    extern Context context;
 
 } // namespace xex_lib

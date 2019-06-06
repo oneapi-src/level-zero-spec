@@ -66,7 +66,7 @@ xeDeviceGroupGet(
     xe_device_group_handle_t* phDeviceGroups        ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
     )
 {
-    auto pfnGet = xe_lib::lib.ddiTable.DeviceGroup.pfnGet;
+    auto pfnGet = xe_lib::context.ddiTable.DeviceGroup.pfnGet;
 
 #if _DEBUG
     if( nullptr == pfnGet )
@@ -107,7 +107,7 @@ xeDeviceGet(
     xe_device_handle_t* phDevices                   ///< [in,out][optional][range(0, *pCount)] array of handle of devices
     )
 {
-    auto pfnGet = xe_lib::lib.ddiTable.Device.pfnGet;
+    auto pfnGet = xe_lib::context.ddiTable.Device.pfnGet;
 
 #if _DEBUG
     if( nullptr == pfnGet )
@@ -145,7 +145,7 @@ xeDeviceGetSubDevice(
     xe_device_handle_t* phSubdevice                 ///< [out] pointer to handle of sub-device object.
     )
 {
-    auto pfnGetSubDevice = xe_lib::lib.ddiTable.Device.pfnGetSubDevice;
+    auto pfnGetSubDevice = xe_lib::context.ddiTable.Device.pfnGetSubDevice;
 
 #if _DEBUG
     if( nullptr == pfnGetSubDevice )
@@ -180,7 +180,7 @@ xeDeviceGroupGetApiVersion(
     xe_api_version_t* version                       ///< [out] api version
     )
 {
-    auto pfnGetApiVersion = xe_lib::lib.ddiTable.DeviceGroup.pfnGetApiVersion;
+    auto pfnGetApiVersion = xe_lib::context.ddiTable.DeviceGroup.pfnGetApiVersion;
 
 #if _DEBUG
     if( nullptr == pfnGetApiVersion )
@@ -217,7 +217,7 @@ xeDeviceGroupGetDeviceProperties(
     xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
     )
 {
-    auto pfnGetDeviceProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetDeviceProperties;
+    auto pfnGetDeviceProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetDeviceProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetDeviceProperties )
@@ -253,7 +253,7 @@ xeDeviceGroupGetComputeProperties(
     xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
     )
 {
-    auto pfnGetComputeProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetComputeProperties;
+    auto pfnGetComputeProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetComputeProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetComputeProperties )
@@ -298,7 +298,7 @@ xeDeviceGroupGetMemoryProperties(
                                                     ///< memory properties
     )
 {
-    auto pfnGetMemoryProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetMemoryProperties;
+    auto pfnGetMemoryProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetMemoryProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetMemoryProperties )
@@ -335,7 +335,7 @@ xeDeviceGroupGetMemoryAccessProperties(
     xe_device_memory_access_properties_t* pMemAccessProperties  ///< [out] query result for memory access properties
     )
 {
-    auto pfnGetMemoryAccessProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetMemoryAccessProperties;
+    auto pfnGetMemoryAccessProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetMemoryAccessProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetMemoryAccessProperties )
@@ -372,7 +372,7 @@ xeDeviceGroupGetCacheProperties(
     xe_device_cache_properties_t* pCacheProperties  ///< [out] query result for cache properties
     )
 {
-    auto pfnGetCacheProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetCacheProperties;
+    auto pfnGetCacheProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetCacheProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetCacheProperties )
@@ -407,7 +407,7 @@ xeDeviceGroupGetImageProperties(
     xe_device_image_properties_t* pImageProperties  ///< [out] query result for image properties
     )
 {
-    auto pfnGetImageProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetImageProperties;
+    auto pfnGetImageProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetImageProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetImageProperties )
@@ -445,7 +445,7 @@ xeDeviceGetP2PProperties(
     xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
     )
 {
-    auto pfnGetP2PProperties = xe_lib::lib.ddiTable.Device.pfnGetP2PProperties;
+    auto pfnGetP2PProperties = xe_lib::context.ddiTable.Device.pfnGetP2PProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetP2PProperties )
@@ -494,7 +494,7 @@ xeDeviceCanAccessPeer(
     xe_bool_t* value                                ///< [out] returned access capability
     )
 {
-    auto pfnCanAccessPeer = xe_lib::lib.ddiTable.Device.pfnCanAccessPeer;
+    auto pfnCanAccessPeer = xe_lib::context.ddiTable.Device.pfnCanAccessPeer;
 
 #if _DEBUG
     if( nullptr == pfnCanAccessPeer )
@@ -529,7 +529,7 @@ xeDeviceSetIntermediateCacheConfig(
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     )
 {
-    auto pfnSetIntermediateCacheConfig = xe_lib::lib.ddiTable.Device.pfnSetIntermediateCacheConfig;
+    auto pfnSetIntermediateCacheConfig = xe_lib::context.ddiTable.Device.pfnSetIntermediateCacheConfig;
 
 #if _DEBUG
     if( nullptr == pfnSetIntermediateCacheConfig )
@@ -564,7 +564,7 @@ xeDeviceSetLastLevelCacheConfig(
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     )
 {
-    auto pfnSetLastLevelCacheConfig = xe_lib::lib.ddiTable.Device.pfnSetLastLevelCacheConfig;
+    auto pfnSetLastLevelCacheConfig = xe_lib::context.ddiTable.Device.pfnSetLastLevelCacheConfig;
 
 #if _DEBUG
     if( nullptr == pfnSetLastLevelCacheConfig )

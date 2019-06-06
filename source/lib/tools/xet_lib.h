@@ -33,19 +33,19 @@
 namespace xet_lib
 {
     ///////////////////////////////////////////////////////////////////////////////
-    class Library
+    class Context
     {
     public:
         HMODULE loader = nullptr;
 
-        Library();
-        ~Library();
+        Context();
+        ~Context();
 
         xe_result_t Init();
 
         xet_dditable_t  ddiTable = {};
     };
 
-    extern Library lib;
+    extern Context context;
 
 } // namespace xet_lib

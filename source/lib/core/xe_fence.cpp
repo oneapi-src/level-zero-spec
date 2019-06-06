@@ -64,7 +64,7 @@ xeFenceCreate(
     xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
     )
 {
-    auto pfnCreate = xe_lib::lib.ddiTable.Fence.pfnCreate;
+    auto pfnCreate = xe_lib::context.ddiTable.Fence.pfnCreate;
 
 #if _DEBUG
     if( nullptr == pfnCreate )
@@ -103,7 +103,7 @@ xeFenceDestroy(
     xe_fence_handle_t hFence                        ///< [in][release] handle of fence object to destroy
     )
 {
-    auto pfnDestroy = xe_lib::lib.ddiTable.Fence.pfnDestroy;
+    auto pfnDestroy = xe_lib::context.ddiTable.Fence.pfnDestroy;
 
 #if _DEBUG
     if( nullptr == pfnDestroy )
@@ -144,7 +144,7 @@ xeFenceHostSynchronize(
                                                     ///< is lost.
     )
 {
-    auto pfnHostSynchronize = xe_lib::lib.ddiTable.Fence.pfnHostSynchronize;
+    auto pfnHostSynchronize = xe_lib::context.ddiTable.Fence.pfnHostSynchronize;
 
 #if _DEBUG
     if( nullptr == pfnHostSynchronize )
@@ -180,7 +180,7 @@ xeFenceQueryStatus(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
-    auto pfnQueryStatus = xe_lib::lib.ddiTable.Fence.pfnQueryStatus;
+    auto pfnQueryStatus = xe_lib::context.ddiTable.Fence.pfnQueryStatus;
 
 #if _DEBUG
     if( nullptr == pfnQueryStatus )
@@ -213,7 +213,7 @@ xeFenceReset(
     xe_fence_handle_t hFence                        ///< [in] handle of the fence
     )
 {
-    auto pfnReset = xe_lib::lib.ddiTable.Fence.pfnReset;
+    auto pfnReset = xe_lib::context.ddiTable.Fence.pfnReset;
 
 #if _DEBUG
     if( nullptr == pfnReset )

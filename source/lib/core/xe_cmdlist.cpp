@@ -64,7 +64,7 @@ xeCommandListCreate(
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     )
 {
-    auto pfnCreate = xe_lib::lib.ddiTable.CommandList.pfnCreate;
+    auto pfnCreate = xe_lib::context.ddiTable.CommandList.pfnCreate;
 
 #if _DEBUG
     if( nullptr == pfnCreate )
@@ -105,7 +105,7 @@ xeCommandListCreateImmediate(
     xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
     )
 {
-    auto pfnCreateImmediate = xe_lib::lib.ddiTable.CommandList.pfnCreateImmediate;
+    auto pfnCreateImmediate = xe_lib::context.ddiTable.CommandList.pfnCreateImmediate;
 
 #if _DEBUG
     if( nullptr == pfnCreateImmediate )
@@ -139,7 +139,7 @@ xeCommandListDestroy(
     xe_command_list_handle_t hCommandList           ///< [in][release] handle of command list object to destroy
     )
 {
-    auto pfnDestroy = xe_lib::lib.ddiTable.CommandList.pfnDestroy;
+    auto pfnDestroy = xe_lib::context.ddiTable.CommandList.pfnDestroy;
 
 #if _DEBUG
     if( nullptr == pfnDestroy )
@@ -169,7 +169,7 @@ xeCommandListClose(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
     )
 {
-    auto pfnClose = xe_lib::lib.ddiTable.CommandList.pfnClose;
+    auto pfnClose = xe_lib::context.ddiTable.CommandList.pfnClose;
 
 #if _DEBUG
     if( nullptr == pfnClose )
@@ -202,7 +202,7 @@ xeCommandListReset(
     xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
     )
 {
-    auto pfnReset = xe_lib::lib.ddiTable.CommandList.pfnReset;
+    auto pfnReset = xe_lib::context.ddiTable.CommandList.pfnReset;
 
 #if _DEBUG
     if( nullptr == pfnReset )
@@ -242,7 +242,7 @@ xeCommandListSetParameter(
     uint32_t value                                  ///< [in] value of attribute
     )
 {
-    auto pfnSetParameter = xe_lib::lib.ddiTable.CommandList.pfnSetParameter;
+    auto pfnSetParameter = xe_lib::context.ddiTable.CommandList.pfnSetParameter;
 
 #if _DEBUG
     if( nullptr == pfnSetParameter )
@@ -282,7 +282,7 @@ xeCommandListGetParameter(
     uint32_t* value                                 ///< [out] value of attribute
     )
 {
-    auto pfnGetParameter = xe_lib::lib.ddiTable.CommandList.pfnGetParameter;
+    auto pfnGetParameter = xe_lib::context.ddiTable.CommandList.pfnGetParameter;
 
 #if _DEBUG
     if( nullptr == pfnGetParameter )
@@ -312,7 +312,7 @@ xeCommandListResetParameters(
     xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
     )
 {
-    auto pfnResetParameters = xe_lib::lib.ddiTable.CommandList.pfnResetParameters;
+    auto pfnResetParameters = xe_lib::context.ddiTable.CommandList.pfnResetParameters;
 
 #if _DEBUG
     if( nullptr == pfnResetParameters )
@@ -348,7 +348,7 @@ xeCommandListReserveSpace(
     void** ptr                                      ///< [out] pointer to command buffer space reserved
     )
 {
-    auto pfnReserveSpace = xe_lib::lib.ddiTable.CommandList.pfnReserveSpace;
+    auto pfnReserveSpace = xe_lib::context.ddiTable.CommandList.pfnReserveSpace;
 
 #if _DEBUG
     if( nullptr == pfnReserveSpace )

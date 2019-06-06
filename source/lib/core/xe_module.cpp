@@ -84,7 +84,7 @@ xeModuleCreate(
     xe_module_build_log_handle_t* phBuildLog        ///< [out][optional] pointer to handle of module's build log.
     )
 {
-    auto pfnCreate = xe_lib::lib.ddiTable.Module.pfnCreate;
+    auto pfnCreate = xe_lib::context.ddiTable.Module.pfnCreate;
 
 #if _DEBUG
     if( nullptr == pfnCreate )
@@ -122,7 +122,7 @@ xeModuleDestroy(
     xe_module_handle_t hModule                      ///< [in][release] handle of the module
     )
 {
-    auto pfnDestroy = xe_lib::lib.ddiTable.Module.pfnDestroy;
+    auto pfnDestroy = xe_lib::context.ddiTable.Module.pfnDestroy;
 
 #if _DEBUG
     if( nullptr == pfnDestroy )
@@ -156,7 +156,7 @@ xeModuleBuildLogDestroy(
     xe_module_build_log_handle_t hModuleBuildLog    ///< [in][release] handle of the module build log object.
     )
 {
-    auto pfnDestroy = xe_lib::lib.ddiTable.ModuleBuildLog.pfnDestroy;
+    auto pfnDestroy = xe_lib::context.ddiTable.ModuleBuildLog.pfnDestroy;
 
 #if _DEBUG
     if( nullptr == pfnDestroy )
@@ -192,7 +192,7 @@ xeModuleBuildLogGetString(
     char* pBuildLog                                 ///< [in,out][optional] pointer to null-terminated string of the log.
     )
 {
-    auto pfnGetString = xe_lib::lib.ddiTable.ModuleBuildLog.pfnGetString;
+    auto pfnGetString = xe_lib::context.ddiTable.ModuleBuildLog.pfnGetString;
 
 #if _DEBUG
     if( nullptr == pfnGetString )
@@ -235,7 +235,7 @@ xeModuleGetNativeBinary(
     uint8_t* pModuleNativeBinary                    ///< [in,out][optional] byte pointer to native binary
     )
 {
-    auto pfnGetNativeBinary = xe_lib::lib.ddiTable.Module.pfnGetNativeBinary;
+    auto pfnGetNativeBinary = xe_lib::context.ddiTable.Module.pfnGetNativeBinary;
 
 #if _DEBUG
     if( nullptr == pfnGetNativeBinary )
@@ -269,7 +269,7 @@ xeModuleGetGlobalPointer(
     void** pPtr                                     ///< [out] device visible pointer
     )
 {
-    auto pfnGetGlobalPointer = xe_lib::lib.ddiTable.Module.pfnGetGlobalPointer;
+    auto pfnGetGlobalPointer = xe_lib::context.ddiTable.Module.pfnGetGlobalPointer;
 
 #if _DEBUG
     if( nullptr == pfnGetGlobalPointer )
@@ -309,7 +309,7 @@ xeFunctionCreate(
     xe_function_handle_t* phFunction                ///< [out] handle of the Function object
     )
 {
-    auto pfnCreate = xe_lib::lib.ddiTable.Function.pfnCreate;
+    auto pfnCreate = xe_lib::context.ddiTable.Function.pfnCreate;
 
 #if _DEBUG
     if( nullptr == pfnCreate )
@@ -344,7 +344,7 @@ xeFunctionDestroy(
     xe_function_handle_t hFunction                  ///< [in][release] handle of the function object
     )
 {
-    auto pfnDestroy = xe_lib::lib.ddiTable.Function.pfnDestroy;
+    auto pfnDestroy = xe_lib::context.ddiTable.Function.pfnDestroy;
 
 #if _DEBUG
     if( nullptr == pfnDestroy )
@@ -381,7 +381,7 @@ xeModuleGetFunctionPointer(
     void** pfnFunction                              ///< [out] pointer to function.
     )
 {
-    auto pfnGetFunctionPointer = xe_lib::lib.ddiTable.Module.pfnGetFunctionPointer;
+    auto pfnGetFunctionPointer = xe_lib::context.ddiTable.Module.pfnGetFunctionPointer;
 
 #if _DEBUG
     if( nullptr == pfnGetFunctionPointer )
@@ -416,7 +416,7 @@ xeFunctionSetGroupSize(
     uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this function.
     )
 {
-    auto pfnSetGroupSize = xe_lib::lib.ddiTable.Function.pfnSetGroupSize;
+    auto pfnSetGroupSize = xe_lib::context.ddiTable.Function.pfnSetGroupSize;
 
 #if _DEBUG
     if( nullptr == pfnSetGroupSize )
@@ -458,7 +458,7 @@ xeFunctionSuggestGroupSize(
     uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
     )
 {
-    auto pfnSuggestGroupSize = xe_lib::lib.ddiTable.Function.pfnSuggestGroupSize;
+    auto pfnSuggestGroupSize = xe_lib::context.ddiTable.Function.pfnSuggestGroupSize;
 
 #if _DEBUG
     if( nullptr == pfnSuggestGroupSize )
@@ -496,7 +496,7 @@ xeFunctionSetArgumentValue(
                                                     ///< null then argument value is considered null.
     )
 {
-    auto pfnSetArgumentValue = xe_lib::lib.ddiTable.Function.pfnSetArgumentValue;
+    auto pfnSetArgumentValue = xe_lib::context.ddiTable.Function.pfnSetArgumentValue;
 
 #if _DEBUG
     if( nullptr == pfnSetArgumentValue )
@@ -534,7 +534,7 @@ xeFunctionSetAttribute(
     uint32_t value                                  ///< [in] attribute value to set
     )
 {
-    auto pfnSetAttribute = xe_lib::lib.ddiTable.Function.pfnSetAttribute;
+    auto pfnSetAttribute = xe_lib::context.ddiTable.Function.pfnSetAttribute;
 
 #if _DEBUG
     if( nullptr == pfnSetAttribute )
@@ -571,7 +571,7 @@ xeFunctionGetAttribute(
     uint32_t* pValue                                ///< [out] returned attribute value
     )
 {
-    auto pfnGetAttribute = xe_lib::lib.ddiTable.Function.pfnGetAttribute;
+    auto pfnGetAttribute = xe_lib::context.ddiTable.Function.pfnGetAttribute;
 
 #if _DEBUG
     if( nullptr == pfnGetAttribute )
@@ -615,7 +615,7 @@ xeCommandListAppendLaunchFunction(
                                                     ///< on before launching
     )
 {
-    auto pfnAppendLaunchFunction = xe_lib::lib.ddiTable.CommandList.pfnAppendLaunchFunction;
+    auto pfnAppendLaunchFunction = xe_lib::context.ddiTable.CommandList.pfnAppendLaunchFunction;
 
 #if _DEBUG
     if( nullptr == pfnAppendLaunchFunction )
@@ -662,7 +662,7 @@ xeCommandListAppendLaunchFunctionIndirect(
                                                     ///< on before launching
     )
 {
-    auto pfnAppendLaunchFunctionIndirect = xe_lib::lib.ddiTable.CommandList.pfnAppendLaunchFunctionIndirect;
+    auto pfnAppendLaunchFunctionIndirect = xe_lib::context.ddiTable.CommandList.pfnAppendLaunchFunctionIndirect;
 
 #if _DEBUG
     if( nullptr == pfnAppendLaunchFunctionIndirect )
@@ -716,7 +716,7 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
                                                     ///< on before launching
     )
 {
-    auto pfnAppendLaunchMultipleFunctionsIndirect = xe_lib::lib.ddiTable.CommandList.pfnAppendLaunchMultipleFunctionsIndirect;
+    auto pfnAppendLaunchMultipleFunctionsIndirect = xe_lib::context.ddiTable.CommandList.pfnAppendLaunchMultipleFunctionsIndirect;
 
 #if _DEBUG
     if( nullptr == pfnAppendLaunchMultipleFunctionsIndirect )
@@ -760,7 +760,7 @@ xeCommandListAppendLaunchHostFunction(
                                                     ///< on before launching
     )
 {
-    auto pfnAppendLaunchHostFunction = xe_lib::lib.ddiTable.CommandList.pfnAppendLaunchHostFunction;
+    auto pfnAppendLaunchHostFunction = xe_lib::context.ddiTable.CommandList.pfnAppendLaunchHostFunction;
 
 #if _DEBUG
     if( nullptr == pfnAppendLaunchHostFunction )

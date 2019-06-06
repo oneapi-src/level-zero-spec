@@ -61,7 +61,7 @@ xexCommandGraphCreate(
     xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
     )
 {
-    auto pfnCreate = xex_lib::lib.ddiTable.CommandGraph.pfnCreate;
+    auto pfnCreate = xex_lib::context.ddiTable.CommandGraph.pfnCreate;
 
 #if _DEBUG
     if( nullptr == pfnCreate )
@@ -93,7 +93,7 @@ xexCommandGraphDestroy(
     xex_command_graph_handle_t hCommandGraph        ///< [in][release] handle of command graph object to destroy
     )
 {
-    auto pfnDestroy = xex_lib::lib.ddiTable.CommandGraph.pfnDestroy;
+    auto pfnDestroy = xex_lib::context.ddiTable.CommandGraph.pfnDestroy;
 
 #if _DEBUG
     if( nullptr == pfnDestroy )
@@ -126,7 +126,7 @@ xexCommandGraphClose(
     xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
     )
 {
-    auto pfnClose = xex_lib::lib.ddiTable.CommandGraph.pfnClose;
+    auto pfnClose = xex_lib::context.ddiTable.CommandGraph.pfnClose;
 
 #if _DEBUG
     if( nullptr == pfnClose )

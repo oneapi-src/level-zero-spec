@@ -71,7 +71,7 @@ xeCommandListAppendBarrier(
                                                     ///< on before executing barrier
     )
 {
-    auto pfnAppendBarrier = xe_lib::lib.ddiTable.CommandList.pfnAppendBarrier;
+    auto pfnAppendBarrier = xe_lib::context.ddiTable.CommandList.pfnAppendBarrier;
 
 #if _DEBUG
     if( nullptr == pfnAppendBarrier )
@@ -118,7 +118,7 @@ xeCommandListAppendMemoryRangesBarrier(
                                                     ///< on before executing barrier
     )
 {
-    auto pfnAppendMemoryRangesBarrier = xe_lib::lib.ddiTable.CommandList.pfnAppendMemoryRangesBarrier;
+    auto pfnAppendMemoryRangesBarrier = xe_lib::context.ddiTable.CommandList.pfnAppendMemoryRangesBarrier;
 
 #if _DEBUG
     if( nullptr == pfnAppendMemoryRangesBarrier )
@@ -153,7 +153,7 @@ xeDeviceSystemBarrier(
     xe_device_handle_t hDevice                      ///< [in] handle of the device
     )
 {
-    auto pfnSystemBarrier = xe_lib::lib.ddiTable.Device.pfnSystemBarrier;
+    auto pfnSystemBarrier = xe_lib::context.ddiTable.Device.pfnSystemBarrier;
 
 #if _DEBUG
     if( nullptr == pfnSystemBarrier )

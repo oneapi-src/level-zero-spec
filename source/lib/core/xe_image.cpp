@@ -58,7 +58,7 @@ xeImageGetProperties(
     xe_image_properties_t* pImageProperties         ///< [out] pointer to image properties
     )
 {
-    auto pfnGetProperties = xe_lib::lib.ddiTable.Image.pfnGetProperties;
+    auto pfnGetProperties = xe_lib::context.ddiTable.Image.pfnGetProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetProperties )
@@ -101,7 +101,7 @@ xeImageCreate(
     xe_image_handle_t* phImage                      ///< [out] pointer to handle of image object created
     )
 {
-    auto pfnCreate = xe_lib::lib.ddiTable.Image.pfnCreate;
+    auto pfnCreate = xe_lib::context.ddiTable.Image.pfnCreate;
 
 #if _DEBUG
     if( nullptr == pfnCreate )
@@ -135,7 +135,7 @@ xeImageDestroy(
     xe_image_handle_t hImage                        ///< [in][release] handle of image object to destroy
     )
 {
-    auto pfnDestroy = xe_lib::lib.ddiTable.Image.pfnDestroy;
+    auto pfnDestroy = xe_lib::context.ddiTable.Image.pfnDestroy;
 
 #if _DEBUG
     if( nullptr == pfnDestroy )

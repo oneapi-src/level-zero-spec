@@ -78,12 +78,12 @@ ${th.make_func_name(n, tags, obj)}(
     )
 {
 %if re.match("Init", obj['name']):
-    auto result = ${n}_lib::lib.Init();
+    auto result = ${n}_lib::context.Init();
     if( ${X}_RESULT_SUCCESS != result )
         return result;
 
 %endif
-    auto ${th.make_pfn_name(n, tags, obj)} = ${n}_lib::lib.ddiTable.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
+    auto ${th.make_pfn_name(n, tags, obj)} = ${n}_lib::context.ddiTable.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
 
 #if _DEBUG
     if( nullptr == ${th.make_pfn_name(n, tags, obj)} )
