@@ -354,17 +354,16 @@ void single_event_pool_create(L0Context &context,
     }
 }
 
-void single_event_create(xe_event_pool_handle_t kernel_launch_event_pool,
-                         xe_event_handle_t *kernel_launch_event) {
+void single_event_create(xe_event_pool_handle_t event_pool,
+                         xe_event_handle_t *event) {
         xe_result_t result;
-        xe_event_desc_t kernel_launch_event_desc;
+        xe_event_desc_t event_desc;
 
-        kernel_launch_event_desc.index = 0;
-        kernel_launch_event_desc.signal = XE_EVENT_SCOPE_FLAG_NONE;
-        kernel_launch_event_desc.wait = XE_EVENT_SCOPE_FLAG_NONE;
-        kernel_launch_event_desc.version = XE_EVENT_DESC_VERSION_CURRENT;
-        result = xeEventCreate(kernel_launch_event_pool,
-                               &kernel_launch_event_desc, kernel_launch_event);
+        event_desc.index = 0;
+        event_desc.signal = XE_EVENT_SCOPE_FLAG_NONE;
+        event_desc.wait = XE_EVENT_SCOPE_FLAG_NONE;
+        event_desc.version = XE_EVENT_DESC_VERSION_CURRENT;
+        result = xeEventCreate(event_pool, &event_desc, event);
         if (result) {
             throw std::runtime_error("xeEventCreate failed: " + result);
         }
@@ -426,10 +425,103 @@ float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
             run_command_queue(context);
         }
         timed = timer.stopAndTime();
+    } else if (type == TimingMeasurement::BANDWIDTH_EVENT_TIMING) {
+        xe_event_pool_handle_t event_pool;
+        xe_event_handle_t function_event;
+
+        single_event_pool_create(context, &event_pool);
+        if (verbose)
+            std::cout << "Event Pool Created\n";
+
+        single_event_create(event_pool, &function_event);
+        if (verbose)
+            std::cout << "Event Created\n";
+
+        result = xeCommandListAppendLaunchFunction(context.command_list,
+                                                   function,
+                                                   &workgroup_info.thread_group_dimensions,
+                                                   function_event, 0, nullptr);
+        if (result) {
+            throw std::runtime_error("xeCommandListAppendLaunchFunction failed: " + result);
+        }
+        if (verbose)
+            std::cout << "Function launch appended\n";
+
+        result = xeCommandListClose(context.command_list);
+        if (result) {
+            throw std::runtime_error("xeCommandListClose failed: " + result);
+        }
+        if (verbose)
+            std::cout << "Command list closed\n";
+
+        for (uint32_t i = 0; i < warmup_iterations; i++) {
+            result = xeCommandQueueExecuteCommandLists(context.command_queue, 1,
+                                                       &context.command_list,
+                                                       nullptr);
+            if (result) {
+                throw std::runtime_error(
+                        "xeCommandQueueExecuteCommandLists failed: " + result);
+            }
+
+            result = xeEventHostSynchronize(function_event, UINT32_MAX);
+            if (result) {
+                throw std::runtime_error("xeEventHostSynchronize failed: " +
+                                         result);
+            }
+
+            result = xeCommandQueueSynchronize(context.command_queue,
+                                               UINT32_MAX);
+            if (result) {
+                throw std::runtime_error("xeCommandQueueSynchronize failed: " +
+                                         result);
+            }
+
+            result = xeEventReset(function_event);
+            if (result) {
+                throw std::runtime_error("xeEventReset failed: " + result);
+            }
+            if (verbose)
+                std::cout << "Event Reset" << std::endl;
+        }
+
+        for (uint32_t i = 0; i < iters; i++) {
+            timer.start();
+            result = xeCommandQueueExecuteCommandLists(context.command_queue, 1,
+                                                       &context.command_list,
+                                                       nullptr);
+            if (result) {
+                throw std::runtime_error(
+                        "xeCommandQueueExecuteCommandLists failed: " + result);
+            }
+
+            result = xeEventHostSynchronize(function_event, UINT32_MAX);
+            if (result) {
+                throw std::runtime_error("xeEventHostSynchronize failed: " +
+                                         result);
+            }
+            timed += timer.stopAndTime();
+
+            result = xeCommandQueueSynchronize(context.command_queue,
+                                               UINT32_MAX);
+            if (result) {
+                throw std::runtime_error("xeCommandQueueSynchronize failed: " +
+                                         result);
+            }
+            if (verbose)
+                std::cout << "Command queue synchronized\n";
+
+            result = xeEventReset(function_event);
+            if (result) {
+                throw std::runtime_error("xeEventReset failed: " + result);
+            }
+            if (verbose)
+                std::cout << "Event Reset\n";
+        }
+        xeEventDestroy(function_event);
     } else if (type == TimingMeasurement::KERNEL_LAUNCH_LATENCY) {
         xe_event_handle_t kernel_launch_event;
-
         xe_event_pool_handle_t kernel_launch_event_pool;
+
         single_event_pool_create(context, &kernel_launch_event_pool);
         if (verbose)
             std::cout << "Event Pool Created\n";
@@ -676,5 +768,13 @@ uint64_t max_device_object_size(L0Context &context) {
         }
     } else {
         return device_properties.totalLocalMemSize;
+    }
+}
+
+TimingMeasurement XePeak::is_bandwidth_with_event_timer(void) {
+    if (use_event_timer) {
+        return TimingMeasurement::BANDWIDTH_EVENT_TIMING;
+    } else {
+        return TimingMeasurement::BANDWIDTH;
     }
 }

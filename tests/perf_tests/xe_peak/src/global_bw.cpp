@@ -26,7 +26,7 @@ void XePeak::xe_peak_global_bw(L0Context &context) {
     xe_result_t result = XE_RESULT_SUCCESS;
     uint64_t temp_global_size, max_total_work_items;
     struct XeWorkGroups workgroup_info;
-    TimingMeasurement type = TimingMeasurement::BANDWIDTH;
+    TimingMeasurement type = is_bandwidth_with_event_timer();
 
     std::vector<uint8_t> binary_file = context.load_binary_file("xe_global_bw.spv");
 

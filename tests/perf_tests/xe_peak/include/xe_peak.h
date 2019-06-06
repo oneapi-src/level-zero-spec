@@ -57,6 +57,7 @@
 
 enum class TimingMeasurement {
     BANDWIDTH = 0,
+    BANDWIDTH_EVENT_TIMING,
     KERNEL_LAUNCH_LATENCY,
     KERNEL_COMPLETE_LATENCY
 };
@@ -137,9 +138,11 @@ void _transfer_bw_host_copy(void *destination_buffer, void *source_buffer,
                             size_t buffer_size);
 void _transfer_bw_shared_memory(L0Context &context,
                                 std::vector<float> local_memory);
+TimingMeasurement is_bandwidth_with_event_timer(void);
 };
 
 uint64_t max_device_object_size(L0Context &context);
+TimingMeasurement is_bandwidth_with_event_timer(void);
 
 #endif /* XE_PEAK_H */
 
