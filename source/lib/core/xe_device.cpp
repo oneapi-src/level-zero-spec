@@ -99,11 +99,10 @@ xeDeviceGroupGet(
 xe_result_t __xecall
 xeDeviceGet(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
                                                     ///< if count is zero, then the driver will update the value with the total
-                                                    ///< number of device groups available.
-                                                    ///< if count is non-zero, then driver will only retrieve that number of
-                                                    ///< device groups.
+                                                    ///< number of devices available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of devices.
     xe_device_handle_t* phDevices                   ///< [in,out][optional][range(0, *pCount)] array of handle of devices
     )
 {
@@ -134,25 +133,27 @@ xeDeviceGet(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
-///         + nullptr == phSubdevice
-///         + ordinal is out of range reported by device properties.
+///         + nullptr == pCount
+///         + count is out of range reported by ::xeDeviceGetSubDevices
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGetSubDevice(
+xeDeviceGetSubDevices(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve; must be less than
-                                                    ///< ::xe_device_properties_t::numSubdevices
-    xe_device_handle_t* phSubdevice                 ///< [out] pointer to handle of sub-device object.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of sub-devices.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of sub-devices available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of sub-devices.
+    xe_device_handle_t* phSubdevices                ///< [in,out][optional][range(0, *pCount)] array of handle of sub-devices
     )
 {
-    auto pfnGetSubDevice = xe_lib::context.ddiTable.Device.pfnGetSubDevice;
+    auto pfnGetSubDevices = xe_lib::context.ddiTable.Device.pfnGetSubDevices;
 
 #if _DEBUG
-    if( nullptr == pfnGetSubDevice )
+    if( nullptr == pfnGetSubDevices )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnGetSubDevice( hDevice, ordinal, phSubdevice );
+    return pfnGetSubDevices( hDevice, pCount, phSubdevices );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -668,11 +669,10 @@ namespace xe
     void __xecall
     Device::Get(
         DeviceGroup* pDeviceGroup,                      ///< [in] pointer to the device group object
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
                                                         ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of device groups available.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of
-                                                        ///< device groups.
+                                                        ///< number of devices available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of devices.
         Device** ppDevices                              ///< [in,out][optional][range(0, *pCount)] array of pointer to devices
         )
     {
@@ -718,41 +718,45 @@ namespace xe
     ///   _Analogues_
     ///     - clCreateSubDevices
     /// 
-    /// @returns
-    ///     - Device*: pointer to handle of sub-device object.
-    /// 
     /// @throws result_t
-    Device* __xecall
-    Device::GetSubDevice(
-        uint32_t ordinal                                ///< [in] ordinal of sub-device to retrieve; must be less than
-                                                        ///< ::device_properties_t::numSubdevices
+    void __xecall
+    Device::GetSubDevices(
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of sub-devices.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of sub-devices available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of sub-devices.
+        Device** ppSubdevices                           ///< [in,out][optional][range(0, *pCount)] array of pointer to sub-devices
         )
     {
-        xe_device_handle_t hSubdevice;
+        thread_local std::vector<xe_device_handle_t> hSubdevices;
+        hSubdevices.resize( ( ppSubdevices ) ? *pCount : 0 );
 
-        auto result = static_cast<result_t>( ::xeDeviceGetSubDevice(
+        auto result = static_cast<result_t>( ::xeDeviceGetSubDevices(
             reinterpret_cast<xe_device_handle_t>( getHandle() ),
-            ordinal,
-            &hSubdevice ) );
+            pCount,
+            hSubdevices.data() ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::GetSubDevice" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::GetSubDevices" );
 
-        Device* pSubdevice = nullptr;
+        for( uint32_t i = 0; ( ppSubdevices ) && ( i < *pCount ); ++i )
+            ppSubdevices[ i ] = nullptr;
 
         try
         {
-            pSubdevice = new Device( reinterpret_cast<device_handle_t>( hSubdevice ), nullptr );
+            for( uint32_t i = 0; ( ppSubdevices ) && ( i < *pCount ); ++i )
+                ppSubdevices[ i ] = new Device( reinterpret_cast<device_handle_t>( hSubdevices[ i ] ), m_pDeviceGroup );
         }
         catch( std::bad_alloc& )
         {
-            delete pSubdevice;
-            pSubdevice = nullptr;
+            for( uint32_t i = 0; ( ppSubdevices ) && ( i < *pCount ); ++i )
+            {
+                delete ppSubdevices[ i ];
+                ppSubdevices[ i ] = nullptr;
+            }
 
-            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Device::GetSubDevice" );
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Device::GetSubDevices" );
         }
-
-        return pSubdevice;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1478,10 +1482,6 @@ namespace xe
         str += to_string(val.uuid);
         str += "\n";
         
-        str += "DeviceGroup::device_properties_t::numSubdevices : ";
-        str += std::to_string(val.numSubdevices);
-        str += "\n";
-        
         str += "DeviceGroup::device_properties_t::isSubdevice : ";
         str += std::to_string(val.isSubdevice);
         str += "\n";
@@ -1534,8 +1534,12 @@ namespace xe
         str += std::to_string(val.numSubslicesPerSlice);
         str += "\n";
         
-        str += "DeviceGroup::device_properties_t::numSlicesPerSubdevice : ";
-        str += std::to_string(val.numSlicesPerSubdevice);
+        str += "DeviceGroup::device_properties_t::numSlicesPerTile : ";
+        str += std::to_string(val.numSlicesPerTile);
+        str += "\n";
+        
+        str += "DeviceGroup::device_properties_t::numTiles : ";
+        str += std::to_string(val.numTiles);
         str += "\n";
         
         str += "DeviceGroup::device_properties_t::name : ";

@@ -142,11 +142,10 @@ namespace loader
     xe_result_t __xecall
     xeDeviceGet(
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
                                                         ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of device groups available.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of
-                                                        ///< device groups.
+                                                        ///< number of devices available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of devices.
         xe_device_handle_t* phDevices                   ///< [in,out][optional][range(0, *pCount)] array of handle of devices
         )
     {
@@ -174,13 +173,15 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGetSubDevice
+    /// @brief Intercept function for xeDeviceGetSubDevices
     xe_result_t __xecall
-    xeDeviceGetSubDevice(
+    xeDeviceGetSubDevices(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-        uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve; must be less than
-                                                        ///< ::xe_device_properties_t::numSubdevices
-        xe_device_handle_t* phSubdevice                 ///< [out] pointer to handle of sub-device object.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of sub-devices.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of sub-devices available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of sub-devices.
+        xe_device_handle_t* phSubdevices                ///< [in,out][optional][range(0, *pCount)] array of handle of sub-devices
         )
     {
         // extract driver's function pointer table
@@ -190,13 +191,14 @@ namespace loader
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Device.pfnGetSubDevice( hDevice, ordinal, phSubdevice );
+        auto result = dditable->xe.Device.pfnGetSubDevices( hDevice, pCount, phSubdevices );
 
         try
         {
-            // convert driver handle to loader handle
-            *phSubdevice = reinterpret_cast<xe_device_handle_t>(
-                xe_device_factory.get( *phSubdevice, dditable ) );
+            // convert driver handles to loader handles
+            for( size_t i = 0; ( nullptr != phSubdevices ) && ( i < *pCount ); ++i )
+                phSubdevices[ i ] = reinterpret_cast<xe_device_handle_t>(
+                    xe_device_factory.get( phSubdevices[ i ], dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -2651,7 +2653,7 @@ xeGetDeviceProcAddrTable(
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnGet                                      = loader::xeDeviceGet;
-            pDdiTable->pfnGetSubDevice                             = loader::xeDeviceGetSubDevice;
+            pDdiTable->pfnGetSubDevices                            = loader::xeDeviceGetSubDevices;
             pDdiTable->pfnGetP2PProperties                         = loader::xeDeviceGetP2PProperties;
             pDdiTable->pfnCanAccessPeer                            = loader::xeDeviceCanAccessPeer;
             pDdiTable->pfnSetIntermediateCacheConfig               = loader::xeDeviceSetIntermediateCacheConfig;

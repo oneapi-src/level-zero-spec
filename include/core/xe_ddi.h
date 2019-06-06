@@ -84,10 +84,10 @@ typedef xe_result_t (__xecall *xe_pfnDeviceGet_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGetSubDevice 
-typedef xe_result_t (__xecall *xe_pfnDeviceGetSubDevice_t)(
+/// @brief Function-pointer for xeDeviceGetSubDevices 
+typedef xe_result_t (__xecall *xe_pfnDeviceGetSubDevices_t)(
     xe_device_handle_t,
-    uint32_t,
+    uint32_t*,
     xe_device_handle_t*
     );
 
@@ -195,7 +195,7 @@ typedef xe_result_t (__xecall *xe_pfnDeviceEvictImage_t)(
 typedef struct _xe_device_dditable_t
 {
     xe_pfnDeviceGet_t                                           pfnGet;
-    xe_pfnDeviceGetSubDevice_t                                  pfnGetSubDevice;
+    xe_pfnDeviceGetSubDevices_t                                 pfnGetSubDevices;
     xe_pfnDeviceGetP2PProperties_t                              pfnGetP2PProperties;
     xe_pfnDeviceCanAccessPeer_t                                 pfnCanAccessPeer;
     xe_pfnDeviceSetIntermediateCacheConfig_t                    pfnSetIntermediateCacheConfig;

@@ -1017,7 +1017,10 @@ def make_wrapper_ctor_params(namespace, tags, obj, meta, specs, wparam):
                 params.append(name)
 
         else:
-            params.append("nullptr")
+            if (not is_static and not is_global):
+                params.append("m_"+name)
+            else:
+                params.append("nullptr")
 
     return params
 

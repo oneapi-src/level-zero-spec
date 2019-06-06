@@ -195,7 +195,7 @@ namespace xe
 
         try
         {
-            pModule = new Module( reinterpret_cast<module_handle_t>( hModule ), this, nullptr );
+            pModule = new Module( reinterpret_cast<module_handle_t>( hModule ), this, m_desc );
         }
         catch( std::bad_alloc& )
         {
@@ -238,7 +238,7 @@ namespace xe
 
         try
         {
-            pCommandQueue = new CommandQueue( reinterpret_cast<command_queue_handle_t>( hCommandQueue ), this, nullptr );
+            pCommandQueue = new CommandQueue( reinterpret_cast<command_queue_handle_t>( hCommandQueue ), this, m_desc );
         }
         catch( std::bad_alloc& )
         {

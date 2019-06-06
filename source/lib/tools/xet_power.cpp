@@ -1578,7 +1578,7 @@ namespace xet
 
         try
         {
-            pSrcFreqDomain = new FreqDomain( nullptr );
+            pSrcFreqDomain = new FreqDomain( m_pPower );
         }
         catch( std::bad_alloc& )
         {

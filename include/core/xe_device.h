@@ -98,11 +98,10 @@ xeDeviceGroupGet(
 xe_result_t __xecall
 xeDeviceGet(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
                                                     ///< if count is zero, then the driver will update the value with the total
-                                                    ///< number of device groups available.
-                                                    ///< if count is non-zero, then driver will only retrieve that number of
-                                                    ///< device groups.
+                                                    ///< number of devices available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of devices.
     xe_device_handle_t* phDevices                   ///< [in,out][optional][range(0, *pCount)] array of handle of devices
     );
 
@@ -123,15 +122,17 @@ xeDeviceGet(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
-///         + nullptr == phSubdevice
-///         + ordinal is out of range reported by device properties.
+///         + nullptr == pCount
+///         + count is out of range reported by ::xeDeviceGetSubDevices
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGetSubDevice(
+xeDeviceGetSubDevices(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve; must be less than
-                                                    ///< ::xe_device_properties_t::numSubdevices
-    xe_device_handle_t* phSubdevice                 ///< [out] pointer to handle of sub-device object.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of sub-devices.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of sub-devices available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of sub-devices.
+    xe_device_handle_t* phSubdevices                ///< [in,out][optional][range(0, *pCount)] array of handle of sub-devices
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -217,7 +218,6 @@ typedef struct _xe_device_properties_t
     uint32_t vendorId;                              ///< [out] vendor id from PCI configuration
     uint32_t deviceId;                              ///< [out] device id from PCI configuration
     xe_device_uuid_t uuid;                          ///< [out] universal unique identifier.
-    uint32_t numSubdevices;                         ///< [out] Number of sub-devices the device can be sub-divided into.
     xe_bool_t isSubdevice;                          ///< [out] If the device handle used for query represents a sub-device.
     uint32_t subdeviceId;                           ///< [out] sub-device id. Only valid if isSubdevice is true.
     uint32_t coreClockRate;                         ///< [out] Clock rate for device core.
@@ -232,7 +232,8 @@ typedef struct _xe_device_properties_t
     uint32_t physicalEUSimdWidth;                   ///< [out] The physical EU simd width.
     uint32_t numEUsPerSubslice;                     ///< [out] Number of EUs per sub-slice.
     uint32_t numSubslicesPerSlice;                  ///< [out] Number of sub-slices per slice.
-    uint32_t numSlicesPerSubdevice;                 ///< [out] Number of slices per sub-device.
+    uint32_t numSlicesPerTile;                      ///< [out] Number of slices per tile.
+    uint32_t numTiles;                              ///< [out] Number of tiles.
     char name[XE_MAX_DEVICE_NAME];                  ///< [out] Device name
 
 } xe_device_properties_t;

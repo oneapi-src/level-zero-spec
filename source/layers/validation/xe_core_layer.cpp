@@ -109,11 +109,10 @@ namespace layer
     xe_result_t __xecall
     xeDeviceGet(
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
                                                         ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of device groups available.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of
-                                                        ///< device groups.
+                                                        ///< number of devices available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of devices.
         xe_device_handle_t* phDevices                   ///< [in,out][optional][range(0, *pCount)] array of handle of devices
         )
     {
@@ -136,18 +135,20 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGetSubDevice
+    /// @brief Intercept function for xeDeviceGetSubDevices
     xe_result_t __xecall
-    xeDeviceGetSubDevice(
+    xeDeviceGetSubDevices(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-        uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve; must be less than
-                                                        ///< ::xe_device_properties_t::numSubdevices
-        xe_device_handle_t* phSubdevice                 ///< [out] pointer to handle of sub-device object.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of sub-devices.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of sub-devices available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of sub-devices.
+        xe_device_handle_t* phSubdevices                ///< [in,out][optional][range(0, *pCount)] array of handle of sub-devices
         )
     {
-        auto pfnGetSubDevice = context.xeDdiTable.Device.pfnGetSubDevice;
+        auto pfnGetSubDevices = context.xeDdiTable.Device.pfnGetSubDevices;
 
-        if( nullptr == pfnGetSubDevice )
+        if( nullptr == pfnGetSubDevices )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -155,12 +156,12 @@ namespace layer
             if( nullptr == hDevice )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == phSubdevice )
+            if( nullptr == pCount )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetSubDevice( hDevice, ordinal, phSubdevice );
+        return pfnGetSubDevices( hDevice, pCount, phSubdevices );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2874,8 +2875,8 @@ xeGetDeviceProcAddrTable(
     dditable.pfnGet                                      = pDdiTable->pfnGet;
     pDdiTable->pfnGet                                    = layer::xeDeviceGet;
 
-    dditable.pfnGetSubDevice                             = pDdiTable->pfnGetSubDevice;
-    pDdiTable->pfnGetSubDevice                           = layer::xeDeviceGetSubDevice;
+    dditable.pfnGetSubDevices                            = pDdiTable->pfnGetSubDevices;
+    pDdiTable->pfnGetSubDevices                          = layer::xeDeviceGetSubDevices;
 
     dditable.pfnGetP2PProperties                         = pDdiTable->pfnGetP2PProperties;
     pDdiTable->pfnGetP2PProperties                       = layer::xeDeviceGetP2PProperties;
