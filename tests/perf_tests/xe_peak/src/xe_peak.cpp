@@ -338,6 +338,37 @@ void XePeak::run_command_queue(L0Context &context) {
     }
 }
 
+void single_event_pool_create(L0Context &context,
+                              xe_event_pool_handle_t *kernel_launch_event_pool) {
+    xe_result_t result;
+    xe_event_pool_desc_t kernel_launch_event_pool_desc;
+
+    kernel_launch_event_pool_desc.count = 1;
+    kernel_launch_event_pool_desc.flags = XE_EVENT_POOL_FLAG_HOST_VISIBLE;
+    kernel_launch_event_pool_desc.version = XE_EVENT_POOL_DESC_VERSION_CURRENT;
+
+    result = xeEventPoolCreate(context.device, &kernel_launch_event_pool_desc,
+                               kernel_launch_event_pool);
+    if (result) {
+        throw std::runtime_error("xeEventPoolCreate failed: " + result);
+    }
+}
+
+void single_event_create(xe_event_pool_handle_t kernel_launch_event_pool,
+                         xe_event_handle_t *kernel_launch_event) {
+        xe_result_t result;
+        xe_event_desc_t kernel_launch_event_desc;
+
+        kernel_launch_event_desc.index = 0;
+        kernel_launch_event_desc.signal = XE_EVENT_SCOPE_FLAG_NONE;
+        kernel_launch_event_desc.wait = XE_EVENT_SCOPE_FLAG_NONE;
+        kernel_launch_event_desc.version = XE_EVENT_DESC_VERSION_CURRENT;
+        result = xeEventCreate(kernel_launch_event_pool,
+                               &kernel_launch_event_desc, kernel_launch_event);
+        if (result) {
+            throw std::runtime_error("xeEventCreate failed: " + result);
+        }
+}
 //---------------------------------------------------------------------
 // Utility function to execute a kernel function for a set of iterations
 // and measure the time elapsed based off the timing type.
@@ -396,28 +427,14 @@ float XePeak::run_kernel(L0Context context, xe_function_handle_t &function,
         }
         timed = timer.stopAndTime();
     } else if (type == TimingMeasurement::KERNEL_LAUNCH_LATENCY) {
-        xe_event_pool_desc_t kernel_launch_event_pool_desc;
-        xe_event_desc_t kernel_launch_event_desc;
-        xe_event_pool_handle_t kernel_launch_event_pool;
         xe_event_handle_t kernel_launch_event;
-        kernel_launch_event_pool_desc.count = 1;
-        kernel_launch_event_pool_desc.flags = XE_EVENT_POOL_FLAG_HOST_VISIBLE;
-        kernel_launch_event_pool_desc.version = XE_EVENT_POOL_DESC_VERSION_CURRENT;
-        kernel_launch_event_desc.index = 0;
-        kernel_launch_event_desc.signal = XE_EVENT_SCOPE_FLAG_NONE;
-        kernel_launch_event_desc.wait = XE_EVENT_SCOPE_FLAG_NONE;
-        kernel_launch_event_desc.version = XE_EVENT_DESC_VERSION_CURRENT;
 
-        result = xeEventPoolCreate(context.device, &kernel_launch_event_pool_desc, &kernel_launch_event_pool);
-        if (result) {
-            throw std::runtime_error("xeEventPoolCreate failed: " + result);
-        }
+        xe_event_pool_handle_t kernel_launch_event_pool;
+        single_event_pool_create(context, &kernel_launch_event_pool);
         if (verbose)
             std::cout << "Event Pool Created\n";
-        result = xeEventCreate(kernel_launch_event_pool, &kernel_launch_event_desc, &kernel_launch_event);
-        if (result) {
-            throw std::runtime_error("xeEventCreate failed: " + result);
-        }
+
+        single_event_create(kernel_launch_event_pool, &kernel_launch_event);
         if (verbose)
             std::cout << "Event Created\n";
         result = xeCommandListAppendSignalEvent(context.command_list, kernel_launch_event);
