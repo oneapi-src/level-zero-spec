@@ -638,17 +638,20 @@ namespace xe
 
         try
         {
+            xe_lib::lib.m_deviceGroups.resize( ( ppDeviceGroups ) ? *pCount : 0 );
+
             for( uint32_t i = 0; ( ppDeviceGroups ) && ( i < *pCount ); ++i )
-                ppDeviceGroups[ i ] = new DeviceGroup( reinterpret_cast<device_group_handle_t>( hDeviceGroups[ i ] ) );
+            {
+                if( nullptr == xe_lib::lib.m_deviceGroups[ i ] )
+                {
+                    xe_lib::lib.m_deviceGroups[ i ] = std::unique_ptr<DeviceGroup>(
+                        new DeviceGroup( reinterpret_cast<device_group_handle_t>( hDeviceGroups[ i ] ) ) );
+                }
+                ppDeviceGroups[ i ] = xe_lib::lib.m_deviceGroups[ i ].get();
+            }
         }
         catch( std::bad_alloc& )
         {
-            for( uint32_t i = 0; ( ppDeviceGroups ) && ( i < *pCount ); ++i )
-            {
-                delete ppDeviceGroups[ i ];
-                ppDeviceGroups[ i ] = nullptr;
-            }
-
             throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::DeviceGroup::Get" );
         }
     }
@@ -693,16 +696,17 @@ namespace xe
         try
         {
             for( uint32_t i = 0; ( ppDevices ) && ( i < *pCount ); ++i )
-                ppDevices[ i ] = new Device( reinterpret_cast<device_handle_t>( hDevices[ i ] ), pDeviceGroup );
+            {
+                if( nullptr == pDeviceGroup->m_devices[ i ] )
+                {
+                    pDeviceGroup->m_devices[ i ] = std::unique_ptr<Device>(
+                        new Device( reinterpret_cast<device_handle_t>( hDevices[ i ] ), pDeviceGroup ) );
+                }
+                ppDevices[ i ] = pDeviceGroup->m_devices[ i ].get();
+            }
         }
         catch( std::bad_alloc& )
         {
-            for( uint32_t i = 0; ( ppDevices ) && ( i < *pCount ); ++i )
-            {
-                delete ppDevices[ i ];
-                ppDevices[ i ] = nullptr;
-            }
-
             throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Device::Get" );
         }
     }
@@ -742,7 +746,7 @@ namespace xe
 
         try
         {
-            pSubdevice = new Device( reinterpret_cast<device_handle_t>( hSubdevice ), nullptr );
+            pSubdevice = new Device( reinterpret_cast<device_handle_t>( hSubdevice ), m_pDeviceGroup );
         }
         catch( std::bad_alloc& )
         {

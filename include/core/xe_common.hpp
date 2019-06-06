@@ -40,6 +40,8 @@
 #include <stdint.h>
 #include <string.h>
 #include <exception>
+#include <vector>
+#include <memory>
 #include <tuple>
 #include <string>
 

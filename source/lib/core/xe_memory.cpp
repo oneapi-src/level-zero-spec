@@ -625,16 +625,12 @@ namespace xe
         try
         {
             if( ppDevice )
-                *ppDevice =  new Device( reinterpret_cast<device_handle_t>( hDevice ), this );
+                for( auto& pDevice : m_devices )
+                    if( reinterpret_cast<device_handle_t>( hDevice ) == pDevice->getHandle() )
+                        *ppDevice = pDevice.get();
         }
         catch( std::bad_alloc& )
         {
-            if( ppDevice )
-            {
-                delete *ppDevice;
-                *ppDevice =  nullptr;
-            }
-
             throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetMemProperties" );
         }
 

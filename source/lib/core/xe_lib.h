@@ -46,6 +46,8 @@ namespace xe_lib
         xe_result_t Init();
 
         xe_dditable_t   ddiTable = {};
+
+        std::vector<std::unique_ptr<xe::DeviceGroup>> m_deviceGroups;
     };
 
     extern Library lib;
