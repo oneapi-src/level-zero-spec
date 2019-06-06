@@ -33,7 +33,7 @@
 namespace xex_lib
 {
     ///////////////////////////////////////////////////////////////////////////////
-    xe_result_t Context::Init()
+    xe_result_t context_t::Init()
     {
         loader = LOAD_DRIVER_LIBRARY( MAKE_DRIVER_NAME( "xe_loader" ) );
 
