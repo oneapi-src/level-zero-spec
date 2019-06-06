@@ -1947,7 +1947,7 @@ namespace layer
     xe_result_t __xecall
     xeDeviceGroupFreeMem(
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-        const void* ptr                                 ///< [in][release] pointer to memory to free
+        void* ptr                                       ///< [in][release] pointer to memory to free
         )
     {
         auto pfnFreeMem = context.xeDdiTable.DeviceGroup.pfnFreeMem;

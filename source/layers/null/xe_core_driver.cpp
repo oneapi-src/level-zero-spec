@@ -54,6 +54,8 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        *version = 0;
+
         return result;
     }
 
@@ -71,8 +73,8 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        if( nullptr != pCount ) *pCount = 1;
-        if( nullptr != phDeviceGroups ) *phDeviceGroups = reinterpret_cast<xe_device_group_handle_t>( context.get() );
+        *pCount = 1;
+        if( nullptr != phDeviceGroups ) *reinterpret_cast<void**>(phDeviceGroups) = context.get();
 
         return result;
     }
@@ -91,8 +93,8 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        if( nullptr != pCount ) *pCount = 1;
-        if( nullptr != phDevices ) *phDevices = reinterpret_cast<xe_device_handle_t>( context.get() );
+        *pCount = 1;
+        if( nullptr != phDevices ) *reinterpret_cast<void**>(phDevices) = context.get() ;
 
         return result;
     }
@@ -178,6 +180,9 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        *pCount = 1;
+        if( nullptr != pMemProperties ) *pMemProperties = context.memoryProperties;
+
         return result;
     }
 
@@ -190,6 +195,8 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        *pMemAccessProperties = context.memoryAccessProperties;
 
         return result;
     }
@@ -204,6 +211,8 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        *pCacheProperties = context.cacheProperties;
+
         return result;
     }
 
@@ -216,6 +225,8 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        *pImageProperties = context.imageProperties;
 
         return result;
     }
@@ -231,6 +242,8 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        *pP2PProperties = context.p2pProperties;
+
         return result;
     }
 
@@ -244,6 +257,8 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        *value = 0;
 
         return result;
     }
@@ -1034,6 +1049,8 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        *ptr = _aligned_malloc( size, alignment );
+
         return result;
     }
 
@@ -1053,6 +1070,8 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        *ptr = _aligned_malloc( size, alignment );
+
         return result;
     }
 
@@ -1069,6 +1088,8 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        *ptr = _aligned_malloc( size, alignment );
+
         return result;
     }
 
@@ -1077,10 +1098,12 @@ namespace driver
     xe_result_t __xecall
     xeDeviceGroupFreeMem(
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-        const void* ptr                                 ///< [in][release] pointer to memory to free
+        void* ptr                                       ///< [in][release] pointer to memory to free
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        _aligned_free( ptr );
 
         return result;
     }
@@ -1097,7 +1120,7 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        if( nullptr != phDevice ) *phDevice = reinterpret_cast<xe_device_handle_t>( context.get() );
+        *pMemProperties = {};
 
         return result;
     }

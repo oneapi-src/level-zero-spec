@@ -43,12 +43,14 @@ namespace driver
 {
     %for obj in th.extract_objs(specs, r"function"):
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for ${th.make_func_name(n, tags, obj)}
+    <%
+        fname = th.make_func_name(n, tags, obj)
+    %>/// @brief Intercept function for ${fname}
     %if 'condition' in obj:
     #if ${th.subt(n, tags, obj['condition'])}
     %endif
     ${x}_result_t __${x}call
-    ${th.make_func_name(n, tags, obj)}(
+    ${fname}(
         %for line in th.make_param_lines(n, tags, obj):
         ${line}
         %endfor
@@ -56,22 +58,71 @@ namespace driver
     {
         ${x}_result_t result = ${X}_RESULT_SUCCESS;
 
-        %if re.match(r"\w+DeviceGroupGet$", th.make_func_name(n, tags, obj)):
-        if( nullptr != pCount ) *pCount = 1;
-        if( nullptr != phDeviceGroups ) *phDeviceGroups = reinterpret_cast<${x}_device_group_handle_t>( context.get() );
+        %if re.match(r"\w+DeviceGroupGet$", fname):
+        *pCount = 1;
+        if( nullptr != phDeviceGroups ) *reinterpret_cast<void**>(phDeviceGroups) = context.get();
 
-        %elif re.match(r"\w+DeviceGet$", th.make_func_name(n, tags, obj)):
-        if( nullptr != pCount ) *pCount = 1;
-        if( nullptr != phDevices ) *phDevices = reinterpret_cast<${x}_device_handle_t>( context.get() );
+        %elif re.match(r"\w+DeviceGet$", fname):
+        *pCount = 1;
+        if( nullptr != phDevices ) *reinterpret_cast<void**>(phDevices) = context.get() ;
 
-        %elif re.match(r"\w+DeviceGroupGetApiVersion", th.make_func_name(n, tags, obj)):
+        %elif re.match(r"\w+GetDriverVersion", fname):
+        *version = 0;
+
+        %elif re.match(r"\w+GetApiVersion", fname):
         *version = context.version;
 
-        %elif re.match(r"\w+DeviceGroupGetDeviceProperties$", th.make_func_name(n, tags, obj)):
+        %elif re.match(r"\w+GetDeviceProperties$", fname):
         *pDeviceProperties = context.deviceProperties;
 
-        %elif re.match(r"\w+DeviceGroupGetComputeProperties", th.make_func_name(n, tags, obj)):
+        %elif re.match(r"\w+GetComputeProperties", fname):
         *pComputeProperties = context.computeProperties;
+
+        %elif re.match(r"\w+GetMemoryProperties", fname):
+        *pCount = 1;
+        if( nullptr != pMemProperties ) *pMemProperties = context.memoryProperties;
+
+        %elif re.match(r"\w+GetMemoryAccessProperties", fname):
+        *pMemAccessProperties = context.memoryAccessProperties;
+
+        %elif re.match(r"\w+GetCacheProperties", fname):
+        *pCacheProperties = context.cacheProperties;
+
+        %elif re.match(r"\w+GetImageProperties", fname):
+        *pImageProperties = context.imageProperties;
+
+        %elif re.match(r"\w+GetP2PProperties", fname):
+        *pP2PProperties = context.p2pProperties;
+
+        %elif re.match(r"\w+CanAccessPeer", fname):
+        *value = 0;
+
+        %elif re.match(r"\w+Alloc\w+Mem", fname):
+        *ptr = _aligned_malloc( size, alignment );
+
+        %elif re.match(r"\w+FreeMem", fname):
+        _aligned_free( ptr );
+
+        %elif re.match(r"\w+GetMemProperties", fname):
+        *pMemProperties = {};
+
+        %elif re.match(r"\w+MetricGroupGet$", fname):
+        *pCount = 1;
+        if( nullptr != phMetricGroup ) *reinterpret_cast<void**>(phMetricGroup) = context.get();
+
+        %elif re.match(r"\w+MetricGroupGetProperties", fname):
+        *pProperties = context.metricGroupProperties;
+
+        %elif re.match(r"\w+MetricGetProperties", fname):
+        *pProperties = context.metricProperties;
+
+        %elif re.match(r"\w+CalculateData", fname):
+        *pCalculatedDataCount = 1;
+        if( pCalculatedData ) *pCalculatedData = {};
+
+        %elif re.match(r"\w+ReadData", fname) or re.match(r"\w+GetData", fname):
+        *pRawDataSize = 1;
+        if( pRawData ) *pRawData = 0;
 
         %else:
         %for item in th.get_loader_epilogue(n, tags, obj, meta):

@@ -59,8 +59,8 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        for( size_t i = 0; ( nullptr != phMetricGroup ) && ( i < *pCount ); ++i )
-            phMetricGroup[ i ] = reinterpret_cast<xet_metric_group_handle_t>( context.get() );
+        *pCount = 1;
+        if( nullptr != phMetricGroup ) *reinterpret_cast<void**>(phMetricGroup) = context.get();
 
         return result;
     }
@@ -74,6 +74,8 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        *pProperties = context.metricGroupProperties;
 
         return result;
     }
@@ -105,6 +107,8 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        *pProperties = context.metricProperties;
+
         return result;
     }
 
@@ -123,6 +127,9 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        *pCalculatedDataCount = 1;
+        if( pCalculatedData ) *pCalculatedData = {};
 
         return result;
     }
@@ -203,6 +210,9 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        *pRawDataSize = 1;
+        if( pRawData ) *pRawData = 0;
 
         return result;
     }
@@ -332,6 +342,9 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        *pRawDataSize = 1;
+        if( pRawData ) *pRawData = 0;
 
         return result;
     }

@@ -208,7 +208,7 @@ xeDeviceGroupAllocHostMem(
 xe_result_t __xecall
 xeDeviceGroupFreeMem(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    const void* ptr                                 ///< [in][release] pointer to memory to free
+    void* ptr                                       ///< [in][release] pointer to memory to free
     )
 {
     auto pfnFreeMem = xe_lib::context.ddiTable.DeviceGroup.pfnFreeMem;
@@ -574,7 +574,7 @@ namespace xe
     /// @throws result_t
     void __xecall
     DeviceGroup::FreeMem(
-        const void* ptr                                 ///< [in][release] pointer to memory to free
+        void* ptr                                       ///< [in][release] pointer to memory to free
         )
     {
         auto result = static_cast<result_t>( ::xeDeviceGroupFreeMem(

@@ -343,7 +343,7 @@ typedef xe_result_t (__xecall *xe_pfnDeviceGroupAllocHostMem_t)(
 /// @brief Function-pointer for xeDeviceGroupFreeMem 
 typedef xe_result_t (__xecall *xe_pfnDeviceGroupFreeMem_t)(
     xe_device_group_handle_t,
-    const void*
+    void*
     );
 
 ///////////////////////////////////////////////////////////////////////////////

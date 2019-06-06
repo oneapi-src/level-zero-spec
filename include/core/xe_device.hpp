@@ -638,7 +638,7 @@ namespace xe
         /// @throws result_t
         void __xecall
         FreeMem(
-            const void* ptr                                 ///< [in][release] pointer to memory to free
+            void* ptr                                       ///< [in][release] pointer to memory to free
             );
 
         ///////////////////////////////////////////////////////////////////////////////
