@@ -634,6 +634,7 @@ returns:
 type: class
 desc: "C++ wrapper for metric group"
 name: $tMetricGroup
+attribute: singleton
 owner: $tDevice
 members:
     - type: $t_metric_group_handle_t
@@ -647,6 +648,7 @@ members:
 type: class
 desc: "C++ wrapper for metric"
 name: $tMetric
+attribute: singleton
 owner: $tMetricGroup
 members:
     - type: $t_metric_handle_t

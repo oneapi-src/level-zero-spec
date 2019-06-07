@@ -679,6 +679,7 @@ returns:
 type: class
 desc: "C++ wrapper for device group"
 name: $xDeviceGroup
+attribute: singleton
 members:
     - type: $x_device_group_handle_t
       name: handle
@@ -687,6 +688,7 @@ members:
 type: class
 desc: "C++ wrapper for device"
 name: $xDevice
+attribute: singleton
 owner: $xDeviceGroup
 members:
     - type: $x_device_handle_t
