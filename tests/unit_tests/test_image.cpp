@@ -216,47 +216,68 @@ HWTEST2_F(ImageSurfaceState, descMatchesSurfaceFormats, MatchAny) {
     using SURFACE_FORMAT = typename RENDER_SURFACE_STATE::SURFACE_FORMAT;
     Mock<Device> device;
 
-    xe_image_desc_t desc = {};
-    desc.type = XE_IMAGE_TYPE_3D;
-    desc.width = 11;
-    desc.height = 13;
-    desc.depth = 17;
+    xe_image_desc_t desc_odd = {};
+    desc_odd.type = XE_IMAGE_TYPE_3D;
+    desc_odd.width = 11;
+    desc_odd.height = 13;
+    desc_odd.depth = 17;
+
+    /* some media formats require even dimensions due to subsampling */
+    xe_image_desc_t desc_even = {};
+    desc_even.type = XE_IMAGE_TYPE_2D;
+    desc_even.width = 12;
+    desc_even.height = 16;
+    desc_even.depth = 1;
 
     struct FormatInfo {
-        size_t elemSize;
+        size_t elemBitSize;
         xe_image_format_layout_t formatLayout;
         xe_image_format_type_t formatType;
         SURFACE_FORMAT ssFormat;
+        bool requireEven;
     };
     struct FormatInfo testFormats[] = {
-        {sizeof(uint8_t), XE_IMAGE_FORMAT_LAYOUT_8, XE_IMAGE_FORMAT_TYPE_UINT,
-         RENDER_SURFACE_STATE::SURFACE_FORMAT_R8_UINT},
-        {sizeof(uint32_t) * 4, XE_IMAGE_FORMAT_LAYOUT_32_32_32_32, XE_IMAGE_FORMAT_TYPE_UINT,
-         RENDER_SURFACE_STATE::SURFACE_FORMAT_R32G32B32A32_UINT},
-        {sizeof(uint8_t) * 4, XE_IMAGE_FORMAT_LAYOUT_8_8_8_8, XE_IMAGE_FORMAT_TYPE_UNORM,
-         RENDER_SURFACE_STATE::SURFACE_FORMAT_R8G8B8A8_UNORM},
-        {sizeof(int16_t), XE_IMAGE_FORMAT_LAYOUT_16, XE_IMAGE_FORMAT_TYPE_SNORM,
-         RENDER_SURFACE_STATE::SURFACE_FORMAT_R16_SNORM},
-        {sizeof(float) * 4, XE_IMAGE_FORMAT_LAYOUT_32_32_32_32, XE_IMAGE_FORMAT_TYPE_FLOAT,
-         RENDER_SURFACE_STATE::SURFACE_FORMAT_R32G32B32A32_FLOAT},
+        {sizeof(uint8_t) * 8, XE_IMAGE_FORMAT_LAYOUT_8, XE_IMAGE_FORMAT_TYPE_UINT,
+         RENDER_SURFACE_STATE::SURFACE_FORMAT_R8_UINT, false},
+        {sizeof(uint32_t) * 4 * 8, XE_IMAGE_FORMAT_LAYOUT_32_32_32_32, XE_IMAGE_FORMAT_TYPE_UINT,
+         RENDER_SURFACE_STATE::SURFACE_FORMAT_R32G32B32A32_UINT, false},
+        {sizeof(uint8_t) * 4 * 8, XE_IMAGE_FORMAT_LAYOUT_8_8_8_8, XE_IMAGE_FORMAT_TYPE_UNORM,
+         RENDER_SURFACE_STATE::SURFACE_FORMAT_R8G8B8A8_UNORM, false},
+        {sizeof(int16_t) * 8, XE_IMAGE_FORMAT_LAYOUT_16, XE_IMAGE_FORMAT_TYPE_SNORM,
+         RENDER_SURFACE_STATE::SURFACE_FORMAT_R16_SNORM, false},
+        {sizeof(float) * 4 * 8, XE_IMAGE_FORMAT_LAYOUT_32_32_32_32, XE_IMAGE_FORMAT_TYPE_FLOAT,
+         RENDER_SURFACE_STATE::SURFACE_FORMAT_R32G32B32A32_FLOAT, false},
+        {8, XE_IMAGE_FORMAT_LAYOUT_Y8, XE_IMAGE_FORMAT_TYPE_UNORM,
+         RENDER_SURFACE_STATE::SURFACE_FORMAT_Y8_UNORM, false},
+        {12, XE_IMAGE_FORMAT_LAYOUT_NV12, XE_IMAGE_FORMAT_TYPE_UNORM,
+         RENDER_SURFACE_STATE::SURFACE_FORMAT_PLANAR_420_8, true}
     };
     size_t numFormats = sizeof(testFormats) / sizeof(struct FormatInfo);
 
     for (size_t i = 0; i < numFormats; i++) {
-        desc.format.layout = testFormats[i].formatLayout;
-        desc.format.type = testFormats[i].formatType;
+        for (int j = 0; j < 2; j++) {
+            bool odd = (j == 0);
 
-        auto imageCore = new ImageCoreFamily<gfxCoreFamily>();
-        bool ret = imageCore->initialize(&device, &desc);
-        ASSERT_TRUE(ret);
+            if (odd && testFormats[i].requireEven)
+                continue;
 
-        auto surfaceState = &imageCore->surfaceState;
-        ASSERT_EQ(surfaceState->getSurfaceFormat(), testFormats[i].ssFormat);
+            xe_image_desc_t *desc = odd ? &desc_odd : &desc_even;
 
-        ASSERT_EQ(imageCore->getSizeInBytes(),
-                  testFormats[i].elemSize * desc.width * desc.height * desc.depth);
+            desc->format.layout = testFormats[i].formatLayout;
+            desc->format.type = testFormats[i].formatType;
 
-        delete imageCore;
+            auto imageCore = new ImageCoreFamily<gfxCoreFamily>();
+            bool ret = imageCore->initialize(&device, desc);
+            ASSERT_TRUE(ret);
+
+            auto surfaceState = &imageCore->surfaceState;
+            ASSERT_EQ(surfaceState->getSurfaceFormat(), testFormats[i].ssFormat);
+
+            ASSERT_EQ(imageCore->getSizeInBytes(),
+                      (testFormats[i].elemBitSize * desc->width * desc->height * desc->depth)/8);
+
+            delete imageCore;
+        }
     }
 }
 

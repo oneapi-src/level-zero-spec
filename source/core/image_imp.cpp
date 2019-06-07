@@ -47,10 +47,27 @@ bool ImageImp::initialize(Device *device, const xe_image_desc_t *desc) {
 
     imageDesc = *desc;
 
-    size_t elem_size = formatLayoutSize[imageDesc.format.layout];
-    sizeBytes = elem_size * imageDesc.height * imageDesc.width * imageDesc.depth;
+    size_t elem_bit_size = formats[imageDesc.format.layout].bitsPerPixel;
+    size_t sizeBits = (elem_bit_size * imageDesc.height * imageDesc.width * imageDesc.depth);
+    size_t alignment = elem_bit_size;
 
-    allocation = globalMemoryManager->allocateManagedMemory(device, sizeBytes, elem_size);
+    assert((sizeBits & 0x7) == 0);
+
+    sizeBytes = sizeBits >> 3;
+
+    /* round up to next power of 2 */
+    if ((alignment & (alignment - 1)) != 0) {
+	while ((alignment & (alignment - 1)) != 0)
+            alignment &= (alignment - 1);
+
+        alignment = alignment << 1;
+    }
+
+    /* convert to bytes */
+    assert((alignment & 0x7) == 0);
+    alignment = alignment >> 3;
+
+    allocation = globalMemoryManager->allocateManagedMemory(device, sizeBytes, alignment);
     assert(allocation);
     return true;
 }

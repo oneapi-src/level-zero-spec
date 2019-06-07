@@ -6,6 +6,8 @@ template <GFXCORE_FAMILY gfxCoreFamily>
 bool ImageCoreFamily<gfxCoreFamily>::initialize(Device *device, const xe_image_desc_t *desc) {
     using RENDER_SURFACE_STATE = typename GfxFamily::RENDER_SURFACE_STATE;
 
+    bool isMediaLayout;
+
     if (desc == nullptr) {
         return false;
     }
@@ -29,46 +31,42 @@ bool ImageCoreFamily<gfxCoreFamily>::initialize(Device *device, const xe_image_d
         return false;
     }
 
-    if (desc->format.x > XE_IMAGE_FORMAT_SWIZZLE_MAX ||
-        desc->format.y > XE_IMAGE_FORMAT_SWIZZLE_MAX ||
-        desc->format.z > XE_IMAGE_FORMAT_SWIZZLE_MAX ||
-        desc->format.w > XE_IMAGE_FORMAT_SWIZZLE_MAX) {
-        return false;
-    }
-
     if (!BaseClass::initialize(device, desc)) {
         return false;
     }
 
+    isMediaLayout = (formats[desc->format.layout].type == ImageFormatDescriptor::MEDIA);
     surfaceState = GfxFamily::cmdInitRenderSurfaceState;
 
-    surfaceState.setShaderChannelSelectRed(
-        static_cast<const typename RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_RED>(
-            shaderChannelSelect[desc->format.x]));
-    surfaceState.setShaderChannelSelectGreen(
-        static_cast<const typename RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_GREEN>(
-            shaderChannelSelect[desc->format.y]));
-    surfaceState.setShaderChannelSelectBlue(
-        static_cast<const typename RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_BLUE>(
-            shaderChannelSelect[desc->format.z]));
-    surfaceState.setShaderChannelSelectAlpha(
-        static_cast<const typename RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_ALPHA>(
-            shaderChannelSelect[desc->format.w]));
+    if (!isMediaLayout) {
+        surfaceState.setShaderChannelSelectRed(
+            static_cast<const typename RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_RED>(
+                shaderChannelSelect[desc->format.x]));
+        surfaceState.setShaderChannelSelectGreen(
+            static_cast<const typename RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_GREEN>(
+                shaderChannelSelect[desc->format.y]));
+        surfaceState.setShaderChannelSelectBlue(
+            static_cast<const typename RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_BLUE>(
+                shaderChannelSelect[desc->format.z]));
+        surfaceState.setShaderChannelSelectAlpha(
+            static_cast<const typename RENDER_SURFACE_STATE::SHADER_CHANNEL_SELECT_ALPHA>(
+                shaderChannelSelect[desc->format.w]));
 
-    switch (desc->type) {
-    case XE_IMAGE_TYPE_1D:
-    case XE_IMAGE_TYPE_1DARRAY:
-        surfaceState.setSurfaceType(RENDER_SURFACE_STATE::SURFACE_TYPE_SURFTYPE_1D);
-        break;
-    case XE_IMAGE_TYPE_2D:
-    case XE_IMAGE_TYPE_2DARRAY:
-        surfaceState.setSurfaceType(RENDER_SURFACE_STATE::SURFACE_TYPE_SURFTYPE_2D);
-        break;
-    case XE_IMAGE_TYPE_3D:
-        surfaceState.setSurfaceType(RENDER_SURFACE_STATE::SURFACE_TYPE_SURFTYPE_3D);
-        break;
-    default:
-        return false;
+        switch (desc->type) {
+        case XE_IMAGE_TYPE_1D:
+        case XE_IMAGE_TYPE_1DARRAY:
+            surfaceState.setSurfaceType(RENDER_SURFACE_STATE::SURFACE_TYPE_SURFTYPE_1D);
+            break;
+        case XE_IMAGE_TYPE_2D:
+        case XE_IMAGE_TYPE_2DARRAY:
+            surfaceState.setSurfaceType(RENDER_SURFACE_STATE::SURFACE_TYPE_SURFTYPE_2D);
+            break;
+        case XE_IMAGE_TYPE_3D:
+            surfaceState.setSurfaceType(RENDER_SURFACE_STATE::SURFACE_TYPE_SURFTYPE_3D);
+            break;
+        default:
+            return false;
+        }
     }
 
     switch (desc->type) {
@@ -93,11 +91,15 @@ bool ImageCoreFamily<gfxCoreFamily>::initialize(Device *device, const xe_image_d
                 gmm->getRenderVAlignment()));
     }
 
-    surfaceState.setSurfaceFormat(surfaceFormatTable[desc->format.layout][desc->format.type]);
+    if (isMediaLayout) {
+        surfaceState.setSurfaceFormat(mediaSurfaceFormatTable[
+            desc->format.layout - XE_IMAGE_FORMAT_MEDIA_LAYOUT_OFFSET]);
+    } else {
+        surfaceState.setSurfaceFormat(surfaceFormatTable[desc->format.layout][desc->format.type]);
 
-    size_t elem_size = formatLayoutSize[desc->format.layout];
-    surfaceState.setSurfacePitch(static_cast<uint32_t>(desc->width * elem_size));
-
+        size_t elem_bit_size = formats[desc->format.layout].bitsPerPixel;
+        surfaceState.setSurfacePitch(static_cast<uint32_t>(desc->width * (elem_bit_size >> 3)));
+    }
     surfaceState.setSurfaceBaseAddress(static_cast<uint64_t>(this->allocation->getGpuAddress()));
 
     return true;
