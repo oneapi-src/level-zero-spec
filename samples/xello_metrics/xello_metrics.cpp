@@ -70,24 +70,7 @@ int main( int argc, char *argv[] )
         pCommandList->AppendMetricQueryEnd( pQuery.get(), pEvent.get() );
         pEvent->HostSynchronize( UINT32_MAX );
 
-        // Read raw data from query
-        size_t rawDataSize = 0;
-        pQuery->GetData( &rawDataSize, nullptr );
-        std::vector<uint8_t> rawData( rawDataSize );
-        pQuery->GetData( &rawDataSize, rawData.data() );
-
-        // Calculate results
-        uint32_t calcDataCount = 0;
-        xet::MetricGroup::CalculateData( pMetricGroup, rawDataSize, rawData.data(), &calcDataCount, nullptr );
-        std::vector<xet::typed_value_t> calcData( pMetricGroup->GetProperties().reportSize * calcDataCount );
-        xet::MetricGroup::CalculateData( pMetricGroup, rawDataSize, rawData.data(), &calcDataCount, calcData.data() );
-
-        // Report results
-        std::cout << "Compute Basic results:\n";
-        for( auto& entry : calcData )
-        {
-            std::cout << xet::to_string( entry );
-        }
+        calculateResults( pMetricGroup, pQuery.get() );
     }
     catch( const xe::exception_t& e )
     {

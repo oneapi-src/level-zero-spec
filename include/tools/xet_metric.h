@@ -66,7 +66,7 @@ xetMetricGroupGet(
                                                     ///< number of metric groups available.
                                                     ///< if count is non-zero, then driver will only retrieve that number of
                                                     ///< metric groups.
-    xet_metric_group_handle_t* phMetricGroup        ///< [in,out][optional][range(0, *pCount)] array of handle of metric groups
+    xet_metric_group_handle_t* phMetricGroups       ///< [in,out][optional][range(0, *pCount)] array of handle of metric groups
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -135,30 +135,6 @@ xetMetricGroupGetProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef XET_MAX_METRIC_NAME
-/// @brief Maximum metric name string size
-#define XET_MAX_METRIC_NAME  256
-#endif // XET_MAX_METRIC_NAME
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef XET_MAX_METRIC_DESCRIPTION
-/// @brief Maximum metric description string size
-#define XET_MAX_METRIC_DESCRIPTION  256
-#endif // XET_MAX_METRIC_DESCRIPTION
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef XET_MAX_METRIC_COMPONENT
-/// @brief Maximum metric component string size
-#define XET_MAX_METRIC_COMPONENT  256
-#endif // XET_MAX_METRIC_COMPONENT
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef XET_MAX_METRIC_RESULT_UNITS
-/// @brief Maximum metric result units string size
-#define XET_MAX_METRIC_RESULT_UNITS  256
-#endif // XET_MAX_METRIC_RESULT_UNITS
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Metric types
 typedef enum _xet_metric_type_t
 {
@@ -174,25 +150,26 @@ typedef enum _xet_metric_type_t
 } xet_metric_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Value types
+/// @brief Supported value types
 typedef enum _xet_value_type_t
 {
-    XET_VALUE_TYPE_UINT32,                          ///< Value type: uint32
-    XET_VALUE_TYPE_UINT64,                          ///< Value type: uint64
-    XET_VALUE_TYPE_FLOAT,                           ///< Value type: float
-    XET_VALUE_TYPE_BOOL,                            ///< Value type: bool
+    XET_VALUE_TYPE_UINT32,                          ///< 32-bit unsigned-integer
+    XET_VALUE_TYPE_UINT64,                          ///< 64-bit unsigned-integer
+    XET_VALUE_TYPE_FLOAT32,                         ///< 32-bit floating-point
+    XET_VALUE_TYPE_FLOAT64,                         ///< 64-bit floating-point
+    XET_VALUE_TYPE_BOOL8,                           ///< 8-bit boolean
 
 } xet_value_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Different value types union
+/// @brief Union of values
 typedef union _xet_value_t
 {
-    uint32_t _uint32;                               ///< [out] uint32_t value
-    uint64_t _uint64;                               ///< [out] uint64_t value
-    float _float;                                   ///< [out] float value
-    double _double;                                 ///< [out] double value
-    xe_bool_t _bool;                                ///< [out] bool value
+    uint32_t ui32;                                  ///< [out] 32-bit unsigned-integer
+    uint64_t ui64;                                  ///< [out] 32-bit unsigned-integer
+    float fp32;                                     ///< [out] 32-bit floating-point
+    double fp64;                                    ///< [out] 64-bit floating-point
+    xe_bool_t b8;                                   ///< [out] 8-bit boolean
 
 } xet_value_t;
 
@@ -200,77 +177,10 @@ typedef union _xet_value_t
 /// @brief Typed value
 typedef struct _xet_typed_value_t
 {
-    xet_value_type_t type;                          ///< [out] value type
-    xet_value_t value;                              ///< [out] value of a specified type
+    xet_value_type_t type;                          ///< [out] type of value
+    xet_value_t value;                              ///< [out] value
 
 } xet_typed_value_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief API version of ::xet_metric_properties_t
-typedef enum _xet_metric_properties_version_t
-{
-    XET_METRIC_PROPERTIES_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),///< version 1.0
-
-} xet_metric_properties_version_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Metric properties queried using ::xetMetricGetProperties
-typedef struct _xet_metric_properties_t
-{
-    xet_metric_properties_version_t version;        ///< [in] ::XET_METRIC_PROPERTIES_VERSION_CURRENT
-    char name[XET_MAX_METRIC_NAME];                 ///< [out] metric name
-    char description[XET_MAX_METRIC_DESCRIPTION];   ///< [out] metric description
-    char component[XET_MAX_METRIC_COMPONENT];       ///< [out] metric component
-    uint32_t tierNumber;                            ///< [out] number of tier
-    xet_metric_type_t metricType;                   ///< [out] metric type
-    xet_value_type_t resultType;                    ///< [out] metric result type
-    char resultUnits[XET_MAX_METRIC_RESULT_UNITS];  ///< [out] metric result units
-
-} xet_metric_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves metric from a metric group.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hMetricGroup
-///         + nullptr == phMetric
-///         + invalid metric group handle
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetMetricGet(
-    xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
-    uint32_t ordinal,                               ///< [in] ordinal of metric to retrieve; must be less than
-                                                    ///< ::xet_metric_group_properties_t::metricCount
-    xet_metric_handle_t* phMetric                   ///< [out] handle of metric
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves attributes of a metric.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hMetric
-///         + nullptr == pProperties
-///         + invalid handle
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetMetricGetProperties(
-    xet_metric_handle_t hMetric,                    ///< [in] handle of the metric
-    xet_metric_properties_t* pProperties            ///< [out] metric properties
-    );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Calculates counter values from raw data.
@@ -299,6 +209,99 @@ xetMetricGroupCalculateData(
                                                     ///< number of entires to be calculated.
                                                     ///< if count is non-zero, then driver will only calculate that number of entires.
     xet_typed_value_t* pCalculatedData              ///< [in,out][range(0, *pCalculatedDataSize)] buffer of calculated data
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves metric from a metric group.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hMetricGroup
+///         + nullptr == pCount
+///         + invalid metric group handle
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetMetricGet(
+    xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of metrics.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of metrics available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of metrics.
+    xet_metric_handle_t* phMetrics                  ///< [in,out][optional][range(0, *pCount)] array of handle of metrics
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_MAX_METRIC_NAME
+/// @brief Maximum metric name string size
+#define XET_MAX_METRIC_NAME  256
+#endif // XET_MAX_METRIC_NAME
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_MAX_METRIC_DESCRIPTION
+/// @brief Maximum metric description string size
+#define XET_MAX_METRIC_DESCRIPTION  256
+#endif // XET_MAX_METRIC_DESCRIPTION
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_MAX_METRIC_COMPONENT
+/// @brief Maximum metric component string size
+#define XET_MAX_METRIC_COMPONENT  256
+#endif // XET_MAX_METRIC_COMPONENT
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_MAX_METRIC_RESULT_UNITS
+/// @brief Maximum metric result units string size
+#define XET_MAX_METRIC_RESULT_UNITS  256
+#endif // XET_MAX_METRIC_RESULT_UNITS
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::xet_metric_properties_t
+typedef enum _xet_metric_properties_version_t
+{
+    XET_METRIC_PROPERTIES_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),///< version 1.0
+
+} xet_metric_properties_version_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Metric properties queried using ::xetMetricGetProperties
+typedef struct _xet_metric_properties_t
+{
+    xet_metric_properties_version_t version;        ///< [in] ::XET_METRIC_PROPERTIES_VERSION_CURRENT
+    char name[XET_MAX_METRIC_NAME];                 ///< [out] metric name
+    char description[XET_MAX_METRIC_DESCRIPTION];   ///< [out] metric description
+    char component[XET_MAX_METRIC_COMPONENT];       ///< [out] metric component
+    uint32_t tierNumber;                            ///< [out] number of tier
+    xet_metric_type_t metricType;                   ///< [out] metric type
+    xet_value_type_t resultType;                    ///< [out] metric result type
+    char resultUnits[XET_MAX_METRIC_RESULT_UNITS];  ///< [out] metric result units
+
+} xet_metric_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves attributes of a metric.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hMetric
+///         + nullptr == pProperties
+///         + invalid handle
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetMetricGetProperties(
+    xet_metric_handle_t hMetric,                    ///< [in] handle of the metric
+    xet_metric_properties_t* pProperties            ///< [out] metric properties
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -447,6 +450,14 @@ xetMetricTracerReadData(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::xet_metric_query_pool_desc_t
+typedef enum _xet_metric_query_pool_desc_version_t
+{
+    XET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
+
+} xet_metric_query_pool_desc_version_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Metric query pool types
 typedef enum _xet_metric_query_pool_flag_t
 {
@@ -454,14 +465,6 @@ typedef enum _xet_metric_query_pool_flag_t
     XET_METRIC_QUERY_POOL_FLAG_SKIP_EXECUTION,      ///< Skips workload execution between begin/end calls.
 
 } xet_metric_query_pool_flag_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief API version of ::xet_metric_query_pool_desc_t
-typedef enum _xet_metric_query_pool_desc_version_t
-{
-    XET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ),   ///< version 1.0
-
-} xet_metric_query_pool_desc_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Metric query pool description

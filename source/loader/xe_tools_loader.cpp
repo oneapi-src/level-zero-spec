@@ -73,7 +73,7 @@ namespace loader
                                                         ///< number of metric groups available.
                                                         ///< if count is non-zero, then driver will only retrieve that number of
                                                         ///< metric groups.
-        xet_metric_group_handle_t* phMetricGroup        ///< [in,out][optional][range(0, *pCount)] array of handle of metric groups
+        xet_metric_group_handle_t* phMetricGroups       ///< [in,out][optional][range(0, *pCount)] array of handle of metric groups
         )
     {
         // extract driver's function pointer table
@@ -83,14 +83,14 @@ namespace loader
         hDeviceGroup = reinterpret_cast<xet_device_group_object_t*>( hDeviceGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xet.MetricGroup.pfnGet( hDeviceGroup, pCount, phMetricGroup );
+        auto result = dditable->xet.MetricGroup.pfnGet( hDeviceGroup, pCount, phMetricGroups );
 
         try
         {
             // convert driver handles to loader handles
-            for( size_t i = 0; ( nullptr != phMetricGroup ) && ( i < *pCount ); ++i )
-                phMetricGroup[ i ] = reinterpret_cast<xet_metric_group_handle_t>(
-                    xet_metric_group_factory.get( phMetricGroup[ i ], dditable ) );
+            for( size_t i = 0; ( nullptr != phMetricGroups ) && ( i < *pCount ); ++i )
+                phMetricGroups[ i ] = reinterpret_cast<xet_metric_group_handle_t>(
+                    xet_metric_group_factory.get( phMetricGroups[ i ], dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -120,13 +120,17 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetMetricGet
+    /// @brief Intercept function for xetMetricGroupCalculateData
     xe_result_t __xecall
-    xetMetricGet(
+    xetMetricGroupCalculateData(
         xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
-        uint32_t ordinal,                               ///< [in] ordinal of metric to retrieve; must be less than
-                                                        ///< ::xet_metric_group_properties_t::metricCount
-        xet_metric_handle_t* phMetric                   ///< [out] handle of metric
+        size_t rawDataSize,                             ///< [in] size in bytes of raw data buffer
+        uint8_t* pRawData,                              ///< [in][range(0, rawDataSize)] buffer of raw data to calculate
+        uint32_t* pCalculatedDataCount,                 ///< [in] pointer to number of entries in calculated data buffer.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of entires to be calculated.
+                                                        ///< if count is non-zero, then driver will only calculate that number of entires.
+        xet_typed_value_t* pCalculatedData              ///< [in,out][range(0, *pCalculatedDataSize)] buffer of calculated data
         )
     {
         // extract driver's function pointer table
@@ -136,13 +140,38 @@ namespace loader
         hMetricGroup = reinterpret_cast<xet_metric_group_object_t*>( hMetricGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xet.Metric.pfnGet( hMetricGroup, ordinal, phMetric );
+        auto result = dditable->xet.MetricGroup.pfnCalculateData( hMetricGroup, rawDataSize, pRawData, pCalculatedDataCount, pCalculatedData );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetMetricGet
+    xe_result_t __xecall
+    xetMetricGet(
+        xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of metrics.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of metrics available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of metrics.
+        xet_metric_handle_t* phMetrics                  ///< [in,out][optional][range(0, *pCount)] array of handle of metrics
+        )
+    {
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_metric_group_object_t*>( hMetricGroup )->dditable;
+
+        // convert loader handle to driver handle
+        hMetricGroup = reinterpret_cast<xet_metric_group_object_t*>( hMetricGroup )->handle;
+
+        // forward to device-driver
+        auto result = dditable->xet.Metric.pfnGet( hMetricGroup, pCount, phMetrics );
 
         try
         {
-            // convert driver handle to loader handle
-            *phMetric = reinterpret_cast<xet_metric_handle_t>(
-                xet_metric_factory.get( *phMetric, dditable ) );
+            // convert driver handles to loader handles
+            for( size_t i = 0; ( nullptr != phMetrics ) && ( i < *pCount ); ++i )
+                phMetrics[ i ] = reinterpret_cast<xet_metric_handle_t>(
+                    xet_metric_factory.get( phMetrics[ i ], dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -167,32 +196,6 @@ namespace loader
 
         // forward to device-driver
         auto result = dditable->xet.Metric.pfnGetProperties( hMetric, pProperties );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetMetricGroupCalculateData
-    xe_result_t __xecall
-    xetMetricGroupCalculateData(
-        xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
-        size_t rawDataSize,                             ///< [in] size in bytes of raw data buffer
-        uint8_t* pRawData,                              ///< [in][range(0, rawDataSize)] buffer of raw data to calculate
-        uint32_t* pCalculatedDataCount,                 ///< [in] pointer to number of entries in calculated data buffer.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of entires to be calculated.
-                                                        ///< if count is non-zero, then driver will only calculate that number of entires.
-        xet_typed_value_t* pCalculatedData              ///< [in,out][range(0, *pCalculatedDataSize)] buffer of calculated data
-        )
-    {
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xet_metric_group_object_t*>( hMetricGroup )->dditable;
-
-        // convert loader handle to driver handle
-        hMetricGroup = reinterpret_cast<xet_metric_group_object_t*>( hMetricGroup )->handle;
-
-        // forward to device-driver
-        auto result = dditable->xet.MetricGroup.pfnCalculateData( hMetricGroup, rawDataSize, pRawData, pCalculatedDataCount, pCalculatedData );
 
         return result;
     }

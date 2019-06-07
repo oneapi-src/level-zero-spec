@@ -61,7 +61,7 @@ namespace layer
                                                         ///< number of metric groups available.
                                                         ///< if count is non-zero, then driver will only retrieve that number of
                                                         ///< metric groups.
-        xet_metric_group_handle_t* phMetricGroup        ///< [in,out][optional][range(0, *pCount)] array of handle of metric groups
+        xet_metric_group_handle_t* phMetricGroups       ///< [in,out][optional][range(0, *pCount)] array of handle of metric groups
         )
     {
         auto pfnGet = context.xetDdiTable.MetricGroup.pfnGet;
@@ -79,7 +79,7 @@ namespace layer
 
         }
 
-        return pfnGet( hDeviceGroup, pCount, phMetricGroup );
+        return pfnGet( hDeviceGroup, pCount, phMetricGroups );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -106,60 +106,6 @@ namespace layer
         }
 
         return pfnGetProperties( hMetricGroup, pProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetMetricGet
-    xe_result_t __xecall
-    xetMetricGet(
-        xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
-        uint32_t ordinal,                               ///< [in] ordinal of metric to retrieve; must be less than
-                                                        ///< ::xet_metric_group_properties_t::metricCount
-        xet_metric_handle_t* phMetric                   ///< [out] handle of metric
-        )
-    {
-        auto pfnGet = context.xetDdiTable.Metric.pfnGet;
-
-        if( nullptr == pfnGet )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hMetricGroup )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == phMetric )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGet( hMetricGroup, ordinal, phMetric );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetMetricGetProperties
-    xe_result_t __xecall
-    xetMetricGetProperties(
-        xet_metric_handle_t hMetric,                    ///< [in] handle of the metric
-        xet_metric_properties_t* pProperties            ///< [out] metric properties
-        )
-    {
-        auto pfnGetProperties = context.xetDdiTable.Metric.pfnGetProperties;
-
-        if( nullptr == pfnGetProperties )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hMetric )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pProperties )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetProperties( hMetric, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -198,6 +144,62 @@ namespace layer
         }
 
         return pfnCalculateData( hMetricGroup, rawDataSize, pRawData, pCalculatedDataCount, pCalculatedData );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetMetricGet
+    xe_result_t __xecall
+    xetMetricGet(
+        xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of metrics.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of metrics available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of metrics.
+        xet_metric_handle_t* phMetrics                  ///< [in,out][optional][range(0, *pCount)] array of handle of metrics
+        )
+    {
+        auto pfnGet = context.xetDdiTable.Metric.pfnGet;
+
+        if( nullptr == pfnGet )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hMetricGroup )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCount )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGet( hMetricGroup, pCount, phMetrics );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetMetricGetProperties
+    xe_result_t __xecall
+    xetMetricGetProperties(
+        xet_metric_handle_t hMetric,                    ///< [in] handle of the metric
+        xet_metric_properties_t* pProperties            ///< [out] metric properties
+        )
+    {
+        auto pfnGetProperties = context.xetDdiTable.Metric.pfnGetProperties;
+
+        if( nullptr == pfnGetProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hMetric )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pProperties )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetProperties( hMetric, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

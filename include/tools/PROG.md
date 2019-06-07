@@ -97,17 +97,18 @@ for selecting a preferred metric group for a specific type of measurements.
 ```c
     xe_result_t FindMetricGroup( xe_device_group_handle_t hDeviceGroup, char* pMetricGroupName, uint32_t desiredSamplingType, xet_metric_group_handle_t* phMetricGroup )
     {
-        // Obtain available metric group count for the specific device group
+        // Obtain available metric groups for the specific device group
         uint32_t metricGroupCount = 0;
         xetMetricGroupGet( hDeviceGroup, &metricGroupCount, nullptr );
 
         xet_metric_group_handle_t* phMetricGroups = malloc(metricGroupCount * sizeof(xet_metric_group_handle_t));
+        xetMetricGroupGet( hDeviceGroup, &metricGroupCount, phMetricGroups );
 
-        // Interate over all metric groups available for the 'hDevice'
+        // Interate over all metric groups available
         for( uint32_t i = 0; i < metricGroupCount; i++ )
         {   
             // Get metric group under index 'i' and its properties
-            xet_metric_group_properties_t metricGroupProperties = {XET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT};
+            xet_metric_group_properties_t metricGroupProperties;
             xetMetricGroupGetProperties( phMetricGroups[i], &metricGroupProperties );
 
             printf("Metric Group: %s\n", metricGroupProperties.name);
@@ -164,7 +165,6 @@ The following sample code demonstrates a basic sequence for time based collectio
     xe_result_t TimeBasedUsageExample( xe_device_group_handle_t hDeviceGroup, xe_device_handle_t hDevice )
     {
         xet_metric_group_handle_t     hMetricGroup           = nullptr;
-        xet_metric_group_properties_t metricGroupProperties  = {};
         xe_event_handle_t            hNotificationEvent     = nullptr;
         xe_event_pool_handle_t       hEventPool             = nullptr;
         xe_event_pool_desc_t         eventPoolDesc          = {XE_EVENT_POOL_DESC_VERSION_CURRENT, XE_EVENT_POOL_FLAG_DEFAULT , 1};
@@ -174,7 +174,6 @@ The following sample code demonstrates a basic sequence for time based collectio
 
         // Find a "ComputeBasic" metric group suitable for Time Based collection
         FindMetricGroup( hDeviceGroup, "ComputeBasic", XET_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED, &hMetricGroup );
-        xetMetricGroupGetProperties( hMetricGroup, &metricGroupProperties );
 
         // Configure the HW
         xetDeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
@@ -215,10 +214,7 @@ The following sample code demonstrates a basic sequence for time based collectio
         xetDeviceActivateMetricGroups( hDevice, 0, nullptr );
 
         // Calculate metric data
-        uint32_t calculatedDataCount = 0;
-        xetMetricGroupCalculateData( hMetricGroup, rawSize, rawData, &calculatedDataCount, nullptr );
-        xet_typed_value_t* calculatedData = malloc( calculatedDataCount * metricGroupProperties.reportSize );
-        xetMetricGroupCalculateData( hMetricGroup, rawSize, rawData, &calculatedDataCount, calculatedData );
+        CalculateMetricsExample( hMetricGroup, rawSize, rawData );
     }
 ```
 
@@ -239,7 +235,6 @@ The following sample code demonstrates a basic sequence for query based collecti
     xe_result_t MetricQueryUsageExample( xe_device_group_handle_t hDeviceGroup, xe_device_handle_t hDevice )
     {
         xet_metric_group_handle_t      hMetricGroup          = nullptr;
-        xet_metric_group_properties_t  metricGroupProperties = {XET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT};
         xe_event_handle_t             hCompletionEvent      = nullptr;
         xe_event_pool_desc_t          eventPoolDesc         = {XE_EVENT_POOL_DESC_VERSION_CURRENT};
         xe_event_desc_t               eventDesc             = {XE_EVENT_DESC_VERSION_CURRENT};
@@ -250,7 +245,6 @@ The following sample code demonstrates a basic sequence for query based collecti
     
         // Find a "ComputeBasic" metric group suitable for Event Based collection
         FindMetricGroup( hDeviceGroup, "ComputeBasic", XET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED, &hMetricGroup );
-        xetMetricGroupGetProperties( hMetricGroup, &metricGroupProperties );
 
         // Configure HW
         xetDeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
@@ -296,10 +290,7 @@ The following sample code demonstrates a basic sequence for query based collecti
         xetDeviceActivateMetricGroups( hDevice, 0, nullptr );
 
         // Calculate metric data
-        uint32_t calculatedDataCount = 0;
-        xetMetricGroupCalculateData( hMetricGroup, rawSize, rawData, &calculatedDataCount, nullptr );
-        xet_typed_value_t* calculatedData = malloc( calculatedDataCount * metricGroupProperties.reportSize );
-        xetMetricGroupCalculateData( hMetricGroup, rawSize, rawData, &calculatedDataCount, calculatedData );
+        CalculateMetricsExample( hMetricGroup, rawSize, rawData );
     }
 ```
 
@@ -307,6 +298,65 @@ The following sample code demonstrates a basic sequence for query based collecti
 Both MetricTracer and MetricQueryPool collect the data in device specific, raw form that is not suitable
 for application processing. To calculate metric values use ::xetMetricGroupCalculateData.
 
+The following sample code demonstrates a basic sequence for metric calculation and interpretation:
+```c
+    xe_result_t CalculateMetricsExample( xet_metric_group_handle_t hMetricGroup, size_t rawSize, uint8_t* rawData )
+    {
+        // Calculate metric data
+        uint32_t calculatedDataCount = 0;
+        xetMetricGroupCalculateData( hMetricGroup, rawSize, rawData, &calculatedDataCount, nullptr );
+        xet_typed_value_t* calculatedData = malloc( calculatedDataCount * sizeof(xet_typed_value_t) );
+        xetMetricGroupCalculateData( hMetricGroup, rawSize, rawData, &calculatedDataCount, calculatedData );
+
+        // Obtain available metrics for the specific metric group
+        uint32_t metricCount = 0;
+        xetMetricGet( hMetricGroup, &metricCount, nullptr );
+
+        xet_metric_handle_t* phMetrics = malloc(metricCount * sizeof(xet_metric_handle_t));
+        xetMetricGet( hMetricGroup, &metricCount, phMetrics );
+
+        // Print metric results
+        uint32_t numReports = calculatedDataCount / metricCount;
+        for( uint32_t report = 0; report < numReports; ++report )
+        {
+            printf("Report: %d\n", report);
+
+            for( uint32_t metric = 0; metric < metricCount; ++metric )
+            {
+                xet_typed_value_t data = calculatedData[report * metricCount + metric];
+
+                xet_metric_properties_t metricProperties;
+                xetMetricGetProperties( phMetrics[ metric ], &metricProperties );
+
+                printf("Metric: %s\n", metricProperties.name );
+
+                switch( data.type )
+                {
+                case XET_VALUE_TYPE_UINT32:
+                    printf(" Value: %lu\n", data.value.ui32 );
+                    break;
+                case XET_VALUE_TYPE_UINT64:
+                    printf(" Value: %llu\n", data.value.ui64 );
+                    break;
+                case XET_VALUE_TYPE_FLOAT32:
+                    printf(" Value: %f\n", data.value.fp32 );
+                    break;
+                case XET_VALUE_TYPE_FLOAT64:
+                    printf(" Value: %f\n", data.value.fp64 );
+                    break;
+                case XET_VALUE_TYPE_BOOL8:
+                    if( data.value.ui32 )
+                        printf(" Value: true\n" );
+                    else
+                        printf(" Value: false\n" );
+                    break;
+                default:
+                    break;
+                };
+            }
+        }
+    }
+```
 
 # <a name="pm">Power</a>
 

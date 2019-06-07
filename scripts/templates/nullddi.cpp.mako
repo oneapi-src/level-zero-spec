@@ -108,10 +108,14 @@ namespace driver
 
         %elif re.match(r"\w+MetricGroupGet$", fname):
         *pCount = 1;
-        if( nullptr != phMetricGroup ) *reinterpret_cast<void**>(phMetricGroup) = context.get();
+        if( nullptr != phMetricGroups ) *reinterpret_cast<void**>(phMetricGroups) = context.get();
 
         %elif re.match(r"\w+MetricGroupGetProperties", fname):
         *pProperties = context.metricGroupProperties;
+
+        %elif re.match(r"\w+MetricGet$", fname):
+        *pCount = 1;
+        if( nullptr != phMetrics ) *reinterpret_cast<void**>(phMetrics) = context.get();
 
         %elif re.match(r"\w+MetricGetProperties", fname):
         *pProperties = context.metricProperties;

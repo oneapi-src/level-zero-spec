@@ -77,25 +77,26 @@
 namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Value types
+    /// @brief Supported value types
     enum class value_type_t
     {
-        UINT32,                                         ///< Value type: uint32
-        UINT64,                                         ///< Value type: uint64
-        FLOAT,                                          ///< Value type: float
-        BOOL,                                           ///< Value type: bool
+        UINT32,                                         ///< 32-bit unsigned-integer
+        UINT64,                                         ///< 64-bit unsigned-integer
+        FLOAT32,                                        ///< 32-bit floating-point
+        FLOAT64,                                        ///< 64-bit floating-point
+        BOOL8,                                          ///< 8-bit boolean
 
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Different value types union
+    /// @brief Union of values
     union value_t
     {
-        uint32_t _uint32;                               ///< [out] uint32_t value
-        uint64_t _uint64;                               ///< [out] uint64_t value
-        float _float;                                   ///< [out] float value
-        double _double;                                 ///< [out] double value
-        xe::bool_t _bool;                               ///< [out] bool value
+        uint32_t ui32;                                  ///< [out] 32-bit unsigned-integer
+        uint64_t ui64;                                  ///< [out] 32-bit unsigned-integer
+        float fp32;                                     ///< [out] 32-bit floating-point
+        double fp64;                                    ///< [out] 64-bit floating-point
+        xe::bool_t b8;                                  ///< [out] 8-bit boolean
 
     };
 
@@ -103,8 +104,8 @@ namespace xet
     /// @brief Typed value
     struct typed_value_t
     {
-        value_type_t type;                              ///< [out] value type
-        value_t value;                                  ///< [out] value of a specified type
+        value_type_t type;                              ///< [out] type of value
+        value_t value;                                  ///< [out] value
 
     };
 
@@ -185,7 +186,7 @@ namespace xet
                                                             ///< number of metric groups available.
                                                             ///< if count is non-zero, then driver will only retrieve that number of
                                                             ///< metric groups.
-            MetricGroup** ppMetricGroup = nullptr           ///< [in,out][optional][range(0, *pCount)] array of pointer to metric
+            MetricGroup** ppMetricGroups = nullptr          ///< [in,out][optional][range(0, *pCount)] array of pointer to metric
                                                             ///< groups
             );
 
@@ -297,15 +298,15 @@ namespace xet
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
-        /// @returns
-        ///     - Metric*: handle of metric
-        /// 
         /// @throws result_t
-        static Metric* __xecall
+        static void __xecall
         Get(
             MetricGroup* pMetricGroup,                      ///< [in] pointer to the metric group
-            uint32_t ordinal                                ///< [in] ordinal of metric to retrieve; must be less than
-                                                            ///< ::metric_group_properties_t::metricCount
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of metrics.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of metrics available.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of metrics.
+            Metric** ppMetrics = nullptr                    ///< [in,out][optional][range(0, *pCount)] array of pointer to metrics
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -433,19 +434,19 @@ namespace xet
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief API version of ::metric_query_pool_desc_t
+        enum class desc_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Metric query pool types
         enum class flag_t
         {
             PERFORMANCE,                                    ///< Performance metric query pool.
             SKIP_EXECUTION,                                 ///< Skips workload execution between begin/end calls.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::metric_query_pool_desc_t
-        enum class desc_version_t
-        {
-            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
@@ -665,12 +666,12 @@ namespace xet
     std::string to_string( const MetricTracer::desc_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts MetricQueryPool::flag_t to std::string
-    std::string to_string( const MetricQueryPool::flag_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts MetricQueryPool::desc_version_t to std::string
     std::string to_string( const MetricQueryPool::desc_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts MetricQueryPool::flag_t to std::string
+    std::string to_string( const MetricQueryPool::flag_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts MetricQueryPool::desc_t to std::string

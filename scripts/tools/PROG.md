@@ -103,17 +103,18 @@ for selecting a preferred metric group for a specific type of measurements.
 ```c
     ${x}_result_t FindMetricGroup( ${x}_device_group_handle_t hDeviceGroup, char* pMetricGroupName, uint32_t desiredSamplingType, ${t}_metric_group_handle_t* phMetricGroup )
     {
-        // Obtain available metric group count for the specific device group
+        // Obtain available metric groups for the specific device group
         uint32_t metricGroupCount = 0;
         ${t}MetricGroupGet( hDeviceGroup, &metricGroupCount, nullptr );
 
         ${t}_metric_group_handle_t* phMetricGroups = malloc(metricGroupCount * sizeof(${t}_metric_group_handle_t));
+        ${t}MetricGroupGet( hDeviceGroup, &metricGroupCount, phMetricGroups );
 
-        // Interate over all metric groups available for the 'hDevice'
+        // Interate over all metric groups available
         for( uint32_t i = 0; i < metricGroupCount; i++ )
         {   
             // Get metric group under index 'i' and its properties
-            ${t}_metric_group_properties_t metricGroupProperties = {${T}_METRIC_GROUP_PROPERTIES_VERSION_CURRENT};
+            ${t}_metric_group_properties_t metricGroupProperties;
             ${t}MetricGroupGetProperties( phMetricGroups[i], &metricGroupProperties );
 
             printf("Metric Group: %s\n", metricGroupProperties.name);
@@ -170,7 +171,6 @@ The following sample code demonstrates a basic sequence for time based collectio
     ${x}_result_t TimeBasedUsageExample( ${x}_device_group_handle_t hDeviceGroup, ${x}_device_handle_t hDevice )
     {
         ${t}_metric_group_handle_t     hMetricGroup           = nullptr;
-        ${t}_metric_group_properties_t metricGroupProperties  = {};
         ${x}_event_handle_t            hNotificationEvent     = nullptr;
         ${x}_event_pool_handle_t       hEventPool             = nullptr;
         ${x}_event_pool_desc_t         eventPoolDesc          = {${X}_EVENT_POOL_DESC_VERSION_CURRENT, ${X}_EVENT_POOL_FLAG_DEFAULT , 1};
@@ -180,7 +180,6 @@ The following sample code demonstrates a basic sequence for time based collectio
 
         // Find a "ComputeBasic" metric group suitable for Time Based collection
         FindMetricGroup( hDeviceGroup, "ComputeBasic", ${T}_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED, &hMetricGroup );
-        ${t}MetricGroupGetProperties( hMetricGroup, &metricGroupProperties );
 
         // Configure the HW
         ${t}DeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
@@ -221,10 +220,7 @@ The following sample code demonstrates a basic sequence for time based collectio
         ${t}DeviceActivateMetricGroups( hDevice, 0, nullptr );
 
         // Calculate metric data
-        uint32_t calculatedDataCount = 0;
-        ${t}MetricGroupCalculateData( hMetricGroup, rawSize, rawData, &calculatedDataCount, nullptr );
-        ${t}_typed_value_t* calculatedData = malloc( calculatedDataCount * metricGroupProperties.reportSize );
-        ${t}MetricGroupCalculateData( hMetricGroup, rawSize, rawData, &calculatedDataCount, calculatedData );
+        CalculateMetricsExample( hMetricGroup, rawSize, rawData );
     }
 ```
 
@@ -245,7 +241,6 @@ The following sample code demonstrates a basic sequence for query based collecti
     ${x}_result_t MetricQueryUsageExample( ${x}_device_group_handle_t hDeviceGroup, ${x}_device_handle_t hDevice )
     {
         ${t}_metric_group_handle_t      hMetricGroup          = nullptr;
-        ${t}_metric_group_properties_t  metricGroupProperties = {${T}_METRIC_GROUP_PROPERTIES_VERSION_CURRENT};
         ${x}_event_handle_t             hCompletionEvent      = nullptr;
         ${x}_event_pool_desc_t          eventPoolDesc         = {${X}_EVENT_POOL_DESC_VERSION_CURRENT};
         ${x}_event_desc_t               eventDesc             = {${X}_EVENT_DESC_VERSION_CURRENT};
@@ -256,7 +251,6 @@ The following sample code demonstrates a basic sequence for query based collecti
     
         // Find a "ComputeBasic" metric group suitable for Event Based collection
         FindMetricGroup( hDeviceGroup, "ComputeBasic", ${T}_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED, &hMetricGroup );
-        ${t}MetricGroupGetProperties( hMetricGroup, &metricGroupProperties );
 
         // Configure HW
         ${t}DeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
@@ -302,10 +296,7 @@ The following sample code demonstrates a basic sequence for query based collecti
         ${t}DeviceActivateMetricGroups( hDevice, 0, nullptr );
 
         // Calculate metric data
-        uint32_t calculatedDataCount = 0;
-        ${t}MetricGroupCalculateData( hMetricGroup, rawSize, rawData, &calculatedDataCount, nullptr );
-        ${t}_typed_value_t* calculatedData = malloc( calculatedDataCount * metricGroupProperties.reportSize );
-        ${t}MetricGroupCalculateData( hMetricGroup, rawSize, rawData, &calculatedDataCount, calculatedData );
+        CalculateMetricsExample( hMetricGroup, rawSize, rawData );
     }
 ```
 
@@ -313,6 +304,65 @@ ${"##"} <a name="cal">Calculation</a>
 Both MetricTracer and MetricQueryPool collect the data in device specific, raw form that is not suitable
 for application processing. To calculate metric values use ::${t}MetricGroupCalculateData.
 
+The following sample code demonstrates a basic sequence for metric calculation and interpretation:
+```c
+    ${x}_result_t CalculateMetricsExample( ${t}_metric_group_handle_t hMetricGroup, size_t rawSize, uint8_t* rawData )
+    {
+        // Calculate metric data
+        uint32_t calculatedDataCount = 0;
+        ${t}MetricGroupCalculateData( hMetricGroup, rawSize, rawData, &calculatedDataCount, nullptr );
+        ${t}_typed_value_t* calculatedData = malloc( calculatedDataCount * sizeof(${t}_typed_value_t) );
+        ${t}MetricGroupCalculateData( hMetricGroup, rawSize, rawData, &calculatedDataCount, calculatedData );
+
+        // Obtain available metrics for the specific metric group
+        uint32_t metricCount = 0;
+        ${t}MetricGet( hMetricGroup, &metricCount, nullptr );
+
+        ${t}_metric_handle_t* phMetrics = malloc(metricCount * sizeof(${t}_metric_handle_t));
+        ${t}MetricGet( hMetricGroup, &metricCount, phMetrics );
+
+        // Print metric results
+        uint32_t numReports = calculatedDataCount / metricCount;
+        for( uint32_t report = 0; report < numReports; ++report )
+        {
+            printf("Report: %d\n", report);
+
+            for( uint32_t metric = 0; metric < metricCount; ++metric )
+            {
+                ${t}_typed_value_t data = calculatedData[report * metricCount + metric];
+
+                ${t}_metric_properties_t metricProperties;
+                ${t}MetricGetProperties( phMetrics[ metric ], &metricProperties );
+
+                printf("Metric: %s\n", metricProperties.name );
+
+                switch( data.type )
+                {
+                case ${T}_VALUE_TYPE_UINT32:
+                    printf(" Value: %lu\n", data.value.ui32 );
+                    break;
+                case ${T}_VALUE_TYPE_UINT64:
+                    printf(" Value: %llu\n", data.value.ui64 );
+                    break;
+                case ${T}_VALUE_TYPE_FLOAT32:
+                    printf(" Value: %f\n", data.value.fp32 );
+                    break;
+                case ${T}_VALUE_TYPE_FLOAT64:
+                    printf(" Value: %f\n", data.value.fp64 );
+                    break;
+                case ${T}_VALUE_TYPE_BOOL8:
+                    if( data.value.ui32 )
+                        printf(" Value: true\n" );
+                    else
+                        printf(" Value: false\n" );
+                    break;
+                default:
+                    break;
+                };
+            }
+        }
+    }
+```
 
 ${"#"} <a name="pm">Power</a>
 

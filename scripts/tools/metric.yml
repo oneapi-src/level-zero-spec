@@ -20,7 +20,7 @@ params:
             if count is zero, then the driver will update the value with the total number of metric groups available.
             if count is non-zero, then driver will only retrieve that number of metric groups.
     - type: "$t_metric_group_handle_t*"
-      name: phMetricGroup
+      name: phMetricGroups
       desc: "[in,out][optional][range(0, *pCount)] array of handle of metric groups"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
@@ -102,26 +102,6 @@ returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid metric group handle"
 --- #--------------------------------------------------------------------------
-type: macro
-desc: "Maximum metric name string size"
-name: $T_MAX_METRIC_NAME
-value: "256"
---- #--------------------------------------------------------------------------
-type: macro
-desc: "Maximum metric description string size"
-name: $T_MAX_METRIC_DESCRIPTION
-value: "256"
---- #--------------------------------------------------------------------------
-type: macro
-desc: "Maximum metric component string size"
-name: $T_MAX_METRIC_COMPONENT
-value: "256"
---- #--------------------------------------------------------------------------
-type: macro
-desc: "Maximum metric result units string size"
-name: $T_MAX_METRIC_RESULT_UNITS
-value: "256"
---- #--------------------------------------------------------------------------
 type: enum
 desc: "Metric types"
 class: $tMetric
@@ -145,39 +125,41 @@ etors:
       desc: "Metric type: raw"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Value types"
+desc: "Supported value types"
 class: $t
 name: $t_value_type_t
 etors:
     - name: $T_VALUE_TYPE_UINT32
-      desc: "Value type: uint32"
+      desc: "32-bit unsigned-integer"
     - name: $T_VALUE_TYPE_UINT64
-      desc: "Value type: uint64"
-    - name: $T_VALUE_TYPE_FLOAT
-      desc: "Value type: float"
-    - name: $T_VALUE_TYPE_BOOL
-      desc: "Value type: bool"
+      desc: "64-bit unsigned-integer"
+    - name: $T_VALUE_TYPE_FLOAT32
+      desc: "32-bit floating-point"
+    - name: $T_VALUE_TYPE_FLOAT64
+      desc: "64-bit floating-point"
+    - name: $T_VALUE_TYPE_BOOL8
+      desc: "8-bit boolean"
 --- #--------------------------------------------------------------------------
 type: union
-desc: "Different value types union"
+desc: "Union of values"
 class: $t
 name: $t_value_t
 members:
     - type: uint32_t
-      name: "_uint32"
-      desc: "[out] uint32_t value"
+      name: "ui32"
+      desc: "[out] 32-bit unsigned-integer"
     - type: uint64_t
-      name: "_uint64"
-      desc: "[out] uint64_t value"
+      name: "ui64"
+      desc: "[out] 32-bit unsigned-integer"
     - type: float
-      name: "_float"
-      desc: "[out] float value"
+      name: "fp32"
+      desc: "[out] 32-bit floating-point"
     - type: double
-      name: "_double"
-      desc: "[out] double value"
+      name: "fp64"
+      desc: "[out] 64-bit floating-point"
     - type: $x_bool_t
-      name: "_bool"
-      desc: "[out] bool value"
+      name: "b8"
+      desc: "[out] 8-bit boolean"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Typed value"
@@ -186,10 +168,84 @@ name: $t_typed_value_t
 members:
     - type: $t_value_type_t
       name: "type"
-      desc: "[out] value type"
+      desc: "[out] type of value"
     - type: $t_value_t
       name: "value"
-      desc: "[out] value of a specified type"
+      desc: "[out] value"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Calculates counter values from raw data."
+class: $tMetricGroup
+name: CalculateData
+decl: static
+details:
+    - "The application may call this function from simultaneous threads."
+params:
+    - type: "$t_metric_group_handle_t"
+      name: hMetricGroup
+      desc: "[in] handle of the metric group"
+    - type: size_t
+      name: rawDataSize
+      desc: "[in] size in bytes of raw data buffer"
+    - type: "uint8_t*"
+      name: pRawData
+      desc: "[in][range(0, rawDataSize)] buffer of raw data to calculate"
+    - type: uint32_t*
+      name: pCalculatedDataCount
+      desc: |
+            [in] pointer to number of entries in calculated data buffer.
+            if count is zero, then the driver will update the value with the total number of entires to be calculated.
+            if count is non-zero, then driver will only calculate that number of entires.
+    - type: "$t_typed_value_t*"
+      name: pCalculatedData
+      desc: "[in,out][range(0, *pCalculatedDataSize)] buffer of calculated data"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "invalid metric group handle"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves metric from a metric group."
+class: $tMetric
+name: Get
+decl: static
+details:
+    - "The application may call this function from simultaneous threads."
+params:
+    - type: "$t_metric_group_handle_t"
+      name: hMetricGroup
+      desc: "[in] handle of the metric group"
+    - type: uint32_t*
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of metrics.
+            if count is zero, then the driver will update the value with the total number of metrics available.
+            if count is non-zero, then driver will only retrieve that number of metrics.
+    - type: "$t_metric_handle_t*"
+      name: phMetrics
+      desc: "[in,out][optional][range(0, *pCount)] array of handle of metrics"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "invalid metric group handle"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum metric name string size"
+name: $T_MAX_METRIC_NAME
+value: "256"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum metric description string size"
+name: $T_MAX_METRIC_DESCRIPTION
+value: "256"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum metric component string size"
+name: $T_MAX_METRIC_COMPONENT
+value: "256"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum metric result units string size"
+name: $T_MAX_METRIC_RESULT_UNITS
+value: "256"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $t_metric_properties_t"
@@ -232,27 +288,6 @@ members:
       desc: "[out] metric result units"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Retrieves metric from a metric group."
-class: $tMetric
-name: Get
-decl: static
-details:
-    - "The application may call this function from simultaneous threads."
-params:
-    - type: "$t_metric_group_handle_t"
-      name: hMetricGroup
-      desc: "[in] handle of the metric group"
-    - type: uint32_t
-      name: ordinal
-      desc: "[in] ordinal of metric to retrieve; must be less than $t_metric_group_properties_t::metricCount"
-    - type: "$t_metric_handle_t*"
-      name: phMetric
-      desc: "[out] handle of metric"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid metric group handle"
---- #--------------------------------------------------------------------------
-type: function
 desc: "Retrieves attributes of a metric."
 class: $tMetric
 name: GetProperties
@@ -268,36 +303,6 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid handle"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Calculates counter values from raw data."
-class: $tMetricGroup
-name: CalculateData
-decl: static
-details:
-    - "The application may call this function from simultaneous threads."
-params:
-    - type: "$t_metric_group_handle_t"
-      name: hMetricGroup
-      desc: "[in] handle of the metric group"
-    - type: size_t
-      name: rawDataSize
-      desc: "[in] size in bytes of raw data buffer"
-    - type: "uint8_t*"
-      name: pRawData
-      desc: "[in][range(0, rawDataSize)] buffer of raw data to calculate"
-    - type: uint32_t*
-      name: pCalculatedDataCount
-      desc: |
-            [in] pointer to number of entries in calculated data buffer.
-            if count is zero, then the driver will update the value with the total number of entires to be calculated.
-            if count is non-zero, then driver will only calculate that number of entires.
-    - type: "$t_typed_value_t*"
-      name: pCalculatedData
-      desc: "[in,out][range(0, *pCalculatedDataSize)] buffer of calculated data"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid metric group handle"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Activates metric groups."
@@ -430,6 +435,15 @@ returns:
         - "invalid metric tracer handle"
 --- #--------------------------------------------------------------------------
 type: enum
+desc: "API version of $t_metric_query_pool_desc_t"
+class: $tMetricQueryPool
+name: $t_metric_query_pool_desc_version_t
+etors:
+    - name: $T_METRIC_QUERY_POOL_DESC_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: enum
 desc: "Metric query pool types"
 class: $tMetricQueryPool
 name: $t_metric_query_pool_flag_t
@@ -438,15 +452,6 @@ etors:
       desc: "Performance metric query pool."
     - name: $T_METRIC_QUERY_POOL_FLAG_SKIP_EXECUTION
       desc: "Skips workload execution between begin/end calls."
---- #--------------------------------------------------------------------------
-type: enum
-desc: "API version of $t_metric_query_pool_desc_t"
-class: $tMetricQueryPool
-name: $t_metric_query_pool_desc_version_t
-etors:
-    - name: $T_METRIC_QUERY_POOL_DESC_VERSION_CURRENT
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Metric query pool description"

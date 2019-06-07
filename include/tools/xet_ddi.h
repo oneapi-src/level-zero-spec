@@ -239,7 +239,7 @@ typedef xe_result_t (__xecall *xet_pfnGetMetricGroupProcAddrTable_t)(
 /// @brief Function-pointer for xetMetricGet 
 typedef xe_result_t (__xecall *xet_pfnMetricGet_t)(
     xet_metric_group_handle_t,
-    uint32_t,
+    uint32_t*,
     xet_metric_handle_t*
     );
 

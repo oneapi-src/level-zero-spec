@@ -54,13 +54,13 @@ namespace driver
                                                         ///< number of metric groups available.
                                                         ///< if count is non-zero, then driver will only retrieve that number of
                                                         ///< metric groups.
-        xet_metric_group_handle_t* phMetricGroup        ///< [in,out][optional][range(0, *pCount)] array of handle of metric groups
+        xet_metric_group_handle_t* phMetricGroups       ///< [in,out][optional][range(0, *pCount)] array of handle of metric groups
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         *pCount = 1;
-        if( nullptr != phMetricGroup ) *reinterpret_cast<void**>(phMetricGroup) = context.get();
+        if( nullptr != phMetricGroups ) *reinterpret_cast<void**>(phMetricGroups) = context.get();
 
         return result;
     }
@@ -76,38 +76,6 @@ namespace driver
         xe_result_t result = XE_RESULT_SUCCESS;
 
         *pProperties = context.metricGroupProperties;
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetMetricGet
-    xe_result_t __xecall
-    xetMetricGet(
-        xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
-        uint32_t ordinal,                               ///< [in] ordinal of metric to retrieve; must be less than
-                                                        ///< ::xet_metric_group_properties_t::metricCount
-        xet_metric_handle_t* phMetric                   ///< [out] handle of metric
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        *phMetric = reinterpret_cast<xet_metric_handle_t>( context.get() );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetMetricGetProperties
-    xe_result_t __xecall
-    xetMetricGetProperties(
-        xet_metric_handle_t hMetric,                    ///< [in] handle of the metric
-        xet_metric_properties_t* pProperties            ///< [out] metric properties
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        *pProperties = context.metricProperties;
 
         return result;
     }
@@ -130,6 +98,41 @@ namespace driver
 
         *pCalculatedDataCount = 1;
         if( pCalculatedData ) *pCalculatedData = {};
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetMetricGet
+    xe_result_t __xecall
+    xetMetricGet(
+        xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of metrics.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of metrics available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of metrics.
+        xet_metric_handle_t* phMetrics                  ///< [in,out][optional][range(0, *pCount)] array of handle of metrics
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        *pCount = 1;
+        if( nullptr != phMetrics ) *reinterpret_cast<void**>(phMetrics) = context.get();
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetMetricGetProperties
+    xe_result_t __xecall
+    xetMetricGetProperties(
+        xet_metric_handle_t hMetric,                    ///< [in] handle of the metric
+        xet_metric_properties_t* pProperties            ///< [out] metric properties
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        *pProperties = context.metricProperties;
 
         return result;
     }

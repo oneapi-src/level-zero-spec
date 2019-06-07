@@ -64,5 +64,6 @@ namespace driver
         metricProperties.metricType = XET_METRIC_TYPE_DURATION;
         metricProperties.resultType = XET_VALUE_TYPE_UINT32;
         strcpy( metricProperties.name, "Null Metric" );
+        strcpy( metricProperties.resultUnits, "ns" );
     }
 }

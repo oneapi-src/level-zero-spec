@@ -57,7 +57,7 @@ xetMetricGroupGet(
                                                     ///< number of metric groups available.
                                                     ///< if count is non-zero, then driver will only retrieve that number of
                                                     ///< metric groups.
-    xet_metric_group_handle_t* phMetricGroup        ///< [in,out][optional][range(0, *pCount)] array of handle of metric groups
+    xet_metric_group_handle_t* phMetricGroups       ///< [in,out][optional][range(0, *pCount)] array of handle of metric groups
     )
 {
     auto pfnGet = xet_lib::context.ddiTable.MetricGroup.pfnGet;
@@ -67,7 +67,7 @@ xetMetricGroupGet(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnGet( hDeviceGroup, pCount, phMetricGroup );
+    return pfnGet( hDeviceGroup, pCount, phMetricGroups );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -99,70 +99,6 @@ xetMetricGroupGetProperties(
 #endif
 
     return pfnGetProperties( hMetricGroup, pProperties );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves metric from a metric group.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hMetricGroup
-///         + nullptr == phMetric
-///         + invalid metric group handle
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetMetricGet(
-    xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
-    uint32_t ordinal,                               ///< [in] ordinal of metric to retrieve; must be less than
-                                                    ///< ::xet_metric_group_properties_t::metricCount
-    xet_metric_handle_t* phMetric                   ///< [out] handle of metric
-    )
-{
-    auto pfnGet = xet_lib::context.ddiTable.Metric.pfnGet;
-
-#if _DEBUG
-    if( nullptr == pfnGet )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
-
-    return pfnGet( hMetricGroup, ordinal, phMetric );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves attributes of a metric.
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hMetric
-///         + nullptr == pProperties
-///         + invalid handle
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetMetricGetProperties(
-    xet_metric_handle_t hMetric,                    ///< [in] handle of the metric
-    xet_metric_properties_t* pProperties            ///< [out] metric properties
-    )
-{
-    auto pfnGetProperties = xet_lib::context.ddiTable.Metric.pfnGetProperties;
-
-#if _DEBUG
-    if( nullptr == pfnGetProperties )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
-
-    return pfnGetProperties( hMetric, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -202,6 +138,72 @@ xetMetricGroupCalculateData(
 #endif
 
     return pfnCalculateData( hMetricGroup, rawDataSize, pRawData, pCalculatedDataCount, pCalculatedData );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves metric from a metric group.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hMetricGroup
+///         + nullptr == pCount
+///         + invalid metric group handle
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetMetricGet(
+    xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of metrics.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of metrics available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of metrics.
+    xet_metric_handle_t* phMetrics                  ///< [in,out][optional][range(0, *pCount)] array of handle of metrics
+    )
+{
+    auto pfnGet = xet_lib::context.ddiTable.Metric.pfnGet;
+
+#if _DEBUG
+    if( nullptr == pfnGet )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return pfnGet( hMetricGroup, pCount, phMetrics );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves attributes of a metric.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hMetric
+///         + nullptr == pProperties
+///         + invalid handle
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetMetricGetProperties(
+    xet_metric_handle_t hMetric,                    ///< [in] handle of the metric
+    xet_metric_properties_t* pProperties            ///< [out] metric properties
+    )
+{
+    auto pfnGetProperties = xet_lib::context.ddiTable.Metric.pfnGetProperties;
+
+#if _DEBUG
+    if( nullptr == pfnGetProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return pfnGetProperties( hMetric, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -753,35 +755,35 @@ namespace xet
                                                         ///< number of metric groups available.
                                                         ///< if count is non-zero, then driver will only retrieve that number of
                                                         ///< metric groups.
-        MetricGroup** ppMetricGroup                     ///< [in,out][optional][range(0, *pCount)] array of pointer to metric
+        MetricGroup** ppMetricGroups                    ///< [in,out][optional][range(0, *pCount)] array of pointer to metric
                                                         ///< groups
         )
     {
-        thread_local std::vector<xet_metric_group_handle_t> hMetricGroup;
-        hMetricGroup.resize( ( ppMetricGroup ) ? *pCount : 0 );
+        thread_local std::vector<xet_metric_group_handle_t> hMetricGroups;
+        hMetricGroups.resize( ( ppMetricGroups ) ? *pCount : 0 );
 
         auto result = static_cast<result_t>( ::xetMetricGroupGet(
             reinterpret_cast<xet_device_group_handle_t>( pDeviceGroup->getHandle() ),
             pCount,
-            hMetricGroup.data() ) );
+            hMetricGroups.data() ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricGroup::Get" );
 
-        for( uint32_t i = 0; ( ppMetricGroup ) && ( i < *pCount ); ++i )
-            ppMetricGroup[ i ] = nullptr;
+        for( uint32_t i = 0; ( ppMetricGroups ) && ( i < *pCount ); ++i )
+            ppMetricGroups[ i ] = nullptr;
 
         try
         {
-            for( uint32_t i = 0; ( ppMetricGroup ) && ( i < *pCount ); ++i )
-                ppMetricGroup[ i ] = new MetricGroup( reinterpret_cast<metric_group_handle_t>( hMetricGroup[ i ] ), nullptr );
+            for( uint32_t i = 0; ( ppMetricGroups ) && ( i < *pCount ); ++i )
+                ppMetricGroups[ i ] = new MetricGroup( reinterpret_cast<metric_group_handle_t>( hMetricGroups[ i ] ), nullptr );
         }
         catch( std::bad_alloc& )
         {
-            for( uint32_t i = 0; ( ppMetricGroup ) && ( i < *pCount ); ++i )
+            for( uint32_t i = 0; ( ppMetricGroups ) && ( i < *pCount ); ++i )
             {
-                delete ppMetricGroup[ i ];
-                ppMetricGroup[ i ] = nullptr;
+                delete ppMetricGroups[ i ];
+                ppMetricGroups[ i ] = nullptr;
             }
 
             throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xet::MetricGroup::Get" );
@@ -816,77 +818,6 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieves metric from a metric group.
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    /// 
-    /// @returns
-    ///     - Metric*: handle of metric
-    /// 
-    /// @throws result_t
-    Metric* __xecall
-    Metric::Get(
-        MetricGroup* pMetricGroup,                      ///< [in] pointer to the metric group
-        uint32_t ordinal                                ///< [in] ordinal of metric to retrieve; must be less than
-                                                        ///< ::metric_group_properties_t::metricCount
-        )
-    {
-        xet_metric_handle_t hMetric;
-
-        auto result = static_cast<result_t>( ::xetMetricGet(
-            reinterpret_cast<xet_metric_group_handle_t>( pMetricGroup->getHandle() ),
-            ordinal,
-            &hMetric ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Metric::Get" );
-
-        Metric* pMetric = nullptr;
-
-        try
-        {
-            pMetric = new Metric( reinterpret_cast<metric_handle_t>( hMetric ), pMetricGroup );
-        }
-        catch( std::bad_alloc& )
-        {
-            delete pMetric;
-            pMetric = nullptr;
-
-            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xet::Metric::Get" );
-        }
-
-        return pMetric;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieves attributes of a metric.
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    /// 
-    /// @returns
-    ///     - properties_t: metric properties
-    /// 
-    /// @throws result_t
-    Metric::properties_t __xecall
-    Metric::GetProperties(
-        void
-        )
-    {
-        xet_metric_properties_t properties;
-
-        auto result = static_cast<result_t>( ::xetMetricGetProperties(
-            reinterpret_cast<xet_metric_handle_t>( getHandle() ),
-            &properties ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Metric::GetProperties" );
-
-        return *reinterpret_cast<properties_t*>( &properties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Calculates counter values from raw data.
     /// 
     /// @details
@@ -914,6 +845,81 @@ namespace xet
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricGroup::CalculateData" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Retrieves metric from a metric group.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Metric::Get(
+        MetricGroup* pMetricGroup,                      ///< [in] pointer to the metric group
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of metrics.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of metrics available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of metrics.
+        Metric** ppMetrics                              ///< [in,out][optional][range(0, *pCount)] array of pointer to metrics
+        )
+    {
+        thread_local std::vector<xet_metric_handle_t> hMetrics;
+        hMetrics.resize( ( ppMetrics ) ? *pCount : 0 );
+
+        auto result = static_cast<result_t>( ::xetMetricGet(
+            reinterpret_cast<xet_metric_group_handle_t>( pMetricGroup->getHandle() ),
+            pCount,
+            hMetrics.data() ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Metric::Get" );
+
+        for( uint32_t i = 0; ( ppMetrics ) && ( i < *pCount ); ++i )
+            ppMetrics[ i ] = nullptr;
+
+        try
+        {
+            for( uint32_t i = 0; ( ppMetrics ) && ( i < *pCount ); ++i )
+                ppMetrics[ i ] = new Metric( reinterpret_cast<metric_handle_t>( hMetrics[ i ] ), pMetricGroup );
+        }
+        catch( std::bad_alloc& )
+        {
+            for( uint32_t i = 0; ( ppMetrics ) && ( i < *pCount ); ++i )
+            {
+                delete ppMetrics[ i ];
+                ppMetrics[ i ] = nullptr;
+            }
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xet::Metric::Get" );
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Retrieves attributes of a metric.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    /// 
+    /// @returns
+    ///     - properties_t: metric properties
+    /// 
+    /// @throws result_t
+    Metric::properties_t __xecall
+    Metric::GetProperties(
+        void
+        )
+    {
+        xet_metric_properties_t properties;
+
+        auto result = static_cast<result_t>( ::xetMetricGetProperties(
+            reinterpret_cast<xet_metric_handle_t>( getHandle() ),
+            &properties ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Metric::GetProperties" );
+
+        return *reinterpret_cast<properties_t*>( &properties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1339,12 +1345,16 @@ namespace xet
             str = "value_type_t::UINT64";
             break;
 
-        case value_type_t::FLOAT:
-            str = "value_type_t::FLOAT";
+        case value_type_t::FLOAT32:
+            str = "value_type_t::FLOAT32";
             break;
 
-        case value_type_t::BOOL:
-            str = "value_type_t::BOOL";
+        case value_type_t::FLOAT64:
+            str = "value_type_t::FLOAT64";
+            break;
+
+        case value_type_t::BOOL8:
+            str = "value_type_t::BOOL8";
             break;
 
         default:
@@ -1361,24 +1371,24 @@ namespace xet
     {
         std::string str;
         
-        str += "value_t::_uint32 : ";
-        str += std::to_string(val._uint32);
+        str += "value_t::ui32 : ";
+        str += std::to_string(val.ui32);
         str += "\n";
         
-        str += "value_t::_uint64 : ";
-        str += std::to_string(val._uint64);
+        str += "value_t::ui64 : ";
+        str += std::to_string(val.ui64);
         str += "\n";
         
-        str += "value_t::_float : ";
-        str += std::to_string(val._float);
+        str += "value_t::fp32 : ";
+        str += std::to_string(val.fp32);
         str += "\n";
         
-        str += "value_t::_double : ";
-        str += std::to_string(val._double);
+        str += "value_t::fp64 : ";
+        str += std::to_string(val.fp64);
         str += "\n";
         
-        str += "value_t::_bool : ";
-        str += std::to_string(val._bool);
+        str += "value_t::b8 : ";
+        str += std::to_string(val.b8);
         str += "\n";
 
         return str;
@@ -1628,6 +1638,26 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts MetricQueryPool::desc_version_t to std::string
+    std::string to_string( const MetricQueryPool::desc_version_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case MetricQueryPool::desc_version_t::CURRENT:
+            str = "MetricQueryPool::desc_version_t::CURRENT";
+            break;
+
+        default:
+            str = "MetricQueryPool::desc_version_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts MetricQueryPool::flag_t to std::string
     std::string to_string( const MetricQueryPool::flag_t val )
     {
@@ -1645,26 +1675,6 @@ namespace xet
 
         default:
             str = "MetricQueryPool::flag_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts MetricQueryPool::desc_version_t to std::string
-    std::string to_string( const MetricQueryPool::desc_version_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case MetricQueryPool::desc_version_t::CURRENT:
-            str = "MetricQueryPool::desc_version_t::CURRENT";
-            break;
-
-        default:
-            str = "MetricQueryPool::desc_version_t::?";
             break;
         };
 
