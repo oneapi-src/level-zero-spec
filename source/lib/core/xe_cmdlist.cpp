@@ -702,6 +702,12 @@ namespace xe
         
         if( static_cast<uint32_t>(CommandList::flag_t::RELAXED_ORDERING) & bits )
             str += "RELAXED_ORDERING | ";
+        
+        if( static_cast<uint32_t>(CommandList::flag_t::MAXIMIZE_THROUGHPUT) & bits )
+            str += "MAXIMIZE_THROUGHPUT | ";
+        
+        if( static_cast<uint32_t>(CommandList::flag_t::EXPLICIT_ONLY) & bits )
+            str += "EXPLICIT_ONLY | ";
 
         return ( str.size() > 3 ) 
             ? "CommandList::flag_t::{ " + str.substr(0, str.size() - 3) + " }"

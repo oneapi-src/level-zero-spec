@@ -56,10 +56,23 @@ typedef enum _xe_command_list_desc_version_t
 typedef enum _xe_command_list_flag_t
 {
     XE_COMMAND_LIST_FLAG_NONE = 0,                  ///< default behavior
-    XE_COMMAND_LIST_FLAG_COPY_ONLY = XE_BIT(0),     ///< command list **only** contains copy operations (and synchronization
-                                                    ///< primitives)
+    XE_COMMAND_LIST_FLAG_COPY_ONLY = XE_BIT(0),     ///< command list **only** contains copy operations (and synchronization primitives).
+                                                    ///< this command list may **only** be submitted to a command queue created
+                                                    ///< with ::XE_COMMAND_QUEUE_FLAG_COPY_ONLY.
     XE_COMMAND_LIST_FLAG_RELAXED_ORDERING = XE_BIT(1),  ///< driver may reorder programs and copys between barriers and
-                                                    ///< synchronization primitives
+                                                    ///< synchronization primitives.
+                                                    ///< using this flag may increase Host overhead of ::xeCommandListClose.
+                                                    ///< therefore, this flag should **not** be set for low-latency usage-models.
+    XE_COMMAND_LIST_FLAG_MAXIMIZE_THROUGHPUT = XE_BIT(2),   ///< driver may perform additional optimizations that increase dexecution
+                                                    ///< throughput. 
+                                                    ///< using this flag may increase Host overhead of ::xeCommandListClose and ::xeCommandQueueExecuteCommandLists.
+                                                    ///< therefore, this flag should **not** be set for low-latency usage-models.
+    XE_COMMAND_LIST_FLAG_EXPLICIT_ONLY = XE_BIT(3), ///< command list should be optimized for submission to a single command
+                                                    ///< queue and device engine.
+                                                    ///< driver **must** disable any implicit optimizations for distributing
+                                                    ///< work across multiple engines.
+                                                    ///< this flag should be used when applications want full control over
+                                                    ///< multi-engine submission and scheduling.
 
 } xe_command_list_flag_t;
 
