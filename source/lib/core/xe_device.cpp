@@ -639,16 +639,10 @@ namespace xe
 
         try
         {
-            xe_lib::lib.m_deviceGroups.resize( ( ppDeviceGroups ) ? *pCount : 0 );
-
             for( uint32_t i = 0; ( ppDeviceGroups ) && ( i < *pCount ); ++i )
             {
-                if( nullptr == xe_lib::lib.m_deviceGroups[ i ] )
-                {
-                    xe_lib::lib.m_deviceGroups[ i ] = std::unique_ptr<DeviceGroup>(
-                        new DeviceGroup( reinterpret_cast<device_group_handle_t>( hDeviceGroups[ i ] ) ) );
-                }
-                ppDeviceGroups[ i ] = xe_lib::lib.m_deviceGroups[ i ].get();
+                ppDeviceGroups[ i ] = xe_lib::context.deviceGroupFactory.getInstance(
+                    reinterpret_cast<device_group_handle_t>( hDeviceGroups[ i ] ) );
             }
         }
         catch( std::bad_alloc& )
@@ -697,12 +691,8 @@ namespace xe
         {
             for( uint32_t i = 0; ( ppDevices ) && ( i < *pCount ); ++i )
             {
-                if( nullptr == pDeviceGroup->m_devices[ i ] )
-                {
-                    pDeviceGroup->m_devices[ i ] = std::unique_ptr<Device>(
-                        new Device( reinterpret_cast<device_handle_t>( hDevices[ i ] ), pDeviceGroup ) );
-                }
-                ppDevices[ i ] = pDeviceGroup->m_devices[ i ].get();
+                ppDevices[ i ] = xe_lib::context.deviceFactory.getInstance(
+                    reinterpret_cast<device_handle_t>( hDevices[ i ] ), pDeviceGroup );
             }
         }
         catch( std::bad_alloc& )
@@ -749,7 +739,10 @@ namespace xe
         try
         {
             for( uint32_t i = 0; ( ppSubdevices ) && ( i < *pCount ); ++i )
-                ppSubdevices[ i ] = new Device( reinterpret_cast<device_handle_t>( hSubdevices[ i ] ), m_pDeviceGroup );
+            {
+                ppSubdevices[ i ] = xe_lib::context.deviceFactory.getInstance(
+                    reinterpret_cast<device_handle_t>( hSubdevices[ i ] ), m_pDeviceGroup );
+            }
         }
         catch( std::bad_alloc& )
         {

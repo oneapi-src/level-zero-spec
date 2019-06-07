@@ -34,6 +34,6 @@ namespace loader
 {
     ///////////////////////////////////////////////////////////////////////////////
     using xex_command_graph_object_t          = object_t < xex_command_graph_handle_t >;
-    using xex_command_graph_factory_t         = factory_t < xex_command_graph_object_t >;
+    using xex_command_graph_factory_t         = singleton_factory_t < xex_command_graph_object_t, xex_command_graph_handle_t >;
 
 }

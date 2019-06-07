@@ -25,8 +25,7 @@
 *
 ******************************************************************************/
 #pragma once
-#include <unordered_map>
-#include <mutex>
+#include "xe_singleton.h"
 
 //////////////////////////////////////////////////////////////////////////
 struct dditable_t
@@ -36,64 +35,22 @@ struct dditable_t
     xet_dditable_t  xet;
 };
 
-namespace loader
+//////////////////////////////////////////////////////////////////////////
+template<typename _handle_t>
+class object_t
 {
-    //////////////////////////////////////////////////////////////////////////
-    template<typename _object_t>
-    class factory_t
+public:
+    using handle_t = _handle_t;
+
+    handle_t    handle;
+    dditable_t* dditable;
+
+    object_t() = delete;
+
+    object_t( handle_t _handle, dditable_t* _dditable )
+        : handle( _handle ), dditable( _dditable )
     {
-    protected:
-        using object_t = _object_t;
-        using handle_t = typename object_t::handle_t;
+    }
 
-        // container for unique loader handles
-        using ptr_t = std::unique_ptr < object_t >;
-        using map_t = std::unordered_map < size_t, ptr_t >;
-
-        map_t map;
-        std::mutex mut;
-
-    public:
-        factory_t() = default;
-        ~factory_t() = default;
-
-        _object_t* get(
-            handle_t _handle,
-            dditable_t* _dditable )
-        {
-            std::lock_guard<std::mutex> lk( mut );
-
-            auto key = reinterpret_cast<size_t>( _handle );
-            auto ptr = std::make_unique<_object_t>( _handle, _dditable );
-            auto iter = map.emplace( key, std::move( ptr ) ).first;
-            return iter->second.get();
-        }
-
-        void release(
-            handle_t _handle )
-        {
-            std::lock_guard<std::mutex> lk( mut );
-            auto key = reinterpret_cast<size_t>( _handle );
-            map.erase( key );
-        }
-    };
-
-    //////////////////////////////////////////////////////////////////////////
-    template<typename _handle_t>
-    class object_t
-    {
-    public:
-        using handle_t = _handle_t;
-
-        handle_t    handle;
-        dditable_t* dditable;
-
-        object_t() = delete;
-
-        object_t( handle_t _handle, dditable_t* _dditable ) : handle( _handle ), dditable( _dditable )
-        {
-        }
-
-        ~object_t() = default;
-    };
-}
+    ~object_t() = default;
+};

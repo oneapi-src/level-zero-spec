@@ -28,10 +28,14 @@
 #include "xe_api.hpp"
 #include "xe_ddi.h"
 #include "xe_util.h"
+#include "xe_singleton.h"
 #include <vector>
 
 namespace xe_lib
 {
+    using device_group_factory_t = singleton_factory_t<xe::DeviceGroup, xe::device_group_handle_t>;
+    using device_factory_t = singleton_factory_t<xe::Device, xe::device_handle_t>;
+
     ///////////////////////////////////////////////////////////////////////////////
     class context_t
     {
@@ -45,7 +49,8 @@ namespace xe_lib
 
         xe_dditable_t   ddiTable = {};
 
-        std::vector<std::unique_ptr<xe::DeviceGroup>> m_deviceGroups;
+        device_group_factory_t  deviceGroupFactory;
+        device_factory_t        deviceFactory;
     };
 
     extern context_t context;

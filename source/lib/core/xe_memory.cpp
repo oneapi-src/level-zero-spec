@@ -625,9 +625,8 @@ namespace xe
         try
         {
             if( ppDevice )
-                for( auto& pDevice : m_devices )
-                    if( reinterpret_cast<device_handle_t>( hDevice ) == pDevice->getHandle() )
-                        *ppDevice = pDevice.get();
+                *ppDevice = xe_lib::context.deviceFactory.getInstance(
+                    reinterpret_cast<device_handle_t>( hDevice ), nullptr );
         }
         catch( std::bad_alloc& )
         {

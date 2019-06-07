@@ -325,17 +325,13 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         device_group_handle_t m_handle;                 ///< [in] handle of device group object
 
-        friend class Device;
-        std::vector<std::unique_ptr<Device>> m_devices;
-
+    public:
         ///////////////////////////////////////////////////////////////////////////////
+        DeviceGroup( void ) = delete;
         DeviceGroup(
             device_group_handle_t handle                    ///< [in] handle of device group object
         );
 
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        DeviceGroup( void ) = delete;
         ~DeviceGroup( void ) = default;
 
         DeviceGroup( DeviceGroup const& other ) = delete;
@@ -790,17 +786,14 @@ namespace xe
         device_handle_t m_handle;                       ///< [in] handle of device object
         DeviceGroup* m_pDeviceGroup;                    ///< [in] pointer to owner object
 
-        std::vector<std::unique_ptr<Device>> m_devices;
-
-        ///////////////////////////////////////////////////////////////////////////////
-        Device( 
-            device_handle_t handle,                         ///< [in] handle of device object
-            DeviceGroup* pDeviceGroup                       ///< [in] pointer to owner object
-            );
-
     public:
         ///////////////////////////////////////////////////////////////////////////////
         Device( void ) = delete;
+        Device(
+            device_handle_t handle,                         ///< [in] handle of device object
+            DeviceGroup* pDeviceGroup                       ///< [in] pointer to owner object
+        );
+
         ~Device( void ) = default;
 
         Device( Device const& other ) = delete;
