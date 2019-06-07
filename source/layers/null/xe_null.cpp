@@ -28,5 +28,42 @@
 
 namespace driver
 {
+    //////////////////////////////////////////////////////////////////////////
     context_t context;
+
+    //////////////////////////////////////////////////////////////////////////
+    context_t::context_t()
+    {
+        deviceProperties.version = XE_DEVICE_PROPERTIES_VERSION_CURRENT;
+        deviceProperties.type = XE_DEVICE_TYPE_GPU;
+        deviceProperties.maxCommandQueues = 1;
+        deviceProperties.numAsyncComputeEngines = 1;
+        deviceProperties.numAsyncCopyEngines = 1;
+        strcpy( deviceProperties.name, "Null Device" );
+
+        computeProperties.version = XE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT;
+
+        memoryProperties.version = XE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT;
+
+        memoryAccessProperties.version = XE_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT;
+
+        cacheProperties.version = XE_DEVICE_CACHE_PROPERTIES_VERSION_CURRENT;
+
+        imageProperties.version = XE_DEVICE_IMAGE_PROPERTIES_VERSION_CURRENT;
+
+        p2pProperties.version = XE_DEVICE_P2P_PROPERTIES_VERSION_CURRENT;
+
+        metricGroupProperties.version = XET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT;
+        metricGroupProperties.metricCount = 1;
+        metricGroupProperties.samplingType = static_cast<xet_metric_group_sampling_type_t>(
+            XET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED | XET_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED );
+        metricGroupProperties.reportSize = 1;
+        strcpy( metricGroupProperties.name, "Null Metric Group" );
+
+        metricProperties.version = XET_METRIC_PROPERTIES_VERSION_CURRENT;
+        metricProperties.metricType = XET_METRIC_TYPE_DURATION;
+        metricProperties.resultType = XET_VALUE_TYPE_UINT32;
+        strcpy( metricProperties.name, "Null Metric" );
+        strcpy( metricProperties.resultUnits, "ns" );
+    }
 }

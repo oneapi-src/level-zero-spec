@@ -69,10 +69,23 @@ namespace xe
         enum class flag_t
         {
             NONE = 0,                                       ///< default behavior
-            COPY_ONLY = XE_BIT(0),                          ///< command list **only** contains copy operations (and synchronization
-                                                            ///< primitives)
+            COPY_ONLY = XE_BIT(0),                          ///< command list **only** contains copy operations (and synchronization primitives).
+                                                            ///< this command list may **only** be submitted to a command queue created
+                                                            ///< with ::COMMAND_QUEUE_FLAG_COPY_ONLY.
             RELAXED_ORDERING = XE_BIT(1),                   ///< driver may reorder programs and copys between barriers and
-                                                            ///< synchronization primitives
+                                                            ///< synchronization primitives.
+                                                            ///< using this flag may increase Host overhead of ::CommandListClose.
+                                                            ///< therefore, this flag should **not** be set for low-latency usage-models.
+            MAXIMIZE_THROUGHPUT = XE_BIT(2),                ///< driver may perform additional optimizations that increase dexecution
+                                                            ///< throughput. 
+                                                            ///< using this flag may increase Host overhead of ::CommandListClose and ::CommandQueueExecuteCommandLists.
+                                                            ///< therefore, this flag should **not** be set for low-latency usage-models.
+            EXPLICIT_ONLY = XE_BIT(3),                      ///< command list should be optimized for submission to a single command
+                                                            ///< queue and device engine.
+                                                            ///< driver **must** disable any implicit optimizations for distributing
+                                                            ///< work across multiple engines.
+                                                            ///< this flag should be used when applications want full control over
+                                                            ///< multi-engine submission and scheduling.
 
         };
 

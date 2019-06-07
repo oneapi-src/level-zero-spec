@@ -56,7 +56,7 @@ xeDeviceRegisterCLMemory(
     void** ptr                                      ///< [out] pointer to device allocation
     )
 {
-    auto pfnRegisterCLMemory = xe_lib::lib.ddiTable.Device.pfnRegisterCLMemory;
+    auto pfnRegisterCLMemory = xe_lib::context.ddiTable.Device.pfnRegisterCLMemory;
 
 #if _DEBUG
     if( nullptr == pfnRegisterCLMemory )
@@ -89,7 +89,7 @@ xeDeviceRegisterCLProgram(
     xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
     )
 {
-    auto pfnRegisterCLProgram = xe_lib::lib.ddiTable.Device.pfnRegisterCLProgram;
+    auto pfnRegisterCLProgram = xe_lib::context.ddiTable.Device.pfnRegisterCLProgram;
 
 #if _DEBUG
     if( nullptr == pfnRegisterCLProgram )
@@ -122,7 +122,7 @@ xeDeviceRegisterCLCommandQueue(
     xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
     )
 {
-    auto pfnRegisterCLCommandQueue = xe_lib::lib.ddiTable.Device.pfnRegisterCLCommandQueue;
+    auto pfnRegisterCLCommandQueue = xe_lib::context.ddiTable.Device.pfnRegisterCLCommandQueue;
 
 #if _DEBUG
     if( nullptr == pfnRegisterCLCommandQueue )
@@ -195,7 +195,7 @@ namespace xe
 
         try
         {
-            pModule = new Module( reinterpret_cast<module_handle_t>( hModule ), this, nullptr );
+            pModule = new Module( reinterpret_cast<module_handle_t>( hModule ), this, m_desc );
         }
         catch( std::bad_alloc& )
         {
@@ -238,7 +238,7 @@ namespace xe
 
         try
         {
-            pCommandQueue = new CommandQueue( reinterpret_cast<command_queue_handle_t>( hCommandQueue ), this, nullptr );
+            pCommandQueue = new CommandQueue( reinterpret_cast<command_queue_handle_t>( hCommandQueue ), this, m_desc );
         }
         catch( std::bad_alloc& )
         {

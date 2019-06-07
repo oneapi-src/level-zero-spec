@@ -62,7 +62,7 @@ xetPowerCreate(
     xet_power_handle_t* pPowerHandle                ///< [out] handle for accessing power features of the device
     )
 {
-    auto pfnCreate = xet_lib::lib.ddiTable.Power.pfnCreate;
+    auto pfnCreate = xet_lib::context.ddiTable.Power.pfnCreate;
 
 #if _DEBUG
     if( nullptr == pfnCreate )
@@ -92,7 +92,7 @@ xetPowerDestroy(
     xet_power_handle_t hPower                       ///< [in][release] handle of the power object to destroy
     )
 {
-    auto pfnDestroy = xet_lib::lib.ddiTable.Power.pfnDestroy;
+    auto pfnDestroy = xet_lib::context.ddiTable.Power.pfnDestroy;
 
 #if _DEBUG
     if( nullptr == pfnDestroy )
@@ -119,7 +119,7 @@ xetPowerGetAveragePowerLimit(
     xet_power_average_limit_t* pLimit               ///< [out] information about the average power limit
     )
 {
-    auto pfnGetAveragePowerLimit = xet_lib::lib.ddiTable.Power.pfnGetAveragePowerLimit;
+    auto pfnGetAveragePowerLimit = xet_lib::context.ddiTable.Power.pfnGetAveragePowerLimit;
 
 #if _DEBUG
     if( nullptr == pfnGetAveragePowerLimit )
@@ -146,7 +146,7 @@ xetPowerGetBurstPowerLimit(
     xet_power_burst_limit_t* pLimit                 ///< [out] information about the burst power limit
     )
 {
-    auto pfnGetBurstPowerLimit = xet_lib::lib.ddiTable.Power.pfnGetBurstPowerLimit;
+    auto pfnGetBurstPowerLimit = xet_lib::context.ddiTable.Power.pfnGetBurstPowerLimit;
 
 #if _DEBUG
     if( nullptr == pfnGetBurstPowerLimit )
@@ -173,7 +173,7 @@ xetPowerGetPeakPowerLimit(
     xet_power_peak_limit_t* pLimit                  ///< [out] information about the peak power limit
     )
 {
-    auto pfnGetPeakPowerLimit = xet_lib::lib.ddiTable.Power.pfnGetPeakPowerLimit;
+    auto pfnGetPeakPowerLimit = xet_lib::context.ddiTable.Power.pfnGetPeakPowerLimit;
 
 #if _DEBUG
     if( nullptr == pfnGetPeakPowerLimit )
@@ -200,7 +200,7 @@ xetPowerGetAllPowerLimits(
     xet_power_limits_t* pLimits                     ///< [out] information about the average/burst/peak power limits
     )
 {
-    auto pfnGetAllPowerLimits = xet_lib::lib.ddiTable.Power.pfnGetAllPowerLimits;
+    auto pfnGetAllPowerLimits = xet_lib::context.ddiTable.Power.pfnGetAllPowerLimits;
 
 #if _DEBUG
     if( nullptr == pfnGetAllPowerLimits )
@@ -227,7 +227,7 @@ xetPowerGetDefaultPowerLimits(
     xet_power_limits_t* pLimits                     ///< [out] information about the default average/burst/peak power limits
     )
 {
-    auto pfnGetDefaultPowerLimits = xet_lib::lib.ddiTable.Power.pfnGetDefaultPowerLimits;
+    auto pfnGetDefaultPowerLimits = xet_lib::context.ddiTable.Power.pfnGetDefaultPowerLimits;
 
 #if _DEBUG
     if( nullptr == pfnGetDefaultPowerLimits )
@@ -254,7 +254,7 @@ xetPowerSetAveragePowerLimit(
     xet_power_average_limit_t* pLimit               ///< [in] information about the average power limit
     )
 {
-    auto pfnSetAveragePowerLimit = xet_lib::lib.ddiTable.Power.pfnSetAveragePowerLimit;
+    auto pfnSetAveragePowerLimit = xet_lib::context.ddiTable.Power.pfnSetAveragePowerLimit;
 
 #if _DEBUG
     if( nullptr == pfnSetAveragePowerLimit )
@@ -281,7 +281,7 @@ xetPowerSetBurstPowerLimit(
     xet_power_burst_limit_t* pLimit                 ///< [in] information about the burst power limit
     )
 {
-    auto pfnSetBurstPowerLimit = xet_lib::lib.ddiTable.Power.pfnSetBurstPowerLimit;
+    auto pfnSetBurstPowerLimit = xet_lib::context.ddiTable.Power.pfnSetBurstPowerLimit;
 
 #if _DEBUG
     if( nullptr == pfnSetBurstPowerLimit )
@@ -308,7 +308,7 @@ xetPowerSetPeakPowerLimit(
     xet_power_peak_limit_t* pLimit                  ///< [in] information about the peak power limit
     )
 {
-    auto pfnSetPeakPowerLimit = xet_lib::lib.ddiTable.Power.pfnSetPeakPowerLimit;
+    auto pfnSetPeakPowerLimit = xet_lib::context.ddiTable.Power.pfnSetPeakPowerLimit;
 
 #if _DEBUG
     if( nullptr == pfnSetPeakPowerLimit )
@@ -335,7 +335,7 @@ xetPowerSetPowerLimits(
     xet_power_limits_t* pLimits                     ///< [in] information about the average/burst/peak power limits
     )
 {
-    auto pfnSetPowerLimits = xet_lib::lib.ddiTable.Power.pfnSetPowerLimits;
+    auto pfnSetPowerLimits = xet_lib::context.ddiTable.Power.pfnSetPowerLimits;
 
 #if _DEBUG
     if( nullptr == pfnSetPowerLimits )
@@ -366,7 +366,7 @@ xetPowerGetEnergyCounter(
     uint64_t* pEnergy                               ///< [out] the energy counter in millijoules
     )
 {
-    auto pfnGetEnergyCounter = xet_lib::lib.ddiTable.Power.pfnGetEnergyCounter;
+    auto pfnGetEnergyCounter = xet_lib::context.ddiTable.Power.pfnGetEnergyCounter;
 
 #if _DEBUG
     if( nullptr == pfnGetEnergyCounter )
@@ -393,7 +393,7 @@ xetPowerGetTurboMode(
     xet_turbo_mode_t* pTurboMode                    ///< [out] turbo mode currently in effect
     )
 {
-    auto pfnGetTurboMode = xet_lib::lib.ddiTable.Power.pfnGetTurboMode;
+    auto pfnGetTurboMode = xet_lib::context.ddiTable.Power.pfnGetTurboMode;
 
 #if _DEBUG
     if( nullptr == pfnGetTurboMode )
@@ -419,7 +419,7 @@ xetPowerSetTurboMode(
     xet_turbo_mode_t pTurboMode                     ///< [in] new turbo mode
     )
 {
-    auto pfnSetTurboMode = xet_lib::lib.ddiTable.Power.pfnSetTurboMode;
+    auto pfnSetTurboMode = xet_lib::context.ddiTable.Power.pfnSetTurboMode;
 
 #if _DEBUG
     if( nullptr == pfnSetTurboMode )
@@ -452,7 +452,7 @@ xetFreqDomainGet(
                                                     ///< domains
     )
 {
-    auto pfnGet = xet_lib::lib.ddiTable.FreqDomain.pfnGet;
+    auto pfnGet = xet_lib::context.ddiTable.FreqDomain.pfnGet;
 
 #if _DEBUG
     if( nullptr == pfnGet )
@@ -479,7 +479,7 @@ xetFreqDomainGetProperties(
     xet_freq_domain_properties_t* pFreqDomainProperties ///< [out] pointer to properties for the frequency domain
     )
 {
-    auto pfnGetProperties = xet_lib::lib.ddiTable.FreqDomain.pfnGetProperties;
+    auto pfnGetProperties = xet_lib::context.ddiTable.FreqDomain.pfnGetProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetProperties )
@@ -508,7 +508,7 @@ xetFreqDomainGetSourceFreqDomain(
                                                     ///< will be returned
     )
 {
-    auto pfnGetSourceFreqDomain = xet_lib::lib.ddiTable.FreqDomain.pfnGetSourceFreqDomain;
+    auto pfnGetSourceFreqDomain = xet_lib::context.ddiTable.FreqDomain.pfnGetSourceFreqDomain;
 
 #if _DEBUG
     if( nullptr == pfnGetSourceFreqDomain )
@@ -541,7 +541,7 @@ xetFreqDomainGetSupportedClocks(
     uint32_t* pClocks                               ///< [out] pointer to array of frequencies
     )
 {
-    auto pfnGetSupportedClocks = xet_lib::lib.ddiTable.FreqDomain.pfnGetSupportedClocks;
+    auto pfnGetSupportedClocks = xet_lib::context.ddiTable.FreqDomain.pfnGetSupportedClocks;
 
 #if _DEBUG
     if( nullptr == pfnGetSupportedClocks )
@@ -574,7 +574,7 @@ xetFreqDomainGetSupportedClockDividers(
     xet_clock_divider_t* pDividers                  ///< [out] pointer to array of dividers
     )
 {
-    auto pfnGetSupportedClockDividers = xet_lib::lib.ddiTable.FreqDomain.pfnGetSupportedClockDividers;
+    auto pfnGetSupportedClockDividers = xet_lib::context.ddiTable.FreqDomain.pfnGetSupportedClockDividers;
 
 #if _DEBUG
     if( nullptr == pfnGetSupportedClockDividers )
@@ -604,7 +604,7 @@ xetFreqDomainGetClockRange(
     uint32_t* pMaxClock                             ///< [out] max clock frequency in units of MHz
     )
 {
-    auto pfnGetClockRange = xet_lib::lib.ddiTable.FreqDomain.pfnGetClockRange;
+    auto pfnGetClockRange = xet_lib::context.ddiTable.FreqDomain.pfnGetClockRange;
 
 #if _DEBUG
     if( nullptr == pfnGetClockRange )
@@ -642,7 +642,7 @@ xetFreqDomainSetClockRange(
     uint32_t maxClock                               ///< [in] max clock frequency in units of MHz
     )
 {
-    auto pfnSetClockRange = xet_lib::lib.ddiTable.FreqDomain.pfnSetClockRange;
+    auto pfnSetClockRange = xet_lib::context.ddiTable.FreqDomain.pfnSetClockRange;
 
 #if _DEBUG
     if( nullptr == pfnSetClockRange )
@@ -676,7 +676,7 @@ xetFreqDomainSetClockDivider(
     xet_clock_divider_t* pClockDividerRequest       ///< [out] pointer to frequency divider request
     )
 {
-    auto pfnSetClockDivider = xet_lib::lib.ddiTable.FreqDomain.pfnSetClockDivider;
+    auto pfnSetClockDivider = xet_lib::context.ddiTable.FreqDomain.pfnSetClockDivider;
 
 #if _DEBUG
     if( nullptr == pfnSetClockDivider )
@@ -707,7 +707,7 @@ xetFreqDomainGetCurrentFrequency(
     xet_freq_throttle_reasons_t* pFreqThrottleReasons   ///< [out] the reason the resolved frequency is lower than the request
     )
 {
-    auto pfnGetCurrentFrequency = xet_lib::lib.ddiTable.FreqDomain.pfnGetCurrentFrequency;
+    auto pfnGetCurrentFrequency = xet_lib::context.ddiTable.FreqDomain.pfnGetCurrentFrequency;
 
 #if _DEBUG
     if( nullptr == pfnGetCurrentFrequency )
@@ -734,7 +734,7 @@ xetPowerFanCount(
     uint32_t* pFanCount                             ///< [out] the number of fans on the device
     )
 {
-    auto pfnFanCount = xet_lib::lib.ddiTable.Power.pfnFanCount;
+    auto pfnFanCount = xet_lib::context.ddiTable.Power.pfnFanCount;
 
 #if _DEBUG
     if( nullptr == pfnFanCount )
@@ -762,7 +762,7 @@ xetPowerFanGetProperties(
     xet_fan_properties_t* pFanProperties            ///< [out] pointer to storage for fan properties
     )
 {
-    auto pfnFanGetProperties = xet_lib::lib.ddiTable.Power.pfnFanGetProperties;
+    auto pfnFanGetProperties = xet_lib::context.ddiTable.Power.pfnFanGetProperties;
 
 #if _DEBUG
     if( nullptr == pfnFanGetProperties )
@@ -798,7 +798,7 @@ xetPowerFanGetSpeedTable(
     xet_fan_point_t* pFanPoints                     ///< [out] pointer to an array of temperature/fan-speed points
     )
 {
-    auto pfnFanGetSpeedTable = xet_lib::lib.ddiTable.Power.pfnFanGetSpeedTable;
+    auto pfnFanGetSpeedTable = xet_lib::context.ddiTable.Power.pfnFanGetSpeedTable;
 
 #if _DEBUG
     if( nullptr == pfnFanGetSpeedTable )
@@ -832,7 +832,7 @@ xetPowerFanSetSpeedTable(
     xet_fan_point_t* pFanPoints                     ///< [in] pointer to an array of temperature/fan-speed points
     )
 {
-    auto pfnFanSetSpeedTable = xet_lib::lib.ddiTable.Power.pfnFanSetSpeedTable;
+    auto pfnFanSetSpeedTable = xet_lib::context.ddiTable.Power.pfnFanSetSpeedTable;
 
 #if _DEBUG
     if( nullptr == pfnFanSetSpeedTable )
@@ -866,7 +866,7 @@ xetPowerFanGetSpeed(
     xet_fan_speed_info_t* pFanSpeed                 ///< [out] pointer to an array of current fan speeds
     )
 {
-    auto pfnFanGetSpeed = xet_lib::lib.ddiTable.Power.pfnFanGetSpeed;
+    auto pfnFanGetSpeed = xet_lib::context.ddiTable.Power.pfnFanGetSpeed;
 
 #if _DEBUG
     if( nullptr == pfnFanGetSpeed )
@@ -900,7 +900,7 @@ xetPowerFanSetSpeed(
     xet_fan_speed_info_t* pFanSpeed                 ///< [in] pointer to an array of current fan speeds
     )
 {
-    auto pfnFanSetSpeed = xet_lib::lib.ddiTable.Power.pfnFanSetSpeed;
+    auto pfnFanSetSpeed = xet_lib::context.ddiTable.Power.pfnFanSetSpeed;
 
 #if _DEBUG
     if( nullptr == pfnFanSetSpeed )
@@ -927,7 +927,7 @@ xetPowerTemperatureSensorCount(
     uint32_t* pSensorCount                          ///< [out] the number of temperature sensors on the device
     )
 {
-    auto pfnTemperatureSensorCount = xet_lib::lib.ddiTable.Power.pfnTemperatureSensorCount;
+    auto pfnTemperatureSensorCount = xet_lib::context.ddiTable.Power.pfnTemperatureSensorCount;
 
 #if _DEBUG
     if( nullptr == pfnTemperatureSensorCount )
@@ -959,7 +959,7 @@ xetPowerGetTemperatureProperties(
     xet_temperature_properties_t* pProperties       ///< [out] pointer to properties for this sensor
     )
 {
-    auto pfnGetTemperatureProperties = xet_lib::lib.ddiTable.Power.pfnGetTemperatureProperties;
+    auto pfnGetTemperatureProperties = xet_lib::context.ddiTable.Power.pfnGetTemperatureProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetTemperatureProperties )
@@ -993,7 +993,7 @@ xetPowerGetTemperature(
     uint16_t* pTemperatures                         ///< [out] pointer to an array of temperatures in units of degrees celsius
     )
 {
-    auto pfnGetTemperature = xet_lib::lib.ddiTable.Power.pfnGetTemperature;
+    auto pfnGetTemperature = xet_lib::context.ddiTable.Power.pfnGetTemperature;
 
 #if _DEBUG
     if( nullptr == pfnGetTemperature )
@@ -1028,7 +1028,7 @@ xetPowerSetTemperatureThreshold(
                                                     ///< will be throttled
     )
 {
-    auto pfnSetTemperatureThreshold = xet_lib::lib.ddiTable.Power.pfnSetTemperatureThreshold;
+    auto pfnSetTemperatureThreshold = xet_lib::context.ddiTable.Power.pfnSetTemperatureThreshold;
 
 #if _DEBUG
     if( nullptr == pfnSetTemperatureThreshold )
@@ -1055,7 +1055,7 @@ xetPowerActivityCount(
     uint32_t* pActivityCount                        ///< [out] the number of activity counters on the device
     )
 {
-    auto pfnActivityCount = xet_lib::lib.ddiTable.Power.pfnActivityCount;
+    auto pfnActivityCount = xet_lib::context.ddiTable.Power.pfnActivityCount;
 
 #if _DEBUG
     if( nullptr == pfnActivityCount )
@@ -1087,7 +1087,7 @@ xetPowerGetActivityProperties(
     xet_activity_properties_t* pProperties          ///< [out] pointer to properties for this activity counter
     )
 {
-    auto pfnGetActivityProperties = xet_lib::lib.ddiTable.Power.pfnGetActivityProperties;
+    auto pfnGetActivityProperties = xet_lib::context.ddiTable.Power.pfnGetActivityProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetActivityProperties )
@@ -1121,7 +1121,7 @@ xetPowerGetActivityCounters(
     xet_activity_counters_t* pCounters              ///< [out] pointer to an array of activity counter data
     )
 {
-    auto pfnGetActivityCounters = xet_lib::lib.ddiTable.Power.pfnGetActivityCounters;
+    auto pfnGetActivityCounters = xet_lib::context.ddiTable.Power.pfnGetActivityCounters;
 
 #if _DEBUG
     if( nullptr == pfnGetActivityCounters )
@@ -1578,7 +1578,7 @@ namespace xet
 
         try
         {
-            pSrcFreqDomain = new FreqDomain( nullptr );
+            pSrcFreqDomain = new FreqDomain( m_pPower );
         }
         catch( std::bad_alloc& )
         {
@@ -2147,26 +2147,27 @@ namespace xet
     std::string to_string( const fan_capabilities_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
         
         if( static_cast<uint32_t>(fan_capabilities_t::GET_SPEED_PERCENTAGE) & bits )
-            str += "fan_capabilities_t::GET_SPEED_PERCENTAGE | ";
+            str += "GET_SPEED_PERCENTAGE | ";
         
         if( static_cast<uint32_t>(fan_capabilities_t::SET_SPEED_PERCENTAGE) & bits )
-            str += "fan_capabilities_t::SET_SPEED_PERCENTAGE | ";
+            str += "SET_SPEED_PERCENTAGE | ";
         
         if( static_cast<uint32_t>(fan_capabilities_t::GET_SPEED_RPM) & bits )
-            str += "fan_capabilities_t::GET_SPEED_RPM | ";
+            str += "GET_SPEED_RPM | ";
         
         if( static_cast<uint32_t>(fan_capabilities_t::SET_SPEED_RPM) & bits )
-            str += "fan_capabilities_t::SET_SPEED_RPM | ";
+            str += "SET_SPEED_RPM | ";
         
         if( static_cast<uint32_t>(fan_capabilities_t::HAVE_TEMPERATURE_SPEED_TABLE) & bits )
-            str += "fan_capabilities_t::HAVE_TEMPERATURE_SPEED_TABLE | ";
+            str += "HAVE_TEMPERATURE_SPEED_TABLE | ";
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "fan_capabilities_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "fan_capabilities_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2198,17 +2199,18 @@ namespace xet
     std::string to_string( const Power::init_flags_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
         
-        if( static_cast<uint32_t>(Power::init_flags_t::NONE) & bits )
-            str += "Power::init_flags_t::NONE | ";
+        if( 0 == bits )
+            str += "NONE   ";
         
         if( static_cast<uint32_t>(Power::init_flags_t::WRITE) & bits )
-            str += "Power::init_flags_t::WRITE | ";
+            str += "WRITE | ";
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "Power::init_flags_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Power::init_flags_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2216,44 +2218,45 @@ namespace xet
     std::string to_string( const Power::gpu_domain_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
         
         if( static_cast<uint32_t>(Power::gpu_domain_t::BASE) & bits )
-            str += "Power::gpu_domain_t::BASE | ";
+            str += "BASE | ";
         
         if( static_cast<uint32_t>(Power::gpu_domain_t::VIDEO_DECODE) & bits )
-            str += "Power::gpu_domain_t::VIDEO_DECODE | ";
+            str += "VIDEO_DECODE | ";
         
         if( static_cast<uint32_t>(Power::gpu_domain_t::VIDEO_ENCODE) & bits )
-            str += "Power::gpu_domain_t::VIDEO_ENCODE | ";
+            str += "VIDEO_ENCODE | ";
         
         if( static_cast<uint32_t>(Power::gpu_domain_t::VIDEO_PROCESSING) & bits )
-            str += "Power::gpu_domain_t::VIDEO_PROCESSING | ";
+            str += "VIDEO_PROCESSING | ";
         
         if( static_cast<uint32_t>(Power::gpu_domain_t::_3D_FIXED_FUNCTION) & bits )
-            str += "Power::gpu_domain_t::_3D_FIXED_FUNCTION | ";
+            str += "_3D_FIXED_FUNCTION | ";
         
         if( static_cast<uint32_t>(Power::gpu_domain_t::_3D_RENDER) & bits )
-            str += "Power::gpu_domain_t::_3D_RENDER | ";
+            str += "_3D_RENDER | ";
         
         if( static_cast<uint32_t>(Power::gpu_domain_t::COMPUTE) & bits )
-            str += "Power::gpu_domain_t::COMPUTE | ";
+            str += "COMPUTE | ";
         
         if( static_cast<uint32_t>(Power::gpu_domain_t::SYSTOLIC_ARRAY) & bits )
-            str += "Power::gpu_domain_t::SYSTOLIC_ARRAY | ";
+            str += "SYSTOLIC_ARRAY | ";
         
         if( static_cast<uint32_t>(Power::gpu_domain_t::RAYTRACING) & bits )
-            str += "Power::gpu_domain_t::RAYTRACING | ";
+            str += "RAYTRACING | ";
         
         if( static_cast<uint32_t>(Power::gpu_domain_t::LOCAL_MEMORY) & bits )
-            str += "Power::gpu_domain_t::LOCAL_MEMORY | ";
+            str += "LOCAL_MEMORY | ";
         
         if( static_cast<uint32_t>(Power::gpu_domain_t::BASE_CHIPLET_LINK) & bits )
-            str += "Power::gpu_domain_t::BASE_CHIPLET_LINK | ";
+            str += "BASE_CHIPLET_LINK | ";
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "Power::gpu_domain_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Power::gpu_domain_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2547,35 +2550,36 @@ namespace xet
     std::string to_string( const FreqDomain::freq_throttle_reasons_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
         
-        if( static_cast<uint32_t>(FreqDomain::freq_throttle_reasons_t::NONE) & bits )
-            str += "FreqDomain::freq_throttle_reasons_t::NONE | ";
+        if( 0 == bits )
+            str += "NONE   ";
         
         if( static_cast<uint32_t>(FreqDomain::freq_throttle_reasons_t::AVE_PWR_CAP) & bits )
-            str += "FreqDomain::freq_throttle_reasons_t::AVE_PWR_CAP | ";
+            str += "AVE_PWR_CAP | ";
         
         if( static_cast<uint32_t>(FreqDomain::freq_throttle_reasons_t::BURST_PWR_CAP) & bits )
-            str += "FreqDomain::freq_throttle_reasons_t::BURST_PWR_CAP | ";
+            str += "BURST_PWR_CAP | ";
         
         if( static_cast<uint32_t>(FreqDomain::freq_throttle_reasons_t::CURRENT_LIMIT) & bits )
-            str += "FreqDomain::freq_throttle_reasons_t::CURRENT_LIMIT | ";
+            str += "CURRENT_LIMIT | ";
         
         if( static_cast<uint32_t>(FreqDomain::freq_throttle_reasons_t::THERMAL_LIMIT) & bits )
-            str += "FreqDomain::freq_throttle_reasons_t::THERMAL_LIMIT | ";
+            str += "THERMAL_LIMIT | ";
         
         if( static_cast<uint32_t>(FreqDomain::freq_throttle_reasons_t::PSU_ALERT) & bits )
-            str += "FreqDomain::freq_throttle_reasons_t::PSU_ALERT | ";
+            str += "PSU_ALERT | ";
         
         if( static_cast<uint32_t>(FreqDomain::freq_throttle_reasons_t::SW_RANGE) & bits )
-            str += "FreqDomain::freq_throttle_reasons_t::SW_RANGE | ";
+            str += "SW_RANGE | ";
         
         if( static_cast<uint32_t>(FreqDomain::freq_throttle_reasons_t::HW_RANGE) & bits )
-            str += "FreqDomain::freq_throttle_reasons_t::HW_RANGE | ";
+            str += "HW_RANGE | ";
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "FreqDomain::freq_throttle_reasons_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "FreqDomain::freq_throttle_reasons_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////

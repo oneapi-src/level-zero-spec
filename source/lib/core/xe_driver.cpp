@@ -62,11 +62,11 @@ xeInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    auto result = xe_lib::lib.Init();
+    auto result = xe_lib::context.Init();
     if( XE_RESULT_SUCCESS != result )
         return result;
 
-    auto pfnInit = xe_lib::lib.ddiTable.Global.pfnInit;
+    auto pfnInit = xe_lib::context.ddiTable.Global.pfnInit;
 
 #if _DEBUG
     if( nullptr == pfnInit )
@@ -104,7 +104,7 @@ xeDeviceGroupGetDriverVersion(
     uint32_t* version                               ///< [out] driver version
     )
 {
-    auto pfnGetDriverVersion = xe_lib::lib.ddiTable.DeviceGroup.pfnGetDriverVersion;
+    auto pfnGetDriverVersion = xe_lib::context.ddiTable.DeviceGroup.pfnGetDriverVersion;
 
 #if _DEBUG
     if( nullptr == pfnGetDriverVersion )
@@ -190,17 +190,18 @@ namespace xe
     std::string to_string( const init_flag_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
         
-        if( static_cast<uint32_t>(init_flag_t::NONE) & bits )
-            str += "init_flag_t::NONE | ";
+        if( 0 == bits )
+            str += "NONE   ";
         
         if( static_cast<uint32_t>(init_flag_t::GPU_ONLY) & bits )
-            str += "init_flag_t::GPU_ONLY | ";
+            str += "GPU_ONLY | ";
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "init_flag_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "init_flag_t::{ ? }";
     }
 
 } // namespace xe

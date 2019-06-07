@@ -783,7 +783,7 @@ The following sample code demonstrates a sequence for creating function args and
 ```
 
 ${"###"} Function Launch
-In order to invoke a function on the device you must call one of the CommandListAppendLaunch* functions for
+In order to invoke a function on the device an application must call one of the CommandListAppendLaunch* functions for
 a command list. The most basic version of these is ::${x}CommandListAppendLaunchFunction which takes a
 command list, function, launch arguments, and an optional synchronization event used to signal completion.
 The launch arguments contain thread group dimensions.
@@ -854,10 +854,9 @@ there are no distinction between sub-devices and devices.
 ![Subdevice](../images/core_subdevice.png?raw=true)  
 @image latex core_subdevice.png
 
-Query device properties using ::${x}DeviceGroupGetDeviceProperties to confirm subdevices are supported with
-::${x}_device_properties_t.numSubdevices. Use ::${x}DeviceGetSubDevice to obtain a sub-device handle.
+Use ::${x}DeviceGetSubDevices to confirm subdevices are supported and to obtain a sub-device handle.
 There are additional device properties in ::${x}_device_properties_t for sub-devices to confirm a
-device is a sub-device and to query the id. This is useful when needing to pass a sub-device
+device is a sub-device and to query the sub-device id. This is useful when needing to pass a sub-device
 handle to another library.
 
 To allocate memory and dispatch tasks to a particular sub-device then obtain the sub-device
@@ -867,25 +866,25 @@ that there is not enough local sub-device memory for the allocation. The driver 
 sub-device allocations over to another sub-device's local memory. However, the application can retry using the
 parent device and the driver will decide where to place the allocation.
 
-One thing to note is that the ordinal
-that is used when creating a command queue is relative to the sub-device. This ordinal specifies which
-physical compute queue on the device or sub-device to map the logical queue to. You need to query
-::${x}_device_properties_t.numAsyncComputeEngines from the sub-device to determine how to set this ordinal.
+One thing to note is that the ordinal that is used when creating a command queue is relative to the sub-device.
+This ordinal specifies which physical compute queue on the device or sub-device to map the logical queue to. 
+The application needs to query ::${x}_device_properties_t.numAsyncComputeEngines from the sub-device to determine how to set this ordinal.
 See ::${x}_command_queue_desc_t for more details.
 
 A 16-byte unique device identifier (uuid) can be obtained for a device or sub-device using ::${x}DeviceGroupGetDeviceProperties.
 
 ```c
-    ...
-    ${x}DeviceGroupGetDeviceProperties(device, &deviceProps);
-    ...
+    // Query for all sub-devices of the device
+    uint32_t subdeviceCount = 0;
+    ${x}DeviceGetSubDevices(hDevice, &subdeviceCount, nullptr);
 
-    // Code assumes a specific device configuration.
-    assert(deviceProps.numSubDevices == 4);
+    ${x}_device_handle_t* allSubDevices = (${x}_device_handle_t*)
+        malloc(subdeviceCount * sizeof(${x}_device_handle_t));
+    ${x}DeviceGetSubDevices(hDevice, &subdeviceCount, &allSubDevices);
 
     // Desire is to allocate and dispatch work to sub-device 2.
-    ${x}_device_handle_t hSubdevice;
-    ${x}DeviceGetSubDevice(device, 2, &hSubdevice);
+    assert(subdeviceCount >= 3);
+    ${x}_device_handle_t hSubdevice = allSubDevices[2];
 
     // Query sub-device properties.
     ${x}_device_properties_t subdeviceProps;
@@ -903,7 +902,7 @@ A 16-byte unique device identifier (uuid) can be obtained for a device or sub-de
     assert(desc.ordinal < subdeviceProps.numAsyncComputeEngines);
 
     ${x}_command_queue_handle_t commandQueueForSubDevice2;
-    ${x}CommandQueueCreate(hSubdevice, desc, &commandQueueForSubDevice2);
+    ${x}CommandQueueCreate(hSubdevice, &desc, &commandQueueForSubDevice2);
     ...
 ```
 

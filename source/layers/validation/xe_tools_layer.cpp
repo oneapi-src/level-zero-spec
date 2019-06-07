@@ -61,7 +61,7 @@ namespace layer
                                                         ///< number of metric groups available.
                                                         ///< if count is non-zero, then driver will only retrieve that number of
                                                         ///< metric groups.
-        xet_metric_group_handle_t* phMetricGroup        ///< [in,out][optional][range(0, *pCount)] array of handle of metric groups
+        xet_metric_group_handle_t* phMetricGroups       ///< [in,out][optional][range(0, *pCount)] array of handle of metric groups
         )
     {
         auto pfnGet = context.xetDdiTable.MetricGroup.pfnGet;
@@ -79,7 +79,7 @@ namespace layer
 
         }
 
-        return pfnGet( hDeviceGroup, pCount, phMetricGroup );
+        return pfnGet( hDeviceGroup, pCount, phMetricGroups );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -109,13 +109,53 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetMetricGroupCalculateData
+    xe_result_t __xecall
+    xetMetricGroupCalculateData(
+        xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
+        size_t rawDataSize,                             ///< [in] size in bytes of raw data buffer
+        uint8_t* pRawData,                              ///< [in][range(0, rawDataSize)] buffer of raw data to calculate
+        uint32_t* pCalculatedDataCount,                 ///< [in] pointer to number of entries in calculated data buffer.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of entires to be calculated.
+                                                        ///< if count is non-zero, then driver will only calculate that number of entires.
+        xet_typed_value_t* pCalculatedData              ///< [in,out][range(0, *pCalculatedDataSize)] buffer of calculated data
+        )
+    {
+        auto pfnCalculateData = context.xetDdiTable.MetricGroup.pfnCalculateData;
+
+        if( nullptr == pfnCalculateData )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hMetricGroup )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pRawData )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCalculatedDataCount )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCalculatedData )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnCalculateData( hMetricGroup, rawDataSize, pRawData, pCalculatedDataCount, pCalculatedData );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetMetricGet
     xe_result_t __xecall
     xetMetricGet(
         xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
-        uint32_t ordinal,                               ///< [in] ordinal of metric to retrieve; must be less than
-                                                        ///< ::xet_metric_group_properties_t::metricCount
-        xet_metric_handle_t* phMetric                   ///< [out] handle of metric
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of metrics.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of metrics available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of metrics.
+        xet_metric_handle_t* phMetrics                  ///< [in,out][optional][range(0, *pCount)] array of handle of metrics
         )
     {
         auto pfnGet = context.xetDdiTable.Metric.pfnGet;
@@ -128,12 +168,12 @@ namespace layer
             if( nullptr == hMetricGroup )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == phMetric )
+            if( nullptr == pCount )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGet( hMetricGroup, ordinal, phMetric );
+        return pfnGet( hMetricGroup, pCount, phMetrics );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -160,39 +200,6 @@ namespace layer
         }
 
         return pfnGetProperties( hMetric, pProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetMetricGroupCalculateData
-    xe_result_t __xecall
-    xetMetricGroupCalculateData(
-        xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
-        uint32_t count,                                 ///< [in,out] number of reports to calculate
-        size_t rawDataSize,                             ///< [in] size in bytes of raw data buffer
-        uint8_t* pRawData,                              ///< [in][range(0, rawDataSize)] buffer of raw data to calculate
-        size_t calculatedDataSize,                      ///< [in] size in bytes of calculated metrics
-        xet_typed_value_t* pCalculatedData              ///< [in,out][range(0, calculatedDataSize)] buffer of calculated metrics
-        )
-    {
-        auto pfnCalculateData = context.xetDdiTable.MetricGroup.pfnCalculateData;
-
-        if( nullptr == pfnCalculateData )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hMetricGroup )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pRawData )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pCalculatedData )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnCalculateData( hMetricGroup, count, rawDataSize, pRawData, calculatedDataSize, pCalculatedData );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -229,7 +236,7 @@ namespace layer
     xetMetricTracerOpen(
         xet_device_handle_t hDevice,                    ///< [in] handle of the device
         xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
-        xet_metric_tracer_desc_t* pDesc,                ///< [in,out] metric tracer descriptor
+        xet_metric_tracer_desc_t* desc,                 ///< [in,out] metric tracer descriptor
         xe_event_handle_t hNotificationEvent,           ///< [in] event used for report availability notification. Must be device
                                                         ///< to host type.
         xet_metric_tracer_handle_t* phMetricTracer      ///< [out] handle of metric tracer
@@ -248,7 +255,7 @@ namespace layer
             if( nullptr == hMetricGroup )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pDesc )
+            if( nullptr == desc )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == hNotificationEvent )
@@ -257,12 +264,12 @@ namespace layer
             if( nullptr == phMetricTracer )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( XET_METRIC_TRACER_DESC_VERSION_CURRENT < pDesc->version )
+            if( XET_METRIC_TRACER_DESC_VERSION_CURRENT < desc->version )
                 return XE_RESULT_ERROR_UNSUPPORTED;
 
         }
 
-        return pfnOpen( hDevice, hMetricGroup, pDesc, hNotificationEvent, phMetricTracer );
+        return pfnOpen( hDevice, hMetricGroup, desc, hNotificationEvent, phMetricTracer );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -319,9 +326,13 @@ namespace layer
     xe_result_t __xecall
     xetMetricTracerReadData(
         xet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
-        uint32_t* pReportCount,                         ///< [in,out] report count to read/returned
-        uint32_t rawDataSize,                           ///< [in] raw data buffer size
-        uint8_t* pRawData                               ///< [in,out] raw data buffer for reports
+        size_t* pRawDataSize,                           ///< [in,out] pointer to size in bytes of raw data requested to read.
+                                                        ///< if size is zero, then the driver will update the value with the total
+                                                        ///< size in bytes needed for all reports available.
+                                                        ///< if size is non-zero, then driver will only retrieve the number of
+                                                        ///< reports that fit into the buffer.
+        uint8_t* pRawData                               ///< [in,out][optional][range(0, *pRawDataSize)] buffer containing tracer
+                                                        ///< reports in raw format
         )
     {
         auto pfnReadData = context.xetDdiTable.MetricTracer.pfnReadData;
@@ -334,15 +345,12 @@ namespace layer
             if( nullptr == hMetricTracer )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pReportCount )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pRawData )
+            if( nullptr == pRawDataSize )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnReadData( hMetricTracer, pReportCount, rawDataSize, pRawData );
+        return pfnReadData( hMetricTracer, pRawDataSize, pRawData );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -351,7 +359,7 @@ namespace layer
     xetMetricQueryPoolCreate(
         xet_device_handle_t hDevice,                    ///< [in] handle of the device
         xet_metric_group_handle_t hMetricGroup,         ///< [in] metric group associated with the query object.
-        xet_metric_query_pool_desc_t* pDesc,            ///< [in] metric query pool creation data
+        const xet_metric_query_pool_desc_t* desc,       ///< [in] metric query pool descriptor
         xet_metric_query_pool_handle_t* phMetricQueryPool   ///< [out] handle of metric query pool
         )
     {
@@ -368,18 +376,18 @@ namespace layer
             if( nullptr == hMetricGroup )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pDesc )
+            if( nullptr == desc )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == phMetricQueryPool )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( XET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT < pDesc->version )
+            if( XET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT < desc->version )
                 return XE_RESULT_ERROR_UNSUPPORTED;
 
         }
 
-        return pfnCreate( hDevice, hMetricGroup, pDesc, phMetricQueryPool );
+        return pfnCreate( hDevice, hMetricGroup, desc, phMetricQueryPool );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -558,10 +566,13 @@ namespace layer
     xe_result_t __xecall
     xetMetricQueryGetData(
         xet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
-        uint32_t count,                                 ///< [in] number of query reports to read
-        size_t rawDataSize,                             ///< [in] size in bytes of raw data buffer
-        uint8_t* pRawData                               ///< [in,out][range(0, rawDataSize)] buffer containing query results in raw
-                                                        ///< format
+        size_t* pRawDataSize,                           ///< [in,out] pointer to size in bytes of raw data requested to read.
+                                                        ///< if size is zero, then the driver will update the value with the total
+                                                        ///< size in bytes needed for all reports available.
+                                                        ///< if size is non-zero, then driver will only retrieve the number of
+                                                        ///< reports that fit into the buffer.
+        uint8_t* pRawData                               ///< [in,out][optional][range(0, *pRawDataSize)] buffer containing query
+                                                        ///< reports in raw format
         )
     {
         auto pfnGetData = context.xetDdiTable.MetricQuery.pfnGetData;
@@ -574,12 +585,12 @@ namespace layer
             if( nullptr == hMetricQuery )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pRawData )
+            if( nullptr == pRawDataSize )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetData( hMetricQuery, count, rawDataSize, pRawData );
+        return pfnGetData( hMetricQuery, pRawDataSize, pRawData );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

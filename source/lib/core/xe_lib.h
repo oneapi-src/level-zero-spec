@@ -32,16 +32,14 @@
 
 namespace xe_lib
 {
-    using namespace xe;
-
     ///////////////////////////////////////////////////////////////////////////////
-    class Library
+    class context_t
     {
     public:
         HMODULE loader = nullptr;
 
-        Library();
-        ~Library();
+        context_t();
+        ~context_t();
 
         xe_result_t Init();
 
@@ -50,6 +48,6 @@ namespace xe_lib
         std::vector<std::unique_ptr<xe::DeviceGroup>> m_deviceGroups;
     };
 
-    extern Library lib;
+    extern context_t context;
 
 } // namespace xe_lib

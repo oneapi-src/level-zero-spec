@@ -170,7 +170,7 @@ params:
     - type: $x_device_group_handle_t
       name: hDeviceGroup
       desc: "[in] handle of the device group object"
-    - type: "const void*"
+    - type: "void*"
       name: ptr
       desc: "[in][release] pointer to memory to free"
 --- #--------------------------------------------------------------------------

@@ -58,7 +58,7 @@ xeImageGetProperties(
     xe_image_properties_t* pImageProperties         ///< [out] pointer to image properties
     )
 {
-    auto pfnGetProperties = xe_lib::lib.ddiTable.Image.pfnGetProperties;
+    auto pfnGetProperties = xe_lib::context.ddiTable.Image.pfnGetProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetProperties )
@@ -101,7 +101,7 @@ xeImageCreate(
     xe_image_handle_t* phImage                      ///< [out] pointer to handle of image object created
     )
 {
-    auto pfnCreate = xe_lib::lib.ddiTable.Image.pfnCreate;
+    auto pfnCreate = xe_lib::context.ddiTable.Image.pfnCreate;
 
 #if _DEBUG
     if( nullptr == pfnCreate )
@@ -135,7 +135,7 @@ xeImageDestroy(
     xe_image_handle_t hImage                        ///< [in][release] handle of image object to destroy
     )
 {
-    auto pfnDestroy = xe_lib::lib.ddiTable.Image.pfnDestroy;
+    auto pfnDestroy = xe_lib::context.ddiTable.Image.pfnDestroy;
 
 #if _DEBUG
     if( nullptr == pfnDestroy )
@@ -298,23 +298,24 @@ namespace xe
     std::string to_string( const Image::flag_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
         
         if( static_cast<uint32_t>(Image::flag_t::PROGRAM_READ) & bits )
-            str += "Image::flag_t::PROGRAM_READ | ";
+            str += "PROGRAM_READ | ";
         
         if( static_cast<uint32_t>(Image::flag_t::PROGRAM_WRITE) & bits )
-            str += "Image::flag_t::PROGRAM_WRITE | ";
+            str += "PROGRAM_WRITE | ";
         
         if( static_cast<uint32_t>(Image::flag_t::BIAS_CACHED) & bits )
-            str += "Image::flag_t::BIAS_CACHED | ";
+            str += "BIAS_CACHED | ";
         
         if( static_cast<uint32_t>(Image::flag_t::BIAS_UNCACHED) & bits )
-            str += "Image::flag_t::BIAS_UNCACHED | ";
+            str += "BIAS_UNCACHED | ";
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "Image::flag_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Image::flag_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -594,20 +595,21 @@ namespace xe
     std::string to_string( const Image::sampler_filter_flags_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
         
-        if( static_cast<uint32_t>(Image::sampler_filter_flags_t::NONE) & bits )
-            str += "Image::sampler_filter_flags_t::NONE | ";
+        if( 0 == bits )
+            str += "NONE   ";
         
         if( static_cast<uint32_t>(Image::sampler_filter_flags_t::POINT) & bits )
-            str += "Image::sampler_filter_flags_t::POINT | ";
+            str += "POINT | ";
         
         if( static_cast<uint32_t>(Image::sampler_filter_flags_t::LINEAR) & bits )
-            str += "Image::sampler_filter_flags_t::LINEAR | ";
+            str += "LINEAR | ";
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "Image::sampler_filter_flags_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Image::sampler_filter_flags_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////

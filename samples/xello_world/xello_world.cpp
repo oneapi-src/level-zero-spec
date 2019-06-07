@@ -21,7 +21,7 @@ int main( int argc, char *argv[] )
     }
 
     xe::DeviceGroup* pDeviceGroup = nullptr;
-    if( init() )
+    if( init_xe() )
         pDeviceGroup = findDeviceGroup( xe::DeviceGroup::device_type_t::GPU );
 
     if( !pDeviceGroup )

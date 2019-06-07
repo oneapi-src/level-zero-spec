@@ -78,12 +78,12 @@ ${th.make_func_name(n, tags, obj)}(
     )
 {
 %if re.match("Init", obj['name']):
-    auto result = ${n}_lib::lib.Init();
+    auto result = ${n}_lib::context.Init();
     if( ${X}_RESULT_SUCCESS != result )
         return result;
 
 %endif
-    auto ${th.make_pfn_name(n, tags, obj)} = ${n}_lib::lib.ddiTable.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
+    auto ${th.make_pfn_name(n, tags, obj)} = ${n}_lib::context.ddiTable.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
 
 #if _DEBUG
     if( nullptr == ${th.make_pfn_name(n, tags, obj)} )
@@ -279,18 +279,24 @@ namespace ${n}
         %if re.match(r"enum", obj['type']):
         %if th.is_enum_bitfield(obj):
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
-        %for item in obj['etors']:
+        %for i, item in enumerate(obj['etors']):
         <%
             ename = th.make_etor_name(n, tags, obj['name'], item['name'], cpp=True)
         %>
+        %if i == 0 and ('value' not in item or "0" == item['value']):
+        if( 0 == bits )
+            str += "${ename}   ";
+        %else:
         if( static_cast<uint32_t>(${tname}::${ename}) & bits )
-            str += "${tname}::${ename} | ";
+            str += "${ename} | ";
+        %endif
         %endfor
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "${tname}::{ " + str.substr(0, str.size() - 3) + " }"
+            : "${tname}::{ ? }";
         %else:
         std::string str;
 
@@ -337,7 +343,7 @@ namespace ${n}
                 tmp += std::to_string( entry );
                 tmp += ", ";
             }
-            str += "{ " + tmp.substr( 0, tmp.size() - 2 ) + " }";;
+            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
         }
         %else:
         str += std::to_string(val.${mname});
@@ -368,18 +374,24 @@ namespace ${n}
     {
         %if th.is_enum_bitfield(e):
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
-        %for item in e['etors']:
+        %for i, item in enumerate(e['etors']):
         <%
             ename = th.make_etor_name(n, tags, e['name'], item['name'], cpp=True)
         %>
+        %if i == 0 and ('value' not in item or "0" == item['value']):
+        if( 0 == bits )
+            str += "${ename}   ";
+        %else:
         if( static_cast<uint32_t>(${tname}::${ename}) & bits )
-            str += "${tname}::${ename} | ";
+            str += "${ename} | ";
+        %endif
         %endfor
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "${tname}::{ " + str.substr(0, str.size() - 3) + " }"
+            : "${tname}::{ ? }";
         %else:
         std::string str;
 
@@ -441,7 +453,7 @@ namespace ${n}
                 tmp += std::to_string( entry );
                 tmp += ", ";
             }
-            str += "{ " + tmp.substr( 0, tmp.size() - 2 ) + " }";;
+            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
         }
         %else:
         str += std::to_string(val.${mname});

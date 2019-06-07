@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include <iostream>
 #include "xe_api.hpp"
 
@@ -17,13 +18,13 @@ inline bool argparse( int argc, char *argv[],
 }
 
 //////////////////////////////////////////////////////////////////////////
-inline bool init( void )
+inline bool init_xe( void )
 {
     try
     {
         // Initialize the driver
         xe::Init( xe::init_flag_t::NONE );
-        std::cout << "Driver initialized\n";
+        std::cout << "Driver initialized.\n";
     }
     catch( const xe::exception_t& e )
     {
@@ -42,15 +43,15 @@ inline xe::DeviceGroup* findDeviceGroup(
     uint32_t groupCount = 0;
     xe::DeviceGroup::Get( &groupCount, nullptr );
 
-    auto ppDeviceGroup = new xe::DeviceGroup*[ groupCount ];
-    xe::DeviceGroup::Get( &groupCount, ppDeviceGroup );
+    std::vector<xe::DeviceGroup*> deviceGroups( groupCount );
+    xe::DeviceGroup::Get( &groupCount, deviceGroups.data() );
 
     xe::DeviceGroup* found = nullptr;
 
     // for each device group, find the first one matching the type
     for( uint32_t grp = 0; grp < groupCount; ++grp )
     {
-        auto pDeviceGroup = ppDeviceGroup[ grp ];
+        auto pDeviceGroup = deviceGroups[ grp ];
         auto device_properties = pDeviceGroup->GetDeviceProperties();
 
         if( type == device_properties.type )
@@ -91,6 +92,5 @@ inline xe::DeviceGroup* findDeviceGroup(
         std::cout << "Did NOT find matching " << xe::to_string(type) <<" device group!" << "\n";
     }
 
-    delete[] ppDeviceGroup;
     return found;
 }

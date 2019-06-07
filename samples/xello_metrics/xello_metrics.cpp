@@ -6,20 +6,19 @@
 //////////////////////////////////////////////////////////////////////////
 int main( int argc, char *argv[] )
 {
-    if( argparse( argc, argv, "-val", "--enable_validation_layer" ) )
+    if( argparse( argc, argv, "-null", "--enable_null_driver" ) )
     {
-        putenv( const_cast<char *>( "XE_ENABLE_VALIDATION_LAYER=1" ) );
-        putenv( const_cast<char *>( "XE_ENABLE_PARAMETER_VALIDATION=1" ) );
+        putenv( const_cast<char *>( "XE_ENABLE_NULL_DRIVER=1" ) );
     }
 
     xet::DeviceGroup* pDeviceGroup = nullptr;
-    if( init() )
+    if( init_xet() )
         pDeviceGroup = reinterpret_cast<xet::DeviceGroup*>( findDeviceGroup( xe::DeviceGroup::device_type_t::GPU ) );
     if( !pDeviceGroup )
         return -1;
 
-    // Find the metric group (todo: change to device group)
-    auto pMetricGroup = findMetricGroup( pDeviceGroup, xet::MetricGroup::sampling_type_t::EVENT_BASED, "ComputeBasic" );
+    // Find an event-based metric group
+    auto pMetricGroup = findMetricGroup( pDeviceGroup, xet::MetricGroup::sampling_type_t::EVENT_BASED );
     if( !pMetricGroup )
         return -1;
 
@@ -71,26 +70,7 @@ int main( int argc, char *argv[] )
         pCommandList->AppendMetricQueryEnd( pQuery.get(), pEvent.get() );
         pEvent->HostSynchronize( UINT32_MAX );
 
-        // Read raw data from query
-        auto rawDataSize = pMetricGroup->GetProperties().rawReportSize;
-        auto rawData = new uint8_t[ rawDataSize ];
-        pQuery->GetData( numSamples, rawDataSize, rawData );
-
-        // Calculate results
-        auto calcDataSize = pMetricGroup->GetProperties().calculatedReportSize * numSamples;
-        auto calcData = new xet::typed_value_t[ calcDataSize ];
-        pMetricGroup->CalculateData( numSamples, rawDataSize, rawData, calcDataSize, calcData );
-
-        delete[] rawData;
-
-        // Report results
-        std::cout << "Compute Basic results:\n";
-        for( uint32_t i = 0; i < calcDataSize; ++i )
-        {
-            std::cout << xet::to_string( calcData[ i ] );
-        }
-
-        delete[] calcData;
+        calculateResults( pMetricGroup, pQuery.get() );
     }
     catch( const xe::exception_t& e )
     {

@@ -62,11 +62,11 @@ xexInit(
     xe_init_flag_t flags                            ///< [in] initialization flags
     )
 {
-    auto result = xex_lib::lib.Init();
+    auto result = xex_lib::context.Init();
     if( XE_RESULT_SUCCESS != result )
         return result;
 
-    auto pfnInit = xex_lib::lib.ddiTable.Global.pfnInit;
+    auto pfnInit = xex_lib::context.ddiTable.Global.pfnInit;
 
 #if _DEBUG
     if( nullptr == pfnInit )

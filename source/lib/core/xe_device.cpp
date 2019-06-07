@@ -66,7 +66,7 @@ xeDeviceGroupGet(
     xe_device_group_handle_t* phDeviceGroups        ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
     )
 {
-    auto pfnGet = xe_lib::lib.ddiTable.DeviceGroup.pfnGet;
+    auto pfnGet = xe_lib::context.ddiTable.DeviceGroup.pfnGet;
 
 #if _DEBUG
     if( nullptr == pfnGet )
@@ -99,15 +99,14 @@ xeDeviceGroupGet(
 xe_result_t __xecall
 xeDeviceGet(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
                                                     ///< if count is zero, then the driver will update the value with the total
-                                                    ///< number of device groups available.
-                                                    ///< if count is non-zero, then driver will only retrieve that number of
-                                                    ///< device groups.
+                                                    ///< number of devices available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of devices.
     xe_device_handle_t* phDevices                   ///< [in,out][optional][range(0, *pCount)] array of handle of devices
     )
 {
-    auto pfnGet = xe_lib::lib.ddiTable.Device.pfnGet;
+    auto pfnGet = xe_lib::context.ddiTable.Device.pfnGet;
 
 #if _DEBUG
     if( nullptr == pfnGet )
@@ -134,25 +133,27 @@ xeDeviceGet(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
-///         + nullptr == phSubdevice
-///         + ordinal is out of range reported by device properties.
+///         + nullptr == pCount
+///         + count is out of range reported by ::xeDeviceGetSubDevices
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGetSubDevice(
+xeDeviceGetSubDevices(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device object
-    uint32_t ordinal,                               ///< [in] ordinal of sub-device to retrieve; must be less than
-                                                    ///< ::xe_device_properties_t::numSubdevices
-    xe_device_handle_t* phSubdevice                 ///< [out] pointer to handle of sub-device object.
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of sub-devices.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of sub-devices available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of sub-devices.
+    xe_device_handle_t* phSubdevices                ///< [in,out][optional][range(0, *pCount)] array of handle of sub-devices
     )
 {
-    auto pfnGetSubDevice = xe_lib::lib.ddiTable.Device.pfnGetSubDevice;
+    auto pfnGetSubDevices = xe_lib::context.ddiTable.Device.pfnGetSubDevices;
 
 #if _DEBUG
-    if( nullptr == pfnGetSubDevice )
+    if( nullptr == pfnGetSubDevices )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnGetSubDevice( hDevice, ordinal, phSubdevice );
+    return pfnGetSubDevices( hDevice, pCount, phSubdevices );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -180,7 +181,7 @@ xeDeviceGroupGetApiVersion(
     xe_api_version_t* version                       ///< [out] api version
     )
 {
-    auto pfnGetApiVersion = xe_lib::lib.ddiTable.DeviceGroup.pfnGetApiVersion;
+    auto pfnGetApiVersion = xe_lib::context.ddiTable.DeviceGroup.pfnGetApiVersion;
 
 #if _DEBUG
     if( nullptr == pfnGetApiVersion )
@@ -217,7 +218,7 @@ xeDeviceGroupGetDeviceProperties(
     xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
     )
 {
-    auto pfnGetDeviceProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetDeviceProperties;
+    auto pfnGetDeviceProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetDeviceProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetDeviceProperties )
@@ -253,7 +254,7 @@ xeDeviceGroupGetComputeProperties(
     xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
     )
 {
-    auto pfnGetComputeProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetComputeProperties;
+    auto pfnGetComputeProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetComputeProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetComputeProperties )
@@ -298,7 +299,7 @@ xeDeviceGroupGetMemoryProperties(
                                                     ///< memory properties
     )
 {
-    auto pfnGetMemoryProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetMemoryProperties;
+    auto pfnGetMemoryProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetMemoryProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetMemoryProperties )
@@ -335,7 +336,7 @@ xeDeviceGroupGetMemoryAccessProperties(
     xe_device_memory_access_properties_t* pMemAccessProperties  ///< [out] query result for memory access properties
     )
 {
-    auto pfnGetMemoryAccessProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetMemoryAccessProperties;
+    auto pfnGetMemoryAccessProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetMemoryAccessProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetMemoryAccessProperties )
@@ -372,7 +373,7 @@ xeDeviceGroupGetCacheProperties(
     xe_device_cache_properties_t* pCacheProperties  ///< [out] query result for cache properties
     )
 {
-    auto pfnGetCacheProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetCacheProperties;
+    auto pfnGetCacheProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetCacheProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetCacheProperties )
@@ -407,7 +408,7 @@ xeDeviceGroupGetImageProperties(
     xe_device_image_properties_t* pImageProperties  ///< [out] query result for image properties
     )
 {
-    auto pfnGetImageProperties = xe_lib::lib.ddiTable.DeviceGroup.pfnGetImageProperties;
+    auto pfnGetImageProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetImageProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetImageProperties )
@@ -445,7 +446,7 @@ xeDeviceGetP2PProperties(
     xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
     )
 {
-    auto pfnGetP2PProperties = xe_lib::lib.ddiTable.Device.pfnGetP2PProperties;
+    auto pfnGetP2PProperties = xe_lib::context.ddiTable.Device.pfnGetP2PProperties;
 
 #if _DEBUG
     if( nullptr == pfnGetP2PProperties )
@@ -494,7 +495,7 @@ xeDeviceCanAccessPeer(
     xe_bool_t* value                                ///< [out] returned access capability
     )
 {
-    auto pfnCanAccessPeer = xe_lib::lib.ddiTable.Device.pfnCanAccessPeer;
+    auto pfnCanAccessPeer = xe_lib::context.ddiTable.Device.pfnCanAccessPeer;
 
 #if _DEBUG
     if( nullptr == pfnCanAccessPeer )
@@ -529,7 +530,7 @@ xeDeviceSetIntermediateCacheConfig(
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     )
 {
-    auto pfnSetIntermediateCacheConfig = xe_lib::lib.ddiTable.Device.pfnSetIntermediateCacheConfig;
+    auto pfnSetIntermediateCacheConfig = xe_lib::context.ddiTable.Device.pfnSetIntermediateCacheConfig;
 
 #if _DEBUG
     if( nullptr == pfnSetIntermediateCacheConfig )
@@ -564,7 +565,7 @@ xeDeviceSetLastLevelCacheConfig(
     xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     )
 {
-    auto pfnSetLastLevelCacheConfig = xe_lib::lib.ddiTable.Device.pfnSetLastLevelCacheConfig;
+    auto pfnSetLastLevelCacheConfig = xe_lib::context.ddiTable.Device.pfnSetLastLevelCacheConfig;
 
 #if _DEBUG
     if( nullptr == pfnSetLastLevelCacheConfig )
@@ -671,11 +672,10 @@ namespace xe
     void __xecall
     Device::Get(
         DeviceGroup* pDeviceGroup,                      ///< [in] pointer to the device group object
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
                                                         ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of device groups available.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of
-                                                        ///< device groups.
+                                                        ///< number of devices available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of devices.
         Device** ppDevices                              ///< [in,out][optional][range(0, *pCount)] array of pointer to devices
         )
     {
@@ -722,41 +722,45 @@ namespace xe
     ///   _Analogues_
     ///     - clCreateSubDevices
     /// 
-    /// @returns
-    ///     - Device*: pointer to handle of sub-device object.
-    /// 
     /// @throws result_t
-    Device* __xecall
-    Device::GetSubDevice(
-        uint32_t ordinal                                ///< [in] ordinal of sub-device to retrieve; must be less than
-                                                        ///< ::device_properties_t::numSubdevices
+    void __xecall
+    Device::GetSubDevices(
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of sub-devices.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of sub-devices available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of sub-devices.
+        Device** ppSubdevices                           ///< [in,out][optional][range(0, *pCount)] array of pointer to sub-devices
         )
     {
-        xe_device_handle_t hSubdevice;
+        thread_local std::vector<xe_device_handle_t> hSubdevices;
+        hSubdevices.resize( ( ppSubdevices ) ? *pCount : 0 );
 
-        auto result = static_cast<result_t>( ::xeDeviceGetSubDevice(
+        auto result = static_cast<result_t>( ::xeDeviceGetSubDevices(
             reinterpret_cast<xe_device_handle_t>( getHandle() ),
-            ordinal,
-            &hSubdevice ) );
+            pCount,
+            hSubdevices.data() ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::GetSubDevice" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::GetSubDevices" );
 
-        Device* pSubdevice = nullptr;
+        for( uint32_t i = 0; ( ppSubdevices ) && ( i < *pCount ); ++i )
+            ppSubdevices[ i ] = nullptr;
 
         try
         {
-            pSubdevice = new Device( reinterpret_cast<device_handle_t>( hSubdevice ), m_pDeviceGroup );
+            for( uint32_t i = 0; ( ppSubdevices ) && ( i < *pCount ); ++i )
+                ppSubdevices[ i ] = new Device( reinterpret_cast<device_handle_t>( hSubdevices[ i ] ), m_pDeviceGroup );
         }
         catch( std::bad_alloc& )
         {
-            delete pSubdevice;
-            pSubdevice = nullptr;
+            for( uint32_t i = 0; ( ppSubdevices ) && ( i < *pCount ); ++i )
+            {
+                delete ppSubdevices[ i ];
+                ppSubdevices[ i ] = nullptr;
+            }
 
-            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Device::GetSubDevice" );
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Device::GetSubDevices" );
         }
-
-        return pSubdevice;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1256,26 +1260,27 @@ namespace xe
     std::string to_string( const DeviceGroup::memory_access_capabilities_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
         
-        if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS_NONE) & bits )
-            str += "DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS_NONE | ";
+        if( 0 == bits )
+            str += "MEMORY_ACCESS_NONE   ";
         
         if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS) & bits )
-            str += "DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS | ";
+            str += "MEMORY_ACCESS | ";
         
         if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_ATOMIC_ACCESS) & bits )
-            str += "DeviceGroup::memory_access_capabilities_t::MEMORY_ATOMIC_ACCESS | ";
+            str += "MEMORY_ATOMIC_ACCESS | ";
         
         if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ACCESS) & bits )
-            str += "DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ACCESS | ";
+            str += "MEMORY_CONCURRENT_ACCESS | ";
         
         if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ATOMIC_ACCESS) & bits )
-            str += "DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ATOMIC_ACCESS | ";
+            str += "MEMORY_CONCURRENT_ATOMIC_ACCESS | ";
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "DeviceGroup::memory_access_capabilities_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "DeviceGroup::memory_access_capabilities_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1323,20 +1328,21 @@ namespace xe
     std::string to_string( const DeviceGroup::device_mem_alloc_flag_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
         
-        if( static_cast<uint32_t>(DeviceGroup::device_mem_alloc_flag_t::DEFAULT) & bits )
-            str += "DeviceGroup::device_mem_alloc_flag_t::DEFAULT | ";
+        if( 0 == bits )
+            str += "DEFAULT   ";
         
         if( static_cast<uint32_t>(DeviceGroup::device_mem_alloc_flag_t::BIAS_CACHED) & bits )
-            str += "DeviceGroup::device_mem_alloc_flag_t::BIAS_CACHED | ";
+            str += "BIAS_CACHED | ";
         
         if( static_cast<uint32_t>(DeviceGroup::device_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
-            str += "DeviceGroup::device_mem_alloc_flag_t::BIAS_UNCACHED | ";
+            str += "BIAS_UNCACHED | ";
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "DeviceGroup::device_mem_alloc_flag_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "DeviceGroup::device_mem_alloc_flag_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1344,23 +1350,24 @@ namespace xe
     std::string to_string( const DeviceGroup::host_mem_alloc_flag_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
         
-        if( static_cast<uint32_t>(DeviceGroup::host_mem_alloc_flag_t::DEFAULT) & bits )
-            str += "DeviceGroup::host_mem_alloc_flag_t::DEFAULT | ";
+        if( 0 == bits )
+            str += "DEFAULT   ";
         
         if( static_cast<uint32_t>(DeviceGroup::host_mem_alloc_flag_t::BIAS_CACHED) & bits )
-            str += "DeviceGroup::host_mem_alloc_flag_t::BIAS_CACHED | ";
+            str += "BIAS_CACHED | ";
         
         if( static_cast<uint32_t>(DeviceGroup::host_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
-            str += "DeviceGroup::host_mem_alloc_flag_t::BIAS_UNCACHED | ";
+            str += "BIAS_UNCACHED | ";
         
         if( static_cast<uint32_t>(DeviceGroup::host_mem_alloc_flag_t::BIAS_WRITE_COMBINED) & bits )
-            str += "DeviceGroup::host_mem_alloc_flag_t::BIAS_WRITE_COMBINED | ";
+            str += "BIAS_WRITE_COMBINED | ";
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "DeviceGroup::host_mem_alloc_flag_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "DeviceGroup::host_mem_alloc_flag_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1449,7 +1456,7 @@ namespace xe
                 tmp += std::to_string( entry );
                 tmp += ", ";
             }
-            str += "{ " + tmp.substr( 0, tmp.size() - 2 ) + " }";;
+            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
         }
         str += "\n";
 
@@ -1480,10 +1487,6 @@ namespace xe
         
         str += "DeviceGroup::device_properties_t::uuid : ";
         str += to_string(val.uuid);
-        str += "\n";
-        
-        str += "DeviceGroup::device_properties_t::numSubdevices : ";
-        str += std::to_string(val.numSubdevices);
         str += "\n";
         
         str += "DeviceGroup::device_properties_t::isSubdevice : ";
@@ -1538,8 +1541,12 @@ namespace xe
         str += std::to_string(val.numSubslicesPerSlice);
         str += "\n";
         
-        str += "DeviceGroup::device_properties_t::numSlicesPerSubdevice : ";
-        str += std::to_string(val.numSlicesPerSubdevice);
+        str += "DeviceGroup::device_properties_t::numSlicesPerTile : ";
+        str += std::to_string(val.numSlicesPerTile);
+        str += "\n";
+        
+        str += "DeviceGroup::device_properties_t::numTiles : ";
+        str += std::to_string(val.numTiles);
         str += "\n";
         
         str += "DeviceGroup::device_properties_t::name : ";
@@ -1603,7 +1610,7 @@ namespace xe
                 tmp += std::to_string( entry );
                 tmp += ", ";
             }
-            str += "{ " + tmp.substr( 0, tmp.size() - 2 ) + " }";;
+            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
         }
         str += "\n";
 
@@ -1776,20 +1783,21 @@ namespace xe
     std::string to_string( const Device::cache_config_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
-        if( 0 == bits ) return std::string("{}");
 
         std::string str;
         
         if( static_cast<uint32_t>(Device::cache_config_t::DEFAULT) & bits )
-            str += "Device::cache_config_t::DEFAULT | ";
+            str += "DEFAULT | ";
         
         if( static_cast<uint32_t>(Device::cache_config_t::LARGE_SLM) & bits )
-            str += "Device::cache_config_t::LARGE_SLM | ";
+            str += "LARGE_SLM | ";
         
         if( static_cast<uint32_t>(Device::cache_config_t::LARGE_DATA) & bits )
-            str += "Device::cache_config_t::LARGE_DATA | ";
+            str += "LARGE_DATA | ";
 
-        return "{ " + str.substr(0, str.size() - 3) + " }";
+        return ( str.size() > 3 ) 
+            ? "Device::cache_config_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Device::cache_config_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////

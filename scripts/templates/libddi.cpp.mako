@@ -42,7 +42,7 @@ from templates import helper as th
 namespace ${n}_lib
 {
     ///////////////////////////////////////////////////////////////////////////////
-    ${x}_result_t Library::Init()
+    ${x}_result_t context_t::Init()
     {
         loader = LOAD_DRIVER_LIBRARY( MAKE_DRIVER_NAME( "${x}_loader" ) );
 

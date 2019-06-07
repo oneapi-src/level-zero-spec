@@ -25,6 +25,7 @@
 *
 ******************************************************************************/
 #pragma once
+#include <stdlib.h>
 #include "xe_ddi.h"
 #include "xex_ddi.h"
 #include "xet_ddi.h"
@@ -37,21 +38,19 @@ namespace driver
     public:
         xe_api_version_t version = XE_API_VERSION_1_0;
 
-        context_t() = default;
-        ~context_t() = default;
+        xe_device_properties_t deviceProperties = {};
+        xe_device_compute_properties_t computeProperties = {};
+        xe_device_memory_properties_t memoryProperties = {};
+        xe_device_memory_access_properties_t memoryAccessProperties = {};
+        xe_device_cache_properties_t cacheProperties = {};
+        xe_device_image_properties_t imageProperties = {};
+        xe_device_p2p_properties_t p2pProperties = {};
 
-        xe_result_t xeInit( xe_init_flag_t flags )
-        {
-            return XE_RESULT_SUCCESS;
-        }
-        xe_result_t xexInit( xe_init_flag_t flags )
-        {
-            return XE_RESULT_SUCCESS;
-        }
-        xe_result_t xetInit( xe_init_flag_t flags )
-        {
-            return XE_RESULT_SUCCESS;
-        }
+        xet_metric_group_properties_t metricGroupProperties = {};
+        xet_metric_properties_t metricProperties = {};
+
+        context_t();
+        ~context_t() = default;
 
         void* get( void )
         {

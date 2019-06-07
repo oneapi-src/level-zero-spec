@@ -66,7 +66,7 @@ xeSamplerCreate(
     xe_sampler_handle_t* phSampler                  ///< [out] handle of the sampler
     )
 {
-    auto pfnCreate = xe_lib::lib.ddiTable.Sampler.pfnCreate;
+    auto pfnCreate = xe_lib::context.ddiTable.Sampler.pfnCreate;
 
 #if _DEBUG
     if( nullptr == pfnCreate )
@@ -104,7 +104,7 @@ xeSamplerDestroy(
     xe_sampler_handle_t hSampler                    ///< [in][release] handle of the sampler
     )
 {
-    auto pfnDestroy = xe_lib::lib.ddiTable.Sampler.pfnDestroy;
+    auto pfnDestroy = xe_lib::context.ddiTable.Sampler.pfnDestroy;
 
 #if _DEBUG
     if( nullptr == pfnDestroy )
