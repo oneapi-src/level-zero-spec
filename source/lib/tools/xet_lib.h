@@ -29,6 +29,7 @@
 #include "xet_ddi.h"
 #include "xe_util.h"
 #include "xe_singleton.h"
+#include <vector>
 
 namespace xet_lib
 {
