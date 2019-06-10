@@ -49,7 +49,7 @@ namespace loader
         _object_t = re.sub(r"(\w+)_handle_t", r"\1_object_t", _handle_t)
         _factory_t = re.sub(r"(\w+)_handle_t", r"\1_factory_t", _handle_t)
     %>using ${th.append_ws(_object_t, 35)} = object_t < ${_handle_t} >;
-    using ${th.append_ws(_factory_t, 35)} = factory_t < ${_object_t} >;
+    using ${th.append_ws(_factory_t, 35)} = singleton_factory_t < ${_object_t}, ${_handle_t} >;
 
     %endif
     %endfor
