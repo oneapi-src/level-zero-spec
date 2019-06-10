@@ -35,7 +35,7 @@ class singleton_factory_t
 {
 protected:
     using singleton_t = _singleton_t;
-    using key_t = typename std::conditional_t<std::is_pointer_v<_key_t>, size_t, _key_t>;
+    using key_t = typename std::conditional<std::is_pointer<_key_t>::value, size_t, _key_t>::type;
 
     using ptr_t = std::unique_ptr < singleton_t >;
     using map_t = std::unordered_map < key_t, ptr_t >;
