@@ -328,9 +328,9 @@ namespace xe
     public:
         ///////////////////////////////////////////////////////////////////////////////
         DeviceGroup( void ) = delete;
-        DeviceGroup(
+        DeviceGroup( 
             device_group_handle_t handle                    ///< [in] handle of device group object
-        );
+            );
 
         ~DeviceGroup( void ) = default;
 
@@ -789,10 +789,10 @@ namespace xe
     public:
         ///////////////////////////////////////////////////////////////////////////////
         Device( void ) = delete;
-        Device(
+        Device( 
             device_handle_t handle,                         ///< [in] handle of device object
             DeviceGroup* pDeviceGroup                       ///< [in] pointer to owner object
-        );
+            );
 
         ~Device( void ) = default;
 
@@ -801,9 +801,6 @@ namespace xe
 
         Device( Device&& other ) = delete;
         void operator=( Device&& other ) = delete;
-
-        //////////////////////////////////////////////////////////////////////////
-        static Device* getInstance( device_handle_t handle );
 
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
