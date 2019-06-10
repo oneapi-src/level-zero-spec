@@ -62,17 +62,6 @@ def declare_dbg(obj, tags):
 #if !defined(_${N}_API_HPP)
 #pragma message("warning: this file is not intended to be included directly")
 #endif
-%if re.match(r"common", name):
-%if n == x:
-#include <stdint.h>
-#include <string.h>
-#include <exception>
-#include <tuple>
-#include <string>
-%else:
-#include "${x}_api.hpp"
-%endif
-%endif
 %for item in header['includes']:
 #include "${re.sub(r"\$h", "hpp", th.subt(n, tags, item))}"
 %endfor

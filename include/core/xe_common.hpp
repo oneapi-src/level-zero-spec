@@ -37,11 +37,6 @@
 #if !defined(_XE_API_HPP)
 #pragma message("warning: this file is not intended to be included directly")
 #endif
-#include <stdint.h>
-#include <string.h>
-#include <exception>
-#include <tuple>
-#include <string>
 
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef XE_MAKE_VERSION

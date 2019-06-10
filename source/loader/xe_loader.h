@@ -25,7 +25,6 @@
 *
 ******************************************************************************/
 #pragma once
-#include <memory>
 #include <vector>
 
 #include "xe_ddi.h"

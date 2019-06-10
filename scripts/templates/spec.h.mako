@@ -46,13 +46,6 @@ from templates import helper as th
 #if !defined(_${N}_API_H)
 #pragma message("warning: this file is not intended to be included directly")
 #endif
-%if re.match(r"common", name):
-#include <stdint.h>
-#include <string.h>
-%if x != n:
-#include "${x}_api.h"
-%endif
-%endif
 %for item in header['includes']:
 #include "${re.sub(r"\$h", "h", th.subt(n, tags, item))}"
 %endfor

@@ -6,7 +6,6 @@ from templates import helper as th
     N=n.upper()
 
     x=tags['$x']
-    X=x.upper()
 %>/**************************************************************************//**
 *
 * INTEL CONFIDENTIAL
@@ -42,6 +41,16 @@ from templates import helper as th
 #pragma once
 #endif
 
+%if n != x:
+// 'core' API headers
+#include "${x}_api.h"
+%else:
+// standard headers
+#include <stdint.h>
+#include <string.h>
+%endif
+
+// '${section}' API headers
 %for f in files:
 #include "${f}"
 %endfor

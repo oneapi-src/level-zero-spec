@@ -29,7 +29,6 @@
 #include "xe_ddi.h"
 #include "xe_util.h"
 #include "xe_singleton.h"
-#include <vector>
 
 namespace xe_lib
 {

@@ -33,6 +33,11 @@
 #pragma once
 #endif
 
+// standard headers
+#include <stdint.h>
+#include <string.h>
+
+// 'core' API headers
 #include "xe_common.h"
 #include "xe_driver.h"
 #include "xe_device.h"

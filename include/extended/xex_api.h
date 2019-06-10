@@ -33,6 +33,10 @@
 #pragma once
 #endif
 
+// 'core' API headers
+#include "xe_api.h"
+
+// 'extended' API headers
 #include "xex_common.h"
 #include "xex_driver.h"
 #include "xex_cmdgraph.h"

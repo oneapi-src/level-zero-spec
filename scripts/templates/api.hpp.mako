@@ -3,6 +3,8 @@ import re
 %><%
     n=namespace
     N=n.upper()
+
+    x=tags['$x']
 %>/**************************************************************************//**
 *
 * INTEL CONFIDENTIAL
@@ -37,6 +39,19 @@ import re
 #if defined(__cplusplus)
 #pragma once
 
+%if n != x:
+// 'core' API headers
+#include "${x}_api.hpp"
+%else:
+// standard headers
+#include <stdint.h>
+#include <string.h>
+#include <exception>
+#include <tuple>
+#include <string>
+%endif
+
+// '${section}' API headers
 %for f in files:
 #include "${f}"
 %endfor

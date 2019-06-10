@@ -33,6 +33,10 @@
 #pragma once
 #endif
 
+// 'core' API headers
+#include "xe_api.h"
+
+// 'tools' API headers
 #include "xet_common.h"
 #include "xet_driver.h"
 #include "xet_device.h"

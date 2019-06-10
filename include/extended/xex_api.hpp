@@ -32,6 +32,10 @@
 #if defined(__cplusplus)
 #pragma once
 
+// 'core' API headers
+#include "xe_api.hpp"
+
+// 'extended' API headers
 #include "xex_common.hpp"
 #include "xex_driver.hpp"
 #include "xex_cmdgraph.hpp"

@@ -32,6 +32,10 @@
 #if defined(__cplusplus)
 #pragma once
 
+// 'core' API headers
+#include "xe_api.hpp"
+
+// 'tools' API headers
 #include "xet_common.hpp"
 #include "xet_driver.hpp"
 #include "xet_device.hpp"
