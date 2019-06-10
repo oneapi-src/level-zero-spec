@@ -689,10 +689,10 @@ namespace xet
     ///////////////////////////////////////////////////////////////////////////////
     MetricGroup::MetricGroup( 
         metric_group_handle_t handle,                   ///< [in] handle of metric group object
-        Device* pDevice                                 ///< [in] pointer to owner object
+        DeviceGroup* pDeviceGroup                       ///< [in] pointer to owner object
         ) :
         m_handle( handle ),
-        m_pDevice( pDevice )
+        m_pDeviceGroup( pDeviceGroup )
     {
     }
 
@@ -776,16 +776,10 @@ namespace xet
         try
         {
             for( uint32_t i = 0; ( ppMetricGroups ) && ( i < *pCount ); ++i )
-                ppMetricGroups[ i ] = new MetricGroup( reinterpret_cast<metric_group_handle_t>( hMetricGroups[ i ] ), nullptr );
+                ppMetricGroups[ i ] = xet_lib::context.metricGroupFactory.getInstance( reinterpret_cast<metric_group_handle_t>( hMetricGroups[ i ] ), pDeviceGroup );
         }
         catch( std::bad_alloc& )
         {
-            for( uint32_t i = 0; ( ppMetricGroups ) && ( i < *pCount ); ++i )
-            {
-                delete ppMetricGroups[ i ];
-                ppMetricGroups[ i ] = nullptr;
-            }
-
             throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xet::MetricGroup::Get" );
         }
     }
@@ -881,16 +875,10 @@ namespace xet
         try
         {
             for( uint32_t i = 0; ( ppMetrics ) && ( i < *pCount ); ++i )
-                ppMetrics[ i ] = new Metric( reinterpret_cast<metric_handle_t>( hMetrics[ i ] ), pMetricGroup );
+                ppMetrics[ i ] = xet_lib::context.metricFactory.getInstance( reinterpret_cast<metric_handle_t>( hMetrics[ i ] ), pMetricGroup );
         }
         catch( std::bad_alloc& )
         {
-            for( uint32_t i = 0; ( ppMetrics ) && ( i < *pCount ); ++i )
-            {
-                delete ppMetrics[ i ];
-                ppMetrics[ i ] = nullptr;
-            }
-
             throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xet::Metric::Get" );
         }
     }

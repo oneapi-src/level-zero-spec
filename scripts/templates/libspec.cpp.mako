@@ -147,7 +147,7 @@ namespace ${n}
         ${line}
         %endfor
         )<%
-        wparams, rvalue = th.make_wrapper_params(n, tags, obj, meta)
+        wparams, rvalue = th.make_wrapper_params(n, tags, obj, meta, specs)
 %>
     {
         %for item in wparams:
@@ -203,20 +203,37 @@ namespace ${n}
             %if 'range' in item:
             %if item['optional']:
             for( uint32_t i = ${item['range'][0]}; ( ${item['name']} ) && ( i < ${item['range'][1]} ); ++i )
-                ${item['name']}[ i ] = new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, specs, item))} );
+                %if item['ctor']['factory']:
+                ${item['name']}[ i ] = ${n}_lib::context.${item['ctor']['factory']}.getInstance( ${", ".join(item['ctor']['params'])} );
+                %else:
+                ${item['name']}[ i ] = new ${item['class']}( ${", ".join(item['ctor']['params'])} );
+                %endif
             %else:
             for( uint32_t i = ${item['range'][0]}; i < ${item['range'][1]}; ++i )
-                ${item['name']}[ i ] = new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, specs, item))} );
+                %if item['ctor']['factory']:
+                ${item['name']}[ i ] = ${n}_lib::context.${item['ctor']['factory']}.getInstance( ${", ".join(item['ctor']['params'])} );
+                %else:
+                ${item['name']}[ i ] = new ${item['class']}( ${", ".join(item['ctor']['params'])} );
+                %endif
             %endif
             %elif item['optional']:
             if( ${item['name']} )
-                *${item['name']} =  new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, specs, item))} );
+                %if item['ctor']['factory']:
+                *${item['name']} =  ${n}_lib::context.${item['ctor']['factory']}.getInstance( ${", ".join(item['ctor']['params'])} );
+                %else:
+                *${item['name']} =  new ${item['class']}( ${", ".join(item['ctor']['params'])} );
+                %endif
             %else:
-            ${item['name']} = new ${item['class']}( ${", ".join(th.make_wrapper_ctor_params(n, tags, obj, meta, specs, item))} );
+            %if item['ctor']['factory']:
+            ${item['name']} = ${n}_lib::context.${item['ctor']['factory']}.getInstance( ${", ".join(item['ctor']['params'])} );
+            %else:
+            ${item['name']} = new ${item['class']}( ${", ".join(item['ctor']['params'])} );
+            %endif
             %endif
         }
         catch( std::bad_alloc& )
         {
+            %if not item['ctor']['factory']:
             %if 'range' in item:
             %if item['optional']:
             for( uint32_t i = ${item['range'][0]}; ( ${item['name']} ) && ( i < ${item['range'][1]} ); ++i )
@@ -242,6 +259,7 @@ namespace ${n}
             ${item['name']} = nullptr;
             %endif
 
+            %endif
             throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "${n}::${th.subt(n, tags, obj['class'], cpp=True)}::${th.subt(n, tags, obj['name'], cpp=True)}" );
         }
         %endif

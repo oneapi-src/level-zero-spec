@@ -28,10 +28,14 @@
 #include "xet_api.hpp"
 #include "xet_ddi.h"
 #include "xe_util.h"
+#include "xe_singleton.h"
 #include <vector>
 
 namespace xet_lib
 {
+    using metric_group_factory_t = singleton_factory_t<xet::MetricGroup, xet::metric_group_handle_t>;
+    using metric_factory_t = singleton_factory_t<xet::Metric, xet::metric_handle_t>;
+
     ///////////////////////////////////////////////////////////////////////////////
     class context_t
     {
@@ -44,6 +48,9 @@ namespace xet_lib
         xe_result_t Init();
 
         xet_dditable_t  ddiTable = {};
+
+        metric_group_factory_t  metricGroupFactory;
+        metric_factory_t        metricFactory;
     };
 
     extern context_t context;

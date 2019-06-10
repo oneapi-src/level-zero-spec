@@ -45,6 +45,14 @@ class class_traits:
         except:
             return False
 
+    @staticmethod
+    def is_singleton(item):
+        try:
+            return "singleton" == item['attribute']
+        except:
+            return False
+
+
 """
     Extracts traits from a type name
 """
@@ -787,7 +795,7 @@ def _get_local_name(name):
 Public:
     returns a list of dict for declaring local variables in c++ wrapper
 """
-def make_wrapper_params(namespace, tags, obj, meta):
+def make_wrapper_params(namespace, tags, obj, meta, specs):
     params = []
     returns = []
 
@@ -825,6 +833,8 @@ def make_wrapper_params(namespace, tags, obj, meta):
             range_end   = param_traits.range_end(item)
             if type_traits.is_class_handle(item['type'], meta):
                 if param_traits.is_output(item) or param_traits.is_inoutput(item):
+                    cobj = next(iter(filter_items(extract_objs(specs, 'class'), 'name', type_traits.find_class_name(item['type'], meta))), None)
+                    fty_name = "%sFactory"%(_remove_ptr(cpp_cname[0].lower() + cpp_cname[1:], False))
                     if param_traits.is_optional(item):
                         params.append({
                             'local': local_name,
@@ -834,6 +844,10 @@ def make_wrapper_params(namespace, tags, obj, meta):
                             'optional': True,
                             'arg': "%s.data()"%(local_name),
                             'class': _remove_ptr(cpp_cname, False),
+                            'ctor': {
+                                'params': _make_wrapper_ctor_params(namespace, tags, item, obj, cobj, meta),
+                                'factory': fty_name if class_traits.is_singleton(cobj) else ""
+                            },
                             'name': cpp_name
                         })
                     else:
@@ -845,6 +859,10 @@ def make_wrapper_params(namespace, tags, obj, meta):
                             'optional': False,
                             'arg': "%s.data()"%(local_name),
                             'class': _remove_ptr(cpp_cname, False),
+                            'ctor': {
+                                'params': _make_wrapper_ctor_params(namespace, tags, item, obj, cobj, meta),
+                                'factory': "%sFactory"%(_remove_ptr(cpp_cname, False)) if class_traits.is_singleton(cobj) else ""
+                            },
                             'name': cpp_name
                         })
                         if param_traits.is_output(item):
@@ -896,6 +914,8 @@ def make_wrapper_params(namespace, tags, obj, meta):
             if type_traits.is_class_handle(item['type'], meta):
                 is_this_handle = type_traits.find_class_name(item['type'], meta) == obj_traits.class_name(obj)
                 if param_traits.is_output(item):
+                    cobj = next(iter(filter_items(extract_objs(specs, 'class'), 'name', type_traits.find_class_name(item['type'], meta))), None)
+                    fty_name = "%sFactory"%(_remove_ptr(cpp_cname[0].lower() + cpp_cname[1:], False))
                     if param_traits.is_optional(item):
                         params.append({
                             'local': local_name,
@@ -905,6 +925,10 @@ def make_wrapper_params(namespace, tags, obj, meta):
                             'arg': "( %s ) ? &%s : nullptr"%(cpp_name, local_name),
                             'release': False,
                             'class': _remove_ptr(cpp_cname, False),
+                            'ctor': {
+                                'params': _make_wrapper_ctor_params(namespace, tags, item, obj, cobj, meta),
+                                'factory': fty_name if class_traits.is_singleton(cobj) else ""
+                            },
                             'name': cpp_name
                         })
                     else:
@@ -916,6 +940,10 @@ def make_wrapper_params(namespace, tags, obj, meta):
                             'arg': "&%s"%(local_name),
                             'release': False,
                             'class': _remove_ptr(cpp_cname, False),
+                            'ctor': {
+                                'params': _make_wrapper_ctor_params(namespace, tags, item, obj, cobj, meta),
+                                'factory': fty_name if class_traits.is_singleton(cobj) else ""
+                            },
                             'name': cpp_name
                         })
                         returns.append(cpp_name)
@@ -980,35 +1008,31 @@ def make_wrapper_params(namespace, tags, obj, meta):
     return params, rvalue
 
 """
-Public:
+Private:
     returns a list of c++ strings of ctor arguments in c++ wrapper
 """
-def make_wrapper_ctor_params(namespace, tags, obj, meta, specs, wparam):
+def _make_wrapper_ctor_params(namespace, tags, item, obj, cobj, meta):
     params = []
-
-    # find, extract the class obj that owns this obj
-    cobj = None
-    for item in extract_objs(specs, r"class"):
-        if re.match(r".*%s$"%wparam['class'], item['name']):
-            cobj = item
-            break
-    if not cobj:
-        return params
 
     is_static = function_traits.is_static(obj)
     is_global = function_traits.is_global(obj, tags)
 
     # generate list of names for each parameter of the current function
-    oparams = [ _get_param_name(namespace, tags, item, cpp=True) for item in obj['params'] ]
+    oparams = [ _get_param_name(namespace, tags, oparam, cpp=True) for oparam in obj['params'] ]
 
     # walk the ctor parameter names
     cparams = make_ctor_param_lines(namespace, tags, cobj, meta=meta, format=['name'])
     for i, name in enumerate(cparams):
         if name == "handle":
-            if 'range' in wparam:
-                params.append("reinterpret_cast<%s>( %s[ i ] )"%(wparam['cpptype'], wparam['local']))
+            c_name = _get_param_name(namespace, tags, item, cpp=False)
+            local_name = _get_local_name(c_name)
+
+            cpp_tname = _get_type_name(namespace, tags, obj, item, cpp=True, meta=meta, handle_to_class=False)
+
+            if param_traits.is_range(item):
+                params.append("reinterpret_cast<%s>( %s[ i ] )"%(_remove_const_ptr(cpp_tname), local_name))
             else:
-                params.append("reinterpret_cast<%s>( %s )"%(wparam['cpptype'], wparam['local']))
+                params.append("reinterpret_cast<%s>( %s )"%(_remove_const_ptr(cpp_tname), local_name))
 
         elif name in oparams:
             if (not is_static and not is_global) and (0 == oparams.index(name)):

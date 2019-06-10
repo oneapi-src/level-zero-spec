@@ -641,14 +641,14 @@ type: class
 desc: "C++ wrapper for metric group"
 name: $tMetricGroup
 attribute: singleton
-owner: $tDevice
+owner: $tDeviceGroup
 members:
     - type: $t_metric_group_handle_t
       name: handle
       desc: "[in] handle of metric group object" 
       init: nullptr
-    - type: $tDevice*
-      name: pDevice
+    - type: $tDeviceGroup*
+      name: pDeviceGroup
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class

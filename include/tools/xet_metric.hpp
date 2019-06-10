@@ -150,14 +150,14 @@ namespace xet
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         metric_group_handle_t m_handle = nullptr;       ///< [in] handle of metric group object
-        Device* m_pDevice;                              ///< [in] pointer to owner object
+        DeviceGroup* m_pDeviceGroup;                    ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         MetricGroup( void ) = delete;
         MetricGroup( 
             metric_group_handle_t handle,                   ///< [in] handle of metric group object
-            Device* pDevice                                 ///< [in] pointer to owner object
+            DeviceGroup* pDeviceGroup                       ///< [in] pointer to owner object
             );
 
         ~MetricGroup( void ) = default;
@@ -170,7 +170,7 @@ namespace xet
 
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
-        auto getDevice( void ) const { return m_pDevice; }
+        auto getDevicegroup( void ) const { return m_pDeviceGroup; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Retrieves metric group for a device group.

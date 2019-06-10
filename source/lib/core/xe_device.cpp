@@ -640,10 +640,7 @@ namespace xe
         try
         {
             for( uint32_t i = 0; ( ppDeviceGroups ) && ( i < *pCount ); ++i )
-            {
-                ppDeviceGroups[ i ] = xe_lib::context.deviceGroupFactory.getInstance(
-                    reinterpret_cast<device_group_handle_t>( hDeviceGroups[ i ] ) );
-            }
+                ppDeviceGroups[ i ] = xe_lib::context.deviceGroupFactory.getInstance( reinterpret_cast<device_group_handle_t>( hDeviceGroups[ i ] ) );
         }
         catch( std::bad_alloc& )
         {
@@ -690,10 +687,7 @@ namespace xe
         try
         {
             for( uint32_t i = 0; ( ppDevices ) && ( i < *pCount ); ++i )
-            {
-                ppDevices[ i ] = xe_lib::context.deviceFactory.getInstance(
-                    reinterpret_cast<device_handle_t>( hDevices[ i ] ), pDeviceGroup );
-            }
+                ppDevices[ i ] = xe_lib::context.deviceFactory.getInstance( reinterpret_cast<device_handle_t>( hDevices[ i ] ), pDeviceGroup );
         }
         catch( std::bad_alloc& )
         {
@@ -739,19 +733,10 @@ namespace xe
         try
         {
             for( uint32_t i = 0; ( ppSubdevices ) && ( i < *pCount ); ++i )
-            {
-                ppSubdevices[ i ] = xe_lib::context.deviceFactory.getInstance(
-                    reinterpret_cast<device_handle_t>( hSubdevices[ i ] ), m_pDeviceGroup );
-            }
+                ppSubdevices[ i ] = xe_lib::context.deviceFactory.getInstance( reinterpret_cast<device_handle_t>( hSubdevices[ i ] ), m_pDeviceGroup );
         }
         catch( std::bad_alloc& )
         {
-            for( uint32_t i = 0; ( ppSubdevices ) && ( i < *pCount ); ++i )
-            {
-                delete ppSubdevices[ i ];
-                ppSubdevices[ i ] = nullptr;
-            }
-
             throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Device::GetSubDevices" );
         }
     }
