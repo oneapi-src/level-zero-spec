@@ -99,7 +99,7 @@ namespace loader
                 {
                     for( uint32_t i = total_count; i < count; ++i )
                         ${obj['params'][1]['name']}[ i ] = reinterpret_cast<${n}_device_group_handle_t>( 
-                            ${n}_device_group_factory.get( ${obj['params'][1]['name']}[ i ], &drv.dditable ) );
+                            ${n}_device_group_factory.getInstance( ${obj['params'][1]['name']}[ i ], &drv.dditable ) );
                 }
                 catch( std::bad_alloc& )
                 {
@@ -148,16 +148,16 @@ namespace loader
             // convert driver handles to loader handles
             for( size_t i = ${item['range'][0]}; ( nullptr != ${item['name']} ) && ( i < ${item['range'][1]} ); ++i )
                 ${item['name']}[ i ] = reinterpret_cast<${item['type']}>(
-                    ${item['factory']}.get( ${item['name']}[ i ], dditable ) );
+                    ${item['factory']}.getInstance( ${item['name']}[ i ], dditable ) );
             %else:
             // convert driver handle to loader handle
             %if item['optional']:
             if( nullptr != ${item['name']} )
                 *${item['name']} = reinterpret_cast<${item['type']}>(
-                    ${item['factory']}.get( *${item['name']}, dditable ) );
+                    ${item['factory']}.getInstance( *${item['name']}, dditable ) );
             %else:
             *${item['name']} = reinterpret_cast<${item['type']}>(
-                ${item['factory']}.get( *${item['name']}, dditable ) );
+                ${item['factory']}.getInstance( *${item['name']}, dditable ) );
             %endif
             %endif
         }

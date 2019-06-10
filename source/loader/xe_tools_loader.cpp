@@ -90,7 +90,7 @@ namespace loader
             // convert driver handles to loader handles
             for( size_t i = 0; ( nullptr != phMetricGroups ) && ( i < *pCount ); ++i )
                 phMetricGroups[ i ] = reinterpret_cast<xet_metric_group_handle_t>(
-                    xet_metric_group_factory.get( phMetricGroups[ i ], dditable ) );
+                    xet_metric_group_factory.getInstance( phMetricGroups[ i ], dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -171,7 +171,7 @@ namespace loader
             // convert driver handles to loader handles
             for( size_t i = 0; ( nullptr != phMetrics ) && ( i < *pCount ); ++i )
                 phMetrics[ i ] = reinterpret_cast<xet_metric_handle_t>(
-                    xet_metric_factory.get( phMetrics[ i ], dditable ) );
+                    xet_metric_factory.getInstance( phMetrics[ i ], dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -257,7 +257,7 @@ namespace loader
         {
             // convert driver handle to loader handle
             *phMetricTracer = reinterpret_cast<xet_metric_tracer_handle_t>(
-                xet_metric_tracer_factory.get( *phMetricTracer, dditable ) );
+                xet_metric_tracer_factory.getInstance( *phMetricTracer, dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -363,7 +363,7 @@ namespace loader
         {
             // convert driver handle to loader handle
             *phMetricQueryPool = reinterpret_cast<xet_metric_query_pool_handle_t>(
-                xet_metric_query_pool_factory.get( *phMetricQueryPool, dditable ) );
+                xet_metric_query_pool_factory.getInstance( *phMetricQueryPool, dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -415,7 +415,7 @@ namespace loader
         {
             // convert driver handle to loader handle
             *phMetricQuery = reinterpret_cast<xet_metric_query_handle_t>(
-                xet_metric_query_factory.get( *phMetricQuery, dditable ) );
+                xet_metric_query_factory.getInstance( *phMetricQuery, dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -581,7 +581,7 @@ namespace loader
         {
             // convert driver handle to loader handle
             *pPowerHandle = reinterpret_cast<xet_power_handle_t>(
-                xet_power_factory.get( *pPowerHandle, dditable ) );
+                xet_power_factory.getInstance( *pPowerHandle, dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -879,7 +879,7 @@ namespace loader
             // convert driver handles to loader handles
             for( size_t i = 0; ( nullptr != phFreqDomain ) && ( i < *pCount ); ++i )
                 phFreqDomain[ i ] = reinterpret_cast<xet_freq_domain_handle_t>(
-                    xet_freq_domain_factory.get( phFreqDomain[ i ], dditable ) );
+                    xet_freq_domain_factory.getInstance( phFreqDomain[ i ], dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -930,7 +930,7 @@ namespace loader
         {
             // convert driver handle to loader handle
             *phSrcFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>(
-                xet_freq_domain_factory.get( *phSrcFreqDomain, dditable ) );
+                xet_freq_domain_factory.getInstance( *phSrcFreqDomain, dditable ) );
         }
         catch( std::bad_alloc& )
         {

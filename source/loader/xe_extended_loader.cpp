@@ -76,7 +76,7 @@ namespace loader
         {
             // convert driver handle to loader handle
             *phCommandGraph = reinterpret_cast<xex_command_graph_handle_t>(
-                xex_command_graph_factory.get( *phCommandGraph, dditable ) );
+                xex_command_graph_factory.getInstance( *phCommandGraph, dditable ) );
         }
         catch( std::bad_alloc& )
         {

@@ -120,7 +120,7 @@ namespace loader
                 {
                     for( uint32_t i = total_count; i < count; ++i )
                         phDeviceGroups[ i ] = reinterpret_cast<xe_device_group_handle_t>( 
-                            xe_device_group_factory.get( phDeviceGroups[ i ], &drv.dditable ) );
+                            xe_device_group_factory.getInstance( phDeviceGroups[ i ], &drv.dditable ) );
                 }
                 catch( std::bad_alloc& )
                 {
@@ -163,7 +163,7 @@ namespace loader
             // convert driver handles to loader handles
             for( size_t i = 0; ( nullptr != phDevices ) && ( i < *pCount ); ++i )
                 phDevices[ i ] = reinterpret_cast<xe_device_handle_t>(
-                    xe_device_factory.get( phDevices[ i ], dditable ) );
+                    xe_device_factory.getInstance( phDevices[ i ], dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -198,7 +198,7 @@ namespace loader
             // convert driver handles to loader handles
             for( size_t i = 0; ( nullptr != phSubdevices ) && ( i < *pCount ); ++i )
                 phSubdevices[ i ] = reinterpret_cast<xe_device_handle_t>(
-                    xe_device_factory.get( phSubdevices[ i ], dditable ) );
+                    xe_device_factory.getInstance( phSubdevices[ i ], dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -463,7 +463,7 @@ namespace loader
         {
             // convert driver handle to loader handle
             *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>(
-                xe_command_queue_factory.get( *phCommandQueue, dditable ) );
+                xe_command_queue_factory.getInstance( *phCommandQueue, dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -569,7 +569,7 @@ namespace loader
         {
             // convert driver handle to loader handle
             *phCommandList = reinterpret_cast<xe_command_list_handle_t>(
-                xe_command_list_factory.get( *phCommandList, dditable ) );
+                xe_command_list_factory.getInstance( *phCommandList, dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -600,7 +600,7 @@ namespace loader
         {
             // convert driver handle to loader handle
             *phCommandList = reinterpret_cast<xe_command_list_handle_t>(
-                xe_command_list_factory.get( *phCommandList, dditable ) );
+                xe_command_list_factory.getInstance( *phCommandList, dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -880,7 +880,7 @@ namespace loader
         {
             // convert driver handle to loader handle
             *phModule = reinterpret_cast<xe_module_handle_t>(
-                xe_module_factory.get( *phModule, dditable ) );
+                xe_module_factory.getInstance( *phModule, dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -914,7 +914,7 @@ namespace loader
         {
             // convert driver handle to loader handle
             *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>(
-                xe_command_queue_factory.get( *phCommandQueue, dditable ) );
+                xe_command_queue_factory.getInstance( *phCommandQueue, dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -1204,7 +1204,7 @@ namespace loader
         {
             // convert driver handle to loader handle
             *phEventPool = reinterpret_cast<xe_event_pool_handle_t>(
-                xe_event_pool_factory.get( *phEventPool, dditable ) );
+                xe_event_pool_factory.getInstance( *phEventPool, dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -1256,7 +1256,7 @@ namespace loader
         {
             // convert driver handle to loader handle
             *phEvent = reinterpret_cast<xe_event_handle_t>(
-                xe_event_factory.get( *phEvent, dditable ) );
+                xe_event_factory.getInstance( *phEvent, dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -1328,7 +1328,7 @@ namespace loader
         {
             // convert driver handle to loader handle
             *phEventPool = reinterpret_cast<xe_event_pool_handle_t>(
-                xe_event_pool_factory.get( *phEventPool, dditable ) );
+                xe_event_pool_factory.getInstance( *phEventPool, dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -1533,7 +1533,7 @@ namespace loader
         {
             // convert driver handle to loader handle
             *phFence = reinterpret_cast<xe_fence_handle_t>(
-                xe_fence_factory.get( *phFence, dditable ) );
+                xe_fence_factory.getInstance( *phFence, dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -1668,7 +1668,7 @@ namespace loader
         {
             // convert driver handle to loader handle
             *phImage = reinterpret_cast<xe_image_handle_t>(
-                xe_image_factory.get( *phImage, dditable ) );
+                xe_image_factory.getInstance( *phImage, dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -1824,7 +1824,7 @@ namespace loader
             // convert driver handle to loader handle
             if( nullptr != phDevice )
                 *phDevice = reinterpret_cast<xe_device_handle_t>(
-                    xe_device_factory.get( *phDevice, dditable ) );
+                    xe_device_factory.getInstance( *phDevice, dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -1945,7 +1945,7 @@ namespace loader
         {
             // convert driver handle to loader handle
             *phModule = reinterpret_cast<xe_module_handle_t>(
-                xe_module_factory.get( *phModule, dditable ) );
+                xe_module_factory.getInstance( *phModule, dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -1956,7 +1956,7 @@ namespace loader
             // convert driver handle to loader handle
             if( nullptr != phBuildLog )
                 *phBuildLog = reinterpret_cast<xe_module_build_log_handle_t>(
-                    xe_module_build_log_factory.get( *phBuildLog, dditable ) );
+                    xe_module_build_log_factory.getInstance( *phBuildLog, dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -2092,7 +2092,7 @@ namespace loader
         {
             // convert driver handle to loader handle
             *phFunction = reinterpret_cast<xe_function_handle_t>(
-                xe_function_factory.get( *phFunction, dditable ) );
+                xe_function_factory.getInstance( *phFunction, dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -2508,7 +2508,7 @@ namespace loader
         {
             // convert driver handle to loader handle
             *phSampler = reinterpret_cast<xe_sampler_handle_t>(
-                xe_sampler_factory.get( *phSampler, dditable ) );
+                xe_sampler_factory.getInstance( *phSampler, dditable ) );
         }
         catch( std::bad_alloc& )
         {
