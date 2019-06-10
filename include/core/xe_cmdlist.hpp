@@ -585,7 +585,7 @@ namespace xe
         void __xecall
         AppendMemoryPrefetch(
             const void* ptr,                                ///< [in] pointer to start of the memory range to prefetch
-            size_t count                                    ///< [in] size in bytes of the memory range to prefetch
+            size_t size                                     ///< [in] size in bytes of the memory range to prefetch
             );
 
         ///////////////////////////////////////////////////////////////////////////////

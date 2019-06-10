@@ -1210,7 +1210,7 @@ namespace layer
     xeCommandListAppendMemoryPrefetch(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         const void* ptr,                                ///< [in] pointer to start of the memory range to prefetch
-        size_t count                                    ///< [in] size in bytes of the memory range to prefetch
+        size_t size                                     ///< [in] size in bytes of the memory range to prefetch
         )
     {
         auto pfnAppendMemoryPrefetch = context.xeDdiTable.CommandList.pfnAppendMemoryPrefetch;
@@ -1228,7 +1228,7 @@ namespace layer
 
         }
 
-        return pfnAppendMemoryPrefetch( hCommandList, ptr, count );
+        return pfnAppendMemoryPrefetch( hCommandList, ptr, size );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

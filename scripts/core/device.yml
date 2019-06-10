@@ -422,7 +422,7 @@ members:
       name: sharedCrossDeviceAllocCapabilities
       desc: "[out] Bitfield describing shared (cross-device) memory capabilities"
     - type: $x_memory_access_capabilities_t
-      name: sharedSystemDeviceAllocCapabilities
+      name: sharedSystemAllocCapabilities
       desc: "[out] Bitfield describing shared (system) memory capabilities"
 --- #--------------------------------------------------------------------------
 type: function

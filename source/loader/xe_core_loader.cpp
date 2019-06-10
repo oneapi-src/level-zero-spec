@@ -1133,7 +1133,7 @@ namespace loader
     xeCommandListAppendMemoryPrefetch(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         const void* ptr,                                ///< [in] pointer to start of the memory range to prefetch
-        size_t count                                    ///< [in] size in bytes of the memory range to prefetch
+        size_t size                                     ///< [in] size in bytes of the memory range to prefetch
         )
     {
         // extract driver's function pointer table
@@ -1143,7 +1143,7 @@ namespace loader
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnAppendMemoryPrefetch( hCommandList, ptr, count );
+        auto result = dditable->xe.CommandList.pfnAppendMemoryPrefetch( hCommandList, ptr, size );
 
         return result;
     }

@@ -1646,8 +1646,8 @@ namespace xe
         str += to_string(val.sharedCrossDeviceAllocCapabilities);
         str += "\n";
         
-        str += "DeviceGroup::device_memory_access_properties_t::sharedSystemDeviceAllocCapabilities : ";
-        str += to_string(val.sharedSystemDeviceAllocCapabilities);
+        str += "DeviceGroup::device_memory_access_properties_t::sharedSystemAllocCapabilities : ";
+        str += to_string(val.sharedSystemAllocCapabilities);
         str += "\n";
 
         return str;

@@ -270,7 +270,7 @@ params:
       name: ptr
       desc: "[in] pointer to start of the memory range to prefetch"
     - type: "size_t"
-      name: count
+      name: size
       desc: "[in] size in bytes of the memory range to prefetch"
 --- #--------------------------------------------------------------------------
 type: enum

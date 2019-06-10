@@ -415,7 +415,7 @@ typedef struct _xe_device_memory_access_properties_t
     xe_memory_access_capabilities_t deviceAllocCapabilities;///< [out] Bitfield describing device memory capabilities
     xe_memory_access_capabilities_t sharedSingleDeviceAllocCapabilities;///< [out] Bitfield describing shared (single-device) memory capabilities
     xe_memory_access_capabilities_t sharedCrossDeviceAllocCapabilities; ///< [out] Bitfield describing shared (cross-device) memory capabilities
-    xe_memory_access_capabilities_t sharedSystemDeviceAllocCapabilities;///< [out] Bitfield describing shared (system) memory capabilities
+    xe_memory_access_capabilities_t sharedSystemAllocCapabilities;  ///< [out] Bitfield describing shared (system) memory capabilities
 
 } xe_device_memory_access_properties_t;
 

@@ -366,7 +366,7 @@ xe_result_t __xecall
 xeCommandListAppendMemoryPrefetch(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     const void* ptr,                                ///< [in] pointer to start of the memory range to prefetch
-    size_t count                                    ///< [in] size in bytes of the memory range to prefetch
+    size_t size                                     ///< [in] size in bytes of the memory range to prefetch
     )
 {
     auto pfnAppendMemoryPrefetch = xe_lib::context.ddiTable.CommandList.pfnAppendMemoryPrefetch;
@@ -376,7 +376,7 @@ xeCommandListAppendMemoryPrefetch(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnAppendMemoryPrefetch( hCommandList, ptr, count );
+    return pfnAppendMemoryPrefetch( hCommandList, ptr, size );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -705,13 +705,13 @@ namespace xe
     void __xecall
     CommandList::AppendMemoryPrefetch(
         const void* ptr,                                ///< [in] pointer to start of the memory range to prefetch
-        size_t count                                    ///< [in] size in bytes of the memory range to prefetch
+        size_t size                                     ///< [in] size in bytes of the memory range to prefetch
         )
     {
         auto result = static_cast<result_t>( ::xeCommandListAppendMemoryPrefetch(
             reinterpret_cast<xe_command_list_handle_t>( getHandle() ),
             ptr,
-            count ) );
+            size ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendMemoryPrefetch" );
