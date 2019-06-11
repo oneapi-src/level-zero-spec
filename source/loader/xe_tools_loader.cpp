@@ -1349,6 +1349,50 @@ namespace loader
         return result;
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetDeviceSetTracingPrologue
+    xe_result_t __xecall
+    xetDeviceSetTracingPrologue(
+        xet_device_handle_t hDevice,                    ///< [in] handle of the device
+        xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
+        xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
+                                                        ///< pointers
+        )
+    {
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_device_object_t*>( hDevice )->dditable;
+
+        // convert loader handle to driver handle
+        hDevice = reinterpret_cast<xet_device_object_t*>( hDevice )->handle;
+
+        // forward to device-driver
+        auto result = dditable->xet.Device.pfnSetTracingPrologue( hDevice, pCoreCbs, pExtendedCbs );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetDeviceSetTracingEpilogue
+    xe_result_t __xecall
+    xetDeviceSetTracingEpilogue(
+        xet_device_handle_t hDevice,                    ///< [in] handle of the device
+        xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
+        xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
+                                                        ///< pointers
+        )
+    {
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_device_object_t*>( hDevice )->dditable;
+
+        // convert loader handle to driver handle
+        hDevice = reinterpret_cast<xet_device_object_t*>( hDevice )->handle;
+
+        // forward to device-driver
+        auto result = dditable->xet.Device.pfnSetTracingEpilogue( hDevice, pCoreCbs, pExtendedCbs );
+
+        return result;
+    }
+
 } // namespace loader
 
 #if defined(__cplusplus)
@@ -1464,6 +1508,8 @@ xetGetDeviceProcAddrTable(
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnActivateMetricGroups                     = loader::xetDeviceActivateMetricGroups;
+            pDdiTable->pfnSetTracingPrologue                       = loader::xetDeviceSetTracingPrologue;
+            pDdiTable->pfnSetTracingEpilogue                       = loader::xetDeviceSetTracingEpilogue;
         }
         else
         {

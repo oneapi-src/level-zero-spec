@@ -865,6 +865,36 @@ namespace driver
         return result;
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetDeviceSetTracingPrologue
+    xe_result_t __xecall
+    xetDeviceSetTracingPrologue(
+        xet_device_handle_t hDevice,                    ///< [in] handle of the device
+        xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
+        xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
+                                                        ///< pointers
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetDeviceSetTracingEpilogue
+    xe_result_t __xecall
+    xetDeviceSetTracingEpilogue(
+        xet_device_handle_t hDevice,                    ///< [in] handle of the device
+        xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
+        xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
+                                                        ///< pointers
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        return result;
+    }
+
 } // namespace driver
 
 #if defined(__cplusplus)
@@ -927,6 +957,10 @@ xetGetDeviceProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     pDdiTable->pfnActivateMetricGroups                   = driver::xetDeviceActivateMetricGroups;
+
+    pDdiTable->pfnSetTracingPrologue                     = driver::xetDeviceSetTracingPrologue;
+
+    pDdiTable->pfnSetTracingEpilogue                     = driver::xetDeviceSetTracingEpilogue;
 
     return result;
 }

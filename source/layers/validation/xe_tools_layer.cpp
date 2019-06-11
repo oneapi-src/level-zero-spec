@@ -1566,6 +1566,62 @@ namespace layer
         return pfnGetActivityCounters( hPower, startCounterIndex, numCounters, pCounters );
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetDeviceSetTracingPrologue
+    xe_result_t __xecall
+    xetDeviceSetTracingPrologue(
+        xet_device_handle_t hDevice,                    ///< [in] handle of the device
+        xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
+        xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
+                                                        ///< pointers
+        )
+    {
+        auto pfnSetTracingPrologue = context.xetDdiTable.Device.pfnSetTracingPrologue;
+
+        if( nullptr == pfnSetTracingPrologue )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDevice )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCoreCbs )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSetTracingPrologue( hDevice, pCoreCbs, pExtendedCbs );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetDeviceSetTracingEpilogue
+    xe_result_t __xecall
+    xetDeviceSetTracingEpilogue(
+        xet_device_handle_t hDevice,                    ///< [in] handle of the device
+        xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
+        xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
+                                                        ///< pointers
+        )
+    {
+        auto pfnSetTracingEpilogue = context.xetDdiTable.Device.pfnSetTracingEpilogue;
+
+        if( nullptr == pfnSetTracingEpilogue )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDevice )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCoreCbs )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSetTracingEpilogue( hDevice, pCoreCbs, pExtendedCbs );
+    }
+
 } // namespace layer
 
 #if defined(__cplusplus)
@@ -1634,6 +1690,12 @@ xetGetDeviceProcAddrTable(
 
     dditable.pfnActivateMetricGroups                     = pDdiTable->pfnActivateMetricGroups;
     pDdiTable->pfnActivateMetricGroups                   = layer::xetDeviceActivateMetricGroups;
+
+    dditable.pfnSetTracingPrologue                       = pDdiTable->pfnSetTracingPrologue;
+    pDdiTable->pfnSetTracingPrologue                     = layer::xetDeviceSetTracingPrologue;
+
+    dditable.pfnSetTracingEpilogue                       = pDdiTable->pfnSetTracingEpilogue;
+    pDdiTable->pfnSetTracingEpilogue                     = layer::xetDeviceSetTracingEpilogue;
 
     return result;
 }

@@ -44,6 +44,7 @@
 #include "xet_metric.hpp"
 #include "xet_power.hpp"
 #include "xet_sysman.hpp"
+#include "xet_tracing.hpp"
 
 #endif // defined(__cplusplus)
 #endif // _XET_API_HPP

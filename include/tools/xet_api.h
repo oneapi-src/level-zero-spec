@@ -45,5 +45,6 @@
 #include "xet_metric.h"
 #include "xet_power.h"
 #include "xet_sysman.h"
+#include "xet_tracing.h"
 
 #endif // _XET_API_H

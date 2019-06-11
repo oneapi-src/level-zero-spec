@@ -1,0 +1,53 @@
+--- #------------- -------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for API Tracing"
+--- #--------------------------------------------------------------------------
+type: typedef
+desc: "Re-use the existing DDI table definition for 'core' callbacks"
+class: $tDevice
+name: $t_core_callbacks_t
+value: $x_dditable_t
+--- #--------------------------------------------------------------------------
+type: typedef
+desc: "Re-use the existing DDI table definition for 'extended' callbacks"
+class: $tDevice
+name: $t_extended_callbacks_t
+value: $e_dditable_t
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Sets the collection of callbacks to be executed **before** driver execution."
+class: $tDevice
+name: SetTracingPrologue
+details:
+    - "The application only needs to set the function pointers it is interested in receiving; all others should be 'nullptr'"
+    - "The application must ensure that no other threads are executing functions for which the tracing functions are changing."
+    - "The application may **not** call this function from simultaneous threads with the same device handle."
+params:
+    - type: "$t_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: "$t_core_callbacks_t*"
+      name: pCoreCbs
+      desc: "[in] pointer to table of 'core' callback function pointers"
+    - type: "$t_extended_callbacks_t*"
+      name: pExtendedCbs
+      desc: "[in][optional] pointer to table of 'extended' callback function pointers"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Sets the collection of callbacks to be executed **after** driver execution."
+class: $tDevice
+name: SetTracingEpilogue
+details:
+    - "The application only needs to set the function pointers it is interested in receiving; all others should be 'nullptr'"
+    - "The application must ensure that no other threads are executing functions for which the tracing functions are changing."
+    - "The application may **not** call this function from simultaneous threads with the same device handle."
+params:
+    - type: "$t_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: "$t_core_callbacks_t*"
+      name: pCoreCbs
+      desc: "[in] pointer to table of 'core' callback function pointers"
+    - type: "$t_extended_callbacks_t*"
+      name: pExtendedCbs
+      desc: "[in][optional] pointer to table of 'extended' callback function pointers"

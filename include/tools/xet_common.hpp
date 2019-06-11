@@ -37,6 +37,8 @@
 #if !defined(_XET_API_HPP)
 #pragma message("warning: this file is not intended to be included directly")
 #endif
+#include "xe_ddi.h"
+#include "xex_ddi.h"
 
 namespace xet
 {

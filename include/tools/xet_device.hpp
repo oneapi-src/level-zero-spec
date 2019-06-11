@@ -70,6 +70,14 @@ namespace xet
     class Device : public xe::Device
     {
     public:
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Re-use the existing DDI table definition for 'core' callbacks
+        using core_callbacks_t = xe_dditable_t;
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Re-use the existing DDI table definition for 'extended' callbacks
+        using extended_callbacks_t = xex_dditable_t;
+
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
@@ -102,6 +110,44 @@ namespace xet
             uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
             MetricGroup** ppMetricGroups                    ///< [in][range(0, count)] handles of the metric groups to activate. NULL
                                                             ///< to deactivate.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Sets the collection of callbacks to be executed **before** driver
+        ///        execution.
+        /// 
+        /// @details
+        ///     - The application only needs to set the function pointers it is
+        ///       interested in receiving; all others should be 'nullptr'
+        ///     - The application must ensure that no other threads are executing
+        ///       functions for which the tracing functions are changing.
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same device handle.
+        /// @throws result_t
+        void __xecall
+        SetTracingPrologue(
+            core_callbacks_t* pCoreCbs,                     ///< [in] pointer to table of 'core' callback function pointers
+            extended_callbacks_t* pExtendedCbs = nullptr    ///< [in][optional] pointer to table of 'extended' callback function
+                                                            ///< pointers
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Sets the collection of callbacks to be executed **after** driver
+        ///        execution.
+        /// 
+        /// @details
+        ///     - The application only needs to set the function pointers it is
+        ///       interested in receiving; all others should be 'nullptr'
+        ///     - The application must ensure that no other threads are executing
+        ///       functions for which the tracing functions are changing.
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same device handle.
+        /// @throws result_t
+        void __xecall
+        SetTracingEpilogue(
+            core_callbacks_t* pCoreCbs,                     ///< [in] pointer to table of 'core' callback function pointers
+            extended_callbacks_t* pExtendedCbs = nullptr    ///< [in][optional] pointer to table of 'extended' callback function
+                                                            ///< pointers
             );
 
     };

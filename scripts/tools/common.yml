@@ -2,6 +2,9 @@
 type: header
 desc: "Intel $OneApi Level-Zero Tool API common types"
 ordinal: "0"
+includes:
+    - "$x_ddi.h"
+    - "$e_ddi.h"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of device group object"

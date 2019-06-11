@@ -118,7 +118,7 @@ namespace ${n}
         %endfor
         );
     %else:
-    using ${th.make_type_name(n, tags, obj, cpp=True)} = ${th.subt(n, tags, obj['value'], cpp=True)};
+    using ${th.make_type_name(n, tags, obj, cpp=True)} = ${th.subt(n, tags, obj['value'], cpp=False)};
     %endif
     ## ENUM #######################################################################
     %elif re.match(r"enum", obj['type']):
@@ -175,7 +175,7 @@ namespace ${n}
             %endfor
             );
         %else:
-        using ${th.make_type_name(n, tags, t, cpp=True)} = ${th.subt(n, tags, t['value'], cpp=True)};
+        using ${th.make_type_name(n, tags, t, cpp=True)} = ${th.subt(n, tags, t['value'], cpp=False)};
         %endif
 %if 'condition' in t:
 #endif // ${th.subt(n, tags, t['condition'])}

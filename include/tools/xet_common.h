@@ -38,6 +38,8 @@
 #if !defined(_XET_API_H)
 #pragma message("warning: this file is not intended to be included directly")
 #endif
+#include "xe_ddi.h"
+#include "xex_ddi.h"
 
 #if defined(__cplusplus)
 extern "C" {

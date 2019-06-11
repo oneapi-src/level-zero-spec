@@ -84,10 +84,28 @@ typedef xe_result_t (__xecall *xet_pfnDeviceActivateMetricGroups_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetDeviceSetTracingPrologue 
+typedef xe_result_t (__xecall *xet_pfnDeviceSetTracingPrologue_t)(
+    xet_device_handle_t,
+    xet_core_callbacks_t*,
+    xet_extended_callbacks_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetDeviceSetTracingEpilogue 
+typedef xe_result_t (__xecall *xet_pfnDeviceSetTracingEpilogue_t)(
+    xet_device_handle_t,
+    xet_core_callbacks_t*,
+    xet_extended_callbacks_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Device functions pointers
 typedef struct _xet_device_dditable_t
 {
     xet_pfnDeviceActivateMetricGroups_t                         pfnActivateMetricGroups;
+    xet_pfnDeviceSetTracingPrologue_t                           pfnSetTracingPrologue;
+    xet_pfnDeviceSetTracingEpilogue_t                           pfnSetTracingEpilogue;
 } xet_device_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
