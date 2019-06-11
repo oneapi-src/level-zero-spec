@@ -61,6 +61,12 @@ namespace xet
     using command_list_handle_t = _command_list_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle of module object
+    class Module;
+    struct _module_handle_t;
+    using module_handle_t = _module_handle_t*;
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of metric group's object
     class MetricGroup;
     struct _metric_group_handle_t;

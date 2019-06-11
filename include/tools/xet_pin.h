@@ -21,25 +21,30 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xet_gtpin.cpp
+* @file xet_pin.h
 *
-* @brief C++ wrapper of Intel Xe Level-Zero Tool APIs for GT-Pin
+* @brief Intel Xe Level-Zero Tool APIs for Program Instrumentation (PIN)
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/tools/gtpin.yml
+* DO NOT EDIT: generated from /scripts/tools/pin.yml
 * @endcond
 *
 ******************************************************************************/
-#include "xet_lib.h"
+#ifndef _XET_PIN_H
+#define _XET_PIN_H
+#if defined(__cplusplus)
+#pragma once
+#endif
+#if !defined(_XET_API_H)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 
+#if defined(__cplusplus)
 extern "C" {
+#endif
 
+#if defined(__cplusplus)
 } // extern "C"
+#endif
 
-namespace xet
-{
-} // namespace xet
-
-namespace xet
-{
-} // namespace xet
+#endif // _XET_PIN_H

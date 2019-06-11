@@ -2352,7 +2352,7 @@ namespace driver
     /// @brief Intercept function for xeModuleGetNativeBinary
     xe_result_t __xecall
     xeModuleGetNativeBinary(
-        xe_module_handle_t hModule,                     ///< [in] handle of the device
+        xe_module_handle_t hModule,                     ///< [in] handle of the module
         size_t* pSize,                                  ///< [in,out] size of native binary in bytes.
         uint8_t* pModuleNativeBinary                    ///< [in,out][optional] byte pointer to native binary
         )

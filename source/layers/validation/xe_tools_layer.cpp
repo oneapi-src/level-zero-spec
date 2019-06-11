@@ -594,6 +594,34 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetModuleGetDebugInfo
+    xe_result_t __xecall
+    xetModuleGetDebugInfo(
+        xet_module_handle_t hModule,                    ///< [in] handle of the module
+        xet_module_debug_info_format_t format,          ///< [in] debug info format requested
+        size_t* pSize,                                  ///< [in,out] size of debug info in bytes
+        uint8_t* pDebugInfo                             ///< [in,out][optional] byte pointer to debug info
+        )
+    {
+        auto pfnGetDebugInfo = context.xetDdiTable.Module.pfnGetDebugInfo;
+
+        if( nullptr == pfnGetDebugInfo )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hModule )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pSize )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetDebugInfo( hModule, format, pSize, pDebugInfo );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetPowerCreate
     xe_result_t __xecall
     xetPowerCreate(
@@ -1738,6 +1766,39 @@ xetGetCommandListProcAddrTable(
 
     dditable.pfnAppendMetricMemoryBarrier                = pDdiTable->pfnAppendMetricMemoryBarrier;
     pDdiTable->pfnAppendMetricMemoryBarrier              = layer::xetCommandListAppendMetricMemoryBarrier;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Module table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetModuleProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_module_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    auto& dditable = layer::context.xetDdiTable.Module;
+
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( layer::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    dditable.pfnGetDebugInfo                             = pDdiTable->pfnGetDebugInfo;
+    pDdiTable->pfnGetDebugInfo                           = layer::xetModuleGetDebugInfo;
 
     return result;
 }

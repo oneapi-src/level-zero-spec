@@ -25,6 +25,12 @@ name: "$t_command_list_handle_t"
 alias: "$x_command_list_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
+desc: "Handle of module object"
+class: $tModule
+name: "$t_module_handle_t"
+alias: "$x_module_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
 desc: "Handle of metric group's object"
 class: $tMetricGroup
 name: "$t_metric_group_handle_t"

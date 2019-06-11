@@ -1,0 +1,39 @@
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for Module"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported module debug info formats."
+class: $tModule
+name: $t_module_debug_info_format_t
+etors:
+    - name: $T_MODULE_DEBUG_INFO_FORMAT_DWARF
+      desc: "Format is DWARF"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieve debug info from module."
+class: $tModule
+name: GetDebugInfo
+details:
+    - "The caller can pass nullptr for pDebugInfo when querying only for size."
+    - "The implementation will copy the native binary into a buffer supplied by the caller."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_module_handle_t
+      name: hModule
+      desc: "[in] handle of the module"
+    - type: $t_module_debug_info_format_t
+      name: format
+      desc: "[in] debug info format requested"
+    - type: "size_t*"
+      name: pSize
+      desc: "[in,out] size of debug info in bytes"
+    - type: "uint8_t*"
+      name: pDebugInfo
+      desc: "[in,out][optional] byte pointer to debug info"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for module"
+name: $tModule
+base: $xModule

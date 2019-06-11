@@ -143,9 +143,6 @@ params:
     - type: "char*"
       name: pBuildLog
       desc: "[in,out][optional] pointer to null-terminated string of the log."
-returns:
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieve native binary from Module."
@@ -161,18 +158,13 @@ details:
 params:
     - type: $x_module_handle_t
       name: hModule
-      desc: "[in] handle of the device"
+      desc: "[in] handle of the module"
     - type: "size_t*"
       name: pSize
       desc: "[in,out] size of native binary in bytes."
     - type: "uint8_t*"
       name: pModuleNativeBinary
       desc: "[in,out][optional] byte pointer to native binary"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "invalid format"
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieve global variable pointer from Module."

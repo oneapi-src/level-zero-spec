@@ -58,6 +58,10 @@ typedef xe_device_handle_t xet_device_handle_t;
 typedef xe_command_list_handle_t xet_command_list_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle of module object
+typedef xe_module_handle_t xet_module_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of metric group's object
 typedef struct _xet_metric_group_handle_t *xet_metric_group_handle_t;
 

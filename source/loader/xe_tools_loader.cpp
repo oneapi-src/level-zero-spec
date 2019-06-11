@@ -36,6 +36,7 @@ namespace loader
     xet_device_group_factory_t          xet_device_group_factory;
     xet_device_factory_t                xet_device_factory;
     xet_command_list_factory_t          xet_command_list_factory;
+    xet_module_factory_t                xet_module_factory;
     xet_metric_group_factory_t          xet_metric_group_factory;
     xet_metric_factory_t                xet_metric_factory;
     xet_metric_tracer_factory_t         xet_metric_tracer_factory;
@@ -555,6 +556,28 @@ namespace loader
 
         // forward to device-driver
         auto result = dditable->xet.MetricQuery.pfnGetData( hMetricQuery, pRawDataSize, pRawData );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetModuleGetDebugInfo
+    xe_result_t __xecall
+    xetModuleGetDebugInfo(
+        xet_module_handle_t hModule,                    ///< [in] handle of the module
+        xet_module_debug_info_format_t format,          ///< [in] debug info format requested
+        size_t* pSize,                                  ///< [in,out] size of debug info in bytes
+        uint8_t* pDebugInfo                             ///< [in,out][optional] byte pointer to debug info
+        )
+    {
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_module_object_t*>( hModule )->dditable;
+
+        // convert loader handle to driver handle
+        hModule = reinterpret_cast<xet_module_object_t*>( hModule )->handle;
+
+        // forward to device-driver
+        auto result = dditable->xet.Module.pfnGetDebugInfo( hModule, format, pSize, pDebugInfo );
 
         return result;
     }
@@ -1590,6 +1613,70 @@ xetGetCommandListProcAddrTable(
     {
         static auto getTable = reinterpret_cast<xet_pfnGetCommandListProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "xetGetCommandListProcAddrTable") );
+        result = getTable( version, pDdiTable );
+    }
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Module table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetModuleProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_module_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( loader::context.drivers.size() < 1 )
+        return XE_RESULT_ERROR_UNINITIALIZED;
+
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( loader::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    // Load the device-driver DDI tables
+    for( auto& drv : loader::context.drivers )
+    {
+        if( XE_RESULT_SUCCESS == result )
+        {
+            static auto getTable = reinterpret_cast<xet_pfnGetModuleProcAddrTable_t>(
+                GET_FUNCTION_PTR( drv.handle, "xetGetModuleProcAddrTable") );
+            result = getTable( version, &drv.dditable.xet.Module );
+        }
+    }
+
+    if( XE_RESULT_SUCCESS == result )
+    {
+        if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
+        {
+            // return pointers to loader's DDIs
+            pDdiTable->pfnGetDebugInfo                             = loader::xetModuleGetDebugInfo;
+        }
+        else
+        {
+            // return pointers directly to driver's DDIs
+            *pDdiTable = loader::context.drivers.front().dditable.xet.Module;
+        }
+    }
+
+    // If the validation layer is enabled, then intercept the loader's DDIs
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetModuleProcAddrTable_t>(
+            GET_FUNCTION_PTR(loader::context.validationLayer, "xetGetModuleProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 

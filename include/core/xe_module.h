@@ -191,8 +191,6 @@ xeModuleBuildLogDestroy(
 ///         + nullptr == hModuleBuildLog
 ///         + nullptr == pSize
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
 xeModuleBuildLogGetString(
     xe_module_build_log_handle_t hModuleBuildLog,   ///< [in] handle of the module build log object.
@@ -222,13 +220,10 @@ xeModuleBuildLogGetString(
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hModule
 ///         + nullptr == pSize
-///         + invalid format
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
 xeModuleGetNativeBinary(
-    xe_module_handle_t hModule,                     ///< [in] handle of the device
+    xe_module_handle_t hModule,                     ///< [in] handle of the module
     size_t* pSize,                                  ///< [in,out] size of native binary in bytes.
     uint8_t* pModuleNativeBinary                    ///< [in,out][optional] byte pointer to native binary
     );

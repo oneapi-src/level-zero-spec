@@ -196,6 +196,46 @@ typedef xe_result_t (__xecall *xet_pfnGetCommandListProcAddrTable_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetModuleGetDebugInfo 
+typedef xe_result_t (__xecall *xet_pfnModuleGetDebugInfo_t)(
+    xet_module_handle_t,
+    xet_module_debug_info_format_t,
+    size_t*,
+    uint8_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Module functions pointers
+typedef struct _xet_module_dditable_t
+{
+    xet_pfnModuleGetDebugInfo_t                                 pfnGetDebugInfo;
+} xet_module_dditable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Module table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetModuleProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_module_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetGetModuleProcAddrTable
+typedef xe_result_t (__xecall *xet_pfnGetModuleProcAddrTable_t)(
+    xe_api_version_t,
+    xet_module_dditable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetMetricGroupGet 
 typedef xe_result_t (__xecall *xet_pfnMetricGroupGet_t)(
     xet_device_group_handle_t,
@@ -846,6 +886,7 @@ typedef struct _xet_dditable_t
     xet_global_dditable_t               Global;
     xet_device_dditable_t               Device;
     xet_command_list_dditable_t         CommandList;
+    xet_module_dditable_t               Module;
     xet_metric_group_dditable_t         MetricGroup;
     xet_metric_dditable_t               Metric;
     xet_metric_tracer_dditable_t        MetricTracer;
