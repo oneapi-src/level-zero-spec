@@ -877,6 +877,9 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        context.xePrologueCbs = *pCoreCbs;
+        if( pExtendedCbs ) context.xexPrologueCbs = *pExtendedCbs;
+
         return result;
     }
 
@@ -891,6 +894,9 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        context.xeEpilogueCbs = *pCoreCbs;
+        if( pExtendedCbs ) context.xexEpilogueCbs = *pExtendedCbs;
 
         return result;
     }

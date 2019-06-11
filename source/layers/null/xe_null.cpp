@@ -65,5 +65,7 @@ namespace driver
         metricProperties.resultType = XET_VALUE_TYPE_UINT32;
         strcpy( metricProperties.name, "Null Metric" );
         strcpy( metricProperties.resultUnits, "ns" );
+
+        enableTracing = getenv_tobool( "XE_ENABLE_API_TRACING" );
     }
 }

@@ -58,6 +58,15 @@ namespace driver
     {
         ${x}_result_t result = ${X}_RESULT_SUCCESS;
 
+        %if n != "xet":
+        if( context.enableTracing )
+        {
+            auto ${th.make_pfn_name(n, tags, obj)} = context.${n}PrologueCbs.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
+            if( nullptr != ${th.make_pfn_name(n, tags, obj)} )
+                ${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
+        }
+
+        %endif
         %if re.match(r"\w+DeviceGroupGet$", fname):
         *pCount = 1;
         if( nullptr != phDeviceGroups ) *reinterpret_cast<void**>(phDeviceGroups) = context.get();
@@ -128,6 +137,14 @@ namespace driver
         *pRawDataSize = 1;
         if( pRawData ) *pRawData = 0;
 
+        %elif re.match(r"\w+SetTracingPrologue", fname):
+        context.xePrologueCbs = *pCoreCbs;
+        if( pExtendedCbs ) context.xexPrologueCbs = *pExtendedCbs;
+
+        %elif re.match(r"\w+SetTracingEpilogue", fname):
+        context.xeEpilogueCbs = *pCoreCbs;
+        if( pExtendedCbs ) context.xexEpilogueCbs = *pExtendedCbs;
+
         %else:
         %for item in th.get_loader_epilogue(n, tags, obj, meta):
         %if 'range' in item:
@@ -142,6 +159,15 @@ namespace driver
         %endif
 
         %endfor
+        %endif
+        %if n != "xet":
+        if( context.enableTracing )
+        {
+            auto ${th.make_pfn_name(n, tags, obj)} = context.${n}EpilogueCbs.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
+            if( nullptr != ${th.make_pfn_name(n, tags, obj)} )
+                ${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
+        }
+
         %endif
         return result;
     }

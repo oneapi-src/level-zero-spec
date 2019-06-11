@@ -41,6 +41,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnInit = context.xexPrologueCbs.Global.pfnInit;
+            if( nullptr != pfnInit )
+                pfnInit( flags );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnInit = context.xexEpilogueCbs.Global.pfnInit;
+            if( nullptr != pfnInit )
+                pfnInit( flags );
+        }
+
         return result;
     }
 
@@ -55,7 +69,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnCreate = context.xexPrologueCbs.CommandGraph.pfnCreate;
+            if( nullptr != pfnCreate )
+                pfnCreate( hDevice, desc, phCommandGraph );
+        }
+
         *phCommandGraph = reinterpret_cast<xex_command_graph_handle_t>( context.get() );
+
+        if( context.enableTracing )
+        {
+            auto pfnCreate = context.xexEpilogueCbs.CommandGraph.pfnCreate;
+            if( nullptr != pfnCreate )
+                pfnCreate( hDevice, desc, phCommandGraph );
+        }
 
         return result;
     }
@@ -69,6 +97,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnDestroy = context.xexPrologueCbs.CommandGraph.pfnDestroy;
+            if( nullptr != pfnDestroy )
+                pfnDestroy( hCommandGraph );
+        }
+
+
+        if( context.enableTracing )
+        {
+            auto pfnDestroy = context.xexEpilogueCbs.CommandGraph.pfnDestroy;
+            if( nullptr != pfnDestroy )
+                pfnDestroy( hCommandGraph );
+        }
 
         return result;
     }
@@ -81,6 +123,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnClose = context.xexPrologueCbs.CommandGraph.pfnClose;
+            if( nullptr != pfnClose )
+                pfnClose( hCommandGraph );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnClose = context.xexEpilogueCbs.CommandGraph.pfnClose;
+            if( nullptr != pfnClose )
+                pfnClose( hCommandGraph );
+        }
 
         return result;
     }

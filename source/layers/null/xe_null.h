@@ -29,6 +29,7 @@
 #include "xe_ddi.h"
 #include "xex_ddi.h"
 #include "xet_ddi.h"
+#include "xe_util.h"
 
 namespace driver
 {
@@ -48,6 +49,12 @@ namespace driver
 
         xet_metric_group_properties_t metricGroupProperties = {};
         xet_metric_properties_t metricProperties = {};
+
+        bool enableTracing = false;
+        xet_core_callbacks_t xePrologueCbs = {};
+        xet_core_callbacks_t xeEpilogueCbs = {};
+        xet_extended_callbacks_t xexPrologueCbs = {};
+        xet_extended_callbacks_t xexEpilogueCbs = {};
 
         context_t();
         ~context_t() = default;

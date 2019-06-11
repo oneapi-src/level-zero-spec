@@ -41,6 +41,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnInit = context.xePrologueCbs.Global.pfnInit;
+            if( nullptr != pfnInit )
+                pfnInit( flags );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnInit = context.xeEpilogueCbs.Global.pfnInit;
+            if( nullptr != pfnInit )
+                pfnInit( flags );
+        }
+
         return result;
     }
 
@@ -54,7 +68,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnGetDriverVersion = context.xePrologueCbs.DeviceGroup.pfnGetDriverVersion;
+            if( nullptr != pfnGetDriverVersion )
+                pfnGetDriverVersion( hDeviceGroup, version );
+        }
+
         *version = 0;
+
+        if( context.enableTracing )
+        {
+            auto pfnGetDriverVersion = context.xeEpilogueCbs.DeviceGroup.pfnGetDriverVersion;
+            if( nullptr != pfnGetDriverVersion )
+                pfnGetDriverVersion( hDeviceGroup, version );
+        }
 
         return result;
     }
@@ -73,8 +101,22 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnGet = context.xePrologueCbs.DeviceGroup.pfnGet;
+            if( nullptr != pfnGet )
+                pfnGet( pCount, phDeviceGroups );
+        }
+
         *pCount = 1;
         if( nullptr != phDeviceGroups ) *reinterpret_cast<void**>(phDeviceGroups) = context.get();
+
+        if( context.enableTracing )
+        {
+            auto pfnGet = context.xeEpilogueCbs.DeviceGroup.pfnGet;
+            if( nullptr != pfnGet )
+                pfnGet( pCount, phDeviceGroups );
+        }
 
         return result;
     }
@@ -93,8 +135,22 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnGet = context.xePrologueCbs.Device.pfnGet;
+            if( nullptr != pfnGet )
+                pfnGet( hDeviceGroup, pCount, phDevices );
+        }
+
         *pCount = 1;
         if( nullptr != phDevices ) *reinterpret_cast<void**>(phDevices) = context.get() ;
+
+        if( context.enableTracing )
+        {
+            auto pfnGet = context.xeEpilogueCbs.Device.pfnGet;
+            if( nullptr != pfnGet )
+                pfnGet( hDeviceGroup, pCount, phDevices );
+        }
 
         return result;
     }
@@ -113,8 +169,22 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnGetSubDevices = context.xePrologueCbs.Device.pfnGetSubDevices;
+            if( nullptr != pfnGetSubDevices )
+                pfnGetSubDevices( hDevice, pCount, phSubdevices );
+        }
+
         for( size_t i = 0; ( nullptr != phSubdevices ) && ( i < *pCount ); ++i )
             phSubdevices[ i ] = reinterpret_cast<xe_device_handle_t>( context.get() );
+
+        if( context.enableTracing )
+        {
+            auto pfnGetSubDevices = context.xeEpilogueCbs.Device.pfnGetSubDevices;
+            if( nullptr != pfnGetSubDevices )
+                pfnGetSubDevices( hDevice, pCount, phSubdevices );
+        }
 
         return result;
     }
@@ -129,7 +199,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnGetApiVersion = context.xePrologueCbs.DeviceGroup.pfnGetApiVersion;
+            if( nullptr != pfnGetApiVersion )
+                pfnGetApiVersion( hDeviceGroup, version );
+        }
+
         *version = context.version;
+
+        if( context.enableTracing )
+        {
+            auto pfnGetApiVersion = context.xeEpilogueCbs.DeviceGroup.pfnGetApiVersion;
+            if( nullptr != pfnGetApiVersion )
+                pfnGetApiVersion( hDeviceGroup, version );
+        }
 
         return result;
     }
@@ -144,7 +228,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnGetDeviceProperties = context.xePrologueCbs.DeviceGroup.pfnGetDeviceProperties;
+            if( nullptr != pfnGetDeviceProperties )
+                pfnGetDeviceProperties( hDeviceGroup, pDeviceProperties );
+        }
+
         *pDeviceProperties = context.deviceProperties;
+
+        if( context.enableTracing )
+        {
+            auto pfnGetDeviceProperties = context.xeEpilogueCbs.DeviceGroup.pfnGetDeviceProperties;
+            if( nullptr != pfnGetDeviceProperties )
+                pfnGetDeviceProperties( hDeviceGroup, pDeviceProperties );
+        }
 
         return result;
     }
@@ -159,7 +257,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnGetComputeProperties = context.xePrologueCbs.DeviceGroup.pfnGetComputeProperties;
+            if( nullptr != pfnGetComputeProperties )
+                pfnGetComputeProperties( hDeviceGroup, pComputeProperties );
+        }
+
         *pComputeProperties = context.computeProperties;
+
+        if( context.enableTracing )
+        {
+            auto pfnGetComputeProperties = context.xeEpilogueCbs.DeviceGroup.pfnGetComputeProperties;
+            if( nullptr != pfnGetComputeProperties )
+                pfnGetComputeProperties( hDeviceGroup, pComputeProperties );
+        }
 
         return result;
     }
@@ -180,8 +292,22 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnGetMemoryProperties = context.xePrologueCbs.DeviceGroup.pfnGetMemoryProperties;
+            if( nullptr != pfnGetMemoryProperties )
+                pfnGetMemoryProperties( hDeviceGroup, pCount, pMemProperties );
+        }
+
         *pCount = 1;
         if( nullptr != pMemProperties ) *pMemProperties = context.memoryProperties;
+
+        if( context.enableTracing )
+        {
+            auto pfnGetMemoryProperties = context.xeEpilogueCbs.DeviceGroup.pfnGetMemoryProperties;
+            if( nullptr != pfnGetMemoryProperties )
+                pfnGetMemoryProperties( hDeviceGroup, pCount, pMemProperties );
+        }
 
         return result;
     }
@@ -196,7 +322,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnGetMemoryAccessProperties = context.xePrologueCbs.DeviceGroup.pfnGetMemoryAccessProperties;
+            if( nullptr != pfnGetMemoryAccessProperties )
+                pfnGetMemoryAccessProperties( hDeviceGroup, pMemAccessProperties );
+        }
+
         *pMemAccessProperties = context.memoryAccessProperties;
+
+        if( context.enableTracing )
+        {
+            auto pfnGetMemoryAccessProperties = context.xeEpilogueCbs.DeviceGroup.pfnGetMemoryAccessProperties;
+            if( nullptr != pfnGetMemoryAccessProperties )
+                pfnGetMemoryAccessProperties( hDeviceGroup, pMemAccessProperties );
+        }
 
         return result;
     }
@@ -211,7 +351,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnGetCacheProperties = context.xePrologueCbs.DeviceGroup.pfnGetCacheProperties;
+            if( nullptr != pfnGetCacheProperties )
+                pfnGetCacheProperties( hDeviceGroup, pCacheProperties );
+        }
+
         *pCacheProperties = context.cacheProperties;
+
+        if( context.enableTracing )
+        {
+            auto pfnGetCacheProperties = context.xeEpilogueCbs.DeviceGroup.pfnGetCacheProperties;
+            if( nullptr != pfnGetCacheProperties )
+                pfnGetCacheProperties( hDeviceGroup, pCacheProperties );
+        }
 
         return result;
     }
@@ -226,7 +380,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnGetImageProperties = context.xePrologueCbs.DeviceGroup.pfnGetImageProperties;
+            if( nullptr != pfnGetImageProperties )
+                pfnGetImageProperties( hDeviceGroup, pImageProperties );
+        }
+
         *pImageProperties = context.imageProperties;
+
+        if( context.enableTracing )
+        {
+            auto pfnGetImageProperties = context.xeEpilogueCbs.DeviceGroup.pfnGetImageProperties;
+            if( nullptr != pfnGetImageProperties )
+                pfnGetImageProperties( hDeviceGroup, pImageProperties );
+        }
 
         return result;
     }
@@ -242,7 +410,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnGetP2PProperties = context.xePrologueCbs.Device.pfnGetP2PProperties;
+            if( nullptr != pfnGetP2PProperties )
+                pfnGetP2PProperties( hDevice, hPeerDevice, pP2PProperties );
+        }
+
         *pP2PProperties = context.p2pProperties;
+
+        if( context.enableTracing )
+        {
+            auto pfnGetP2PProperties = context.xeEpilogueCbs.Device.pfnGetP2PProperties;
+            if( nullptr != pfnGetP2PProperties )
+                pfnGetP2PProperties( hDevice, hPeerDevice, pP2PProperties );
+        }
 
         return result;
     }
@@ -258,7 +440,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnCanAccessPeer = context.xePrologueCbs.Device.pfnCanAccessPeer;
+            if( nullptr != pfnCanAccessPeer )
+                pfnCanAccessPeer( hDevice, hPeerDevice, value );
+        }
+
         *value = 0;
+
+        if( context.enableTracing )
+        {
+            auto pfnCanAccessPeer = context.xeEpilogueCbs.Device.pfnCanAccessPeer;
+            if( nullptr != pfnCanAccessPeer )
+                pfnCanAccessPeer( hDevice, hPeerDevice, value );
+        }
 
         return result;
     }
@@ -273,6 +469,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnSetIntermediateCacheConfig = context.xePrologueCbs.Device.pfnSetIntermediateCacheConfig;
+            if( nullptr != pfnSetIntermediateCacheConfig )
+                pfnSetIntermediateCacheConfig( hDevice, CacheConfig );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnSetIntermediateCacheConfig = context.xeEpilogueCbs.Device.pfnSetIntermediateCacheConfig;
+            if( nullptr != pfnSetIntermediateCacheConfig )
+                pfnSetIntermediateCacheConfig( hDevice, CacheConfig );
+        }
+
         return result;
     }
 
@@ -285,6 +495,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnSetLastLevelCacheConfig = context.xePrologueCbs.Device.pfnSetLastLevelCacheConfig;
+            if( nullptr != pfnSetLastLevelCacheConfig )
+                pfnSetLastLevelCacheConfig( hDevice, CacheConfig );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnSetLastLevelCacheConfig = context.xeEpilogueCbs.Device.pfnSetLastLevelCacheConfig;
+            if( nullptr != pfnSetLastLevelCacheConfig )
+                pfnSetLastLevelCacheConfig( hDevice, CacheConfig );
+        }
 
         return result;
     }
@@ -300,7 +524,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnCreate = context.xePrologueCbs.CommandQueue.pfnCreate;
+            if( nullptr != pfnCreate )
+                pfnCreate( hDevice, desc, phCommandQueue );
+        }
+
         *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>( context.get() );
+
+        if( context.enableTracing )
+        {
+            auto pfnCreate = context.xeEpilogueCbs.CommandQueue.pfnCreate;
+            if( nullptr != pfnCreate )
+                pfnCreate( hDevice, desc, phCommandQueue );
+        }
 
         return result;
     }
@@ -314,6 +552,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnDestroy = context.xePrologueCbs.CommandQueue.pfnDestroy;
+            if( nullptr != pfnDestroy )
+                pfnDestroy( hCommandQueue );
+        }
+
+
+        if( context.enableTracing )
+        {
+            auto pfnDestroy = context.xeEpilogueCbs.CommandQueue.pfnDestroy;
+            if( nullptr != pfnDestroy )
+                pfnDestroy( hCommandQueue );
+        }
 
         return result;
     }
@@ -330,6 +582,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnExecuteCommandLists = context.xePrologueCbs.CommandQueue.pfnExecuteCommandLists;
+            if( nullptr != pfnExecuteCommandLists )
+                pfnExecuteCommandLists( hCommandQueue, numCommandLists, phCommandLists, hFence );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnExecuteCommandLists = context.xeEpilogueCbs.CommandQueue.pfnExecuteCommandLists;
+            if( nullptr != pfnExecuteCommandLists )
+                pfnExecuteCommandLists( hCommandQueue, numCommandLists, phCommandLists, hFence );
+        }
 
         return result;
     }
@@ -348,6 +614,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnSynchronize = context.xePrologueCbs.CommandQueue.pfnSynchronize;
+            if( nullptr != pfnSynchronize )
+                pfnSynchronize( hCommandQueue, timeout );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnSynchronize = context.xeEpilogueCbs.CommandQueue.pfnSynchronize;
+            if( nullptr != pfnSynchronize )
+                pfnSynchronize( hCommandQueue, timeout );
+        }
+
         return result;
     }
 
@@ -362,7 +642,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnCreate = context.xePrologueCbs.CommandList.pfnCreate;
+            if( nullptr != pfnCreate )
+                pfnCreate( hDevice, desc, phCommandList );
+        }
+
         *phCommandList = reinterpret_cast<xe_command_list_handle_t>( context.get() );
+
+        if( context.enableTracing )
+        {
+            auto pfnCreate = context.xeEpilogueCbs.CommandList.pfnCreate;
+            if( nullptr != pfnCreate )
+                pfnCreate( hDevice, desc, phCommandList );
+        }
 
         return result;
     }
@@ -378,7 +672,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnCreateImmediate = context.xePrologueCbs.CommandList.pfnCreateImmediate;
+            if( nullptr != pfnCreateImmediate )
+                pfnCreateImmediate( hDevice, altdesc, phCommandList );
+        }
+
         *phCommandList = reinterpret_cast<xe_command_list_handle_t>( context.get() );
+
+        if( context.enableTracing )
+        {
+            auto pfnCreateImmediate = context.xeEpilogueCbs.CommandList.pfnCreateImmediate;
+            if( nullptr != pfnCreateImmediate )
+                pfnCreateImmediate( hDevice, altdesc, phCommandList );
+        }
 
         return result;
     }
@@ -392,6 +700,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnDestroy = context.xePrologueCbs.CommandList.pfnDestroy;
+            if( nullptr != pfnDestroy )
+                pfnDestroy( hCommandList );
+        }
+
+
+        if( context.enableTracing )
+        {
+            auto pfnDestroy = context.xeEpilogueCbs.CommandList.pfnDestroy;
+            if( nullptr != pfnDestroy )
+                pfnDestroy( hCommandList );
+        }
 
         return result;
     }
@@ -405,6 +727,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnClose = context.xePrologueCbs.CommandList.pfnClose;
+            if( nullptr != pfnClose )
+                pfnClose( hCommandList );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnClose = context.xeEpilogueCbs.CommandList.pfnClose;
+            if( nullptr != pfnClose )
+                pfnClose( hCommandList );
+        }
+
         return result;
     }
 
@@ -416,6 +752,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnReset = context.xePrologueCbs.CommandList.pfnReset;
+            if( nullptr != pfnReset )
+                pfnReset( hCommandList );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnReset = context.xeEpilogueCbs.CommandList.pfnReset;
+            if( nullptr != pfnReset )
+                pfnReset( hCommandList );
+        }
 
         return result;
     }
@@ -431,6 +781,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnSetParameter = context.xePrologueCbs.CommandList.pfnSetParameter;
+            if( nullptr != pfnSetParameter )
+                pfnSetParameter( hCommandList, parameter, value );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnSetParameter = context.xeEpilogueCbs.CommandList.pfnSetParameter;
+            if( nullptr != pfnSetParameter )
+                pfnSetParameter( hCommandList, parameter, value );
+        }
+
         return result;
     }
 
@@ -445,6 +809,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnGetParameter = context.xePrologueCbs.CommandList.pfnGetParameter;
+            if( nullptr != pfnGetParameter )
+                pfnGetParameter( hCommandList, parameter, value );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnGetParameter = context.xeEpilogueCbs.CommandList.pfnGetParameter;
+            if( nullptr != pfnGetParameter )
+                pfnGetParameter( hCommandList, parameter, value );
+        }
+
         return result;
     }
 
@@ -456,6 +834,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnResetParameters = context.xePrologueCbs.CommandList.pfnResetParameters;
+            if( nullptr != pfnResetParameters )
+                pfnResetParameters( hCommandList );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnResetParameters = context.xeEpilogueCbs.CommandList.pfnResetParameters;
+            if( nullptr != pfnResetParameters )
+                pfnResetParameters( hCommandList );
+        }
 
         return result;
     }
@@ -470,6 +862,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnReserveSpace = context.xePrologueCbs.CommandList.pfnReserveSpace;
+            if( nullptr != pfnReserveSpace )
+                pfnReserveSpace( hCommandList, size, ptr );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnReserveSpace = context.xeEpilogueCbs.CommandList.pfnReserveSpace;
+            if( nullptr != pfnReserveSpace )
+                pfnReserveSpace( hCommandList, size, ptr );
+        }
 
         return result;
     }
@@ -486,6 +892,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendBarrier = context.xePrologueCbs.CommandList.pfnAppendBarrier;
+            if( nullptr != pfnAppendBarrier )
+                pfnAppendBarrier( hCommandList, hSignalEvent, numWaitEvents, phWaitEvents );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendBarrier = context.xeEpilogueCbs.CommandList.pfnAppendBarrier;
+            if( nullptr != pfnAppendBarrier )
+                pfnAppendBarrier( hCommandList, hSignalEvent, numWaitEvents, phWaitEvents );
+        }
 
         return result;
     }
@@ -506,6 +926,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnAppendMemoryRangesBarrier = context.xePrologueCbs.CommandList.pfnAppendMemoryRangesBarrier;
+            if( nullptr != pfnAppendMemoryRangesBarrier )
+                pfnAppendMemoryRangesBarrier( hCommandList, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendMemoryRangesBarrier = context.xeEpilogueCbs.CommandList.pfnAppendMemoryRangesBarrier;
+            if( nullptr != pfnAppendMemoryRangesBarrier )
+                pfnAppendMemoryRangesBarrier( hCommandList, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents );
+        }
+
         return result;
     }
 
@@ -517,6 +951,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnSystemBarrier = context.xePrologueCbs.Device.pfnSystemBarrier;
+            if( nullptr != pfnSystemBarrier )
+                pfnSystemBarrier( hDevice );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnSystemBarrier = context.xeEpilogueCbs.Device.pfnSystemBarrier;
+            if( nullptr != pfnSystemBarrier )
+                pfnSystemBarrier( hDevice );
+        }
 
         return result;
     }
@@ -533,6 +981,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnRegisterCLMemory = context.xePrologueCbs.Device.pfnRegisterCLMemory;
+            if( nullptr != pfnRegisterCLMemory )
+                pfnRegisterCLMemory( hDevice, context, mem, ptr );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnRegisterCLMemory = context.xeEpilogueCbs.Device.pfnRegisterCLMemory;
+            if( nullptr != pfnRegisterCLMemory )
+                pfnRegisterCLMemory( hDevice, context, mem, ptr );
+        }
 
         return result;
     }
@@ -551,7 +1013,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnRegisterCLProgram = context.xePrologueCbs.Device.pfnRegisterCLProgram;
+            if( nullptr != pfnRegisterCLProgram )
+                pfnRegisterCLProgram( hDevice, context, program, phModule );
+        }
+
         *phModule = reinterpret_cast<xe_module_handle_t>( context.get() );
+
+        if( context.enableTracing )
+        {
+            auto pfnRegisterCLProgram = context.xeEpilogueCbs.Device.pfnRegisterCLProgram;
+            if( nullptr != pfnRegisterCLProgram )
+                pfnRegisterCLProgram( hDevice, context, program, phModule );
+        }
 
         return result;
     }
@@ -570,7 +1046,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnRegisterCLCommandQueue = context.xePrologueCbs.Device.pfnRegisterCLCommandQueue;
+            if( nullptr != pfnRegisterCLCommandQueue )
+                pfnRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
+        }
+
         *phCommandQueue = reinterpret_cast<xe_command_queue_handle_t>( context.get() );
+
+        if( context.enableTracing )
+        {
+            auto pfnRegisterCLCommandQueue = context.xeEpilogueCbs.Device.pfnRegisterCLCommandQueue;
+            if( nullptr != pfnRegisterCLCommandQueue )
+                pfnRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
+        }
 
         return result;
     }
@@ -589,6 +1079,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnAppendMemoryCopy = context.xePrologueCbs.CommandList.pfnAppendMemoryCopy;
+            if( nullptr != pfnAppendMemoryCopy )
+                pfnAppendMemoryCopy( hCommandList, dstptr, srcptr, size, hEvent );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendMemoryCopy = context.xeEpilogueCbs.CommandList.pfnAppendMemoryCopy;
+            if( nullptr != pfnAppendMemoryCopy )
+                pfnAppendMemoryCopy( hCommandList, dstptr, srcptr, size, hEvent );
+        }
+
         return result;
     }
 
@@ -604,6 +1108,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendMemorySet = context.xePrologueCbs.CommandList.pfnAppendMemorySet;
+            if( nullptr != pfnAppendMemorySet )
+                pfnAppendMemorySet( hCommandList, ptr, value, size, hEvent );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendMemorySet = context.xeEpilogueCbs.CommandList.pfnAppendMemorySet;
+            if( nullptr != pfnAppendMemorySet )
+                pfnAppendMemorySet( hCommandList, ptr, value, size, hEvent );
+        }
 
         return result;
     }
@@ -624,6 +1142,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnAppendMemoryCopyRegion = context.xePrologueCbs.CommandList.pfnAppendMemoryCopyRegion;
+            if( nullptr != pfnAppendMemoryCopyRegion )
+                pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, srcptr, srcRegion, srcPitch, hEvent );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendMemoryCopyRegion = context.xeEpilogueCbs.CommandList.pfnAppendMemoryCopyRegion;
+            if( nullptr != pfnAppendMemoryCopyRegion )
+                pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, srcptr, srcRegion, srcPitch, hEvent );
+        }
+
         return result;
     }
 
@@ -638,6 +1170,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendImageCopy = context.xePrologueCbs.CommandList.pfnAppendImageCopy;
+            if( nullptr != pfnAppendImageCopy )
+                pfnAppendImageCopy( hCommandList, hDstImage, hSrcImage, hEvent );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendImageCopy = context.xeEpilogueCbs.CommandList.pfnAppendImageCopy;
+            if( nullptr != pfnAppendImageCopy )
+                pfnAppendImageCopy( hCommandList, hDstImage, hSrcImage, hEvent );
+        }
 
         return result;
     }
@@ -656,6 +1202,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnAppendImageCopyRegion = context.xePrologueCbs.CommandList.pfnAppendImageCopyRegion;
+            if( nullptr != pfnAppendImageCopyRegion )
+                pfnAppendImageCopyRegion( hCommandList, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hEvent );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendImageCopyRegion = context.xeEpilogueCbs.CommandList.pfnAppendImageCopyRegion;
+            if( nullptr != pfnAppendImageCopyRegion )
+                pfnAppendImageCopyRegion( hCommandList, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hEvent );
+        }
+
         return result;
     }
 
@@ -671,6 +1231,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendImageCopyToMemory = context.xePrologueCbs.CommandList.pfnAppendImageCopyToMemory;
+            if( nullptr != pfnAppendImageCopyToMemory )
+                pfnAppendImageCopyToMemory( hCommandList, dstptr, hSrcImage, pSrcRegion, hEvent );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendImageCopyToMemory = context.xeEpilogueCbs.CommandList.pfnAppendImageCopyToMemory;
+            if( nullptr != pfnAppendImageCopyToMemory )
+                pfnAppendImageCopyToMemory( hCommandList, dstptr, hSrcImage, pSrcRegion, hEvent );
+        }
 
         return result;
     }
@@ -688,6 +1262,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnAppendImageCopyFromMemory = context.xePrologueCbs.CommandList.pfnAppendImageCopyFromMemory;
+            if( nullptr != pfnAppendImageCopyFromMemory )
+                pfnAppendImageCopyFromMemory( hCommandList, hDstImage, srcptr, pDstRegion, hEvent );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendImageCopyFromMemory = context.xeEpilogueCbs.CommandList.pfnAppendImageCopyFromMemory;
+            if( nullptr != pfnAppendImageCopyFromMemory )
+                pfnAppendImageCopyFromMemory( hCommandList, hDstImage, srcptr, pDstRegion, hEvent );
+        }
+
         return result;
     }
 
@@ -701,6 +1289,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendMemoryPrefetch = context.xePrologueCbs.CommandList.pfnAppendMemoryPrefetch;
+            if( nullptr != pfnAppendMemoryPrefetch )
+                pfnAppendMemoryPrefetch( hCommandList, ptr, size );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendMemoryPrefetch = context.xeEpilogueCbs.CommandList.pfnAppendMemoryPrefetch;
+            if( nullptr != pfnAppendMemoryPrefetch )
+                pfnAppendMemoryPrefetch( hCommandList, ptr, size );
+        }
 
         return result;
     }
@@ -717,6 +1319,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendMemAdvise = context.xePrologueCbs.CommandList.pfnAppendMemAdvise;
+            if( nullptr != pfnAppendMemAdvise )
+                pfnAppendMemAdvise( hCommandList, hDevice, ptr, size, advice );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendMemAdvise = context.xeEpilogueCbs.CommandList.pfnAppendMemAdvise;
+            if( nullptr != pfnAppendMemAdvise )
+                pfnAppendMemAdvise( hCommandList, hDevice, ptr, size, advice );
+        }
 
         return result;
     }
@@ -736,7 +1352,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnCreate = context.xePrologueCbs.EventPool.pfnCreate;
+            if( nullptr != pfnCreate )
+                pfnCreate( hDeviceGroup, desc, numDevices, phDevices, phEventPool );
+        }
+
         *phEventPool = reinterpret_cast<xe_event_pool_handle_t>( context.get() );
+
+        if( context.enableTracing )
+        {
+            auto pfnCreate = context.xeEpilogueCbs.EventPool.pfnCreate;
+            if( nullptr != pfnCreate )
+                pfnCreate( hDeviceGroup, desc, numDevices, phDevices, phEventPool );
+        }
 
         return result;
     }
@@ -750,6 +1380,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnDestroy = context.xePrologueCbs.EventPool.pfnDestroy;
+            if( nullptr != pfnDestroy )
+                pfnDestroy( hEventPool );
+        }
+
+
+        if( context.enableTracing )
+        {
+            auto pfnDestroy = context.xeEpilogueCbs.EventPool.pfnDestroy;
+            if( nullptr != pfnDestroy )
+                pfnDestroy( hEventPool );
+        }
 
         return result;
     }
@@ -765,7 +1409,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnCreate = context.xePrologueCbs.Event.pfnCreate;
+            if( nullptr != pfnCreate )
+                pfnCreate( hEventPool, desc, phEvent );
+        }
+
         *phEvent = reinterpret_cast<xe_event_handle_t>( context.get() );
+
+        if( context.enableTracing )
+        {
+            auto pfnCreate = context.xeEpilogueCbs.Event.pfnCreate;
+            if( nullptr != pfnCreate )
+                pfnCreate( hEventPool, desc, phEvent );
+        }
 
         return result;
     }
@@ -779,6 +1437,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnDestroy = context.xePrologueCbs.Event.pfnDestroy;
+            if( nullptr != pfnDestroy )
+                pfnDestroy( hEvent );
+        }
+
+
+        if( context.enableTracing )
+        {
+            auto pfnDestroy = context.xeEpilogueCbs.Event.pfnDestroy;
+            if( nullptr != pfnDestroy )
+                pfnDestroy( hEvent );
+        }
 
         return result;
     }
@@ -792,6 +1464,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnGetIpcHandle = context.xePrologueCbs.EventPool.pfnGetIpcHandle;
+            if( nullptr != pfnGetIpcHandle )
+                pfnGetIpcHandle( hEventPool, phIpc );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnGetIpcHandle = context.xeEpilogueCbs.EventPool.pfnGetIpcHandle;
+            if( nullptr != pfnGetIpcHandle )
+                pfnGetIpcHandle( hEventPool, phIpc );
+        }
 
         return result;
     }
@@ -807,7 +1493,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnOpenIpcHandle = context.xePrologueCbs.EventPool.pfnOpenIpcHandle;
+            if( nullptr != pfnOpenIpcHandle )
+                pfnOpenIpcHandle( hDevice, hIpc, phEventPool );
+        }
+
         *phEventPool = reinterpret_cast<xe_event_pool_handle_t>( context.get() );
+
+        if( context.enableTracing )
+        {
+            auto pfnOpenIpcHandle = context.xeEpilogueCbs.EventPool.pfnOpenIpcHandle;
+            if( nullptr != pfnOpenIpcHandle )
+                pfnOpenIpcHandle( hDevice, hIpc, phEventPool );
+        }
 
         return result;
     }
@@ -821,6 +1521,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnCloseIpcHandle = context.xePrologueCbs.EventPool.pfnCloseIpcHandle;
+            if( nullptr != pfnCloseIpcHandle )
+                pfnCloseIpcHandle( hEventPool );
+        }
+
+
+        if( context.enableTracing )
+        {
+            auto pfnCloseIpcHandle = context.xeEpilogueCbs.EventPool.pfnCloseIpcHandle;
+            if( nullptr != pfnCloseIpcHandle )
+                pfnCloseIpcHandle( hEventPool );
+        }
 
         return result;
     }
@@ -834,6 +1548,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendSignalEvent = context.xePrologueCbs.CommandList.pfnAppendSignalEvent;
+            if( nullptr != pfnAppendSignalEvent )
+                pfnAppendSignalEvent( hCommandList, hEvent );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendSignalEvent = context.xeEpilogueCbs.CommandList.pfnAppendSignalEvent;
+            if( nullptr != pfnAppendSignalEvent )
+                pfnAppendSignalEvent( hCommandList, hEvent );
+        }
 
         return result;
     }
@@ -850,6 +1578,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnAppendWaitOnEvents = context.xePrologueCbs.CommandList.pfnAppendWaitOnEvents;
+            if( nullptr != pfnAppendWaitOnEvents )
+                pfnAppendWaitOnEvents( hCommandList, numEvents, phEvents );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendWaitOnEvents = context.xeEpilogueCbs.CommandList.pfnAppendWaitOnEvents;
+            if( nullptr != pfnAppendWaitOnEvents )
+                pfnAppendWaitOnEvents( hCommandList, numEvents, phEvents );
+        }
+
         return result;
     }
 
@@ -861,6 +1603,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnHostSignal = context.xePrologueCbs.Event.pfnHostSignal;
+            if( nullptr != pfnHostSignal )
+                pfnHostSignal( hEvent );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnHostSignal = context.xeEpilogueCbs.Event.pfnHostSignal;
+            if( nullptr != pfnHostSignal )
+                pfnHostSignal( hEvent );
+        }
 
         return result;
     }
@@ -879,6 +1635,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnHostSynchronize = context.xePrologueCbs.Event.pfnHostSynchronize;
+            if( nullptr != pfnHostSynchronize )
+                pfnHostSynchronize( hEvent, timeout );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnHostSynchronize = context.xeEpilogueCbs.Event.pfnHostSynchronize;
+            if( nullptr != pfnHostSynchronize )
+                pfnHostSynchronize( hEvent, timeout );
+        }
+
         return result;
     }
 
@@ -890,6 +1660,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnQueryStatus = context.xePrologueCbs.Event.pfnQueryStatus;
+            if( nullptr != pfnQueryStatus )
+                pfnQueryStatus( hEvent );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnQueryStatus = context.xeEpilogueCbs.Event.pfnQueryStatus;
+            if( nullptr != pfnQueryStatus )
+                pfnQueryStatus( hEvent );
+        }
 
         return result;
     }
@@ -904,6 +1688,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnAppendEventReset = context.xePrologueCbs.CommandList.pfnAppendEventReset;
+            if( nullptr != pfnAppendEventReset )
+                pfnAppendEventReset( hCommandList, hEvent );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendEventReset = context.xeEpilogueCbs.CommandList.pfnAppendEventReset;
+            if( nullptr != pfnAppendEventReset )
+                pfnAppendEventReset( hCommandList, hEvent );
+        }
+
         return result;
     }
 
@@ -915,6 +1713,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnReset = context.xePrologueCbs.Event.pfnReset;
+            if( nullptr != pfnReset )
+                pfnReset( hEvent );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnReset = context.xeEpilogueCbs.Event.pfnReset;
+            if( nullptr != pfnReset )
+                pfnReset( hEvent );
+        }
 
         return result;
     }
@@ -930,7 +1742,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnCreate = context.xePrologueCbs.Fence.pfnCreate;
+            if( nullptr != pfnCreate )
+                pfnCreate( hCommandQueue, desc, phFence );
+        }
+
         *phFence = reinterpret_cast<xe_fence_handle_t>( context.get() );
+
+        if( context.enableTracing )
+        {
+            auto pfnCreate = context.xeEpilogueCbs.Fence.pfnCreate;
+            if( nullptr != pfnCreate )
+                pfnCreate( hCommandQueue, desc, phFence );
+        }
 
         return result;
     }
@@ -944,6 +1770,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnDestroy = context.xePrologueCbs.Fence.pfnDestroy;
+            if( nullptr != pfnDestroy )
+                pfnDestroy( hFence );
+        }
+
+
+        if( context.enableTracing )
+        {
+            auto pfnDestroy = context.xeEpilogueCbs.Fence.pfnDestroy;
+            if( nullptr != pfnDestroy )
+                pfnDestroy( hFence );
+        }
 
         return result;
     }
@@ -962,6 +1802,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnHostSynchronize = context.xePrologueCbs.Fence.pfnHostSynchronize;
+            if( nullptr != pfnHostSynchronize )
+                pfnHostSynchronize( hFence, timeout );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnHostSynchronize = context.xeEpilogueCbs.Fence.pfnHostSynchronize;
+            if( nullptr != pfnHostSynchronize )
+                pfnHostSynchronize( hFence, timeout );
+        }
+
         return result;
     }
 
@@ -974,6 +1828,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnQueryStatus = context.xePrologueCbs.Fence.pfnQueryStatus;
+            if( nullptr != pfnQueryStatus )
+                pfnQueryStatus( hFence );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnQueryStatus = context.xeEpilogueCbs.Fence.pfnQueryStatus;
+            if( nullptr != pfnQueryStatus )
+                pfnQueryStatus( hFence );
+        }
+
         return result;
     }
 
@@ -985,6 +1853,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnReset = context.xePrologueCbs.Fence.pfnReset;
+            if( nullptr != pfnReset )
+                pfnReset( hFence );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnReset = context.xeEpilogueCbs.Fence.pfnReset;
+            if( nullptr != pfnReset )
+                pfnReset( hFence );
+        }
 
         return result;
     }
@@ -1000,6 +1882,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnGetProperties = context.xePrologueCbs.Image.pfnGetProperties;
+            if( nullptr != pfnGetProperties )
+                pfnGetProperties( hDevice, desc, pImageProperties );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnGetProperties = context.xeEpilogueCbs.Image.pfnGetProperties;
+            if( nullptr != pfnGetProperties )
+                pfnGetProperties( hDevice, desc, pImageProperties );
+        }
+
         return result;
     }
 
@@ -1014,7 +1910,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnCreate = context.xePrologueCbs.Image.pfnCreate;
+            if( nullptr != pfnCreate )
+                pfnCreate( hDevice, desc, phImage );
+        }
+
         *phImage = reinterpret_cast<xe_image_handle_t>( context.get() );
+
+        if( context.enableTracing )
+        {
+            auto pfnCreate = context.xeEpilogueCbs.Image.pfnCreate;
+            if( nullptr != pfnCreate )
+                pfnCreate( hDevice, desc, phImage );
+        }
 
         return result;
     }
@@ -1028,6 +1938,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnDestroy = context.xePrologueCbs.Image.pfnDestroy;
+            if( nullptr != pfnDestroy )
+                pfnDestroy( hImage );
+        }
+
+
+        if( context.enableTracing )
+        {
+            auto pfnDestroy = context.xeEpilogueCbs.Image.pfnDestroy;
+            if( nullptr != pfnDestroy )
+                pfnDestroy( hImage );
+        }
 
         return result;
     }
@@ -1049,7 +1973,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnAllocSharedMem = context.xePrologueCbs.DeviceGroup.pfnAllocSharedMem;
+            if( nullptr != pfnAllocSharedMem )
+                pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, ordinal, host_flags, size, alignment, ptr );
+        }
+
         *ptr = malloc( size );
+
+        if( context.enableTracing )
+        {
+            auto pfnAllocSharedMem = context.xeEpilogueCbs.DeviceGroup.pfnAllocSharedMem;
+            if( nullptr != pfnAllocSharedMem )
+                pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, ordinal, host_flags, size, alignment, ptr );
+        }
 
         return result;
     }
@@ -1070,7 +2008,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnAllocDeviceMem = context.xePrologueCbs.DeviceGroup.pfnAllocDeviceMem;
+            if( nullptr != pfnAllocDeviceMem )
+                pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, ordinal, size, alignment, ptr );
+        }
+
         *ptr = malloc( size );
+
+        if( context.enableTracing )
+        {
+            auto pfnAllocDeviceMem = context.xeEpilogueCbs.DeviceGroup.pfnAllocDeviceMem;
+            if( nullptr != pfnAllocDeviceMem )
+                pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, ordinal, size, alignment, ptr );
+        }
 
         return result;
     }
@@ -1088,7 +2040,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnAllocHostMem = context.xePrologueCbs.DeviceGroup.pfnAllocHostMem;
+            if( nullptr != pfnAllocHostMem )
+                pfnAllocHostMem( hDeviceGroup, flags, size, alignment, ptr );
+        }
+
         *ptr = malloc( size );
+
+        if( context.enableTracing )
+        {
+            auto pfnAllocHostMem = context.xeEpilogueCbs.DeviceGroup.pfnAllocHostMem;
+            if( nullptr != pfnAllocHostMem )
+                pfnAllocHostMem( hDeviceGroup, flags, size, alignment, ptr );
+        }
 
         return result;
     }
@@ -1103,7 +2069,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnFreeMem = context.xePrologueCbs.DeviceGroup.pfnFreeMem;
+            if( nullptr != pfnFreeMem )
+                pfnFreeMem( hDeviceGroup, ptr );
+        }
+
         free( ptr );
+
+        if( context.enableTracing )
+        {
+            auto pfnFreeMem = context.xeEpilogueCbs.DeviceGroup.pfnFreeMem;
+            if( nullptr != pfnFreeMem )
+                pfnFreeMem( hDeviceGroup, ptr );
+        }
 
         return result;
     }
@@ -1120,7 +2100,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnGetMemProperties = context.xePrologueCbs.DeviceGroup.pfnGetMemProperties;
+            if( nullptr != pfnGetMemProperties )
+                pfnGetMemProperties( hDeviceGroup, ptr, pMemProperties, phDevice );
+        }
+
         *pMemProperties = {};
+
+        if( context.enableTracing )
+        {
+            auto pfnGetMemProperties = context.xeEpilogueCbs.DeviceGroup.pfnGetMemProperties;
+            if( nullptr != pfnGetMemProperties )
+                pfnGetMemProperties( hDeviceGroup, ptr, pMemProperties, phDevice );
+        }
 
         return result;
     }
@@ -1137,6 +2131,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnGetMemAddressRange = context.xePrologueCbs.DeviceGroup.pfnGetMemAddressRange;
+            if( nullptr != pfnGetMemAddressRange )
+                pfnGetMemAddressRange( hDeviceGroup, ptr, pBase, pSize );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnGetMemAddressRange = context.xeEpilogueCbs.DeviceGroup.pfnGetMemAddressRange;
+            if( nullptr != pfnGetMemAddressRange )
+                pfnGetMemAddressRange( hDeviceGroup, ptr, pBase, pSize );
+        }
+
         return result;
     }
 
@@ -1150,6 +2158,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnGetMemIpcHandle = context.xePrologueCbs.DeviceGroup.pfnGetMemIpcHandle;
+            if( nullptr != pfnGetMemIpcHandle )
+                pfnGetMemIpcHandle( hDeviceGroup, ptr, pIpcHandle );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnGetMemIpcHandle = context.xeEpilogueCbs.DeviceGroup.pfnGetMemIpcHandle;
+            if( nullptr != pfnGetMemIpcHandle )
+                pfnGetMemIpcHandle( hDeviceGroup, ptr, pIpcHandle );
+        }
 
         return result;
     }
@@ -1167,6 +2189,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnOpenMemIpcHandle = context.xePrologueCbs.DeviceGroup.pfnOpenMemIpcHandle;
+            if( nullptr != pfnOpenMemIpcHandle )
+                pfnOpenMemIpcHandle( hDeviceGroup, hDevice, handle, flags, ptr );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnOpenMemIpcHandle = context.xeEpilogueCbs.DeviceGroup.pfnOpenMemIpcHandle;
+            if( nullptr != pfnOpenMemIpcHandle )
+                pfnOpenMemIpcHandle( hDeviceGroup, hDevice, handle, flags, ptr );
+        }
+
         return result;
     }
 
@@ -1179,6 +2215,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnCloseMemIpcHandle = context.xePrologueCbs.DeviceGroup.pfnCloseMemIpcHandle;
+            if( nullptr != pfnCloseMemIpcHandle )
+                pfnCloseMemIpcHandle( hDeviceGroup, ptr );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnCloseMemIpcHandle = context.xeEpilogueCbs.DeviceGroup.pfnCloseMemIpcHandle;
+            if( nullptr != pfnCloseMemIpcHandle )
+                pfnCloseMemIpcHandle( hDeviceGroup, ptr );
+        }
 
         return result;
     }
@@ -1195,9 +2245,23 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnCreate = context.xePrologueCbs.Module.pfnCreate;
+            if( nullptr != pfnCreate )
+                pfnCreate( hDevice, desc, phModule, phBuildLog );
+        }
+
         *phModule = reinterpret_cast<xe_module_handle_t>( context.get() );
 
         if( nullptr != phBuildLog ) *phBuildLog = reinterpret_cast<xe_module_build_log_handle_t>( context.get() );
+
+        if( context.enableTracing )
+        {
+            auto pfnCreate = context.xeEpilogueCbs.Module.pfnCreate;
+            if( nullptr != pfnCreate )
+                pfnCreate( hDevice, desc, phModule, phBuildLog );
+        }
 
         return result;
     }
@@ -1211,6 +2275,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnDestroy = context.xePrologueCbs.Module.pfnDestroy;
+            if( nullptr != pfnDestroy )
+                pfnDestroy( hModule );
+        }
+
+
+        if( context.enableTracing )
+        {
+            auto pfnDestroy = context.xeEpilogueCbs.Module.pfnDestroy;
+            if( nullptr != pfnDestroy )
+                pfnDestroy( hModule );
+        }
 
         return result;
     }
@@ -1224,6 +2302,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnDestroy = context.xePrologueCbs.ModuleBuildLog.pfnDestroy;
+            if( nullptr != pfnDestroy )
+                pfnDestroy( hModuleBuildLog );
+        }
+
+
+        if( context.enableTracing )
+        {
+            auto pfnDestroy = context.xeEpilogueCbs.ModuleBuildLog.pfnDestroy;
+            if( nullptr != pfnDestroy )
+                pfnDestroy( hModuleBuildLog );
+        }
 
         return result;
     }
@@ -1239,6 +2331,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnGetString = context.xePrologueCbs.ModuleBuildLog.pfnGetString;
+            if( nullptr != pfnGetString )
+                pfnGetString( hModuleBuildLog, pSize, pBuildLog );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnGetString = context.xeEpilogueCbs.ModuleBuildLog.pfnGetString;
+            if( nullptr != pfnGetString )
+                pfnGetString( hModuleBuildLog, pSize, pBuildLog );
+        }
+
         return result;
     }
 
@@ -1252,6 +2358,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnGetNativeBinary = context.xePrologueCbs.Module.pfnGetNativeBinary;
+            if( nullptr != pfnGetNativeBinary )
+                pfnGetNativeBinary( hModule, pSize, pModuleNativeBinary );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnGetNativeBinary = context.xeEpilogueCbs.Module.pfnGetNativeBinary;
+            if( nullptr != pfnGetNativeBinary )
+                pfnGetNativeBinary( hModule, pSize, pModuleNativeBinary );
+        }
 
         return result;
     }
@@ -1267,6 +2387,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnGetGlobalPointer = context.xePrologueCbs.Module.pfnGetGlobalPointer;
+            if( nullptr != pfnGetGlobalPointer )
+                pfnGetGlobalPointer( hModule, pGlobalName, pPtr );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnGetGlobalPointer = context.xeEpilogueCbs.Module.pfnGetGlobalPointer;
+            if( nullptr != pfnGetGlobalPointer )
+                pfnGetGlobalPointer( hModule, pGlobalName, pPtr );
+        }
+
         return result;
     }
 
@@ -1281,7 +2415,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnCreate = context.xePrologueCbs.Function.pfnCreate;
+            if( nullptr != pfnCreate )
+                pfnCreate( hModule, desc, phFunction );
+        }
+
         *phFunction = reinterpret_cast<xe_function_handle_t>( context.get() );
+
+        if( context.enableTracing )
+        {
+            auto pfnCreate = context.xeEpilogueCbs.Function.pfnCreate;
+            if( nullptr != pfnCreate )
+                pfnCreate( hModule, desc, phFunction );
+        }
 
         return result;
     }
@@ -1295,6 +2443,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnDestroy = context.xePrologueCbs.Function.pfnDestroy;
+            if( nullptr != pfnDestroy )
+                pfnDestroy( hFunction );
+        }
+
+
+        if( context.enableTracing )
+        {
+            auto pfnDestroy = context.xeEpilogueCbs.Function.pfnDestroy;
+            if( nullptr != pfnDestroy )
+                pfnDestroy( hFunction );
+        }
 
         return result;
     }
@@ -1310,6 +2472,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnGetFunctionPointer = context.xePrologueCbs.Module.pfnGetFunctionPointer;
+            if( nullptr != pfnGetFunctionPointer )
+                pfnGetFunctionPointer( hModule, pFunctionName, pfnFunction );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnGetFunctionPointer = context.xeEpilogueCbs.Module.pfnGetFunctionPointer;
+            if( nullptr != pfnGetFunctionPointer )
+                pfnGetFunctionPointer( hModule, pFunctionName, pfnFunction );
+        }
+
         return result;
     }
 
@@ -1324,6 +2500,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnSetGroupSize = context.xePrologueCbs.Function.pfnSetGroupSize;
+            if( nullptr != pfnSetGroupSize )
+                pfnSetGroupSize( hFunction, groupSizeX, groupSizeY, groupSizeZ );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnSetGroupSize = context.xeEpilogueCbs.Function.pfnSetGroupSize;
+            if( nullptr != pfnSetGroupSize )
+                pfnSetGroupSize( hFunction, groupSizeX, groupSizeY, groupSizeZ );
+        }
 
         return result;
     }
@@ -1343,6 +2533,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnSuggestGroupSize = context.xePrologueCbs.Function.pfnSuggestGroupSize;
+            if( nullptr != pfnSuggestGroupSize )
+                pfnSuggestGroupSize( hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnSuggestGroupSize = context.xeEpilogueCbs.Function.pfnSuggestGroupSize;
+            if( nullptr != pfnSuggestGroupSize )
+                pfnSuggestGroupSize( hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
+        }
+
         return result;
     }
 
@@ -1359,6 +2563,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnSetArgumentValue = context.xePrologueCbs.Function.pfnSetArgumentValue;
+            if( nullptr != pfnSetArgumentValue )
+                pfnSetArgumentValue( hFunction, argIndex, argSize, pArgValue );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnSetArgumentValue = context.xeEpilogueCbs.Function.pfnSetArgumentValue;
+            if( nullptr != pfnSetArgumentValue )
+                pfnSetArgumentValue( hFunction, argIndex, argSize, pArgValue );
+        }
+
         return result;
     }
 
@@ -1373,6 +2591,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnSetAttribute = context.xePrologueCbs.Function.pfnSetAttribute;
+            if( nullptr != pfnSetAttribute )
+                pfnSetAttribute( hFunction, attr, value );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnSetAttribute = context.xeEpilogueCbs.Function.pfnSetAttribute;
+            if( nullptr != pfnSetAttribute )
+                pfnSetAttribute( hFunction, attr, value );
+        }
+
         return result;
     }
 
@@ -1386,6 +2618,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnGetAttribute = context.xePrologueCbs.Function.pfnGetAttribute;
+            if( nullptr != pfnGetAttribute )
+                pfnGetAttribute( hFunction, attr, pValue );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnGetAttribute = context.xeEpilogueCbs.Function.pfnGetAttribute;
+            if( nullptr != pfnGetAttribute )
+                pfnGetAttribute( hFunction, attr, pValue );
+        }
 
         return result;
     }
@@ -1405,6 +2651,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnAppendLaunchFunction = context.xePrologueCbs.CommandList.pfnAppendLaunchFunction;
+            if( nullptr != pfnAppendLaunchFunction )
+                pfnAppendLaunchFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendLaunchFunction = context.xeEpilogueCbs.CommandList.pfnAppendLaunchFunction;
+            if( nullptr != pfnAppendLaunchFunction )
+                pfnAppendLaunchFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
+        }
+
         return result;
     }
 
@@ -1422,6 +2682,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendLaunchFunctionIndirect = context.xePrologueCbs.CommandList.pfnAppendLaunchFunctionIndirect;
+            if( nullptr != pfnAppendLaunchFunctionIndirect )
+                pfnAppendLaunchFunctionIndirect( hCommandList, hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendLaunchFunctionIndirect = context.xeEpilogueCbs.CommandList.pfnAppendLaunchFunctionIndirect;
+            if( nullptr != pfnAppendLaunchFunctionIndirect )
+                pfnAppendLaunchFunctionIndirect( hCommandList, hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+        }
 
         return result;
     }
@@ -1446,6 +2720,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnAppendLaunchMultipleFunctionsIndirect = context.xePrologueCbs.CommandList.pfnAppendLaunchMultipleFunctionsIndirect;
+            if( nullptr != pfnAppendLaunchMultipleFunctionsIndirect )
+                pfnAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendLaunchMultipleFunctionsIndirect = context.xeEpilogueCbs.CommandList.pfnAppendLaunchMultipleFunctionsIndirect;
+            if( nullptr != pfnAppendLaunchMultipleFunctionsIndirect )
+                pfnAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+        }
+
         return result;
     }
 
@@ -1464,6 +2752,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnAppendLaunchHostFunction = context.xePrologueCbs.CommandList.pfnAppendLaunchHostFunction;
+            if( nullptr != pfnAppendLaunchHostFunction )
+                pfnAppendLaunchHostFunction( hCommandList, pfnHostFunc, pUserData, hSignalEvent, numWaitEvents, phWaitEvents );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnAppendLaunchHostFunction = context.xeEpilogueCbs.CommandList.pfnAppendLaunchHostFunction;
+            if( nullptr != pfnAppendLaunchHostFunction )
+                pfnAppendLaunchHostFunction( hCommandList, pfnHostFunc, pUserData, hSignalEvent, numWaitEvents, phWaitEvents );
+        }
+
         return result;
     }
 
@@ -1477,6 +2779,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnMakeMemoryResident = context.xePrologueCbs.Device.pfnMakeMemoryResident;
+            if( nullptr != pfnMakeMemoryResident )
+                pfnMakeMemoryResident( hDevice, ptr, size );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnMakeMemoryResident = context.xeEpilogueCbs.Device.pfnMakeMemoryResident;
+            if( nullptr != pfnMakeMemoryResident )
+                pfnMakeMemoryResident( hDevice, ptr, size );
+        }
 
         return result;
     }
@@ -1492,6 +2808,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnEvictMemory = context.xePrologueCbs.Device.pfnEvictMemory;
+            if( nullptr != pfnEvictMemory )
+                pfnEvictMemory( hDevice, ptr, size );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnEvictMemory = context.xeEpilogueCbs.Device.pfnEvictMemory;
+            if( nullptr != pfnEvictMemory )
+                pfnEvictMemory( hDevice, ptr, size );
+        }
+
         return result;
     }
 
@@ -1505,6 +2835,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnMakeImageResident = context.xePrologueCbs.Device.pfnMakeImageResident;
+            if( nullptr != pfnMakeImageResident )
+                pfnMakeImageResident( hDevice, hImage );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnMakeImageResident = context.xeEpilogueCbs.Device.pfnMakeImageResident;
+            if( nullptr != pfnMakeImageResident )
+                pfnMakeImageResident( hDevice, hImage );
+        }
+
         return result;
     }
 
@@ -1517,6 +2861,20 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        if( context.enableTracing )
+        {
+            auto pfnEvictImage = context.xePrologueCbs.Device.pfnEvictImage;
+            if( nullptr != pfnEvictImage )
+                pfnEvictImage( hDevice, hImage );
+        }
+
+        if( context.enableTracing )
+        {
+            auto pfnEvictImage = context.xeEpilogueCbs.Device.pfnEvictImage;
+            if( nullptr != pfnEvictImage )
+                pfnEvictImage( hDevice, hImage );
+        }
 
         return result;
     }
@@ -1532,7 +2890,21 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnCreate = context.xePrologueCbs.Sampler.pfnCreate;
+            if( nullptr != pfnCreate )
+                pfnCreate( hDevice, desc, phSampler );
+        }
+
         *phSampler = reinterpret_cast<xe_sampler_handle_t>( context.get() );
+
+        if( context.enableTracing )
+        {
+            auto pfnCreate = context.xeEpilogueCbs.Sampler.pfnCreate;
+            if( nullptr != pfnCreate )
+                pfnCreate( hDevice, desc, phSampler );
+        }
 
         return result;
     }
@@ -1546,6 +2918,20 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        if( context.enableTracing )
+        {
+            auto pfnDestroy = context.xePrologueCbs.Sampler.pfnDestroy;
+            if( nullptr != pfnDestroy )
+                pfnDestroy( hSampler );
+        }
+
+
+        if( context.enableTracing )
+        {
+            auto pfnDestroy = context.xeEpilogueCbs.Sampler.pfnDestroy;
+            if( nullptr != pfnDestroy )
+                pfnDestroy( hSampler );
+        }
 
         return result;
     }
