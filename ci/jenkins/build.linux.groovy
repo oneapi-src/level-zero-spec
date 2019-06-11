@@ -70,14 +70,17 @@ set -x
 
 mkdir ubuntu18
 cd ubuntu18
-cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release -DLOKI_VERSION_BUILD=${buildId} -DLOKI_DRIVER_VERSION=${driverVersion} ${cmakeFlags.join(' ')}
-cmake --build . --config Release --clean-first --target package
-dpkg-deb -x intel-loki-devel_*.deb x
-
 cmake -GNinja .. -DCMAKE_BUILD_TYPE=Debug -DLOKI_VERSION_BUILD=${buildId} -DLOKI_DRIVER_VERSION=${driverVersion} ${cmakeFlags.join(' ')}
 cmake --build . --config Debug --clean-first --target package
-dpkg-deb -x intel-loki-devel_*.deb x
+mkdir Debug
+mv ./*.deb ./Debug/
 
+cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release -DLOKI_VERSION_BUILD=${buildId} -DLOKI_DRIVER_VERSION=${driverVersion} ${cmakeFlags.join(' ')}
+cmake --build . --config Release --clean-first --target package
+mkdir Release
+mv ./*.deb ./Release/
+
+dpkg-deb -x ./Release/intel-loki-devel_*.deb x
 pushd x
 zip -r -9 ../`basename ../intel-loki-devel_*.deb ~bionic_amd64.deb`.zip .
 popd
@@ -92,8 +95,8 @@ cd ../latex
 make
 """
 			}
-			archiveArtifacts "ubuntu18/*.deb"
-			archiveArtifacts "ubuntu18/*.zip"
+			archiveArtifacts "ubuntu18/Debug/*.deb"
+			archiveArtifacts "ubuntu18/Release/*.deb"
 			dir('latex') {
 				archiveArtifacts "*.pdf"
 			}
