@@ -305,10 +305,17 @@ ${"###"} Appending
   However, an application may allow the driver to optimize the ordering by using
   ::${X}_COMMAND_LIST_FLAG_RELAXED_ORDERING.  Reordering is guarenteed to be only occur
   between barriers and synchronization primitives.
+- By default, commands submitted to a command list are optimized for execution by
+  balancing both device throughput and Host latency. For very low-level latency
+  usage-models, applications should use immediate command lists. For usage-models where
+  maximum throughput is desired, applications should use ::${X}_COMMAND_LIST_FLAG_MAXIMIZE_THROUGHPUT.
+- By default, commands submitted to a command list may be optimized by the driver
+  to fully exploit the concurrency of the device by distributing commands across
+  multiple engines and/or sub-devices.  If the application prefers to opt-out of
+  these optimizations, such as when the application plans to perform this distribution
+  itself, then it should use ::${X}_COMMAND_LIST_FLAG_EXPLICIT_ONLY.
 - The command list maintains some machine state, which is inherited by subsequent
   commands. See ::${x}_command_list_parameter_t for details.
-- A command list can be called from another command list (nested). In this case, state
-  may be inherited and leaked by the nested command list.
 
 The following sample code demonstrates a basic sequence for creation of command lists:
 ```c
