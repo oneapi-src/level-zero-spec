@@ -49,7 +49,7 @@ A device represents a physical device in the system that support Xe.
 - The application is responsible for sharing memory and explicit submission and synchronization across multiple devices.
 - Device may expose sub-devices that allow finer-grained partition and control; such as each tile of a multi-tile devices.
 
-The following diagram illustrates the relationship between the device group, device and other objects described in this document.
+The following diagram illustrates the relationship between the device group, device and other objects described in this document.  
 ![Device](../images/core_device.png?raw=true)  
 @image latex core_device.png
 
