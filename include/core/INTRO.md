@@ -272,10 +272,10 @@ The following examples demonstrate proper usage:
 # <a name="tls">Tools</a>
 Level-Zero APIs specific for supporting 3rd-party tools are separated from "Core" into "Tools" APIs.
 
-The following diagram illustrates the hierarchy of "Core" versus "Tool" APIs:  
+The following diagram illustrates how 3rd-party tools may utilize the instrumentation layer:  
 ![Tool](../images/intro_tools.png?raw=true)  
 @image latex intro_tools.png
 
 The "Tools" APIs are designed to provided low-level access to device capabilities in order to support 3rd-party tools, but are not intended to replace or directly interface 3rd-party tools.
-The "Tools" APIs allow for driver callbacks to be registered by 3rd-party tools to be notified of specific event.
+The "Tools" APIs allow for driver callbacks to be registered by 3rd-party tools to be notified of specific API events.
 
