@@ -72,15 +72,15 @@ mkdir ubuntu18
 cd ubuntu18
 cmake -GNinja .. -DCMAKE_BUILD_TYPE=Release -DLOKI_VERSION_BUILD=${buildId} -DLOKI_DRIVER_VERSION=${driverVersion} ${cmakeFlags.join(' ')}
 cmake --build . --config Release --clean-first --target package
-dpkg-deb -x intel-loki-devel_*.deb x
 
-cmake -GNinja .. -DCMAKE_BUILD_TYPE=Debug -DLOKI_VERSION_BUILD=${buildId} -DLOKI_DRIVER_VERSION=${driverVersion} ${cmakeFlags.join(' ')}
-cmake --build . --config Debug --clean-first --target package
 dpkg-deb -x intel-loki-devel_*.deb x
 
 pushd x
 zip -r -9 ../`basename ../intel-loki-devel_*.deb ~bionic_amd64.deb`.zip .
 popd
+
+cmake -GNinja .. -DCMAKE_BUILD_TYPE=Debug -DLOKI_VERSION_BUILD=${buildId} -DLOKI_DRIVER_VERSION=${driverVersion} ${cmakeFlags.join(' ')}
+cmake --build . --config Debug --clean-first --target package
 
 """
 			}
