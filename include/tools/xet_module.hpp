@@ -49,7 +49,7 @@ namespace xet
         /// @brief Supported module debug info formats.
         enum class debug_info_format_t
         {
-            DWARF,                                          ///< Format is DWARF
+            ELF_DWARF,                                      ///< Format is ELF/DWARF
 
         };
 

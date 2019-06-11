@@ -47,7 +47,7 @@ extern "C" {
 /// @brief Supported module debug info formats.
 typedef enum _xet_module_debug_info_format_t
 {
-    XET_MODULE_DEBUG_INFO_FORMAT_DWARF,             ///< Format is DWARF
+    XET_MODULE_DEBUG_INFO_FORMAT_ELF_DWARF,         ///< Format is ELF/DWARF
 
 } xet_module_debug_info_format_t;
 

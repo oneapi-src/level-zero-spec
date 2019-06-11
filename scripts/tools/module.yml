@@ -7,8 +7,8 @@ desc: "Supported module debug info formats."
 class: $tModule
 name: $t_module_debug_info_format_t
 etors:
-    - name: $T_MODULE_DEBUG_INFO_FORMAT_DWARF
-      desc: "Format is DWARF"
+    - name: $T_MODULE_DEBUG_INFO_FORMAT_ELF_DWARF
+      desc: "Format is ELF/DWARF"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieve debug info from module."

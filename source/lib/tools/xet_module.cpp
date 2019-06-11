@@ -116,8 +116,8 @@ namespace xet
 
         switch( val )
         {
-        case Module::debug_info_format_t::DWARF:
-            str = "Module::debug_info_format_t::DWARF";
+        case Module::debug_info_format_t::ELF_DWARF:
+            str = "Module::debug_info_format_t::ELF_DWARF";
             break;
 
         default:
