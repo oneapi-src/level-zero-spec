@@ -637,8 +637,6 @@ Module build options can be passed with ::${x}_module_desc_t as a string.
 | -${x}-opt-large-register-file                 | Increase number of registers available to threads.    | Disabled | GPU |
 ## --validate=on
 
-Note: It is expected that features such as specialization constants can also be passed here.
-
 ${"###"} Module Build Log
 The ::${x}ModuleCreate function can optionally generate a build log object ::${x}_module_build_log_handle_t.
 

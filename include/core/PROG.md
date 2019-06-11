@@ -631,8 +631,6 @@ Module build options can be passed with ::xe_module_desc_t as a string.
 | -xe-opt-greater-than-4GB-buffer-required    | Use 64-bit offset calculations for buffers.           | Disabled | GPU |
 | -xe-opt-large-register-file                 | Increase number of registers available to threads.    | Disabled | GPU |
 
-Note: It is expected that features such as specialization constants can also be passed here.
-
 ### Module Build Log
 The ::xeModuleCreate function can optionally generate a build log object ::xe_module_build_log_handle_t.
 
