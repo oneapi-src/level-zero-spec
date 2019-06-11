@@ -73,5 +73,24 @@ TEST_F(CommandListAppendCopy, checksMemoryCopyForMemoryFromDifferentDevicesHappe
     globalMemoryManager->freeGraphicsAllocation(srcAlloc);
 }
 
+struct CommandListAppendSet : public GlobalFixtureTest {};
+
+TEST_F(CommandListAppendCopy, checksMemorySetHappens) {
+    Mock<Device> device;
+    Mock<CommandList> commandList;
+    size_t bufferSize = 4096u;
+    auto dstAlloc = globalMemoryManager->allocateDeviceMemory(&device, bufferSize, 64);
+    ASSERT_NE(nullptr, dstAlloc);
+	void *dst = reinterpret_cast<void *>(dstAlloc->getGpuAddress());
+
+    EXPECT_CALL(commandList, appendMemorySet(dst, _, bufferSize, _, _, _)).Times(1);
+
+    auto res =
+        xeCommandListAppendMemorySet(&commandList, dst, 0, bufferSize, nullptr, 0, nullptr);
+    ASSERT_EQ(XE_RESULT_SUCCESS, res);
+
+    globalMemoryManager->freeGraphicsAllocation(dstAlloc);
+}
+
 } // namespace ult
 } // namespace L0
