@@ -622,6 +622,37 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetModuleReserveSpace
+    xe_result_t __xecall
+    xetModuleReserveSpace(
+        xet_module_handle_t hModule,                    ///< [in] handle of the module
+        size_t size,                                    ///< [in] size (in bytes) to reserve
+        void** hostptr,                                 ///< [out] Host visible pointer to space reserved
+        void** deviceptr                                ///< [out] device visible pointer to space reserved
+        )
+    {
+        auto pfnReserveSpace = context.xetDdiTable.Module.pfnReserveSpace;
+
+        if( nullptr == pfnReserveSpace )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hModule )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == hostptr )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == deviceptr )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnReserveSpace( hModule, size, hostptr, deviceptr );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetPowerCreate
     xe_result_t __xecall
     xetPowerCreate(
@@ -1799,6 +1830,9 @@ xetGetModuleProcAddrTable(
 
     dditable.pfnGetDebugInfo                             = pDdiTable->pfnGetDebugInfo;
     pDdiTable->pfnGetDebugInfo                           = layer::xetModuleGetDebugInfo;
+
+    dditable.pfnReserveSpace                             = pDdiTable->pfnReserveSpace;
+    pDdiTable->pfnReserveSpace                           = layer::xetModuleReserveSpace;
 
     return result;
 }

@@ -43,6 +43,32 @@
 extern "C" {
 #endif
 
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Reserve a section of contiguous buffer space within the module.
+/// 
+/// @details
+///     - The application may **not** call this function from simultaneous
+///       threads with the same module handle.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hModule
+///         + nullptr == hostptr
+///         + nullptr == deviceptr
+///         + 0 for size
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetModuleReserveSpace(
+    xet_module_handle_t hModule,                    ///< [in] handle of the module
+    size_t size,                                    ///< [in] size (in bytes) to reserve
+    void** hostptr,                                 ///< [out] Host visible pointer to space reserved
+    void** deviceptr                                ///< [out] device visible pointer to space reserved
+    );
+
 #if defined(__cplusplus)
 } // extern "C"
 #endif

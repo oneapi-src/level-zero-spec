@@ -1,3 +1,27 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for Program Instrumentation (PIN)"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Reserve a section of contiguous buffer space within the module."
+class: $tModule
+name: ReserveSpace
+details:
+    - "The application may **not** call this function from simultaneous threads with the same module handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_module_handle_t
+      name: hModule
+      desc: "[in] handle of the module"
+    - type: size_t
+      name: size
+      desc: "[in] size (in bytes) to reserve"
+    - type: void**
+      name: hostptr
+      desc: "[out] Host visible pointer to space reserved"
+    - type: "void**"
+      name: deviceptr
+      desc: "[out] device visible pointer to space reserved"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+       - "0 for size"

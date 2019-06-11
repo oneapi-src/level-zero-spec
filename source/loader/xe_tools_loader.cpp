@@ -583,6 +583,28 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetModuleReserveSpace
+    xe_result_t __xecall
+    xetModuleReserveSpace(
+        xet_module_handle_t hModule,                    ///< [in] handle of the module
+        size_t size,                                    ///< [in] size (in bytes) to reserve
+        void** hostptr,                                 ///< [out] Host visible pointer to space reserved
+        void** deviceptr                                ///< [out] device visible pointer to space reserved
+        )
+    {
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_module_object_t*>( hModule )->dditable;
+
+        // convert loader handle to driver handle
+        hModule = reinterpret_cast<xet_module_object_t*>( hModule )->handle;
+
+        // forward to device-driver
+        auto result = dditable->xet.Module.pfnReserveSpace( hModule, size, hostptr, deviceptr );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetPowerCreate
     xe_result_t __xecall
     xetPowerCreate(
@@ -1664,6 +1686,7 @@ xetGetModuleProcAddrTable(
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnGetDebugInfo                             = loader::xetModuleGetDebugInfo;
+            pDdiTable->pfnReserveSpace                             = loader::xetModuleReserveSpace;
         }
         else
         {

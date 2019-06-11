@@ -368,6 +368,21 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetModuleReserveSpace
+    xe_result_t __xecall
+    xetModuleReserveSpace(
+        xet_module_handle_t hModule,                    ///< [in] handle of the module
+        size_t size,                                    ///< [in] size (in bytes) to reserve
+        void** hostptr,                                 ///< [out] Host visible pointer to space reserved
+        void** deviceptr                                ///< [out] device visible pointer to space reserved
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetPowerCreate
     xe_result_t __xecall
     xetPowerCreate(
@@ -1048,6 +1063,8 @@ xetGetModuleProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     pDdiTable->pfnGetDebugInfo                           = driver::xetModuleGetDebugInfo;
+
+    pDdiTable->pfnReserveSpace                           = driver::xetModuleReserveSpace;
 
     return result;
 }

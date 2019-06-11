@@ -205,10 +205,20 @@ typedef xe_result_t (__xecall *xet_pfnModuleGetDebugInfo_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetModuleReserveSpace 
+typedef xe_result_t (__xecall *xet_pfnModuleReserveSpace_t)(
+    xet_module_handle_t,
+    size_t,
+    void**,
+    void**
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Module functions pointers
 typedef struct _xet_module_dditable_t
 {
     xet_pfnModuleGetDebugInfo_t                                 pfnGetDebugInfo;
+    xet_pfnModuleReserveSpace_t                                 pfnReserveSpace;
 } xet_module_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////

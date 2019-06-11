@@ -89,6 +89,23 @@ namespace xet
             uint8_t* pDebugInfo = nullptr                   ///< [in,out][optional] byte pointer to debug info
             );
 
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Reserve a section of contiguous buffer space within the module.
+        /// 
+        /// @details
+        ///     - The application may **not** call this function from simultaneous
+        ///       threads with the same module handle.
+        ///     - The implementation of this function should be lock-free.
+        /// @returns
+        ///     - void*: Host visible pointer to space reserved
+        ///     - void*: device visible pointer to space reserved
+        /// 
+        /// @throws result_t
+        std::tuple<void*, void*> __xecall
+        ReserveSpace(
+            size_t size                                     ///< [in] size (in bytes) to reserve
+            );
+
     };
 
 } // namespace xet
