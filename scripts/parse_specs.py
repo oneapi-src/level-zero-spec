@@ -4,6 +4,19 @@ import re
 import hashlib
 
 """
+    validate documents meet some basic requirements of code generation
+"""
+def validate_doc(d):
+    for item in d:
+        # error: struct/unions may not contain handles
+        # error: invalid/unknown tag
+        # warning: enum/etor mismatch
+        # error: if not static or global, then first parameter must be handle/class
+        # warning: first member of descriptor must be version
+        # error: missing range in desc
+        pass
+
+"""
     generates SHA512 string for the given object
 """
 def generate_hash(d):
