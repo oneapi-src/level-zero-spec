@@ -30,7 +30,7 @@ class DrmIPCMemoryManager : public IPCMemoryManager {
     xe_result_t ipcOpenMemHandle(xe_device_handle_t hDevice, xe_ipc_mem_handle_t handle,
                                  xe_ipc_memory_flag_t flags, void **ptr) override;
     xe_result_t ipcCloseMemHandle(const void *ptr) override;
-    void *allocateShMemory(size_t size, size_t alignment, std::string &shmFileName) override;
+    void *allocateShMemory(size_t *size, size_t alignment, std::string &shmFileName) override;
     void freeShMemory(GraphicsAllocation *graphAllocation) override;
 
     static unsigned int shmFileCounter;

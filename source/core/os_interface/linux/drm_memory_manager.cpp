@@ -2,17 +2,15 @@
 
 namespace L0 {
 
-IPCMemoryManager *IPCMemoryManager::create() {
-    return new DrmIPCMemoryManager();
-}
+IPCMemoryManager *IPCMemoryManager::create() { return new DrmIPCMemoryManager(); }
 
-xe_result_t DrmIPCMemoryManager::ipcGetMemHandle(const void *ptr,
-                                                          xe_ipc_mem_handle_t *pIpcHandle) {
+xe_result_t DrmIPCMemoryManager::ipcGetMemHandle(const void *ptr, xe_ipc_mem_handle_t *pIpcHandle) {
 
     GraphicsAllocation *allocation = globalMemoryManager->findGraphicsAllocation(ptr);
 
     DrmIpcHandle *handle = new DrmIpcHandle;
-    strncpy(handle->shmFileName, allocation->shmFileName.c_str(), allocation->shmFileName.length () + 1);
+    strncpy(handle->shmFileName, allocation->shmFileName.c_str(),
+            allocation->shmFileName.length() + 1);
     handle->alignment = allocation->alignment;
     handle->size = allocation->getSize();
 
@@ -24,8 +22,8 @@ xe_result_t DrmIPCMemoryManager::ipcGetMemHandle(const void *ptr,
 }
 
 xe_result_t DrmIPCMemoryManager::ipcOpenMemHandle(xe_device_handle_t hDevice,
-                                                           xe_ipc_mem_handle_t handle,
-                                                           xe_ipc_memory_flag_t flags, void **ptr) {
+                                                  xe_ipc_mem_handle_t handle,
+                                                  xe_ipc_memory_flag_t flags, void **ptr) {
 
     /*NOTE: hDevice and flags are unused*/
 
@@ -77,11 +75,11 @@ xe_result_t DrmIPCMemoryManager::ipcCloseMemHandle(const void *ptr) {
 int DrmIPCMemoryManager::openShmFile(const char *shmFileName, bool mustExist) {
     int shmFileDescriptor;
 
-    //ipcOpenMemHandle must make sure the file already exists, because the filename
+    // ipcOpenMemHandle must make sure the file already exists, because the filename
     // may be corrupt and shm_open will NOT fail.
-    if (mustExist){
-        shmFileDescriptor = shm_open(shmFileName, O_RDWR | O_CREAT| O_EXCL, S_IRUSR | S_IWUSR);
-        if (shmFileDescriptor > 0)  {
+    if (mustExist) {
+        shmFileDescriptor = shm_open(shmFileName, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
+        if (shmFileDescriptor > 0) {
             close(shmFileDescriptor);
             if (shm_unlink(shmFileName)) {
                 assert(0);
@@ -99,16 +97,14 @@ int DrmIPCMemoryManager::openShmFile(const char *shmFileName, bool mustExist) {
         if (getuid() != st.st_uid) {
             return -1;
         }
-    }
-    else{
+    } else {
         return -1;
     }
 
     return shmFileDescriptor;
 }
 
-void *DrmIPCMemoryManager::memoryMapShmFile(size_t size, size_t alignment,
-                                                     int shmFileDescriptor) {
+void *DrmIPCMemoryManager::memoryMapShmFile(size_t size, size_t alignment, int shmFileDescriptor) {
     void *mapPtr;
     uintptr_t alignedPtr;
 
@@ -119,7 +115,7 @@ void *DrmIPCMemoryManager::memoryMapShmFile(size_t size, size_t alignment,
         assert(0);
         return nullptr;
     }
-    // No need to keep the fd open. 
+    // No need to keep the fd open.
     close(shmFileDescriptor);
 
     alignedPtr = reinterpret_cast<uintptr_t>(mapPtr) + alignment;
@@ -136,8 +132,8 @@ void *DrmIPCMemoryManager::memoryMapShmFile(size_t size, size_t alignment,
     return reinterpret_cast<void *>(alignedPtr);
 }
 
-void *DrmIPCMemoryManager::allocateShMemory(size_t size, size_t alignment,
-                                                     std::string &shmFileName) {
+void *DrmIPCMemoryManager::allocateShMemory(size_t *size, size_t alignment,
+                                            std::string &shmFileName) {
     char localFileName[255];
     int shmFileDescriptor;
     void *shmBuffer;
@@ -146,7 +142,7 @@ void *DrmIPCMemoryManager::allocateShMemory(size_t size, size_t alignment,
     size_t cAlignment = alignUp(std::max(alignment, minAlignment), minAlignment);
     // When size == 0 allocate allocationAlignment
     // It's needed to prevent overlapping pages with user pointers
-    size_t cSize = std::max(alignUp(size, minAlignment), minAlignment);
+    size_t cSize = std::max(alignUp(*size, minAlignment), minAlignment);
 
     if (snprintf(localFileName, sizeof(localFileName), "/L0_shm.%d%x%d", (int)getuid(),
                  (int)getpid(), DrmIPCMemoryManager::shmFileCounter) < 0) {
@@ -172,6 +168,9 @@ void *DrmIPCMemoryManager::allocateShMemory(size_t size, size_t alignment,
     }
     shmFileName = localFileName;
     DrmIPCMemoryManager::shmFileCounter++;
+
+    // Return the real size of the buffer.
+    *size = cSize;
     return shmBuffer;
 }
 
@@ -179,9 +178,7 @@ void DrmIPCMemoryManager::freeShMemory(GraphicsAllocation *allocation) {
 
     auto userAddress = allocation->getHostAddress();
     auto realAddress = reinterpret_cast<char **>(userAddress)[-1];
-    uintptr_t sizeStoredAddress =
-        reinterpret_cast<uintptr_t>(userAddress) - (sizeof(void *) + sizeof(size_t));
-    size_t size = *(reinterpret_cast<size_t *>(sizeStoredAddress));
+    size_t size = allocation->getSize();
 
     if (munmap(reinterpret_cast<void *>(realAddress), size)) {
         assert(0);

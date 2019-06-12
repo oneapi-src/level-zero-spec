@@ -16,12 +16,12 @@ xe_result_t hostMemAlloc(xe_host_mem_alloc_flag_t flags, size_t size, size_t ali
 
 xe_result_t ipcCloseMemHandle(const void *ptr) {
     auto ipc = IPCMemoryManager::create();
-    xe_result_t result =  ipc->ipcCloseMemHandle(ptr);
+    xe_result_t result = ipc->ipcCloseMemHandle(ptr);
     delete ipc;
     return result;
 }
 
-xe_result_t ipcGetMemHandle(const void *ptr, xe_ipc_mem_handle_t *pIpcHandle){
+xe_result_t ipcGetMemHandle(const void *ptr, xe_ipc_mem_handle_t *pIpcHandle) {
     auto ipc = IPCMemoryManager::create();
     xe_result_t result = ipc->ipcGetMemHandle(ptr, pIpcHandle);
     delete ipc;
@@ -53,7 +53,7 @@ xe_result_t deviceMemAlloc(xe_device_handle_t hDevice, xe_device_mem_alloc_flag_
     auto l0mms = IPCMemoryManager::create();
     std::string shmFileName;
     // Allocate shred memory (so later can be shared with other proc using IPC)
-    buffer = l0mms->allocateShMemory(size, alignment, shmFileName);
+    buffer = l0mms->allocateShMemory(&size, alignment, shmFileName);
     if (buffer == nullptr) {
         return XE_RESULT_ERROR_UNKNOWN;
     }
