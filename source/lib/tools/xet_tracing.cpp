@@ -44,32 +44,32 @@ extern "C" {
 ///     - The application must ensure that no other threads are executing
 ///       functions for which the tracing functions are changing.
 ///     - The application may **not** call this function from simultaneous
-///       threads with the same device handle.
+///       threads with the same device group handle.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
+///         + nullptr == hDeviceGroup
 ///         + nullptr == pCoreCbs
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetDeviceSetTracingPrologue(
-    xet_device_handle_t hDevice,                    ///< [in] handle of the device
+xetDeviceGroupSetTracingPrologue(
+    xet_device_group_handle_t hDeviceGroup,         ///< [in] handle of the device group
     xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
     xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
                                                     ///< pointers
     )
 {
-    auto pfnSetTracingPrologue = xet_lib::context.ddiTable.Device.pfnSetTracingPrologue;
+    auto pfnSetTracingPrologue = xet_lib::context.ddiTable.DeviceGroup.pfnSetTracingPrologue;
 
 #if _DEBUG
     if( nullptr == pfnSetTracingPrologue )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnSetTracingPrologue( hDevice, pCoreCbs, pExtendedCbs );
+    return pfnSetTracingPrologue( hDeviceGroup, pCoreCbs, pExtendedCbs );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -82,32 +82,32 @@ xetDeviceSetTracingPrologue(
 ///     - The application must ensure that no other threads are executing
 ///       functions for which the tracing functions are changing.
 ///     - The application may **not** call this function from simultaneous
-///       threads with the same device handle.
+///       threads with the same device group handle.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
+///         + nullptr == hDeviceGroup
 ///         + nullptr == pCoreCbs
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetDeviceSetTracingEpilogue(
-    xet_device_handle_t hDevice,                    ///< [in] handle of the device
+xetDeviceGroupSetTracingEpilogue(
+    xet_device_group_handle_t hDeviceGroup,         ///< [in] handle of the device group
     xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
     xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
                                                     ///< pointers
     )
 {
-    auto pfnSetTracingEpilogue = xet_lib::context.ddiTable.Device.pfnSetTracingEpilogue;
+    auto pfnSetTracingEpilogue = xet_lib::context.ddiTable.DeviceGroup.pfnSetTracingEpilogue;
 
 #if _DEBUG
     if( nullptr == pfnSetTracingEpilogue )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnSetTracingEpilogue( hDevice, pCoreCbs, pExtendedCbs );
+    return pfnSetTracingEpilogue( hDeviceGroup, pCoreCbs, pExtendedCbs );
 }
 
 } // extern "C"
@@ -124,23 +124,23 @@ namespace xet
     ///     - The application must ensure that no other threads are executing
     ///       functions for which the tracing functions are changing.
     ///     - The application may **not** call this function from simultaneous
-    ///       threads with the same device handle.
+    ///       threads with the same device group handle.
     /// 
     /// @throws result_t
     void __xecall
-    Device::SetTracingPrologue(
+    DeviceGroup::SetTracingPrologue(
         core_callbacks_t* pCoreCbs,                     ///< [in] pointer to table of 'core' callback function pointers
         extended_callbacks_t* pExtendedCbs              ///< [in][optional] pointer to table of 'extended' callback function
                                                         ///< pointers
         )
     {
-        auto result = static_cast<result_t>( ::xetDeviceSetTracingPrologue(
-            reinterpret_cast<xet_device_handle_t>( getHandle() ),
+        auto result = static_cast<result_t>( ::xetDeviceGroupSetTracingPrologue(
+            reinterpret_cast<xet_device_group_handle_t>( getHandle() ),
             reinterpret_cast<xet_core_callbacks_t*>( pCoreCbs ),
             reinterpret_cast<xet_extended_callbacks_t*>( pExtendedCbs ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Device::SetTracingPrologue" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::DeviceGroup::SetTracingPrologue" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -153,23 +153,23 @@ namespace xet
     ///     - The application must ensure that no other threads are executing
     ///       functions for which the tracing functions are changing.
     ///     - The application may **not** call this function from simultaneous
-    ///       threads with the same device handle.
+    ///       threads with the same device group handle.
     /// 
     /// @throws result_t
     void __xecall
-    Device::SetTracingEpilogue(
+    DeviceGroup::SetTracingEpilogue(
         core_callbacks_t* pCoreCbs,                     ///< [in] pointer to table of 'core' callback function pointers
         extended_callbacks_t* pExtendedCbs              ///< [in][optional] pointer to table of 'extended' callback function
                                                         ///< pointers
         )
     {
-        auto result = static_cast<result_t>( ::xetDeviceSetTracingEpilogue(
-            reinterpret_cast<xet_device_handle_t>( getHandle() ),
+        auto result = static_cast<result_t>( ::xetDeviceGroupSetTracingEpilogue(
+            reinterpret_cast<xet_device_group_handle_t>( getHandle() ),
             reinterpret_cast<xet_core_callbacks_t*>( pCoreCbs ),
             reinterpret_cast<xet_extended_callbacks_t*>( pExtendedCbs ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Device::SetTracingEpilogue" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::DeviceGroup::SetTracingEpilogue" );
     }
 
 } // namespace xet

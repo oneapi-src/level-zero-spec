@@ -263,8 +263,10 @@ The following table documents the supported knobs for overriding default driver 
 | ^                   | [${X}_ENABLE_MEMORY_TRACKER](#v3)           | {**0**, 1}        | Enables the validation level for tracking memory lifetime                         |
 | ^                   | [${X}_ENABLE_THREADING_VALIDATION](#v4)     | {**0**, 1}        | Enables the validation level for multithreading usage                             |
 | Instrumentation     | [${X}_ENABLE_INSTRUMENTATION_LAYER](#i0)    | {**0**, 1}        | Enables instrumentation layer for profiling                                       |
-| ^                   | [${X}_ENABLE_API_TRACING](#i1)              | {**0**, 1}        | Enables the instrumentation level for tracing API calls                           |
-| ^                   | [${X}_ENABLE_PIN](#i2)                      | {**0**, 1}        | Enables the instrumentation level for program instrumentation                     |
+| ^                   | [${X}_ENABLE_API_TRACING](#i1)              | {**0**, 1}        | Enables the instrumentation for API tracing                                       |
+| ^                   | [${X}_ENABLE_METRICS](#i2)                  | {**0**, 1}        | Enables the instrumentation for device metrics                                    |
+| ^                   | [${X}_ENABLE_PROGRAM_INSTRUMENTATION](#i3)  | {**0**, 1}        | Enables the instrumentation for program instrumentation                           |
+| ^                   | [${X}_ENABLE_PROGRAM_DEBUGGING](#i4)        | {**0**, 1}        | Enables the instrumentation for program debugging                                 |
 ## --validate=on
 
 ${"###"} <a name="aff">Affinity Mask</a>
@@ -287,11 +289,17 @@ The following examples demonstrate proper usage:
 
 ${"#"} <a name="tls">Tools</a>
 Level-Zero APIs specific for supporting 3rd-party tools are separated from "Core" into "Tools" APIs.
+The "Tools" APIs are designed to provided low-level access to device capabilities in order to support 3rd-party tools, but are not intended to replace or directly interface 3rd-party tools.
+The "Tools" APIs are still available for direct application use.
 
 The following diagram illustrates how 3rd-party tools may utilize the instrumentation layer:  
 ![Tool](../images/intro_tools.png?raw=true)  
 @image latex intro_tools.png
 
-The "Tools" APIs are designed to provided low-level access to device capabilities in order to support 3rd-party tools, but are not intended to replace or directly interface 3rd-party tools.
-The "Tools" APIs allow for driver callbacks to be registered by 3rd-party tools to be notified of specific API events.
+The "Tools" APIs provide the following capabilities for 3rd-party tools:
+- Allow for callbacks to be registered, in order to be notified of specific application events.
+- Allow for device metrics to be queried, in order to profile application usage.
+- Allow for application programs to be instrumented with custom instructions, for low-level code profiling.
+- Allow for application programs to be debugged using breakpoints and register access.
 
+See the "Tools" programming guide for more details.

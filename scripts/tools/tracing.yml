@@ -4,28 +4,28 @@ desc: "Intel $OneApi Level-Zero Tool APIs for API Tracing"
 --- #--------------------------------------------------------------------------
 type: typedef
 desc: "Re-use the existing DDI table definition for 'core' callbacks"
-class: $tDevice
+class: $tDeviceGroup
 name: $t_core_callbacks_t
 value: $x_dditable_t
 --- #--------------------------------------------------------------------------
 type: typedef
 desc: "Re-use the existing DDI table definition for 'extended' callbacks"
-class: $tDevice
+class: $tDeviceGroup
 name: $t_extended_callbacks_t
 value: $e_dditable_t
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Sets the collection of callbacks to be executed **before** driver execution."
-class: $tDevice
+class: $tDeviceGroup
 name: SetTracingPrologue
 details:
     - "The application only needs to set the function pointers it is interested in receiving; all others should be 'nullptr'"
     - "The application must ensure that no other threads are executing functions for which the tracing functions are changing."
-    - "The application may **not** call this function from simultaneous threads with the same device handle."
+    - "The application may **not** call this function from simultaneous threads with the same device group handle."
 params:
-    - type: "$t_device_handle_t"
-      name: hDevice
-      desc: "[in] handle of the device"
+    - type: "$t_device_group_handle_t"
+      name: hDeviceGroup
+      desc: "[in] handle of the device group"
     - type: "$t_core_callbacks_t*"
       name: pCoreCbs
       desc: "[in] pointer to table of 'core' callback function pointers"
@@ -35,16 +35,16 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Sets the collection of callbacks to be executed **after** driver execution."
-class: $tDevice
+class: $tDeviceGroup
 name: SetTracingEpilogue
 details:
     - "The application only needs to set the function pointers it is interested in receiving; all others should be 'nullptr'"
     - "The application must ensure that no other threads are executing functions for which the tracing functions are changing."
-    - "The application may **not** call this function from simultaneous threads with the same device handle."
+    - "The application may **not** call this function from simultaneous threads with the same device group handle."
 params:
-    - type: "$t_device_handle_t"
-      name: hDevice
-      desc: "[in] handle of the device"
+    - type: "$t_device_group_handle_t"
+      name: hDeviceGroup
+      desc: "[in] handle of the device group"
     - type: "$t_core_callbacks_t*"
       name: pCoreCbs
       desc: "[in] pointer to table of 'core' callback function pointers"

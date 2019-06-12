@@ -51,6 +51,13 @@ namespace xet_lib
 
         if( XE_RESULT_SUCCESS == result )
         {
+            auto getTable = reinterpret_cast<xet_pfnGetDeviceGroupProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xetGetDeviceGroupProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &ddiTable.DeviceGroup );
+        }
+
+        if( XE_RESULT_SUCCESS == result )
+        {
             auto getTable = reinterpret_cast<xet_pfnGetDeviceProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "xetGetDeviceProcAddrTable") );
             result = getTable( XE_API_VERSION_1_0, &ddiTable.Device );

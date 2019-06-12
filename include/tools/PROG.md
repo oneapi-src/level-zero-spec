@@ -7,10 +7,63 @@ The following documents the high-level programming models and guidelines.
 NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
 
 ## Table of Contents
-* [Metrics](#md)
 * [API Tracing](#at)
+* [Metrics](#md)
 * [Program Instrumentation](#pin)
 * [Program Debug](#dbg)
+
+# <a name="at">API Tracing</a>
+
+## Introduction
+API tracing provides a way for tools to recieve notifications of API calls made by an applicaton.
+The callbacks provide direct access to the input and output parameters for viewing or modification.
+Tools may also use these notifications as triggers to block and inject new API calls into the command stream, such as metrics.
+
+## Registration
+Tools may independently register for enter and exist callbacks for individual API calls, per Device Group.
+- xetDeviceGroupSetTracingPrologue is used to specify all the enter callbacks
+- xetDeviceGroupSetTracingEpilogue is used to specify all the exist callbacks
+- The callbacks are defined as function pointers, with identical parameters as the API call itself
+- If the value of a callback is nullptr, then it will be ignored.
+
+The followsing sample code demonstrates a basic usage of API tracing:
+```c
+    xe_result_t OnExitCommandListAppendLaunchFunction(
+        xe_command_list_handle_t hCommandList,
+        xe_function_handle_t hFunction,
+        const xe_thread_group_dimensions_t* pLaunchFuncArgs,
+        xe_event_handle_t hSignalEvent,
+        uint32_t numWaitEvents,
+        xe_event_handle_t* phWaitEvents )
+    {
+        // force a wait after every function
+        xeCommandListAppendWaitOnEvents(hCommandList, 1, &hSignalEvent);
+    }
+
+    void RegisterCallbacks( void )
+    {
+        // Set all callbacks
+        xet_core_callbacks_t prologCbs = {};
+        xet_core_callbacks_t epilogCbs = {};
+        epilogCbs.CommandList.pfnAppendLaunchFunction = OnExitCommandListAppendLaunchFunction;
+
+        // Register for all device groups
+        uint32_t groupCount = 0;
+        xeDeviceGroupGet(&groupCount, nullptr);
+
+        xe_device_group_handle_t* allDeviceGroups = malloc(groupCount * sizeof(xe_device_group_handle_t));
+        xeDeviceGroupGet(&groupCount, allDeviceGroups);
+
+        for(uint32_t i = 0; i < groupCount; ++i)
+        {
+            xetDeviceGroupSetTracingPrologue(allDeviceGroups[i], &prologCbs, nullptr);
+            xetDeviceGroupSetTracingEpilogue(allDeviceGroups[i], &epilogCbs, nullptr);
+        }
+
+        free(allDeviceGroups);
+    }
+```
+
 
 # <a name="md">Metrics</a>
 
@@ -154,7 +207,7 @@ Time-based collection uses a simple Open, Wait, Read, Close scheme:
 @image latex tools_metric_tracer.png
 
 
-The following sample code demonstrates a basic sequence for time based collection:
+The following sample code demonstrates a basic sequence for tracer-based collection:
 ```c
     xe_result_t TimeBasedUsageExample( xe_device_group_handle_t hDeviceGroup, xe_device_handle_t hDevice )
     {
@@ -179,7 +232,7 @@ The following sample code demonstrates a basic sequence for time based collectio
         eventDesc.wait   = XE_EVENT_SCOPE_FLAG_HOST; 
         xeEventCreate( hEventPool, &eventDesc, &hNotificationEvent );
         
-        // Open time based sampling
+        // Open metric tracer
         metricTracerDescriptor.samplingPeriod   	= 1000;
         metricTracerDescriptor.notifyEveryNReports  = 32768;
         xetMetricTracerOpen( hDevice, hMetricGroup, &metricTracerDescriptor, hNotificationEvent, &hMetricTracer );
@@ -229,7 +282,7 @@ A Query Pool is used to efficiently use and reuse device meory for multiple quer
 ![MetricQuery](../images/tools_metric_query.png?raw=true)  
 @image latex tools_metric_query.png
 
-The following sample code demonstrates a basic sequence for query based collection:
+The following sample code demonstrates a basic sequence for query-based collection:
 ```c
     xe_result_t MetricQueryUsageExample( xe_device_group_handle_t hDeviceGroup, xe_device_handle_t hDevice )
     {
@@ -360,11 +413,6 @@ The following sample code demonstrates a basic sequence for metric calculation a
         free(phMetrics);
     }
 ```
-
-# <a name="at">API Tracing</a>
-
-## Introduction
-
 
 # <a name="pin">Program Instrumentation</a>
 

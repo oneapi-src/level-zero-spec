@@ -1626,23 +1626,23 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetDeviceSetTracingPrologue
+    /// @brief Intercept function for xetDeviceGroupSetTracingPrologue
     xe_result_t __xecall
-    xetDeviceSetTracingPrologue(
-        xet_device_handle_t hDevice,                    ///< [in] handle of the device
+    xetDeviceGroupSetTracingPrologue(
+        xet_device_group_handle_t hDeviceGroup,         ///< [in] handle of the device group
         xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
         xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
                                                         ///< pointers
         )
     {
-        auto pfnSetTracingPrologue = context.xetDdiTable.Device.pfnSetTracingPrologue;
+        auto pfnSetTracingPrologue = context.xetDdiTable.DeviceGroup.pfnSetTracingPrologue;
 
         if( nullptr == pfnSetTracingPrologue )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDevice )
+            if( nullptr == hDeviceGroup )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pCoreCbs )
@@ -1650,27 +1650,27 @@ namespace layer
 
         }
 
-        return pfnSetTracingPrologue( hDevice, pCoreCbs, pExtendedCbs );
+        return pfnSetTracingPrologue( hDeviceGroup, pCoreCbs, pExtendedCbs );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetDeviceSetTracingEpilogue
+    /// @brief Intercept function for xetDeviceGroupSetTracingEpilogue
     xe_result_t __xecall
-    xetDeviceSetTracingEpilogue(
-        xet_device_handle_t hDevice,                    ///< [in] handle of the device
+    xetDeviceGroupSetTracingEpilogue(
+        xet_device_group_handle_t hDeviceGroup,         ///< [in] handle of the device group
         xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
         xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
                                                         ///< pointers
         )
     {
-        auto pfnSetTracingEpilogue = context.xetDdiTable.Device.pfnSetTracingEpilogue;
+        auto pfnSetTracingEpilogue = context.xetDdiTable.DeviceGroup.pfnSetTracingEpilogue;
 
         if( nullptr == pfnSetTracingEpilogue )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDevice )
+            if( nullptr == hDeviceGroup )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pCoreCbs )
@@ -1678,7 +1678,7 @@ namespace layer
 
         }
 
-        return pfnSetTracingEpilogue( hDevice, pCoreCbs, pExtendedCbs );
+        return pfnSetTracingEpilogue( hDeviceGroup, pCoreCbs, pExtendedCbs );
     }
 
 } // namespace layer
@@ -1721,6 +1721,42 @@ xetGetGlobalProcAddrTable(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's DeviceGroup table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetDeviceGroupProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_device_group_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    auto& dditable = layer::context.xetDdiTable.DeviceGroup;
+
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( layer::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    dditable.pfnSetTracingPrologue                       = pDdiTable->pfnSetTracingPrologue;
+    pDdiTable->pfnSetTracingPrologue                     = layer::xetDeviceGroupSetTracingPrologue;
+
+    dditable.pfnSetTracingEpilogue                       = pDdiTable->pfnSetTracingEpilogue;
+    pDdiTable->pfnSetTracingEpilogue                     = layer::xetDeviceGroupSetTracingEpilogue;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Exported function for filling application's Device table
 ///        with current process' addresses
 ///
@@ -1749,12 +1785,6 @@ xetGetDeviceProcAddrTable(
 
     dditable.pfnActivateMetricGroups                     = pDdiTable->pfnActivateMetricGroups;
     pDdiTable->pfnActivateMetricGroups                   = layer::xetDeviceActivateMetricGroups;
-
-    dditable.pfnSetTracingPrologue                       = pDdiTable->pfnSetTracingPrologue;
-    pDdiTable->pfnSetTracingPrologue                     = layer::xetDeviceSetTracingPrologue;
-
-    dditable.pfnSetTracingEpilogue                       = pDdiTable->pfnSetTracingEpilogue;
-    pDdiTable->pfnSetTracingEpilogue                     = layer::xetDeviceSetTracingEpilogue;
 
     return result;
 }

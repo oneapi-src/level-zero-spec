@@ -61,19 +61,19 @@ typedef xex_dditable_t xet_extended_callbacks_t;
 ///     - The application must ensure that no other threads are executing
 ///       functions for which the tracing functions are changing.
 ///     - The application may **not** call this function from simultaneous
-///       threads with the same device handle.
+///       threads with the same device group handle.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
+///         + nullptr == hDeviceGroup
 ///         + nullptr == pCoreCbs
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetDeviceSetTracingPrologue(
-    xet_device_handle_t hDevice,                    ///< [in] handle of the device
+xetDeviceGroupSetTracingPrologue(
+    xet_device_group_handle_t hDeviceGroup,         ///< [in] handle of the device group
     xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
     xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
                                                     ///< pointers
@@ -89,19 +89,19 @@ xetDeviceSetTracingPrologue(
 ///     - The application must ensure that no other threads are executing
 ///       functions for which the tracing functions are changing.
 ///     - The application may **not** call this function from simultaneous
-///       threads with the same device handle.
+///       threads with the same device group handle.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
+///         + nullptr == hDeviceGroup
 ///         + nullptr == pCoreCbs
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetDeviceSetTracingEpilogue(
-    xet_device_handle_t hDevice,                    ///< [in] handle of the device
+xetDeviceGroupSetTracingEpilogue(
+    xet_device_group_handle_t hDeviceGroup,         ///< [in] handle of the device group
     xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
     xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
                                                     ///< pointers
