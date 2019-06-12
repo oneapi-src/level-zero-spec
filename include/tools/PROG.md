@@ -8,11 +8,9 @@ NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
 
 ## Table of Contents
 * [Metrics](#md)
+* [API Tracing](#at)
 * [Program Instrumentation](#pin)
 * [Program Debug](#dbg)
-* [API Tracing](#at)
-* [Power](#pm)
-* [System Management](#sm)
 
 # <a name="md">Metrics</a>
 
@@ -20,70 +18,68 @@ NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
 Devices provide programmable infrastructure designed to support performance debugging. The API
 described in this document provides access to these device metrics.
 
-Most of the detailed metrics require the device to be properly programmed by the driver. It is
+The following diagram illustrates the relationship between the metric objects described in this document.  
+![Metrics](../images/tools_metric_hierarchy.png?raw=true)  
+@image latex tools_metric_hierarchy.png
+
+Most of the detailed metrics require the device to be properly programmed before use. It is
 important to understand that the device programming is in most cases global. This generally means
 that if a software tool or an application is using the metrics then no other application
 can reliably use the same device resources.
 
+The use of some metrics may negatively impact the performance of the device.
 The intention of this API is to support performance debug and it is not advised to use it in regular execution.
 
-### Software abstraction of device counting
-The device infrastucture consists of non-programmable pre-defined set of counters, a programmable
+## Metric Groups
+The device infrastucture consists of non-programmable, pre-defined set of counters, and a programmable
 network of connections that work with a separate set of counters as well as other types of counters.
-For sake of simplicity the smallest unit of configuration is a Metric Group. Metric Groups are
+For sake of simplicity, the smallest unit of configuration is a Metric Group. Metric Groups are
 sets of metrics that provide certain perspective on workload's performance. The groups aggregate metrics,
 define device programming and available collection methods. An application may choose to collect data
 from a number of Metric Groups provided that they all belong to different domains. [Domains](#dom) are used
 as a software representation of independent device resources that can safely be used concurrently.
 
-### Sampling types
+### Sampling Types
 Sampling types are a software representation of device capabilities in terms of reading metric values.
 Each Metric Group provides information which sampling types it supports.
-There are separate sets of APIs supporting each of the sampling types [Time based](#tbs) and [Query based](#queries).
+There are separate sets of APIs supporting each of the sampling types [Time-based](#tbs) and [Event-based](#query).
 
 All available sampling types are defined in ::xet_metric_group_sampling_type_t.
 - Information about supported sampling types for a given Metric Group is provided in 
   ::xet_metric_group_properties_t.samplingType.
-- It's possible that Xe provides multiple Metric Groups with the same names but different sampling types.
+- It's possible that a device provides multiple Metric Groups with the same names but different sampling types.
 - When enumerating, it's important to choose a Metric Group which supports the desired sampling type.
 
 ### <a name="dom">Domains</a>
 Every Metric Group belongs to a given domain (::xet_metric_group_properties_t.domain). 
+- The Metric Group typically define a uniform device counter configuration used for measurements.
 - Each domain represents an exclusive resource used by the Metric Group.
 - It's possible to simultaneously gather data for two different Metric Groups, only if they belong
   to a different domain i.e. Metric Groups that can be collected concurrently will have different domain values.
 
 ## <a name="enu">Enumeration</a>
-A common tool flow is to enumerate metrics looking for specific Metric Groups and/or Metrics.
-Depending on the metrics required for a specific scenario a tool may choose to run the workload multiple times
-recording different set of Metric Groups each time.
-Usually care must be taken to ensure run to run stability and result repeatability if metrics from different runs are meant to be used together.
-
 All available metrics are organized into Metric Groups.
-- If required, a Metric Group contains a uniform device counter configuration used for measurements.
-  The programming is not exposed in the API.
 - During data collection, data for the whole Metric Group is gathered.
-- Metric Group names don't have to be unique.
-- List of available Metric Groups and Metrics depends on device and driver.
+- The list of available Metric Groups and their Metrics is device-specific.
 
-Each level of the metrics hierarchy (MetricGroups and Metrics) provides all the information needed for
-its identification and usage.
+The following APIs provide all the information needed for identification and usage.
 - Metric Group properties are accessed through function ::xetMetricGroupGetProperties, returning
   ::xet_metric_group_properties_t.
 - Metric properties are accessed through function ::xetMetricGetProperties, returning
   ::xet_metric_properties_t.
 
-![Metrics](../images/tools_metric_hierarchy.png?raw=true)  
-@image latex tools_metric_hierarchy.png
-
-When enumerating Metric tree to find a desired Metric Group, it's important to know in advance with
-which sampling type it will be used. 
+A common tool flow is to enumerate metrics looking for a specific Metric Group.
+Depending on the metrics required for a specific scenario a tool may choose to run the workload multiple times,
+recording different set of Metric Groups each time.
+Usually care must be taken to ensure run-to-run stability and result repeatability if metrics from different runs are meant to be used together.
+When enumerating Metric tree to find a desired Metric Group, it's important to know in advance which sampling type it will be used. 
 
 To enumerate through the Metric tree:
 1. Call ::xetMetricGroupGet to obtain Metric Group count.
 2. Call ::xetMetricGroupGet to obtain all Metric Groups.
 3. Iterate over all available Metric Groups.
     - At this point it's possible to check e.g. Metric Group name, domain or sampling type.
+    - Metric Group names may not be unique.
 4. For each Metric Group obtain their Metric count calling ::xetMetricGroupGetProperties with
    Metric Group handle (::xet_metric_group_handle_t) and checking ::xet_metric_group_properties_t.metricCount.
 5. Iterate over available Metrics using ::xetMetricGet with parent Metric Group (::xet_metric_group_handle_t).
@@ -132,29 +128,27 @@ for selecting a preferred metric group for a specific type of measurements.
 ## <a name="con">Configuration</a>
 Use the ::xetDeviceActivateMetricGroups API call to configure the device for data collection.
 - Subsequent calls to the function will disable device programming for the metric groups not selected for activation.
-- To avoid bogous data only call the ::xetDeviceActivateMetricGroups between experiments i.e. while not collecting data.
+- To avoid undefined results only call the ::xetDeviceActivateMetricGroups between experiments i.e. while not collecting data.
 
 Programming restrictions:
 - Any combination of metric groups can be configured simultanously provided that all of them have
   different ::xet_metric_group_properties_t.domain.
 - MetricGroup must be active until ::xetMetricQueryGetData and ::xetMetricTracerClose.
-- Conflicting Groups cannot be activated, in such case the call to TODO ... would fail.
+- Conflicting Groups cannot be activated, in such case the call to ::xetDeviceActivateMetricGroups would fail.
 
 ## <a name="col">Collection</a>
-There are two modes of metrics collection supported: time based and query based.
-- Time based collection is using a timer as well as other events to store data samples in circular buffer.
-  A metric tracer interface is a software interface for configuration and collection.
-- Query based metrics collection is based on a pair of Begin/End events appended to command lists.
-  Query result generally characterizes device behavior between those events.
+There are two modes of metrics collection supported: time-based and event-based.
+- Time-based collection is using a timer as well as other events to store data samples.
+  A metric tracer interface is the software interface for configuration and collection.
+- Event-based metrics collection is based on a pair of Begin/End events appended to command lists.
+  A metric query interface is the software interface for configuration and collection.
 
-### <a name="tbs">Time Based</a>
-Time based collection is using a simple Open/Wait/Read/Close scheme:
+### <a name="tbs">Metric Tracer</a>
+Time-based collection uses a simple Open, Wait, Read, Close scheme:
 - ::xetMetricTracerOpen opens the tracer.
 - ::xeEventHostSynchronize and ::xeEventQueryStatus can be used to wait for data.
-- ::xetMetricTracerReadData reads the data.
+- ::xetMetricTracerReadData reads the data to be later processed by ::xetMetricGroupCalculateData.
 - ::xetMetricTracerClose closes the tracer.
-
-**Note:** To avoid incorrect data, do not reconfigure the device using ::xetDeviceActivateMetricGroups while the tracer is opened.
 
 ![MetricTracer](../images/tools_metric_tracer.png?raw=true)  
 @image latex tools_metric_tracer.png
@@ -215,17 +209,22 @@ The following sample code demonstrates a basic sequence for time based collectio
 
         // Calculate metric data
         CalculateMetricsExample( hMetricGroup, rawSize, rawData );
+        free(rawData);
     }
 ```
 
-### <a name="queries">Queries</a>
-Query API provides a way of acquiring metrics per portions of workload delimited by BEGIN/END events.
-Typically, multiple queries are used to characterize a workload so the API is pool based.
+### <a name="query">Metric Query</a>
+Event-based collection uses a simple Begin, End, GetData scheme:
+- ::xetCommandListAppendMetricQueryBegin defines the start counting event
+- ::xetCommandListAppendMetricQueryEnd defines the finish counting event
+- ::xetMetricQueryGetData reads the raw data to be later processed by ::xetMetricGroupCalculateData.
 
-- A metric query pool is created and destroyed using ::xetMetricQueryPoolCreate and ::xetMetricQueryPoolDestroy calls.
-- To work with individual query object, use ::xetMetricQueryCreate to get a handle.
-- Then insert BEGIN/END events into a command list using ::xetCommandListAppendMetricQueryBegin and ::xetCommandListAppendMetricQueryEnd calls.
-- Once the workload has been executed the ::xetMetricQueryGetData returns the raw data to be later processed by ::xetMetricGroupCalculateData.
+Typically, multiple queries are used and recycled to characterize a workload.
+A Query Pool is used to efficiently use and reuse device meory for multiple queries.
+- ::xetMetricQueryPoolCreate creates a pool of homogeneous queries.
+- ::xetMetricQueryPoolDestroy frees the pool. The application must ensure no queries within the pool are in-use before freeing the pool.
+- ::xetMetricQueryCreate obtains a handle to a unique location in the pool.
+- ::xetMetricQueryReset allows for low-cost recycling of a location in the pool.
 
 ![MetricQuery](../images/tools_metric_query.png?raw=true)  
 @image latex tools_metric_query.png
@@ -291,6 +290,7 @@ The following sample code demonstrates a basic sequence for query based collecti
 
         // Calculate metric data
         CalculateMetricsExample( hMetricGroup, rawSize, rawData );
+        free(rawData);
     }
 ```
 
@@ -355,14 +355,23 @@ The following sample code demonstrates a basic sequence for metric calculation a
                 };
             }
         }
+
+        free(calculatedData);
+        free(phMetrics);
     }
 ```
 
-# <a name="pm">Power</a>
+# <a name="at">API Tracing</a>
 
 ## Introduction
 
 
-# <a name="sm">System Management</a>
+# <a name="pin">Program Instrumentation</a>
 
 ## Introduction
+
+
+# <a name="pin">Program Debug</a>
+
+## Introduction
+
