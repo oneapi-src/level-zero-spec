@@ -235,12 +235,26 @@ typedef xe_result_t (__xecall *xet_pfnModuleGetDebugInfo_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetModuleReserveSpace 
-typedef xe_result_t (__xecall *xet_pfnModuleReserveSpace_t)(
+/// @brief Function-pointer for xetModuleAllocateExecutableMemory 
+typedef xe_result_t (__xecall *xet_pfnModuleAllocateExecutableMemory_t)(
     xet_module_handle_t,
     size_t,
-    void**,
     void**
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetModuleFreeExecutableMemory 
+typedef xe_result_t (__xecall *xet_pfnModuleFreeExecutableMemory_t)(
+    xet_module_handle_t,
+    void*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetModuleGetFunctionNames 
+typedef xe_result_t (__xecall *xet_pfnModuleGetFunctionNames_t)(
+    xet_module_handle_t,
+    uint32_t*,
+    const char**
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -248,7 +262,9 @@ typedef xe_result_t (__xecall *xet_pfnModuleReserveSpace_t)(
 typedef struct _xet_module_dditable_t
 {
     xet_pfnModuleGetDebugInfo_t                                 pfnGetDebugInfo;
-    xet_pfnModuleReserveSpace_t                                 pfnReserveSpace;
+    xet_pfnModuleAllocateExecutableMemory_t                     pfnAllocateExecutableMemory;
+    xet_pfnModuleFreeExecutableMemory_t                         pfnFreeExecutableMemory;
+    xet_pfnModuleGetFunctionNames_t                             pfnGetFunctionNames;
 } xet_module_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -273,6 +289,52 @@ xetGetModuleProcAddrTable(
 typedef xe_result_t (__xecall *xet_pfnGetModuleProcAddrTable_t)(
     xe_api_version_t,
     xet_module_dditable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetFunctionGetProfileInfo 
+typedef xe_result_t (__xecall *xet_pfnFunctionGetProfileInfo_t)(
+    xet_function_handle_t,
+    xet_profile_info_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetFunctionSetAddress 
+typedef xe_result_t (__xecall *xet_pfnFunctionSetAddress_t)(
+    xet_function_handle_t,
+    void*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Function functions pointers
+typedef struct _xet_function_dditable_t
+{
+    xet_pfnFunctionGetProfileInfo_t                             pfnGetProfileInfo;
+    xet_pfnFunctionSetAddress_t                                 pfnSetAddress;
+} xet_function_dditable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Function table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetFunctionProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_function_dditable_t* pDdiTable              ///< [in,out] pointer to table of DDI function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetGetFunctionProcAddrTable
+typedef xe_result_t (__xecall *xet_pfnGetFunctionProcAddrTable_t)(
+    xe_api_version_t,
+    xet_function_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -928,6 +990,7 @@ typedef struct _xet_dditable_t
     xet_device_dditable_t               Device;
     xet_command_list_dditable_t         CommandList;
     xet_module_dditable_t               Module;
+    xet_function_dditable_t             Function;
     xet_metric_group_dditable_t         MetricGroup;
     xet_metric_dditable_t               Metric;
     xet_metric_tracer_dditable_t        MetricTracer;

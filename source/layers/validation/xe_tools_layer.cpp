@@ -622,18 +622,17 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetModuleReserveSpace
+    /// @brief Intercept function for xetModuleAllocateExecutableMemory
     xe_result_t __xecall
-    xetModuleReserveSpace(
+    xetModuleAllocateExecutableMemory(
         xet_module_handle_t hModule,                    ///< [in] handle of the module
-        size_t size,                                    ///< [in] size (in bytes) to reserve
-        void** hostptr,                                 ///< [out] Host visible pointer to space reserved
-        void** deviceptr                                ///< [out] device visible pointer to space reserved
+        size_t size,                                    ///< [in] size (in bytes) to allocate
+        void** ptr                                      ///< [out] pointer to allocation
         )
     {
-        auto pfnReserveSpace = context.xetDdiTable.Module.pfnReserveSpace;
+        auto pfnAllocateExecutableMemory = context.xetDdiTable.Module.pfnAllocateExecutableMemory;
 
-        if( nullptr == pfnReserveSpace )
+        if( nullptr == pfnAllocateExecutableMemory )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -641,15 +640,121 @@ namespace layer
             if( nullptr == hModule )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == hostptr )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == deviceptr )
+            if( nullptr == ptr )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnReserveSpace( hModule, size, hostptr, deviceptr );
+        return pfnAllocateExecutableMemory( hModule, size, ptr );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetModuleFreeExecutableMemory
+    xe_result_t __xecall
+    xetModuleFreeExecutableMemory(
+        xet_module_handle_t hModule,                    ///< [in] handle of the module
+        void* ptr                                       ///< [in] pointer to allocation to free
+        )
+    {
+        auto pfnFreeExecutableMemory = context.xetDdiTable.Module.pfnFreeExecutableMemory;
+
+        if( nullptr == pfnFreeExecutableMemory )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hModule )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == ptr )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnFreeExecutableMemory( hModule, ptr );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetModuleGetFunctionNames
+    xe_result_t __xecall
+    xetModuleGetFunctionNames(
+        xet_module_handle_t hModule,                    ///< [in] handle of the device
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of names available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of names.
+        const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
+        )
+    {
+        auto pfnGetFunctionNames = context.xetDdiTable.Module.pfnGetFunctionNames;
+
+        if( nullptr == pfnGetFunctionNames )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hModule )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCount )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetFunctionNames( hModule, pCount, pNames );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetFunctionGetProfileInfo
+    xe_result_t __xecall
+    xetFunctionGetProfileInfo(
+        xet_function_handle_t hFunction,                ///< [in] handle to function
+        xet_profile_info_t* pInfo                       ///< [out] pointer to profile info
+        )
+    {
+        auto pfnGetProfileInfo = context.xetDdiTable.Function.pfnGetProfileInfo;
+
+        if( nullptr == pfnGetProfileInfo )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFunction )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pInfo )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetProfileInfo( hFunction, pInfo );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetFunctionSetAddress
+    xe_result_t __xecall
+    xetFunctionSetAddress(
+        xet_function_handle_t hFunction,                ///< [in] handle to function
+        void* ptr                                       ///< [in] address to use for function; must be allocated using ::xetModuleAllocateExecutableMemory.
+                                                        ///< if address is nullptr, then resets function address to default value."
+        )
+    {
+        auto pfnSetAddress = context.xetDdiTable.Function.pfnSetAddress;
+
+        if( nullptr == pfnSetAddress )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hFunction )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == ptr )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSetAddress( hFunction, ptr );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1861,8 +1966,50 @@ xetGetModuleProcAddrTable(
     dditable.pfnGetDebugInfo                             = pDdiTable->pfnGetDebugInfo;
     pDdiTable->pfnGetDebugInfo                           = layer::xetModuleGetDebugInfo;
 
-    dditable.pfnReserveSpace                             = pDdiTable->pfnReserveSpace;
-    pDdiTable->pfnReserveSpace                           = layer::xetModuleReserveSpace;
+    dditable.pfnAllocateExecutableMemory                 = pDdiTable->pfnAllocateExecutableMemory;
+    pDdiTable->pfnAllocateExecutableMemory               = layer::xetModuleAllocateExecutableMemory;
+
+    dditable.pfnFreeExecutableMemory                     = pDdiTable->pfnFreeExecutableMemory;
+    pDdiTable->pfnFreeExecutableMemory                   = layer::xetModuleFreeExecutableMemory;
+
+    dditable.pfnGetFunctionNames                         = pDdiTable->pfnGetFunctionNames;
+    pDdiTable->pfnGetFunctionNames                       = layer::xetModuleGetFunctionNames;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Function table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetFunctionProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_function_dditable_t* pDdiTable              ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    auto& dditable = layer::context.xetDdiTable.Function;
+
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( layer::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    dditable.pfnGetProfileInfo                           = pDdiTable->pfnGetProfileInfo;
+    pDdiTable->pfnGetProfileInfo                         = layer::xetFunctionGetProfileInfo;
+
+    dditable.pfnSetAddress                               = pDdiTable->pfnSetAddress;
+    pDdiTable->pfnSetAddress                             = layer::xetFunctionSetAddress;
 
     return result;
 }

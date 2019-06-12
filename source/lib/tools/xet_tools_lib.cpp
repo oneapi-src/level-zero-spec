@@ -79,6 +79,13 @@ namespace xet_lib
 
         if( XE_RESULT_SUCCESS == result )
         {
+            auto getTable = reinterpret_cast<xet_pfnGetFunctionProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xetGetFunctionProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &ddiTable.Function );
+        }
+
+        if( XE_RESULT_SUCCESS == result )
+        {
             auto getTable = reinterpret_cast<xet_pfnGetMetricGroupProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "xetGetMetricGroupProcAddrTable") );
             result = getTable( XE_API_VERSION_1_0, &ddiTable.MetricGroup );

@@ -62,6 +62,10 @@ typedef xe_command_list_handle_t xet_command_list_handle_t;
 typedef xe_module_handle_t xet_module_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle of function object
+typedef xe_function_handle_t xet_function_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of metric group's object
 typedef struct _xet_metric_group_handle_t *xet_metric_group_handle_t;
 
@@ -108,6 +112,18 @@ typedef struct _xet_metric_tracer_desc_t xet_metric_tracer_desc_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_metric_query_pool_desc_t
 typedef struct _xet_metric_query_pool_desc_t xet_metric_query_pool_desc_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_profile_info_t
+typedef struct _xet_profile_info_t xet_profile_info_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_profile_grf_token_t
+typedef struct _xet_profile_grf_token_t xet_profile_grf_token_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_profile_grf_sequence_t
+typedef struct _xet_profile_grf_sequence_t xet_profile_grf_sequence_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_power_average_limit_t

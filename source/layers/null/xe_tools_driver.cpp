@@ -368,13 +368,71 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetModuleReserveSpace
+    /// @brief Intercept function for xetModuleAllocateExecutableMemory
     xe_result_t __xecall
-    xetModuleReserveSpace(
+    xetModuleAllocateExecutableMemory(
         xet_module_handle_t hModule,                    ///< [in] handle of the module
-        size_t size,                                    ///< [in] size (in bytes) to reserve
-        void** hostptr,                                 ///< [out] Host visible pointer to space reserved
-        void** deviceptr                                ///< [out] device visible pointer to space reserved
+        size_t size,                                    ///< [in] size (in bytes) to allocate
+        void** ptr                                      ///< [out] pointer to allocation
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        *ptr = malloc( size );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetModuleFreeExecutableMemory
+    xe_result_t __xecall
+    xetModuleFreeExecutableMemory(
+        xet_module_handle_t hModule,                    ///< [in] handle of the module
+        void* ptr                                       ///< [in] pointer to allocation to free
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetModuleGetFunctionNames
+    xe_result_t __xecall
+    xetModuleGetFunctionNames(
+        xet_module_handle_t hModule,                    ///< [in] handle of the device
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of names available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of names.
+        const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetFunctionGetProfileInfo
+    xe_result_t __xecall
+    xetFunctionGetProfileInfo(
+        xet_function_handle_t hFunction,                ///< [in] handle to function
+        xet_profile_info_t* pInfo                       ///< [out] pointer to profile info
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetFunctionSetAddress
+    xe_result_t __xecall
+    xetFunctionSetAddress(
+        xet_function_handle_t hFunction,                ///< [in] handle to function
+        void* ptr                                       ///< [in] address to use for function; must be allocated using ::xetModuleAllocateExecutableMemory.
+                                                        ///< if address is nullptr, then resets function address to default value."
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -1092,7 +1150,43 @@ xetGetModuleProcAddrTable(
 
     pDdiTable->pfnGetDebugInfo                           = driver::xetModuleGetDebugInfo;
 
-    pDdiTable->pfnReserveSpace                           = driver::xetModuleReserveSpace;
+    pDdiTable->pfnAllocateExecutableMemory               = driver::xetModuleAllocateExecutableMemory;
+
+    pDdiTable->pfnFreeExecutableMemory                   = driver::xetModuleFreeExecutableMemory;
+
+    pDdiTable->pfnGetFunctionNames                       = driver::xetModuleGetFunctionNames;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Function table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetFunctionProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_function_dditable_t* pDdiTable              ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( driver::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    pDdiTable->pfnGetProfileInfo                         = driver::xetFunctionGetProfileInfo;
+
+    pDdiTable->pfnSetAddress                             = driver::xetFunctionSetAddress;
 
     return result;
 }

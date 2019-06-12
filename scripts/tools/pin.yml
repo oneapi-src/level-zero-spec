@@ -3,10 +3,12 @@ type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for Program Instrumentation (PIN)"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Reserve a section of contiguous buffer space within the module."
+desc: "Allocates executable memory from a module."
 class: $tModule
-name: ReserveSpace
+name: AllocateExecutableMemory
 details:
+    - The pointer returned is accessible by both the Host and the device from which the module was created.
+    - The pointer is only valid to be used from within the module.
     - "The application may **not** call this function from simultaneous threads with the same module handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -15,13 +17,158 @@ params:
       desc: "[in] handle of the module"
     - type: size_t
       name: size
-      desc: "[in] size (in bytes) to reserve"
+      desc: "[in] size (in bytes) to allocate"
     - type: void**
-      name: hostptr
-      desc: "[out] Host visible pointer to space reserved"
-    - type: "void**"
-      name: deviceptr
-      desc: "[out] device visible pointer to space reserved"
+      name: ptr
+      desc: "[out] pointer to allocation"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
        - "0 for size"
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Frees executable memory from a module."
+class: $tModule
+name: FreeExecutableMemory
+details:
+    - "The application may **not** call this function from simultaneous threads with the same module handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_module_handle_t
+      name: hModule
+      desc: "[in] handle of the module"
+    - type: void*
+      name: ptr
+      desc: "[in] pointer to allocation to free"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieve all function names in the module."
+class: $tModule
+name: GetFunctionNames
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_module_handle_t
+      name: hModule
+      desc: "[in] handle of the device"
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of names.
+            if count is zero, then the driver will update the value with the total number of names available.
+            if count is non-zero, then driver will only retrieve that number of names.
+    - type: "const char**"
+      name: pNames
+      desc: "[in,out][optional][range(0, *pCount)] array of names of functions"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "API version of $t_profile_info_t"
+class: $tFunction
+name: $t_profile_info_version_t
+etors:
+    - name: $T_PROFILE_INFO_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supportted profile features"
+class: $tFunction
+name: $t_profile_flag_t
+etors:
+    - name: $T_PROFILE_FLAG_RERA
+      value: "$X_BIT(0)"
+      desc: "RERA"
+    - name: $T_PROFILE_FLAG_GRF
+      value: "$X_BIT(1)"
+      desc: "free GRF info"
+    - name: $T_PROFILE_FLAG_SRCLINE
+      value: "$X_BIT(2)"
+      desc: "source line mapping"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Profiling meta-data for instrumentation"
+class: $tFunction
+name: $t_profile_info_t
+members:
+    - type: $t_profile_info_version_t
+      name: version
+      desc: "[in] $T_PROFILE_INFO_VERSION_CURRENT"
+      init: "$T_PROFILE_INFO_VERSION_CURRENT"
+    - type: $t_profile_flag_t
+      name: flags
+      desc: "[out] indicates which flags were enabled during compilation"
+    - type: uint32_t
+      name: numTokens
+      desc: "[out] number of tokens immediately following this structure"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported profile token types"
+class: $tFunction
+name: $t_profile_token_type_t
+etors:
+    - name: $T_PROFILE_TOKEN_TYPE_GRF
+      desc: "GRF info"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Profile GRF token detailing unused registers in the current function"
+class: $tFunction
+name: $t_profile_grf_token_t
+members:
+    - type: $t_profile_token_type_t
+      name: type
+      desc: "[out] type of token"
+    - type: uint32_t
+      name: size
+      desc: "[out] total size of the token, in bytes"
+    - type: uint32_t
+      name: count
+      desc: "[out] number of register sequences immediately following this structure"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Profile GRF sequence detailing consecutive bytes, all of which are unused"
+class: $tFunction
+name: $t_profile_grf_sequence_t
+members:
+    - type: uint32_t
+      name: start
+      desc: "[out] starting byte in the GRF table, representing the start of unused bytes in the current function"
+    - type: uint32_t
+      name: count
+      desc: "[out] number of consecutive bytes in the sequence, starting from start"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieve profiling information generated for the function."
+class: $tFunction
+name: GetProfileInfo
+details:
+    - "Module must be created using the following build option:":
+        - "\"-$t-profile-flags <n>\" - enable generation of profile information"
+        - "\"<n>\" must be a combination of $t_profile_flag_t, in hex"
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_function_handle_t
+      name: hFunction
+      desc: "[in] handle to function"
+    - type: "$t_profile_info_t*"
+      name: pInfo
+      desc: "[out] pointer to profile info"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Changes the address of a function for the next $xCommandListAppendLaunchFunction"
+class: $tFunction
+name: SetAddress
+details:
+    - "This function may **not** be called from simultaneous threads with the same function handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_function_handle_t
+      name: hFunction
+      desc: "[in] handle to function"
+    - type: void*
+      name: ptr
+      desc: |
+            [in] address to use for function; must be allocated using $tModuleAllocateExecutableMemory.
+            if address is nullptr, then resets function address to default value."

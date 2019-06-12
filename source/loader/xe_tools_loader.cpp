@@ -37,6 +37,7 @@ namespace loader
     xet_device_factory_t                xet_device_factory;
     xet_command_list_factory_t          xet_command_list_factory;
     xet_module_factory_t                xet_module_factory;
+    xet_function_factory_t              xet_function_factory;
     xet_metric_group_factory_t          xet_metric_group_factory;
     xet_metric_factory_t                xet_metric_factory;
     xet_metric_tracer_factory_t         xet_metric_tracer_factory;
@@ -583,13 +584,12 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetModuleReserveSpace
+    /// @brief Intercept function for xetModuleAllocateExecutableMemory
     xe_result_t __xecall
-    xetModuleReserveSpace(
+    xetModuleAllocateExecutableMemory(
         xet_module_handle_t hModule,                    ///< [in] handle of the module
-        size_t size,                                    ///< [in] size (in bytes) to reserve
-        void** hostptr,                                 ///< [out] Host visible pointer to space reserved
-        void** deviceptr                                ///< [out] device visible pointer to space reserved
+        size_t size,                                    ///< [in] size (in bytes) to allocate
+        void** ptr                                      ///< [out] pointer to allocation
         )
     {
         // extract driver's function pointer table
@@ -599,7 +599,92 @@ namespace loader
         hModule = reinterpret_cast<xet_module_object_t*>( hModule )->handle;
 
         // forward to device-driver
-        auto result = dditable->xet.Module.pfnReserveSpace( hModule, size, hostptr, deviceptr );
+        auto result = dditable->xet.Module.pfnAllocateExecutableMemory( hModule, size, ptr );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetModuleFreeExecutableMemory
+    xe_result_t __xecall
+    xetModuleFreeExecutableMemory(
+        xet_module_handle_t hModule,                    ///< [in] handle of the module
+        void* ptr                                       ///< [in] pointer to allocation to free
+        )
+    {
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_module_object_t*>( hModule )->dditable;
+
+        // convert loader handle to driver handle
+        hModule = reinterpret_cast<xet_module_object_t*>( hModule )->handle;
+
+        // forward to device-driver
+        auto result = dditable->xet.Module.pfnFreeExecutableMemory( hModule, ptr );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetModuleGetFunctionNames
+    xe_result_t __xecall
+    xetModuleGetFunctionNames(
+        xet_module_handle_t hModule,                    ///< [in] handle of the device
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of names available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of names.
+        const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
+        )
+    {
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_module_object_t*>( hModule )->dditable;
+
+        // convert loader handle to driver handle
+        hModule = reinterpret_cast<xet_module_object_t*>( hModule )->handle;
+
+        // forward to device-driver
+        auto result = dditable->xet.Module.pfnGetFunctionNames( hModule, pCount, pNames );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetFunctionGetProfileInfo
+    xe_result_t __xecall
+    xetFunctionGetProfileInfo(
+        xet_function_handle_t hFunction,                ///< [in] handle to function
+        xet_profile_info_t* pInfo                       ///< [out] pointer to profile info
+        )
+    {
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_function_object_t*>( hFunction )->dditable;
+
+        // convert loader handle to driver handle
+        hFunction = reinterpret_cast<xet_function_object_t*>( hFunction )->handle;
+
+        // forward to device-driver
+        auto result = dditable->xet.Function.pfnGetProfileInfo( hFunction, pInfo );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetFunctionSetAddress
+    xe_result_t __xecall
+    xetFunctionSetAddress(
+        xet_function_handle_t hFunction,                ///< [in] handle to function
+        void* ptr                                       ///< [in] address to use for function; must be allocated using ::xetModuleAllocateExecutableMemory.
+                                                        ///< if address is nullptr, then resets function address to default value."
+        )
+    {
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_function_object_t*>( hFunction )->dditable;
+
+        // convert loader handle to driver handle
+        hFunction = reinterpret_cast<xet_function_object_t*>( hFunction )->handle;
+
+        // forward to device-driver
+        auto result = dditable->xet.Function.pfnSetAddress( hFunction, ptr );
 
         return result;
     }
@@ -1749,7 +1834,9 @@ xetGetModuleProcAddrTable(
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnGetDebugInfo                             = loader::xetModuleGetDebugInfo;
-            pDdiTable->pfnReserveSpace                             = loader::xetModuleReserveSpace;
+            pDdiTable->pfnAllocateExecutableMemory                 = loader::xetModuleAllocateExecutableMemory;
+            pDdiTable->pfnFreeExecutableMemory                     = loader::xetModuleFreeExecutableMemory;
+            pDdiTable->pfnGetFunctionNames                         = loader::xetModuleGetFunctionNames;
         }
         else
         {
@@ -1763,6 +1850,71 @@ xetGetModuleProcAddrTable(
     {
         static auto getTable = reinterpret_cast<xet_pfnGetModuleProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "xetGetModuleProcAddrTable") );
+        result = getTable( version, pDdiTable );
+    }
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Function table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetFunctionProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_function_dditable_t* pDdiTable              ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( loader::context.drivers.size() < 1 )
+        return XE_RESULT_ERROR_UNINITIALIZED;
+
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( loader::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    // Load the device-driver DDI tables
+    for( auto& drv : loader::context.drivers )
+    {
+        if( XE_RESULT_SUCCESS == result )
+        {
+            static auto getTable = reinterpret_cast<xet_pfnGetFunctionProcAddrTable_t>(
+                GET_FUNCTION_PTR( drv.handle, "xetGetFunctionProcAddrTable") );
+            result = getTable( version, &drv.dditable.xet.Function );
+        }
+    }
+
+    if( XE_RESULT_SUCCESS == result )
+    {
+        if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
+        {
+            // return pointers to loader's DDIs
+            pDdiTable->pfnGetProfileInfo                           = loader::xetFunctionGetProfileInfo;
+            pDdiTable->pfnSetAddress                               = loader::xetFunctionSetAddress;
+        }
+        else
+        {
+            // return pointers directly to driver's DDIs
+            *pDdiTable = loader::context.drivers.front().dditable.xet.Function;
+        }
+    }
+
+    // If the validation layer is enabled, then intercept the loader's DDIs
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetFunctionProcAddrTable_t>(
+            GET_FUNCTION_PTR(loader::context.validationLayer, "xetGetFunctionProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 

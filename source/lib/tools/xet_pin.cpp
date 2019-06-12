@@ -35,7 +35,46 @@
 extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Reserve a section of contiguous buffer space within the module.
+/// @brief Allocates executable memory from a module.
+/// 
+/// @details
+///     - The pointer returned is accessible by both the Host and the device
+///       from which the module was created.
+///     - The pointer is only valid to be used from within the module.
+///     - The application may **not** call this function from simultaneous
+///       threads with the same module handle.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hModule
+///         + nullptr == ptr
+///         + 0 for size
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+xe_result_t __xecall
+xetModuleAllocateExecutableMemory(
+    xet_module_handle_t hModule,                    ///< [in] handle of the module
+    size_t size,                                    ///< [in] size (in bytes) to allocate
+    void** ptr                                      ///< [out] pointer to allocation
+    )
+{
+    auto pfnAllocateExecutableMemory = xet_lib::context.ddiTable.Module.pfnAllocateExecutableMemory;
+
+#if _DEBUG
+    if( nullptr == pfnAllocateExecutableMemory )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return pfnAllocateExecutableMemory( hModule, size, ptr );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Frees executable memory from a module.
 /// 
 /// @details
 ///     - The application may **not** call this function from simultaneous
@@ -48,26 +87,126 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hModule
-///         + nullptr == hostptr
-///         + nullptr == deviceptr
-///         + 0 for size
+///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetModuleReserveSpace(
+xetModuleFreeExecutableMemory(
     xet_module_handle_t hModule,                    ///< [in] handle of the module
-    size_t size,                                    ///< [in] size (in bytes) to reserve
-    void** hostptr,                                 ///< [out] Host visible pointer to space reserved
-    void** deviceptr                                ///< [out] device visible pointer to space reserved
+    void* ptr                                       ///< [in] pointer to allocation to free
     )
 {
-    auto pfnReserveSpace = xet_lib::context.ddiTable.Module.pfnReserveSpace;
+    auto pfnFreeExecutableMemory = xet_lib::context.ddiTable.Module.pfnFreeExecutableMemory;
 
 #if _DEBUG
-    if( nullptr == pfnReserveSpace )
+    if( nullptr == pfnFreeExecutableMemory )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnReserveSpace( hModule, size, hostptr, deviceptr );
+    return pfnFreeExecutableMemory( hModule, ptr );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieve all function names in the module.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hModule
+///         + nullptr == pCount
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetModuleGetFunctionNames(
+    xet_module_handle_t hModule,                    ///< [in] handle of the device
+    uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
+                                                    ///< if count is zero, then the driver will update the value with the total
+                                                    ///< number of names available.
+                                                    ///< if count is non-zero, then driver will only retrieve that number of names.
+    const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
+    )
+{
+    auto pfnGetFunctionNames = xet_lib::context.ddiTable.Module.pfnGetFunctionNames;
+
+#if _DEBUG
+    if( nullptr == pfnGetFunctionNames )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return pfnGetFunctionNames( hModule, pCount, pNames );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieve profiling information generated for the function.
+/// 
+/// @details
+///     - Module must be created using the following build option:
+///         + "-xet-profile-flags <n>" - enable generation of profile
+///           information
+///         + "<n>" must be a combination of ::xet_profile_flag_t, in hex
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFunction
+///         + nullptr == pInfo
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetFunctionGetProfileInfo(
+    xet_function_handle_t hFunction,                ///< [in] handle to function
+    xet_profile_info_t* pInfo                       ///< [out] pointer to profile info
+    )
+{
+    auto pfnGetProfileInfo = xet_lib::context.ddiTable.Function.pfnGetProfileInfo;
+
+#if _DEBUG
+    if( nullptr == pfnGetProfileInfo )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return pfnGetProfileInfo( hFunction, pInfo );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Changes the address of a function for the next
+///        ::xeCommandListAppendLaunchFunction
+/// 
+/// @details
+///     - This function may **not** be called from simultaneous threads with the
+///       same function handle.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hFunction
+///         + nullptr == ptr
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetFunctionSetAddress(
+    xet_function_handle_t hFunction,                ///< [in] handle to function
+    void* ptr                                       ///< [in] address to use for function; must be allocated using ::xetModuleAllocateExecutableMemory.
+                                                    ///< if address is nullptr, then resets function address to default value."
+    )
+{
+    auto pfnSetAddress = xet_lib::context.ddiTable.Function.pfnSetAddress;
+
+#if _DEBUG
+    if( nullptr == pfnSetAddress )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+#endif
+
+    return pfnSetAddress( hFunction, ptr );
 }
 
 } // extern "C"
@@ -75,37 +214,139 @@ xetModuleReserveSpace(
 namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Reserve a section of contiguous buffer space within the module.
+    /// @brief Allocates executable memory from a module.
+    /// 
+    /// @details
+    ///     - The pointer returned is accessible by both the Host and the device
+    ///       from which the module was created.
+    ///     - The pointer is only valid to be used from within the module.
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same module handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - void*: pointer to allocation
+    /// 
+    /// @throws result_t
+    void* __xecall
+    Module::AllocateExecutableMemory(
+        size_t size                                     ///< [in] size (in bytes) to allocate
+        )
+    {
+        void* ptr;
+
+        auto result = static_cast<result_t>( ::xetModuleAllocateExecutableMemory(
+            reinterpret_cast<xet_module_handle_t>( getHandle() ),
+            size,
+            &ptr ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Module::AllocateExecutableMemory" );
+
+        return ptr;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Frees executable memory from a module.
     /// 
     /// @details
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same module handle.
     ///     - The implementation of this function should be lock-free.
     /// 
-    /// @returns
-    ///     - void*: Host visible pointer to space reserved
-    ///     - void*: device visible pointer to space reserved
-    /// 
     /// @throws result_t
-    std::tuple<void*, void*> __xecall
-    Module::ReserveSpace(
-        size_t size                                     ///< [in] size (in bytes) to reserve
+    void __xecall
+    Module::FreeExecutableMemory(
+        void* ptr                                       ///< [in] pointer to allocation to free
         )
     {
-        void* hostptr;
-
-        void* deviceptr;
-
-        auto result = static_cast<result_t>( ::xetModuleReserveSpace(
+        auto result = static_cast<result_t>( ::xetModuleFreeExecutableMemory(
             reinterpret_cast<xet_module_handle_t>( getHandle() ),
-            size,
-            &hostptr,
-            &deviceptr ) );
+            ptr ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Module::ReserveSpace" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Module::FreeExecutableMemory" );
+    }
 
-        return std::make_tuple( hostptr, deviceptr );
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Retrieve all function names in the module.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Module::GetFunctionNames(
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of names.
+                                                        ///< if count is zero, then the driver will update the value with the total
+                                                        ///< number of names available.
+                                                        ///< if count is non-zero, then driver will only retrieve that number of names.
+        const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
+        )
+    {
+        auto result = static_cast<result_t>( ::xetModuleGetFunctionNames(
+            reinterpret_cast<xet_module_handle_t>( getHandle() ),
+            pCount,
+            pNames ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Module::GetFunctionNames" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Retrieve profiling information generated for the function.
+    /// 
+    /// @details
+    ///     - Module must be created using the following build option:
+    ///         + "--profile-flags <n>" - enable generation of profile information
+    ///         + "<n>" must be a combination of ::profile_flag_t, in hex
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - profile_info_t: pointer to profile info
+    /// 
+    /// @throws result_t
+    Function::profile_info_t __xecall
+    Function::GetProfileInfo(
+        void
+        )
+    {
+        xet_profile_info_t info;
+
+        auto result = static_cast<result_t>( ::xetFunctionGetProfileInfo(
+            reinterpret_cast<xet_function_handle_t>( getHandle() ),
+            &info ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Function::GetProfileInfo" );
+
+        return *reinterpret_cast<profile_info_t*>( &info );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Changes the address of a function for the next
+    ///        ::xeCommandListAppendLaunchFunction
+    /// 
+    /// @details
+    ///     - This function may **not** be called from simultaneous threads with the
+    ///       same function handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Function::SetAddress(
+        void* ptr                                       ///< [in] address to use for function; must be allocated using ::ModuleAllocateExecutableMemory.
+                                                        ///< if address is nullptr, then resets function address to default value."
+        )
+    {
+        auto result = static_cast<result_t>( ::xetFunctionSetAddress(
+            reinterpret_cast<xet_function_handle_t>( getHandle() ),
+            ptr ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Function::SetAddress" );
     }
 
 } // namespace xet

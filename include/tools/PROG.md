@@ -21,8 +21,8 @@ Tools may also use these notifications as triggers to block and inject new API c
 
 ## Registration
 Tools may independently register for enter and exist callbacks for individual API calls, per Device Group.
-- xetDeviceGroupSetTracingPrologue is used to specify all the enter callbacks
-- xetDeviceGroupSetTracingEpilogue is used to specify all the exist callbacks
+- ::xetDeviceGroupSetTracingPrologue is used to specify all the enter callbacks
+- ::xetDeviceGroupSetTracingEpilogue is used to specify all the exist callbacks
 - The callbacks are defined as function pointers, with identical parameters as the API call itself
 - If the value of a callback is nullptr, then it will be ignored.
 

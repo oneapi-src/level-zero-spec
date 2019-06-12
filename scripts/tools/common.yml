@@ -31,6 +31,12 @@ name: "$t_module_handle_t"
 alias: "$x_module_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
+desc: "Handle of function object"
+class: $tFunction
+name: "$t_function_handle_t"
+alias: "$x_function_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
 desc: "Handle of metric group's object"
 class: $tMetricGroup
 name: "$t_metric_group_handle_t"

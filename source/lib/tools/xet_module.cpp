@@ -128,4 +128,125 @@ namespace xet
         return str;
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Function::profile_info_version_t to std::string
+    std::string to_string( const Function::profile_info_version_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Function::profile_info_version_t::CURRENT:
+            str = "Function::profile_info_version_t::CURRENT";
+            break;
+
+        default:
+            str = "Function::profile_info_version_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Function::profile_flag_t to std::string
+    std::string to_string( const Function::profile_flag_t val )
+    {
+        const auto bits = static_cast<uint32_t>( val );
+
+        std::string str;
+        
+        if( static_cast<uint32_t>(Function::profile_flag_t::RERA) & bits )
+            str += "RERA | ";
+        
+        if( static_cast<uint32_t>(Function::profile_flag_t::GRF) & bits )
+            str += "GRF | ";
+        
+        if( static_cast<uint32_t>(Function::profile_flag_t::SRCLINE) & bits )
+            str += "SRCLINE | ";
+
+        return ( str.size() > 3 ) 
+            ? "Function::profile_flag_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Function::profile_flag_t::{ ? }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Function::profile_token_type_t to std::string
+    std::string to_string( const Function::profile_token_type_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Function::profile_token_type_t::GRF:
+            str = "Function::profile_token_type_t::GRF";
+            break;
+
+        default:
+            str = "Function::profile_token_type_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Function::profile_info_t to std::string
+    std::string to_string( const Function::profile_info_t val )
+    {
+        std::string str;
+        
+        str += "Function::profile_info_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "Function::profile_info_t::flags : ";
+        str += to_string(val.flags);
+        str += "\n";
+        
+        str += "Function::profile_info_t::numTokens : ";
+        str += std::to_string(val.numTokens);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Function::profile_grf_token_t to std::string
+    std::string to_string( const Function::profile_grf_token_t val )
+    {
+        std::string str;
+        
+        str += "Function::profile_grf_token_t::type : ";
+        str += to_string(val.type);
+        str += "\n";
+        
+        str += "Function::profile_grf_token_t::size : ";
+        str += std::to_string(val.size);
+        str += "\n";
+        
+        str += "Function::profile_grf_token_t::count : ";
+        str += std::to_string(val.count);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Function::profile_grf_sequence_t to std::string
+    std::string to_string( const Function::profile_grf_sequence_t val )
+    {
+        std::string str;
+        
+        str += "Function::profile_grf_sequence_t::start : ";
+        str += std::to_string(val.start);
+        str += "\n";
+        
+        str += "Function::profile_grf_sequence_t::count : ";
+        str += std::to_string(val.count);
+        str += "\n";
+
+        return str;
+    }
+
 } // namespace xet

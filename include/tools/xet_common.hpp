@@ -67,6 +67,12 @@ namespace xet
     using module_handle_t = _module_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle of function object
+    class Function;
+    struct _function_handle_t;
+    using function_handle_t = _function_handle_t*;
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of metric group's object
     class MetricGroup;
     struct _metric_group_handle_t;

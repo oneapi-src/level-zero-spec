@@ -37,3 +37,8 @@ type: class
 desc: "C++ wrapper for module"
 name: $tModule
 base: $xModule
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for function"
+name: $tFunction
+base: $xFunction
