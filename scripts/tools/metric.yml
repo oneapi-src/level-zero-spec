@@ -82,9 +82,6 @@ members:
     - type: uint32_t
       name: "metricCount"
       desc: "[out] metric count belonging to this group"
-    - type: size_t
-      name: "reportSize"
-      desc: "[out] size of calculated data per-report"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves attributes of a metric group."
@@ -175,9 +172,9 @@ members:
       desc: "[out] value"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Calculates counter values from raw data."
+desc: "Calculates metric values from raw data."
 class: $tMetricGroup
-name: CalculateData
+name: CalculateMetricValues
 decl: static
 details:
     - "The application may call this function from simultaneous threads."
@@ -192,14 +189,15 @@ params:
       name: pRawData
       desc: "[in][range(0, rawDataSize)] buffer of raw data to calculate"
     - type: uint32_t*
-      name: pCalculatedDataCount
+      name: pMetricValueCount
       desc: |
-            [in] pointer to number of entries in calculated data buffer.
-            if count is zero, then the driver will update the value with the total number of entires to be calculated.
-            if count is non-zero, then driver will only calculate that number of entires.
+            [in,out] pointer to number of metric values calculated.
+            if count is zero, then the driver will update the value with the total number of metric values to be calculated.
+            if count is non-zero, then driver will only calculate that number of metric values.
+            if count is larger than the number available in the raw data buffer, then the driver will update the value with the actual number of metric values to be calculated.
     - type: "$t_typed_value_t*"
-      name: pCalculatedData
-      desc: "[in,out][range(0, *pCalculatedDataSize)] buffer of calculated data"
+      name: pMetricValues
+      desc: "[in,out][optional][range(0, *pMetricValueCount)] buffer of calculated metrics"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid metric group handle"
@@ -371,7 +369,7 @@ params:
       desc: "[in,out] metric tracer descriptor"
     - type: "$x_event_handle_t"
       name: hNotificationEvent
-      desc: "[in] event used for report availability notification. Must be device to host type."
+      desc: "[in][optional] event used for report availability notification. Must be device to host type."
     - type: "$t_metric_tracer_handle_t*"
       name: phMetricTracer
       desc: "[out] handle of metric tracer"
@@ -423,12 +421,18 @@ params:
     - type: "$t_metric_tracer_handle_t"
       name: hMetricTracer
       desc: "[in] handle of the metric tracer"
+    - type: uint32_t
+      name: maxReportCount
+      desc: |
+            [in] the maximum number of reports the application wants to receive.
+            if UINT32_MAX, then function will retrieve all reports available
     - type: size_t*
       name: pRawDataSize
       desc: |
             [in,out] pointer to size in bytes of raw data requested to read.
             if size is zero, then the driver will update the value with the total size in bytes needed for all reports available.
             if size is non-zero, then driver will only retrieve the number of reports that fit into the buffer.
+            if size is larger than size needed for all reports, then driver will update the value with the actual size needed.
     - type: uint8_t*
       name: pRawData
       desc: "[in,out][optional][range(0, *pRawDataSize)] buffer containing tracer reports in raw format"
@@ -597,7 +601,7 @@ params:
       desc: "[in] handle of the metric query"
     - type: "$x_event_handle_t"
       name: hCompletionEvent
-      desc: "[in] handle of the completion event to signal"
+      desc: "[in][optional] handle of the completion event to signal"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid handle"
@@ -632,6 +636,7 @@ params:
             [in,out] pointer to size in bytes of raw data requested to read.
             if size is zero, then the driver will update the value with the total size in bytes needed for all reports available.
             if size is non-zero, then driver will only retrieve the number of reports that fit into the buffer.
+            if size is larger than size needed for all reports, then driver will update the value with the actual size needed.
     - type: uint8_t*
       name: pRawData
       desc: "[in,out][optional][range(0, *pRawDataSize)] buffer containing query reports in raw format"

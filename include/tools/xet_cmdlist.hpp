@@ -98,7 +98,7 @@ namespace xet
         void __xecall
         AppendMetricQueryEnd(
             MetricQuery* pMetricQuery,                      ///< [in] pointer to the metric query
-            xe::Event* pCompletionEvent                     ///< [in] pointer to the completion event to signal
+            xe::Event* pCompletionEvent = nullptr           ///< [in][optional] pointer to the completion event to signal
             );
 
         ///////////////////////////////////////////////////////////////////////////////

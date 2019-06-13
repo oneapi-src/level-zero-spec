@@ -105,7 +105,7 @@ xetMetricGroupGetProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Calculates counter values from raw data.
+/// @brief Calculates metric values from raw data.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -117,30 +117,34 @@ xetMetricGroupGetProperties(
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hMetricGroup
 ///         + nullptr == pRawData
-///         + nullptr == pCalculatedDataCount
-///         + nullptr == pCalculatedData
+///         + nullptr == pMetricValueCount
 ///         + invalid metric group handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetMetricGroupCalculateData(
+xetMetricGroupCalculateMetricValues(
     xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
     size_t rawDataSize,                             ///< [in] size in bytes of raw data buffer
     uint8_t* pRawData,                              ///< [in][range(0, rawDataSize)] buffer of raw data to calculate
-    uint32_t* pCalculatedDataCount,                 ///< [in] pointer to number of entries in calculated data buffer.
+    uint32_t* pMetricValueCount,                    ///< [in,out] pointer to number of metric values calculated.
                                                     ///< if count is zero, then the driver will update the value with the total
-                                                    ///< number of entires to be calculated.
-                                                    ///< if count is non-zero, then driver will only calculate that number of entires.
-    xet_typed_value_t* pCalculatedData              ///< [in,out][range(0, *pCalculatedDataSize)] buffer of calculated data
+                                                    ///< number of metric values to be calculated.
+                                                    ///< if count is non-zero, then driver will only calculate that number of
+                                                    ///< metric values.
+                                                    ///< if count is larger than the number available in the raw data buffer,
+                                                    ///< then the driver will update the value with the actual number of metric
+                                                    ///< values to be calculated.
+    xet_typed_value_t* pMetricValues                ///< [in,out][optional][range(0, *pMetricValueCount)] buffer of calculated
+                                                    ///< metrics
     )
 {
-    auto pfnCalculateData = xet_lib::context.ddiTable.MetricGroup.pfnCalculateData;
+    auto pfnCalculateMetricValues = xet_lib::context.ddiTable.MetricGroup.pfnCalculateMetricValues;
 
 #if _DEBUG
-    if( nullptr == pfnCalculateData )
+    if( nullptr == pfnCalculateMetricValues )
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnCalculateData( hMetricGroup, rawDataSize, pRawData, pCalculatedDataCount, pCalculatedData );
+    return pfnCalculateMetricValues( hMetricGroup, rawDataSize, pRawData, pMetricValueCount, pMetricValues );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -262,7 +266,6 @@ xetDeviceActivateMetricGroups(
 ///         + nullptr == hDevice
 ///         + nullptr == hMetricGroup
 ///         + nullptr == desc
-///         + nullptr == hNotificationEvent
 ///         + nullptr == phMetricTracer
 ///         + devices do not support metric tracer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -272,8 +275,8 @@ xetMetricTracerOpen(
     xet_device_handle_t hDevice,                    ///< [in] handle of the device
     xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
     xet_metric_tracer_desc_t* desc,                 ///< [in,out] metric tracer descriptor
-    xe_event_handle_t hNotificationEvent,           ///< [in] event used for report availability notification. Must be device
-                                                    ///< to host type.
+    xe_event_handle_t hNotificationEvent,           ///< [in][optional] event used for report availability notification. Must
+                                                    ///< be device to host type.
     xet_metric_tracer_handle_t* phMetricTracer      ///< [out] handle of metric tracer
     )
 {
@@ -368,11 +371,15 @@ xetMetricTracerClose(
 xe_result_t __xecall
 xetMetricTracerReadData(
     xet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
+    uint32_t maxReportCount,                        ///< [in] the maximum number of reports the application wants to receive.
+                                                    ///< if UINT32_MAX, then function will retrieve all reports available
     size_t* pRawDataSize,                           ///< [in,out] pointer to size in bytes of raw data requested to read.
                                                     ///< if size is zero, then the driver will update the value with the total
                                                     ///< size in bytes needed for all reports available.
                                                     ///< if size is non-zero, then driver will only retrieve the number of
                                                     ///< reports that fit into the buffer.
+                                                    ///< if size is larger than size needed for all reports, then driver will
+                                                    ///< update the value with the actual size needed.
     uint8_t* pRawData                               ///< [in,out][optional][range(0, *pRawDataSize)] buffer containing tracer
                                                     ///< reports in raw format
     )
@@ -384,7 +391,7 @@ xetMetricTracerReadData(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnReadData( hMetricTracer, pRawDataSize, pRawData );
+    return pfnReadData( hMetricTracer, maxReportCount, pRawDataSize, pRawData );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -600,14 +607,13 @@ xetCommandListAppendMetricQueryBegin(
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hCommandList
 ///         + nullptr == hMetricQuery
-///         + nullptr == hCompletionEvent
 ///         + invalid handle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetCommandListAppendMetricQueryEnd(
     xet_command_list_handle_t hCommandList,         ///< [in] handle of the command list
     xet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
-    xe_event_handle_t hCompletionEvent              ///< [in] handle of the completion event to signal
+    xe_event_handle_t hCompletionEvent              ///< [in][optional] handle of the completion event to signal
     )
 {
     auto pfnAppendMetricQueryEnd = xet_lib::context.ddiTable.CommandList.pfnAppendMetricQueryEnd;
@@ -673,6 +679,8 @@ xetMetricQueryGetData(
                                                     ///< size in bytes needed for all reports available.
                                                     ///< if size is non-zero, then driver will only retrieve the number of
                                                     ///< reports that fit into the buffer.
+                                                    ///< if size is larger than size needed for all reports, then driver will
+                                                    ///< update the value with the actual size needed.
     uint8_t* pRawData                               ///< [in,out][optional][range(0, *pRawDataSize)] buffer containing query
                                                     ///< reports in raw format
     )
@@ -820,33 +828,38 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Calculates counter values from raw data.
+    /// @brief Calculates metric values from raw data.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
     /// 
     /// @throws result_t
     void __xecall
-    MetricGroup::CalculateData(
+    MetricGroup::CalculateMetricValues(
         MetricGroup* pMetricGroup,                      ///< [in] pointer to the metric group
         size_t rawDataSize,                             ///< [in] size in bytes of raw data buffer
         uint8_t* pRawData,                              ///< [in][range(0, rawDataSize)] buffer of raw data to calculate
-        uint32_t* pCalculatedDataCount,                 ///< [in] pointer to number of entries in calculated data buffer.
+        uint32_t* pMetricValueCount,                    ///< [in,out] pointer to number of metric values calculated.
                                                         ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of entires to be calculated.
-                                                        ///< if count is non-zero, then driver will only calculate that number of entires.
-        typed_value_t* pCalculatedData                  ///< [in,out][range(0, *pCalculatedDataSize)] buffer of calculated data
+                                                        ///< number of metric values to be calculated.
+                                                        ///< if count is non-zero, then driver will only calculate that number of
+                                                        ///< metric values.
+                                                        ///< if count is larger than the number available in the raw data buffer,
+                                                        ///< then the driver will update the value with the actual number of metric
+                                                        ///< values to be calculated.
+        typed_value_t* pMetricValues                    ///< [in,out][optional][range(0, *pMetricValueCount)] buffer of calculated
+                                                        ///< metrics
         )
     {
-        auto result = static_cast<result_t>( ::xetMetricGroupCalculateData(
+        auto result = static_cast<result_t>( ::xetMetricGroupCalculateMetricValues(
             reinterpret_cast<xet_metric_group_handle_t>( pMetricGroup->getHandle() ),
             rawDataSize,
             pRawData,
-            pCalculatedDataCount,
-            reinterpret_cast<xet_typed_value_t*>( pCalculatedData ) ) );
+            pMetricValueCount,
+            reinterpret_cast<xet_typed_value_t*>( pMetricValues ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricGroup::CalculateData" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricGroup::CalculateMetricValues" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -968,8 +981,8 @@ namespace xet
         Device* pDevice,                                ///< [in] pointer to the device
         MetricGroup* pMetricGroup,                      ///< [in] pointer to the metric group
         desc_t* desc,                                   ///< [in,out] metric tracer descriptor
-        xe::Event* pNotificationEvent                   ///< [in] event used for report availability notification. Must be device
-                                                        ///< to host type.
+        xe::Event* pNotificationEvent                   ///< [in][optional] event used for report availability notification. Must
+                                                        ///< be device to host type.
         )
     {
         xet_metric_tracer_handle_t hMetricTracer;
@@ -978,7 +991,7 @@ namespace xet
             reinterpret_cast<xet_device_handle_t>( pDevice->getHandle() ),
             reinterpret_cast<xet_metric_group_handle_t>( pMetricGroup->getHandle() ),
             reinterpret_cast<xet_metric_tracer_desc_t*>( desc ),
-            reinterpret_cast<xe_event_handle_t>( pNotificationEvent->getHandle() ),
+            ( pNotificationEvent ) ? reinterpret_cast<xe_event_handle_t>( pNotificationEvent->getHandle() ) : nullptr,
             &hMetricTracer ) );
 
         if( result_t::SUCCESS != result )
@@ -1053,17 +1066,22 @@ namespace xet
     /// @throws result_t
     void __xecall
     MetricTracer::ReadData(
+        uint32_t maxReportCount,                        ///< [in] the maximum number of reports the application wants to receive.
+                                                        ///< if UINT32_MAX, then function will retrieve all reports available
         size_t* pRawDataSize,                           ///< [in,out] pointer to size in bytes of raw data requested to read.
                                                         ///< if size is zero, then the driver will update the value with the total
                                                         ///< size in bytes needed for all reports available.
                                                         ///< if size is non-zero, then driver will only retrieve the number of
                                                         ///< reports that fit into the buffer.
+                                                        ///< if size is larger than size needed for all reports, then driver will
+                                                        ///< update the value with the actual size needed.
         uint8_t* pRawData                               ///< [in,out][optional][range(0, *pRawDataSize)] buffer containing tracer
                                                         ///< reports in raw format
         )
     {
         auto result = static_cast<result_t>( ::xetMetricTracerReadData(
             reinterpret_cast<xet_metric_tracer_handle_t>( getHandle() ),
+            maxReportCount,
             pRawDataSize,
             pRawData ) );
 
@@ -1264,13 +1282,13 @@ namespace xet
     void __xecall
     CommandList::AppendMetricQueryEnd(
         MetricQuery* pMetricQuery,                      ///< [in] pointer to the metric query
-        xe::Event* pCompletionEvent                     ///< [in] pointer to the completion event to signal
+        xe::Event* pCompletionEvent                     ///< [in][optional] pointer to the completion event to signal
         )
     {
         auto result = static_cast<result_t>( ::xetCommandListAppendMetricQueryEnd(
             reinterpret_cast<xet_command_list_handle_t>( getHandle() ),
             reinterpret_cast<xet_metric_query_handle_t>( pMetricQuery->getHandle() ),
-            reinterpret_cast<xe_event_handle_t>( pCompletionEvent->getHandle() ) ) );
+            ( pCompletionEvent ) ? reinterpret_cast<xe_event_handle_t>( pCompletionEvent->getHandle() ) : nullptr ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::CommandList::AppendMetricQueryEnd" );
@@ -1310,6 +1328,8 @@ namespace xet
                                                         ///< size in bytes needed for all reports available.
                                                         ///< if size is non-zero, then driver will only retrieve the number of
                                                         ///< reports that fit into the buffer.
+                                                        ///< if size is larger than size needed for all reports, then driver will
+                                                        ///< update the value with the actual size needed.
         uint8_t* pRawData                               ///< [in,out][optional][range(0, *pRawDataSize)] buffer containing query
                                                         ///< reports in raw format
         )
@@ -1476,10 +1496,6 @@ namespace xet
         
         str += "MetricGroup::properties_t::metricCount : ";
         str += std::to_string(val.metricCount);
-        str += "\n";
-        
-        str += "MetricGroup::properties_t::reportSize : ";
-        str += std::to_string(val.reportSize);
         str += "\n";
 
         return str;

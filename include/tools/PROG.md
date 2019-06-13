@@ -203,7 +203,7 @@ There are two modes of metrics collection supported: time-based and event-based.
 Time-based collection uses a simple Open, Wait, Read, Close scheme:
 - ::xetMetricTracerOpen opens the tracer.
 - ::xeEventHostSynchronize and ::xeEventQueryStatus can be used to wait for data.
-- ::xetMetricTracerReadData reads the data to be later processed by ::xetMetricGroupCalculateData.
+- ::xetMetricTracerReadData reads the data to be later processed by ::xetMetricGroupCalculateMetricValues.
 - ::xetMetricTracerClose closes the tracer.
 
 ![MetricTracer](../images/tools_metric_tracer.png?raw=true)  
@@ -252,9 +252,9 @@ The following sample code demonstrates a basic sequence for tracer-based collect
 
         // Read raw data
         size_t rawSize = 0;
-        xetMetricTracerReadData( hMetricTracer, &rawSize, nullptr );
+        xetMetricTracerReadData( hMetricTracer, UINT32_MAX, &rawSize, nullptr );
         uint8_t* rawData = malloc(rawSize); 
-        xetMetricTracerReadData( hMetricTracer, &rawSize, rawData );
+        xetMetricTracerReadData( hMetricTracer, UINT32_MAX, &rawSize, rawData );
 
         // Close metric tracer
         xetMetricTracerClose( hMetricTracer );   
@@ -274,7 +274,7 @@ The following sample code demonstrates a basic sequence for tracer-based collect
 Event-based collection uses a simple Begin, End, GetData scheme:
 - ::xetCommandListAppendMetricQueryBegin defines the start counting event
 - ::xetCommandListAppendMetricQueryEnd defines the finish counting event
-- ::xetMetricQueryGetData reads the raw data to be later processed by ::xetMetricGroupCalculateData.
+- ::xetMetricQueryGetData reads the raw data to be later processed by ::xetMetricGroupCalculateMetricValues.
 
 Typically, multiple queries are used and recycled to characterize a workload.
 A Query Pool is used to efficiently use and reuse device meory for multiple queries.
@@ -354,7 +354,7 @@ The following sample code demonstrates a basic sequence for query-based collecti
 
 ## <a name="cal">Calculation</a>
 Both MetricTracer and MetricQueryPool collect the data in device specific, raw form that is not suitable
-for application processing. To calculate metric values use ::xetMetricGroupCalculateData.
+for application processing. To calculate metric values use ::xetMetricGroupCalculateMetricValues.
 
 The following sample code demonstrates a basic sequence for metric calculation and interpretation:
 ```c
@@ -362,10 +362,10 @@ The following sample code demonstrates a basic sequence for metric calculation a
                                            size_t rawSize, uint8_t* rawData )
     {
         // Calculate metric data
-        uint32_t calculatedDataCount = 0;
-        xetMetricGroupCalculateData( hMetricGroup, rawSize, rawData, &calculatedDataCount, nullptr );
-        xet_typed_value_t* calculatedData = malloc( calculatedDataCount * sizeof(xet_typed_value_t) );
-        xetMetricGroupCalculateData( hMetricGroup, rawSize, rawData, &calculatedDataCount, calculatedData );
+        uint32_t numMetricValues = 0;
+        xetMetricGroupCalculateMetricValues( hMetricGroup, rawSize, rawData, &numMetricValues, nullptr );
+        xet_typed_value_t* metricValues = malloc( numMetricValues * sizeof(xet_typed_value_t) );
+        xetMetricGroupCalculateMetricValues( hMetricGroup, rawSize, rawData, &numMetricValues, metricValues );
 
         // Obtain available metrics for the specific metric group
         uint32_t metricCount = 0;
@@ -375,14 +375,14 @@ The following sample code demonstrates a basic sequence for metric calculation a
         xetMetricGet( hMetricGroup, &metricCount, phMetrics );
 
         // Print metric results
-        uint32_t numReports = calculatedDataCount / metricCount;
+        uint32_t numReports = numMetricValues / metricCount;
         for( uint32_t report = 0; report < numReports; ++report )
         {
             printf("Report: %d\n", report);
 
             for( uint32_t metric = 0; metric < metricCount; ++metric )
             {
-                xet_typed_value_t data = calculatedData[report * metricCount + metric];
+                xet_typed_value_t data = metricValues[report * metricCount + metric];
 
                 xet_metric_properties_t metricProperties;
                 xetMetricGetProperties( phMetrics[ metric ], &metricProperties );
@@ -415,7 +415,7 @@ The following sample code demonstrates a basic sequence for metric calculation a
             }
         }
 
-        free(calculatedData);
+        free(metricValues);
         free(phMetrics);
     }
 ```

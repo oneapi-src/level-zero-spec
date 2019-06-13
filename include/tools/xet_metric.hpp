@@ -142,7 +142,6 @@ namespace xet
             uint32_t domain;                                ///< [out] metric group domain number. Cannot use simultaneous metric
                                                             ///< groups from different domains.
             uint32_t metricCount;                           ///< [out] metric count belonging to this group
-            size_t reportSize;                              ///< [out] size of calculated data per-report
 
         };
 
@@ -208,21 +207,26 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Calculates counter values from raw data.
+        /// @brief Calculates metric values from raw data.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         /// @throws result_t
         static void __xecall
-        CalculateData(
+        CalculateMetricValues(
             MetricGroup* pMetricGroup,                      ///< [in] pointer to the metric group
             size_t rawDataSize,                             ///< [in] size in bytes of raw data buffer
             uint8_t* pRawData,                              ///< [in][range(0, rawDataSize)] buffer of raw data to calculate
-            uint32_t* pCalculatedDataCount,                 ///< [in] pointer to number of entries in calculated data buffer.
+            uint32_t* pMetricValueCount,                    ///< [in,out] pointer to number of metric values calculated.
                                                             ///< if count is zero, then the driver will update the value with the total
-                                                            ///< number of entires to be calculated.
-                                                            ///< if count is non-zero, then driver will only calculate that number of entires.
-            typed_value_t* pCalculatedData                  ///< [in,out][range(0, *pCalculatedDataSize)] buffer of calculated data
+                                                            ///< number of metric values to be calculated.
+                                                            ///< if count is non-zero, then driver will only calculate that number of
+                                                            ///< metric values.
+                                                            ///< if count is larger than the number available in the raw data buffer,
+                                                            ///< then the driver will update the value with the actual number of metric
+                                                            ///< values to be calculated.
+            typed_value_t* pMetricValues = nullptr          ///< [in,out][optional][range(0, *pMetricValueCount)] buffer of calculated
+                                                            ///< metrics
             );
 
     };
@@ -398,8 +402,8 @@ namespace xet
             Device* pDevice,                                ///< [in] pointer to the device
             MetricGroup* pMetricGroup,                      ///< [in] pointer to the metric group
             desc_t* desc,                                   ///< [in,out] metric tracer descriptor
-            xe::Event* pNotificationEvent                   ///< [in] event used for report availability notification. Must be device
-                                                            ///< to host type.
+            xe::Event* pNotificationEvent = nullptr         ///< [in][optional] event used for report availability notification. Must
+                                                            ///< be device to host type.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -422,11 +426,15 @@ namespace xet
         /// @throws result_t
         void __xecall
         ReadData(
+            uint32_t maxReportCount,                        ///< [in] the maximum number of reports the application wants to receive.
+                                                            ///< if UINT32_MAX, then function will retrieve all reports available
             size_t* pRawDataSize,                           ///< [in,out] pointer to size in bytes of raw data requested to read.
                                                             ///< if size is zero, then the driver will update the value with the total
                                                             ///< size in bytes needed for all reports available.
                                                             ///< if size is non-zero, then driver will only retrieve the number of
                                                             ///< reports that fit into the buffer.
+                                                            ///< if size is larger than size needed for all reports, then driver will
+                                                            ///< update the value with the actual size needed.
             uint8_t* pRawData = nullptr                     ///< [in,out][optional][range(0, *pRawDataSize)] buffer containing tracer
                                                             ///< reports in raw format
             );
@@ -616,6 +624,8 @@ namespace xet
                                                             ///< size in bytes needed for all reports available.
                                                             ///< if size is non-zero, then driver will only retrieve the number of
                                                             ///< reports that fit into the buffer.
+                                                            ///< if size is larger than size needed for all reports, then driver will
+                                                            ///< update the value with the actual size needed.
             uint8_t* pRawData = nullptr                     ///< [in,out][optional][range(0, *pRawDataSize)] buffer containing query
                                                             ///< reports in raw format
             );

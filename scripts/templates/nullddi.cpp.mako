@@ -129,9 +129,9 @@ namespace driver
         %elif re.match(r"\w+MetricGetProperties", fname):
         *pProperties = context.metricProperties;
 
-        %elif re.match(r"\w+CalculateData", fname):
-        *pCalculatedDataCount = 1;
-        if( pCalculatedData ) *pCalculatedData = {};
+        %elif re.match(r"\w+CalculateMetricValues", fname):
+        *pMetricValueCount = 1;
+        if( pMetricValues ) *pMetricValues = {};
 
         %elif re.match(r"\w+ReadData", fname) or re.match(r"\w+GetData", fname):
         *pRawDataSize = 1;

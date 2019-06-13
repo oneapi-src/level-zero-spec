@@ -57,7 +57,6 @@ namespace driver
         metricGroupProperties.metricCount = 1;
         metricGroupProperties.samplingType = static_cast<xet_metric_group_sampling_type_t>(
             XET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED | XET_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED );
-        metricGroupProperties.reportSize = 1;
         strcpy( metricGroupProperties.name, "Null Metric Group" );
 
         metricProperties.version = XET_METRIC_PROPERTIES_VERSION_CURRENT;

@@ -41,7 +41,7 @@ inline xe::DeviceGroup* findDeviceGroup(
 {
     // get all device groups
     uint32_t groupCount = 0;
-    xe::DeviceGroup::Get( &groupCount, nullptr );
+    xe::DeviceGroup::Get( &groupCount );
 
     std::vector<xe::DeviceGroup*> deviceGroups( groupCount );
     xe::DeviceGroup::Get( &groupCount, deviceGroups.data() );
@@ -68,7 +68,7 @@ inline xe::DeviceGroup* findDeviceGroup(
             std::cout << xe::to_string( compute_properties ) << "\n";
 
             uint32_t memoryCount = 0;
-            pDeviceGroup->GetMemoryProperties( &memoryCount, nullptr );
+            pDeviceGroup->GetMemoryProperties( &memoryCount );
             auto pMemoryProperties = new xe::DeviceGroup::device_memory_properties_t[ memoryCount ];
             pDeviceGroup->GetMemoryProperties( &memoryCount, pMemoryProperties );
             for( uint32_t mem = 0; mem < memoryCount; ++mem )

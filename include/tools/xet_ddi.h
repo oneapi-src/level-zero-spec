@@ -328,8 +328,8 @@ typedef xe_result_t (__xecall *xet_pfnMetricGroupGetProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetMetricGroupCalculateData 
-typedef xe_result_t (__xecall *xet_pfnMetricGroupCalculateData_t)(
+/// @brief Function-pointer for xetMetricGroupCalculateMetricValues 
+typedef xe_result_t (__xecall *xet_pfnMetricGroupCalculateMetricValues_t)(
     xet_metric_group_handle_t,
     size_t,
     uint8_t*,
@@ -343,7 +343,7 @@ typedef struct _xet_metric_group_dditable_t
 {
     xet_pfnMetricGroupGet_t                                     pfnGet;
     xet_pfnMetricGroupGetProperties_t                           pfnGetProperties;
-    xet_pfnMetricGroupCalculateData_t                           pfnCalculateData;
+    xet_pfnMetricGroupCalculateMetricValues_t                   pfnCalculateMetricValues;
 } xet_metric_group_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -437,6 +437,7 @@ typedef xe_result_t (__xecall *xet_pfnMetricTracerClose_t)(
 /// @brief Function-pointer for xetMetricTracerReadData 
 typedef xe_result_t (__xecall *xet_pfnMetricTracerReadData_t)(
     xet_metric_tracer_handle_t,
+    uint32_t,
     size_t*,
     uint8_t*
     );

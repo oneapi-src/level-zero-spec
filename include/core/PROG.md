@@ -344,7 +344,7 @@ The following sample code demonstrates submission of commands to a command queue
     xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // synchronize host and device
-    xeCommandQueueSynchronize(hCommandQueue, MAX_UINT32);
+    xeCommandQueueSynchronize(hCommandQueue, UINT32_MAX);
 
     // Reset (recycle) command list for new commands
     xeCommandListReset(hCommandList);
@@ -429,7 +429,7 @@ The following sample code demonstrates a sequence for creation, submission and q
     xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, hFence);
 
     // Wait for fence to be signaled
-    xeFenceHostSynchronize(hFence, MAX_UINT32);
+    xeFenceHostSynchronize(hFence, UINT32_MAX);
     xeFenceReset(hFence);
     ...
 ```
@@ -965,7 +965,7 @@ The following sample code demonstrate a sequence for using fine-grain residency 
     xeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, hFence);
 
     // wait until complete
-    xeFenceHostSynchronize(hFence, MAX_UINT32);
+    xeFenceHostSynchronize(hFence, UINT32_MAX);
 
     // Finally, evict to free device resources
     xeDeviceEvictMemory(hDevice, begin->next, sizeof(node));
@@ -1106,7 +1106,7 @@ The following code examples demonstrate how to use the event IPC APIs:
     xe_event_handle_t hEvent;
     xeEventCreate(hEventPool, 5, &hEvent);
 
-    xeEventHostSynchronize(hEvent, MAX_UINT32);
+    xeEventHostSynchronize(hEvent, UINT32_MAX);
 ```
     Note, there is no guaranteed address equivalence for the values of `hEvent` in each process.
 

@@ -125,17 +125,22 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetMetricGroupCalculateData
+    /// @brief Intercept function for xetMetricGroupCalculateMetricValues
     xe_result_t __xecall
-    xetMetricGroupCalculateData(
+    xetMetricGroupCalculateMetricValues(
         xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
         size_t rawDataSize,                             ///< [in] size in bytes of raw data buffer
         uint8_t* pRawData,                              ///< [in][range(0, rawDataSize)] buffer of raw data to calculate
-        uint32_t* pCalculatedDataCount,                 ///< [in] pointer to number of entries in calculated data buffer.
+        uint32_t* pMetricValueCount,                    ///< [in,out] pointer to number of metric values calculated.
                                                         ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of entires to be calculated.
-                                                        ///< if count is non-zero, then driver will only calculate that number of entires.
-        xet_typed_value_t* pCalculatedData              ///< [in,out][range(0, *pCalculatedDataSize)] buffer of calculated data
+                                                        ///< number of metric values to be calculated.
+                                                        ///< if count is non-zero, then driver will only calculate that number of
+                                                        ///< metric values.
+                                                        ///< if count is larger than the number available in the raw data buffer,
+                                                        ///< then the driver will update the value with the actual number of metric
+                                                        ///< values to be calculated.
+        xet_typed_value_t* pMetricValues                ///< [in,out][optional][range(0, *pMetricValueCount)] buffer of calculated
+                                                        ///< metrics
         )
     {
         // extract driver's function pointer table
@@ -145,7 +150,7 @@ namespace loader
         hMetricGroup = reinterpret_cast<xet_metric_group_object_t*>( hMetricGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xet.MetricGroup.pfnCalculateData( hMetricGroup, rawDataSize, pRawData, pCalculatedDataCount, pCalculatedData );
+        auto result = dditable->xet.MetricGroup.pfnCalculateMetricValues( hMetricGroup, rawDataSize, pRawData, pMetricValueCount, pMetricValues );
 
         return result;
     }
@@ -240,8 +245,8 @@ namespace loader
         xet_device_handle_t hDevice,                    ///< [in] handle of the device
         xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
         xet_metric_tracer_desc_t* desc,                 ///< [in,out] metric tracer descriptor
-        xe_event_handle_t hNotificationEvent,           ///< [in] event used for report availability notification. Must be device
-                                                        ///< to host type.
+        xe_event_handle_t hNotificationEvent,           ///< [in][optional] event used for report availability notification. Must
+                                                        ///< be device to host type.
         xet_metric_tracer_handle_t* phMetricTracer      ///< [out] handle of metric tracer
         )
     {
@@ -255,7 +260,7 @@ namespace loader
         hMetricGroup = reinterpret_cast<xet_metric_group_object_t*>( hMetricGroup )->handle;
 
         // convert loader handle to driver handle
-        hNotificationEvent = reinterpret_cast<xe_event_object_t*>( hNotificationEvent )->handle;
+        hNotificationEvent = ( hNotificationEvent ) ? reinterpret_cast<xe_event_object_t*>( hNotificationEvent )->handle : nullptr;
 
         // forward to device-driver
         auto result = dditable->xet.MetricTracer.pfnOpen( hDevice, hMetricGroup, desc, hNotificationEvent, phMetricTracer );
@@ -323,11 +328,15 @@ namespace loader
     xe_result_t __xecall
     xetMetricTracerReadData(
         xet_metric_tracer_handle_t hMetricTracer,       ///< [in] handle of the metric tracer
+        uint32_t maxReportCount,                        ///< [in] the maximum number of reports the application wants to receive.
+                                                        ///< if UINT32_MAX, then function will retrieve all reports available
         size_t* pRawDataSize,                           ///< [in,out] pointer to size in bytes of raw data requested to read.
                                                         ///< if size is zero, then the driver will update the value with the total
                                                         ///< size in bytes needed for all reports available.
                                                         ///< if size is non-zero, then driver will only retrieve the number of
                                                         ///< reports that fit into the buffer.
+                                                        ///< if size is larger than size needed for all reports, then driver will
+                                                        ///< update the value with the actual size needed.
         uint8_t* pRawData                               ///< [in,out][optional][range(0, *pRawDataSize)] buffer containing tracer
                                                         ///< reports in raw format
         )
@@ -339,7 +348,7 @@ namespace loader
         hMetricTracer = reinterpret_cast<xet_metric_tracer_object_t*>( hMetricTracer )->handle;
 
         // forward to device-driver
-        auto result = dditable->xet.MetricTracer.pfnReadData( hMetricTracer, pRawDataSize, pRawData );
+        auto result = dditable->xet.MetricTracer.pfnReadData( hMetricTracer, maxReportCount, pRawDataSize, pRawData );
 
         return result;
     }
@@ -500,7 +509,7 @@ namespace loader
     xetCommandListAppendMetricQueryEnd(
         xet_command_list_handle_t hCommandList,         ///< [in] handle of the command list
         xet_metric_query_handle_t hMetricQuery,         ///< [in] handle of the metric query
-        xe_event_handle_t hCompletionEvent              ///< [in] handle of the completion event to signal
+        xe_event_handle_t hCompletionEvent              ///< [in][optional] handle of the completion event to signal
         )
     {
         // extract driver's function pointer table
@@ -513,7 +522,7 @@ namespace loader
         hMetricQuery = reinterpret_cast<xet_metric_query_object_t*>( hMetricQuery )->handle;
 
         // convert loader handle to driver handle
-        hCompletionEvent = reinterpret_cast<xe_event_object_t*>( hCompletionEvent )->handle;
+        hCompletionEvent = ( hCompletionEvent ) ? reinterpret_cast<xe_event_object_t*>( hCompletionEvent )->handle : nullptr;
 
         // forward to device-driver
         auto result = dditable->xet.CommandList.pfnAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent );
@@ -550,6 +559,8 @@ namespace loader
                                                         ///< size in bytes needed for all reports available.
                                                         ///< if size is non-zero, then driver will only retrieve the number of
                                                         ///< reports that fit into the buffer.
+                                                        ///< if size is larger than size needed for all reports, then driver will
+                                                        ///< update the value with the actual size needed.
         uint8_t* pRawData                               ///< [in,out][optional][range(0, *pRawDataSize)] buffer containing query
                                                         ///< reports in raw format
         )
@@ -1912,7 +1923,7 @@ xetGetMetricGroupProcAddrTable(
             // return pointers to loader's DDIs
             pDdiTable->pfnGet                                      = loader::xetMetricGroupGet;
             pDdiTable->pfnGetProperties                            = loader::xetMetricGroupGetProperties;
-            pDdiTable->pfnCalculateData                            = loader::xetMetricGroupCalculateData;
+            pDdiTable->pfnCalculateMetricValues                    = loader::xetMetricGroupCalculateMetricValues;
         }
         else
         {

@@ -156,7 +156,7 @@ namespace xe
             uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time (in nanoseconds) to
                                                             ///< yield before returning ::RESULT_SUCCESS or ::RESULT_NOT_READY;
                                                             ///< if zero, then operates exactly like ::FenceQueryStatus;
-                                                            ///< if MAX_UINT32, then function will not return until complete or device
+                                                            ///< if UINT32_MAX, then function will not return until complete or device
                                                             ///< is lost.
             );
 

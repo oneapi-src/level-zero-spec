@@ -209,7 +209,7 @@ ${"###"} <a name="tbs">Metric Tracer</a>
 Time-based collection uses a simple Open, Wait, Read, Close scheme:
 - ::${t}MetricTracerOpen opens the tracer.
 - ::${x}EventHostSynchronize and ::${x}EventQueryStatus can be used to wait for data.
-- ::${t}MetricTracerReadData reads the data to be later processed by ::${t}MetricGroupCalculateData.
+- ::${t}MetricTracerReadData reads the data to be later processed by ::${t}MetricGroupCalculateMetricValues.
 - ::${t}MetricTracerClose closes the tracer.
 
 ![MetricTracer](../images/tools_metric_tracer.png?raw=true)  
@@ -258,9 +258,9 @@ The following sample code demonstrates a basic sequence for tracer-based collect
 
         // Read raw data
         size_t rawSize = 0;
-        ${t}MetricTracerReadData( hMetricTracer, &rawSize, nullptr );
+        ${t}MetricTracerReadData( hMetricTracer, UINT32_MAX, &rawSize, nullptr );
         uint8_t* rawData = malloc(rawSize); 
-        ${t}MetricTracerReadData( hMetricTracer, &rawSize, rawData );
+        ${t}MetricTracerReadData( hMetricTracer, UINT32_MAX, &rawSize, rawData );
 
         // Close metric tracer
         ${t}MetricTracerClose( hMetricTracer );   
@@ -280,7 +280,7 @@ ${"###"} <a name="query">Metric Query</a>
 Event-based collection uses a simple Begin, End, GetData scheme:
 - ::${t}CommandListAppendMetricQueryBegin defines the start counting event
 - ::${t}CommandListAppendMetricQueryEnd defines the finish counting event
-- ::${t}MetricQueryGetData reads the raw data to be later processed by ::${t}MetricGroupCalculateData.
+- ::${t}MetricQueryGetData reads the raw data to be later processed by ::${t}MetricGroupCalculateMetricValues.
 
 Typically, multiple queries are used and recycled to characterize a workload.
 A Query Pool is used to efficiently use and reuse device meory for multiple queries.
@@ -360,7 +360,7 @@ The following sample code demonstrates a basic sequence for query-based collecti
 
 ${"##"} <a name="cal">Calculation</a>
 Both MetricTracer and MetricQueryPool collect the data in device specific, raw form that is not suitable
-for application processing. To calculate metric values use ::${t}MetricGroupCalculateData.
+for application processing. To calculate metric values use ::${t}MetricGroupCalculateMetricValues.
 
 The following sample code demonstrates a basic sequence for metric calculation and interpretation:
 ```c
@@ -368,10 +368,10 @@ The following sample code demonstrates a basic sequence for metric calculation a
                                            size_t rawSize, uint8_t* rawData )
     {
         // Calculate metric data
-        uint32_t calculatedDataCount = 0;
-        ${t}MetricGroupCalculateData( hMetricGroup, rawSize, rawData, &calculatedDataCount, nullptr );
-        ${t}_typed_value_t* calculatedData = malloc( calculatedDataCount * sizeof(${t}_typed_value_t) );
-        ${t}MetricGroupCalculateData( hMetricGroup, rawSize, rawData, &calculatedDataCount, calculatedData );
+        uint32_t numMetricValues = 0;
+        ${t}MetricGroupCalculateMetricValues( hMetricGroup, rawSize, rawData, &numMetricValues, nullptr );
+        ${t}_typed_value_t* metricValues = malloc( numMetricValues * sizeof(${t}_typed_value_t) );
+        ${t}MetricGroupCalculateMetricValues( hMetricGroup, rawSize, rawData, &numMetricValues, metricValues );
 
         // Obtain available metrics for the specific metric group
         uint32_t metricCount = 0;
@@ -381,14 +381,14 @@ The following sample code demonstrates a basic sequence for metric calculation a
         ${t}MetricGet( hMetricGroup, &metricCount, phMetrics );
 
         // Print metric results
-        uint32_t numReports = calculatedDataCount / metricCount;
+        uint32_t numReports = numMetricValues / metricCount;
         for( uint32_t report = 0; report < numReports; ++report )
         {
             printf("Report: %d\n", report);
 
             for( uint32_t metric = 0; metric < metricCount; ++metric )
             {
-                ${t}_typed_value_t data = calculatedData[report * metricCount + metric];
+                ${t}_typed_value_t data = metricValues[report * metricCount + metric];
 
                 ${t}_metric_properties_t metricProperties;
                 ${t}MetricGetProperties( phMetrics[ metric ], &metricProperties );
@@ -421,7 +421,7 @@ The following sample code demonstrates a basic sequence for metric calculation a
             }
         }
 
-        free(calculatedData);
+        free(metricValues);
         free(phMetrics);
     }
 ```

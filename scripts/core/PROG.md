@@ -348,7 +348,7 @@ The following sample code demonstrates submission of commands to a command queue
     ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // synchronize host and device
-    ${x}CommandQueueSynchronize(hCommandQueue, MAX_UINT32);
+    ${x}CommandQueueSynchronize(hCommandQueue, UINT32_MAX);
 
     // Reset (recycle) command list for new commands
     ${x}CommandListReset(hCommandList);
@@ -433,7 +433,7 @@ The following sample code demonstrates a sequence for creation, submission and q
     ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, hFence);
 
     // Wait for fence to be signaled
-    ${x}FenceHostSynchronize(hFence, MAX_UINT32);
+    ${x}FenceHostSynchronize(hFence, UINT32_MAX);
     ${x}FenceReset(hFence);
     ...
 ```
@@ -971,7 +971,7 @@ The following sample code demonstrate a sequence for using fine-grain residency 
     ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, hFence);
 
     // wait until complete
-    ${x}FenceHostSynchronize(hFence, MAX_UINT32);
+    ${x}FenceHostSynchronize(hFence, UINT32_MAX);
 
     // Finally, evict to free device resources
     ${x}DeviceEvictMemory(hDevice, begin->next, sizeof(node));
@@ -1112,7 +1112,7 @@ The following code examples demonstrate how to use the event IPC APIs:
     ${x}_event_handle_t hEvent;
     ${x}EventCreate(hEventPool, 5, &hEvent);
 
-    ${x}EventHostSynchronize(hEvent, MAX_UINT32);
+    ${x}EventHostSynchronize(hEvent, UINT32_MAX);
 ```
     Note, there is no guaranteed address equivalence for the values of `hEvent` in each process.
 
