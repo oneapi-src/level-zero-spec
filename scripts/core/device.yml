@@ -51,9 +51,6 @@ params:
     - type: "$x_device_handle_t*"
       name: phDevices
       desc: "[in,out][optional][range(0, *pCount)] array of handle of devices"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "count is out of range reported by $xDeviceGroupGetDevices"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves a sub-device from a device"
@@ -78,9 +75,6 @@ params:
     - type: "$x_device_handle_t*"
       name: phSubdevices
       desc: "[in,out][optional][range(0, *pCount)] array of handle of sub-devices"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "count is out of range reported by $xDeviceGetSubDevices"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported API versions"

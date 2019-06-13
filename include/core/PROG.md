@@ -909,7 +909,7 @@ A 16-byte unique device identifier (uuid) can be obtained for a device or sub-de
 
 ## <a name="res">Device Residency</a>
 For devices that do not support page-faults, the driver must ensure that all pages that will be accessed by the kernel are resident before program execution.
-This can be determined by checking ::xe_device_memory_properties_t.onDemandPageFaults.
+This can be determined by checking ::xe_device_properties_t.onDemandPageFaultsSupported.
 
 In most cases, the driver implicitly handles residency of allocations for device access.
 This can be done by inspecting API parameters, including function arguments.

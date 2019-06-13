@@ -94,7 +94,6 @@ xeDeviceGroupGet(
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDeviceGroup
 ///         + nullptr == pCount
-///         + count is out of range reported by ::xeDeviceGroupGetDevices
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeDeviceGet(
@@ -134,7 +133,6 @@ xeDeviceGet(
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
 ///         + nullptr == pCount
-///         + count is out of range reported by ::xeDeviceGetSubDevices
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeDeviceGetSubDevices(
