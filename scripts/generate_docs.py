@@ -63,7 +63,7 @@ def validate_md(fpath, meta):
             continue
 
         if re.match(RE_INVALID_TAG_FORMAT, line):
-            print("%s(%s) : error : invalid %s tag used"%(fpath, iline+1, re.sub(RE_INVALID_TAG, r"\1", line)))
+            print("%s(%s) : error : invalid %s tag used"%(fpath, iline+1, re.sub(RE_INVALID_TAG_FORMAT, r"\1", line)))
 
         if re.match(RE_PROPER_TAG_FORMAT, line):
             words = re.findall(RE_EXTRACT_NAME, line)

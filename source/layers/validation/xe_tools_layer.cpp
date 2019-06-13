@@ -622,59 +622,6 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetModuleAllocateExecutableMemory
-    xe_result_t __xecall
-    xetModuleAllocateExecutableMemory(
-        xet_module_handle_t hModule,                    ///< [in] handle of the module
-        size_t size,                                    ///< [in] size (in bytes) to allocate
-        void** ptr                                      ///< [out] pointer to allocation
-        )
-    {
-        auto pfnAllocateExecutableMemory = context.xetDdiTable.Module.pfnAllocateExecutableMemory;
-
-        if( nullptr == pfnAllocateExecutableMemory )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hModule )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == ptr )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnAllocateExecutableMemory( hModule, size, ptr );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetModuleFreeExecutableMemory
-    xe_result_t __xecall
-    xetModuleFreeExecutableMemory(
-        xet_module_handle_t hModule,                    ///< [in] handle of the module
-        void* ptr                                       ///< [in] pointer to allocation to free
-        )
-    {
-        auto pfnFreeExecutableMemory = context.xetDdiTable.Module.pfnFreeExecutableMemory;
-
-        if( nullptr == pfnFreeExecutableMemory )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hModule )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == ptr )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnFreeExecutableMemory( hModule, ptr );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetModuleGetFunctionNames
     xe_result_t __xecall
     xetModuleGetFunctionNames(
@@ -728,33 +675,6 @@ namespace layer
         }
 
         return pfnGetProfileInfo( hFunction, pInfo );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetFunctionSetAddress
-    xe_result_t __xecall
-    xetFunctionSetAddress(
-        xet_function_handle_t hFunction,                ///< [in] handle to function
-        void* ptr                                       ///< [in] address to use for function; must be allocated using ::xetModuleAllocateExecutableMemory.
-                                                        ///< if address is nullptr, then resets function address to default value."
-        )
-    {
-        auto pfnSetAddress = context.xetDdiTable.Function.pfnSetAddress;
-
-        if( nullptr == pfnSetAddress )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hFunction )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == ptr )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnSetAddress( hFunction, ptr );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1966,12 +1886,6 @@ xetGetModuleProcAddrTable(
     dditable.pfnGetDebugInfo                             = pDdiTable->pfnGetDebugInfo;
     pDdiTable->pfnGetDebugInfo                           = layer::xetModuleGetDebugInfo;
 
-    dditable.pfnAllocateExecutableMemory                 = pDdiTable->pfnAllocateExecutableMemory;
-    pDdiTable->pfnAllocateExecutableMemory               = layer::xetModuleAllocateExecutableMemory;
-
-    dditable.pfnFreeExecutableMemory                     = pDdiTable->pfnFreeExecutableMemory;
-    pDdiTable->pfnFreeExecutableMemory                   = layer::xetModuleFreeExecutableMemory;
-
     dditable.pfnGetFunctionNames                         = pDdiTable->pfnGetFunctionNames;
     pDdiTable->pfnGetFunctionNames                       = layer::xetModuleGetFunctionNames;
 
@@ -2007,9 +1921,6 @@ xetGetFunctionProcAddrTable(
 
     dditable.pfnGetProfileInfo                           = pDdiTable->pfnGetProfileInfo;
     pDdiTable->pfnGetProfileInfo                         = layer::xetFunctionGetProfileInfo;
-
-    dditable.pfnSetAddress                               = pDdiTable->pfnSetAddress;
-    pDdiTable->pfnSetAddress                             = layer::xetFunctionSetAddress;
 
     return result;
 }

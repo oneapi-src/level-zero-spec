@@ -44,57 +44,6 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Allocates executable memory from a module.
-/// 
-/// @details
-///     - The pointer returned is accessible by both the Host and the device
-///       from which the module was created.
-///     - The pointer is only valid to be used from within the module.
-///     - The application may **not** call this function from simultaneous
-///       threads with the same module handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hModule
-///         + nullptr == ptr
-///         + 0 for size
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-xe_result_t __xecall
-xetModuleAllocateExecutableMemory(
-    xet_module_handle_t hModule,                    ///< [in] handle of the module
-    size_t size,                                    ///< [in] size (in bytes) to allocate
-    void** ptr                                      ///< [out] pointer to allocation
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Frees executable memory from a module.
-/// 
-/// @details
-///     - The application may **not** call this function from simultaneous
-///       threads with the same module handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hModule
-///         + nullptr == ptr
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetModuleFreeExecutableMemory(
-    xet_module_handle_t hModule,                    ///< [in] handle of the module
-    void* ptr                                       ///< [in] pointer to allocation to free
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieve all function names in the module.
 /// 
 /// @details
@@ -151,31 +100,32 @@ typedef struct _xet_profile_info_t
 /// @brief Supported profile token types
 typedef enum _xet_profile_token_type_t
 {
-    XET_PROFILE_TOKEN_TYPE_GRF,                     ///< GRF info
+    XET_PROFILE_TOKEN_TYPE_FREE_REGISTER,           ///< GRF info
 
 } xet_profile_token_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Profile GRF token detailing unused registers in the current function
-typedef struct _xet_profile_grf_token_t
+/// @brief Profile free register token detailing unused registers in the current
+///        function
+typedef struct _xet_profile_free_register_token_t
 {
     xet_profile_token_type_t type;                  ///< [out] type of token
     uint32_t size;                                  ///< [out] total size of the token, in bytes
     uint32_t count;                                 ///< [out] number of register sequences immediately following this
                                                     ///< structure
 
-} xet_profile_grf_token_t;
+} xet_profile_free_register_token_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Profile GRF sequence detailing consecutive bytes, all of which are
-///        unused
-typedef struct _xet_profile_grf_sequence_t
+/// @brief Profile register sequence detailing consecutive bytes, all of which
+///        are unused
+typedef struct _xet_profile_register_sequence_t
 {
-    uint32_t start;                                 ///< [out] starting byte in the GRF table, representing the start of unused
-                                                    ///< bytes in the current function
+    uint32_t start;                                 ///< [out] starting byte in the register table, representing the start of
+                                                    ///< unused bytes in the current function
     uint32_t count;                                 ///< [out] number of consecutive bytes in the sequence, starting from start
 
-} xet_profile_grf_sequence_t;
+} xet_profile_register_sequence_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieve profiling information generated for the function.
@@ -200,30 +150,6 @@ xe_result_t __xecall
 xetFunctionGetProfileInfo(
     xet_function_handle_t hFunction,                ///< [in] handle to function
     xet_profile_info_t* pInfo                       ///< [out] pointer to profile info
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Changes the address of a function for the next
-///        ::xeCommandListAppendLaunchFunction
-/// 
-/// @details
-///     - This function may **not** be called from simultaneous threads with the
-///       same function handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFunction
-///         + nullptr == ptr
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetFunctionSetAddress(
-    xet_function_handle_t hFunction,                ///< [in] handle to function
-    void* ptr                                       ///< [in] address to use for function; must be allocated using ::xetModuleAllocateExecutableMemory.
-                                                    ///< if address is nullptr, then resets function address to default value."
     );
 
 #if defined(__cplusplus)

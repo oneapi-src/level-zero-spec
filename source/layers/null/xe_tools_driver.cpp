@@ -368,35 +368,6 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetModuleAllocateExecutableMemory
-    xe_result_t __xecall
-    xetModuleAllocateExecutableMemory(
-        xet_module_handle_t hModule,                    ///< [in] handle of the module
-        size_t size,                                    ///< [in] size (in bytes) to allocate
-        void** ptr                                      ///< [out] pointer to allocation
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        *ptr = malloc( size );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetModuleFreeExecutableMemory
-    xe_result_t __xecall
-    xetModuleFreeExecutableMemory(
-        xet_module_handle_t hModule,                    ///< [in] handle of the module
-        void* ptr                                       ///< [in] pointer to allocation to free
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetModuleGetFunctionNames
     xe_result_t __xecall
     xetModuleGetFunctionNames(
@@ -419,20 +390,6 @@ namespace driver
     xetFunctionGetProfileInfo(
         xet_function_handle_t hFunction,                ///< [in] handle to function
         xet_profile_info_t* pInfo                       ///< [out] pointer to profile info
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetFunctionSetAddress
-    xe_result_t __xecall
-    xetFunctionSetAddress(
-        xet_function_handle_t hFunction,                ///< [in] handle to function
-        void* ptr                                       ///< [in] address to use for function; must be allocated using ::xetModuleAllocateExecutableMemory.
-                                                        ///< if address is nullptr, then resets function address to default value."
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -1150,10 +1107,6 @@ xetGetModuleProcAddrTable(
 
     pDdiTable->pfnGetDebugInfo                           = driver::xetModuleGetDebugInfo;
 
-    pDdiTable->pfnAllocateExecutableMemory               = driver::xetModuleAllocateExecutableMemory;
-
-    pDdiTable->pfnFreeExecutableMemory                   = driver::xetModuleFreeExecutableMemory;
-
     pDdiTable->pfnGetFunctionNames                       = driver::xetModuleGetFunctionNames;
 
     return result;
@@ -1185,8 +1138,6 @@ xetGetFunctionProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     pDdiTable->pfnGetProfileInfo                         = driver::xetFunctionGetProfileInfo;
-
-    pDdiTable->pfnSetAddress                             = driver::xetFunctionSetAddress;
 
     return result;
 }

@@ -3,46 +3,6 @@ type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for Program Instrumentation (PIN)"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Allocates executable memory from a module."
-class: $tModule
-name: AllocateExecutableMemory
-details:
-    - The pointer returned is accessible by both the Host and the device from which the module was created.
-    - The pointer is only valid to be used from within the module.
-    - "The application may **not** call this function from simultaneous threads with the same module handle."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_module_handle_t
-      name: hModule
-      desc: "[in] handle of the module"
-    - type: size_t
-      name: size
-      desc: "[in] size (in bytes) to allocate"
-    - type: void**
-      name: ptr
-      desc: "[out] pointer to allocation"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-       - "0 for size"
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
---- #--------------------------------------------------------------------------
-type: function
-desc: "Frees executable memory from a module."
-class: $tModule
-name: FreeExecutableMemory
-details:
-    - "The application may **not** call this function from simultaneous threads with the same module handle."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_module_handle_t
-      name: hModule
-      desc: "[in] handle of the module"
-    - type: void*
-      name: ptr
-      desc: "[in] pointer to allocation to free"
---- #--------------------------------------------------------------------------
-type: function
 desc: "Retrieve all function names in the module."
 class: $tModule
 name: GetFunctionNames
@@ -108,13 +68,13 @@ desc: "Supported profile token types"
 class: $tFunction
 name: $t_profile_token_type_t
 etors:
-    - name: $T_PROFILE_TOKEN_TYPE_GRF
+    - name: $T_PROFILE_TOKEN_TYPE_FREE_REGISTER
       desc: "GRF info"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Profile GRF token detailing unused registers in the current function"
+desc: "Profile free register token detailing unused registers in the current function"
 class: $tFunction
-name: $t_profile_grf_token_t
+name: $t_profile_free_register_token_t
 members:
     - type: $t_profile_token_type_t
       name: type
@@ -127,13 +87,13 @@ members:
       desc: "[out] number of register sequences immediately following this structure"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Profile GRF sequence detailing consecutive bytes, all of which are unused"
+desc: "Profile register sequence detailing consecutive bytes, all of which are unused"
 class: $tFunction
-name: $t_profile_grf_sequence_t
+name: $t_profile_register_sequence_t
 members:
     - type: uint32_t
       name: start
-      desc: "[out] starting byte in the GRF table, representing the start of unused bytes in the current function"
+      desc: "[out] starting byte in the register table, representing the start of unused bytes in the current function"
     - type: uint32_t
       name: count
       desc: "[out] number of consecutive bytes in the sequence, starting from start"
@@ -155,20 +115,3 @@ params:
     - type: "$t_profile_info_t*"
       name: pInfo
       desc: "[out] pointer to profile info"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Changes the address of a function for the next $xCommandListAppendLaunchFunction"
-class: $tFunction
-name: SetAddress
-details:
-    - "This function may **not** be called from simultaneous threads with the same function handle."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_function_handle_t
-      name: hFunction
-      desc: "[in] handle to function"
-    - type: void*
-      name: ptr
-      desc: |
-            [in] address to use for function; must be allocated using $tModuleAllocateExecutableMemory.
-            if address is nullptr, then resets function address to default value."

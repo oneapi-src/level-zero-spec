@@ -178,8 +178,8 @@ namespace xet
 
         switch( val )
         {
-        case Function::profile_token_type_t::GRF:
-            str = "Function::profile_token_type_t::GRF";
+        case Function::profile_token_type_t::FREE_REGISTER:
+            str = "Function::profile_token_type_t::FREE_REGISTER";
             break;
 
         default:
@@ -212,20 +212,20 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::profile_grf_token_t to std::string
-    std::string to_string( const Function::profile_grf_token_t val )
+    /// @brief Converts Function::profile_free_register_token_t to std::string
+    std::string to_string( const Function::profile_free_register_token_t val )
     {
         std::string str;
         
-        str += "Function::profile_grf_token_t::type : ";
+        str += "Function::profile_free_register_token_t::type : ";
         str += to_string(val.type);
         str += "\n";
         
-        str += "Function::profile_grf_token_t::size : ";
+        str += "Function::profile_free_register_token_t::size : ";
         str += std::to_string(val.size);
         str += "\n";
         
-        str += "Function::profile_grf_token_t::count : ";
+        str += "Function::profile_free_register_token_t::count : ";
         str += std::to_string(val.count);
         str += "\n";
 
@@ -233,16 +233,16 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Function::profile_grf_sequence_t to std::string
-    std::string to_string( const Function::profile_grf_sequence_t val )
+    /// @brief Converts Function::profile_register_sequence_t to std::string
+    std::string to_string( const Function::profile_register_sequence_t val )
     {
         std::string str;
         
-        str += "Function::profile_grf_sequence_t::start : ";
+        str += "Function::profile_register_sequence_t::start : ";
         str += std::to_string(val.start);
         str += "\n";
         
-        str += "Function::profile_grf_sequence_t::count : ";
+        str += "Function::profile_register_sequence_t::count : ";
         str += std::to_string(val.count);
         str += "\n";
 

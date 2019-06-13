@@ -584,47 +584,6 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetModuleAllocateExecutableMemory
-    xe_result_t __xecall
-    xetModuleAllocateExecutableMemory(
-        xet_module_handle_t hModule,                    ///< [in] handle of the module
-        size_t size,                                    ///< [in] size (in bytes) to allocate
-        void** ptr                                      ///< [out] pointer to allocation
-        )
-    {
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xet_module_object_t*>( hModule )->dditable;
-
-        // convert loader handle to driver handle
-        hModule = reinterpret_cast<xet_module_object_t*>( hModule )->handle;
-
-        // forward to device-driver
-        auto result = dditable->xet.Module.pfnAllocateExecutableMemory( hModule, size, ptr );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetModuleFreeExecutableMemory
-    xe_result_t __xecall
-    xetModuleFreeExecutableMemory(
-        xet_module_handle_t hModule,                    ///< [in] handle of the module
-        void* ptr                                       ///< [in] pointer to allocation to free
-        )
-    {
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xet_module_object_t*>( hModule )->dditable;
-
-        // convert loader handle to driver handle
-        hModule = reinterpret_cast<xet_module_object_t*>( hModule )->handle;
-
-        // forward to device-driver
-        auto result = dditable->xet.Module.pfnFreeExecutableMemory( hModule, ptr );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetModuleGetFunctionNames
     xe_result_t __xecall
     xetModuleGetFunctionNames(
@@ -664,27 +623,6 @@ namespace loader
 
         // forward to device-driver
         auto result = dditable->xet.Function.pfnGetProfileInfo( hFunction, pInfo );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetFunctionSetAddress
-    xe_result_t __xecall
-    xetFunctionSetAddress(
-        xet_function_handle_t hFunction,                ///< [in] handle to function
-        void* ptr                                       ///< [in] address to use for function; must be allocated using ::xetModuleAllocateExecutableMemory.
-                                                        ///< if address is nullptr, then resets function address to default value."
-        )
-    {
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xet_function_object_t*>( hFunction )->dditable;
-
-        // convert loader handle to driver handle
-        hFunction = reinterpret_cast<xet_function_object_t*>( hFunction )->handle;
-
-        // forward to device-driver
-        auto result = dditable->xet.Function.pfnSetAddress( hFunction, ptr );
 
         return result;
     }
@@ -1834,8 +1772,6 @@ xetGetModuleProcAddrTable(
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnGetDebugInfo                             = loader::xetModuleGetDebugInfo;
-            pDdiTable->pfnAllocateExecutableMemory                 = loader::xetModuleAllocateExecutableMemory;
-            pDdiTable->pfnFreeExecutableMemory                     = loader::xetModuleFreeExecutableMemory;
             pDdiTable->pfnGetFunctionNames                         = loader::xetModuleGetFunctionNames;
         }
         else
@@ -1901,7 +1837,6 @@ xetGetFunctionProcAddrTable(
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnGetProfileInfo                           = loader::xetFunctionGetProfileInfo;
-            pDdiTable->pfnSetAddress                               = loader::xetFunctionSetAddress;
         }
         else
         {

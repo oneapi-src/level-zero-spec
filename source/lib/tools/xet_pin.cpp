@@ -35,77 +35,6 @@
 extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Allocates executable memory from a module.
-/// 
-/// @details
-///     - The pointer returned is accessible by both the Host and the device
-///       from which the module was created.
-///     - The pointer is only valid to be used from within the module.
-///     - The application may **not** call this function from simultaneous
-///       threads with the same module handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hModule
-///         + nullptr == ptr
-///         + 0 for size
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
-xe_result_t __xecall
-xetModuleAllocateExecutableMemory(
-    xet_module_handle_t hModule,                    ///< [in] handle of the module
-    size_t size,                                    ///< [in] size (in bytes) to allocate
-    void** ptr                                      ///< [out] pointer to allocation
-    )
-{
-    auto pfnAllocateExecutableMemory = xet_lib::context.ddiTable.Module.pfnAllocateExecutableMemory;
-
-#if _DEBUG
-    if( nullptr == pfnAllocateExecutableMemory )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
-
-    return pfnAllocateExecutableMemory( hModule, size, ptr );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Frees executable memory from a module.
-/// 
-/// @details
-///     - The application may **not** call this function from simultaneous
-///       threads with the same module handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hModule
-///         + nullptr == ptr
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetModuleFreeExecutableMemory(
-    xet_module_handle_t hModule,                    ///< [in] handle of the module
-    void* ptr                                       ///< [in] pointer to allocation to free
-    )
-{
-    auto pfnFreeExecutableMemory = xet_lib::context.ddiTable.Module.pfnFreeExecutableMemory;
-
-#if _DEBUG
-    if( nullptr == pfnFreeExecutableMemory )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
-
-    return pfnFreeExecutableMemory( hModule, ptr );
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieve all function names in the module.
 /// 
 /// @details
@@ -175,99 +104,10 @@ xetFunctionGetProfileInfo(
     return pfnGetProfileInfo( hFunction, pInfo );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Changes the address of a function for the next
-///        ::xeCommandListAppendLaunchFunction
-/// 
-/// @details
-///     - This function may **not** be called from simultaneous threads with the
-///       same function handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hFunction
-///         + nullptr == ptr
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetFunctionSetAddress(
-    xet_function_handle_t hFunction,                ///< [in] handle to function
-    void* ptr                                       ///< [in] address to use for function; must be allocated using ::xetModuleAllocateExecutableMemory.
-                                                    ///< if address is nullptr, then resets function address to default value."
-    )
-{
-    auto pfnSetAddress = xet_lib::context.ddiTable.Function.pfnSetAddress;
-
-#if _DEBUG
-    if( nullptr == pfnSetAddress )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
-
-    return pfnSetAddress( hFunction, ptr );
-}
-
 } // extern "C"
 
 namespace xet
 {
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Allocates executable memory from a module.
-    /// 
-    /// @details
-    ///     - The pointer returned is accessible by both the Host and the device
-    ///       from which the module was created.
-    ///     - The pointer is only valid to be used from within the module.
-    ///     - The application may **not** call this function from simultaneous
-    ///       threads with the same module handle.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @returns
-    ///     - void*: pointer to allocation
-    /// 
-    /// @throws result_t
-    void* __xecall
-    Module::AllocateExecutableMemory(
-        size_t size                                     ///< [in] size (in bytes) to allocate
-        )
-    {
-        void* ptr;
-
-        auto result = static_cast<result_t>( ::xetModuleAllocateExecutableMemory(
-            reinterpret_cast<xet_module_handle_t>( getHandle() ),
-            size,
-            &ptr ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Module::AllocateExecutableMemory" );
-
-        return ptr;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Frees executable memory from a module.
-    /// 
-    /// @details
-    ///     - The application may **not** call this function from simultaneous
-    ///       threads with the same module handle.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @throws result_t
-    void __xecall
-    Module::FreeExecutableMemory(
-        void* ptr                                       ///< [in] pointer to allocation to free
-        )
-    {
-        auto result = static_cast<result_t>( ::xetModuleFreeExecutableMemory(
-            reinterpret_cast<xet_module_handle_t>( getHandle() ),
-            ptr ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Module::FreeExecutableMemory" );
-    }
-
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Retrieve all function names in the module.
     /// 
@@ -323,30 +163,6 @@ namespace xet
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Function::GetProfileInfo" );
 
         return *reinterpret_cast<profile_info_t*>( &info );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Changes the address of a function for the next
-    ///        ::xeCommandListAppendLaunchFunction
-    /// 
-    /// @details
-    ///     - This function may **not** be called from simultaneous threads with the
-    ///       same function handle.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @throws result_t
-    void __xecall
-    Function::SetAddress(
-        void* ptr                                       ///< [in] address to use for function; must be allocated using ::ModuleAllocateExecutableMemory.
-                                                        ///< if address is nullptr, then resets function address to default value."
-        )
-    {
-        auto result = static_cast<result_t>( ::xetFunctionSetAddress(
-            reinterpret_cast<xet_function_handle_t>( getHandle() ),
-            ptr ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Function::SetAddress" );
     }
 
 } // namespace xet

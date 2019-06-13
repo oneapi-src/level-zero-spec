@@ -144,7 +144,10 @@ The following sample code demonstrates a basic enumaration over all available me
 Additionally, it returns a metric group with a chosen name and sampling type. Similar code could be used
 for selecting a preferred metric group for a specific type of measurements.
 ```c
-    xe_result_t FindMetricGroup( xe_device_group_handle_t hDeviceGroup, char* pMetricGroupName, uint32_t desiredSamplingType, xet_metric_group_handle_t* phMetricGroup )
+    xe_result_t FindMetricGroup( xe_device_group_handle_t hDeviceGroup,
+                                   char* pMetricGroupName,
+                                   uint32_t desiredSamplingType,
+                                   xet_metric_group_handle_t* phMetricGroup )
     {
         // Obtain available metric groups for the specific device group
         uint32_t metricGroupCount = 0;
@@ -209,7 +212,8 @@ Time-based collection uses a simple Open, Wait, Read, Close scheme:
 
 The following sample code demonstrates a basic sequence for tracer-based collection:
 ```c
-    xe_result_t TimeBasedUsageExample( xe_device_group_handle_t hDeviceGroup, xe_device_handle_t hDevice )
+    xe_result_t TimeBasedUsageExample( xe_device_group_handle_t hDeviceGroup,
+                                         xe_device_handle_t hDevice )
     {
         xet_metric_group_handle_t     hMetricGroup           = nullptr;
         xe_event_handle_t            hNotificationEvent     = nullptr;
@@ -284,7 +288,8 @@ A Query Pool is used to efficiently use and reuse device meory for multiple quer
 
 The following sample code demonstrates a basic sequence for query-based collection:
 ```c
-    xe_result_t MetricQueryUsageExample( xe_device_group_handle_t hDeviceGroup, xe_device_handle_t hDevice )
+    xe_result_t MetricQueryUsageExample( xe_device_group_handle_t hDeviceGroup,
+                                           xe_device_handle_t hDevice )
     {
         xet_metric_group_handle_t      hMetricGroup          = nullptr;
         xe_event_handle_t             hCompletionEvent      = nullptr;
@@ -353,7 +358,8 @@ for application processing. To calculate metric values use ::xetMetricGroupCalcu
 
 The following sample code demonstrates a basic sequence for metric calculation and interpretation:
 ```c
-    xe_result_t CalculateMetricsExample( xet_metric_group_handle_t hMetricGroup, size_t rawSize, uint8_t* rawData )
+    xe_result_t CalculateMetricsExample( xet_metric_group_handle_t hMetricGroup,
+                                           size_t rawSize, uint8_t* rawData )
     {
         // Calculate metric data
         uint32_t calculatedDataCount = 0;
@@ -417,7 +423,44 @@ The following sample code demonstrates a basic sequence for metric calculation a
 # <a name="pin">Program Instrumentation</a>
 
 ## Introduction
+The program instrumentation APIs provide tools a basic framework for low-level profiling of device programs, 
+by allowing direct instrumentation of those programs. These capabilities, in combination with those already provided,
+in combination with API tracing, are sufficient for more advanced frameworks to be developed independently.
 
+## Compilation
+A module must be compiled with foreknowledge that instrumentation will be performed in order for the compiler
+to generate the proper profiling meta-data and leave sufficient space beween the application's instructions for
+the instrumentation tool to inject additional instructions.
+Therefore, when the instrumentation layer is enabled, a new build flag is supported:
+"-xet-profile-flags \<n\>", 
+where "\<n\>" must be a combination of ::xet_profile_flag_t, in hexidecimal.
+
+TODO: do we need any additional options, such as amount of space between instructions, or amount of register space
+to leave free?
+
+As an example, a tool could use API Tracing to inject this build flag on every ::xeModuleCreate API call 
+that the tool wishes to instrument.
+In another example, a tool could recompile a Module using the build flag and use API Tracing to replace the 
+application's Module handle with it's own.
+
+## Instrumentation
+Once the module has been compiled with instrumentation enabled, a tool may use
+::xetModuleGetDebugInfo, ::xetModuleGetFunctionNames and ::xetFunctionGetProfileInfo
+in order to decode the application's instructions and register usage for every function in the module.
+
+A tool may use ::xeModuleGetGlobalPointer to retrieve the Host and device address of each function in the module,
+for direct instrumentation.
+If a tool requires additional functions to be used, it may create another module and use ::xeModuleGetGlobalPointer
+to call functions between modules.
+
+TODO: this requires the tool to inject raw ISA; do we need a V-ISA alternative?
+
+### Profile Info
+TODO: need a picture and write-up from GT-PIN/IGC team on how to use the profile info.
+
+## Execution
+If a tool requires changing the address of an application's function, then it should use API Tracing; for example,
+::xeModuleGetGlobalPointer, ::xeFunctionCreate, and all flavors of ::xeCommandListAppendLaunchFunction.
 
 # <a name="pin">Program Debug</a>
 

@@ -235,21 +235,6 @@ typedef xe_result_t (__xecall *xet_pfnModuleGetDebugInfo_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetModuleAllocateExecutableMemory 
-typedef xe_result_t (__xecall *xet_pfnModuleAllocateExecutableMemory_t)(
-    xet_module_handle_t,
-    size_t,
-    void**
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetModuleFreeExecutableMemory 
-typedef xe_result_t (__xecall *xet_pfnModuleFreeExecutableMemory_t)(
-    xet_module_handle_t,
-    void*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetModuleGetFunctionNames 
 typedef xe_result_t (__xecall *xet_pfnModuleGetFunctionNames_t)(
     xet_module_handle_t,
@@ -262,8 +247,6 @@ typedef xe_result_t (__xecall *xet_pfnModuleGetFunctionNames_t)(
 typedef struct _xet_module_dditable_t
 {
     xet_pfnModuleGetDebugInfo_t                                 pfnGetDebugInfo;
-    xet_pfnModuleAllocateExecutableMemory_t                     pfnAllocateExecutableMemory;
-    xet_pfnModuleFreeExecutableMemory_t                         pfnFreeExecutableMemory;
     xet_pfnModuleGetFunctionNames_t                             pfnGetFunctionNames;
 } xet_module_dditable_t;
 
@@ -299,18 +282,10 @@ typedef xe_result_t (__xecall *xet_pfnFunctionGetProfileInfo_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetFunctionSetAddress 
-typedef xe_result_t (__xecall *xet_pfnFunctionSetAddress_t)(
-    xet_function_handle_t,
-    void*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Function functions pointers
 typedef struct _xet_function_dditable_t
 {
     xet_pfnFunctionGetProfileInfo_t                             pfnGetProfileInfo;
-    xet_pfnFunctionSetAddress_t                                 pfnSetAddress;
 } xet_function_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
