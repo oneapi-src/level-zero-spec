@@ -79,20 +79,21 @@ def main():
             else:
                 specs, meta = parse_specs.parse(srcpath)
 
-            if args['debug']:
-                util.jsonWrite(os.path.join(srcpath, "specs.json"), specs)
-                util.jsonWrite(os.path.join(srcpath, "meta.json"), meta)
+            if len(specs) > 0:
+                if args['debug']:
+                    util.jsonWrite(os.path.join(srcpath, "specs.json"), specs)
+                    util.jsonWrite(os.path.join(srcpath, "meta.json"), meta)
 
-            generate_code.generate_api(dstpath, namespace, tags, specs, meta)
+                generate_code.generate_api(dstpath, namespace, tags, specs, meta)
 
-            if args['lib']:
-                generate_code.generate_lib(libpath, namespace, tags, specs, meta)
+                if args['lib']:
+                    generate_code.generate_lib(libpath, namespace, tags, specs, meta)
 
-            if args['loader']:
-                generate_code.generate_loader("../source/", section, namespace, tags, specs, meta)
+                if args['loader']:
+                    generate_code.generate_loader("../source/", section, namespace, tags, specs, meta)
 
-            if args['layers']:
-                generate_code.generate_layers("../source/", section, namespace, tags, specs, meta)
+                if args['layers']:
+                    generate_code.generate_layers("../source/", section, namespace, tags, specs, meta)
 
             if args['md']:
                 generate_docs.generate_md(srcpath, dstpath, tags, meta)
