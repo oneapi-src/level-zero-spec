@@ -38,8 +38,6 @@
 #if !defined(_XET_API_H)
 #pragma message("warning: this file is not intended to be included directly")
 #endif
-#include "xe_ddi.h"
-#include "xex_ddi.h"
 
 #if defined(__cplusplus)
 extern "C" {
@@ -84,6 +82,10 @@ typedef struct _xet_metric_query_pool_handle_t *xet_metric_query_pool_handle_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of metric query's object
 typedef struct _xet_metric_query_handle_t *xet_metric_query_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle of tracer object
+typedef struct _xet_tracer_handle_t *xet_tracer_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of power object
@@ -172,6 +174,10 @@ typedef struct _xet_activity_properties_t xet_activity_properties_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_activity_counters_t
 typedef struct _xet_activity_counters_t xet_activity_counters_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_tracer_desc_t
+typedef struct _xet_tracer_desc_t xet_tracer_desc_t;
 
 #if defined(__cplusplus)
 } // extern "C"

@@ -653,7 +653,7 @@ Public:
     returns a list of c++ strings for each parameter of a function
     format: "TYPE NAME = INIT, ///< DESCRIPTION"
 """
-def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None, format=["type", "name", "init", "delim", "desc"]):
+def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None, format=["type", "name", "init", "delim", "desc"], delim=","):
     lines = []
 
     if cpp:
@@ -689,7 +689,7 @@ def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None, for
         prologue = " ".join(words)
         if "delim" in format:
             if i < len(params)-1:
-                prologue += ","
+                prologue += delim
 
         if "desc" in format:
             desc = item['desc']
@@ -1231,12 +1231,36 @@ def make_pfn_name(namespace, tags, obj):
 Public:
     returns the name of a function pointer
 """
-def make_pfn_type(namespace, tags, obj):
+def make_pfncb_name(namespace, tags, obj):
+
+    return subt(namespace, tags, "pfn%sCb"%obj['name'])
+
+"""
+Public:
+    returns the name of a function pointer
+"""
+def make_pfn_type(namespace, tags, obj, epilogue=""):
     newtags = dict()
     for key, value in tags.items():
         if re.match(namespace, value):
             newtags[key] = "pfn"
-    return "%s_%s_t"%(namespace, make_func_name(namespace, newtags, obj))
+    return "%s_%s%s_t"%(namespace, make_func_name(namespace, newtags, obj), epilogue)
+
+"""
+Public:
+    returns the name of a function pointer
+"""
+def make_pfncb_type(namespace, tags, obj):
+
+    return make_pfn_type(namespace, tags, obj, epilogue="Cb")
+
+"""
+Public:
+    returns the name of a function pointer
+"""
+def make_pfncb_param_type(namespace, tags, obj):
+
+    return "%s_params_t"%_camel_to_snake(make_func_name(namespace, tags, obj))
 
 """
 Public:
@@ -1332,6 +1356,24 @@ def get_pfntables(specs, meta, namespace, tags):
                 'type': table,
                 'export': export,
                 'pfn': pfn,
+                'functions': objs
+            })
+    return tables
+
+"""
+Public:
+    returns a list of dict of each pfntables needed
+"""
+def get_pfncbtables(specs, meta, namespace, tags):
+    tables = []
+    for cname in sorted(meta['class'], key=lambda x: meta['class'][x]['ordinal']):
+        objs = get_class_function_objs(specs, cname)
+        if len(objs) > 0:
+            name = get_table_name(namespace, tags, {'class': cname})
+            table = "%s_%s_callbacks_t"%(namespace, _camel_to_snake(name))
+            tables.append({
+                'name': name, 
+                'type': table,
                 'functions': objs
             })
     return tables

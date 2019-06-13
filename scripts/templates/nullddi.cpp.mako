@@ -59,11 +59,25 @@ namespace driver
         ${x}_result_t result = ${X}_RESULT_SUCCESS;
 
         %if n != "xet":
+        std::vector<void*> localUserData;
         if( context.enableTracing )
         {
-            auto ${th.make_pfn_name(n, tags, obj)} = context.${n}PrologueCbs.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
-            if( nullptr != ${th.make_pfn_name(n, tags, obj)} )
-                ${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
+            // capture parameters
+            ${th.make_pfncb_param_type(n, tags, obj)} params = {
+                ${",\n".join(th.make_param_lines(n, tags, obj, format=["name"]))}
+            };
+
+            // call each callback registered
+            localUserData.resize( context.tracerData.size() );
+            for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+                if( context.tracerData[ i ].enabled )
+                {
+                    auto& table = context.tracerData[ i ].${n}PrologueCbs.${th.get_table_name(n, tags, obj)};
+                    if( nullptr != table.${th.make_pfncb_name(n, tags, obj)} )
+                        table.${th.make_pfncb_name(n, tags, obj)}( &params, result,
+                            context.tracerData[ i ].globalUserData,
+                            &localUserData[ i ] );
+                }
         }
 
         %endif
@@ -137,13 +151,25 @@ namespace driver
         *pRawDataSize = 1;
         if( pRawData ) *pRawData = 0;
 
-        %elif re.match(r"\w+SetTracingPrologue", fname):
-        context.xePrologueCbs = *pCoreCbs;
-        if( pExtendedCbs ) context.xexPrologueCbs = *pExtendedCbs;
+        %elif re.match(r"\w+TracerCreate", fname):
+        context.tracerData.emplace_back();
+        auto index = context.tracerData.size() - 1;
+        context.tracerData[ index ].globalUserData = desc->pGlobalUserData;
+        *phTracer = reinterpret_cast<decltype(*phTracer)>( index );
 
-        %elif re.match(r"\w+SetTracingEpilogue", fname):
-        context.xeEpilogueCbs = *pCoreCbs;
-        if( pExtendedCbs ) context.xexEpilogueCbs = *pExtendedCbs;
+        %elif re.match(r"\w+TracerSetPrologues", fname):
+        auto index = reinterpret_cast<size_t>( hTracer );
+        context.tracerData[ index ].xePrologueCbs = *pCoreCbs;
+        if( pExtendedCbs ) context.tracerData[ index ].xexPrologueCbs = *pExtendedCbs;
+
+        %elif re.match(r"\w+TracerSetEpilogues", fname):
+        auto index = reinterpret_cast<size_t>( hTracer );
+        context.tracerData[ index ].xeEpilogueCbs = *pCoreCbs;
+        if( pExtendedCbs ) context.tracerData[ index ].xexEpilogueCbs = *pExtendedCbs;
+
+        %elif re.match(r"\w+TracerSetEnabled", fname):
+        auto index = reinterpret_cast<size_t>( hTracer );
+        context.tracerData[ index ].enabled = enable;
 
         %else:
         %for item in th.get_loader_epilogue(n, tags, obj, meta):
@@ -163,9 +189,21 @@ namespace driver
         %if n != "xet":
         if( context.enableTracing )
         {
-            auto ${th.make_pfn_name(n, tags, obj)} = context.${n}EpilogueCbs.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
-            if( nullptr != ${th.make_pfn_name(n, tags, obj)} )
-                ${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
+            // capture parameters
+            ${th.make_pfncb_param_type(n, tags, obj)} params = {
+                ${",\n".join(th.make_param_lines(n, tags, obj, format=["name"]))}
+            };
+
+            // call each callback registered
+            for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+                if( context.tracerData[ i ].enabled )
+                {
+                    auto& table = context.tracerData[ i ].${n}EpilogueCbs.${th.get_table_name(n, tags, obj)};
+                    if( nullptr != table.${th.make_pfncb_name(n, tags, obj)} )
+                        table.${th.make_pfncb_name(n, tags, obj)}( &params, result,
+                            context.tracerData[ i ].globalUserData,
+                            &localUserData[ i ] );
+                }
         }
 
         %endif

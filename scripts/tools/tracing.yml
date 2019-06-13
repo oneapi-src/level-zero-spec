@@ -1,31 +1,96 @@
 --- #------------- -------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for API Tracing"
+includes:
+    - "$x_callbacks.h"
+    - "$e_callbacks.h"
 --- #--------------------------------------------------------------------------
 type: typedef
-desc: "Re-use the existing DDI table definition for 'core' callbacks"
-class: $tDeviceGroup
+desc: "Alias the existing callbacks definition for 'core' callbacks"
+class: $tTracer
 name: $t_core_callbacks_t
-value: $x_dditable_t
+value: $x_callbacks_t
 --- #--------------------------------------------------------------------------
 type: typedef
-desc: "Re-use the existing DDI table definition for 'extended' callbacks"
-class: $tDeviceGroup
+desc: "Alias the existing callbacks definition for 'extended' callbacks"
+class: $tTracer
 name: $t_extended_callbacks_t
-value: $e_dditable_t
+value: $e_callbacks_t
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "API version of $t_tracer_desc_t"
+class: $tTracer
+name: $t_tracer_desc_version_t
+etors:
+    - name: $T_TRACER_DESC_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Tracer descriptor"
+class: $tTracer
+name: $t_tracer_desc_t
+members:
+    - type: $t_tracer_desc_version_t
+      name: version
+      desc: "[in] $T_TRACER_DESC_VERSION_CURRENT"
+      init: $T_TRACER_DESC_VERSION_CURRENT
+    - type: void*
+      name: pGlobalUserData
+      desc: "[in] pointer to global data passes to every callback"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Creates a tracer on the device group."
+class: $tTracer
+name: Create
+decl: static
+ordinal: "0"
+details:
+    - "The tracer can only be used on the device group on which it was created."
+    - "The tracer is created in the disabled state."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_device_group_handle_t
+      name: hDeviceGroup
+      desc: "[in] handle of the device group"
+    - type: "const $t_tracer_desc_t*"
+      name: desc
+      desc: "[in] pointer to tracer descriptor"
+    - type: $t_tracer_handle_t*
+      name: phTracer
+      desc: "[out] pointer to handle of tracer object created"
+returns:
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Destroys a tracer."
+class: $tTracer
+name: Destroy
+decl: static
+ordinal: "0"
+details:
+    - "The application is responsible for making sure the driver is not currently referencing the tracer before it is deleted."
+    - "The implementation of this function will immediately free all Host allocations associated with this tracer."
+    - "The application may **not** call this function from simultaneous threads with the same tracer handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_tracer_handle_t
+      name: hTracer
+      desc: "[in][release] handle of tracer object to destroy"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Sets the collection of callbacks to be executed **before** driver execution."
-class: $tDeviceGroup
-name: SetTracingPrologue
+class: $tTracer
+name: SetPrologues
 details:
     - "The application only needs to set the function pointers it is interested in receiving; all others should be 'nullptr'"
     - "The application must ensure that no other threads are executing functions for which the tracing functions are changing."
-    - "The application may **not** call this function from simultaneous threads with the same device group handle."
+    - "The application may **not** call this function from simultaneous threads with the same tracer handle."
 params:
-    - type: "$t_device_group_handle_t"
-      name: hDeviceGroup
-      desc: "[in] handle of the device group"
+    - type: "$t_tracer_handle_t"
+      name: hTracer
+      desc: "[in] handle of the tracer"
     - type: "$t_core_callbacks_t*"
       name: pCoreCbs
       desc: "[in] pointer to table of 'core' callback function pointers"
@@ -35,19 +100,48 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Sets the collection of callbacks to be executed **after** driver execution."
-class: $tDeviceGroup
-name: SetTracingEpilogue
+class: $tTracer
+name: SetEpilogues
 details:
     - "The application only needs to set the function pointers it is interested in receiving; all others should be 'nullptr'"
     - "The application must ensure that no other threads are executing functions for which the tracing functions are changing."
-    - "The application may **not** call this function from simultaneous threads with the same device group handle."
+    - "The application may **not** call this function from simultaneous threads with the same tracer handle."
 params:
-    - type: "$t_device_group_handle_t"
-      name: hDeviceGroup
-      desc: "[in] handle of the device group"
+    - type: "$t_tracer_handle_t"
+      name: hTracer
+      desc: "[in] handle of the tracer"
     - type: "$t_core_callbacks_t*"
       name: pCoreCbs
       desc: "[in] pointer to table of 'core' callback function pointers"
     - type: "$t_extended_callbacks_t*"
       name: pExtendedCbs
       desc: "[in][optional] pointer to table of 'extended' callback function pointers"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Enables (or disables) the tracer"
+class: $tTracer
+name: SetEnabled
+details:
+    - "The application may **not** call this function from simultaneous threads with the same tracer handle."
+params:
+    - type: "$t_tracer_handle_t"
+      name: hTracer
+      desc: "[in] handle of the tracer"
+    - type: $x_bool_t
+      name: enable
+      desc: "[in] enable the tracer if true; disable if false"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for tracer"
+name: $tTracer
+owner: $tDeviceGroup
+members:
+    - type: $t_tracer_handle_t
+      name: handle
+      desc: "[in] handle of tracer object"
+    - type: $tDeviceGroup*
+      name: pDeviceGroup
+      desc: "[in] pointer to owner object"
+    - type: $t_tracer_desc_t
+      name: desc
+      desc: "[in] descriptor of the tracer object"

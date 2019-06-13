@@ -49,6 +49,7 @@ import re
 #include <exception>
 #include <tuple>
 #include <string>
+#include <sstream>
 %endif
 
 // '${section}' API headers

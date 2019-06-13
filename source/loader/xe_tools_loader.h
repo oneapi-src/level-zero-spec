@@ -63,6 +63,9 @@ namespace loader
     using xet_metric_query_object_t           = object_t < xet_metric_query_handle_t >;
     using xet_metric_query_factory_t          = singleton_factory_t < xet_metric_query_object_t, xet_metric_query_handle_t >;
 
+    using xet_tracer_object_t                 = object_t < xet_tracer_handle_t >;
+    using xet_tracer_factory_t                = singleton_factory_t < xet_tracer_object_t, xet_tracer_handle_t >;
+
     using xet_power_object_t                  = object_t < xet_power_handle_t >;
     using xet_power_factory_t                 = singleton_factory_t < xet_power_object_t, xet_power_handle_t >;
 

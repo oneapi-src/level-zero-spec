@@ -21,46 +21,63 @@ Tools may also use these notifications as triggers to block and inject new API c
 
 ## Registration
 Tools may independently register for enter and exist callbacks for individual API calls, per Device Group.
-- ::xetDeviceGroupSetTracingPrologue is used to specify all the enter callbacks
-- ::xetDeviceGroupSetTracingEpilogue is used to specify all the exist callbacks
+- ::xetTracerSetPrologues is used to specify all the enter callbacks
+- ::xetTracerSetEpilogues is used to specify all the exist callbacks
 - The callbacks are defined as function pointers, with identical parameters as the API call itself
 - If the value of a callback is nullptr, then it will be ignored.
 
 The followsing sample code demonstrates a basic usage of API tracing:
 ```c
-    xe_result_t OnExitCommandListAppendLaunchFunction(
-        xe_command_list_handle_t hCommandList,
-        xe_function_handle_t hFunction,
-        const xe_thread_group_dimensions_t* pLaunchFuncArgs,
-        xe_event_handle_t hSignalEvent,
-        uint32_t numWaitEvents,
-        xe_event_handle_t* phWaitEvents )
+    typedef struct _my_local_data_t
     {
-        // force a wait after every function
-        xeCommandListAppendWaitOnEvents(hCommandList, 1, &hSignalEvent);
+        clock_t start;
+    } my_local_data_t;
+
+    void OnEnterCommandListAppendLaunchFunction(
+        xe_command_list_append_launch_function_params_t* params,
+        xe_result_t result,
+        void* pGlobalUserData,
+        void** ppLocalUserData )
+    {
+        my_local_data_t* local = malloc( sizeof(my_local_data_t) );
+        *ppLocalUserData = local;
+        local->start = clock();
     }
 
-    void RegisterCallbacks( void )
+    void OnExitCommandListAppendLaunchFunction(
+        xe_command_list_append_launch_function_params_t* params,
+        xe_result_t result,
+        void* pGlobalUserData,
+        void** ppLocalUserData )
     {
+        clock_t end = clock();
+        my_local_data_t* local = *(my_local_data_t**)ppLocalUserData;
+        float time = 1000.f * ( end - local->start ) / CLOCKS_PER_SEC;
+        printf("xeCommandListAppendLaunchFunction takes %.4f ms\n", time);
+    }
+
+    void TracingExample( ... )
+    {
+        xet_tracer_desc_t tracer_desc;
+        tracer_desc.version = XET_TRACER_DESC_VERSION_CURRENT;
+        tracer_desc.pGlobalUserData = nullptr;
+        xet_tracer_handle_t hTracer;
+        xetTracerCreate(hDeviceGroup, &tracer_desc, &hTracer);
+
         // Set all callbacks
         xet_core_callbacks_t prologCbs = {};
         xet_core_callbacks_t epilogCbs = {};
+        prologCbs.CommandList.pfnAppendLaunchFunction = OnEnterCommandListAppendLaunchFunction;
         epilogCbs.CommandList.pfnAppendLaunchFunction = OnExitCommandListAppendLaunchFunction;
 
-        // Register for all device groups
-        uint32_t groupCount = 0;
-        xeDeviceGroupGet(&groupCount, nullptr);
+        xetTracerSetPrologues(hTracer, &prologCbs, nullptr);
+        xetTracerSetEpilogues(hTracer, &epilogCbs, nullptr);
 
-        xe_device_group_handle_t* allDeviceGroups = malloc(groupCount * sizeof(xe_device_group_handle_t));
-        xeDeviceGroupGet(&groupCount, allDeviceGroups);
+        xetTracerSetEnabled(hTracer, true);
 
-        for(uint32_t i = 0; i < groupCount; ++i)
-        {
-            xetDeviceGroupSetTracingPrologue(allDeviceGroups[i], &prologCbs, nullptr);
-            xetDeviceGroupSetTracingEpilogue(allDeviceGroups[i], &epilogCbs, nullptr);
-        }
+        xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
 
-        free(allDeviceGroups);
+        xetTracerSetEnabled(hTracer, false);
     }
 ```
 

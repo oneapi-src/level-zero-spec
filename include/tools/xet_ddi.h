@@ -76,54 +76,6 @@ typedef xe_result_t (__xecall *xet_pfnGetGlobalProcAddrTable_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetDeviceGroupSetTracingPrologue 
-typedef xe_result_t (__xecall *xet_pfnDeviceGroupSetTracingPrologue_t)(
-    xet_device_group_handle_t,
-    xet_core_callbacks_t*,
-    xet_extended_callbacks_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetDeviceGroupSetTracingEpilogue 
-typedef xe_result_t (__xecall *xet_pfnDeviceGroupSetTracingEpilogue_t)(
-    xet_device_group_handle_t,
-    xet_core_callbacks_t*,
-    xet_extended_callbacks_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Table of DeviceGroup functions pointers
-typedef struct _xet_device_group_dditable_t
-{
-    xet_pfnDeviceGroupSetTracingPrologue_t                      pfnSetTracingPrologue;
-    xet_pfnDeviceGroupSetTracingEpilogue_t                      pfnSetTracingEpilogue;
-} xet_device_group_dditable_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's DeviceGroup table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xetGetDeviceGroupProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xet_device_group_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetGetDeviceGroupProcAddrTable
-typedef xe_result_t (__xecall *xet_pfnGetDeviceGroupProcAddrTable_t)(
-    xe_api_version_t,
-    xet_device_group_dditable_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetDeviceActivateMetricGroups 
 typedef xe_result_t (__xecall *xet_pfnDeviceActivateMetricGroups_t)(
     xet_device_handle_t,
@@ -585,6 +537,78 @@ typedef xe_result_t (__xecall *xet_pfnGetMetricQueryProcAddrTable_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetTracerCreate 
+typedef xe_result_t (__xecall *xet_pfnTracerCreate_t)(
+    xet_device_group_handle_t,
+    const xet_tracer_desc_t*,
+    xet_tracer_handle_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetTracerDestroy 
+typedef xe_result_t (__xecall *xet_pfnTracerDestroy_t)(
+    xet_tracer_handle_t
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetTracerSetPrologues 
+typedef xe_result_t (__xecall *xet_pfnTracerSetPrologues_t)(
+    xet_tracer_handle_t,
+    xet_core_callbacks_t*,
+    xet_extended_callbacks_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetTracerSetEpilogues 
+typedef xe_result_t (__xecall *xet_pfnTracerSetEpilogues_t)(
+    xet_tracer_handle_t,
+    xet_core_callbacks_t*,
+    xet_extended_callbacks_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetTracerSetEnabled 
+typedef xe_result_t (__xecall *xet_pfnTracerSetEnabled_t)(
+    xet_tracer_handle_t,
+    xe_bool_t
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Tracer functions pointers
+typedef struct _xet_tracer_dditable_t
+{
+    xet_pfnTracerCreate_t                                       pfnCreate;
+    xet_pfnTracerDestroy_t                                      pfnDestroy;
+    xet_pfnTracerSetPrologues_t                                 pfnSetPrologues;
+    xet_pfnTracerSetEpilogues_t                                 pfnSetEpilogues;
+    xet_pfnTracerSetEnabled_t                                   pfnSetEnabled;
+} xet_tracer_dditable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Tracer table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetTracerProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_tracer_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetGetTracerProcAddrTable
+typedef xe_result_t (__xecall *xet_pfnGetTracerProcAddrTable_t)(
+    xe_api_version_t,
+    xet_tracer_dditable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetPowerCreate 
 typedef xe_result_t (__xecall *xet_pfnPowerCreate_t)(
     xet_device_handle_t,
@@ -962,7 +986,6 @@ typedef xe_result_t (__xecall *xet_pfnGetFreqDomainProcAddrTable_t)(
 typedef struct _xet_dditable_t
 {
     xet_global_dditable_t               Global;
-    xet_device_group_dditable_t         DeviceGroup;
     xet_device_dditable_t               Device;
     xet_command_list_dditable_t         CommandList;
     xet_module_dditable_t               Module;
@@ -972,6 +995,7 @@ typedef struct _xet_dditable_t
     xet_metric_tracer_dditable_t        MetricTracer;
     xet_metric_query_pool_dditable_t    MetricQueryPool;
     xet_metric_query_dditable_t         MetricQuery;
+    xet_tracer_dditable_t               Tracer;
     xet_power_dditable_t                Power;
     xet_freq_domain_dditable_t          FreqDomain;
 } xet_dditable_t;

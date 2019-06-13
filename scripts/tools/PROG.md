@@ -27,46 +27,65 @@ Tools may also use these notifications as triggers to block and inject new API c
 
 ${"##"} Registration
 Tools may independently register for enter and exist callbacks for individual API calls, per Device Group.
-- ::${t}DeviceGroupSetTracingPrologue is used to specify all the enter callbacks
-- ::${t}DeviceGroupSetTracingEpilogue is used to specify all the exist callbacks
+- ::${t}TracerSetPrologues is used to specify all the enter callbacks
+- ::${t}TracerSetEpilogues is used to specify all the exist callbacks
 - The callbacks are defined as function pointers, with identical parameters as the API call itself
 - If the value of a callback is nullptr, then it will be ignored.
 
 The followsing sample code demonstrates a basic usage of API tracing:
 ```c
-    ${x}_result_t OnExitCommandListAppendLaunchFunction(
-        ${x}_command_list_handle_t hCommandList,
-        ${x}_function_handle_t hFunction,
-        const ${x}_thread_group_dimensions_t* pLaunchFuncArgs,
-        ${x}_event_handle_t hSignalEvent,
-        uint32_t numWaitEvents,
-        ${x}_event_handle_t* phWaitEvents )
+## --validate=off
+    typedef struct _my_local_data_t
     {
-        // force a wait after every function
-        ${x}CommandListAppendWaitOnEvents(hCommandList, 1, &hSignalEvent);
+        clock_t start;
+    } my_local_data_t;
+
+    void OnEnterCommandListAppendLaunchFunction(
+        ${x}_command_list_append_launch_function_params_t* params,
+        ${x}_result_t result,
+        void* pGlobalUserData,
+        void** ppLocalUserData )
+    {
+        my_local_data_t* local = malloc( sizeof(my_local_data_t) );
+        *ppLocalUserData = local;
+        local->start = clock();
     }
 
-    void RegisterCallbacks( void )
+    void OnExitCommandListAppendLaunchFunction(
+        ${x}_command_list_append_launch_function_params_t* params,
+        ${x}_result_t result,
+        void* pGlobalUserData,
+        void** ppLocalUserData )
     {
+        clock_t end = clock();
+        my_local_data_t* local = *(my_local_data_t**)ppLocalUserData;
+        float time = 1000.f * ( end - local->start ) / CLOCKS_PER_SEC;
+        printf("${x}CommandListAppendLaunchFunction takes %.4f ms\n", time);
+    }
+## --validate=on
+
+    void TracingExample( ... )
+    {
+        ${t}_tracer_desc_t tracer_desc;
+        tracer_desc.version = ${T}_TRACER_DESC_VERSION_CURRENT;
+        tracer_desc.pGlobalUserData = nullptr;
+        ${t}_tracer_handle_t hTracer;
+        ${t}TracerCreate(hDeviceGroup, &tracer_desc, &hTracer);
+
         // Set all callbacks
         ${t}_core_callbacks_t prologCbs = {};
         ${t}_core_callbacks_t epilogCbs = {};
+        prologCbs.CommandList.pfnAppendLaunchFunction = OnEnterCommandListAppendLaunchFunction;
         epilogCbs.CommandList.pfnAppendLaunchFunction = OnExitCommandListAppendLaunchFunction;
 
-        // Register for all device groups
-        uint32_t groupCount = 0;
-        ${x}DeviceGroupGet(&groupCount, nullptr);
+        ${t}TracerSetPrologues(hTracer, &prologCbs, nullptr);
+        ${t}TracerSetEpilogues(hTracer, &epilogCbs, nullptr);
 
-        ${x}_device_group_handle_t* allDeviceGroups = malloc(groupCount * sizeof(${x}_device_group_handle_t));
-        ${x}DeviceGroupGet(&groupCount, allDeviceGroups);
+        ${t}TracerSetEnabled(hTracer, true);
 
-        for(uint32_t i = 0; i < groupCount; ++i)
-        {
-            ${t}DeviceGroupSetTracingPrologue(allDeviceGroups[i], &prologCbs, nullptr);
-            ${t}DeviceGroupSetTracingEpilogue(allDeviceGroups[i], &epilogCbs, nullptr);
-        }
+        ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
 
-        free(allDeviceGroups);
+        ${t}TracerSetEnabled(hTracer, false);
     }
 ```
 

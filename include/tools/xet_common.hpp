@@ -37,8 +37,6 @@
 #if !defined(_XET_API_HPP)
 #pragma message("warning: this file is not intended to be included directly")
 #endif
-#include "xe_ddi.h"
-#include "xex_ddi.h"
 
 namespace xet
 {
@@ -101,6 +99,12 @@ namespace xet
     class MetricQuery;
     struct _metric_query_handle_t;
     using metric_query_handle_t = _metric_query_handle_t*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle of tracer object
+    class Tracer;
+    struct _tracer_handle_t;
+    using tracer_handle_t = _tracer_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of power object

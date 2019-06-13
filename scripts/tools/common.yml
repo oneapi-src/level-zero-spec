@@ -2,9 +2,6 @@
 type: header
 desc: "Intel $OneApi Level-Zero Tool API common types"
 ordinal: "0"
-includes:
-    - "$x_ddi.h"
-    - "$e_ddi.h"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of device group object"
@@ -60,6 +57,11 @@ type: handle
 desc: "Handle of metric query's object"
 class: $tMetricQuery
 name: "$t_metric_query_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of tracer object"
+class: $tTracer
+name: "$t_tracer_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of power object"

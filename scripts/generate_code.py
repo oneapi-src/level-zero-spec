@@ -71,6 +71,25 @@ def mako_ddi_cpp(path, namespace, tags, specs, meta):
 """
     generates c/c++ files from the specification documents
 """
+def mako_callbacks_cpp(path, namespace, tags, specs, meta):
+    template = "callbacks.h.mako"
+    fin = os.path.join("templates", template)
+
+    filename = "%s_callbacks.h"%(namespace)
+    fout = os.path.join(path, filename)
+
+    print("Generating %s..."%fout)
+    return util.makoWrite(
+        fin, fout,
+        section=os.path.basename(path),
+        namespace=namespace,
+        tags=tags,
+        specs=specs,
+        meta=meta)
+
+"""
+    generates c/c++ files from the specification documents
+"""
 def mako_lib_cpp(path, namespace, tags, specs, meta):
     loc = 0
     template = "libspec.cpp.mako"
@@ -228,6 +247,9 @@ def generate_api_cpp(path, namespace, tags, specs, meta):
     hpploc += mako_api_cpp(path, namespace, tags, specs, meta, hppfiles, ".hpp")
 
     hloc += mako_ddi_cpp(path, namespace, tags, specs, meta)
+
+    if namespace != "xet": # todo: needs to be programmable
+        hloc += mako_callbacks_cpp(path, namespace, tags, specs, meta)
 
     return hloc + hpploc
 

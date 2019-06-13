@@ -26,6 +26,7 @@
 ******************************************************************************/
 #pragma once
 #include <stdlib.h>
+#include <vector>
 #include "xe_ddi.h"
 #include "xex_ddi.h"
 #include "xet_ddi.h"
@@ -33,6 +34,19 @@
 
 namespace driver
 {
+    struct tracer_data_t
+    {
+        bool enabled = false;
+
+        void* globalUserData = nullptr;
+
+        xe_callbacks_t xePrologueCbs = {};
+        xe_callbacks_t xeEpilogueCbs = {};
+
+        xex_callbacks_t xexPrologueCbs = {};
+        xex_callbacks_t xexEpilogueCbs = {};
+    };
+
     ///////////////////////////////////////////////////////////////////////////////
     class context_t
     {
@@ -51,10 +65,7 @@ namespace driver
         xet_metric_properties_t metricProperties = {};
 
         bool enableTracing = false;
-        xet_core_callbacks_t xePrologueCbs = {};
-        xet_core_callbacks_t xeEpilogueCbs = {};
-        xet_extended_callbacks_t xexPrologueCbs = {};
-        xet_extended_callbacks_t xexEpilogueCbs = {};
+        std::vector< tracer_data_t > tracerData;
 
         context_t();
         ~context_t() = default;

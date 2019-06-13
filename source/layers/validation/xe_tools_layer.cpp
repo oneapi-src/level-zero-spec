@@ -1663,18 +1663,17 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetDeviceGroupSetTracingPrologue
+    /// @brief Intercept function for xetTracerCreate
     xe_result_t __xecall
-    xetDeviceGroupSetTracingPrologue(
+    xetTracerCreate(
         xet_device_group_handle_t hDeviceGroup,         ///< [in] handle of the device group
-        xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
-        xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
-                                                        ///< pointers
+        const xet_tracer_desc_t* desc,                  ///< [in] pointer to tracer descriptor
+        xet_tracer_handle_t* phTracer                   ///< [out] pointer to handle of tracer object created
         )
     {
-        auto pfnSetTracingPrologue = context.xetDdiTable.DeviceGroup.pfnSetTracingPrologue;
+        auto pfnCreate = context.xetDdiTable.Tracer.pfnCreate;
 
-        if( nullptr == pfnSetTracingPrologue )
+        if( nullptr == pfnCreate )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1682,32 +1681,60 @@ namespace layer
             if( nullptr == hDeviceGroup )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pCoreCbs )
+            if( nullptr == desc )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == phTracer )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( XET_TRACER_DESC_VERSION_CURRENT < desc->version )
+                return XE_RESULT_ERROR_UNSUPPORTED;
 
         }
 
-        return pfnSetTracingPrologue( hDeviceGroup, pCoreCbs, pExtendedCbs );
+        return pfnCreate( hDeviceGroup, desc, phTracer );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetDeviceGroupSetTracingEpilogue
+    /// @brief Intercept function for xetTracerDestroy
     xe_result_t __xecall
-    xetDeviceGroupSetTracingEpilogue(
-        xet_device_group_handle_t hDeviceGroup,         ///< [in] handle of the device group
+    xetTracerDestroy(
+        xet_tracer_handle_t hTracer                     ///< [in][release] handle of tracer object to destroy
+        )
+    {
+        auto pfnDestroy = context.xetDdiTable.Tracer.pfnDestroy;
+
+        if( nullptr == pfnDestroy )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hTracer )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnDestroy( hTracer );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetTracerSetPrologues
+    xe_result_t __xecall
+    xetTracerSetPrologues(
+        xet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
         xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
         xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
                                                         ///< pointers
         )
     {
-        auto pfnSetTracingEpilogue = context.xetDdiTable.DeviceGroup.pfnSetTracingEpilogue;
+        auto pfnSetPrologues = context.xetDdiTable.Tracer.pfnSetPrologues;
 
-        if( nullptr == pfnSetTracingEpilogue )
+        if( nullptr == pfnSetPrologues )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDeviceGroup )
+            if( nullptr == hTracer )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pCoreCbs )
@@ -1715,7 +1742,58 @@ namespace layer
 
         }
 
-        return pfnSetTracingEpilogue( hDeviceGroup, pCoreCbs, pExtendedCbs );
+        return pfnSetPrologues( hTracer, pCoreCbs, pExtendedCbs );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetTracerSetEpilogues
+    xe_result_t __xecall
+    xetTracerSetEpilogues(
+        xet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
+        xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
+        xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
+                                                        ///< pointers
+        )
+    {
+        auto pfnSetEpilogues = context.xetDdiTable.Tracer.pfnSetEpilogues;
+
+        if( nullptr == pfnSetEpilogues )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hTracer )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCoreCbs )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSetEpilogues( hTracer, pCoreCbs, pExtendedCbs );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetTracerSetEnabled
+    xe_result_t __xecall
+    xetTracerSetEnabled(
+        xet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
+        xe_bool_t enable                                ///< [in] enable the tracer if true; disable if false
+        )
+    {
+        auto pfnSetEnabled = context.xetDdiTable.Tracer.pfnSetEnabled;
+
+        if( nullptr == pfnSetEnabled )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hTracer )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSetEnabled( hTracer, enable );
     }
 
 } // namespace layer
@@ -1753,42 +1831,6 @@ xetGetGlobalProcAddrTable(
 
     dditable.pfnInit                                     = pDdiTable->pfnInit;
     pDdiTable->pfnInit                                   = layer::xetInit;
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's DeviceGroup table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xetGetDeviceGroupProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xet_device_group_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
-    )
-{
-    auto& dditable = layer::context.xetDdiTable.DeviceGroup;
-
-    if( nullptr == pDdiTable )
-        return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    if( layer::context.version < version )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    dditable.pfnSetTracingPrologue                       = pDdiTable->pfnSetTracingPrologue;
-    pDdiTable->pfnSetTracingPrologue                     = layer::xetDeviceGroupSetTracingPrologue;
-
-    dditable.pfnSetTracingEpilogue                       = pDdiTable->pfnSetTracingEpilogue;
-    pDdiTable->pfnSetTracingEpilogue                     = layer::xetDeviceGroupSetTracingEpilogue;
 
     return result;
 }
@@ -2125,6 +2167,51 @@ xetGetMetricQueryProcAddrTable(
 
     dditable.pfnGetData                                  = pDdiTable->pfnGetData;
     pDdiTable->pfnGetData                                = layer::xetMetricQueryGetData;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Tracer table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetTracerProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_tracer_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    auto& dditable = layer::context.xetDdiTable.Tracer;
+
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( layer::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    dditable.pfnCreate                                   = pDdiTable->pfnCreate;
+    pDdiTable->pfnCreate                                 = layer::xetTracerCreate;
+
+    dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
+    pDdiTable->pfnDestroy                                = layer::xetTracerDestroy;
+
+    dditable.pfnSetPrologues                             = pDdiTable->pfnSetPrologues;
+    pDdiTable->pfnSetPrologues                           = layer::xetTracerSetPrologues;
+
+    dditable.pfnSetEpilogues                             = pDdiTable->pfnSetEpilogues;
+    pDdiTable->pfnSetEpilogues                           = layer::xetTracerSetEpilogues;
+
+    dditable.pfnSetEnabled                               = pDdiTable->pfnSetEnabled;
+    pDdiTable->pfnSetEnabled                             = layer::xetTracerSetEnabled;
 
     return result;
 }

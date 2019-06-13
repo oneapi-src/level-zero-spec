@@ -51,13 +51,6 @@ namespace xet_lib
 
         if( XE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<xet_pfnGetDeviceGroupProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "xetGetDeviceGroupProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &ddiTable.DeviceGroup );
-        }
-
-        if( XE_RESULT_SUCCESS == result )
-        {
             auto getTable = reinterpret_cast<xet_pfnGetDeviceProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "xetGetDeviceProcAddrTable") );
             result = getTable( XE_API_VERSION_1_0, &ddiTable.Device );
@@ -117,6 +110,13 @@ namespace xet_lib
             auto getTable = reinterpret_cast<xet_pfnGetMetricQueryProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "xetGetMetricQueryProcAddrTable") );
             result = getTable( XE_API_VERSION_1_0, &ddiTable.MetricQuery );
+        }
+
+        if( XE_RESULT_SUCCESS == result )
+        {
+            auto getTable = reinterpret_cast<xet_pfnGetTracerProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xetGetTracerProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &ddiTable.Tracer );
         }
 
         if( XE_RESULT_SUCCESS == result )

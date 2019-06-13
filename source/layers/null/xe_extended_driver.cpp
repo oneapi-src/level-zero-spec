@@ -41,18 +41,44 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        std::vector<void*> localUserData;
         if( context.enableTracing )
         {
-            auto pfnInit = context.xexPrologueCbs.Global.pfnInit;
-            if( nullptr != pfnInit )
-                pfnInit( flags );
+            // capture parameters
+            xex_init_params_t params = {
+                flags
+            };
+
+            // call each callback registered
+            localUserData.resize( context.tracerData.size() );
+            for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+                if( context.tracerData[ i ].enabled )
+                {
+                    auto& table = context.tracerData[ i ].xexPrologueCbs.Global;
+                    if( nullptr != table.pfnInitCb )
+                        table.pfnInitCb( &params, result,
+                            context.tracerData[ i ].globalUserData,
+                            &localUserData[ i ] );
+                }
         }
 
         if( context.enableTracing )
         {
-            auto pfnInit = context.xexEpilogueCbs.Global.pfnInit;
-            if( nullptr != pfnInit )
-                pfnInit( flags );
+            // capture parameters
+            xex_init_params_t params = {
+                flags
+            };
+
+            // call each callback registered
+            for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+                if( context.tracerData[ i ].enabled )
+                {
+                    auto& table = context.tracerData[ i ].xexEpilogueCbs.Global;
+                    if( nullptr != table.pfnInitCb )
+                        table.pfnInitCb( &params, result,
+                            context.tracerData[ i ].globalUserData,
+                            &localUserData[ i ] );
+                }
         }
 
         return result;
@@ -69,20 +95,50 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        std::vector<void*> localUserData;
         if( context.enableTracing )
         {
-            auto pfnCreate = context.xexPrologueCbs.CommandGraph.pfnCreate;
-            if( nullptr != pfnCreate )
-                pfnCreate( hDevice, desc, phCommandGraph );
+            // capture parameters
+            xex_command_graph_create_params_t params = {
+                hDevice,
+desc,
+phCommandGraph
+            };
+
+            // call each callback registered
+            localUserData.resize( context.tracerData.size() );
+            for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+                if( context.tracerData[ i ].enabled )
+                {
+                    auto& table = context.tracerData[ i ].xexPrologueCbs.CommandGraph;
+                    if( nullptr != table.pfnCreateCb )
+                        table.pfnCreateCb( &params, result,
+                            context.tracerData[ i ].globalUserData,
+                            &localUserData[ i ] );
+                }
         }
 
         *phCommandGraph = reinterpret_cast<xex_command_graph_handle_t>( context.get() );
 
         if( context.enableTracing )
         {
-            auto pfnCreate = context.xexEpilogueCbs.CommandGraph.pfnCreate;
-            if( nullptr != pfnCreate )
-                pfnCreate( hDevice, desc, phCommandGraph );
+            // capture parameters
+            xex_command_graph_create_params_t params = {
+                hDevice,
+desc,
+phCommandGraph
+            };
+
+            // call each callback registered
+            for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+                if( context.tracerData[ i ].enabled )
+                {
+                    auto& table = context.tracerData[ i ].xexEpilogueCbs.CommandGraph;
+                    if( nullptr != table.pfnCreateCb )
+                        table.pfnCreateCb( &params, result,
+                            context.tracerData[ i ].globalUserData,
+                            &localUserData[ i ] );
+                }
         }
 
         return result;
@@ -97,19 +153,45 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        std::vector<void*> localUserData;
         if( context.enableTracing )
         {
-            auto pfnDestroy = context.xexPrologueCbs.CommandGraph.pfnDestroy;
-            if( nullptr != pfnDestroy )
-                pfnDestroy( hCommandGraph );
+            // capture parameters
+            xex_command_graph_destroy_params_t params = {
+                hCommandGraph
+            };
+
+            // call each callback registered
+            localUserData.resize( context.tracerData.size() );
+            for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+                if( context.tracerData[ i ].enabled )
+                {
+                    auto& table = context.tracerData[ i ].xexPrologueCbs.CommandGraph;
+                    if( nullptr != table.pfnDestroyCb )
+                        table.pfnDestroyCb( &params, result,
+                            context.tracerData[ i ].globalUserData,
+                            &localUserData[ i ] );
+                }
         }
 
 
         if( context.enableTracing )
         {
-            auto pfnDestroy = context.xexEpilogueCbs.CommandGraph.pfnDestroy;
-            if( nullptr != pfnDestroy )
-                pfnDestroy( hCommandGraph );
+            // capture parameters
+            xex_command_graph_destroy_params_t params = {
+                hCommandGraph
+            };
+
+            // call each callback registered
+            for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+                if( context.tracerData[ i ].enabled )
+                {
+                    auto& table = context.tracerData[ i ].xexEpilogueCbs.CommandGraph;
+                    if( nullptr != table.pfnDestroyCb )
+                        table.pfnDestroyCb( &params, result,
+                            context.tracerData[ i ].globalUserData,
+                            &localUserData[ i ] );
+                }
         }
 
         return result;
@@ -124,18 +206,44 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        std::vector<void*> localUserData;
         if( context.enableTracing )
         {
-            auto pfnClose = context.xexPrologueCbs.CommandGraph.pfnClose;
-            if( nullptr != pfnClose )
-                pfnClose( hCommandGraph );
+            // capture parameters
+            xex_command_graph_close_params_t params = {
+                hCommandGraph
+            };
+
+            // call each callback registered
+            localUserData.resize( context.tracerData.size() );
+            for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+                if( context.tracerData[ i ].enabled )
+                {
+                    auto& table = context.tracerData[ i ].xexPrologueCbs.CommandGraph;
+                    if( nullptr != table.pfnCloseCb )
+                        table.pfnCloseCb( &params, result,
+                            context.tracerData[ i ].globalUserData,
+                            &localUserData[ i ] );
+                }
         }
 
         if( context.enableTracing )
         {
-            auto pfnClose = context.xexEpilogueCbs.CommandGraph.pfnClose;
-            if( nullptr != pfnClose )
-                pfnClose( hCommandGraph );
+            // capture parameters
+            xex_command_graph_close_params_t params = {
+                hCommandGraph
+            };
+
+            // call each callback registered
+            for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+                if( context.tracerData[ i ].enabled )
+                {
+                    auto& table = context.tracerData[ i ].xexEpilogueCbs.CommandGraph;
+                    if( nullptr != table.pfnCloseCb )
+                        table.pfnCloseCb( &params, result,
+                            context.tracerData[ i ].globalUserData,
+                            &localUserData[ i ] );
+                }
         }
 
         return result;

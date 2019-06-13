@@ -66,5 +66,6 @@ namespace driver
         strcpy( metricProperties.resultUnits, "ns" );
 
         enableTracing = getenv_tobool( "XE_ENABLE_API_TRACING" );
+        if( enableTracing ) tracerData.emplace_back();
     }
 }

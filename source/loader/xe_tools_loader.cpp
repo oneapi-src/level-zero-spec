@@ -43,6 +43,7 @@ namespace loader
     xet_metric_tracer_factory_t         xet_metric_tracer_factory;
     xet_metric_query_pool_factory_t     xet_metric_query_pool_factory;
     xet_metric_query_factory_t          xet_metric_query_factory;
+    xet_tracer_factory_t                xet_tracer_factory;
     xet_power_factory_t                 xet_power_factory;
     xet_freq_domain_factory_t           xet_freq_domain_factory;
 
@@ -1439,13 +1440,12 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetDeviceGroupSetTracingPrologue
+    /// @brief Intercept function for xetTracerCreate
     xe_result_t __xecall
-    xetDeviceGroupSetTracingPrologue(
+    xetTracerCreate(
         xet_device_group_handle_t hDeviceGroup,         ///< [in] handle of the device group
-        xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
-        xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
-                                                        ///< pointers
+        const xet_tracer_desc_t* desc,                  ///< [in] pointer to tracer descriptor
+        xet_tracer_handle_t* phTracer                   ///< [out] pointer to handle of tracer object created
         )
     {
         // extract driver's function pointer table
@@ -1455,29 +1455,102 @@ namespace loader
         hDeviceGroup = reinterpret_cast<xet_device_group_object_t*>( hDeviceGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xet.DeviceGroup.pfnSetTracingPrologue( hDeviceGroup, pCoreCbs, pExtendedCbs );
+        auto result = dditable->xet.Tracer.pfnCreate( hDeviceGroup, desc, phTracer );
+
+        try
+        {
+            // convert driver handle to loader handle
+            *phTracer = reinterpret_cast<xet_tracer_handle_t>(
+                xet_tracer_factory.getInstance( *phTracer, dditable ) );
+        }
+        catch( std::bad_alloc& )
+        {
+            result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+        }
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetTracerDestroy
+    xe_result_t __xecall
+    xetTracerDestroy(
+        xet_tracer_handle_t hTracer                     ///< [in][release] handle of tracer object to destroy
+        )
+    {
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_tracer_object_t*>( hTracer )->dditable;
+
+        // convert loader handle to driver handle
+        hTracer = reinterpret_cast<xet_tracer_object_t*>( hTracer )->handle;
+
+        // forward to device-driver
+        auto result = dditable->xet.Tracer.pfnDestroy( hTracer );
+
+        // release loader handle
+        xet_tracer_factory.release( hTracer );
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetTracerSetPrologues
+    xe_result_t __xecall
+    xetTracerSetPrologues(
+        xet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
+        xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
+        xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
+                                                        ///< pointers
+        )
+    {
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_tracer_object_t*>( hTracer )->dditable;
+
+        // convert loader handle to driver handle
+        hTracer = reinterpret_cast<xet_tracer_object_t*>( hTracer )->handle;
+
+        // forward to device-driver
+        auto result = dditable->xet.Tracer.pfnSetPrologues( hTracer, pCoreCbs, pExtendedCbs );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetDeviceGroupSetTracingEpilogue
+    /// @brief Intercept function for xetTracerSetEpilogues
     xe_result_t __xecall
-    xetDeviceGroupSetTracingEpilogue(
-        xet_device_group_handle_t hDeviceGroup,         ///< [in] handle of the device group
+    xetTracerSetEpilogues(
+        xet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
         xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
         xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
                                                         ///< pointers
         )
     {
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xet_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto dditable = reinterpret_cast<xet_tracer_object_t*>( hTracer )->dditable;
 
         // convert loader handle to driver handle
-        hDeviceGroup = reinterpret_cast<xet_device_group_object_t*>( hDeviceGroup )->handle;
+        hTracer = reinterpret_cast<xet_tracer_object_t*>( hTracer )->handle;
 
         // forward to device-driver
-        auto result = dditable->xet.DeviceGroup.pfnSetTracingEpilogue( hDeviceGroup, pCoreCbs, pExtendedCbs );
+        auto result = dditable->xet.Tracer.pfnSetEpilogues( hTracer, pCoreCbs, pExtendedCbs );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetTracerSetEnabled
+    xe_result_t __xecall
+    xetTracerSetEnabled(
+        xet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
+        xe_bool_t enable                                ///< [in] enable the tracer if true; disable if false
+        )
+    {
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_tracer_object_t*>( hTracer )->dditable;
+
+        // convert loader handle to driver handle
+        hTracer = reinterpret_cast<xet_tracer_object_t*>( hTracer )->handle;
+
+        // forward to device-driver
+        auto result = dditable->xet.Tracer.pfnSetEnabled( hTracer, enable );
 
         return result;
     }
@@ -1546,71 +1619,6 @@ xetGetGlobalProcAddrTable(
     {
         static auto getTable = reinterpret_cast<xet_pfnGetGlobalProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "xetGetGlobalProcAddrTable") );
-        result = getTable( version, pDdiTable );
-    }
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's DeviceGroup table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xetGetDeviceGroupProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xet_device_group_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
-    )
-{
-    if( loader::context.drivers.size() < 1 )
-        return XE_RESULT_ERROR_UNINITIALIZED;
-
-    if( nullptr == pDdiTable )
-        return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    if( loader::context.version < version )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    // Load the device-driver DDI tables
-    for( auto& drv : loader::context.drivers )
-    {
-        if( XE_RESULT_SUCCESS == result )
-        {
-            static auto getTable = reinterpret_cast<xet_pfnGetDeviceGroupProcAddrTable_t>(
-                GET_FUNCTION_PTR( drv.handle, "xetGetDeviceGroupProcAddrTable") );
-            result = getTable( version, &drv.dditable.xet.DeviceGroup );
-        }
-    }
-
-    if( XE_RESULT_SUCCESS == result )
-    {
-        if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
-        {
-            // return pointers to loader's DDIs
-            pDdiTable->pfnSetTracingPrologue                       = loader::xetDeviceGroupSetTracingPrologue;
-            pDdiTable->pfnSetTracingEpilogue                       = loader::xetDeviceGroupSetTracingEpilogue;
-        }
-        else
-        {
-            // return pointers directly to driver's DDIs
-            *pDdiTable = loader::context.drivers.front().dditable.xet.DeviceGroup;
-        }
-    }
-
-    // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
-    {
-        static auto getTable = reinterpret_cast<xet_pfnGetDeviceGroupProcAddrTable_t>(
-            GET_FUNCTION_PTR(loader::context.validationLayer, "xetGetDeviceGroupProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -2200,6 +2208,74 @@ xetGetMetricQueryProcAddrTable(
     {
         static auto getTable = reinterpret_cast<xet_pfnGetMetricQueryProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "xetGetMetricQueryProcAddrTable") );
+        result = getTable( version, pDdiTable );
+    }
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's Tracer table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xetGetTracerProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xet_tracer_dditable_t* pDdiTable                ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( loader::context.drivers.size() < 1 )
+        return XE_RESULT_ERROR_UNINITIALIZED;
+
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( loader::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    // Load the device-driver DDI tables
+    for( auto& drv : loader::context.drivers )
+    {
+        if( XE_RESULT_SUCCESS == result )
+        {
+            static auto getTable = reinterpret_cast<xet_pfnGetTracerProcAddrTable_t>(
+                GET_FUNCTION_PTR( drv.handle, "xetGetTracerProcAddrTable") );
+            result = getTable( version, &drv.dditable.xet.Tracer );
+        }
+    }
+
+    if( XE_RESULT_SUCCESS == result )
+    {
+        if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
+        {
+            // return pointers to loader's DDIs
+            pDdiTable->pfnCreate                                   = loader::xetTracerCreate;
+            pDdiTable->pfnDestroy                                  = loader::xetTracerDestroy;
+            pDdiTable->pfnSetPrologues                             = loader::xetTracerSetPrologues;
+            pDdiTable->pfnSetEpilogues                             = loader::xetTracerSetEpilogues;
+            pDdiTable->pfnSetEnabled                               = loader::xetTracerSetEnabled;
+        }
+        else
+        {
+            // return pointers directly to driver's DDIs
+            *pDdiTable = loader::context.drivers.front().dditable.xet.Tracer;
+        }
+    }
+
+    // If the validation layer is enabled, then intercept the loader's DDIs
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xet_pfnGetTracerProcAddrTable_t>(
+            GET_FUNCTION_PTR(loader::context.validationLayer, "xetGetTracerProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 

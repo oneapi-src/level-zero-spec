@@ -38,6 +38,7 @@
 #include <exception>
 #include <tuple>
 #include <string>
+#include <sstream>
 
 // 'core' API headers
 #include "xe_common.hpp"

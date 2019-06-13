@@ -201,15 +201,15 @@ typedef struct _xe_device_dditable_t
     xe_pfnDeviceSetIntermediateCacheConfig_t                    pfnSetIntermediateCacheConfig;
     xe_pfnDeviceSetLastLevelCacheConfig_t                       pfnSetLastLevelCacheConfig;
     xe_pfnDeviceSystemBarrier_t                                 pfnSystemBarrier;
-    #if XE_ENABLE_OCL_INTEROP
+#if XE_ENABLE_OCL_INTEROP
     xe_pfnDeviceRegisterCLMemory_t                              pfnRegisterCLMemory;
-    #endif // XE_ENABLE_OCL_INTEROP
-    #if XE_ENABLE_OCL_INTEROP
+#endif // XE_ENABLE_OCL_INTEROP
+#if XE_ENABLE_OCL_INTEROP
     xe_pfnDeviceRegisterCLProgram_t                             pfnRegisterCLProgram;
-    #endif // XE_ENABLE_OCL_INTEROP
-    #if XE_ENABLE_OCL_INTEROP
+#endif // XE_ENABLE_OCL_INTEROP
+#if XE_ENABLE_OCL_INTEROP
     xe_pfnDeviceRegisterCLCommandQueue_t                        pfnRegisterCLCommandQueue;
-    #endif // XE_ENABLE_OCL_INTEROP
+#endif // XE_ENABLE_OCL_INTEROP
     xe_pfnDeviceMakeMemoryResident_t                            pfnMakeMemoryResident;
     xe_pfnDeviceEvictMemory_t                                   pfnEvictMemory;
     xe_pfnDeviceMakeImageResident_t                             pfnMakeImageResident;
