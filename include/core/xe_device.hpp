@@ -365,6 +365,9 @@ namespace xe
                                                             ///< number of device groups available.
                                                             ///< if count is non-zero, then driver will only retrieve that number of
                                                             ///< device groups.
+                                                            ///< if count is larger than the number of device groups available, then
+                                                            ///< the driver will update the value with the correct number of device
+                                                            ///< groups available.
             DeviceGroup** ppDeviceGroups = nullptr          ///< [in,out][optional][range(0, *pCount)] array of pointer to device
                                                             ///< groups
             );
@@ -473,6 +476,9 @@ namespace xe
                                                             ///< number of memory properties available.
                                                             ///< if count is non-zero, then driver will only retrieve that number of
                                                             ///< memory properties.
+                                                            ///< if count is larger than the number of memory properties available,
+                                                            ///< then the driver will update the value with the correct number of
+                                                            ///< memory properties available.
             device_memory_properties_t* pMemProperties = nullptr///< [in,out][optional][range(0, *pCount)] array of query results for
                                                             ///< memory properties
             );
@@ -824,6 +830,8 @@ namespace xe
                                                             ///< if count is zero, then the driver will update the value with the total
                                                             ///< number of devices available.
                                                             ///< if count is non-zero, then driver will only retrieve that number of devices.
+                                                            ///< if count is larger than the number of devices available, then the
+                                                            ///< driver will update the value with the correct number of devices available.
             Device** ppDevices = nullptr                    ///< [in,out][optional][range(0, *pCount)] array of pointer to devices
             );
 
@@ -844,6 +852,8 @@ namespace xe
                                                             ///< if count is zero, then the driver will update the value with the total
                                                             ///< number of sub-devices available.
                                                             ///< if count is non-zero, then driver will only retrieve that number of sub-devices.
+                                                            ///< if count is larger than the number of sub-devices available, then the
+                                                            ///< driver will update the value with the correct number of sub-devices available.
             Device** ppSubdevices = nullptr                 ///< [in,out][optional][range(0, *pCount)] array of pointer to sub-devices
             );
 

@@ -66,6 +66,9 @@ xetMetricGroupGet(
                                                     ///< number of metric groups available.
                                                     ///< if count is non-zero, then driver will only retrieve that number of
                                                     ///< metric groups.
+                                                    ///< if count is larger than the number of metric groups available, then
+                                                    ///< the driver will update the value with the correct number of metric
+                                                    ///< groups available.
     xet_metric_group_handle_t* phMetricGroups       ///< [in,out][optional][range(0, *pCount)] array of handle of metric groups
     );
 
@@ -233,6 +236,8 @@ xetMetricGet(
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of metrics available.
                                                     ///< if count is non-zero, then driver will only retrieve that number of metrics.
+                                                    ///< if count is larger than the number of metrics available, then the
+                                                    ///< driver will update the value with the correct number of metrics available.
     xet_metric_handle_t* phMetrics                  ///< [in,out][optional][range(0, *pCount)] array of handle of metrics
     );
 

@@ -75,6 +75,9 @@ namespace loader
                                                         ///< number of metric groups available.
                                                         ///< if count is non-zero, then driver will only retrieve that number of
                                                         ///< metric groups.
+                                                        ///< if count is larger than the number of metric groups available, then
+                                                        ///< the driver will update the value with the correct number of metric
+                                                        ///< groups available.
         xet_metric_group_handle_t* phMetricGroups       ///< [in,out][optional][range(0, *pCount)] array of handle of metric groups
         )
     {
@@ -156,6 +159,8 @@ namespace loader
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of metrics available.
                                                         ///< if count is non-zero, then driver will only retrieve that number of metrics.
+                                                        ///< if count is larger than the number of metrics available, then the
+                                                        ///< driver will update the value with the correct number of metrics available.
         xet_metric_handle_t* phMetrics                  ///< [in,out][optional][range(0, *pCount)] array of handle of metrics
         )
     {
@@ -592,6 +597,8 @@ namespace loader
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of names available.
                                                         ///< if count is non-zero, then driver will only retrieve that number of names.
+                                                        ///< if count is larger than the number of names available, then the driver
+                                                        ///< will update the value with the correct number of names available.
         const char** pNames                             ///< [in,out][optional][range(0, *pCount)] array of names of functions
         )
     {
@@ -929,6 +936,9 @@ namespace loader
                                                         ///< number of frequency domains available.
                                                         ///< if count is non-zero, then driver will only retrieve that number of
                                                         ///< frequency domains.
+                                                        ///< if count is larger than the number of frequency domains available,
+                                                        ///< then the driver will update the value with the correct number of
+                                                        ///< frequency domains available.
         xet_freq_domain_handle_t* phFreqDomain          ///< [in,out][optional][range(0, *pCount)] array of handle of frequency
                                                         ///< domains
         )

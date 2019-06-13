@@ -448,6 +448,9 @@ xetFreqDomainGet(
                                                     ///< number of frequency domains available.
                                                     ///< if count is non-zero, then driver will only retrieve that number of
                                                     ///< frequency domains.
+                                                    ///< if count is larger than the number of frequency domains available,
+                                                    ///< then the driver will update the value with the correct number of
+                                                    ///< frequency domains available.
     xet_freq_domain_handle_t* phFreqDomain          ///< [in,out][optional][range(0, *pCount)] array of handle of frequency
                                                     ///< domains
     )
@@ -1493,6 +1496,9 @@ namespace xet
                                                         ///< number of frequency domains available.
                                                         ///< if count is non-zero, then driver will only retrieve that number of
                                                         ///< frequency domains.
+                                                        ///< if count is larger than the number of frequency domains available,
+                                                        ///< then the driver will update the value with the correct number of
+                                                        ///< frequency domains available.
         FreqDomain** ppFreqDomain                       ///< [in,out][optional][range(0, *pCount)] array of pointer to frequency
                                                         ///< domains
         )

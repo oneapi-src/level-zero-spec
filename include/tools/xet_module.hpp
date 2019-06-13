@@ -102,6 +102,8 @@ namespace xet
                                                             ///< if count is zero, then the driver will update the value with the total
                                                             ///< number of names available.
                                                             ///< if count is non-zero, then driver will only retrieve that number of names.
+                                                            ///< if count is larger than the number of names available, then the driver
+                                                            ///< will update the value with the correct number of names available.
             const char** pNames = nullptr                   ///< [in,out][optional][range(0, *pCount)] array of names of functions
             );
 

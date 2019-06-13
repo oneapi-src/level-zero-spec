@@ -750,6 +750,9 @@ namespace xet
                                                             ///< number of frequency domains available.
                                                             ///< if count is non-zero, then driver will only retrieve that number of
                                                             ///< frequency domains.
+                                                            ///< if count is larger than the number of frequency domains available,
+                                                            ///< then the driver will update the value with the correct number of
+                                                            ///< frequency domains available.
             FreqDomain** ppFreqDomain = nullptr             ///< [in,out][optional][range(0, *pCount)] array of pointer to frequency
                                                             ///< domains
             );
