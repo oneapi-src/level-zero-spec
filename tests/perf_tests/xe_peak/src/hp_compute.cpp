@@ -21,31 +21,35 @@
  */
 #include "../include/xe_peak.h"
 
-void XePeak::xe_peak_dp_compute(L0Context &context) {
+// There is no equivalent of cl_half (i.e. 16 bit floating point)
+// in the C/C++ standard. So we are just going to allocate 16 bits
+// using a C type knowing it will be the same size.
+#define cl_half uint16_t
+
+void XePeak::xe_peak_hp_compute(L0Context &context) {
     float gflops, timed;
     xe_result_t result = XE_RESULT_SUCCESS;
     TimingMeasurement type = is_bandwidth_with_event_timer();
     float flops_per_work_item = 4096;
     struct XeWorkGroups workgroup_info;
-    double input_value = 1.3f;
+    float input_value = 1.3f;
 
-    /* TODO: Need to verify that the device being used by L0 support DP.*/
-
-    std::vector<uint8_t> binary_file = context.load_binary_file("xe_dp_compute.spv");
+    std::vector<uint8_t> binary_file = context.load_binary_file("xe_hp_compute.spv");
 
     context.create_module(binary_file);
 
-    uint64_t max_work_items = get_max_work_items(context) * 512; // same multiplier in clPeak
+    // same multiplier in clPeak
+    uint64_t max_work_items = get_max_work_items(context) * 2048;
     uint64_t max_number_of_allocated_items = max_device_object_size(context)
-                                              / sizeof(double);
+                                              / sizeof(cl_half);
     uint64_t number_of_work_items =
-        MIN(max_number_of_allocated_items, (max_work_items * sizeof(double)));
-
-    number_of_work_items = set_workgroups(context, number_of_work_items, &workgroup_info);
+        MIN(max_number_of_allocated_items, (max_work_items * sizeof(cl_half)));
+    number_of_work_items = set_workgroups(context, number_of_work_items,
+                                          &workgroup_info);
 
     void *device_input_value;
-    result = xeDeviceMemAlloc(context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT, sizeof(double), 1,
-                        &device_input_value);
+    result = xeDeviceMemAlloc(context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
+                              sizeof(cl_half), 1, &device_input_value);
     if (result) {
         throw std::runtime_error("xeDeviceMemAlloc failed: " + result);
     }
@@ -54,15 +58,18 @@ void XePeak::xe_peak_dp_compute(L0Context &context) {
 
     void *device_output_buffer;
     result = xeDeviceMemAlloc(context.device, XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT,
-                        (number_of_work_items * sizeof(double)), 1, &device_output_buffer);
+                              (number_of_work_items * sizeof(cl_half)), 1,
+                              &device_output_buffer);
     if (result) {
         throw std::runtime_error("xeDeviceMemAlloc failed: " + result);
     }
     if (verbose)
         std::cout << "device output buffer allocated\n";
 
-    result = xeCommandListAppendMemoryCopy(context.command_list, device_input_value, &input_value,
-                                           sizeof(double), nullptr, 0, nullptr);
+    result = xeCommandListAppendMemoryCopy(context.command_list,
+                                           device_input_value,
+                                           &input_value, sizeof(cl_half),
+                                           nullptr, 0, nullptr);
     if (result) {
         throw std::runtime_error("xeCommandListAppendMemoryCopy failed: " + result);
     }
@@ -71,102 +78,103 @@ void XePeak::xe_peak_dp_compute(L0Context &context) {
 
     result = xeCommandListAppendBarrier(context.command_list, nullptr, 0, nullptr);
     if (result) {
-        throw std::runtime_error("xeCommandListAppendExecutionBarrier failed: " + result);
+        throw std::runtime_error("xeCommandListAppendExecutionBarrier failed: "
+                                 + result);
     }
     if (verbose)
         std::cout << "Execution barrier appended\n";
 
     context.execute_commandlist_and_sync();
 
-    /*Begin setup of Functions*/
+    /*Begin setup of Function*/
 
-    xe_function_handle_t compute_dp_v1;
-    setup_function(context, compute_dp_v1, "compute_dp_v1", device_input_value,
+    xe_function_handle_t compute_hp_v1;
+    setup_function(context, compute_hp_v1, "compute_hp_v1", device_input_value,
                    device_output_buffer);
-    xe_function_handle_t compute_dp_v2;
-    setup_function(context, compute_dp_v2, "compute_dp_v2", device_input_value,
+    xe_function_handle_t compute_hp_v2;
+    setup_function(context, compute_hp_v2, "compute_hp_v2", device_input_value,
                    device_output_buffer);
-    xe_function_handle_t compute_dp_v4;
-    setup_function(context, compute_dp_v4, "compute_dp_v4", device_input_value,
+    xe_function_handle_t compute_hp_v4;
+    setup_function(context, compute_hp_v4, "compute_hp_v4", device_input_value,
                    device_output_buffer);
-    xe_function_handle_t compute_dp_v8;
-    setup_function(context, compute_dp_v8, "compute_dp_v8", device_input_value,
+    xe_function_handle_t compute_hp_v8;
+    setup_function(context, compute_hp_v8, "compute_hp_v8", device_input_value,
                    device_output_buffer);
-    xe_function_handle_t compute_dp_v16;
-    setup_function(context, compute_dp_v16, "compute_dp_v16", device_input_value,
+    xe_function_handle_t compute_hp_v16;
+    setup_function(context, compute_hp_v16, "compute_hp_v16", device_input_value,
                    device_output_buffer);
 
-    std::cout << "Double Precision Compute (GFLOPS)\n";
+    std::cout << "Half Precision Compute (GFLOPS)\n";
 
     ///////////////////////////////////////////////////////////////////////////
     // Vector width 1
-    std::cout << "double   : ";
-    timed = run_kernel(context, compute_dp_v1, workgroup_info, type);
+    std::cout << "half   : ";
+    timed = run_kernel(context, compute_hp_v1, workgroup_info, type);
     gflops = number_of_work_items * flops_per_work_item / timed / 1e3f;
     std::cout << "GFLOPS: " << gflops << "\n";
 
     ///////////////////////////////////////////////////////////////////////////
     // Vector width 2
-    std::cout << "double2   : ";
-    timed = run_kernel(context, compute_dp_v2, workgroup_info, type);
+    std::cout << "half2   : ";
+    timed = run_kernel(context, compute_hp_v2, workgroup_info, type);
     gflops = number_of_work_items * flops_per_work_item / timed / 1e3f;
     std::cout << "GFLOPS: " << gflops << "\n";
 
     ///////////////////////////////////////////////////////////////////////////
     // Vector width 4
-    std::cout << "double4   : ";
-    timed = run_kernel(context, compute_dp_v4, workgroup_info, type);
+    std::cout << "half4   : ";
+    timed = run_kernel(context, compute_hp_v4, workgroup_info, type);
     gflops = number_of_work_items * flops_per_work_item / timed / 1e3f;
     std::cout << "GFLOPS: " << gflops << "\n";
 
     ///////////////////////////////////////////////////////////////////////////
     // Vector width 8
-    std::cout << "double8   : ";
-    timed = run_kernel(context, compute_dp_v8, workgroup_info, type);
+    std::cout << "half8   : ";
+    timed = run_kernel(context, compute_hp_v8, workgroup_info, type);
     gflops = number_of_work_items * flops_per_work_item / timed / 1e3f;
     std::cout << "GFLOPS: " << gflops << "\n";
 
     ///////////////////////////////////////////////////////////////////////////
     // Vector width 16
-    std::cout << "double16   : ";
-    timed = run_kernel(context, compute_dp_v16, workgroup_info, type);
+    std::cout << "half16   : ";
+    timed = run_kernel(context, compute_hp_v16, workgroup_info, type);
     gflops = number_of_work_items * flops_per_work_item / timed / 1e3f;
     std::cout << "GFLOPS: " << gflops << "\n";
 
-    result = xeFunctionDestroy(compute_dp_v1);
+    result = xeFunctionDestroy(compute_hp_v1);
     if (result) {
         throw std::runtime_error("xeFunctionDestroy failed: " + result);
     }
     if (verbose)
-        std::cout << "compute_dp_v1 Function Destroyed\n";
+        std::cout << "compute_hp_v1 Function Destroyed\n";
 
-    result = xeFunctionDestroy(compute_dp_v2);
+    result = xeFunctionDestroy(compute_hp_v2);
     if (result) {
         throw std::runtime_error("xeFunctionDestroy failed: " + result);
     }
     if (verbose)
-        std::cout << "compute_dp_v2 Function Destroyed\n";
+        std::cout << "compute_hp_v2 Function Destroyed\n";
 
-    result = xeFunctionDestroy(compute_dp_v4);
+    result = xeFunctionDestroy(compute_hp_v4);
     if (result) {
         throw std::runtime_error("xeFunctionDestroy failed: " + result);
     }
     if (verbose)
-        std::cout << "compute_dp_v4 Function Destroyed\n";
+        std::cout << "compute_hp_v4 Function Destroyed\n";
 
-    result = xeFunctionDestroy(compute_dp_v8);
+    result = xeFunctionDestroy(compute_hp_v8);
     if (result) {
         throw std::runtime_error("xeFunctionDestroy failed: " + result);
     }
     if (verbose)
-        std::cout << "compute_dp_v8 Function Destroyed\n";
+        std::cout << "compute_hp_v8 Function Destroyed\n";
 
-    result = xeFunctionDestroy(compute_dp_v16);
+    result = xeFunctionDestroy(compute_hp_v16);
     if (result) {
         throw std::runtime_error("xeFunctionDestroy failed: " + result);
     }
     if (verbose)
-        std::cout << "compute_dp_v16 Function Destroyed\n";
+        std::cout << "compute_hp_v16 Function Destroyed\n";
 
     result = xeMemFree(device_input_value);
     if (result) {

@@ -97,6 +97,7 @@ public:
   bool use_event_timer = false;
   bool verbose = false;
   bool run_global_bw = true;
+  bool run_hp_compute = true;
   bool run_sp_compute = true;
   bool run_dp_compute = true;
   bool run_int_compute = true;
@@ -125,6 +126,7 @@ public:
   /* Benchmark Functions*/
   void xe_peak_global_bw(L0Context &context);
   void xe_peak_kernel_latency(L0Context &context);
+  void xe_peak_hp_compute(L0Context &context);
   void xe_peak_sp_compute(L0Context &context);
   void xe_peak_dp_compute(L0Context &context);
   void xe_peak_int_compute(L0Context &context);
@@ -145,4 +147,3 @@ uint64_t max_device_object_size(L0Context &context);
 TimingMeasurement is_bandwidth_with_event_timer(void);
 
 #endif /* XE_PEAK_H */
-

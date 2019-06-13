@@ -693,6 +693,9 @@ int main(int argc, char **argv) {
     if (peak_benchmark.run_global_bw)
         peak_benchmark.xe_peak_global_bw(context);
 
+    if (peak_benchmark.run_hp_compute)
+        peak_benchmark.xe_peak_hp_compute(context);
+
     if (peak_benchmark.run_sp_compute)
         peak_benchmark.xe_peak_sp_compute(context);
 

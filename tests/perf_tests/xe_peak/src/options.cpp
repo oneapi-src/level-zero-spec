@@ -31,6 +31,7 @@ static const char *usage_str =
     "\n                              hide driver latencies [default: No]"
     "\n  -t, string                  selectively run a particular test"
     "\n      global_bw               selectively run global bandwidth test"
+    "\n      hp_compute              selectively run half precision compute test"
     "\n      sp_compute              selectively run single precision compute test"
     "\n      dp_compute              selectively run double precision compute test"
     "\n      int_compute             selectively run integer compute test"
@@ -79,6 +80,7 @@ int XePeak::parse_arguments(int argc, char **argv) {
             }
         } else if ((strcmp(argv[i], "-t") == 0)) {
             run_global_bw = false;
+            run_hp_compute = false;
             run_sp_compute = false;
             run_dp_compute = false;
             run_int_compute = false;
@@ -90,6 +92,9 @@ int XePeak::parse_arguments(int argc, char **argv) {
             }
             if (strcmp(argv[i + 1], "global_bw") == 0) {
                 run_global_bw = true;
+                i++;
+            } else if (strcmp(argv[i + 1], "hp_compute") == 0) {
+                run_hp_compute = true;
                 i++;
             } else if (strcmp(argv[i + 1], "sp_compute") == 0) {
                 run_sp_compute = true;
@@ -111,8 +116,9 @@ int XePeak::parse_arguments(int argc, char **argv) {
                 exit(-1);
             }
         } else if (strcmp(argv[i], "-a") == 0) {
-            run_global_bw = run_sp_compute = run_dp_compute = run_int_compute = run_transfer_bw =
-                run_kernel_lat = true;
+            run_global_bw = run_hp_compute = run_sp_compute \
+                          = run_dp_compute = run_int_compute \
+                          = run_transfer_bw = run_kernel_lat = true;
         } else {
             std::cout << usage_str;
             exit(-1);

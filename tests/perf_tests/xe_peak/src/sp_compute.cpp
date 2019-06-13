@@ -99,50 +99,38 @@ void XePeak::xe_peak_sp_compute(L0Context &context) {
 
     ///////////////////////////////////////////////////////////////////////////
     // Vector width 1
-    std::cout << "float   : \n";
-
+    std::cout << "float   : ";
     timed = run_kernel(context, compute_sp_v1, workgroup_info, type);
-
     gflops = number_of_work_items * flops_per_work_item / timed / 1e3f;
-
     std::cout << "GFLOPS: " << gflops << "\n";
+
     ///////////////////////////////////////////////////////////////////////////
     // Vector width 2
-    std::cout << "float2   : \n";
-
+    std::cout << "float2   : ";
     timed = run_kernel(context, compute_sp_v2, workgroup_info, type);
-
     gflops = number_of_work_items * flops_per_work_item / timed / 1e3f;
-
     std::cout << "GFLOPS: " << gflops << "\n";
+
     ///////////////////////////////////////////////////////////////////////////
     // Vector width 4
-    std::cout << "float4   : \n";
-
+    std::cout << "float4   : ";
     timed = run_kernel(context, compute_sp_v4, workgroup_info, type);
-
     gflops = number_of_work_items * flops_per_work_item / timed / 1e3f;
-
     std::cout << "GFLOPS: " << gflops << "\n";
+
     ///////////////////////////////////////////////////////////////////////////
     // Vector width 8
-    std::cout << "float8   : \n";
-
+    std::cout << "float8   : ";
     timed = run_kernel(context, compute_sp_v8, workgroup_info, type);
-
     gflops = number_of_work_items * flops_per_work_item / timed / 1e3f;
-
     std::cout << "GFLOPS: " << gflops << "\n";
-    ///////////////////////////////////////////////////////////////////////////
-    // Vector width 1
-    std::cout << "float16   : \n";
 
+    ///////////////////////////////////////////////////////////////////////////
+    // Vector width 16
+    std::cout << "float16   : ";
     timed = run_kernel(context, compute_sp_v16, workgroup_info, type);
-
     gflops = number_of_work_items * flops_per_work_item / timed / 1e3f;
-
     std::cout << "GFLOPS: " << gflops << "\n";
-    ///////////////////////////////////////////////////////////////////////////
 
     result = xeFunctionDestroy(compute_sp_v1);
     if (result) {

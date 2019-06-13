@@ -11,6 +11,7 @@ set(XE_PEAK_COMMON src/common.cpp src/options.cpp src/xe_peak.cpp)
 set(XE_PEAK_BENCHMARKS
     src/global_bw.cpp
     src/kernel_latency.cpp
+    src/hp_compute.cpp
     src/sp_compute.cpp
     src/integer_compute.cpp
     src/dp_compute.cpp
@@ -31,6 +32,9 @@ add_custom_command(
                 ${CMAKE_SOURCE_DIR}/tests/perf_tests/xe_peak/kernels/xe_global_bw.spv
                 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xe_global_bw.spv
         COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_SOURCE_DIR}/tests/perf_tests/xe_peak/kernels/xe_hp_compute.spv
+                ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xe_hp_compute.spv
+        COMMAND ${CMAKE_COMMAND} -E copy
                 ${CMAKE_SOURCE_DIR}/tests/perf_tests/xe_peak/kernels/xe_sp_compute.spv
                 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xe_sp_compute.spv
         COMMAND ${CMAKE_COMMAND} -E copy
@@ -49,6 +53,7 @@ if(UNIX)
     install(
         FILES
             "${CMAKE_CURRENT_SOURCE_DIR}/kernels/xe_global_bw.spv"
+            "${CMAKE_CURRENT_SOURCE_DIR}/kernels/xe_hp_compute.spv"
             "${CMAKE_CURRENT_SOURCE_DIR}/kernels/xe_sp_compute.spv"
             "${CMAKE_CURRENT_SOURCE_DIR}/kernels/xe_int_compute.spv"
             "${CMAKE_CURRENT_SOURCE_DIR}/kernels/xe_dp_compute.spv"
