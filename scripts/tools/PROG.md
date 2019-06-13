@@ -29,8 +29,14 @@ ${"##"} Registration
 Tools may independently register for enter and exist callbacks for individual API calls, per Device Group.
 - ::${t}TracerSetPrologues is used to specify all the enter callbacks
 - ::${t}TracerSetEpilogues is used to specify all the exist callbacks
-- The callbacks are defined as function pointers, with identical parameters as the API call itself
 - If the value of a callback is nullptr, then it will be ignored.
+
+The callbacks are defined as a collection of per-API function pointers, with the following parameters:
+- "_params_t* params": a structure capturing the current value of the input and output parameters passed to the API
+- "::${x}_result_t result": the current value of the return value
+- "void* pGlobalUserData": the user's global pointer for the current tracer
+- "void** ppLocalUserData": a tracer-unique storage location for passing data from the prologue to the epilogue
+
 
 The followsing sample code demonstrates a basic usage of API tracing:
 ```c
@@ -456,11 +462,10 @@ ${"##"} Compilation
 A module must be compiled with foreknowledge that instrumentation will be performed in order for the compiler
 to generate the proper profiling meta-data and leave sufficient space beween the application's instructions for
 the instrumentation tool to inject additional instructions.
-Therefore, when the instrumentation layer is enabled, a new build flag is supported:
 ## --validate=off
-"-${t}-profile-flags \<n\>", 
+Therefore, when the instrumentation layer is enabled, a new build flag is supported:
+"-${t}-profile-flags <n>", where "<n>" must be a combination of ::${t}_profile_flag_t, in hexidecimal.
 ## --validate=on
-where "\<n\>" must be a combination of ::${t}_profile_flag_t, in hexidecimal.
 
 TODO: do we need any additional options, such as amount of space between instructions, or amount of register space
 to leave free?
