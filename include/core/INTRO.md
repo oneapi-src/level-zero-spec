@@ -118,6 +118,41 @@ There are multiple versions that should be used by the application to determine 
     - This is typically used to mitigate driver implementation issues for a feature.
     - The value is determined from calling ::xeDeviceGroupGetDriverVersion
 
+### API Version 1.0
+The following features are required:
+- ::xe_device_memory_access_properties_t::deviceAllocCapabilities
+
+The following features are optional:
+- ::xe_device_properties_t::unifiedMemorySupported
+- ::xe_device_properties_t::onDemandPageFaultsSupported
+- ::xe_device_p2p_properties_t::accessSupported
+- ::xe_device_p2p_properties_t::atomicsSupported
+- ::xe_device_memory_access_properties_t::hostAllocCapabilities
+- ::xe_device_memory_access_properties_t::sharedSingleDeviceAllocCapabilities
+- ::xe_device_memory_access_properties_t::sharedCrossDeviceAllocCapabilities
+- ::xe_device_memory_access_properties_t::sharedSystemAllocCapabilities
+- ::xe_device_cache_properties_t::intermediateCacheControlSupported
+- ::xe_device_cache_properties_t::lastLevelCacheSizeControlSupported
+- ::xe_device_image_properties_t::supported
+
+### API Version 1.1
+The following features are required:
+- ::xe_device_memory_access_properties_t::deviceAllocCapabilities
+- ::xe_device_properties_t::unifiedMemorySupported
+- ::xe_device_p2p_properties_t::accessSupported
+- ::xe_device_memory_access_properties_t::hostAllocCapabilities
+- ::xe_device_memory_access_properties_t::sharedSingleDeviceAllocCapabilities
+- ::xe_device_memory_access_properties_t::sharedCrossDeviceAllocCapabilities
+- ::xe_device_memory_access_properties_t::sharedSystemAllocCapabilities
+
+The following features are optional:
+- ::xe_device_properties_t::onDemandPageFaultsSupported
+- ::xe_device_p2p_properties_t::atomicsSupported
+- ::xe_device_cache_properties_t::intermediateCacheControlSupported
+- ::xe_device_cache_properties_t::lastLevelCacheSizeControlSupported
+- ::xe_device_image_properties_t::supported
+
+
 ## Error Handling
 The following design philosophies are adopted in order to reduce Host-side overhead:
 - by default, the driver implementation does no parameter validation of any kind

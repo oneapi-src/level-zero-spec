@@ -124,6 +124,41 @@ There are multiple versions that should be used by the application to determine 
     - This is typically used to mitigate driver implementation issues for a feature.
     - The value is determined from calling ::${x}DeviceGroupGetDriverVersion
 
+${"###"} API Version 1.0
+The following features are required:
+- ::${x}_device_memory_access_properties_t::deviceAllocCapabilities
+
+The following features are optional:
+- ::${x}_device_properties_t::unifiedMemorySupported
+- ::${x}_device_properties_t::onDemandPageFaultsSupported
+- ::${x}_device_p2p_properties_t::accessSupported
+- ::${x}_device_p2p_properties_t::atomicsSupported
+- ::${x}_device_memory_access_properties_t::hostAllocCapabilities
+- ::${x}_device_memory_access_properties_t::sharedSingleDeviceAllocCapabilities
+- ::${x}_device_memory_access_properties_t::sharedCrossDeviceAllocCapabilities
+- ::${x}_device_memory_access_properties_t::sharedSystemAllocCapabilities
+- ::${x}_device_cache_properties_t::intermediateCacheControlSupported
+- ::${x}_device_cache_properties_t::lastLevelCacheSizeControlSupported
+- ::${x}_device_image_properties_t::supported
+
+${"###"} API Version 1.1
+The following features are required:
+- ::${x}_device_memory_access_properties_t::deviceAllocCapabilities
+- ::${x}_device_properties_t::unifiedMemorySupported
+- ::${x}_device_p2p_properties_t::accessSupported
+- ::${x}_device_memory_access_properties_t::hostAllocCapabilities
+- ::${x}_device_memory_access_properties_t::sharedSingleDeviceAllocCapabilities
+- ::${x}_device_memory_access_properties_t::sharedCrossDeviceAllocCapabilities
+- ::${x}_device_memory_access_properties_t::sharedSystemAllocCapabilities
+
+The following features are optional:
+- ::${x}_device_properties_t::onDemandPageFaultsSupported
+- ::${x}_device_p2p_properties_t::atomicsSupported
+- ::${x}_device_cache_properties_t::intermediateCacheControlSupported
+- ::${x}_device_cache_properties_t::lastLevelCacheSizeControlSupported
+- ::${x}_device_image_properties_t::supported
+
+
 ${"##"} Error Handling
 The following design philosophies are adopted in order to reduce Host-side overhead:
 - by default, the driver implementation does no parameter validation of any kind
