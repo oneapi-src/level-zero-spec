@@ -242,14 +242,14 @@ xeModuleGetNativeBinary(
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hModule
 ///         + nullptr == pGlobalName
-///         + nullptr == pPtr
+///         + nullptr == pptr
 ///         + invalid name
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeModuleGetGlobalPointer(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
     const char* pGlobalName,                        ///< [in] name of function in global
-    void** pPtr                                     ///< [out] device visible pointer
+    void** pptr                                     ///< [out] device visible pointer
     );
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -679,7 +679,10 @@ def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None, for
                     init += "= 0"
 
         words = []
-        if "type" in format:
+        if "type*" in format:
+            words.append(tname+"*")
+            name = "p"+name
+        elif "type" in format:
             words.append(tname)
         if "name" in format:
             words.append(name)

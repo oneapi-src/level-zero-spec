@@ -71,7 +71,7 @@ params:
       name: alignment
       desc: "[in] minimum alignment in bytes for the allocation"
     - type: "void**"
-      name: ptr
+      name: pptr
       desc: "[out] pointer to shared allocation"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
@@ -112,7 +112,7 @@ params:
       name: alignment
       desc: "[in] minimum alignment in bytes for the allocation"
     - type: "void**"
-      name: ptr
+      name: pptr
       desc: "[out] pointer to device allocation"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
@@ -146,7 +146,7 @@ params:
       name: alignment
       desc: "[in] minimum alignment in bytes for the allocation"
     - type: "void**"
-      name: ptr
+      name: pptr
       desc: "[out] pointer to host allocation"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
@@ -311,7 +311,7 @@ params:
       name: flags
       desc: "[in] flags controlling the operation"
     - type: "void**"
-      name: ptr
+      name: pptr
       desc: "[out] pointer to device allocation in this process"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:

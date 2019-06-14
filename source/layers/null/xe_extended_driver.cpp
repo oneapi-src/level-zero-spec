@@ -46,7 +46,7 @@ namespace driver
         {
             // capture parameters
             xex_init_params_t params = {
-                flags
+                &flags
             };
 
             // call each callback registered
@@ -66,7 +66,7 @@ namespace driver
         {
             // capture parameters
             xex_init_params_t params = {
-                flags
+                &flags
             };
 
             // call each callback registered
@@ -100,9 +100,9 @@ namespace driver
         {
             // capture parameters
             xex_command_graph_create_params_t params = {
-                hDevice,
-desc,
-phCommandGraph
+                &hDevice,
+                &desc,
+                &phCommandGraph
             };
 
             // call each callback registered
@@ -124,9 +124,9 @@ phCommandGraph
         {
             // capture parameters
             xex_command_graph_create_params_t params = {
-                hDevice,
-desc,
-phCommandGraph
+                &hDevice,
+                &desc,
+                &phCommandGraph
             };
 
             // call each callback registered
@@ -158,7 +158,7 @@ phCommandGraph
         {
             // capture parameters
             xex_command_graph_destroy_params_t params = {
-                hCommandGraph
+                &hCommandGraph
             };
 
             // call each callback registered
@@ -179,7 +179,7 @@ phCommandGraph
         {
             // capture parameters
             xex_command_graph_destroy_params_t params = {
-                hCommandGraph
+                &hCommandGraph
             };
 
             // call each callback registered
@@ -211,7 +211,7 @@ phCommandGraph
         {
             // capture parameters
             xex_command_graph_close_params_t params = {
-                hCommandGraph
+                &hCommandGraph
             };
 
             // call each callback registered
@@ -231,7 +231,7 @@ phCommandGraph
         {
             // capture parameters
             xex_command_graph_close_params_t params = {
-                hCommandGraph
+                &hCommandGraph
             };
 
             // call each callback registered

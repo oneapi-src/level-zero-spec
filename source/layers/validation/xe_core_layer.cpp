@@ -1051,10 +1051,10 @@ namespace layer
     xeCommandListAppendMemoryCopyRegion(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
-        xe_copy_region_t* dstRegion,                    ///< [in] pointer to destination region to copy to
+        const xe_copy_region_t* dstRegion,              ///< [in] pointer to destination region to copy to
         uint32_t dstPitch,                              ///< [in] destination pitch in bytes
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
-        xe_copy_region_t* srcRegion,                    ///< [in] pointer to source region to copy from
+        const xe_copy_region_t* srcRegion,              ///< [in] pointer to source region to copy from
         uint32_t srcPitch,                              ///< [in] source pitch in bytes
         xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
         )
@@ -1124,8 +1124,8 @@ namespace layer
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
         xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
-        xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
-        xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
+        const xe_image_region_t* pDstRegion,            ///< [in][optional] destination region descriptor
+        const xe_image_region_t* pSrcRegion,            ///< [in][optional] source region descriptor
         xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
         )
     {
@@ -1157,7 +1157,7 @@ namespace layer
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
         xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
-        xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
+        const xe_image_region_t* pSrcRegion,            ///< [in][optional] source region descriptor
         xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
         )
     {
@@ -1189,7 +1189,7 @@ namespace layer
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
-        xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
+        const xe_image_region_t* pDstRegion,            ///< [in][optional] destination region descriptor
         xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
         )
     {
@@ -1864,7 +1864,7 @@ namespace layer
         xe_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
-        void** ptr                                      ///< [out] pointer to shared allocation
+        void** pptr                                     ///< [out] pointer to shared allocation
         )
     {
         auto pfnAllocSharedMem = context.xeDdiTable.DeviceGroup.pfnAllocSharedMem;
@@ -1880,12 +1880,12 @@ namespace layer
             if( nullptr == hDevice )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == ptr )
+            if( nullptr == pptr )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, ordinal, host_flags, size, alignment, ptr );
+        return pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, ordinal, host_flags, size, alignment, pptr );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1899,7 +1899,7 @@ namespace layer
                                                         ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
-        void** ptr                                      ///< [out] pointer to device allocation
+        void** pptr                                     ///< [out] pointer to device allocation
         )
     {
         auto pfnAllocDeviceMem = context.xeDdiTable.DeviceGroup.pfnAllocDeviceMem;
@@ -1915,12 +1915,12 @@ namespace layer
             if( nullptr == hDevice )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == ptr )
+            if( nullptr == pptr )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, ordinal, size, alignment, ptr );
+        return pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, ordinal, size, alignment, pptr );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1931,7 +1931,7 @@ namespace layer
         xe_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
-        void** ptr                                      ///< [out] pointer to host allocation
+        void** pptr                                     ///< [out] pointer to host allocation
         )
     {
         auto pfnAllocHostMem = context.xeDdiTable.DeviceGroup.pfnAllocHostMem;
@@ -1944,12 +1944,12 @@ namespace layer
             if( nullptr == hDeviceGroup )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == ptr )
+            if( nullptr == pptr )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnAllocHostMem( hDeviceGroup, flags, size, alignment, ptr );
+        return pfnAllocHostMem( hDeviceGroup, flags, size, alignment, pptr );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2075,7 +2075,7 @@ namespace layer
         xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
         xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
         xe_ipc_memory_flag_t flags,                     ///< [in] flags controlling the operation
-        void** ptr                                      ///< [out] pointer to device allocation in this process
+        void** pptr                                     ///< [out] pointer to device allocation in this process
         )
     {
         auto pfnOpenMemIpcHandle = context.xeDdiTable.DeviceGroup.pfnOpenMemIpcHandle;
@@ -2094,12 +2094,12 @@ namespace layer
             if( nullptr == handle )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == ptr )
+            if( nullptr == pptr )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnOpenMemIpcHandle( hDeviceGroup, hDevice, handle, flags, ptr );
+        return pfnOpenMemIpcHandle( hDeviceGroup, hDevice, handle, flags, pptr );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2266,7 +2266,7 @@ namespace layer
     xeModuleGetGlobalPointer(
         xe_module_handle_t hModule,                     ///< [in] handle of the device
         const char* pGlobalName,                        ///< [in] name of function in global
-        void** pPtr                                     ///< [out] device visible pointer
+        void** pptr                                     ///< [out] device visible pointer
         )
     {
         auto pfnGetGlobalPointer = context.xeDdiTable.Module.pfnGetGlobalPointer;
@@ -2282,12 +2282,12 @@ namespace layer
             if( nullptr == pGlobalName )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pPtr )
+            if( nullptr == pptr )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetGlobalPointer( hModule, pGlobalName, pPtr );
+        return pfnGetGlobalPointer( hModule, pGlobalName, pptr );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

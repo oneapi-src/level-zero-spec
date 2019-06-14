@@ -16,7 +16,7 @@ NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
 
 ## Introduction
 API tracing provides a way for tools to recieve notifications of API calls made by an applicaton.
-The callbacks provide direct access to the input and output parameters for viewing or modification.
+The callbacks provide direct access to the input and output parameters for viewing and modification.
 Tools may also use these notifications as triggers to block and inject new API calls into the command stream, such as metrics.
 
 ## Registration
@@ -26,10 +26,10 @@ Tools may independently register for enter and exist callbacks for individual AP
 - If the value of a callback is nullptr, then it will be ignored.
 
 The callbacks are defined as a collection of per-API function pointers, with the following parameters:
-- "_params_t* params": a structure capturing the current value of the input and output parameters passed to the API
+- "_params_t* params": a structure capturing pointers to the input and output parameters of the current instance
 - "::xe_result_t result": the current value of the return value
-- "void* pGlobalUserData": the user's global pointer for the current tracer
-- "void** ppLocalUserData": a tracer-unique storage location for passing data from the prologue to the epilogue
+- "void* pGlobalUserData": the user's global pointer for the callback's tracer
+- "void** ppLocalUserData": a per-instance, per-tracer storage location for passing data from the prologue to the epilogue
 
 
 The followsing sample code demonstrates a basic usage of API tracing:
@@ -47,6 +47,7 @@ The followsing sample code demonstrates a basic usage of API tracing:
     {
         my_local_data_t* local = malloc( sizeof(my_local_data_t) );
         *ppLocalUserData = local;
+        
         local->start = clock();
     }
 
@@ -57,9 +58,13 @@ The followsing sample code demonstrates a basic usage of API tracing:
         void** ppLocalUserData )
     {
         clock_t end = clock();
+        
         my_local_data_t* local = *(my_local_data_t**)ppLocalUserData;
+        
         float time = 1000.f * ( end - local->start ) / CLOCKS_PER_SEC;
         printf("xeCommandListAppendLaunchFunction takes %.4f ms\n", time);
+        
+        free(local);
     }
 
     void TracingExample( ... )
@@ -84,6 +89,7 @@ The followsing sample code demonstrates a basic usage of API tracing:
         xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
 
         xetTracerSetEnabled(hTracer, false);
+        xetTracerDestroy(hTracer);
     }
 ```
 

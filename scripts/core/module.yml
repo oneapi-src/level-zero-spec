@@ -181,7 +181,7 @@ params:
       name: pGlobalName
       desc: "[in] name of function in global"
     - type: "void**"
-      name: pPtr
+      name: pptr
       desc: "[out] device visible pointer"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:

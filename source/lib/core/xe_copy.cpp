@@ -150,10 +150,10 @@ xe_result_t __xecall
 xeCommandListAppendMemoryCopyRegion(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
-    xe_copy_region_t* dstRegion,                    ///< [in] pointer to destination region to copy to
+    const xe_copy_region_t* dstRegion,              ///< [in] pointer to destination region to copy to
     uint32_t dstPitch,                              ///< [in] destination pitch in bytes
     const void* srcptr,                             ///< [in] pointer to source memory to copy from
-    xe_copy_region_t* srcRegion,                    ///< [in] pointer to source region to copy from
+    const xe_copy_region_t* srcRegion,              ///< [in] pointer to source region to copy from
     uint32_t srcPitch,                              ///< [in] source pitch in bytes
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
@@ -229,8 +229,8 @@ xeCommandListAppendImageCopyRegion(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
-    xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
-    xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
+    const xe_image_region_t* pDstRegion,            ///< [in][optional] destination region descriptor
+    const xe_image_region_t* pSrcRegion,            ///< [in][optional] source region descriptor
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
@@ -272,7 +272,7 @@ xeCommandListAppendImageCopyToMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     void* dstptr,                                   ///< [in] pointer to destination memory to copy to
     xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
-    xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
+    const xe_image_region_t* pSrcRegion,            ///< [in][optional] source region descriptor
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
@@ -314,7 +314,7 @@ xeCommandListAppendImageCopyFromMemory(
     xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
     xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
     const void* srcptr,                             ///< [in] pointer to source memory to copy from
-    xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
+    const xe_image_region_t* pDstRegion,            ///< [in][optional] destination region descriptor
     xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
     )
 {
@@ -525,10 +525,10 @@ namespace xe
     void __xecall
     CommandList::AppendMemoryCopyRegion(
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
-        copy_region_t* dstRegion,                       ///< [in] pointer to destination region to copy to
+        const copy_region_t* dstRegion,                 ///< [in] pointer to destination region to copy to
         uint32_t dstPitch,                              ///< [in] destination pitch in bytes
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
-        copy_region_t* srcRegion,                       ///< [in] pointer to source region to copy from
+        const copy_region_t* srcRegion,                 ///< [in] pointer to source region to copy from
         uint32_t srcPitch,                              ///< [in] source pitch in bytes
         Event* pEvent                                   ///< [in][optional] pointer to the event to signal on completion
         )
@@ -536,10 +536,10 @@ namespace xe
         auto result = static_cast<result_t>( ::xeCommandListAppendMemoryCopyRegion(
             reinterpret_cast<xe_command_list_handle_t>( getHandle() ),
             dstptr,
-            reinterpret_cast<xe_copy_region_t*>( dstRegion ),
+            reinterpret_cast<const xe_copy_region_t*>( dstRegion ),
             dstPitch,
             srcptr,
-            reinterpret_cast<xe_copy_region_t*>( srcRegion ),
+            reinterpret_cast<const xe_copy_region_t*>( srcRegion ),
             srcPitch,
             ( pEvent ) ? reinterpret_cast<xe_event_handle_t>( pEvent->getHandle() ) : nullptr ) );
 
@@ -590,8 +590,8 @@ namespace xe
     CommandList::AppendImageCopyRegion(
         Image* pDstImage,                               ///< [in] pointer to destination image to copy to
         Image* pSrcImage,                               ///< [in] pointer to source image to copy from
-        image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
-        image_region_t* pSrcRegion,                     ///< [in][optional] source region descriptor
+        const image_region_t* pDstRegion,               ///< [in][optional] destination region descriptor
+        const image_region_t* pSrcRegion,               ///< [in][optional] source region descriptor
         Event* pEvent                                   ///< [in][optional] pointer to the event to signal on completion
         )
     {
@@ -599,8 +599,8 @@ namespace xe
             reinterpret_cast<xe_command_list_handle_t>( getHandle() ),
             reinterpret_cast<xe_image_handle_t>( pDstImage->getHandle() ),
             reinterpret_cast<xe_image_handle_t>( pSrcImage->getHandle() ),
-            reinterpret_cast<xe_image_region_t*>( pDstRegion ),
-            reinterpret_cast<xe_image_region_t*>( pSrcRegion ),
+            reinterpret_cast<const xe_image_region_t*>( pDstRegion ),
+            reinterpret_cast<const xe_image_region_t*>( pSrcRegion ),
             ( pEvent ) ? reinterpret_cast<xe_event_handle_t>( pEvent->getHandle() ) : nullptr ) );
 
         if( result_t::SUCCESS != result )
@@ -626,7 +626,7 @@ namespace xe
     CommandList::AppendImageCopyToMemory(
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
         Image* pSrcImage,                               ///< [in] pointer to source image to copy from
-        image_region_t* pSrcRegion,                     ///< [in][optional] source region descriptor
+        const image_region_t* pSrcRegion,               ///< [in][optional] source region descriptor
         Event* pEvent                                   ///< [in][optional] pointer to the event to signal on completion
         )
     {
@@ -634,7 +634,7 @@ namespace xe
             reinterpret_cast<xe_command_list_handle_t>( getHandle() ),
             dstptr,
             reinterpret_cast<xe_image_handle_t>( pSrcImage->getHandle() ),
-            reinterpret_cast<xe_image_region_t*>( pSrcRegion ),
+            reinterpret_cast<const xe_image_region_t*>( pSrcRegion ),
             ( pEvent ) ? reinterpret_cast<xe_event_handle_t>( pEvent->getHandle() ) : nullptr ) );
 
         if( result_t::SUCCESS != result )
@@ -660,7 +660,7 @@ namespace xe
     CommandList::AppendImageCopyFromMemory(
         Image* pDstImage,                               ///< [in] pointer to destination image to copy to
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
-        image_region_t* pDstRegion,                     ///< [in][optional] destination region descriptor
+        const image_region_t* pDstRegion,               ///< [in][optional] destination region descriptor
         Event* pEvent                                   ///< [in][optional] pointer to the event to signal on completion
         )
     {
@@ -668,7 +668,7 @@ namespace xe
             reinterpret_cast<xe_command_list_handle_t>( getHandle() ),
             reinterpret_cast<xe_image_handle_t>( pDstImage->getHandle() ),
             srcptr,
-            reinterpret_cast<xe_image_region_t*>( pDstRegion ),
+            reinterpret_cast<const xe_image_region_t*>( pDstRegion ),
             ( pEvent ) ? reinterpret_cast<xe_event_handle_t>( pEvent->getHandle() ) : nullptr ) );
 
         if( result_t::SUCCESS != result )

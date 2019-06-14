@@ -611,10 +611,10 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendMemorySet_t)(
 typedef xe_result_t (__xecall *xe_pfnCommandListAppendMemoryCopyRegion_t)(
     xe_command_list_handle_t,
     void*,
-    xe_copy_region_t*,
+    const xe_copy_region_t*,
     uint32_t,
     const void*,
-    xe_copy_region_t*,
+    const xe_copy_region_t*,
     uint32_t,
     xe_event_handle_t
     );
@@ -634,8 +634,8 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendImageCopyRegion_t)(
     xe_command_list_handle_t,
     xe_image_handle_t,
     xe_image_handle_t,
-    xe_image_region_t*,
-    xe_image_region_t*,
+    const xe_image_region_t*,
+    const xe_image_region_t*,
     xe_event_handle_t
     );
 
@@ -645,7 +645,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendImageCopyToMemory_t)(
     xe_command_list_handle_t,
     void*,
     xe_image_handle_t,
-    xe_image_region_t*,
+    const xe_image_region_t*,
     xe_event_handle_t
     );
 
@@ -655,7 +655,7 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendImageCopyFromMemory_t)(
     xe_command_list_handle_t,
     xe_image_handle_t,
     const void*,
-    xe_image_region_t*,
+    const xe_image_region_t*,
     xe_event_handle_t
     );
 

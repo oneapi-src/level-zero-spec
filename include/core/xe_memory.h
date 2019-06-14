@@ -88,7 +88,7 @@ typedef enum _xe_host_mem_alloc_flag_t
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDeviceGroup
 ///         + nullptr == hDevice
-///         + nullptr == ptr
+///         + nullptr == pptr
 ///         + unsupported allocation size
 ///         + unsupported alignment
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -104,7 +104,7 @@ xeDeviceGroupAllocSharedMem(
     xe_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
-    void** ptr                                      ///< [out] pointer to shared allocation
+    void** pptr                                     ///< [out] pointer to shared allocation
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -127,7 +127,7 @@ xeDeviceGroupAllocSharedMem(
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDeviceGroup
 ///         + nullptr == hDevice
-///         + nullptr == ptr
+///         + nullptr == pptr
 ///         + unsupported allocation size
 ///         + unsupported alignment
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -142,7 +142,7 @@ xeDeviceGroupAllocDeviceMem(
                                                     ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
-    void** ptr                                      ///< [out] pointer to device allocation
+    void** pptr                                     ///< [out] pointer to device allocation
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -166,7 +166,7 @@ xeDeviceGroupAllocDeviceMem(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDeviceGroup
-///         + nullptr == ptr
+///         + nullptr == pptr
 ///         + unsupported allocation size
 ///         + unsupported alignment
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -178,7 +178,7 @@ xeDeviceGroupAllocHostMem(
     xe_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
-    void** ptr                                      ///< [out] pointer to host allocation
+    void** pptr                                     ///< [out] pointer to host allocation
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -355,7 +355,7 @@ typedef enum _xe_ipc_memory_flag_t
 ///         + nullptr == hDeviceGroup
 ///         + nullptr == hDevice
 ///         + nullptr == handle
-///         + nullptr == ptr
+///         + nullptr == pptr
 ///         + invalid flags
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
@@ -364,7 +364,7 @@ xeDeviceGroupOpenMemIpcHandle(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
     xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
     xe_ipc_memory_flag_t flags,                     ///< [in] flags controlling the operation
-    void** ptr                                      ///< [out] pointer to device allocation in this process
+    void** pptr                                     ///< [out] pointer to device allocation in this process
     );
 
 ///////////////////////////////////////////////////////////////////////////////

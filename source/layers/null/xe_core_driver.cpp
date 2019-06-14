@@ -46,7 +46,7 @@ namespace driver
         {
             // capture parameters
             xe_init_params_t params = {
-                flags
+                &flags
             };
 
             // call each callback registered
@@ -66,7 +66,7 @@ namespace driver
         {
             // capture parameters
             xe_init_params_t params = {
-                flags
+                &flags
             };
 
             // call each callback registered
@@ -99,8 +99,8 @@ namespace driver
         {
             // capture parameters
             xe_device_group_get_driver_version_params_t params = {
-                hDeviceGroup,
-version
+                &hDeviceGroup,
+                &version
             };
 
             // call each callback registered
@@ -122,8 +122,8 @@ version
         {
             // capture parameters
             xe_device_group_get_driver_version_params_t params = {
-                hDeviceGroup,
-version
+                &hDeviceGroup,
+                &version
             };
 
             // call each callback registered
@@ -163,8 +163,8 @@ version
         {
             // capture parameters
             xe_device_group_get_params_t params = {
-                pCount,
-phDeviceGroups
+                &pCount,
+                &phDeviceGroups
             };
 
             // call each callback registered
@@ -187,8 +187,8 @@ phDeviceGroups
         {
             // capture parameters
             xe_device_group_get_params_t params = {
-                pCount,
-phDeviceGroups
+                &pCount,
+                &phDeviceGroups
             };
 
             // call each callback registered
@@ -227,9 +227,9 @@ phDeviceGroups
         {
             // capture parameters
             xe_device_get_params_t params = {
-                hDeviceGroup,
-pCount,
-phDevices
+                &hDeviceGroup,
+                &pCount,
+                &phDevices
             };
 
             // call each callback registered
@@ -252,9 +252,9 @@ phDevices
         {
             // capture parameters
             xe_device_get_params_t params = {
-                hDeviceGroup,
-pCount,
-phDevices
+                &hDeviceGroup,
+                &pCount,
+                &phDevices
             };
 
             // call each callback registered
@@ -293,9 +293,9 @@ phDevices
         {
             // capture parameters
             xe_device_get_sub_devices_params_t params = {
-                hDevice,
-pCount,
-phSubdevices
+                &hDevice,
+                &pCount,
+                &phSubdevices
             };
 
             // call each callback registered
@@ -318,9 +318,9 @@ phSubdevices
         {
             // capture parameters
             xe_device_get_sub_devices_params_t params = {
-                hDevice,
-pCount,
-phSubdevices
+                &hDevice,
+                &pCount,
+                &phSubdevices
             };
 
             // call each callback registered
@@ -353,8 +353,8 @@ phSubdevices
         {
             // capture parameters
             xe_device_group_get_api_version_params_t params = {
-                hDeviceGroup,
-version
+                &hDeviceGroup,
+                &version
             };
 
             // call each callback registered
@@ -376,8 +376,8 @@ version
         {
             // capture parameters
             xe_device_group_get_api_version_params_t params = {
-                hDeviceGroup,
-version
+                &hDeviceGroup,
+                &version
             };
 
             // call each callback registered
@@ -410,8 +410,8 @@ version
         {
             // capture parameters
             xe_device_group_get_device_properties_params_t params = {
-                hDeviceGroup,
-pDeviceProperties
+                &hDeviceGroup,
+                &pDeviceProperties
             };
 
             // call each callback registered
@@ -433,8 +433,8 @@ pDeviceProperties
         {
             // capture parameters
             xe_device_group_get_device_properties_params_t params = {
-                hDeviceGroup,
-pDeviceProperties
+                &hDeviceGroup,
+                &pDeviceProperties
             };
 
             // call each callback registered
@@ -467,8 +467,8 @@ pDeviceProperties
         {
             // capture parameters
             xe_device_group_get_compute_properties_params_t params = {
-                hDeviceGroup,
-pComputeProperties
+                &hDeviceGroup,
+                &pComputeProperties
             };
 
             // call each callback registered
@@ -490,8 +490,8 @@ pComputeProperties
         {
             // capture parameters
             xe_device_group_get_compute_properties_params_t params = {
-                hDeviceGroup,
-pComputeProperties
+                &hDeviceGroup,
+                &pComputeProperties
             };
 
             // call each callback registered
@@ -533,9 +533,9 @@ pComputeProperties
         {
             // capture parameters
             xe_device_group_get_memory_properties_params_t params = {
-                hDeviceGroup,
-pCount,
-pMemProperties
+                &hDeviceGroup,
+                &pCount,
+                &pMemProperties
             };
 
             // call each callback registered
@@ -558,9 +558,9 @@ pMemProperties
         {
             // capture parameters
             xe_device_group_get_memory_properties_params_t params = {
-                hDeviceGroup,
-pCount,
-pMemProperties
+                &hDeviceGroup,
+                &pCount,
+                &pMemProperties
             };
 
             // call each callback registered
@@ -593,8 +593,8 @@ pMemProperties
         {
             // capture parameters
             xe_device_group_get_memory_access_properties_params_t params = {
-                hDeviceGroup,
-pMemAccessProperties
+                &hDeviceGroup,
+                &pMemAccessProperties
             };
 
             // call each callback registered
@@ -616,8 +616,8 @@ pMemAccessProperties
         {
             // capture parameters
             xe_device_group_get_memory_access_properties_params_t params = {
-                hDeviceGroup,
-pMemAccessProperties
+                &hDeviceGroup,
+                &pMemAccessProperties
             };
 
             // call each callback registered
@@ -650,8 +650,8 @@ pMemAccessProperties
         {
             // capture parameters
             xe_device_group_get_cache_properties_params_t params = {
-                hDeviceGroup,
-pCacheProperties
+                &hDeviceGroup,
+                &pCacheProperties
             };
 
             // call each callback registered
@@ -673,8 +673,8 @@ pCacheProperties
         {
             // capture parameters
             xe_device_group_get_cache_properties_params_t params = {
-                hDeviceGroup,
-pCacheProperties
+                &hDeviceGroup,
+                &pCacheProperties
             };
 
             // call each callback registered
@@ -707,8 +707,8 @@ pCacheProperties
         {
             // capture parameters
             xe_device_group_get_image_properties_params_t params = {
-                hDeviceGroup,
-pImageProperties
+                &hDeviceGroup,
+                &pImageProperties
             };
 
             // call each callback registered
@@ -730,8 +730,8 @@ pImageProperties
         {
             // capture parameters
             xe_device_group_get_image_properties_params_t params = {
-                hDeviceGroup,
-pImageProperties
+                &hDeviceGroup,
+                &pImageProperties
             };
 
             // call each callback registered
@@ -765,9 +765,9 @@ pImageProperties
         {
             // capture parameters
             xe_device_get_p2_p_properties_params_t params = {
-                hDevice,
-hPeerDevice,
-pP2PProperties
+                &hDevice,
+                &hPeerDevice,
+                &pP2PProperties
             };
 
             // call each callback registered
@@ -789,9 +789,9 @@ pP2PProperties
         {
             // capture parameters
             xe_device_get_p2_p_properties_params_t params = {
-                hDevice,
-hPeerDevice,
-pP2PProperties
+                &hDevice,
+                &hPeerDevice,
+                &pP2PProperties
             };
 
             // call each callback registered
@@ -825,9 +825,9 @@ pP2PProperties
         {
             // capture parameters
             xe_device_can_access_peer_params_t params = {
-                hDevice,
-hPeerDevice,
-value
+                &hDevice,
+                &hPeerDevice,
+                &value
             };
 
             // call each callback registered
@@ -849,9 +849,9 @@ value
         {
             // capture parameters
             xe_device_can_access_peer_params_t params = {
-                hDevice,
-hPeerDevice,
-value
+                &hDevice,
+                &hPeerDevice,
+                &value
             };
 
             // call each callback registered
@@ -884,8 +884,8 @@ value
         {
             // capture parameters
             xe_device_set_intermediate_cache_config_params_t params = {
-                hDevice,
-CacheConfig
+                &hDevice,
+                &CacheConfig
             };
 
             // call each callback registered
@@ -905,8 +905,8 @@ CacheConfig
         {
             // capture parameters
             xe_device_set_intermediate_cache_config_params_t params = {
-                hDevice,
-CacheConfig
+                &hDevice,
+                &CacheConfig
             };
 
             // call each callback registered
@@ -939,8 +939,8 @@ CacheConfig
         {
             // capture parameters
             xe_device_set_last_level_cache_config_params_t params = {
-                hDevice,
-CacheConfig
+                &hDevice,
+                &CacheConfig
             };
 
             // call each callback registered
@@ -960,8 +960,8 @@ CacheConfig
         {
             // capture parameters
             xe_device_set_last_level_cache_config_params_t params = {
-                hDevice,
-CacheConfig
+                &hDevice,
+                &CacheConfig
             };
 
             // call each callback registered
@@ -995,9 +995,9 @@ CacheConfig
         {
             // capture parameters
             xe_command_queue_create_params_t params = {
-                hDevice,
-desc,
-phCommandQueue
+                &hDevice,
+                &desc,
+                &phCommandQueue
             };
 
             // call each callback registered
@@ -1019,9 +1019,9 @@ phCommandQueue
         {
             // capture parameters
             xe_command_queue_create_params_t params = {
-                hDevice,
-desc,
-phCommandQueue
+                &hDevice,
+                &desc,
+                &phCommandQueue
             };
 
             // call each callback registered
@@ -1053,7 +1053,7 @@ phCommandQueue
         {
             // capture parameters
             xe_command_queue_destroy_params_t params = {
-                hCommandQueue
+                &hCommandQueue
             };
 
             // call each callback registered
@@ -1074,7 +1074,7 @@ phCommandQueue
         {
             // capture parameters
             xe_command_queue_destroy_params_t params = {
-                hCommandQueue
+                &hCommandQueue
             };
 
             // call each callback registered
@@ -1110,10 +1110,10 @@ phCommandQueue
         {
             // capture parameters
             xe_command_queue_execute_command_lists_params_t params = {
-                hCommandQueue,
-numCommandLists,
-phCommandLists,
-hFence
+                &hCommandQueue,
+                &numCommandLists,
+                &phCommandLists,
+                &hFence
             };
 
             // call each callback registered
@@ -1133,10 +1133,10 @@ hFence
         {
             // capture parameters
             xe_command_queue_execute_command_lists_params_t params = {
-                hCommandQueue,
-numCommandLists,
-phCommandLists,
-hFence
+                &hCommandQueue,
+                &numCommandLists,
+                &phCommandLists,
+                &hFence
             };
 
             // call each callback registered
@@ -1173,8 +1173,8 @@ hFence
         {
             // capture parameters
             xe_command_queue_synchronize_params_t params = {
-                hCommandQueue,
-timeout
+                &hCommandQueue,
+                &timeout
             };
 
             // call each callback registered
@@ -1194,8 +1194,8 @@ timeout
         {
             // capture parameters
             xe_command_queue_synchronize_params_t params = {
-                hCommandQueue,
-timeout
+                &hCommandQueue,
+                &timeout
             };
 
             // call each callback registered
@@ -1229,9 +1229,9 @@ timeout
         {
             // capture parameters
             xe_command_list_create_params_t params = {
-                hDevice,
-desc,
-phCommandList
+                &hDevice,
+                &desc,
+                &phCommandList
             };
 
             // call each callback registered
@@ -1253,9 +1253,9 @@ phCommandList
         {
             // capture parameters
             xe_command_list_create_params_t params = {
-                hDevice,
-desc,
-phCommandList
+                &hDevice,
+                &desc,
+                &phCommandList
             };
 
             // call each callback registered
@@ -1289,9 +1289,9 @@ phCommandList
         {
             // capture parameters
             xe_command_list_create_immediate_params_t params = {
-                hDevice,
-altdesc,
-phCommandList
+                &hDevice,
+                &altdesc,
+                &phCommandList
             };
 
             // call each callback registered
@@ -1313,9 +1313,9 @@ phCommandList
         {
             // capture parameters
             xe_command_list_create_immediate_params_t params = {
-                hDevice,
-altdesc,
-phCommandList
+                &hDevice,
+                &altdesc,
+                &phCommandList
             };
 
             // call each callback registered
@@ -1347,7 +1347,7 @@ phCommandList
         {
             // capture parameters
             xe_command_list_destroy_params_t params = {
-                hCommandList
+                &hCommandList
             };
 
             // call each callback registered
@@ -1368,7 +1368,7 @@ phCommandList
         {
             // capture parameters
             xe_command_list_destroy_params_t params = {
-                hCommandList
+                &hCommandList
             };
 
             // call each callback registered
@@ -1400,7 +1400,7 @@ phCommandList
         {
             // capture parameters
             xe_command_list_close_params_t params = {
-                hCommandList
+                &hCommandList
             };
 
             // call each callback registered
@@ -1420,7 +1420,7 @@ phCommandList
         {
             // capture parameters
             xe_command_list_close_params_t params = {
-                hCommandList
+                &hCommandList
             };
 
             // call each callback registered
@@ -1452,7 +1452,7 @@ phCommandList
         {
             // capture parameters
             xe_command_list_reset_params_t params = {
-                hCommandList
+                &hCommandList
             };
 
             // call each callback registered
@@ -1472,7 +1472,7 @@ phCommandList
         {
             // capture parameters
             xe_command_list_reset_params_t params = {
-                hCommandList
+                &hCommandList
             };
 
             // call each callback registered
@@ -1506,9 +1506,9 @@ phCommandList
         {
             // capture parameters
             xe_command_list_set_parameter_params_t params = {
-                hCommandList,
-parameter,
-value
+                &hCommandList,
+                &parameter,
+                &value
             };
 
             // call each callback registered
@@ -1528,9 +1528,9 @@ value
         {
             // capture parameters
             xe_command_list_set_parameter_params_t params = {
-                hCommandList,
-parameter,
-value
+                &hCommandList,
+                &parameter,
+                &value
             };
 
             // call each callback registered
@@ -1564,9 +1564,9 @@ value
         {
             // capture parameters
             xe_command_list_get_parameter_params_t params = {
-                hCommandList,
-parameter,
-value
+                &hCommandList,
+                &parameter,
+                &value
             };
 
             // call each callback registered
@@ -1586,9 +1586,9 @@ value
         {
             // capture parameters
             xe_command_list_get_parameter_params_t params = {
-                hCommandList,
-parameter,
-value
+                &hCommandList,
+                &parameter,
+                &value
             };
 
             // call each callback registered
@@ -1620,7 +1620,7 @@ value
         {
             // capture parameters
             xe_command_list_reset_parameters_params_t params = {
-                hCommandList
+                &hCommandList
             };
 
             // call each callback registered
@@ -1640,7 +1640,7 @@ value
         {
             // capture parameters
             xe_command_list_reset_parameters_params_t params = {
-                hCommandList
+                &hCommandList
             };
 
             // call each callback registered
@@ -1674,9 +1674,9 @@ value
         {
             // capture parameters
             xe_command_list_reserve_space_params_t params = {
-                hCommandList,
-size,
-ptr
+                &hCommandList,
+                &size,
+                &ptr
             };
 
             // call each callback registered
@@ -1696,9 +1696,9 @@ ptr
         {
             // capture parameters
             xe_command_list_reserve_space_params_t params = {
-                hCommandList,
-size,
-ptr
+                &hCommandList,
+                &size,
+                &ptr
             };
 
             // call each callback registered
@@ -1734,10 +1734,10 @@ ptr
         {
             // capture parameters
             xe_command_list_append_barrier_params_t params = {
-                hCommandList,
-hSignalEvent,
-numWaitEvents,
-phWaitEvents
+                &hCommandList,
+                &hSignalEvent,
+                &numWaitEvents,
+                &phWaitEvents
             };
 
             // call each callback registered
@@ -1757,10 +1757,10 @@ phWaitEvents
         {
             // capture parameters
             xe_command_list_append_barrier_params_t params = {
-                hCommandList,
-hSignalEvent,
-numWaitEvents,
-phWaitEvents
+                &hCommandList,
+                &hSignalEvent,
+                &numWaitEvents,
+                &phWaitEvents
             };
 
             // call each callback registered
@@ -1799,13 +1799,13 @@ phWaitEvents
         {
             // capture parameters
             xe_command_list_append_memory_ranges_barrier_params_t params = {
-                hCommandList,
-numRanges,
-pRangeSizes,
-pRanges,
-hSignalEvent,
-numWaitEvents,
-phWaitEvents
+                &hCommandList,
+                &numRanges,
+                &pRangeSizes,
+                &pRanges,
+                &hSignalEvent,
+                &numWaitEvents,
+                &phWaitEvents
             };
 
             // call each callback registered
@@ -1825,13 +1825,13 @@ phWaitEvents
         {
             // capture parameters
             xe_command_list_append_memory_ranges_barrier_params_t params = {
-                hCommandList,
-numRanges,
-pRangeSizes,
-pRanges,
-hSignalEvent,
-numWaitEvents,
-phWaitEvents
+                &hCommandList,
+                &numRanges,
+                &pRangeSizes,
+                &pRanges,
+                &hSignalEvent,
+                &numWaitEvents,
+                &phWaitEvents
             };
 
             // call each callback registered
@@ -1863,7 +1863,7 @@ phWaitEvents
         {
             // capture parameters
             xe_device_system_barrier_params_t params = {
-                hDevice
+                &hDevice
             };
 
             // call each callback registered
@@ -1883,7 +1883,7 @@ phWaitEvents
         {
             // capture parameters
             xe_device_system_barrier_params_t params = {
-                hDevice
+                &hDevice
             };
 
             // call each callback registered
@@ -1919,10 +1919,10 @@ phWaitEvents
         {
             // capture parameters
             xe_device_register_cl_memory_params_t params = {
-                hDevice,
-context,
-mem,
-ptr
+                &hDevice,
+                &context,
+                &mem,
+                &ptr
             };
 
             // call each callback registered
@@ -1942,10 +1942,10 @@ ptr
         {
             // capture parameters
             xe_device_register_cl_memory_params_t params = {
-                hDevice,
-context,
-mem,
-ptr
+                &hDevice,
+                &context,
+                &mem,
+                &ptr
             };
 
             // call each callback registered
@@ -1982,10 +1982,10 @@ ptr
         {
             // capture parameters
             xe_device_register_cl_program_params_t params = {
-                hDevice,
-context,
-program,
-phModule
+                &hDevice,
+                &context,
+                &program,
+                &phModule
             };
 
             // call each callback registered
@@ -2007,10 +2007,10 @@ phModule
         {
             // capture parameters
             xe_device_register_cl_program_params_t params = {
-                hDevice,
-context,
-program,
-phModule
+                &hDevice,
+                &context,
+                &program,
+                &phModule
             };
 
             // call each callback registered
@@ -2047,10 +2047,10 @@ phModule
         {
             // capture parameters
             xe_device_register_cl_command_queue_params_t params = {
-                hDevice,
-context,
-command_queue,
-phCommandQueue
+                &hDevice,
+                &context,
+                &command_queue,
+                &phCommandQueue
             };
 
             // call each callback registered
@@ -2072,10 +2072,10 @@ phCommandQueue
         {
             // capture parameters
             xe_device_register_cl_command_queue_params_t params = {
-                hDevice,
-context,
-command_queue,
-phCommandQueue
+                &hDevice,
+                &context,
+                &command_queue,
+                &phCommandQueue
             };
 
             // call each callback registered
@@ -2112,11 +2112,11 @@ phCommandQueue
         {
             // capture parameters
             xe_command_list_append_memory_copy_params_t params = {
-                hCommandList,
-dstptr,
-srcptr,
-size,
-hEvent
+                &hCommandList,
+                &dstptr,
+                &srcptr,
+                &size,
+                &hEvent
             };
 
             // call each callback registered
@@ -2136,11 +2136,11 @@ hEvent
         {
             // capture parameters
             xe_command_list_append_memory_copy_params_t params = {
-                hCommandList,
-dstptr,
-srcptr,
-size,
-hEvent
+                &hCommandList,
+                &dstptr,
+                &srcptr,
+                &size,
+                &hEvent
             };
 
             // call each callback registered
@@ -2176,11 +2176,11 @@ hEvent
         {
             // capture parameters
             xe_command_list_append_memory_set_params_t params = {
-                hCommandList,
-ptr,
-value,
-size,
-hEvent
+                &hCommandList,
+                &ptr,
+                &value,
+                &size,
+                &hEvent
             };
 
             // call each callback registered
@@ -2200,11 +2200,11 @@ hEvent
         {
             // capture parameters
             xe_command_list_append_memory_set_params_t params = {
-                hCommandList,
-ptr,
-value,
-size,
-hEvent
+                &hCommandList,
+                &ptr,
+                &value,
+                &size,
+                &hEvent
             };
 
             // call each callback registered
@@ -2228,10 +2228,10 @@ hEvent
     xeCommandListAppendMemoryCopyRegion(
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
-        xe_copy_region_t* dstRegion,                    ///< [in] pointer to destination region to copy to
+        const xe_copy_region_t* dstRegion,              ///< [in] pointer to destination region to copy to
         uint32_t dstPitch,                              ///< [in] destination pitch in bytes
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
-        xe_copy_region_t* srcRegion,                    ///< [in] pointer to source region to copy from
+        const xe_copy_region_t* srcRegion,              ///< [in] pointer to source region to copy from
         uint32_t srcPitch,                              ///< [in] source pitch in bytes
         xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
         )
@@ -2243,14 +2243,14 @@ hEvent
         {
             // capture parameters
             xe_command_list_append_memory_copy_region_params_t params = {
-                hCommandList,
-dstptr,
-dstRegion,
-dstPitch,
-srcptr,
-srcRegion,
-srcPitch,
-hEvent
+                &hCommandList,
+                &dstptr,
+                &dstRegion,
+                &dstPitch,
+                &srcptr,
+                &srcRegion,
+                &srcPitch,
+                &hEvent
             };
 
             // call each callback registered
@@ -2270,14 +2270,14 @@ hEvent
         {
             // capture parameters
             xe_command_list_append_memory_copy_region_params_t params = {
-                hCommandList,
-dstptr,
-dstRegion,
-dstPitch,
-srcptr,
-srcRegion,
-srcPitch,
-hEvent
+                &hCommandList,
+                &dstptr,
+                &dstRegion,
+                &dstPitch,
+                &srcptr,
+                &srcRegion,
+                &srcPitch,
+                &hEvent
             };
 
             // call each callback registered
@@ -2312,10 +2312,10 @@ hEvent
         {
             // capture parameters
             xe_command_list_append_image_copy_params_t params = {
-                hCommandList,
-hDstImage,
-hSrcImage,
-hEvent
+                &hCommandList,
+                &hDstImage,
+                &hSrcImage,
+                &hEvent
             };
 
             // call each callback registered
@@ -2335,10 +2335,10 @@ hEvent
         {
             // capture parameters
             xe_command_list_append_image_copy_params_t params = {
-                hCommandList,
-hDstImage,
-hSrcImage,
-hEvent
+                &hCommandList,
+                &hDstImage,
+                &hSrcImage,
+                &hEvent
             };
 
             // call each callback registered
@@ -2363,8 +2363,8 @@ hEvent
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
         xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
-        xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
-        xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
+        const xe_image_region_t* pDstRegion,            ///< [in][optional] destination region descriptor
+        const xe_image_region_t* pSrcRegion,            ///< [in][optional] source region descriptor
         xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
         )
     {
@@ -2375,12 +2375,12 @@ hEvent
         {
             // capture parameters
             xe_command_list_append_image_copy_region_params_t params = {
-                hCommandList,
-hDstImage,
-hSrcImage,
-pDstRegion,
-pSrcRegion,
-hEvent
+                &hCommandList,
+                &hDstImage,
+                &hSrcImage,
+                &pDstRegion,
+                &pSrcRegion,
+                &hEvent
             };
 
             // call each callback registered
@@ -2400,12 +2400,12 @@ hEvent
         {
             // capture parameters
             xe_command_list_append_image_copy_region_params_t params = {
-                hCommandList,
-hDstImage,
-hSrcImage,
-pDstRegion,
-pSrcRegion,
-hEvent
+                &hCommandList,
+                &hDstImage,
+                &hSrcImage,
+                &pDstRegion,
+                &pSrcRegion,
+                &hEvent
             };
 
             // call each callback registered
@@ -2430,7 +2430,7 @@ hEvent
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         void* dstptr,                                   ///< [in] pointer to destination memory to copy to
         xe_image_handle_t hSrcImage,                    ///< [in] handle of source image to copy from
-        xe_image_region_t* pSrcRegion,                  ///< [in][optional] source region descriptor
+        const xe_image_region_t* pSrcRegion,            ///< [in][optional] source region descriptor
         xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
         )
     {
@@ -2441,11 +2441,11 @@ hEvent
         {
             // capture parameters
             xe_command_list_append_image_copy_to_memory_params_t params = {
-                hCommandList,
-dstptr,
-hSrcImage,
-pSrcRegion,
-hEvent
+                &hCommandList,
+                &dstptr,
+                &hSrcImage,
+                &pSrcRegion,
+                &hEvent
             };
 
             // call each callback registered
@@ -2465,11 +2465,11 @@ hEvent
         {
             // capture parameters
             xe_command_list_append_image_copy_to_memory_params_t params = {
-                hCommandList,
-dstptr,
-hSrcImage,
-pSrcRegion,
-hEvent
+                &hCommandList,
+                &dstptr,
+                &hSrcImage,
+                &pSrcRegion,
+                &hEvent
             };
 
             // call each callback registered
@@ -2494,7 +2494,7 @@ hEvent
         xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
         xe_image_handle_t hDstImage,                    ///< [in] handle of destination image to copy to
         const void* srcptr,                             ///< [in] pointer to source memory to copy from
-        xe_image_region_t* pDstRegion,                  ///< [in][optional] destination region descriptor
+        const xe_image_region_t* pDstRegion,            ///< [in][optional] destination region descriptor
         xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
         )
     {
@@ -2505,11 +2505,11 @@ hEvent
         {
             // capture parameters
             xe_command_list_append_image_copy_from_memory_params_t params = {
-                hCommandList,
-hDstImage,
-srcptr,
-pDstRegion,
-hEvent
+                &hCommandList,
+                &hDstImage,
+                &srcptr,
+                &pDstRegion,
+                &hEvent
             };
 
             // call each callback registered
@@ -2529,11 +2529,11 @@ hEvent
         {
             // capture parameters
             xe_command_list_append_image_copy_from_memory_params_t params = {
-                hCommandList,
-hDstImage,
-srcptr,
-pDstRegion,
-hEvent
+                &hCommandList,
+                &hDstImage,
+                &srcptr,
+                &pDstRegion,
+                &hEvent
             };
 
             // call each callback registered
@@ -2567,9 +2567,9 @@ hEvent
         {
             // capture parameters
             xe_command_list_append_memory_prefetch_params_t params = {
-                hCommandList,
-ptr,
-size
+                &hCommandList,
+                &ptr,
+                &size
             };
 
             // call each callback registered
@@ -2589,9 +2589,9 @@ size
         {
             // capture parameters
             xe_command_list_append_memory_prefetch_params_t params = {
-                hCommandList,
-ptr,
-size
+                &hCommandList,
+                &ptr,
+                &size
             };
 
             // call each callback registered
@@ -2627,11 +2627,11 @@ size
         {
             // capture parameters
             xe_command_list_append_mem_advise_params_t params = {
-                hCommandList,
-hDevice,
-ptr,
-size,
-advice
+                &hCommandList,
+                &hDevice,
+                &ptr,
+                &size,
+                &advice
             };
 
             // call each callback registered
@@ -2651,11 +2651,11 @@ advice
         {
             // capture parameters
             xe_command_list_append_mem_advise_params_t params = {
-                hCommandList,
-hDevice,
-ptr,
-size,
-advice
+                &hCommandList,
+                &hDevice,
+                &ptr,
+                &size,
+                &advice
             };
 
             // call each callback registered
@@ -2693,11 +2693,11 @@ advice
         {
             // capture parameters
             xe_event_pool_create_params_t params = {
-                hDeviceGroup,
-desc,
-numDevices,
-phDevices,
-phEventPool
+                &hDeviceGroup,
+                &desc,
+                &numDevices,
+                &phDevices,
+                &phEventPool
             };
 
             // call each callback registered
@@ -2719,11 +2719,11 @@ phEventPool
         {
             // capture parameters
             xe_event_pool_create_params_t params = {
-                hDeviceGroup,
-desc,
-numDevices,
-phDevices,
-phEventPool
+                &hDeviceGroup,
+                &desc,
+                &numDevices,
+                &phDevices,
+                &phEventPool
             };
 
             // call each callback registered
@@ -2755,7 +2755,7 @@ phEventPool
         {
             // capture parameters
             xe_event_pool_destroy_params_t params = {
-                hEventPool
+                &hEventPool
             };
 
             // call each callback registered
@@ -2776,7 +2776,7 @@ phEventPool
         {
             // capture parameters
             xe_event_pool_destroy_params_t params = {
-                hEventPool
+                &hEventPool
             };
 
             // call each callback registered
@@ -2810,9 +2810,9 @@ phEventPool
         {
             // capture parameters
             xe_event_create_params_t params = {
-                hEventPool,
-desc,
-phEvent
+                &hEventPool,
+                &desc,
+                &phEvent
             };
 
             // call each callback registered
@@ -2834,9 +2834,9 @@ phEvent
         {
             // capture parameters
             xe_event_create_params_t params = {
-                hEventPool,
-desc,
-phEvent
+                &hEventPool,
+                &desc,
+                &phEvent
             };
 
             // call each callback registered
@@ -2868,7 +2868,7 @@ phEvent
         {
             // capture parameters
             xe_event_destroy_params_t params = {
-                hEvent
+                &hEvent
             };
 
             // call each callback registered
@@ -2889,7 +2889,7 @@ phEvent
         {
             // capture parameters
             xe_event_destroy_params_t params = {
-                hEvent
+                &hEvent
             };
 
             // call each callback registered
@@ -2922,8 +2922,8 @@ phEvent
         {
             // capture parameters
             xe_event_pool_get_ipc_handle_params_t params = {
-                hEventPool,
-phIpc
+                &hEventPool,
+                &phIpc
             };
 
             // call each callback registered
@@ -2943,8 +2943,8 @@ phIpc
         {
             // capture parameters
             xe_event_pool_get_ipc_handle_params_t params = {
-                hEventPool,
-phIpc
+                &hEventPool,
+                &phIpc
             };
 
             // call each callback registered
@@ -2978,9 +2978,9 @@ phIpc
         {
             // capture parameters
             xe_event_pool_open_ipc_handle_params_t params = {
-                hDevice,
-hIpc,
-phEventPool
+                &hDevice,
+                &hIpc,
+                &phEventPool
             };
 
             // call each callback registered
@@ -3002,9 +3002,9 @@ phEventPool
         {
             // capture parameters
             xe_event_pool_open_ipc_handle_params_t params = {
-                hDevice,
-hIpc,
-phEventPool
+                &hDevice,
+                &hIpc,
+                &phEventPool
             };
 
             // call each callback registered
@@ -3036,7 +3036,7 @@ phEventPool
         {
             // capture parameters
             xe_event_pool_close_ipc_handle_params_t params = {
-                hEventPool
+                &hEventPool
             };
 
             // call each callback registered
@@ -3057,7 +3057,7 @@ phEventPool
         {
             // capture parameters
             xe_event_pool_close_ipc_handle_params_t params = {
-                hEventPool
+                &hEventPool
             };
 
             // call each callback registered
@@ -3090,8 +3090,8 @@ phEventPool
         {
             // capture parameters
             xe_command_list_append_signal_event_params_t params = {
-                hCommandList,
-hEvent
+                &hCommandList,
+                &hEvent
             };
 
             // call each callback registered
@@ -3111,8 +3111,8 @@ hEvent
         {
             // capture parameters
             xe_command_list_append_signal_event_params_t params = {
-                hCommandList,
-hEvent
+                &hCommandList,
+                &hEvent
             };
 
             // call each callback registered
@@ -3147,9 +3147,9 @@ hEvent
         {
             // capture parameters
             xe_command_list_append_wait_on_events_params_t params = {
-                hCommandList,
-numEvents,
-phEvents
+                &hCommandList,
+                &numEvents,
+                &phEvents
             };
 
             // call each callback registered
@@ -3169,9 +3169,9 @@ phEvents
         {
             // capture parameters
             xe_command_list_append_wait_on_events_params_t params = {
-                hCommandList,
-numEvents,
-phEvents
+                &hCommandList,
+                &numEvents,
+                &phEvents
             };
 
             // call each callback registered
@@ -3203,7 +3203,7 @@ phEvents
         {
             // capture parameters
             xe_event_host_signal_params_t params = {
-                hEvent
+                &hEvent
             };
 
             // call each callback registered
@@ -3223,7 +3223,7 @@ phEvents
         {
             // capture parameters
             xe_event_host_signal_params_t params = {
-                hEvent
+                &hEvent
             };
 
             // call each callback registered
@@ -3260,8 +3260,8 @@ phEvents
         {
             // capture parameters
             xe_event_host_synchronize_params_t params = {
-                hEvent,
-timeout
+                &hEvent,
+                &timeout
             };
 
             // call each callback registered
@@ -3281,8 +3281,8 @@ timeout
         {
             // capture parameters
             xe_event_host_synchronize_params_t params = {
-                hEvent,
-timeout
+                &hEvent,
+                &timeout
             };
 
             // call each callback registered
@@ -3314,7 +3314,7 @@ timeout
         {
             // capture parameters
             xe_event_query_status_params_t params = {
-                hEvent
+                &hEvent
             };
 
             // call each callback registered
@@ -3334,7 +3334,7 @@ timeout
         {
             // capture parameters
             xe_event_query_status_params_t params = {
-                hEvent
+                &hEvent
             };
 
             // call each callback registered
@@ -3367,8 +3367,8 @@ timeout
         {
             // capture parameters
             xe_command_list_append_event_reset_params_t params = {
-                hCommandList,
-hEvent
+                &hCommandList,
+                &hEvent
             };
 
             // call each callback registered
@@ -3388,8 +3388,8 @@ hEvent
         {
             // capture parameters
             xe_command_list_append_event_reset_params_t params = {
-                hCommandList,
-hEvent
+                &hCommandList,
+                &hEvent
             };
 
             // call each callback registered
@@ -3421,7 +3421,7 @@ hEvent
         {
             // capture parameters
             xe_event_reset_params_t params = {
-                hEvent
+                &hEvent
             };
 
             // call each callback registered
@@ -3441,7 +3441,7 @@ hEvent
         {
             // capture parameters
             xe_event_reset_params_t params = {
-                hEvent
+                &hEvent
             };
 
             // call each callback registered
@@ -3475,9 +3475,9 @@ hEvent
         {
             // capture parameters
             xe_fence_create_params_t params = {
-                hCommandQueue,
-desc,
-phFence
+                &hCommandQueue,
+                &desc,
+                &phFence
             };
 
             // call each callback registered
@@ -3499,9 +3499,9 @@ phFence
         {
             // capture parameters
             xe_fence_create_params_t params = {
-                hCommandQueue,
-desc,
-phFence
+                &hCommandQueue,
+                &desc,
+                &phFence
             };
 
             // call each callback registered
@@ -3533,7 +3533,7 @@ phFence
         {
             // capture parameters
             xe_fence_destroy_params_t params = {
-                hFence
+                &hFence
             };
 
             // call each callback registered
@@ -3554,7 +3554,7 @@ phFence
         {
             // capture parameters
             xe_fence_destroy_params_t params = {
-                hFence
+                &hFence
             };
 
             // call each callback registered
@@ -3591,8 +3591,8 @@ phFence
         {
             // capture parameters
             xe_fence_host_synchronize_params_t params = {
-                hFence,
-timeout
+                &hFence,
+                &timeout
             };
 
             // call each callback registered
@@ -3612,8 +3612,8 @@ timeout
         {
             // capture parameters
             xe_fence_host_synchronize_params_t params = {
-                hFence,
-timeout
+                &hFence,
+                &timeout
             };
 
             // call each callback registered
@@ -3645,7 +3645,7 @@ timeout
         {
             // capture parameters
             xe_fence_query_status_params_t params = {
-                hFence
+                &hFence
             };
 
             // call each callback registered
@@ -3665,7 +3665,7 @@ timeout
         {
             // capture parameters
             xe_fence_query_status_params_t params = {
-                hFence
+                &hFence
             };
 
             // call each callback registered
@@ -3697,7 +3697,7 @@ timeout
         {
             // capture parameters
             xe_fence_reset_params_t params = {
-                hFence
+                &hFence
             };
 
             // call each callback registered
@@ -3717,7 +3717,7 @@ timeout
         {
             // capture parameters
             xe_fence_reset_params_t params = {
-                hFence
+                &hFence
             };
 
             // call each callback registered
@@ -3751,9 +3751,9 @@ timeout
         {
             // capture parameters
             xe_image_get_properties_params_t params = {
-                hDevice,
-desc,
-pImageProperties
+                &hDevice,
+                &desc,
+                &pImageProperties
             };
 
             // call each callback registered
@@ -3773,9 +3773,9 @@ pImageProperties
         {
             // capture parameters
             xe_image_get_properties_params_t params = {
-                hDevice,
-desc,
-pImageProperties
+                &hDevice,
+                &desc,
+                &pImageProperties
             };
 
             // call each callback registered
@@ -3809,9 +3809,9 @@ pImageProperties
         {
             // capture parameters
             xe_image_create_params_t params = {
-                hDevice,
-desc,
-phImage
+                &hDevice,
+                &desc,
+                &phImage
             };
 
             // call each callback registered
@@ -3833,9 +3833,9 @@ phImage
         {
             // capture parameters
             xe_image_create_params_t params = {
-                hDevice,
-desc,
-phImage
+                &hDevice,
+                &desc,
+                &phImage
             };
 
             // call each callback registered
@@ -3867,7 +3867,7 @@ phImage
         {
             // capture parameters
             xe_image_destroy_params_t params = {
-                hImage
+                &hImage
             };
 
             // call each callback registered
@@ -3888,7 +3888,7 @@ phImage
         {
             // capture parameters
             xe_image_destroy_params_t params = {
-                hImage
+                &hImage
             };
 
             // call each callback registered
@@ -3918,7 +3918,7 @@ phImage
         xe_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
-        void** ptr                                      ///< [out] pointer to shared allocation
+        void** pptr                                     ///< [out] pointer to shared allocation
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -3928,14 +3928,14 @@ phImage
         {
             // capture parameters
             xe_device_group_alloc_shared_mem_params_t params = {
-                hDeviceGroup,
-hDevice,
-device_flags,
-ordinal,
-host_flags,
-size,
-alignment,
-ptr
+                &hDeviceGroup,
+                &hDevice,
+                &device_flags,
+                &ordinal,
+                &host_flags,
+                &size,
+                &alignment,
+                &pptr
             };
 
             // call each callback registered
@@ -3951,20 +3951,20 @@ ptr
                 }
         }
 
-        *ptr = malloc( size );
+        *pptr = malloc( size );
 
         if( context.enableTracing )
         {
             // capture parameters
             xe_device_group_alloc_shared_mem_params_t params = {
-                hDeviceGroup,
-hDevice,
-device_flags,
-ordinal,
-host_flags,
-size,
-alignment,
-ptr
+                &hDeviceGroup,
+                &hDevice,
+                &device_flags,
+                &ordinal,
+                &host_flags,
+                &size,
+                &alignment,
+                &pptr
             };
 
             // call each callback registered
@@ -3993,7 +3993,7 @@ ptr
                                                         ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
-        void** ptr                                      ///< [out] pointer to device allocation
+        void** pptr                                     ///< [out] pointer to device allocation
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -4003,13 +4003,13 @@ ptr
         {
             // capture parameters
             xe_device_group_alloc_device_mem_params_t params = {
-                hDeviceGroup,
-hDevice,
-flags,
-ordinal,
-size,
-alignment,
-ptr
+                &hDeviceGroup,
+                &hDevice,
+                &flags,
+                &ordinal,
+                &size,
+                &alignment,
+                &pptr
             };
 
             // call each callback registered
@@ -4025,19 +4025,19 @@ ptr
                 }
         }
 
-        *ptr = malloc( size );
+        *pptr = malloc( size );
 
         if( context.enableTracing )
         {
             // capture parameters
             xe_device_group_alloc_device_mem_params_t params = {
-                hDeviceGroup,
-hDevice,
-flags,
-ordinal,
-size,
-alignment,
-ptr
+                &hDeviceGroup,
+                &hDevice,
+                &flags,
+                &ordinal,
+                &size,
+                &alignment,
+                &pptr
             };
 
             // call each callback registered
@@ -4063,7 +4063,7 @@ ptr
         xe_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
-        void** ptr                                      ///< [out] pointer to host allocation
+        void** pptr                                     ///< [out] pointer to host allocation
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -4073,11 +4073,11 @@ ptr
         {
             // capture parameters
             xe_device_group_alloc_host_mem_params_t params = {
-                hDeviceGroup,
-flags,
-size,
-alignment,
-ptr
+                &hDeviceGroup,
+                &flags,
+                &size,
+                &alignment,
+                &pptr
             };
 
             // call each callback registered
@@ -4093,17 +4093,17 @@ ptr
                 }
         }
 
-        *ptr = malloc( size );
+        *pptr = malloc( size );
 
         if( context.enableTracing )
         {
             // capture parameters
             xe_device_group_alloc_host_mem_params_t params = {
-                hDeviceGroup,
-flags,
-size,
-alignment,
-ptr
+                &hDeviceGroup,
+                &flags,
+                &size,
+                &alignment,
+                &pptr
             };
 
             // call each callback registered
@@ -4136,8 +4136,8 @@ ptr
         {
             // capture parameters
             xe_device_group_free_mem_params_t params = {
-                hDeviceGroup,
-ptr
+                &hDeviceGroup,
+                &ptr
             };
 
             // call each callback registered
@@ -4159,8 +4159,8 @@ ptr
         {
             // capture parameters
             xe_device_group_free_mem_params_t params = {
-                hDeviceGroup,
-ptr
+                &hDeviceGroup,
+                &ptr
             };
 
             // call each callback registered
@@ -4195,10 +4195,10 @@ ptr
         {
             // capture parameters
             xe_device_group_get_mem_properties_params_t params = {
-                hDeviceGroup,
-ptr,
-pMemProperties,
-phDevice
+                &hDeviceGroup,
+                &ptr,
+                &pMemProperties,
+                &phDevice
             };
 
             // call each callback registered
@@ -4220,10 +4220,10 @@ phDevice
         {
             // capture parameters
             xe_device_group_get_mem_properties_params_t params = {
-                hDeviceGroup,
-ptr,
-pMemProperties,
-phDevice
+                &hDeviceGroup,
+                &ptr,
+                &pMemProperties,
+                &phDevice
             };
 
             // call each callback registered
@@ -4258,10 +4258,10 @@ phDevice
         {
             // capture parameters
             xe_device_group_get_mem_address_range_params_t params = {
-                hDeviceGroup,
-ptr,
-pBase,
-pSize
+                &hDeviceGroup,
+                &ptr,
+                &pBase,
+                &pSize
             };
 
             // call each callback registered
@@ -4281,10 +4281,10 @@ pSize
         {
             // capture parameters
             xe_device_group_get_mem_address_range_params_t params = {
-                hDeviceGroup,
-ptr,
-pBase,
-pSize
+                &hDeviceGroup,
+                &ptr,
+                &pBase,
+                &pSize
             };
 
             // call each callback registered
@@ -4318,9 +4318,9 @@ pSize
         {
             // capture parameters
             xe_device_group_get_mem_ipc_handle_params_t params = {
-                hDeviceGroup,
-ptr,
-pIpcHandle
+                &hDeviceGroup,
+                &ptr,
+                &pIpcHandle
             };
 
             // call each callback registered
@@ -4340,9 +4340,9 @@ pIpcHandle
         {
             // capture parameters
             xe_device_group_get_mem_ipc_handle_params_t params = {
-                hDeviceGroup,
-ptr,
-pIpcHandle
+                &hDeviceGroup,
+                &ptr,
+                &pIpcHandle
             };
 
             // call each callback registered
@@ -4368,7 +4368,7 @@ pIpcHandle
         xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
         xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
         xe_ipc_memory_flag_t flags,                     ///< [in] flags controlling the operation
-        void** ptr                                      ///< [out] pointer to device allocation in this process
+        void** pptr                                     ///< [out] pointer to device allocation in this process
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -4378,11 +4378,11 @@ pIpcHandle
         {
             // capture parameters
             xe_device_group_open_mem_ipc_handle_params_t params = {
-                hDeviceGroup,
-hDevice,
-handle,
-flags,
-ptr
+                &hDeviceGroup,
+                &hDevice,
+                &handle,
+                &flags,
+                &pptr
             };
 
             // call each callback registered
@@ -4402,11 +4402,11 @@ ptr
         {
             // capture parameters
             xe_device_group_open_mem_ipc_handle_params_t params = {
-                hDeviceGroup,
-hDevice,
-handle,
-flags,
-ptr
+                &hDeviceGroup,
+                &hDevice,
+                &handle,
+                &flags,
+                &pptr
             };
 
             // call each callback registered
@@ -4439,8 +4439,8 @@ ptr
         {
             // capture parameters
             xe_device_group_close_mem_ipc_handle_params_t params = {
-                hDeviceGroup,
-ptr
+                &hDeviceGroup,
+                &ptr
             };
 
             // call each callback registered
@@ -4460,8 +4460,8 @@ ptr
         {
             // capture parameters
             xe_device_group_close_mem_ipc_handle_params_t params = {
-                hDeviceGroup,
-ptr
+                &hDeviceGroup,
+                &ptr
             };
 
             // call each callback registered
@@ -4496,10 +4496,10 @@ ptr
         {
             // capture parameters
             xe_module_create_params_t params = {
-                hDevice,
-desc,
-phModule,
-phBuildLog
+                &hDevice,
+                &desc,
+                &phModule,
+                &phBuildLog
             };
 
             // call each callback registered
@@ -4523,10 +4523,10 @@ phBuildLog
         {
             // capture parameters
             xe_module_create_params_t params = {
-                hDevice,
-desc,
-phModule,
-phBuildLog
+                &hDevice,
+                &desc,
+                &phModule,
+                &phBuildLog
             };
 
             // call each callback registered
@@ -4558,7 +4558,7 @@ phBuildLog
         {
             // capture parameters
             xe_module_destroy_params_t params = {
-                hModule
+                &hModule
             };
 
             // call each callback registered
@@ -4579,7 +4579,7 @@ phBuildLog
         {
             // capture parameters
             xe_module_destroy_params_t params = {
-                hModule
+                &hModule
             };
 
             // call each callback registered
@@ -4611,7 +4611,7 @@ phBuildLog
         {
             // capture parameters
             xe_module_build_log_destroy_params_t params = {
-                hModuleBuildLog
+                &hModuleBuildLog
             };
 
             // call each callback registered
@@ -4632,7 +4632,7 @@ phBuildLog
         {
             // capture parameters
             xe_module_build_log_destroy_params_t params = {
-                hModuleBuildLog
+                &hModuleBuildLog
             };
 
             // call each callback registered
@@ -4666,9 +4666,9 @@ phBuildLog
         {
             // capture parameters
             xe_module_build_log_get_string_params_t params = {
-                hModuleBuildLog,
-pSize,
-pBuildLog
+                &hModuleBuildLog,
+                &pSize,
+                &pBuildLog
             };
 
             // call each callback registered
@@ -4688,9 +4688,9 @@ pBuildLog
         {
             // capture parameters
             xe_module_build_log_get_string_params_t params = {
-                hModuleBuildLog,
-pSize,
-pBuildLog
+                &hModuleBuildLog,
+                &pSize,
+                &pBuildLog
             };
 
             // call each callback registered
@@ -4724,9 +4724,9 @@ pBuildLog
         {
             // capture parameters
             xe_module_get_native_binary_params_t params = {
-                hModule,
-pSize,
-pModuleNativeBinary
+                &hModule,
+                &pSize,
+                &pModuleNativeBinary
             };
 
             // call each callback registered
@@ -4746,9 +4746,9 @@ pModuleNativeBinary
         {
             // capture parameters
             xe_module_get_native_binary_params_t params = {
-                hModule,
-pSize,
-pModuleNativeBinary
+                &hModule,
+                &pSize,
+                &pModuleNativeBinary
             };
 
             // call each callback registered
@@ -4772,7 +4772,7 @@ pModuleNativeBinary
     xeModuleGetGlobalPointer(
         xe_module_handle_t hModule,                     ///< [in] handle of the device
         const char* pGlobalName,                        ///< [in] name of function in global
-        void** pPtr                                     ///< [out] device visible pointer
+        void** pptr                                     ///< [out] device visible pointer
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -4782,9 +4782,9 @@ pModuleNativeBinary
         {
             // capture parameters
             xe_module_get_global_pointer_params_t params = {
-                hModule,
-pGlobalName,
-pPtr
+                &hModule,
+                &pGlobalName,
+                &pptr
             };
 
             // call each callback registered
@@ -4804,9 +4804,9 @@ pPtr
         {
             // capture parameters
             xe_module_get_global_pointer_params_t params = {
-                hModule,
-pGlobalName,
-pPtr
+                &hModule,
+                &pGlobalName,
+                &pptr
             };
 
             // call each callback registered
@@ -4840,9 +4840,9 @@ pPtr
         {
             // capture parameters
             xe_function_create_params_t params = {
-                hModule,
-desc,
-phFunction
+                &hModule,
+                &desc,
+                &phFunction
             };
 
             // call each callback registered
@@ -4864,9 +4864,9 @@ phFunction
         {
             // capture parameters
             xe_function_create_params_t params = {
-                hModule,
-desc,
-phFunction
+                &hModule,
+                &desc,
+                &phFunction
             };
 
             // call each callback registered
@@ -4898,7 +4898,7 @@ phFunction
         {
             // capture parameters
             xe_function_destroy_params_t params = {
-                hFunction
+                &hFunction
             };
 
             // call each callback registered
@@ -4919,7 +4919,7 @@ phFunction
         {
             // capture parameters
             xe_function_destroy_params_t params = {
-                hFunction
+                &hFunction
             };
 
             // call each callback registered
@@ -4953,9 +4953,9 @@ phFunction
         {
             // capture parameters
             xe_module_get_function_pointer_params_t params = {
-                hModule,
-pFunctionName,
-pfnFunction
+                &hModule,
+                &pFunctionName,
+                &pfnFunction
             };
 
             // call each callback registered
@@ -4975,9 +4975,9 @@ pfnFunction
         {
             // capture parameters
             xe_module_get_function_pointer_params_t params = {
-                hModule,
-pFunctionName,
-pfnFunction
+                &hModule,
+                &pFunctionName,
+                &pfnFunction
             };
 
             // call each callback registered
@@ -5012,10 +5012,10 @@ pfnFunction
         {
             // capture parameters
             xe_function_set_group_size_params_t params = {
-                hFunction,
-groupSizeX,
-groupSizeY,
-groupSizeZ
+                &hFunction,
+                &groupSizeX,
+                &groupSizeY,
+                &groupSizeZ
             };
 
             // call each callback registered
@@ -5035,10 +5035,10 @@ groupSizeZ
         {
             // capture parameters
             xe_function_set_group_size_params_t params = {
-                hFunction,
-groupSizeX,
-groupSizeY,
-groupSizeZ
+                &hFunction,
+                &groupSizeX,
+                &groupSizeY,
+                &groupSizeZ
             };
 
             // call each callback registered
@@ -5076,13 +5076,13 @@ groupSizeZ
         {
             // capture parameters
             xe_function_suggest_group_size_params_t params = {
-                hFunction,
-globalSizeX,
-globalSizeY,
-globalSizeZ,
-groupSizeX,
-groupSizeY,
-groupSizeZ
+                &hFunction,
+                &globalSizeX,
+                &globalSizeY,
+                &globalSizeZ,
+                &groupSizeX,
+                &groupSizeY,
+                &groupSizeZ
             };
 
             // call each callback registered
@@ -5102,13 +5102,13 @@ groupSizeZ
         {
             // capture parameters
             xe_function_suggest_group_size_params_t params = {
-                hFunction,
-globalSizeX,
-globalSizeY,
-globalSizeZ,
-groupSizeX,
-groupSizeY,
-groupSizeZ
+                &hFunction,
+                &globalSizeX,
+                &globalSizeY,
+                &globalSizeZ,
+                &groupSizeX,
+                &groupSizeY,
+                &groupSizeZ
             };
 
             // call each callback registered
@@ -5144,10 +5144,10 @@ groupSizeZ
         {
             // capture parameters
             xe_function_set_argument_value_params_t params = {
-                hFunction,
-argIndex,
-argSize,
-pArgValue
+                &hFunction,
+                &argIndex,
+                &argSize,
+                &pArgValue
             };
 
             // call each callback registered
@@ -5167,10 +5167,10 @@ pArgValue
         {
             // capture parameters
             xe_function_set_argument_value_params_t params = {
-                hFunction,
-argIndex,
-argSize,
-pArgValue
+                &hFunction,
+                &argIndex,
+                &argSize,
+                &pArgValue
             };
 
             // call each callback registered
@@ -5204,9 +5204,9 @@ pArgValue
         {
             // capture parameters
             xe_function_set_attribute_params_t params = {
-                hFunction,
-attr,
-value
+                &hFunction,
+                &attr,
+                &value
             };
 
             // call each callback registered
@@ -5226,9 +5226,9 @@ value
         {
             // capture parameters
             xe_function_set_attribute_params_t params = {
-                hFunction,
-attr,
-value
+                &hFunction,
+                &attr,
+                &value
             };
 
             // call each callback registered
@@ -5262,9 +5262,9 @@ value
         {
             // capture parameters
             xe_function_get_attribute_params_t params = {
-                hFunction,
-attr,
-pValue
+                &hFunction,
+                &attr,
+                &pValue
             };
 
             // call each callback registered
@@ -5284,9 +5284,9 @@ pValue
         {
             // capture parameters
             xe_function_get_attribute_params_t params = {
-                hFunction,
-attr,
-pValue
+                &hFunction,
+                &attr,
+                &pValue
             };
 
             // call each callback registered
@@ -5324,12 +5324,12 @@ pValue
         {
             // capture parameters
             xe_command_list_append_launch_function_params_t params = {
-                hCommandList,
-hFunction,
-pLaunchFuncArgs,
-hSignalEvent,
-numWaitEvents,
-phWaitEvents
+                &hCommandList,
+                &hFunction,
+                &pLaunchFuncArgs,
+                &hSignalEvent,
+                &numWaitEvents,
+                &phWaitEvents
             };
 
             // call each callback registered
@@ -5349,12 +5349,12 @@ phWaitEvents
         {
             // capture parameters
             xe_command_list_append_launch_function_params_t params = {
-                hCommandList,
-hFunction,
-pLaunchFuncArgs,
-hSignalEvent,
-numWaitEvents,
-phWaitEvents
+                &hCommandList,
+                &hFunction,
+                &pLaunchFuncArgs,
+                &hSignalEvent,
+                &numWaitEvents,
+                &phWaitEvents
             };
 
             // call each callback registered
@@ -5392,12 +5392,12 @@ phWaitEvents
         {
             // capture parameters
             xe_command_list_append_launch_function_indirect_params_t params = {
-                hCommandList,
-hFunction,
-pLaunchArgumentsBuffer,
-hSignalEvent,
-numWaitEvents,
-phWaitEvents
+                &hCommandList,
+                &hFunction,
+                &pLaunchArgumentsBuffer,
+                &hSignalEvent,
+                &numWaitEvents,
+                &phWaitEvents
             };
 
             // call each callback registered
@@ -5417,12 +5417,12 @@ phWaitEvents
         {
             // capture parameters
             xe_command_list_append_launch_function_indirect_params_t params = {
-                hCommandList,
-hFunction,
-pLaunchArgumentsBuffer,
-hSignalEvent,
-numWaitEvents,
-phWaitEvents
+                &hCommandList,
+                &hFunction,
+                &pLaunchArgumentsBuffer,
+                &hSignalEvent,
+                &numWaitEvents,
+                &phWaitEvents
             };
 
             // call each callback registered
@@ -5465,14 +5465,14 @@ phWaitEvents
         {
             // capture parameters
             xe_command_list_append_launch_multiple_functions_indirect_params_t params = {
-                hCommandList,
-numFunctions,
-phFunctions,
-pNumLaunchArguments,
-pLaunchArgumentsBuffer,
-hSignalEvent,
-numWaitEvents,
-phWaitEvents
+                &hCommandList,
+                &numFunctions,
+                &phFunctions,
+                &pNumLaunchArguments,
+                &pLaunchArgumentsBuffer,
+                &hSignalEvent,
+                &numWaitEvents,
+                &phWaitEvents
             };
 
             // call each callback registered
@@ -5492,14 +5492,14 @@ phWaitEvents
         {
             // capture parameters
             xe_command_list_append_launch_multiple_functions_indirect_params_t params = {
-                hCommandList,
-numFunctions,
-phFunctions,
-pNumLaunchArguments,
-pLaunchArgumentsBuffer,
-hSignalEvent,
-numWaitEvents,
-phWaitEvents
+                &hCommandList,
+                &numFunctions,
+                &phFunctions,
+                &pNumLaunchArguments,
+                &pLaunchArgumentsBuffer,
+                &hSignalEvent,
+                &numWaitEvents,
+                &phWaitEvents
             };
 
             // call each callback registered
@@ -5537,12 +5537,12 @@ phWaitEvents
         {
             // capture parameters
             xe_command_list_append_launch_host_function_params_t params = {
-                hCommandList,
-pfnHostFunc,
-pUserData,
-hSignalEvent,
-numWaitEvents,
-phWaitEvents
+                &hCommandList,
+                &pfnHostFunc,
+                &pUserData,
+                &hSignalEvent,
+                &numWaitEvents,
+                &phWaitEvents
             };
 
             // call each callback registered
@@ -5562,12 +5562,12 @@ phWaitEvents
         {
             // capture parameters
             xe_command_list_append_launch_host_function_params_t params = {
-                hCommandList,
-pfnHostFunc,
-pUserData,
-hSignalEvent,
-numWaitEvents,
-phWaitEvents
+                &hCommandList,
+                &pfnHostFunc,
+                &pUserData,
+                &hSignalEvent,
+                &numWaitEvents,
+                &phWaitEvents
             };
 
             // call each callback registered
@@ -5601,9 +5601,9 @@ phWaitEvents
         {
             // capture parameters
             xe_device_make_memory_resident_params_t params = {
-                hDevice,
-ptr,
-size
+                &hDevice,
+                &ptr,
+                &size
             };
 
             // call each callback registered
@@ -5623,9 +5623,9 @@ size
         {
             // capture parameters
             xe_device_make_memory_resident_params_t params = {
-                hDevice,
-ptr,
-size
+                &hDevice,
+                &ptr,
+                &size
             };
 
             // call each callback registered
@@ -5659,9 +5659,9 @@ size
         {
             // capture parameters
             xe_device_evict_memory_params_t params = {
-                hDevice,
-ptr,
-size
+                &hDevice,
+                &ptr,
+                &size
             };
 
             // call each callback registered
@@ -5681,9 +5681,9 @@ size
         {
             // capture parameters
             xe_device_evict_memory_params_t params = {
-                hDevice,
-ptr,
-size
+                &hDevice,
+                &ptr,
+                &size
             };
 
             // call each callback registered
@@ -5716,8 +5716,8 @@ size
         {
             // capture parameters
             xe_device_make_image_resident_params_t params = {
-                hDevice,
-hImage
+                &hDevice,
+                &hImage
             };
 
             // call each callback registered
@@ -5737,8 +5737,8 @@ hImage
         {
             // capture parameters
             xe_device_make_image_resident_params_t params = {
-                hDevice,
-hImage
+                &hDevice,
+                &hImage
             };
 
             // call each callback registered
@@ -5771,8 +5771,8 @@ hImage
         {
             // capture parameters
             xe_device_evict_image_params_t params = {
-                hDevice,
-hImage
+                &hDevice,
+                &hImage
             };
 
             // call each callback registered
@@ -5792,8 +5792,8 @@ hImage
         {
             // capture parameters
             xe_device_evict_image_params_t params = {
-                hDevice,
-hImage
+                &hDevice,
+                &hImage
             };
 
             // call each callback registered
@@ -5827,9 +5827,9 @@ hImage
         {
             // capture parameters
             xe_sampler_create_params_t params = {
-                hDevice,
-desc,
-phSampler
+                &hDevice,
+                &desc,
+                &phSampler
             };
 
             // call each callback registered
@@ -5851,9 +5851,9 @@ phSampler
         {
             // capture parameters
             xe_sampler_create_params_t params = {
-                hDevice,
-desc,
-phSampler
+                &hDevice,
+                &desc,
+                &phSampler
             };
 
             // call each callback registered
@@ -5885,7 +5885,7 @@ phSampler
         {
             // capture parameters
             xe_sampler_destroy_params_t params = {
-                hSampler
+                &hSampler
             };
 
             // call each callback registered
@@ -5906,7 +5906,7 @@ phSampler
         {
             // capture parameters
             xe_sampler_destroy_params_t params = {
-                hSampler
+                &hSampler
             };
 
             // call each callback registered

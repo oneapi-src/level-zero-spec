@@ -468,10 +468,10 @@ namespace xe
         void __xecall
         AppendMemoryCopyRegion(
             void* dstptr,                                   ///< [in] pointer to destination memory to copy to
-            copy_region_t* dstRegion,                       ///< [in] pointer to destination region to copy to
+            const copy_region_t* dstRegion,                 ///< [in] pointer to destination region to copy to
             uint32_t dstPitch,                              ///< [in] destination pitch in bytes
             const void* srcptr,                             ///< [in] pointer to source memory to copy from
-            copy_region_t* srcRegion,                       ///< [in] pointer to source region to copy from
+            const copy_region_t* srcRegion,                 ///< [in] pointer to source region to copy from
             uint32_t srcPitch,                              ///< [in] source pitch in bytes
             Event* pEvent = nullptr                         ///< [in][optional] pointer to the event to signal on completion
             );
@@ -507,8 +507,8 @@ namespace xe
         AppendImageCopyRegion(
             Image* pDstImage,                               ///< [in] pointer to destination image to copy to
             Image* pSrcImage,                               ///< [in] pointer to source image to copy from
-            image_region_t* pDstRegion = nullptr,           ///< [in][optional] destination region descriptor
-            image_region_t* pSrcRegion = nullptr,           ///< [in][optional] source region descriptor
+            const image_region_t* pDstRegion = nullptr,     ///< [in][optional] destination region descriptor
+            const image_region_t* pSrcRegion = nullptr,     ///< [in][optional] source region descriptor
             Event* pEvent = nullptr                         ///< [in][optional] pointer to the event to signal on completion
             );
 
@@ -530,7 +530,7 @@ namespace xe
         AppendImageCopyToMemory(
             void* dstptr,                                   ///< [in] pointer to destination memory to copy to
             Image* pSrcImage,                               ///< [in] pointer to source image to copy from
-            image_region_t* pSrcRegion = nullptr,           ///< [in][optional] source region descriptor
+            const image_region_t* pSrcRegion = nullptr,     ///< [in][optional] source region descriptor
             Event* pEvent = nullptr                         ///< [in][optional] pointer to the event to signal on completion
             );
 
@@ -552,7 +552,7 @@ namespace xe
         AppendImageCopyFromMemory(
             Image* pDstImage,                               ///< [in] pointer to destination image to copy to
             const void* srcptr,                             ///< [in] pointer to source memory to copy from
-            image_region_t* pDstRegion = nullptr,           ///< [in][optional] destination region descriptor
+            const image_region_t* pDstRegion = nullptr,     ///< [in][optional] destination region descriptor
             Event* pEvent = nullptr                         ///< [in][optional] pointer to the event to signal on completion
             );
 

@@ -42,7 +42,7 @@ extern "C" {
 /// @brief Callback function parameters for xeInit 
 typedef struct _xe_init_params_t
 {
-    xe_init_flag_t flags;
+    xe_init_flag_t* pflags;
 } xe_init_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -65,9 +65,9 @@ typedef struct _xe_global_callbacks_t
 /// @brief Callback function parameters for xeDeviceGet 
 typedef struct _xe_device_get_params_t
 {
-    xe_device_group_handle_t hDeviceGroup;
-    uint32_t* pCount;
-    xe_device_handle_t* phDevices;
+    xe_device_group_handle_t* phDeviceGroup;
+    uint32_t** ppCount;
+    xe_device_handle_t** pphDevices;
 } xe_device_get_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -83,9 +83,9 @@ typedef void (__xecall *xe_pfnDeviceGetCb_t)(
 /// @brief Callback function parameters for xeDeviceGetSubDevices 
 typedef struct _xe_device_get_sub_devices_params_t
 {
-    xe_device_handle_t hDevice;
-    uint32_t* pCount;
-    xe_device_handle_t* phSubdevices;
+    xe_device_handle_t* phDevice;
+    uint32_t** ppCount;
+    xe_device_handle_t** pphSubdevices;
 } xe_device_get_sub_devices_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -101,9 +101,9 @@ typedef void (__xecall *xe_pfnDeviceGetSubDevicesCb_t)(
 /// @brief Callback function parameters for xeDeviceGetP2PProperties 
 typedef struct _xe_device_get_p2_p_properties_params_t
 {
-    xe_device_handle_t hDevice;
-    xe_device_handle_t hPeerDevice;
-    xe_device_p2p_properties_t* pP2PProperties;
+    xe_device_handle_t* phDevice;
+    xe_device_handle_t* phPeerDevice;
+    xe_device_p2p_properties_t** ppP2PProperties;
 } xe_device_get_p2_p_properties_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -119,9 +119,9 @@ typedef void (__xecall *xe_pfnDeviceGetP2PPropertiesCb_t)(
 /// @brief Callback function parameters for xeDeviceCanAccessPeer 
 typedef struct _xe_device_can_access_peer_params_t
 {
-    xe_device_handle_t hDevice;
-    xe_device_handle_t hPeerDevice;
-    xe_bool_t* value;
+    xe_device_handle_t* phDevice;
+    xe_device_handle_t* phPeerDevice;
+    xe_bool_t** pvalue;
 } xe_device_can_access_peer_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -137,8 +137,8 @@ typedef void (__xecall *xe_pfnDeviceCanAccessPeerCb_t)(
 /// @brief Callback function parameters for xeDeviceSetIntermediateCacheConfig 
 typedef struct _xe_device_set_intermediate_cache_config_params_t
 {
-    xe_device_handle_t hDevice;
-    xe_cache_config_t CacheConfig;
+    xe_device_handle_t* phDevice;
+    xe_cache_config_t* pCacheConfig;
 } xe_device_set_intermediate_cache_config_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -154,8 +154,8 @@ typedef void (__xecall *xe_pfnDeviceSetIntermediateCacheConfigCb_t)(
 /// @brief Callback function parameters for xeDeviceSetLastLevelCacheConfig 
 typedef struct _xe_device_set_last_level_cache_config_params_t
 {
-    xe_device_handle_t hDevice;
-    xe_cache_config_t CacheConfig;
+    xe_device_handle_t* phDevice;
+    xe_cache_config_t* pCacheConfig;
 } xe_device_set_last_level_cache_config_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -171,7 +171,7 @@ typedef void (__xecall *xe_pfnDeviceSetLastLevelCacheConfigCb_t)(
 /// @brief Callback function parameters for xeDeviceSystemBarrier 
 typedef struct _xe_device_system_barrier_params_t
 {
-    xe_device_handle_t hDevice;
+    xe_device_handle_t* phDevice;
 } xe_device_system_barrier_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -188,10 +188,10 @@ typedef void (__xecall *xe_pfnDeviceSystemBarrierCb_t)(
 #if XE_ENABLE_OCL_INTEROP
 typedef struct _xe_device_register_cl_memory_params_t
 {
-    xe_device_handle_t hDevice;
-    cl_context context;
-    cl_mem mem;
-    void** ptr;
+    xe_device_handle_t* phDevice;
+    cl_context* pcontext;
+    cl_mem* pmem;
+    void*** pptr;
 } xe_device_register_cl_memory_params_t;
 #endif // XE_ENABLE_OCL_INTEROP
 
@@ -211,10 +211,10 @@ typedef void (__xecall *xe_pfnDeviceRegisterCLMemoryCb_t)(
 #if XE_ENABLE_OCL_INTEROP
 typedef struct _xe_device_register_cl_program_params_t
 {
-    xe_device_handle_t hDevice;
-    cl_context context;
-    cl_program program;
-    xe_module_handle_t* phModule;
+    xe_device_handle_t* phDevice;
+    cl_context* pcontext;
+    cl_program* pprogram;
+    xe_module_handle_t** pphModule;
 } xe_device_register_cl_program_params_t;
 #endif // XE_ENABLE_OCL_INTEROP
 
@@ -234,10 +234,10 @@ typedef void (__xecall *xe_pfnDeviceRegisterCLProgramCb_t)(
 #if XE_ENABLE_OCL_INTEROP
 typedef struct _xe_device_register_cl_command_queue_params_t
 {
-    xe_device_handle_t hDevice;
-    cl_context context;
-    cl_command_queue command_queue;
-    xe_command_queue_handle_t* phCommandQueue;
+    xe_device_handle_t* phDevice;
+    cl_context* pcontext;
+    cl_command_queue* pcommand_queue;
+    xe_command_queue_handle_t** pphCommandQueue;
 } xe_device_register_cl_command_queue_params_t;
 #endif // XE_ENABLE_OCL_INTEROP
 
@@ -256,9 +256,9 @@ typedef void (__xecall *xe_pfnDeviceRegisterCLCommandQueueCb_t)(
 /// @brief Callback function parameters for xeDeviceMakeMemoryResident 
 typedef struct _xe_device_make_memory_resident_params_t
 {
-    xe_device_handle_t hDevice;
-    void* ptr;
-    size_t size;
+    xe_device_handle_t* phDevice;
+    void** pptr;
+    size_t* psize;
 } xe_device_make_memory_resident_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -274,9 +274,9 @@ typedef void (__xecall *xe_pfnDeviceMakeMemoryResidentCb_t)(
 /// @brief Callback function parameters for xeDeviceEvictMemory 
 typedef struct _xe_device_evict_memory_params_t
 {
-    xe_device_handle_t hDevice;
-    void* ptr;
-    size_t size;
+    xe_device_handle_t* phDevice;
+    void** pptr;
+    size_t* psize;
 } xe_device_evict_memory_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -292,8 +292,8 @@ typedef void (__xecall *xe_pfnDeviceEvictMemoryCb_t)(
 /// @brief Callback function parameters for xeDeviceMakeImageResident 
 typedef struct _xe_device_make_image_resident_params_t
 {
-    xe_device_handle_t hDevice;
-    xe_image_handle_t hImage;
+    xe_device_handle_t* phDevice;
+    xe_image_handle_t* phImage;
 } xe_device_make_image_resident_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -309,8 +309,8 @@ typedef void (__xecall *xe_pfnDeviceMakeImageResidentCb_t)(
 /// @brief Callback function parameters for xeDeviceEvictImage 
 typedef struct _xe_device_evict_image_params_t
 {
-    xe_device_handle_t hDevice;
-    xe_image_handle_t hImage;
+    xe_device_handle_t* phDevice;
+    xe_image_handle_t* phImage;
 } xe_device_evict_image_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -352,8 +352,8 @@ typedef struct _xe_device_callbacks_t
 /// @brief Callback function parameters for xeDeviceGroupGet 
 typedef struct _xe_device_group_get_params_t
 {
-    uint32_t* pCount;
-    xe_device_group_handle_t* phDeviceGroups;
+    uint32_t** ppCount;
+    xe_device_group_handle_t** pphDeviceGroups;
 } xe_device_group_get_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -369,8 +369,8 @@ typedef void (__xecall *xe_pfnDeviceGroupGetCb_t)(
 /// @brief Callback function parameters for xeDeviceGroupGetDriverVersion 
 typedef struct _xe_device_group_get_driver_version_params_t
 {
-    xe_device_group_handle_t hDeviceGroup;
-    uint32_t* version;
+    xe_device_group_handle_t* phDeviceGroup;
+    uint32_t** pversion;
 } xe_device_group_get_driver_version_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -386,8 +386,8 @@ typedef void (__xecall *xe_pfnDeviceGroupGetDriverVersionCb_t)(
 /// @brief Callback function parameters for xeDeviceGroupGetApiVersion 
 typedef struct _xe_device_group_get_api_version_params_t
 {
-    xe_device_group_handle_t hDeviceGroup;
-    xe_api_version_t* version;
+    xe_device_group_handle_t* phDeviceGroup;
+    xe_api_version_t** pversion;
 } xe_device_group_get_api_version_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -403,8 +403,8 @@ typedef void (__xecall *xe_pfnDeviceGroupGetApiVersionCb_t)(
 /// @brief Callback function parameters for xeDeviceGroupGetDeviceProperties 
 typedef struct _xe_device_group_get_device_properties_params_t
 {
-    xe_device_group_handle_t hDeviceGroup;
-    xe_device_properties_t* pDeviceProperties;
+    xe_device_group_handle_t* phDeviceGroup;
+    xe_device_properties_t** ppDeviceProperties;
 } xe_device_group_get_device_properties_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -420,8 +420,8 @@ typedef void (__xecall *xe_pfnDeviceGroupGetDevicePropertiesCb_t)(
 /// @brief Callback function parameters for xeDeviceGroupGetComputeProperties 
 typedef struct _xe_device_group_get_compute_properties_params_t
 {
-    xe_device_group_handle_t hDeviceGroup;
-    xe_device_compute_properties_t* pComputeProperties;
+    xe_device_group_handle_t* phDeviceGroup;
+    xe_device_compute_properties_t** ppComputeProperties;
 } xe_device_group_get_compute_properties_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -437,9 +437,9 @@ typedef void (__xecall *xe_pfnDeviceGroupGetComputePropertiesCb_t)(
 /// @brief Callback function parameters for xeDeviceGroupGetMemoryProperties 
 typedef struct _xe_device_group_get_memory_properties_params_t
 {
-    xe_device_group_handle_t hDeviceGroup;
-    uint32_t* pCount;
-    xe_device_memory_properties_t* pMemProperties;
+    xe_device_group_handle_t* phDeviceGroup;
+    uint32_t** ppCount;
+    xe_device_memory_properties_t** ppMemProperties;
 } xe_device_group_get_memory_properties_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -455,8 +455,8 @@ typedef void (__xecall *xe_pfnDeviceGroupGetMemoryPropertiesCb_t)(
 /// @brief Callback function parameters for xeDeviceGroupGetMemoryAccessProperties 
 typedef struct _xe_device_group_get_memory_access_properties_params_t
 {
-    xe_device_group_handle_t hDeviceGroup;
-    xe_device_memory_access_properties_t* pMemAccessProperties;
+    xe_device_group_handle_t* phDeviceGroup;
+    xe_device_memory_access_properties_t** ppMemAccessProperties;
 } xe_device_group_get_memory_access_properties_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -472,8 +472,8 @@ typedef void (__xecall *xe_pfnDeviceGroupGetMemoryAccessPropertiesCb_t)(
 /// @brief Callback function parameters for xeDeviceGroupGetCacheProperties 
 typedef struct _xe_device_group_get_cache_properties_params_t
 {
-    xe_device_group_handle_t hDeviceGroup;
-    xe_device_cache_properties_t* pCacheProperties;
+    xe_device_group_handle_t* phDeviceGroup;
+    xe_device_cache_properties_t** ppCacheProperties;
 } xe_device_group_get_cache_properties_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -489,8 +489,8 @@ typedef void (__xecall *xe_pfnDeviceGroupGetCachePropertiesCb_t)(
 /// @brief Callback function parameters for xeDeviceGroupGetImageProperties 
 typedef struct _xe_device_group_get_image_properties_params_t
 {
-    xe_device_group_handle_t hDeviceGroup;
-    xe_device_image_properties_t* pImageProperties;
+    xe_device_group_handle_t* phDeviceGroup;
+    xe_device_image_properties_t** ppImageProperties;
 } xe_device_group_get_image_properties_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -506,14 +506,14 @@ typedef void (__xecall *xe_pfnDeviceGroupGetImagePropertiesCb_t)(
 /// @brief Callback function parameters for xeDeviceGroupAllocSharedMem 
 typedef struct _xe_device_group_alloc_shared_mem_params_t
 {
-    xe_device_group_handle_t hDeviceGroup;
-    xe_device_handle_t hDevice;
-    xe_device_mem_alloc_flag_t device_flags;
-    uint32_t ordinal;
-    xe_host_mem_alloc_flag_t host_flags;
-    size_t size;
-    size_t alignment;
-    void** ptr;
+    xe_device_group_handle_t* phDeviceGroup;
+    xe_device_handle_t* phDevice;
+    xe_device_mem_alloc_flag_t* pdevice_flags;
+    uint32_t* pordinal;
+    xe_host_mem_alloc_flag_t* phost_flags;
+    size_t* psize;
+    size_t* palignment;
+    void*** ppptr;
 } xe_device_group_alloc_shared_mem_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -529,13 +529,13 @@ typedef void (__xecall *xe_pfnDeviceGroupAllocSharedMemCb_t)(
 /// @brief Callback function parameters for xeDeviceGroupAllocDeviceMem 
 typedef struct _xe_device_group_alloc_device_mem_params_t
 {
-    xe_device_group_handle_t hDeviceGroup;
-    xe_device_handle_t hDevice;
-    xe_device_mem_alloc_flag_t flags;
-    uint32_t ordinal;
-    size_t size;
-    size_t alignment;
-    void** ptr;
+    xe_device_group_handle_t* phDeviceGroup;
+    xe_device_handle_t* phDevice;
+    xe_device_mem_alloc_flag_t* pflags;
+    uint32_t* pordinal;
+    size_t* psize;
+    size_t* palignment;
+    void*** ppptr;
 } xe_device_group_alloc_device_mem_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -551,11 +551,11 @@ typedef void (__xecall *xe_pfnDeviceGroupAllocDeviceMemCb_t)(
 /// @brief Callback function parameters for xeDeviceGroupAllocHostMem 
 typedef struct _xe_device_group_alloc_host_mem_params_t
 {
-    xe_device_group_handle_t hDeviceGroup;
-    xe_host_mem_alloc_flag_t flags;
-    size_t size;
-    size_t alignment;
-    void** ptr;
+    xe_device_group_handle_t* phDeviceGroup;
+    xe_host_mem_alloc_flag_t* pflags;
+    size_t* psize;
+    size_t* palignment;
+    void*** ppptr;
 } xe_device_group_alloc_host_mem_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -571,8 +571,8 @@ typedef void (__xecall *xe_pfnDeviceGroupAllocHostMemCb_t)(
 /// @brief Callback function parameters for xeDeviceGroupFreeMem 
 typedef struct _xe_device_group_free_mem_params_t
 {
-    xe_device_group_handle_t hDeviceGroup;
-    void* ptr;
+    xe_device_group_handle_t* phDeviceGroup;
+    void** pptr;
 } xe_device_group_free_mem_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -588,10 +588,10 @@ typedef void (__xecall *xe_pfnDeviceGroupFreeMemCb_t)(
 /// @brief Callback function parameters for xeDeviceGroupGetMemProperties 
 typedef struct _xe_device_group_get_mem_properties_params_t
 {
-    xe_device_group_handle_t hDeviceGroup;
-    const void* ptr;
-    xe_memory_allocation_properties_t* pMemProperties;
-    xe_device_handle_t* phDevice;
+    xe_device_group_handle_t* phDeviceGroup;
+    const void** pptr;
+    xe_memory_allocation_properties_t** ppMemProperties;
+    xe_device_handle_t** pphDevice;
 } xe_device_group_get_mem_properties_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -607,10 +607,10 @@ typedef void (__xecall *xe_pfnDeviceGroupGetMemPropertiesCb_t)(
 /// @brief Callback function parameters for xeDeviceGroupGetMemAddressRange 
 typedef struct _xe_device_group_get_mem_address_range_params_t
 {
-    xe_device_group_handle_t hDeviceGroup;
-    const void* ptr;
-    void** pBase;
-    size_t* pSize;
+    xe_device_group_handle_t* phDeviceGroup;
+    const void** pptr;
+    void*** ppBase;
+    size_t** ppSize;
 } xe_device_group_get_mem_address_range_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -626,9 +626,9 @@ typedef void (__xecall *xe_pfnDeviceGroupGetMemAddressRangeCb_t)(
 /// @brief Callback function parameters for xeDeviceGroupGetMemIpcHandle 
 typedef struct _xe_device_group_get_mem_ipc_handle_params_t
 {
-    xe_device_group_handle_t hDeviceGroup;
-    const void* ptr;
-    xe_ipc_mem_handle_t* pIpcHandle;
+    xe_device_group_handle_t* phDeviceGroup;
+    const void** pptr;
+    xe_ipc_mem_handle_t** ppIpcHandle;
 } xe_device_group_get_mem_ipc_handle_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -644,11 +644,11 @@ typedef void (__xecall *xe_pfnDeviceGroupGetMemIpcHandleCb_t)(
 /// @brief Callback function parameters for xeDeviceGroupOpenMemIpcHandle 
 typedef struct _xe_device_group_open_mem_ipc_handle_params_t
 {
-    xe_device_group_handle_t hDeviceGroup;
-    xe_device_handle_t hDevice;
-    xe_ipc_mem_handle_t handle;
-    xe_ipc_memory_flag_t flags;
-    void** ptr;
+    xe_device_group_handle_t* phDeviceGroup;
+    xe_device_handle_t* phDevice;
+    xe_ipc_mem_handle_t* phandle;
+    xe_ipc_memory_flag_t* pflags;
+    void*** ppptr;
 } xe_device_group_open_mem_ipc_handle_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -664,8 +664,8 @@ typedef void (__xecall *xe_pfnDeviceGroupOpenMemIpcHandleCb_t)(
 /// @brief Callback function parameters for xeDeviceGroupCloseMemIpcHandle 
 typedef struct _xe_device_group_close_mem_ipc_handle_params_t
 {
-    xe_device_group_handle_t hDeviceGroup;
-    const void* ptr;
+    xe_device_group_handle_t* phDeviceGroup;
+    const void** pptr;
 } xe_device_group_close_mem_ipc_handle_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -705,9 +705,9 @@ typedef struct _xe_device_group_callbacks_t
 /// @brief Callback function parameters for xeCommandQueueCreate 
 typedef struct _xe_command_queue_create_params_t
 {
-    xe_device_handle_t hDevice;
-    const xe_command_queue_desc_t* desc;
-    xe_command_queue_handle_t* phCommandQueue;
+    xe_device_handle_t* phDevice;
+    const xe_command_queue_desc_t** pdesc;
+    xe_command_queue_handle_t** pphCommandQueue;
 } xe_command_queue_create_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -723,7 +723,7 @@ typedef void (__xecall *xe_pfnCommandQueueCreateCb_t)(
 /// @brief Callback function parameters for xeCommandQueueDestroy 
 typedef struct _xe_command_queue_destroy_params_t
 {
-    xe_command_queue_handle_t hCommandQueue;
+    xe_command_queue_handle_t* phCommandQueue;
 } xe_command_queue_destroy_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -739,10 +739,10 @@ typedef void (__xecall *xe_pfnCommandQueueDestroyCb_t)(
 /// @brief Callback function parameters for xeCommandQueueExecuteCommandLists 
 typedef struct _xe_command_queue_execute_command_lists_params_t
 {
-    xe_command_queue_handle_t hCommandQueue;
-    uint32_t numCommandLists;
-    xe_command_list_handle_t* phCommandLists;
-    xe_fence_handle_t hFence;
+    xe_command_queue_handle_t* phCommandQueue;
+    uint32_t* pnumCommandLists;
+    xe_command_list_handle_t** pphCommandLists;
+    xe_fence_handle_t* phFence;
 } xe_command_queue_execute_command_lists_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -758,8 +758,8 @@ typedef void (__xecall *xe_pfnCommandQueueExecuteCommandListsCb_t)(
 /// @brief Callback function parameters for xeCommandQueueSynchronize 
 typedef struct _xe_command_queue_synchronize_params_t
 {
-    xe_command_queue_handle_t hCommandQueue;
-    uint32_t timeout;
+    xe_command_queue_handle_t* phCommandQueue;
+    uint32_t* ptimeout;
 } xe_command_queue_synchronize_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -785,9 +785,9 @@ typedef struct _xe_command_queue_callbacks_t
 /// @brief Callback function parameters for xeCommandListCreate 
 typedef struct _xe_command_list_create_params_t
 {
-    xe_device_handle_t hDevice;
-    const xe_command_list_desc_t* desc;
-    xe_command_list_handle_t* phCommandList;
+    xe_device_handle_t* phDevice;
+    const xe_command_list_desc_t** pdesc;
+    xe_command_list_handle_t** pphCommandList;
 } xe_command_list_create_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -803,9 +803,9 @@ typedef void (__xecall *xe_pfnCommandListCreateCb_t)(
 /// @brief Callback function parameters for xeCommandListCreateImmediate 
 typedef struct _xe_command_list_create_immediate_params_t
 {
-    xe_device_handle_t hDevice;
-    const xe_command_queue_desc_t* altdesc;
-    xe_command_list_handle_t* phCommandList;
+    xe_device_handle_t* phDevice;
+    const xe_command_queue_desc_t** paltdesc;
+    xe_command_list_handle_t** pphCommandList;
 } xe_command_list_create_immediate_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -821,7 +821,7 @@ typedef void (__xecall *xe_pfnCommandListCreateImmediateCb_t)(
 /// @brief Callback function parameters for xeCommandListDestroy 
 typedef struct _xe_command_list_destroy_params_t
 {
-    xe_command_list_handle_t hCommandList;
+    xe_command_list_handle_t* phCommandList;
 } xe_command_list_destroy_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -837,7 +837,7 @@ typedef void (__xecall *xe_pfnCommandListDestroyCb_t)(
 /// @brief Callback function parameters for xeCommandListClose 
 typedef struct _xe_command_list_close_params_t
 {
-    xe_command_list_handle_t hCommandList;
+    xe_command_list_handle_t* phCommandList;
 } xe_command_list_close_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -853,7 +853,7 @@ typedef void (__xecall *xe_pfnCommandListCloseCb_t)(
 /// @brief Callback function parameters for xeCommandListReset 
 typedef struct _xe_command_list_reset_params_t
 {
-    xe_command_list_handle_t hCommandList;
+    xe_command_list_handle_t* phCommandList;
 } xe_command_list_reset_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -869,9 +869,9 @@ typedef void (__xecall *xe_pfnCommandListResetCb_t)(
 /// @brief Callback function parameters for xeCommandListSetParameter 
 typedef struct _xe_command_list_set_parameter_params_t
 {
-    xe_command_list_handle_t hCommandList;
-    xe_command_list_parameter_t parameter;
-    uint32_t value;
+    xe_command_list_handle_t* phCommandList;
+    xe_command_list_parameter_t* pparameter;
+    uint32_t* pvalue;
 } xe_command_list_set_parameter_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -887,9 +887,9 @@ typedef void (__xecall *xe_pfnCommandListSetParameterCb_t)(
 /// @brief Callback function parameters for xeCommandListGetParameter 
 typedef struct _xe_command_list_get_parameter_params_t
 {
-    xe_command_list_handle_t hCommandList;
-    xe_command_list_parameter_t parameter;
-    uint32_t* value;
+    xe_command_list_handle_t* phCommandList;
+    xe_command_list_parameter_t* pparameter;
+    uint32_t** pvalue;
 } xe_command_list_get_parameter_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -905,7 +905,7 @@ typedef void (__xecall *xe_pfnCommandListGetParameterCb_t)(
 /// @brief Callback function parameters for xeCommandListResetParameters 
 typedef struct _xe_command_list_reset_parameters_params_t
 {
-    xe_command_list_handle_t hCommandList;
+    xe_command_list_handle_t* phCommandList;
 } xe_command_list_reset_parameters_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -921,9 +921,9 @@ typedef void (__xecall *xe_pfnCommandListResetParametersCb_t)(
 /// @brief Callback function parameters for xeCommandListReserveSpace 
 typedef struct _xe_command_list_reserve_space_params_t
 {
-    xe_command_list_handle_t hCommandList;
-    size_t size;
-    void** ptr;
+    xe_command_list_handle_t* phCommandList;
+    size_t* psize;
+    void*** pptr;
 } xe_command_list_reserve_space_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -939,10 +939,10 @@ typedef void (__xecall *xe_pfnCommandListReserveSpaceCb_t)(
 /// @brief Callback function parameters for xeCommandListAppendBarrier 
 typedef struct _xe_command_list_append_barrier_params_t
 {
-    xe_command_list_handle_t hCommandList;
-    xe_event_handle_t hSignalEvent;
-    uint32_t numWaitEvents;
-    xe_event_handle_t* phWaitEvents;
+    xe_command_list_handle_t* phCommandList;
+    xe_event_handle_t* phSignalEvent;
+    uint32_t* pnumWaitEvents;
+    xe_event_handle_t** pphWaitEvents;
 } xe_command_list_append_barrier_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -958,13 +958,13 @@ typedef void (__xecall *xe_pfnCommandListAppendBarrierCb_t)(
 /// @brief Callback function parameters for xeCommandListAppendMemoryRangesBarrier 
 typedef struct _xe_command_list_append_memory_ranges_barrier_params_t
 {
-    xe_command_list_handle_t hCommandList;
-    uint32_t numRanges;
-    const size_t* pRangeSizes;
-    const void** pRanges;
-    xe_event_handle_t hSignalEvent;
-    uint32_t numWaitEvents;
-    xe_event_handle_t* phWaitEvents;
+    xe_command_list_handle_t* phCommandList;
+    uint32_t* pnumRanges;
+    const size_t** ppRangeSizes;
+    const void*** ppRanges;
+    xe_event_handle_t* phSignalEvent;
+    uint32_t* pnumWaitEvents;
+    xe_event_handle_t** pphWaitEvents;
 } xe_command_list_append_memory_ranges_barrier_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -980,11 +980,11 @@ typedef void (__xecall *xe_pfnCommandListAppendMemoryRangesBarrierCb_t)(
 /// @brief Callback function parameters for xeCommandListAppendMemoryCopy 
 typedef struct _xe_command_list_append_memory_copy_params_t
 {
-    xe_command_list_handle_t hCommandList;
-    void* dstptr;
-    const void* srcptr;
-    size_t size;
-    xe_event_handle_t hEvent;
+    xe_command_list_handle_t* phCommandList;
+    void** pdstptr;
+    const void** psrcptr;
+    size_t* psize;
+    xe_event_handle_t* phEvent;
 } xe_command_list_append_memory_copy_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1000,11 +1000,11 @@ typedef void (__xecall *xe_pfnCommandListAppendMemoryCopyCb_t)(
 /// @brief Callback function parameters for xeCommandListAppendMemorySet 
 typedef struct _xe_command_list_append_memory_set_params_t
 {
-    xe_command_list_handle_t hCommandList;
-    void* ptr;
-    int value;
-    size_t size;
-    xe_event_handle_t hEvent;
+    xe_command_list_handle_t* phCommandList;
+    void** pptr;
+    int* pvalue;
+    size_t* psize;
+    xe_event_handle_t* phEvent;
 } xe_command_list_append_memory_set_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1020,14 +1020,14 @@ typedef void (__xecall *xe_pfnCommandListAppendMemorySetCb_t)(
 /// @brief Callback function parameters for xeCommandListAppendMemoryCopyRegion 
 typedef struct _xe_command_list_append_memory_copy_region_params_t
 {
-    xe_command_list_handle_t hCommandList;
-    void* dstptr;
-    xe_copy_region_t* dstRegion;
-    uint32_t dstPitch;
-    const void* srcptr;
-    xe_copy_region_t* srcRegion;
-    uint32_t srcPitch;
-    xe_event_handle_t hEvent;
+    xe_command_list_handle_t* phCommandList;
+    void** pdstptr;
+    const xe_copy_region_t** pdstRegion;
+    uint32_t* pdstPitch;
+    const void** psrcptr;
+    const xe_copy_region_t** psrcRegion;
+    uint32_t* psrcPitch;
+    xe_event_handle_t* phEvent;
 } xe_command_list_append_memory_copy_region_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1043,10 +1043,10 @@ typedef void (__xecall *xe_pfnCommandListAppendMemoryCopyRegionCb_t)(
 /// @brief Callback function parameters for xeCommandListAppendImageCopy 
 typedef struct _xe_command_list_append_image_copy_params_t
 {
-    xe_command_list_handle_t hCommandList;
-    xe_image_handle_t hDstImage;
-    xe_image_handle_t hSrcImage;
-    xe_event_handle_t hEvent;
+    xe_command_list_handle_t* phCommandList;
+    xe_image_handle_t* phDstImage;
+    xe_image_handle_t* phSrcImage;
+    xe_event_handle_t* phEvent;
 } xe_command_list_append_image_copy_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1062,12 +1062,12 @@ typedef void (__xecall *xe_pfnCommandListAppendImageCopyCb_t)(
 /// @brief Callback function parameters for xeCommandListAppendImageCopyRegion 
 typedef struct _xe_command_list_append_image_copy_region_params_t
 {
-    xe_command_list_handle_t hCommandList;
-    xe_image_handle_t hDstImage;
-    xe_image_handle_t hSrcImage;
-    xe_image_region_t* pDstRegion;
-    xe_image_region_t* pSrcRegion;
-    xe_event_handle_t hEvent;
+    xe_command_list_handle_t* phCommandList;
+    xe_image_handle_t* phDstImage;
+    xe_image_handle_t* phSrcImage;
+    const xe_image_region_t** ppDstRegion;
+    const xe_image_region_t** ppSrcRegion;
+    xe_event_handle_t* phEvent;
 } xe_command_list_append_image_copy_region_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1083,11 +1083,11 @@ typedef void (__xecall *xe_pfnCommandListAppendImageCopyRegionCb_t)(
 /// @brief Callback function parameters for xeCommandListAppendImageCopyToMemory 
 typedef struct _xe_command_list_append_image_copy_to_memory_params_t
 {
-    xe_command_list_handle_t hCommandList;
-    void* dstptr;
-    xe_image_handle_t hSrcImage;
-    xe_image_region_t* pSrcRegion;
-    xe_event_handle_t hEvent;
+    xe_command_list_handle_t* phCommandList;
+    void** pdstptr;
+    xe_image_handle_t* phSrcImage;
+    const xe_image_region_t** ppSrcRegion;
+    xe_event_handle_t* phEvent;
 } xe_command_list_append_image_copy_to_memory_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1103,11 +1103,11 @@ typedef void (__xecall *xe_pfnCommandListAppendImageCopyToMemoryCb_t)(
 /// @brief Callback function parameters for xeCommandListAppendImageCopyFromMemory 
 typedef struct _xe_command_list_append_image_copy_from_memory_params_t
 {
-    xe_command_list_handle_t hCommandList;
-    xe_image_handle_t hDstImage;
-    const void* srcptr;
-    xe_image_region_t* pDstRegion;
-    xe_event_handle_t hEvent;
+    xe_command_list_handle_t* phCommandList;
+    xe_image_handle_t* phDstImage;
+    const void** psrcptr;
+    const xe_image_region_t** ppDstRegion;
+    xe_event_handle_t* phEvent;
 } xe_command_list_append_image_copy_from_memory_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1123,9 +1123,9 @@ typedef void (__xecall *xe_pfnCommandListAppendImageCopyFromMemoryCb_t)(
 /// @brief Callback function parameters for xeCommandListAppendMemoryPrefetch 
 typedef struct _xe_command_list_append_memory_prefetch_params_t
 {
-    xe_command_list_handle_t hCommandList;
-    const void* ptr;
-    size_t size;
+    xe_command_list_handle_t* phCommandList;
+    const void** pptr;
+    size_t* psize;
 } xe_command_list_append_memory_prefetch_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1141,11 +1141,11 @@ typedef void (__xecall *xe_pfnCommandListAppendMemoryPrefetchCb_t)(
 /// @brief Callback function parameters for xeCommandListAppendMemAdvise 
 typedef struct _xe_command_list_append_mem_advise_params_t
 {
-    xe_command_list_handle_t hCommandList;
-    xe_device_handle_t hDevice;
-    const void* ptr;
-    size_t size;
-    xe_memory_advice_t advice;
+    xe_command_list_handle_t* phCommandList;
+    xe_device_handle_t* phDevice;
+    const void** pptr;
+    size_t* psize;
+    xe_memory_advice_t* padvice;
 } xe_command_list_append_mem_advise_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1161,8 +1161,8 @@ typedef void (__xecall *xe_pfnCommandListAppendMemAdviseCb_t)(
 /// @brief Callback function parameters for xeCommandListAppendSignalEvent 
 typedef struct _xe_command_list_append_signal_event_params_t
 {
-    xe_command_list_handle_t hCommandList;
-    xe_event_handle_t hEvent;
+    xe_command_list_handle_t* phCommandList;
+    xe_event_handle_t* phEvent;
 } xe_command_list_append_signal_event_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1178,9 +1178,9 @@ typedef void (__xecall *xe_pfnCommandListAppendSignalEventCb_t)(
 /// @brief Callback function parameters for xeCommandListAppendWaitOnEvents 
 typedef struct _xe_command_list_append_wait_on_events_params_t
 {
-    xe_command_list_handle_t hCommandList;
-    uint32_t numEvents;
-    xe_event_handle_t* phEvents;
+    xe_command_list_handle_t* phCommandList;
+    uint32_t* pnumEvents;
+    xe_event_handle_t** pphEvents;
 } xe_command_list_append_wait_on_events_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1196,8 +1196,8 @@ typedef void (__xecall *xe_pfnCommandListAppendWaitOnEventsCb_t)(
 /// @brief Callback function parameters for xeCommandListAppendEventReset 
 typedef struct _xe_command_list_append_event_reset_params_t
 {
-    xe_command_list_handle_t hCommandList;
-    xe_event_handle_t hEvent;
+    xe_command_list_handle_t* phCommandList;
+    xe_event_handle_t* phEvent;
 } xe_command_list_append_event_reset_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1213,12 +1213,12 @@ typedef void (__xecall *xe_pfnCommandListAppendEventResetCb_t)(
 /// @brief Callback function parameters for xeCommandListAppendLaunchFunction 
 typedef struct _xe_command_list_append_launch_function_params_t
 {
-    xe_command_list_handle_t hCommandList;
-    xe_function_handle_t hFunction;
-    const xe_thread_group_dimensions_t* pLaunchFuncArgs;
-    xe_event_handle_t hSignalEvent;
-    uint32_t numWaitEvents;
-    xe_event_handle_t* phWaitEvents;
+    xe_command_list_handle_t* phCommandList;
+    xe_function_handle_t* phFunction;
+    const xe_thread_group_dimensions_t** ppLaunchFuncArgs;
+    xe_event_handle_t* phSignalEvent;
+    uint32_t* pnumWaitEvents;
+    xe_event_handle_t** pphWaitEvents;
 } xe_command_list_append_launch_function_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1234,12 +1234,12 @@ typedef void (__xecall *xe_pfnCommandListAppendLaunchFunctionCb_t)(
 /// @brief Callback function parameters for xeCommandListAppendLaunchFunctionIndirect 
 typedef struct _xe_command_list_append_launch_function_indirect_params_t
 {
-    xe_command_list_handle_t hCommandList;
-    xe_function_handle_t hFunction;
-    const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer;
-    xe_event_handle_t hSignalEvent;
-    uint32_t numWaitEvents;
-    xe_event_handle_t* phWaitEvents;
+    xe_command_list_handle_t* phCommandList;
+    xe_function_handle_t* phFunction;
+    const xe_thread_group_dimensions_t** ppLaunchArgumentsBuffer;
+    xe_event_handle_t* phSignalEvent;
+    uint32_t* pnumWaitEvents;
+    xe_event_handle_t** pphWaitEvents;
 } xe_command_list_append_launch_function_indirect_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1255,14 +1255,14 @@ typedef void (__xecall *xe_pfnCommandListAppendLaunchFunctionIndirectCb_t)(
 /// @brief Callback function parameters for xeCommandListAppendLaunchMultipleFunctionsIndirect 
 typedef struct _xe_command_list_append_launch_multiple_functions_indirect_params_t
 {
-    xe_command_list_handle_t hCommandList;
-    uint32_t numFunctions;
-    xe_function_handle_t* phFunctions;
-    const uint32_t* pNumLaunchArguments;
-    const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer;
-    xe_event_handle_t hSignalEvent;
-    uint32_t numWaitEvents;
-    xe_event_handle_t* phWaitEvents;
+    xe_command_list_handle_t* phCommandList;
+    uint32_t* pnumFunctions;
+    xe_function_handle_t** pphFunctions;
+    const uint32_t** ppNumLaunchArguments;
+    const xe_thread_group_dimensions_t** ppLaunchArgumentsBuffer;
+    xe_event_handle_t* phSignalEvent;
+    uint32_t* pnumWaitEvents;
+    xe_event_handle_t** pphWaitEvents;
 } xe_command_list_append_launch_multiple_functions_indirect_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1278,12 +1278,12 @@ typedef void (__xecall *xe_pfnCommandListAppendLaunchMultipleFunctionsIndirectCb
 /// @brief Callback function parameters for xeCommandListAppendLaunchHostFunction 
 typedef struct _xe_command_list_append_launch_host_function_params_t
 {
-    xe_command_list_handle_t hCommandList;
-    xe_host_pfn_t pfnHostFunc;
-    void* pUserData;
-    xe_event_handle_t hSignalEvent;
-    uint32_t numWaitEvents;
-    xe_event_handle_t* phWaitEvents;
+    xe_command_list_handle_t* phCommandList;
+    xe_host_pfn_t* ppfnHostFunc;
+    void** ppUserData;
+    xe_event_handle_t* phSignalEvent;
+    uint32_t* pnumWaitEvents;
+    xe_event_handle_t** pphWaitEvents;
 } xe_command_list_append_launch_host_function_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1332,9 +1332,9 @@ typedef struct _xe_command_list_callbacks_t
 /// @brief Callback function parameters for xeFenceCreate 
 typedef struct _xe_fence_create_params_t
 {
-    xe_command_queue_handle_t hCommandQueue;
-    const xe_fence_desc_t* desc;
-    xe_fence_handle_t* phFence;
+    xe_command_queue_handle_t* phCommandQueue;
+    const xe_fence_desc_t** pdesc;
+    xe_fence_handle_t** pphFence;
 } xe_fence_create_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1350,7 +1350,7 @@ typedef void (__xecall *xe_pfnFenceCreateCb_t)(
 /// @brief Callback function parameters for xeFenceDestroy 
 typedef struct _xe_fence_destroy_params_t
 {
-    xe_fence_handle_t hFence;
+    xe_fence_handle_t* phFence;
 } xe_fence_destroy_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1366,8 +1366,8 @@ typedef void (__xecall *xe_pfnFenceDestroyCb_t)(
 /// @brief Callback function parameters for xeFenceHostSynchronize 
 typedef struct _xe_fence_host_synchronize_params_t
 {
-    xe_fence_handle_t hFence;
-    uint32_t timeout;
+    xe_fence_handle_t* phFence;
+    uint32_t* ptimeout;
 } xe_fence_host_synchronize_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1383,7 +1383,7 @@ typedef void (__xecall *xe_pfnFenceHostSynchronizeCb_t)(
 /// @brief Callback function parameters for xeFenceQueryStatus 
 typedef struct _xe_fence_query_status_params_t
 {
-    xe_fence_handle_t hFence;
+    xe_fence_handle_t* phFence;
 } xe_fence_query_status_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1399,7 +1399,7 @@ typedef void (__xecall *xe_pfnFenceQueryStatusCb_t)(
 /// @brief Callback function parameters for xeFenceReset 
 typedef struct _xe_fence_reset_params_t
 {
-    xe_fence_handle_t hFence;
+    xe_fence_handle_t* phFence;
 } xe_fence_reset_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1426,11 +1426,11 @@ typedef struct _xe_fence_callbacks_t
 /// @brief Callback function parameters for xeEventPoolCreate 
 typedef struct _xe_event_pool_create_params_t
 {
-    xe_device_group_handle_t hDeviceGroup;
-    const xe_event_pool_desc_t* desc;
-    uint32_t numDevices;
-    xe_device_handle_t* phDevices;
-    xe_event_pool_handle_t* phEventPool;
+    xe_device_group_handle_t* phDeviceGroup;
+    const xe_event_pool_desc_t** pdesc;
+    uint32_t* pnumDevices;
+    xe_device_handle_t** pphDevices;
+    xe_event_pool_handle_t** pphEventPool;
 } xe_event_pool_create_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1446,7 +1446,7 @@ typedef void (__xecall *xe_pfnEventPoolCreateCb_t)(
 /// @brief Callback function parameters for xeEventPoolDestroy 
 typedef struct _xe_event_pool_destroy_params_t
 {
-    xe_event_pool_handle_t hEventPool;
+    xe_event_pool_handle_t* phEventPool;
 } xe_event_pool_destroy_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1462,8 +1462,8 @@ typedef void (__xecall *xe_pfnEventPoolDestroyCb_t)(
 /// @brief Callback function parameters for xeEventPoolGetIpcHandle 
 typedef struct _xe_event_pool_get_ipc_handle_params_t
 {
-    xe_event_pool_handle_t hEventPool;
-    xe_ipc_event_pool_handle_t* phIpc;
+    xe_event_pool_handle_t* phEventPool;
+    xe_ipc_event_pool_handle_t** pphIpc;
 } xe_event_pool_get_ipc_handle_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1479,9 +1479,9 @@ typedef void (__xecall *xe_pfnEventPoolGetIpcHandleCb_t)(
 /// @brief Callback function parameters for xeEventPoolOpenIpcHandle 
 typedef struct _xe_event_pool_open_ipc_handle_params_t
 {
-    xe_device_handle_t hDevice;
-    xe_ipc_event_pool_handle_t hIpc;
-    xe_event_pool_handle_t* phEventPool;
+    xe_device_handle_t* phDevice;
+    xe_ipc_event_pool_handle_t* phIpc;
+    xe_event_pool_handle_t** pphEventPool;
 } xe_event_pool_open_ipc_handle_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1497,7 +1497,7 @@ typedef void (__xecall *xe_pfnEventPoolOpenIpcHandleCb_t)(
 /// @brief Callback function parameters for xeEventPoolCloseIpcHandle 
 typedef struct _xe_event_pool_close_ipc_handle_params_t
 {
-    xe_event_pool_handle_t hEventPool;
+    xe_event_pool_handle_t* phEventPool;
 } xe_event_pool_close_ipc_handle_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1524,9 +1524,9 @@ typedef struct _xe_event_pool_callbacks_t
 /// @brief Callback function parameters for xeEventCreate 
 typedef struct _xe_event_create_params_t
 {
-    xe_event_pool_handle_t hEventPool;
-    const xe_event_desc_t* desc;
-    xe_event_handle_t* phEvent;
+    xe_event_pool_handle_t* phEventPool;
+    const xe_event_desc_t** pdesc;
+    xe_event_handle_t** pphEvent;
 } xe_event_create_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1542,7 +1542,7 @@ typedef void (__xecall *xe_pfnEventCreateCb_t)(
 /// @brief Callback function parameters for xeEventDestroy 
 typedef struct _xe_event_destroy_params_t
 {
-    xe_event_handle_t hEvent;
+    xe_event_handle_t* phEvent;
 } xe_event_destroy_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1558,7 +1558,7 @@ typedef void (__xecall *xe_pfnEventDestroyCb_t)(
 /// @brief Callback function parameters for xeEventHostSignal 
 typedef struct _xe_event_host_signal_params_t
 {
-    xe_event_handle_t hEvent;
+    xe_event_handle_t* phEvent;
 } xe_event_host_signal_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1574,8 +1574,8 @@ typedef void (__xecall *xe_pfnEventHostSignalCb_t)(
 /// @brief Callback function parameters for xeEventHostSynchronize 
 typedef struct _xe_event_host_synchronize_params_t
 {
-    xe_event_handle_t hEvent;
-    uint32_t timeout;
+    xe_event_handle_t* phEvent;
+    uint32_t* ptimeout;
 } xe_event_host_synchronize_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1591,7 +1591,7 @@ typedef void (__xecall *xe_pfnEventHostSynchronizeCb_t)(
 /// @brief Callback function parameters for xeEventQueryStatus 
 typedef struct _xe_event_query_status_params_t
 {
-    xe_event_handle_t hEvent;
+    xe_event_handle_t* phEvent;
 } xe_event_query_status_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1607,7 +1607,7 @@ typedef void (__xecall *xe_pfnEventQueryStatusCb_t)(
 /// @brief Callback function parameters for xeEventReset 
 typedef struct _xe_event_reset_params_t
 {
-    xe_event_handle_t hEvent;
+    xe_event_handle_t* phEvent;
 } xe_event_reset_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1635,9 +1635,9 @@ typedef struct _xe_event_callbacks_t
 /// @brief Callback function parameters for xeImageGetProperties 
 typedef struct _xe_image_get_properties_params_t
 {
-    xe_device_handle_t hDevice;
-    const xe_image_desc_t* desc;
-    xe_image_properties_t* pImageProperties;
+    xe_device_handle_t* phDevice;
+    const xe_image_desc_t** pdesc;
+    xe_image_properties_t** ppImageProperties;
 } xe_image_get_properties_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1653,9 +1653,9 @@ typedef void (__xecall *xe_pfnImageGetPropertiesCb_t)(
 /// @brief Callback function parameters for xeImageCreate 
 typedef struct _xe_image_create_params_t
 {
-    xe_device_handle_t hDevice;
-    const xe_image_desc_t* desc;
-    xe_image_handle_t* phImage;
+    xe_device_handle_t* phDevice;
+    const xe_image_desc_t** pdesc;
+    xe_image_handle_t** pphImage;
 } xe_image_create_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1671,7 +1671,7 @@ typedef void (__xecall *xe_pfnImageCreateCb_t)(
 /// @brief Callback function parameters for xeImageDestroy 
 typedef struct _xe_image_destroy_params_t
 {
-    xe_image_handle_t hImage;
+    xe_image_handle_t* phImage;
 } xe_image_destroy_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1696,10 +1696,10 @@ typedef struct _xe_image_callbacks_t
 /// @brief Callback function parameters for xeModuleCreate 
 typedef struct _xe_module_create_params_t
 {
-    xe_device_handle_t hDevice;
-    const xe_module_desc_t* desc;
-    xe_module_handle_t* phModule;
-    xe_module_build_log_handle_t* phBuildLog;
+    xe_device_handle_t* phDevice;
+    const xe_module_desc_t** pdesc;
+    xe_module_handle_t** pphModule;
+    xe_module_build_log_handle_t** pphBuildLog;
 } xe_module_create_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1715,7 +1715,7 @@ typedef void (__xecall *xe_pfnModuleCreateCb_t)(
 /// @brief Callback function parameters for xeModuleDestroy 
 typedef struct _xe_module_destroy_params_t
 {
-    xe_module_handle_t hModule;
+    xe_module_handle_t* phModule;
 } xe_module_destroy_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1731,9 +1731,9 @@ typedef void (__xecall *xe_pfnModuleDestroyCb_t)(
 /// @brief Callback function parameters for xeModuleGetNativeBinary 
 typedef struct _xe_module_get_native_binary_params_t
 {
-    xe_module_handle_t hModule;
-    size_t* pSize;
-    uint8_t* pModuleNativeBinary;
+    xe_module_handle_t* phModule;
+    size_t** ppSize;
+    uint8_t** ppModuleNativeBinary;
 } xe_module_get_native_binary_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1749,9 +1749,9 @@ typedef void (__xecall *xe_pfnModuleGetNativeBinaryCb_t)(
 /// @brief Callback function parameters for xeModuleGetGlobalPointer 
 typedef struct _xe_module_get_global_pointer_params_t
 {
-    xe_module_handle_t hModule;
-    const char* pGlobalName;
-    void** pPtr;
+    xe_module_handle_t* phModule;
+    const char** ppGlobalName;
+    void*** ppptr;
 } xe_module_get_global_pointer_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1767,9 +1767,9 @@ typedef void (__xecall *xe_pfnModuleGetGlobalPointerCb_t)(
 /// @brief Callback function parameters for xeModuleGetFunctionPointer 
 typedef struct _xe_module_get_function_pointer_params_t
 {
-    xe_module_handle_t hModule;
-    const char* pFunctionName;
-    void** pfnFunction;
+    xe_module_handle_t* phModule;
+    const char** ppFunctionName;
+    void*** ppfnFunction;
 } xe_module_get_function_pointer_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1796,7 +1796,7 @@ typedef struct _xe_module_callbacks_t
 /// @brief Callback function parameters for xeModuleBuildLogDestroy 
 typedef struct _xe_module_build_log_destroy_params_t
 {
-    xe_module_build_log_handle_t hModuleBuildLog;
+    xe_module_build_log_handle_t* phModuleBuildLog;
 } xe_module_build_log_destroy_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1812,9 +1812,9 @@ typedef void (__xecall *xe_pfnModuleBuildLogDestroyCb_t)(
 /// @brief Callback function parameters for xeModuleBuildLogGetString 
 typedef struct _xe_module_build_log_get_string_params_t
 {
-    xe_module_build_log_handle_t hModuleBuildLog;
-    size_t* pSize;
-    char* pBuildLog;
+    xe_module_build_log_handle_t* phModuleBuildLog;
+    size_t** ppSize;
+    char** ppBuildLog;
 } xe_module_build_log_get_string_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1838,9 +1838,9 @@ typedef struct _xe_module_build_log_callbacks_t
 /// @brief Callback function parameters for xeFunctionCreate 
 typedef struct _xe_function_create_params_t
 {
-    xe_module_handle_t hModule;
-    const xe_function_desc_t* desc;
-    xe_function_handle_t* phFunction;
+    xe_module_handle_t* phModule;
+    const xe_function_desc_t** pdesc;
+    xe_function_handle_t** pphFunction;
 } xe_function_create_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1856,7 +1856,7 @@ typedef void (__xecall *xe_pfnFunctionCreateCb_t)(
 /// @brief Callback function parameters for xeFunctionDestroy 
 typedef struct _xe_function_destroy_params_t
 {
-    xe_function_handle_t hFunction;
+    xe_function_handle_t* phFunction;
 } xe_function_destroy_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1872,10 +1872,10 @@ typedef void (__xecall *xe_pfnFunctionDestroyCb_t)(
 /// @brief Callback function parameters for xeFunctionSetGroupSize 
 typedef struct _xe_function_set_group_size_params_t
 {
-    xe_function_handle_t hFunction;
-    uint32_t groupSizeX;
-    uint32_t groupSizeY;
-    uint32_t groupSizeZ;
+    xe_function_handle_t* phFunction;
+    uint32_t* pgroupSizeX;
+    uint32_t* pgroupSizeY;
+    uint32_t* pgroupSizeZ;
 } xe_function_set_group_size_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1891,13 +1891,13 @@ typedef void (__xecall *xe_pfnFunctionSetGroupSizeCb_t)(
 /// @brief Callback function parameters for xeFunctionSuggestGroupSize 
 typedef struct _xe_function_suggest_group_size_params_t
 {
-    xe_function_handle_t hFunction;
-    uint32_t globalSizeX;
-    uint32_t globalSizeY;
-    uint32_t globalSizeZ;
-    uint32_t* groupSizeX;
-    uint32_t* groupSizeY;
-    uint32_t* groupSizeZ;
+    xe_function_handle_t* phFunction;
+    uint32_t* pglobalSizeX;
+    uint32_t* pglobalSizeY;
+    uint32_t* pglobalSizeZ;
+    uint32_t** pgroupSizeX;
+    uint32_t** pgroupSizeY;
+    uint32_t** pgroupSizeZ;
 } xe_function_suggest_group_size_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1913,10 +1913,10 @@ typedef void (__xecall *xe_pfnFunctionSuggestGroupSizeCb_t)(
 /// @brief Callback function parameters for xeFunctionSetArgumentValue 
 typedef struct _xe_function_set_argument_value_params_t
 {
-    xe_function_handle_t hFunction;
-    uint32_t argIndex;
-    size_t argSize;
-    const void* pArgValue;
+    xe_function_handle_t* phFunction;
+    uint32_t* pargIndex;
+    size_t* pargSize;
+    const void** ppArgValue;
 } xe_function_set_argument_value_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1932,9 +1932,9 @@ typedef void (__xecall *xe_pfnFunctionSetArgumentValueCb_t)(
 /// @brief Callback function parameters for xeFunctionSetAttribute 
 typedef struct _xe_function_set_attribute_params_t
 {
-    xe_function_handle_t hFunction;
-    xe_function_set_attribute_t attr;
-    uint32_t value;
+    xe_function_handle_t* phFunction;
+    xe_function_set_attribute_t* pattr;
+    uint32_t* pvalue;
 } xe_function_set_attribute_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1950,9 +1950,9 @@ typedef void (__xecall *xe_pfnFunctionSetAttributeCb_t)(
 /// @brief Callback function parameters for xeFunctionGetAttribute 
 typedef struct _xe_function_get_attribute_params_t
 {
-    xe_function_handle_t hFunction;
-    xe_function_get_attribute_t attr;
-    uint32_t* pValue;
+    xe_function_handle_t* phFunction;
+    xe_function_get_attribute_t* pattr;
+    uint32_t** ppValue;
 } xe_function_get_attribute_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1981,9 +1981,9 @@ typedef struct _xe_function_callbacks_t
 /// @brief Callback function parameters for xeSamplerCreate 
 typedef struct _xe_sampler_create_params_t
 {
-    xe_device_handle_t hDevice;
-    const xe_sampler_desc_t* desc;
-    xe_sampler_handle_t* phSampler;
+    xe_device_handle_t* phDevice;
+    const xe_sampler_desc_t** pdesc;
+    xe_sampler_handle_t** pphSampler;
 } xe_sampler_create_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1999,7 +1999,7 @@ typedef void (__xecall *xe_pfnSamplerCreateCb_t)(
 /// @brief Callback function parameters for xeSamplerDestroy 
 typedef struct _xe_sampler_destroy_params_t
 {
-    xe_sampler_handle_t hSampler;
+    xe_sampler_handle_t* phSampler;
 } xe_sampler_destroy_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////

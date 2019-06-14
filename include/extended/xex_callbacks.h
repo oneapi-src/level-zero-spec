@@ -42,7 +42,7 @@ extern "C" {
 /// @brief Callback function parameters for xexInit 
 typedef struct _xex_init_params_t
 {
-    xe_init_flag_t flags;
+    xe_init_flag_t* pflags;
 } xex_init_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -65,9 +65,9 @@ typedef struct _xex_global_callbacks_t
 /// @brief Callback function parameters for xexCommandGraphCreate 
 typedef struct _xex_command_graph_create_params_t
 {
-    xe_device_handle_t hDevice;
-    const xex_command_graph_desc_t* desc;
-    xex_command_graph_handle_t* phCommandGraph;
+    xe_device_handle_t* phDevice;
+    const xex_command_graph_desc_t** pdesc;
+    xex_command_graph_handle_t** pphCommandGraph;
 } xex_command_graph_create_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -83,7 +83,7 @@ typedef void (__xecall *xex_pfnCommandGraphCreateCb_t)(
 /// @brief Callback function parameters for xexCommandGraphDestroy 
 typedef struct _xex_command_graph_destroy_params_t
 {
-    xex_command_graph_handle_t hCommandGraph;
+    xex_command_graph_handle_t* phCommandGraph;
 } xex_command_graph_destroy_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -99,7 +99,7 @@ typedef void (__xecall *xex_pfnCommandGraphDestroyCb_t)(
 /// @brief Callback function parameters for xexCommandGraphClose 
 typedef struct _xex_command_graph_close_params_t
 {
-    xex_command_graph_handle_t hCommandGraph;
+    xex_command_graph_handle_t* phCommandGraph;
 } xex_command_graph_close_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////

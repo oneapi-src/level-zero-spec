@@ -254,14 +254,14 @@ xeModuleGetNativeBinary(
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hModule
 ///         + nullptr == pGlobalName
-///         + nullptr == pPtr
+///         + nullptr == pptr
 ///         + invalid name
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeModuleGetGlobalPointer(
     xe_module_handle_t hModule,                     ///< [in] handle of the device
     const char* pGlobalName,                        ///< [in] name of function in global
-    void** pPtr                                     ///< [out] device visible pointer
+    void** pptr                                     ///< [out] device visible pointer
     )
 {
     auto pfnGetGlobalPointer = xe_lib::context.ddiTable.Module.pfnGetGlobalPointer;
@@ -271,7 +271,7 @@ xeModuleGetGlobalPointer(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnGetGlobalPointer( hModule, pGlobalName, pPtr );
+    return pfnGetGlobalPointer( hModule, pGlobalName, pptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1017,17 +1017,17 @@ namespace xe
         const char* pGlobalName                         ///< [in] name of function in global
         )
     {
-        void* ptr;
+        void* pptr;
 
         auto result = static_cast<result_t>( ::xeModuleGetGlobalPointer(
             reinterpret_cast<xe_module_handle_t>( getHandle() ),
             pGlobalName,
-            &ptr ) );
+            &pptr ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Module::GetGlobalPointer" );
 
-        return ptr;
+        return pptr;
     }
 
     ///////////////////////////////////////////////////////////////////////////////

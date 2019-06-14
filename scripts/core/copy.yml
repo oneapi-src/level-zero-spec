@@ -95,7 +95,7 @@ params:
     - type: "void*"
       name: dstptr
       desc: "[in] pointer to destination memory to copy to"
-    - type: "$x_copy_region_t*"
+    - type: "const $x_copy_region_t*"
       name: dstRegion
       desc: "[in] pointer to destination region to copy to"
     - type: "uint32_t"
@@ -104,7 +104,7 @@ params:
     - type: "const void*"
       name: srcptr
       desc: "[in] pointer to source memory to copy from"
-    - type: "$x_copy_region_t*"
+    - type: "const $x_copy_region_t*"
       name: srcRegion
       desc: "[in] pointer to source region to copy from"
     - type: "uint32_t"
@@ -178,10 +178,10 @@ params:
     - type: $x_image_handle_t
       name: hSrcImage
       desc: "[in] handle of source image to copy from"
-    - type: "$x_image_region_t*"
+    - type: "const $x_image_region_t*"
       name: pDstRegion
       desc: "[in][optional] destination region descriptor"
-    - type: "$x_image_region_t*"
+    - type: "const $x_image_region_t*"
       name: pSrcRegion
       desc: "[in][optional] source region descriptor"
     - type: $x_event_handle_t
@@ -208,7 +208,7 @@ params:
     - type: $x_image_handle_t
       name: hSrcImage
       desc: "[in] handle of source image to copy from"
-    - type: "$x_image_region_t*"
+    - type: "const $x_image_region_t*"
       name: pSrcRegion
       desc: "[in][optional] source region descriptor"
     - type: $x_event_handle_t
@@ -235,7 +235,7 @@ params:
     - type: "const void*"
       name: srcptr
       desc: "[in] pointer to source memory to copy from"
-    - type: "$x_image_region_t*"
+    - type: "const $x_image_region_t*"
       name: pDstRegion
       desc: "[in][optional] destination region descriptor"
     - type: $x_event_handle_t

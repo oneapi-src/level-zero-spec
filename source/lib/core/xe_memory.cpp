@@ -58,7 +58,7 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDeviceGroup
 ///         + nullptr == hDevice
-///         + nullptr == ptr
+///         + nullptr == pptr
 ///         + unsupported allocation size
 ///         + unsupported alignment
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -74,7 +74,7 @@ xeDeviceGroupAllocSharedMem(
     xe_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
-    void** ptr                                      ///< [out] pointer to shared allocation
+    void** pptr                                     ///< [out] pointer to shared allocation
     )
 {
     auto pfnAllocSharedMem = xe_lib::context.ddiTable.DeviceGroup.pfnAllocSharedMem;
@@ -84,7 +84,7 @@ xeDeviceGroupAllocSharedMem(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, ordinal, host_flags, size, alignment, ptr );
+    return pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, ordinal, host_flags, size, alignment, pptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -107,7 +107,7 @@ xeDeviceGroupAllocSharedMem(
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDeviceGroup
 ///         + nullptr == hDevice
-///         + nullptr == ptr
+///         + nullptr == pptr
 ///         + unsupported allocation size
 ///         + unsupported alignment
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -122,7 +122,7 @@ xeDeviceGroupAllocDeviceMem(
                                                     ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
-    void** ptr                                      ///< [out] pointer to device allocation
+    void** pptr                                     ///< [out] pointer to device allocation
     )
 {
     auto pfnAllocDeviceMem = xe_lib::context.ddiTable.DeviceGroup.pfnAllocDeviceMem;
@@ -132,7 +132,7 @@ xeDeviceGroupAllocDeviceMem(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, ordinal, size, alignment, ptr );
+    return pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, ordinal, size, alignment, pptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -156,7 +156,7 @@ xeDeviceGroupAllocDeviceMem(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDeviceGroup
-///         + nullptr == ptr
+///         + nullptr == pptr
 ///         + unsupported allocation size
 ///         + unsupported alignment
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -168,7 +168,7 @@ xeDeviceGroupAllocHostMem(
     xe_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
-    void** ptr                                      ///< [out] pointer to host allocation
+    void** pptr                                     ///< [out] pointer to host allocation
     )
 {
     auto pfnAllocHostMem = xe_lib::context.ddiTable.DeviceGroup.pfnAllocHostMem;
@@ -178,7 +178,7 @@ xeDeviceGroupAllocHostMem(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnAllocHostMem( hDeviceGroup, flags, size, alignment, ptr );
+    return pfnAllocHostMem( hDeviceGroup, flags, size, alignment, pptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -357,7 +357,7 @@ xeDeviceGroupGetMemIpcHandle(
 ///         + nullptr == hDeviceGroup
 ///         + nullptr == hDevice
 ///         + nullptr == handle
-///         + nullptr == ptr
+///         + nullptr == pptr
 ///         + invalid flags
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
@@ -366,7 +366,7 @@ xeDeviceGroupOpenMemIpcHandle(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
     xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
     xe_ipc_memory_flag_t flags,                     ///< [in] flags controlling the operation
-    void** ptr                                      ///< [out] pointer to device allocation in this process
+    void** pptr                                     ///< [out] pointer to device allocation in this process
     )
 {
     auto pfnOpenMemIpcHandle = xe_lib::context.ddiTable.DeviceGroup.pfnOpenMemIpcHandle;
@@ -376,7 +376,7 @@ xeDeviceGroupOpenMemIpcHandle(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnOpenMemIpcHandle( hDeviceGroup, hDevice, handle, flags, ptr );
+    return pfnOpenMemIpcHandle( hDeviceGroup, hDevice, handle, flags, pptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -452,7 +452,7 @@ namespace xe
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
         )
     {
-        void* ptr;
+        void* pptr;
 
         auto result = static_cast<result_t>( ::xeDeviceGroupAllocSharedMem(
             reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
@@ -462,12 +462,12 @@ namespace xe
             static_cast<xe_host_mem_alloc_flag_t>( host_flags ),
             size,
             alignment,
-            &ptr ) );
+            &pptr ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::AllocSharedMem" );
 
-        return ptr;
+        return pptr;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -497,7 +497,7 @@ namespace xe
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
         )
     {
-        void* ptr;
+        void* pptr;
 
         auto result = static_cast<result_t>( ::xeDeviceGroupAllocDeviceMem(
             reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
@@ -506,12 +506,12 @@ namespace xe
             ordinal,
             size,
             alignment,
-            &ptr ) );
+            &pptr ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::AllocDeviceMem" );
 
-        return ptr;
+        return pptr;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -540,19 +540,19 @@ namespace xe
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
         )
     {
-        void* ptr;
+        void* pptr;
 
         auto result = static_cast<result_t>( ::xeDeviceGroupAllocHostMem(
             reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
             static_cast<xe_host_mem_alloc_flag_t>( flags ),
             size,
             alignment,
-            &ptr ) );
+            &pptr ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::AllocHostMem" );
 
-        return ptr;
+        return pptr;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -724,19 +724,19 @@ namespace xe
         ipc_memory_flag_t flags                         ///< [in] flags controlling the operation
         )
     {
-        void* ptr;
+        void* pptr;
 
         auto result = static_cast<result_t>( ::xeDeviceGroupOpenMemIpcHandle(
             reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
             reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
             reinterpret_cast<xe_ipc_mem_handle_t>( handle ),
             static_cast<xe_ipc_memory_flag_t>( flags ),
-            &ptr ) );
+            &pptr ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::OpenMemIpcHandle" );
 
-        return ptr;
+        return pptr;
     }
 
     ///////////////////////////////////////////////////////////////////////////////

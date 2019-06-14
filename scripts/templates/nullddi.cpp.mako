@@ -64,7 +64,7 @@ namespace driver
         {
             // capture parameters
             ${th.make_pfncb_param_type(n, tags, obj)} params = {
-                ${",\n".join(th.make_param_lines(n, tags, obj, format=["name"]))}
+                &${",\n                &".join(th.make_param_lines(n, tags, obj, format=["name"]))}
             };
 
             // call each callback registered
@@ -121,7 +121,7 @@ namespace driver
         *value = 0;
 
         %elif re.match(r"\w+Alloc\w+Mem", fname):
-        *ptr = malloc( size );
+        *pptr = malloc( size );
 
         %elif re.match(r"\w+FreeMem", fname):
         free( ptr );
@@ -191,7 +191,7 @@ namespace driver
         {
             // capture parameters
             ${th.make_pfncb_param_type(n, tags, obj)} params = {
-                ${",\n".join(th.make_param_lines(n, tags, obj, format=["name"]))}
+                &${",\n                &".join(th.make_param_lines(n, tags, obj, format=["name"]))}
             };
 
             // call each callback registered

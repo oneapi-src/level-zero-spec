@@ -56,7 +56,7 @@ extern "C" {
 %endif
 typedef struct _${th.make_pfncb_param_type(n, tags, obj)}
 {
-    %for line in th.make_param_lines(n, tags, obj, format=["type", "name"]):
+    %for line in th.make_param_lines(n, tags, obj, format=["type*", "name"]):
     ${line};
     %endfor
 } ${th.make_pfncb_param_type(n, tags, obj)};
