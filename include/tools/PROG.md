@@ -21,15 +21,15 @@ Tools may also use these notifications as triggers to block and inject new API c
 
 ## Registration
 Tools may independently register for enter and exist callbacks for individual API calls, per Device Group.
-- ::xetTracerSetPrologues is used to specify all the enter callbacks
-- ::xetTracerSetEpilogues is used to specify all the exist callbacks
-- If the value of a callback is nullptr, then it will be ignored.
+* ::xetTracerSetPrologues is used to specify all the enter callbacks
+* ::xetTracerSetEpilogues is used to specify all the exist callbacks
+* If the value of a callback is nullptr, then it will be ignored.
 
 The callbacks are defined as a collection of per-API function pointers, with the following parameters:
-- "_params_t* params": a structure capturing pointers to the input and output parameters of the current instance
-- "::xe_result_t result": the current value of the return value
-- "void* pGlobalUserData": the user's global pointer for the callback's tracer
-- "void** ppLocalUserData": a per-instance, per-tracer storage location for passing data from the prologue to the epilogue
+* params : a structure capturing pointers to the input and output parameters of the current instance
+* result : the current value of the return value
+* pGlobalUserData : the user's global pointer for the callback's tracer
+* ppLocalUserData : a per-instance, per-tracer storage location for passing data from the prologue to the epilogue
 
 
 The followsing sample code demonstrates a basic usage of API tracing:
@@ -456,7 +456,29 @@ The program instrumentation APIs provide tools a basic framework for low-level p
 by allowing direct instrumentation of those programs. These capabilities, in combination with those already provided,
 in combination with API tracing, are sufficient for more advanced frameworks to be developed independently.
 
-## Compilation
+There are two type of instrumentation available:
+1. Inter-Function Instrumentation - intercepting and redirecting function calls
+2. Intra-Function Instrumentation - injecting new instructions within a function
+
+## Inter-Function Instrumentation
+The following capabilities allow for a tool to intercept and redirect function calls:
+* Inter-module function calls - the ability to call functions between different modules; e.g., the applicaiton's module and a tool's module
+* [API Tracing](#at)
+
+For example, a tool may use API Tracing in any of the following ways:
+* ::xeModuleCreate - replace a module handle with instrumented module handle for all functions
+* ::xeFunctionCreate - replace a function handle with instrumented function handle for all call sites
+* ::xeModuleGetFunctionPointer - replace a function pointer with instrumented function pointer for all call sites
+* ::xeCommandListAppendLaunchFunction - replace a function handle with instrumented function handle at call site
+
+## Intra-Function Instrumentation
+The following capabilities allow for a tool to inject instructions within a function:
+* ::xetModuleGetFunctionNames  - allows for a tool to query for all functions within an application's module
+* ::xetModuleGetDebugInfo - allows a tool to query standard debug info for a function
+* ::xetFunctionGetProfileInfo - allows a tool query detailed information on aspects of a function
+* [API Tracing](#at) - same as above
+
+### Compilation
 A module must be compiled with foreknowledge that instrumentation will be performed in order for the compiler
 to generate the proper profiling meta-data and leave sufficient space beween the application's instructions for
 the instrumentation tool to inject additional instructions.
@@ -466,31 +488,34 @@ Therefore, when the instrumentation layer is enabled, a new build flag is suppor
 TODO: do we need any additional options, such as amount of space between instructions, or amount of register space
 to leave free?
 
-As an example, a tool could use API Tracing to inject this build flag on every ::xeModuleCreate API call 
+As an example, a tool could use API Tracing to inject this build flag on each ::xeModuleCreate call 
 that the tool wishes to instrument.
 In another example, a tool could recompile a Module using the build flag and use API Tracing to replace the 
 application's Module handle with it's own.
 
-## Instrumentation
-Once the module has been compiled with instrumentation enabled, a tool may use
-::xetModuleGetDebugInfo, ::xetModuleGetFunctionNames and ::xetFunctionGetProfileInfo
-in order to decode the application's instructions and register usage for every function in the module.
+### Instrumentation
+Once the module has been compiled with instrumentation enabled, a tool may use ::xetModuleGetDebugInfo and ::xetFunctionGetProfileInfo
+in order to decode the application's instructions and register usage for each function in the module.
 
-A tool may use ::xeModuleGetGlobalPointer to retrieve the Host and device address of each function in the module,
+A tool may use ::xeModuleGetFunctionPointer to retrieve the Host and device address of each function in the module,
 for direct instrumentation.
-If a tool requires additional functions to be used, it may create another module and use ::xeModuleGetGlobalPointer
+If a tool requires additional functions to be used, it may create another module and use ::xeModuleGetFunctionPointer
 to call functions between modules.
 
 TODO: this requires the tool to inject raw ISA; do we need a V-ISA alternative?
 
-### Profile Info
+#### Profile Info
 TODO: need a picture and write-up from GT-PIN/IGC team on how to use the profile info.
 
-## Execution
+### Execution
 If a tool requires changing the address of an application's function, then it should use API Tracing; for example,
-::xeModuleGetGlobalPointer, ::xeFunctionCreate, and all flavors of ::xeCommandListAppendLaunchFunction.
+::xeModuleGetFunctionPointer and all flavors of ::xeCommandListAppendLaunchFunction.
 
-# <a name="pin">Program Debug</a>
+
+# <a name="dbg">Program Debug</a>
 
 ## Introduction
+The program debug APIs provide tools a basic framework for inserting breakpoints and accessing register values of device programs,
+as they are executing on the device.
 
+(more details coming soon...)
