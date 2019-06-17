@@ -473,20 +473,17 @@ For example, a tool may use API Tracing in any of the following ways:
 
 ## Intra-Function Instrumentation
 The following capabilities allow for a tool to inject instructions within a function:
-* ::xetModuleGetFunctionNames  - allows for a tool to query for all functions within an application's module
-* ::xetModuleGetDebugInfo - allows a tool to query standard debug info for a function
+* ::xetModuleGetDebugInfo - allows a tool to query standard debug info for an application's module
+* ::xetModuleGetFunctionNames - allows for a tool to query for all functions within an application's module
 * ::xetFunctionGetProfileInfo - allows a tool query detailed information on aspects of a function
-* [API Tracing](#at) - same as above
+* ::xeModuleGetNativeBinary - allows for a tool to retrieve the native binary of the application's module, instrument it, then create a new module using the intrumented version
+* [API Tracing](#at) - same usage as Inter-Function Instrumentation above
 
 ### Compilation
 A module must be compiled with foreknowledge that instrumentation will be performed in order for the compiler
-to generate the proper profiling meta-data and leave sufficient space beween the application's instructions for
-the instrumentation tool to inject additional instructions.
+to generate the proper profiling meta-data.
 Therefore, when the instrumentation layer is enabled, a new build flag is supported:
 "-xet-profile-flags <n>", where "<n>" must be a combination of ::xet_profile_flag_t, in hexidecimal.
-
-TODO: do we need any additional options, such as amount of space between instructions, or amount of register space
-to leave free?
 
 As an example, a tool could use API Tracing to inject this build flag on each ::xeModuleCreate call 
 that the tool wishes to instrument.
@@ -497,12 +494,13 @@ application's Module handle with it's own.
 Once the module has been compiled with instrumentation enabled, a tool may use ::xetModuleGetDebugInfo and ::xetFunctionGetProfileInfo
 in order to decode the application's instructions and register usage for each function in the module.
 
-A tool may use ::xeModuleGetFunctionPointer to retrieve the Host and device address of each function in the module,
-for direct instrumentation.
-If a tool requires additional functions to be used, it may create another module and use ::xeModuleGetFunctionPointer
-to call functions between modules.
+If a tool requires additional functions to be used, it may create other module(s) and use ::xeModuleGetFunctionPointer
+to call functions between the application and tool modules.
+A tool may use ::xeModuleGetFunctionPointer to retrieve the Host and device address of each function in the module.
 
-TODO: this requires the tool to inject raw ISA; do we need a V-ISA alternative?
+There are no APIs provided for the actual instrumentation.  Instead this is left up to the tool itself to decode the application module's
+native binary and inject native instructions.  This model prevents the instrumentation from being manipulated by
+the compiler.
 
 #### Profile Info
 TODO: need a picture and write-up from GT-PIN/IGC team on how to use the profile info.

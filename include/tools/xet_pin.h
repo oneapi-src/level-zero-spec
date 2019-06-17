@@ -82,9 +82,9 @@ typedef enum _xet_profile_info_version_t
 /// @brief Supportted profile features
 typedef enum _xet_profile_flag_t
 {
-    XET_PROFILE_FLAG_RERA = XE_BIT(0),              ///< RERA
-    XET_PROFILE_FLAG_GRF = XE_BIT(1),               ///< free GRF info
-    XET_PROFILE_FLAG_SRCLINE = XE_BIT(2),           ///< source line mapping
+    XET_PROFILE_FLAG_REGISTER_REALLOCATION = XE_BIT(0), ///< request the compiler attempt to minimize register usage as much as
+                                                    ///< possible to allow for instrumentation
+    XET_PROFILE_FLAG_FREE_REGISTER_INFO = XE_BIT(1),///< request the compiler generate free register info
 
 } xet_profile_flag_t;
 

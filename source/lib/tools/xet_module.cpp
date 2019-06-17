@@ -156,14 +156,11 @@ namespace xet
 
         std::string str;
         
-        if( static_cast<uint32_t>(Function::profile_flag_t::RERA) & bits )
-            str += "RERA | ";
+        if( static_cast<uint32_t>(Function::profile_flag_t::REGISTER_REALLOCATION) & bits )
+            str += "REGISTER_REALLOCATION | ";
         
-        if( static_cast<uint32_t>(Function::profile_flag_t::GRF) & bits )
-            str += "GRF | ";
-        
-        if( static_cast<uint32_t>(Function::profile_flag_t::SRCLINE) & bits )
-            str += "SRCLINE | ";
+        if( static_cast<uint32_t>(Function::profile_flag_t::FREE_REGISTER_INFO) & bits )
+            str += "FREE_REGISTER_INFO | ";
 
         return ( str.size() > 3 ) 
             ? "Function::profile_flag_t::{ " + str.substr(0, str.size() - 3) + " }"

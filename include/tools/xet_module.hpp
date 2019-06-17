@@ -126,9 +126,9 @@ namespace xet
         /// @brief Supportted profile features
         enum class profile_flag_t
         {
-            RERA = XE_BIT(0),                               ///< RERA
-            GRF = XE_BIT(1),                                ///< free GRF info
-            SRCLINE = XE_BIT(2),                            ///< source line mapping
+            REGISTER_REALLOCATION = XE_BIT(0),              ///< request the compiler attempt to minimize register usage as much as
+                                                            ///< possible to allow for instrumentation
+            FREE_REGISTER_INFO = XE_BIT(1),                 ///< request the compiler generate free register info
 
         };
 

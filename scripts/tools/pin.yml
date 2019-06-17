@@ -38,15 +38,12 @@ desc: "Supportted profile features"
 class: $tFunction
 name: $t_profile_flag_t
 etors:
-    - name: $T_PROFILE_FLAG_RERA
+    - name: $T_PROFILE_FLAG_REGISTER_REALLOCATION
       value: "$X_BIT(0)"
-      desc: "RERA"
-    - name: $T_PROFILE_FLAG_GRF
+      desc: "request the compiler attempt to minimize register usage as much as possible to allow for instrumentation"
+    - name: $T_PROFILE_FLAG_FREE_REGISTER_INFO
       value: "$X_BIT(1)"
-      desc: "free GRF info"
-    - name: $T_PROFILE_FLAG_SRCLINE
-      value: "$X_BIT(2)"
-      desc: "source line mapping"
+      desc: "request the compiler generate free register info"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Profiling meta-data for instrumentation"
