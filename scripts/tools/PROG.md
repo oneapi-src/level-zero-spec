@@ -41,6 +41,11 @@ The callbacks are defined as a collection of per-API function pointers, with the
 The followsing sample code demonstrates a basic usage of API tracing:
 ```c
 ## --validate=off
+    typedef struct _my_global_data_t
+    {
+        uint32_t instance;
+    } my_global_data_t;
+
     typedef struct _my_local_data_t
     {
         clock_t start;
@@ -66,10 +71,11 @@ The followsing sample code demonstrates a basic usage of API tracing:
     {
         clock_t end = clock();
         
+        my_global_data_t global = (my_global_data_t*)pGlobalUserData;
         my_local_data_t* local = *(my_local_data_t**)ppLocalUserData;
         
         float time = 1000.f * ( end - local->start ) / CLOCKS_PER_SEC;
-        printf("${x}CommandListAppendLaunchFunction takes %.4f ms\n", time);
+        printf("${x}CommandListAppendLaunchFunction #%d takes %.4f ms\n", global->instance++, time);
         
         free(local);
     }
@@ -77,9 +83,10 @@ The followsing sample code demonstrates a basic usage of API tracing:
 
     void TracingExample( ... )
     {
+        my_global_data_t global_data = {};
         ${t}_tracer_desc_t tracer_desc;
         tracer_desc.version = ${T}_TRACER_DESC_VERSION_CURRENT;
-        tracer_desc.pGlobalUserData = nullptr;
+        tracer_desc.pGlobalUserData = &global_data;
         ${t}_tracer_handle_t hTracer;
         ${t}TracerCreate(hDeviceGroup, &tracer_desc, &hTracer);
 
@@ -94,6 +101,8 @@ The followsing sample code demonstrates a basic usage of API tracing:
 
         ${t}TracerSetEnabled(hTracer, true);
 
+        ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+        ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
         ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
 
         ${t}TracerSetEnabled(hTracer, false);

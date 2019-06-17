@@ -34,6 +34,11 @@ The callbacks are defined as a collection of per-API function pointers, with the
 
 The followsing sample code demonstrates a basic usage of API tracing:
 ```c
+    typedef struct _my_global_data_t
+    {
+        uint32_t instance;
+    } my_global_data_t;
+
     typedef struct _my_local_data_t
     {
         clock_t start;
@@ -59,19 +64,21 @@ The followsing sample code demonstrates a basic usage of API tracing:
     {
         clock_t end = clock();
         
+        my_global_data_t global = (my_global_data_t*)pGlobalUserData;
         my_local_data_t* local = *(my_local_data_t**)ppLocalUserData;
         
         float time = 1000.f * ( end - local->start ) / CLOCKS_PER_SEC;
-        printf("xeCommandListAppendLaunchFunction takes %.4f ms\n", time);
+        printf("xeCommandListAppendLaunchFunction #%d takes %.4f ms\n", global->instance++, time);
         
         free(local);
     }
 
     void TracingExample( ... )
     {
+        my_global_data_t global_data = {};
         xet_tracer_desc_t tracer_desc;
         tracer_desc.version = XET_TRACER_DESC_VERSION_CURRENT;
-        tracer_desc.pGlobalUserData = nullptr;
+        tracer_desc.pGlobalUserData = &global_data;
         xet_tracer_handle_t hTracer;
         xetTracerCreate(hDeviceGroup, &tracer_desc, &hTracer);
 
@@ -86,6 +93,8 @@ The followsing sample code demonstrates a basic usage of API tracing:
 
         xetTracerSetEnabled(hTracer, true);
 
+        xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
+        xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
         xeCommandListAppendLaunchFunction(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
 
         xetTracerSetEnabled(hTracer, false);
