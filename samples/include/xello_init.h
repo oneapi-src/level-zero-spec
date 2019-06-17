@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include "xe_api.hpp"
+#include "xet_api.hpp"
 
 //////////////////////////////////////////////////////////////////////////
 inline bool argparse( int argc, char *argv[],
@@ -29,6 +30,24 @@ inline bool init_xe( void )
     catch( const xe::exception_t& e )
     {
         std::cout << "Driver not initialized!\n";
+        std::cout << e.what();
+        return false;
+    }
+    return true;
+}
+
+//////////////////////////////////////////////////////////////////////////
+inline bool init_xet( void )
+{
+    try
+    {
+        // Initialize the driver
+        xet::Init( xe::init_flag_t::NONE );
+        std::cout << "Tools initialized.\n";
+    }
+    catch( const xe::exception_t& e )
+    {
+        std::cout << "Tools not initialized!\n";
         std::cout << e.what();
         return false;
     }

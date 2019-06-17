@@ -71,7 +71,7 @@ The followsing sample code demonstrates a basic usage of API tracing:
     {
         clock_t end = clock();
         
-        my_global_data_t global = (my_global_data_t*)pGlobalUserData;
+        my_global_data_t* global = (my_global_data_t*)pGlobalUserData;
         my_local_data_t* local = *(my_local_data_t**)ppLocalUserData;
         
         float time = 1000.f * ( end - local->start ) / CLOCKS_PER_SEC;
