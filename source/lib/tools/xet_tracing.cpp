@@ -76,9 +76,8 @@ xetTracerCreate(
 /// @brief Destroys a tracer.
 /// 
 /// @details
-///     - The application is responsible for making sure the driver is not
-///       currently referencing the tracer before it is deleted.
-///     - The implementation of this function will immediately free all Host
+///     - The implementation of this function will stall and wait on any
+///       outstanding threads executing callbacks before freeing any Host
 ///       allocations associated with this tracer.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same tracer handle.
@@ -279,9 +278,8 @@ namespace xet
     /// @brief Destroys a tracer.
     /// 
     /// @details
-    ///     - The application is responsible for making sure the driver is not
-    ///       currently referencing the tracer before it is deleted.
-    ///     - The implementation of this function will immediately free all Host
+    ///     - The implementation of this function will stall and wait on any
+    ///       outstanding threads executing callbacks before freeing any Host
     ///       allocations associated with this tracer.
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same tracer handle.

@@ -180,6 +180,10 @@ The following design philosophies are adopted in order to maximize Host thread c
     + the application is responsible for ensuring that all driver objects and memory are no longer in-use by the device before freeing; otherwise the Host or device may fault
     + no implcit garabage collection is supported by the driver
 
+The expectation is that an application is in direct control over all Host thread creation and usage.
+The driver should never implicitly create threads. 
+If there is a need for an implementation to use a background thread, then that thread should be create and provided by the application.
+
 Each API function must document details on the multithreading requirements for that call.
 
 The primary usage-models enabled by these rules is:

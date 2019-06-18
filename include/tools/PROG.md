@@ -31,8 +31,19 @@ The callbacks are defined as a collection of per-API function pointers, with the
 * pGlobalUserData : the user's global pointer for the callback's tracer
 * ppLocalUserData : a per-instance, per-tracer storage location for passing data from the prologue to the epilogue
 
+## Enabling/Disabling and Destruction
+The tracer is created in a disabled state and must be explicitly enabled by calling ::xetTracerSetEnabled.
+The implementation gaurentees that prologues and epilogues will always be executed in pairs; i.e.
+* if the prologue was called then the epilogue is gaurenteed to be called, even if another thread disabled the tracer between execution
+* if the prologue was not called then the epilogue is gaurenteed not to be called, even if another thread enabled the tracer between execution
 
-The followsing sample code demonstrates a basic usage of API tracing:
+The tracer should be disabled by the application before the tracer is destoryed. 
+If multiple threads are in-flight, then it is still possbile that callbacks will continue to execute even after the tracer is disabled;
+specifically due to the pairing rules above.
+Due to the complexity involved in ensuring no threads are still or will be executing a callback even after its been disabled,
+the implementation will stall and wait for any outstanding threads during ::xetTracerDestroy.
+
+The following sample code demonstrates a basic usage of API tracing:
 ```c
     typedef struct _my_global_data_t
     {
