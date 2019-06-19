@@ -314,6 +314,7 @@ namespace xe
     ///   _Analogues_
     ///     - **vkWaitForFences**
     /// 
+    /// @returns
     ///     - bool_t:'0' when RESULT_NOT_READY
     /// @throws result_t
     bool_t __xecall
@@ -347,6 +348,7 @@ namespace xe
     ///   _Analogues_
     ///     - **vkGetFenceStatus**
     /// 
+    /// @returns
     ///     - bool_t:'0' when RESULT_NOT_READY
     /// @throws result_t
     bool_t __xecall

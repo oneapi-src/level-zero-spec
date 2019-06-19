@@ -1151,6 +1151,8 @@ def make_returns_lines(namespace, tags, obj, cpp=False, meta=None):
                 else:
                     rname = item
                 if "$X_RESULT_NOT_READY" == rname:
+                    if len(lines) == 0:
+                        lines.append("@returns")
                     lines.append("    - %s"%subt(namespace, tags, "$x_bool_t:'0' when $X_RESULT_NOT_READY", cpp=cpp))
         lines.append("@throws result_t")
         return lines

@@ -915,6 +915,7 @@ namespace xe
     ///     - clWaitForEvents
     ///     - cuEventSynchronize
     /// 
+    /// @returns
     ///     - bool_t:'0' when RESULT_NOT_READY
     /// @throws result_t
     bool_t __xecall
@@ -950,6 +951,7 @@ namespace xe
     ///     - vkGetEventStatus
     ///     - cuEventQuery
     /// 
+    /// @returns
     ///     - bool_t:'0' when RESULT_NOT_READY
     /// @throws result_t
     bool_t __xecall

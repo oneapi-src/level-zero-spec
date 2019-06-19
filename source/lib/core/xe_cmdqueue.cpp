@@ -324,6 +324,7 @@ namespace xe
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
+    /// @returns
     ///     - bool_t:'0' when RESULT_NOT_READY
     /// @throws result_t
     bool_t __xecall
