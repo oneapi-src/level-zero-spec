@@ -34,6 +34,32 @@
 
 namespace driver
 {
+    ///////////////////////////////////////////////////////////////////////////////
+    class context_t
+    {
+    public:
+        xe_api_version_t version = XE_API_VERSION_1_0;
+
+        xe_dditable_t   xeDdiTable = {};
+        xex_dditable_t  xexDdiTable = {};
+        xet_dditable_t  xetDdiTable = {};
+
+        context_t();
+        ~context_t() = default;
+
+        void* get( void )
+        {
+            static uint64_t count = 0x80800000;
+            return reinterpret_cast<void*>( ++count );
+        }
+    };
+
+    extern context_t context;
+} // namespace driver
+
+namespace instrumented
+{
+    //////////////////////////////////////////////////////////////////////////
     struct tracer_data_t
     {
         bool enabled = false;
@@ -51,31 +77,12 @@ namespace driver
     class context_t
     {
     public:
-        xe_api_version_t version = XE_API_VERSION_1_0;
-
-        xe_device_properties_t deviceProperties = {};
-        xe_device_compute_properties_t computeProperties = {};
-        xe_device_memory_properties_t memoryProperties = {};
-        xe_device_memory_access_properties_t memoryAccessProperties = {};
-        xe_device_cache_properties_t cacheProperties = {};
-        xe_device_image_properties_t imageProperties = {};
-        xe_device_p2p_properties_t p2pProperties = {};
-
-        xet_metric_group_properties_t metricGroupProperties = {};
-        xet_metric_properties_t metricProperties = {};
-
         bool enableTracing = false;
         std::vector< tracer_data_t > tracerData;
 
         context_t();
         ~context_t() = default;
-
-        void* get( void )
-        {
-            static uint64_t count = 0x80800000;
-            return reinterpret_cast<void*>( ++count );
-        }
     };
 
     extern context_t context;
-}
+} // namespace instrumented

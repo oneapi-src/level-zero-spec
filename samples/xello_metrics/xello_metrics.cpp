@@ -12,7 +12,7 @@ int main( int argc, char *argv[] )
     }
 
     xet::DeviceGroup* pDeviceGroup = nullptr;
-    if( init_xet() )
+    if( init_xe() && init_xet() )
         pDeviceGroup = reinterpret_cast<xet::DeviceGroup*>( findDeviceGroup( xe::DeviceGroup::device_type_t::GPU ) );
     if( !pDeviceGroup )
         return -1;

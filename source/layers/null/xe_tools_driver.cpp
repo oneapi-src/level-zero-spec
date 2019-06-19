@@ -41,6 +41,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnInit = context.xetDdiTable.Global.pfnInit;
+        if( nullptr != pfnInit )
+        {
+            result = pfnInit( flags );
+        }
+        else
+        {
+            // generic implementation
+        }
+
         return result;
     }
 
@@ -62,8 +73,19 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        *pCount = 1;
-        if( nullptr != phMetricGroups ) *reinterpret_cast<void**>(phMetricGroups) = context.get();
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGet = context.xetDdiTable.MetricGroup.pfnGet;
+        if( nullptr != pfnGet )
+        {
+            result = pfnGet( hDeviceGroup, pCount, phMetricGroups );
+        }
+        else
+        {
+            // generic implementation
+            for( size_t i = 0; ( nullptr != phMetricGroups ) && ( i < *pCount ); ++i )
+                phMetricGroups[ i ] = reinterpret_cast<xet_metric_group_handle_t>( context.get() );
+
+        }
 
         return result;
     }
@@ -78,7 +100,16 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        *pProperties = context.metricGroupProperties;
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetProperties = context.xetDdiTable.MetricGroup.pfnGetProperties;
+        if( nullptr != pfnGetProperties )
+        {
+            result = pfnGetProperties( hMetricGroup, pProperties );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -104,8 +135,16 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        *pMetricValueCount = 1;
-        if( pMetricValues ) *pMetricValues = {};
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnCalculateMetricValues = context.xetDdiTable.MetricGroup.pfnCalculateMetricValues;
+        if( nullptr != pfnCalculateMetricValues )
+        {
+            result = pfnCalculateMetricValues( hMetricGroup, rawDataSize, pRawData, pMetricValueCount, pMetricValues );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -126,8 +165,19 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        *pCount = 1;
-        if( nullptr != phMetrics ) *reinterpret_cast<void**>(phMetrics) = context.get();
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGet = context.xetDdiTable.Metric.pfnGet;
+        if( nullptr != pfnGet )
+        {
+            result = pfnGet( hMetricGroup, pCount, phMetrics );
+        }
+        else
+        {
+            // generic implementation
+            for( size_t i = 0; ( nullptr != phMetrics ) && ( i < *pCount ); ++i )
+                phMetrics[ i ] = reinterpret_cast<xet_metric_handle_t>( context.get() );
+
+        }
 
         return result;
     }
@@ -142,7 +192,16 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        *pProperties = context.metricProperties;
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetProperties = context.xetDdiTable.Metric.pfnGetProperties;
+        if( nullptr != pfnGetProperties )
+        {
+            result = pfnGetProperties( hMetric, pProperties );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -158,6 +217,17 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnActivateMetricGroups = context.xetDdiTable.Device.pfnActivateMetricGroups;
+        if( nullptr != pfnActivateMetricGroups )
+        {
+            result = pfnActivateMetricGroups( hDevice, count, phMetricGroups );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -176,7 +246,18 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        *phMetricTracer = reinterpret_cast<xet_metric_tracer_handle_t>( context.get() );
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnOpen = context.xetDdiTable.MetricTracer.pfnOpen;
+        if( nullptr != pfnOpen )
+        {
+            result = pfnOpen( hDevice, hMetricGroup, desc, hNotificationEvent, phMetricTracer );
+        }
+        else
+        {
+            // generic implementation
+            *phMetricTracer = reinterpret_cast<xet_metric_tracer_handle_t>( context.get() );
+
+        }
 
         return result;
     }
@@ -192,6 +273,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnAppendMetricTracerMarker = context.xetDdiTable.CommandList.pfnAppendMetricTracerMarker;
+        if( nullptr != pfnAppendMetricTracerMarker )
+        {
+            result = pfnAppendMetricTracerMarker( hCommandList, hMetricTracer, value );
+        }
+        else
+        {
+            // generic implementation
+        }
+
         return result;
     }
 
@@ -204,6 +296,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnClose = context.xetDdiTable.MetricTracer.pfnClose;
+        if( nullptr != pfnClose )
+        {
+            result = pfnClose( hMetricTracer );
+        }
+        else
+        {
+            // generic implementation
+
+        }
 
         return result;
     }
@@ -228,8 +331,16 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        *pRawDataSize = 1;
-        if( pRawData ) *pRawData = 0;
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnReadData = context.xetDdiTable.MetricTracer.pfnReadData;
+        if( nullptr != pfnReadData )
+        {
+            result = pfnReadData( hMetricTracer, maxReportCount, pRawDataSize, pRawData );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -246,7 +357,18 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        *phMetricQueryPool = reinterpret_cast<xet_metric_query_pool_handle_t>( context.get() );
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnCreate = context.xetDdiTable.MetricQueryPool.pfnCreate;
+        if( nullptr != pfnCreate )
+        {
+            result = pfnCreate( hDevice, hMetricGroup, desc, phMetricQueryPool );
+        }
+        else
+        {
+            // generic implementation
+            *phMetricQueryPool = reinterpret_cast<xet_metric_query_pool_handle_t>( context.get() );
+
+        }
 
         return result;
     }
@@ -260,6 +382,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnDestroy = context.xetDdiTable.MetricQueryPool.pfnDestroy;
+        if( nullptr != pfnDestroy )
+        {
+            result = pfnDestroy( hMetricQueryPool );
+        }
+        else
+        {
+            // generic implementation
+
+        }
 
         return result;
     }
@@ -275,7 +408,18 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        *phMetricQuery = reinterpret_cast<xet_metric_query_handle_t>( context.get() );
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnCreate = context.xetDdiTable.MetricQuery.pfnCreate;
+        if( nullptr != pfnCreate )
+        {
+            result = pfnCreate( hMetricQueryPool, index, phMetricQuery );
+        }
+        else
+        {
+            // generic implementation
+            *phMetricQuery = reinterpret_cast<xet_metric_query_handle_t>( context.get() );
+
+        }
 
         return result;
     }
@@ -289,6 +433,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnDestroy = context.xetDdiTable.MetricQuery.pfnDestroy;
+        if( nullptr != pfnDestroy )
+        {
+            result = pfnDestroy( hMetricQuery );
+        }
+        else
+        {
+            // generic implementation
+
+        }
 
         return result;
     }
@@ -302,6 +457,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnReset = context.xetDdiTable.MetricQuery.pfnReset;
+        if( nullptr != pfnReset )
+        {
+            result = pfnReset( hMetricQuery );
+        }
+        else
+        {
+            // generic implementation
+        }
+
         return result;
     }
 
@@ -314,6 +480,17 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnAppendMetricQueryBegin = context.xetDdiTable.CommandList.pfnAppendMetricQueryBegin;
+        if( nullptr != pfnAppendMetricQueryBegin )
+        {
+            result = pfnAppendMetricQueryBegin( hCommandList, hMetricQuery );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -329,6 +506,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnAppendMetricQueryEnd = context.xetDdiTable.CommandList.pfnAppendMetricQueryEnd;
+        if( nullptr != pfnAppendMetricQueryEnd )
+        {
+            result = pfnAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent );
+        }
+        else
+        {
+            // generic implementation
+        }
+
         return result;
     }
 
@@ -340,6 +528,17 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnAppendMetricMemoryBarrier = context.xetDdiTable.CommandList.pfnAppendMetricMemoryBarrier;
+        if( nullptr != pfnAppendMetricMemoryBarrier )
+        {
+            result = pfnAppendMetricMemoryBarrier( hCommandList );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -362,8 +561,16 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        *pRawDataSize = 1;
-        if( pRawData ) *pRawData = 0;
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetData = context.xetDdiTable.MetricQuery.pfnGetData;
+        if( nullptr != pfnGetData )
+        {
+            result = pfnGetData( hMetricQuery, pRawDataSize, pRawData );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -379,6 +586,17 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetDebugInfo = context.xetDdiTable.Module.pfnGetDebugInfo;
+        if( nullptr != pfnGetDebugInfo )
+        {
+            result = pfnGetDebugInfo( hModule, format, pSize, pDebugInfo );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -399,6 +617,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetFunctionNames = context.xetDdiTable.Module.pfnGetFunctionNames;
+        if( nullptr != pfnGetFunctionNames )
+        {
+            result = pfnGetFunctionNames( hModule, pCount, pNames );
+        }
+        else
+        {
+            // generic implementation
+        }
+
         return result;
     }
 
@@ -411,6 +640,17 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetProfileInfo = context.xetDdiTable.Function.pfnGetProfileInfo;
+        if( nullptr != pfnGetProfileInfo )
+        {
+            result = pfnGetProfileInfo( hFunction, pInfo );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -426,7 +666,18 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        *pPowerHandle = reinterpret_cast<xet_power_handle_t>( context.get() );
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnCreate = context.xetDdiTable.Power.pfnCreate;
+        if( nullptr != pfnCreate )
+        {
+            result = pfnCreate( hDevice, flags, pPowerHandle );
+        }
+        else
+        {
+            // generic implementation
+            *pPowerHandle = reinterpret_cast<xet_power_handle_t>( context.get() );
+
+        }
 
         return result;
     }
@@ -440,6 +691,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnDestroy = context.xetDdiTable.Power.pfnDestroy;
+        if( nullptr != pfnDestroy )
+        {
+            result = pfnDestroy( hPower );
+        }
+        else
+        {
+            // generic implementation
+
+        }
 
         return result;
     }
@@ -454,6 +716,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetAveragePowerLimit = context.xetDdiTable.Power.pfnGetAveragePowerLimit;
+        if( nullptr != pfnGetAveragePowerLimit )
+        {
+            result = pfnGetAveragePowerLimit( hPower, pLimit );
+        }
+        else
+        {
+            // generic implementation
+        }
+
         return result;
     }
 
@@ -466,6 +739,17 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetBurstPowerLimit = context.xetDdiTable.Power.pfnGetBurstPowerLimit;
+        if( nullptr != pfnGetBurstPowerLimit )
+        {
+            result = pfnGetBurstPowerLimit( hPower, pLimit );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -480,6 +764,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetPeakPowerLimit = context.xetDdiTable.Power.pfnGetPeakPowerLimit;
+        if( nullptr != pfnGetPeakPowerLimit )
+        {
+            result = pfnGetPeakPowerLimit( hPower, pLimit );
+        }
+        else
+        {
+            // generic implementation
+        }
+
         return result;
     }
 
@@ -492,6 +787,17 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetAllPowerLimits = context.xetDdiTable.Power.pfnGetAllPowerLimits;
+        if( nullptr != pfnGetAllPowerLimits )
+        {
+            result = pfnGetAllPowerLimits( hPower, pLimits );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -506,6 +812,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetDefaultPowerLimits = context.xetDdiTable.Power.pfnGetDefaultPowerLimits;
+        if( nullptr != pfnGetDefaultPowerLimits )
+        {
+            result = pfnGetDefaultPowerLimits( hPower, pLimits );
+        }
+        else
+        {
+            // generic implementation
+        }
+
         return result;
     }
 
@@ -518,6 +835,17 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetAveragePowerLimit = context.xetDdiTable.Power.pfnSetAveragePowerLimit;
+        if( nullptr != pfnSetAveragePowerLimit )
+        {
+            result = pfnSetAveragePowerLimit( hPower, pLimit );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -532,6 +860,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetBurstPowerLimit = context.xetDdiTable.Power.pfnSetBurstPowerLimit;
+        if( nullptr != pfnSetBurstPowerLimit )
+        {
+            result = pfnSetBurstPowerLimit( hPower, pLimit );
+        }
+        else
+        {
+            // generic implementation
+        }
+
         return result;
     }
 
@@ -544,6 +883,17 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetPeakPowerLimit = context.xetDdiTable.Power.pfnSetPeakPowerLimit;
+        if( nullptr != pfnSetPeakPowerLimit )
+        {
+            result = pfnSetPeakPowerLimit( hPower, pLimit );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -558,6 +908,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetPowerLimits = context.xetDdiTable.Power.pfnSetPowerLimits;
+        if( nullptr != pfnSetPowerLimits )
+        {
+            result = pfnSetPowerLimits( hPower, pLimits );
+        }
+        else
+        {
+            // generic implementation
+        }
+
         return result;
     }
 
@@ -570,6 +931,17 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetEnergyCounter = context.xetDdiTable.Power.pfnGetEnergyCounter;
+        if( nullptr != pfnGetEnergyCounter )
+        {
+            result = pfnGetEnergyCounter( hPower, pEnergy );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -584,6 +956,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetTurboMode = context.xetDdiTable.Power.pfnGetTurboMode;
+        if( nullptr != pfnGetTurboMode )
+        {
+            result = pfnGetTurboMode( hPower, pTurboMode );
+        }
+        else
+        {
+            // generic implementation
+        }
+
         return result;
     }
 
@@ -596,6 +979,17 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetTurboMode = context.xetDdiTable.Power.pfnSetTurboMode;
+        if( nullptr != pfnSetTurboMode )
+        {
+            result = pfnSetTurboMode( hPower, pTurboMode );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -619,8 +1013,19 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        for( size_t i = 0; ( nullptr != phFreqDomain ) && ( i < *pCount ); ++i )
-            phFreqDomain[ i ] = reinterpret_cast<xet_freq_domain_handle_t>( context.get() );
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGet = context.xetDdiTable.FreqDomain.pfnGet;
+        if( nullptr != pfnGet )
+        {
+            result = pfnGet( hPower, pCount, phFreqDomain );
+        }
+        else
+        {
+            // generic implementation
+            for( size_t i = 0; ( nullptr != phFreqDomain ) && ( i < *pCount ); ++i )
+                phFreqDomain[ i ] = reinterpret_cast<xet_freq_domain_handle_t>( context.get() );
+
+        }
 
         return result;
     }
@@ -634,6 +1039,17 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetProperties = context.xetDdiTable.FreqDomain.pfnGetProperties;
+        if( nullptr != pfnGetProperties )
+        {
+            result = pfnGetProperties( hFreqDomain, pFreqDomainProperties );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -649,7 +1065,18 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        *phSrcFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>( context.get() );
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetSourceFreqDomain = context.xetDdiTable.FreqDomain.pfnGetSourceFreqDomain;
+        if( nullptr != pfnGetSourceFreqDomain )
+        {
+            result = pfnGetSourceFreqDomain( hFreqDomain, phSrcFreqDomain );
+        }
+        else
+        {
+            // generic implementation
+            *phSrcFreqDomain = reinterpret_cast<xet_freq_domain_handle_t>( context.get() );
+
+        }
 
         return result;
     }
@@ -665,6 +1092,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetSupportedClocks = context.xetDdiTable.FreqDomain.pfnGetSupportedClocks;
+        if( nullptr != pfnGetSupportedClocks )
+        {
+            result = pfnGetSupportedClocks( hFreqDomain, numClockPoints, pClocks );
+        }
+        else
+        {
+            // generic implementation
+        }
+
         return result;
     }
 
@@ -678,6 +1116,17 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetSupportedClockDividers = context.xetDdiTable.FreqDomain.pfnGetSupportedClockDividers;
+        if( nullptr != pfnGetSupportedClockDividers )
+        {
+            result = pfnGetSupportedClockDividers( hFreqDomain, numClockDividers, pDividers );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -693,6 +1142,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetClockRange = context.xetDdiTable.FreqDomain.pfnGetClockRange;
+        if( nullptr != pfnGetClockRange )
+        {
+            result = pfnGetClockRange( hFreqDomain, pMinClock, pMaxClock );
+        }
+        else
+        {
+            // generic implementation
+        }
+
         return result;
     }
 
@@ -707,6 +1167,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetClockRange = context.xetDdiTable.FreqDomain.pfnSetClockRange;
+        if( nullptr != pfnSetClockRange )
+        {
+            result = pfnSetClockRange( hFreqDomain, minClock, maxClock );
+        }
+        else
+        {
+            // generic implementation
+        }
+
         return result;
     }
 
@@ -719,6 +1190,17 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetClockDivider = context.xetDdiTable.FreqDomain.pfnSetClockDivider;
+        if( nullptr != pfnSetClockDivider )
+        {
+            result = pfnSetClockDivider( hFreqDomain, pClockDividerRequest );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -735,6 +1217,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetCurrentFrequency = context.xetDdiTable.FreqDomain.pfnGetCurrentFrequency;
+        if( nullptr != pfnGetCurrentFrequency )
+        {
+            result = pfnGetCurrentFrequency( hFreqDomain, pFreqRequest, pFreqResolved, pFreqThrottleReasons );
+        }
+        else
+        {
+            // generic implementation
+        }
+
         return result;
     }
 
@@ -747,6 +1240,17 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnFanCount = context.xetDdiTable.Power.pfnFanCount;
+        if( nullptr != pfnFanCount )
+        {
+            result = pfnFanCount( hPower, pFanCount );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -761,6 +1265,17 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnFanGetProperties = context.xetDdiTable.Power.pfnFanGetProperties;
+        if( nullptr != pfnFanGetProperties )
+        {
+            result = pfnFanGetProperties( hPower, fanIndex, pFanProperties );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -779,6 +1294,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnFanGetSpeedTable = context.xetDdiTable.Power.pfnFanGetSpeedTable;
+        if( nullptr != pfnFanGetSpeedTable )
+        {
+            result = pfnFanGetSpeedTable( hPower, fanIndex, fanSpeedInRpm, pNumFanPoints, pFanPoints );
+        }
+        else
+        {
+            // generic implementation
+        }
+
         return result;
     }
 
@@ -793,6 +1319,17 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnFanSetSpeedTable = context.xetDdiTable.Power.pfnFanSetSpeedTable;
+        if( nullptr != pfnFanSetSpeedTable )
+        {
+            result = pfnFanSetSpeedTable( hPower, fanIndex, numFanPoints, pFanPoints );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -811,6 +1348,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnFanGetSpeed = context.xetDdiTable.Power.pfnFanGetSpeed;
+        if( nullptr != pfnFanGetSpeed )
+        {
+            result = pfnFanGetSpeed( hPower, startFanIndex, numFans, fanSpeedInRpm, pFanSpeed );
+        }
+        else
+        {
+            // generic implementation
+        }
+
         return result;
     }
 
@@ -827,6 +1375,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnFanSetSpeed = context.xetDdiTable.Power.pfnFanSetSpeed;
+        if( nullptr != pfnFanSetSpeed )
+        {
+            result = pfnFanSetSpeed( hPower, startFanIndex, numFans, pFanSpeed );
+        }
+        else
+        {
+            // generic implementation
+        }
+
         return result;
     }
 
@@ -839,6 +1398,17 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnTemperatureSensorCount = context.xetDdiTable.Power.pfnTemperatureSensorCount;
+        if( nullptr != pfnTemperatureSensorCount )
+        {
+            result = pfnTemperatureSensorCount( hPower, pSensorCount );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -853,6 +1423,17 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetTemperatureProperties = context.xetDdiTable.Power.pfnGetTemperatureProperties;
+        if( nullptr != pfnGetTemperatureProperties )
+        {
+            result = pfnGetTemperatureProperties( hPower, sensorIndex, pProperties );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -870,6 +1451,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetTemperature = context.xetDdiTable.Power.pfnGetTemperature;
+        if( nullptr != pfnGetTemperature )
+        {
+            result = pfnGetTemperature( hPower, startSensorIndex, numSensors, pTemperatures );
+        }
+        else
+        {
+            // generic implementation
+        }
+
         return result;
     }
 
@@ -885,6 +1477,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetTemperatureThreshold = context.xetDdiTable.Power.pfnSetTemperatureThreshold;
+        if( nullptr != pfnSetTemperatureThreshold )
+        {
+            result = pfnSetTemperatureThreshold( hPower, sensorIndex, maxTemperature );
+        }
+        else
+        {
+            // generic implementation
+        }
+
         return result;
     }
 
@@ -897,6 +1500,17 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnActivityCount = context.xetDdiTable.Power.pfnActivityCount;
+        if( nullptr != pfnActivityCount )
+        {
+            result = pfnActivityCount( hPower, pActivityCount );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -911,6 +1525,17 @@ namespace driver
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetActivityProperties = context.xetDdiTable.Power.pfnGetActivityProperties;
+        if( nullptr != pfnGetActivityProperties )
+        {
+            result = pfnGetActivityProperties( hPower, activityIndex, pProperties );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -928,6 +1553,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetActivityCounters = context.xetDdiTable.Power.pfnGetActivityCounters;
+        if( nullptr != pfnGetActivityCounters )
+        {
+            result = pfnGetActivityCounters( hPower, startCounterIndex, numCounters, pCounters );
+        }
+        else
+        {
+            // generic implementation
+        }
+
         return result;
     }
 
@@ -942,10 +1578,18 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        context.tracerData.emplace_back();
-        auto index = context.tracerData.size() - 1;
-        context.tracerData[ index ].globalUserData = desc->pGlobalUserData;
-        *phTracer = reinterpret_cast<decltype(*phTracer)>( index );
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnCreate = context.xetDdiTable.Tracer.pfnCreate;
+        if( nullptr != pfnCreate )
+        {
+            result = pfnCreate( hDeviceGroup, desc, phTracer );
+        }
+        else
+        {
+            // generic implementation
+            *phTracer = reinterpret_cast<xet_tracer_handle_t>( context.get() );
+
+        }
 
         return result;
     }
@@ -959,6 +1603,17 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnDestroy = context.xetDdiTable.Tracer.pfnDestroy;
+        if( nullptr != pfnDestroy )
+        {
+            result = pfnDestroy( hTracer );
+        }
+        else
+        {
+            // generic implementation
+
+        }
 
         return result;
     }
@@ -975,9 +1630,16 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        auto index = reinterpret_cast<size_t>( hTracer );
-        context.tracerData[ index ].xePrologueCbs = *pCoreCbs;
-        if( pExperimentalCbs ) context.tracerData[ index ].xexPrologueCbs = *pExperimentalCbs;
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetPrologues = context.xetDdiTable.Tracer.pfnSetPrologues;
+        if( nullptr != pfnSetPrologues )
+        {
+            result = pfnSetPrologues( hTracer, pCoreCbs, pExperimentalCbs );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -994,9 +1656,16 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        auto index = reinterpret_cast<size_t>( hTracer );
-        context.tracerData[ index ].xeEpilogueCbs = *pCoreCbs;
-        if( pExperimentalCbs ) context.tracerData[ index ].xexEpilogueCbs = *pExperimentalCbs;
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetEpilogues = context.xetDdiTable.Tracer.pfnSetEpilogues;
+        if( nullptr != pfnSetEpilogues )
+        {
+            result = pfnSetEpilogues( hTracer, pCoreCbs, pExperimentalCbs );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
@@ -1011,8 +1680,16 @@ namespace driver
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
-        auto index = reinterpret_cast<size_t>( hTracer );
-        context.tracerData[ index ].enabled = enable;
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnSetEnabled = context.xetDdiTable.Tracer.pfnSetEnabled;
+        if( nullptr != pfnSetEnabled )
+        {
+            result = pfnSetEnabled( hTracer, enable );
+        }
+        else
+        {
+            // generic implementation
+        }
 
         return result;
     }
