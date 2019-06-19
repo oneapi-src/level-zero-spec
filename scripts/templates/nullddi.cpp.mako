@@ -113,7 +113,7 @@ namespace instrumented
 
         // capture parameters
         ${th.make_pfncb_param_type(n, tags, obj)} in_params = {
-            &${",\n                &".join(th.make_param_lines(n, tags, obj, format=["name"]))}
+            &${",\n            &".join(th.make_param_lines(n, tags, obj, format=["name"]))}
         };
 
         // call each callback registered
@@ -133,7 +133,7 @@ namespace instrumented
 
         // capture parameters
         ${th.make_pfncb_param_type(n, tags, obj)} out_params = {
-            &${",\n                &".join(th.make_param_lines(n, tags, obj, format=["name"]))}
+            &${",\n            &".join(th.make_param_lines(n, tags, obj, format=["name"]))}
         };
 
         // call each callback registered

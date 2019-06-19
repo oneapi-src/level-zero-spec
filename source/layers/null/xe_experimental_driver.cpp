@@ -220,8 +220,8 @@ namespace instrumented
         // capture parameters
         xex_command_list_reserve_space_params_t in_params = {
             &hCommandList,
-                &size,
-                &ptr
+            &size,
+            &ptr
         };
 
         // call each callback registered
@@ -242,8 +242,8 @@ namespace instrumented
         // capture parameters
         xex_command_list_reserve_space_params_t out_params = {
             &hCommandList,
-                &size,
-                &ptr
+            &size,
+            &ptr
         };
 
         // call each callback registered
@@ -274,8 +274,8 @@ namespace instrumented
         // capture parameters
         xex_command_graph_create_params_t in_params = {
             &hDevice,
-                &desc,
-                &phCommandGraph
+            &desc,
+            &phCommandGraph
         };
 
         // call each callback registered
@@ -296,8 +296,8 @@ namespace instrumented
         // capture parameters
         xex_command_graph_create_params_t out_params = {
             &hDevice,
-                &desc,
-                &phCommandGraph
+            &desc,
+            &phCommandGraph
         };
 
         // call each callback registered

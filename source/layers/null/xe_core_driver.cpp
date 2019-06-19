@@ -2660,7 +2660,7 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_driver_version_params_t in_params = {
             &hDeviceGroup,
-                &version
+            &version
         };
 
         // call each callback registered
@@ -2681,7 +2681,7 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_driver_version_params_t out_params = {
             &hDeviceGroup,
-                &version
+            &version
         };
 
         // call each callback registered
@@ -2718,7 +2718,7 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_params_t in_params = {
             &pCount,
-                &phDeviceGroups
+            &phDeviceGroups
         };
 
         // call each callback registered
@@ -2739,7 +2739,7 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_params_t out_params = {
             &pCount,
-                &phDeviceGroups
+            &phDeviceGroups
         };
 
         // call each callback registered
@@ -2775,8 +2775,8 @@ namespace instrumented
         // capture parameters
         xe_device_get_params_t in_params = {
             &hDeviceGroup,
-                &pCount,
-                &phDevices
+            &pCount,
+            &phDevices
         };
 
         // call each callback registered
@@ -2797,8 +2797,8 @@ namespace instrumented
         // capture parameters
         xe_device_get_params_t out_params = {
             &hDeviceGroup,
-                &pCount,
-                &phDevices
+            &pCount,
+            &phDevices
         };
 
         // call each callback registered
@@ -2834,8 +2834,8 @@ namespace instrumented
         // capture parameters
         xe_device_get_sub_devices_params_t in_params = {
             &hDevice,
-                &pCount,
-                &phSubdevices
+            &pCount,
+            &phSubdevices
         };
 
         // call each callback registered
@@ -2856,8 +2856,8 @@ namespace instrumented
         // capture parameters
         xe_device_get_sub_devices_params_t out_params = {
             &hDevice,
-                &pCount,
-                &phSubdevices
+            &pCount,
+            &phSubdevices
         };
 
         // call each callback registered
@@ -2887,7 +2887,7 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_api_version_params_t in_params = {
             &hDeviceGroup,
-                &version
+            &version
         };
 
         // call each callback registered
@@ -2908,7 +2908,7 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_api_version_params_t out_params = {
             &hDeviceGroup,
-                &version
+            &version
         };
 
         // call each callback registered
@@ -2938,7 +2938,7 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_device_properties_params_t in_params = {
             &hDeviceGroup,
-                &pDeviceProperties
+            &pDeviceProperties
         };
 
         // call each callback registered
@@ -2959,7 +2959,7 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_device_properties_params_t out_params = {
             &hDeviceGroup,
-                &pDeviceProperties
+            &pDeviceProperties
         };
 
         // call each callback registered
@@ -2989,7 +2989,7 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_compute_properties_params_t in_params = {
             &hDeviceGroup,
-                &pComputeProperties
+            &pComputeProperties
         };
 
         // call each callback registered
@@ -3010,7 +3010,7 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_compute_properties_params_t out_params = {
             &hDeviceGroup,
-                &pComputeProperties
+            &pComputeProperties
         };
 
         // call each callback registered
@@ -3049,8 +3049,8 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_memory_properties_params_t in_params = {
             &hDeviceGroup,
-                &pCount,
-                &pMemProperties
+            &pCount,
+            &pMemProperties
         };
 
         // call each callback registered
@@ -3071,8 +3071,8 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_memory_properties_params_t out_params = {
             &hDeviceGroup,
-                &pCount,
-                &pMemProperties
+            &pCount,
+            &pMemProperties
         };
 
         // call each callback registered
@@ -3102,7 +3102,7 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_memory_access_properties_params_t in_params = {
             &hDeviceGroup,
-                &pMemAccessProperties
+            &pMemAccessProperties
         };
 
         // call each callback registered
@@ -3123,7 +3123,7 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_memory_access_properties_params_t out_params = {
             &hDeviceGroup,
-                &pMemAccessProperties
+            &pMemAccessProperties
         };
 
         // call each callback registered
@@ -3153,7 +3153,7 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_cache_properties_params_t in_params = {
             &hDeviceGroup,
-                &pCacheProperties
+            &pCacheProperties
         };
 
         // call each callback registered
@@ -3174,7 +3174,7 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_cache_properties_params_t out_params = {
             &hDeviceGroup,
-                &pCacheProperties
+            &pCacheProperties
         };
 
         // call each callback registered
@@ -3204,7 +3204,7 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_image_properties_params_t in_params = {
             &hDeviceGroup,
-                &pImageProperties
+            &pImageProperties
         };
 
         // call each callback registered
@@ -3225,7 +3225,7 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_image_properties_params_t out_params = {
             &hDeviceGroup,
-                &pImageProperties
+            &pImageProperties
         };
 
         // call each callback registered
@@ -3256,8 +3256,8 @@ namespace instrumented
         // capture parameters
         xe_device_get_p2_p_properties_params_t in_params = {
             &hDevice,
-                &hPeerDevice,
-                &pP2PProperties
+            &hPeerDevice,
+            &pP2PProperties
         };
 
         // call each callback registered
@@ -3278,8 +3278,8 @@ namespace instrumented
         // capture parameters
         xe_device_get_p2_p_properties_params_t out_params = {
             &hDevice,
-                &hPeerDevice,
-                &pP2PProperties
+            &hPeerDevice,
+            &pP2PProperties
         };
 
         // call each callback registered
@@ -3310,8 +3310,8 @@ namespace instrumented
         // capture parameters
         xe_device_can_access_peer_params_t in_params = {
             &hDevice,
-                &hPeerDevice,
-                &value
+            &hPeerDevice,
+            &value
         };
 
         // call each callback registered
@@ -3332,8 +3332,8 @@ namespace instrumented
         // capture parameters
         xe_device_can_access_peer_params_t out_params = {
             &hDevice,
-                &hPeerDevice,
-                &value
+            &hPeerDevice,
+            &value
         };
 
         // call each callback registered
@@ -3363,7 +3363,7 @@ namespace instrumented
         // capture parameters
         xe_device_set_intermediate_cache_config_params_t in_params = {
             &hDevice,
-                &CacheConfig
+            &CacheConfig
         };
 
         // call each callback registered
@@ -3384,7 +3384,7 @@ namespace instrumented
         // capture parameters
         xe_device_set_intermediate_cache_config_params_t out_params = {
             &hDevice,
-                &CacheConfig
+            &CacheConfig
         };
 
         // call each callback registered
@@ -3414,7 +3414,7 @@ namespace instrumented
         // capture parameters
         xe_device_set_last_level_cache_config_params_t in_params = {
             &hDevice,
-                &CacheConfig
+            &CacheConfig
         };
 
         // call each callback registered
@@ -3435,7 +3435,7 @@ namespace instrumented
         // capture parameters
         xe_device_set_last_level_cache_config_params_t out_params = {
             &hDevice,
-                &CacheConfig
+            &CacheConfig
         };
 
         // call each callback registered
@@ -3466,8 +3466,8 @@ namespace instrumented
         // capture parameters
         xe_command_queue_create_params_t in_params = {
             &hDevice,
-                &desc,
-                &phCommandQueue
+            &desc,
+            &phCommandQueue
         };
 
         // call each callback registered
@@ -3488,8 +3488,8 @@ namespace instrumented
         // capture parameters
         xe_command_queue_create_params_t out_params = {
             &hDevice,
-                &desc,
-                &phCommandQueue
+            &desc,
+            &phCommandQueue
         };
 
         // call each callback registered
@@ -3570,9 +3570,9 @@ namespace instrumented
         // capture parameters
         xe_command_queue_execute_command_lists_params_t in_params = {
             &hCommandQueue,
-                &numCommandLists,
-                &phCommandLists,
-                &hFence
+            &numCommandLists,
+            &phCommandLists,
+            &hFence
         };
 
         // call each callback registered
@@ -3593,9 +3593,9 @@ namespace instrumented
         // capture parameters
         xe_command_queue_execute_command_lists_params_t out_params = {
             &hCommandQueue,
-                &numCommandLists,
-                &phCommandLists,
-                &hFence
+            &numCommandLists,
+            &phCommandLists,
+            &hFence
         };
 
         // call each callback registered
@@ -3629,7 +3629,7 @@ namespace instrumented
         // capture parameters
         xe_command_queue_synchronize_params_t in_params = {
             &hCommandQueue,
-                &timeout
+            &timeout
         };
 
         // call each callback registered
@@ -3650,7 +3650,7 @@ namespace instrumented
         // capture parameters
         xe_command_queue_synchronize_params_t out_params = {
             &hCommandQueue,
-                &timeout
+            &timeout
         };
 
         // call each callback registered
@@ -3681,8 +3681,8 @@ namespace instrumented
         // capture parameters
         xe_command_list_create_params_t in_params = {
             &hDevice,
-                &desc,
-                &phCommandList
+            &desc,
+            &phCommandList
         };
 
         // call each callback registered
@@ -3703,8 +3703,8 @@ namespace instrumented
         // capture parameters
         xe_command_list_create_params_t out_params = {
             &hDevice,
-                &desc,
-                &phCommandList
+            &desc,
+            &phCommandList
         };
 
         // call each callback registered
@@ -3735,8 +3735,8 @@ namespace instrumented
         // capture parameters
         xe_command_list_create_immediate_params_t in_params = {
             &hDevice,
-                &altdesc,
-                &phCommandList
+            &altdesc,
+            &phCommandList
         };
 
         // call each callback registered
@@ -3757,8 +3757,8 @@ namespace instrumented
         // capture parameters
         xe_command_list_create_immediate_params_t out_params = {
             &hDevice,
-                &altdesc,
-                &phCommandList
+            &altdesc,
+            &phCommandList
         };
 
         // call each callback registered
@@ -3933,8 +3933,8 @@ namespace instrumented
         // capture parameters
         xe_command_list_set_parameter_params_t in_params = {
             &hCommandList,
-                &parameter,
-                &value
+            &parameter,
+            &value
         };
 
         // call each callback registered
@@ -3955,8 +3955,8 @@ namespace instrumented
         // capture parameters
         xe_command_list_set_parameter_params_t out_params = {
             &hCommandList,
-                &parameter,
-                &value
+            &parameter,
+            &value
         };
 
         // call each callback registered
@@ -3987,8 +3987,8 @@ namespace instrumented
         // capture parameters
         xe_command_list_get_parameter_params_t in_params = {
             &hCommandList,
-                &parameter,
-                &value
+            &parameter,
+            &value
         };
 
         // call each callback registered
@@ -4009,8 +4009,8 @@ namespace instrumented
         // capture parameters
         xe_command_list_get_parameter_params_t out_params = {
             &hCommandList,
-                &parameter,
-                &value
+            &parameter,
+            &value
         };
 
         // call each callback registered
@@ -4091,9 +4091,9 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_barrier_params_t in_params = {
             &hCommandList,
-                &hSignalEvent,
-                &numWaitEvents,
-                &phWaitEvents
+            &hSignalEvent,
+            &numWaitEvents,
+            &phWaitEvents
         };
 
         // call each callback registered
@@ -4114,9 +4114,9 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_barrier_params_t out_params = {
             &hCommandList,
-                &hSignalEvent,
-                &numWaitEvents,
-                &phWaitEvents
+            &hSignalEvent,
+            &numWaitEvents,
+            &phWaitEvents
         };
 
         // call each callback registered
@@ -4152,12 +4152,12 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_memory_ranges_barrier_params_t in_params = {
             &hCommandList,
-                &numRanges,
-                &pRangeSizes,
-                &pRanges,
-                &hSignalEvent,
-                &numWaitEvents,
-                &phWaitEvents
+            &numRanges,
+            &pRangeSizes,
+            &pRanges,
+            &hSignalEvent,
+            &numWaitEvents,
+            &phWaitEvents
         };
 
         // call each callback registered
@@ -4178,12 +4178,12 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_memory_ranges_barrier_params_t out_params = {
             &hCommandList,
-                &numRanges,
-                &pRangeSizes,
-                &pRanges,
-                &hSignalEvent,
-                &numWaitEvents,
-                &phWaitEvents
+            &numRanges,
+            &pRangeSizes,
+            &pRanges,
+            &hSignalEvent,
+            &numWaitEvents,
+            &phWaitEvents
         };
 
         // call each callback registered
@@ -4264,9 +4264,9 @@ namespace instrumented
         // capture parameters
         xe_device_register_cl_memory_params_t in_params = {
             &hDevice,
-                &context,
-                &mem,
-                &ptr
+            &context,
+            &mem,
+            &ptr
         };
 
         // call each callback registered
@@ -4287,9 +4287,9 @@ namespace instrumented
         // capture parameters
         xe_device_register_cl_memory_params_t out_params = {
             &hDevice,
-                &context,
-                &mem,
-                &ptr
+            &context,
+            &mem,
+            &ptr
         };
 
         // call each callback registered
@@ -4323,9 +4323,9 @@ namespace instrumented
         // capture parameters
         xe_device_register_cl_program_params_t in_params = {
             &hDevice,
-                &context,
-                &program,
-                &phModule
+            &context,
+            &program,
+            &phModule
         };
 
         // call each callback registered
@@ -4346,9 +4346,9 @@ namespace instrumented
         // capture parameters
         xe_device_register_cl_program_params_t out_params = {
             &hDevice,
-                &context,
-                &program,
-                &phModule
+            &context,
+            &program,
+            &phModule
         };
 
         // call each callback registered
@@ -4382,9 +4382,9 @@ namespace instrumented
         // capture parameters
         xe_device_register_cl_command_queue_params_t in_params = {
             &hDevice,
-                &context,
-                &command_queue,
-                &phCommandQueue
+            &context,
+            &command_queue,
+            &phCommandQueue
         };
 
         // call each callback registered
@@ -4405,9 +4405,9 @@ namespace instrumented
         // capture parameters
         xe_device_register_cl_command_queue_params_t out_params = {
             &hDevice,
-                &context,
-                &command_queue,
-                &phCommandQueue
+            &context,
+            &command_queue,
+            &phCommandQueue
         };
 
         // call each callback registered
@@ -4441,10 +4441,10 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_memory_copy_params_t in_params = {
             &hCommandList,
-                &dstptr,
-                &srcptr,
-                &size,
-                &hEvent
+            &dstptr,
+            &srcptr,
+            &size,
+            &hEvent
         };
 
         // call each callback registered
@@ -4465,10 +4465,10 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_memory_copy_params_t out_params = {
             &hCommandList,
-                &dstptr,
-                &srcptr,
-                &size,
-                &hEvent
+            &dstptr,
+            &srcptr,
+            &size,
+            &hEvent
         };
 
         // call each callback registered
@@ -4501,10 +4501,10 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_memory_set_params_t in_params = {
             &hCommandList,
-                &ptr,
-                &value,
-                &size,
-                &hEvent
+            &ptr,
+            &value,
+            &size,
+            &hEvent
         };
 
         // call each callback registered
@@ -4525,10 +4525,10 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_memory_set_params_t out_params = {
             &hCommandList,
-                &ptr,
-                &value,
-                &size,
-                &hEvent
+            &ptr,
+            &value,
+            &size,
+            &hEvent
         };
 
         // call each callback registered
@@ -4564,13 +4564,13 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_memory_copy_region_params_t in_params = {
             &hCommandList,
-                &dstptr,
-                &dstRegion,
-                &dstPitch,
-                &srcptr,
-                &srcRegion,
-                &srcPitch,
-                &hEvent
+            &dstptr,
+            &dstRegion,
+            &dstPitch,
+            &srcptr,
+            &srcRegion,
+            &srcPitch,
+            &hEvent
         };
 
         // call each callback registered
@@ -4591,13 +4591,13 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_memory_copy_region_params_t out_params = {
             &hCommandList,
-                &dstptr,
-                &dstRegion,
-                &dstPitch,
-                &srcptr,
-                &srcRegion,
-                &srcPitch,
-                &hEvent
+            &dstptr,
+            &dstRegion,
+            &dstPitch,
+            &srcptr,
+            &srcRegion,
+            &srcPitch,
+            &hEvent
         };
 
         // call each callback registered
@@ -4629,9 +4629,9 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_image_copy_params_t in_params = {
             &hCommandList,
-                &hDstImage,
-                &hSrcImage,
-                &hEvent
+            &hDstImage,
+            &hSrcImage,
+            &hEvent
         };
 
         // call each callback registered
@@ -4652,9 +4652,9 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_image_copy_params_t out_params = {
             &hCommandList,
-                &hDstImage,
-                &hSrcImage,
-                &hEvent
+            &hDstImage,
+            &hSrcImage,
+            &hEvent
         };
 
         // call each callback registered
@@ -4688,11 +4688,11 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_image_copy_region_params_t in_params = {
             &hCommandList,
-                &hDstImage,
-                &hSrcImage,
-                &pDstRegion,
-                &pSrcRegion,
-                &hEvent
+            &hDstImage,
+            &hSrcImage,
+            &pDstRegion,
+            &pSrcRegion,
+            &hEvent
         };
 
         // call each callback registered
@@ -4713,11 +4713,11 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_image_copy_region_params_t out_params = {
             &hCommandList,
-                &hDstImage,
-                &hSrcImage,
-                &pDstRegion,
-                &pSrcRegion,
-                &hEvent
+            &hDstImage,
+            &hSrcImage,
+            &pDstRegion,
+            &pSrcRegion,
+            &hEvent
         };
 
         // call each callback registered
@@ -4750,10 +4750,10 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_image_copy_to_memory_params_t in_params = {
             &hCommandList,
-                &dstptr,
-                &hSrcImage,
-                &pSrcRegion,
-                &hEvent
+            &dstptr,
+            &hSrcImage,
+            &pSrcRegion,
+            &hEvent
         };
 
         // call each callback registered
@@ -4774,10 +4774,10 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_image_copy_to_memory_params_t out_params = {
             &hCommandList,
-                &dstptr,
-                &hSrcImage,
-                &pSrcRegion,
-                &hEvent
+            &dstptr,
+            &hSrcImage,
+            &pSrcRegion,
+            &hEvent
         };
 
         // call each callback registered
@@ -4810,10 +4810,10 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_image_copy_from_memory_params_t in_params = {
             &hCommandList,
-                &hDstImage,
-                &srcptr,
-                &pDstRegion,
-                &hEvent
+            &hDstImage,
+            &srcptr,
+            &pDstRegion,
+            &hEvent
         };
 
         // call each callback registered
@@ -4834,10 +4834,10 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_image_copy_from_memory_params_t out_params = {
             &hCommandList,
-                &hDstImage,
-                &srcptr,
-                &pDstRegion,
-                &hEvent
+            &hDstImage,
+            &srcptr,
+            &pDstRegion,
+            &hEvent
         };
 
         // call each callback registered
@@ -4868,8 +4868,8 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_memory_prefetch_params_t in_params = {
             &hCommandList,
-                &ptr,
-                &size
+            &ptr,
+            &size
         };
 
         // call each callback registered
@@ -4890,8 +4890,8 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_memory_prefetch_params_t out_params = {
             &hCommandList,
-                &ptr,
-                &size
+            &ptr,
+            &size
         };
 
         // call each callback registered
@@ -4924,10 +4924,10 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_mem_advise_params_t in_params = {
             &hCommandList,
-                &hDevice,
-                &ptr,
-                &size,
-                &advice
+            &hDevice,
+            &ptr,
+            &size,
+            &advice
         };
 
         // call each callback registered
@@ -4948,10 +4948,10 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_mem_advise_params_t out_params = {
             &hCommandList,
-                &hDevice,
-                &ptr,
-                &size,
-                &advice
+            &hDevice,
+            &ptr,
+            &size,
+            &advice
         };
 
         // call each callback registered
@@ -4986,10 +4986,10 @@ namespace instrumented
         // capture parameters
         xe_event_pool_create_params_t in_params = {
             &hDeviceGroup,
-                &desc,
-                &numDevices,
-                &phDevices,
-                &phEventPool
+            &desc,
+            &numDevices,
+            &phDevices,
+            &phEventPool
         };
 
         // call each callback registered
@@ -5010,10 +5010,10 @@ namespace instrumented
         // capture parameters
         xe_event_pool_create_params_t out_params = {
             &hDeviceGroup,
-                &desc,
-                &numDevices,
-                &phDevices,
-                &phEventPool
+            &desc,
+            &numDevices,
+            &phDevices,
+            &phEventPool
         };
 
         // call each callback registered
@@ -5092,8 +5092,8 @@ namespace instrumented
         // capture parameters
         xe_event_create_params_t in_params = {
             &hEventPool,
-                &desc,
-                &phEvent
+            &desc,
+            &phEvent
         };
 
         // call each callback registered
@@ -5114,8 +5114,8 @@ namespace instrumented
         // capture parameters
         xe_event_create_params_t out_params = {
             &hEventPool,
-                &desc,
-                &phEvent
+            &desc,
+            &phEvent
         };
 
         // call each callback registered
@@ -5193,7 +5193,7 @@ namespace instrumented
         // capture parameters
         xe_event_pool_get_ipc_handle_params_t in_params = {
             &hEventPool,
-                &phIpc
+            &phIpc
         };
 
         // call each callback registered
@@ -5214,7 +5214,7 @@ namespace instrumented
         // capture parameters
         xe_event_pool_get_ipc_handle_params_t out_params = {
             &hEventPool,
-                &phIpc
+            &phIpc
         };
 
         // call each callback registered
@@ -5245,8 +5245,8 @@ namespace instrumented
         // capture parameters
         xe_event_pool_open_ipc_handle_params_t in_params = {
             &hDevice,
-                &hIpc,
-                &phEventPool
+            &hIpc,
+            &phEventPool
         };
 
         // call each callback registered
@@ -5267,8 +5267,8 @@ namespace instrumented
         // capture parameters
         xe_event_pool_open_ipc_handle_params_t out_params = {
             &hDevice,
-                &hIpc,
-                &phEventPool
+            &hIpc,
+            &phEventPool
         };
 
         // call each callback registered
@@ -5346,7 +5346,7 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_signal_event_params_t in_params = {
             &hCommandList,
-                &hEvent
+            &hEvent
         };
 
         // call each callback registered
@@ -5367,7 +5367,7 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_signal_event_params_t out_params = {
             &hCommandList,
-                &hEvent
+            &hEvent
         };
 
         // call each callback registered
@@ -5399,8 +5399,8 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_wait_on_events_params_t in_params = {
             &hCommandList,
-                &numEvents,
-                &phEvents
+            &numEvents,
+            &phEvents
         };
 
         // call each callback registered
@@ -5421,8 +5421,8 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_wait_on_events_params_t out_params = {
             &hCommandList,
-                &numEvents,
-                &phEvents
+            &numEvents,
+            &phEvents
         };
 
         // call each callback registered
@@ -5504,7 +5504,7 @@ namespace instrumented
         // capture parameters
         xe_event_host_synchronize_params_t in_params = {
             &hEvent,
-                &timeout
+            &timeout
         };
 
         // call each callback registered
@@ -5525,7 +5525,7 @@ namespace instrumented
         // capture parameters
         xe_event_host_synchronize_params_t out_params = {
             &hEvent,
-                &timeout
+            &timeout
         };
 
         // call each callback registered
@@ -5603,7 +5603,7 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_event_reset_params_t in_params = {
             &hCommandList,
-                &hEvent
+            &hEvent
         };
 
         // call each callback registered
@@ -5624,7 +5624,7 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_event_reset_params_t out_params = {
             &hCommandList,
-                &hEvent
+            &hEvent
         };
 
         // call each callback registered
@@ -5703,8 +5703,8 @@ namespace instrumented
         // capture parameters
         xe_fence_create_params_t in_params = {
             &hCommandQueue,
-                &desc,
-                &phFence
+            &desc,
+            &phFence
         };
 
         // call each callback registered
@@ -5725,8 +5725,8 @@ namespace instrumented
         // capture parameters
         xe_fence_create_params_t out_params = {
             &hCommandQueue,
-                &desc,
-                &phFence
+            &desc,
+            &phFence
         };
 
         // call each callback registered
@@ -5808,7 +5808,7 @@ namespace instrumented
         // capture parameters
         xe_fence_host_synchronize_params_t in_params = {
             &hFence,
-                &timeout
+            &timeout
         };
 
         // call each callback registered
@@ -5829,7 +5829,7 @@ namespace instrumented
         // capture parameters
         xe_fence_host_synchronize_params_t out_params = {
             &hFence,
-                &timeout
+            &timeout
         };
 
         // call each callback registered
@@ -5956,8 +5956,8 @@ namespace instrumented
         // capture parameters
         xe_image_get_properties_params_t in_params = {
             &hDevice,
-                &desc,
-                &pImageProperties
+            &desc,
+            &pImageProperties
         };
 
         // call each callback registered
@@ -5978,8 +5978,8 @@ namespace instrumented
         // capture parameters
         xe_image_get_properties_params_t out_params = {
             &hDevice,
-                &desc,
-                &pImageProperties
+            &desc,
+            &pImageProperties
         };
 
         // call each callback registered
@@ -6010,8 +6010,8 @@ namespace instrumented
         // capture parameters
         xe_image_create_params_t in_params = {
             &hDevice,
-                &desc,
-                &phImage
+            &desc,
+            &phImage
         };
 
         // call each callback registered
@@ -6032,8 +6032,8 @@ namespace instrumented
         // capture parameters
         xe_image_create_params_t out_params = {
             &hDevice,
-                &desc,
-                &phImage
+            &desc,
+            &phImage
         };
 
         // call each callback registered
@@ -6118,13 +6118,13 @@ namespace instrumented
         // capture parameters
         xe_device_group_alloc_shared_mem_params_t in_params = {
             &hDeviceGroup,
-                &hDevice,
-                &device_flags,
-                &ordinal,
-                &host_flags,
-                &size,
-                &alignment,
-                &pptr
+            &hDevice,
+            &device_flags,
+            &ordinal,
+            &host_flags,
+            &size,
+            &alignment,
+            &pptr
         };
 
         // call each callback registered
@@ -6145,13 +6145,13 @@ namespace instrumented
         // capture parameters
         xe_device_group_alloc_shared_mem_params_t out_params = {
             &hDeviceGroup,
-                &hDevice,
-                &device_flags,
-                &ordinal,
-                &host_flags,
-                &size,
-                &alignment,
-                &pptr
+            &hDevice,
+            &device_flags,
+            &ordinal,
+            &host_flags,
+            &size,
+            &alignment,
+            &pptr
         };
 
         // call each callback registered
@@ -6187,12 +6187,12 @@ namespace instrumented
         // capture parameters
         xe_device_group_alloc_device_mem_params_t in_params = {
             &hDeviceGroup,
-                &hDevice,
-                &flags,
-                &ordinal,
-                &size,
-                &alignment,
-                &pptr
+            &hDevice,
+            &flags,
+            &ordinal,
+            &size,
+            &alignment,
+            &pptr
         };
 
         // call each callback registered
@@ -6213,12 +6213,12 @@ namespace instrumented
         // capture parameters
         xe_device_group_alloc_device_mem_params_t out_params = {
             &hDeviceGroup,
-                &hDevice,
-                &flags,
-                &ordinal,
-                &size,
-                &alignment,
-                &pptr
+            &hDevice,
+            &flags,
+            &ordinal,
+            &size,
+            &alignment,
+            &pptr
         };
 
         // call each callback registered
@@ -6251,10 +6251,10 @@ namespace instrumented
         // capture parameters
         xe_device_group_alloc_host_mem_params_t in_params = {
             &hDeviceGroup,
-                &flags,
-                &size,
-                &alignment,
-                &pptr
+            &flags,
+            &size,
+            &alignment,
+            &pptr
         };
 
         // call each callback registered
@@ -6275,10 +6275,10 @@ namespace instrumented
         // capture parameters
         xe_device_group_alloc_host_mem_params_t out_params = {
             &hDeviceGroup,
-                &flags,
-                &size,
-                &alignment,
-                &pptr
+            &flags,
+            &size,
+            &alignment,
+            &pptr
         };
 
         // call each callback registered
@@ -6308,7 +6308,7 @@ namespace instrumented
         // capture parameters
         xe_device_group_free_mem_params_t in_params = {
             &hDeviceGroup,
-                &ptr
+            &ptr
         };
 
         // call each callback registered
@@ -6329,7 +6329,7 @@ namespace instrumented
         // capture parameters
         xe_device_group_free_mem_params_t out_params = {
             &hDeviceGroup,
-                &ptr
+            &ptr
         };
 
         // call each callback registered
@@ -6361,9 +6361,9 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_mem_properties_params_t in_params = {
             &hDeviceGroup,
-                &ptr,
-                &pMemProperties,
-                &phDevice
+            &ptr,
+            &pMemProperties,
+            &phDevice
         };
 
         // call each callback registered
@@ -6384,9 +6384,9 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_mem_properties_params_t out_params = {
             &hDeviceGroup,
-                &ptr,
-                &pMemProperties,
-                &phDevice
+            &ptr,
+            &pMemProperties,
+            &phDevice
         };
 
         // call each callback registered
@@ -6418,9 +6418,9 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_mem_address_range_params_t in_params = {
             &hDeviceGroup,
-                &ptr,
-                &pBase,
-                &pSize
+            &ptr,
+            &pBase,
+            &pSize
         };
 
         // call each callback registered
@@ -6441,9 +6441,9 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_mem_address_range_params_t out_params = {
             &hDeviceGroup,
-                &ptr,
-                &pBase,
-                &pSize
+            &ptr,
+            &pBase,
+            &pSize
         };
 
         // call each callback registered
@@ -6474,8 +6474,8 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_mem_ipc_handle_params_t in_params = {
             &hDeviceGroup,
-                &ptr,
-                &pIpcHandle
+            &ptr,
+            &pIpcHandle
         };
 
         // call each callback registered
@@ -6496,8 +6496,8 @@ namespace instrumented
         // capture parameters
         xe_device_group_get_mem_ipc_handle_params_t out_params = {
             &hDeviceGroup,
-                &ptr,
-                &pIpcHandle
+            &ptr,
+            &pIpcHandle
         };
 
         // call each callback registered
@@ -6530,10 +6530,10 @@ namespace instrumented
         // capture parameters
         xe_device_group_open_mem_ipc_handle_params_t in_params = {
             &hDeviceGroup,
-                &hDevice,
-                &handle,
-                &flags,
-                &pptr
+            &hDevice,
+            &handle,
+            &flags,
+            &pptr
         };
 
         // call each callback registered
@@ -6554,10 +6554,10 @@ namespace instrumented
         // capture parameters
         xe_device_group_open_mem_ipc_handle_params_t out_params = {
             &hDeviceGroup,
-                &hDevice,
-                &handle,
-                &flags,
-                &pptr
+            &hDevice,
+            &handle,
+            &flags,
+            &pptr
         };
 
         // call each callback registered
@@ -6587,7 +6587,7 @@ namespace instrumented
         // capture parameters
         xe_device_group_close_mem_ipc_handle_params_t in_params = {
             &hDeviceGroup,
-                &ptr
+            &ptr
         };
 
         // call each callback registered
@@ -6608,7 +6608,7 @@ namespace instrumented
         // capture parameters
         xe_device_group_close_mem_ipc_handle_params_t out_params = {
             &hDeviceGroup,
-                &ptr
+            &ptr
         };
 
         // call each callback registered
@@ -6640,9 +6640,9 @@ namespace instrumented
         // capture parameters
         xe_module_create_params_t in_params = {
             &hDevice,
-                &desc,
-                &phModule,
-                &phBuildLog
+            &desc,
+            &phModule,
+            &phBuildLog
         };
 
         // call each callback registered
@@ -6663,9 +6663,9 @@ namespace instrumented
         // capture parameters
         xe_module_create_params_t out_params = {
             &hDevice,
-                &desc,
-                &phModule,
-                &phBuildLog
+            &desc,
+            &phModule,
+            &phBuildLog
         };
 
         // call each callback registered
@@ -6792,8 +6792,8 @@ namespace instrumented
         // capture parameters
         xe_module_build_log_get_string_params_t in_params = {
             &hModuleBuildLog,
-                &pSize,
-                &pBuildLog
+            &pSize,
+            &pBuildLog
         };
 
         // call each callback registered
@@ -6814,8 +6814,8 @@ namespace instrumented
         // capture parameters
         xe_module_build_log_get_string_params_t out_params = {
             &hModuleBuildLog,
-                &pSize,
-                &pBuildLog
+            &pSize,
+            &pBuildLog
         };
 
         // call each callback registered
@@ -6846,8 +6846,8 @@ namespace instrumented
         // capture parameters
         xe_module_get_native_binary_params_t in_params = {
             &hModule,
-                &pSize,
-                &pModuleNativeBinary
+            &pSize,
+            &pModuleNativeBinary
         };
 
         // call each callback registered
@@ -6868,8 +6868,8 @@ namespace instrumented
         // capture parameters
         xe_module_get_native_binary_params_t out_params = {
             &hModule,
-                &pSize,
-                &pModuleNativeBinary
+            &pSize,
+            &pModuleNativeBinary
         };
 
         // call each callback registered
@@ -6900,8 +6900,8 @@ namespace instrumented
         // capture parameters
         xe_module_get_global_pointer_params_t in_params = {
             &hModule,
-                &pGlobalName,
-                &pptr
+            &pGlobalName,
+            &pptr
         };
 
         // call each callback registered
@@ -6922,8 +6922,8 @@ namespace instrumented
         // capture parameters
         xe_module_get_global_pointer_params_t out_params = {
             &hModule,
-                &pGlobalName,
-                &pptr
+            &pGlobalName,
+            &pptr
         };
 
         // call each callback registered
@@ -6954,8 +6954,8 @@ namespace instrumented
         // capture parameters
         xe_function_create_params_t in_params = {
             &hModule,
-                &desc,
-                &phFunction
+            &desc,
+            &phFunction
         };
 
         // call each callback registered
@@ -6976,8 +6976,8 @@ namespace instrumented
         // capture parameters
         xe_function_create_params_t out_params = {
             &hModule,
-                &desc,
-                &phFunction
+            &desc,
+            &phFunction
         };
 
         // call each callback registered
@@ -7056,8 +7056,8 @@ namespace instrumented
         // capture parameters
         xe_module_get_function_pointer_params_t in_params = {
             &hModule,
-                &pFunctionName,
-                &pfnFunction
+            &pFunctionName,
+            &pfnFunction
         };
 
         // call each callback registered
@@ -7078,8 +7078,8 @@ namespace instrumented
         // capture parameters
         xe_module_get_function_pointer_params_t out_params = {
             &hModule,
-                &pFunctionName,
-                &pfnFunction
+            &pFunctionName,
+            &pfnFunction
         };
 
         // call each callback registered
@@ -7111,9 +7111,9 @@ namespace instrumented
         // capture parameters
         xe_function_set_group_size_params_t in_params = {
             &hFunction,
-                &groupSizeX,
-                &groupSizeY,
-                &groupSizeZ
+            &groupSizeX,
+            &groupSizeY,
+            &groupSizeZ
         };
 
         // call each callback registered
@@ -7134,9 +7134,9 @@ namespace instrumented
         // capture parameters
         xe_function_set_group_size_params_t out_params = {
             &hFunction,
-                &groupSizeX,
-                &groupSizeY,
-                &groupSizeZ
+            &groupSizeX,
+            &groupSizeY,
+            &groupSizeZ
         };
 
         // call each callback registered
@@ -7171,12 +7171,12 @@ namespace instrumented
         // capture parameters
         xe_function_suggest_group_size_params_t in_params = {
             &hFunction,
-                &globalSizeX,
-                &globalSizeY,
-                &globalSizeZ,
-                &groupSizeX,
-                &groupSizeY,
-                &groupSizeZ
+            &globalSizeX,
+            &globalSizeY,
+            &globalSizeZ,
+            &groupSizeX,
+            &groupSizeY,
+            &groupSizeZ
         };
 
         // call each callback registered
@@ -7197,12 +7197,12 @@ namespace instrumented
         // capture parameters
         xe_function_suggest_group_size_params_t out_params = {
             &hFunction,
-                &globalSizeX,
-                &globalSizeY,
-                &globalSizeZ,
-                &groupSizeX,
-                &groupSizeY,
-                &groupSizeZ
+            &globalSizeX,
+            &globalSizeY,
+            &globalSizeZ,
+            &groupSizeX,
+            &groupSizeY,
+            &groupSizeZ
         };
 
         // call each callback registered
@@ -7235,9 +7235,9 @@ namespace instrumented
         // capture parameters
         xe_function_set_argument_value_params_t in_params = {
             &hFunction,
-                &argIndex,
-                &argSize,
-                &pArgValue
+            &argIndex,
+            &argSize,
+            &pArgValue
         };
 
         // call each callback registered
@@ -7258,9 +7258,9 @@ namespace instrumented
         // capture parameters
         xe_function_set_argument_value_params_t out_params = {
             &hFunction,
-                &argIndex,
-                &argSize,
-                &pArgValue
+            &argIndex,
+            &argSize,
+            &pArgValue
         };
 
         // call each callback registered
@@ -7291,8 +7291,8 @@ namespace instrumented
         // capture parameters
         xe_function_set_attribute_params_t in_params = {
             &hFunction,
-                &attr,
-                &value
+            &attr,
+            &value
         };
 
         // call each callback registered
@@ -7313,8 +7313,8 @@ namespace instrumented
         // capture parameters
         xe_function_set_attribute_params_t out_params = {
             &hFunction,
-                &attr,
-                &value
+            &attr,
+            &value
         };
 
         // call each callback registered
@@ -7345,8 +7345,8 @@ namespace instrumented
         // capture parameters
         xe_function_get_attribute_params_t in_params = {
             &hFunction,
-                &attr,
-                &pValue
+            &attr,
+            &pValue
         };
 
         // call each callback registered
@@ -7367,8 +7367,8 @@ namespace instrumented
         // capture parameters
         xe_function_get_attribute_params_t out_params = {
             &hFunction,
-                &attr,
-                &pValue
+            &attr,
+            &pValue
         };
 
         // call each callback registered
@@ -7403,11 +7403,11 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_launch_function_params_t in_params = {
             &hCommandList,
-                &hFunction,
-                &pLaunchFuncArgs,
-                &hSignalEvent,
-                &numWaitEvents,
-                &phWaitEvents
+            &hFunction,
+            &pLaunchFuncArgs,
+            &hSignalEvent,
+            &numWaitEvents,
+            &phWaitEvents
         };
 
         // call each callback registered
@@ -7428,11 +7428,11 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_launch_function_params_t out_params = {
             &hCommandList,
-                &hFunction,
-                &pLaunchFuncArgs,
-                &hSignalEvent,
-                &numWaitEvents,
-                &phWaitEvents
+            &hFunction,
+            &pLaunchFuncArgs,
+            &hSignalEvent,
+            &numWaitEvents,
+            &phWaitEvents
         };
 
         // call each callback registered
@@ -7467,11 +7467,11 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_launch_function_indirect_params_t in_params = {
             &hCommandList,
-                &hFunction,
-                &pLaunchArgumentsBuffer,
-                &hSignalEvent,
-                &numWaitEvents,
-                &phWaitEvents
+            &hFunction,
+            &pLaunchArgumentsBuffer,
+            &hSignalEvent,
+            &numWaitEvents,
+            &phWaitEvents
         };
 
         // call each callback registered
@@ -7492,11 +7492,11 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_launch_function_indirect_params_t out_params = {
             &hCommandList,
-                &hFunction,
-                &pLaunchArgumentsBuffer,
-                &hSignalEvent,
-                &numWaitEvents,
-                &phWaitEvents
+            &hFunction,
+            &pLaunchArgumentsBuffer,
+            &hSignalEvent,
+            &numWaitEvents,
+            &phWaitEvents
         };
 
         // call each callback registered
@@ -7536,13 +7536,13 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_launch_multiple_functions_indirect_params_t in_params = {
             &hCommandList,
-                &numFunctions,
-                &phFunctions,
-                &pNumLaunchArguments,
-                &pLaunchArgumentsBuffer,
-                &hSignalEvent,
-                &numWaitEvents,
-                &phWaitEvents
+            &numFunctions,
+            &phFunctions,
+            &pNumLaunchArguments,
+            &pLaunchArgumentsBuffer,
+            &hSignalEvent,
+            &numWaitEvents,
+            &phWaitEvents
         };
 
         // call each callback registered
@@ -7563,13 +7563,13 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_launch_multiple_functions_indirect_params_t out_params = {
             &hCommandList,
-                &numFunctions,
-                &phFunctions,
-                &pNumLaunchArguments,
-                &pLaunchArgumentsBuffer,
-                &hSignalEvent,
-                &numWaitEvents,
-                &phWaitEvents
+            &numFunctions,
+            &phFunctions,
+            &pNumLaunchArguments,
+            &pLaunchArgumentsBuffer,
+            &hSignalEvent,
+            &numWaitEvents,
+            &phWaitEvents
         };
 
         // call each callback registered
@@ -7604,11 +7604,11 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_launch_host_function_params_t in_params = {
             &hCommandList,
-                &pfnHostFunc,
-                &pUserData,
-                &hSignalEvent,
-                &numWaitEvents,
-                &phWaitEvents
+            &pfnHostFunc,
+            &pUserData,
+            &hSignalEvent,
+            &numWaitEvents,
+            &phWaitEvents
         };
 
         // call each callback registered
@@ -7629,11 +7629,11 @@ namespace instrumented
         // capture parameters
         xe_command_list_append_launch_host_function_params_t out_params = {
             &hCommandList,
-                &pfnHostFunc,
-                &pUserData,
-                &hSignalEvent,
-                &numWaitEvents,
-                &phWaitEvents
+            &pfnHostFunc,
+            &pUserData,
+            &hSignalEvent,
+            &numWaitEvents,
+            &phWaitEvents
         };
 
         // call each callback registered
@@ -7664,8 +7664,8 @@ namespace instrumented
         // capture parameters
         xe_device_make_memory_resident_params_t in_params = {
             &hDevice,
-                &ptr,
-                &size
+            &ptr,
+            &size
         };
 
         // call each callback registered
@@ -7686,8 +7686,8 @@ namespace instrumented
         // capture parameters
         xe_device_make_memory_resident_params_t out_params = {
             &hDevice,
-                &ptr,
-                &size
+            &ptr,
+            &size
         };
 
         // call each callback registered
@@ -7718,8 +7718,8 @@ namespace instrumented
         // capture parameters
         xe_device_evict_memory_params_t in_params = {
             &hDevice,
-                &ptr,
-                &size
+            &ptr,
+            &size
         };
 
         // call each callback registered
@@ -7740,8 +7740,8 @@ namespace instrumented
         // capture parameters
         xe_device_evict_memory_params_t out_params = {
             &hDevice,
-                &ptr,
-                &size
+            &ptr,
+            &size
         };
 
         // call each callback registered
@@ -7771,7 +7771,7 @@ namespace instrumented
         // capture parameters
         xe_device_make_image_resident_params_t in_params = {
             &hDevice,
-                &hImage
+            &hImage
         };
 
         // call each callback registered
@@ -7792,7 +7792,7 @@ namespace instrumented
         // capture parameters
         xe_device_make_image_resident_params_t out_params = {
             &hDevice,
-                &hImage
+            &hImage
         };
 
         // call each callback registered
@@ -7822,7 +7822,7 @@ namespace instrumented
         // capture parameters
         xe_device_evict_image_params_t in_params = {
             &hDevice,
-                &hImage
+            &hImage
         };
 
         // call each callback registered
@@ -7843,7 +7843,7 @@ namespace instrumented
         // capture parameters
         xe_device_evict_image_params_t out_params = {
             &hDevice,
-                &hImage
+            &hImage
         };
 
         // call each callback registered
@@ -7874,8 +7874,8 @@ namespace instrumented
         // capture parameters
         xe_sampler_create_params_t in_params = {
             &hDevice,
-                &desc,
-                &phSampler
+            &desc,
+            &phSampler
         };
 
         // call each callback registered
@@ -7896,8 +7896,8 @@ namespace instrumented
         // capture parameters
         xe_sampler_create_params_t out_params = {
             &hDevice,
-                &desc,
-                &phSampler
+            &desc,
+            &phSampler
         };
 
         // call each callback registered
