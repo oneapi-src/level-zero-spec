@@ -46,7 +46,7 @@ namespace xe
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::event_pool_desc_t
+        /// @brief API version of ::xe_event_pool_desc_t
         enum class desc_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -67,7 +67,7 @@ namespace xe
         /// @brief Event pool descriptor
         struct desc_t
         {
-            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::EVENT_POOL_DESC_VERSION_CURRENT
+            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::XE_EVENT_POOL_DESC_VERSION_CURRENT
             flag_t flags = flag_t::DEFAULT;                 ///< [in] creation flags
             uint32_t count;                                 ///< [in] number of events within the pool
 
@@ -167,7 +167,7 @@ namespace xe
         /// 
         /// @details
         ///     - The event handle in this process should not be freed with
-        ///       ::EventPoolDestroy, but rather with ::EventPoolCloseIpcHandle.
+        ///       ::xeEventPoolDestroy, but rather with ::xeEventPoolCloseIpcHandle.
         ///     - The application may call this function from simultaneous threads.
         /// 
         /// @remarks
@@ -188,7 +188,7 @@ namespace xe
         /// 
         /// @details
         ///     - Closes an IPC event handle by destroying events that were opened in
-        ///       this process using ::EventPoolOpenIpcHandle.
+        ///       this process using ::xeEventPoolOpenIpcHandle.
         ///     - The application may **not** call this function from simultaneous
         ///       threads with the same event pool handle.
         /// 
@@ -209,7 +209,7 @@ namespace xe
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::event_desc_t
+        /// @brief API version of ::xe_event_desc_t
         enum class desc_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -235,7 +235,7 @@ namespace xe
         /// @brief Event descriptor
         struct desc_t
         {
-            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::EVENT_DESC_VERSION_CURRENT
+            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::XE_EVENT_DESC_VERSION_CURRENT
             uint32_t index;                                 ///< [in] index of the event within the pool; must be less-than the count
                                                             ///< specified during pool creation
             scope_flag_t signal = scope_flag_t::NONE;       ///< [in] defines the scope of relevant cache hierarchies to flush on a
@@ -354,8 +354,8 @@ namespace xe
         bool_t __xecall
         HostSynchronize(
             uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time (in nanoseconds) to
-                                                            ///< yield before returning ::RESULT_SUCCESS or ::RESULT_NOT_READY;
-                                                            ///< if zero, then operates exactly like ::EventQueryStatus;
+                                                            ///< yield before returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY;
+                                                            ///< if zero, then operates exactly like ::xeEventQueryStatus;
                                                             ///< if UINT32_MAX, then function will not return until complete or device
                                                             ///< is lost.
             );

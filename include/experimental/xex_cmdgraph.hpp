@@ -46,7 +46,7 @@ namespace xex
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::command_graph_desc_t
+        /// @brief API version of ::xex_command_graph_desc_t
         enum class desc_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -65,7 +65,7 @@ namespace xex
         /// @brief CommandGraph descriptor
         struct desc_t
         {
-            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::COMMAND_GRAPH_DESC_VERSION_CURRENT
+            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::XEX_COMMAND_GRAPH_DESC_VERSION_CURRENT
             flag_t flags = flag_t::NONE;                    ///< [in] creation flags
 
         };

@@ -1051,7 +1051,7 @@ namespace xet
     /// 
     /// @details
     ///     - Initializes internal structures to support power management features.
-    ///     - Error ::XERESULT_ERROR_UNSUPPORTED is returned if the device does not
+    ///     - Error ::XE_RESULT_ERROR_UNSUPPORTED is returned if the device does not
     ///       support access to power management features.
     /// 
     /// @remarks
@@ -1066,7 +1066,7 @@ namespace xet
     Power* __xecall
     Power::Create(
         Device* pDevice,                                ///< [in] pointer to the device object
-        uint32_t flags                                  ///< [in] bitfield of ::power_init_flags_t
+        uint32_t flags                                  ///< [in] bitfield of ::xet_power_init_flags_t
         )
     {
         xet_power_handle_t powerHandle;
@@ -1452,7 +1452,7 @@ namespace xet
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Get the source frequency domain handle for a frequency domain of type
-    ///        ::CLOCK_TYPE_DIVIDER
+    ///        ::XET_CLOCK_TYPE_DIVIDER
     /// 
     /// @returns
     ///     - FreqDomain*: pointer to a handle where the source frequency domain handle will be returned
@@ -1491,11 +1491,11 @@ namespace xet
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Get supported frequency points for frequency domains with clock type
-    ///        ::CLOCK_TYPE_PLL
+    ///        ::XET_CLOCK_TYPE_PLL
     /// 
     /// @details
     ///     - The total available list of frequencies can be found in
-    ///       ::freq_domain_properties_t.numClockPoints.
+    ///       ::xet_freq_domain_properties_t.numClockPoints.
     /// 
     /// @returns
     ///     - uint32_t: pointer to array of frequencies
@@ -1521,11 +1521,11 @@ namespace xet
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Get supported frequency dividers for frequency domains with clock type
-    ///        ::CLOCK_TYPE_DIVIDER
+    ///        ::XET_CLOCK_TYPE_DIVIDER
     /// 
     /// @details
     ///     - The total available list of frequencies can be found in
-    ///       ::freq_domain_properties_t.numClockDividers.
+    ///       ::xet_freq_domain_properties_t.numClockDividers.
     /// 
     /// @returns
     ///     - clock_divider_t: pointer to array of dividers
@@ -1551,7 +1551,7 @@ namespace xet
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Get the frequency range for a frequency domain with clock type
-    ///        ::CLOCK_TYPE_PLL.
+    ///        ::XET_CLOCK_TYPE_PLL.
     /// 
     /// @returns
     ///     - uint32_t: min clock frequency in units of MHz
@@ -1580,7 +1580,7 @@ namespace xet
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Set the frequency range for a frequency domain with clock type
-    ///        ::CLOCK_TYPE_PLL.
+    ///        ::XET_CLOCK_TYPE_PLL.
     /// 
     /// @details
     ///     - Turbo (dynamic hardware frequency management) will select frequencies
@@ -1610,7 +1610,7 @@ namespace xet
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Set frequency divider for a frequency domain with clock type
-    ///        ::CLOCK_TYPE_DIVIDER
+    ///        ::XET_CLOCK_TYPE_DIVIDER
     /// 
     /// @details
     ///     - This disables dynamic frequency divider management running on the
@@ -1704,7 +1704,7 @@ namespace xet
     /// @throws result_t
     Power::fan_properties_t __xecall
     Power::FanGetProperties(
-        uint32_t fanIndex                               ///< [in] fan index [0 .. ::PowerFanCount - 1]
+        uint32_t fanIndex                               ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
         )
     {
         xet_fan_properties_t fanProperties;
@@ -1733,7 +1733,7 @@ namespace xet
     /// @throws result_t
     Power::fan_point_t __xecall
     Power::FanGetSpeedTable(
-        uint32_t fanIndex,                              ///< [in] fan index [0 .. ::PowerFanCount - 1]
+        uint32_t fanIndex,                              ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
         xe::bool_t fanSpeedInRpm,                       ///< [in] true will request fan speeds in RPM, otherwise in percentage
         uint32_t* pNumFanPoints                         ///< [in,out] input number of elements in pFanSpeedTable array; output
                                                         ///< number of elements returned
@@ -1758,14 +1758,14 @@ namespace xet
     /// @brief Set fan speed table
     /// 
     /// @details
-    ///     - Use ::PowerFanGetProperties to determine acceptable units for fan
+    ///     - Use ::xetPowerFanGetProperties to determine acceptable units for fan
     ///       speed (percent, RPM).
     ///     - Fan points should be ordered according to increasing temperature.
     /// 
     /// @throws result_t
     void __xecall
     Power::FanSetSpeedTable(
-        uint32_t fanIndex,                              ///< [in] fan index [0 .. ::PowerFanCount - 1]
+        uint32_t fanIndex,                              ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
         uint32_t numFanPoints,                          ///< [in] number of points in pFanSpeedTable array
         fan_point_t* pFanPoints                         ///< [in] pointer to an array of temperature/fan-speed points
         )
@@ -1792,7 +1792,7 @@ namespace xet
     /// @throws result_t
     Power::fan_speed_info_t __xecall
     Power::FanGetSpeed(
-        uint32_t startFanIndex,                         ///< [in] fan index [0 .. ::PowerFanCount - 1]
+        uint32_t startFanIndex,                         ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
         uint32_t numFans,                               ///< [in] pFanSpeed will contain results for fan index
                                                         ///< (startFanIndex)..(startFanIndex + numFans - 1)
         xe::bool_t fanSpeedInRpm                        ///< [in] true will request fan speeds in RPM, otherwise in percentage
@@ -1817,13 +1817,13 @@ namespace xet
     /// @brief Set fan speeds
     /// 
     /// @details
-    ///     - Use ::fan_speed_info_t.fanSpeedMode to set whether the speed should be
-    ///       fixed or dynamically controlled
+    ///     - Use ::xet_fan_speed_info_t.fanSpeedMode to set whether the speed
+    ///       should be fixed or dynamically controlled
     /// 
     /// @throws result_t
     void __xecall
     Power::FanSetSpeed(
-        uint32_t startFanIndex,                         ///< [in] fan index [0 .. ::PowerFanCount - 1]
+        uint32_t startFanIndex,                         ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
         uint32_t numFans,                               ///< [in] pFanSpeed will contain results for fan index
                                                         ///< (startFanIndex)..(startFanIndex + numFans - 1)
         fan_speed_info_t* pFanSpeed                     ///< [in] pointer to an array of current fan speeds
@@ -1876,7 +1876,7 @@ namespace xet
     /// @throws result_t
     Power::temperature_properties_t __xecall
     Power::GetTemperatureProperties(
-        uint32_t sensorIndex                            ///< [in] sensor index [0 .. ::PowerTemperatureSensorCount]
+        uint32_t sensorIndex                            ///< [in] sensor index [0 .. ::xetPowerTemperatureSensorCount]
         )
     {
         xet_temperature_properties_t properties;
@@ -1905,7 +1905,7 @@ namespace xet
     /// @throws result_t
     uint16_t __xecall
     Power::GetTemperature(
-        uint32_t startSensorIndex,                      ///< [in] sensor index [0 .. ::PowerTemperatureSensorCount]
+        uint32_t startSensorIndex,                      ///< [in] sensor index [0 .. ::xetPowerTemperatureSensorCount]
         uint32_t numSensors                             ///< [in] pTemperatures will contain results for sensors index
                                                         ///< (startSensorIndex)..(startSensorIndex + numSensors - 1)
         )
@@ -1928,8 +1928,8 @@ namespace xet
     /// @brief Set temperature threshold
     /// 
     /// @details
-    ///     - Check ::temperature_properties_t.canChangeThreshold to determine if
-    ///       the threshold can be changed.
+    ///     - Check ::xet_temperature_properties_t.canChangeThreshold to determine
+    ///       if the threshold can be changed.
     ///     - On most systems, there is only one threshold and sensorIndex should be
     ///       0.
     ///     - **This is an overclocking feature and will void device warranty**
@@ -1937,7 +1937,7 @@ namespace xet
     /// @throws result_t
     void __xecall
     Power::SetTemperatureThreshold(
-        uint32_t sensorIndex,                           ///< [in] sensor index [0 .. ::PowerTemperatureSensorCount]
+        uint32_t sensorIndex,                           ///< [in] sensor index [0 .. ::xetPowerTemperatureSensorCount]
         uint16_t maxTemperature                         ///< [in] temperature threshold in degrees celsius beyond which frequency
                                                         ///< will be throttled
         )
@@ -1988,7 +1988,7 @@ namespace xet
     /// @throws result_t
     Power::activity_properties_t __xecall
     Power::GetActivityProperties(
-        uint32_t activityIndex                          ///< [in] activity counter index [0 .. ::PowerActivityCount]
+        uint32_t activityIndex                          ///< [in] activity counter index [0 .. ::xetPowerActivityCount]
         )
     {
         xet_activity_properties_t properties;
@@ -2017,7 +2017,7 @@ namespace xet
     /// @throws result_t
     Power::activity_counters_t __xecall
     Power::GetActivityCounters(
-        uint32_t startCounterIndex,                     ///< [in] sensor index [0 .. ::PowerActivityCount]
+        uint32_t startCounterIndex,                     ///< [in] sensor index [0 .. ::xetPowerActivityCount]
         uint32_t numCounters                            ///< [in] pCounters will contain results for activity counter index
                                                         ///< (startCounterIndex)..(startCounterIndex + numCounters - 1)
         )

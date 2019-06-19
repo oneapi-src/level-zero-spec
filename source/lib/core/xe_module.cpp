@@ -756,15 +756,15 @@ namespace xe
     ///     - Compiles the module for execution on the device.
     ///     - The module can only be used on the device on which it was created.
     ///     - The module can be copied to other devices within the same device group
-    ///       by using ::ModuleGetNativeBinary.
+    ///       by using ::xeModuleGetNativeBinary.
     ///     - The following build options are supported:
-    ///         + "--opt-disable" - Disable optimizations
-    ///         + "--opt-greater-than-4GB-buffer-required" - Use 64-bit offset
+    ///         + "-xe-opt-disable" - Disable optimizations
+    ///         + "-xe-opt-greater-than-4GB-buffer-required" - Use 64-bit offset
     ///           calculations for buffers.
-    ///         + "--opt-large-register-file" - Increase number of registers
+    ///         + "-xe-opt-large-register-file" - Increase number of registers
     ///           available to threads.
     ///     - A build log can optionally be returned to the caller. The caller is
-    ///       responsible for destroying build log using ::ModuleBuildLogDestroy.
+    ///       responsible for destroying build log using ::xeModuleBuildLogDestroy.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
@@ -873,7 +873,7 @@ namespace xe
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same build log handle.
     ///     - The implementation of this function should be lock-free.
-    ///     - This function can be called before or after ::ModuleDestroy for the
+    ///     - This function can be called before or after ::xeModuleDestroy for the
     ///       associated module.
     /// 
     /// @throws result_t
@@ -1120,7 +1120,7 @@ namespace xe
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     ///     - This function ignores the group size that is set using
-    ///       ::FunctionSetGroupSize.
+    ///       ::xeFunctionSetGroupSize.
     /// 
     /// @returns
     ///     - uint32_t: recommended size of group for X dimension.
@@ -1251,7 +1251,7 @@ namespace xe
     /// 
     /// @details
     ///     - This may **not** be called for a command list created with
-    ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
+    ///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
     ///     - This function may **not** be called from simultaneous threads with the
     ///       same command list handle.
     ///     - The implementation of this function should be lock-free.
@@ -1297,7 +1297,7 @@ namespace xe
     ///     - The launch arguments buffer may not be reusued until the function has
     ///       completed on the device.
     ///     - This may **not** be called for a command list created with
-    ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
+    ///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
     ///     - This function may **not** be called from simultaneous threads with the
     ///       same command list handle.
     ///     - The implementation of this function should be lock-free.
@@ -1344,7 +1344,7 @@ namespace xe
     ///     - The array of launch arguments buffer may not be reusued until the
     ///       function has completed on the device.
     ///     - This may **not** be called for a command list created with
-    ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
+    ///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
     ///     - This function may **not** be called from simultaneous threads with the
     ///       same command list handle.
     ///     - The implementation of this function should be lock-free.
@@ -1401,7 +1401,7 @@ namespace xe
     /// 
     /// @details
     ///     - This may **not** be called for a command list created with
-    ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
+    ///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
     ///     - This function may **not** be called from simultaneous threads with the
     ///       same command list handle.
     ///     - The implementation of this function should be lock-free.

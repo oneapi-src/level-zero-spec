@@ -46,7 +46,7 @@ namespace xe
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::sampler_desc_t
+        /// @brief API version of ::xe_sampler_desc_t
         enum class desc_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -77,7 +77,7 @@ namespace xe
         /// @brief Sampler descriptor
         struct desc_t
         {
-            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::SAMPLER_DESC_VERSION_CURRENT
+            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::XE_SAMPLER_DESC_VERSION_CURRENT
             address_mode_t addressMode = address_mode_t::NONE;  ///< [in] Sampler addressing mode to determine how out-of-bounds
                                                             ///< coordinates are handled.
             filter_mode_t filterMode = filter_mode_t::NEAREST;  ///< [in] Sampler filter mode to determine how samples are filtered.

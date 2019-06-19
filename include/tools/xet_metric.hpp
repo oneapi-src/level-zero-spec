@@ -124,7 +124,7 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::metric_group_properties_t
+        /// @brief API version of ::xet_metric_group_properties_t
         enum class properties_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -132,10 +132,10 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Metric group properties queried using ::MetricGroupGetProperties
+        /// @brief Metric group properties queried using ::xetMetricGroupGetProperties
         struct properties_t
         {
-            properties_version_t version = properties_version_t::CURRENT;   ///< [in] ::METRIC_GROUP_PROPERTIES_VERSION_CURRENT
+            properties_version_t version = properties_version_t::CURRENT;   ///< [in] ::XET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT
             char name[XET_MAX_METRIC_GROUP_NAME];           ///< [out] metric group name
             char description[XET_MAX_METRIC_GROUP_DESCRIPTION]; ///< [out] metric group description
             sampling_type_t samplingType;                   ///< [out] metric group sampling type
@@ -252,7 +252,7 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::metric_properties_t
+        /// @brief API version of ::xet_metric_properties_t
         enum class properties_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -260,10 +260,10 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Metric properties queried using ::MetricGetProperties
+        /// @brief Metric properties queried using ::xetMetricGetProperties
         struct properties_t
         {
-            properties_version_t version = properties_version_t::CURRENT;   ///< [in] ::METRIC_PROPERTIES_VERSION_CURRENT
+            properties_version_t version = properties_version_t::CURRENT;   ///< [in] ::XET_METRIC_PROPERTIES_VERSION_CURRENT
             char name[XET_MAX_METRIC_NAME];                 ///< [out] metric name
             char description[XET_MAX_METRIC_DESCRIPTION];   ///< [out] metric description
             char component[XET_MAX_METRIC_COMPONENT];       ///< [out] metric component
@@ -340,7 +340,7 @@ namespace xet
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::metric_tracer_desc_t
+        /// @brief API version of ::xet_metric_tracer_desc_t
         enum class desc_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -351,7 +351,7 @@ namespace xet
         /// @brief Metric tracer descriptor
         struct desc_t
         {
-            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::METRIC_TRACER_DESC_VERSION_CURRENT
+            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::XET_METRIC_TRACER_DESC_VERSION_CURRENT
             uint32_t notifyEveryNReports;                   ///< [in,out] number of collected reports after which notification event
                                                             ///< will be signalled
             uint32_t samplingPeriod;                        ///< [in,out] tracer sampling period in nanoseconds
@@ -447,7 +447,7 @@ namespace xet
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::metric_query_pool_desc_t
+        /// @brief API version of ::xet_metric_query_pool_desc_t
         enum class desc_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -467,7 +467,7 @@ namespace xet
         /// @brief Metric query pool description
         struct desc_t
         {
-            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::METRIC_QUERY_POOL_DESC_VERSION_CURRENT
+            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::XET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT
             flag_t flags = flag_t::PERFORMANCE;             ///< [in] Query pool type.
             uint32_t count;                                 ///< [in] Internal slots count within query pool object.
 

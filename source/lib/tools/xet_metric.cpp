@@ -881,7 +881,7 @@ namespace xet
     /// 
     /// @details
     ///     - MetricGroup must be active until MetricQueryGetDeta and
-    ///       ::MetricTracerClose.
+    ///       ::xetMetricTracerClose.
     ///     - Conflicting metric groups cannot be activated, in such case tha call
     ///       would fail.
     /// 

@@ -137,8 +137,9 @@ namespace xet
     /// 
     /// @details
     ///     - Module must be created using the following build option:
-    ///         + "--profile-flags <n>" - enable generation of profile information
-    ///         + "<n>" must be a combination of ::profile_flag_t, in hex
+    ///         + "-xet-profile-flags <n>" - enable generation of profile
+    ///           information
+    ///         + "<n>" must be a combination of ::xet_profile_flag_t, in hex
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 

@@ -46,7 +46,7 @@ namespace xe
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::command_queue_desc_t
+        /// @brief API version of ::xe_command_queue_desc_t
         enum class desc_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -92,16 +92,16 @@ namespace xe
         /// @brief Command Queue descriptor
         struct desc_t
         {
-            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::COMMAND_QUEUE_DESC_VERSION_CURRENT
+            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::XE_COMMAND_QUEUE_DESC_VERSION_CURRENT
             flag_t flags = flag_t::NONE;                    ///< [in] creation flags
             mode_t mode = mode_t::DEFAULT;                  ///< [in] operation mode
             priority_t priority = priority_t::NORMAL;       ///< [in] priority
             uint32_t ordinal = 0;                           ///< [in] if logical-only flag is set, then will be ignored;
-                                                            ///< else-if copy-only flag is set, then must be less than ::device_properties_t.numAsyncCopyEngines;
+                                                            ///< else-if copy-only flag is set, then must be less than ::xe_device_properties_t.numAsyncCopyEngines;
                                                             ///< otherwise must be less than
-                                                            ///< ::device_properties_t.numAsyncComputeEngines. When using sub-devices
-                                                            ///< the ::device_properties_t.numAsyncComputeEngines must be queried from
-                                                            ///< the sub-device being used.
+                                                            ///< ::xe_device_properties_t.numAsyncComputeEngines. When using sub-devices
+                                                            ///< the ::xe_device_properties_t.numAsyncComputeEngines must be queried
+                                                            ///< from the sub-device being used.
 
         };
 
@@ -211,8 +211,8 @@ namespace xe
         bool_t __xecall
         Synchronize(
             uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
-                                                            ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY;
-                                                            ///< if zero, then operates exactly like ::FenceQueryStatus;
+                                                            ///< returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY;
+                                                            ///< if zero, then operates exactly like ::xeFenceQueryStatus;
                                                             ///< if UINT32_MAX, then function will not return until complete or device
                                                             ///< is lost.
             );

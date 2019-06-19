@@ -46,7 +46,7 @@ namespace xe
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::fence_desc_t
+        /// @brief API version of ::xe_fence_desc_t
         enum class desc_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -65,7 +65,7 @@ namespace xe
         /// @brief Fence descriptor
         struct desc_t
         {
-            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::FENCE_DESC_VERSION_CURRENT
+            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::XE_FENCE_DESC_VERSION_CURRENT
             flag_t flags = flag_t::NONE;                    ///< [in] creation flags
 
         };
@@ -156,8 +156,8 @@ namespace xe
         bool_t __xecall
         HostSynchronize(
             uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time (in nanoseconds) to
-                                                            ///< yield before returning ::RESULT_SUCCESS or ::RESULT_NOT_READY;
-                                                            ///< if zero, then operates exactly like ::FenceQueryStatus;
+                                                            ///< yield before returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY;
+                                                            ///< if zero, then operates exactly like ::xeFenceQueryStatus;
                                                             ///< if UINT32_MAX, then function will not return until complete or device
                                                             ///< is lost.
             );

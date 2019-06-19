@@ -40,19 +40,19 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef XE_MAKE_VERSION
-/// @brief Generates generic Xe:: API versions
+/// @brief Generates generic Xe API versions
 #define XE_MAKE_VERSION( _major, _minor )  (( _major << 16 )|( _minor & 0x0000ffff))
 #endif // XE_MAKE_VERSION
 
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef XE_MAJOR_VERSION
-/// @brief Extracts Xe:: API major version
+/// @brief Extracts Xe API major version
 #define XE_MAJOR_VERSION( _ver )  ( _ver >> 16 )
 #endif // XE_MAJOR_VERSION
 
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef XE_MINOR_VERSION
-/// @brief Extracts Xe:: API minor version
+/// @brief Extracts Xe API minor version
 #define XE_MINOR_VERSION( _ver )  ( _ver & 0x0000ffff )
 #endif // XE_MINOR_VERSION
 

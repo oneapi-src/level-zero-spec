@@ -130,7 +130,7 @@ namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
 #if XE_ENABLE_OCL_INTEROP
-    /// @brief Registers OpenCL memory with Xe::
+    /// @brief Registers OpenCL memory with Xe
     /// 
     /// @returns
     ///     - void*: pointer to device allocation
@@ -159,7 +159,7 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
 #if XE_ENABLE_OCL_INTEROP
-    /// @brief Registers OpenCL program with Xe::
+    /// @brief Registers OpenCL program with Xe
     /// 
     /// @returns
     ///     - Module*: pointer to handle of module object created
@@ -202,7 +202,7 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
 #if XE_ENABLE_OCL_INTEROP
-    /// @brief Registers OpenCL command queue with Xe::
+    /// @brief Registers OpenCL command queue with Xe
     /// 
     /// @returns
     ///     - CommandQueue*: pointer to handle of command queue object created

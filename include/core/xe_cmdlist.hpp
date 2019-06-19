@@ -47,7 +47,7 @@ namespace xe
     public:
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief type definition for host function pointers used with
-        ///        ::CommandListAppendLaunchHostFunction
+        ///        ::xeCommandListAppendLaunchHostFunction
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -57,7 +57,7 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::command_list_desc_t
+        /// @brief API version of ::xe_command_list_desc_t
         enum class desc_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -71,14 +71,14 @@ namespace xe
             NONE = 0,                                       ///< default behavior
             COPY_ONLY = XE_BIT(0),                          ///< command list **only** contains copy operations (and synchronization primitives).
                                                             ///< this command list may **only** be submitted to a command queue created
-                                                            ///< with ::COMMAND_QUEUE_FLAG_COPY_ONLY.
+                                                            ///< with ::XE_COMMAND_QUEUE_FLAG_COPY_ONLY.
             RELAXED_ORDERING = XE_BIT(1),                   ///< driver may reorder programs and copys between barriers and
                                                             ///< synchronization primitives.
-                                                            ///< using this flag may increase Host overhead of ::CommandListClose.
+                                                            ///< using this flag may increase Host overhead of ::xeCommandListClose.
                                                             ///< therefore, this flag should **not** be set for low-latency usage-models.
             MAXIMIZE_THROUGHPUT = XE_BIT(2),                ///< driver may perform additional optimizations that increase dexecution
                                                             ///< throughput. 
-                                                            ///< using this flag may increase Host overhead of ::CommandListClose and ::CommandQueueExecuteCommandLists.
+                                                            ///< using this flag may increase Host overhead of ::xeCommandListClose and ::xeCommandQueueExecuteCommandLists.
                                                             ///< therefore, this flag should **not** be set for low-latency usage-models.
             EXPLICIT_ONLY = XE_BIT(3),                      ///< command list should be optimized for submission to a single command
                                                             ///< queue and device engine.
@@ -102,13 +102,13 @@ namespace xe
         enum class memory_advice_t
         {
             SET_READ_MOSTLY = 0,                            ///< hint that memory will be read from frequently and written to rarely
-            CLEAR_READ_MOSTLY,                              ///< removes the affect of ::MEMORY_ADVICE_SET_READ_MOSTLY
+            CLEAR_READ_MOSTLY,                              ///< removes the affect of ::XE_MEMORY_ADVICE_SET_READ_MOSTLY
             SET_PREFERRED_LOCATION,                         ///< hint that the preferred memory location is the specified device
-            CLEAR_PREFERRED_LOCATION,                       ///< removes the affect of ::MEMORY_ADVICE_SET_PREFERRED_LOCATION
+            CLEAR_PREFERRED_LOCATION,                       ///< removes the affect of ::XE_MEMORY_ADVICE_SET_PREFERRED_LOCATION
             SET_ACCESSED_BY,                                ///< hint that memory will be accessed by the specified device
-            CLEAR_ACCESSED_BY,                              ///< removes the affect of ::MEMORY_ADVICE_SET_ACCESSED_BY
+            CLEAR_ACCESSED_BY,                              ///< removes the affect of ::XE_MEMORY_ADVICE_SET_ACCESSED_BY
             SET_NON_ATOMIC_MOSTLY,                          ///< hints that memory will mostly be accessed non-atomically
-            CLEAR_NON_ATOMIC_MOSTLY,                        ///< removes the affect of ::MEMORY_ADVICE_SET_NON_ATOMIC_MOSTLY
+            CLEAR_NON_ATOMIC_MOSTLY,                        ///< removes the affect of ::XE_MEMORY_ADVICE_SET_NON_ATOMIC_MOSTLY
             BIAS_CACHED,                                    ///< hints that memory should be cached
             BIAS_UNCACHED,                                  ///< hints that memory should be not be cached
 
@@ -118,7 +118,7 @@ namespace xe
         /// @brief Command List descriptor
         struct desc_t
         {
-            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::COMMAND_LIST_DESC_VERSION_CURRENT
+            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::XE_COMMAND_LIST_DESC_VERSION_CURRENT
             flag_t flags = flag_t::NONE;                    ///< [in] creation flags
 
         };
@@ -657,7 +657,7 @@ namespace xe
         /// 
         /// @details
         ///     - This may **not** be called for a command list created with
-        ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
+        ///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
         ///     - This function may **not** be called from simultaneous threads with the
         ///       same command list handle.
         ///     - The implementation of this function should be lock-free.
@@ -684,7 +684,7 @@ namespace xe
         ///     - The launch arguments buffer may not be reusued until the function has
         ///       completed on the device.
         ///     - This may **not** be called for a command list created with
-        ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
+        ///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
         ///     - This function may **not** be called from simultaneous threads with the
         ///       same command list handle.
         ///     - The implementation of this function should be lock-free.
@@ -712,7 +712,7 @@ namespace xe
         ///     - The array of launch arguments buffer may not be reusued until the
         ///       function has completed on the device.
         ///     - This may **not** be called for a command list created with
-        ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
+        ///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
         ///     - This function may **not** be called from simultaneous threads with the
         ///       same command list handle.
         ///     - The implementation of this function should be lock-free.
@@ -742,7 +742,7 @@ namespace xe
         /// 
         /// @details
         ///     - This may **not** be called for a command list created with
-        ///       ::COMMAND_LIST_FLAG_COPY_ONLY.
+        ///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
         ///     - This function may **not** be called from simultaneous threads with the
         ///       same command list handle.
         ///     - The implementation of this function should be lock-free.

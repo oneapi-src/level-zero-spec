@@ -419,7 +419,7 @@ namespace xe
         Device* pDevice,                                ///< [in] pointer to a device
         device_mem_alloc_flag_t device_flags,           ///< [in] flags specifying additional device allocation controls
         uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
-                                                        ///< must be less than the count returned from ::DeviceGroupGetMemoryProperties
+                                                        ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
         host_mem_alloc_flag_t host_flags,               ///< [in] flags specifying additional host allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
@@ -465,7 +465,7 @@ namespace xe
         Device* pDevice,                                ///< [in] pointer to the device
         device_mem_alloc_flag_t flags,                  ///< [in] flags specifying additional allocation controls
         uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
-                                                        ///< must be less than the count returned from ::DeviceGroupGetMemoryProperties
+                                                        ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
         )
@@ -679,7 +679,8 @@ namespace xe
     ///     - Takes an IPC memory handle from a sending process and associates it
     ///       with a device pointer usable in this process.
     ///     - The device pointer in this process should not be freed with
-    ///       ::DeviceGroupFreeMem, but rather with ::DeviceGroupCloseMemIpcHandle.
+    ///       ::xeDeviceGroupFreeMem, but rather with
+    ///       ::xeDeviceGroupCloseMemIpcHandle.
     ///     - The application may call this function from simultaneous threads.
     /// 
     /// @remarks
@@ -717,7 +718,7 @@ namespace xe
     /// 
     /// @details
     ///     - Closes an IPC memory handle by unmapping memory that was opened in
-    ///       this process using ::DeviceGroupOpenMemIpcHandle.
+    ///       this process using ::xeDeviceGroupOpenMemIpcHandle.
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same pointer.
     /// 

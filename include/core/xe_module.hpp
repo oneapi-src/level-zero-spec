@@ -46,7 +46,7 @@ namespace xe
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::module_desc_t
+        /// @brief API version of ::xe_module_desc_t
         enum class desc_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -66,7 +66,7 @@ namespace xe
         /// @brief Module descriptor
         struct desc_t
         {
-            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::MODULE_DESC_VERSION_CURRENT
+            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::XE_MODULE_DESC_VERSION_CURRENT
             format_t format;                                ///< [in] Module format passed in with pInputModule
             size_t inputSize = 0;                           ///< [in] size of input IL or ISA from pInputModule.
             const uint8_t* pInputModule = nullptr;          ///< [in] pointer to IL or ISA
@@ -111,15 +111,15 @@ namespace xe
         ///     - Compiles the module for execution on the device.
         ///     - The module can only be used on the device on which it was created.
         ///     - The module can be copied to other devices within the same device group
-        ///       by using ::ModuleGetNativeBinary.
+        ///       by using ::xeModuleGetNativeBinary.
         ///     - The following build options are supported:
-        ///         + "--opt-disable" - Disable optimizations
-        ///         + "--opt-greater-than-4GB-buffer-required" - Use 64-bit offset
+        ///         + "-xe-opt-disable" - Disable optimizations
+        ///         + "-xe-opt-greater-than-4GB-buffer-required" - Use 64-bit offset
         ///           calculations for buffers.
-        ///         + "--opt-large-register-file" - Increase number of registers
+        ///         + "-xe-opt-large-register-file" - Increase number of registers
         ///           available to threads.
         ///     - A build log can optionally be returned to the caller. The caller is
-        ///       responsible for destroying build log using ::ModuleBuildLogDestroy.
+        ///       responsible for destroying build log using ::xeModuleBuildLogDestroy.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// 
@@ -255,7 +255,7 @@ namespace xe
         ///     - The application may **not** call this function from simultaneous
         ///       threads with the same build log handle.
         ///     - The implementation of this function should be lock-free.
-        ///     - This function can be called before or after ::ModuleDestroy for the
+        ///     - This function can be called before or after ::xeModuleDestroy for the
         ///       associated module.
         /// @throws result_t
         static void __xecall
@@ -286,7 +286,7 @@ namespace xe
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::function_desc_t
+        /// @brief API version of ::xe_function_desc_t
         enum class desc_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -340,7 +340,7 @@ namespace xe
         /// @brief Function descriptor
         struct desc_t
         {
-            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::FUNCTION_DESC_VERSION_CURRENT
+            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::XE_FUNCTION_DESC_VERSION_CURRENT
             flag_t flags = flag_t::NONE;                    ///< [in] creation flags
             const char* pFunctionName = nullptr;            ///< [in] null-terminated name of function in Module
 
@@ -438,7 +438,7 @@ namespace xe
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         ///     - This function ignores the group size that is set using
-        ///       ::FunctionSetGroupSize.
+        ///       ::xeFunctionSetGroupSize.
         /// @returns
         ///     - uint32_t: recommended size of group for X dimension.
         ///     - uint32_t: recommended size of group for Y dimension.

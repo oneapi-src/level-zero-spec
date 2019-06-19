@@ -46,7 +46,7 @@ namespace xe
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::image_desc_t
+        /// @brief API version of ::xe_image_desc_t
         enum class desc_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -140,7 +140,7 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::image_properties_t
+        /// @brief API version of ::xe_image_properties_t
         enum class properties_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -174,18 +174,18 @@ namespace xe
         /// @brief Image descriptor
         struct desc_t
         {
-            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::IMAGE_DESC_VERSION_CURRENT
+            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::XE_IMAGE_DESC_VERSION_CURRENT
             flag_t flags;                                   ///< [in] creation flags
             type_t type;                                    ///< [in] image type
             format_desc_t format;                           ///< [in] image format
             size_t width = 0;                               ///< [in] width in pixels, see
-                                                            ///< ::device_image_properties_t::maxImageDims1D/2D/3D
+                                                            ///< ::xe_device_image_properties_t::maxImageDims1D/2D/3D
             size_t height = 0;                              ///< [in] height in pixels (2D or 3D only), see
-                                                            ///< ::device_image_properties_t::maxImageDims2D/3D
+                                                            ///< ::xe_device_image_properties_t::maxImageDims2D/3D
             size_t depth = 0;                               ///< [in] depth in pixels (3D only), see
-                                                            ///< ::device_image_properties_t::maxImageDims3D
+                                                            ///< ::xe_device_image_properties_t::maxImageDims3D
             size_t arraylevels = 1;                         ///< [in] array levels (array types only), see
-                                                            ///< ::device_image_properties_t::maxImageArraySlices
+                                                            ///< ::xe_device_image_properties_t::maxImageArraySlices
             size_t miplevels = 0;                           ///< [in] mipmap levels (must be 0)
 
         };
@@ -194,7 +194,7 @@ namespace xe
         /// @brief Image properties
         struct properties_t
         {
-            properties_version_t version = properties_version_t::CURRENT;   ///< [in] ::IMAGE_PROPERTIES_VERSION_CURRENT
+            properties_version_t version = properties_version_t::CURRENT;   ///< [in] ::XE_IMAGE_PROPERTIES_VERSION_CURRENT
             sampler_filter_flags_t samplerFilterFlags;      ///< [out] supported sampler filtering
 
         };
@@ -250,7 +250,7 @@ namespace xe
         /// @details
         ///     - The image is only visible to the device on which it was created.
         ///     - The image can be copied to another device using the
-        ///       ::::CommandListAppendImageCopy functions.
+        ///       ::::xeCommandListAppendImageCopy functions.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// 

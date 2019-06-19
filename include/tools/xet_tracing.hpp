@@ -56,7 +56,7 @@ namespace xet
         using experimental_callbacks_t = xex_callbacks_t;
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::tracer_desc_t
+        /// @brief API version of ::xet_tracer_desc_t
         enum class desc_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -67,7 +67,7 @@ namespace xet
         /// @brief Tracer descriptor
         struct desc_t
         {
-            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::TRACER_DESC_VERSION_CURRENT
+            desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::XET_TRACER_DESC_VERSION_CURRENT
             void* pGlobalUserData;                          ///< [in] pointer to global data passes to every callback
 
         };

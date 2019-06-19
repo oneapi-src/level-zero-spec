@@ -269,21 +269,19 @@ Public:
 """
 def subt(namespace, tags, string, comment=False, cpp=False):
     for key, value in tags.items():
-        if cpp and re.match(namespace, value):                                  # generating c++ names and tag matches current namespace
-            string = re.sub(r"%s_?"%re.escape("-"+key), "-", string)            # hack for compile options
-            repl = "::" if comment and "$OneApi" != key else ""                 # remove tags; e.g., "$x" -> ""
-            string = re.sub(r"%s_?"%re.escape(key), repl, string)
-            string = re.sub(r"%s_?"%re.escape(key.upper()), repl.upper(), string)
-        elif cpp:                                                               # generating c++ names and tags do _not_ match current namespace
-            string = re.sub(r"-%s"%re.escape(key), "-"+value, string)           # hack for compile options
-            repl = "::"+value if comment and "$OneApi" != key else value+"::"   # add namespace; e.g. "$x" -> "xe::"
-            string = re.sub(r"%s_?"%re.escape(key), repl, string)
-            string = re.sub(r"%s_?"%re.escape(key.upper()), repl.upper(), string)
-        else:                                                                   # generating c names
+        if comment or not cpp:                                                  # generating c names
             string = re.sub(r"-%s"%re.escape(key), "-"+value, string)           # hack for compile options
             repl = "::"+value if comment and "$OneApi" != key else value        # replace tag; e.g., "$x" -> "xe"
             string = re.sub(re.escape(key), repl, string)
             string = re.sub(re.escape(key.upper()), repl.upper(), string)
+        elif re.match(namespace, value):                                        # generating c++ names and tag matches current namespace
+            repl = ""                                                           # remove tags; e.g., "$x" -> ""
+            string = re.sub(r"%s_?"%re.escape(key), repl, string)
+            string = re.sub(r"%s_?"%re.escape(key.upper()), repl.upper(), string)
+        else:                                                                   # generating c++ names and tags do _not_ match current namespace
+            repl = value+"::"                                                   # add namespace; e.g. "$x" -> "xe::"
+            string = re.sub(r"%s_?"%re.escape(key), repl, string)
+            string = re.sub(r"%s_?"%re.escape(key.upper()), repl.upper(), string)
     return string
 
 """

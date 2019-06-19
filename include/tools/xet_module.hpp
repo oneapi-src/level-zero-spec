@@ -115,7 +115,7 @@ namespace xet
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::profile_info_t
+        /// @brief API version of ::xet_profile_info_t
         enum class profile_info_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -144,7 +144,7 @@ namespace xet
         /// @brief Profiling meta-data for instrumentation
         struct profile_info_t
         {
-            profile_info_version_t version = profile_info_version_t::CURRENT;   ///< [in] ::PROFILE_INFO_VERSION_CURRENT
+            profile_info_version_t version = profile_info_version_t::CURRENT;   ///< [in] ::XET_PROFILE_INFO_VERSION_CURRENT
             profile_flag_t flags;                           ///< [out] indicates which flags were enabled during compilation
             uint32_t numTokens;                             ///< [out] number of tokens immediately following this structure
 
@@ -196,8 +196,9 @@ namespace xet
         /// 
         /// @details
         ///     - Module must be created using the following build option:
-        ///         + "--profile-flags <n>" - enable generation of profile information
-        ///         + "<n>" must be a combination of ::profile_flag_t, in hex
+        ///         + "-xet-profile-flags <n>" - enable generation of profile
+        ///           information
+        ///         + "<n>" must be a combination of ::xet_profile_flag_t, in hex
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @returns

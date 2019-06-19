@@ -750,7 +750,7 @@ namespace xe
     /// 
     /// @details
     ///     - The event handle in this process should not be freed with
-    ///       ::EventPoolDestroy, but rather with ::EventPoolCloseIpcHandle.
+    ///       ::xeEventPoolDestroy, but rather with ::xeEventPoolCloseIpcHandle.
     ///     - The application may call this function from simultaneous threads.
     /// 
     /// @remarks
@@ -799,7 +799,7 @@ namespace xe
     /// 
     /// @details
     ///     - Closes an IPC event handle by destroying events that were opened in
-    ///       this process using ::EventPoolOpenIpcHandle.
+    ///       this process using ::xeEventPoolOpenIpcHandle.
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same event pool handle.
     /// 
@@ -921,8 +921,8 @@ namespace xe
     bool_t __xecall
     Event::HostSynchronize(
         uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time (in nanoseconds) to
-                                                        ///< yield before returning ::RESULT_SUCCESS or ::RESULT_NOT_READY;
-                                                        ///< if zero, then operates exactly like ::EventQueryStatus;
+                                                        ///< yield before returning ::XE_RESULT_SUCCESS or ::XE_RESULT_NOT_READY;
+                                                        ///< if zero, then operates exactly like ::xeEventQueryStatus;
                                                         ///< if UINT32_MAX, then function will not return until complete or device
                                                         ///< is lost.
         )

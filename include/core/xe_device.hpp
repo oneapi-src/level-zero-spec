@@ -67,8 +67,8 @@ namespace xe
         /// @brief Supported API versions
         /// 
         /// @details
-        ///     - API versions contain major and minor attributes, use ::MAJOR_VERSION
-        ///       and ::MINOR_VERSION
+        ///     - API versions contain major and minor attributes, use
+        ///       ::XE_MAJOR_VERSION and ::XE_MINOR_VERSION
         enum class api_version_t
         {
             _1_0 = XE_MAKE_VERSION( 1, 0 ),                 ///< 1.0
@@ -76,7 +76,7 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::device_properties_t
+        /// @brief API version of ::xe_device_properties_t
         enum class device_properties_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -93,7 +93,7 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::device_compute_properties_t
+        /// @brief API version of ::xe_device_compute_properties_t
         enum class device_compute_properties_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -101,7 +101,7 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::device_memory_properties_t
+        /// @brief API version of ::xe_device_memory_properties_t
         enum class device_memory_properties_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -109,7 +109,7 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::device_memory_access_properties_t
+        /// @brief API version of ::xe_device_memory_access_properties_t
         enum class device_memory_access_properties_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -133,7 +133,7 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::device_cache_properties_t
+        /// @brief API version of ::xe_device_cache_properties_t
         enum class device_cache_properties_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -141,7 +141,7 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::device_image_properties_t
+        /// @brief API version of ::xe_device_image_properties_t
         enum class device_image_properties_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -170,7 +170,7 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::memory_allocation_properties_t
+        /// @brief API version of ::xe_memory_allocation_properties_t
         enum class memory_allocation_properties_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -205,10 +205,10 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Device properties queried using ::DeviceGroupGetDeviceProperties
+        /// @brief Device properties queried using ::xeDeviceGroupGetDeviceProperties
         struct device_properties_t
         {
-            device_properties_version_t version = device_properties_version_t::CURRENT; ///< [in] ::DEVICE_PROPERTIES_VERSION_CURRENT
+            device_properties_version_t version = device_properties_version_t::CURRENT; ///< [in] ::XE_DEVICE_PROPERTIES_VERSION_CURRENT
             device_type_t type;                             ///< [out] generic device type
             uint32_t vendorId;                              ///< [out] vendor id from PCI configuration
             uint32_t deviceId;                              ///< [out] device id from PCI configuration
@@ -235,10 +235,10 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Device compute properties queried using
-        ///        ::DeviceGroupGetComputeProperties
+        ///        ::xeDeviceGroupGetComputeProperties
         struct device_compute_properties_t
         {
-            device_compute_properties_version_t version = device_compute_properties_version_t::CURRENT; ///< [in] ::DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT
+            device_compute_properties_version_t version = device_compute_properties_version_t::CURRENT; ///< [in] ::XE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT
             uint32_t maxTotalGroupSize;                     ///< [out] Maximum items per compute group. (maxGroupSizeX * maxGroupSizeY
                                                             ///< * maxGroupSizeZ) <= maxTotalGroupSize
             uint32_t maxGroupSizeX;                         ///< [out] Maximum items for X dimension in group
@@ -256,10 +256,10 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Device local memory properties queried using
-        ///        ::DeviceGroupGetMemoryProperties
+        ///        ::xeDeviceGroupGetMemoryProperties
         struct device_memory_properties_t
         {
-            device_memory_properties_version_t version = device_memory_properties_version_t::CURRENT;   ///< [in] ::DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
+            device_memory_properties_version_t version = device_memory_properties_version_t::CURRENT;   ///< [in] ::XE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
             uint32_t maxClockRate;                          ///< [out] Maximum clock rate for device memory.
             uint32_t maxBusWidth;                           ///< [out] Maximum bus width between device and memory.
             uint64_t totalSize;                             ///< [out] Total memory size in bytes.
@@ -268,10 +268,10 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Device memory access properties queried using
-        ///        ::DeviceGroupGetMemoryAccessProperties
+        ///        ::xeDeviceGroupGetMemoryAccessProperties
         struct device_memory_access_properties_t
         {
-            device_memory_access_properties_version_t version = device_memory_access_properties_version_t::CURRENT; ///< [in] ::DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT
+            device_memory_access_properties_version_t version = device_memory_access_properties_version_t::CURRENT; ///< [in] ::XE_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT
             memory_access_capabilities_t hostAllocCapabilities; ///< [out] Bitfield describing host memory capabilities
             memory_access_capabilities_t deviceAllocCapabilities;   ///< [out] Bitfield describing device memory capabilities
             memory_access_capabilities_t sharedSingleDeviceAllocCapabilities;   ///< [out] Bitfield describing shared (single-device) memory capabilities
@@ -281,10 +281,11 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Device cache properties queried using ::DeviceGroupGetCacheProperties
+        /// @brief Device cache properties queried using
+        ///        ::xeDeviceGroupGetCacheProperties
         struct device_cache_properties_t
         {
-            device_cache_properties_version_t version = device_cache_properties_version_t::CURRENT; ///< [in] ::DEVICE_CACHE_PROPERTIES_VERSION_CURRENT
+            device_cache_properties_version_t version = device_cache_properties_version_t::CURRENT; ///< [in] ::XE_DEVICE_CACHE_PROPERTIES_VERSION_CURRENT
             bool_t intermediateCacheControlSupported;       ///< [out] Support User control on Intermediate Cache (i.e. Resize SLM
                                                             ///< section vs Generic Cache)
             size_t intermediateCacheSize;                   ///< [out] Per-cache Intermediate Cache (L1/L2) size, in bytes
@@ -296,12 +297,12 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Device image properties queried using
-        ///        ::DeviceGroupGetComputeProperties
+        ///        ::xeDeviceGroupGetComputeProperties
         struct device_image_properties_t
         {
-            device_image_properties_version_t version = device_image_properties_version_t::CURRENT; ///< [in] ::DEVICE_IMAGE_PROPERTIES_VERSION_CURRENT
+            device_image_properties_version_t version = device_image_properties_version_t::CURRENT; ///< [in] ::XE_DEVICE_IMAGE_PROPERTIES_VERSION_CURRENT
             bool_t supported;                               ///< [out] Supports reading and writing of images. See
-                                                            ///< ::::ImageGetProperties for format-specific capabilities.
+                                                            ///< ::::xeImageGetProperties for format-specific capabilities.
             uint32_t maxImageDims1D;                        ///< [out] Maximum image dimensions for 1D resources.
             uint32_t maxImageDims2D;                        ///< [out] Maximum image dimensions for 2D resources.
             uint32_t maxImageDims3D;                        ///< [out] Maximum image dimensions for 3D resources.
@@ -311,10 +312,10 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Memory allocation properties queried using
-        ///        ::DeviceGroupGetMemProperties
+        ///        ::xeDeviceGroupGetMemProperties
         struct memory_allocation_properties_t
         {
-            memory_allocation_properties_version_t version = memory_allocation_properties_version_t::CURRENT;   ///< [in] ::MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT
+            memory_allocation_properties_version_t version = memory_allocation_properties_version_t::CURRENT;   ///< [in] ::XE_MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT
             memory_type_t type;                             ///< [out] type of allocated memory
             uint64_t id;                                    ///< [out] identifier for this allocation
 
@@ -569,7 +570,7 @@ namespace xe
             Device* pDevice,                                ///< [in] pointer to a device
             device_mem_alloc_flag_t device_flags,           ///< [in] flags specifying additional device allocation controls
             uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
-                                                            ///< must be less than the count returned from ::DeviceGroupGetMemoryProperties
+                                                            ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
             host_mem_alloc_flag_t host_flags,               ///< [in] flags specifying additional host allocation controls
             size_t size,                                    ///< [in] size in bytes to allocate
             size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
@@ -596,7 +597,7 @@ namespace xe
             Device* pDevice,                                ///< [in] pointer to the device
             device_mem_alloc_flag_t flags,                  ///< [in] flags specifying additional allocation controls
             uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
-                                                            ///< must be less than the count returned from ::DeviceGroupGetMemoryProperties
+                                                            ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
             size_t size,                                    ///< [in] size in bytes to allocate
             size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
             );
@@ -713,7 +714,8 @@ namespace xe
         ///     - Takes an IPC memory handle from a sending process and associates it
         ///       with a device pointer usable in this process.
         ///     - The device pointer in this process should not be freed with
-        ///       ::DeviceGroupFreeMem, but rather with ::DeviceGroupCloseMemIpcHandle.
+        ///       ::xeDeviceGroupFreeMem, but rather with
+        ///       ::xeDeviceGroupCloseMemIpcHandle.
         ///     - The application may call this function from simultaneous threads.
         /// 
         /// @remarks
@@ -735,7 +737,7 @@ namespace xe
         /// 
         /// @details
         ///     - Closes an IPC memory handle by unmapping memory that was opened in
-        ///       this process using ::DeviceGroupOpenMemIpcHandle.
+        ///       this process using ::xeDeviceGroupOpenMemIpcHandle.
         ///     - The application may **not** call this function from simultaneous
         ///       threads with the same pointer.
         /// 
@@ -756,7 +758,7 @@ namespace xe
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::device_p2p_properties_t
+        /// @brief API version of ::xe_device_p2p_properties_t
         enum class p2p_properties_version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
@@ -777,10 +779,10 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Device properties queried using ::DeviceGetP2PProperties
+        /// @brief Device properties queried using ::xeDeviceGetP2PProperties
         struct p2p_properties_t
         {
-            p2p_properties_version_t version = p2p_properties_version_t::CURRENT;   ///< [in] ::DEVICE_P2P_PROPERTIES_VERSION_CURRENT
+            p2p_properties_version_t version = p2p_properties_version_t::CURRENT;   ///< [in] ::XE_DEVICE_P2P_PROPERTIES_VERSION_CURRENT
             bool_t accessSupported;                         ///< [out] Supports access between peer devices.
             bool_t atomicsSupported;                        ///< [out] Supports atomics between peer devices.
 
@@ -960,7 +962,7 @@ namespace xe
 
 #if XE_ENABLE_OCL_INTEROP
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Registers OpenCL memory with Xe::
+        /// @brief Registers OpenCL memory with Xe
         /// @returns
         ///     - void*: pointer to device allocation
         /// 
@@ -974,7 +976,7 @@ namespace xe
 
 #if XE_ENABLE_OCL_INTEROP
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Registers OpenCL program with Xe::
+        /// @brief Registers OpenCL program with Xe
         /// @returns
         ///     - Module*: pointer to handle of module object created
         /// 
@@ -988,7 +990,7 @@ namespace xe
 
 #if XE_ENABLE_OCL_INTEROP
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Registers OpenCL command queue with Xe::
+        /// @brief Registers OpenCL command queue with Xe
         /// @returns
         ///     - CommandQueue*: pointer to handle of command queue object created
         /// 
