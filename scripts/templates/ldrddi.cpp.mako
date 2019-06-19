@@ -65,9 +65,9 @@ namespace loader
         %endfor
         )
     {
-        %if re.match(r"Init", obj['name']):
         xe_result_t result = ${X}_RESULT_SUCCESS;
 
+        %if re.match(r"Init", obj['name']):
         for( auto& drv : context.drivers )
         {
             if( ${X}_RESULT_SUCCESS == result )
@@ -75,9 +75,8 @@ namespace loader
                 result = drv.dditable.${n}.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
             }
         }
-        %elif re.match(r"\w+DeviceGroupGet$", th.make_func_name(n, tags, obj)):
-        xe_result_t result = ${X}_RESULT_SUCCESS;
 
+        %elif re.match(r"\w+DeviceGroupGet$", th.make_func_name(n, tags, obj)):
         uint32_t total_count = 0;
 
         for( auto& drv : context.drivers )
@@ -118,6 +117,9 @@ namespace loader
         %if 0 == i:
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<${item['obj']}*>( ${item['name']} )->dditable;
+        auto ${th.make_pfn_name(n, tags, obj)} = dditable->${n}.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
+        if( nullptr == ${th.make_pfn_name(n, tags, obj)} )
+            return ${X}_RESULT_ERROR_UNSUPPORTED;
 
         %endif
         %if 'range' in item:
@@ -135,7 +137,7 @@ namespace loader
 
         %endfor
         // forward to device-driver
-        auto result = dditable->${n}.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
+        result = ${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
 
         %for item in th.get_loader_epilogue(n, tags, obj, meta):
         %if item['release']:
@@ -166,6 +168,7 @@ namespace loader
             result = ${X}_RESULT_ERROR_OUT_OF_HOST_MEMORY;
         }
         %endif
+
         %endfor
         %endif
         return result;
@@ -216,7 +219,7 @@ ${tbl['export']['name']}(
     {
         if( ${X}_RESULT_SUCCESS == result )
         {
-            static auto getTable = reinterpret_cast<${tbl['pfn']}>(
+            auto getTable = reinterpret_cast<${tbl['pfn']}>(
                 GET_FUNCTION_PTR( drv.handle, "${tbl['export']['name']}") );
             result = getTable( version, &drv.dditable.${n}.${tbl['name']} );
         }
@@ -247,7 +250,7 @@ ${tbl['export']['name']}(
     // If the validation layer is enabled, then intercept the loader's DDIs
     if(( ${X}_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
     {
-        static auto getTable = reinterpret_cast<${tbl['pfn']}>(
+        auto getTable = reinterpret_cast<${tbl['pfn']}>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "${tbl['export']['name']}") );
         result = getTable( version, pDdiTable );
     }

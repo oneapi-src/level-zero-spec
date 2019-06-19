@@ -70,11 +70,8 @@ xeCommandListAppendMemoryCopy(
     )
 {
     auto pfnAppendMemoryCopy = xe_lib::context.ddiTable.CommandList.pfnAppendMemoryCopy;
-
-#if _DEBUG
     if( nullptr == pfnAppendMemoryCopy )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAppendMemoryCopy( hCommandList, dstptr, srcptr, size, hEvent );
 }
@@ -114,11 +111,8 @@ xeCommandListAppendMemorySet(
     )
 {
     auto pfnAppendMemorySet = xe_lib::context.ddiTable.CommandList.pfnAppendMemorySet;
-
-#if _DEBUG
     if( nullptr == pfnAppendMemorySet )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAppendMemorySet( hCommandList, ptr, value, size, hEvent );
 }
@@ -159,11 +153,8 @@ xeCommandListAppendMemoryCopyRegion(
     )
 {
     auto pfnAppendMemoryCopyRegion = xe_lib::context.ddiTable.CommandList.pfnAppendMemoryCopyRegion;
-
-#if _DEBUG
     if( nullptr == pfnAppendMemoryCopyRegion )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, srcptr, srcRegion, srcPitch, hEvent );
 }
@@ -198,11 +189,8 @@ xeCommandListAppendImageCopy(
     )
 {
     auto pfnAppendImageCopy = xe_lib::context.ddiTable.CommandList.pfnAppendImageCopy;
-
-#if _DEBUG
     if( nullptr == pfnAppendImageCopy )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAppendImageCopy( hCommandList, hDstImage, hSrcImage, hEvent );
 }
@@ -235,11 +223,8 @@ xeCommandListAppendImageCopyRegion(
     )
 {
     auto pfnAppendImageCopyRegion = xe_lib::context.ddiTable.CommandList.pfnAppendImageCopyRegion;
-
-#if _DEBUG
     if( nullptr == pfnAppendImageCopyRegion )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAppendImageCopyRegion( hCommandList, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hEvent );
 }
@@ -277,11 +262,8 @@ xeCommandListAppendImageCopyToMemory(
     )
 {
     auto pfnAppendImageCopyToMemory = xe_lib::context.ddiTable.CommandList.pfnAppendImageCopyToMemory;
-
-#if _DEBUG
     if( nullptr == pfnAppendImageCopyToMemory )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAppendImageCopyToMemory( hCommandList, dstptr, hSrcImage, pSrcRegion, hEvent );
 }
@@ -319,11 +301,8 @@ xeCommandListAppendImageCopyFromMemory(
     )
 {
     auto pfnAppendImageCopyFromMemory = xe_lib::context.ddiTable.CommandList.pfnAppendImageCopyFromMemory;
-
-#if _DEBUG
     if( nullptr == pfnAppendImageCopyFromMemory )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAppendImageCopyFromMemory( hCommandList, hDstImage, srcptr, pDstRegion, hEvent );
 }
@@ -370,11 +349,8 @@ xeCommandListAppendMemoryPrefetch(
     )
 {
     auto pfnAppendMemoryPrefetch = xe_lib::context.ddiTable.CommandList.pfnAppendMemoryPrefetch;
-
-#if _DEBUG
     if( nullptr == pfnAppendMemoryPrefetch )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAppendMemoryPrefetch( hCommandList, ptr, size );
 }
@@ -422,11 +398,8 @@ xeCommandListAppendMemAdvise(
     )
 {
     auto pfnAppendMemAdvise = xe_lib::context.ddiTable.CommandList.pfnAppendMemAdvise;
-
-#if _DEBUG
     if( nullptr == pfnAppendMemAdvise )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAppendMemAdvise( hCommandList, hDevice, ptr, size, advice );
 }

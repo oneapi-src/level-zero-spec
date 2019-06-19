@@ -63,11 +63,8 @@ xetTracerCreate(
     )
 {
     auto pfnCreate = xet_lib::context.ddiTable.Tracer.pfnCreate;
-
-#if _DEBUG
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnCreate( hDeviceGroup, desc, phTracer );
 }
@@ -96,11 +93,8 @@ xetTracerDestroy(
     )
 {
     auto pfnDestroy = xet_lib::context.ddiTable.Tracer.pfnDestroy;
-
-#if _DEBUG
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnDestroy( hTracer );
 }
@@ -134,11 +128,8 @@ xetTracerSetPrologues(
     )
 {
     auto pfnSetPrologues = xet_lib::context.ddiTable.Tracer.pfnSetPrologues;
-
-#if _DEBUG
     if( nullptr == pfnSetPrologues )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnSetPrologues( hTracer, pCoreCbs, pExperimentalCbs );
 }
@@ -172,11 +163,8 @@ xetTracerSetEpilogues(
     )
 {
     auto pfnSetEpilogues = xet_lib::context.ddiTable.Tracer.pfnSetEpilogues;
-
-#if _DEBUG
     if( nullptr == pfnSetEpilogues )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnSetEpilogues( hTracer, pCoreCbs, pExperimentalCbs );
 }
@@ -202,11 +190,8 @@ xetTracerSetEnabled(
     )
 {
     auto pfnSetEnabled = xet_lib::context.ddiTable.Tracer.pfnSetEnabled;
-
-#if _DEBUG
     if( nullptr == pfnSetEnabled )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnSetEnabled( hTracer, enable );
 }

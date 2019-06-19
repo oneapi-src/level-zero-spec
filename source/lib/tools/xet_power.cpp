@@ -63,11 +63,8 @@ xetPowerCreate(
     )
 {
     auto pfnCreate = xet_lib::context.ddiTable.Power.pfnCreate;
-
-#if _DEBUG
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnCreate( hDevice, flags, pPowerHandle );
 }
@@ -93,11 +90,8 @@ xetPowerDestroy(
     )
 {
     auto pfnDestroy = xet_lib::context.ddiTable.Power.pfnDestroy;
-
-#if _DEBUG
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnDestroy( hPower );
 }
@@ -120,11 +114,8 @@ xetPowerGetAveragePowerLimit(
     )
 {
     auto pfnGetAveragePowerLimit = xet_lib::context.ddiTable.Power.pfnGetAveragePowerLimit;
-
-#if _DEBUG
     if( nullptr == pfnGetAveragePowerLimit )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetAveragePowerLimit( hPower, pLimit );
 }
@@ -147,11 +138,8 @@ xetPowerGetBurstPowerLimit(
     )
 {
     auto pfnGetBurstPowerLimit = xet_lib::context.ddiTable.Power.pfnGetBurstPowerLimit;
-
-#if _DEBUG
     if( nullptr == pfnGetBurstPowerLimit )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetBurstPowerLimit( hPower, pLimit );
 }
@@ -174,11 +162,8 @@ xetPowerGetPeakPowerLimit(
     )
 {
     auto pfnGetPeakPowerLimit = xet_lib::context.ddiTable.Power.pfnGetPeakPowerLimit;
-
-#if _DEBUG
     if( nullptr == pfnGetPeakPowerLimit )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetPeakPowerLimit( hPower, pLimit );
 }
@@ -201,11 +186,8 @@ xetPowerGetAllPowerLimits(
     )
 {
     auto pfnGetAllPowerLimits = xet_lib::context.ddiTable.Power.pfnGetAllPowerLimits;
-
-#if _DEBUG
     if( nullptr == pfnGetAllPowerLimits )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetAllPowerLimits( hPower, pLimits );
 }
@@ -228,11 +210,8 @@ xetPowerGetDefaultPowerLimits(
     )
 {
     auto pfnGetDefaultPowerLimits = xet_lib::context.ddiTable.Power.pfnGetDefaultPowerLimits;
-
-#if _DEBUG
     if( nullptr == pfnGetDefaultPowerLimits )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetDefaultPowerLimits( hPower, pLimits );
 }
@@ -255,11 +234,8 @@ xetPowerSetAveragePowerLimit(
     )
 {
     auto pfnSetAveragePowerLimit = xet_lib::context.ddiTable.Power.pfnSetAveragePowerLimit;
-
-#if _DEBUG
     if( nullptr == pfnSetAveragePowerLimit )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnSetAveragePowerLimit( hPower, pLimit );
 }
@@ -282,11 +258,8 @@ xetPowerSetBurstPowerLimit(
     )
 {
     auto pfnSetBurstPowerLimit = xet_lib::context.ddiTable.Power.pfnSetBurstPowerLimit;
-
-#if _DEBUG
     if( nullptr == pfnSetBurstPowerLimit )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnSetBurstPowerLimit( hPower, pLimit );
 }
@@ -309,11 +282,8 @@ xetPowerSetPeakPowerLimit(
     )
 {
     auto pfnSetPeakPowerLimit = xet_lib::context.ddiTable.Power.pfnSetPeakPowerLimit;
-
-#if _DEBUG
     if( nullptr == pfnSetPeakPowerLimit )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnSetPeakPowerLimit( hPower, pLimit );
 }
@@ -336,11 +306,8 @@ xetPowerSetPowerLimits(
     )
 {
     auto pfnSetPowerLimits = xet_lib::context.ddiTable.Power.pfnSetPowerLimits;
-
-#if _DEBUG
     if( nullptr == pfnSetPowerLimits )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnSetPowerLimits( hPower, pLimits );
 }
@@ -367,11 +334,8 @@ xetPowerGetEnergyCounter(
     )
 {
     auto pfnGetEnergyCounter = xet_lib::context.ddiTable.Power.pfnGetEnergyCounter;
-
-#if _DEBUG
     if( nullptr == pfnGetEnergyCounter )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetEnergyCounter( hPower, pEnergy );
 }
@@ -394,11 +358,8 @@ xetPowerGetTurboMode(
     )
 {
     auto pfnGetTurboMode = xet_lib::context.ddiTable.Power.pfnGetTurboMode;
-
-#if _DEBUG
     if( nullptr == pfnGetTurboMode )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetTurboMode( hPower, pTurboMode );
 }
@@ -420,11 +381,8 @@ xetPowerSetTurboMode(
     )
 {
     auto pfnSetTurboMode = xet_lib::context.ddiTable.Power.pfnSetTurboMode;
-
-#if _DEBUG
     if( nullptr == pfnSetTurboMode )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnSetTurboMode( hPower, pTurboMode );
 }
@@ -456,11 +414,8 @@ xetFreqDomainGet(
     )
 {
     auto pfnGet = xet_lib::context.ddiTable.FreqDomain.pfnGet;
-
-#if _DEBUG
     if( nullptr == pfnGet )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGet( hPower, pCount, phFreqDomain );
 }
@@ -483,11 +438,8 @@ xetFreqDomainGetProperties(
     )
 {
     auto pfnGetProperties = xet_lib::context.ddiTable.FreqDomain.pfnGetProperties;
-
-#if _DEBUG
     if( nullptr == pfnGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetProperties( hFreqDomain, pFreqDomainProperties );
 }
@@ -512,11 +464,8 @@ xetFreqDomainGetSourceFreqDomain(
     )
 {
     auto pfnGetSourceFreqDomain = xet_lib::context.ddiTable.FreqDomain.pfnGetSourceFreqDomain;
-
-#if _DEBUG
     if( nullptr == pfnGetSourceFreqDomain )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetSourceFreqDomain( hFreqDomain, phSrcFreqDomain );
 }
@@ -545,11 +494,8 @@ xetFreqDomainGetSupportedClocks(
     )
 {
     auto pfnGetSupportedClocks = xet_lib::context.ddiTable.FreqDomain.pfnGetSupportedClocks;
-
-#if _DEBUG
     if( nullptr == pfnGetSupportedClocks )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetSupportedClocks( hFreqDomain, numClockPoints, pClocks );
 }
@@ -578,11 +524,8 @@ xetFreqDomainGetSupportedClockDividers(
     )
 {
     auto pfnGetSupportedClockDividers = xet_lib::context.ddiTable.FreqDomain.pfnGetSupportedClockDividers;
-
-#if _DEBUG
     if( nullptr == pfnGetSupportedClockDividers )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetSupportedClockDividers( hFreqDomain, numClockDividers, pDividers );
 }
@@ -608,11 +551,8 @@ xetFreqDomainGetClockRange(
     )
 {
     auto pfnGetClockRange = xet_lib::context.ddiTable.FreqDomain.pfnGetClockRange;
-
-#if _DEBUG
     if( nullptr == pfnGetClockRange )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetClockRange( hFreqDomain, pMinClock, pMaxClock );
 }
@@ -646,11 +586,8 @@ xetFreqDomainSetClockRange(
     )
 {
     auto pfnSetClockRange = xet_lib::context.ddiTable.FreqDomain.pfnSetClockRange;
-
-#if _DEBUG
     if( nullptr == pfnSetClockRange )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnSetClockRange( hFreqDomain, minClock, maxClock );
 }
@@ -680,11 +617,8 @@ xetFreqDomainSetClockDivider(
     )
 {
     auto pfnSetClockDivider = xet_lib::context.ddiTable.FreqDomain.pfnSetClockDivider;
-
-#if _DEBUG
     if( nullptr == pfnSetClockDivider )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnSetClockDivider( hFreqDomain, pClockDividerRequest );
 }
@@ -711,11 +645,8 @@ xetFreqDomainGetCurrentFrequency(
     )
 {
     auto pfnGetCurrentFrequency = xet_lib::context.ddiTable.FreqDomain.pfnGetCurrentFrequency;
-
-#if _DEBUG
     if( nullptr == pfnGetCurrentFrequency )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetCurrentFrequency( hFreqDomain, pFreqRequest, pFreqResolved, pFreqThrottleReasons );
 }
@@ -738,11 +669,8 @@ xetPowerFanCount(
     )
 {
     auto pfnFanCount = xet_lib::context.ddiTable.Power.pfnFanCount;
-
-#if _DEBUG
     if( nullptr == pfnFanCount )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnFanCount( hPower, pFanCount );
 }
@@ -766,11 +694,8 @@ xetPowerFanGetProperties(
     )
 {
     auto pfnFanGetProperties = xet_lib::context.ddiTable.Power.pfnFanGetProperties;
-
-#if _DEBUG
     if( nullptr == pfnFanGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnFanGetProperties( hPower, fanIndex, pFanProperties );
 }
@@ -802,11 +727,8 @@ xetPowerFanGetSpeedTable(
     )
 {
     auto pfnFanGetSpeedTable = xet_lib::context.ddiTable.Power.pfnFanGetSpeedTable;
-
-#if _DEBUG
     if( nullptr == pfnFanGetSpeedTable )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnFanGetSpeedTable( hPower, fanIndex, fanSpeedInRpm, pNumFanPoints, pFanPoints );
 }
@@ -836,11 +758,8 @@ xetPowerFanSetSpeedTable(
     )
 {
     auto pfnFanSetSpeedTable = xet_lib::context.ddiTable.Power.pfnFanSetSpeedTable;
-
-#if _DEBUG
     if( nullptr == pfnFanSetSpeedTable )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnFanSetSpeedTable( hPower, fanIndex, numFanPoints, pFanPoints );
 }
@@ -870,11 +789,8 @@ xetPowerFanGetSpeed(
     )
 {
     auto pfnFanGetSpeed = xet_lib::context.ddiTable.Power.pfnFanGetSpeed;
-
-#if _DEBUG
     if( nullptr == pfnFanGetSpeed )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnFanGetSpeed( hPower, startFanIndex, numFans, fanSpeedInRpm, pFanSpeed );
 }
@@ -904,11 +820,8 @@ xetPowerFanSetSpeed(
     )
 {
     auto pfnFanSetSpeed = xet_lib::context.ddiTable.Power.pfnFanSetSpeed;
-
-#if _DEBUG
     if( nullptr == pfnFanSetSpeed )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnFanSetSpeed( hPower, startFanIndex, numFans, pFanSpeed );
 }
@@ -931,11 +844,8 @@ xetPowerTemperatureSensorCount(
     )
 {
     auto pfnTemperatureSensorCount = xet_lib::context.ddiTable.Power.pfnTemperatureSensorCount;
-
-#if _DEBUG
     if( nullptr == pfnTemperatureSensorCount )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnTemperatureSensorCount( hPower, pSensorCount );
 }
@@ -963,11 +873,8 @@ xetPowerGetTemperatureProperties(
     )
 {
     auto pfnGetTemperatureProperties = xet_lib::context.ddiTable.Power.pfnGetTemperatureProperties;
-
-#if _DEBUG
     if( nullptr == pfnGetTemperatureProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetTemperatureProperties( hPower, sensorIndex, pProperties );
 }
@@ -997,11 +904,8 @@ xetPowerGetTemperature(
     )
 {
     auto pfnGetTemperature = xet_lib::context.ddiTable.Power.pfnGetTemperature;
-
-#if _DEBUG
     if( nullptr == pfnGetTemperature )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetTemperature( hPower, startSensorIndex, numSensors, pTemperatures );
 }
@@ -1032,11 +936,8 @@ xetPowerSetTemperatureThreshold(
     )
 {
     auto pfnSetTemperatureThreshold = xet_lib::context.ddiTable.Power.pfnSetTemperatureThreshold;
-
-#if _DEBUG
     if( nullptr == pfnSetTemperatureThreshold )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnSetTemperatureThreshold( hPower, sensorIndex, maxTemperature );
 }
@@ -1059,11 +960,8 @@ xetPowerActivityCount(
     )
 {
     auto pfnActivityCount = xet_lib::context.ddiTable.Power.pfnActivityCount;
-
-#if _DEBUG
     if( nullptr == pfnActivityCount )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnActivityCount( hPower, pActivityCount );
 }
@@ -1091,11 +989,8 @@ xetPowerGetActivityProperties(
     )
 {
     auto pfnGetActivityProperties = xet_lib::context.ddiTable.Power.pfnGetActivityProperties;
-
-#if _DEBUG
     if( nullptr == pfnGetActivityProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetActivityProperties( hPower, activityIndex, pProperties );
 }
@@ -1125,11 +1020,8 @@ xetPowerGetActivityCounters(
     )
 {
     auto pfnGetActivityCounters = xet_lib::context.ddiTable.Power.pfnGetActivityCounters;
-
-#if _DEBUG
     if( nullptr == pfnGetActivityCounters )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetActivityCounters( hPower, startCounterIndex, numCounters, pCounters );
 }

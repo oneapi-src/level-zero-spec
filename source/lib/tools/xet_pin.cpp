@@ -62,11 +62,8 @@ xetModuleGetFunctionNames(
     )
 {
     auto pfnGetFunctionNames = xet_lib::context.ddiTable.Module.pfnGetFunctionNames;
-
-#if _DEBUG
     if( nullptr == pfnGetFunctionNames )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetFunctionNames( hModule, pCount, pNames );
 }
@@ -97,11 +94,8 @@ xetFunctionGetProfileInfo(
     )
 {
     auto pfnGetProfileInfo = xet_lib::context.ddiTable.Function.pfnGetProfileInfo;
-
-#if _DEBUG
     if( nullptr == pfnGetProfileInfo )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetProfileInfo( hFunction, pInfo );
 }

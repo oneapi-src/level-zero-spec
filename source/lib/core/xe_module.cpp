@@ -85,11 +85,8 @@ xeModuleCreate(
     )
 {
     auto pfnCreate = xe_lib::context.ddiTable.Module.pfnCreate;
-
-#if _DEBUG
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnCreate( hDevice, desc, phModule, phBuildLog );
 }
@@ -123,11 +120,8 @@ xeModuleDestroy(
     )
 {
     auto pfnDestroy = xe_lib::context.ddiTable.Module.pfnDestroy;
-
-#if _DEBUG
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnDestroy( hModule );
 }
@@ -157,11 +151,8 @@ xeModuleBuildLogDestroy(
     )
 {
     auto pfnDestroy = xe_lib::context.ddiTable.ModuleBuildLog.pfnDestroy;
-
-#if _DEBUG
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnDestroy( hModuleBuildLog );
 }
@@ -191,11 +182,8 @@ xeModuleBuildLogGetString(
     )
 {
     auto pfnGetString = xe_lib::context.ddiTable.ModuleBuildLog.pfnGetString;
-
-#if _DEBUG
     if( nullptr == pfnGetString )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetString( hModuleBuildLog, pSize, pBuildLog );
 }
@@ -231,11 +219,8 @@ xeModuleGetNativeBinary(
     )
 {
     auto pfnGetNativeBinary = xe_lib::context.ddiTable.Module.pfnGetNativeBinary;
-
-#if _DEBUG
     if( nullptr == pfnGetNativeBinary )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetNativeBinary( hModule, pSize, pModuleNativeBinary );
 }
@@ -265,11 +250,8 @@ xeModuleGetGlobalPointer(
     )
 {
     auto pfnGetGlobalPointer = xe_lib::context.ddiTable.Module.pfnGetGlobalPointer;
-
-#if _DEBUG
     if( nullptr == pfnGetGlobalPointer )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetGlobalPointer( hModule, pGlobalName, pptr );
 }
@@ -305,11 +287,8 @@ xeFunctionCreate(
     )
 {
     auto pfnCreate = xe_lib::context.ddiTable.Function.pfnCreate;
-
-#if _DEBUG
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnCreate( hModule, desc, phFunction );
 }
@@ -340,11 +319,8 @@ xeFunctionDestroy(
     )
 {
     auto pfnDestroy = xe_lib::context.ddiTable.Function.pfnDestroy;
-
-#if _DEBUG
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnDestroy( hFunction );
 }
@@ -377,11 +353,8 @@ xeModuleGetFunctionPointer(
     )
 {
     auto pfnGetFunctionPointer = xe_lib::context.ddiTable.Module.pfnGetFunctionPointer;
-
-#if _DEBUG
     if( nullptr == pfnGetFunctionPointer )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetFunctionPointer( hModule, pFunctionName, pfnFunction );
 }
@@ -412,11 +385,8 @@ xeFunctionSetGroupSize(
     )
 {
     auto pfnSetGroupSize = xe_lib::context.ddiTable.Function.pfnSetGroupSize;
-
-#if _DEBUG
     if( nullptr == pfnSetGroupSize )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnSetGroupSize( hFunction, groupSizeX, groupSizeY, groupSizeZ );
 }
@@ -454,11 +424,8 @@ xeFunctionSuggestGroupSize(
     )
 {
     auto pfnSuggestGroupSize = xe_lib::context.ddiTable.Function.pfnSuggestGroupSize;
-
-#if _DEBUG
     if( nullptr == pfnSuggestGroupSize )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnSuggestGroupSize( hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
 }
@@ -492,11 +459,8 @@ xeFunctionSetArgumentValue(
     )
 {
     auto pfnSetArgumentValue = xe_lib::context.ddiTable.Function.pfnSetArgumentValue;
-
-#if _DEBUG
     if( nullptr == pfnSetArgumentValue )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnSetArgumentValue( hFunction, argIndex, argSize, pArgValue );
 }
@@ -530,11 +494,8 @@ xeFunctionSetAttribute(
     )
 {
     auto pfnSetAttribute = xe_lib::context.ddiTable.Function.pfnSetAttribute;
-
-#if _DEBUG
     if( nullptr == pfnSetAttribute )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnSetAttribute( hFunction, attr, value );
 }
@@ -567,11 +528,8 @@ xeFunctionGetAttribute(
     )
 {
     auto pfnGetAttribute = xe_lib::context.ddiTable.Function.pfnGetAttribute;
-
-#if _DEBUG
     if( nullptr == pfnGetAttribute )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetAttribute( hFunction, attr, pValue );
 }
@@ -611,11 +569,8 @@ xeCommandListAppendLaunchFunction(
     )
 {
     auto pfnAppendLaunchFunction = xe_lib::context.ddiTable.CommandList.pfnAppendLaunchFunction;
-
-#if _DEBUG
     if( nullptr == pfnAppendLaunchFunction )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAppendLaunchFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
 }
@@ -658,11 +613,8 @@ xeCommandListAppendLaunchFunctionIndirect(
     )
 {
     auto pfnAppendLaunchFunctionIndirect = xe_lib::context.ddiTable.CommandList.pfnAppendLaunchFunctionIndirect;
-
-#if _DEBUG
     if( nullptr == pfnAppendLaunchFunctionIndirect )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAppendLaunchFunctionIndirect( hCommandList, hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
 }
@@ -712,11 +664,8 @@ xeCommandListAppendLaunchMultipleFunctionsIndirect(
     )
 {
     auto pfnAppendLaunchMultipleFunctionsIndirect = xe_lib::context.ddiTable.CommandList.pfnAppendLaunchMultipleFunctionsIndirect;
-
-#if _DEBUG
     if( nullptr == pfnAppendLaunchMultipleFunctionsIndirect )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
 }
@@ -756,11 +705,8 @@ xeCommandListAppendLaunchHostFunction(
     )
 {
     auto pfnAppendLaunchHostFunction = xe_lib::context.ddiTable.CommandList.pfnAppendLaunchHostFunction;
-
-#if _DEBUG
     if( nullptr == pfnAppendLaunchHostFunction )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAppendLaunchHostFunction( hCommandList, pfnHostFunc, pUserData, hSignalEvent, numWaitEvents, phWaitEvents );
 }

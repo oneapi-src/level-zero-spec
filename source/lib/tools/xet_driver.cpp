@@ -67,11 +67,8 @@ xetInit(
         return result;
 
     auto pfnInit = xet_lib::context.ddiTable.Global.pfnInit;
-
-#if _DEBUG
     if( nullptr == pfnInit )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnInit( flags );
 }

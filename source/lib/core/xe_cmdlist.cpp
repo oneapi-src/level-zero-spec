@@ -65,11 +65,8 @@ xeCommandListCreate(
     )
 {
     auto pfnCreate = xe_lib::context.ddiTable.CommandList.pfnCreate;
-
-#if _DEBUG
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnCreate( hDevice, desc, phCommandList );
 }
@@ -106,11 +103,8 @@ xeCommandListCreateImmediate(
     )
 {
     auto pfnCreateImmediate = xe_lib::context.ddiTable.CommandList.pfnCreateImmediate;
-
-#if _DEBUG
     if( nullptr == pfnCreateImmediate )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnCreateImmediate( hDevice, altdesc, phCommandList );
 }
@@ -140,11 +134,8 @@ xeCommandListDestroy(
     )
 {
     auto pfnDestroy = xe_lib::context.ddiTable.CommandList.pfnDestroy;
-
-#if _DEBUG
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnDestroy( hCommandList );
 }
@@ -170,11 +161,8 @@ xeCommandListClose(
     )
 {
     auto pfnClose = xe_lib::context.ddiTable.CommandList.pfnClose;
-
-#if _DEBUG
     if( nullptr == pfnClose )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnClose( hCommandList );
 }
@@ -203,11 +191,8 @@ xeCommandListReset(
     )
 {
     auto pfnReset = xe_lib::context.ddiTable.CommandList.pfnReset;
-
-#if _DEBUG
     if( nullptr == pfnReset )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnReset( hCommandList );
 }
@@ -243,11 +228,8 @@ xeCommandListSetParameter(
     )
 {
     auto pfnSetParameter = xe_lib::context.ddiTable.CommandList.pfnSetParameter;
-
-#if _DEBUG
     if( nullptr == pfnSetParameter )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnSetParameter( hCommandList, parameter, value );
 }
@@ -283,11 +265,8 @@ xeCommandListGetParameter(
     )
 {
     auto pfnGetParameter = xe_lib::context.ddiTable.CommandList.pfnGetParameter;
-
-#if _DEBUG
     if( nullptr == pfnGetParameter )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetParameter( hCommandList, parameter, value );
 }
@@ -313,11 +292,8 @@ xeCommandListResetParameters(
     )
 {
     auto pfnResetParameters = xe_lib::context.ddiTable.CommandList.pfnResetParameters;
-
-#if _DEBUG
     if( nullptr == pfnResetParameters )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnResetParameters( hCommandList );
 }

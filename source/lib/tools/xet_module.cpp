@@ -62,11 +62,8 @@ xetModuleGetDebugInfo(
     )
 {
     auto pfnGetDebugInfo = xet_lib::context.ddiTable.Module.pfnGetDebugInfo;
-
-#if _DEBUG
     if( nullptr == pfnGetDebugInfo )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetDebugInfo( hModule, format, pSize, pDebugInfo );
 }

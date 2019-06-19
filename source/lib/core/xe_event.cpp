@@ -65,11 +65,8 @@ xeEventPoolCreate(
     )
 {
     auto pfnCreate = xe_lib::context.ddiTable.EventPool.pfnCreate;
-
-#if _DEBUG
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnCreate( hDeviceGroup, desc, numDevices, phDevices, phEventPool );
 }
@@ -102,11 +99,8 @@ xeEventPoolDestroy(
     )
 {
     auto pfnDestroy = xe_lib::context.ddiTable.EventPool.pfnDestroy;
-
-#if _DEBUG
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnDestroy( hEventPool );
 }
@@ -145,11 +139,8 @@ xeEventCreate(
     )
 {
     auto pfnCreate = xe_lib::context.ddiTable.Event.pfnCreate;
-
-#if _DEBUG
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnCreate( hEventPool, desc, phEvent );
 }
@@ -185,11 +176,8 @@ xeEventDestroy(
     )
 {
     auto pfnDestroy = xe_lib::context.ddiTable.Event.pfnDestroy;
-
-#if _DEBUG
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnDestroy( hEvent );
 }
@@ -220,11 +208,8 @@ xeEventPoolGetIpcHandle(
     )
 {
     auto pfnGetIpcHandle = xe_lib::context.ddiTable.EventPool.pfnGetIpcHandle;
-
-#if _DEBUG
     if( nullptr == pfnGetIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetIpcHandle( hEventPool, phIpc );
 }
@@ -259,11 +244,8 @@ xeEventPoolOpenIpcHandle(
     )
 {
     auto pfnOpenIpcHandle = xe_lib::context.ddiTable.EventPool.pfnOpenIpcHandle;
-
-#if _DEBUG
     if( nullptr == pfnOpenIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnOpenIpcHandle( hDevice, hIpc, phEventPool );
 }
@@ -294,11 +276,8 @@ xeEventPoolCloseIpcHandle(
     )
 {
     auto pfnCloseIpcHandle = xe_lib::context.ddiTable.EventPool.pfnCloseIpcHandle;
-
-#if _DEBUG
     if( nullptr == pfnCloseIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnCloseIpcHandle( hEventPool );
 }
@@ -332,11 +311,8 @@ xeCommandListAppendSignalEvent(
     )
 {
     auto pfnAppendSignalEvent = xe_lib::context.ddiTable.CommandList.pfnAppendSignalEvent;
-
-#if _DEBUG
     if( nullptr == pfnAppendSignalEvent )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAppendSignalEvent( hCommandList, hEvent );
 }
@@ -366,11 +342,8 @@ xeCommandListAppendWaitOnEvents(
     )
 {
     auto pfnAppendWaitOnEvents = xe_lib::context.ddiTable.CommandList.pfnAppendWaitOnEvents;
-
-#if _DEBUG
     if( nullptr == pfnAppendWaitOnEvents )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAppendWaitOnEvents( hCommandList, numEvents, phEvents );
 }
@@ -399,11 +372,8 @@ xeEventHostSignal(
     )
 {
     auto pfnHostSignal = xe_lib::context.ddiTable.Event.pfnHostSignal;
-
-#if _DEBUG
     if( nullptr == pfnHostSignal )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnHostSignal( hEvent );
 }
@@ -440,11 +410,8 @@ xeEventHostSynchronize(
     )
 {
     auto pfnHostSynchronize = xe_lib::context.ddiTable.Event.pfnHostSynchronize;
-
-#if _DEBUG
     if( nullptr == pfnHostSynchronize )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnHostSynchronize( hEvent, timeout );
 }
@@ -477,11 +444,8 @@ xeEventQueryStatus(
     )
 {
     auto pfnQueryStatus = xe_lib::context.ddiTable.Event.pfnQueryStatus;
-
-#if _DEBUG
     if( nullptr == pfnQueryStatus )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnQueryStatus( hEvent );
 }
@@ -513,11 +477,8 @@ xeCommandListAppendEventReset(
     )
 {
     auto pfnAppendEventReset = xe_lib::context.ddiTable.CommandList.pfnAppendEventReset;
-
-#if _DEBUG
     if( nullptr == pfnAppendEventReset )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAppendEventReset( hCommandList, hEvent );
 }
@@ -546,11 +507,8 @@ xeEventReset(
     )
 {
     auto pfnReset = xe_lib::context.ddiTable.Event.pfnReset;
-
-#if _DEBUG
     if( nullptr == pfnReset )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnReset( hEvent );
 }
@@ -957,8 +915,9 @@ namespace xe
     ///     - clWaitForEvents
     ///     - cuEventSynchronize
     /// 
+    ///     - bool_t:'0' when RESULT_NOT_READY
     /// @throws result_t
-    void __xecall
+    bool_t __xecall
     Event::HostSynchronize(
         uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time (in nanoseconds) to
                                                         ///< yield before returning ::RESULT_SUCCESS or ::RESULT_NOT_READY;
@@ -971,8 +930,11 @@ namespace xe
             reinterpret_cast<xe_event_handle_t>( getHandle() ),
             timeout ) );
 
+        if( result_t::NOT_READY == result )
+            return 0; // false
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Event::HostSynchronize" );
+        return 1; // true
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -988,8 +950,9 @@ namespace xe
     ///     - vkGetEventStatus
     ///     - cuEventQuery
     /// 
+    ///     - bool_t:'0' when RESULT_NOT_READY
     /// @throws result_t
-    void __xecall
+    bool_t __xecall
     Event::QueryStatus(
         void
         )
@@ -997,8 +960,11 @@ namespace xe
         auto result = static_cast<result_t>( ::xeEventQueryStatus(
             reinterpret_cast<xe_event_handle_t>( getHandle() ) ) );
 
+        if( result_t::NOT_READY == result )
+            return 0; // false
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Event::QueryStatus" );
+        return 1; // true
     }
 
     ///////////////////////////////////////////////////////////////////////////////

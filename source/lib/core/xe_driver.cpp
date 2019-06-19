@@ -67,11 +67,8 @@ xeInit(
         return result;
 
     auto pfnInit = xe_lib::context.ddiTable.Global.pfnInit;
-
-#if _DEBUG
     if( nullptr == pfnInit )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnInit( flags );
 }
@@ -105,11 +102,8 @@ xeDeviceGroupGetDriverVersion(
     )
 {
     auto pfnGetDriverVersion = xe_lib::context.ddiTable.DeviceGroup.pfnGetDriverVersion;
-
-#if _DEBUG
     if( nullptr == pfnGetDriverVersion )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetDriverVersion( hDeviceGroup, version );
 }

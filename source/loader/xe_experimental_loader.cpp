@@ -52,6 +52,7 @@ namespace loader
                 result = drv.dditable.xex.Global.pfnInit( flags );
             }
         }
+
         return result;
     }
 
@@ -64,14 +65,19 @@ namespace loader
         void** ptr                                      ///< [out] pointer to command buffer space reserved
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xex_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnReserveSpace = dditable->xex.CommandList.pfnReserveSpace;
+        if( nullptr == pfnReserveSpace )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xex_command_list_object_t*>( hCommandList )->handle;
 
         // forward to device-driver
-        auto result = dditable->xex.CommandList.pfnReserveSpace( hCommandList, size, ptr );
+        result = pfnReserveSpace( hCommandList, size, ptr );
 
         return result;
     }
@@ -85,14 +91,19 @@ namespace loader
         xex_command_graph_handle_t* phCommandGraph      ///< [out] pointer to handle of command graph object created
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnCreate = dditable->xex.CommandGraph.pfnCreate;
+        if( nullptr == pfnCreate )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xex.CommandGraph.pfnCreate( hDevice, desc, phCommandGraph );
+        result = pfnCreate( hDevice, desc, phCommandGraph );
 
         try
         {
@@ -104,6 +115,7 @@ namespace loader
         {
             result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
         }
+
         return result;
     }
 
@@ -114,17 +126,23 @@ namespace loader
         xex_command_graph_handle_t hCommandGraph        ///< [in][release] handle of command graph object to destroy
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph )->dditable;
+        auto pfnDestroy = dditable->xex.CommandGraph.pfnDestroy;
+        if( nullptr == pfnDestroy )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandGraph = reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph )->handle;
 
         // forward to device-driver
-        auto result = dditable->xex.CommandGraph.pfnDestroy( hCommandGraph );
+        result = pfnDestroy( hCommandGraph );
 
         // release loader handle
         xex_command_graph_factory.release( hCommandGraph );
+
         return result;
     }
 
@@ -135,14 +153,19 @@ namespace loader
         xex_command_graph_handle_t hCommandGraph        ///< [in] handle of command graph object to close
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph )->dditable;
+        auto pfnClose = dditable->xex.CommandGraph.pfnClose;
+        if( nullptr == pfnClose )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandGraph = reinterpret_cast<xex_command_graph_object_t*>( hCommandGraph )->handle;
 
         // forward to device-driver
-        auto result = dditable->xex.CommandGraph.pfnClose( hCommandGraph );
+        result = pfnClose( hCommandGraph );
 
         return result;
     }
@@ -186,7 +209,7 @@ xexGetGlobalProcAddrTable(
     {
         if( XE_RESULT_SUCCESS == result )
         {
-            static auto getTable = reinterpret_cast<xex_pfnGetGlobalProcAddrTable_t>(
+            auto getTable = reinterpret_cast<xex_pfnGetGlobalProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xexGetGlobalProcAddrTable") );
             result = getTable( version, &drv.dditable.xex.Global );
         }
@@ -209,7 +232,7 @@ xexGetGlobalProcAddrTable(
     // If the validation layer is enabled, then intercept the loader's DDIs
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
     {
-        static auto getTable = reinterpret_cast<xex_pfnGetGlobalProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xex_pfnGetGlobalProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "xexGetGlobalProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
@@ -250,7 +273,7 @@ xexGetCommandListProcAddrTable(
     {
         if( XE_RESULT_SUCCESS == result )
         {
-            static auto getTable = reinterpret_cast<xex_pfnGetCommandListProcAddrTable_t>(
+            auto getTable = reinterpret_cast<xex_pfnGetCommandListProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xexGetCommandListProcAddrTable") );
             result = getTable( version, &drv.dditable.xex.CommandList );
         }
@@ -273,7 +296,7 @@ xexGetCommandListProcAddrTable(
     // If the validation layer is enabled, then intercept the loader's DDIs
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
     {
-        static auto getTable = reinterpret_cast<xex_pfnGetCommandListProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xex_pfnGetCommandListProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "xexGetCommandListProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
@@ -314,7 +337,7 @@ xexGetCommandGraphProcAddrTable(
     {
         if( XE_RESULT_SUCCESS == result )
         {
-            static auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
+            auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xexGetCommandGraphProcAddrTable") );
             result = getTable( version, &drv.dditable.xex.CommandGraph );
         }
@@ -339,7 +362,7 @@ xexGetCommandGraphProcAddrTable(
     // If the validation layer is enabled, then intercept the loader's DDIs
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
     {
-        static auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xex_pfnGetCommandGraphProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "xexGetCommandGraphProcAddrTable") );
         result = getTable( version, pDdiTable );
     }

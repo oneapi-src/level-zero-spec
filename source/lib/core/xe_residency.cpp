@@ -59,11 +59,8 @@ xeDeviceMakeMemoryResident(
     )
 {
     auto pfnMakeMemoryResident = xe_lib::context.ddiTable.Device.pfnMakeMemoryResident;
-
-#if _DEBUG
     if( nullptr == pfnMakeMemoryResident )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnMakeMemoryResident( hDevice, ptr, size );
 }
@@ -94,11 +91,8 @@ xeDeviceEvictMemory(
     )
 {
     auto pfnEvictMemory = xe_lib::context.ddiTable.Device.pfnEvictMemory;
-
-#if _DEBUG
     if( nullptr == pfnEvictMemory )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnEvictMemory( hDevice, ptr, size );
 }
@@ -127,11 +121,8 @@ xeDeviceMakeImageResident(
     )
 {
     auto pfnMakeImageResident = xe_lib::context.ddiTable.Device.pfnMakeImageResident;
-
-#if _DEBUG
     if( nullptr == pfnMakeImageResident )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnMakeImageResident( hDevice, hImage );
 }
@@ -162,11 +153,8 @@ xeDeviceEvictImage(
     )
 {
     auto pfnEvictImage = xe_lib::context.ddiTable.Device.pfnEvictImage;
-
-#if _DEBUG
     if( nullptr == pfnEvictImage )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnEvictImage( hDevice, hImage );
 }

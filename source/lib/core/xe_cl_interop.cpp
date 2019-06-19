@@ -57,11 +57,8 @@ xeDeviceRegisterCLMemory(
     )
 {
     auto pfnRegisterCLMemory = xe_lib::context.ddiTable.Device.pfnRegisterCLMemory;
-
-#if _DEBUG
     if( nullptr == pfnRegisterCLMemory )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnRegisterCLMemory( hDevice, context, mem, ptr );
 }
@@ -90,11 +87,8 @@ xeDeviceRegisterCLProgram(
     )
 {
     auto pfnRegisterCLProgram = xe_lib::context.ddiTable.Device.pfnRegisterCLProgram;
-
-#if _DEBUG
     if( nullptr == pfnRegisterCLProgram )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnRegisterCLProgram( hDevice, context, program, phModule );
 }
@@ -123,11 +117,8 @@ xeDeviceRegisterCLCommandQueue(
     )
 {
     auto pfnRegisterCLCommandQueue = xe_lib::context.ddiTable.Device.pfnRegisterCLCommandQueue;
-
-#if _DEBUG
     if( nullptr == pfnRegisterCLCommandQueue )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
 }

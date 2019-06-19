@@ -62,11 +62,8 @@ xexCommandGraphCreate(
     )
 {
     auto pfnCreate = xex_lib::context.ddiTable.CommandGraph.pfnCreate;
-
-#if _DEBUG
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnCreate( hDevice, desc, phCommandGraph );
 }
@@ -94,11 +91,8 @@ xexCommandGraphDestroy(
     )
 {
     auto pfnDestroy = xex_lib::context.ddiTable.CommandGraph.pfnDestroy;
-
-#if _DEBUG
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnDestroy( hCommandGraph );
 }
@@ -127,11 +121,8 @@ xexCommandGraphClose(
     )
 {
     auto pfnClose = xex_lib::context.ddiTable.CommandGraph.pfnClose;
-
-#if _DEBUG
     if( nullptr == pfnClose )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnClose( hCommandGraph );
 }

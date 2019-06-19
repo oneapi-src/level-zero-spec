@@ -65,11 +65,8 @@ xeFenceCreate(
     )
 {
     auto pfnCreate = xe_lib::context.ddiTable.Fence.pfnCreate;
-
-#if _DEBUG
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnCreate( hCommandQueue, desc, phFence );
 }
@@ -104,11 +101,8 @@ xeFenceDestroy(
     )
 {
     auto pfnDestroy = xe_lib::context.ddiTable.Fence.pfnDestroy;
-
-#if _DEBUG
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnDestroy( hFence );
 }
@@ -145,11 +139,8 @@ xeFenceHostSynchronize(
     )
 {
     auto pfnHostSynchronize = xe_lib::context.ddiTable.Fence.pfnHostSynchronize;
-
-#if _DEBUG
     if( nullptr == pfnHostSynchronize )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnHostSynchronize( hFence, timeout );
 }
@@ -181,11 +172,8 @@ xeFenceQueryStatus(
     )
 {
     auto pfnQueryStatus = xe_lib::context.ddiTable.Fence.pfnQueryStatus;
-
-#if _DEBUG
     if( nullptr == pfnQueryStatus )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnQueryStatus( hFence );
 }
@@ -214,11 +202,8 @@ xeFenceReset(
     )
 {
     auto pfnReset = xe_lib::context.ddiTable.Fence.pfnReset;
-
-#if _DEBUG
     if( nullptr == pfnReset )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnReset( hFence );
 }
@@ -329,8 +314,9 @@ namespace xe
     ///   _Analogues_
     ///     - **vkWaitForFences**
     /// 
+    ///     - bool_t:'0' when RESULT_NOT_READY
     /// @throws result_t
-    void __xecall
+    bool_t __xecall
     Fence::HostSynchronize(
         uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time (in nanoseconds) to
                                                         ///< yield before returning ::RESULT_SUCCESS or ::RESULT_NOT_READY;
@@ -343,8 +329,11 @@ namespace xe
             reinterpret_cast<xe_fence_handle_t>( getHandle() ),
             timeout ) );
 
+        if( result_t::NOT_READY == result )
+            return 0; // false
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Fence::HostSynchronize" );
+        return 1; // true
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -358,8 +347,9 @@ namespace xe
     ///   _Analogues_
     ///     - **vkGetFenceStatus**
     /// 
+    ///     - bool_t:'0' when RESULT_NOT_READY
     /// @throws result_t
-    void __xecall
+    bool_t __xecall
     Fence::QueryStatus(
         void
         )
@@ -367,8 +357,11 @@ namespace xe
         auto result = static_cast<result_t>( ::xeFenceQueryStatus(
             reinterpret_cast<xe_fence_handle_t>( getHandle() ) ) );
 
+        if( result_t::NOT_READY == result )
+            return 0; // false
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Fence::QueryStatus" );
+        return 1; // true
     }
 
     ///////////////////////////////////////////////////////////////////////////////

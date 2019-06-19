@@ -70,11 +70,8 @@ xeDeviceGroupGet(
     )
 {
     auto pfnGet = xe_lib::context.ddiTable.DeviceGroup.pfnGet;
-
-#if _DEBUG
     if( nullptr == pfnGet )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGet( pCount, phDeviceGroups );
 }
@@ -111,11 +108,8 @@ xeDeviceGet(
     )
 {
     auto pfnGet = xe_lib::context.ddiTable.Device.pfnGet;
-
-#if _DEBUG
     if( nullptr == pfnGet )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGet( hDeviceGroup, pCount, phDevices );
 }
@@ -152,11 +146,8 @@ xeDeviceGetSubDevices(
     )
 {
     auto pfnGetSubDevices = xe_lib::context.ddiTable.Device.pfnGetSubDevices;
-
-#if _DEBUG
     if( nullptr == pfnGetSubDevices )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetSubDevices( hDevice, pCount, phSubdevices );
 }
@@ -187,11 +178,8 @@ xeDeviceGroupGetApiVersion(
     )
 {
     auto pfnGetApiVersion = xe_lib::context.ddiTable.DeviceGroup.pfnGetApiVersion;
-
-#if _DEBUG
     if( nullptr == pfnGetApiVersion )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetApiVersion( hDeviceGroup, version );
 }
@@ -224,11 +212,8 @@ xeDeviceGroupGetDeviceProperties(
     )
 {
     auto pfnGetDeviceProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetDeviceProperties;
-
-#if _DEBUG
     if( nullptr == pfnGetDeviceProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetDeviceProperties( hDeviceGroup, pDeviceProperties );
 }
@@ -260,11 +245,8 @@ xeDeviceGroupGetComputeProperties(
     )
 {
     auto pfnGetComputeProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetComputeProperties;
-
-#if _DEBUG
     if( nullptr == pfnGetComputeProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetComputeProperties( hDeviceGroup, pComputeProperties );
 }
@@ -308,11 +290,8 @@ xeDeviceGroupGetMemoryProperties(
     )
 {
     auto pfnGetMemoryProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetMemoryProperties;
-
-#if _DEBUG
     if( nullptr == pfnGetMemoryProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetMemoryProperties( hDeviceGroup, pCount, pMemProperties );
 }
@@ -345,11 +324,8 @@ xeDeviceGroupGetMemoryAccessProperties(
     )
 {
     auto pfnGetMemoryAccessProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetMemoryAccessProperties;
-
-#if _DEBUG
     if( nullptr == pfnGetMemoryAccessProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetMemoryAccessProperties( hDeviceGroup, pMemAccessProperties );
 }
@@ -382,11 +358,8 @@ xeDeviceGroupGetCacheProperties(
     )
 {
     auto pfnGetCacheProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetCacheProperties;
-
-#if _DEBUG
     if( nullptr == pfnGetCacheProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetCacheProperties( hDeviceGroup, pCacheProperties );
 }
@@ -417,11 +390,8 @@ xeDeviceGroupGetImageProperties(
     )
 {
     auto pfnGetImageProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetImageProperties;
-
-#if _DEBUG
     if( nullptr == pfnGetImageProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetImageProperties( hDeviceGroup, pImageProperties );
 }
@@ -455,11 +425,8 @@ xeDeviceGetP2PProperties(
     )
 {
     auto pfnGetP2PProperties = xe_lib::context.ddiTable.Device.pfnGetP2PProperties;
-
-#if _DEBUG
     if( nullptr == pfnGetP2PProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetP2PProperties( hDevice, hPeerDevice, pP2PProperties );
 }
@@ -504,11 +471,8 @@ xeDeviceCanAccessPeer(
     )
 {
     auto pfnCanAccessPeer = xe_lib::context.ddiTable.Device.pfnCanAccessPeer;
-
-#if _DEBUG
     if( nullptr == pfnCanAccessPeer )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnCanAccessPeer( hDevice, hPeerDevice, value );
 }
@@ -539,11 +503,8 @@ xeDeviceSetIntermediateCacheConfig(
     )
 {
     auto pfnSetIntermediateCacheConfig = xe_lib::context.ddiTable.Device.pfnSetIntermediateCacheConfig;
-
-#if _DEBUG
     if( nullptr == pfnSetIntermediateCacheConfig )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnSetIntermediateCacheConfig( hDevice, CacheConfig );
 }
@@ -574,11 +535,8 @@ xeDeviceSetLastLevelCacheConfig(
     )
 {
     auto pfnSetLastLevelCacheConfig = xe_lib::context.ddiTable.Device.pfnSetLastLevelCacheConfig;
-
-#if _DEBUG
     if( nullptr == pfnSetLastLevelCacheConfig )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnSetLastLevelCacheConfig( hDevice, CacheConfig );
 }

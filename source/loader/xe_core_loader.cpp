@@ -62,6 +62,7 @@ namespace loader
                 result = drv.dditable.xe.Global.pfnInit( flags );
             }
         }
+
         return result;
     }
 
@@ -73,14 +74,19 @@ namespace loader
         uint32_t* version                               ///< [out] driver version
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto pfnGetDriverVersion = dditable->xe.DeviceGroup.pfnGetDriverVersion;
+        if( nullptr == pfnGetDriverVersion )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.DeviceGroup.pfnGetDriverVersion( hDeviceGroup, version );
+        result = pfnGetDriverVersion( hDeviceGroup, version );
 
         return result;
     }
@@ -154,14 +160,19 @@ namespace loader
         xe_device_handle_t* phDevices                   ///< [in,out][optional][range(0, *pCount)] array of handle of devices
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto pfnGet = dditable->xe.Device.pfnGet;
+        if( nullptr == pfnGet )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Device.pfnGet( hDeviceGroup, pCount, phDevices );
+        result = pfnGet( hDeviceGroup, pCount, phDevices );
 
         try
         {
@@ -174,6 +185,7 @@ namespace loader
         {
             result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
         }
+
         return result;
     }
 
@@ -191,14 +203,19 @@ namespace loader
         xe_device_handle_t* phSubdevices                ///< [in,out][optional][range(0, *pCount)] array of handle of sub-devices
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnGetSubDevices = dditable->xe.Device.pfnGetSubDevices;
+        if( nullptr == pfnGetSubDevices )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Device.pfnGetSubDevices( hDevice, pCount, phSubdevices );
+        result = pfnGetSubDevices( hDevice, pCount, phSubdevices );
 
         try
         {
@@ -211,6 +228,7 @@ namespace loader
         {
             result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
         }
+
         return result;
     }
 
@@ -222,14 +240,19 @@ namespace loader
         xe_api_version_t* version                       ///< [out] api version
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto pfnGetApiVersion = dditable->xe.DeviceGroup.pfnGetApiVersion;
+        if( nullptr == pfnGetApiVersion )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.DeviceGroup.pfnGetApiVersion( hDeviceGroup, version );
+        result = pfnGetApiVersion( hDeviceGroup, version );
 
         return result;
     }
@@ -242,14 +265,19 @@ namespace loader
         xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto pfnGetDeviceProperties = dditable->xe.DeviceGroup.pfnGetDeviceProperties;
+        if( nullptr == pfnGetDeviceProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.DeviceGroup.pfnGetDeviceProperties( hDeviceGroup, pDeviceProperties );
+        result = pfnGetDeviceProperties( hDeviceGroup, pDeviceProperties );
 
         return result;
     }
@@ -262,14 +290,19 @@ namespace loader
         xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto pfnGetComputeProperties = dditable->xe.DeviceGroup.pfnGetComputeProperties;
+        if( nullptr == pfnGetComputeProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.DeviceGroup.pfnGetComputeProperties( hDeviceGroup, pComputeProperties );
+        result = pfnGetComputeProperties( hDeviceGroup, pComputeProperties );
 
         return result;
     }
@@ -291,14 +324,19 @@ namespace loader
                                                         ///< memory properties
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto pfnGetMemoryProperties = dditable->xe.DeviceGroup.pfnGetMemoryProperties;
+        if( nullptr == pfnGetMemoryProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.DeviceGroup.pfnGetMemoryProperties( hDeviceGroup, pCount, pMemProperties );
+        result = pfnGetMemoryProperties( hDeviceGroup, pCount, pMemProperties );
 
         return result;
     }
@@ -311,14 +349,19 @@ namespace loader
         xe_device_memory_access_properties_t* pMemAccessProperties  ///< [out] query result for memory access properties
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto pfnGetMemoryAccessProperties = dditable->xe.DeviceGroup.pfnGetMemoryAccessProperties;
+        if( nullptr == pfnGetMemoryAccessProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.DeviceGroup.pfnGetMemoryAccessProperties( hDeviceGroup, pMemAccessProperties );
+        result = pfnGetMemoryAccessProperties( hDeviceGroup, pMemAccessProperties );
 
         return result;
     }
@@ -331,14 +374,19 @@ namespace loader
         xe_device_cache_properties_t* pCacheProperties  ///< [out] query result for cache properties
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto pfnGetCacheProperties = dditable->xe.DeviceGroup.pfnGetCacheProperties;
+        if( nullptr == pfnGetCacheProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.DeviceGroup.pfnGetCacheProperties( hDeviceGroup, pCacheProperties );
+        result = pfnGetCacheProperties( hDeviceGroup, pCacheProperties );
 
         return result;
     }
@@ -351,14 +399,19 @@ namespace loader
         xe_device_image_properties_t* pImageProperties  ///< [out] query result for image properties
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto pfnGetImageProperties = dditable->xe.DeviceGroup.pfnGetImageProperties;
+        if( nullptr == pfnGetImageProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.DeviceGroup.pfnGetImageProperties( hDeviceGroup, pImageProperties );
+        result = pfnGetImageProperties( hDeviceGroup, pImageProperties );
 
         return result;
     }
@@ -372,8 +425,13 @@ namespace loader
         xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnGetP2PProperties = dditable->xe.Device.pfnGetP2PProperties;
+        if( nullptr == pfnGetP2PProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
@@ -382,7 +440,7 @@ namespace loader
         hPeerDevice = reinterpret_cast<xe_device_object_t*>( hPeerDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Device.pfnGetP2PProperties( hDevice, hPeerDevice, pP2PProperties );
+        result = pfnGetP2PProperties( hDevice, hPeerDevice, pP2PProperties );
 
         return result;
     }
@@ -396,8 +454,13 @@ namespace loader
         xe_bool_t* value                                ///< [out] returned access capability
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnCanAccessPeer = dditable->xe.Device.pfnCanAccessPeer;
+        if( nullptr == pfnCanAccessPeer )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
@@ -406,7 +469,7 @@ namespace loader
         hPeerDevice = reinterpret_cast<xe_device_object_t*>( hPeerDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Device.pfnCanAccessPeer( hDevice, hPeerDevice, value );
+        result = pfnCanAccessPeer( hDevice, hPeerDevice, value );
 
         return result;
     }
@@ -419,14 +482,19 @@ namespace loader
         xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnSetIntermediateCacheConfig = dditable->xe.Device.pfnSetIntermediateCacheConfig;
+        if( nullptr == pfnSetIntermediateCacheConfig )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Device.pfnSetIntermediateCacheConfig( hDevice, CacheConfig );
+        result = pfnSetIntermediateCacheConfig( hDevice, CacheConfig );
 
         return result;
     }
@@ -439,14 +507,19 @@ namespace loader
         xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnSetLastLevelCacheConfig = dditable->xe.Device.pfnSetLastLevelCacheConfig;
+        if( nullptr == pfnSetLastLevelCacheConfig )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Device.pfnSetLastLevelCacheConfig( hDevice, CacheConfig );
+        result = pfnSetLastLevelCacheConfig( hDevice, CacheConfig );
 
         return result;
     }
@@ -460,14 +533,19 @@ namespace loader
         xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnCreate = dditable->xe.CommandQueue.pfnCreate;
+        if( nullptr == pfnCreate )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandQueue.pfnCreate( hDevice, desc, phCommandQueue );
+        result = pfnCreate( hDevice, desc, phCommandQueue );
 
         try
         {
@@ -479,6 +557,7 @@ namespace loader
         {
             result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
         }
+
         return result;
     }
 
@@ -489,17 +568,23 @@ namespace loader
         xe_command_queue_handle_t hCommandQueue         ///< [in][release] handle of command queue object to destroy
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_queue_object_t*>( hCommandQueue )->dditable;
+        auto pfnDestroy = dditable->xe.CommandQueue.pfnDestroy;
+        if( nullptr == pfnDestroy )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandQueue = reinterpret_cast<xe_command_queue_object_t*>( hCommandQueue )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandQueue.pfnDestroy( hCommandQueue );
+        result = pfnDestroy( hCommandQueue );
 
         // release loader handle
         xe_command_queue_factory.release( hCommandQueue );
+
         return result;
     }
 
@@ -514,8 +599,13 @@ namespace loader
         xe_fence_handle_t hFence                        ///< [in][optional] handle of the fence to signal on completion
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_queue_object_t*>( hCommandQueue )->dditable;
+        auto pfnExecuteCommandLists = dditable->xe.CommandQueue.pfnExecuteCommandLists;
+        if( nullptr == pfnExecuteCommandLists )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandQueue = reinterpret_cast<xe_command_queue_object_t*>( hCommandQueue )->handle;
@@ -528,7 +618,7 @@ namespace loader
         hFence = ( hFence ) ? reinterpret_cast<xe_fence_object_t*>( hFence )->handle : nullptr;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandQueue.pfnExecuteCommandLists( hCommandQueue, numCommandLists, phCommandLists, hFence );
+        result = pfnExecuteCommandLists( hCommandQueue, numCommandLists, phCommandLists, hFence );
 
         return result;
     }
@@ -545,14 +635,19 @@ namespace loader
                                                         ///< is lost.
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_queue_object_t*>( hCommandQueue )->dditable;
+        auto pfnSynchronize = dditable->xe.CommandQueue.pfnSynchronize;
+        if( nullptr == pfnSynchronize )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandQueue = reinterpret_cast<xe_command_queue_object_t*>( hCommandQueue )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandQueue.pfnSynchronize( hCommandQueue, timeout );
+        result = pfnSynchronize( hCommandQueue, timeout );
 
         return result;
     }
@@ -566,14 +661,19 @@ namespace loader
         xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnCreate = dditable->xe.CommandList.pfnCreate;
+        if( nullptr == pfnCreate )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnCreate( hDevice, desc, phCommandList );
+        result = pfnCreate( hDevice, desc, phCommandList );
 
         try
         {
@@ -585,6 +685,7 @@ namespace loader
         {
             result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
         }
+
         return result;
     }
 
@@ -597,14 +698,19 @@ namespace loader
         xe_command_list_handle_t* phCommandList         ///< [out] pointer to handle of command list object created
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnCreateImmediate = dditable->xe.CommandList.pfnCreateImmediate;
+        if( nullptr == pfnCreateImmediate )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnCreateImmediate( hDevice, altdesc, phCommandList );
+        result = pfnCreateImmediate( hDevice, altdesc, phCommandList );
 
         try
         {
@@ -616,6 +722,7 @@ namespace loader
         {
             result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
         }
+
         return result;
     }
 
@@ -626,17 +733,23 @@ namespace loader
         xe_command_list_handle_t hCommandList           ///< [in][release] handle of command list object to destroy
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnDestroy = dditable->xe.CommandList.pfnDestroy;
+        if( nullptr == pfnDestroy )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnDestroy( hCommandList );
+        result = pfnDestroy( hCommandList );
 
         // release loader handle
         xe_command_list_factory.release( hCommandList );
+
         return result;
     }
 
@@ -647,14 +760,19 @@ namespace loader
         xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to close
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnClose = dditable->xe.CommandList.pfnClose;
+        if( nullptr == pfnClose )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnClose( hCommandList );
+        result = pfnClose( hCommandList );
 
         return result;
     }
@@ -666,14 +784,19 @@ namespace loader
         xe_command_list_handle_t hCommandList           ///< [in] handle of command list object to reset
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnReset = dditable->xe.CommandList.pfnReset;
+        if( nullptr == pfnReset )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnReset( hCommandList );
+        result = pfnReset( hCommandList );
 
         return result;
     }
@@ -687,14 +810,19 @@ namespace loader
         uint32_t value                                  ///< [in] value of attribute
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnSetParameter = dditable->xe.CommandList.pfnSetParameter;
+        if( nullptr == pfnSetParameter )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnSetParameter( hCommandList, parameter, value );
+        result = pfnSetParameter( hCommandList, parameter, value );
 
         return result;
     }
@@ -708,14 +836,19 @@ namespace loader
         uint32_t* value                                 ///< [out] value of attribute
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnGetParameter = dditable->xe.CommandList.pfnGetParameter;
+        if( nullptr == pfnGetParameter )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnGetParameter( hCommandList, parameter, value );
+        result = pfnGetParameter( hCommandList, parameter, value );
 
         return result;
     }
@@ -727,14 +860,19 @@ namespace loader
         xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnResetParameters = dditable->xe.CommandList.pfnResetParameters;
+        if( nullptr == pfnResetParameters )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnResetParameters( hCommandList );
+        result = pfnResetParameters( hCommandList );
 
         return result;
     }
@@ -750,8 +888,13 @@ namespace loader
                                                         ///< on before executing barrier
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnAppendBarrier = dditable->xe.CommandList.pfnAppendBarrier;
+        if( nullptr == pfnAppendBarrier )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
@@ -764,7 +907,7 @@ namespace loader
             phWaitEvents[ i ] = reinterpret_cast<xe_event_object_t*>( phWaitEvents[ i ] )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnAppendBarrier( hCommandList, hSignalEvent, numWaitEvents, phWaitEvents );
+        result = pfnAppendBarrier( hCommandList, hSignalEvent, numWaitEvents, phWaitEvents );
 
         return result;
     }
@@ -783,8 +926,13 @@ namespace loader
                                                         ///< on before executing barrier
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnAppendMemoryRangesBarrier = dditable->xe.CommandList.pfnAppendMemoryRangesBarrier;
+        if( nullptr == pfnAppendMemoryRangesBarrier )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
@@ -797,7 +945,7 @@ namespace loader
             phWaitEvents[ i ] = reinterpret_cast<xe_event_object_t*>( phWaitEvents[ i ] )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnAppendMemoryRangesBarrier( hCommandList, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents );
+        result = pfnAppendMemoryRangesBarrier( hCommandList, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents );
 
         return result;
     }
@@ -809,14 +957,19 @@ namespace loader
         xe_device_handle_t hDevice                      ///< [in] handle of the device
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnSystemBarrier = dditable->xe.Device.pfnSystemBarrier;
+        if( nullptr == pfnSystemBarrier )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Device.pfnSystemBarrier( hDevice );
+        result = pfnSystemBarrier( hDevice );
 
         return result;
     }
@@ -832,14 +985,19 @@ namespace loader
         void** ptr                                      ///< [out] pointer to device allocation
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnRegisterCLMemory = dditable->xe.Device.pfnRegisterCLMemory;
+        if( nullptr == pfnRegisterCLMemory )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Device.pfnRegisterCLMemory( hDevice, context, mem, ptr );
+        result = pfnRegisterCLMemory( hDevice, context, mem, ptr );
 
         return result;
     }
@@ -856,14 +1014,19 @@ namespace loader
         xe_module_handle_t* phModule                    ///< [out] pointer to handle of module object created
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnRegisterCLProgram = dditable->xe.Device.pfnRegisterCLProgram;
+        if( nullptr == pfnRegisterCLProgram )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Device.pfnRegisterCLProgram( hDevice, context, program, phModule );
+        result = pfnRegisterCLProgram( hDevice, context, program, phModule );
 
         try
         {
@@ -875,6 +1038,7 @@ namespace loader
         {
             result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
         }
+
         return result;
     }
     #endif // XE_ENABLE_OCL_INTEROP
@@ -890,14 +1054,19 @@ namespace loader
         xe_command_queue_handle_t* phCommandQueue       ///< [out] pointer to handle of command queue object created
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnRegisterCLCommandQueue = dditable->xe.Device.pfnRegisterCLCommandQueue;
+        if( nullptr == pfnRegisterCLCommandQueue )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Device.pfnRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
+        result = pfnRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
 
         try
         {
@@ -909,6 +1078,7 @@ namespace loader
         {
             result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
         }
+
         return result;
     }
     #endif // XE_ENABLE_OCL_INTEROP
@@ -924,8 +1094,13 @@ namespace loader
         xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnAppendMemoryCopy = dditable->xe.CommandList.pfnAppendMemoryCopy;
+        if( nullptr == pfnAppendMemoryCopy )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
@@ -934,7 +1109,7 @@ namespace loader
         hEvent = ( hEvent ) ? reinterpret_cast<xe_event_object_t*>( hEvent )->handle : nullptr;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnAppendMemoryCopy( hCommandList, dstptr, srcptr, size, hEvent );
+        result = pfnAppendMemoryCopy( hCommandList, dstptr, srcptr, size, hEvent );
 
         return result;
     }
@@ -950,8 +1125,13 @@ namespace loader
         xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnAppendMemorySet = dditable->xe.CommandList.pfnAppendMemorySet;
+        if( nullptr == pfnAppendMemorySet )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
@@ -960,7 +1140,7 @@ namespace loader
         hEvent = ( hEvent ) ? reinterpret_cast<xe_event_object_t*>( hEvent )->handle : nullptr;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnAppendMemorySet( hCommandList, ptr, value, size, hEvent );
+        result = pfnAppendMemorySet( hCommandList, ptr, value, size, hEvent );
 
         return result;
     }
@@ -979,8 +1159,13 @@ namespace loader
         xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnAppendMemoryCopyRegion = dditable->xe.CommandList.pfnAppendMemoryCopyRegion;
+        if( nullptr == pfnAppendMemoryCopyRegion )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
@@ -989,7 +1174,7 @@ namespace loader
         hEvent = ( hEvent ) ? reinterpret_cast<xe_event_object_t*>( hEvent )->handle : nullptr;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, srcptr, srcRegion, srcPitch, hEvent );
+        result = pfnAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, srcptr, srcRegion, srcPitch, hEvent );
 
         return result;
     }
@@ -1004,8 +1189,13 @@ namespace loader
         xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnAppendImageCopy = dditable->xe.CommandList.pfnAppendImageCopy;
+        if( nullptr == pfnAppendImageCopy )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
@@ -1020,7 +1210,7 @@ namespace loader
         hEvent = ( hEvent ) ? reinterpret_cast<xe_event_object_t*>( hEvent )->handle : nullptr;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnAppendImageCopy( hCommandList, hDstImage, hSrcImage, hEvent );
+        result = pfnAppendImageCopy( hCommandList, hDstImage, hSrcImage, hEvent );
 
         return result;
     }
@@ -1037,8 +1227,13 @@ namespace loader
         xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnAppendImageCopyRegion = dditable->xe.CommandList.pfnAppendImageCopyRegion;
+        if( nullptr == pfnAppendImageCopyRegion )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
@@ -1053,7 +1248,7 @@ namespace loader
         hEvent = ( hEvent ) ? reinterpret_cast<xe_event_object_t*>( hEvent )->handle : nullptr;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnAppendImageCopyRegion( hCommandList, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hEvent );
+        result = pfnAppendImageCopyRegion( hCommandList, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hEvent );
 
         return result;
     }
@@ -1069,8 +1264,13 @@ namespace loader
         xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnAppendImageCopyToMemory = dditable->xe.CommandList.pfnAppendImageCopyToMemory;
+        if( nullptr == pfnAppendImageCopyToMemory )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
@@ -1082,7 +1282,7 @@ namespace loader
         hEvent = ( hEvent ) ? reinterpret_cast<xe_event_object_t*>( hEvent )->handle : nullptr;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnAppendImageCopyToMemory( hCommandList, dstptr, hSrcImage, pSrcRegion, hEvent );
+        result = pfnAppendImageCopyToMemory( hCommandList, dstptr, hSrcImage, pSrcRegion, hEvent );
 
         return result;
     }
@@ -1098,8 +1298,13 @@ namespace loader
         xe_event_handle_t hEvent                        ///< [in][optional] handle of the event to signal on completion
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnAppendImageCopyFromMemory = dditable->xe.CommandList.pfnAppendImageCopyFromMemory;
+        if( nullptr == pfnAppendImageCopyFromMemory )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
@@ -1111,7 +1316,7 @@ namespace loader
         hEvent = ( hEvent ) ? reinterpret_cast<xe_event_object_t*>( hEvent )->handle : nullptr;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnAppendImageCopyFromMemory( hCommandList, hDstImage, srcptr, pDstRegion, hEvent );
+        result = pfnAppendImageCopyFromMemory( hCommandList, hDstImage, srcptr, pDstRegion, hEvent );
 
         return result;
     }
@@ -1125,14 +1330,19 @@ namespace loader
         size_t size                                     ///< [in] size in bytes of the memory range to prefetch
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnAppendMemoryPrefetch = dditable->xe.CommandList.pfnAppendMemoryPrefetch;
+        if( nullptr == pfnAppendMemoryPrefetch )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnAppendMemoryPrefetch( hCommandList, ptr, size );
+        result = pfnAppendMemoryPrefetch( hCommandList, ptr, size );
 
         return result;
     }
@@ -1148,8 +1358,13 @@ namespace loader
         xe_memory_advice_t advice                       ///< [in] Memory advice for the memory range
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnAppendMemAdvise = dditable->xe.CommandList.pfnAppendMemAdvise;
+        if( nullptr == pfnAppendMemAdvise )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
@@ -1158,7 +1373,7 @@ namespace loader
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnAppendMemAdvise( hCommandList, hDevice, ptr, size, advice );
+        result = pfnAppendMemAdvise( hCommandList, hDevice, ptr, size, advice );
 
         return result;
     }
@@ -1176,8 +1391,13 @@ namespace loader
         xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto pfnCreate = dditable->xe.EventPool.pfnCreate;
+        if( nullptr == pfnCreate )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
@@ -1187,7 +1407,7 @@ namespace loader
             phDevices[ i ] = reinterpret_cast<xe_device_object_t*>( phDevices[ i ] )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.EventPool.pfnCreate( hDeviceGroup, desc, numDevices, phDevices, phEventPool );
+        result = pfnCreate( hDeviceGroup, desc, numDevices, phDevices, phEventPool );
 
         try
         {
@@ -1199,6 +1419,7 @@ namespace loader
         {
             result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
         }
+
         return result;
     }
 
@@ -1209,17 +1430,23 @@ namespace loader
         xe_event_pool_handle_t hEventPool               ///< [in][release] handle of event pool object to destroy
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_event_pool_object_t*>( hEventPool )->dditable;
+        auto pfnDestroy = dditable->xe.EventPool.pfnDestroy;
+        if( nullptr == pfnDestroy )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hEventPool = reinterpret_cast<xe_event_pool_object_t*>( hEventPool )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.EventPool.pfnDestroy( hEventPool );
+        result = pfnDestroy( hEventPool );
 
         // release loader handle
         xe_event_pool_factory.release( hEventPool );
+
         return result;
     }
 
@@ -1232,14 +1459,19 @@ namespace loader
         xe_event_handle_t* phEvent                      ///< [out] pointer to handle of event object created
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_event_pool_object_t*>( hEventPool )->dditable;
+        auto pfnCreate = dditable->xe.Event.pfnCreate;
+        if( nullptr == pfnCreate )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hEventPool = reinterpret_cast<xe_event_pool_object_t*>( hEventPool )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Event.pfnCreate( hEventPool, desc, phEvent );
+        result = pfnCreate( hEventPool, desc, phEvent );
 
         try
         {
@@ -1251,6 +1483,7 @@ namespace loader
         {
             result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
         }
+
         return result;
     }
 
@@ -1261,17 +1494,23 @@ namespace loader
         xe_event_handle_t hEvent                        ///< [in][release] handle of event object to destroy
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_event_object_t*>( hEvent )->dditable;
+        auto pfnDestroy = dditable->xe.Event.pfnDestroy;
+        if( nullptr == pfnDestroy )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hEvent = reinterpret_cast<xe_event_object_t*>( hEvent )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Event.pfnDestroy( hEvent );
+        result = pfnDestroy( hEvent );
 
         // release loader handle
         xe_event_factory.release( hEvent );
+
         return result;
     }
 
@@ -1283,14 +1522,19 @@ namespace loader
         xe_ipc_event_pool_handle_t* phIpc               ///< [out] Returned IPC event handle
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_event_pool_object_t*>( hEventPool )->dditable;
+        auto pfnGetIpcHandle = dditable->xe.EventPool.pfnGetIpcHandle;
+        if( nullptr == pfnGetIpcHandle )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hEventPool = reinterpret_cast<xe_event_pool_object_t*>( hEventPool )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.EventPool.pfnGetIpcHandle( hEventPool, phIpc );
+        result = pfnGetIpcHandle( hEventPool, phIpc );
 
         return result;
     }
@@ -1304,14 +1548,19 @@ namespace loader
         xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnOpenIpcHandle = dditable->xe.EventPool.pfnOpenIpcHandle;
+        if( nullptr == pfnOpenIpcHandle )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.EventPool.pfnOpenIpcHandle( hDevice, hIpc, phEventPool );
+        result = pfnOpenIpcHandle( hDevice, hIpc, phEventPool );
 
         try
         {
@@ -1323,6 +1572,7 @@ namespace loader
         {
             result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
         }
+
         return result;
     }
 
@@ -1333,17 +1583,23 @@ namespace loader
         xe_event_pool_handle_t hEventPool               ///< [in][release] handle of event pool object
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_event_pool_object_t*>( hEventPool )->dditable;
+        auto pfnCloseIpcHandle = dditable->xe.EventPool.pfnCloseIpcHandle;
+        if( nullptr == pfnCloseIpcHandle )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hEventPool = reinterpret_cast<xe_event_pool_object_t*>( hEventPool )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.EventPool.pfnCloseIpcHandle( hEventPool );
+        result = pfnCloseIpcHandle( hEventPool );
 
         // release loader handle
         xe_event_pool_factory.release( hEventPool );
+
         return result;
     }
 
@@ -1355,8 +1611,13 @@ namespace loader
         xe_event_handle_t hEvent                        ///< [in] handle of the event
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnAppendSignalEvent = dditable->xe.CommandList.pfnAppendSignalEvent;
+        if( nullptr == pfnAppendSignalEvent )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
@@ -1365,7 +1626,7 @@ namespace loader
         hEvent = reinterpret_cast<xe_event_object_t*>( hEvent )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnAppendSignalEvent( hCommandList, hEvent );
+        result = pfnAppendSignalEvent( hCommandList, hEvent );
 
         return result;
     }
@@ -1380,8 +1641,13 @@ namespace loader
                                                         ///< continuing
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnAppendWaitOnEvents = dditable->xe.CommandList.pfnAppendWaitOnEvents;
+        if( nullptr == pfnAppendWaitOnEvents )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
@@ -1391,7 +1657,7 @@ namespace loader
             phEvents[ i ] = reinterpret_cast<xe_event_object_t*>( phEvents[ i ] )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnAppendWaitOnEvents( hCommandList, numEvents, phEvents );
+        result = pfnAppendWaitOnEvents( hCommandList, numEvents, phEvents );
 
         return result;
     }
@@ -1403,14 +1669,19 @@ namespace loader
         xe_event_handle_t hEvent                        ///< [in] handle of the event
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_event_object_t*>( hEvent )->dditable;
+        auto pfnHostSignal = dditable->xe.Event.pfnHostSignal;
+        if( nullptr == pfnHostSignal )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hEvent = reinterpret_cast<xe_event_object_t*>( hEvent )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Event.pfnHostSignal( hEvent );
+        result = pfnHostSignal( hEvent );
 
         return result;
     }
@@ -1427,14 +1698,19 @@ namespace loader
                                                         ///< is lost.
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_event_object_t*>( hEvent )->dditable;
+        auto pfnHostSynchronize = dditable->xe.Event.pfnHostSynchronize;
+        if( nullptr == pfnHostSynchronize )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hEvent = reinterpret_cast<xe_event_object_t*>( hEvent )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Event.pfnHostSynchronize( hEvent, timeout );
+        result = pfnHostSynchronize( hEvent, timeout );
 
         return result;
     }
@@ -1446,14 +1722,19 @@ namespace loader
         xe_event_handle_t hEvent                        ///< [in] handle of the event
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_event_object_t*>( hEvent )->dditable;
+        auto pfnQueryStatus = dditable->xe.Event.pfnQueryStatus;
+        if( nullptr == pfnQueryStatus )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hEvent = reinterpret_cast<xe_event_object_t*>( hEvent )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Event.pfnQueryStatus( hEvent );
+        result = pfnQueryStatus( hEvent );
 
         return result;
     }
@@ -1466,8 +1747,13 @@ namespace loader
         xe_event_handle_t hEvent                        ///< [in] handle of the event
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnAppendEventReset = dditable->xe.CommandList.pfnAppendEventReset;
+        if( nullptr == pfnAppendEventReset )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
@@ -1476,7 +1762,7 @@ namespace loader
         hEvent = reinterpret_cast<xe_event_object_t*>( hEvent )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnAppendEventReset( hCommandList, hEvent );
+        result = pfnAppendEventReset( hCommandList, hEvent );
 
         return result;
     }
@@ -1488,14 +1774,19 @@ namespace loader
         xe_event_handle_t hEvent                        ///< [in] handle of the event
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_event_object_t*>( hEvent )->dditable;
+        auto pfnReset = dditable->xe.Event.pfnReset;
+        if( nullptr == pfnReset )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hEvent = reinterpret_cast<xe_event_object_t*>( hEvent )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Event.pfnReset( hEvent );
+        result = pfnReset( hEvent );
 
         return result;
     }
@@ -1509,14 +1800,19 @@ namespace loader
         xe_fence_handle_t* phFence                      ///< [out] pointer to handle of fence object created
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_queue_object_t*>( hCommandQueue )->dditable;
+        auto pfnCreate = dditable->xe.Fence.pfnCreate;
+        if( nullptr == pfnCreate )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandQueue = reinterpret_cast<xe_command_queue_object_t*>( hCommandQueue )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Fence.pfnCreate( hCommandQueue, desc, phFence );
+        result = pfnCreate( hCommandQueue, desc, phFence );
 
         try
         {
@@ -1528,6 +1824,7 @@ namespace loader
         {
             result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
         }
+
         return result;
     }
 
@@ -1538,17 +1835,23 @@ namespace loader
         xe_fence_handle_t hFence                        ///< [in][release] handle of fence object to destroy
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_fence_object_t*>( hFence )->dditable;
+        auto pfnDestroy = dditable->xe.Fence.pfnDestroy;
+        if( nullptr == pfnDestroy )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hFence = reinterpret_cast<xe_fence_object_t*>( hFence )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Fence.pfnDestroy( hFence );
+        result = pfnDestroy( hFence );
 
         // release loader handle
         xe_fence_factory.release( hFence );
+
         return result;
     }
 
@@ -1564,14 +1867,19 @@ namespace loader
                                                         ///< is lost.
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_fence_object_t*>( hFence )->dditable;
+        auto pfnHostSynchronize = dditable->xe.Fence.pfnHostSynchronize;
+        if( nullptr == pfnHostSynchronize )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hFence = reinterpret_cast<xe_fence_object_t*>( hFence )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Fence.pfnHostSynchronize( hFence, timeout );
+        result = pfnHostSynchronize( hFence, timeout );
 
         return result;
     }
@@ -1583,14 +1891,19 @@ namespace loader
         xe_fence_handle_t hFence                        ///< [in] handle of the fence
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_fence_object_t*>( hFence )->dditable;
+        auto pfnQueryStatus = dditable->xe.Fence.pfnQueryStatus;
+        if( nullptr == pfnQueryStatus )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hFence = reinterpret_cast<xe_fence_object_t*>( hFence )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Fence.pfnQueryStatus( hFence );
+        result = pfnQueryStatus( hFence );
 
         return result;
     }
@@ -1602,14 +1915,19 @@ namespace loader
         xe_fence_handle_t hFence                        ///< [in] handle of the fence
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_fence_object_t*>( hFence )->dditable;
+        auto pfnReset = dditable->xe.Fence.pfnReset;
+        if( nullptr == pfnReset )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hFence = reinterpret_cast<xe_fence_object_t*>( hFence )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Fence.pfnReset( hFence );
+        result = pfnReset( hFence );
 
         return result;
     }
@@ -1623,14 +1941,19 @@ namespace loader
         xe_image_properties_t* pImageProperties         ///< [out] pointer to image properties
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnGetProperties = dditable->xe.Image.pfnGetProperties;
+        if( nullptr == pfnGetProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Image.pfnGetProperties( hDevice, desc, pImageProperties );
+        result = pfnGetProperties( hDevice, desc, pImageProperties );
 
         return result;
     }
@@ -1644,14 +1967,19 @@ namespace loader
         xe_image_handle_t* phImage                      ///< [out] pointer to handle of image object created
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnCreate = dditable->xe.Image.pfnCreate;
+        if( nullptr == pfnCreate )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Image.pfnCreate( hDevice, desc, phImage );
+        result = pfnCreate( hDevice, desc, phImage );
 
         try
         {
@@ -1663,6 +1991,7 @@ namespace loader
         {
             result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
         }
+
         return result;
     }
 
@@ -1673,17 +2002,23 @@ namespace loader
         xe_image_handle_t hImage                        ///< [in][release] handle of image object to destroy
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_image_object_t*>( hImage )->dditable;
+        auto pfnDestroy = dditable->xe.Image.pfnDestroy;
+        if( nullptr == pfnDestroy )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hImage = reinterpret_cast<xe_image_object_t*>( hImage )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Image.pfnDestroy( hImage );
+        result = pfnDestroy( hImage );
 
         // release loader handle
         xe_image_factory.release( hImage );
+
         return result;
     }
 
@@ -1702,8 +2037,13 @@ namespace loader
         void** pptr                                     ///< [out] pointer to shared allocation
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto pfnAllocSharedMem = dditable->xe.DeviceGroup.pfnAllocSharedMem;
+        if( nullptr == pfnAllocSharedMem )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
@@ -1712,7 +2052,7 @@ namespace loader
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.DeviceGroup.pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, ordinal, host_flags, size, alignment, pptr );
+        result = pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, ordinal, host_flags, size, alignment, pptr );
 
         return result;
     }
@@ -1731,8 +2071,13 @@ namespace loader
         void** pptr                                     ///< [out] pointer to device allocation
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto pfnAllocDeviceMem = dditable->xe.DeviceGroup.pfnAllocDeviceMem;
+        if( nullptr == pfnAllocDeviceMem )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
@@ -1741,7 +2086,7 @@ namespace loader
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.DeviceGroup.pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, ordinal, size, alignment, pptr );
+        result = pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, ordinal, size, alignment, pptr );
 
         return result;
     }
@@ -1757,14 +2102,19 @@ namespace loader
         void** pptr                                     ///< [out] pointer to host allocation
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto pfnAllocHostMem = dditable->xe.DeviceGroup.pfnAllocHostMem;
+        if( nullptr == pfnAllocHostMem )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.DeviceGroup.pfnAllocHostMem( hDeviceGroup, flags, size, alignment, pptr );
+        result = pfnAllocHostMem( hDeviceGroup, flags, size, alignment, pptr );
 
         return result;
     }
@@ -1777,14 +2127,19 @@ namespace loader
         void* ptr                                       ///< [in][release] pointer to memory to free
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto pfnFreeMem = dditable->xe.DeviceGroup.pfnFreeMem;
+        if( nullptr == pfnFreeMem )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.DeviceGroup.pfnFreeMem( hDeviceGroup, ptr );
+        result = pfnFreeMem( hDeviceGroup, ptr );
 
         return result;
     }
@@ -1799,14 +2154,19 @@ namespace loader
         xe_device_handle_t* phDevice                    ///< [out][optional] device associated with this allocation
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto pfnGetMemProperties = dditable->xe.DeviceGroup.pfnGetMemProperties;
+        if( nullptr == pfnGetMemProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.DeviceGroup.pfnGetMemProperties( hDeviceGroup, ptr, pMemProperties, phDevice );
+        result = pfnGetMemProperties( hDeviceGroup, ptr, pMemProperties, phDevice );
 
         try
         {
@@ -1819,6 +2179,7 @@ namespace loader
         {
             result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
         }
+
         return result;
     }
 
@@ -1832,14 +2193,19 @@ namespace loader
         size_t* pSize                                   ///< [in,out][optional] size of the allocation
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto pfnGetMemAddressRange = dditable->xe.DeviceGroup.pfnGetMemAddressRange;
+        if( nullptr == pfnGetMemAddressRange )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.DeviceGroup.pfnGetMemAddressRange( hDeviceGroup, ptr, pBase, pSize );
+        result = pfnGetMemAddressRange( hDeviceGroup, ptr, pBase, pSize );
 
         return result;
     }
@@ -1853,14 +2219,19 @@ namespace loader
         xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto pfnGetMemIpcHandle = dditable->xe.DeviceGroup.pfnGetMemIpcHandle;
+        if( nullptr == pfnGetMemIpcHandle )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.DeviceGroup.pfnGetMemIpcHandle( hDeviceGroup, ptr, pIpcHandle );
+        result = pfnGetMemIpcHandle( hDeviceGroup, ptr, pIpcHandle );
 
         return result;
     }
@@ -1876,8 +2247,13 @@ namespace loader
         void** pptr                                     ///< [out] pointer to device allocation in this process
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto pfnOpenMemIpcHandle = dditable->xe.DeviceGroup.pfnOpenMemIpcHandle;
+        if( nullptr == pfnOpenMemIpcHandle )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
@@ -1886,7 +2262,7 @@ namespace loader
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.DeviceGroup.pfnOpenMemIpcHandle( hDeviceGroup, hDevice, handle, flags, pptr );
+        result = pfnOpenMemIpcHandle( hDeviceGroup, hDevice, handle, flags, pptr );
 
         return result;
     }
@@ -1899,14 +2275,19 @@ namespace loader
         const void* ptr                                 ///< [in][release] pointer to device allocation in this process
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto pfnCloseMemIpcHandle = dditable->xe.DeviceGroup.pfnCloseMemIpcHandle;
+        if( nullptr == pfnCloseMemIpcHandle )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.DeviceGroup.pfnCloseMemIpcHandle( hDeviceGroup, ptr );
+        result = pfnCloseMemIpcHandle( hDeviceGroup, ptr );
 
         return result;
     }
@@ -1921,14 +2302,19 @@ namespace loader
         xe_module_build_log_handle_t* phBuildLog        ///< [out][optional] pointer to handle of module's build log.
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnCreate = dditable->xe.Module.pfnCreate;
+        if( nullptr == pfnCreate )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Module.pfnCreate( hDevice, desc, phModule, phBuildLog );
+        result = pfnCreate( hDevice, desc, phModule, phBuildLog );
 
         try
         {
@@ -1940,6 +2326,7 @@ namespace loader
         {
             result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
         }
+
         try
         {
             // convert driver handle to loader handle
@@ -1951,6 +2338,7 @@ namespace loader
         {
             result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
         }
+
         return result;
     }
 
@@ -1961,17 +2349,23 @@ namespace loader
         xe_module_handle_t hModule                      ///< [in][release] handle of the module
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_module_object_t*>( hModule )->dditable;
+        auto pfnDestroy = dditable->xe.Module.pfnDestroy;
+        if( nullptr == pfnDestroy )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hModule = reinterpret_cast<xe_module_object_t*>( hModule )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Module.pfnDestroy( hModule );
+        result = pfnDestroy( hModule );
 
         // release loader handle
         xe_module_factory.release( hModule );
+
         return result;
     }
 
@@ -1982,17 +2376,23 @@ namespace loader
         xe_module_build_log_handle_t hModuleBuildLog    ///< [in][release] handle of the module build log object.
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_module_build_log_object_t*>( hModuleBuildLog )->dditable;
+        auto pfnDestroy = dditable->xe.ModuleBuildLog.pfnDestroy;
+        if( nullptr == pfnDestroy )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hModuleBuildLog = reinterpret_cast<xe_module_build_log_object_t*>( hModuleBuildLog )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.ModuleBuildLog.pfnDestroy( hModuleBuildLog );
+        result = pfnDestroy( hModuleBuildLog );
 
         // release loader handle
         xe_module_build_log_factory.release( hModuleBuildLog );
+
         return result;
     }
 
@@ -2005,14 +2405,19 @@ namespace loader
         char* pBuildLog                                 ///< [in,out][optional] pointer to null-terminated string of the log.
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_module_build_log_object_t*>( hModuleBuildLog )->dditable;
+        auto pfnGetString = dditable->xe.ModuleBuildLog.pfnGetString;
+        if( nullptr == pfnGetString )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hModuleBuildLog = reinterpret_cast<xe_module_build_log_object_t*>( hModuleBuildLog )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.ModuleBuildLog.pfnGetString( hModuleBuildLog, pSize, pBuildLog );
+        result = pfnGetString( hModuleBuildLog, pSize, pBuildLog );
 
         return result;
     }
@@ -2026,14 +2431,19 @@ namespace loader
         uint8_t* pModuleNativeBinary                    ///< [in,out][optional] byte pointer to native binary
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_module_object_t*>( hModule )->dditable;
+        auto pfnGetNativeBinary = dditable->xe.Module.pfnGetNativeBinary;
+        if( nullptr == pfnGetNativeBinary )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hModule = reinterpret_cast<xe_module_object_t*>( hModule )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Module.pfnGetNativeBinary( hModule, pSize, pModuleNativeBinary );
+        result = pfnGetNativeBinary( hModule, pSize, pModuleNativeBinary );
 
         return result;
     }
@@ -2047,14 +2457,19 @@ namespace loader
         void** pptr                                     ///< [out] device visible pointer
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_module_object_t*>( hModule )->dditable;
+        auto pfnGetGlobalPointer = dditable->xe.Module.pfnGetGlobalPointer;
+        if( nullptr == pfnGetGlobalPointer )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hModule = reinterpret_cast<xe_module_object_t*>( hModule )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Module.pfnGetGlobalPointer( hModule, pGlobalName, pptr );
+        result = pfnGetGlobalPointer( hModule, pGlobalName, pptr );
 
         return result;
     }
@@ -2068,14 +2483,19 @@ namespace loader
         xe_function_handle_t* phFunction                ///< [out] handle of the Function object
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_module_object_t*>( hModule )->dditable;
+        auto pfnCreate = dditable->xe.Function.pfnCreate;
+        if( nullptr == pfnCreate )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hModule = reinterpret_cast<xe_module_object_t*>( hModule )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Function.pfnCreate( hModule, desc, phFunction );
+        result = pfnCreate( hModule, desc, phFunction );
 
         try
         {
@@ -2087,6 +2507,7 @@ namespace loader
         {
             result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
         }
+
         return result;
     }
 
@@ -2097,17 +2518,23 @@ namespace loader
         xe_function_handle_t hFunction                  ///< [in][release] handle of the function object
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_function_object_t*>( hFunction )->dditable;
+        auto pfnDestroy = dditable->xe.Function.pfnDestroy;
+        if( nullptr == pfnDestroy )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hFunction = reinterpret_cast<xe_function_object_t*>( hFunction )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Function.pfnDestroy( hFunction );
+        result = pfnDestroy( hFunction );
 
         // release loader handle
         xe_function_factory.release( hFunction );
+
         return result;
     }
 
@@ -2120,14 +2547,19 @@ namespace loader
         void** pfnFunction                              ///< [out] pointer to function.
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_module_object_t*>( hModule )->dditable;
+        auto pfnGetFunctionPointer = dditable->xe.Module.pfnGetFunctionPointer;
+        if( nullptr == pfnGetFunctionPointer )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hModule = reinterpret_cast<xe_module_object_t*>( hModule )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Module.pfnGetFunctionPointer( hModule, pFunctionName, pfnFunction );
+        result = pfnGetFunctionPointer( hModule, pFunctionName, pfnFunction );
 
         return result;
     }
@@ -2142,14 +2574,19 @@ namespace loader
         uint32_t groupSizeZ                             ///< [in] group size for Z dimension to use for this function.
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_function_object_t*>( hFunction )->dditable;
+        auto pfnSetGroupSize = dditable->xe.Function.pfnSetGroupSize;
+        if( nullptr == pfnSetGroupSize )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hFunction = reinterpret_cast<xe_function_object_t*>( hFunction )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Function.pfnSetGroupSize( hFunction, groupSizeX, groupSizeY, groupSizeZ );
+        result = pfnSetGroupSize( hFunction, groupSizeX, groupSizeY, groupSizeZ );
 
         return result;
     }
@@ -2167,14 +2604,19 @@ namespace loader
         uint32_t* groupSizeZ                            ///< [out] recommended size of group for Z dimension.
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_function_object_t*>( hFunction )->dditable;
+        auto pfnSuggestGroupSize = dditable->xe.Function.pfnSuggestGroupSize;
+        if( nullptr == pfnSuggestGroupSize )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hFunction = reinterpret_cast<xe_function_object_t*>( hFunction )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Function.pfnSuggestGroupSize( hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
+        result = pfnSuggestGroupSize( hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
 
         return result;
     }
@@ -2190,14 +2632,19 @@ namespace loader
                                                         ///< null then argument value is considered null.
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_function_object_t*>( hFunction )->dditable;
+        auto pfnSetArgumentValue = dditable->xe.Function.pfnSetArgumentValue;
+        if( nullptr == pfnSetArgumentValue )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hFunction = reinterpret_cast<xe_function_object_t*>( hFunction )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Function.pfnSetArgumentValue( hFunction, argIndex, argSize, pArgValue );
+        result = pfnSetArgumentValue( hFunction, argIndex, argSize, pArgValue );
 
         return result;
     }
@@ -2211,14 +2658,19 @@ namespace loader
         uint32_t value                                  ///< [in] attribute value to set
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_function_object_t*>( hFunction )->dditable;
+        auto pfnSetAttribute = dditable->xe.Function.pfnSetAttribute;
+        if( nullptr == pfnSetAttribute )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hFunction = reinterpret_cast<xe_function_object_t*>( hFunction )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Function.pfnSetAttribute( hFunction, attr, value );
+        result = pfnSetAttribute( hFunction, attr, value );
 
         return result;
     }
@@ -2232,14 +2684,19 @@ namespace loader
         uint32_t* pValue                                ///< [out] returned attribute value
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_function_object_t*>( hFunction )->dditable;
+        auto pfnGetAttribute = dditable->xe.Function.pfnGetAttribute;
+        if( nullptr == pfnGetAttribute )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hFunction = reinterpret_cast<xe_function_object_t*>( hFunction )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Function.pfnGetAttribute( hFunction, attr, pValue );
+        result = pfnGetAttribute( hFunction, attr, pValue );
 
         return result;
     }
@@ -2257,8 +2714,13 @@ namespace loader
                                                         ///< on before launching
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnAppendLaunchFunction = dditable->xe.CommandList.pfnAppendLaunchFunction;
+        if( nullptr == pfnAppendLaunchFunction )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
@@ -2274,7 +2736,7 @@ namespace loader
             phWaitEvents[ i ] = reinterpret_cast<xe_event_object_t*>( phWaitEvents[ i ] )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnAppendLaunchFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
+        result = pfnAppendLaunchFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
 
         return result;
     }
@@ -2292,8 +2754,13 @@ namespace loader
                                                         ///< on before launching
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnAppendLaunchFunctionIndirect = dditable->xe.CommandList.pfnAppendLaunchFunctionIndirect;
+        if( nullptr == pfnAppendLaunchFunctionIndirect )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
@@ -2309,7 +2776,7 @@ namespace loader
             phWaitEvents[ i ] = reinterpret_cast<xe_event_object_t*>( phWaitEvents[ i ] )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnAppendLaunchFunctionIndirect( hCommandList, hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+        result = pfnAppendLaunchFunctionIndirect( hCommandList, hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
 
         return result;
     }
@@ -2332,8 +2799,13 @@ namespace loader
                                                         ///< on before launching
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnAppendLaunchMultipleFunctionsIndirect = dditable->xe.CommandList.pfnAppendLaunchMultipleFunctionsIndirect;
+        if( nullptr == pfnAppendLaunchMultipleFunctionsIndirect )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
@@ -2350,7 +2822,7 @@ namespace loader
             phWaitEvents[ i ] = reinterpret_cast<xe_event_object_t*>( phWaitEvents[ i ] )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+        result = pfnAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
 
         return result;
     }
@@ -2368,8 +2840,13 @@ namespace loader
                                                         ///< on before launching
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnAppendLaunchHostFunction = dditable->xe.CommandList.pfnAppendLaunchHostFunction;
+        if( nullptr == pfnAppendLaunchHostFunction )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
@@ -2382,7 +2859,7 @@ namespace loader
             phWaitEvents[ i ] = reinterpret_cast<xe_event_object_t*>( phWaitEvents[ i ] )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnAppendLaunchHostFunction( hCommandList, pfnHostFunc, pUserData, hSignalEvent, numWaitEvents, phWaitEvents );
+        result = pfnAppendLaunchHostFunction( hCommandList, pfnHostFunc, pUserData, hSignalEvent, numWaitEvents, phWaitEvents );
 
         return result;
     }
@@ -2396,14 +2873,19 @@ namespace loader
         size_t size                                     ///< [in] size in bytes to make resident
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnMakeMemoryResident = dditable->xe.Device.pfnMakeMemoryResident;
+        if( nullptr == pfnMakeMemoryResident )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Device.pfnMakeMemoryResident( hDevice, ptr, size );
+        result = pfnMakeMemoryResident( hDevice, ptr, size );
 
         return result;
     }
@@ -2417,14 +2899,19 @@ namespace loader
         size_t size                                     ///< [in] size in bytes to evict
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnEvictMemory = dditable->xe.Device.pfnEvictMemory;
+        if( nullptr == pfnEvictMemory )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Device.pfnEvictMemory( hDevice, ptr, size );
+        result = pfnEvictMemory( hDevice, ptr, size );
 
         return result;
     }
@@ -2437,8 +2924,13 @@ namespace loader
         xe_image_handle_t hImage                        ///< [in] handle of image to make resident
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnMakeImageResident = dditable->xe.Device.pfnMakeImageResident;
+        if( nullptr == pfnMakeImageResident )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
@@ -2447,7 +2939,7 @@ namespace loader
         hImage = reinterpret_cast<xe_image_object_t*>( hImage )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Device.pfnMakeImageResident( hDevice, hImage );
+        result = pfnMakeImageResident( hDevice, hImage );
 
         return result;
     }
@@ -2460,8 +2952,13 @@ namespace loader
         xe_image_handle_t hImage                        ///< [in] handle of image to make evict
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnEvictImage = dditable->xe.Device.pfnEvictImage;
+        if( nullptr == pfnEvictImage )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
@@ -2470,7 +2967,7 @@ namespace loader
         hImage = reinterpret_cast<xe_image_object_t*>( hImage )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Device.pfnEvictImage( hDevice, hImage );
+        result = pfnEvictImage( hDevice, hImage );
 
         return result;
     }
@@ -2484,14 +2981,19 @@ namespace loader
         xe_sampler_handle_t* phSampler                  ///< [out] handle of the sampler
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnCreate = dditable->xe.Sampler.pfnCreate;
+        if( nullptr == pfnCreate )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Sampler.pfnCreate( hDevice, desc, phSampler );
+        result = pfnCreate( hDevice, desc, phSampler );
 
         try
         {
@@ -2503,6 +3005,7 @@ namespace loader
         {
             result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
         }
+
         return result;
     }
 
@@ -2513,17 +3016,23 @@ namespace loader
         xe_sampler_handle_t hSampler                    ///< [in][release] handle of the sampler
         )
     {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_sampler_object_t*>( hSampler )->dditable;
+        auto pfnDestroy = dditable->xe.Sampler.pfnDestroy;
+        if( nullptr == pfnDestroy )
+            return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hSampler = reinterpret_cast<xe_sampler_object_t*>( hSampler )->handle;
 
         // forward to device-driver
-        auto result = dditable->xe.Sampler.pfnDestroy( hSampler );
+        result = pfnDestroy( hSampler );
 
         // release loader handle
         xe_sampler_factory.release( hSampler );
+
         return result;
     }
 
@@ -2566,7 +3075,7 @@ xeGetGlobalProcAddrTable(
     {
         if( XE_RESULT_SUCCESS == result )
         {
-            static auto getTable = reinterpret_cast<xe_pfnGetGlobalProcAddrTable_t>(
+            auto getTable = reinterpret_cast<xe_pfnGetGlobalProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetGlobalProcAddrTable") );
             result = getTable( version, &drv.dditable.xe.Global );
         }
@@ -2589,7 +3098,7 @@ xeGetGlobalProcAddrTable(
     // If the validation layer is enabled, then intercept the loader's DDIs
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
     {
-        static auto getTable = reinterpret_cast<xe_pfnGetGlobalProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xe_pfnGetGlobalProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "xeGetGlobalProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
@@ -2630,7 +3139,7 @@ xeGetDeviceProcAddrTable(
     {
         if( XE_RESULT_SUCCESS == result )
         {
-            static auto getTable = reinterpret_cast<xe_pfnGetDeviceProcAddrTable_t>(
+            auto getTable = reinterpret_cast<xe_pfnGetDeviceProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetDeviceProcAddrTable") );
             result = getTable( version, &drv.dditable.xe.Device );
         }
@@ -2672,7 +3181,7 @@ xeGetDeviceProcAddrTable(
     // If the validation layer is enabled, then intercept the loader's DDIs
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
     {
-        static auto getTable = reinterpret_cast<xe_pfnGetDeviceProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xe_pfnGetDeviceProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "xeGetDeviceProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
@@ -2713,7 +3222,7 @@ xeGetDeviceGroupProcAddrTable(
     {
         if( XE_RESULT_SUCCESS == result )
         {
-            static auto getTable = reinterpret_cast<xe_pfnGetDeviceGroupProcAddrTable_t>(
+            auto getTable = reinterpret_cast<xe_pfnGetDeviceGroupProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetDeviceGroupProcAddrTable") );
             result = getTable( version, &drv.dditable.xe.DeviceGroup );
         }
@@ -2753,7 +3262,7 @@ xeGetDeviceGroupProcAddrTable(
     // If the validation layer is enabled, then intercept the loader's DDIs
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
     {
-        static auto getTable = reinterpret_cast<xe_pfnGetDeviceGroupProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xe_pfnGetDeviceGroupProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "xeGetDeviceGroupProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
@@ -2794,7 +3303,7 @@ xeGetCommandQueueProcAddrTable(
     {
         if( XE_RESULT_SUCCESS == result )
         {
-            static auto getTable = reinterpret_cast<xe_pfnGetCommandQueueProcAddrTable_t>(
+            auto getTable = reinterpret_cast<xe_pfnGetCommandQueueProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetCommandQueueProcAddrTable") );
             result = getTable( version, &drv.dditable.xe.CommandQueue );
         }
@@ -2820,7 +3329,7 @@ xeGetCommandQueueProcAddrTable(
     // If the validation layer is enabled, then intercept the loader's DDIs
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
     {
-        static auto getTable = reinterpret_cast<xe_pfnGetCommandQueueProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xe_pfnGetCommandQueueProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "xeGetCommandQueueProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
@@ -2861,7 +3370,7 @@ xeGetCommandListProcAddrTable(
     {
         if( XE_RESULT_SUCCESS == result )
         {
-            static auto getTable = reinterpret_cast<xe_pfnGetCommandListProcAddrTable_t>(
+            auto getTable = reinterpret_cast<xe_pfnGetCommandListProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetCommandListProcAddrTable") );
             result = getTable( version, &drv.dditable.xe.CommandList );
         }
@@ -2909,7 +3418,7 @@ xeGetCommandListProcAddrTable(
     // If the validation layer is enabled, then intercept the loader's DDIs
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
     {
-        static auto getTable = reinterpret_cast<xe_pfnGetCommandListProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xe_pfnGetCommandListProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "xeGetCommandListProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
@@ -2950,7 +3459,7 @@ xeGetFenceProcAddrTable(
     {
         if( XE_RESULT_SUCCESS == result )
         {
-            static auto getTable = reinterpret_cast<xe_pfnGetFenceProcAddrTable_t>(
+            auto getTable = reinterpret_cast<xe_pfnGetFenceProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetFenceProcAddrTable") );
             result = getTable( version, &drv.dditable.xe.Fence );
         }
@@ -2977,7 +3486,7 @@ xeGetFenceProcAddrTable(
     // If the validation layer is enabled, then intercept the loader's DDIs
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
     {
-        static auto getTable = reinterpret_cast<xe_pfnGetFenceProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xe_pfnGetFenceProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "xeGetFenceProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
@@ -3018,7 +3527,7 @@ xeGetEventPoolProcAddrTable(
     {
         if( XE_RESULT_SUCCESS == result )
         {
-            static auto getTable = reinterpret_cast<xe_pfnGetEventPoolProcAddrTable_t>(
+            auto getTable = reinterpret_cast<xe_pfnGetEventPoolProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetEventPoolProcAddrTable") );
             result = getTable( version, &drv.dditable.xe.EventPool );
         }
@@ -3045,7 +3554,7 @@ xeGetEventPoolProcAddrTable(
     // If the validation layer is enabled, then intercept the loader's DDIs
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
     {
-        static auto getTable = reinterpret_cast<xe_pfnGetEventPoolProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xe_pfnGetEventPoolProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "xeGetEventPoolProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
@@ -3086,7 +3595,7 @@ xeGetEventProcAddrTable(
     {
         if( XE_RESULT_SUCCESS == result )
         {
-            static auto getTable = reinterpret_cast<xe_pfnGetEventProcAddrTable_t>(
+            auto getTable = reinterpret_cast<xe_pfnGetEventProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetEventProcAddrTable") );
             result = getTable( version, &drv.dditable.xe.Event );
         }
@@ -3114,7 +3623,7 @@ xeGetEventProcAddrTable(
     // If the validation layer is enabled, then intercept the loader's DDIs
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
     {
-        static auto getTable = reinterpret_cast<xe_pfnGetEventProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xe_pfnGetEventProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "xeGetEventProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
@@ -3155,7 +3664,7 @@ xeGetImageProcAddrTable(
     {
         if( XE_RESULT_SUCCESS == result )
         {
-            static auto getTable = reinterpret_cast<xe_pfnGetImageProcAddrTable_t>(
+            auto getTable = reinterpret_cast<xe_pfnGetImageProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetImageProcAddrTable") );
             result = getTable( version, &drv.dditable.xe.Image );
         }
@@ -3180,7 +3689,7 @@ xeGetImageProcAddrTable(
     // If the validation layer is enabled, then intercept the loader's DDIs
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
     {
-        static auto getTable = reinterpret_cast<xe_pfnGetImageProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xe_pfnGetImageProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "xeGetImageProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
@@ -3221,7 +3730,7 @@ xeGetModuleProcAddrTable(
     {
         if( XE_RESULT_SUCCESS == result )
         {
-            static auto getTable = reinterpret_cast<xe_pfnGetModuleProcAddrTable_t>(
+            auto getTable = reinterpret_cast<xe_pfnGetModuleProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetModuleProcAddrTable") );
             result = getTable( version, &drv.dditable.xe.Module );
         }
@@ -3248,7 +3757,7 @@ xeGetModuleProcAddrTable(
     // If the validation layer is enabled, then intercept the loader's DDIs
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
     {
-        static auto getTable = reinterpret_cast<xe_pfnGetModuleProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xe_pfnGetModuleProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "xeGetModuleProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
@@ -3289,7 +3798,7 @@ xeGetModuleBuildLogProcAddrTable(
     {
         if( XE_RESULT_SUCCESS == result )
         {
-            static auto getTable = reinterpret_cast<xe_pfnGetModuleBuildLogProcAddrTable_t>(
+            auto getTable = reinterpret_cast<xe_pfnGetModuleBuildLogProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetModuleBuildLogProcAddrTable") );
             result = getTable( version, &drv.dditable.xe.ModuleBuildLog );
         }
@@ -3313,7 +3822,7 @@ xeGetModuleBuildLogProcAddrTable(
     // If the validation layer is enabled, then intercept the loader's DDIs
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
     {
-        static auto getTable = reinterpret_cast<xe_pfnGetModuleBuildLogProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xe_pfnGetModuleBuildLogProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "xeGetModuleBuildLogProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
@@ -3354,7 +3863,7 @@ xeGetFunctionProcAddrTable(
     {
         if( XE_RESULT_SUCCESS == result )
         {
-            static auto getTable = reinterpret_cast<xe_pfnGetFunctionProcAddrTable_t>(
+            auto getTable = reinterpret_cast<xe_pfnGetFunctionProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetFunctionProcAddrTable") );
             result = getTable( version, &drv.dditable.xe.Function );
         }
@@ -3383,7 +3892,7 @@ xeGetFunctionProcAddrTable(
     // If the validation layer is enabled, then intercept the loader's DDIs
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
     {
-        static auto getTable = reinterpret_cast<xe_pfnGetFunctionProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xe_pfnGetFunctionProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "xeGetFunctionProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
@@ -3424,7 +3933,7 @@ xeGetSamplerProcAddrTable(
     {
         if( XE_RESULT_SUCCESS == result )
         {
-            static auto getTable = reinterpret_cast<xe_pfnGetSamplerProcAddrTable_t>(
+            auto getTable = reinterpret_cast<xe_pfnGetSamplerProcAddrTable_t>(
                 GET_FUNCTION_PTR( drv.handle, "xeGetSamplerProcAddrTable") );
             result = getTable( version, &drv.dditable.xe.Sampler );
         }
@@ -3448,7 +3957,7 @@ xeGetSamplerProcAddrTable(
     // If the validation layer is enabled, then intercept the loader's DDIs
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
     {
-        static auto getTable = reinterpret_cast<xe_pfnGetSamplerProcAddrTable_t>(
+        auto getTable = reinterpret_cast<xe_pfnGetSamplerProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "xeGetSamplerProcAddrTable") );
         result = getTable( version, pDdiTable );
     }

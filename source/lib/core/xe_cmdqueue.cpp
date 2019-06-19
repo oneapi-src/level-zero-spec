@@ -69,11 +69,8 @@ xeCommandQueueCreate(
     )
 {
     auto pfnCreate = xe_lib::context.ddiTable.CommandQueue.pfnCreate;
-
-#if _DEBUG
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnCreate( hDevice, desc, phCommandQueue );
 }
@@ -108,11 +105,8 @@ xeCommandQueueDestroy(
     )
 {
     auto pfnDestroy = xe_lib::context.ddiTable.CommandQueue.pfnDestroy;
-
-#if _DEBUG
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnDestroy( hCommandQueue );
 }
@@ -148,11 +142,8 @@ xeCommandQueueExecuteCommandLists(
     )
 {
     auto pfnExecuteCommandLists = xe_lib::context.ddiTable.CommandQueue.pfnExecuteCommandLists;
-
-#if _DEBUG
     if( nullptr == pfnExecuteCommandLists )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnExecuteCommandLists( hCommandQueue, numCommandLists, phCommandLists, hFence );
 }
@@ -184,11 +175,8 @@ xeCommandQueueSynchronize(
     )
 {
     auto pfnSynchronize = xe_lib::context.ddiTable.CommandQueue.pfnSynchronize;
-
-#if _DEBUG
     if( nullptr == pfnSynchronize )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnSynchronize( hCommandQueue, timeout );
 }
@@ -336,8 +324,9 @@ namespace xe
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
+    ///     - bool_t:'0' when RESULT_NOT_READY
     /// @throws result_t
-    void __xecall
+    bool_t __xecall
     CommandQueue::Synchronize(
         uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
                                                         ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY;
@@ -350,8 +339,11 @@ namespace xe
             reinterpret_cast<xe_command_queue_handle_t>( getHandle() ),
             timeout ) );
 
+        if( result_t::NOT_READY == result )
+            return 0; // false
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandQueue::Synchronize" );
+        return 1; // true
     }
 
 } // namespace xe

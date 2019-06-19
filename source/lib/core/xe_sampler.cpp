@@ -67,11 +67,8 @@ xeSamplerCreate(
     )
 {
     auto pfnCreate = xe_lib::context.ddiTable.Sampler.pfnCreate;
-
-#if _DEBUG
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnCreate( hDevice, desc, phSampler );
 }
@@ -105,11 +102,8 @@ xeSamplerDestroy(
     )
 {
     auto pfnDestroy = xe_lib::context.ddiTable.Sampler.pfnDestroy;
-
-#if _DEBUG
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnDestroy( hSampler );
 }

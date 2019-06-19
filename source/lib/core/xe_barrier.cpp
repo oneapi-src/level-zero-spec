@@ -72,11 +72,8 @@ xeCommandListAppendBarrier(
     )
 {
     auto pfnAppendBarrier = xe_lib::context.ddiTable.CommandList.pfnAppendBarrier;
-
-#if _DEBUG
     if( nullptr == pfnAppendBarrier )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAppendBarrier( hCommandList, hSignalEvent, numWaitEvents, phWaitEvents );
 }
@@ -119,11 +116,8 @@ xeCommandListAppendMemoryRangesBarrier(
     )
 {
     auto pfnAppendMemoryRangesBarrier = xe_lib::context.ddiTable.CommandList.pfnAppendMemoryRangesBarrier;
-
-#if _DEBUG
     if( nullptr == pfnAppendMemoryRangesBarrier )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAppendMemoryRangesBarrier( hCommandList, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents );
 }
@@ -154,11 +148,8 @@ xeDeviceSystemBarrier(
     )
 {
     auto pfnSystemBarrier = xe_lib::context.ddiTable.Device.pfnSystemBarrier;
-
-#if _DEBUG
     if( nullptr == pfnSystemBarrier )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnSystemBarrier( hDevice );
 }

@@ -59,11 +59,8 @@ xeImageGetProperties(
     )
 {
     auto pfnGetProperties = xe_lib::context.ddiTable.Image.pfnGetProperties;
-
-#if _DEBUG
     if( nullptr == pfnGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetProperties( hDevice, desc, pImageProperties );
 }
@@ -102,11 +99,8 @@ xeImageCreate(
     )
 {
     auto pfnCreate = xe_lib::context.ddiTable.Image.pfnCreate;
-
-#if _DEBUG
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnCreate( hDevice, desc, phImage );
 }
@@ -136,11 +130,8 @@ xeImageDestroy(
     )
 {
     auto pfnDestroy = xe_lib::context.ddiTable.Image.pfnDestroy;
-
-#if _DEBUG
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnDestroy( hImage );
 }

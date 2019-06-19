@@ -61,11 +61,8 @@ xexCommandListReserveSpace(
     )
 {
     auto pfnReserveSpace = xex_lib::context.ddiTable.CommandList.pfnReserveSpace;
-
-#if _DEBUG
     if( nullptr == pfnReserveSpace )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnReserveSpace( hCommandList, size, ptr );
 }

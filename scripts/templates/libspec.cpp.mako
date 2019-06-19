@@ -84,11 +84,8 @@ ${th.make_func_name(n, tags, obj)}(
 
 %endif
     auto ${th.make_pfn_name(n, tags, obj)} = ${n}_lib::context.ddiTable.${th.get_table_name(n, tags, obj)}.${th.make_pfn_name(n, tags, obj)};
-
-#if _DEBUG
     if( nullptr == ${th.make_pfn_name(n, tags, obj)} )
         return ${X}_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return ${th.make_pfn_name(n, tags, obj)}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
 }
@@ -175,6 +172,10 @@ namespace ${n}
         auto result = static_cast<result_t>( ::${th.make_func_name(n, tags, obj)}(
             ${",\n            ".join(th.extract_items(wparams, 'arg'))} ) );
 
+        %if len(rvalue) == 0 and re.match(r"\w*bool_t", th.make_return_type(n, tags, obj, cpp=True, meta=meta)):
+        if( result_t::NOT_READY == result )
+            return 0; // false
+        %endif
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "${n}::${th.subt(n, tags, obj['class'], cpp=True)}::${th.subt(n, tags, obj['name'], cpp=True)}" );
         %for item in wparams:
@@ -268,6 +269,8 @@ namespace ${n}
         %if len(rvalue) > 0:
 
         return ${rvalue};
+        %elif re.match(r"\w*bool_t", th.make_return_type(n, tags, obj, cpp=True, meta=meta)):
+        return 1; // true
         %endif
     }
 %if 'condition' in obj:

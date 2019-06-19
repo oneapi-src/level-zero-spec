@@ -205,8 +205,9 @@ namespace xe
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
+        ///     - bool_t:'0' when RESULT_NOT_READY
         /// @throws result_t
-        void __xecall
+        bool_t __xecall
         Synchronize(
             uint32_t timeout                                ///< [in] if non-zero, then indicates the maximum time to yield before
                                                             ///< returning ::RESULT_SUCCESS or ::RESULT_NOT_READY;

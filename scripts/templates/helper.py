@@ -1143,6 +1143,15 @@ def make_returns_lines(namespace, tags, obj, cpp=False, meta=None):
                 tname = _remove_const_ptr(_get_type_name(namespace, tags, obj, p, cpp, meta))
                 lines.append("    - %s"%subt(namespace, tags, "%s:%s"%(tname, desc), True, cpp))
             lines.append("")
+        if 'returns' in obj:
+            for item in obj['returns']:
+                if isinstance(item, dict):
+                    for key, values in item.items():
+                        rname = key
+                else:
+                    rname = item
+                if "$X_RESULT_NOT_READY" == rname:
+                    lines.append("    - %s"%subt(namespace, tags, "$x_bool_t:'0' when $X_RESULT_NOT_READY", cpp=cpp))
         lines.append("@throws result_t")
         return lines
 
@@ -1201,6 +1210,16 @@ def make_return_type(namespace, tags, obj, cpp=False, decl=False, meta=None):
                     tname = _remove_const_ptr(_get_type_name(namespace, tags, obj, p, cpp, meta))
 
             types.append(tname)
+
+    if 'returns' in obj:
+        for item in obj['returns']:
+            if isinstance(item, dict):
+                for key, values in item.items():
+                    rname = key
+            else:
+                rname = item
+            if "$X_RESULT_NOT_READY" == rname:
+                types.append(subt(namespace, tags, "$x_bool_t", cpp=cpp))
 
     if len(types) == 0:
         # if none exist, then just return "void"

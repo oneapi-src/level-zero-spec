@@ -78,11 +78,8 @@ xeDeviceGroupAllocSharedMem(
     )
 {
     auto pfnAllocSharedMem = xe_lib::context.ddiTable.DeviceGroup.pfnAllocSharedMem;
-
-#if _DEBUG
     if( nullptr == pfnAllocSharedMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, ordinal, host_flags, size, alignment, pptr );
 }
@@ -126,11 +123,8 @@ xeDeviceGroupAllocDeviceMem(
     )
 {
     auto pfnAllocDeviceMem = xe_lib::context.ddiTable.DeviceGroup.pfnAllocDeviceMem;
-
-#if _DEBUG
     if( nullptr == pfnAllocDeviceMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, ordinal, size, alignment, pptr );
 }
@@ -172,11 +166,8 @@ xeDeviceGroupAllocHostMem(
     )
 {
     auto pfnAllocHostMem = xe_lib::context.ddiTable.DeviceGroup.pfnAllocHostMem;
-
-#if _DEBUG
     if( nullptr == pfnAllocHostMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAllocHostMem( hDeviceGroup, flags, size, alignment, pptr );
 }
@@ -212,11 +203,8 @@ xeDeviceGroupFreeMem(
     )
 {
     auto pfnFreeMem = xe_lib::context.ddiTable.DeviceGroup.pfnFreeMem;
-
-#if _DEBUG
     if( nullptr == pfnFreeMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnFreeMem( hDeviceGroup, ptr );
 }
@@ -249,11 +237,8 @@ xeDeviceGroupGetMemProperties(
     )
 {
     auto pfnGetMemProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetMemProperties;
-
-#if _DEBUG
     if( nullptr == pfnGetMemProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetMemProperties( hDeviceGroup, ptr, pMemProperties, phDevice );
 }
@@ -285,11 +270,8 @@ xeDeviceGroupGetMemAddressRange(
     )
 {
     auto pfnGetMemAddressRange = xe_lib::context.ddiTable.DeviceGroup.pfnGetMemAddressRange;
-
-#if _DEBUG
     if( nullptr == pfnGetMemAddressRange )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetMemAddressRange( hDeviceGroup, ptr, pBase, pSize );
 }
@@ -324,11 +306,8 @@ xeDeviceGroupGetMemIpcHandle(
     )
 {
     auto pfnGetMemIpcHandle = xe_lib::context.ddiTable.DeviceGroup.pfnGetMemIpcHandle;
-
-#if _DEBUG
     if( nullptr == pfnGetMemIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetMemIpcHandle( hDeviceGroup, ptr, pIpcHandle );
 }
@@ -370,11 +349,8 @@ xeDeviceGroupOpenMemIpcHandle(
     )
 {
     auto pfnOpenMemIpcHandle = xe_lib::context.ddiTable.DeviceGroup.pfnOpenMemIpcHandle;
-
-#if _DEBUG
     if( nullptr == pfnOpenMemIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnOpenMemIpcHandle( hDeviceGroup, hDevice, handle, flags, pptr );
 }
@@ -407,11 +383,8 @@ xeDeviceGroupCloseMemIpcHandle(
     )
 {
     auto pfnCloseMemIpcHandle = xe_lib::context.ddiTable.DeviceGroup.pfnCloseMemIpcHandle;
-
-#if _DEBUG
     if( nullptr == pfnCloseMemIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnCloseMemIpcHandle( hDeviceGroup, ptr );
 }

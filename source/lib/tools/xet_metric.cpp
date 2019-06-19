@@ -64,11 +64,8 @@ xetMetricGroupGet(
     )
 {
     auto pfnGet = xet_lib::context.ddiTable.MetricGroup.pfnGet;
-
-#if _DEBUG
     if( nullptr == pfnGet )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGet( hDeviceGroup, pCount, phMetricGroups );
 }
@@ -95,11 +92,8 @@ xetMetricGroupGetProperties(
     )
 {
     auto pfnGetProperties = xet_lib::context.ddiTable.MetricGroup.pfnGetProperties;
-
-#if _DEBUG
     if( nullptr == pfnGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetProperties( hMetricGroup, pProperties );
 }
@@ -138,11 +132,8 @@ xetMetricGroupCalculateMetricValues(
     )
 {
     auto pfnCalculateMetricValues = xet_lib::context.ddiTable.MetricGroup.pfnCalculateMetricValues;
-
-#if _DEBUG
     if( nullptr == pfnCalculateMetricValues )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnCalculateMetricValues( hMetricGroup, rawDataSize, pRawData, pMetricValueCount, pMetricValues );
 }
@@ -175,11 +166,8 @@ xetMetricGet(
     )
 {
     auto pfnGet = xet_lib::context.ddiTable.Metric.pfnGet;
-
-#if _DEBUG
     if( nullptr == pfnGet )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGet( hMetricGroup, pCount, phMetrics );
 }
@@ -206,11 +194,8 @@ xetMetricGetProperties(
     )
 {
     auto pfnGetProperties = xet_lib::context.ddiTable.Metric.pfnGetProperties;
-
-#if _DEBUG
     if( nullptr == pfnGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetProperties( hMetric, pProperties );
 }
@@ -242,11 +227,8 @@ xetDeviceActivateMetricGroups(
     )
 {
     auto pfnActivateMetricGroups = xet_lib::context.ddiTable.Device.pfnActivateMetricGroups;
-
-#if _DEBUG
     if( nullptr == pfnActivateMetricGroups )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnActivateMetricGroups( hDevice, count, phMetricGroups );
 }
@@ -281,11 +263,8 @@ xetMetricTracerOpen(
     )
 {
     auto pfnOpen = xet_lib::context.ddiTable.MetricTracer.pfnOpen;
-
-#if _DEBUG
     if( nullptr == pfnOpen )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnOpen( hDevice, hMetricGroup, desc, hNotificationEvent, phMetricTracer );
 }
@@ -314,11 +293,8 @@ xetCommandListAppendMetricTracerMarker(
     )
 {
     auto pfnAppendMetricTracerMarker = xet_lib::context.ddiTable.CommandList.pfnAppendMetricTracerMarker;
-
-#if _DEBUG
     if( nullptr == pfnAppendMetricTracerMarker )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAppendMetricTracerMarker( hCommandList, hMetricTracer, value );
 }
@@ -344,11 +320,8 @@ xetMetricTracerClose(
     )
 {
     auto pfnClose = xet_lib::context.ddiTable.MetricTracer.pfnClose;
-
-#if _DEBUG
     if( nullptr == pfnClose )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnClose( hMetricTracer );
 }
@@ -385,11 +358,8 @@ xetMetricTracerReadData(
     )
 {
     auto pfnReadData = xet_lib::context.ddiTable.MetricTracer.pfnReadData;
-
-#if _DEBUG
     if( nullptr == pfnReadData )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnReadData( hMetricTracer, maxReportCount, pRawDataSize, pRawData );
 }
@@ -421,11 +391,8 @@ xetMetricQueryPoolCreate(
     )
 {
     auto pfnCreate = xet_lib::context.ddiTable.MetricQueryPool.pfnCreate;
-
-#if _DEBUG
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnCreate( hDevice, hMetricGroup, desc, phMetricQueryPool );
 }
@@ -456,11 +423,8 @@ xetMetricQueryPoolDestroy(
     )
 {
     auto pfnDestroy = xet_lib::context.ddiTable.MetricQueryPool.pfnDestroy;
-
-#if _DEBUG
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnDestroy( hMetricQueryPool );
 }
@@ -488,11 +452,8 @@ xetMetricQueryCreate(
     )
 {
     auto pfnCreate = xet_lib::context.ddiTable.MetricQuery.pfnCreate;
-
-#if _DEBUG
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnCreate( hMetricQueryPool, index, phMetricQuery );
 }
@@ -520,11 +481,8 @@ xetMetricQueryDestroy(
     )
 {
     auto pfnDestroy = xet_lib::context.ddiTable.MetricQuery.pfnDestroy;
-
-#if _DEBUG
     if( nullptr == pfnDestroy )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnDestroy( hMetricQuery );
 }
@@ -552,11 +510,8 @@ xetMetricQueryReset(
     )
 {
     auto pfnReset = xet_lib::context.ddiTable.MetricQuery.pfnReset;
-
-#if _DEBUG
     if( nullptr == pfnReset )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnReset( hMetricQuery );
 }
@@ -584,11 +539,8 @@ xetCommandListAppendMetricQueryBegin(
     )
 {
     auto pfnAppendMetricQueryBegin = xet_lib::context.ddiTable.CommandList.pfnAppendMetricQueryBegin;
-
-#if _DEBUG
     if( nullptr == pfnAppendMetricQueryBegin )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAppendMetricQueryBegin( hCommandList, hMetricQuery );
 }
@@ -617,11 +569,8 @@ xetCommandListAppendMetricQueryEnd(
     )
 {
     auto pfnAppendMetricQueryEnd = xet_lib::context.ddiTable.CommandList.pfnAppendMetricQueryEnd;
-
-#if _DEBUG
     if( nullptr == pfnAppendMetricQueryEnd )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAppendMetricQueryEnd( hCommandList, hMetricQuery, hCompletionEvent );
 }
@@ -647,11 +596,8 @@ xetCommandListAppendMetricMemoryBarrier(
     )
 {
     auto pfnAppendMetricMemoryBarrier = xet_lib::context.ddiTable.CommandList.pfnAppendMetricMemoryBarrier;
-
-#if _DEBUG
     if( nullptr == pfnAppendMetricMemoryBarrier )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnAppendMetricMemoryBarrier( hCommandList );
 }
@@ -686,11 +632,8 @@ xetMetricQueryGetData(
     )
 {
     auto pfnGetData = xet_lib::context.ddiTable.MetricQuery.pfnGetData;
-
-#if _DEBUG
     if( nullptr == pfnGetData )
         return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
 
     return pfnGetData( hMetricQuery, pRawDataSize, pRawData );
 }
