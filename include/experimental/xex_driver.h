@@ -21,42 +21,58 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xex_common.hpp
+* @file xex_driver.h
 *
-* @brief C++ wrapper of Intel Xe Level-Zero Extended API common types
+* @brief Intel Xe Level-Zero APIs
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/extended/common.yml
+* DO NOT EDIT: generated from /scripts/experimental/driver.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XEX_COMMON_HPP
-#define _XEX_COMMON_HPP
+#ifndef _XEX_DRIVER_H
+#define _XEX_DRIVER_H
 #if defined(__cplusplus)
 #pragma once
-#if !defined(_XEX_API_HPP)
+#endif
+#if !defined(_XEX_API_H)
 #pragma message("warning: this file is not intended to be included directly")
 #endif
 
-namespace xex
-{
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle of driver's command graph object
-    class CommandGraph;
-    struct _command_graph_handle_t;
-    using command_graph_handle_t = _command_graph_handle_t*;
+#if defined(__cplusplus)
+extern "C" {
+#endif
 
-} // namespace xex
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Initialize the Xe driver and must be called before any other API
+///        function.
+/// 
+/// @details
+///     - If this function is not called then all other functions will return
+///       ::XE_RESULT_ERROR_UNINITIALIZED.
+///     - Only one instance of a driver per process will be initialized.
+///     - This function is thread-safe for scenarios where multiple libraries
+///       may initialize the driver simultaneously.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuInit**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for flags
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
+xe_result_t __xecall
+xexInit(
+    xe_init_flag_t flags                            ///< [in] initialization flags
+    );
 
-namespace xex
-{
-} // namespace xex
+#if defined(__cplusplus)
+} // extern "C"
+#endif
 
-namespace xex
-{
-    using result_t = xe::result_t;
-    using exception_t = xe::exception_t;
-
-} // namespace xex
-#endif // defined(__cplusplus)
-#endif // _XEX_COMMON_HPP
+#endif // _XEX_DRIVER_H

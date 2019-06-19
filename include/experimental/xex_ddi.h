@@ -23,7 +23,7 @@
 * @file xex_ddi.h
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/extended
+* DO NOT EDIT: generated from /scripts/experimental
 * @endcond
 *
 ******************************************************************************/
@@ -73,6 +73,45 @@ xexGetGlobalProcAddrTable(
 typedef xe_result_t (__xecall *xex_pfnGetGlobalProcAddrTable_t)(
     xe_api_version_t,
     xex_global_dditable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xexCommandListReserveSpace 
+typedef xe_result_t (__xecall *xex_pfnCommandListReserveSpace_t)(
+    xex_command_list_handle_t,
+    size_t,
+    void**
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of CommandList functions pointers
+typedef struct _xex_command_list_dditable_t
+{
+    xex_pfnCommandListReserveSpace_t                            pfnReserveSpace;
+} xex_command_list_dditable_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's CommandList table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xexGetCommandListProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xex_command_list_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xexGetCommandListProcAddrTable
+typedef xe_result_t (__xecall *xex_pfnGetCommandListProcAddrTable_t)(
+    xe_api_version_t,
+    xex_command_list_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -133,6 +172,7 @@ typedef xe_result_t (__xecall *xex_pfnGetCommandGraphProcAddrTable_t)(
 typedef struct _xex_dditable_t
 {
     xex_global_dditable_t               Global;
+    xex_command_list_dditable_t         CommandList;
     xex_command_graph_dditable_t        CommandGraph;
 } xex_dditable_t;
 

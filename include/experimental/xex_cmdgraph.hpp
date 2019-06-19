@@ -23,10 +23,10 @@
 *
 * @file xex_cmdgraph.hpp
 *
-* @brief C++ wrapper of Intel Xe Level-Zero Extended APIs for CommandGraph
+* @brief C++ wrapper of Intel Xe Level-Zero Experimental APIs for CommandGraph
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/extended/cmdgraph.yml
+* DO NOT EDIT: generated from /scripts/experimental/cmdgraph.yml
 * @endcond
 *
 ******************************************************************************/

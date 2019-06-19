@@ -129,7 +129,7 @@ xe_result_t __xecall
 xetTracerSetPrologues(
     xet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
     xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
-    xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
+    xet_experimental_callbacks_t* pExperimentalCbs  ///< [in][optional] pointer to table of 'experimental' callback function
                                                     ///< pointers
     )
 {
@@ -140,7 +140,7 @@ xetTracerSetPrologues(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnSetPrologues( hTracer, pCoreCbs, pExtendedCbs );
+    return pfnSetPrologues( hTracer, pCoreCbs, pExperimentalCbs );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -167,7 +167,7 @@ xe_result_t __xecall
 xetTracerSetEpilogues(
     xet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
     xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
-    xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
+    xet_experimental_callbacks_t* pExperimentalCbs  ///< [in][optional] pointer to table of 'experimental' callback function
                                                     ///< pointers
     )
 {
@@ -178,7 +178,7 @@ xetTracerSetEpilogues(
         return XE_RESULT_ERROR_UNSUPPORTED;
 #endif
 
-    return pfnSetEpilogues( hTracer, pCoreCbs, pExtendedCbs );
+    return pfnSetEpilogues( hTracer, pCoreCbs, pExperimentalCbs );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -316,14 +316,14 @@ namespace xet
     void __xecall
     Tracer::SetPrologues(
         core_callbacks_t* pCoreCbs,                     ///< [in] pointer to table of 'core' callback function pointers
-        extended_callbacks_t* pExtendedCbs              ///< [in][optional] pointer to table of 'extended' callback function
+        experimental_callbacks_t* pExperimentalCbs      ///< [in][optional] pointer to table of 'experimental' callback function
                                                         ///< pointers
         )
     {
         auto result = static_cast<result_t>( ::xetTracerSetPrologues(
             reinterpret_cast<xet_tracer_handle_t>( getHandle() ),
             reinterpret_cast<xet_core_callbacks_t*>( pCoreCbs ),
-            reinterpret_cast<xet_extended_callbacks_t*>( pExtendedCbs ) ) );
+            reinterpret_cast<xet_experimental_callbacks_t*>( pExperimentalCbs ) ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Tracer::SetPrologues" );
@@ -345,14 +345,14 @@ namespace xet
     void __xecall
     Tracer::SetEpilogues(
         core_callbacks_t* pCoreCbs,                     ///< [in] pointer to table of 'core' callback function pointers
-        extended_callbacks_t* pExtendedCbs              ///< [in][optional] pointer to table of 'extended' callback function
+        experimental_callbacks_t* pExperimentalCbs      ///< [in][optional] pointer to table of 'experimental' callback function
                                                         ///< pointers
         )
     {
         auto result = static_cast<result_t>( ::xetTracerSetEpilogues(
             reinterpret_cast<xet_tracer_handle_t>( getHandle() ),
             reinterpret_cast<xet_core_callbacks_t*>( pCoreCbs ),
-            reinterpret_cast<xet_extended_callbacks_t*>( pExtendedCbs ) ) );
+            reinterpret_cast<xet_experimental_callbacks_t*>( pExperimentalCbs ) ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Tracer::SetEpilogues" );

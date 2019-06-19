@@ -1659,64 +1659,6 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListReserveSpace
-    xe_result_t __xecall
-    xeCommandListReserveSpace(
-        xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        size_t size,                                    ///< [in] size (in bytes) to reserve
-        void** ptr                                      ///< [out] pointer to command buffer space reserved
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        std::vector<void*> localUserData;
-        if( context.enableTracing )
-        {
-            // capture parameters
-            xe_command_list_reserve_space_params_t params = {
-                &hCommandList,
-                &size,
-                &ptr
-            };
-
-            // call each callback registered
-            localUserData.resize( context.tracerData.size() );
-            for( uint32_t i = 0; i < context.tracerData.size(); ++i )
-                if( context.tracerData[ i ].enabled )
-                {
-                    auto& table = context.tracerData[ i ].xePrologueCbs.CommandList;
-                    if( nullptr != table.pfnReserveSpaceCb )
-                        table.pfnReserveSpaceCb( &params, result,
-                            context.tracerData[ i ].globalUserData,
-                            &localUserData[ i ] );
-                }
-        }
-
-        if( context.enableTracing )
-        {
-            // capture parameters
-            xe_command_list_reserve_space_params_t params = {
-                &hCommandList,
-                &size,
-                &ptr
-            };
-
-            // call each callback registered
-            for( uint32_t i = 0; i < context.tracerData.size(); ++i )
-                if( context.tracerData[ i ].enabled )
-                {
-                    auto& table = context.tracerData[ i ].xeEpilogueCbs.CommandList;
-                    if( nullptr != table.pfnReserveSpaceCb )
-                        table.pfnReserveSpaceCb( &params, result,
-                            context.tracerData[ i ].globalUserData,
-                            &localUserData[ i ] );
-                }
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xeCommandListAppendBarrier
     xe_result_t __xecall
     xeCommandListAppendBarrier(
@@ -6162,8 +6104,6 @@ xeGetCommandListProcAddrTable(
     pDdiTable->pfnGetParameter                           = driver::xeCommandListGetParameter;
 
     pDdiTable->pfnResetParameters                        = driver::xeCommandListResetParameters;
-
-    pDdiTable->pfnReserveSpace                           = driver::xeCommandListReserveSpace;
 
     pDdiTable->pfnAppendBarrier                          = driver::xeCommandListAppendBarrier;
 

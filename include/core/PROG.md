@@ -32,7 +32,6 @@ NOTE: Sample code in this document contains little or no error checking for brev
     + [OpenCL Interoperability](#oi)
     + [Inter-Process Communication](#ipc)
     + [Peer-to-Peer Access and Queries](#peer)
-* [Experimental](#exp)
 
 # <a name="dd">Devices</a>
 ## Device Group
@@ -1133,17 +1132,3 @@ The following Peer-to-Peer functionalities are provided through the API:
         - ::xeDeviceGetP2PProperties
     - Copy data between devices over peer-to-peer fabric.
         - ::xeCommandListAppendMemoryCopy
-
-# <a name="exp">Experimental</a>
-The following experimental features are provided only for the development and refinement of future APIs.
-These APIs are **not** supported by production drivers without explicit end-user opt-in.
-
-## Device-Specific Commands
-::xeCommandListReserveSpace provides direct access to the command list's command buffers in order to allow unrestricted access the device's capabilities.
-The application is solely responsible for ensuring the commands are valid and correct for the specific device.
-
-```c
-    void* ptr = nullptr;
-    xeCommandListReserveSpace(hCommandList, sizeof(blob), &ptr);
-    ::memcpy(ptr, blob, sizeof(blob));
-```

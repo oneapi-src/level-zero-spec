@@ -785,33 +785,6 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListReserveSpace
-    xe_result_t __xecall
-    xeCommandListReserveSpace(
-        xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        size_t size,                                    ///< [in] size (in bytes) to reserve
-        void** ptr                                      ///< [out] pointer to command buffer space reserved
-        )
-    {
-        auto pfnReserveSpace = context.xeDdiTable.CommandList.pfnReserveSpace;
-
-        if( nullptr == pfnReserveSpace )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hCommandList )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == ptr )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnReserveSpace( hCommandList, size, ptr );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xeCommandListAppendBarrier
     xe_result_t __xecall
     xeCommandListAppendBarrier(
@@ -3109,9 +3082,6 @@ xeGetCommandListProcAddrTable(
 
     dditable.pfnResetParameters                          = pDdiTable->pfnResetParameters;
     pDdiTable->pfnResetParameters                        = layer::xeCommandListResetParameters;
-
-    dditable.pfnReserveSpace                             = pDdiTable->pfnReserveSpace;
-    pDdiTable->pfnReserveSpace                           = layer::xeCommandListReserveSpace;
 
     dditable.pfnAppendBarrier                            = pDdiTable->pfnAppendBarrier;
     pDdiTable->pfnAppendBarrier                          = layer::xeCommandListAppendBarrier;

@@ -21,7 +21,7 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_extended_driver.cpp
+* @file xe_experimental_driver.cpp
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/templates/nullddi.cpp.mako
@@ -76,6 +76,64 @@ namespace driver
                     auto& table = context.tracerData[ i ].xexEpilogueCbs.Global;
                     if( nullptr != table.pfnInitCb )
                         table.pfnInitCb( &params, result,
+                            context.tracerData[ i ].globalUserData,
+                            &localUserData[ i ] );
+                }
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xexCommandListReserveSpace
+    xe_result_t __xecall
+    xexCommandListReserveSpace(
+        xex_command_list_handle_t hCommandList,         ///< [in] handle of the command list
+        size_t size,                                    ///< [in] size (in bytes) to reserve
+        void** ptr                                      ///< [out] pointer to command buffer space reserved
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        std::vector<void*> localUserData;
+        if( context.enableTracing )
+        {
+            // capture parameters
+            xex_command_list_reserve_space_params_t params = {
+                &hCommandList,
+                &size,
+                &ptr
+            };
+
+            // call each callback registered
+            localUserData.resize( context.tracerData.size() );
+            for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+                if( context.tracerData[ i ].enabled )
+                {
+                    auto& table = context.tracerData[ i ].xexPrologueCbs.CommandList;
+                    if( nullptr != table.pfnReserveSpaceCb )
+                        table.pfnReserveSpaceCb( &params, result,
+                            context.tracerData[ i ].globalUserData,
+                            &localUserData[ i ] );
+                }
+        }
+
+        if( context.enableTracing )
+        {
+            // capture parameters
+            xex_command_list_reserve_space_params_t params = {
+                &hCommandList,
+                &size,
+                &ptr
+            };
+
+            // call each callback registered
+            for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+                if( context.tracerData[ i ].enabled )
+                {
+                    auto& table = context.tracerData[ i ].xexEpilogueCbs.CommandList;
+                    if( nullptr != table.pfnReserveSpaceCb )
+                        table.pfnReserveSpaceCb( &params, result,
                             context.tracerData[ i ].globalUserData,
                             &localUserData[ i ] );
                 }
@@ -281,6 +339,36 @@ xexGetGlobalProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     pDdiTable->pfnInit                                   = driver::xexInit;
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's CommandList table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xexGetCommandListProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xex_command_list_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( driver::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    pDdiTable->pfnReserveSpace                           = driver::xexCommandListReserveSpace;
 
     return result;
 }

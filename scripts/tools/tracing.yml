@@ -12,9 +12,9 @@ name: $t_core_callbacks_t
 value: $x_callbacks_t
 --- #--------------------------------------------------------------------------
 type: typedef
-desc: "Alias the existing callbacks definition for 'extended' callbacks"
+desc: "Alias the existing callbacks definition for 'experimental' callbacks"
 class: $tTracer
-name: $t_extended_callbacks_t
+name: $t_experimental_callbacks_t
 value: $e_callbacks_t
 --- #--------------------------------------------------------------------------
 type: enum
@@ -93,9 +93,9 @@ params:
     - type: "$t_core_callbacks_t*"
       name: pCoreCbs
       desc: "[in] pointer to table of 'core' callback function pointers"
-    - type: "$t_extended_callbacks_t*"
-      name: pExtendedCbs
-      desc: "[in][optional] pointer to table of 'extended' callback function pointers"
+    - type: "$t_experimental_callbacks_t*"
+      name: pExperimentalCbs
+      desc: "[in][optional] pointer to table of 'experimental' callback function pointers"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Sets the collection of callbacks to be executed **after** driver execution."
@@ -112,9 +112,9 @@ params:
     - type: "$t_core_callbacks_t*"
       name: pCoreCbs
       desc: "[in] pointer to table of 'core' callback function pointers"
-    - type: "$t_extended_callbacks_t*"
-      name: pExtendedCbs
-      desc: "[in][optional] pointer to table of 'extended' callback function pointers"
+    - type: "$t_experimental_callbacks_t*"
+      name: pExperimentalCbs
+      desc: "[in][optional] pointer to table of 'experimental' callback function pointers"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Enables (or disables) the tracer"

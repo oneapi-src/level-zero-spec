@@ -322,42 +322,6 @@ xeCommandListResetParameters(
     return pfnResetParameters( hCommandList );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Reserve a section of contiguous command buffer space within the
-///        command list.
-/// 
-/// @details
-///     - The pointer returned is valid for both Host and device access.
-///     - The application may **not** call this function from simultaneous
-///       threads with the same command list handle.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hCommandList
-///         + nullptr == ptr
-///         + 0 for size
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xeCommandListReserveSpace(
-    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-    size_t size,                                    ///< [in] size (in bytes) to reserve
-    void** ptr                                      ///< [out] pointer to command buffer space reserved
-    )
-{
-    auto pfnReserveSpace = xe_lib::context.ddiTable.CommandList.pfnReserveSpace;
-
-#if _DEBUG
-    if( nullptr == pfnReserveSpace )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-#endif
-
-    return pfnReserveSpace( hCommandList, size, ptr );
-}
-
 } // extern "C"
 
 namespace xe
@@ -628,38 +592,6 @@ namespace xe
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::ResetParameters" );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Reserve a section of contiguous command buffer space within the
-    ///        command list.
-    /// 
-    /// @details
-    ///     - The pointer returned is valid for both Host and device access.
-    ///     - The application may **not** call this function from simultaneous
-    ///       threads with the same command list handle.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @returns
-    ///     - void*: pointer to command buffer space reserved
-    /// 
-    /// @throws result_t
-    void* __xecall
-    CommandList::ReserveSpace(
-        size_t size                                     ///< [in] size (in bytes) to reserve
-        )
-    {
-        void* ptr;
-
-        auto result = static_cast<result_t>( ::xeCommandListReserveSpace(
-            reinterpret_cast<xe_command_list_handle_t>( getHandle() ),
-            size,
-            &ptr ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::ReserveSpace" );
-
-        return ptr;
     }
 
 } // namespace xe

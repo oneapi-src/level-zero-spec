@@ -21,50 +21,50 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_loader.h
+* @file xex_driver.hpp
+*
+* @brief C++ wrapper of Intel Xe Level-Zero APIs
+*
+* @cond DEV
+* DO NOT EDIT: generated from /scripts/experimental/driver.yml
+* @endcond
 *
 ******************************************************************************/
+#ifndef _XEX_DRIVER_HPP
+#define _XEX_DRIVER_HPP
+#if defined(__cplusplus)
 #pragma once
-#include <vector>
+#if !defined(_XEX_API_HPP)
+#pragma message("warning: this file is not intended to be included directly")
+#endif
 
-#include "xe_ddi.h"
-#include "xex_ddi.h"
-#include "xet_ddi.h"
-#include "xe_util.h"
-
-#include "xe_object.h"
-#include "xe_core_loader.h"
-#include "xe_experimental_loader.h"
-#include "xe_tools_loader.h"
-
-namespace loader
+namespace xex
 {
-    //////////////////////////////////////////////////////////////////////////
-    struct driver_t
-    {
-        HMODULE handle = NULL;
-
-        dditable_t dditable = {};
-    };
-
-    using driver_vector_t = std::vector< driver_t >;
-
     ///////////////////////////////////////////////////////////////////////////////
-    class context_t
-    {
-    public:
-        xe_api_version_t version = XE_API_VERSION_1_0;
+    /// @brief Initialize the Xe:: driver and must be called before any other API
+    ///        function.
+    /// 
+    /// @details
+    ///     - If this function is not called then all other functions will return
+    ///       ::XERESULT_ERROR_UNINITIALIZED.
+    ///     - Only one instance of a driver per process will be initialized.
+    ///     - This function is thread-safe for scenarios where multiple libraries
+    ///       may initialize the driver simultaneously.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuInit**
+    /// 
+    /// @throws result_t
+    void __xecall
+    Init(
+        xe::init_flag_t flags                           ///< [in] initialization flags
+        );
 
-        driver_vector_t drivers;
+} // namespace xex
 
-        HMODULE validationLayer = nullptr;
-
-        bool forceIntercept = false;
-
-        context_t();
-        ~context_t();
-    };
-
-    extern context_t context;
-
-}
+namespace xex
+{
+} // namespace xex
+#endif // defined(__cplusplus)
+#endif // _XEX_DRIVER_HPP

@@ -5,7 +5,7 @@ add_library(${TARGET_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_null.h
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_null.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_core_driver.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_extended_driver.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/xe_experimental_driver.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_tools_driver.cpp
 )
 

@@ -20,25 +20,26 @@
 * or otherwise. Any license under such intellectual property rights must be
 * express and approved by Intel in writing.
 *
-* @file xex_api.hpp
+* @file xex_api.h
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/extended
+* DO NOT EDIT: generated from /scripts/experimental
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XEX_API_HPP
-#define _XEX_API_HPP
+#ifndef _XEX_API_H
+#define _XEX_API_H
 #if defined(__cplusplus)
 #pragma once
+#endif
 
 // 'core' API headers
-#include "xe_api.hpp"
+#include "xe_api.h"
 
-// 'extended' API headers
-#include "xex_common.hpp"
-#include "xex_driver.hpp"
-#include "xex_cmdgraph.hpp"
+// 'experimental' API headers
+#include "xex_common.h"
+#include "xex_driver.h"
+#include "xex_cmdlist.h"
+#include "xex_cmdgraph.h"
 
-#endif // defined(__cplusplus)
-#endif // _XEX_API_HPP
+#endif // _XEX_API_H

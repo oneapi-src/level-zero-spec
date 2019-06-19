@@ -26,7 +26,7 @@
 * @brief C++ wrapper of Intel Xe Level-Zero APIs
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/extended/driver.yml
+* DO NOT EDIT: generated from /scripts/experimental/driver.yml
 * @endcond
 *
 ******************************************************************************/

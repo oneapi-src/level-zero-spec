@@ -1,0 +1,2079 @@
+{
+    "class": {
+        "$e": {
+            "function": [
+                "Init"
+            ],
+            "ordinal": "0"
+        },
+        "$eCommandGraph": {
+            "enum": [
+                "$e_command_graph_desc_version_t",
+                "$e_command_graph_flag_t"
+            ],
+            "function": [
+                "Create",
+                "Destroy",
+                "Close"
+            ],
+            "handle": [
+                "$e_command_graph_handle_t"
+            ],
+            "members": [
+                "$e_command_graph_handle_t",
+                "$xDevice*",
+                "$e_command_graph_desc_t"
+            ],
+            "ordinal": "9999",
+            "owner": "$xDevice",
+            "struct": [
+                "$e_command_graph_desc_t"
+            ]
+        },
+        "$eCommandList": {
+            "function": [
+                "ReserveSpace"
+            ],
+            "handle": [
+                "$e_command_list_handle_t"
+            ],
+            "ordinal": "1"
+        },
+        "$x": {
+            "enum": [
+                "$x_init_flag_t"
+            ],
+            "function": [
+                "Init"
+            ],
+            "ordinal": "0"
+        },
+        "$xCommandList": {
+            "child": [
+                "$eCommandList"
+            ],
+            "enum": [
+                "$x_command_list_desc_version_t",
+                "$x_command_list_flag_t",
+                "$x_command_list_parameter_t",
+                "$x_memory_advice_t"
+            ],
+            "function": [
+                "AppendBarrier",
+                "AppendMemoryRangesBarrier",
+                "Create",
+                "CreateImmediate",
+                "Destroy",
+                "Close",
+                "Reset",
+                "SetParameter",
+                "GetParameter",
+                "ResetParameters",
+                "AppendMemoryCopy",
+                "AppendMemorySet",
+                "AppendMemoryCopyRegion",
+                "AppendImageCopy",
+                "AppendImageCopyRegion",
+                "AppendImageCopyToMemory",
+                "AppendImageCopyFromMemory",
+                "AppendMemoryPrefetch",
+                "AppendMemAdvise",
+                "AppendSignalEvent",
+                "AppendWaitOnEvents",
+                "AppendEventReset",
+                "AppendLaunchFunction",
+                "AppendLaunchFunctionIndirect",
+                "AppendLaunchMultipleFunctionsIndirect",
+                "AppendLaunchHostFunction"
+            ],
+            "handle": [
+                "$x_command_list_handle_t"
+            ],
+            "members": [
+                "$x_command_list_handle_t",
+                "$xDevice*",
+                "$x_command_list_desc_t"
+            ],
+            "ordinal": "3",
+            "owner": "$xDevice",
+            "struct": [
+                "$x_command_list_desc_t",
+                "$x_copy_region_t",
+                "$x_image_region_t",
+                "$x_thread_group_dimensions_t"
+            ],
+            "typedef": [
+                "$x_host_pfn_t"
+            ]
+        },
+        "$xCommandQueue": {
+            "enum": [
+                "$x_command_queue_desc_version_t",
+                "$x_command_queue_flag_t",
+                "$x_command_queue_mode_t",
+                "$x_command_queue_priority_t"
+            ],
+            "function": [
+                "Create",
+                "Destroy",
+                "ExecuteCommandLists",
+                "Synchronize"
+            ],
+            "handle": [
+                "$x_command_queue_handle_t"
+            ],
+            "members": [
+                "$x_command_queue_handle_t",
+                "$xDevice*",
+                "$x_command_queue_desc_t"
+            ],
+            "ordinal": "2",
+            "owner": "$xDevice",
+            "owns": [
+                "$xFence"
+            ],
+            "struct": [
+                "$x_command_queue_desc_t"
+            ]
+        },
+        "$xDevice": {
+            "enum": [
+                "$x_device_p2p_properties_version_t",
+                "$x_cache_config_t"
+            ],
+            "function": [
+                "SystemBarrier",
+                "RegisterCLMemory",
+                "RegisterCLProgram",
+                "RegisterCLCommandQueue",
+                "Get",
+                "GetSubDevices",
+                "GetP2PProperties",
+                "CanAccessPeer",
+                "SetIntermediateCacheConfig",
+                "SetLastLevelCacheConfig",
+                "MakeMemoryResident",
+                "EvictMemory",
+                "MakeImageResident",
+                "EvictImage"
+            ],
+            "handle": [
+                "$x_device_handle_t"
+            ],
+            "members": [
+                "$x_device_handle_t",
+                "$xDeviceGroup*"
+            ],
+            "ordinal": "1",
+            "owner": "$xDeviceGroup",
+            "owns": [
+                "$xCommandList",
+                "$xCommandQueue",
+                "$xImage",
+                "$xModule",
+                "$xSampler",
+                "$eCommandGraph"
+            ],
+            "struct": [
+                "$x_device_p2p_properties_t"
+            ]
+        },
+        "$xDeviceGroup": {
+            "enum": [
+                "$x_api_version_t",
+                "$x_device_properties_version_t",
+                "$x_device_type_t",
+                "$x_device_compute_properties_version_t",
+                "$x_device_memory_properties_version_t",
+                "$x_device_memory_access_properties_version_t",
+                "$x_memory_access_capabilities_t",
+                "$x_device_cache_properties_version_t",
+                "$x_device_image_properties_version_t",
+                "$x_device_mem_alloc_flag_t",
+                "$x_host_mem_alloc_flag_t",
+                "$x_memory_allocation_properties_version_t",
+                "$x_memory_type_t",
+                "$x_ipc_memory_flag_t"
+            ],
+            "function": [
+                "Get",
+                "GetApiVersion",
+                "GetDeviceProperties",
+                "GetComputeProperties",
+                "GetMemoryProperties",
+                "GetMemoryAccessProperties",
+                "GetCacheProperties",
+                "GetImageProperties",
+                "GetDriverVersion",
+                "AllocSharedMem",
+                "AllocDeviceMem",
+                "AllocHostMem",
+                "FreeMem",
+                "GetMemProperties",
+                "GetMemAddressRange",
+                "GetMemIpcHandle",
+                "OpenMemIpcHandle",
+                "CloseMemIpcHandle"
+            ],
+            "handle": [
+                "$x_device_group_handle_t"
+            ],
+            "members": [
+                "$x_device_group_handle_t"
+            ],
+            "ordinal": "1",
+            "owns": [
+                "$xDevice",
+                "$xEventPool"
+            ],
+            "struct": [
+                "$x_device_uuid_t",
+                "$x_device_properties_t",
+                "$x_device_compute_properties_t",
+                "$x_device_memory_properties_t",
+                "$x_device_memory_access_properties_t",
+                "$x_device_cache_properties_t",
+                "$x_device_image_properties_t",
+                "$x_memory_allocation_properties_t"
+            ]
+        },
+        "$xEvent": {
+            "enum": [
+                "$x_event_desc_version_t",
+                "$x_event_scope_flag_t"
+            ],
+            "function": [
+                "Create",
+                "Destroy",
+                "HostSignal",
+                "HostSynchronize",
+                "QueryStatus",
+                "Reset"
+            ],
+            "handle": [
+                "$x_event_handle_t"
+            ],
+            "members": [
+                "$x_event_handle_t",
+                "$xEventPool*",
+                "$x_event_desc_t"
+            ],
+            "ordinal": "9999",
+            "owner": "$xEventPool",
+            "struct": [
+                "$x_event_desc_t"
+            ]
+        },
+        "$xEventPool": {
+            "enum": [
+                "$x_event_pool_desc_version_t",
+                "$x_event_pool_flag_t"
+            ],
+            "function": [
+                "Create",
+                "Destroy",
+                "GetIpcHandle",
+                "OpenIpcHandle",
+                "CloseIpcHandle"
+            ],
+            "handle": [
+                "$x_event_pool_handle_t"
+            ],
+            "members": [
+                "$x_event_pool_handle_t",
+                "$xDeviceGroup*",
+                "$x_event_pool_desc_t"
+            ],
+            "ordinal": "9999",
+            "owner": "$xDeviceGroup",
+            "owns": [
+                "$xEvent"
+            ],
+            "struct": [
+                "$x_event_pool_desc_t"
+            ]
+        },
+        "$xFence": {
+            "enum": [
+                "$x_fence_desc_version_t",
+                "$x_fence_flag_t"
+            ],
+            "function": [
+                "Create",
+                "Destroy",
+                "HostSynchronize",
+                "QueryStatus",
+                "Reset"
+            ],
+            "handle": [
+                "$x_fence_handle_t"
+            ],
+            "members": [
+                "$x_fence_handle_t",
+                "$xCommandQueue*",
+                "$x_fence_desc_t"
+            ],
+            "ordinal": "9999",
+            "owner": "$xCommandQueue",
+            "struct": [
+                "$x_fence_desc_t"
+            ]
+        },
+        "$xFunction": {
+            "enum": [
+                "$x_function_desc_version_t",
+                "$x_function_flag_t",
+                "$x_function_set_attribute_t",
+                "$x_function_get_attribute_t"
+            ],
+            "function": [
+                "Create",
+                "Destroy",
+                "SetGroupSize",
+                "SuggestGroupSize",
+                "SetArgumentValue",
+                "SetAttribute",
+                "GetAttribute"
+            ],
+            "handle": [
+                "$x_function_handle_t"
+            ],
+            "members": [
+                "$x_function_handle_t",
+                "$xModule*",
+                "$x_function_desc_t"
+            ],
+            "ordinal": "9999",
+            "owner": "$xModule",
+            "struct": [
+                "$x_function_desc_t"
+            ]
+        },
+        "$xImage": {
+            "enum": [
+                "$x_image_desc_version_t",
+                "$x_image_flag_t",
+                "$x_image_type_t",
+                "$x_image_format_layout_t",
+                "$x_image_format_type_t",
+                "$x_image_format_swizzle_t",
+                "$x_image_properties_version_t",
+                "$x_image_sampler_filter_flags_t"
+            ],
+            "function": [
+                "GetProperties",
+                "Create",
+                "Destroy"
+            ],
+            "handle": [
+                "$x_image_handle_t"
+            ],
+            "members": [
+                "$x_image_handle_t",
+                "$xDevice*",
+                "$x_image_desc_t"
+            ],
+            "ordinal": "9999",
+            "owner": "$xDevice",
+            "struct": [
+                "$x_image_format_desc_t",
+                "$x_image_desc_t",
+                "$x_image_properties_t"
+            ]
+        },
+        "$xModule": {
+            "enum": [
+                "$x_module_desc_version_t",
+                "$x_module_format_t"
+            ],
+            "function": [
+                "Create",
+                "Destroy",
+                "GetNativeBinary",
+                "GetGlobalPointer",
+                "GetFunctionPointer"
+            ],
+            "handle": [
+                "$x_module_handle_t"
+            ],
+            "members": [
+                "$x_module_handle_t",
+                "$xDevice*",
+                "$x_module_desc_t"
+            ],
+            "ordinal": "9999",
+            "owner": "$xDevice",
+            "owns": [
+                "$xModuleBuildLog",
+                "$xFunction"
+            ],
+            "struct": [
+                "$x_module_desc_t"
+            ]
+        },
+        "$xModuleBuildLog": {
+            "function": [
+                "Destroy",
+                "GetString"
+            ],
+            "handle": [
+                "$x_module_build_log_handle_t"
+            ],
+            "members": [
+                "$x_module_build_log_handle_t",
+                "$xModule*"
+            ],
+            "ordinal": "9999",
+            "owner": "$xModule"
+        },
+        "$xSampler": {
+            "enum": [
+                "$x_sampler_desc_version_t",
+                "$x_sampler_address_mode_t",
+                "$x_sampler_filter_mode_t"
+            ],
+            "function": [
+                "Create",
+                "Destroy"
+            ],
+            "handle": [
+                "$x_sampler_handle_t"
+            ],
+            "members": [
+                "$x_sampler_handle_t",
+                "$xDevice*",
+                "$x_sampler_desc_t"
+            ],
+            "ordinal": "9999",
+            "owner": "$xDevice",
+            "struct": [
+                "$x_sampler_desc_t"
+            ]
+        }
+    },
+    "enum": {
+        "$e_command_graph_desc_version_t": {
+            "class": "$eCommandGraph",
+            "types": [
+                "$E_COMMAND_GRAPH_DESC_VERSION_CURRENT"
+            ]
+        },
+        "$e_command_graph_flag_t": {
+            "class": "$eCommandGraph",
+            "types": [
+                "$E_COMMAND_GRAPH_FLAG_NONE"
+            ]
+        },
+        "$x_api_version_t": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$X_API_VERSION_1_0"
+            ]
+        },
+        "$x_cache_config_t": {
+            "class": "$xDevice",
+            "types": [
+                "$X_CACHE_CONFIG_DEFAULT",
+                "$X_CACHE_CONFIG_LARGE_SLM",
+                "$X_CACHE_CONFIG_LARGE_DATA"
+            ]
+        },
+        "$x_command_list_desc_version_t": {
+            "class": "$xCommandList",
+            "types": [
+                "$X_COMMAND_LIST_DESC_VERSION_CURRENT"
+            ]
+        },
+        "$x_command_list_flag_t": {
+            "class": "$xCommandList",
+            "types": [
+                "$X_COMMAND_LIST_FLAG_NONE",
+                "$X_COMMAND_LIST_FLAG_COPY_ONLY",
+                "$X_COMMAND_LIST_FLAG_RELAXED_ORDERING",
+                "$X_COMMAND_LIST_FLAG_MAXIMIZE_THROUGHPUT",
+                "$X_COMMAND_LIST_FLAG_EXPLICIT_ONLY"
+            ]
+        },
+        "$x_command_list_parameter_t": {
+            "class": "$xCommandList",
+            "types": [
+                "$X_COMMAND_LIST_PARAMETER_TBD"
+            ]
+        },
+        "$x_command_queue_desc_version_t": {
+            "class": "$xCommandQueue",
+            "types": [
+                "$X_COMMAND_QUEUE_DESC_VERSION_CURRENT"
+            ]
+        },
+        "$x_command_queue_flag_t": {
+            "class": "$xCommandQueue",
+            "types": [
+                "$X_COMMAND_QUEUE_FLAG_NONE",
+                "$X_COMMAND_QUEUE_FLAG_COPY_ONLY",
+                "$X_COMMAND_QUEUE_FLAG_LOGICAL_ONLY",
+                "$X_COMMAND_QUEUE_FLAG_SINGLE_SLICE_ONLY"
+            ]
+        },
+        "$x_command_queue_mode_t": {
+            "class": "$xCommandQueue",
+            "types": [
+                "$X_COMMAND_QUEUE_MODE_DEFAULT",
+                "$X_COMMAND_QUEUE_MODE_SYNCHRONOUS",
+                "$X_COMMAND_QUEUE_MODE_ASYNCHRONOUS"
+            ]
+        },
+        "$x_command_queue_priority_t": {
+            "class": "$xCommandQueue",
+            "types": [
+                "$X_COMMAND_QUEUE_PRIORITY_NORMAL",
+                "$X_COMMAND_QUEUE_PRIORITY_LOW",
+                "$X_COMMAND_QUEUE_PRIORITY_HIGH"
+            ]
+        },
+        "$x_device_cache_properties_version_t": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$X_DEVICE_CACHE_PROPERTIES_VERSION_CURRENT"
+            ]
+        },
+        "$x_device_compute_properties_version_t": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$X_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT"
+            ]
+        },
+        "$x_device_image_properties_version_t": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$X_DEVICE_IMAGE_PROPERTIES_VERSION_CURRENT"
+            ]
+        },
+        "$x_device_mem_alloc_flag_t": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$X_DEVICE_MEM_ALLOC_FLAG_DEFAULT",
+                "$X_DEVICE_MEM_ALLOC_FLAG_BIAS_CACHED",
+                "$X_DEVICE_MEM_ALLOC_FLAG_BIAS_UNCACHED"
+            ]
+        },
+        "$x_device_memory_access_properties_version_t": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$X_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT"
+            ]
+        },
+        "$x_device_memory_properties_version_t": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$X_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT"
+            ]
+        },
+        "$x_device_p2p_properties_version_t": {
+            "class": "$xDevice",
+            "types": [
+                "$X_DEVICE_P2P_PROPERTIES_VERSION_CURRENT"
+            ]
+        },
+        "$x_device_properties_version_t": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$X_DEVICE_PROPERTIES_VERSION_CURRENT"
+            ]
+        },
+        "$x_device_type_t": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$X_DEVICE_TYPE_GPU",
+                "$X_DEVICE_TYPE_FPGA"
+            ]
+        },
+        "$x_event_desc_version_t": {
+            "class": "$xEvent",
+            "types": [
+                "$X_EVENT_DESC_VERSION_CURRENT"
+            ]
+        },
+        "$x_event_pool_desc_version_t": {
+            "class": "$xEventPool",
+            "types": [
+                "$X_EVENT_POOL_DESC_VERSION_CURRENT"
+            ]
+        },
+        "$x_event_pool_flag_t": {
+            "class": "$xEventPool",
+            "types": [
+                "$X_EVENT_POOL_FLAG_DEFAULT",
+                "$X_EVENT_POOL_FLAG_HOST_VISIBLE",
+                "$X_EVENT_POOL_FLAG_IPC"
+            ]
+        },
+        "$x_event_scope_flag_t": {
+            "class": "$xEvent",
+            "types": [
+                "$X_EVENT_SCOPE_FLAG_NONE",
+                "$X_EVENT_SCOPE_FLAG_SUBDEVICE",
+                "$X_EVENT_SCOPE_FLAG_DEVICE",
+                "$X_EVENT_SCOPE_FLAG_HOST"
+            ]
+        },
+        "$x_fence_desc_version_t": {
+            "class": "$xFence",
+            "types": [
+                "$X_FENCE_DESC_VERSION_CURRENT"
+            ]
+        },
+        "$x_fence_flag_t": {
+            "class": "$xFence",
+            "types": [
+                "$X_FENCE_FLAG_NONE"
+            ]
+        },
+        "$x_function_desc_version_t": {
+            "class": "$xFunction",
+            "types": [
+                "$X_FUNCTION_DESC_VERSION_CURRENT"
+            ]
+        },
+        "$x_function_flag_t": {
+            "class": "$xFunction",
+            "types": [
+                "$X_FUNCTION_FLAG_NONE",
+                "$X_FUNCTION_FLAG_FORCE_RESIDENCY"
+            ]
+        },
+        "$x_function_get_attribute_t": {
+            "class": "$xFunction",
+            "types": [
+                "$X_FUNCTION_GET_ATTR_MAX_REGS_USED",
+                "$X_FUNCTION_GET_ATTR_NUM_THREAD_DIMENSIONS",
+                "$X_FUNCTION_GET_ATTR_MAX_SHARED_MEM_SIZE",
+                "$X_FUNCTION_GET_ATTR_HAS_SPILL_FILL",
+                "$X_FUNCTION_GET_ATTR_HAS_BARRIERS",
+                "$X_FUNCTION_GET_ATTR_HAS_DPAS"
+            ]
+        },
+        "$x_function_set_attribute_t": {
+            "class": "$xFunction",
+            "types": [
+                "$X_FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS",
+                "$X_FUNCTION_SET_ATTR_INDIRECT_DEVICE_ACCESS",
+                "$X_FUNCTION_SET_ATTR_INDIRECT_SHARED_ACCESS"
+            ]
+        },
+        "$x_host_mem_alloc_flag_t": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$X_HOST_MEM_ALLOC_FLAG_DEFAULT",
+                "$X_HOST_MEM_ALLOC_FLAG_BIAS_CACHED",
+                "$X_HOST_MEM_ALLOC_FLAG_BIAS_UNCACHED",
+                "$X_HOST_MEM_ALLOC_FLAG_BIAS_WRITE_COMBINED"
+            ]
+        },
+        "$x_image_desc_version_t": {
+            "class": "$xImage",
+            "types": [
+                "$X_IMAGE_DESC_VERSION_CURRENT"
+            ]
+        },
+        "$x_image_flag_t": {
+            "class": "$xImage",
+            "types": [
+                "$X_IMAGE_FLAG_PROGRAM_READ",
+                "$X_IMAGE_FLAG_PROGRAM_WRITE",
+                "$X_IMAGE_FLAG_BIAS_CACHED",
+                "$X_IMAGE_FLAG_BIAS_UNCACHED"
+            ]
+        },
+        "$x_image_format_layout_t": {
+            "class": "$xImage",
+            "types": [
+                "$X_IMAGE_FORMAT_LAYOUT_8",
+                "$X_IMAGE_FORMAT_LAYOUT_16",
+                "$X_IMAGE_FORMAT_LAYOUT_32",
+                "$X_IMAGE_FORMAT_LAYOUT_8_8",
+                "$X_IMAGE_FORMAT_LAYOUT_8_8_8_8",
+                "$X_IMAGE_FORMAT_LAYOUT_16_16",
+                "$X_IMAGE_FORMAT_LAYOUT_16_16_16_16",
+                "$X_IMAGE_FORMAT_LAYOUT_32_32",
+                "$X_IMAGE_FORMAT_LAYOUT_32_32_32_32",
+                "$X_IMAGE_FORMAT_LAYOUT_10_10_10_2",
+                "$X_IMAGE_FORMAT_LAYOUT_11_11_10",
+                "$X_IMAGE_FORMAT_LAYOUT_5_6_5",
+                "$X_IMAGE_FORMAT_LAYOUT_5_5_5_1",
+                "$X_IMAGE_FORMAT_LAYOUT_4_4_4_4",
+                "$X_IMAGE_FORMAT_LAYOUT_Y8",
+                "$X_IMAGE_FORMAT_LAYOUT_NV12",
+                "$X_IMAGE_FORMAT_LAYOUT_YUYV",
+                "$X_IMAGE_FORMAT_LAYOUT_VYUY",
+                "$X_IMAGE_FORMAT_LAYOUT_YVYU",
+                "$X_IMAGE_FORMAT_LAYOUT_UYVY",
+                "$X_IMAGE_FORMAT_LAYOUT_AYUV",
+                "$X_IMAGE_FORMAT_LAYOUT_YUAV",
+                "$X_IMAGE_FORMAT_LAYOUT_P010",
+                "$X_IMAGE_FORMAT_LAYOUT_Y410",
+                "$X_IMAGE_FORMAT_LAYOUT_P012",
+                "$X_IMAGE_FORMAT_LAYOUT_Y16",
+                "$X_IMAGE_FORMAT_LAYOUT_P016",
+                "$X_IMAGE_FORMAT_LAYOUT_Y216",
+                "$X_IMAGE_FORMAT_LAYOUT_P216",
+                "$X_IMAGE_FORMAT_LAYOUT_P416"
+            ]
+        },
+        "$x_image_format_swizzle_t": {
+            "class": "$xImage",
+            "types": [
+                "$X_IMAGE_FORMAT_SWIZZLE_R",
+                "$X_IMAGE_FORMAT_SWIZZLE_G",
+                "$X_IMAGE_FORMAT_SWIZZLE_B",
+                "$X_IMAGE_FORMAT_SWIZZLE_A",
+                "$X_IMAGE_FORMAT_SWIZZLE_0",
+                "$X_IMAGE_FORMAT_SWIZZLE_1",
+                "$X_IMAGE_FORMAT_SWIZZLE_X"
+            ]
+        },
+        "$x_image_format_type_t": {
+            "class": "$xImage",
+            "types": [
+                "$X_IMAGE_FORMAT_TYPE_UINT",
+                "$X_IMAGE_FORMAT_TYPE_SINT",
+                "$X_IMAGE_FORMAT_TYPE_UNORM",
+                "$X_IMAGE_FORMAT_TYPE_SNORM",
+                "$X_IMAGE_FORMAT_TYPE_FLOAT"
+            ]
+        },
+        "$x_image_properties_version_t": {
+            "class": "$xImage",
+            "types": [
+                "$X_IMAGE_PROPERTIES_VERSION_CURRENT"
+            ]
+        },
+        "$x_image_sampler_filter_flags_t": {
+            "class": "$xImage",
+            "types": [
+                "$X_IMAGE_SAMPLER_FILTER_FLAGS_NONE",
+                "$X_IMAGE_SAMPLER_FILTER_FLAGS_POINT",
+                "$X_IMAGE_SAMPLER_FILTER_FLAGS_LINEAR"
+            ]
+        },
+        "$x_image_type_t": {
+            "class": "$xImage",
+            "types": [
+                "$X_IMAGE_TYPE_1D",
+                "$X_IMAGE_TYPE_1DARRAY",
+                "$X_IMAGE_TYPE_2D",
+                "$X_IMAGE_TYPE_2DARRAY",
+                "$X_IMAGE_TYPE_3D"
+            ]
+        },
+        "$x_init_flag_t": {
+            "class": "$x",
+            "types": [
+                "$X_INIT_FLAG_NONE",
+                "$X_INIT_FLAG_GPU_ONLY"
+            ]
+        },
+        "$x_ipc_memory_flag_t": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$X_IPC_MEMORY_FLAG_NONE"
+            ]
+        },
+        "$x_memory_access_capabilities_t": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$X_MEMORY_ACCESS_NONE",
+                "$X_MEMORY_ACCESS",
+                "$X_MEMORY_ATOMIC_ACCESS",
+                "$X_MEMORY_CONCURRENT_ACCESS",
+                "$X_MEMORY_CONCURRENT_ATOMIC_ACCESS"
+            ]
+        },
+        "$x_memory_advice_t": {
+            "class": "$xCommandList",
+            "types": [
+                "$X_MEMORY_ADVICE_SET_READ_MOSTLY",
+                "$X_MEMORY_ADVICE_CLEAR_READ_MOSTLY",
+                "$X_MEMORY_ADVICE_SET_PREFERRED_LOCATION",
+                "$X_MEMORY_ADVICE_CLEAR_PREFERRED_LOCATION",
+                "$X_MEMORY_ADVICE_SET_ACCESSED_BY",
+                "$X_MEMORY_ADVICE_CLEAR_ACCESSED_BY",
+                "$X_MEMORY_ADVICE_SET_NON_ATOMIC_MOSTLY",
+                "$X_MEMORY_ADVICE_CLEAR_NON_ATOMIC_MOSTLY",
+                "$X_MEMORY_ADVICE_BIAS_CACHED",
+                "$X_MEMORY_ADVICE_BIAS_UNCACHED"
+            ]
+        },
+        "$x_memory_allocation_properties_version_t": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$X_MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT"
+            ]
+        },
+        "$x_memory_type_t": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$X_MEMORY_TYPE_UNKNOWN",
+                "$X_MEMORY_TYPE_HOST",
+                "$X_MEMORY_TYPE_DEVICE",
+                "$X_MEMORY_TYPE_SHARED"
+            ]
+        },
+        "$x_module_desc_version_t": {
+            "class": "$xModule",
+            "types": [
+                "$X_MODULE_DESC_VERSION_CURRENT"
+            ]
+        },
+        "$x_module_format_t": {
+            "class": "$xModule",
+            "types": [
+                "$X_MODULE_FORMAT_IL_SPIRV",
+                "$X_MODULE_FORMAT_NATIVE"
+            ]
+        },
+        "$x_result_t": {
+            "class": "",
+            "types": [
+                "$X_RESULT_SUCCESS",
+                "$X_RESULT_NOT_READY",
+                "$X_RESULT_ERROR_UNINITIALIZED",
+                "$X_RESULT_ERROR_DEVICE_LOST",
+                "$X_RESULT_ERROR_UNSUPPORTED",
+                "$X_RESULT_ERROR_INVALID_ARGUMENT",
+                "$X_RESULT_ERROR_OUT_OF_HOST_MEMORY",
+                "$X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY",
+                "$X_RESULT_ERROR_MODULE_BUILD_FAILURE",
+                "$X_RESULT_ERROR_UNKNOWN"
+            ]
+        },
+        "$x_sampler_address_mode_t": {
+            "class": "$xSampler",
+            "types": [
+                "$X_SAMPLER_ADDRESS_MODE_NONE",
+                "$X_SAMPLER_ADDRESS_MODE_REPEAT",
+                "$X_SAMPLER_ADDRESS_MODE_CLAMP",
+                "$X_SAMPLER_ADDRESS_MODE_MIRROR"
+            ]
+        },
+        "$x_sampler_desc_version_t": {
+            "class": "$xSampler",
+            "types": [
+                "$X_SAMPLER_DESC_VERSION_CURRENT"
+            ]
+        },
+        "$x_sampler_filter_mode_t": {
+            "class": "$xSampler",
+            "types": [
+                "$X_SAMPLER_FILTER_MODE_NEAREST",
+                "$X_SAMPLER_FILTER_MODE_LINEAR"
+            ]
+        }
+    },
+    "function": {
+        "$eCommandGraphClose": {
+            "class": "$eCommandGraph",
+            "types": [
+                "$e_command_graph_handle_t"
+            ]
+        },
+        "$eCommandGraphCreate": {
+            "class": "$eCommandGraph",
+            "types": [
+                "$x_device_handle_t",
+                "const $e_command_graph_desc_t*",
+                "$e_command_graph_handle_t*"
+            ]
+        },
+        "$eCommandGraphDestroy": {
+            "class": "$eCommandGraph",
+            "types": [
+                "$e_command_graph_handle_t"
+            ]
+        },
+        "$eCommandListReserveSpace": {
+            "class": "$eCommandList",
+            "types": [
+                "$e_command_list_handle_t",
+                "size_t",
+                "void**"
+            ]
+        },
+        "$eInit": {
+            "class": "$e",
+            "types": [
+                "$x_init_flag_t"
+            ]
+        },
+        "$xCommandListAppendBarrier": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t",
+                "$x_event_handle_t",
+                "uint32_t",
+                "$x_event_handle_t*"
+            ]
+        },
+        "$xCommandListAppendEventReset": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t",
+                "$x_event_handle_t"
+            ]
+        },
+        "$xCommandListAppendImageCopy": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t",
+                "$x_image_handle_t",
+                "$x_image_handle_t",
+                "$x_event_handle_t"
+            ]
+        },
+        "$xCommandListAppendImageCopyFromMemory": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t",
+                "$x_image_handle_t",
+                "const void*",
+                "const $x_image_region_t*",
+                "$x_event_handle_t"
+            ]
+        },
+        "$xCommandListAppendImageCopyRegion": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t",
+                "$x_image_handle_t",
+                "$x_image_handle_t",
+                "const $x_image_region_t*",
+                "const $x_image_region_t*",
+                "$x_event_handle_t"
+            ]
+        },
+        "$xCommandListAppendImageCopyToMemory": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t",
+                "void*",
+                "$x_image_handle_t",
+                "const $x_image_region_t*",
+                "$x_event_handle_t"
+            ]
+        },
+        "$xCommandListAppendLaunchFunction": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t",
+                "$x_function_handle_t",
+                "const $x_thread_group_dimensions_t*",
+                "$x_event_handle_t",
+                "uint32_t",
+                "$x_event_handle_t*"
+            ]
+        },
+        "$xCommandListAppendLaunchFunctionIndirect": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t",
+                "$x_function_handle_t",
+                "const $x_thread_group_dimensions_t*",
+                "$x_event_handle_t",
+                "uint32_t",
+                "$x_event_handle_t*"
+            ]
+        },
+        "$xCommandListAppendLaunchHostFunction": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t",
+                "$x_host_pfn_t",
+                "void*",
+                "$x_event_handle_t",
+                "uint32_t",
+                "$x_event_handle_t*"
+            ]
+        },
+        "$xCommandListAppendLaunchMultipleFunctionsIndirect": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t",
+                "uint32_t",
+                "$x_function_handle_t*",
+                "const uint32_t*",
+                "const $x_thread_group_dimensions_t*",
+                "$x_event_handle_t",
+                "uint32_t",
+                "$x_event_handle_t*"
+            ]
+        },
+        "$xCommandListAppendMemAdvise": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t",
+                "$x_device_handle_t",
+                "const void*",
+                "size_t",
+                "$x_memory_advice_t"
+            ]
+        },
+        "$xCommandListAppendMemoryCopy": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t",
+                "void*",
+                "const void*",
+                "size_t",
+                "$x_event_handle_t"
+            ]
+        },
+        "$xCommandListAppendMemoryCopyRegion": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t",
+                "void*",
+                "const $x_copy_region_t*",
+                "uint32_t",
+                "const void*",
+                "const $x_copy_region_t*",
+                "uint32_t",
+                "$x_event_handle_t"
+            ]
+        },
+        "$xCommandListAppendMemoryPrefetch": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t",
+                "const void*",
+                "size_t"
+            ]
+        },
+        "$xCommandListAppendMemoryRangesBarrier": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t",
+                "uint32_t",
+                "const size_t*",
+                "const void**",
+                "$x_event_handle_t",
+                "uint32_t",
+                "$x_event_handle_t*"
+            ]
+        },
+        "$xCommandListAppendMemorySet": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t",
+                "void*",
+                "int",
+                "size_t",
+                "$x_event_handle_t"
+            ]
+        },
+        "$xCommandListAppendSignalEvent": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t",
+                "$x_event_handle_t"
+            ]
+        },
+        "$xCommandListAppendWaitOnEvents": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t",
+                "uint32_t",
+                "$x_event_handle_t*"
+            ]
+        },
+        "$xCommandListClose": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t"
+            ]
+        },
+        "$xCommandListCreate": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_device_handle_t",
+                "const $x_command_list_desc_t*",
+                "$x_command_list_handle_t*"
+            ]
+        },
+        "$xCommandListCreateImmediate": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_device_handle_t",
+                "const $x_command_queue_desc_t*",
+                "$x_command_list_handle_t*"
+            ]
+        },
+        "$xCommandListDestroy": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t"
+            ]
+        },
+        "$xCommandListGetParameter": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t",
+                "$x_command_list_parameter_t",
+                "uint32_t*"
+            ]
+        },
+        "$xCommandListReset": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t"
+            ]
+        },
+        "$xCommandListResetParameters": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t"
+            ]
+        },
+        "$xCommandListSetParameter": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_handle_t",
+                "$x_command_list_parameter_t",
+                "uint32_t"
+            ]
+        },
+        "$xCommandQueueCreate": {
+            "class": "$xCommandQueue",
+            "types": [
+                "$x_device_handle_t",
+                "const $x_command_queue_desc_t*",
+                "$x_command_queue_handle_t*"
+            ]
+        },
+        "$xCommandQueueDestroy": {
+            "class": "$xCommandQueue",
+            "types": [
+                "$x_command_queue_handle_t"
+            ]
+        },
+        "$xCommandQueueExecuteCommandLists": {
+            "class": "$xCommandQueue",
+            "types": [
+                "$x_command_queue_handle_t",
+                "uint32_t",
+                "$x_command_list_handle_t*",
+                "$x_fence_handle_t"
+            ]
+        },
+        "$xCommandQueueSynchronize": {
+            "class": "$xCommandQueue",
+            "types": [
+                "$x_command_queue_handle_t",
+                "uint32_t"
+            ]
+        },
+        "$xDeviceCanAccessPeer": {
+            "class": "$xDevice",
+            "types": [
+                "$x_device_handle_t",
+                "$x_device_handle_t",
+                "$x_bool_t*"
+            ]
+        },
+        "$xDeviceEvictImage": {
+            "class": "$xDevice",
+            "types": [
+                "$x_device_handle_t",
+                "$x_image_handle_t"
+            ]
+        },
+        "$xDeviceEvictMemory": {
+            "class": "$xDevice",
+            "types": [
+                "$x_device_handle_t",
+                "void*",
+                "size_t"
+            ]
+        },
+        "$xDeviceGet": {
+            "class": "$xDevice",
+            "types": [
+                "$x_device_group_handle_t",
+                "uint32_t*",
+                "$x_device_handle_t*"
+            ]
+        },
+        "$xDeviceGetP2PProperties": {
+            "class": "$xDevice",
+            "types": [
+                "$x_device_handle_t",
+                "$x_device_handle_t",
+                "$x_device_p2p_properties_t*"
+            ]
+        },
+        "$xDeviceGetSubDevices": {
+            "class": "$xDevice",
+            "types": [
+                "$x_device_handle_t",
+                "uint32_t*",
+                "$x_device_handle_t*"
+            ]
+        },
+        "$xDeviceGroupAllocDeviceMem": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_device_group_handle_t",
+                "$x_device_handle_t",
+                "$x_device_mem_alloc_flag_t",
+                "uint32_t",
+                "size_t",
+                "size_t",
+                "void**"
+            ]
+        },
+        "$xDeviceGroupAllocHostMem": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_device_group_handle_t",
+                "$x_host_mem_alloc_flag_t",
+                "size_t",
+                "size_t",
+                "void**"
+            ]
+        },
+        "$xDeviceGroupAllocSharedMem": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_device_group_handle_t",
+                "$x_device_handle_t",
+                "$x_device_mem_alloc_flag_t",
+                "uint32_t",
+                "$x_host_mem_alloc_flag_t",
+                "size_t",
+                "size_t",
+                "void**"
+            ]
+        },
+        "$xDeviceGroupCloseMemIpcHandle": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_device_group_handle_t",
+                "const void*"
+            ]
+        },
+        "$xDeviceGroupFreeMem": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_device_group_handle_t",
+                "void*"
+            ]
+        },
+        "$xDeviceGroupGet": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "uint32_t*",
+                "$x_device_group_handle_t*"
+            ]
+        },
+        "$xDeviceGroupGetApiVersion": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_device_group_handle_t",
+                "$x_api_version_t*"
+            ]
+        },
+        "$xDeviceGroupGetCacheProperties": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_device_group_handle_t",
+                "$x_device_cache_properties_t*"
+            ]
+        },
+        "$xDeviceGroupGetComputeProperties": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_device_group_handle_t",
+                "$x_device_compute_properties_t*"
+            ]
+        },
+        "$xDeviceGroupGetDeviceProperties": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_device_group_handle_t",
+                "$x_device_properties_t*"
+            ]
+        },
+        "$xDeviceGroupGetDriverVersion": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_device_group_handle_t",
+                "uint32_t*"
+            ]
+        },
+        "$xDeviceGroupGetImageProperties": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_device_group_handle_t",
+                "$x_device_image_properties_t*"
+            ]
+        },
+        "$xDeviceGroupGetMemAddressRange": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_device_group_handle_t",
+                "const void*",
+                "void**",
+                "size_t*"
+            ]
+        },
+        "$xDeviceGroupGetMemIpcHandle": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_device_group_handle_t",
+                "const void*",
+                "$x_ipc_mem_handle_t*"
+            ]
+        },
+        "$xDeviceGroupGetMemProperties": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_device_group_handle_t",
+                "const void*",
+                "$x_memory_allocation_properties_t*",
+                "$x_device_handle_t*"
+            ]
+        },
+        "$xDeviceGroupGetMemoryAccessProperties": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_device_group_handle_t",
+                "$x_device_memory_access_properties_t*"
+            ]
+        },
+        "$xDeviceGroupGetMemoryProperties": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_device_group_handle_t",
+                "uint32_t*",
+                "$x_device_memory_properties_t*"
+            ]
+        },
+        "$xDeviceGroupOpenMemIpcHandle": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_device_group_handle_t",
+                "$x_device_handle_t",
+                "$x_ipc_mem_handle_t",
+                "$x_ipc_memory_flag_t",
+                "void**"
+            ]
+        },
+        "$xDeviceMakeImageResident": {
+            "class": "$xDevice",
+            "types": [
+                "$x_device_handle_t",
+                "$x_image_handle_t"
+            ]
+        },
+        "$xDeviceMakeMemoryResident": {
+            "class": "$xDevice",
+            "types": [
+                "$x_device_handle_t",
+                "void*",
+                "size_t"
+            ]
+        },
+        "$xDeviceRegisterCLCommandQueue": {
+            "class": "$xDevice",
+            "types": [
+                "$x_device_handle_t",
+                "cl_context",
+                "cl_command_queue",
+                "$x_command_queue_handle_t*"
+            ]
+        },
+        "$xDeviceRegisterCLMemory": {
+            "class": "$xDevice",
+            "types": [
+                "$x_device_handle_t",
+                "cl_context",
+                "cl_mem",
+                "void**"
+            ]
+        },
+        "$xDeviceRegisterCLProgram": {
+            "class": "$xDevice",
+            "types": [
+                "$x_device_handle_t",
+                "cl_context",
+                "cl_program",
+                "$x_module_handle_t*"
+            ]
+        },
+        "$xDeviceSetIntermediateCacheConfig": {
+            "class": "$xDevice",
+            "types": [
+                "$x_device_handle_t",
+                "$x_cache_config_t"
+            ]
+        },
+        "$xDeviceSetLastLevelCacheConfig": {
+            "class": "$xDevice",
+            "types": [
+                "$x_device_handle_t",
+                "$x_cache_config_t"
+            ]
+        },
+        "$xDeviceSystemBarrier": {
+            "class": "$xDevice",
+            "types": [
+                "$x_device_handle_t"
+            ]
+        },
+        "$xEventCreate": {
+            "class": "$xEvent",
+            "types": [
+                "$x_event_pool_handle_t",
+                "const $x_event_desc_t*",
+                "$x_event_handle_t*"
+            ]
+        },
+        "$xEventDestroy": {
+            "class": "$xEvent",
+            "types": [
+                "$x_event_handle_t"
+            ]
+        },
+        "$xEventHostSignal": {
+            "class": "$xEvent",
+            "types": [
+                "$x_event_handle_t"
+            ]
+        },
+        "$xEventHostSynchronize": {
+            "class": "$xEvent",
+            "types": [
+                "$x_event_handle_t",
+                "uint32_t"
+            ]
+        },
+        "$xEventPoolCloseIpcHandle": {
+            "class": "$xEventPool",
+            "types": [
+                "$x_event_pool_handle_t"
+            ]
+        },
+        "$xEventPoolCreate": {
+            "class": "$xEventPool",
+            "types": [
+                "$x_device_group_handle_t",
+                "const $x_event_pool_desc_t*",
+                "uint32_t",
+                "$x_device_handle_t*",
+                "$x_event_pool_handle_t*"
+            ]
+        },
+        "$xEventPoolDestroy": {
+            "class": "$xEventPool",
+            "types": [
+                "$x_event_pool_handle_t"
+            ]
+        },
+        "$xEventPoolGetIpcHandle": {
+            "class": "$xEventPool",
+            "types": [
+                "$x_event_pool_handle_t",
+                "$x_ipc_event_pool_handle_t*"
+            ]
+        },
+        "$xEventPoolOpenIpcHandle": {
+            "class": "$xEventPool",
+            "types": [
+                "$x_device_handle_t",
+                "$x_ipc_event_pool_handle_t",
+                "$x_event_pool_handle_t*"
+            ]
+        },
+        "$xEventQueryStatus": {
+            "class": "$xEvent",
+            "types": [
+                "$x_event_handle_t"
+            ]
+        },
+        "$xEventReset": {
+            "class": "$xEvent",
+            "types": [
+                "$x_event_handle_t"
+            ]
+        },
+        "$xFenceCreate": {
+            "class": "$xFence",
+            "types": [
+                "$x_command_queue_handle_t",
+                "const $x_fence_desc_t*",
+                "$x_fence_handle_t*"
+            ]
+        },
+        "$xFenceDestroy": {
+            "class": "$xFence",
+            "types": [
+                "$x_fence_handle_t"
+            ]
+        },
+        "$xFenceHostSynchronize": {
+            "class": "$xFence",
+            "types": [
+                "$x_fence_handle_t",
+                "uint32_t"
+            ]
+        },
+        "$xFenceQueryStatus": {
+            "class": "$xFence",
+            "types": [
+                "$x_fence_handle_t"
+            ]
+        },
+        "$xFenceReset": {
+            "class": "$xFence",
+            "types": [
+                "$x_fence_handle_t"
+            ]
+        },
+        "$xFunctionCreate": {
+            "class": "$xFunction",
+            "types": [
+                "$x_module_handle_t",
+                "const $x_function_desc_t*",
+                "$x_function_handle_t*"
+            ]
+        },
+        "$xFunctionDestroy": {
+            "class": "$xFunction",
+            "types": [
+                "$x_function_handle_t"
+            ]
+        },
+        "$xFunctionGetAttribute": {
+            "class": "$xFunction",
+            "types": [
+                "$x_function_handle_t",
+                "$x_function_get_attribute_t",
+                "uint32_t*"
+            ]
+        },
+        "$xFunctionSetArgumentValue": {
+            "class": "$xFunction",
+            "types": [
+                "$x_function_handle_t",
+                "uint32_t",
+                "size_t",
+                "const void*"
+            ]
+        },
+        "$xFunctionSetAttribute": {
+            "class": "$xFunction",
+            "types": [
+                "$x_function_handle_t",
+                "$x_function_set_attribute_t",
+                "uint32_t"
+            ]
+        },
+        "$xFunctionSetGroupSize": {
+            "class": "$xFunction",
+            "types": [
+                "$x_function_handle_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t"
+            ]
+        },
+        "$xFunctionSuggestGroupSize": {
+            "class": "$xFunction",
+            "types": [
+                "$x_function_handle_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t*",
+                "uint32_t*",
+                "uint32_t*"
+            ]
+        },
+        "$xImageCreate": {
+            "class": "$xImage",
+            "types": [
+                "$x_device_handle_t",
+                "const $x_image_desc_t*",
+                "$x_image_handle_t*"
+            ]
+        },
+        "$xImageDestroy": {
+            "class": "$xImage",
+            "types": [
+                "$x_image_handle_t"
+            ]
+        },
+        "$xImageGetProperties": {
+            "class": "$xImage",
+            "types": [
+                "$x_device_handle_t",
+                "const $x_image_desc_t*",
+                "$x_image_properties_t*"
+            ]
+        },
+        "$xInit": {
+            "class": "$x",
+            "types": [
+                "$x_init_flag_t"
+            ]
+        },
+        "$xModuleBuildLogDestroy": {
+            "class": "$xModuleBuildLog",
+            "types": [
+                "$x_module_build_log_handle_t"
+            ]
+        },
+        "$xModuleBuildLogGetString": {
+            "class": "$xModuleBuildLog",
+            "types": [
+                "$x_module_build_log_handle_t",
+                "size_t*",
+                "char*"
+            ]
+        },
+        "$xModuleCreate": {
+            "class": "$xModule",
+            "types": [
+                "$x_device_handle_t",
+                "const $x_module_desc_t*",
+                "$x_module_handle_t*",
+                "$x_module_build_log_handle_t*"
+            ]
+        },
+        "$xModuleDestroy": {
+            "class": "$xModule",
+            "types": [
+                "$x_module_handle_t"
+            ]
+        },
+        "$xModuleGetFunctionPointer": {
+            "class": "$xModule",
+            "types": [
+                "$x_module_handle_t",
+                "const char*",
+                "void**"
+            ]
+        },
+        "$xModuleGetGlobalPointer": {
+            "class": "$xModule",
+            "types": [
+                "$x_module_handle_t",
+                "const char*",
+                "void**"
+            ]
+        },
+        "$xModuleGetNativeBinary": {
+            "class": "$xModule",
+            "types": [
+                "$x_module_handle_t",
+                "size_t*",
+                "uint8_t*"
+            ]
+        },
+        "$xSamplerCreate": {
+            "class": "$xSampler",
+            "types": [
+                "$x_device_handle_t",
+                "const $x_sampler_desc_t*",
+                "$x_sampler_handle_t*"
+            ]
+        },
+        "$xSamplerDestroy": {
+            "class": "$xSampler",
+            "types": [
+                "$x_sampler_handle_t"
+            ]
+        }
+    },
+    "handle": {
+        "$e_command_graph_handle_t": {
+            "class": "$eCommandGraph",
+            "types": []
+        },
+        "$e_command_list_handle_t": {
+            "class": "$eCommandList",
+            "types": []
+        },
+        "$x_command_list_handle_t": {
+            "class": "$xCommandList",
+            "types": []
+        },
+        "$x_command_queue_handle_t": {
+            "class": "$xCommandQueue",
+            "types": []
+        },
+        "$x_device_group_handle_t": {
+            "class": "$xDeviceGroup",
+            "types": []
+        },
+        "$x_device_handle_t": {
+            "class": "$xDevice",
+            "types": []
+        },
+        "$x_event_handle_t": {
+            "class": "$xEvent",
+            "types": []
+        },
+        "$x_event_pool_handle_t": {
+            "class": "$xEventPool",
+            "types": []
+        },
+        "$x_fence_handle_t": {
+            "class": "$xFence",
+            "types": []
+        },
+        "$x_function_handle_t": {
+            "class": "$xFunction",
+            "types": []
+        },
+        "$x_image_handle_t": {
+            "class": "$xImage",
+            "types": []
+        },
+        "$x_ipc_event_pool_handle_t": {
+            "class": "",
+            "types": []
+        },
+        "$x_ipc_mem_handle_t": {
+            "class": "",
+            "types": []
+        },
+        "$x_module_build_log_handle_t": {
+            "class": "$xModuleBuildLog",
+            "types": []
+        },
+        "$x_module_handle_t": {
+            "class": "$xModule",
+            "types": []
+        },
+        "$x_sampler_handle_t": {
+            "class": "$xSampler",
+            "types": []
+        }
+    },
+    "macro": {
+        "$X_BIT": {
+            "class": "",
+            "types": [
+                "( 1 << _i )"
+            ]
+        },
+        "$X_ENABLE_OCL_INTEROP": {
+            "class": "",
+            "types": [
+                "0"
+            ]
+        },
+        "$X_MAJOR_VERSION": {
+            "class": "",
+            "types": [
+                "( _ver >> 16 )"
+            ]
+        },
+        "$X_MAKE_VERSION": {
+            "class": "",
+            "types": [
+                "(( _major << 16 )|( _minor & 0x0000ffff))"
+            ]
+        },
+        "$X_MAX_DEVICE_NAME": {
+            "class": "",
+            "types": [
+                "256"
+            ]
+        },
+        "$X_MAX_UUID_SIZE": {
+            "class": "",
+            "types": [
+                "16"
+            ]
+        },
+        "$X_MINOR_VERSION": {
+            "class": "",
+            "types": [
+                "( _ver & 0x0000ffff )"
+            ]
+        },
+        "$X_SUBGROUPSIZE_COUNT": {
+            "class": "",
+            "types": [
+                "8"
+            ]
+        },
+        "__$xcall": {
+            "class": "",
+            "types": [
+                "__cdecl",
+                ""
+            ]
+        },
+        "__$xdllexport": {
+            "class": "",
+            "types": [
+                "__declspec(dllexport)",
+                ""
+            ]
+        }
+    },
+    "struct": {
+        "$e_command_graph_desc_t": {
+            "class": "$eCommandGraph",
+            "types": [
+                "$e_command_graph_desc_version_t",
+                "$e_command_graph_flag_t"
+            ]
+        },
+        "$x_command_list_desc_t": {
+            "class": "$xCommandList",
+            "types": [
+                "$x_command_list_desc_version_t",
+                "$x_command_list_flag_t"
+            ]
+        },
+        "$x_command_queue_desc_t": {
+            "class": "$xCommandQueue",
+            "types": [
+                "$x_command_queue_desc_version_t",
+                "$x_command_queue_flag_t",
+                "$x_command_queue_mode_t",
+                "$x_command_queue_priority_t",
+                "uint32_t"
+            ]
+        },
+        "$x_copy_region_t": {
+            "class": "$xCommandList",
+            "types": [
+                "uint32_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t"
+            ]
+        },
+        "$x_device_cache_properties_t": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_device_cache_properties_version_t",
+                "$x_bool_t",
+                "size_t",
+                "$x_bool_t",
+                "size_t"
+            ]
+        },
+        "$x_device_compute_properties_t": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_device_compute_properties_version_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t"
+            ]
+        },
+        "$x_device_image_properties_t": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_device_image_properties_version_t",
+                "$x_bool_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t"
+            ]
+        },
+        "$x_device_memory_access_properties_t": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_device_memory_access_properties_version_t",
+                "$x_memory_access_capabilities_t",
+                "$x_memory_access_capabilities_t",
+                "$x_memory_access_capabilities_t",
+                "$x_memory_access_capabilities_t",
+                "$x_memory_access_capabilities_t"
+            ]
+        },
+        "$x_device_memory_properties_t": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_device_memory_properties_version_t",
+                "uint32_t",
+                "uint32_t",
+                "uint64_t"
+            ]
+        },
+        "$x_device_p2p_properties_t": {
+            "class": "$xDevice",
+            "types": [
+                "$x_device_p2p_properties_version_t",
+                "$x_bool_t",
+                "$x_bool_t"
+            ]
+        },
+        "$x_device_properties_t": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_device_properties_version_t",
+                "$x_device_type_t",
+                "uint32_t",
+                "uint32_t",
+                "$x_device_uuid_t",
+                "$x_bool_t",
+                "uint32_t",
+                "uint32_t",
+                "$x_bool_t",
+                "$x_bool_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t",
+                "char"
+            ]
+        },
+        "$x_device_uuid_t": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "uint8_t"
+            ]
+        },
+        "$x_event_desc_t": {
+            "class": "$xEvent",
+            "types": [
+                "$x_event_desc_version_t",
+                "uint32_t",
+                "$x_event_scope_flag_t",
+                "$x_event_scope_flag_t"
+            ]
+        },
+        "$x_event_pool_desc_t": {
+            "class": "$xEventPool",
+            "types": [
+                "$x_event_pool_desc_version_t",
+                "$x_event_pool_flag_t",
+                "uint32_t"
+            ]
+        },
+        "$x_fence_desc_t": {
+            "class": "$xFence",
+            "types": [
+                "$x_fence_desc_version_t",
+                "$x_fence_flag_t"
+            ]
+        },
+        "$x_function_desc_t": {
+            "class": "$xFunction",
+            "types": [
+                "$x_function_desc_version_t",
+                "$x_function_flag_t",
+                "const char*"
+            ]
+        },
+        "$x_image_desc_t": {
+            "class": "$xImage",
+            "types": [
+                "$x_image_desc_version_t",
+                "$x_image_flag_t",
+                "$x_image_type_t",
+                "$x_image_format_desc_t",
+                "size_t",
+                "size_t",
+                "size_t",
+                "size_t",
+                "size_t"
+            ]
+        },
+        "$x_image_format_desc_t": {
+            "class": "$xImage",
+            "types": [
+                "$x_image_format_layout_t",
+                "$x_image_format_type_t",
+                "$x_image_format_swizzle_t",
+                "$x_image_format_swizzle_t",
+                "$x_image_format_swizzle_t",
+                "$x_image_format_swizzle_t"
+            ]
+        },
+        "$x_image_properties_t": {
+            "class": "$xImage",
+            "types": [
+                "$x_image_properties_version_t",
+                "$x_image_sampler_filter_flags_t"
+            ]
+        },
+        "$x_image_region_t": {
+            "class": "$xCommandList",
+            "types": [
+                "uint32_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t",
+                "uint32_t"
+            ]
+        },
+        "$x_memory_allocation_properties_t": {
+            "class": "$xDeviceGroup",
+            "types": [
+                "$x_memory_allocation_properties_version_t",
+                "$x_memory_type_t",
+                "uint64_t"
+            ]
+        },
+        "$x_module_desc_t": {
+            "class": "$xModule",
+            "types": [
+                "$x_module_desc_version_t",
+                "$x_module_format_t",
+                "size_t",
+                "const uint8_t*",
+                "const char*"
+            ]
+        },
+        "$x_sampler_desc_t": {
+            "class": "$xSampler",
+            "types": [
+                "$x_sampler_desc_version_t",
+                "$x_sampler_address_mode_t",
+                "$x_sampler_filter_mode_t",
+                "$x_bool_t"
+            ]
+        },
+        "$x_thread_group_dimensions_t": {
+            "class": "$xCommandList",
+            "types": [
+                "uint32_t",
+                "uint32_t",
+                "uint32_t"
+            ]
+        }
+    },
+    "typedef": {
+        "$x_bool_t": {
+            "class": "",
+            "types": []
+        },
+        "$x_host_pfn_t": {
+            "class": "$xCommandList",
+            "types": []
+        }
+    }
+}

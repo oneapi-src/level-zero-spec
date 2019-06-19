@@ -52,8 +52,8 @@ namespace xet
         using core_callbacks_t = xe_callbacks_t;
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Alias the existing callbacks definition for 'extended' callbacks
-        using extended_callbacks_t = xex_callbacks_t;
+        /// @brief Alias the existing callbacks definition for 'experimental' callbacks
+        using experimental_callbacks_t = xex_callbacks_t;
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief API version of ::tracer_desc_t
@@ -151,7 +151,7 @@ namespace xet
         void __xecall
         SetPrologues(
             core_callbacks_t* pCoreCbs,                     ///< [in] pointer to table of 'core' callback function pointers
-            extended_callbacks_t* pExtendedCbs = nullptr    ///< [in][optional] pointer to table of 'extended' callback function
+            experimental_callbacks_t* pExperimentalCbs = nullptr///< [in][optional] pointer to table of 'experimental' callback function
                                                             ///< pointers
             );
 
@@ -170,7 +170,7 @@ namespace xet
         void __xecall
         SetEpilogues(
             core_callbacks_t* pCoreCbs,                     ///< [in] pointer to table of 'core' callback function pointers
-            extended_callbacks_t* pExtendedCbs = nullptr    ///< [in][optional] pointer to table of 'extended' callback function
+            experimental_callbacks_t* pExperimentalCbs = nullptr///< [in][optional] pointer to table of 'experimental' callback function
                                                             ///< pointers
             );
 

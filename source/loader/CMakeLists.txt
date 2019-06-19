@@ -6,7 +6,7 @@ add_library(${TARGET_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_loader.h
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_loader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_core_loader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_extended_loader.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/xe_experimental_loader.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_tools_loader.cpp
 )
 

@@ -226,29 +226,6 @@ params:
       name: hCommandList
       desc: "[in] handle of the command list"
 --- #--------------------------------------------------------------------------
-type: function
-desc: "Reserve a section of contiguous command buffer space within the command list."
-class: $xCommandList
-name: ReserveSpace
-ordinal: "3"
-details:
-    - "The pointer returned is valid for both Host and device access."
-    - "The application may **not** call this function from simultaneous threads with the same command list handle."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_command_list_handle_t
-      name: hCommandList
-      desc: "[in] handle of the command list"
-    - type: size_t
-      name: size
-      desc: "[in] size (in bytes) to reserve"
-    - type: void**
-      name: ptr
-      desc: "[out] pointer to command buffer space reserved"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-       - "0 for size"
---- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for command list"
 name: $xCommandList

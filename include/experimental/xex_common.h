@@ -21,17 +21,17 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xex_driver.h
+* @file xex_common.h
 *
-* @brief Intel Xe Level-Zero APIs
+* @brief Intel Xe Level-Zero Experimental API common types
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/extended/driver.yml
+* DO NOT EDIT: generated from /scripts/experimental/common.yml
 * @endcond
 *
 ******************************************************************************/
-#ifndef _XEX_DRIVER_H
-#define _XEX_DRIVER_H
+#ifndef _XEX_COMMON_H
+#define _XEX_COMMON_H
 #if defined(__cplusplus)
 #pragma once
 #endif
@@ -44,35 +44,19 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Initialize the Xe driver and must be called before any other API
-///        function.
-/// 
-/// @details
-///     - If this function is not called then all other functions will return
-///       ::XE_RESULT_ERROR_UNINITIALIZED.
-///     - Only one instance of a driver per process will be initialized.
-///     - This function is thread-safe for scenarios where multiple libraries
-///       may initialize the driver simultaneously.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuInit**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for flags
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
-xe_result_t __xecall
-xexInit(
-    xe_init_flag_t flags                            ///< [in] initialization flags
-    );
+/// @brief Handle of command list object
+typedef xe_command_list_handle_t xex_command_list_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Handle of driver's command graph object
+typedef struct _xex_command_graph_handle_t *xex_command_graph_handle_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xex_command_graph_desc_t
+typedef struct _xex_command_graph_desc_t xex_command_graph_desc_t;
 
 #if defined(__cplusplus)
 } // extern "C"
 #endif
 
-#endif // _XEX_DRIVER_H
+#endif // _XEX_COMMON_H

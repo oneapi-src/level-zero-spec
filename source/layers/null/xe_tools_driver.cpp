@@ -969,7 +969,7 @@ namespace driver
     xetTracerSetPrologues(
         xet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
         xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
-        xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
+        xet_experimental_callbacks_t* pExperimentalCbs  ///< [in][optional] pointer to table of 'experimental' callback function
                                                         ///< pointers
         )
     {
@@ -977,7 +977,7 @@ namespace driver
 
         auto index = reinterpret_cast<size_t>( hTracer );
         context.tracerData[ index ].xePrologueCbs = *pCoreCbs;
-        if( pExtendedCbs ) context.tracerData[ index ].xexPrologueCbs = *pExtendedCbs;
+        if( pExperimentalCbs ) context.tracerData[ index ].xexPrologueCbs = *pExperimentalCbs;
 
         return result;
     }
@@ -988,7 +988,7 @@ namespace driver
     xetTracerSetEpilogues(
         xet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
         xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
-        xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
+        xet_experimental_callbacks_t* pExperimentalCbs  ///< [in][optional] pointer to table of 'experimental' callback function
                                                         ///< pointers
         )
     {
@@ -996,7 +996,7 @@ namespace driver
 
         auto index = reinterpret_cast<size_t>( hTracer );
         context.tracerData[ index ].xeEpilogueCbs = *pCoreCbs;
-        if( pExtendedCbs ) context.tracerData[ index ].xexEpilogueCbs = *pExtendedCbs;
+        if( pExperimentalCbs ) context.tracerData[ index ].xexEpilogueCbs = *pExperimentalCbs;
 
         return result;
     }

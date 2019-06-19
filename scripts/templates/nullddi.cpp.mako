@@ -160,12 +160,12 @@ namespace driver
         %elif re.match(r"\w+TracerSetPrologues", fname):
         auto index = reinterpret_cast<size_t>( hTracer );
         context.tracerData[ index ].xePrologueCbs = *pCoreCbs;
-        if( pExtendedCbs ) context.tracerData[ index ].xexPrologueCbs = *pExtendedCbs;
+        if( pExperimentalCbs ) context.tracerData[ index ].xexPrologueCbs = *pExperimentalCbs;
 
         %elif re.match(r"\w+TracerSetEpilogues", fname):
         auto index = reinterpret_cast<size_t>( hTracer );
         context.tracerData[ index ].xeEpilogueCbs = *pCoreCbs;
-        if( pExtendedCbs ) context.tracerData[ index ].xexEpilogueCbs = *pExtendedCbs;
+        if( pExperimentalCbs ) context.tracerData[ index ].xexEpilogueCbs = *pExperimentalCbs;
 
         %elif re.match(r"\w+TracerSetEnabled", fname):
         auto index = reinterpret_cast<size_t>( hTracer );

@@ -1,7 +1,13 @@
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $OneApi Level-Zero Extended API common types"
+desc: "Intel $OneApi Level-Zero Experimental API common types"
 ordinal: "0"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of command list object"
+class: $eCommandList
+name: "$e_command_list_handle_t"
+alias: "$x_command_list_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's command graph object"

@@ -330,24 +330,6 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Reserve a section of contiguous command buffer space within the
-        ///        command list.
-        /// 
-        /// @details
-        ///     - The pointer returned is valid for both Host and device access.
-        ///     - The application may **not** call this function from simultaneous
-        ///       threads with the same command list handle.
-        ///     - The implementation of this function should be lock-free.
-        /// @returns
-        ///     - void*: pointer to command buffer space reserved
-        /// 
-        /// @throws result_t
-        void* __xecall
-        ReserveSpace(
-            size_t size                                     ///< [in] size (in bytes) to reserve
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Appends an execution and global memory barrier into a command list.
         /// 
         /// @details

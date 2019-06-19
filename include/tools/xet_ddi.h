@@ -555,7 +555,7 @@ typedef xe_result_t (__xecall *xet_pfnTracerDestroy_t)(
 typedef xe_result_t (__xecall *xet_pfnTracerSetPrologues_t)(
     xet_tracer_handle_t,
     xet_core_callbacks_t*,
-    xet_extended_callbacks_t*
+    xet_experimental_callbacks_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -563,7 +563,7 @@ typedef xe_result_t (__xecall *xet_pfnTracerSetPrologues_t)(
 typedef xe_result_t (__xecall *xet_pfnTracerSetEpilogues_t)(
     xet_tracer_handle_t,
     xet_core_callbacks_t*,
-    xet_extended_callbacks_t*
+    xet_experimental_callbacks_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////

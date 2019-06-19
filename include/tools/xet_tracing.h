@@ -50,8 +50,8 @@ extern "C" {
 typedef xe_callbacks_t xet_core_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Alias the existing callbacks definition for 'extended' callbacks
-typedef xex_callbacks_t xet_extended_callbacks_t;
+/// @brief Alias the existing callbacks definition for 'experimental' callbacks
+typedef xex_callbacks_t xet_experimental_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xet_tracer_desc_t
@@ -145,7 +145,7 @@ xe_result_t __xecall
 xetTracerSetPrologues(
     xet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
     xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
-    xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
+    xet_experimental_callbacks_t* pExperimentalCbs  ///< [in][optional] pointer to table of 'experimental' callback function
                                                     ///< pointers
     );
 
@@ -173,7 +173,7 @@ xe_result_t __xecall
 xetTracerSetEpilogues(
     xet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
     xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
-    xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
+    xet_experimental_callbacks_t* pExperimentalCbs  ///< [in][optional] pointer to table of 'experimental' callback function
                                                     ///< pointers
     );
 

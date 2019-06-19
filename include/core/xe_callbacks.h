@@ -918,24 +918,6 @@ typedef void (__xecall *xe_pfnCommandListResetParametersCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeCommandListReserveSpace 
-typedef struct _xe_command_list_reserve_space_params_t
-{
-    xe_command_list_handle_t* phCommandList;
-    size_t* psize;
-    void*** pptr;
-} xe_command_list_reserve_space_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeCommandListReserveSpace 
-typedef void (__xecall *xe_pfnCommandListReserveSpaceCb_t)(
-    xe_command_list_reserve_space_params_t* params,
-    xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListAppendBarrier 
 typedef struct _xe_command_list_append_barrier_params_t
 {
@@ -1307,7 +1289,6 @@ typedef struct _xe_command_list_callbacks_t
     xe_pfnCommandListSetParameterCb_t                               pfnSetParameterCb;
     xe_pfnCommandListGetParameterCb_t                               pfnGetParameterCb;
     xe_pfnCommandListResetParametersCb_t                            pfnResetParametersCb;
-    xe_pfnCommandListReserveSpaceCb_t                               pfnReserveSpaceCb;
     xe_pfnCommandListAppendBarrierCb_t                              pfnAppendBarrierCb;
     xe_pfnCommandListAppendMemoryRangesBarrierCb_t                  pfnAppendMemoryRangesBarrierCb;
     xe_pfnCommandListAppendMemoryCopyCb_t                           pfnAppendMemoryCopyCb;

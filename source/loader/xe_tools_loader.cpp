@@ -1497,7 +1497,7 @@ namespace loader
     xetTracerSetPrologues(
         xet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
         xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
-        xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
+        xet_experimental_callbacks_t* pExperimentalCbs  ///< [in][optional] pointer to table of 'experimental' callback function
                                                         ///< pointers
         )
     {
@@ -1508,7 +1508,7 @@ namespace loader
         hTracer = reinterpret_cast<xet_tracer_object_t*>( hTracer )->handle;
 
         // forward to device-driver
-        auto result = dditable->xet.Tracer.pfnSetPrologues( hTracer, pCoreCbs, pExtendedCbs );
+        auto result = dditable->xet.Tracer.pfnSetPrologues( hTracer, pCoreCbs, pExperimentalCbs );
 
         return result;
     }
@@ -1519,7 +1519,7 @@ namespace loader
     xetTracerSetEpilogues(
         xet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
         xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
-        xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
+        xet_experimental_callbacks_t* pExperimentalCbs  ///< [in][optional] pointer to table of 'experimental' callback function
                                                         ///< pointers
         )
     {
@@ -1530,7 +1530,7 @@ namespace loader
         hTracer = reinterpret_cast<xet_tracer_object_t*>( hTracer )->handle;
 
         // forward to device-driver
-        auto result = dditable->xet.Tracer.pfnSetEpilogues( hTracer, pCoreCbs, pExtendedCbs );
+        auto result = dditable->xet.Tracer.pfnSetEpilogues( hTracer, pCoreCbs, pExperimentalCbs );
 
         return result;
     }

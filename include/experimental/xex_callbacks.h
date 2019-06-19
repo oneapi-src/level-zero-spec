@@ -23,7 +23,7 @@
 * @file xex_callbacks.h
 *
 * @cond DEV
-* DO NOT EDIT: generated from /scripts/extended
+* DO NOT EDIT: generated from /scripts/experimental
 * @endcond
 *
 ******************************************************************************/
@@ -60,6 +60,31 @@ typedef struct _xex_global_callbacks_t
 {
     xex_pfnInitCb_t                                                 pfnInitCb;
 } xex_global_callbacks_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for xexCommandListReserveSpace 
+typedef struct _xex_command_list_reserve_space_params_t
+{
+    xex_command_list_handle_t* phCommandList;
+    size_t* psize;
+    void*** pptr;
+} xex_command_list_reserve_space_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for xexCommandListReserveSpace 
+typedef void (__xecall *xex_pfnCommandListReserveSpaceCb_t)(
+    xex_command_list_reserve_space_params_t* params,
+    xe_result_t result,
+    void* pGlobalUserData,
+    void** ppLocalUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of CommandList callback functions pointers
+typedef struct _xex_command_list_callbacks_t
+{
+    xex_pfnCommandListReserveSpaceCb_t                              pfnReserveSpaceCb;
+} xex_command_list_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xexCommandGraphCreate 
@@ -125,6 +150,7 @@ typedef struct _xex_command_graph_callbacks_t
 typedef struct _xex_callbacks_t
 {
     xex_global_callbacks_t              Global;
+    xex_command_list_callbacks_t        CommandList;
     xex_command_graph_callbacks_t       CommandGraph;
 } xex_callbacks_t;
 

@@ -1723,7 +1723,7 @@ namespace layer
     xetTracerSetPrologues(
         xet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
         xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
-        xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
+        xet_experimental_callbacks_t* pExperimentalCbs  ///< [in][optional] pointer to table of 'experimental' callback function
                                                         ///< pointers
         )
     {
@@ -1742,7 +1742,7 @@ namespace layer
 
         }
 
-        return pfnSetPrologues( hTracer, pCoreCbs, pExtendedCbs );
+        return pfnSetPrologues( hTracer, pCoreCbs, pExperimentalCbs );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1751,7 +1751,7 @@ namespace layer
     xetTracerSetEpilogues(
         xet_tracer_handle_t hTracer,                    ///< [in] handle of the tracer
         xet_core_callbacks_t* pCoreCbs,                 ///< [in] pointer to table of 'core' callback function pointers
-        xet_extended_callbacks_t* pExtendedCbs          ///< [in][optional] pointer to table of 'extended' callback function
+        xet_experimental_callbacks_t* pExperimentalCbs  ///< [in][optional] pointer to table of 'experimental' callback function
                                                         ///< pointers
         )
     {
@@ -1770,7 +1770,7 @@ namespace layer
 
         }
 
-        return pfnSetEpilogues( hTracer, pCoreCbs, pExtendedCbs );
+        return pfnSetEpilogues( hTracer, pCoreCbs, pExperimentalCbs );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

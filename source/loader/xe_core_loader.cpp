@@ -740,27 +740,6 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListReserveSpace
-    xe_result_t __xecall
-    xeCommandListReserveSpace(
-        xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
-        size_t size,                                    ///< [in] size (in bytes) to reserve
-        void** ptr                                      ///< [out] pointer to command buffer space reserved
-        )
-    {
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
-
-        // convert loader handle to driver handle
-        hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
-
-        // forward to device-driver
-        auto result = dditable->xe.CommandList.pfnReserveSpace( hCommandList, size, ptr );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xeCommandListAppendBarrier
     xe_result_t __xecall
     xeCommandListAppendBarrier(
@@ -2901,7 +2880,6 @@ xeGetCommandListProcAddrTable(
             pDdiTable->pfnSetParameter                             = loader::xeCommandListSetParameter;
             pDdiTable->pfnGetParameter                             = loader::xeCommandListGetParameter;
             pDdiTable->pfnResetParameters                          = loader::xeCommandListResetParameters;
-            pDdiTable->pfnReserveSpace                             = loader::xeCommandListReserveSpace;
             pDdiTable->pfnAppendBarrier                            = loader::xeCommandListAppendBarrier;
             pDdiTable->pfnAppendMemoryRangesBarrier                = loader::xeCommandListAppendMemoryRangesBarrier;
             pDdiTable->pfnAppendMemoryCopy                         = loader::xeCommandListAppendMemoryCopy;

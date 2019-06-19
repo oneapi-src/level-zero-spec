@@ -21,7 +21,7 @@
 * express and approved by Intel in writing.  
 * @endcond
 *
-* @file xe_extended_loader.cpp
+* @file xe_experimental_loader.cpp
 *
 * @cond DEV
 * DO NOT EDIT: generated from /scripts/templates/ldrddi.cpp.mako
@@ -33,6 +33,7 @@
 namespace loader
 {
     ///////////////////////////////////////////////////////////////////////////////
+    xex_command_list_factory_t          xex_command_list_factory;
     xex_command_graph_factory_t         xex_command_graph_factory;
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -51,6 +52,27 @@ namespace loader
                 result = drv.dditable.xex.Global.pfnInit( flags );
             }
         }
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xexCommandListReserveSpace
+    xe_result_t __xecall
+    xexCommandListReserveSpace(
+        xex_command_list_handle_t hCommandList,         ///< [in] handle of the command list
+        size_t size,                                    ///< [in] size (in bytes) to reserve
+        void** ptr                                      ///< [out] pointer to command buffer space reserved
+        )
+    {
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xex_command_list_object_t*>( hCommandList )->dditable;
+
+        // convert loader handle to driver handle
+        hCommandList = reinterpret_cast<xex_command_list_object_t*>( hCommandList )->handle;
+
+        // forward to device-driver
+        auto result = dditable->xex.CommandList.pfnReserveSpace( hCommandList, size, ptr );
+
         return result;
     }
 
@@ -189,6 +211,70 @@ xexGetGlobalProcAddrTable(
     {
         static auto getTable = reinterpret_cast<xex_pfnGetGlobalProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "xexGetGlobalProcAddrTable") );
+        result = getTable( version, pDdiTable );
+    }
+
+    return result;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Exported function for filling application's CommandList table
+///        with current process' addresses
+///
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + invalid value for version
+///         + nullptr for pDdiTable
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + version not supported
+__xedllexport xe_result_t __xecall
+xexGetCommandListProcAddrTable(
+    xe_api_version_t version,                       ///< [in] API version requested
+    xex_command_list_dditable_t* pDdiTable          ///< [in,out] pointer to table of DDI function pointers
+    )
+{
+    if( loader::context.drivers.size() < 1 )
+        return XE_RESULT_ERROR_UNINITIALIZED;
+
+    if( nullptr == pDdiTable )
+        return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+    if( loader::context.version < version )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    xe_result_t result = XE_RESULT_SUCCESS;
+
+    // Load the device-driver DDI tables
+    for( auto& drv : loader::context.drivers )
+    {
+        if( XE_RESULT_SUCCESS == result )
+        {
+            static auto getTable = reinterpret_cast<xex_pfnGetCommandListProcAddrTable_t>(
+                GET_FUNCTION_PTR( drv.handle, "xexGetCommandListProcAddrTable") );
+            result = getTable( version, &drv.dditable.xex.CommandList );
+        }
+    }
+
+    if( XE_RESULT_SUCCESS == result )
+    {
+        if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
+        {
+            // return pointers to loader's DDIs
+            pDdiTable->pfnReserveSpace                             = loader::xexCommandListReserveSpace;
+        }
+        else
+        {
+            // return pointers directly to driver's DDIs
+            *pDdiTable = loader::context.drivers.front().dditable.xex.CommandList;
+        }
+    }
+
+    // If the validation layer is enabled, then intercept the loader's DDIs
+    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
+    {
+        static auto getTable = reinterpret_cast<xex_pfnGetCommandListProcAddrTable_t>(
+            GET_FUNCTION_PTR(loader::context.validationLayer, "xexGetCommandListProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 

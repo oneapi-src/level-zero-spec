@@ -113,8 +113,8 @@ Note: "${OneApi}" is a placeholder until One API branding is decided.
 ${"##"} Versioning
 There are multiple versions that should be used by the application to determine compatibility:
 1. API Version - this is the version of the API supported by the device.
-    - This is typically used to determine if the device supports the minimum set of features required by the application.
-    - There is a single API version that represents a collection of features.
+    - This is typically used to determine if the device supports the minimum set of APIs required by the application.
+    - There is a single API version that represents a collection of APIs.
     - The value is determined from calling ::${x}DeviceGroupGetApiVersion
     - The value returned will be the minimum of the ::${x}_api_version_t supported by the device and known by the driver.
 2. Structure Version - these are the versions of the structures passed-by-pointer to the driver.
@@ -123,40 +123,6 @@ There are multiple versions that should be used by the application to determine 
 3. Driver Version - this is the version of the driver installed in the system.
     - This is typically used to mitigate driver implementation issues for a feature.
     - The value is determined from calling ::${x}DeviceGroupGetDriverVersion
-
-${"###"} API Version 1.0
-The following features are required:
-- ::${x}_device_memory_access_properties_t::deviceAllocCapabilities
-
-The following features are optional:
-- ::${x}_device_properties_t::unifiedMemorySupported
-- ::${x}_device_properties_t::onDemandPageFaultsSupported
-- ::${x}_device_p2p_properties_t::accessSupported
-- ::${x}_device_p2p_properties_t::atomicsSupported
-- ::${x}_device_memory_access_properties_t::hostAllocCapabilities
-- ::${x}_device_memory_access_properties_t::sharedSingleDeviceAllocCapabilities
-- ::${x}_device_memory_access_properties_t::sharedCrossDeviceAllocCapabilities
-- ::${x}_device_memory_access_properties_t::sharedSystemAllocCapabilities
-- ::${x}_device_cache_properties_t::intermediateCacheControlSupported
-- ::${x}_device_cache_properties_t::lastLevelCacheSizeControlSupported
-- ::${x}_device_image_properties_t::supported
-
-${"###"} API Version 1.1
-The following features are required:
-- ::${x}_device_memory_access_properties_t::deviceAllocCapabilities
-- ::${x}_device_properties_t::unifiedMemorySupported
-- ::${x}_device_p2p_properties_t::accessSupported
-- ::${x}_device_memory_access_properties_t::hostAllocCapabilities
-- ::${x}_device_memory_access_properties_t::sharedSingleDeviceAllocCapabilities
-- ::${x}_device_memory_access_properties_t::sharedCrossDeviceAllocCapabilities
-- ::${x}_device_memory_access_properties_t::sharedSystemAllocCapabilities
-
-The following features are optional:
-- ::${x}_device_properties_t::onDemandPageFaultsSupported
-- ::${x}_device_p2p_properties_t::atomicsSupported
-- ::${x}_device_cache_properties_t::intermediateCacheControlSupported
-- ::${x}_device_cache_properties_t::lastLevelCacheSizeControlSupported
-- ::${x}_device_image_properties_t::supported
 
 
 ${"##"} Error Handling
@@ -196,13 +162,17 @@ The primary usage-models enabled by these rules is:
 - multiple, simultaneous threads may operate on independent driver objects with no implicit thread-locks
 - driver object handles may be passed between and used by multiple threads with no implicit thread-locks
 
-${"##"} Heterogeneous Device Support
-In order to both expose the full capabilities of GPUs and remain supportable by other devices, the API definition is sub-divided into "Core" and "Extended".  
-"Core" represents APIs that all fully cross-device while "Extended" represents APIs that are device-specific.
-All implementations must support "Core" APIs while "Extended" APIs are optional.
-An implementation will return ::${X}_RESULT_ERROR_UNSUPPORTED for any feature request not supported by that device.
+${"##"} Experimental API Support
+Features which are still being considered for inclusion into the "Core" API, 
+but require additional experimentation by application vendors before ratification,
+are exposed as "Experimental" APIs.
 
-Note: currently all APIs are defined as part of the "Core" specification until they are determined to not be supportable by other devices.
+Applications should not rely on experimental APIs in production.
+- Experimental APIs may be added and removed from the API at any time; with or without an official API revision.
+- Experimental APIs are not gaurenteed to be forward or backward capatible between API versions.
+- Experimental APIs are not gaurenteed to be supported in production driver releases; and may appear and disappear from release to release.
+
+An implementation will return ::${X}_RESULT_ERROR_UNSUPPORTED for any experimental API not supported by that driver.
 
 ${"#"} <a name="drv">Driver Architecture</a>
 The following section provides high-level driver architecture.

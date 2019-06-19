@@ -5,7 +5,7 @@ add_library(${TARGET_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_layer.h
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_layer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_core_layer.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/xe_extended_layer.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/xe_experimental_layer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xe_tools_layer.cpp
 )
 
