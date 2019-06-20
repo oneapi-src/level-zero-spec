@@ -56,7 +56,6 @@ typedef struct _${th.make_pfncb_param_type(n, tags, obj)}
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 %if 'condition' in obj:
 #if ${th.subt(n, tags, obj['condition'])}
 %endif
@@ -64,8 +63,7 @@ typedef void (__${x}call *${th.make_pfncb_type(n, tags, obj)})(
     ${th.make_pfncb_param_type(n, tags, obj)}* params,
     ${x}_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 %if 'condition' in obj:
 #endif // ${th.subt(n, tags, obj['condition'])}

@@ -103,8 +103,6 @@ namespace instrumented
         std::vector<void*> instanceUserData;
         instanceUserData.resize( context.tracerData.size() );
 
-        static void* apiUserData = nullptr;
-
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
             if( context.tracerData[ i ].enabled )
@@ -112,9 +110,8 @@ namespace instrumented
                 auto& table = context.tracerData[ i ].${n}PrologueCbs.${th.get_table_name(n, tags, obj)};
                 if( nullptr != table.${th.make_pfncb_name(n, tags, obj)} )
                     table.${th.make_pfncb_name(n, tags, obj)}( &in_params, result,
-                        context.tracerData[ i ].globalUserData,
-                        &instanceUserData[ i ],
-                        &apiUserData );
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
             }
 
         result = driver::${fname}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
@@ -131,9 +128,8 @@ namespace instrumented
                 auto& table = context.tracerData[ i ].${n}EpilogueCbs.${th.get_table_name(n, tags, obj)};
                 if( nullptr != table.${th.make_pfncb_name(n, tags, obj)} )
                     table.${th.make_pfncb_name(n, tags, obj)}( &out_params, result,
-                        context.tracerData[ i ].globalUserData,
-                        &instanceUserData[ i ],
-                        &apiUserData );
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
             }
 
         return result;

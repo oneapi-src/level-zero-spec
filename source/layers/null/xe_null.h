@@ -47,7 +47,7 @@ namespace instrumented
     {
         bool enabled = false;
 
-        void* globalUserData = nullptr;
+        void* userData = nullptr;
 
         xe_callbacks_t xePrologueCbs = {};
         xe_callbacks_t xeEpilogueCbs = {};

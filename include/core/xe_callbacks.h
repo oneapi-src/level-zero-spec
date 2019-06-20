@@ -37,13 +37,11 @@ typedef struct _xe_init_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnInitCb_t)(
     xe_init_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -70,13 +68,11 @@ typedef struct _xe_device_get_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGetCb_t)(
     xe_device_get_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -96,13 +92,11 @@ typedef struct _xe_device_get_sub_devices_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGetSubDevicesCb_t)(
     xe_device_get_sub_devices_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -122,13 +116,11 @@ typedef struct _xe_device_get_p2_p_properties_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGetP2PPropertiesCb_t)(
     xe_device_get_p2_p_properties_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -148,13 +140,11 @@ typedef struct _xe_device_can_access_peer_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceCanAccessPeerCb_t)(
     xe_device_can_access_peer_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -173,13 +163,11 @@ typedef struct _xe_device_set_intermediate_cache_config_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceSetIntermediateCacheConfigCb_t)(
     xe_device_set_intermediate_cache_config_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -198,13 +186,11 @@ typedef struct _xe_device_set_last_level_cache_config_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceSetLastLevelCacheConfigCb_t)(
     xe_device_set_last_level_cache_config_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -222,13 +208,11 @@ typedef struct _xe_device_system_barrier_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceSystemBarrierCb_t)(
     xe_device_system_barrier_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -251,14 +235,12 @@ typedef struct _xe_device_register_cl_memory_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 #if XE_ENABLE_OCL_INTEROP
 typedef void (__xecall *xe_pfnDeviceRegisterCLMemoryCb_t)(
     xe_device_register_cl_memory_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 #endif // XE_ENABLE_OCL_INTEROP
 
@@ -282,14 +264,12 @@ typedef struct _xe_device_register_cl_program_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 #if XE_ENABLE_OCL_INTEROP
 typedef void (__xecall *xe_pfnDeviceRegisterCLProgramCb_t)(
     xe_device_register_cl_program_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 #endif // XE_ENABLE_OCL_INTEROP
 
@@ -313,14 +293,12 @@ typedef struct _xe_device_register_cl_command_queue_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 #if XE_ENABLE_OCL_INTEROP
 typedef void (__xecall *xe_pfnDeviceRegisterCLCommandQueueCb_t)(
     xe_device_register_cl_command_queue_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 #endif // XE_ENABLE_OCL_INTEROP
 
@@ -341,13 +319,11 @@ typedef struct _xe_device_make_memory_resident_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceMakeMemoryResidentCb_t)(
     xe_device_make_memory_resident_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -367,13 +343,11 @@ typedef struct _xe_device_evict_memory_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceEvictMemoryCb_t)(
     xe_device_evict_memory_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -392,13 +366,11 @@ typedef struct _xe_device_make_image_resident_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceMakeImageResidentCb_t)(
     xe_device_make_image_resident_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -417,13 +389,11 @@ typedef struct _xe_device_evict_image_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceEvictImageCb_t)(
     xe_device_evict_image_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -468,13 +438,11 @@ typedef struct _xe_device_group_get_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetCb_t)(
     xe_device_group_get_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -493,13 +461,11 @@ typedef struct _xe_device_group_get_driver_version_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetDriverVersionCb_t)(
     xe_device_group_get_driver_version_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -518,13 +484,11 @@ typedef struct _xe_device_group_get_api_version_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetApiVersionCb_t)(
     xe_device_group_get_api_version_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -543,13 +507,11 @@ typedef struct _xe_device_group_get_device_properties_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetDevicePropertiesCb_t)(
     xe_device_group_get_device_properties_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -568,13 +530,11 @@ typedef struct _xe_device_group_get_compute_properties_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetComputePropertiesCb_t)(
     xe_device_group_get_compute_properties_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -594,13 +554,11 @@ typedef struct _xe_device_group_get_memory_properties_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetMemoryPropertiesCb_t)(
     xe_device_group_get_memory_properties_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -619,13 +577,11 @@ typedef struct _xe_device_group_get_memory_access_properties_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetMemoryAccessPropertiesCb_t)(
     xe_device_group_get_memory_access_properties_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -644,13 +600,11 @@ typedef struct _xe_device_group_get_cache_properties_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetCachePropertiesCb_t)(
     xe_device_group_get_cache_properties_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -669,13 +623,11 @@ typedef struct _xe_device_group_get_image_properties_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetImagePropertiesCb_t)(
     xe_device_group_get_image_properties_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -700,13 +652,11 @@ typedef struct _xe_device_group_alloc_shared_mem_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupAllocSharedMemCb_t)(
     xe_device_group_alloc_shared_mem_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -730,13 +680,11 @@ typedef struct _xe_device_group_alloc_device_mem_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupAllocDeviceMemCb_t)(
     xe_device_group_alloc_device_mem_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -758,13 +706,11 @@ typedef struct _xe_device_group_alloc_host_mem_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupAllocHostMemCb_t)(
     xe_device_group_alloc_host_mem_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -783,13 +729,11 @@ typedef struct _xe_device_group_free_mem_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupFreeMemCb_t)(
     xe_device_group_free_mem_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -810,13 +754,11 @@ typedef struct _xe_device_group_get_mem_properties_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetMemPropertiesCb_t)(
     xe_device_group_get_mem_properties_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -837,13 +779,11 @@ typedef struct _xe_device_group_get_mem_address_range_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetMemAddressRangeCb_t)(
     xe_device_group_get_mem_address_range_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -863,13 +803,11 @@ typedef struct _xe_device_group_get_mem_ipc_handle_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetMemIpcHandleCb_t)(
     xe_device_group_get_mem_ipc_handle_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -891,13 +829,11 @@ typedef struct _xe_device_group_open_mem_ipc_handle_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupOpenMemIpcHandleCb_t)(
     xe_device_group_open_mem_ipc_handle_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -916,13 +852,11 @@ typedef struct _xe_device_group_close_mem_ipc_handle_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupCloseMemIpcHandleCb_t)(
     xe_device_group_close_mem_ipc_handle_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -966,13 +900,11 @@ typedef struct _xe_command_queue_create_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandQueueCreateCb_t)(
     xe_command_queue_create_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -990,13 +922,11 @@ typedef struct _xe_command_queue_destroy_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandQueueDestroyCb_t)(
     xe_command_queue_destroy_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1017,13 +947,11 @@ typedef struct _xe_command_queue_execute_command_lists_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandQueueExecuteCommandListsCb_t)(
     xe_command_queue_execute_command_lists_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1042,13 +970,11 @@ typedef struct _xe_command_queue_synchronize_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandQueueSynchronizeCb_t)(
     xe_command_queue_synchronize_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1078,13 +1004,11 @@ typedef struct _xe_command_list_create_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListCreateCb_t)(
     xe_command_list_create_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1104,13 +1028,11 @@ typedef struct _xe_command_list_create_immediate_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListCreateImmediateCb_t)(
     xe_command_list_create_immediate_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1128,13 +1050,11 @@ typedef struct _xe_command_list_destroy_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListDestroyCb_t)(
     xe_command_list_destroy_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1152,13 +1072,11 @@ typedef struct _xe_command_list_close_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListCloseCb_t)(
     xe_command_list_close_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1176,13 +1094,11 @@ typedef struct _xe_command_list_reset_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListResetCb_t)(
     xe_command_list_reset_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1202,13 +1118,11 @@ typedef struct _xe_command_list_set_parameter_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListSetParameterCb_t)(
     xe_command_list_set_parameter_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1228,13 +1142,11 @@ typedef struct _xe_command_list_get_parameter_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListGetParameterCb_t)(
     xe_command_list_get_parameter_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1252,13 +1164,11 @@ typedef struct _xe_command_list_reset_parameters_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListResetParametersCb_t)(
     xe_command_list_reset_parameters_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1279,13 +1189,11 @@ typedef struct _xe_command_list_append_barrier_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendBarrierCb_t)(
     xe_command_list_append_barrier_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1309,13 +1217,11 @@ typedef struct _xe_command_list_append_memory_ranges_barrier_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendMemoryRangesBarrierCb_t)(
     xe_command_list_append_memory_ranges_barrier_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1337,13 +1243,11 @@ typedef struct _xe_command_list_append_memory_copy_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendMemoryCopyCb_t)(
     xe_command_list_append_memory_copy_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1365,13 +1269,11 @@ typedef struct _xe_command_list_append_memory_set_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendMemorySetCb_t)(
     xe_command_list_append_memory_set_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1396,13 +1298,11 @@ typedef struct _xe_command_list_append_memory_copy_region_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendMemoryCopyRegionCb_t)(
     xe_command_list_append_memory_copy_region_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1423,13 +1323,11 @@ typedef struct _xe_command_list_append_image_copy_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendImageCopyCb_t)(
     xe_command_list_append_image_copy_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1452,13 +1350,11 @@ typedef struct _xe_command_list_append_image_copy_region_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendImageCopyRegionCb_t)(
     xe_command_list_append_image_copy_region_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1480,13 +1376,11 @@ typedef struct _xe_command_list_append_image_copy_to_memory_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendImageCopyToMemoryCb_t)(
     xe_command_list_append_image_copy_to_memory_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1508,13 +1402,11 @@ typedef struct _xe_command_list_append_image_copy_from_memory_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendImageCopyFromMemoryCb_t)(
     xe_command_list_append_image_copy_from_memory_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1534,13 +1426,11 @@ typedef struct _xe_command_list_append_memory_prefetch_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendMemoryPrefetchCb_t)(
     xe_command_list_append_memory_prefetch_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1562,13 +1452,11 @@ typedef struct _xe_command_list_append_mem_advise_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendMemAdviseCb_t)(
     xe_command_list_append_mem_advise_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1587,13 +1475,11 @@ typedef struct _xe_command_list_append_signal_event_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendSignalEventCb_t)(
     xe_command_list_append_signal_event_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1613,13 +1499,11 @@ typedef struct _xe_command_list_append_wait_on_events_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendWaitOnEventsCb_t)(
     xe_command_list_append_wait_on_events_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1638,13 +1522,11 @@ typedef struct _xe_command_list_append_event_reset_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendEventResetCb_t)(
     xe_command_list_append_event_reset_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1667,13 +1549,11 @@ typedef struct _xe_command_list_append_launch_function_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendLaunchFunctionCb_t)(
     xe_command_list_append_launch_function_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1696,13 +1576,11 @@ typedef struct _xe_command_list_append_launch_function_indirect_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendLaunchFunctionIndirectCb_t)(
     xe_command_list_append_launch_function_indirect_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1727,13 +1605,11 @@ typedef struct _xe_command_list_append_launch_multiple_functions_indirect_params
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendLaunchMultipleFunctionsIndirectCb_t)(
     xe_command_list_append_launch_multiple_functions_indirect_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1756,13 +1632,11 @@ typedef struct _xe_command_list_append_launch_host_function_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendLaunchHostFunctionCb_t)(
     xe_command_list_append_launch_host_function_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1814,13 +1688,11 @@ typedef struct _xe_fence_create_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFenceCreateCb_t)(
     xe_fence_create_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1838,13 +1710,11 @@ typedef struct _xe_fence_destroy_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFenceDestroyCb_t)(
     xe_fence_destroy_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1863,13 +1733,11 @@ typedef struct _xe_fence_host_synchronize_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFenceHostSynchronizeCb_t)(
     xe_fence_host_synchronize_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1887,13 +1755,11 @@ typedef struct _xe_fence_query_status_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFenceQueryStatusCb_t)(
     xe_fence_query_status_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1911,13 +1777,11 @@ typedef struct _xe_fence_reset_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFenceResetCb_t)(
     xe_fence_reset_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1950,13 +1814,11 @@ typedef struct _xe_event_pool_create_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnEventPoolCreateCb_t)(
     xe_event_pool_create_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1974,13 +1836,11 @@ typedef struct _xe_event_pool_destroy_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnEventPoolDestroyCb_t)(
     xe_event_pool_destroy_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1999,13 +1859,11 @@ typedef struct _xe_event_pool_get_ipc_handle_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnEventPoolGetIpcHandleCb_t)(
     xe_event_pool_get_ipc_handle_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2025,13 +1883,11 @@ typedef struct _xe_event_pool_open_ipc_handle_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnEventPoolOpenIpcHandleCb_t)(
     xe_event_pool_open_ipc_handle_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2049,13 +1905,11 @@ typedef struct _xe_event_pool_close_ipc_handle_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnEventPoolCloseIpcHandleCb_t)(
     xe_event_pool_close_ipc_handle_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2086,13 +1940,11 @@ typedef struct _xe_event_create_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnEventCreateCb_t)(
     xe_event_create_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2110,13 +1962,11 @@ typedef struct _xe_event_destroy_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnEventDestroyCb_t)(
     xe_event_destroy_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2134,13 +1984,11 @@ typedef struct _xe_event_host_signal_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnEventHostSignalCb_t)(
     xe_event_host_signal_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2159,13 +2007,11 @@ typedef struct _xe_event_host_synchronize_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnEventHostSynchronizeCb_t)(
     xe_event_host_synchronize_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2183,13 +2029,11 @@ typedef struct _xe_event_query_status_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnEventQueryStatusCb_t)(
     xe_event_query_status_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2207,13 +2051,11 @@ typedef struct _xe_event_reset_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnEventResetCb_t)(
     xe_event_reset_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2245,13 +2087,11 @@ typedef struct _xe_image_get_properties_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnImageGetPropertiesCb_t)(
     xe_image_get_properties_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2271,13 +2111,11 @@ typedef struct _xe_image_create_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnImageCreateCb_t)(
     xe_image_create_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2295,13 +2133,11 @@ typedef struct _xe_image_destroy_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnImageDestroyCb_t)(
     xe_image_destroy_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2331,13 +2167,11 @@ typedef struct _xe_module_create_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnModuleCreateCb_t)(
     xe_module_create_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2355,13 +2189,11 @@ typedef struct _xe_module_destroy_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnModuleDestroyCb_t)(
     xe_module_destroy_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2381,13 +2213,11 @@ typedef struct _xe_module_get_native_binary_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnModuleGetNativeBinaryCb_t)(
     xe_module_get_native_binary_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2407,13 +2237,11 @@ typedef struct _xe_module_get_global_pointer_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnModuleGetGlobalPointerCb_t)(
     xe_module_get_global_pointer_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2433,13 +2261,11 @@ typedef struct _xe_module_get_function_pointer_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnModuleGetFunctionPointerCb_t)(
     xe_module_get_function_pointer_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2468,13 +2294,11 @@ typedef struct _xe_module_build_log_destroy_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnModuleBuildLogDestroyCb_t)(
     xe_module_build_log_destroy_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2494,13 +2318,11 @@ typedef struct _xe_module_build_log_get_string_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnModuleBuildLogGetStringCb_t)(
     xe_module_build_log_get_string_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2528,13 +2350,11 @@ typedef struct _xe_function_create_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFunctionCreateCb_t)(
     xe_function_create_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2552,13 +2372,11 @@ typedef struct _xe_function_destroy_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFunctionDestroyCb_t)(
     xe_function_destroy_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2579,13 +2397,11 @@ typedef struct _xe_function_set_group_size_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFunctionSetGroupSizeCb_t)(
     xe_function_set_group_size_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2609,13 +2425,11 @@ typedef struct _xe_function_suggest_group_size_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFunctionSuggestGroupSizeCb_t)(
     xe_function_suggest_group_size_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2636,13 +2450,11 @@ typedef struct _xe_function_set_argument_value_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFunctionSetArgumentValueCb_t)(
     xe_function_set_argument_value_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2662,13 +2474,11 @@ typedef struct _xe_function_set_attribute_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFunctionSetAttributeCb_t)(
     xe_function_set_attribute_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2688,13 +2498,11 @@ typedef struct _xe_function_get_attribute_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFunctionGetAttributeCb_t)(
     xe_function_get_attribute_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2727,13 +2535,11 @@ typedef struct _xe_sampler_create_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnSamplerCreateCb_t)(
     xe_sampler_create_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2751,13 +2557,11 @@ typedef struct _xe_sampler_destroy_params_t
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnSamplerDestroyCb_t)(
     xe_sampler_destroy_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
-    void** ppTracerInstanceUserData,
-    void** ppStaticUserData
+    void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////

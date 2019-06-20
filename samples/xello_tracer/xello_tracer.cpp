@@ -84,8 +84,7 @@ int main( int argc, char *argv[] )
         prologCbs.CommandList.pfnAppendSignalEventCb = [](
             xe_command_list_append_signal_event_params_t*, xe_result_t,
             void* pTracerUserData,
-            void** ppTracerInstanceUserData,
-            void** ppStaticUserData )
+            void** ppTracerInstanceUserData )
         {
             my_instance_data_t* instance_data = new my_instance_data_t;
             *ppTracerInstanceUserData = instance_data;
@@ -98,8 +97,7 @@ int main( int argc, char *argv[] )
         epilogCbs.CommandList.pfnAppendSignalEventCb = [](
             xe_command_list_append_signal_event_params_t*, xe_result_t,
             void* pTracerUserData,
-            void** ppTracerInstanceUserData,
-            void** ppStaticUserData )
+            void** ppTracerInstanceUserData )
         {
             auto end = std::chrono::high_resolution_clock::now();
 

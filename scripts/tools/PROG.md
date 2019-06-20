@@ -36,7 +36,6 @@ The callbacks are defined as a collection of per-API function pointers, with the
 * result : the current value of the return value
 * pTracerUserData : the user's pointer for the tracer's data
 * ppTracerInstanceUserData : a per-tracer, per-instance storage location; typically used for passing data from the prologue to the epilogue
-* ppStaticUserData: a per-API storage location; typically used for passing data between multiple tracers
 
 ${"##"} Enabling/Disabling and Destruction
 The tracer is created in a disabled state and must be explicitly enabled by calling ::xetTracerSetEnabled.
@@ -67,8 +66,7 @@ The following sample code demonstrates a basic usage of API tracing:
         ${x}_command_list_append_launch_function_params_t* params,
         ${x}_result_t result,
         void* pTracerUserData,
-        void** ppTracerInstanceUserData,
-        void** ppStaticUserData )
+        void** ppTracerInstanceUserData )
     {
         my_instance_data_t* instance_data = malloc( sizeof(my_instance_data_t) );
         *ppTracerInstanceUserData = instance_data;
@@ -80,8 +78,7 @@ The following sample code demonstrates a basic usage of API tracing:
         ${x}_command_list_append_launch_function_params_t* params,
         ${x}_result_t result,
         void* pTracerUserData,
-        void** ppTracerInstanceUserData,
-        void** ppStaticUserData )
+        void** ppTracerInstanceUserData )
     {
         clock_t end = clock();
         
