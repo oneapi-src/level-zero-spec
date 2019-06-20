@@ -381,10 +381,10 @@ namespace xet
         str += to_string(val.version);
         str += "\n";
         
-        str += "Tracer::desc_t::pGlobalUserData : ";
+        str += "Tracer::desc_t::pUserData : ";
         {
             std::stringstream ss;
-            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pGlobalUserData);
+            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pUserData);
             str += ss.str();
         }
         str += "\n";

@@ -41,8 +41,8 @@ members:
       desc: "[in] $T_TRACER_DESC_VERSION_CURRENT"
       init: $T_TRACER_DESC_VERSION_CURRENT
     - type: void*
-      name: pGlobalUserData
-      desc: "[in] pointer to global data passes to every callback"
+      name: pUserData
+      desc: "[in] pointer passed to every tracer's callbacks"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a tracer on the device group."

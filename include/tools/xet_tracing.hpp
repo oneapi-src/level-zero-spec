@@ -51,7 +51,7 @@ namespace xet
         struct desc_t
         {
             desc_version_t version = desc_version_t::CURRENT;   ///< [in] ::XET_TRACER_DESC_VERSION_CURRENT
-            void* pGlobalUserData;                          ///< [in] pointer to global data passes to every callback
+            void* pUserData;                                ///< [in] pointer passed to every tracer's callbacks
 
         };
 

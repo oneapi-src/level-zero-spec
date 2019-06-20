@@ -49,7 +49,7 @@ typedef enum _xet_tracer_desc_version_t
 typedef struct _xet_tracer_desc_t
 {
     xet_tracer_desc_version_t version;              ///< [in] ::XET_TRACER_DESC_VERSION_CURRENT
-    void* pGlobalUserData;                          ///< [in] pointer to global data passes to every callback
+    void* pUserData;                                ///< [in] pointer passed to every tracer's callbacks
 
 } xet_tracer_desc_t;
 

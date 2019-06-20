@@ -300,7 +300,7 @@ namespace instrumented
             {
                 context.tracerData.emplace_back();
                 auto index = context.tracerData.size() - 1;
-                context.tracerData[ index ].globalUserData = desc->pGlobalUserData;
+                context.tracerData[ index ].globalUserData = desc->pUserData;
 
                 *phTracer = reinterpret_cast<decltype( *phTracer )>( index );
                 return XE_RESULT_SUCCESS;

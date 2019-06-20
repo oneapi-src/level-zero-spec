@@ -28,8 +28,9 @@ Tools may independently register for enter and exist callbacks for individual AP
 The callbacks are defined as a collection of per-API function pointers, with the following parameters:
 * params : a structure capturing pointers to the input and output parameters of the current instance
 * result : the current value of the return value
-* pGlobalUserData : the user's global pointer for the callback's tracer
-* ppLocalUserData : a per-instance, per-tracer storage location for passing data from the prologue to the epilogue
+* pTracerUserData : the user's pointer for the tracer's data
+* ppTracerInstanceUserData : a per-tracer, per-instance storage location; typically used for passing data from the prologue to the epilogue
+* ppStaticUserData: a per-API storage location; typically used for passing data between multiple tracers
 
 ## Enabling/Disabling and Destruction
 The tracer is created in a disabled state and must be explicitly enabled by calling ::xetTracerSetEnabled.
@@ -45,51 +46,53 @@ the implementation will stall and wait for any outstanding threads during ::xetT
 
 The following sample code demonstrates a basic usage of API tracing:
 ```c
-    typedef struct _my_global_data_t
+    typedef struct _my_tracer_data_t
     {
         uint32_t instance;
-    } my_global_data_t;
+    } my_tracer_data_t;
 
-    typedef struct _my_local_data_t
+    typedef struct _my_instance_data_t
     {
         clock_t start;
-    } my_local_data_t;
+    } my_instance_data_t;
 
     void OnEnterCommandListAppendLaunchFunction(
         xe_command_list_append_launch_function_params_t* params,
         xe_result_t result,
-        void* pGlobalUserData,
-        void** ppLocalUserData )
+        void* pTracerUserData,
+        void** ppTracerInstanceUserData,
+        void** ppStaticUserData )
     {
-        my_local_data_t* local = malloc( sizeof(my_local_data_t) );
-        *ppLocalUserData = local;
+        my_instance_data_t* instance_data = malloc( sizeof(my_instance_data_t) );
+        *ppTracerInstanceUserData = instance_data;
         
-        local->start = clock();
+        instance_data->start = clock();
     }
 
     void OnExitCommandListAppendLaunchFunction(
         xe_command_list_append_launch_function_params_t* params,
         xe_result_t result,
-        void* pGlobalUserData,
-        void** ppLocalUserData )
+        void* pTracerUserData,
+        void** ppTracerInstanceUserData,
+        void** ppStaticUserData )
     {
         clock_t end = clock();
         
-        my_global_data_t* global = (my_global_data_t*)pGlobalUserData;
-        my_local_data_t* local = *(my_local_data_t**)ppLocalUserData;
+        my_tracer_data_t* tracer_data = (my_tracer_data_t*)pTracerUserData;
+        my_instance_data_t* instance_data = *(my_instance_data_t**)ppTracerInstanceUserData;
         
-        float time = 1000.f * ( end - local->start ) / CLOCKS_PER_SEC;
-        printf("xeCommandListAppendLaunchFunction #%d takes %.4f ms\n", global->instance++, time);
+        float time = 1000.f * ( end - instance_data->start ) / CLOCKS_PER_SEC;
+        printf("xeCommandListAppendLaunchFunction #%d takes %.4f ms\n", tracer_data->instance++, time);
         
-        free(local);
+        free(instance_data);
     }
 
     void TracingExample( ... )
     {
-        my_global_data_t global_data = {};
+        my_tracer_data_t tracer_data = {};
         xet_tracer_desc_t tracer_desc;
         tracer_desc.version = XET_TRACER_DESC_VERSION_CURRENT;
-        tracer_desc.pGlobalUserData = &global_data;
+        tracer_desc.pUserData = &tracer_data;
         xet_tracer_handle_t hTracer;
         xetTracerCreate(hDeviceGroup, &tracer_desc, &hTracer);
 

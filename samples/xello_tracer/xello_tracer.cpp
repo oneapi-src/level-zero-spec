@@ -12,14 +12,14 @@
 #include "xello_init.h"
 
 //////////////////////////////////////////////////////////////////////////
-struct my_global_data_t
+struct my_tracer_data_t
 {
     uint32_t instance = 0;
 };
 
 using time_point_t = std::chrono::time_point<std::chrono::high_resolution_clock>;
 
-struct my_local_data_t
+struct my_instance_data_t
 {
     time_point_t start;
 };
@@ -72,9 +72,9 @@ int main( int argc, char *argv[] )
             []( xe::Event* p ){ xe::Event::Destroy( p ); } );
 
         // Create a tracer for the event call
-        my_global_data_t gbl;
+        my_tracer_data_t gbl;
         xet::Tracer::desc_t tracer_desc;
-        tracer_desc.pGlobalUserData = &gbl;
+        tracer_desc.pUserData = &gbl;
         auto pTracer = std::shared_ptr<xet::Tracer>(
             xet::Tracer::Create( pDeviceGroup, &tracer_desc ),
             []( xet::Tracer* p ){ xet::Tracer::Destroy( p ); } );
@@ -83,29 +83,33 @@ int main( int argc, char *argv[] )
         xet::Tracer::core_callbacks_t prologCbs = {};
         prologCbs.CommandList.pfnAppendSignalEventCb = [](
             xe_command_list_append_signal_event_params_t*, xe_result_t,
-            void* pGlobalUserData, void** ppLocalUserData )
+            void* pTracerUserData,
+            void** ppTracerInstanceUserData,
+            void** ppStaticUserData )
         {
-            my_local_data_t* local = new my_local_data_t;
-            *ppLocalUserData = local;
+            my_instance_data_t* instance_data = new my_instance_data_t;
+            *ppTracerInstanceUserData = instance_data;
 
-            local->start = std::chrono::high_resolution_clock::now();
+            instance_data->start = std::chrono::high_resolution_clock::now();
         };
         pTracer->SetPrologues( &prologCbs );
 
         xet::Tracer::core_callbacks_t epilogCbs = {};
         epilogCbs.CommandList.pfnAppendSignalEventCb = [](
             xe_command_list_append_signal_event_params_t*, xe_result_t,
-            void* pGlobalUserData, void** ppLocalUserData )
+            void* pTracerUserData,
+            void** ppTracerInstanceUserData,
+            void** ppStaticUserData )
         {
             auto end = std::chrono::high_resolution_clock::now();
 
-            my_global_data_t* global = reinterpret_cast<my_global_data_t*>( pGlobalUserData );
-            my_local_data_t* local = *reinterpret_cast<my_local_data_t**>( ppLocalUserData );
+            my_tracer_data_t* tracer_data = reinterpret_cast<my_tracer_data_t*>( pTracerUserData );
+            my_instance_data_t* instance_data = *reinterpret_cast<my_instance_data_t**>( ppTracerInstanceUserData );
 
-            std::chrono::duration<double, std::micro> diff = end - local->start;
-            std::cout << "AppendSignalEvent #" << global->instance++ << " took : " << diff.count() << " us\n";
+            std::chrono::duration<double, std::micro> diff = end - instance_data->start;
+            std::cout << "AppendSignalEvent #" << tracer_data->instance++ << " took : " << diff.count() << " us\n";
 
-            delete local;
+            delete instance_data;
         };
         pTracer->SetEpilogues( &epilogCbs );
 

@@ -24,6 +24,8 @@ extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeInit 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_init_params_t
 {
     xe_init_flag_t* pflags;
@@ -31,11 +33,17 @@ typedef struct _xe_init_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeInit 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnInitCb_t)(
     xe_init_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -47,6 +55,8 @@ typedef struct _xe_global_callbacks_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceGet 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_get_params_t
 {
     xe_device_group_handle_t* phDeviceGroup;
@@ -56,15 +66,23 @@ typedef struct _xe_device_get_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceGet 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGetCb_t)(
     xe_device_get_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceGetSubDevices 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_get_sub_devices_params_t
 {
     xe_device_handle_t* phDevice;
@@ -74,15 +92,23 @@ typedef struct _xe_device_get_sub_devices_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceGetSubDevices 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGetSubDevicesCb_t)(
     xe_device_get_sub_devices_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceGetP2PProperties 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_get_p2_p_properties_params_t
 {
     xe_device_handle_t* phDevice;
@@ -92,15 +118,23 @@ typedef struct _xe_device_get_p2_p_properties_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceGetP2PProperties 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGetP2PPropertiesCb_t)(
     xe_device_get_p2_p_properties_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceCanAccessPeer 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_can_access_peer_params_t
 {
     xe_device_handle_t* phDevice;
@@ -110,15 +144,23 @@ typedef struct _xe_device_can_access_peer_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceCanAccessPeer 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceCanAccessPeerCb_t)(
     xe_device_can_access_peer_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceSetIntermediateCacheConfig 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_set_intermediate_cache_config_params_t
 {
     xe_device_handle_t* phDevice;
@@ -127,15 +169,23 @@ typedef struct _xe_device_set_intermediate_cache_config_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceSetIntermediateCacheConfig 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceSetIntermediateCacheConfigCb_t)(
     xe_device_set_intermediate_cache_config_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceSetLastLevelCacheConfig 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_set_last_level_cache_config_params_t
 {
     xe_device_handle_t* phDevice;
@@ -144,15 +194,23 @@ typedef struct _xe_device_set_last_level_cache_config_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceSetLastLevelCacheConfig 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceSetLastLevelCacheConfigCb_t)(
     xe_device_set_last_level_cache_config_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceSystemBarrier 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_system_barrier_params_t
 {
     xe_device_handle_t* phDevice;
@@ -160,15 +218,23 @@ typedef struct _xe_device_system_barrier_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceSystemBarrier 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceSystemBarrierCb_t)(
     xe_device_system_barrier_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceRegisterCLMemory 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 #if XE_ENABLE_OCL_INTEROP
 typedef struct _xe_device_register_cl_memory_params_t
 {
@@ -181,17 +247,25 @@ typedef struct _xe_device_register_cl_memory_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceRegisterCLMemory 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 #if XE_ENABLE_OCL_INTEROP
 typedef void (__xecall *xe_pfnDeviceRegisterCLMemoryCb_t)(
     xe_device_register_cl_memory_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 #endif // XE_ENABLE_OCL_INTEROP
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceRegisterCLProgram 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 #if XE_ENABLE_OCL_INTEROP
 typedef struct _xe_device_register_cl_program_params_t
 {
@@ -204,17 +278,25 @@ typedef struct _xe_device_register_cl_program_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceRegisterCLProgram 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 #if XE_ENABLE_OCL_INTEROP
 typedef void (__xecall *xe_pfnDeviceRegisterCLProgramCb_t)(
     xe_device_register_cl_program_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 #endif // XE_ENABLE_OCL_INTEROP
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceRegisterCLCommandQueue 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 #if XE_ENABLE_OCL_INTEROP
 typedef struct _xe_device_register_cl_command_queue_params_t
 {
@@ -227,17 +309,25 @@ typedef struct _xe_device_register_cl_command_queue_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceRegisterCLCommandQueue 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 #if XE_ENABLE_OCL_INTEROP
 typedef void (__xecall *xe_pfnDeviceRegisterCLCommandQueueCb_t)(
     xe_device_register_cl_command_queue_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 #endif // XE_ENABLE_OCL_INTEROP
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceMakeMemoryResident 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_make_memory_resident_params_t
 {
     xe_device_handle_t* phDevice;
@@ -247,15 +337,23 @@ typedef struct _xe_device_make_memory_resident_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceMakeMemoryResident 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceMakeMemoryResidentCb_t)(
     xe_device_make_memory_resident_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceEvictMemory 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_evict_memory_params_t
 {
     xe_device_handle_t* phDevice;
@@ -265,15 +363,23 @@ typedef struct _xe_device_evict_memory_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceEvictMemory 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceEvictMemoryCb_t)(
     xe_device_evict_memory_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceMakeImageResident 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_make_image_resident_params_t
 {
     xe_device_handle_t* phDevice;
@@ -282,15 +388,23 @@ typedef struct _xe_device_make_image_resident_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceMakeImageResident 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceMakeImageResidentCb_t)(
     xe_device_make_image_resident_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceEvictImage 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_evict_image_params_t
 {
     xe_device_handle_t* phDevice;
@@ -299,11 +413,17 @@ typedef struct _xe_device_evict_image_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceEvictImage 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceEvictImageCb_t)(
     xe_device_evict_image_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -334,6 +454,8 @@ typedef struct _xe_device_callbacks_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceGroupGet 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_group_get_params_t
 {
     uint32_t** ppCount;
@@ -342,15 +464,23 @@ typedef struct _xe_device_group_get_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceGroupGet 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetCb_t)(
     xe_device_group_get_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceGroupGetDriverVersion 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_group_get_driver_version_params_t
 {
     xe_device_group_handle_t* phDeviceGroup;
@@ -359,15 +489,23 @@ typedef struct _xe_device_group_get_driver_version_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceGroupGetDriverVersion 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetDriverVersionCb_t)(
     xe_device_group_get_driver_version_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceGroupGetApiVersion 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_group_get_api_version_params_t
 {
     xe_device_group_handle_t* phDeviceGroup;
@@ -376,15 +514,23 @@ typedef struct _xe_device_group_get_api_version_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceGroupGetApiVersion 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetApiVersionCb_t)(
     xe_device_group_get_api_version_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceGroupGetDeviceProperties 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_group_get_device_properties_params_t
 {
     xe_device_group_handle_t* phDeviceGroup;
@@ -393,15 +539,23 @@ typedef struct _xe_device_group_get_device_properties_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceGroupGetDeviceProperties 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetDevicePropertiesCb_t)(
     xe_device_group_get_device_properties_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceGroupGetComputeProperties 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_group_get_compute_properties_params_t
 {
     xe_device_group_handle_t* phDeviceGroup;
@@ -410,15 +564,23 @@ typedef struct _xe_device_group_get_compute_properties_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceGroupGetComputeProperties 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetComputePropertiesCb_t)(
     xe_device_group_get_compute_properties_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceGroupGetMemoryProperties 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_group_get_memory_properties_params_t
 {
     xe_device_group_handle_t* phDeviceGroup;
@@ -428,15 +590,23 @@ typedef struct _xe_device_group_get_memory_properties_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceGroupGetMemoryProperties 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetMemoryPropertiesCb_t)(
     xe_device_group_get_memory_properties_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceGroupGetMemoryAccessProperties 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_group_get_memory_access_properties_params_t
 {
     xe_device_group_handle_t* phDeviceGroup;
@@ -445,15 +615,23 @@ typedef struct _xe_device_group_get_memory_access_properties_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceGroupGetMemoryAccessProperties 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetMemoryAccessPropertiesCb_t)(
     xe_device_group_get_memory_access_properties_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceGroupGetCacheProperties 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_group_get_cache_properties_params_t
 {
     xe_device_group_handle_t* phDeviceGroup;
@@ -462,15 +640,23 @@ typedef struct _xe_device_group_get_cache_properties_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceGroupGetCacheProperties 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetCachePropertiesCb_t)(
     xe_device_group_get_cache_properties_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceGroupGetImageProperties 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_group_get_image_properties_params_t
 {
     xe_device_group_handle_t* phDeviceGroup;
@@ -479,15 +665,23 @@ typedef struct _xe_device_group_get_image_properties_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceGroupGetImageProperties 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetImagePropertiesCb_t)(
     xe_device_group_get_image_properties_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceGroupAllocSharedMem 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_group_alloc_shared_mem_params_t
 {
     xe_device_group_handle_t* phDeviceGroup;
@@ -502,15 +696,23 @@ typedef struct _xe_device_group_alloc_shared_mem_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceGroupAllocSharedMem 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupAllocSharedMemCb_t)(
     xe_device_group_alloc_shared_mem_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceGroupAllocDeviceMem 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_group_alloc_device_mem_params_t
 {
     xe_device_group_handle_t* phDeviceGroup;
@@ -524,15 +726,23 @@ typedef struct _xe_device_group_alloc_device_mem_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceGroupAllocDeviceMem 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupAllocDeviceMemCb_t)(
     xe_device_group_alloc_device_mem_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceGroupAllocHostMem 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_group_alloc_host_mem_params_t
 {
     xe_device_group_handle_t* phDeviceGroup;
@@ -544,15 +754,23 @@ typedef struct _xe_device_group_alloc_host_mem_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceGroupAllocHostMem 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupAllocHostMemCb_t)(
     xe_device_group_alloc_host_mem_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceGroupFreeMem 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_group_free_mem_params_t
 {
     xe_device_group_handle_t* phDeviceGroup;
@@ -561,15 +779,23 @@ typedef struct _xe_device_group_free_mem_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceGroupFreeMem 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupFreeMemCb_t)(
     xe_device_group_free_mem_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceGroupGetMemProperties 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_group_get_mem_properties_params_t
 {
     xe_device_group_handle_t* phDeviceGroup;
@@ -580,15 +806,23 @@ typedef struct _xe_device_group_get_mem_properties_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceGroupGetMemProperties 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetMemPropertiesCb_t)(
     xe_device_group_get_mem_properties_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceGroupGetMemAddressRange 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_group_get_mem_address_range_params_t
 {
     xe_device_group_handle_t* phDeviceGroup;
@@ -599,15 +833,23 @@ typedef struct _xe_device_group_get_mem_address_range_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceGroupGetMemAddressRange 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetMemAddressRangeCb_t)(
     xe_device_group_get_mem_address_range_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceGroupGetMemIpcHandle 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_group_get_mem_ipc_handle_params_t
 {
     xe_device_group_handle_t* phDeviceGroup;
@@ -617,15 +859,23 @@ typedef struct _xe_device_group_get_mem_ipc_handle_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceGroupGetMemIpcHandle 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupGetMemIpcHandleCb_t)(
     xe_device_group_get_mem_ipc_handle_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceGroupOpenMemIpcHandle 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_group_open_mem_ipc_handle_params_t
 {
     xe_device_group_handle_t* phDeviceGroup;
@@ -637,15 +887,23 @@ typedef struct _xe_device_group_open_mem_ipc_handle_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceGroupOpenMemIpcHandle 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupOpenMemIpcHandleCb_t)(
     xe_device_group_open_mem_ipc_handle_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceGroupCloseMemIpcHandle 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_device_group_close_mem_ipc_handle_params_t
 {
     xe_device_group_handle_t* phDeviceGroup;
@@ -654,11 +912,17 @@ typedef struct _xe_device_group_close_mem_ipc_handle_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeDeviceGroupCloseMemIpcHandle 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnDeviceGroupCloseMemIpcHandleCb_t)(
     xe_device_group_close_mem_ipc_handle_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -687,6 +951,8 @@ typedef struct _xe_device_group_callbacks_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandQueueCreate 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_queue_create_params_t
 {
     xe_device_handle_t* phDevice;
@@ -696,15 +962,23 @@ typedef struct _xe_command_queue_create_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandQueueCreate 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandQueueCreateCb_t)(
     xe_command_queue_create_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandQueueDestroy 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_queue_destroy_params_t
 {
     xe_command_queue_handle_t* phCommandQueue;
@@ -712,15 +986,23 @@ typedef struct _xe_command_queue_destroy_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandQueueDestroy 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandQueueDestroyCb_t)(
     xe_command_queue_destroy_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandQueueExecuteCommandLists 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_queue_execute_command_lists_params_t
 {
     xe_command_queue_handle_t* phCommandQueue;
@@ -731,15 +1013,23 @@ typedef struct _xe_command_queue_execute_command_lists_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandQueueExecuteCommandLists 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandQueueExecuteCommandListsCb_t)(
     xe_command_queue_execute_command_lists_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandQueueSynchronize 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_queue_synchronize_params_t
 {
     xe_command_queue_handle_t* phCommandQueue;
@@ -748,11 +1038,17 @@ typedef struct _xe_command_queue_synchronize_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandQueueSynchronize 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandQueueSynchronizeCb_t)(
     xe_command_queue_synchronize_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -767,6 +1063,8 @@ typedef struct _xe_command_queue_callbacks_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListCreate 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_create_params_t
 {
     xe_device_handle_t* phDevice;
@@ -776,15 +1074,23 @@ typedef struct _xe_command_list_create_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListCreate 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListCreateCb_t)(
     xe_command_list_create_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListCreateImmediate 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_create_immediate_params_t
 {
     xe_device_handle_t* phDevice;
@@ -794,15 +1100,23 @@ typedef struct _xe_command_list_create_immediate_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListCreateImmediate 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListCreateImmediateCb_t)(
     xe_command_list_create_immediate_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListDestroy 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_destroy_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -810,15 +1124,23 @@ typedef struct _xe_command_list_destroy_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListDestroy 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListDestroyCb_t)(
     xe_command_list_destroy_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListClose 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_close_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -826,15 +1148,23 @@ typedef struct _xe_command_list_close_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListClose 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListCloseCb_t)(
     xe_command_list_close_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListReset 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_reset_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -842,15 +1172,23 @@ typedef struct _xe_command_list_reset_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListReset 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListResetCb_t)(
     xe_command_list_reset_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListSetParameter 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_set_parameter_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -860,15 +1198,23 @@ typedef struct _xe_command_list_set_parameter_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListSetParameter 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListSetParameterCb_t)(
     xe_command_list_set_parameter_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListGetParameter 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_get_parameter_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -878,15 +1224,23 @@ typedef struct _xe_command_list_get_parameter_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListGetParameter 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListGetParameterCb_t)(
     xe_command_list_get_parameter_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListResetParameters 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_reset_parameters_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -894,15 +1248,23 @@ typedef struct _xe_command_list_reset_parameters_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListResetParameters 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListResetParametersCb_t)(
     xe_command_list_reset_parameters_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListAppendBarrier 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_append_barrier_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -913,15 +1275,23 @@ typedef struct _xe_command_list_append_barrier_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListAppendBarrier 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendBarrierCb_t)(
     xe_command_list_append_barrier_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListAppendMemoryRangesBarrier 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_append_memory_ranges_barrier_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -935,15 +1305,23 @@ typedef struct _xe_command_list_append_memory_ranges_barrier_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListAppendMemoryRangesBarrier 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendMemoryRangesBarrierCb_t)(
     xe_command_list_append_memory_ranges_barrier_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListAppendMemoryCopy 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_append_memory_copy_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -955,15 +1333,23 @@ typedef struct _xe_command_list_append_memory_copy_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListAppendMemoryCopy 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendMemoryCopyCb_t)(
     xe_command_list_append_memory_copy_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListAppendMemorySet 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_append_memory_set_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -975,15 +1361,23 @@ typedef struct _xe_command_list_append_memory_set_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListAppendMemorySet 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendMemorySetCb_t)(
     xe_command_list_append_memory_set_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListAppendMemoryCopyRegion 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_append_memory_copy_region_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -998,15 +1392,23 @@ typedef struct _xe_command_list_append_memory_copy_region_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListAppendMemoryCopyRegion 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendMemoryCopyRegionCb_t)(
     xe_command_list_append_memory_copy_region_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListAppendImageCopy 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_append_image_copy_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -1017,15 +1419,23 @@ typedef struct _xe_command_list_append_image_copy_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListAppendImageCopy 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendImageCopyCb_t)(
     xe_command_list_append_image_copy_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListAppendImageCopyRegion 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_append_image_copy_region_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -1038,15 +1448,23 @@ typedef struct _xe_command_list_append_image_copy_region_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListAppendImageCopyRegion 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendImageCopyRegionCb_t)(
     xe_command_list_append_image_copy_region_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListAppendImageCopyToMemory 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_append_image_copy_to_memory_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -1058,15 +1476,23 @@ typedef struct _xe_command_list_append_image_copy_to_memory_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListAppendImageCopyToMemory 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendImageCopyToMemoryCb_t)(
     xe_command_list_append_image_copy_to_memory_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListAppendImageCopyFromMemory 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_append_image_copy_from_memory_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -1078,15 +1504,23 @@ typedef struct _xe_command_list_append_image_copy_from_memory_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListAppendImageCopyFromMemory 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendImageCopyFromMemoryCb_t)(
     xe_command_list_append_image_copy_from_memory_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListAppendMemoryPrefetch 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_append_memory_prefetch_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -1096,15 +1530,23 @@ typedef struct _xe_command_list_append_memory_prefetch_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListAppendMemoryPrefetch 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendMemoryPrefetchCb_t)(
     xe_command_list_append_memory_prefetch_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListAppendMemAdvise 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_append_mem_advise_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -1116,15 +1558,23 @@ typedef struct _xe_command_list_append_mem_advise_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListAppendMemAdvise 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendMemAdviseCb_t)(
     xe_command_list_append_mem_advise_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListAppendSignalEvent 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_append_signal_event_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -1133,15 +1583,23 @@ typedef struct _xe_command_list_append_signal_event_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListAppendSignalEvent 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendSignalEventCb_t)(
     xe_command_list_append_signal_event_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListAppendWaitOnEvents 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_append_wait_on_events_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -1151,15 +1609,23 @@ typedef struct _xe_command_list_append_wait_on_events_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListAppendWaitOnEvents 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendWaitOnEventsCb_t)(
     xe_command_list_append_wait_on_events_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListAppendEventReset 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_append_event_reset_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -1168,15 +1634,23 @@ typedef struct _xe_command_list_append_event_reset_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListAppendEventReset 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendEventResetCb_t)(
     xe_command_list_append_event_reset_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListAppendLaunchFunction 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_append_launch_function_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -1189,15 +1663,23 @@ typedef struct _xe_command_list_append_launch_function_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListAppendLaunchFunction 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendLaunchFunctionCb_t)(
     xe_command_list_append_launch_function_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListAppendLaunchFunctionIndirect 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_append_launch_function_indirect_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -1210,15 +1692,23 @@ typedef struct _xe_command_list_append_launch_function_indirect_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListAppendLaunchFunctionIndirect 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendLaunchFunctionIndirectCb_t)(
     xe_command_list_append_launch_function_indirect_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListAppendLaunchMultipleFunctionsIndirect 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_append_launch_multiple_functions_indirect_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -1233,15 +1723,23 @@ typedef struct _xe_command_list_append_launch_multiple_functions_indirect_params
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListAppendLaunchMultipleFunctionsIndirect 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendLaunchMultipleFunctionsIndirectCb_t)(
     xe_command_list_append_launch_multiple_functions_indirect_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListAppendLaunchHostFunction 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_command_list_append_launch_host_function_params_t
 {
     xe_command_list_handle_t* phCommandList;
@@ -1254,11 +1752,17 @@ typedef struct _xe_command_list_append_launch_host_function_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeCommandListAppendLaunchHostFunction 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnCommandListAppendLaunchHostFunctionCb_t)(
     xe_command_list_append_launch_host_function_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1295,6 +1799,8 @@ typedef struct _xe_command_list_callbacks_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeFenceCreate 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_fence_create_params_t
 {
     xe_command_queue_handle_t* phCommandQueue;
@@ -1304,15 +1810,23 @@ typedef struct _xe_fence_create_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeFenceCreate 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFenceCreateCb_t)(
     xe_fence_create_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeFenceDestroy 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_fence_destroy_params_t
 {
     xe_fence_handle_t* phFence;
@@ -1320,15 +1834,23 @@ typedef struct _xe_fence_destroy_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeFenceDestroy 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFenceDestroyCb_t)(
     xe_fence_destroy_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeFenceHostSynchronize 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_fence_host_synchronize_params_t
 {
     xe_fence_handle_t* phFence;
@@ -1337,15 +1859,23 @@ typedef struct _xe_fence_host_synchronize_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeFenceHostSynchronize 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFenceHostSynchronizeCb_t)(
     xe_fence_host_synchronize_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeFenceQueryStatus 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_fence_query_status_params_t
 {
     xe_fence_handle_t* phFence;
@@ -1353,15 +1883,23 @@ typedef struct _xe_fence_query_status_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeFenceQueryStatus 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFenceQueryStatusCb_t)(
     xe_fence_query_status_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeFenceReset 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_fence_reset_params_t
 {
     xe_fence_handle_t* phFence;
@@ -1369,11 +1907,17 @@ typedef struct _xe_fence_reset_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeFenceReset 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFenceResetCb_t)(
     xe_fence_reset_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1389,6 +1933,8 @@ typedef struct _xe_fence_callbacks_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeEventPoolCreate 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_event_pool_create_params_t
 {
     xe_device_group_handle_t* phDeviceGroup;
@@ -1400,15 +1946,23 @@ typedef struct _xe_event_pool_create_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeEventPoolCreate 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnEventPoolCreateCb_t)(
     xe_event_pool_create_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeEventPoolDestroy 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_event_pool_destroy_params_t
 {
     xe_event_pool_handle_t* phEventPool;
@@ -1416,15 +1970,23 @@ typedef struct _xe_event_pool_destroy_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeEventPoolDestroy 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnEventPoolDestroyCb_t)(
     xe_event_pool_destroy_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeEventPoolGetIpcHandle 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_event_pool_get_ipc_handle_params_t
 {
     xe_event_pool_handle_t* phEventPool;
@@ -1433,15 +1995,23 @@ typedef struct _xe_event_pool_get_ipc_handle_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeEventPoolGetIpcHandle 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnEventPoolGetIpcHandleCb_t)(
     xe_event_pool_get_ipc_handle_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeEventPoolOpenIpcHandle 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_event_pool_open_ipc_handle_params_t
 {
     xe_device_handle_t* phDevice;
@@ -1451,15 +2021,23 @@ typedef struct _xe_event_pool_open_ipc_handle_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeEventPoolOpenIpcHandle 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnEventPoolOpenIpcHandleCb_t)(
     xe_event_pool_open_ipc_handle_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeEventPoolCloseIpcHandle 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_event_pool_close_ipc_handle_params_t
 {
     xe_event_pool_handle_t* phEventPool;
@@ -1467,11 +2045,17 @@ typedef struct _xe_event_pool_close_ipc_handle_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeEventPoolCloseIpcHandle 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnEventPoolCloseIpcHandleCb_t)(
     xe_event_pool_close_ipc_handle_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1487,6 +2071,8 @@ typedef struct _xe_event_pool_callbacks_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeEventCreate 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_event_create_params_t
 {
     xe_event_pool_handle_t* phEventPool;
@@ -1496,15 +2082,23 @@ typedef struct _xe_event_create_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeEventCreate 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnEventCreateCb_t)(
     xe_event_create_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeEventDestroy 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_event_destroy_params_t
 {
     xe_event_handle_t* phEvent;
@@ -1512,15 +2106,23 @@ typedef struct _xe_event_destroy_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeEventDestroy 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnEventDestroyCb_t)(
     xe_event_destroy_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeEventHostSignal 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_event_host_signal_params_t
 {
     xe_event_handle_t* phEvent;
@@ -1528,15 +2130,23 @@ typedef struct _xe_event_host_signal_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeEventHostSignal 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnEventHostSignalCb_t)(
     xe_event_host_signal_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeEventHostSynchronize 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_event_host_synchronize_params_t
 {
     xe_event_handle_t* phEvent;
@@ -1545,15 +2155,23 @@ typedef struct _xe_event_host_synchronize_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeEventHostSynchronize 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnEventHostSynchronizeCb_t)(
     xe_event_host_synchronize_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeEventQueryStatus 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_event_query_status_params_t
 {
     xe_event_handle_t* phEvent;
@@ -1561,15 +2179,23 @@ typedef struct _xe_event_query_status_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeEventQueryStatus 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnEventQueryStatusCb_t)(
     xe_event_query_status_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeEventReset 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_event_reset_params_t
 {
     xe_event_handle_t* phEvent;
@@ -1577,11 +2203,17 @@ typedef struct _xe_event_reset_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeEventReset 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnEventResetCb_t)(
     xe_event_reset_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1598,6 +2230,8 @@ typedef struct _xe_event_callbacks_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeImageGetProperties 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_image_get_properties_params_t
 {
     xe_device_handle_t* phDevice;
@@ -1607,15 +2241,23 @@ typedef struct _xe_image_get_properties_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeImageGetProperties 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnImageGetPropertiesCb_t)(
     xe_image_get_properties_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeImageCreate 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_image_create_params_t
 {
     xe_device_handle_t* phDevice;
@@ -1625,15 +2267,23 @@ typedef struct _xe_image_create_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeImageCreate 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnImageCreateCb_t)(
     xe_image_create_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeImageDestroy 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_image_destroy_params_t
 {
     xe_image_handle_t* phImage;
@@ -1641,11 +2291,17 @@ typedef struct _xe_image_destroy_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeImageDestroy 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnImageDestroyCb_t)(
     xe_image_destroy_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1659,6 +2315,8 @@ typedef struct _xe_image_callbacks_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeModuleCreate 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_module_create_params_t
 {
     xe_device_handle_t* phDevice;
@@ -1669,15 +2327,23 @@ typedef struct _xe_module_create_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeModuleCreate 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnModuleCreateCb_t)(
     xe_module_create_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeModuleDestroy 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_module_destroy_params_t
 {
     xe_module_handle_t* phModule;
@@ -1685,15 +2351,23 @@ typedef struct _xe_module_destroy_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeModuleDestroy 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnModuleDestroyCb_t)(
     xe_module_destroy_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeModuleGetNativeBinary 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_module_get_native_binary_params_t
 {
     xe_module_handle_t* phModule;
@@ -1703,15 +2377,23 @@ typedef struct _xe_module_get_native_binary_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeModuleGetNativeBinary 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnModuleGetNativeBinaryCb_t)(
     xe_module_get_native_binary_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeModuleGetGlobalPointer 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_module_get_global_pointer_params_t
 {
     xe_module_handle_t* phModule;
@@ -1721,15 +2403,23 @@ typedef struct _xe_module_get_global_pointer_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeModuleGetGlobalPointer 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnModuleGetGlobalPointerCb_t)(
     xe_module_get_global_pointer_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeModuleGetFunctionPointer 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_module_get_function_pointer_params_t
 {
     xe_module_handle_t* phModule;
@@ -1739,11 +2429,17 @@ typedef struct _xe_module_get_function_pointer_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeModuleGetFunctionPointer 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnModuleGetFunctionPointerCb_t)(
     xe_module_get_function_pointer_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1759,6 +2455,8 @@ typedef struct _xe_module_callbacks_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeModuleBuildLogDestroy 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_module_build_log_destroy_params_t
 {
     xe_module_build_log_handle_t* phModuleBuildLog;
@@ -1766,15 +2464,23 @@ typedef struct _xe_module_build_log_destroy_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeModuleBuildLogDestroy 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnModuleBuildLogDestroyCb_t)(
     xe_module_build_log_destroy_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeModuleBuildLogGetString 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_module_build_log_get_string_params_t
 {
     xe_module_build_log_handle_t* phModuleBuildLog;
@@ -1784,11 +2490,17 @@ typedef struct _xe_module_build_log_get_string_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeModuleBuildLogGetString 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnModuleBuildLogGetStringCb_t)(
     xe_module_build_log_get_string_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1801,6 +2513,8 @@ typedef struct _xe_module_build_log_callbacks_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeFunctionCreate 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_function_create_params_t
 {
     xe_module_handle_t* phModule;
@@ -1810,15 +2524,23 @@ typedef struct _xe_function_create_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeFunctionCreate 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFunctionCreateCb_t)(
     xe_function_create_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeFunctionDestroy 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_function_destroy_params_t
 {
     xe_function_handle_t* phFunction;
@@ -1826,15 +2548,23 @@ typedef struct _xe_function_destroy_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeFunctionDestroy 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFunctionDestroyCb_t)(
     xe_function_destroy_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeFunctionSetGroupSize 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_function_set_group_size_params_t
 {
     xe_function_handle_t* phFunction;
@@ -1845,15 +2575,23 @@ typedef struct _xe_function_set_group_size_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeFunctionSetGroupSize 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFunctionSetGroupSizeCb_t)(
     xe_function_set_group_size_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeFunctionSuggestGroupSize 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_function_suggest_group_size_params_t
 {
     xe_function_handle_t* phFunction;
@@ -1867,15 +2605,23 @@ typedef struct _xe_function_suggest_group_size_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeFunctionSuggestGroupSize 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFunctionSuggestGroupSizeCb_t)(
     xe_function_suggest_group_size_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeFunctionSetArgumentValue 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_function_set_argument_value_params_t
 {
     xe_function_handle_t* phFunction;
@@ -1886,15 +2632,23 @@ typedef struct _xe_function_set_argument_value_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeFunctionSetArgumentValue 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFunctionSetArgumentValueCb_t)(
     xe_function_set_argument_value_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeFunctionSetAttribute 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_function_set_attribute_params_t
 {
     xe_function_handle_t* phFunction;
@@ -1904,15 +2658,23 @@ typedef struct _xe_function_set_attribute_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeFunctionSetAttribute 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFunctionSetAttributeCb_t)(
     xe_function_set_attribute_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeFunctionGetAttribute 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_function_get_attribute_params_t
 {
     xe_function_handle_t* phFunction;
@@ -1922,11 +2684,17 @@ typedef struct _xe_function_get_attribute_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeFunctionGetAttribute 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnFunctionGetAttributeCb_t)(
     xe_function_get_attribute_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1944,6 +2712,8 @@ typedef struct _xe_function_callbacks_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeSamplerCreate 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_sampler_create_params_t
 {
     xe_device_handle_t* phDevice;
@@ -1953,15 +2723,23 @@ typedef struct _xe_sampler_create_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeSamplerCreate 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnSamplerCreateCb_t)(
     xe_sampler_create_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeSamplerDestroy 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_sampler_destroy_params_t
 {
     xe_sampler_handle_t* phSampler;
@@ -1969,11 +2747,17 @@ typedef struct _xe_sampler_destroy_params_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function-pointer for xeSamplerDestroy 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+/// @param[in,out] ppStaticUserData Per-API user data
 typedef void (__xecall *xe_pfnSamplerDestroyCb_t)(
     xe_sampler_destroy_params_t* params,
     xe_result_t result,
-    void* pGlobalUserData,
-    void** ppLocalUserData
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData,
+    void** ppStaticUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
