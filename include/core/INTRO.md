@@ -9,7 +9,7 @@
 * [Tools](#tls)
 
 # <a name="obj">Objective</a>
-The objective of the Level-Zero API is to provide direct-to-metal interfaces to offload accelerator devices. 
+The objective of the 'One API' Level-Zero API is to provide direct-to-metal interfaces to offload accelerator devices. 
 It is a programming interface that can be published at a cadence that better matches Intel hardware releases and can be tailored to any device needs. 
 It can be adapted to support broader set of languages features, such as function pointers, virtual functions, unified memory, and  I/O capabilities.
 
@@ -101,8 +101,6 @@ The following naming conventions are followed in order to avoid conflicts within
 In addition, the following coding standards are followed:
 - all function input parameters precede output parameters
 - all functions return ::xe_result_t
-
-Note: "Xe" is a placeholder until One API branding is decided.
 
 ## Versioning
 There are multiple versions that should be used by the application to determine compatibility:

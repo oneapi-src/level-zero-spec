@@ -39,14 +39,14 @@ ${"##"} Table of Contents
 
 ${"#"} <a name="dd">Devices</a>
 ${"##"} Device Group
-A device group represents a collection of physical, homogeneous devices in the system that support ${OneApi}.
+A device group represents a collection of physical, homogeneous devices in the system that support Level-Zero.
 - The application may query the number device groups and the properties of each device group.
 - More than one device group may be available in the system. For example, group 0 may contain two GPUs, group 1 may contain one FPGA, and finally group 2 may contain another GPU with different properties than group 0.
 - A device group is primarily used for allocating and freeing memory used by one or more devices
 - Memory is **not** implicitly shared across all devices within a device group.  However, it is available to be explicitly shared.
 
 ${"##"} Device
-A device represents a physical device in the system that support ${OneApi}.
+A device represents a physical device in the system that support Level-Zero.
 - The application may query the number devices within a device group.
 - All devices in the device group share the same properties.
 - The application is responsible for sharing memory and explicit submission and synchronization across multiple devices.
@@ -58,7 +58,7 @@ The following diagram illustrates the relationship between the device group, dev
 
 ${"##"} Initialization and Discovery
 The driver must be initialized by calling ::${x}Init before any other function.
-This function will load and initialize all ${OneApi} driver(s) in the system for all threads in the current process.
+This function will load and initialize all Level-Zero driver(s) in the system for all threads in the current process.
 Simultaneous calls to ::${x}Init are thread-safe and only one instance of driver(s) will be loaded per-process.
 This function will allow queries of the available device groups in the system.
 
@@ -979,7 +979,7 @@ The following sample code demonstrate a sequence for using fine-grain residency 
 ```
 
 ${"##"} <a name="oi">OpenCL Interoperability</a>
-Interoperability with OpenCL is currently only supported _from_ OpenCL _to_ ${OneApi} for a subset of types.
+Interoperability with OpenCL is currently only supported _from_ OpenCL _to_ Level-Zero for a subset of types.
 The APIs are designed to be OS agnostics and allow implementations to optimize for unified device drivers;
 while allowing less-optimal interopability across different device types and/or vendors.
 
@@ -989,40 +989,40 @@ There are three OpenCL types that can be shared for interoperability:
 3. **cl_command_queue** - an OpenCL command queue object
 
 ${"###"} cl_mem
-OpenCL buffer objects may be registered for use as an ${OneApi} device memory allocation.
-Registering an OpenCL buffer object with ${OneApi} merely obtains a pointer to the underlying device memory
+OpenCL buffer objects may be registered for use as a Level-Zero device memory allocation.
+Registering an OpenCL buffer object with Level-Zero merely obtains a pointer to the underlying device memory
 allocation and does not alter the lifetime of the device memory underlying the OpenCL buffer object.
-Freeing the ${OneApi} device memory allocation effectively "un-registers" the allocation from ${OneApi}, 
+Freeing the Level-Zero device memory allocation effectively "un-registers" the allocation from Level-Zero, 
 and should be performed before the OpenCL buffer object is destroyed.
-Using the ${OneApi} device memory allocation after destroying its associated OpenCL buffer object will
+Using the Level-Zero device memory allocation after destroying its associated OpenCL buffer object will
 result in undefined behavior.
 
-Applications are responsible for enforcing memory consistency for shared buffer objects using existing OpenCL and/or ${OneApi} APIs.
+Applications are responsible for enforcing memory consistency for shared buffer objects using existing OpenCL and/or Level-Zero APIs.
 
 ${"###"} cl_program
-${OneApi} modules are always in a compiled state and therefore prior to retrieving an ::${x}_module_handle_t from
+Level-Zero modules are always in a compiled state and therefore prior to retrieving an ::${x}_module_handle_t from
 a cl_program the caller must ensure the cl_program is compiled and linked.
 
 ${"###"} cl_command_queue
 Sharing OpenCL command queues provide opportunities to minimize transition costs when submitting work from
-an OpenCL queue followed by submitting work to ${OneApi} command queue and vice-versa.  Enqueuing ${OneApi} command lists
-to ${OneApi} command queues are immediately submitted to the device.  OpenCL implementations, however, may not
+an OpenCL queue followed by submitting work to Level-Zero command queue and vice-versa.  Enqueuing Level-Zero command lists
+to Level-Zero command queues are immediately submitted to the device.  OpenCL implementations, however, may not
 necessarily submit tasks to the device unless forced by explicit OpenCL API such as clFlush or clFinish.
 To minimize overhead between sharing command queues, applications must explicitly submit OpenCL command 
-queues using clFlush, clFinish or similar operations prior to enqueuing an ${OneApi} command list.
+queues using clFlush, clFinish or similar operations prior to enqueuing an Level-Zero command list.
 Failing to explicitly submit device work may result in undefined behavior.  
 
 Sharing an OpenCL command queue doesn't alter the lifetime of the API object.  It provides knowledge for the
 driver to potentially reuse some internal resources which may have noticeable overhead when switching the resources.
 
 Memory contents as reflected by any caching schemes will be consistent such that, for example, a memory write
-in an OpenCL command queue can be read by a subsequent ${OneApi} command list without any special application action. 
+in an OpenCL command queue can be read by a subsequent Level-Zero command list without any special application action. 
 The cost to ensure memory consistency may be implementation dependent.  The performance of sharing command queues
 will be no worse than an application submitting work to OpenCL, calling clFinish followed by submitting an
-${OneApi} command list.  In most cases, command queue sharing may be much more efficient. 
+Level-Zero command list.  In most cases, command queue sharing may be much more efficient. 
 
 ${"##"} <a name="ipc">Inter-Process Communication</a>
-There are two types of Inter-Process Communication (IPC) APIs for using ${OneApi} allocations across processes:
+There are two types of Inter-Process Communication (IPC) APIs for using Level-Zero allocations across processes:
 1. Memory
 2. Events 
 
@@ -1037,13 +1037,13 @@ The following code examples demonstrate how to use the memory IPC APIs:
     ${x}_ipc_mem_handle_t hIPC;
     ${x}DeviceGroupGetMemIpcHandle(hDeviceGroup, dptr, &hIPC);
 
-    // Method of sending to receiving process is not defined by ${OneApi}:
+    // Method of sending to receiving process is not defined by Level-Zero:
     send_to_receiving_process(hIPC);
 ```
 
 2. Next, the allocation is received and un-packaged on the receiving process:
 ```c
-    // Method of receiving from sending process is not defined by ${OneApi}:
+    // Method of receiving from sending process is not defined by Level-Zero:
     ${x}_ipc_mem_handle_t hIPC;
     hIPC = receive_from_sending_process();
 

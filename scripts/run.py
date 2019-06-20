@@ -1,3 +1,9 @@
+"""
+ Copyright (C) 2019 Intel Corporation
+
+ SPDX-License-Identifier: MIT
+
+"""
 import argparse
 import util
 import parse_specs

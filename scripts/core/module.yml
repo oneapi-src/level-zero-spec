@@ -1,3 +1,8 @@
+#
+# Copyright (C) 2019 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero APIs for Module"
