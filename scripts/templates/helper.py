@@ -108,6 +108,16 @@ class type_traits:
             return False
 
     @staticmethod
+    def is_enum(name, meta):
+        try:
+            name = _remove_const_ptr(name)
+            if name in meta['enum']:
+                return True
+            return False
+        except:
+            return False
+
+    @staticmethod
     def find_class_name(name, meta):
         try:
             name = _remove_const_ptr(name)
@@ -497,22 +507,27 @@ def _get_value_name(namespace, tags, value, cpp, meta):
 
 """
 Public:
-    returns a list of c++ strings for declaring each enumerator in an enumeration
-    format: "ETOR_NAME = VALUE, ///< DESCRIPTION"
+    returns a list of strings for declaring each enumerator in an enumeration
+    c++ format: "ETOR_NAME = VALUE, ///< DESCRIPTION"
+    python format: "ETOR_NAME = VALUE, ## DESCRIPTION"
 """
-def make_etor_lines(namespace, tags, obj, cpp=False, meta=None):
+def make_etor_lines(namespace, tags, obj, cpp=False, py=False, meta=None):
     lines = []
     for item in obj['etors']:
-        name = make_etor_name(namespace, tags, obj['name'], item['name'], cpp)
+        name = make_etor_name(namespace, tags, obj['name'], item['name'], cpp or py)
 
         if 'value' in item:
+            delim = "," if not py else ""
             value = _get_value_name(namespace, tags, item['value'], cpp, meta)
-            prologue = "%s = %s,"%(name, value)
+            prologue = "%s = %s%s"%(name, value, delim)
+        elif py:
+            prologue = "%s = auto()"%(name)
         else:
             prologue = "%s,"%(name)
 
+        comment_style = "##" if py else "///<"
         for line in split_line(subt(namespace, tags, item['desc'], True, cpp), 70):
-            lines.append("%s///< %s"%(append_ws(prologue, 48), line))
+            lines.append("%s%s %s"%(append_ws(prologue, 48), comment_style, line))
             prologue = ""
     return lines
 
@@ -562,6 +577,34 @@ def _get_type_name(namespace, tags, obj, item, cpp=False, meta=None, handle_to_c
     return name
 
 """
+Private:
+    returns python c_type name of any type
+"""
+def get_ctype_name(namespace, tags, item):
+    name = subt(namespace, tags, item['type'])
+    name = _remove_const(name)
+    name = re.sub(r"void\*", "c_void_p", name)
+    name = re.sub(r"uint8_t", "c_ubyte", name)
+    name = re.sub(r"uint16_t", "c_ushort", name)
+    name = re.sub(r"uint32_t", "c_ulong", name)
+    name = re.sub(r"uint64_t", "c_ulonglong", name)
+    name = re.sub(r"size_t", "c_size_t", name)
+    name = re.sub(r"float", "c_float", name)
+    name = re.sub(r"double", "c_double", name)
+    name = re.sub(r"char", "c_char", name)
+    name = re.sub(r"int", "c_int", name)
+
+    if type_traits.is_pointer(name):
+        name = _remove_ptr(name)
+        name = "POINTER(%s)"%name
+
+    elif 'name' in item and value_traits.is_array(item['name']):
+        length = subt(namespace, tags, value_traits.get_array_length(item['name']))
+        name = "%s * %s"%(name, length)
+
+    return name
+
+"""
 Public:
     returns c/c++ name of member of struct/class
 """
@@ -578,26 +621,36 @@ def make_member_name(namespace, tags, item, prefix="", cpp=False, meta=None, rem
 
 """
 Public:
-    returns a list of c++ strings for each member of a structure or class
-    format: "TYPE NAME = INIT, ///< DESCRIPTION"
+    returns a list of strings for each member of a structure or class
+    c++ format: "TYPE NAME = INIT, ///< DESCRIPTION"
+    python format: "("NAME", TYPE)" ## DESCRIPTION"
 """
-def make_member_lines(namespace, tags, obj, prefix="", cpp=False, meta=None):
+def make_member_lines(namespace, tags, obj, prefix="", cpp=False, py=False, meta=None):
     lines = []
     if 'members' not in obj:
         return lines
 
-    for item in obj['members']:
-        name = make_member_name(namespace, tags, item, prefix, cpp, meta)
-        tname = _get_type_name(namespace, tags, obj, item, cpp, meta)
+    for i, item in enumerate(obj['members']):
+        name = make_member_name(namespace, tags, item, prefix, cpp, meta, remove_array=py)
+
+        if py:
+            tname = get_ctype_name(namespace, tags, item)
+        else:
+            tname = _get_type_name(namespace, tags, obj, item, cpp, meta)
 
         if cpp and 'init' in item:
             value = _get_value_name(namespace, tags, item['init'], cpp, meta)
             prologue = "%s %s = %s;"%(tname, name, value)
+        elif py:
+            delim = "," if i < (len(obj['members'])-1) else ""
+            prologue = "(\"%s\", %s)%s"%(name, tname, delim)
         else:
             prologue = "%s %s;"%(tname, name)
 
+        comment_style = "##" if py else "///<"
+        ws_count = 64 if py else 48
         for line in split_line(subt(namespace, tags, item['desc'], True, cpp), 70):
-            lines.append("%s///< %s"%(append_ws(prologue, 48), line))
+            lines.append("%s%s %s"%(append_ws(prologue, ws_count), comment_style, line))
             prologue = ""
     return lines
 
@@ -657,7 +710,7 @@ Public:
     returns a list of c++ strings for each parameter of a function
     format: "TYPE NAME = INIT, ///< DESCRIPTION"
 """
-def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None, format=["type", "name", "init", "delim", "desc"], delim=","):
+def make_param_lines(namespace, tags, obj, cpp=False, py=False, decl=False, meta=None, format=["type", "name", "init", "delim", "desc"], delim=","):
     lines = []
 
     if cpp:
@@ -670,7 +723,10 @@ def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None, for
 
     for i, item in enumerate(params):
         name = _get_param_name(namespace, tags, item, cpp=cpp)
-        tname = _get_type_name(namespace, tags, obj, item, cpp, meta)
+        if py:
+            tname = get_ctype_name(namespace, tags, item)
+        else:
+            tname = _get_type_name(namespace, tags, obj, item, cpp, meta)
         init = ""
 
         if cpp:
@@ -708,7 +764,7 @@ def make_param_lines(namespace, tags, obj, cpp=False, decl=False, meta=None, for
         else:
             lines.append(prologue)
 
-    if "type" in format and len(lines) == 0:
+    if "type" in format and len(lines) == 0 and not py:
         lines = ["void"]
     return lines
 

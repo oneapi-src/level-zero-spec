@@ -58,6 +58,25 @@ def mako_api_cpp(path, namespace, tags, specs, meta, files, ext):
 """
     generates c/c++ files from the specification documents
 """
+def mako_api_py(path, namespace, tags, specs, meta):
+    template = "api.py.mako"
+    fin = os.path.join("templates", template)
+
+    filename = "%s.py"%(namespace)
+    fout = os.path.join(path, filename)
+
+    print("Generating %s..."%fout)
+    return util.makoWrite(
+        fin, fout,
+        section=os.path.basename(path),
+        namespace=namespace,
+        tags=tags,
+        specs=specs,
+        meta=meta)
+
+"""
+    generates c/c++ files from the specification documents
+"""
 def mako_ddi_cpp(path, namespace, tags, specs, meta):
     template = "ddi.h.mako"
     fin = os.path.join("templates", template)
@@ -273,12 +292,23 @@ def generate_lib_cpp(path, namespace, tags, specs, meta):
     return loc
 
 """
+    generates python files from the specification documents
+"""
+def generate_api_py(path, namespace, tags, specs, meta):
+    util.makePath(path)
+    util.removeFiles(path, "*.py")
+
+    loc = mako_api_py(path, namespace, tags, specs, meta)
+    return loc
+
+"""
 Entry-point:
     generates api code
 """
 def generate_api(path, namespace, tags, specs, meta):
     loc = 0
     loc += generate_api_cpp(path, namespace, tags, specs, meta)
+    loc += generate_api_py(path, namespace, tags, specs, meta)
     print("Generated %s lines of code.\n"%loc)
 
 """
