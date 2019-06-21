@@ -92,20 +92,24 @@ XET_MAX_METRIC_GROUP_DESCRIPTION = 256
 
 ###############################################################################
 ## @brief Metric group sampling type
-class xet_metric_group_sampling_type_t(c_int):
-    pass
-
 class xet_metric_group_sampling_type_v(IntEnum):
     EVENT_BASED = XE_BIT(0)                         ## Event based sampling
     TIME_BASED = XE_BIT(1)                          ## Time based sampling
 
+class xet_metric_group_sampling_type_t(c_int):
+    def __str__(self):
+        return str(xet_metric_group_sampling_type_v(value))
+
+
 ###############################################################################
 ## @brief API version of ::xet_metric_group_properties_t
-class xet_metric_group_properties_version_t(c_int):
-    pass
-
 class xet_metric_group_properties_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
+
+class xet_metric_group_properties_version_t(c_int):
+    def __str__(self):
+        return str(xet_metric_group_properties_version_v(value))
+
 
 ###############################################################################
 ## @brief Metric group properties queried using ::xetMetricGroupGetProperties
@@ -122,9 +126,6 @@ class xet_metric_group_properties_t(Structure):
 
 ###############################################################################
 ## @brief Metric types
-class xet_metric_type_t(c_int):
-    pass
-
 class xet_metric_type_v(IntEnum):
     DURATION = auto()                               ## Metric type: duration
     EVENT = auto()                                  ## Metric type: event
@@ -135,17 +136,24 @@ class xet_metric_type_v(IntEnum):
     RATIO = auto()                                  ## Metric type: ratio
     RAW = auto()                                    ## Metric type: raw
 
+class xet_metric_type_t(c_int):
+    def __str__(self):
+        return str(xet_metric_type_v(value))
+
+
 ###############################################################################
 ## @brief Supported value types
-class xet_value_type_t(c_int):
-    pass
-
 class xet_value_type_v(IntEnum):
     UINT32 = auto()                                 ## 32-bit unsigned-integer
     UINT64 = auto()                                 ## 64-bit unsigned-integer
     FLOAT32 = auto()                                ## 32-bit floating-point
     FLOAT64 = auto()                                ## 64-bit floating-point
     BOOL8 = auto()                                  ## 8-bit boolean
+
+class xet_value_type_t(c_int):
+    def __str__(self):
+        return str(xet_value_type_v(value))
+
 
 ###############################################################################
 ## @brief Union of values
@@ -184,11 +192,13 @@ XET_MAX_METRIC_RESULT_UNITS = 256
 
 ###############################################################################
 ## @brief API version of ::xet_metric_properties_t
-class xet_metric_properties_version_t(c_int):
-    pass
-
 class xet_metric_properties_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
+
+class xet_metric_properties_version_t(c_int):
+    def __str__(self):
+        return str(xet_metric_properties_version_v(value))
+
 
 ###############################################################################
 ## @brief Metric properties queried using ::xetMetricGetProperties
@@ -206,11 +216,13 @@ class xet_metric_properties_t(Structure):
 
 ###############################################################################
 ## @brief API version of ::xet_metric_tracer_desc_t
-class xet_metric_tracer_desc_version_t(c_int):
-    pass
-
 class xet_metric_tracer_desc_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
+
+class xet_metric_tracer_desc_version_t(c_int):
+    def __str__(self):
+        return str(xet_metric_tracer_desc_version_v(value))
+
 
 ###############################################################################
 ## @brief Metric tracer descriptor
@@ -224,20 +236,24 @@ class xet_metric_tracer_desc_t(Structure):
 
 ###############################################################################
 ## @brief API version of ::xet_metric_query_pool_desc_t
-class xet_metric_query_pool_desc_version_t(c_int):
-    pass
-
 class xet_metric_query_pool_desc_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
 
+class xet_metric_query_pool_desc_version_t(c_int):
+    def __str__(self):
+        return str(xet_metric_query_pool_desc_version_v(value))
+
+
 ###############################################################################
 ## @brief Metric query pool types
-class xet_metric_query_pool_flag_t(c_int):
-    pass
-
 class xet_metric_query_pool_flag_v(IntEnum):
     PERFORMANCE = auto()                            ## Performance metric query pool.
     SKIP_EXECUTION = auto()                         ## Skips workload execution between begin/end calls.
+
+class xet_metric_query_pool_flag_t(c_int):
+    def __str__(self):
+        return str(xet_metric_query_pool_flag_v(value))
+
 
 ###############################################################################
 ## @brief Metric query pool description
@@ -250,29 +266,35 @@ class xet_metric_query_pool_desc_t(Structure):
 
 ###############################################################################
 ## @brief Supported module debug info formats.
-class xet_module_debug_info_format_t(c_int):
-    pass
-
 class xet_module_debug_info_format_v(IntEnum):
     ELF_DWARF = auto()                              ## Format is ELF/DWARF
 
+class xet_module_debug_info_format_t(c_int):
+    def __str__(self):
+        return str(xet_module_debug_info_format_v(value))
+
+
 ###############################################################################
 ## @brief API version of ::xet_profile_info_t
-class xet_profile_info_version_t(c_int):
-    pass
-
 class xet_profile_info_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
 
+class xet_profile_info_version_t(c_int):
+    def __str__(self):
+        return str(xet_profile_info_version_v(value))
+
+
 ###############################################################################
 ## @brief Supportted profile features
-class xet_profile_flag_t(c_int):
-    pass
-
 class xet_profile_flag_v(IntEnum):
     REGISTER_REALLOCATION = XE_BIT(0)               ## request the compiler attempt to minimize register usage as much as
                                                     ## possible to allow for instrumentation
     FREE_REGISTER_INFO = XE_BIT(1)                  ## request the compiler generate free register info
+
+class xet_profile_flag_t(c_int):
+    def __str__(self):
+        return str(xet_profile_flag_v(value))
+
 
 ###############################################################################
 ## @brief Profiling meta-data for instrumentation
@@ -285,11 +307,13 @@ class xet_profile_info_t(Structure):
 
 ###############################################################################
 ## @brief Supported profile token types
-class xet_profile_token_type_t(c_int):
-    pass
-
 class xet_profile_token_type_v(IntEnum):
     FREE_REGISTER = auto()                          ## GRF info
+
+class xet_profile_token_type_t(c_int):
+    def __str__(self):
+        return str(xet_profile_token_type_v(value))
+
 
 ###############################################################################
 ## @brief Profile free register token detailing unused registers in the current
@@ -314,18 +338,17 @@ class xet_profile_register_sequence_t(Structure):
 
 ###############################################################################
 ## @brief Power initialization flags (bitfield)
-class xet_power_init_flags_t(c_int):
-    pass
-
 class xet_power_init_flags_v(IntEnum):
     NONE = 0                                        ## default initialization
     WRITE = XE_BIT( 0 )                             ## request access to power controls
 
+class xet_power_init_flags_t(c_int):
+    def __str__(self):
+        return str(xet_power_init_flags_v(value))
+
+
 ###############################################################################
 ## @brief GPU domains
-class xet_gpu_domain_t(c_int):
-    pass
-
 class xet_gpu_domain_v(IntEnum):
     BASE = XE_BIT( 0 )                              ## base die
     VIDEO_DECODE = XE_BIT( 1 )                      ## video decode engines
@@ -339,13 +362,20 @@ class xet_gpu_domain_v(IntEnum):
     LOCAL_MEMORY = XE_BIT( 9 )                      ## local memory
     BASE_CHIPLET_LINK = XE_BIT( 10 )                ## link between base die and chiplet
 
+class xet_gpu_domain_t(c_int):
+    def __str__(self):
+        return str(xet_gpu_domain_v(value))
+
+
 ###############################################################################
 ## @brief API version of ::xet_power_average_limit_t
-class xet_power_average_limit_version_t(c_int):
-    pass
-
 class xet_power_average_limit_version_v(IntEnum):
     AVERAGE_POWER_LIMIT_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 )   ## version 1.0
+
+class xet_power_average_limit_version_t(c_int):
+    def __str__(self):
+        return str(xet_power_average_limit_version_v(value))
+
 
 ###############################################################################
 ## @brief Average power limit
@@ -406,9 +436,6 @@ class xet_power_limits_t(Structure):
 
 ###############################################################################
 ## @brief Turbo (dynamic hardware frequency management) modes
-class xet_turbo_mode_t(c_int):
-    pass
-
 class xet_turbo_mode_v(IntEnum):
     DISABLED = 0                                    ## DVFS is currently disabled - frequency is fixed
     DEFAULT = auto()                                ## hardware default DVFS (typically EFFICIENT)
@@ -417,21 +444,25 @@ class xet_turbo_mode_v(IntEnum):
     AGGRESSIVE_PERFORMANCE = auto()                 ## aggressively favor performance over power
     MAX_PERFORMANCE = auto()                        ## fixed max frequency unless limited by thermals/power
 
+class xet_turbo_mode_t(c_int):
+    def __str__(self):
+        return str(xet_turbo_mode_v(value))
+
+
 ###############################################################################
 ## @brief Clock types
-class xet_clock_type_t(c_int):
-    pass
-
 class xet_clock_type_v(IntEnum):
     FIXED = 0                                       ## fixed crystal clock
     PLL = auto()                                    ## phase-locked-loop (PLL) frequency range
     DIVIDER = auto()                                ## frequency is linked to another domain by a divider
 
+class xet_clock_type_t(c_int):
+    def __str__(self):
+        return str(xet_clock_type_v(value))
+
+
 ###############################################################################
 ## @brief Frequency throttle reasons
-class xet_freq_throttle_reasons_t(c_int):
-    pass
-
 class xet_freq_throttle_reasons_v(IntEnum):
     NONE = 0                                        ## frequency not throttled
     AVE_PWR_CAP = XE_BIT( 0 )                       ## frequency throttled due to average power excursion (PL1)
@@ -442,6 +473,11 @@ class xet_freq_throttle_reasons_v(IntEnum):
     SW_RANGE = XE_BIT( 5 )                          ## frequency throttled due to software supplied frequency range
     HW_RANGE = XE_BIT( 6 )                          ## frequency throttled due to a sub block that has a lower frequency
                                                     ## range when it receives clocks
+
+class xet_freq_throttle_reasons_t(c_int):
+    def __str__(self):
+        return str(xet_freq_throttle_reasons_v(value))
+
 
 ###############################################################################
 ## @brief Properties of a frequency domain
@@ -489,9 +525,6 @@ class xet_clock_divider_t(Structure):
 
 ###############################################################################
 ## @brief Fan capabilities
-class xet_fan_capabilities_t(c_int):
-    pass
-
 class xet_fan_capabilities_v(IntEnum):
     GET_SPEED_PERCENTAGE = XE_BIT( 0 )              ## can query fan speed as a percentage
     SET_SPEED_PERCENTAGE = XE_BIT( 1 )              ## can set fan speed as a percentage
@@ -499,14 +532,21 @@ class xet_fan_capabilities_v(IntEnum):
     SET_SPEED_RPM = XE_BIT( 3 )                     ## can set fan speed as rpm
     HAVE_TEMPERATURE_SPEED_TABLE = XE_BIT( 4 )      ## can set temperature/fan speed table
 
+class xet_fan_capabilities_t(c_int):
+    def __str__(self):
+        return str(xet_fan_capabilities_v(value))
+
+
 ###############################################################################
 ## @brief Fan speed modes
-class xet_fan_speed_mode_t(c_int):
-    pass
-
 class xet_fan_speed_mode_v(IntEnum):
     AUTO = 0                                        ## fan speed is dynamically controlled based on temperature
     FIXED = auto()                                  ## fan speed is fixed
+
+class xet_fan_speed_mode_t(c_int):
+    def __str__(self):
+        return str(xet_fan_speed_mode_v(value))
+
 
 ###############################################################################
 ## @brief Fan properties
@@ -603,11 +643,13 @@ class xet_experimental_callbacks_t(xex_callbacks_t):
 
 ###############################################################################
 ## @brief API version of ::xet_tracer_desc_t
-class xet_tracer_desc_version_t(c_int):
-    pass
-
 class xet_tracer_desc_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
+
+class xet_tracer_desc_version_t(c_int):
+    def __str__(self):
+        return str(xet_tracer_desc_version_v(value))
+
 
 ###############################################################################
 ## @brief Tracer descriptor

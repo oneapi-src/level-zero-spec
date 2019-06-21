@@ -57,13 +57,15 @@ class ${th.make_type_name(n, tags, obj)}(${th.get_ctype_name(n, tags, {'type': o
 %endif
 ## ENUM #######################################################################
 %elif re.match(r"enum", obj['type']):
-class ${th.make_type_name(n, tags, obj)}(c_int):
-    pass
-
 class ${re.sub(r"(\w+)_t", r"\1_v", th.make_type_name(n, tags, obj))}(IntEnum):
     %for line in th.make_etor_lines(n, tags, obj, py=True, meta=meta):
     ${line}
     %endfor
+
+class ${th.make_type_name(n, tags, obj)}(c_int):
+    def __str__(self):
+        return str(${re.sub(r"(\w+)_t", r"\1_v", th.make_type_name(n, tags, obj))}(value))
+
 ## STRUCT/UNION ###############################################################
 %elif re.match(r"struct|union", obj['type']):
 class ${th.make_type_name(n, tags, obj)}(Structure):

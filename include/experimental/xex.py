@@ -29,19 +29,23 @@ class xex_command_graph_handle_t(c_void_p):
 
 ###############################################################################
 ## @brief API version of ::xex_command_graph_desc_t
-class xex_command_graph_desc_version_t(c_int):
-    pass
-
 class xex_command_graph_desc_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
 
+class xex_command_graph_desc_version_t(c_int):
+    def __str__(self):
+        return str(xex_command_graph_desc_version_v(value))
+
+
 ###############################################################################
 ## @brief Supported command graph creation flags
-class xex_command_graph_flag_t(c_int):
-    pass
-
 class xex_command_graph_flag_v(IntEnum):
     NONE = 0                                        ## default behavior
+
+class xex_command_graph_flag_t(c_int):
+    def __str__(self):
+        return str(xex_command_graph_flag_v(value))
+
 
 ###############################################################################
 ## @brief CommandGraph descriptor

@@ -130,9 +130,6 @@ def XE_BIT( _i ):
 ## @remarks
 ##   _Analogues_
 ##     - **CUresult**
-class xe_result_t(c_int):
-    pass
-
 class xe_result_v(IntEnum):
     SUCCESS = 0                                     ## success
     NOT_READY = 1                                   ## synchronization primitive not signaled
@@ -145,14 +142,21 @@ class xe_result_v(IntEnum):
     ERROR_MODULE_BUILD_FAILURE = auto()             ## error in building module
     ERROR_UNKNOWN = 0x7fffffff                      ## unknown or internal error
 
+class xe_result_t(c_int):
+    def __str__(self):
+        return str(xe_result_v(value))
+
+
 ###############################################################################
 ## @brief Supported initialization flags
-class xe_init_flag_t(c_int):
-    pass
-
 class xe_init_flag_v(IntEnum):
     NONE = 0                                        ## default behavior
     GPU_ONLY = XE_BIT(0)                            ## only initialize GPU drivers
+
+class xe_init_flag_t(c_int):
+    def __str__(self):
+        return str(xe_init_flag_v(value))
+
 
 ###############################################################################
 ## @brief Supported API versions
@@ -160,19 +164,23 @@ class xe_init_flag_v(IntEnum):
 ## @details
 ##     - API versions contain major and minor attributes, use
 ##       ::XE_MAJOR_VERSION and ::XE_MINOR_VERSION
-class xe_api_version_t(c_int):
-    pass
-
 class xe_api_version_v(IntEnum):
     _1_0 = XE_MAKE_VERSION( 1, 0 )                  ## 1.0
 
+class xe_api_version_t(c_int):
+    def __str__(self):
+        return str(xe_api_version_v(value))
+
+
 ###############################################################################
 ## @brief API version of ::xe_device_properties_t
-class xe_device_properties_version_t(c_int):
-    pass
-
 class xe_device_properties_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
+
+class xe_device_properties_version_t(c_int):
+    def __str__(self):
+        return str(xe_device_properties_version_v(value))
+
 
 ###############################################################################
 ## @brief Maximum device uuid size in bytes
@@ -180,12 +188,14 @@ XE_MAX_UUID_SIZE = 16
 
 ###############################################################################
 ## @brief Supported device types
-class xe_device_type_t(c_int):
-    pass
-
 class xe_device_type_v(IntEnum):
     GPU = 1                                         ## Graphics Processing Unit
     FPGA = auto()                                   ## Field Programmable Gate Array
+
+class xe_device_type_t(c_int):
+    def __str__(self):
+        return str(xe_device_type_v(value))
+
 
 ###############################################################################
 ## @brief Device universal unique id (UUID)
@@ -228,11 +238,13 @@ class xe_device_properties_t(Structure):
 
 ###############################################################################
 ## @brief API version of ::xe_device_compute_properties_t
-class xe_device_compute_properties_version_t(c_int):
-    pass
-
 class xe_device_compute_properties_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
+
+class xe_device_compute_properties_version_t(c_int):
+    def __str__(self):
+        return str(xe_device_compute_properties_version_v(value))
+
 
 ###############################################################################
 ## @brief Maximum number of subgroup sizes supported.
@@ -260,11 +272,13 @@ class xe_device_compute_properties_t(Structure):
 
 ###############################################################################
 ## @brief API version of ::xe_device_memory_properties_t
-class xe_device_memory_properties_version_t(c_int):
-    pass
-
 class xe_device_memory_properties_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
+
+class xe_device_memory_properties_version_t(c_int):
+    def __str__(self):
+        return str(xe_device_memory_properties_version_v(value))
+
 
 ###############################################################################
 ## @brief Device local memory properties queried using
@@ -279,11 +293,13 @@ class xe_device_memory_properties_t(Structure):
 
 ###############################################################################
 ## @brief API version of ::xe_device_memory_access_properties_t
-class xe_device_memory_access_properties_version_t(c_int):
-    pass
-
 class xe_device_memory_access_properties_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
+
+class xe_device_memory_access_properties_version_t(c_int):
+    def __str__(self):
+        return str(xe_device_memory_access_properties_version_v(value))
+
 
 ###############################################################################
 ## @brief Memory access capabilities
@@ -291,15 +307,17 @@ class xe_device_memory_access_properties_version_v(IntEnum):
 ## @details
 ##     - Supported access capabilities for different types of memory
 ##       allocations
-class xe_memory_access_capabilities_t(c_int):
-    pass
-
 class xe_memory_access_capabilities_v(IntEnum):
     MEMORY_ACCESS_NONE = 0                          ## Access not supported
     MEMORY_ACCESS = XE_BIT( 0 )                     ## Supports load/store access
     MEMORY_ATOMIC_ACCESS = XE_BIT( 1 )              ## Supports atomic access
     MEMORY_CONCURRENT_ACCESS = XE_BIT( 2 )          ## Supports concurrent access
     MEMORY_CONCURRENT_ATOMIC_ACCESS = XE_BIT( 3 )   ## Supports concurrent atomic access
+
+class xe_memory_access_capabilities_t(c_int):
+    def __str__(self):
+        return str(xe_memory_access_capabilities_v(value))
+
 
 ###############################################################################
 ## @brief Device memory access properties queried using
@@ -316,11 +334,13 @@ class xe_device_memory_access_properties_t(Structure):
 
 ###############################################################################
 ## @brief API version of ::xe_device_cache_properties_t
-class xe_device_cache_properties_version_t(c_int):
-    pass
-
 class xe_device_cache_properties_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
+
+class xe_device_cache_properties_version_t(c_int):
+    def __str__(self):
+        return str(xe_device_cache_properties_version_v(value))
+
 
 ###############################################################################
 ## @brief Device cache properties queried using
@@ -338,11 +358,13 @@ class xe_device_cache_properties_t(Structure):
 
 ###############################################################################
 ## @brief API version of ::xe_device_image_properties_t
-class xe_device_image_properties_version_t(c_int):
-    pass
-
 class xe_device_image_properties_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
+
+class xe_device_image_properties_version_t(c_int):
+    def __str__(self):
+        return str(xe_device_image_properties_version_v(value))
+
 
 ###############################################################################
 ## @brief Device image properties queried using
@@ -360,11 +382,13 @@ class xe_device_image_properties_t(Structure):
 
 ###############################################################################
 ## @brief API version of ::xe_device_p2p_properties_t
-class xe_device_p2p_properties_version_t(c_int):
-    pass
-
 class xe_device_p2p_properties_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
+
+class xe_device_p2p_properties_version_t(c_int):
+    def __str__(self):
+        return str(xe_device_p2p_properties_version_v(value))
+
 
 ###############################################################################
 ## @brief Device properties queried using ::xeDeviceGetP2PProperties
@@ -380,27 +404,28 @@ class xe_device_p2p_properties_t(Structure):
 ## 
 ## @details
 ##     - Supported Cache Config (Default, Large SLM, Large Data Cache)
-class xe_cache_config_t(c_int):
-    pass
-
 class xe_cache_config_v(IntEnum):
     DEFAULT = XE_BIT( 0 )                           ## Default Config
     LARGE_SLM = XE_BIT( 1 )                         ## Large SLM size
     LARGE_DATA = XE_BIT( 2 )                        ## Large General Data size
 
+class xe_cache_config_t(c_int):
+    def __str__(self):
+        return str(xe_cache_config_v(value))
+
+
 ###############################################################################
 ## @brief API version of ::xe_command_queue_desc_t
-class xe_command_queue_desc_version_t(c_int):
-    pass
-
 class xe_command_queue_desc_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
 
+class xe_command_queue_desc_version_t(c_int):
+    def __str__(self):
+        return str(xe_command_queue_desc_version_v(value))
+
+
 ###############################################################################
 ## @brief Supported command queue flags
-class xe_command_queue_flag_t(c_int):
-    pass
-
 class xe_command_queue_flag_v(IntEnum):
     NONE = 0                                        ## default behavior
     COPY_ONLY = XE_BIT(0)                           ## command queue only supports enqueing copy-only command lists
@@ -409,11 +434,13 @@ class xe_command_queue_flag_v(IntEnum):
     SINGLE_SLICE_ONLY = XE_BIT(2)                   ## command queue reserves and cannot comsume more than a single slice.
                                                     ## 'slice' size is device-specific.  cannot be combined with COPY_ONLY.
 
+class xe_command_queue_flag_t(c_int):
+    def __str__(self):
+        return str(xe_command_queue_flag_v(value))
+
+
 ###############################################################################
 ## @brief Supported command queue modes
-class xe_command_queue_mode_t(c_int):
-    pass
-
 class xe_command_queue_mode_v(IntEnum):
     DEFAULT = 0                                     ## implicit default behavior; uses driver-based heuristics
     SYNCHRONOUS = auto()                            ## Device execution always completes immediately on execute;
@@ -421,15 +448,22 @@ class xe_command_queue_mode_v(IntEnum):
     ASYNCHRONOUS = auto()                           ## Device execution is scheduled and will complete in future;
                                                     ## explicit synchronization object must be used to determine completeness
 
+class xe_command_queue_mode_t(c_int):
+    def __str__(self):
+        return str(xe_command_queue_mode_v(value))
+
+
 ###############################################################################
 ## @brief Supported command queue priorities
-class xe_command_queue_priority_t(c_int):
-    pass
-
 class xe_command_queue_priority_v(IntEnum):
     NORMAL = 0                                      ## [default] normal priority
     LOW = auto()                                    ## lower priority than normal
     HIGH = auto()                                   ## higher priority than normal
+
+class xe_command_queue_priority_t(c_int):
+    def __str__(self):
+        return str(xe_command_queue_priority_v(value))
+
 
 ###############################################################################
 ## @brief Command Queue descriptor
@@ -449,17 +483,16 @@ class xe_command_queue_desc_t(Structure):
 
 ###############################################################################
 ## @brief API version of ::xe_command_list_desc_t
-class xe_command_list_desc_version_t(c_int):
-    pass
-
 class xe_command_list_desc_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
 
+class xe_command_list_desc_version_t(c_int):
+    def __str__(self):
+        return str(xe_command_list_desc_version_v(value))
+
+
 ###############################################################################
 ## @brief Supported command list creation flags
-class xe_command_list_flag_t(c_int):
-    pass
-
 class xe_command_list_flag_v(IntEnum):
     NONE = 0                                        ## default behavior
     COPY_ONLY = XE_BIT(0)                           ## command list **only** contains copy operations (and synchronization primitives).
@@ -480,6 +513,11 @@ class xe_command_list_flag_v(IntEnum):
                                                     ## this flag should be used when applications want full control over
                                                     ## multi-engine submission and scheduling.
 
+class xe_command_list_flag_t(c_int):
+    def __str__(self):
+        return str(xe_command_list_flag_v(value))
+
+
 ###############################################################################
 ## @brief Command List descriptor
 class xe_command_list_desc_t(Structure):
@@ -490,11 +528,13 @@ class xe_command_list_desc_t(Structure):
 
 ###############################################################################
 ## @brief Supported command list parameters
-class xe_command_list_parameter_t(c_int):
-    pass
-
 class xe_command_list_parameter_v(IntEnum):
     TBD = auto()                                    ## TBD
+
+class xe_command_list_parameter_t(c_int):
+    def __str__(self):
+        return str(xe_command_list_parameter_v(value))
+
 
 ###############################################################################
 ## @brief Copy region descriptor
@@ -521,9 +561,6 @@ class xe_image_region_t(Structure):
 
 ###############################################################################
 ## @brief Supported memory advice hints
-class xe_memory_advice_t(c_int):
-    pass
-
 class xe_memory_advice_v(IntEnum):
     SET_READ_MOSTLY = 0                             ## hint that memory will be read from frequently and written to rarely
     CLEAR_READ_MOSTLY = auto()                      ## removes the affect of ::XE_MEMORY_ADVICE_SET_READ_MOSTLY
@@ -536,23 +573,32 @@ class xe_memory_advice_v(IntEnum):
     BIAS_CACHED = auto()                            ## hints that memory should be cached
     BIAS_UNCACHED = auto()                          ## hints that memory should be not be cached
 
+class xe_memory_advice_t(c_int):
+    def __str__(self):
+        return str(xe_memory_advice_v(value))
+
+
 ###############################################################################
 ## @brief API version of ::xe_event_pool_desc_t
-class xe_event_pool_desc_version_t(c_int):
-    pass
-
 class xe_event_pool_desc_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
 
+class xe_event_pool_desc_version_t(c_int):
+    def __str__(self):
+        return str(xe_event_pool_desc_version_v(value))
+
+
 ###############################################################################
 ## @brief Supported event pool creation flags
-class xe_event_pool_flag_t(c_int):
-    pass
-
 class xe_event_pool_flag_v(IntEnum):
     DEFAULT = 0                                     ## signals and waits visible to the entire device and peer devices
     HOST_VISIBLE = XE_BIT(0)                        ## signals and waits are also visible to host
     IPC = XE_BIT(1)                                 ## signals and waits may be shared across processes
+
+class xe_event_pool_flag_t(c_int):
+    def __str__(self):
+        return str(xe_event_pool_flag_v(value))
+
 
 ###############################################################################
 ## @brief Event pool descriptor
@@ -565,17 +611,16 @@ class xe_event_pool_desc_t(Structure):
 
 ###############################################################################
 ## @brief API version of ::xe_event_desc_t
-class xe_event_desc_version_t(c_int):
-    pass
-
 class xe_event_desc_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
 
+class xe_event_desc_version_t(c_int):
+    def __str__(self):
+        return str(xe_event_desc_version_v(value))
+
+
 ###############################################################################
 ## @brief Supported event scope flags
-class xe_event_scope_flag_t(c_int):
-    pass
-
 class xe_event_scope_flag_v(IntEnum):
     NONE = 0                                        ## execution synchronization only; no cache hierarchies are flushed or
                                                     ## invalidated
@@ -585,6 +630,11 @@ class xe_event_scope_flag_v(IntEnum):
                                                     ## device access and peer device access
     HOST = XE_BIT(2)                                ## cache hierarchies are flushed or invalidated sufficient for device and
                                                     ## host access
+
+class xe_event_scope_flag_t(c_int):
+    def __str__(self):
+        return str(xe_event_scope_flag_v(value))
+
 
 ###############################################################################
 ## @brief Event descriptor
@@ -601,19 +651,23 @@ class xe_event_desc_t(Structure):
 
 ###############################################################################
 ## @brief API version of ::xe_fence_desc_t
-class xe_fence_desc_version_t(c_int):
-    pass
-
 class xe_fence_desc_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
 
+class xe_fence_desc_version_t(c_int):
+    def __str__(self):
+        return str(xe_fence_desc_version_v(value))
+
+
 ###############################################################################
 ## @brief Supported fence creation flags
-class xe_fence_flag_t(c_int):
-    pass
-
 class xe_fence_flag_v(IntEnum):
     NONE = 0                                        ## default behavior
+
+class xe_fence_flag_t(c_int):
+    def __str__(self):
+        return str(xe_fence_flag_v(value))
+
 
 ###############################################################################
 ## @brief Fence descriptor
@@ -625,28 +679,29 @@ class xe_fence_desc_t(Structure):
 
 ###############################################################################
 ## @brief API version of ::xe_image_desc_t
-class xe_image_desc_version_t(c_int):
-    pass
-
 class xe_image_desc_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
 
+class xe_image_desc_version_t(c_int):
+    def __str__(self):
+        return str(xe_image_desc_version_v(value))
+
+
 ###############################################################################
 ## @brief Supported image creation flags
-class xe_image_flag_t(c_int):
-    pass
-
 class xe_image_flag_v(IntEnum):
     PROGRAM_READ = XE_BIT( 0 )                      ## programs will read contents
     PROGRAM_WRITE = XE_BIT( 1 )                     ## programs will write contents
     BIAS_CACHED = XE_BIT( 2 )                       ## device should cache contents
     BIAS_UNCACHED = XE_BIT( 3 )                     ## device should not cache contents
 
+class xe_image_flag_t(c_int):
+    def __str__(self):
+        return str(xe_image_flag_v(value))
+
+
 ###############################################################################
 ## @brief Supported image types
-class xe_image_type_t(c_int):
-    pass
-
 class xe_image_type_v(IntEnum):
     _1D = auto()                                    ## 1D
     _1DARRAY = auto()                               ## 1D array
@@ -654,11 +709,13 @@ class xe_image_type_v(IntEnum):
     _2DARRAY = auto()                               ## 2D array
     _3D = auto()                                    ## 3D
 
+class xe_image_type_t(c_int):
+    def __str__(self):
+        return str(xe_image_type_v(value))
+
+
 ###############################################################################
 ## @brief Supported image format layouts
-class xe_image_format_layout_t(c_int):
-    pass
-
 class xe_image_format_layout_v(IntEnum):
     _8 = auto()                                     ## 8-bit single component layout
     _16 = auto()                                    ## 16-bit single component layout
@@ -691,11 +748,13 @@ class xe_image_format_layout_v(IntEnum):
     P216 = auto()                                   ## Media Format: P216. Format type and swizzle is ignored for this.
     P416 = auto()                                   ## Media Format: P416. Format type and swizzle is ignored for this.
 
+class xe_image_format_layout_t(c_int):
+    def __str__(self):
+        return str(xe_image_format_layout_v(value))
+
+
 ###############################################################################
 ## @brief Supported image format types
-class xe_image_format_type_t(c_int):
-    pass
-
 class xe_image_format_type_v(IntEnum):
     UINT = auto()                                   ## Unsigned integer
     SINT = auto()                                   ## Signed integer
@@ -703,11 +762,13 @@ class xe_image_format_type_v(IntEnum):
     SNORM = auto()                                  ## Signed normalized integer
     FLOAT = auto()                                  ## Float
 
+class xe_image_format_type_t(c_int):
+    def __str__(self):
+        return str(xe_image_format_type_v(value))
+
+
 ###############################################################################
 ## @brief Supported image format component swizzle into channel
-class xe_image_format_swizzle_t(c_int):
-    pass
-
 class xe_image_format_swizzle_v(IntEnum):
     R = auto()                                      ## Red component
     G = auto()                                      ## Green component
@@ -716,6 +777,11 @@ class xe_image_format_swizzle_v(IntEnum):
     _0 = auto()                                     ## Zero
     _1 = auto()                                     ## One
     X = auto()                                      ## Don't care
+
+class xe_image_format_swizzle_t(c_int):
+    def __str__(self):
+        return str(xe_image_format_swizzle_v(value))
+
 
 ###############################################################################
 ## @brief Image format descriptor
@@ -750,21 +816,25 @@ class xe_image_desc_t(Structure):
 
 ###############################################################################
 ## @brief API version of ::xe_image_properties_t
-class xe_image_properties_version_t(c_int):
-    pass
-
 class xe_image_properties_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
 
+class xe_image_properties_version_t(c_int):
+    def __str__(self):
+        return str(xe_image_properties_version_v(value))
+
+
 ###############################################################################
 ## @brief Supported sampler filtering flags
-class xe_image_sampler_filter_flags_t(c_int):
-    pass
-
 class xe_image_sampler_filter_flags_v(IntEnum):
     NONE = 0                                        ## device does not support filtering
     POINT = XE_BIT(0)                               ## device supports point filtering
     LINEAR = XE_BIT(1)                              ## device supports linear filtering
+
+class xe_image_sampler_filter_flags_t(c_int):
+    def __str__(self):
+        return str(xe_image_sampler_filter_flags_v(value))
+
 
 ###############################################################################
 ## @brief Image properties
@@ -776,43 +846,51 @@ class xe_image_properties_t(Structure):
 
 ###############################################################################
 ## @brief Supported device memory allocation flags
-class xe_device_mem_alloc_flag_t(c_int):
-    pass
-
 class xe_device_mem_alloc_flag_v(IntEnum):
     DEFAULT = 0                                     ## implicit default behavior; uses driver-based heuristics
     BIAS_CACHED = XE_BIT( 0 )                       ## device should cache allocation
     BIAS_UNCACHED = XE_BIT( 1 )                     ## device should not cache allocation (UC)
 
+class xe_device_mem_alloc_flag_t(c_int):
+    def __str__(self):
+        return str(xe_device_mem_alloc_flag_v(value))
+
+
 ###############################################################################
 ## @brief Supported host memory allocation flags
-class xe_host_mem_alloc_flag_t(c_int):
-    pass
-
 class xe_host_mem_alloc_flag_v(IntEnum):
     DEFAULT = 0                                     ## implicit default behavior; uses driver-based heuristics
     BIAS_CACHED = XE_BIT( 0 )                       ## host should cache allocation
     BIAS_UNCACHED = XE_BIT( 1 )                     ## host should not cache allocation (UC)
     BIAS_WRITE_COMBINED = XE_BIT( 2 )               ## host memory should be allocated write-combined (WC)
 
+class xe_host_mem_alloc_flag_t(c_int):
+    def __str__(self):
+        return str(xe_host_mem_alloc_flag_v(value))
+
+
 ###############################################################################
 ## @brief API version of ::xe_memory_allocation_properties_t
-class xe_memory_allocation_properties_version_t(c_int):
-    pass
-
 class xe_memory_allocation_properties_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
 
+class xe_memory_allocation_properties_version_t(c_int):
+    def __str__(self):
+        return str(xe_memory_allocation_properties_version_v(value))
+
+
 ###############################################################################
 ## @brief Memory allocation type
-class xe_memory_type_t(c_int):
-    pass
-
 class xe_memory_type_v(IntEnum):
     UNKNOWN = 0                                     ## the memory pointed to is of unknown type
     HOST = auto()                                   ## the memory pointed to is a host allocation
     DEVICE = auto()                                 ## the memory pointed to is a device allocation
     SHARED = auto()                                 ## the memory pointed to is a shared ownership allocation
+
+class xe_memory_type_t(c_int):
+    def __str__(self):
+        return str(xe_memory_type_v(value))
+
 
 ###############################################################################
 ## @brief Memory allocation properties queried using
@@ -826,28 +904,34 @@ class xe_memory_allocation_properties_t(Structure):
 
 ###############################################################################
 ## @brief Supported IPC memory flags
-class xe_ipc_memory_flag_t(c_int):
-    pass
-
 class xe_ipc_memory_flag_v(IntEnum):
     NONE = 0                                        ## No special flags
 
+class xe_ipc_memory_flag_t(c_int):
+    def __str__(self):
+        return str(xe_ipc_memory_flag_v(value))
+
+
 ###############################################################################
 ## @brief API version of ::xe_module_desc_t
-class xe_module_desc_version_t(c_int):
-    pass
-
 class xe_module_desc_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
 
+class xe_module_desc_version_t(c_int):
+    def __str__(self):
+        return str(xe_module_desc_version_v(value))
+
+
 ###############################################################################
 ## @brief Supported module creation input formats
-class xe_module_format_t(c_int):
-    pass
-
 class xe_module_format_v(IntEnum):
     IL_SPIRV = 0                                    ## Format is SPIRV IL format
     NATIVE = auto()                                 ## Format is device native format
+
+class xe_module_format_t(c_int):
+    def __str__(self):
+        return str(xe_module_format_v(value))
+
 
 ###############################################################################
 ## @brief Module descriptor
@@ -863,20 +947,24 @@ class xe_module_desc_t(Structure):
 
 ###############################################################################
 ## @brief API version of ::xe_function_desc_t
-class xe_function_desc_version_t(c_int):
-    pass
-
 class xe_function_desc_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
 
+class xe_function_desc_version_t(c_int):
+    def __str__(self):
+        return str(xe_function_desc_version_v(value))
+
+
 ###############################################################################
 ## @brief Supported function creation flags
-class xe_function_flag_t(c_int):
-    pass
-
 class xe_function_flag_v(IntEnum):
     NONE = 0                                        ## default driver behavior
     FORCE_RESIDENCY = auto()                        ## force all device allocations to be resident during execution
+
+class xe_function_flag_t(c_int):
+    def __str__(self):
+        return str(xe_function_flag_v(value))
+
 
 ###############################################################################
 ## @brief Function descriptor
@@ -893,9 +981,6 @@ class xe_function_desc_t(Structure):
 ## @remarks
 ##   _Analogues_
 ##     - **cl_kernel_exec_info**
-class xe_function_set_attribute_t(c_int):
-    pass
-
 class xe_function_set_attribute_v(IntEnum):
     FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS = 0      ## Indicates that the function accesses host allocations indirectly
                                                     ## (default: false)
@@ -904,15 +989,17 @@ class xe_function_set_attribute_v(IntEnum):
     FUNCTION_SET_ATTR_INDIRECT_SHARED_ACCESS = auto()   ## Indicates that the function accesses shared allocations indirectly
                                                     ## (default: false)
 
+class xe_function_set_attribute_t(c_int):
+    def __str__(self):
+        return str(xe_function_set_attribute_v(value))
+
+
 ###############################################################################
 ## @brief Function attributes
 ## 
 ## @remarks
 ##   _Analogues_
 ##     - **CUfunction_attribute**
-class xe_function_get_attribute_t(c_int):
-    pass
-
 class xe_function_get_attribute_v(IntEnum):
     FUNCTION_GET_ATTR_MAX_REGS_USED = 0             ## Maximum device registers used for this function
     FUNCTION_GET_ATTR_NUM_THREAD_DIMENSIONS = auto()## Maximum dimensions for group for this function
@@ -920,6 +1007,11 @@ class xe_function_get_attribute_v(IntEnum):
     FUNCTION_GET_ATTR_HAS_SPILL_FILL = auto()       ## Function required spill/fills.
     FUNCTION_GET_ATTR_HAS_BARRIERS = auto()         ## Function contains barriers.
     FUNCTION_GET_ATTR_HAS_DPAS = auto()             ## Function contains DPAs.
+
+class xe_function_get_attribute_t(c_int):
+    def __str__(self):
+        return str(xe_function_get_attribute_v(value))
+
 
 ###############################################################################
 ## @brief Function thread group dimensions.
@@ -942,31 +1034,37 @@ class xe_host_pfn_t(c_void_p):
 
 ###############################################################################
 ## @brief API version of ::xe_sampler_desc_t
-class xe_sampler_desc_version_t(c_int):
-    pass
-
 class xe_sampler_desc_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
 
+class xe_sampler_desc_version_t(c_int):
+    def __str__(self):
+        return str(xe_sampler_desc_version_v(value))
+
+
 ###############################################################################
 ## @brief Sampler addressing modes
-class xe_sampler_address_mode_t(c_int):
-    pass
-
 class xe_sampler_address_mode_v(IntEnum):
     NONE = 0                                        ## No coordinate modifications for out-of-bounds image access.
     REPEAT = auto()                                 ## Out-of-bounds coordinates are wrapped back around.
     CLAMP = auto()                                  ## Out-of-bounds coordinates are clamped to edge.
     MIRROR = auto()                                 ## Out-of-bounds coordinates are mirrored starting from edge.
 
+class xe_sampler_address_mode_t(c_int):
+    def __str__(self):
+        return str(xe_sampler_address_mode_v(value))
+
+
 ###############################################################################
 ## @brief Sampler filtering modes
-class xe_sampler_filter_mode_t(c_int):
-    pass
-
 class xe_sampler_filter_mode_v(IntEnum):
     NEAREST = 0                                     ## No coordinate modifications for out of bounds image access.
     LINEAR = auto()                                 ## Out-of-bounds coordinates are wrapped back around.
+
+class xe_sampler_filter_mode_t(c_int):
+    def __str__(self):
+        return str(xe_sampler_filter_mode_v(value))
+
 
 ###############################################################################
 ## @brief Sampler descriptor
