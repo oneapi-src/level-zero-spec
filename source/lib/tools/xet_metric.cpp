@@ -198,15 +198,14 @@ xetMetricGetProperties(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
-///         + nullptr == phMetricGroups
 ///         + invalid metric groups
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetDeviceActivateMetricGroups(
     xet_device_handle_t hDevice,                    ///< [in] handle of the device
     uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
-    xet_metric_group_handle_t* phMetricGroups       ///< [in][range(0, count)] handles of the metric groups to activate. NULL
-                                                    ///< to deactivate.
+    xet_metric_group_handle_t* phMetricGroups       ///< [in][optional][range(0, count)] handles of the metric groups to
+                                                    ///< activate. NULL to deactivate.
     )
 {
     auto pfnActivateMetricGroups = xet_lib::context.ddiTable.Device.pfnActivateMetricGroups;
@@ -872,15 +871,15 @@ namespace xet
     void __xecall
     Device::ActivateMetricGroups(
         uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
-        MetricGroup** ppMetricGroups                    ///< [in][range(0, count)] handles of the metric groups to activate. NULL
-                                                        ///< to deactivate.
+        MetricGroup** ppMetricGroups                    ///< [in][optional][range(0, count)] handles of the metric groups to
+                                                        ///< activate. NULL to deactivate.
         )
     {
         thread_local std::vector<xet_metric_group_handle_t> hMetricGroups;
         hMetricGroups.resize( 0 );
         hMetricGroups.reserve( count );
         for( uint32_t i = 0; i < count; ++i )
-            hMetricGroups.emplace_back( reinterpret_cast<xet_metric_group_handle_t>( ppMetricGroups[ i ]->getHandle() ) );
+            hMetricGroups.emplace_back( ( ppMetricGroups ) ? reinterpret_cast<xet_metric_group_handle_t>( ppMetricGroups[ i ]->getHandle() ) : nullptr );
 
         auto result = static_cast<result_t>( ::xetDeviceActivateMetricGroups(
             reinterpret_cast<xet_device_handle_t>( getHandle() ),
