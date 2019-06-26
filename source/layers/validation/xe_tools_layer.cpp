@@ -198,8 +198,8 @@ namespace layer
     xetDeviceActivateMetricGroups(
         xet_device_handle_t hDevice,                    ///< [in] handle of the device
         uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
-        xet_metric_group_handle_t* phMetricGroups       ///< [in][range(0, count)] handles of the metric groups to activate. NULL
-                                                        ///< to deactivate.
+        xet_metric_group_handle_t* phMetricGroups       ///< [in][optional][range(0, count)] handles of the metric groups to
+                                                        ///< activate. NULL to deactivate.
         )
     {
         auto pfnActivateMetricGroups = context.xetDdiTable.Device.pfnActivateMetricGroups;
@@ -210,9 +210,6 @@ namespace layer
         if( context.enableParameterValidation )
         {
             if( nullptr == hDevice )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == phMetricGroups )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }

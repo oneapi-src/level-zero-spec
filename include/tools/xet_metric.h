@@ -310,15 +310,14 @@ xetMetricGetProperties(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
-///         + nullptr == phMetricGroups
 ///         + invalid metric groups
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetDeviceActivateMetricGroups(
     xet_device_handle_t hDevice,                    ///< [in] handle of the device
     uint32_t count,                                 ///< [in] metric group count to activate. 0 to deactivate.
-    xet_metric_group_handle_t* phMetricGroups       ///< [in][range(0, count)] handles of the metric groups to activate. NULL
-                                                    ///< to deactivate.
+    xet_metric_group_handle_t* phMetricGroups       ///< [in][optional][range(0, count)] handles of the metric groups to
+                                                    ///< activate. NULL to deactivate.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
