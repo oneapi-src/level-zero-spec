@@ -104,27 +104,6 @@ namespace xet_lib
 
         if( XE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<xet_pfnGetSysmanProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "xetGetSysmanProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &ddiTable.Sysman );
-        }
-
-        if( XE_RESULT_SUCCESS == result )
-        {
-            auto getTable = reinterpret_cast<xet_pfnGetSysmanResContainerProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "xetGetSysmanResContainerProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &ddiTable.SysmanResContainer );
-        }
-
-        if( XE_RESULT_SUCCESS == result )
-        {
-            auto getTable = reinterpret_cast<xet_pfnGetSysmanResourceProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "xetGetSysmanResourceProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &ddiTable.SysmanResource );
-        }
-
-        if( XE_RESULT_SUCCESS == result )
-        {
             auto getTable = reinterpret_cast<xet_pfnGetPowerProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "xetGetPowerProcAddrTable") );
             result = getTable( XE_API_VERSION_1_0, &ddiTable.Power );

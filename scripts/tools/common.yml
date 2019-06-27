@@ -69,31 +69,16 @@ class: $tTracer
 name: "$t_tracer_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle for accessing System Resource Management features"
-class: $tSysman
-name: "$t_sysman_handle_t"
---- #--------------------------------------------------------------------------
-type: macro
-desc: "Invalid System Resource Management handle"
-name: $T_INVALID_SYSMAN_HANDLE
-value: "NULL"
+desc: "Handle of power object"
+class: $tPower
+name: "$t_power_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle for a Sysman resource container"
-class: $tSysmanResContainer
-name: "$t_res_container_handle_t"
---- #--------------------------------------------------------------------------
-type: macro
-desc: "Invalid Sysman resource container handle"
-name: $T_INVALID_SYSMAN_RES_CONTAINER_HANDLE
-value: "NULL"
---- #--------------------------------------------------------------------------
-type: handle
-desc: "Handle for a Sysman resource"
-class: $tSysmanResource
-name: "$t_resource_handle_t"
---- #--------------------------------------------------------------------------
-type: macro
-desc: "Invalid Sysman resource handle"
-name: $T_INVALID_SYSMAN_RESOURCE_HANDLE
-value: "NULL"
+desc: "Handle of a frequency domain on a device"
+class: $tFreqDomain
+name: "$t_freq_domain_handle_t"
+# --- #--------------------------------------------------------------------------
+# type: handle
+# desc: "Handle of sysman object"
+# class: $tSysman
+# name: "$t_sysman_handle_t"
