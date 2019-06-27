@@ -1315,11 +1315,11 @@ namespace xet
         std::string str;
         
         str += "value_t::ui32 : ";
-        str += std::to_string(val.ui32);
+        str += to_string(val.ui32);
         str += "\n";
         
         str += "value_t::ui64 : ";
-        str += std::to_string(val.ui64);
+        str += to_string(val.ui64);
         str += "\n";
         
         str += "value_t::fp32 : ";
@@ -1416,11 +1416,11 @@ namespace xet
         str += "\n";
         
         str += "MetricGroup::properties_t::domain : ";
-        str += std::to_string(val.domain);
+        str += to_string(val.domain);
         str += "\n";
         
         str += "MetricGroup::properties_t::metricCount : ";
-        str += std::to_string(val.metricCount);
+        str += to_string(val.metricCount);
         str += "\n";
 
         return str;
@@ -1517,7 +1517,7 @@ namespace xet
         str += "\n";
         
         str += "Metric::properties_t::tierNumber : ";
-        str += std::to_string(val.tierNumber);
+        str += to_string(val.tierNumber);
         str += "\n";
         
         str += "Metric::properties_t::metricType : ";
@@ -1566,11 +1566,11 @@ namespace xet
         str += "\n";
         
         str += "MetricTracer::desc_t::notifyEveryNReports : ";
-        str += std::to_string(val.notifyEveryNReports);
+        str += to_string(val.notifyEveryNReports);
         str += "\n";
         
         str += "MetricTracer::desc_t::samplingPeriod : ";
-        str += std::to_string(val.samplingPeriod);
+        str += to_string(val.samplingPeriod);
         str += "\n";
 
         return str;
@@ -1635,7 +1635,7 @@ namespace xet
         str += "\n";
         
         str += "MetricQueryPool::desc_t::count : ";
-        str += std::to_string(val.count);
+        str += to_string(val.count);
         str += "\n";
 
         return str;

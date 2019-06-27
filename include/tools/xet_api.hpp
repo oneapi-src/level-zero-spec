@@ -27,7 +27,6 @@
 #include "xet_metric.hpp"
 #include "xet_module.hpp"
 #include "xet_pin.hpp"
-#include "xet_power.hpp"
 #include "xet_sysman.hpp"
 #include "xet_tracing.hpp"
 
