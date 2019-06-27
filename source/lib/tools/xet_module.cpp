@@ -182,7 +182,7 @@ namespace xet
         str += "\n";
         
         str += "Function::profile_info_t::numTokens : ";
-        str += std::to_string(val.numTokens);
+        str += to_string(val.numTokens);
         str += "\n";
 
         return str;
@@ -199,11 +199,11 @@ namespace xet
         str += "\n";
         
         str += "Function::profile_free_register_token_t::size : ";
-        str += std::to_string(val.size);
+        str += to_string(val.size);
         str += "\n";
         
         str += "Function::profile_free_register_token_t::count : ";
-        str += std::to_string(val.count);
+        str += to_string(val.count);
         str += "\n";
 
         return str;
@@ -216,11 +216,11 @@ namespace xet
         std::string str;
         
         str += "Function::profile_register_sequence_t::start : ";
-        str += std::to_string(val.start);
+        str += to_string(val.start);
         str += "\n";
         
         str += "Function::profile_register_sequence_t::count : ";
-        str += std::to_string(val.count);
+        str += to_string(val.count);
         str += "\n";
 
         return str;

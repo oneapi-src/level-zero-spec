@@ -187,7 +187,7 @@ namespace xet
         {
             xe::bool_t fanSpeedInRpm;                       ///< [in,out] false means fanSpeed is in percentage, true means fanSpeed is
                                                             ///< in RPM
-            fan_speed_mode_t fanSpeedMode;                  ///< [in,out] whether the fan speed is fixed or being controlled
+            SysmanResource::fan_speed_mode_t fanSpeedMode;  ///< [in,out] whether the fan speed is fixed or being controlled
                                                             ///< dynamically
             uint16_t fanSpeed;                              ///< [in,out] the fan speed as a percentage (or RPM if fanSpeedInRpm is
                                                             ///< true)
@@ -285,10 +285,10 @@ namespace xet
         ///     - **nvmlInit**
         ///     - **rsmi_init**
         /// @returns
-        ///     - Power*: handle for accessing power features of the device
+        ///     - power_handle_t: handle for accessing power features of the device
         /// 
         /// @throws result_t
-        static Power* __xecall
+        static power_handle_t __xecall
         Create(
             Device* pDevice,                                ///< [in] pointer to the device object
             uint32_t flags                                  ///< [in] bitfield of ::xet_power_init_flags_t
@@ -304,7 +304,7 @@ namespace xet
         /// @throws result_t
         static void __xecall
         Destroy(
-            Power* pPower                                   ///< [in][release] pointer to the power object to destroy
+            power_handle_t pPower                           ///< [in][release] pointer to the power object to destroy
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -442,10 +442,10 @@ namespace xet
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get fan properties for one of the fans on a device
         /// @returns
-        ///     - fan_properties_t: pointer to storage for fan properties
+        ///     - SysmanResource::fan_properties_t: pointer to storage for fan properties
         /// 
         /// @throws result_t
-        fan_properties_t __xecall
+        SysmanResource::fan_properties_t __xecall
         FanGetProperties(
             uint32_t fanIndex                               ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
             );
@@ -727,7 +727,7 @@ namespace xet
         /// @throws result_t
         static void __xecall
         Get(
-            Power* pPower,                                  ///< [in] pointer to the power object
+            power_handle_t pPower,                          ///< [in] pointer to the power object
             uint32_t* pCount,                               ///< [in,out] pointer to the number of frequency domains.
                                                             ///< if count is zero, then the driver will update the value with the total
                                                             ///< number of frequency domains available.
@@ -736,7 +736,7 @@ namespace xet
                                                             ///< if count is larger than the number of frequency domains available,
                                                             ///< then the driver will update the value with the correct number of
                                                             ///< frequency domains available.
-            FreqDomain** ppFreqDomain = nullptr             ///< [in,out][optional][range(0, *pCount)] array of pointer to frequency
+            freq_domain_handle_t* ppFreqDomain = nullptr    ///< [in,out][optional][range(0, *pCount)] array of pointer to frequency
                                                             ///< domains
             );
 
@@ -755,10 +755,10 @@ namespace xet
         /// @brief Get the source frequency domain handle for a frequency domain of type
         ///        ::XET_CLOCK_TYPE_DIVIDER
         /// @returns
-        ///     - FreqDomain*: pointer to a handle where the source frequency domain handle will be returned
+        ///     - freq_domain_handle_t: pointer to a handle where the source frequency domain handle will be returned
         /// 
         /// @throws result_t
-        FreqDomain* __xecall
+        freq_domain_handle_t __xecall
         GetSourceFreqDomain(
             void
             );
@@ -851,10 +851,10 @@ namespace xet
         /// @returns
         ///     - uint32_t: current frequency in MHz requested by the driver
         ///     - uint32_t: the actual frequency in MHz
-        ///     - freq_throttle_reasons_t: the reason the resolved frequency is lower than the request
+        ///     - SysmanResource::freq_throttle_reasons_t: the reason the resolved frequency is lower than the request
         /// 
         /// @throws result_t
-        std::tuple<uint32_t, uint32_t, freq_throttle_reasons_t> __xecall
+        std::tuple<uint32_t, uint32_t, SysmanResource::freq_throttle_reasons_t> __xecall
         GetCurrentFrequency(
             void
             );
