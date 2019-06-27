@@ -9,6 +9,7 @@ add_library(${TARGET_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/xet_metric.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xet_module.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xet_pin.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/xet_power.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xet_sysman.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xet_tracing.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/xet_tools_lib.cpp

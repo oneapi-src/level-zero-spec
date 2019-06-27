@@ -28,6 +28,7 @@
 #include "xet_metric.h"
 #include "xet_module.h"
 #include "xet_pin.h"
+#include "xet_power.h"
 #include "xet_sysman.h"
 #include "xet_tracing.h"
 
