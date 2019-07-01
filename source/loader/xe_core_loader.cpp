@@ -400,6 +400,31 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeDeviceGroupGetIPCProperties
+    xe_result_t __xecall
+    xeDeviceGroupGetIPCProperties(
+        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+        xe_device_ipc_properties_t* pIPCProperties      ///< [out] query result for IPC properties
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto pfnGetIPCProperties = dditable->xe.DeviceGroup.pfnGetIPCProperties;
+        if( nullptr == pfnGetIPCProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
+
+        // forward to device-driver
+        result = pfnGetIPCProperties( hDeviceGroup, pIPCProperties );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xeDeviceGetP2PProperties
     xe_result_t __xecall
     xeDeviceGetP2PProperties(
@@ -3225,6 +3250,7 @@ xeGetDeviceGroupProcAddrTable(
             pDdiTable->pfnGetMemoryAccessProperties                = loader::xeDeviceGroupGetMemoryAccessProperties;
             pDdiTable->pfnGetCacheProperties                       = loader::xeDeviceGroupGetCacheProperties;
             pDdiTable->pfnGetImageProperties                       = loader::xeDeviceGroupGetImageProperties;
+            pDdiTable->pfnGetIPCProperties                         = loader::xeDeviceGroupGetIPCProperties;
             pDdiTable->pfnAllocSharedMem                           = loader::xeDeviceGroupAllocSharedMem;
             pDdiTable->pfnAllocDeviceMem                           = loader::xeDeviceGroupAllocDeviceMem;
             pDdiTable->pfnAllocHostMem                             = loader::xeDeviceGroupAllocHostMem;

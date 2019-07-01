@@ -132,6 +132,14 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief API version of ::xe_device_ipc_properties_t
+        enum class device_ipc_properties_version_t
+        {
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Supported device memory allocation flags
         enum class device_mem_alloc_flag_t
         {
@@ -290,6 +298,18 @@ namespace xe
             uint32_t maxImageDims2D;                        ///< [out] Maximum image dimensions for 2D resources.
             uint32_t maxImageDims3D;                        ///< [out] Maximum image dimensions for 3D resources.
             uint32_t maxImageArraySlices;                   ///< [out] Maximum image array slices
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Device IPC properties queried using ::xeDeviceGroupGetIPCProperties
+        struct device_ipc_properties_t
+        {
+            device_ipc_properties_version_t version = device_ipc_properties_version_t::CURRENT; ///< [in] ::XE_DEVICE_IPC_PROPERTIES_VERSION_CURRENT
+            bool_t memsSupported;                           ///< [out] Supports passing memory allocations between processes. See
+                                                            ///< ::::xeDeviceGroupGetMemIpcHandle.
+            bool_t eventsSupported;                         ///< [out] Supports passing events between processes. See
+                                                            ///< ::::xeEventPoolGetIpcHandle.
 
         };
 
@@ -525,6 +545,25 @@ namespace xe
         /// @throws result_t
         device_image_properties_t __xecall
         GetImageProperties(
+            void
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Retrieves IPC attributes of the device
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuDeviceGetAttribute**
+        /// @returns
+        ///     - device_ipc_properties_t: query result for IPC properties
+        /// 
+        /// @throws result_t
+        device_ipc_properties_t __xecall
+        GetIPCProperties(
             void
             );
 
@@ -1115,6 +1154,14 @@ namespace xe
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts DeviceGroup::device_image_properties_t to std::string
     std::string to_string( const DeviceGroup::device_image_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts DeviceGroup::device_ipc_properties_version_t to std::string
+    std::string to_string( const DeviceGroup::device_ipc_properties_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts DeviceGroup::device_ipc_properties_t to std::string
+    std::string to_string( const DeviceGroup::device_ipc_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts DeviceGroup::device_mem_alloc_flag_t to std::string

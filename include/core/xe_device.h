@@ -536,6 +536,51 @@ xeDeviceGroupGetImageProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief API version of ::xe_device_ipc_properties_t
+typedef enum _xe_device_ipc_properties_version_t
+{
+    XE_DEVICE_IPC_PROPERTIES_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ), ///< version 1.0
+
+} xe_device_ipc_properties_version_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Device IPC properties queried using ::xeDeviceGroupGetIPCProperties
+typedef struct _xe_device_ipc_properties_t
+{
+    xe_device_ipc_properties_version_t version;     ///< [in] ::XE_DEVICE_IPC_PROPERTIES_VERSION_CURRENT
+    xe_bool_t memsSupported;                        ///< [out] Supports passing memory allocations between processes. See
+                                                    ///< ::::xeDeviceGroupGetMemIpcHandle.
+    xe_bool_t eventsSupported;                      ///< [out] Supports passing events between processes. See
+                                                    ///< ::::xeEventPoolGetIpcHandle.
+
+} xe_device_ipc_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves IPC attributes of the device
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuDeviceGetAttribute**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDeviceGroup
+///         + nullptr == pIPCProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeDeviceGroupGetIPCProperties(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xe_device_ipc_properties_t* pIPCProperties      ///< [out] query result for IPC properties
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief API version of ::xe_device_p2p_properties_t
 typedef enum _xe_device_p2p_properties_version_t
 {

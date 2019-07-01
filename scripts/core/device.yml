@@ -552,6 +552,49 @@ params:
       desc: "[out] query result for image properties"
 --- #--------------------------------------------------------------------------
 type: enum
+desc: "API version of $x_device_ipc_properties_t"
+class: $xDeviceGroup
+name: $x_device_ipc_properties_version_t
+etors:
+    - name: $X_DEVICE_IPC_PROPERTIES_VERSION_CURRENT
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device IPC properties queried using $xDeviceGroupGetIPCProperties"
+class: $xDeviceGroup
+name: $x_device_ipc_properties_t
+members:
+    - type: $x_device_ipc_properties_version_t
+      name: version
+      desc: "[in] $X_DEVICE_IPC_PROPERTIES_VERSION_CURRENT"
+      init: $X_DEVICE_IPC_PROPERTIES_VERSION_CURRENT
+    - type: $x_bool_t
+      name: memsSupported
+      desc: "[out] Supports passing memory allocations between processes. See ::$xDeviceGroupGetMemIpcHandle."
+    - type: $x_bool_t
+      name: eventsSupported
+      desc: "[out] Supports passing events between processes. See ::$xEventPoolGetIpcHandle."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves IPC attributes of the device"
+class: $xDeviceGroup
+name: GetIPCProperties
+ordinal: "1"
+analogue:
+    - "**cuDeviceGetAttribute**"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_device_group_handle_t
+      name: hDeviceGroup
+      desc: "[in] handle of the device group object"
+    - type: "$x_device_ipc_properties_t*"
+      name: pIPCProperties
+      desc: "[out] query result for IPC properties"
+--- #--------------------------------------------------------------------------
+type: enum
 desc: "API version of $x_device_p2p_properties_t"
 class: $xDevice
 name: $x_device_p2p_properties_version_t

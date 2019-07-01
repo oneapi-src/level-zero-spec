@@ -289,6 +289,13 @@ typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetImageProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeDeviceGroupGetIPCProperties 
+typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetIPCProperties_t)(
+    xe_device_group_handle_t,
+    xe_device_ipc_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeDeviceGroupAllocSharedMem 
 typedef xe_result_t (__xecall *xe_pfnDeviceGroupAllocSharedMem_t)(
     xe_device_group_handle_t,
@@ -386,6 +393,7 @@ typedef struct _xe_device_group_dditable_t
     xe_pfnDeviceGroupGetMemoryAccessProperties_t                pfnGetMemoryAccessProperties;
     xe_pfnDeviceGroupGetCacheProperties_t                       pfnGetCacheProperties;
     xe_pfnDeviceGroupGetImageProperties_t                       pfnGetImageProperties;
+    xe_pfnDeviceGroupGetIPCProperties_t                         pfnGetIPCProperties;
     xe_pfnDeviceGroupAllocSharedMem_t                           pfnAllocSharedMem;
     xe_pfnDeviceGroupAllocDeviceMem_t                           pfnAllocDeviceMem;
     xe_pfnDeviceGroupAllocHostMem_t                             pfnAllocHostMem;

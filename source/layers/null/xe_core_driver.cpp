@@ -340,6 +340,30 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeDeviceGroupGetIPCProperties
+    xe_result_t __xecall
+    xeDeviceGroupGetIPCProperties(
+        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+        xe_device_ipc_properties_t* pIPCProperties      ///< [out] query result for IPC properties
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetIPCProperties = context.xeDdiTable.DeviceGroup.pfnGetIPCProperties;
+        if( nullptr != pfnGetIPCProperties )
+        {
+            result = pfnGetIPCProperties( hDeviceGroup, pIPCProperties );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xeDeviceGetP2PProperties
     xe_result_t __xecall
     xeDeviceGetP2PProperties(
@@ -3242,6 +3266,59 @@ namespace instrumented
                 auto& table = context.tracerData[ i ].xeEpilogueCbs.DeviceGroup;
                 if( nullptr != table.pfnGetImagePropertiesCb )
                     table.pfnGetImagePropertiesCb( &out_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeDeviceGroupGetIPCProperties
+    xe_result_t __xecall
+    xeDeviceGroupGetIPCProperties(
+        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+        xe_device_ipc_properties_t* pIPCProperties      ///< [out] query result for IPC properties
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // capture parameters
+        xe_device_group_get_ipc_properties_params_t in_params = {
+            &hDeviceGroup,
+            &pIPCProperties
+        };
+
+        // create storage locations for callbacks
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].xePrologueCbs.DeviceGroup;
+                if( nullptr != table.pfnGetIPCPropertiesCb )
+                    table.pfnGetIPCPropertiesCb( &in_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        result = driver::xeDeviceGroupGetIPCProperties( hDeviceGroup, pIPCProperties );
+
+        // capture parameters
+        xe_device_group_get_ipc_properties_params_t out_params = {
+            &hDeviceGroup,
+            &pIPCProperties
+        };
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].xeEpilogueCbs.DeviceGroup;
+                if( nullptr != table.pfnGetIPCPropertiesCb )
+                    table.pfnGetIPCPropertiesCb( &out_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
@@ -8353,6 +8430,11 @@ xeGetDeviceGroupProcAddrTable(
         pDdiTable->pfnGetImageProperties                     = instrumented::xeDeviceGroupGetImageProperties;
     else
         pDdiTable->pfnGetImageProperties                     = driver::xeDeviceGroupGetImageProperties;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnGetIPCProperties                       = instrumented::xeDeviceGroupGetIPCProperties;
+    else
+        pDdiTable->pfnGetIPCProperties                       = driver::xeDeviceGroupGetIPCProperties;
 
     if( instrumented::context.enableTracing )
         pDdiTable->pfnAllocSharedMem                         = instrumented::xeDeviceGroupAllocSharedMem;

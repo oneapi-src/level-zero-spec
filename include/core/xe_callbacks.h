@@ -631,6 +631,29 @@ typedef void (__xecall *xe_pfnDeviceGroupGetImagePropertiesCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for xeDeviceGroupGetIPCProperties 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _xe_device_group_get_ipc_properties_params_t
+{
+    xe_device_group_handle_t* phDeviceGroup;
+    xe_device_ipc_properties_t** ppIPCProperties;
+} xe_device_group_get_ipc_properties_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for xeDeviceGroupGetIPCProperties 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__xecall *xe_pfnDeviceGroupGetIPCPropertiesCb_t)(
+    xe_device_group_get_ipc_properties_params_t* params,
+    xe_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceGroupAllocSharedMem 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
@@ -872,6 +895,7 @@ typedef struct _xe_device_group_callbacks_t
     xe_pfnDeviceGroupGetMemoryAccessPropertiesCb_t                  pfnGetMemoryAccessPropertiesCb;
     xe_pfnDeviceGroupGetCachePropertiesCb_t                         pfnGetCachePropertiesCb;
     xe_pfnDeviceGroupGetImagePropertiesCb_t                         pfnGetImagePropertiesCb;
+    xe_pfnDeviceGroupGetIPCPropertiesCb_t                           pfnGetIPCPropertiesCb;
     xe_pfnDeviceGroupAllocSharedMemCb_t                             pfnAllocSharedMemCb;
     xe_pfnDeviceGroupAllocDeviceMemCb_t                             pfnAllocDeviceMemCb;
     xe_pfnDeviceGroupAllocHostMemCb_t                               pfnAllocHostMemCb;

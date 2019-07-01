@@ -380,6 +380,38 @@ xeDeviceGroupGetImageProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Retrieves IPC attributes of the device
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuDeviceGetAttribute**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hDeviceGroup
+///         + nullptr == pIPCProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeDeviceGroupGetIPCProperties(
+    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xe_device_ipc_properties_t* pIPCProperties      ///< [out] query result for IPC properties
+    )
+{
+    auto pfnGetIPCProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetIPCProperties;
+    if( nullptr == pfnGetIPCProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnGetIPCProperties( hDeviceGroup, pIPCProperties );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves Peer-to-Peer properties between one device and a peer
 ///        devices
 /// 
@@ -936,6 +968,38 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Retrieves IPC attributes of the device
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuDeviceGetAttribute**
+    /// 
+    /// @returns
+    ///     - device_ipc_properties_t: query result for IPC properties
+    /// 
+    /// @throws result_t
+    DeviceGroup::device_ipc_properties_t __xecall
+    DeviceGroup::GetIPCProperties(
+        void
+        )
+    {
+        xe_device_ipc_properties_t iPCProperties;
+
+        auto result = static_cast<result_t>( ::xeDeviceGroupGetIPCProperties(
+            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+            &iPCProperties ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetIPCProperties" );
+
+        return *reinterpret_cast<device_ipc_properties_t*>( &iPCProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Retrieves Peer-to-Peer properties between one device and a peer
     ///        devices
     /// 
@@ -1254,6 +1318,26 @@ namespace xe
 
         default:
             str = "DeviceGroup::device_image_properties_version_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts DeviceGroup::device_ipc_properties_version_t to std::string
+    std::string to_string( const DeviceGroup::device_ipc_properties_version_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case DeviceGroup::device_ipc_properties_version_t::CURRENT:
+            str = "DeviceGroup::device_ipc_properties_version_t::CURRENT";
+            break;
+
+        default:
+            str = "DeviceGroup::device_ipc_properties_version_t::?";
             break;
         };
 
@@ -1669,6 +1753,27 @@ namespace xe
         
         str += "DeviceGroup::device_image_properties_t::maxImageArraySlices : ";
         str += std::to_string(val.maxImageArraySlices);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts DeviceGroup::device_ipc_properties_t to std::string
+    std::string to_string( const DeviceGroup::device_ipc_properties_t val )
+    {
+        std::string str;
+        
+        str += "DeviceGroup::device_ipc_properties_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "DeviceGroup::device_ipc_properties_t::memsSupported : ";
+        str += std::to_string(val.memsSupported);
+        str += "\n";
+        
+        str += "DeviceGroup::device_ipc_properties_t::eventsSupported : ";
+        str += std::to_string(val.eventsSupported);
         str += "\n";
 
         return str;

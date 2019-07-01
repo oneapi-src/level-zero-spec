@@ -381,6 +381,27 @@ class xe_device_image_properties_t(Structure):
     ]
 
 ###############################################################################
+## @brief API version of ::xe_device_ipc_properties_t
+class xe_device_ipc_properties_version_v(IntEnum):
+    CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
+
+class xe_device_ipc_properties_version_t(c_int):
+    def __str__(self):
+        return str(xe_device_ipc_properties_version_v(value))
+
+
+###############################################################################
+## @brief Device IPC properties queried using ::xeDeviceGroupGetIPCProperties
+class xe_device_ipc_properties_t(Structure):
+    _fields_ = [
+        ("version", xe_device_ipc_properties_version_t),                ## [in] ::XE_DEVICE_IPC_PROPERTIES_VERSION_CURRENT
+        ("memsSupported", xe_bool_t),                                   ## [out] Supports passing memory allocations between processes. See
+                                                                        ## ::::xeDeviceGroupGetMemIpcHandle.
+        ("eventsSupported", xe_bool_t)                                  ## [out] Supports passing events between processes. See
+                                                                        ## ::::xeEventPoolGetIpcHandle.
+    ]
+
+###############################################################################
 ## @brief API version of ::xe_device_p2p_properties_t
 class xe_device_p2p_properties_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
@@ -1278,6 +1299,13 @@ else:
     _xeDeviceGroupGetImageProperties_t = CFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(xe_device_image_properties_t) )
 
 ###############################################################################
+## @brief Function-pointer for xeDeviceGroupGetIPCProperties
+if __use_win_types:
+    _xeDeviceGroupGetIPCProperties_t = WINFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(xe_device_ipc_properties_t) )
+else:
+    _xeDeviceGroupGetIPCProperties_t = CFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(xe_device_ipc_properties_t) )
+
+###############################################################################
 ## @brief Function-pointer for xeDeviceGroupAllocSharedMem
 if __use_win_types:
     _xeDeviceGroupAllocSharedMem_t = WINFUNCTYPE( xe_result_t, xe_device_group_handle_t, xe_device_handle_t, xe_device_mem_alloc_flag_t, c_ulong, xe_host_mem_alloc_flag_t, c_size_t, c_size_t, POINTER(c_void_p) )
@@ -1354,6 +1382,7 @@ class _xe_device_group_dditable_t(Structure):
         ("pfnGetMemoryAccessProperties", c_void_p),                     ## _xeDeviceGroupGetMemoryAccessProperties_t
         ("pfnGetCacheProperties", c_void_p),                            ## _xeDeviceGroupGetCacheProperties_t
         ("pfnGetImageProperties", c_void_p),                            ## _xeDeviceGroupGetImageProperties_t
+        ("pfnGetIPCProperties", c_void_p),                              ## _xeDeviceGroupGetIPCProperties_t
         ("pfnAllocSharedMem", c_void_p),                                ## _xeDeviceGroupAllocSharedMem_t
         ("pfnAllocDeviceMem", c_void_p),                                ## _xeDeviceGroupAllocDeviceMem_t
         ("pfnAllocHostMem", c_void_p),                                  ## _xeDeviceGroupAllocHostMem_t
@@ -2033,6 +2062,7 @@ class XE_DDI:
         self.xeDeviceGroupGetMemoryAccessProperties = _xeDeviceGroupGetMemoryAccessProperties_t(self.__dditable.DeviceGroup.pfnGetMemoryAccessProperties)
         self.xeDeviceGroupGetCacheProperties = _xeDeviceGroupGetCacheProperties_t(self.__dditable.DeviceGroup.pfnGetCacheProperties)
         self.xeDeviceGroupGetImageProperties = _xeDeviceGroupGetImageProperties_t(self.__dditable.DeviceGroup.pfnGetImageProperties)
+        self.xeDeviceGroupGetIPCProperties = _xeDeviceGroupGetIPCProperties_t(self.__dditable.DeviceGroup.pfnGetIPCProperties)
         self.xeDeviceGroupAllocSharedMem = _xeDeviceGroupAllocSharedMem_t(self.__dditable.DeviceGroup.pfnAllocSharedMem)
         self.xeDeviceGroupAllocDeviceMem = _xeDeviceGroupAllocDeviceMem_t(self.__dditable.DeviceGroup.pfnAllocDeviceMem)
         self.xeDeviceGroupAllocHostMem = _xeDeviceGroupAllocHostMem_t(self.__dditable.DeviceGroup.pfnAllocHostMem)

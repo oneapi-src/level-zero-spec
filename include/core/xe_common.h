@@ -188,6 +188,10 @@ typedef struct _xe_device_cache_properties_t xe_device_cache_properties_t;
 typedef struct _xe_device_image_properties_t xe_device_image_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_device_ipc_properties_t
+typedef struct _xe_device_ipc_properties_t xe_device_ipc_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xe_device_p2p_properties_t
 typedef struct _xe_device_p2p_properties_t xe_device_p2p_properties_t;
 
