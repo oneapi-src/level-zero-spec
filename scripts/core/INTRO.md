@@ -6,6 +6,8 @@ ${"#"} Introduction
 %>
 [DO NOT EDIT]: # (generated from /scripts/core/INTRO.md)
 
+NOTE: The ${OneApi} Level-Zero specifications are **Intel Confidential**.
+
 ${"##"} Table of Contents
 * [Objective](#obj)
 * [API Specification](#spec)
