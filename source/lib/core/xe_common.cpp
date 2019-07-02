@@ -27,6 +27,32 @@ namespace xe
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts ipc_mem_handle_t to std::string
+    std::string to_string( const ipc_mem_handle_t val )
+    {
+        std::string str;
+        
+        str += "ipc_mem_handle_t::data : ";
+        str += val.data;
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts ipc_event_pool_handle_t to std::string
+    std::string to_string( const ipc_event_pool_handle_t val )
+    {
+        std::string str;
+        
+        str += "ipc_event_pool_handle_t::data : ";
+        str += val.data;
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts result_t to std::string
     std::string to_string( const result_t val )
     {
