@@ -483,7 +483,7 @@ def make_etor_name(namespace, tags, enum, etor, cpp=False):
 Private:
     returns c/c++ name of value
 """
-def _get_value_name(namespace, tags, value, cpp, meta):
+def _get_value_name(namespace, tags, value, cpp, meta, is_array_size=False):
     if cpp:
         if value_traits.is_macro(value, meta):
             value = subt(namespace, tags, value)
@@ -498,7 +498,10 @@ def _get_value_name(namespace, tags, value, cpp, meta):
                 cname = type_traits.find_class_name(name, meta)
                 cname = subt(namespace, tags, cname, cpp=cpp)
                 enum = _remove_class(enum, cname)
-                value = "%s::%s"%(enum, make_etor_name(namespace, tags, name, value, cpp))
+                if is_array_size:
+                    value = "static_cast<int>(%s::%s)"%(enum, make_etor_name(namespace, tags, name, value, cpp))
+                else:
+                    value = "%s::%s"%(enum, make_etor_name(namespace, tags, name, value, cpp))
             else:
                 value = subt(namespace, tags, value, cpp=cpp)
     else:
@@ -621,7 +624,7 @@ def make_member_name(namespace, tags, item, prefix="", cpp=False, meta=None, rem
         name = value_traits.get_array_name(item['name'])
         name = subt(namespace, tags, name)
         alength = value_traits.get_array_length(item['name'])
-        alength = _get_value_name(namespace, tags, alength, cpp, meta)
+        alength = _get_value_name(namespace, tags, alength, cpp, meta, is_array_size=True)
         name = "%s[%s]"%(name, alength)
     else:
         name = subt(namespace, tags, prefix+item['name'], cpp=cpp)
