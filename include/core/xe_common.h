@@ -125,26 +125,12 @@ typedef struct _xe_function_handle_t *xe_function_handle_t;
 typedef struct _xe_sampler_handle_t *xe_sampler_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef XE_MAX_IPC_HANDLE_SIZE
-/// @brief Maximum IPC handle size
-#define XE_MAX_IPC_HANDLE_SIZE  64
-#endif // XE_MAX_IPC_HANDLE_SIZE
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief IPC handle to a memory allocation
-typedef struct _xe_ipc_mem_handle_t
-{
-    char data[XE_MAX_IPC_HANDLE_SIZE];              ///< Opaque data representing an IPC handle
-
-} xe_ipc_mem_handle_t;
+typedef struct _xe_ipc_mem_handle_t *xe_ipc_mem_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief IPC handle to a event pool allocation
-typedef struct _xe_ipc_event_pool_handle_t
-{
-    char data[XE_MAX_IPC_HANDLE_SIZE];              ///< Opaque data representing an IPC handle
-
-} xe_ipc_event_pool_handle_t;
+typedef struct _xe_ipc_event_pool_handle_t *xe_ipc_event_pool_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef XE_BIT
@@ -172,14 +158,6 @@ typedef enum _xe_result_t
     XE_RESULT_ERROR_UNKNOWN = 0x7fffffff,           ///< unknown or internal error
 
 } xe_result_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xe_ipc_mem_handle_t
-typedef struct _xe_ipc_mem_handle_t xe_ipc_mem_handle_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xe_ipc_event_pool_handle_t
-typedef struct _xe_ipc_event_pool_handle_t xe_ipc_event_pool_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xe_device_uuid_t

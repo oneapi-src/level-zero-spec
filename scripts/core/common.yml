@@ -108,26 +108,13 @@ desc: "Handle of driver's sampler object"
 class: $xSampler
 name: "$x_sampler_handle_t"
 --- #--------------------------------------------------------------------------
-type: macro
-desc: "Maximum IPC handle size"
-name: $X_MAX_IPC_HANDLE_SIZE
-value: "64"
---- #--------------------------------------------------------------------------
-type: struct
+type: handle
 desc: "IPC handle to a memory allocation"
 name: "$x_ipc_mem_handle_t"
-members:
-    - type: char
-      name: "data[$X_MAX_IPC_HANDLE_SIZE]"
-      desc: "Opaque data representing an IPC handle"
 --- #--------------------------------------------------------------------------
-type: struct
+type: handle
 desc: "IPC handle to a event pool allocation"
 name: "$x_ipc_event_pool_handle_t"
-members:
-    - type: char
-      name: "data[$X_MAX_IPC_HANDLE_SIZE]"
-      desc: "Opaque data representing an IPC handle"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Generic macro for enumerator bit masks"

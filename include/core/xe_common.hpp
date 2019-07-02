@@ -68,12 +68,6 @@
 #endif // XE_ENABLE_OCL_INTEROP
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef XE_MAX_IPC_HANDLE_SIZE
-/// @brief Maximum IPC handle size
-#define XE_MAX_IPC_HANDLE_SIZE  64
-#endif // XE_MAX_IPC_HANDLE_SIZE
-
-///////////////////////////////////////////////////////////////////////////////
 #ifndef XE_BIT
 /// @brief Generic macro for enumerator bit masks
 #define XE_BIT( _i )  ( 1 << _i )
@@ -159,19 +153,13 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief IPC handle to a memory allocation
-    struct ipc_mem_handle_t
-    {
-        char data[XE_MAX_IPC_HANDLE_SIZE];              ///< Opaque data representing an IPC handle
-
-    };
+    struct _ipc_mem_handle_t;
+    using ipc_mem_handle_t = _ipc_mem_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief IPC handle to a event pool allocation
-    struct ipc_event_pool_handle_t
-    {
-        char data[XE_MAX_IPC_HANDLE_SIZE];              ///< Opaque data representing an IPC handle
-
-    };
+    struct _ipc_event_pool_handle_t;
+    using ipc_event_pool_handle_t = _ipc_event_pool_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Defines Return/Error codes
@@ -198,14 +186,6 @@ namespace xe
 
 namespace xe
 {
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts ipc_mem_handle_t to std::string
-    std::string to_string( const ipc_mem_handle_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts ipc_event_pool_handle_t to std::string
-    std::string to_string( const ipc_event_pool_handle_t val );
-
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts result_t to std::string
     std::string to_string( const result_t val );

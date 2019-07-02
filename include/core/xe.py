@@ -110,22 +110,14 @@ class xe_sampler_handle_t(c_void_p):
     pass
 
 ###############################################################################
-## @brief Maximum IPC handle size
-XE_MAX_IPC_HANDLE_SIZE = 64
-
-###############################################################################
 ## @brief IPC handle to a memory allocation
-class xe_ipc_mem_handle_t(Structure):
-    _fields_ = [
-        ("data", c_char * XE_MAX_IPC_HANDLE_SIZE)                       ## Opaque data representing an IPC handle
-    ]
+class xe_ipc_mem_handle_t(c_void_p):
+    pass
 
 ###############################################################################
 ## @brief IPC handle to a event pool allocation
-class xe_ipc_event_pool_handle_t(Structure):
-    _fields_ = [
-        ("data", c_char * XE_MAX_IPC_HANDLE_SIZE)                       ## Opaque data representing an IPC handle
-    ]
+class xe_ipc_event_pool_handle_t(c_void_p):
+    pass
 
 ###############################################################################
 ## @brief Generic macro for enumerator bit masks
