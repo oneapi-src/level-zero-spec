@@ -318,7 +318,7 @@ namespace xet
             uint32_t numChildren;                           ///< [out] The number of child resource containers
             uint32_t numPeers;                              ///< [out] The number of resource containers connected with peer-to-peer
                                                             ///< links
-            uint32_t numResourcesByType[resource_type_t::MAX_TYPES];///< [out] The number of resources of each type attached to this resource
+            uint32_t numResourcesByType[static_cast<int>(resource_type_t::MAX_TYPES)];  ///< [out] The number of resources of each type attached to this resource
                                                             ///< container (not in the child resource containers)
 
         };
@@ -702,7 +702,7 @@ namespace xet
         struct device_prop_accel_assets_t
         {
             uint64_t assetBitfield;                         ///< [out] A bitfield of assets available in the resource container
-            device_prop_accel_asset_t assetInfo[accel_asset_t::MAX_TYPES];  ///< [out] Information about each asset.
+            device_prop_accel_asset_t assetInfo[static_cast<int>(accel_asset_t::MAX_TYPES)];///< [out] Information about each asset.
 
         };
 
@@ -729,7 +729,7 @@ namespace xet
         {
             uint32_t TotalNonFatalError;                    ///< [out] The total number of non-fatal hardware errors that have occurred
                                                             ///< since the driver booted
-            uint32_t errors[hw_error_type_t::HW_ERROR_COUNT];   ///< [out] Error counters for each type (::xet_hw_error_type_t) of hardware
+            uint32_t errors[static_cast<int>(hw_error_type_t::HW_ERROR_COUNT)]; ///< [out] Error counters for each type (::xet_hw_error_type_t) of hardware
                                                             ///< error.
             uint32_t NumResets;                             ///< [out] The total number of hardware resets that have been performed
                                                             ///< since the driver booted
