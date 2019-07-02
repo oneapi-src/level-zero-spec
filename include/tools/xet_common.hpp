@@ -21,6 +21,24 @@
 #pragma message("warning: this file is not intended to be included directly")
 #endif
 
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_INVALID_SYSMAN_HANDLE
+/// @brief Invalid System Resource Management handle
+#define XET_INVALID_SYSMAN_HANDLE  NULL
+#endif // XET_INVALID_SYSMAN_HANDLE
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_INVALID_SYSMAN_RES_CONTAINER_HANDLE
+/// @brief Invalid Sysman resource container handle
+#define XET_INVALID_SYSMAN_RES_CONTAINER_HANDLE  NULL
+#endif // XET_INVALID_SYSMAN_RES_CONTAINER_HANDLE
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_INVALID_SYSMAN_RESOURCE_HANDLE
+/// @brief Invalid Sysman resource handle
+#define XET_INVALID_SYSMAN_RESOURCE_HANDLE  NULL
+#endif // XET_INVALID_SYSMAN_RESOURCE_HANDLE
+
 namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
@@ -90,16 +108,22 @@ namespace xet
     using tracer_handle_t = _tracer_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle of power object
-    class Power;
-    struct _power_handle_t;
-    using power_handle_t = _power_handle_t*;
+    /// @brief Handle for accessing System Resource Management features
+    class Sysman;
+    struct _sysman_handle_t;
+    using sysman_handle_t = _sysman_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle of a frequency domain on a device
-    class FreqDomain;
-    struct _freq_domain_handle_t;
-    using freq_domain_handle_t = _freq_domain_handle_t*;
+    /// @brief Handle for a Sysman resource container
+    class SysmanResContainer;
+    struct _res_container_handle_t;
+    using res_container_handle_t = _res_container_handle_t*;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Handle for a Sysman resource
+    class SysmanResource;
+    struct _resource_handle_t;
+    using resource_handle_t = _resource_handle_t*;
 
 } // namespace xet
 

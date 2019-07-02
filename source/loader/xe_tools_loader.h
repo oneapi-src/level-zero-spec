@@ -49,10 +49,13 @@ namespace loader
     using xet_tracer_object_t                 = object_t < xet_tracer_handle_t >;
     using xet_tracer_factory_t                = singleton_factory_t < xet_tracer_object_t, xet_tracer_handle_t >;
 
-    using xet_power_object_t                  = object_t < xet_power_handle_t >;
-    using xet_power_factory_t                 = singleton_factory_t < xet_power_object_t, xet_power_handle_t >;
+    using xet_sysman_object_t                 = object_t < xet_sysman_handle_t >;
+    using xet_sysman_factory_t                = singleton_factory_t < xet_sysman_object_t, xet_sysman_handle_t >;
 
-    using xet_freq_domain_object_t            = object_t < xet_freq_domain_handle_t >;
-    using xet_freq_domain_factory_t           = singleton_factory_t < xet_freq_domain_object_t, xet_freq_domain_handle_t >;
+    using xet_res_container_object_t          = object_t < xet_res_container_handle_t >;
+    using xet_res_container_factory_t         = singleton_factory_t < xet_res_container_object_t, xet_res_container_handle_t >;
+
+    using xet_resource_object_t               = object_t < xet_resource_handle_t >;
+    using xet_resource_factory_t              = singleton_factory_t < xet_resource_object_t, xet_resource_handle_t >;
 
 }

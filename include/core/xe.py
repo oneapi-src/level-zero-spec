@@ -140,6 +140,7 @@ class xe_result_v(IntEnum):
     ERROR_OUT_OF_HOST_MEMORY = auto()               ## insufficient host memory to satisfy call
     ERROR_OUT_OF_DEVICE_MEMORY = auto()             ## insufficient device memory to satisfy call
     ERROR_MODULE_BUILD_FAILURE = auto()             ## error in building module
+    XE_ERROR_ACCESS_DENIED = auto()                 ## access denied
     ERROR_UNKNOWN = 0x7fffffff                      ## unknown or internal error
 
 class xe_result_t(c_int):

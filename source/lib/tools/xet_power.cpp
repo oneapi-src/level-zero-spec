@@ -1043,10 +1043,10 @@ namespace xet
     ///     - **rsmi_init**
     /// 
     /// @returns
-    ///     - Power*: handle for accessing power features of the device
+    ///     - power_handle_t: handle for accessing power features of the device
     /// 
     /// @throws result_t
-    Power* __xecall
+    power_handle_t __xecall
     Power::Create(
         Device* pDevice,                                ///< [in] pointer to the device object
         uint32_t flags                                  ///< [in] bitfield of ::xet_power_init_flags_t
@@ -1062,21 +1062,7 @@ namespace xet
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::Create" );
 
-        Power* pPowerHandle = nullptr;
-
-        try
-        {
-            pPowerHandle = new Power( pDevice );
-        }
-        catch( std::bad_alloc& )
-        {
-            delete pPowerHandle;
-            pPowerHandle = nullptr;
-
-            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xet::Power::Create" );
-        }
-
-        return pPowerHandle;
+        return reinterpret_cast<power_handle_t>( powerHandle );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1090,16 +1076,14 @@ namespace xet
     /// @throws result_t
     void __xecall
     Power::Destroy(
-        Power* pPower                                   ///< [in][release] pointer to the power object to destroy
+        power_handle_t pPower                           ///< [in][release] pointer to the power object to destroy
         )
     {
         auto result = static_cast<result_t>( ::xetPowerDestroy(
-            reinterpret_cast<xet_power_handle_t>( pPower->getHandle() ) ) );
+            reinterpret_cast<xet_power_handle_t>( pPower ) ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::Destroy" );
-
-        delete pPower;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1117,7 +1101,7 @@ namespace xet
         xet_power_average_limit_t limit;
 
         auto result = static_cast<result_t>( ::xetPowerGetAveragePowerLimit(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             &limit ) );
 
         if( result_t::SUCCESS != result )
@@ -1141,7 +1125,7 @@ namespace xet
         xet_power_burst_limit_t limit;
 
         auto result = static_cast<result_t>( ::xetPowerGetBurstPowerLimit(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             &limit ) );
 
         if( result_t::SUCCESS != result )
@@ -1165,7 +1149,7 @@ namespace xet
         xet_power_peak_limit_t limit;
 
         auto result = static_cast<result_t>( ::xetPowerGetPeakPowerLimit(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             &limit ) );
 
         if( result_t::SUCCESS != result )
@@ -1189,7 +1173,7 @@ namespace xet
         xet_power_limits_t limits;
 
         auto result = static_cast<result_t>( ::xetPowerGetAllPowerLimits(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             &limits ) );
 
         if( result_t::SUCCESS != result )
@@ -1213,7 +1197,7 @@ namespace xet
         xet_power_limits_t limits;
 
         auto result = static_cast<result_t>( ::xetPowerGetDefaultPowerLimits(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             &limits ) );
 
         if( result_t::SUCCESS != result )
@@ -1232,7 +1216,7 @@ namespace xet
         )
     {
         auto result = static_cast<result_t>( ::xetPowerSetAveragePowerLimit(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             reinterpret_cast<xet_power_average_limit_t*>( pLimit ) ) );
 
         if( result_t::SUCCESS != result )
@@ -1249,7 +1233,7 @@ namespace xet
         )
     {
         auto result = static_cast<result_t>( ::xetPowerSetBurstPowerLimit(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             reinterpret_cast<xet_power_burst_limit_t*>( pLimit ) ) );
 
         if( result_t::SUCCESS != result )
@@ -1266,7 +1250,7 @@ namespace xet
         )
     {
         auto result = static_cast<result_t>( ::xetPowerSetPeakPowerLimit(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             reinterpret_cast<xet_power_peak_limit_t*>( pLimit ) ) );
 
         if( result_t::SUCCESS != result )
@@ -1283,7 +1267,7 @@ namespace xet
         )
     {
         auto result = static_cast<result_t>( ::xetPowerSetPowerLimits(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             reinterpret_cast<xet_power_limits_t*>( pLimits ) ) );
 
         if( result_t::SUCCESS != result )
@@ -1309,7 +1293,7 @@ namespace xet
         uint64_t energy;
 
         auto result = static_cast<result_t>( ::xetPowerGetEnergyCounter(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             &energy ) );
 
         if( result_t::SUCCESS != result )
@@ -1333,7 +1317,7 @@ namespace xet
         xet_turbo_mode_t turboMode;
 
         auto result = static_cast<result_t>( ::xetPowerGetTurboMode(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             &turboMode ) );
 
         if( result_t::SUCCESS != result )
@@ -1352,7 +1336,7 @@ namespace xet
         )
     {
         auto result = static_cast<result_t>( ::xetPowerSetTurboMode(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             static_cast<xet_turbo_mode_t>( pTurboMode ) ) );
 
         if( result_t::SUCCESS != result )
@@ -1365,7 +1349,7 @@ namespace xet
     /// @throws result_t
     void __xecall
     FreqDomain::Get(
-        Power* pPower,                                  ///< [in] pointer to the power object
+        power_handle_t pPower,                          ///< [in] pointer to the power object
         uint32_t* pCount,                               ///< [in,out] pointer to the number of frequency domains.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of frequency domains available.
@@ -1374,39 +1358,17 @@ namespace xet
                                                         ///< if count is larger than the number of frequency domains available,
                                                         ///< then the driver will update the value with the correct number of
                                                         ///< frequency domains available.
-        FreqDomain** ppFreqDomain                       ///< [in,out][optional][range(0, *pCount)] array of pointer to frequency
+        freq_domain_handle_t* ppFreqDomain              ///< [in,out][optional][range(0, *pCount)] array of pointer to frequency
                                                         ///< domains
         )
     {
-        thread_local std::vector<xet_freq_domain_handle_t> hFreqDomain;
-        hFreqDomain.resize( ( ppFreqDomain ) ? *pCount : 0 );
-
         auto result = static_cast<result_t>( ::xetFreqDomainGet(
-            reinterpret_cast<xet_power_handle_t>( pPower->getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             pCount,
-            hFreqDomain.data() ) );
+            reinterpret_cast<xet_freq_domain_handle_t*>( ppFreqDomain ) ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::FreqDomain::Get" );
-
-        for( uint32_t i = 0; ( ppFreqDomain ) && ( i < *pCount ); ++i )
-            ppFreqDomain[ i ] = nullptr;
-
-        try
-        {
-            for( uint32_t i = 0; ( ppFreqDomain ) && ( i < *pCount ); ++i )
-                ppFreqDomain[ i ] = new FreqDomain( pPower );
-        }
-        catch( std::bad_alloc& )
-        {
-            for( uint32_t i = 0; ( ppFreqDomain ) && ( i < *pCount ); ++i )
-            {
-                delete ppFreqDomain[ i ];
-                ppFreqDomain[ i ] = nullptr;
-            }
-
-            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xet::FreqDomain::Get" );
-        }
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1424,7 +1386,7 @@ namespace xet
         xet_freq_domain_properties_t freqDomainProperties;
 
         auto result = static_cast<result_t>( ::xetFreqDomainGetProperties(
-            reinterpret_cast<xet_freq_domain_handle_t>( getHandle() ),
+            reinterpret_cast<xet_freq_domain_handle_t>( pFreqDomain ),
             &freqDomainProperties ) );
 
         if( result_t::SUCCESS != result )
@@ -1438,10 +1400,10 @@ namespace xet
     ///        ::XET_CLOCK_TYPE_DIVIDER
     /// 
     /// @returns
-    ///     - FreqDomain*: pointer to a handle where the source frequency domain handle will be returned
+    ///     - freq_domain_handle_t: pointer to a handle where the source frequency domain handle will be returned
     /// 
     /// @throws result_t
-    FreqDomain* __xecall
+    freq_domain_handle_t __xecall
     FreqDomain::GetSourceFreqDomain(
         void
         )
@@ -1449,27 +1411,13 @@ namespace xet
         xet_freq_domain_handle_t hSrcFreqDomain;
 
         auto result = static_cast<result_t>( ::xetFreqDomainGetSourceFreqDomain(
-            reinterpret_cast<xet_freq_domain_handle_t>( getHandle() ),
+            reinterpret_cast<xet_freq_domain_handle_t>( pFreqDomain ),
             &hSrcFreqDomain ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::FreqDomain::GetSourceFreqDomain" );
 
-        FreqDomain* pSrcFreqDomain = nullptr;
-
-        try
-        {
-            pSrcFreqDomain = new FreqDomain( m_pPower );
-        }
-        catch( std::bad_alloc& )
-        {
-            delete pSrcFreqDomain;
-            pSrcFreqDomain = nullptr;
-
-            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xet::FreqDomain::GetSourceFreqDomain" );
-        }
-
-        return pSrcFreqDomain;
+        return reinterpret_cast<freq_domain_handle_t>( hSrcFreqDomain );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1492,7 +1440,7 @@ namespace xet
         uint32_t clocks;
 
         auto result = static_cast<result_t>( ::xetFreqDomainGetSupportedClocks(
-            reinterpret_cast<xet_freq_domain_handle_t>( getHandle() ),
+            reinterpret_cast<xet_freq_domain_handle_t>( pFreqDomain ),
             numClockPoints,
             &clocks ) );
 
@@ -1522,7 +1470,7 @@ namespace xet
         xet_clock_divider_t dividers;
 
         auto result = static_cast<result_t>( ::xetFreqDomainGetSupportedClockDividers(
-            reinterpret_cast<xet_freq_domain_handle_t>( getHandle() ),
+            reinterpret_cast<xet_freq_domain_handle_t>( pFreqDomain ),
             numClockDividers,
             &dividers ) );
 
@@ -1551,7 +1499,7 @@ namespace xet
         uint32_t maxClock;
 
         auto result = static_cast<result_t>( ::xetFreqDomainGetClockRange(
-            reinterpret_cast<xet_freq_domain_handle_t>( getHandle() ),
+            reinterpret_cast<xet_freq_domain_handle_t>( pFreqDomain ),
             &minClock,
             &maxClock ) );
 
@@ -1583,7 +1531,7 @@ namespace xet
         )
     {
         auto result = static_cast<result_t>( ::xetFreqDomainSetClockRange(
-            reinterpret_cast<xet_freq_domain_handle_t>( getHandle() ),
+            reinterpret_cast<xet_freq_domain_handle_t>( pFreqDomain ),
             minClock,
             maxClock ) );
 
@@ -1613,7 +1561,7 @@ namespace xet
         xet_clock_divider_t clockDividerRequest;
 
         auto result = static_cast<result_t>( ::xetFreqDomainSetClockDivider(
-            reinterpret_cast<xet_freq_domain_handle_t>( getHandle() ),
+            reinterpret_cast<xet_freq_domain_handle_t>( pFreqDomain ),
             &clockDividerRequest ) );
 
         if( result_t::SUCCESS != result )
@@ -1628,10 +1576,10 @@ namespace xet
     /// @returns
     ///     - uint32_t: current frequency in MHz requested by the driver
     ///     - uint32_t: the actual frequency in MHz
-    ///     - freq_throttle_reasons_t: the reason the resolved frequency is lower than the request
+    ///     - SysmanResource::freq_throttle_reasons_t: the reason the resolved frequency is lower than the request
     /// 
     /// @throws result_t
-    std::tuple<uint32_t, uint32_t, FreqDomain::freq_throttle_reasons_t> __xecall
+    std::tuple<uint32_t, uint32_t, SysmanResource::SysmanResource::freq_throttle_reasons_t> __xecall
     FreqDomain::GetCurrentFrequency(
         void
         )
@@ -1643,7 +1591,7 @@ namespace xet
         xet_freq_throttle_reasons_t freqThrottleReasons;
 
         auto result = static_cast<result_t>( ::xetFreqDomainGetCurrentFrequency(
-            reinterpret_cast<xet_freq_domain_handle_t>( getHandle() ),
+            reinterpret_cast<xet_freq_domain_handle_t>( pFreqDomain ),
             &freqRequest,
             &freqResolved,
             &freqThrottleReasons ) );
@@ -1651,7 +1599,7 @@ namespace xet
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::FreqDomain::GetCurrentFrequency" );
 
-        return std::make_tuple( freqRequest, freqResolved, *reinterpret_cast<freq_throttle_reasons_t*>( &freqThrottleReasons ) );
+        return std::make_tuple( freqRequest, freqResolved, *reinterpret_cast<SysmanResource::freq_throttle_reasons_t*>( &freqThrottleReasons ) );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1669,7 +1617,7 @@ namespace xet
         uint32_t fanCount;
 
         auto result = static_cast<result_t>( ::xetPowerFanCount(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             &fanCount ) );
 
         if( result_t::SUCCESS != result )
@@ -1682,10 +1630,10 @@ namespace xet
     /// @brief Get fan properties for one of the fans on a device
     /// 
     /// @returns
-    ///     - fan_properties_t: pointer to storage for fan properties
+    ///     - SysmanResource::fan_properties_t: pointer to storage for fan properties
     /// 
     /// @throws result_t
-    Power::fan_properties_t __xecall
+    SysmanResource::SysmanResource::fan_properties_t __xecall
     Power::FanGetProperties(
         uint32_t fanIndex                               ///< [in] fan index [0 .. ::xetPowerFanCount - 1]
         )
@@ -1693,14 +1641,14 @@ namespace xet
         xet_fan_properties_t fanProperties;
 
         auto result = static_cast<result_t>( ::xetPowerFanGetProperties(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             fanIndex,
             &fanProperties ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Power::FanGetProperties" );
 
-        return *reinterpret_cast<fan_properties_t*>( &fanProperties );
+        return *reinterpret_cast<SysmanResource::fan_properties_t*>( &fanProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1725,7 +1673,7 @@ namespace xet
         xet_fan_point_t fanPoints;
 
         auto result = static_cast<result_t>( ::xetPowerFanGetSpeedTable(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             fanIndex,
             static_cast<xe_bool_t>( fanSpeedInRpm ),
             pNumFanPoints,
@@ -1754,7 +1702,7 @@ namespace xet
         )
     {
         auto result = static_cast<result_t>( ::xetPowerFanSetSpeedTable(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             fanIndex,
             numFanPoints,
             reinterpret_cast<xet_fan_point_t*>( pFanPoints ) ) );
@@ -1784,7 +1732,7 @@ namespace xet
         xet_fan_speed_info_t fanSpeed;
 
         auto result = static_cast<result_t>( ::xetPowerFanGetSpeed(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             startFanIndex,
             numFans,
             static_cast<xe_bool_t>( fanSpeedInRpm ),
@@ -1813,7 +1761,7 @@ namespace xet
         )
     {
         auto result = static_cast<result_t>( ::xetPowerFanSetSpeed(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             startFanIndex,
             numFans,
             reinterpret_cast<xet_fan_speed_info_t*>( pFanSpeed ) ) );
@@ -1837,7 +1785,7 @@ namespace xet
         uint32_t sensorCount;
 
         auto result = static_cast<result_t>( ::xetPowerTemperatureSensorCount(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             &sensorCount ) );
 
         if( result_t::SUCCESS != result )
@@ -1865,7 +1813,7 @@ namespace xet
         xet_temperature_properties_t properties;
 
         auto result = static_cast<result_t>( ::xetPowerGetTemperatureProperties(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             sensorIndex,
             &properties ) );
 
@@ -1896,7 +1844,7 @@ namespace xet
         uint16_t temperatures;
 
         auto result = static_cast<result_t>( ::xetPowerGetTemperature(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             startSensorIndex,
             numSensors,
             &temperatures ) );
@@ -1926,7 +1874,7 @@ namespace xet
         )
     {
         auto result = static_cast<result_t>( ::xetPowerSetTemperatureThreshold(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             sensorIndex,
             maxTemperature ) );
 
@@ -1949,7 +1897,7 @@ namespace xet
         uint32_t activityCount;
 
         auto result = static_cast<result_t>( ::xetPowerActivityCount(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             &activityCount ) );
 
         if( result_t::SUCCESS != result )
@@ -1977,7 +1925,7 @@ namespace xet
         xet_activity_properties_t properties;
 
         auto result = static_cast<result_t>( ::xetPowerGetActivityProperties(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             activityIndex,
             &properties ) );
 
@@ -2008,7 +1956,7 @@ namespace xet
         xet_activity_counters_t counters;
 
         auto result = static_cast<result_t>( ::xetPowerGetActivityCounters(
-            reinterpret_cast<xet_power_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_handle_t>( pPower ),
             startCounterIndex,
             numCounters,
             &counters ) );

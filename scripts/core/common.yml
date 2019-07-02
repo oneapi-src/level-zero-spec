@@ -147,6 +147,8 @@ etors:
       desc: "insufficient device memory to satisfy call"
     - name: $X_RESULT_ERROR_MODULE_BUILD_FAILURE
       desc: "error in building module"
+    - name: XE_RESULT_ERROR_ACCESS_DENIED
+      desc: "access denied"
     - name: $X_RESULT_ERROR_UNKNOWN
       value: "0x7fffffff"
       desc: "unknown or internal error"

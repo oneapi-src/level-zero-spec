@@ -70,6 +70,10 @@ namespace xe
             str = "result_t::ERROR_MODULE_BUILD_FAILURE";
             break;
 
+        case result_t::XE_ERROR_ACCESS_DENIED:
+            str = "result_t::XE_ERROR_ACCESS_DENIED";
+            break;
+
         case result_t::ERROR_UNKNOWN:
             str = "result_t::ERROR_UNKNOWN";
             break;
