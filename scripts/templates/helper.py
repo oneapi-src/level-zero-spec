@@ -542,17 +542,17 @@ def is_enum_bitfield(obj):
     return False
 
 """
-Private:
+Public:
     returns c/c++ name of any type
 """
-def _get_type_name(namespace, tags, obj, item, cpp=False, meta=None, handle_to_class=True):
-    name = subt(namespace, tags, item['type'], cpp=cpp)
+def get_type_name(namespace, tags, obj, item, cpp=False, meta=None, handle_to_class=True):
+    name = subt(namespace, tags, item, cpp=cpp)
     if cpp:
-        cname = type_traits.find_class_name(item['type'], meta)
+        cname = type_traits.find_class_name(item, meta)
         if cname:
             is_global = class_traits.is_global(cname, tags)
             is_namespace = class_traits.is_namespace(cname, namespace, tags)  # cname == namespace? e.g., cname == "$x"
-            is_handle = type_traits.is_handle(item['type'])
+            is_handle = type_traits.is_handle(item)
 
             is_inscope = False
             if obj_traits.is_class(obj):                        # if the obj _is_ a class
@@ -573,8 +573,14 @@ def _get_type_name(namespace, tags, obj, item, cpp=False, meta=None, handle_to_c
             if not is_handle:
                 # remove the verbose class part from the type name
                 name = _remove_class(name, cname)
-
     return name
+
+"""
+Private:
+    returns c/c++ name of any type
+"""
+def _get_type_name(namespace, tags, obj, item, cpp=False, meta=None, handle_to_class=True):
+    return get_type_name(namespace, tags, obj, item['type'], cpp, meta, handle_to_class)
 
 """
 Private:
@@ -611,6 +617,12 @@ Public:
 def make_member_name(namespace, tags, item, prefix="", cpp=False, meta=None, remove_array=False):
     if cpp and value_traits.is_macro(item['name'], meta):
         name = subt(namespace, tags, item['name'])
+    elif cpp and value_traits.is_array(item['name']):
+        name = value_traits.get_array_name(item['name'])
+        name = subt(namespace, tags, name)
+        alength = value_traits.get_array_length(item['name'])
+        alength = _get_value_name(namespace, tags, alength, cpp, meta)
+        name = "%s[%s]"%(name, alength)
     else:
         name = subt(namespace, tags, prefix+item['name'], cpp=cpp)
 

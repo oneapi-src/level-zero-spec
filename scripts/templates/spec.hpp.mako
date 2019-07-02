@@ -101,7 +101,7 @@ namespace ${n}
         %endfor
         );
     %else:
-    using ${th.make_type_name(n, tags, obj, cpp=True)} = ${th.subt(n, tags, obj['value'], cpp=False)};
+    using ${th.make_type_name(n, tags, obj, cpp=True)} = ${th.get_type_name(n, tags, obj, obj['value'], cpp=True, meta=meta, handle_to_class=True)};
     %endif
     ## ENUM #######################################################################
     %elif re.match(r"enum", obj['type']):

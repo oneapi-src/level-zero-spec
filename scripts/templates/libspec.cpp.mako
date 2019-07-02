@@ -447,18 +447,22 @@ namespace ${n}
             ss << "0x" << std::hex << reinterpret_cast<size_t>(val.${mname});
             str += ss.str();
         }
-        %elif th.type_traits.is_known(item['type'], meta) and (item['type'] != "$x_bool_t"):
-        str += to_string(val.${mname});
         %elif th.value_traits.is_array(item['name']):
         {
             std::string tmp;
             for( auto& entry : val.${mname} )
             {
+                %if th.type_traits.is_known(item['type'], meta) and (item['type'] != "$x_bool_t"):
+                tmp += to_string( entry );
+                %else:
                 tmp += std::to_string( entry );
+                %endif
                 tmp += ", ";
             }
             str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
         }
+        %elif th.type_traits.is_known(item['type'], meta) and (item['type'] != "$x_bool_t"):
+        str += to_string(val.${mname});
         %else:
         str += std::to_string(val.${mname});
         %endif
