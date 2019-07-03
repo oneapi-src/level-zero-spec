@@ -133,16 +133,12 @@ typedef struct _xet_profile_free_register_token_t xet_profile_free_register_toke
 typedef struct _xet_profile_register_sequence_t xet_profile_register_sequence_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_res_container_uuid_t
-typedef struct _xet_res_container_uuid_t xet_res_container_uuid_t;
+/// @brief Forward-declare xet_resource_uuid_t
+typedef struct _xet_resource_uuid_t xet_resource_uuid_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_res_container_info_t
 typedef struct _xet_res_container_info_t xet_res_container_info_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resource_uuid_t
-typedef struct _xet_resource_uuid_t xet_resource_uuid_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_resource_info_t

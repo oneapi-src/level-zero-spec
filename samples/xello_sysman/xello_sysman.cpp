@@ -15,10 +15,10 @@
 #include <stdio.h>
 #include "xet_api.h"
 
-void ShowDeviceInfo(xet_res_container_handle_t hDeviceContainer); // Forward declaration
-void ShowFanInfo(xet_resource_handle_t hFanResource); // Forward declaration
+void ShowDeviceInfo(xet_sysman_handle_t hSysman, xet_res_container_handle_t hDeviceContainer); // Forward declaration
+void ShowFanInfo(xet_sysman_handle_t hSysman, xet_resource_handle_t hFanResource); // Forward declaration
 
-void ShowFans(xet_res_container_handle_t hBoardContainer)
+void ShowFans(xet_sysman_handle_t hSysman, xet_res_container_handle_t hBoardContainer)
 {
     uint32_t numFans = 0;
     if (xetSysmanResContainerGetResources(hBoardContainer, XET_RESOURCE_TYPE_FAN, &numFans, NULL) == XE_RESULT_SUCCESS)
@@ -28,20 +28,24 @@ void ShowFans(xet_res_container_handle_t hBoardContainer)
         {
             for (uint32_t i = 0; i < numFans; i++)
             {
-                ShowFanInfo(phFans[i]);
+                ShowFanInfo(hSysman, phFans[i]);
             }
         }
         free(phFans);
     }
 }
 
-void ShowFanInfo(xet_resource_handle_t hFanResource)
+void ShowFanInfo(xet_sysman_handle_t hSysman, xet_resource_handle_t hFanResource)
 {
     xet_resource_info_t info;
     if (xetSysmanResourceGetInfo(hFanResource, &info) == XE_RESULT_SUCCESS)
     {
+        char uuidStr[XET_RESOURCE_UUID_STRING_SIZE + 1] = { 0 };
+        uint32_t size = sizeof(uuidStr);
+        xetSysmanConvertUuidToString(hSysman, &info.uuid, &size, uuidStr);
+
         fprintf(stdout, "Fan\n");
-        fprintf(stdout, "    UUID: %s\n", (char*)info.uuid.id);
+        fprintf(stdout, "    UUID: %s\n", uuidStr);
         fprintf(stdout, "\n");
     }
 
@@ -76,7 +80,7 @@ struct BoardData
     xet_board_prop_board_number_t   BoardNumber;
 };
 
-void ShowBoardInfo(xet_res_container_handle_t hDeviceContainer)
+void ShowBoardInfo(xet_sysman_handle_t hSysman, xet_res_container_handle_t hDeviceContainer)
 {
     xet_res_container_handle_t hParentContainer;
     if (xetSysmanResContainerGetParent(hDeviceContainer, &hParentContainer) != XE_RESULT_SUCCESS)
@@ -107,20 +111,28 @@ void ShowBoardInfo(xet_res_container_handle_t hDeviceContainer)
         &data,
         &size) == XE_RESULT_SUCCESS)
     {
+        char uuidStr[XET_RESOURCE_UUID_STRING_SIZE + 1] = { 0 };
+        uint32_t size = sizeof(uuidStr);
+        xetSysmanConvertUuidToString(hSysman, &info.uuid, &size, uuidStr);
+
         fprintf(stdout, "Board\n");
-        fprintf(stdout, "    UUID:    %s\n", (char*)info.uuid.id);
-        fprintf(stdout, "    Serial#: %s\n", (char*)data.SerialNumber.str);
-        fprintf(stdout, "    Board#:  %s\n", (char*)data.BoardNumber.str);
+        fprintf(stdout, "    UUID:    %s\n", uuidStr);
+        fprintf(stdout, "    Serial#: %s\n", data.SerialNumber.str);
+        fprintf(stdout, "    Board#:  %s\n", data.BoardNumber.str);
     }
 }
 
-void ShowDeviceInfo(xet_res_container_handle_t hDeviceContainer)
+void ShowDeviceInfo(xet_sysman_handle_t hSysman, xet_res_container_handle_t hDeviceContainer)
 {
     xet_res_container_info_t info;
     if (xetSysmanResContainerGetInfo(hDeviceContainer, &info) == XE_RESULT_SUCCESS)
     {
+        char uuidStr[XET_RESOURCE_UUID_STRING_SIZE + 1] = { 0 };
+        uint32_t size = sizeof(uuidStr);
+        xetSysmanConvertUuidToString(hSysman, &info.uuid, &size, uuidStr);
+
         fprintf(stdout, "Device\n");
-        fprintf(stdout, "    UUID: %s\n", (char*)info.uuid.id);
+        fprintf(stdout, "    UUID: %s\n", uuidStr);
         fprintf(stdout, "    # sub-devices: %u\n", info.numChildren);
         fprintf(stdout, "    # p2p links: %u\n", info.numPeers);
         fprintf(stdout, "    Assets:\n");
@@ -147,7 +159,7 @@ void ListDevices(xet_sysman_handle_t hSysman)
         {
             for (uint32_t i = 0; i < numDevices; i++)
             {
-                ShowDeviceInfo(phContainers[i]);
+                ShowDeviceInfo(hSysman, phContainers[i]);
             }
         }
         free(phContainers);

@@ -814,6 +814,42 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanConvertUuidToString
+    xe_result_t __xecall
+    xetSysmanConvertUuidToString(
+        xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
+        const xet_resource_uuid_t* pUuid,               ///< [in] Pointer to a Sysman UUID
+        uint32_t* pSize,                                ///< [in,out] Pointer to the size of the string buffer pointed to by pStr.
+                                                        ///< If size is zero, the storage size including end-of-string terminator
+                                                        ///< will be returned.
+                                                        ///< If size is non-zero and less than the required length, the storage
+                                                        ///< size including end-of-string terminator will be returned and an error
+                                                        ///< status given.
+                                                        ///< If size is non-zero and larger than the string length, the number of
+                                                        ///< characters stored in the buffer including the end-of-string terminator
+                                                        ///< will be returned.
+        char* pStr                                      ///< [in][optional] Pointer to storage for the string representation of the
+                                                        ///< UUID
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnConvertUuidToString = dditable->xet.Sysman.pfnConvertUuidToString;
+        if( nullptr == pfnConvertUuidToString )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnConvertUuidToString( hSysman, pUuid, pSize, pStr );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanGetResourceContainers
     xe_result_t __xecall
     xetSysmanGetResourceContainers(
@@ -906,7 +942,7 @@ namespace loader
     xe_result_t __xecall
     xetSysmanGetResourceContainerByUuid(
         xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        xet_res_container_uuid_t* uuid,                 ///< [in] UUID for the resource container.
+        const xet_resource_uuid_t* uuid,                ///< [in] UUID for the resource container.
         xet_res_container_handle_t* phResContainer      ///< [out] Resource container with UUID.
         )
     {
@@ -934,6 +970,36 @@ namespace loader
         {
             result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
         }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanResContainerIsSame
+    xe_result_t __xecall
+    xetSysmanResContainerIsSame(
+        xet_res_container_handle_t hLhs,                ///< [in] Handle of the resource container
+        xet_res_container_handle_t hRhs,                ///< [in] Handle of the resource container
+        xe_bool_t* pIsSame                              ///< [in] Sets to True if the two resource containers reference the same
+                                                        ///< underlying resource container
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_res_container_object_t*>( hLhs )->dditable;
+        auto pfnIsSame = dditable->xet.SysmanResContainer.pfnIsSame;
+        if( nullptr == pfnIsSame )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hLhs = reinterpret_cast<xet_res_container_object_t*>( hLhs )->handle;
+
+        // convert loader handle to driver handle
+        hRhs = reinterpret_cast<xet_res_container_object_t*>( hRhs )->handle;
+
+        // forward to device-driver
+        result = pfnIsSame( hLhs, hRhs, pIsSame );
 
         return result;
     }
@@ -1151,6 +1217,36 @@ namespace loader
 
         // forward to device-driver
         result = pfnGetResources( hResContainter, type, pCount, phResources );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanResourceIsSame
+    xe_result_t __xecall
+    xetSysmanResourceIsSame(
+        xet_resource_handle_t hLhs,                     ///< [in] Handle of the resource
+        xet_resource_handle_t hRhs,                     ///< [in] Handle of the resource
+        xe_bool_t* pIsSame                              ///< [in] Sets to True if the two resources reference the same underlying
+                                                        ///< resource
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_resource_object_t*>( hLhs )->dditable;
+        auto pfnIsSame = dditable->xet.SysmanResource.pfnIsSame;
+        if( nullptr == pfnIsSame )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hLhs = reinterpret_cast<xet_resource_object_t*>( hLhs )->handle;
+
+        // convert loader handle to driver handle
+        hRhs = reinterpret_cast<xet_resource_object_t*>( hRhs )->handle;
+
+        // forward to device-driver
+        result = pfnIsSame( hLhs, hRhs, pIsSame );
 
         return result;
     }
@@ -3014,6 +3110,7 @@ xetGetSysmanProcAddrTable(
             // return pointers to loader's DDIs
             pDdiTable->pfnCreate                                   = loader::xetSysmanCreate;
             pDdiTable->pfnDestroy                                  = loader::xetSysmanDestroy;
+            pDdiTable->pfnConvertUuidToString                      = loader::xetSysmanConvertUuidToString;
             pDdiTable->pfnGetResourceContainers                    = loader::xetSysmanGetResourceContainers;
             pDdiTable->pfnGetDeviceResourceContainer               = loader::xetSysmanGetDeviceResourceContainer;
             pDdiTable->pfnGetResourceContainerByUuid               = loader::xetSysmanGetResourceContainerByUuid;
@@ -3083,6 +3180,7 @@ xetGetSysmanResContainerProcAddrTable(
         if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
         {
             // return pointers to loader's DDIs
+            pDdiTable->pfnIsSame                                   = loader::xetSysmanResContainerIsSame;
             pDdiTable->pfnGetInfo                                  = loader::xetSysmanResContainerGetInfo;
             pDdiTable->pfnGetParent                                = loader::xetSysmanResContainerGetParent;
             pDdiTable->pfnGetChildren                              = loader::xetSysmanResContainerGetChildren;
@@ -3155,6 +3253,7 @@ xetGetSysmanResourceProcAddrTable(
         if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
         {
             // return pointers to loader's DDIs
+            pDdiTable->pfnIsSame                                   = loader::xetSysmanResourceIsSame;
             pDdiTable->pfnGetInfo                                  = loader::xetSysmanResourceGetInfo;
             pDdiTable->pfnGetPsuProperties                         = loader::xetSysmanResourceGetPsuProperties;
             pDdiTable->pfnSetPsuProperties                         = loader::xetSysmanResourceSetPsuProperties;

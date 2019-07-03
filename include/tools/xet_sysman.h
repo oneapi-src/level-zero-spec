@@ -136,18 +136,68 @@ typedef enum _xet_accel_asset_t
 } xet_accel_asset_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Resource container universal unique id (UUID)
-typedef struct _xet_res_container_uuid_t
-{
-    uint8_t id[XE_MAX_UUID_SIZE];                   ///< [out] resource container universal unique id
+#ifndef XET_RESOURCE_UUID_SIZE
+/// @brief Size of UUID number in bytes
+#define XET_RESOURCE_UUID_SIZE  16
+#endif // XET_RESOURCE_UUID_SIZE
 
-} xet_res_container_uuid_t;
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_RESOURCE_UUID_STRING_SIZE
+/// @brief Maximum number of characters in string representation of a UUID
+/// 
+/// @details
+///     - Size does not including end-of-string terminator
+///     - Format of UUID string: ffffffff-ffff-ffff-ffff-ffffffffffff
+#define XET_RESOURCE_UUID_STRING_SIZE  36
+#endif // XET_RESOURCE_UUID_STRING_SIZE
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Universal unique id (UUID) for Sysman objects (resource containers and
+///        resources)
+typedef struct _xet_resource_uuid_t
+{
+    uint8_t id[XET_RESOURCE_UUID_SIZE];             ///< [in,out] Universal unique id of Sysman object
+
+} xet_resource_uuid_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Convert Sysman UUID to a string
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pUuid
+///         + nullptr == pSize
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanConvertUuidToString(
+    xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
+    const xet_resource_uuid_t* pUuid,               ///< [in] Pointer to a Sysman UUID
+    uint32_t* pSize,                                ///< [in,out] Pointer to the size of the string buffer pointed to by pStr.
+                                                    ///< If size is zero, the storage size including end-of-string terminator
+                                                    ///< will be returned.
+                                                    ///< If size is non-zero and less than the required length, the storage
+                                                    ///< size including end-of-string terminator will be returned and an error
+                                                    ///< status given.
+                                                    ///< If size is non-zero and larger than the string length, the number of
+                                                    ///< characters stored in the buffer including the end-of-string terminator
+                                                    ///< will be returned.
+    char* pStr                                      ///< [in][optional] Pointer to storage for the string representation of the
+                                                    ///< UUID
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Generic information about a resource container
 typedef struct _xet_res_container_info_t
 {
-    xet_res_container_uuid_t uuid;                  ///< [out] UUID for the resource container
+    xet_resource_uuid_t uuid;                       ///< [out] UUID for the resource container
     xet_res_container_type_t type;                  ///< [out] Type of resource container
     xe_bool_t haveParent;                           ///< [out] Indicates if this resource container has a parent container
     uint32_t numChildren;                           ///< [out] The number of child resource containers
@@ -159,20 +209,12 @@ typedef struct _xet_res_container_info_t
 } xet_res_container_info_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Resource universal unique id (UUID)
-typedef struct _xet_resource_uuid_t
-{
-    uint8_t id[XE_MAX_UUID_SIZE];                   ///< [out] resource universal unique id
-
-} xet_resource_uuid_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Generic information about a resource
 typedef struct _xet_resource_info_t
 {
     xet_resource_uuid_t uuid;                       ///< [out] UUID for the resource
     xet_resource_type_t type;                       ///< [out] Type of resource
-    xet_res_container_uuid_t resContainerUuid;      ///< [out] UUID for the resource container where this resouce is located
+    xet_resource_uuid_t resContainerUuid;           ///< [out] UUID for the resource container where this resouce is located
 
 } xet_resource_info_t;
 
@@ -250,8 +292,33 @@ xetSysmanGetDeviceResourceContainer(
 xe_result_t __xecall
 xetSysmanGetResourceContainerByUuid(
     xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-    xet_res_container_uuid_t* uuid,                 ///< [in] UUID for the resource container.
+    const xet_resource_uuid_t* uuid,                ///< [in] UUID for the resource container.
     xet_res_container_handle_t* phResContainer      ///< [out] Resource container with UUID.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Compare if two resource container handles reference the same
+///        underlying resource container
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hLhs
+///         + nullptr == hRhs
+///         + nullptr == pIsSame
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanResContainerIsSame(
+    xet_res_container_handle_t hLhs,                ///< [in] Handle of the resource container
+    xet_res_container_handle_t hRhs,                ///< [in] Handle of the resource container
+    xe_bool_t* pIsSame                              ///< [in] Sets to True if the two resource containers reference the same
+                                                    ///< underlying resource container
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -402,6 +469,30 @@ xetSysmanResContainerGetResources(
                                                     ///< driver will update the value with the correct number of resources of a
                                                     ///< given type that are available.
     xet_resource_handle_t* phResources              ///< [in][optional][range(0, *pCount)] array of handle of resources
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Compare if two resource handles reference the same underlying resource
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hLhs
+///         + nullptr == hRhs
+///         + nullptr == pIsSame
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanResourceIsSame(
+    xet_resource_handle_t hLhs,                     ///< [in] Handle of the resource
+    xet_resource_handle_t hRhs,                     ///< [in] Handle of the resource
+    xe_bool_t* pIsSame                              ///< [in] Sets to True if the two resources reference the same underlying
+                                                    ///< resource
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2322,7 +2413,7 @@ xetSysmanUnregisterEvents(
 /// @brief Event data
 typedef struct _xet_sysman_event_data_t
 {
-    xet_res_container_uuid_t uuid;                  ///< [out] The UUID of the resource container that generated the event
+    xet_resource_uuid_t uuid;                       ///< [out] The UUID of the resource container that generated the event
     uint32_t events;                                ///< [out] Bitfield of events (1<<::xet_sysman_event_type_t) that have been
                                                     ///< triggered.
 

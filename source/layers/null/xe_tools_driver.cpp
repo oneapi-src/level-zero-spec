@@ -690,6 +690,41 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanConvertUuidToString
+    xe_result_t __xecall
+    xetSysmanConvertUuidToString(
+        xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
+        const xet_resource_uuid_t* pUuid,               ///< [in] Pointer to a Sysman UUID
+        uint32_t* pSize,                                ///< [in,out] Pointer to the size of the string buffer pointed to by pStr.
+                                                        ///< If size is zero, the storage size including end-of-string terminator
+                                                        ///< will be returned.
+                                                        ///< If size is non-zero and less than the required length, the storage
+                                                        ///< size including end-of-string terminator will be returned and an error
+                                                        ///< status given.
+                                                        ///< If size is non-zero and larger than the string length, the number of
+                                                        ///< characters stored in the buffer including the end-of-string terminator
+                                                        ///< will be returned.
+        char* pStr                                      ///< [in][optional] Pointer to storage for the string representation of the
+                                                        ///< UUID
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnConvertUuidToString = context.xetDdiTable.Sysman.pfnConvertUuidToString;
+        if( nullptr != pfnConvertUuidToString )
+        {
+            result = pfnConvertUuidToString( hSysman, pUuid, pSize, pStr );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanGetResourceContainers
     xe_result_t __xecall
     xetSysmanGetResourceContainers(
@@ -759,7 +794,7 @@ namespace driver
     xe_result_t __xecall
     xetSysmanGetResourceContainerByUuid(
         xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        xet_res_container_uuid_t* uuid,                 ///< [in] UUID for the resource container.
+        const xet_resource_uuid_t* uuid,                ///< [in] UUID for the resource container.
         xet_res_container_handle_t* phResContainer      ///< [out] Resource container with UUID.
         )
     {
@@ -776,6 +811,32 @@ namespace driver
             // generic implementation
             *phResContainer = reinterpret_cast<xet_res_container_handle_t>( context.get() );
 
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanResContainerIsSame
+    xe_result_t __xecall
+    xetSysmanResContainerIsSame(
+        xet_res_container_handle_t hLhs,                ///< [in] Handle of the resource container
+        xet_res_container_handle_t hRhs,                ///< [in] Handle of the resource container
+        xe_bool_t* pIsSame                              ///< [in] Sets to True if the two resource containers reference the same
+                                                        ///< underlying resource container
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnIsSame = context.xetDdiTable.SysmanResContainer.pfnIsSame;
+        if( nullptr != pfnIsSame )
+        {
+            result = pfnIsSame( hLhs, hRhs, pIsSame );
+        }
+        else
+        {
+            // generic implementation
         }
 
         return result;
@@ -952,6 +1013,32 @@ namespace driver
         if( nullptr != pfnGetResources )
         {
             result = pfnGetResources( hResContainter, type, pCount, phResources );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanResourceIsSame
+    xe_result_t __xecall
+    xetSysmanResourceIsSame(
+        xet_resource_handle_t hLhs,                     ///< [in] Handle of the resource
+        xet_resource_handle_t hRhs,                     ///< [in] Handle of the resource
+        xe_bool_t* pIsSame                              ///< [in] Sets to True if the two resources reference the same underlying
+                                                        ///< resource
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnIsSame = context.xetDdiTable.SysmanResource.pfnIsSame;
+        if( nullptr != pfnIsSame )
+        {
+            result = pfnIsSame( hLhs, hRhs, pIsSame );
         }
         else
         {
@@ -2395,6 +2482,8 @@ xetGetSysmanProcAddrTable(
 
     pDdiTable->pfnDestroy                                = driver::xetSysmanDestroy;
 
+    pDdiTable->pfnConvertUuidToString                    = driver::xetSysmanConvertUuidToString;
+
     pDdiTable->pfnGetResourceContainers                  = driver::xetSysmanGetResourceContainers;
 
     pDdiTable->pfnGetDeviceResourceContainer             = driver::xetSysmanGetDeviceResourceContainer;
@@ -2434,6 +2523,8 @@ xetGetSysmanResContainerProcAddrTable(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
+
+    pDdiTable->pfnIsSame                                 = driver::xetSysmanResContainerIsSame;
 
     pDdiTable->pfnGetInfo                                = driver::xetSysmanResContainerGetInfo;
 
@@ -2480,6 +2571,8 @@ xetGetSysmanResourceProcAddrTable(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
+
+    pDdiTable->pfnIsSame                                 = driver::xetSysmanResourceIsSame;
 
     pDdiTable->pfnGetInfo                                = driver::xetSysmanResourceGetInfo;
 

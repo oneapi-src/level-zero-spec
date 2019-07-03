@@ -425,17 +425,30 @@ class xet_accel_asset_t(c_int):
 
 
 ###############################################################################
-## @brief Resource container universal unique id (UUID)
-class xet_res_container_uuid_t(Structure):
+## @brief Size of UUID number in bytes
+XET_RESOURCE_UUID_SIZE = 16
+
+###############################################################################
+## @brief Maximum number of characters in string representation of a UUID
+## 
+## @details
+##     - Size does not including end-of-string terminator
+##     - Format of UUID string: ffffffff-ffff-ffff-ffff-ffffffffffff
+XET_RESOURCE_UUID_STRING_SIZE = 36
+
+###############################################################################
+## @brief Universal unique id (UUID) for Sysman objects (resource containers and
+##        resources)
+class xet_resource_uuid_t(Structure):
     _fields_ = [
-        ("id", c_ubyte * XE_MAX_UUID_SIZE)                              ## [out] resource container universal unique id
+        ("id", c_ubyte * XET_RESOURCE_UUID_SIZE)                        ## [in,out] Universal unique id of Sysman object
     ]
 
 ###############################################################################
 ## @brief Generic information about a resource container
 class xet_res_container_info_t(Structure):
     _fields_ = [
-        ("uuid", xet_res_container_uuid_t),                             ## [out] UUID for the resource container
+        ("uuid", xet_resource_uuid_t),                                  ## [out] UUID for the resource container
         ("type", xet_res_container_type_t),                             ## [out] Type of resource container
         ("haveParent", xe_bool_t),                                      ## [out] Indicates if this resource container has a parent container
         ("numChildren", c_ulong),                                       ## [out] The number of child resource containers
@@ -446,19 +459,12 @@ class xet_res_container_info_t(Structure):
     ]
 
 ###############################################################################
-## @brief Resource universal unique id (UUID)
-class xet_resource_uuid_t(Structure):
-    _fields_ = [
-        ("id", c_ubyte * XE_MAX_UUID_SIZE)                              ## [out] resource universal unique id
-    ]
-
-###############################################################################
 ## @brief Generic information about a resource
 class xet_resource_info_t(Structure):
     _fields_ = [
         ("uuid", xet_resource_uuid_t),                                  ## [out] UUID for the resource
         ("type", xet_resource_type_t),                                  ## [out] Type of resource
-        ("resContainerUuid", xet_res_container_uuid_t)                  ## [out] UUID for the resource container where this resouce is located
+        ("resContainerUuid", xet_resource_uuid_t)                       ## [out] UUID for the resource container where this resouce is located
     ]
 
 ###############################################################################
@@ -1584,7 +1590,7 @@ class xet_sysman_event_type_t(c_int):
 ## @brief Event data
 class xet_sysman_event_data_t(Structure):
     _fields_ = [
-        ("uuid", xet_res_container_uuid_t),                             ## [out] The UUID of the resource container that generated the event
+        ("uuid", xet_resource_uuid_t),                                  ## [out] The UUID of the resource container that generated the event
         ("events", c_ulong)                                             ## [out] Bitfield of events (1<<::xet_sysman_event_type_t) that have been
                                                                         ## triggered.
     ]
@@ -1951,6 +1957,13 @@ else:
     _xetSysmanDestroy_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t )
 
 ###############################################################################
+## @brief Function-pointer for xetSysmanConvertUuidToString
+if __use_win_types:
+    _xetSysmanConvertUuidToString_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_resource_uuid_t), POINTER(c_ulong), POINTER(c_char) )
+else:
+    _xetSysmanConvertUuidToString_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_resource_uuid_t), POINTER(c_ulong), POINTER(c_char) )
+
+###############################################################################
 ## @brief Function-pointer for xetSysmanGetResourceContainers
 if __use_win_types:
     _xetSysmanGetResourceContainers_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_res_container_type_t, POINTER(c_ulong), POINTER(xet_res_container_handle_t) )
@@ -1967,9 +1980,9 @@ else:
 ###############################################################################
 ## @brief Function-pointer for xetSysmanGetResourceContainerByUuid
 if __use_win_types:
-    _xetSysmanGetResourceContainerByUuid_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_res_container_uuid_t), POINTER(xet_res_container_handle_t) )
+    _xetSysmanGetResourceContainerByUuid_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_resource_uuid_t), POINTER(xet_res_container_handle_t) )
 else:
-    _xetSysmanGetResourceContainerByUuid_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_res_container_uuid_t), POINTER(xet_res_container_handle_t) )
+    _xetSysmanGetResourceContainerByUuid_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_resource_uuid_t), POINTER(xet_res_container_handle_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanRegisterEvents
@@ -1999,6 +2012,7 @@ class _xet_sysman_dditable_t(Structure):
     _fields_ = [
         ("pfnCreate", c_void_p),                                        ## _xetSysmanCreate_t
         ("pfnDestroy", c_void_p),                                       ## _xetSysmanDestroy_t
+        ("pfnConvertUuidToString", c_void_p),                           ## _xetSysmanConvertUuidToString_t
         ("pfnGetResourceContainers", c_void_p),                         ## _xetSysmanGetResourceContainers_t
         ("pfnGetDeviceResourceContainer", c_void_p),                    ## _xetSysmanGetDeviceResourceContainer_t
         ("pfnGetResourceContainerByUuid", c_void_p),                    ## _xetSysmanGetResourceContainerByUuid_t
@@ -2006,6 +2020,13 @@ class _xet_sysman_dditable_t(Structure):
         ("pfnUnregisterEvents", c_void_p),                              ## _xetSysmanUnregisterEvents_t
         ("pfnListenEvents", c_void_p)                                   ## _xetSysmanListenEvents_t
     ]
+
+###############################################################################
+## @brief Function-pointer for xetSysmanResContainerIsSame
+if __use_win_types:
+    _xetSysmanResContainerIsSame_t = WINFUNCTYPE( xe_result_t, xet_res_container_handle_t, xet_res_container_handle_t, POINTER(xe_bool_t) )
+else:
+    _xetSysmanResContainerIsSame_t = CFUNCTYPE( xe_result_t, xet_res_container_handle_t, xet_res_container_handle_t, POINTER(xe_bool_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanResContainerGetInfo
@@ -2075,6 +2096,7 @@ else:
 ## @brief Table of SysmanResContainer functions pointers
 class _xet_sysman_res_container_dditable_t(Structure):
     _fields_ = [
+        ("pfnIsSame", c_void_p),                                        ## _xetSysmanResContainerIsSame_t
         ("pfnGetInfo", c_void_p),                                       ## _xetSysmanResContainerGetInfo_t
         ("pfnGetParent", c_void_p),                                     ## _xetSysmanResContainerGetParent_t
         ("pfnGetChildren", c_void_p),                                   ## _xetSysmanResContainerGetChildren_t
@@ -2085,6 +2107,13 @@ class _xet_sysman_res_container_dditable_t(Structure):
         ("pfnGetDeviceProperties", c_void_p),                           ## _xetSysmanResContainerGetDeviceProperties_t
         ("pfnSetDeviceProperties", c_void_p)                            ## _xetSysmanResContainerSetDeviceProperties_t
     ]
+
+###############################################################################
+## @brief Function-pointer for xetSysmanResourceIsSame
+if __use_win_types:
+    _xetSysmanResourceIsSame_t = WINFUNCTYPE( xe_result_t, xet_resource_handle_t, xet_resource_handle_t, POINTER(xe_bool_t) )
+else:
+    _xetSysmanResourceIsSame_t = CFUNCTYPE( xe_result_t, xet_resource_handle_t, xet_resource_handle_t, POINTER(xe_bool_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanResourceGetInfo
@@ -2252,6 +2281,7 @@ else:
 ## @brief Table of SysmanResource functions pointers
 class _xet_sysman_resource_dditable_t(Structure):
     _fields_ = [
+        ("pfnIsSame", c_void_p),                                        ## _xetSysmanResourceIsSame_t
         ("pfnGetInfo", c_void_p),                                       ## _xetSysmanResourceGetInfo_t
         ("pfnGetPsuProperties", c_void_p),                              ## _xetSysmanResourceGetPsuProperties_t
         ("pfnSetPsuProperties", c_void_p),                              ## _xetSysmanResourceSetPsuProperties_t
@@ -2446,6 +2476,7 @@ class XET_DDI:
         # attach function interface to function address
         self.xetSysmanCreate = _xetSysmanCreate_t(self.__dditable.Sysman.pfnCreate)
         self.xetSysmanDestroy = _xetSysmanDestroy_t(self.__dditable.Sysman.pfnDestroy)
+        self.xetSysmanConvertUuidToString = _xetSysmanConvertUuidToString_t(self.__dditable.Sysman.pfnConvertUuidToString)
         self.xetSysmanGetResourceContainers = _xetSysmanGetResourceContainers_t(self.__dditable.Sysman.pfnGetResourceContainers)
         self.xetSysmanGetDeviceResourceContainer = _xetSysmanGetDeviceResourceContainer_t(self.__dditable.Sysman.pfnGetDeviceResourceContainer)
         self.xetSysmanGetResourceContainerByUuid = _xetSysmanGetResourceContainerByUuid_t(self.__dditable.Sysman.pfnGetResourceContainerByUuid)
@@ -2461,6 +2492,7 @@ class XET_DDI:
         self.__dditable.SysmanResContainer = _SysmanResContainer
 
         # attach function interface to function address
+        self.xetSysmanResContainerIsSame = _xetSysmanResContainerIsSame_t(self.__dditable.SysmanResContainer.pfnIsSame)
         self.xetSysmanResContainerGetInfo = _xetSysmanResContainerGetInfo_t(self.__dditable.SysmanResContainer.pfnGetInfo)
         self.xetSysmanResContainerGetParent = _xetSysmanResContainerGetParent_t(self.__dditable.SysmanResContainer.pfnGetParent)
         self.xetSysmanResContainerGetChildren = _xetSysmanResContainerGetChildren_t(self.__dditable.SysmanResContainer.pfnGetChildren)
@@ -2479,6 +2511,7 @@ class XET_DDI:
         self.__dditable.SysmanResource = _SysmanResource
 
         # attach function interface to function address
+        self.xetSysmanResourceIsSame = _xetSysmanResourceIsSame_t(self.__dditable.SysmanResource.pfnIsSame)
         self.xetSysmanResourceGetInfo = _xetSysmanResourceGetInfo_t(self.__dditable.SysmanResource.pfnGetInfo)
         self.xetSysmanResourceGetPsuProperties = _xetSysmanResourceGetPsuProperties_t(self.__dditable.SysmanResource.pfnGetPsuProperties)
         self.xetSysmanResourceSetPsuProperties = _xetSysmanResourceSetPsuProperties_t(self.__dditable.SysmanResource.pfnSetPsuProperties)

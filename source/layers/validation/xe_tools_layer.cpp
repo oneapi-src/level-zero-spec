@@ -716,6 +716,46 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanConvertUuidToString
+    xe_result_t __xecall
+    xetSysmanConvertUuidToString(
+        xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
+        const xet_resource_uuid_t* pUuid,               ///< [in] Pointer to a Sysman UUID
+        uint32_t* pSize,                                ///< [in,out] Pointer to the size of the string buffer pointed to by pStr.
+                                                        ///< If size is zero, the storage size including end-of-string terminator
+                                                        ///< will be returned.
+                                                        ///< If size is non-zero and less than the required length, the storage
+                                                        ///< size including end-of-string terminator will be returned and an error
+                                                        ///< status given.
+                                                        ///< If size is non-zero and larger than the string length, the number of
+                                                        ///< characters stored in the buffer including the end-of-string terminator
+                                                        ///< will be returned.
+        char* pStr                                      ///< [in][optional] Pointer to storage for the string representation of the
+                                                        ///< UUID
+        )
+    {
+        auto pfnConvertUuidToString = context.xetDdiTable.Sysman.pfnConvertUuidToString;
+
+        if( nullptr == pfnConvertUuidToString )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pUuid )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pSize )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnConvertUuidToString( hSysman, pUuid, pSize, pStr );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanGetResourceContainers
     xe_result_t __xecall
     xetSysmanGetResourceContainers(
@@ -787,7 +827,7 @@ namespace layer
     xe_result_t __xecall
     xetSysmanGetResourceContainerByUuid(
         xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        xet_res_container_uuid_t* uuid,                 ///< [in] UUID for the resource container.
+        const xet_resource_uuid_t* uuid,                ///< [in] UUID for the resource container.
         xet_res_container_handle_t* phResContainer      ///< [out] Resource container with UUID.
         )
     {
@@ -810,6 +850,37 @@ namespace layer
         }
 
         return pfnGetResourceContainerByUuid( hSysman, uuid, phResContainer );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanResContainerIsSame
+    xe_result_t __xecall
+    xetSysmanResContainerIsSame(
+        xet_res_container_handle_t hLhs,                ///< [in] Handle of the resource container
+        xet_res_container_handle_t hRhs,                ///< [in] Handle of the resource container
+        xe_bool_t* pIsSame                              ///< [in] Sets to True if the two resource containers reference the same
+                                                        ///< underlying resource container
+        )
+    {
+        auto pfnIsSame = context.xetDdiTable.SysmanResContainer.pfnIsSame;
+
+        if( nullptr == pfnIsSame )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hLhs )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == hRhs )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pIsSame )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnIsSame( hLhs, hRhs, pIsSame );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -994,6 +1065,37 @@ namespace layer
         }
 
         return pfnGetResources( hResContainter, type, pCount, phResources );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanResourceIsSame
+    xe_result_t __xecall
+    xetSysmanResourceIsSame(
+        xet_resource_handle_t hLhs,                     ///< [in] Handle of the resource
+        xet_resource_handle_t hRhs,                     ///< [in] Handle of the resource
+        xe_bool_t* pIsSame                              ///< [in] Sets to True if the two resources reference the same underlying
+                                                        ///< resource
+        )
+    {
+        auto pfnIsSame = context.xetDdiTable.SysmanResource.pfnIsSame;
+
+        if( nullptr == pfnIsSame )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hLhs )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == hRhs )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pIsSame )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnIsSame( hLhs, hRhs, pIsSame );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2666,6 +2768,9 @@ xetGetSysmanProcAddrTable(
     dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
     pDdiTable->pfnDestroy                                = layer::xetSysmanDestroy;
 
+    dditable.pfnConvertUuidToString                      = pDdiTable->pfnConvertUuidToString;
+    pDdiTable->pfnConvertUuidToString                    = layer::xetSysmanConvertUuidToString;
+
     dditable.pfnGetResourceContainers                    = pDdiTable->pfnGetResourceContainers;
     pDdiTable->pfnGetResourceContainers                  = layer::xetSysmanGetResourceContainers;
 
@@ -2713,6 +2818,9 @@ xetGetSysmanResContainerProcAddrTable(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
+
+    dditable.pfnIsSame                                   = pDdiTable->pfnIsSame;
+    pDdiTable->pfnIsSame                                 = layer::xetSysmanResContainerIsSame;
 
     dditable.pfnGetInfo                                  = pDdiTable->pfnGetInfo;
     pDdiTable->pfnGetInfo                                = layer::xetSysmanResContainerGetInfo;
@@ -2770,6 +2878,9 @@ xetGetSysmanResourceProcAddrTable(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
+
+    dditable.pfnIsSame                                   = pDdiTable->pfnIsSame;
+    pDdiTable->pfnIsSame                                 = layer::xetSysmanResourceIsSame;
 
     dditable.pfnGetInfo                                  = pDdiTable->pfnGetInfo;
     pDdiTable->pfnGetInfo                                = layer::xetSysmanResourceGetInfo;

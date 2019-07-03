@@ -135,21 +135,59 @@ etors:
     - name: $T_ACCEL_ASSET_MAX_TYPES
       desc: "The number of accelerator asset types"
 --- #--------------------------------------------------------------------------
+type: macro
+desc: "Size of UUID number in bytes"
+name: $T_RESOURCE_UUID_SIZE
+value: "16"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum number of characters in string representation of a UUID"
+details:
+    - "Size does not including end-of-string terminator"
+    - "Format of UUID string: ffffffff-ffff-ffff-ffff-ffffffffffff"
+name: $T_RESOURCE_UUID_STRING_SIZE
+value: "36"
+--- #--------------------------------------------------------------------------
 type: struct
-desc: "Resource container universal unique id (UUID)"
+desc: "Universal unique id (UUID) for Sysman objects (resource containers and resources)"
 class: $tSysman
-name: $t_res_container_uuid_t
+name: $t_resource_uuid_t
 members:
     - type: uint8_t
-      name: "id[$X_MAX_UUID_SIZE]"
-      desc: "[out] resource container universal unique id"
+      name: "id[$T_RESOURCE_UUID_SIZE]"
+      desc: "[in,out] Universal unique id of Sysman object"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Convert Sysman UUID to a string"
+class: $tSysman
+name: ConvertUuidToString
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] Handle of the SMI object"
+    - type: const $t_resource_uuid_t*
+      name: pUuid
+      desc: "[in] Pointer to a Sysman UUID"
+    - type: "uint32_t*"
+      name: pSize
+      desc: |
+            [in,out] Pointer to the size of the string buffer pointed to by pStr.
+            If size is zero, the storage size including end-of-string terminator will be returned.
+            If size is non-zero and less than the required length, the storage size including end-of-string terminator will be returned and an error status given.
+            If size is non-zero and larger than the string length, the number of characters stored in the buffer including the end-of-string terminator will be returned.
+    - type: "char*"
+      name: pStr
+      desc: "[in][optional] Pointer to storage for the string representation of the UUID"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Generic information about a resource container"
 class: $tSysman
 name: $t_res_container_info_t
 members:
-    - type: $t_res_container_uuid_t
+    - type: $t_resource_uuid_t
       name: "uuid"
       desc: "[out] UUID for the resource container"
     - type: $t_res_container_type_t
@@ -169,15 +207,6 @@ members:
       desc: "[out] The number of resources of each type attached to this resource container (not in the child resource containers)"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Resource universal unique id (UUID)"
-class: $tSysman
-name: $t_resource_uuid_t
-members:
-    - type: uint8_t
-      name: "id[$X_MAX_UUID_SIZE]"
-      desc: "[out] resource universal unique id"
---- #--------------------------------------------------------------------------
-type: struct
 desc: "Generic information about a resource"
 class: $tSysman
 name: $t_resource_info_t
@@ -188,7 +217,7 @@ members:
     - type: $t_resource_type_t
       name: "type"
       desc: "[out] Type of resource"
-    - type: $t_res_container_uuid_t
+    - type: $t_resource_uuid_t
       name: "resContainerUuid"
       desc: "[out] UUID for the resource container where this resouce is located"
 --- #--------------------------------------------------------------------------
@@ -246,12 +275,30 @@ params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] Handle of the SMI object"
-    - type: $t_res_container_uuid_t*
+    - type: const $t_resource_uuid_t*
       name: uuid
       desc: "[in] UUID for the resource container."
     - type: "$t_res_container_handle_t*"
       name: phResContainer
       desc: "[out] Resource container with UUID."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Compare if two resource container handles reference the same underlying resource container"
+class: $tSysmanResContainer
+name: IsSame
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_res_container_handle_t
+      name: hLhs
+      desc: "[in] Handle of the resource container"
+    - type: $t_res_container_handle_t
+      name: hRhs
+      desc: "[in] Handle of the resource container"
+    - type: $x_bool_t*
+      name: pIsSame
+      desc: "[in] Sets to True if the two resource containers reference the same underlying resource container"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get generic information about a resource container"
@@ -366,6 +413,24 @@ params:
     - type: "$t_resource_handle_t*"
       name: phResources
       desc: "[in][optional][range(0, *pCount)] array of handle of resources"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Compare if two resource handles reference the same underlying resource"
+class: $tSysmanResource
+name: IsSame
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_resource_handle_t
+      name: hLhs
+      desc: "[in] Handle of the resource"
+    - type: $t_resource_handle_t
+      name: hRhs
+      desc: "[in] Handle of the resource"
+    - type: $x_bool_t*
+      name: pIsSame
+      desc: "[in] Sets to True if the two resources reference the same underlying resource"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get generic information about a resource"
@@ -2392,7 +2457,7 @@ desc: "Event data"
 class: $tSysman
 name: $t_sysman_event_data_t
 members:
-    - type: $t_res_container_uuid_t
+    - type: $t_resource_uuid_t
       name: "uuid"
       desc: "[out] The UUID of the resource container that generated the event"
     - type: uint32_t

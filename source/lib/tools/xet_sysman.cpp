@@ -78,6 +78,46 @@ xetSysmanDestroy(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Convert Sysman UUID to a string
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pUuid
+///         + nullptr == pSize
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanConvertUuidToString(
+    xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
+    const xet_resource_uuid_t* pUuid,               ///< [in] Pointer to a Sysman UUID
+    uint32_t* pSize,                                ///< [in,out] Pointer to the size of the string buffer pointed to by pStr.
+                                                    ///< If size is zero, the storage size including end-of-string terminator
+                                                    ///< will be returned.
+                                                    ///< If size is non-zero and less than the required length, the storage
+                                                    ///< size including end-of-string terminator will be returned and an error
+                                                    ///< status given.
+                                                    ///< If size is non-zero and larger than the string length, the number of
+                                                    ///< characters stored in the buffer including the end-of-string terminator
+                                                    ///< will be returned.
+    char* pStr                                      ///< [in][optional] Pointer to storage for the string representation of the
+                                                    ///< UUID
+    )
+{
+    auto pfnConvertUuidToString = xet_lib::context.ddiTable.Sysman.pfnConvertUuidToString;
+    if( nullptr == pfnConvertUuidToString )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnConvertUuidToString( hSysman, pUuid, pSize, pStr );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves resource containers of a given type
 /// 
 /// @details
@@ -165,7 +205,7 @@ xetSysmanGetDeviceResourceContainer(
 xe_result_t __xecall
 xetSysmanGetResourceContainerByUuid(
     xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-    xet_res_container_uuid_t* uuid,                 ///< [in] UUID for the resource container.
+    const xet_resource_uuid_t* uuid,                ///< [in] UUID for the resource container.
     xet_res_container_handle_t* phResContainer      ///< [out] Resource container with UUID.
     )
 {
@@ -174,6 +214,38 @@ xetSysmanGetResourceContainerByUuid(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     return pfnGetResourceContainerByUuid( hSysman, uuid, phResContainer );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Compare if two resource container handles reference the same
+///        underlying resource container
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hLhs
+///         + nullptr == hRhs
+///         + nullptr == pIsSame
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanResContainerIsSame(
+    xet_res_container_handle_t hLhs,                ///< [in] Handle of the resource container
+    xet_res_container_handle_t hRhs,                ///< [in] Handle of the resource container
+    xe_bool_t* pIsSame                              ///< [in] Sets to True if the two resource containers reference the same
+                                                    ///< underlying resource container
+    )
+{
+    auto pfnIsSame = xet_lib::context.ddiTable.SysmanResContainer.pfnIsSame;
+    if( nullptr == pfnIsSame )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnIsSame( hLhs, hRhs, pIsSame );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -366,6 +438,37 @@ xetSysmanResContainerGetResources(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     return pfnGetResources( hResContainter, type, pCount, phResources );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Compare if two resource handles reference the same underlying resource
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hLhs
+///         + nullptr == hRhs
+///         + nullptr == pIsSame
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanResourceIsSame(
+    xet_resource_handle_t hLhs,                     ///< [in] Handle of the resource
+    xet_resource_handle_t hRhs,                     ///< [in] Handle of the resource
+    xe_bool_t* pIsSame                              ///< [in] Sets to True if the two resources reference the same underlying
+                                                    ///< resource
+    )
+{
+    auto pfnIsSame = xet_lib::context.ddiTable.SysmanResource.pfnIsSame;
+    if( nullptr == pfnIsSame )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnIsSame( hLhs, hRhs, pIsSame );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1548,6 +1651,40 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Convert Sysman UUID to a string
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::ConvertUuidToString(
+        const resource_uuid_t* pUuid,                   ///< [in] Pointer to a Sysman UUID
+        uint32_t* pSize,                                ///< [in,out] Pointer to the size of the string buffer pointed to by pStr.
+                                                        ///< If size is zero, the storage size including end-of-string terminator
+                                                        ///< will be returned.
+                                                        ///< If size is non-zero and less than the required length, the storage
+                                                        ///< size including end-of-string terminator will be returned and an error
+                                                        ///< status given.
+                                                        ///< If size is non-zero and larger than the string length, the number of
+                                                        ///< characters stored in the buffer including the end-of-string terminator
+                                                        ///< will be returned.
+        char* pStr                                      ///< [in][optional] Pointer to storage for the string representation of the
+                                                        ///< UUID
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanConvertUuidToString(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<const xet_resource_uuid_t*>( pUuid ),
+            pSize,
+            pStr ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::ConvertUuidToString" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Retrieves resource containers of a given type
     /// 
     /// @details
@@ -1662,14 +1799,14 @@ namespace xet
     /// @throws result_t
     SysmanResContainer* __xecall
     Sysman::GetResourceContainerByUuid(
-        res_container_uuid_t* uuid                      ///< [in] UUID for the resource container.
+        const resource_uuid_t* uuid                     ///< [in] UUID for the resource container.
         )
     {
         xet_res_container_handle_t hResContainer;
 
         auto result = static_cast<result_t>( ::xetSysmanGetResourceContainerByUuid(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            reinterpret_cast<xet_res_container_uuid_t*>( uuid ),
+            reinterpret_cast<const xet_resource_uuid_t*>( uuid ),
             &hResContainer ) );
 
         if( result_t::SUCCESS != result )
@@ -1690,6 +1827,31 @@ namespace xet
         }
 
         return pResContainer;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Compare if two resource container handles reference the same
+    ///        underlying resource container
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    SysmanResContainer::IsSame(
+        SysmanResContainer* pRhs,                       ///< [in] Handle of the resource container
+        xe::bool_t* pIsSame                             ///< [in] Sets to True if the two resource containers reference the same
+                                                        ///< underlying resource container
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanResContainerIsSame(
+            reinterpret_cast<xet_res_container_handle_t>( getHandle() ),
+            reinterpret_cast<xet_res_container_handle_t>( pRhs->getHandle() ),
+            reinterpret_cast<xe_bool_t*>( pIsSame ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::SysmanResContainer::IsSame" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1929,6 +2091,30 @@ namespace xet
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::SysmanResContainer::GetResources" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Compare if two resource handles reference the same underlying resource
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    SysmanResource::IsSame(
+        SysmanResource* pRhs,                           ///< [in] Handle of the resource
+        xe::bool_t* pIsSame                             ///< [in] Sets to True if the two resources reference the same underlying
+                                                        ///< resource
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanResourceIsSame(
+            reinterpret_cast<xet_resource_handle_t>( getHandle() ),
+            reinterpret_cast<xet_resource_handle_t>( pRhs->getHandle() ),
+            reinterpret_cast<xe_bool_t*>( pIsSame ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::SysmanResource::IsSame" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3021,12 +3207,12 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::res_container_uuid_t to std::string
-    std::string to_string( const Sysman::res_container_uuid_t val )
+    /// @brief Converts Sysman::resource_uuid_t to std::string
+    std::string to_string( const Sysman::resource_uuid_t val )
     {
         std::string str;
         
-        str += "Sysman::res_container_uuid_t::id : ";
+        str += "Sysman::resource_uuid_t::id : ";
         {
             std::string tmp;
             for( auto& entry : val.id )
@@ -3071,27 +3257,6 @@ namespace xet
         {
             std::string tmp;
             for( auto& entry : val.numResourcesByType )
-            {
-                tmp += std::to_string( entry );
-                tmp += ", ";
-            }
-            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
-        }
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resource_uuid_t to std::string
-    std::string to_string( const Sysman::resource_uuid_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resource_uuid_t::id : ";
-        {
-            std::string tmp;
-            for( auto& entry : val.id )
             {
                 tmp += std::to_string( entry );
                 tmp += ", ";

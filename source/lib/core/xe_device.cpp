@@ -1024,7 +1024,7 @@ namespace xe
 
         auto result = static_cast<result_t>( ::xeDeviceGetP2PProperties(
             reinterpret_cast<xe_device_handle_t>( getHandle() ),
-            reinterpret_cast<xe_device_handle_t>( getHandle() ),
+            reinterpret_cast<xe_device_handle_t>( pPeerDevice->getHandle() ),
             &p2PProperties ) );
 
         if( result_t::SUCCESS != result )
@@ -1069,7 +1069,7 @@ namespace xe
 
         auto result = static_cast<result_t>( ::xeDeviceCanAccessPeer(
             reinterpret_cast<xe_device_handle_t>( getHandle() ),
-            reinterpret_cast<xe_device_handle_t>( getHandle() ),
+            reinterpret_cast<xe_device_handle_t>( pPeerDevice->getHandle() ),
             &value ) );
 
         if( result_t::SUCCESS != result )
