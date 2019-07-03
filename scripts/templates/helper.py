@@ -876,6 +876,7 @@ Public:
 def make_wrapper_params(namespace, tags, obj, meta, specs):
     params = []
     returns = []
+    numSelf = 0
 
     # if the input parameter is a class,
     # then need to use getHandle
@@ -1030,9 +1031,15 @@ def make_wrapper_params(namespace, tags, obj, meta, specs):
                         'arg': "( %s ) ? reinterpret_cast<%s>( %s->getHandle() ) : nullptr"%(cpp_name, c_tname, cpp_name)
                     })
                 elif (not is_static and not is_global) and is_this_handle:
-                    params.append({
-                        'arg': "reinterpret_cast<%s>( getHandle() )"%(c_tname)
-                    })
+                    numSelf += 1
+                    if numSelf == 1:
+                        params.append({
+                            'arg': "reinterpret_cast<%s>( getHandle() )"%(c_tname)
+                        })
+                    else:
+                        params.append({
+                            'arg': "MARCBEUCHATreinterpret_cast<%s>( %s->getHandle() )"%(c_tname, cpp_name)
+                        })
                 elif param_traits.is_release(item):
                     params.append({
                         'arg': "reinterpret_cast<%s>( %s->getHandle() )"%(c_tname, cpp_name),
