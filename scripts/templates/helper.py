@@ -1038,7 +1038,7 @@ def make_wrapper_params(namespace, tags, obj, meta, specs):
                         })
                     else:
                         params.append({
-                            'arg': "MARCBEUCHATreinterpret_cast<%s>( %s->getHandle() )"%(c_tname, cpp_name)
+                            'arg': "reinterpret_cast<%s>( %s->getHandle() )"%(c_tname, cpp_name)
                         })
                 elif param_traits.is_release(item):
                     params.append({
