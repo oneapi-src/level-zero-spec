@@ -18,4 +18,6 @@ ${"##"} Table of Contents
 ${"#"} <a name="in">Introduction</a>
 Sysman is the System Resource Management Interface (SMI) providing accelerator devices in a system.
 
+![Introduction](../images/tools_sysman_object_hierarchy.png?raw=true) 
+
 (more details coming soon...)
