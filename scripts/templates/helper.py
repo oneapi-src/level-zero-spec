@@ -483,7 +483,7 @@ def make_etor_name(namespace, tags, enum, etor, cpp=False):
 Private:
     returns c/c++ name of value
 """
-def _get_value_name(namespace, tags, value, cpp, meta, is_array_size=False):
+def _get_value_name(namespace, tags, value, cpp, meta, is_array_size=False, cbase=None):
     if cpp:
         if value_traits.is_macro(value, meta):
             value = subt(namespace, tags, value)
@@ -492,12 +492,16 @@ def _get_value_name(namespace, tags, value, cpp, meta, is_array_size=False):
             if name:
                 # e.g., "ETOR_NAME" -> "ENUM_NAME::ETOR_NAME"
                 enum = subt(namespace, tags, name, cpp=cpp)
-
                 # e.g., "CLS_ENUM_NAME" -> "ENUM_NAME"
-                # todo: this is assuming the class name is not needed - same class, same namespace
                 cname = type_traits.find_class_name(name, meta)
                 cname = subt(namespace, tags, cname, cpp=cpp)
                 enum = _remove_class(enum, cname)
+                if cpp and cbase and (cbase != None):
+                    cbase = subt(namespace, tags, cbase, cpp=cpp)
+                    if cbase == cname:
+                        enum = _remove_class(enum, cname)
+                    else:
+                        enum = "%s::%s"%(cname, enum)
                 if is_array_size:
                     value = "static_cast<int>(%s::%s)"%(enum, make_etor_name(namespace, tags, name, value, cpp))
                 else:
@@ -521,7 +525,7 @@ def make_etor_lines(namespace, tags, obj, cpp=False, py=False, meta=None):
 
         if 'value' in item:
             delim = "," if not py else ""
-            value = _get_value_name(namespace, tags, item['value'], cpp, meta)
+            value = _get_value_name(namespace, tags, item['value'], cpp, meta, cbase=obj_traits.class_name(obj))
             prologue = "%s = %s%s"%(name, value, delim)
         elif py:
             prologue = "%s = auto()"%(name)
@@ -617,14 +621,14 @@ def get_ctype_name(namespace, tags, item):
 Public:
     returns c/c++ name of member of struct/class
 """
-def make_member_name(namespace, tags, item, prefix="", cpp=False, meta=None, remove_array=False):
+def make_member_name(namespace, tags, item, prefix="", cpp=False, meta=None, remove_array=False, cbase=None):
     if cpp and value_traits.is_macro(item['name'], meta):
         name = subt(namespace, tags, item['name'])
     elif cpp and value_traits.is_array(item['name']):
         name = value_traits.get_array_name(item['name'])
         name = subt(namespace, tags, name)
         alength = value_traits.get_array_length(item['name'])
-        alength = _get_value_name(namespace, tags, alength, cpp, meta, is_array_size=True)
+        alength = _get_value_name(namespace, tags, alength, cpp, meta, is_array_size=True, cbase=cbase)
         name = "%s[%s]"%(name, alength)
     else:
         name = subt(namespace, tags, prefix+item['name'], cpp=cpp)
@@ -646,7 +650,7 @@ def make_member_lines(namespace, tags, obj, prefix="", cpp=False, py=False, meta
         return lines
 
     for i, item in enumerate(obj['members']):
-        name = make_member_name(namespace, tags, item, prefix, cpp, meta, remove_array=py)
+        name = make_member_name(namespace, tags, item, prefix, cpp, meta, remove_array=py, cbase=obj_traits.class_name(obj))
 
         if py:
             tname = get_ctype_name(namespace, tags, item)
@@ -654,7 +658,7 @@ def make_member_lines(namespace, tags, obj, prefix="", cpp=False, py=False, meta
             tname = _get_type_name(namespace, tags, obj, item, cpp, meta)
 
         if cpp and 'init' in item:
-            value = _get_value_name(namespace, tags, item['init'], cpp, meta)
+            value = _get_value_name(namespace, tags, item['init'], cpp, meta, cbase=obj_traits.class_name(obj))
             prologue = "%s %s = %s;"%(tname, name, value)
         elif py:
             delim = "," if i < (len(obj['members'])-1) else ""
