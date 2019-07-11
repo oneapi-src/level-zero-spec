@@ -28,7 +28,6 @@ namespace loader
     xet_metric_query_factory_t          xet_metric_query_factory;
     xet_tracer_factory_t                xet_tracer_factory;
     xet_sysman_factory_t                xet_sysman_factory;
-    xet_res_container_factory_t         xet_res_container_factory;
     xet_resource_factory_t              xet_resource_factory;
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -753,9 +752,10 @@ namespace loader
     /// @brief Intercept function for xetSysmanCreate
     xe_result_t __xecall
     xetSysmanCreate(
-        xet_device_group_handle_t hDeviceGroup,         ///< [in] handle of the device group
-        uint32_t flags,                                 ///< [in] bitfield of ::xet_sysman_init_flags_t
-        xet_sysman_handle_t* phSysman                   ///< [out] handle for accessing SMI features
+        xet_device_group_handle_t hDeviceGroup,         ///< [in] Handle of the device group
+        xet_sysman_version_t version,                   ///< [in] SMI version that application was built with
+        uint32_t flags,                                 ///< [in] Bitfield of ::xet_sysman_init_flags_t
+        xet_sysman_handle_t* phSysman                   ///< [out] Handle for accessing SMI features
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -770,7 +770,7 @@ namespace loader
         hDeviceGroup = reinterpret_cast<xet_device_group_object_t*>( hDeviceGroup )->handle;
 
         // forward to device-driver
-        result = pfnCreate( hDeviceGroup, flags, phSysman );
+        result = pfnCreate( hDeviceGroup, version, flags, phSysman );
 
         try
         {
@@ -814,6 +814,32 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanGetAccelAssetName
+    xe_result_t __xecall
+    xetSysmanGetAccelAssetName(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle
+        xet_accel_asset_t type,                         ///< [in] The type of accelerator asset
+        const char** ppName                             ///< [in] Pointer to the asset name
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnGetAccelAssetName = dditable->xet.Sysman.pfnGetAccelAssetName;
+        if( nullptr == pfnGetAccelAssetName )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnGetAccelAssetName( hSysman, type, ppName );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanConvertUuidToString
     xe_result_t __xecall
     xetSysmanConvertUuidToString(
@@ -825,7 +851,7 @@ namespace loader
                                                         ///< If size is non-zero and less than the required length, the storage
                                                         ///< size including end-of-string terminator will be returned and an error
                                                         ///< status given.
-                                                        ///< If size is non-zero and larger than the string length, the number of
+                                                        ///< If size is non-zero and larger than the required length, the number of
                                                         ///< characters stored in the buffer including the end-of-string terminator
                                                         ///< will be returned.
         char* pStr                                      ///< [in][optional] Pointer to storage for the string representation of the
@@ -850,43 +876,46 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanGetResourceContainers
+    /// @brief Intercept function for xetSysmanGetResources
     xe_result_t __xecall
-    xetSysmanGetResourceContainers(
+    xetSysmanGetResources(
         xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        xet_res_container_type_t type,                  ///< [in] The type of resource containers to enumerate
-        uint32_t* pCount,                               ///< [in,out] Pointer to the number of resource containers.
+        xet_resource_handle_t hParentResource,          ///< [in] Handle of the parent resource object (can be
+                                                        ///< ::XET_INVALID_SYSMAN_RESOURCE_HANDLE)
+        xet_resource_type_t type,                       ///< [in] The type of resources to enumerate
+        uint32_t* pCount,                               ///< [in,out] Pointer to the number of elements in the array phResources.
                                                         ///< If count is zero, then the driver will update the value with the total
-                                                        ///< number of resource containers of the given type that are available.
+                                                        ///< number of resources that would be returned.
                                                         ///< If count is non-zero, then driver will only retrieve that number of
-                                                        ///< resource containers of the given type starting from index 0.
-                                                        ///< If count is larger than the number of resource containers available,
-                                                        ///< then the driver will update the value with the correct number of
-                                                        ///< resource containers of a given type that are available.
-        xet_res_container_handle_t* phResContainers     ///< [out][optional][range(0, *pCount)] array of handle of resource
-                                                        ///< containers
+                                                        ///< resources of the given type starting from index 0.
+                                                        ///< If count is larger than the number of resource that will be returned,
+                                                        ///< then the driver will update the value with actual number returned.
+        xet_resource_handle_t* phResources              ///< [out][optional][range(0, *pCount)] Array of resources resources
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnGetResourceContainers = dditable->xet.Sysman.pfnGetResourceContainers;
-        if( nullptr == pfnGetResourceContainers )
+        auto pfnGetResources = dditable->xet.Sysman.pfnGetResources;
+        if( nullptr == pfnGetResources )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
+        // convert loader handle to driver handle
+        hParentResource = reinterpret_cast<xet_resource_object_t*>( hParentResource )->handle;
+
         // forward to device-driver
-        result = pfnGetResourceContainers( hSysman, type, pCount, phResContainers );
+        result = pfnGetResources( hSysman, hParentResource, type, pCount, phResources );
 
         try
         {
             // convert driver handles to loader handles
-            for( size_t i = 0; ( nullptr != phResContainers ) && ( i < *pCount ); ++i )
-                phResContainers[ i ] = reinterpret_cast<xet_res_container_handle_t>(
-                    xet_res_container_factory.getInstance( phResContainers[ i ], dditable ) );
+            for( size_t i = 0; ( nullptr != phResources ) && ( i < *pCount ); ++i )
+                phResources[ i ] = reinterpret_cast<xet_resource_handle_t>(
+                    xet_resource_factory.getInstance( phResources[ i ], dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -897,21 +926,20 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanGetDeviceResourceContainer
+    /// @brief Intercept function for xetSysmanGetDeviceResource
     xe_result_t __xecall
-    xetSysmanGetDeviceResourceContainer(
+    xetSysmanGetDeviceResource(
         xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        xe_device_handle_t hDevice,                     ///< [in] Handle to the device. It must be a member of the same Device
-                                                        ///< Group as hSysman was created from.
-        xet_res_container_handle_t* phResContainer      ///< [out] Resource container for the specified device.
+        xe_device_handle_t hDevice,                     ///< [in] Handle to the device.
+        xet_resource_handle_t* phResource               ///< [out] Resource handle for the specified device
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnGetDeviceResourceContainer = dditable->xet.Sysman.pfnGetDeviceResourceContainer;
-        if( nullptr == pfnGetDeviceResourceContainer )
+        auto pfnGetDeviceResource = dditable->xet.Sysman.pfnGetDeviceResource;
+        if( nullptr == pfnGetDeviceResource )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
@@ -921,13 +949,13 @@ namespace loader
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        result = pfnGetDeviceResourceContainer( hSysman, hDevice, phResContainer );
+        result = pfnGetDeviceResource( hSysman, hDevice, phResource );
 
         try
         {
             // convert driver handle to loader handle
-            *phResContainer = reinterpret_cast<xet_res_container_handle_t>(
-                xet_res_container_factory.getInstance( *phResContainer, dditable ) );
+            *phResource = reinterpret_cast<xet_resource_handle_t>(
+                xet_resource_factory.getInstance( *phResource, dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -938,33 +966,33 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanGetResourceContainerByUuid
+    /// @brief Intercept function for xetSysmanGetResourceByUuid
     xe_result_t __xecall
-    xetSysmanGetResourceContainerByUuid(
+    xetSysmanGetResourceByUuid(
         xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        const xet_resource_uuid_t* uuid,                ///< [in] UUID for the resource container.
-        xet_res_container_handle_t* phResContainer      ///< [out] Resource container with UUID.
+        const xet_resource_uuid_t* uuid,                ///< [in] UUID for the resource
+        xet_resource_handle_t* phResource               ///< [out] Resource handle
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnGetResourceContainerByUuid = dditable->xet.Sysman.pfnGetResourceContainerByUuid;
-        if( nullptr == pfnGetResourceContainerByUuid )
+        auto pfnGetResourceByUuid = dditable->xet.Sysman.pfnGetResourceByUuid;
+        if( nullptr == pfnGetResourceByUuid )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnGetResourceContainerByUuid( hSysman, uuid, phResContainer );
+        result = pfnGetResourceByUuid( hSysman, uuid, phResource );
 
         try
         {
             // convert driver handle to loader handle
-            *phResContainer = reinterpret_cast<xet_res_container_handle_t>(
-                xet_res_container_factory.getInstance( *phResContainer, dditable ) );
+            *phResource = reinterpret_cast<xet_resource_handle_t>(
+                xet_resource_factory.getInstance( *phResource, dditable ) );
         }
         catch( std::bad_alloc& )
         {
@@ -975,248 +1003,56 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResContainerIsSame
+    /// @brief Intercept function for xetSysmanGetRasErrors
     xe_result_t __xecall
-    xetSysmanResContainerIsSame(
-        xet_res_container_handle_t hLhs,                ///< [in] Handle of the resource container
-        xet_res_container_handle_t hRhs,                ///< [in] Handle of the resource container
-        xe_bool_t* pIsSame                              ///< [in] Sets to True if the two resource containers reference the same
-                                                        ///< underlying resource container
+    xetSysmanGetRasErrors(
+        xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource. If specified, only errors within that
+                                                        ///< resource of child resources are returned. Otherwise all errors are
+                                                        ///< returned.
+        uint32_t type,                                  ///< [in] Bitfield of error types to filter - one or more of
+                                                        ///< ::xet_ras_error_type_t. Set to ::XET_RAS_ERROR_TYPE_ALL to have all
+                                                        ///< error types returned.
+        uint32_t location,                              ///< [in] Bitfield of error locations to filter - one or more of
+                                                        ///< ::xet_ras_error_loc_t. Set to ::XET_RAS_ERROR_LOC_ALL to have all
+                                                        ///< error locations returned.
+        uint32_t threshold,                             ///< [in] Only return error elements that have occurred at least this
+                                                        ///< number of times.
+                                                        ///< If set to 0, will get a list of all possible RAS elements, even those
+                                                        ///< that have not had errors.
+                                                        ///< For error elements of type ::XET_RAS_DATA_TYPE_OCCURRED, there is no
+                                                        ///< underlying counter, so they will always be returned independent of the
+                                                        ///< threshold setting.
+        xe_bool_t clear,                                ///< [in] Set to true to clear the underlying counters after they are
+                                                        ///< returned
+        uint32_t* pCount,                               ///< [in] Pointer to the number of elements in the array pErrors.
+                                                        ///< If count is 0 or pErrors is nullptr, driver will update with the
+                                                        ///< number of errors matching the specified filters. Counters are not cleared.
+                                                        ///< If count is non-zero and less than the number of matching errors,
+                                                        ///< driver will update with the number of errors matching the specified
+                                                        ///< filters. No data is returned and counters are not cleared.
+                                                        ///< If count is greater than or equal to the number of matching errors,
+                                                        ///< all data is returned, counters are cleared if requested and count will
+                                                        ///< be set to actual number of errors returned.
+        xet_res_error_t* pErrors                        ///< [in] Array of error data
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xet_res_container_object_t*>( hLhs )->dditable;
-        auto pfnIsSame = dditable->xet.SysmanResContainer.pfnIsSame;
-        if( nullptr == pfnIsSame )
+        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnGetRasErrors = dditable->xet.Sysman.pfnGetRasErrors;
+        if( nullptr == pfnGetRasErrors )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hLhs = reinterpret_cast<xet_res_container_object_t*>( hLhs )->handle;
+        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // convert loader handle to driver handle
-        hRhs = reinterpret_cast<xet_res_container_object_t*>( hRhs )->handle;
+        hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnIsSame( hLhs, hRhs, pIsSame );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResContainerGetInfo
-    xe_result_t __xecall
-    xetSysmanResContainerGetInfo(
-        xet_res_container_handle_t hResContainer,       ///< [in] Handle of the resource container
-        xet_res_container_info_t* pInfo                 ///< [out] Generic information about the resource container.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xet_res_container_object_t*>( hResContainer )->dditable;
-        auto pfnGetInfo = dditable->xet.SysmanResContainer.pfnGetInfo;
-        if( nullptr == pfnGetInfo )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hResContainer = reinterpret_cast<xet_res_container_object_t*>( hResContainer )->handle;
-
-        // forward to device-driver
-        result = pfnGetInfo( hResContainer, pInfo );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResContainerGetParent
-    xe_result_t __xecall
-    xetSysmanResContainerGetParent(
-        xet_res_container_handle_t hResContainer,       ///< [in] Handle of the resource container.
-        xet_res_container_handle_t* phResContainer      ///< [out] Handle of the parent resource container.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xet_res_container_object_t*>( hResContainer )->dditable;
-        auto pfnGetParent = dditable->xet.SysmanResContainer.pfnGetParent;
-        if( nullptr == pfnGetParent )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hResContainer = reinterpret_cast<xet_res_container_object_t*>( hResContainer )->handle;
-
-        // forward to device-driver
-        result = pfnGetParent( hResContainer, phResContainer );
-
-        try
-        {
-            // convert driver handle to loader handle
-            *phResContainer = reinterpret_cast<xet_res_container_handle_t>(
-                xet_res_container_factory.getInstance( *phResContainer, dditable ) );
-        }
-        catch( std::bad_alloc& )
-        {
-            result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResContainerGetChildren
-    xe_result_t __xecall
-    xetSysmanResContainerGetChildren(
-        xet_res_container_handle_t hResContainter,      ///< [in] Handle of the resource container
-        uint32_t* pCount,                               ///< [in,out] Pointer to the number of child resource containers.
-                                                        ///< If count is zero, then the driver will update the value with the total
-                                                        ///< number of child resource containers.
-                                                        ///< If count is non-zero, then driver will only retrieve that number of
-                                                        ///< child resource containers starting from index 0.
-                                                        ///< If count is larger than the number of child resource containers
-                                                        ///< available, then the driver will update the value with the correct
-                                                        ///< number of child resource containers.
-        xet_res_container_handle_t* phResContainers     ///< [out][optional][range(0, *pCount)] array of handle of resource
-                                                        ///< containers
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xet_res_container_object_t*>( hResContainter )->dditable;
-        auto pfnGetChildren = dditable->xet.SysmanResContainer.pfnGetChildren;
-        if( nullptr == pfnGetChildren )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hResContainter = reinterpret_cast<xet_res_container_object_t*>( hResContainter )->handle;
-
-        // forward to device-driver
-        result = pfnGetChildren( hResContainter, pCount, phResContainers );
-
-        try
-        {
-            // convert driver handles to loader handles
-            for( size_t i = 0; ( nullptr != phResContainers ) && ( i < *pCount ); ++i )
-                phResContainers[ i ] = reinterpret_cast<xet_res_container_handle_t>(
-                    xet_res_container_factory.getInstance( phResContainers[ i ], dditable ) );
-        }
-        catch( std::bad_alloc& )
-        {
-            result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResContainerGetPeers
-    xe_result_t __xecall
-    xetSysmanResContainerGetPeers(
-        xet_res_container_handle_t hResContainter,      ///< [in] Handle of the resource container
-        uint32_t* pCount,                               ///< [in,out] Pointer to the number of peer resource containers.
-                                                        ///< If count is zero, then the driver will update the value with the total
-                                                        ///< number of peer resource containers.
-                                                        ///< If count is non-zero, then driver will only retrieve that number of
-                                                        ///< peer resource containers starting from index 0.
-                                                        ///< If count is larger than the number of peer resource containers
-                                                        ///< available, then the driver will update the value with the correct
-                                                        ///< number of peer resource containers.
-        xet_res_container_handle_t* phResContainers     ///< [out][optional][range(0, *pCount)] array of handle of resource
-                                                        ///< containers
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xet_res_container_object_t*>( hResContainter )->dditable;
-        auto pfnGetPeers = dditable->xet.SysmanResContainer.pfnGetPeers;
-        if( nullptr == pfnGetPeers )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hResContainter = reinterpret_cast<xet_res_container_object_t*>( hResContainter )->handle;
-
-        // forward to device-driver
-        result = pfnGetPeers( hResContainter, pCount, phResContainers );
-
-        try
-        {
-            // convert driver handles to loader handles
-            for( size_t i = 0; ( nullptr != phResContainers ) && ( i < *pCount ); ++i )
-                phResContainers[ i ] = reinterpret_cast<xet_res_container_handle_t>(
-                    xet_res_container_factory.getInstance( phResContainers[ i ], dditable ) );
-        }
-        catch( std::bad_alloc& )
-        {
-            result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResContainerGetAccelAssetName
-    xe_result_t __xecall
-    xetSysmanResContainerGetAccelAssetName(
-        xet_res_container_handle_t hResContainer,       ///< [in] Handle to a resource container where the asset is located
-        xet_accel_asset_t type,                         ///< [in] The type of accelerator asset
-        const char** ppName                             ///< [in] Pointer to the string will be stored here
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xet_res_container_object_t*>( hResContainer )->dditable;
-        auto pfnGetAccelAssetName = dditable->xet.SysmanResContainer.pfnGetAccelAssetName;
-        if( nullptr == pfnGetAccelAssetName )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hResContainer = reinterpret_cast<xet_res_container_object_t*>( hResContainer )->handle;
-
-        // forward to device-driver
-        result = pfnGetAccelAssetName( hResContainer, type, ppName );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResContainerGetResources
-    xe_result_t __xecall
-    xetSysmanResContainerGetResources(
-        xet_res_container_handle_t hResContainter,      ///< [in] Handle of the resource container
-        xet_resource_type_t type,                       ///< [in] The type of resources to enumerate
-        uint32_t* pCount,                               ///< [in,out] Pointer to the number of resource.
-                                                        ///< If count is zero, then the driver will update the value with the total
-                                                        ///< number of resources of the given type that are available.
-                                                        ///< If count is non-zero, then driver will only retrieve that number of
-                                                        ///< resources of the given type starting from index 0.
-                                                        ///< If count is larger than the number of resources available, then the
-                                                        ///< driver will update the value with the correct number of resources of a
-                                                        ///< given type that are available.
-        xet_resource_handle_t* phResources              ///< [in][optional][range(0, *pCount)] array of handle of resources
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xet_res_container_object_t*>( hResContainter )->dditable;
-        auto pfnGetResources = dditable->xet.SysmanResContainer.pfnGetResources;
-        if( nullptr == pfnGetResources )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hResContainter = reinterpret_cast<xet_res_container_object_t*>( hResContainter )->handle;
-
-        // convert loader handles to driver handles
-        for( size_t i = 0; ( nullptr != phResources ) && ( i < *pCount ); ++i )
-            phResources[ i ] = reinterpret_cast<xet_resource_object_t*>( phResources[ i ] )->handle;
-
-        // forward to device-driver
-        result = pfnGetResources( hResContainter, type, pCount, phResources );
+        result = pfnGetRasErrors( hSysman, hResource, type, location, threshold, clear, pCount, pErrors );
 
         return result;
     }
@@ -1225,10 +1061,10 @@ namespace loader
     /// @brief Intercept function for xetSysmanResourceIsSame
     xe_result_t __xecall
     xetSysmanResourceIsSame(
-        xet_resource_handle_t hLhs,                     ///< [in] Handle of the resource
-        xet_resource_handle_t hRhs,                     ///< [in] Handle of the resource
+        xet_resource_handle_t hLhs,                     ///< [in] Handle of of the resources
+        xet_resource_handle_t hRhs,                     ///< [in] Handle of the other resource
         xe_bool_t* pIsSame                              ///< [in] Sets to True if the two resources reference the same underlying
-                                                        ///< resource
+                                                        ///< hardware object
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -1256,7 +1092,7 @@ namespace loader
     xe_result_t __xecall
     xetSysmanResourceGetInfo(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        xet_resource_info_t* pInfo                      ///< [out] Generic information about the resource.
+        xet_resource_info_t* pInfo                      ///< [out] Generic information about the resource
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -1277,102 +1113,205 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResContainerGetBoardProperties
+    /// @brief Intercept function for xetSysmanResourceGetParent
     xe_result_t __xecall
-    xetSysmanResContainerGetBoardProperties(
-        xet_res_container_handle_t hResContainer,       ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_board_properties_t* pIndexes,         ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+    xetSysmanResourceGetParent(
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        xet_resource_handle_t* phResource               ///< [out] Handle of the parent resource
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xet_res_container_object_t*>( hResContainer )->dditable;
-        auto pfnGetBoardProperties = dditable->xet.SysmanResContainer.pfnGetBoardProperties;
+        auto dditable = reinterpret_cast<xet_resource_object_t*>( hResource )->dditable;
+        auto pfnGetParent = dditable->xet.SysmanResource.pfnGetParent;
+        if( nullptr == pfnGetParent )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
+
+        // forward to device-driver
+        result = pfnGetParent( hResource, phResource );
+
+        try
+        {
+            // convert driver handle to loader handle
+            *phResource = reinterpret_cast<xet_resource_handle_t>(
+                xet_resource_factory.getInstance( *phResource, dditable ) );
+        }
+        catch( std::bad_alloc& )
+        {
+            result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanResourceGetChildren
+    xe_result_t __xecall
+    xetSysmanResourceGetChildren(
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t* pCount,                               ///< [in,out] Pointer to the number of elements in the array phResources.
+                                                        ///< If count is zero, then the driver will update the value with the total
+                                                        ///< number of child resources.
+                                                        ///< If count is non-zero, then driver will only retrieve that number of
+                                                        ///< child resources starting from index 0.
+                                                        ///< If count is larger than the number of child resources that will be
+                                                        ///< returned, then the driver will update the value with the resources
+                                                        ///< actually returned.
+        xet_resource_handle_t* phResources              ///< [out][optional][range(0, *pCount)] Array of resource handles.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_resource_object_t*>( hResource )->dditable;
+        auto pfnGetChildren = dditable->xet.SysmanResource.pfnGetChildren;
+        if( nullptr == pfnGetChildren )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
+
+        // forward to device-driver
+        result = pfnGetChildren( hResource, pCount, phResources );
+
+        try
+        {
+            // convert driver handles to loader handles
+            for( size_t i = 0; ( nullptr != phResources ) && ( i < *pCount ); ++i )
+                phResources[ i ] = reinterpret_cast<xet_resource_handle_t>(
+                    xet_resource_factory.getInstance( phResources[ i ], dditable ) );
+        }
+        catch( std::bad_alloc& )
+        {
+            result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanResourceGetPeers
+    xe_result_t __xecall
+    xetSysmanResourceGetPeers(
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t* pCount,                               ///< [in,out] Pointer to the number of elements in the array phResources.
+                                                        ///< If count is zero, then the driver will update the value with the total
+                                                        ///< number of peer resources.
+                                                        ///< If count is non-zero, then driver will only retrieve that number of
+                                                        ///< peer resources starting from index 0.
+                                                        ///< If count is larger than the number of peer resources that will be
+                                                        ///< returned, then the driver will update the value with the resources
+                                                        ///< actually returned.
+        xet_resource_handle_t* phResources              ///< [out][optional][range(0, *pCount)] Array of resource handles.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_resource_object_t*>( hResource )->dditable;
+        auto pfnGetPeers = dditable->xet.SysmanResource.pfnGetPeers;
+        if( nullptr == pfnGetPeers )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
+
+        // forward to device-driver
+        result = pfnGetPeers( hResource, pCount, phResources );
+
+        try
+        {
+            // convert driver handles to loader handles
+            for( size_t i = 0; ( nullptr != phResources ) && ( i < *pCount ); ++i )
+                phResources[ i ] = reinterpret_cast<xet_resource_handle_t>(
+                    xet_resource_factory.getInstance( phResources[ i ], dditable ) );
+        }
+        catch( std::bad_alloc& )
+        {
+            result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanResourceGetBoardProperties
+    xe_result_t __xecall
+    xetSysmanResourceGetBoardProperties(
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_board_property_request_t* pRequest          ///< [in] Pointer to list of properties and corresponding data storage
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_resource_object_t*>( hResource )->dditable;
+        auto pfnGetBoardProperties = dditable->xet.SysmanResource.pfnGetBoardProperties;
         if( nullptr == pfnGetBoardProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hResContainer = reinterpret_cast<xet_res_container_object_t*>( hResContainer )->handle;
+        hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnGetBoardProperties( hResContainer, count, pIndexes, pValues, pSize );
+        result = pfnGetBoardProperties( hResource, count, pRequest );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResContainerGetDeviceProperties
+    /// @brief Intercept function for xetSysmanResourceGetDeviceProperties
     xe_result_t __xecall
-    xetSysmanResContainerGetDeviceProperties(
-        xet_res_container_handle_t hResContainer,       ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_device_properties_t* pIndexes,        ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+    xetSysmanResourceGetDeviceProperties(
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_device_property_request_t* pRequest         ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xet_res_container_object_t*>( hResContainer )->dditable;
-        auto pfnGetDeviceProperties = dditable->xet.SysmanResContainer.pfnGetDeviceProperties;
+        auto dditable = reinterpret_cast<xet_resource_object_t*>( hResource )->dditable;
+        auto pfnGetDeviceProperties = dditable->xet.SysmanResource.pfnGetDeviceProperties;
         if( nullptr == pfnGetDeviceProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hResContainer = reinterpret_cast<xet_res_container_object_t*>( hResContainer )->handle;
+        hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnGetDeviceProperties( hResContainer, count, pIndexes, pValues, pSize );
+        result = pfnGetDeviceProperties( hResource, count, pRequest );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResContainerSetDeviceProperties
+    /// @brief Intercept function for xetSysmanResourceSetDeviceProperties
     xe_result_t __xecall
-    xetSysmanResContainerSetDeviceProperties(
-        xet_res_container_handle_t hResContainer,       ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_device_properties_t* pIndexes,        ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+    xetSysmanResourceSetDeviceProperties(
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_device_property_request_t* pRequest         ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xet_res_container_object_t*>( hResContainer )->dditable;
-        auto pfnSetDeviceProperties = dditable->xet.SysmanResContainer.pfnSetDeviceProperties;
+        auto dditable = reinterpret_cast<xet_resource_object_t*>( hResource )->dditable;
+        auto pfnSetDeviceProperties = dditable->xet.SysmanResource.pfnSetDeviceProperties;
         if( nullptr == pfnSetDeviceProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hResContainer = reinterpret_cast<xet_res_container_object_t*>( hResContainer )->handle;
+        hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnSetDeviceProperties( hResContainer, count, pIndexes, pValues, size );
+        result = pfnSetDeviceProperties( hResource, count, pRequest );
 
         return result;
     }
@@ -1382,18 +1321,8 @@ namespace loader
     xe_result_t __xecall
     xetSysmanResourceGetPsuProperties(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_psu_properties_t* pIndexes,           ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_psu_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -1408,7 +1337,7 @@ namespace loader
         hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnGetPsuProperties( hResource, count, pIndexes, pValues, pSize );
+        result = pfnGetPsuProperties( hResource, count, pRequest );
 
         return result;
     }
@@ -1417,12 +1346,9 @@ namespace loader
     /// @brief Intercept function for xetSysmanResourceSetPsuProperties
     xe_result_t __xecall
     xetSysmanResourceSetPsuProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_psu_properties_t* pIndexes,           ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_psu_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -1437,7 +1363,7 @@ namespace loader
         hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnSetPsuProperties( hResource, count, pIndexes, pValues, size );
+        result = pfnSetPsuProperties( hResource, count, pRequest );
 
         return result;
     }
@@ -1447,18 +1373,8 @@ namespace loader
     xe_result_t __xecall
     xetSysmanResourceGetTempProperties(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_temp_properties_t* pIndexes,          ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_temp_property_request_t* pRequest           ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -1473,36 +1389,7 @@ namespace loader
         hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnGetTempProperties( hResource, count, pIndexes, pValues, pSize );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceSetTempProperties
-    xe_result_t __xecall
-    xetSysmanResourceSetTempProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_temp_properties_t* pIndexes,          ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xet_resource_object_t*>( hResource )->dditable;
-        auto pfnSetTempProperties = dditable->xet.SysmanResource.pfnSetTempProperties;
-        if( nullptr == pfnSetTempProperties )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
-
-        // forward to device-driver
-        result = pfnSetTempProperties( hResource, count, pIndexes, pValues, size );
+        result = pfnGetTempProperties( hResource, count, pRequest );
 
         return result;
     }
@@ -1512,18 +1399,8 @@ namespace loader
     xe_result_t __xecall
     xetSysmanResourceGetFanProperties(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_fan_properties_t* pIndexes,           ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_fan_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -1538,7 +1415,7 @@ namespace loader
         hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnGetFanProperties( hResource, count, pIndexes, pValues, pSize );
+        result = pfnGetFanProperties( hResource, count, pRequest );
 
         return result;
     }
@@ -1547,12 +1424,9 @@ namespace loader
     /// @brief Intercept function for xetSysmanResourceSetFanProperties
     xe_result_t __xecall
     xetSysmanResourceSetFanProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_fan_properties_t* pIndexes,           ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_fan_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -1567,7 +1441,7 @@ namespace loader
         hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnSetFanProperties( hResource, count, pIndexes, pValues, size );
+        result = pfnSetFanProperties( hResource, count, pRequest );
 
         return result;
     }
@@ -1577,18 +1451,8 @@ namespace loader
     xe_result_t __xecall
     xetSysmanResourceGetLedProperties(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_led_properties_t* pIndexes,           ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_led_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -1603,7 +1467,7 @@ namespace loader
         hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnGetLedProperties( hResource, count, pIndexes, pValues, pSize );
+        result = pfnGetLedProperties( hResource, count, pRequest );
 
         return result;
     }
@@ -1612,12 +1476,9 @@ namespace loader
     /// @brief Intercept function for xetSysmanResourceSetLedProperties
     xe_result_t __xecall
     xetSysmanResourceSetLedProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_led_properties_t* pIndexes,           ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_led_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -1632,7 +1493,7 @@ namespace loader
         hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnSetLedProperties( hResource, count, pIndexes, pValues, size );
+        result = pfnSetLedProperties( hResource, count, pRequest );
 
         return result;
     }
@@ -1642,18 +1503,8 @@ namespace loader
     xe_result_t __xecall
     xetSysmanResourceGetFirmwareProperties(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_firmware_properties_t* pIndexes,      ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_firmware_property_request_t* pRequest       ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -1668,7 +1519,7 @@ namespace loader
         hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnGetFirmwareProperties( hResource, count, pIndexes, pValues, pSize );
+        result = pfnGetFirmwareProperties( hResource, count, pRequest );
 
         return result;
     }
@@ -1677,12 +1528,9 @@ namespace loader
     /// @brief Intercept function for xetSysmanResourceSetFirmwareProperties
     xe_result_t __xecall
     xetSysmanResourceSetFirmwareProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_firmware_properties_t* pIndexes,      ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_firmware_property_request_t* pRequest       ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -1697,7 +1545,7 @@ namespace loader
         hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnSetFirmwareProperties( hResource, count, pIndexes, pValues, size );
+        result = pfnSetFirmwareProperties( hResource, count, pRequest );
 
         return result;
     }
@@ -1707,18 +1555,8 @@ namespace loader
     xe_result_t __xecall
     xetSysmanResourceGetPwrProperties(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_pwr_properties_t* pIndexes,           ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_pwr_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -1733,7 +1571,7 @@ namespace loader
         hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnGetPwrProperties( hResource, count, pIndexes, pValues, pSize );
+        result = pfnGetPwrProperties( hResource, count, pRequest );
 
         return result;
     }
@@ -1742,12 +1580,9 @@ namespace loader
     /// @brief Intercept function for xetSysmanResourceSetPwrProperties
     xe_result_t __xecall
     xetSysmanResourceSetPwrProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_pwr_properties_t* pIndexes,           ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_pwr_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -1762,7 +1597,7 @@ namespace loader
         hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnSetPwrProperties( hResource, count, pIndexes, pValues, size );
+        result = pfnSetPwrProperties( hResource, count, pRequest );
 
         return result;
     }
@@ -1772,18 +1607,8 @@ namespace loader
     xe_result_t __xecall
     xetSysmanResourceGetFreqProperties(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_freq_properties_t* pIndexes,          ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_freq_property_request_t* pRequest           ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -1798,7 +1623,7 @@ namespace loader
         hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnGetFreqProperties( hResource, count, pIndexes, pValues, pSize );
+        result = pfnGetFreqProperties( hResource, count, pRequest );
 
         return result;
     }
@@ -1807,12 +1632,9 @@ namespace loader
     /// @brief Intercept function for xetSysmanResourceSetFreqProperties
     xe_result_t __xecall
     xetSysmanResourceSetFreqProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_freq_properties_t* pIndexes,          ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_freq_property_request_t* pRequest           ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -1827,72 +1649,59 @@ namespace loader
         hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnSetFreqProperties( hResource, count, pIndexes, pValues, size );
+        result = pfnSetFreqProperties( hResource, count, pRequest );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceGetPwrWellProperties
+    /// @brief Intercept function for xetSysmanResourceGetPwrwellProperties
     xe_result_t __xecall
-    xetSysmanResourceGetPwrWellProperties(
+    xetSysmanResourceGetPwrwellProperties(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_pwrwell_properties_t* pIndexes,       ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_pwrwell_property_request_t* pRequest        ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xet_resource_object_t*>( hResource )->dditable;
-        auto pfnGetPwrWellProperties = dditable->xet.SysmanResource.pfnGetPwrWellProperties;
-        if( nullptr == pfnGetPwrWellProperties )
+        auto pfnGetPwrwellProperties = dditable->xet.SysmanResource.pfnGetPwrwellProperties;
+        if( nullptr == pfnGetPwrwellProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnGetPwrWellProperties( hResource, count, pIndexes, pValues, pSize );
+        result = pfnGetPwrwellProperties( hResource, count, pRequest );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceSetPwrWellProperties
+    /// @brief Intercept function for xetSysmanResourceSetPwrwellProperties
     xe_result_t __xecall
-    xetSysmanResourceSetPwrWellProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_pwrwell_properties_t* pIndexes,       ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+    xetSysmanResourceSetPwrwellProperties(
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_pwrwell_property_request_t* pRequest        ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xet_resource_object_t*>( hResource )->dditable;
-        auto pfnSetPwrWellProperties = dditable->xet.SysmanResource.pfnSetPwrWellProperties;
-        if( nullptr == pfnSetPwrWellProperties )
+        auto pfnSetPwrwellProperties = dditable->xet.SysmanResource.pfnSetPwrwellProperties;
+        if( nullptr == pfnSetPwrwellProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnSetPwrWellProperties( hResource, count, pIndexes, pValues, size );
+        result = pfnSetPwrwellProperties( hResource, count, pRequest );
 
         return result;
     }
@@ -1902,18 +1711,8 @@ namespace loader
     xe_result_t __xecall
     xetSysmanResourceGetAccelProperties(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_accel_properties_t* pIndexes,         ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_accel_property_request_t* pRequest          ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -1928,36 +1727,7 @@ namespace loader
         hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnGetAccelProperties( hResource, count, pIndexes, pValues, pSize );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceSetAccelProperties
-    xe_result_t __xecall
-    xetSysmanResourceSetAccelProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_accel_properties_t* pIndexes,         ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xet_resource_object_t*>( hResource )->dditable;
-        auto pfnSetAccelProperties = dditable->xet.SysmanResource.pfnSetAccelProperties;
-        if( nullptr == pfnSetAccelProperties )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
-
-        // forward to device-driver
-        result = pfnSetAccelProperties( hResource, count, pIndexes, pValues, size );
+        result = pfnGetAccelProperties( hResource, count, pRequest );
 
         return result;
     }
@@ -1967,18 +1737,8 @@ namespace loader
     xe_result_t __xecall
     xetSysmanResourceGetMemProperties(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_mem_properties_t* pIndexes,           ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_mem_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -1993,7 +1753,7 @@ namespace loader
         hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnGetMemProperties( hResource, count, pIndexes, pValues, pSize );
+        result = pfnGetMemProperties( hResource, count, pRequest );
 
         return result;
     }
@@ -2002,12 +1762,9 @@ namespace loader
     /// @brief Intercept function for xetSysmanResourceSetMemProperties
     xe_result_t __xecall
     xetSysmanResourceSetMemProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_mem_properties_t* pIndexes,           ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_mem_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -2022,7 +1779,7 @@ namespace loader
         hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnSetMemProperties( hResource, count, pIndexes, pValues, size );
+        result = pfnSetMemProperties( hResource, count, pRequest );
 
         return result;
     }
@@ -2032,18 +1789,8 @@ namespace loader
     xe_result_t __xecall
     xetSysmanResourceGetLinkProperties(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_link_properties_t* pIndexes,          ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_link_property_request_t* pRequest           ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -2058,7 +1805,7 @@ namespace loader
         hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnGetLinkProperties( hResource, count, pIndexes, pValues, pSize );
+        result = pfnGetLinkProperties( hResource, count, pRequest );
 
         return result;
     }
@@ -2067,12 +1814,9 @@ namespace loader
     /// @brief Intercept function for xetSysmanResourceSetLinkProperties
     xe_result_t __xecall
     xetSysmanResourceSetLinkProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_link_properties_t* pIndexes,          ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_link_property_request_t* pRequest           ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -2087,7 +1831,7 @@ namespace loader
         hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
-        result = pfnSetLinkProperties( hResource, count, pIndexes, pValues, size );
+        result = pfnSetLinkProperties( hResource, count, pRequest );
 
         return result;
     }
@@ -2097,10 +1841,10 @@ namespace loader
     xe_result_t __xecall
     xetSysmanRegisterEvents(
         xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        xet_res_container_handle_t hResource,           ///< [in] Handle of the resource container. Events from any contained
+        xet_resource_handle_t hResource,                ///< [in] Handle of the parent resource. Events from any contained devices
+                                                        ///< will be registered.
+                                                        ///< If the handle is ::XET_INVALID_SYSMAN_RESOURCE_HANDLE, events from all
                                                         ///< devices will be registered.
-                                                        ///< If the handle is ::XET_INVALID_SYSMAN_RES_CONTAINER_HANDLE, events
-                                                        ///< from all devices will be registered.
         uint32_t events                                 ///< [in] Bitfield of events to register.
                                                         ///< Construct by ORing (1<<::xet_sysman_event_type_t).
                                                         ///< Set to (~0) to register to receive all events.
@@ -2118,7 +1862,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // convert loader handle to driver handle
-        hResource = reinterpret_cast<xet_res_container_object_t*>( hResource )->handle;
+        hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
         result = pfnRegisterEvents( hSysman, hResource, events );
@@ -2131,10 +1875,10 @@ namespace loader
     xe_result_t __xecall
     xetSysmanUnregisterEvents(
         xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        xet_res_container_handle_t hResource,           ///< [in] Handle of the resource container. Events from any contained
+        xet_resource_handle_t hResource,                ///< [in] Handle of the parent resource. Events from any contained devices
+                                                        ///< will be unregistered.
+                                                        ///< If the handle is ::XET_INVALID_SYSMAN_RESOURCE_HANDLE, events from all
                                                         ///< devices will be unregistered.
-                                                        ///< If the handle is ::XET_INVALID_SYSMAN_RES_CONTAINER_HANDLE, events
-                                                        ///< from all devices will be unregistered.
         uint32_t events                                 ///< [in] Bitfield of events to unregister.
                                                         ///< Construct by ORing (1<<::xet_sysman_event_type_t).
                                                         ///< Set to (~0) to unregister all events.
@@ -2152,7 +1896,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // convert loader handle to driver handle
-        hResource = reinterpret_cast<xet_res_container_object_t*>( hResource )->handle;
+        hResource = reinterpret_cast<xet_resource_object_t*>( hResource )->handle;
 
         // forward to device-driver
         result = pfnUnregisterEvents( hSysman, hResource, events );
@@ -3110,10 +2854,12 @@ xetGetSysmanProcAddrTable(
             // return pointers to loader's DDIs
             pDdiTable->pfnCreate                                   = loader::xetSysmanCreate;
             pDdiTable->pfnDestroy                                  = loader::xetSysmanDestroy;
+            pDdiTable->pfnGetAccelAssetName                        = loader::xetSysmanGetAccelAssetName;
             pDdiTable->pfnConvertUuidToString                      = loader::xetSysmanConvertUuidToString;
-            pDdiTable->pfnGetResourceContainers                    = loader::xetSysmanGetResourceContainers;
-            pDdiTable->pfnGetDeviceResourceContainer               = loader::xetSysmanGetDeviceResourceContainer;
-            pDdiTable->pfnGetResourceContainerByUuid               = loader::xetSysmanGetResourceContainerByUuid;
+            pDdiTable->pfnGetResources                             = loader::xetSysmanGetResources;
+            pDdiTable->pfnGetDeviceResource                        = loader::xetSysmanGetDeviceResource;
+            pDdiTable->pfnGetResourceByUuid                        = loader::xetSysmanGetResourceByUuid;
+            pDdiTable->pfnGetRasErrors                             = loader::xetSysmanGetRasErrors;
             pDdiTable->pfnRegisterEvents                           = loader::xetSysmanRegisterEvents;
             pDdiTable->pfnUnregisterEvents                         = loader::xetSysmanUnregisterEvents;
             pDdiTable->pfnListenEvents                             = loader::xetSysmanListenEvents;
@@ -3130,79 +2876,6 @@ xetGetSysmanProcAddrTable(
     {
         auto getTable = reinterpret_cast<xet_pfnGetSysmanProcAddrTable_t>(
             GET_FUNCTION_PTR(loader::context.validationLayer, "xetGetSysmanProcAddrTable") );
-        result = getTable( version, pDdiTable );
-    }
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanResContainer table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xetGetSysmanResContainerProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xet_sysman_res_container_dditable_t* pDdiTable  ///< [in,out] pointer to table of DDI function pointers
-    )
-{
-    if( loader::context.drivers.size() < 1 )
-        return XE_RESULT_ERROR_UNINITIALIZED;
-
-    if( nullptr == pDdiTable )
-        return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    if( loader::context.version < version )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    // Load the device-driver DDI tables
-    for( auto& drv : loader::context.drivers )
-    {
-        if( XE_RESULT_SUCCESS == result )
-        {
-            auto getTable = reinterpret_cast<xet_pfnGetSysmanResContainerProcAddrTable_t>(
-                GET_FUNCTION_PTR( drv.handle, "xetGetSysmanResContainerProcAddrTable") );
-            result = getTable( version, &drv.dditable.xet.SysmanResContainer );
-        }
-    }
-
-    if( XE_RESULT_SUCCESS == result )
-    {
-        if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
-        {
-            // return pointers to loader's DDIs
-            pDdiTable->pfnIsSame                                   = loader::xetSysmanResContainerIsSame;
-            pDdiTable->pfnGetInfo                                  = loader::xetSysmanResContainerGetInfo;
-            pDdiTable->pfnGetParent                                = loader::xetSysmanResContainerGetParent;
-            pDdiTable->pfnGetChildren                              = loader::xetSysmanResContainerGetChildren;
-            pDdiTable->pfnGetPeers                                 = loader::xetSysmanResContainerGetPeers;
-            pDdiTable->pfnGetAccelAssetName                        = loader::xetSysmanResContainerGetAccelAssetName;
-            pDdiTable->pfnGetResources                             = loader::xetSysmanResContainerGetResources;
-            pDdiTable->pfnGetBoardProperties                       = loader::xetSysmanResContainerGetBoardProperties;
-            pDdiTable->pfnGetDeviceProperties                      = loader::xetSysmanResContainerGetDeviceProperties;
-            pDdiTable->pfnSetDeviceProperties                      = loader::xetSysmanResContainerSetDeviceProperties;
-        }
-        else
-        {
-            // return pointers directly to driver's DDIs
-            *pDdiTable = loader::context.drivers.front().dditable.xet.SysmanResContainer;
-        }
-    }
-
-    // If the validation layer is enabled, then intercept the loader's DDIs
-    if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
-    {
-        auto getTable = reinterpret_cast<xet_pfnGetSysmanResContainerProcAddrTable_t>(
-            GET_FUNCTION_PTR(loader::context.validationLayer, "xetGetSysmanResContainerProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 
@@ -3255,10 +2928,15 @@ xetGetSysmanResourceProcAddrTable(
             // return pointers to loader's DDIs
             pDdiTable->pfnIsSame                                   = loader::xetSysmanResourceIsSame;
             pDdiTable->pfnGetInfo                                  = loader::xetSysmanResourceGetInfo;
+            pDdiTable->pfnGetParent                                = loader::xetSysmanResourceGetParent;
+            pDdiTable->pfnGetChildren                              = loader::xetSysmanResourceGetChildren;
+            pDdiTable->pfnGetPeers                                 = loader::xetSysmanResourceGetPeers;
+            pDdiTable->pfnGetBoardProperties                       = loader::xetSysmanResourceGetBoardProperties;
+            pDdiTable->pfnGetDeviceProperties                      = loader::xetSysmanResourceGetDeviceProperties;
+            pDdiTable->pfnSetDeviceProperties                      = loader::xetSysmanResourceSetDeviceProperties;
             pDdiTable->pfnGetPsuProperties                         = loader::xetSysmanResourceGetPsuProperties;
             pDdiTable->pfnSetPsuProperties                         = loader::xetSysmanResourceSetPsuProperties;
             pDdiTable->pfnGetTempProperties                        = loader::xetSysmanResourceGetTempProperties;
-            pDdiTable->pfnSetTempProperties                        = loader::xetSysmanResourceSetTempProperties;
             pDdiTable->pfnGetFanProperties                         = loader::xetSysmanResourceGetFanProperties;
             pDdiTable->pfnSetFanProperties                         = loader::xetSysmanResourceSetFanProperties;
             pDdiTable->pfnGetLedProperties                         = loader::xetSysmanResourceGetLedProperties;
@@ -3269,10 +2947,9 @@ xetGetSysmanResourceProcAddrTable(
             pDdiTable->pfnSetPwrProperties                         = loader::xetSysmanResourceSetPwrProperties;
             pDdiTable->pfnGetFreqProperties                        = loader::xetSysmanResourceGetFreqProperties;
             pDdiTable->pfnSetFreqProperties                        = loader::xetSysmanResourceSetFreqProperties;
-            pDdiTable->pfnGetPwrWellProperties                     = loader::xetSysmanResourceGetPwrWellProperties;
-            pDdiTable->pfnSetPwrWellProperties                     = loader::xetSysmanResourceSetPwrWellProperties;
+            pDdiTable->pfnGetPwrwellProperties                     = loader::xetSysmanResourceGetPwrwellProperties;
+            pDdiTable->pfnSetPwrwellProperties                     = loader::xetSysmanResourceSetPwrwellProperties;
             pDdiTable->pfnGetAccelProperties                       = loader::xetSysmanResourceGetAccelProperties;
-            pDdiTable->pfnSetAccelProperties                       = loader::xetSysmanResourceSetAccelProperties;
             pDdiTable->pfnGetMemProperties                         = loader::xetSysmanResourceGetMemProperties;
             pDdiTable->pfnSetMemProperties                         = loader::xetSysmanResourceSetMemProperties;
             pDdiTable->pfnGetLinkProperties                        = loader::xetSysmanResourceGetLinkProperties;

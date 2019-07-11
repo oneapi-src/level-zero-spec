@@ -79,16 +79,6 @@ name: $T_INVALID_SYSMAN_HANDLE
 value: "NULL"
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle for a Sysman resource container"
-class: $tSysmanResContainer
-name: "$t_res_container_handle_t"
---- #--------------------------------------------------------------------------
-type: macro
-desc: "Invalid Sysman resource container handle"
-name: $T_INVALID_SYSMAN_RES_CONTAINER_HANDLE
-value: "NULL"
---- #--------------------------------------------------------------------------
-type: handle
 desc: "Handle for a Sysman resource"
 class: $tSysmanResource
 name: "$t_resource_handle_t"

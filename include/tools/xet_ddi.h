@@ -596,6 +596,7 @@ typedef xe_result_t (__xecall *xet_pfnGetTracerProcAddrTable_t)(
 /// @brief Function-pointer for xetSysmanCreate 
 typedef xe_result_t (__xecall *xet_pfnSysmanCreate_t)(
     xet_device_group_handle_t,
+    xet_sysman_version_t,
     uint32_t,
     xet_sysman_handle_t*
     );
@@ -604,6 +605,14 @@ typedef xe_result_t (__xecall *xet_pfnSysmanCreate_t)(
 /// @brief Function-pointer for xetSysmanDestroy 
 typedef xe_result_t (__xecall *xet_pfnSysmanDestroy_t)(
     xet_sysman_handle_t
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanGetAccelAssetName 
+typedef xe_result_t (__xecall *xet_pfnSysmanGetAccelAssetName_t)(
+    xet_sysman_handle_t,
+    xet_accel_asset_t,
+    const char**
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -616,35 +625,49 @@ typedef xe_result_t (__xecall *xet_pfnSysmanConvertUuidToString_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanGetResourceContainers 
-typedef xe_result_t (__xecall *xet_pfnSysmanGetResourceContainers_t)(
+/// @brief Function-pointer for xetSysmanGetResources 
+typedef xe_result_t (__xecall *xet_pfnSysmanGetResources_t)(
     xet_sysman_handle_t,
-    xet_res_container_type_t,
+    xet_resource_handle_t,
+    xet_resource_type_t,
     uint32_t*,
-    xet_res_container_handle_t*
+    xet_resource_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanGetDeviceResourceContainer 
-typedef xe_result_t (__xecall *xet_pfnSysmanGetDeviceResourceContainer_t)(
+/// @brief Function-pointer for xetSysmanGetDeviceResource 
+typedef xe_result_t (__xecall *xet_pfnSysmanGetDeviceResource_t)(
     xet_sysman_handle_t,
     xe_device_handle_t,
-    xet_res_container_handle_t*
+    xet_resource_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanGetResourceContainerByUuid 
-typedef xe_result_t (__xecall *xet_pfnSysmanGetResourceContainerByUuid_t)(
+/// @brief Function-pointer for xetSysmanGetResourceByUuid 
+typedef xe_result_t (__xecall *xet_pfnSysmanGetResourceByUuid_t)(
     xet_sysman_handle_t,
     const xet_resource_uuid_t*,
-    xet_res_container_handle_t*
+    xet_resource_handle_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanGetRasErrors 
+typedef xe_result_t (__xecall *xet_pfnSysmanGetRasErrors_t)(
+    xet_sysman_handle_t,
+    xet_resource_handle_t,
+    uint32_t,
+    uint32_t,
+    uint32_t,
+    xe_bool_t,
+    uint32_t*,
+    xet_res_error_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetSysmanRegisterEvents 
 typedef xe_result_t (__xecall *xet_pfnSysmanRegisterEvents_t)(
     xet_sysman_handle_t,
-    xet_res_container_handle_t,
+    xet_resource_handle_t,
     uint32_t
     );
 
@@ -652,7 +675,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanRegisterEvents_t)(
 /// @brief Function-pointer for xetSysmanUnregisterEvents 
 typedef xe_result_t (__xecall *xet_pfnSysmanUnregisterEvents_t)(
     xet_sysman_handle_t,
-    xet_res_container_handle_t,
+    xet_resource_handle_t,
     uint32_t
     );
 
@@ -671,10 +694,12 @@ typedef struct _xet_sysman_dditable_t
 {
     xet_pfnSysmanCreate_t                                       pfnCreate;
     xet_pfnSysmanDestroy_t                                      pfnDestroy;
+    xet_pfnSysmanGetAccelAssetName_t                            pfnGetAccelAssetName;
     xet_pfnSysmanConvertUuidToString_t                          pfnConvertUuidToString;
-    xet_pfnSysmanGetResourceContainers_t                        pfnGetResourceContainers;
-    xet_pfnSysmanGetDeviceResourceContainer_t                   pfnGetDeviceResourceContainer;
-    xet_pfnSysmanGetResourceContainerByUuid_t                   pfnGetResourceContainerByUuid;
+    xet_pfnSysmanGetResources_t                                 pfnGetResources;
+    xet_pfnSysmanGetDeviceResource_t                            pfnGetDeviceResource;
+    xet_pfnSysmanGetResourceByUuid_t                            pfnGetResourceByUuid;
+    xet_pfnSysmanGetRasErrors_t                                 pfnGetRasErrors;
     xet_pfnSysmanRegisterEvents_t                               pfnRegisterEvents;
     xet_pfnSysmanUnregisterEvents_t                             pfnUnregisterEvents;
     xet_pfnSysmanListenEvents_t                                 pfnListenEvents;
@@ -705,131 +730,6 @@ typedef xe_result_t (__xecall *xet_pfnGetSysmanProcAddrTable_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanResContainerIsSame 
-typedef xe_result_t (__xecall *xet_pfnSysmanResContainerIsSame_t)(
-    xet_res_container_handle_t,
-    xet_res_container_handle_t,
-    xe_bool_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanResContainerGetInfo 
-typedef xe_result_t (__xecall *xet_pfnSysmanResContainerGetInfo_t)(
-    xet_res_container_handle_t,
-    xet_res_container_info_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanResContainerGetParent 
-typedef xe_result_t (__xecall *xet_pfnSysmanResContainerGetParent_t)(
-    xet_res_container_handle_t,
-    xet_res_container_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanResContainerGetChildren 
-typedef xe_result_t (__xecall *xet_pfnSysmanResContainerGetChildren_t)(
-    xet_res_container_handle_t,
-    uint32_t*,
-    xet_res_container_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanResContainerGetPeers 
-typedef xe_result_t (__xecall *xet_pfnSysmanResContainerGetPeers_t)(
-    xet_res_container_handle_t,
-    uint32_t*,
-    xet_res_container_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanResContainerGetAccelAssetName 
-typedef xe_result_t (__xecall *xet_pfnSysmanResContainerGetAccelAssetName_t)(
-    xet_res_container_handle_t,
-    xet_accel_asset_t,
-    const char**
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanResContainerGetResources 
-typedef xe_result_t (__xecall *xet_pfnSysmanResContainerGetResources_t)(
-    xet_res_container_handle_t,
-    xet_resource_type_t,
-    uint32_t*,
-    xet_resource_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanResContainerGetBoardProperties 
-typedef xe_result_t (__xecall *xet_pfnSysmanResContainerGetBoardProperties_t)(
-    xet_res_container_handle_t,
-    uint32_t,
-    const xet_board_properties_t*,
-    void*,
-    uint32_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanResContainerGetDeviceProperties 
-typedef xe_result_t (__xecall *xet_pfnSysmanResContainerGetDeviceProperties_t)(
-    xet_res_container_handle_t,
-    uint32_t,
-    const xet_device_properties_t*,
-    void*,
-    uint32_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanResContainerSetDeviceProperties 
-typedef xe_result_t (__xecall *xet_pfnSysmanResContainerSetDeviceProperties_t)(
-    xet_res_container_handle_t,
-    uint32_t,
-    const xet_device_properties_t*,
-    void*,
-    uint32_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Table of SysmanResContainer functions pointers
-typedef struct _xet_sysman_res_container_dditable_t
-{
-    xet_pfnSysmanResContainerIsSame_t                           pfnIsSame;
-    xet_pfnSysmanResContainerGetInfo_t                          pfnGetInfo;
-    xet_pfnSysmanResContainerGetParent_t                        pfnGetParent;
-    xet_pfnSysmanResContainerGetChildren_t                      pfnGetChildren;
-    xet_pfnSysmanResContainerGetPeers_t                         pfnGetPeers;
-    xet_pfnSysmanResContainerGetAccelAssetName_t                pfnGetAccelAssetName;
-    xet_pfnSysmanResContainerGetResources_t                     pfnGetResources;
-    xet_pfnSysmanResContainerGetBoardProperties_t               pfnGetBoardProperties;
-    xet_pfnSysmanResContainerGetDeviceProperties_t              pfnGetDeviceProperties;
-    xet_pfnSysmanResContainerSetDeviceProperties_t              pfnSetDeviceProperties;
-} xet_sysman_res_container_dditable_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanResContainer table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xetGetSysmanResContainerProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xet_sysman_res_container_dditable_t* pDdiTable  ///< [in,out] pointer to table of DDI function pointers
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetGetSysmanResContainerProcAddrTable
-typedef xe_result_t (__xecall *xet_pfnGetSysmanResContainerProcAddrTable_t)(
-    xe_api_version_t,
-    xet_sysman_res_container_dditable_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetSysmanResourceIsSame 
 typedef xe_result_t (__xecall *xet_pfnSysmanResourceIsSame_t)(
     xet_resource_handle_t,
@@ -845,13 +745,58 @@ typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetInfo_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanResourceGetParent 
+typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetParent_t)(
+    xet_resource_handle_t,
+    xet_resource_handle_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanResourceGetChildren 
+typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetChildren_t)(
+    xet_resource_handle_t,
+    uint32_t*,
+    xet_resource_handle_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanResourceGetPeers 
+typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetPeers_t)(
+    xet_resource_handle_t,
+    uint32_t*,
+    xet_resource_handle_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanResourceGetBoardProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetBoardProperties_t)(
+    xet_resource_handle_t,
+    uint32_t,
+    xet_board_property_request_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanResourceGetDeviceProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetDeviceProperties_t)(
+    xet_resource_handle_t,
+    uint32_t,
+    xet_device_property_request_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanResourceSetDeviceProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanResourceSetDeviceProperties_t)(
+    xet_resource_handle_t,
+    uint32_t,
+    xet_device_property_request_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetSysmanResourceGetPsuProperties 
 typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetPsuProperties_t)(
     xet_resource_handle_t,
     uint32_t,
-    const xet_psu_properties_t*,
-    void*,
-    uint32_t*
+    xet_psu_property_request_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -859,9 +804,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetPsuProperties_t)(
 typedef xe_result_t (__xecall *xet_pfnSysmanResourceSetPsuProperties_t)(
     xet_resource_handle_t,
     uint32_t,
-    const xet_psu_properties_t*,
-    void*,
-    uint32_t
+    xet_psu_property_request_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -869,19 +812,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanResourceSetPsuProperties_t)(
 typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetTempProperties_t)(
     xet_resource_handle_t,
     uint32_t,
-    const xet_temp_properties_t*,
-    void*,
-    uint32_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanResourceSetTempProperties 
-typedef xe_result_t (__xecall *xet_pfnSysmanResourceSetTempProperties_t)(
-    xet_resource_handle_t,
-    uint32_t,
-    const xet_temp_properties_t*,
-    void*,
-    uint32_t
+    xet_temp_property_request_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -889,9 +820,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanResourceSetTempProperties_t)(
 typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetFanProperties_t)(
     xet_resource_handle_t,
     uint32_t,
-    const xet_fan_properties_t*,
-    void*,
-    uint32_t*
+    xet_fan_property_request_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -899,9 +828,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetFanProperties_t)(
 typedef xe_result_t (__xecall *xet_pfnSysmanResourceSetFanProperties_t)(
     xet_resource_handle_t,
     uint32_t,
-    const xet_fan_properties_t*,
-    void*,
-    uint32_t
+    xet_fan_property_request_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -909,9 +836,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanResourceSetFanProperties_t)(
 typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetLedProperties_t)(
     xet_resource_handle_t,
     uint32_t,
-    const xet_led_properties_t*,
-    void*,
-    uint32_t*
+    xet_led_property_request_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -919,9 +844,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetLedProperties_t)(
 typedef xe_result_t (__xecall *xet_pfnSysmanResourceSetLedProperties_t)(
     xet_resource_handle_t,
     uint32_t,
-    const xet_led_properties_t*,
-    void*,
-    uint32_t
+    xet_led_property_request_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -929,9 +852,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanResourceSetLedProperties_t)(
 typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetFirmwareProperties_t)(
     xet_resource_handle_t,
     uint32_t,
-    const xet_firmware_properties_t*,
-    void*,
-    uint32_t*
+    xet_firmware_property_request_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -939,9 +860,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetFirmwareProperties_t)(
 typedef xe_result_t (__xecall *xet_pfnSysmanResourceSetFirmwareProperties_t)(
     xet_resource_handle_t,
     uint32_t,
-    const xet_firmware_properties_t*,
-    void*,
-    uint32_t
+    xet_firmware_property_request_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -949,9 +868,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanResourceSetFirmwareProperties_t)(
 typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetPwrProperties_t)(
     xet_resource_handle_t,
     uint32_t,
-    const xet_pwr_properties_t*,
-    void*,
-    uint32_t*
+    xet_pwr_property_request_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -959,9 +876,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetPwrProperties_t)(
 typedef xe_result_t (__xecall *xet_pfnSysmanResourceSetPwrProperties_t)(
     xet_resource_handle_t,
     uint32_t,
-    const xet_pwr_properties_t*,
-    void*,
-    uint32_t
+    xet_pwr_property_request_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -969,9 +884,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanResourceSetPwrProperties_t)(
 typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetFreqProperties_t)(
     xet_resource_handle_t,
     uint32_t,
-    const xet_freq_properties_t*,
-    void*,
-    uint32_t*
+    xet_freq_property_request_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -979,29 +892,23 @@ typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetFreqProperties_t)(
 typedef xe_result_t (__xecall *xet_pfnSysmanResourceSetFreqProperties_t)(
     xet_resource_handle_t,
     uint32_t,
-    const xet_freq_properties_t*,
-    void*,
-    uint32_t
+    xet_freq_property_request_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanResourceGetPwrWellProperties 
-typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetPwrWellProperties_t)(
+/// @brief Function-pointer for xetSysmanResourceGetPwrwellProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetPwrwellProperties_t)(
     xet_resource_handle_t,
     uint32_t,
-    const xet_pwrwell_properties_t*,
-    void*,
-    uint32_t*
+    xet_pwrwell_property_request_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanResourceSetPwrWellProperties 
-typedef xe_result_t (__xecall *xet_pfnSysmanResourceSetPwrWellProperties_t)(
+/// @brief Function-pointer for xetSysmanResourceSetPwrwellProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanResourceSetPwrwellProperties_t)(
     xet_resource_handle_t,
     uint32_t,
-    const xet_pwrwell_properties_t*,
-    void*,
-    uint32_t
+    xet_pwrwell_property_request_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1009,19 +916,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanResourceSetPwrWellProperties_t)(
 typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetAccelProperties_t)(
     xet_resource_handle_t,
     uint32_t,
-    const xet_accel_properties_t*,
-    void*,
-    uint32_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanResourceSetAccelProperties 
-typedef xe_result_t (__xecall *xet_pfnSysmanResourceSetAccelProperties_t)(
-    xet_resource_handle_t,
-    uint32_t,
-    const xet_accel_properties_t*,
-    void*,
-    uint32_t
+    xet_accel_property_request_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1029,9 +924,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanResourceSetAccelProperties_t)(
 typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetMemProperties_t)(
     xet_resource_handle_t,
     uint32_t,
-    const xet_mem_properties_t*,
-    void*,
-    uint32_t*
+    xet_mem_property_request_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1039,9 +932,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetMemProperties_t)(
 typedef xe_result_t (__xecall *xet_pfnSysmanResourceSetMemProperties_t)(
     xet_resource_handle_t,
     uint32_t,
-    const xet_mem_properties_t*,
-    void*,
-    uint32_t
+    xet_mem_property_request_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1049,9 +940,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanResourceSetMemProperties_t)(
 typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetLinkProperties_t)(
     xet_resource_handle_t,
     uint32_t,
-    const xet_link_properties_t*,
-    void*,
-    uint32_t*
+    xet_link_property_request_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1059,9 +948,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanResourceGetLinkProperties_t)(
 typedef xe_result_t (__xecall *xet_pfnSysmanResourceSetLinkProperties_t)(
     xet_resource_handle_t,
     uint32_t,
-    const xet_link_properties_t*,
-    void*,
-    uint32_t
+    xet_link_property_request_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1070,10 +957,15 @@ typedef struct _xet_sysman_resource_dditable_t
 {
     xet_pfnSysmanResourceIsSame_t                               pfnIsSame;
     xet_pfnSysmanResourceGetInfo_t                              pfnGetInfo;
+    xet_pfnSysmanResourceGetParent_t                            pfnGetParent;
+    xet_pfnSysmanResourceGetChildren_t                          pfnGetChildren;
+    xet_pfnSysmanResourceGetPeers_t                             pfnGetPeers;
+    xet_pfnSysmanResourceGetBoardProperties_t                   pfnGetBoardProperties;
+    xet_pfnSysmanResourceGetDeviceProperties_t                  pfnGetDeviceProperties;
+    xet_pfnSysmanResourceSetDeviceProperties_t                  pfnSetDeviceProperties;
     xet_pfnSysmanResourceGetPsuProperties_t                     pfnGetPsuProperties;
     xet_pfnSysmanResourceSetPsuProperties_t                     pfnSetPsuProperties;
     xet_pfnSysmanResourceGetTempProperties_t                    pfnGetTempProperties;
-    xet_pfnSysmanResourceSetTempProperties_t                    pfnSetTempProperties;
     xet_pfnSysmanResourceGetFanProperties_t                     pfnGetFanProperties;
     xet_pfnSysmanResourceSetFanProperties_t                     pfnSetFanProperties;
     xet_pfnSysmanResourceGetLedProperties_t                     pfnGetLedProperties;
@@ -1084,10 +976,9 @@ typedef struct _xet_sysman_resource_dditable_t
     xet_pfnSysmanResourceSetPwrProperties_t                     pfnSetPwrProperties;
     xet_pfnSysmanResourceGetFreqProperties_t                    pfnGetFreqProperties;
     xet_pfnSysmanResourceSetFreqProperties_t                    pfnSetFreqProperties;
-    xet_pfnSysmanResourceGetPwrWellProperties_t                 pfnGetPwrWellProperties;
-    xet_pfnSysmanResourceSetPwrWellProperties_t                 pfnSetPwrWellProperties;
+    xet_pfnSysmanResourceGetPwrwellProperties_t                 pfnGetPwrwellProperties;
+    xet_pfnSysmanResourceSetPwrwellProperties_t                 pfnSetPwrwellProperties;
     xet_pfnSysmanResourceGetAccelProperties_t                   pfnGetAccelProperties;
-    xet_pfnSysmanResourceSetAccelProperties_t                   pfnSetAccelProperties;
     xet_pfnSysmanResourceGetMemProperties_t                     pfnGetMemProperties;
     xet_pfnSysmanResourceSetMemProperties_t                     pfnSetMemProperties;
     xet_pfnSysmanResourceGetLinkProperties_t                    pfnGetLinkProperties;
@@ -1134,7 +1025,6 @@ typedef struct _xet_dditable_t
     xet_metric_query_dditable_t         MetricQuery;
     xet_tracer_dditable_t               Tracer;
     xet_sysman_dditable_t               Sysman;
-    xet_sysman_res_container_dditable_t SysmanResContainer;
     xet_sysman_resource_dditable_t      SysmanResource;
 } xet_dditable_t;
 

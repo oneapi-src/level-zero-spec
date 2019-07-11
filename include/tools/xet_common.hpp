@@ -28,12 +28,6 @@
 #endif // XET_INVALID_SYSMAN_HANDLE
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef XET_INVALID_SYSMAN_RES_CONTAINER_HANDLE
-/// @brief Invalid Sysman resource container handle
-#define XET_INVALID_SYSMAN_RES_CONTAINER_HANDLE  NULL
-#endif // XET_INVALID_SYSMAN_RES_CONTAINER_HANDLE
-
-///////////////////////////////////////////////////////////////////////////////
 #ifndef XET_INVALID_SYSMAN_RESOURCE_HANDLE
 /// @brief Invalid Sysman resource handle
 #define XET_INVALID_SYSMAN_RESOURCE_HANDLE  NULL
@@ -112,12 +106,6 @@ namespace xet
     class Sysman;
     struct _sysman_handle_t;
     using sysman_handle_t = _sysman_handle_t*;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle for a Sysman resource container
-    class SysmanResContainer;
-    struct _res_container_handle_t;
-    using res_container_handle_t = _res_container_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle for a Sysman resource

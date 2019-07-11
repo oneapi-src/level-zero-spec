@@ -15,16 +15,16 @@
 #include <stdio.h>
 #include "xet_api.h"
 
-void ShowDeviceInfo(xet_sysman_handle_t hSysman, xet_res_container_handle_t hDeviceContainer); // Forward declaration
+void ShowDeviceInfo(xet_sysman_handle_t hSysman, xet_resource_handle_t hDeviceContainer); // Forward declaration
 void ShowFanInfo(xet_sysman_handle_t hSysman, xet_resource_handle_t hFanResource); // Forward declaration
 
-void ShowFans(xet_sysman_handle_t hSysman, xet_res_container_handle_t hBoardContainer)
+void ShowFans(xet_sysman_handle_t hSysman, xet_resource_handle_t hBoardContainer)
 {
     uint32_t numFans = 0;
-    if (xetSysmanResContainerGetResources(hBoardContainer, XET_RESOURCE_TYPE_FAN, &numFans, NULL) == XE_RESULT_SUCCESS)
+    if (xetSysmanGetResources(hSysman, hBoardContainer, XET_RESOURCE_TYPE_FAN, &numFans, NULL) == XE_RESULT_SUCCESS)
     {
         xet_resource_handle_t* phFans = (xet_resource_handle_t*)malloc(numFans * sizeof(xet_resource_handle_t));
-        if (xetSysmanResContainerGetResources(hBoardContainer, XET_RESOURCE_TYPE_FAN, &numFans, phFans) == XE_RESULT_SUCCESS)
+        if (xetSysmanGetResources(hSysman, hBoardContainer, XET_RESOURCE_TYPE_FAN, &numFans, phFans) == XE_RESULT_SUCCESS)
         {
             for (uint32_t i = 0; i < numFans; i++)
             {
@@ -51,16 +51,22 @@ void ShowFanInfo(xet_sysman_handle_t hSysman, xet_resource_handle_t hFanResource
 
 }
 
-void ShutdownDevice(xet_res_container_handle_t hDeviceContainer)
+void ShutdownDevice(xet_resource_handle_t hDeviceContainer)
 {
-    xet_device_properties_t prop = XET_DEVICE_PROP_COLD_SHUTDOWN;
-    xe_bool_t shutdown = 1;
-    if (xetSysmanResContainerSetDeviceProperties(
+    struct
+    {
+        xet_device_prop_cold_shutdown_t shutdown;
+    } data;
+    xet_device_property_request_t requests[] = 
+    {
+        { XET_DEVICE_PROP_COLD_SHUTDOWN,    &data.shutdown, sizeof(data.shutdown) },
+    };
+    data.shutdown.doShutdown = 1;
+
+    if (xetSysmanResourceSetDeviceProperties(
         hDeviceContainer,
-        1,
-        &prop,
-        &shutdown,
-        sizeof(shutdown)) == XE_RESULT_SUCCESS)
+        sizeof(requests) / sizeof(requests[0]),
+        requests) == XE_RESULT_SUCCESS)
     {
         fprintf(stdout, "Device shutdown initiated.\n");
     }
@@ -70,46 +76,44 @@ void ShutdownDevice(xet_res_container_handle_t hDeviceContainer)
     }
 }
 
-static const xet_board_properties_t sBoardProperties[] = {
-    XET_BOARD_PROP_SERIAL_NUMBER,
-    XET_BOARD_PROP_BOARD_NUMBER
-};
 struct BoardData
 {
     xet_board_prop_serial_number_t  SerialNumber;
     xet_board_prop_board_number_t   BoardNumber;
 };
 
-void ShowBoardInfo(xet_sysman_handle_t hSysman, xet_res_container_handle_t hDeviceContainer)
+void ShowBoardInfo(xet_sysman_handle_t hSysman, xet_resource_handle_t hDeviceContainer)
 {
-    xet_res_container_handle_t hParentContainer;
-    if (xetSysmanResContainerGetParent(hDeviceContainer, &hParentContainer) != XE_RESULT_SUCCESS)
+    xet_resource_handle_t hParentContainer;
+    if (xetSysmanResourceGetParent(hDeviceContainer, &hParentContainer) != XE_RESULT_SUCCESS)
     {
         // This device has no parent container
         return;
     }
 
-    xet_res_container_info_t info;
-    if (xetSysmanResContainerGetInfo(hParentContainer, &info) != XE_RESULT_SUCCESS)
+    xet_resource_info_t info;
+    if (xetSysmanResourceGetInfo(hParentContainer, &info) != XE_RESULT_SUCCESS)
     {
         // Can't get information about the parent
         return;
     }
 
-    if (info.type != XET_RES_CONTAINER_TYPE_BOARD)
+    if (info.type != XET_RESOURCE_TYPE_BOARD_CONTAINER)
     {
         // Parent is not a board
         return;
     }
 
     BoardData data;
-    uint32_t size = sizeof(data);
-    if (xetSysmanResContainerGetBoardProperties(
+    xet_board_property_request_t requests[] = 
+    {
+        { XET_BOARD_PROP_SERIAL_NUMBER,     &data.SerialNumber, sizeof(data.SerialNumber) },
+        { XET_BOARD_PROP_BOARD_NUMBER,      &data.BoardNumber,  sizeof(data.BoardNumber)  },
+    };
+    if (xetSysmanResourceGetBoardProperties(
         hParentContainer,
-        sizeof(sBoardProperties) / sizeof(sBoardProperties[0]),
-        sBoardProperties,
-        &data,
-        &size) == XE_RESULT_SUCCESS)
+        sizeof(requests) / sizeof(requests[0]),
+        requests) == XE_RESULT_SUCCESS)
     {
         char uuidStr[XET_RESOURCE_UUID_STRING_SIZE + 1] = { 0 };
         uint32_t size = sizeof(uuidStr);
@@ -122,10 +126,10 @@ void ShowBoardInfo(xet_sysman_handle_t hSysman, xet_res_container_handle_t hDevi
     }
 }
 
-void ShowDeviceInfo(xet_sysman_handle_t hSysman, xet_res_container_handle_t hDeviceContainer)
+void ShowDeviceInfo(xet_sysman_handle_t hSysman, xet_resource_handle_t hDeviceContainer)
 {
-    xet_res_container_info_t info;
-    if (xetSysmanResContainerGetInfo(hDeviceContainer, &info) == XE_RESULT_SUCCESS)
+    xet_resource_info_t info;
+    if (xetSysmanResourceGetInfo(hDeviceContainer, &info) == XE_RESULT_SUCCESS)
     {
         char uuidStr[XET_RESOURCE_UUID_STRING_SIZE + 1] = { 0 };
         uint32_t size = sizeof(uuidStr);
@@ -139,7 +143,7 @@ void ShowDeviceInfo(xet_sysman_handle_t hSysman, xet_res_container_handle_t hDev
         for (int i = 0; i < XET_ACCEL_ASSET_MAX_TYPES; i++)
         {
             const char* pResName;
-            xetSysmanResContainerGetAccelAssetName(hDeviceContainer, (xet_accel_asset_t)i, &pResName);
+            xetSysmanGetAccelAssetName(hSysman, (xet_accel_asset_t)i, &pResName);
             if (info.numResourcesByType[i])
             {
                 fprintf(stdout, "        %s: %u\n", pResName, info.numResourcesByType[i]);
@@ -152,10 +156,10 @@ void ShowDeviceInfo(xet_sysman_handle_t hSysman, xet_res_container_handle_t hDev
 void ListDevices(xet_sysman_handle_t hSysman)
 {
     uint32_t numDevices = 0;
-    if (xetSysmanGetResourceContainers(hSysman, XET_RES_CONTAINER_TYPE_DEVICE, &numDevices, NULL) == XE_RESULT_SUCCESS)
+    if (xetSysmanGetResources(hSysman, XET_INVALID_SYSMAN_RESOURCE_HANDLE, XET_RESOURCE_TYPE_DEVICE_CONTAINER, &numDevices, NULL) == XE_RESULT_SUCCESS)
     {
-        xet_res_container_handle_t* phContainers = (xet_res_container_handle_t*)malloc(numDevices * sizeof(xet_res_container_handle_t));
-        if (xetSysmanGetResourceContainers(hSysman, XET_RES_CONTAINER_TYPE_DEVICE, &numDevices, phContainers) == XE_RESULT_SUCCESS)
+        xet_resource_handle_t* phContainers = (xet_resource_handle_t*)malloc(numDevices * sizeof(xet_resource_handle_t));
+        if (xetSysmanGetResources(hSysman, XET_INVALID_SYSMAN_RESOURCE_HANDLE, XET_RESOURCE_TYPE_DEVICE_CONTAINER, &numDevices, phContainers) == XE_RESULT_SUCCESS)
         {
             for (uint32_t i = 0; i < numDevices; i++)
             {
@@ -182,7 +186,7 @@ int main( int argc, char *argv[] )
         xe_device_group_handle_t hDeviceGroup;
         if (xeDeviceGroupGet(&numDeviceGroups, &hDeviceGroup) == XE_RESULT_SUCCESS)
         {
-            xe_result_t res = xetSysmanCreate(hDeviceGroup, XET_SYSMAN_INIT_FLAGS_WRITE, &hSysman);
+            xe_result_t res = xetSysmanCreate(hDeviceGroup, XET_SYSMAN_VERSION_CURRENT, XET_SYSMAN_INIT_FLAGS_WRITE, &hSysman);
             if (res == XE_RESULT_SUCCESS)
             {
                 fprintf(stdout, "Have access to system resource management.\n\n");
@@ -191,7 +195,7 @@ int main( int argc, char *argv[] )
 
                 xetSysmanDestroy(hSysman);
             }
-            else if (res == XE_RESULT_ERROR_ACCESS_DENIED)
+            else if (res == XE_RESULT_ACCESS_DENIED)
             {
                 fprintf(stderr, "ERROR: Don't have write access to accelerator resources.\n");
             }

@@ -155,7 +155,10 @@ typedef enum _xe_result_t
     XE_RESULT_ERROR_OUT_OF_HOST_MEMORY,             ///< insufficient host memory to satisfy call
     XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY,           ///< insufficient device memory to satisfy call
     XE_RESULT_ERROR_MODULE_BUILD_FAILURE,           ///< error in building module
-    XE_RESULT_ERROR_ACCESS_DENIED,                  ///< access denied
+    XE_RESULT_ACCESS_DENIED,                        ///< access denied
+    XE_RESULT_NOT_FOUND,                            ///< an object could not be found
+    XE_RESULT_TOO_SMALL,                            ///< an array argument doesn't have enough storage
+    XE_RESULT_MISMATCH_DEVICE_GROUP,                ///< a specified device handle is not in the specified device group
     XE_RESULT_ERROR_UNKNOWN = 0x7fffffff,           ///< unknown or internal error
 
 } xe_result_t;

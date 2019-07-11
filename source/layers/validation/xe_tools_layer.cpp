@@ -670,9 +670,10 @@ namespace layer
     /// @brief Intercept function for xetSysmanCreate
     xe_result_t __xecall
     xetSysmanCreate(
-        xet_device_group_handle_t hDeviceGroup,         ///< [in] handle of the device group
-        uint32_t flags,                                 ///< [in] bitfield of ::xet_sysman_init_flags_t
-        xet_sysman_handle_t* phSysman                   ///< [out] handle for accessing SMI features
+        xet_device_group_handle_t hDeviceGroup,         ///< [in] Handle of the device group
+        xet_sysman_version_t version,                   ///< [in] SMI version that application was built with
+        uint32_t flags,                                 ///< [in] Bitfield of ::xet_sysman_init_flags_t
+        xet_sysman_handle_t* phSysman                   ///< [out] Handle for accessing SMI features
         )
     {
         auto pfnCreate = context.xetDdiTable.Sysman.pfnCreate;
@@ -690,7 +691,7 @@ namespace layer
 
         }
 
-        return pfnCreate( hDeviceGroup, flags, phSysman );
+        return pfnCreate( hDeviceGroup, version, flags, phSysman );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -716,6 +717,33 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanGetAccelAssetName
+    xe_result_t __xecall
+    xetSysmanGetAccelAssetName(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle
+        xet_accel_asset_t type,                         ///< [in] The type of accelerator asset
+        const char** ppName                             ///< [in] Pointer to the asset name
+        )
+    {
+        auto pfnGetAccelAssetName = context.xetDdiTable.Sysman.pfnGetAccelAssetName;
+
+        if( nullptr == pfnGetAccelAssetName )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == ppName )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetAccelAssetName( hSysman, type, ppName );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanConvertUuidToString
     xe_result_t __xecall
     xetSysmanConvertUuidToString(
@@ -727,7 +755,7 @@ namespace layer
                                                         ///< If size is non-zero and less than the required length, the storage
                                                         ///< size including end-of-string terminator will be returned and an error
                                                         ///< status given.
-                                                        ///< If size is non-zero and larger than the string length, the number of
+                                                        ///< If size is non-zero and larger than the required length, the number of
                                                         ///< characters stored in the buffer including the end-of-string terminator
                                                         ///< will be returned.
         char* pStr                                      ///< [in][optional] Pointer to storage for the string representation of the
@@ -756,26 +784,26 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanGetResourceContainers
+    /// @brief Intercept function for xetSysmanGetResources
     xe_result_t __xecall
-    xetSysmanGetResourceContainers(
+    xetSysmanGetResources(
         xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        xet_res_container_type_t type,                  ///< [in] The type of resource containers to enumerate
-        uint32_t* pCount,                               ///< [in,out] Pointer to the number of resource containers.
+        xet_resource_handle_t hParentResource,          ///< [in] Handle of the parent resource object (can be
+                                                        ///< ::XET_INVALID_SYSMAN_RESOURCE_HANDLE)
+        xet_resource_type_t type,                       ///< [in] The type of resources to enumerate
+        uint32_t* pCount,                               ///< [in,out] Pointer to the number of elements in the array phResources.
                                                         ///< If count is zero, then the driver will update the value with the total
-                                                        ///< number of resource containers of the given type that are available.
+                                                        ///< number of resources that would be returned.
                                                         ///< If count is non-zero, then driver will only retrieve that number of
-                                                        ///< resource containers of the given type starting from index 0.
-                                                        ///< If count is larger than the number of resource containers available,
-                                                        ///< then the driver will update the value with the correct number of
-                                                        ///< resource containers of a given type that are available.
-        xet_res_container_handle_t* phResContainers     ///< [out][optional][range(0, *pCount)] array of handle of resource
-                                                        ///< containers
+                                                        ///< resources of the given type starting from index 0.
+                                                        ///< If count is larger than the number of resource that will be returned,
+                                                        ///< then the driver will update the value with actual number returned.
+        xet_resource_handle_t* phResources              ///< [out][optional][range(0, *pCount)] Array of resources resources
         )
     {
-        auto pfnGetResourceContainers = context.xetDdiTable.Sysman.pfnGetResourceContainers;
+        auto pfnGetResources = context.xetDdiTable.Sysman.pfnGetResources;
 
-        if( nullptr == pfnGetResourceContainers )
+        if( nullptr == pfnGetResources )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -783,27 +811,29 @@ namespace layer
             if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
+            if( nullptr == hParentResource )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
             if( nullptr == pCount )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetResourceContainers( hSysman, type, pCount, phResContainers );
+        return pfnGetResources( hSysman, hParentResource, type, pCount, phResources );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanGetDeviceResourceContainer
+    /// @brief Intercept function for xetSysmanGetDeviceResource
     xe_result_t __xecall
-    xetSysmanGetDeviceResourceContainer(
+    xetSysmanGetDeviceResource(
         xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        xe_device_handle_t hDevice,                     ///< [in] Handle to the device. It must be a member of the same Device
-                                                        ///< Group as hSysman was created from.
-        xet_res_container_handle_t* phResContainer      ///< [out] Resource container for the specified device.
+        xe_device_handle_t hDevice,                     ///< [in] Handle to the device.
+        xet_resource_handle_t* phResource               ///< [out] Resource handle for the specified device
         )
     {
-        auto pfnGetDeviceResourceContainer = context.xetDdiTable.Sysman.pfnGetDeviceResourceContainer;
+        auto pfnGetDeviceResource = context.xetDdiTable.Sysman.pfnGetDeviceResource;
 
-        if( nullptr == pfnGetDeviceResourceContainer )
+        if( nullptr == pfnGetDeviceResource )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -814,26 +844,26 @@ namespace layer
             if( nullptr == hDevice )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == phResContainer )
+            if( nullptr == phResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetDeviceResourceContainer( hSysman, hDevice, phResContainer );
+        return pfnGetDeviceResource( hSysman, hDevice, phResource );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanGetResourceContainerByUuid
+    /// @brief Intercept function for xetSysmanGetResourceByUuid
     xe_result_t __xecall
-    xetSysmanGetResourceContainerByUuid(
+    xetSysmanGetResourceByUuid(
         xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        const xet_resource_uuid_t* uuid,                ///< [in] UUID for the resource container.
-        xet_res_container_handle_t* phResContainer      ///< [out] Resource container with UUID.
+        const xet_resource_uuid_t* uuid,                ///< [in] UUID for the resource
+        xet_resource_handle_t* phResource               ///< [out] Resource handle
         )
     {
-        auto pfnGetResourceContainerByUuid = context.xetDdiTable.Sysman.pfnGetResourceContainerByUuid;
+        auto pfnGetResourceByUuid = context.xetDdiTable.Sysman.pfnGetResourceByUuid;
 
-        if( nullptr == pfnGetResourceContainerByUuid )
+        if( nullptr == pfnGetResourceByUuid )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -844,237 +874,81 @@ namespace layer
             if( nullptr == uuid )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == phResContainer )
+            if( nullptr == phResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetResourceContainerByUuid( hSysman, uuid, phResContainer );
+        return pfnGetResourceByUuid( hSysman, uuid, phResource );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResContainerIsSame
+    /// @brief Intercept function for xetSysmanGetRasErrors
     xe_result_t __xecall
-    xetSysmanResContainerIsSame(
-        xet_res_container_handle_t hLhs,                ///< [in] Handle of the resource container
-        xet_res_container_handle_t hRhs,                ///< [in] Handle of the resource container
-        xe_bool_t* pIsSame                              ///< [in] Sets to True if the two resource containers reference the same
-                                                        ///< underlying resource container
+    xetSysmanGetRasErrors(
+        xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource. If specified, only errors within that
+                                                        ///< resource of child resources are returned. Otherwise all errors are
+                                                        ///< returned.
+        uint32_t type,                                  ///< [in] Bitfield of error types to filter - one or more of
+                                                        ///< ::xet_ras_error_type_t. Set to ::XET_RAS_ERROR_TYPE_ALL to have all
+                                                        ///< error types returned.
+        uint32_t location,                              ///< [in] Bitfield of error locations to filter - one or more of
+                                                        ///< ::xet_ras_error_loc_t. Set to ::XET_RAS_ERROR_LOC_ALL to have all
+                                                        ///< error locations returned.
+        uint32_t threshold,                             ///< [in] Only return error elements that have occurred at least this
+                                                        ///< number of times.
+                                                        ///< If set to 0, will get a list of all possible RAS elements, even those
+                                                        ///< that have not had errors.
+                                                        ///< For error elements of type ::XET_RAS_DATA_TYPE_OCCURRED, there is no
+                                                        ///< underlying counter, so they will always be returned independent of the
+                                                        ///< threshold setting.
+        xe_bool_t clear,                                ///< [in] Set to true to clear the underlying counters after they are
+                                                        ///< returned
+        uint32_t* pCount,                               ///< [in] Pointer to the number of elements in the array pErrors.
+                                                        ///< If count is 0 or pErrors is nullptr, driver will update with the
+                                                        ///< number of errors matching the specified filters. Counters are not cleared.
+                                                        ///< If count is non-zero and less than the number of matching errors,
+                                                        ///< driver will update with the number of errors matching the specified
+                                                        ///< filters. No data is returned and counters are not cleared.
+                                                        ///< If count is greater than or equal to the number of matching errors,
+                                                        ///< all data is returned, counters are cleared if requested and count will
+                                                        ///< be set to actual number of errors returned.
+        xet_res_error_t* pErrors                        ///< [in] Array of error data
         )
     {
-        auto pfnIsSame = context.xetDdiTable.SysmanResContainer.pfnIsSame;
+        auto pfnGetRasErrors = context.xetDdiTable.Sysman.pfnGetRasErrors;
 
-        if( nullptr == pfnIsSame )
+        if( nullptr == pfnGetRasErrors )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hLhs )
+            if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == hRhs )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pIsSame )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnIsSame( hLhs, hRhs, pIsSame );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResContainerGetInfo
-    xe_result_t __xecall
-    xetSysmanResContainerGetInfo(
-        xet_res_container_handle_t hResContainer,       ///< [in] Handle of the resource container
-        xet_res_container_info_t* pInfo                 ///< [out] Generic information about the resource container.
-        )
-    {
-        auto pfnGetInfo = context.xetDdiTable.SysmanResContainer.pfnGetInfo;
-
-        if( nullptr == pfnGetInfo )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hResContainer )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pInfo )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetInfo( hResContainer, pInfo );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResContainerGetParent
-    xe_result_t __xecall
-    xetSysmanResContainerGetParent(
-        xet_res_container_handle_t hResContainer,       ///< [in] Handle of the resource container.
-        xet_res_container_handle_t* phResContainer      ///< [out] Handle of the parent resource container.
-        )
-    {
-        auto pfnGetParent = context.xetDdiTable.SysmanResContainer.pfnGetParent;
-
-        if( nullptr == pfnGetParent )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hResContainer )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == phResContainer )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetParent( hResContainer, phResContainer );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResContainerGetChildren
-    xe_result_t __xecall
-    xetSysmanResContainerGetChildren(
-        xet_res_container_handle_t hResContainter,      ///< [in] Handle of the resource container
-        uint32_t* pCount,                               ///< [in,out] Pointer to the number of child resource containers.
-                                                        ///< If count is zero, then the driver will update the value with the total
-                                                        ///< number of child resource containers.
-                                                        ///< If count is non-zero, then driver will only retrieve that number of
-                                                        ///< child resource containers starting from index 0.
-                                                        ///< If count is larger than the number of child resource containers
-                                                        ///< available, then the driver will update the value with the correct
-                                                        ///< number of child resource containers.
-        xet_res_container_handle_t* phResContainers     ///< [out][optional][range(0, *pCount)] array of handle of resource
-                                                        ///< containers
-        )
-    {
-        auto pfnGetChildren = context.xetDdiTable.SysmanResContainer.pfnGetChildren;
-
-        if( nullptr == pfnGetChildren )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hResContainter )
+            if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pCount )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-        }
-
-        return pfnGetChildren( hResContainter, pCount, phResContainers );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResContainerGetPeers
-    xe_result_t __xecall
-    xetSysmanResContainerGetPeers(
-        xet_res_container_handle_t hResContainter,      ///< [in] Handle of the resource container
-        uint32_t* pCount,                               ///< [in,out] Pointer to the number of peer resource containers.
-                                                        ///< If count is zero, then the driver will update the value with the total
-                                                        ///< number of peer resource containers.
-                                                        ///< If count is non-zero, then driver will only retrieve that number of
-                                                        ///< peer resource containers starting from index 0.
-                                                        ///< If count is larger than the number of peer resource containers
-                                                        ///< available, then the driver will update the value with the correct
-                                                        ///< number of peer resource containers.
-        xet_res_container_handle_t* phResContainers     ///< [out][optional][range(0, *pCount)] array of handle of resource
-                                                        ///< containers
-        )
-    {
-        auto pfnGetPeers = context.xetDdiTable.SysmanResContainer.pfnGetPeers;
-
-        if( nullptr == pfnGetPeers )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hResContainter )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pCount )
+            if( nullptr == pErrors )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetPeers( hResContainter, pCount, phResContainers );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResContainerGetAccelAssetName
-    xe_result_t __xecall
-    xetSysmanResContainerGetAccelAssetName(
-        xet_res_container_handle_t hResContainer,       ///< [in] Handle to a resource container where the asset is located
-        xet_accel_asset_t type,                         ///< [in] The type of accelerator asset
-        const char** ppName                             ///< [in] Pointer to the string will be stored here
-        )
-    {
-        auto pfnGetAccelAssetName = context.xetDdiTable.SysmanResContainer.pfnGetAccelAssetName;
-
-        if( nullptr == pfnGetAccelAssetName )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hResContainer )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == ppName )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetAccelAssetName( hResContainer, type, ppName );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResContainerGetResources
-    xe_result_t __xecall
-    xetSysmanResContainerGetResources(
-        xet_res_container_handle_t hResContainter,      ///< [in] Handle of the resource container
-        xet_resource_type_t type,                       ///< [in] The type of resources to enumerate
-        uint32_t* pCount,                               ///< [in,out] Pointer to the number of resource.
-                                                        ///< If count is zero, then the driver will update the value with the total
-                                                        ///< number of resources of the given type that are available.
-                                                        ///< If count is non-zero, then driver will only retrieve that number of
-                                                        ///< resources of the given type starting from index 0.
-                                                        ///< If count is larger than the number of resources available, then the
-                                                        ///< driver will update the value with the correct number of resources of a
-                                                        ///< given type that are available.
-        xet_resource_handle_t* phResources              ///< [in][optional][range(0, *pCount)] array of handle of resources
-        )
-    {
-        auto pfnGetResources = context.xetDdiTable.SysmanResContainer.pfnGetResources;
-
-        if( nullptr == pfnGetResources )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hResContainter )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pCount )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetResources( hResContainter, type, pCount, phResources );
+        return pfnGetRasErrors( hSysman, hResource, type, location, threshold, clear, pCount, pErrors );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanResourceIsSame
     xe_result_t __xecall
     xetSysmanResourceIsSame(
-        xet_resource_handle_t hLhs,                     ///< [in] Handle of the resource
-        xet_resource_handle_t hRhs,                     ///< [in] Handle of the resource
+        xet_resource_handle_t hLhs,                     ///< [in] Handle of of the resources
+        xet_resource_handle_t hRhs,                     ///< [in] Handle of the other resource
         xe_bool_t* pIsSame                              ///< [in] Sets to True if the two resources reference the same underlying
-                                                        ///< resource
+                                                        ///< hardware object
         )
     {
         auto pfnIsSame = context.xetDdiTable.SysmanResource.pfnIsSame;
@@ -1103,7 +977,7 @@ namespace layer
     xe_result_t __xecall
     xetSysmanResourceGetInfo(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        xet_resource_info_t* pInfo                      ///< [out] Generic information about the resource.
+        xet_resource_info_t* pInfo                      ///< [out] Generic information about the resource
         )
     {
         auto pfnGetInfo = context.xetDdiTable.SysmanResource.pfnGetInfo;
@@ -1125,122 +999,178 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResContainerGetBoardProperties
+    /// @brief Intercept function for xetSysmanResourceGetParent
     xe_result_t __xecall
-    xetSysmanResContainerGetBoardProperties(
-        xet_res_container_handle_t hResContainer,       ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_board_properties_t* pIndexes,         ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+    xetSysmanResourceGetParent(
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        xet_resource_handle_t* phResource               ///< [out] Handle of the parent resource
         )
     {
-        auto pfnGetBoardProperties = context.xetDdiTable.SysmanResContainer.pfnGetBoardProperties;
+        auto pfnGetParent = context.xetDdiTable.SysmanResource.pfnGetParent;
+
+        if( nullptr == pfnGetParent )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hResource )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == phResource )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetParent( hResource, phResource );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanResourceGetChildren
+    xe_result_t __xecall
+    xetSysmanResourceGetChildren(
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t* pCount,                               ///< [in,out] Pointer to the number of elements in the array phResources.
+                                                        ///< If count is zero, then the driver will update the value with the total
+                                                        ///< number of child resources.
+                                                        ///< If count is non-zero, then driver will only retrieve that number of
+                                                        ///< child resources starting from index 0.
+                                                        ///< If count is larger than the number of child resources that will be
+                                                        ///< returned, then the driver will update the value with the resources
+                                                        ///< actually returned.
+        xet_resource_handle_t* phResources              ///< [out][optional][range(0, *pCount)] Array of resource handles.
+        )
+    {
+        auto pfnGetChildren = context.xetDdiTable.SysmanResource.pfnGetChildren;
+
+        if( nullptr == pfnGetChildren )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hResource )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCount )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetChildren( hResource, pCount, phResources );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanResourceGetPeers
+    xe_result_t __xecall
+    xetSysmanResourceGetPeers(
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t* pCount,                               ///< [in,out] Pointer to the number of elements in the array phResources.
+                                                        ///< If count is zero, then the driver will update the value with the total
+                                                        ///< number of peer resources.
+                                                        ///< If count is non-zero, then driver will only retrieve that number of
+                                                        ///< peer resources starting from index 0.
+                                                        ///< If count is larger than the number of peer resources that will be
+                                                        ///< returned, then the driver will update the value with the resources
+                                                        ///< actually returned.
+        xet_resource_handle_t* phResources              ///< [out][optional][range(0, *pCount)] Array of resource handles.
+        )
+    {
+        auto pfnGetPeers = context.xetDdiTable.SysmanResource.pfnGetPeers;
+
+        if( nullptr == pfnGetPeers )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hResource )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCount )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetPeers( hResource, pCount, phResources );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanResourceGetBoardProperties
+    xe_result_t __xecall
+    xetSysmanResourceGetBoardProperties(
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_board_property_request_t* pRequest          ///< [in] Pointer to list of properties and corresponding data storage
+        )
+    {
+        auto pfnGetBoardProperties = context.xetDdiTable.SysmanResource.pfnGetBoardProperties;
 
         if( nullptr == pfnGetBoardProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResContainer )
+            if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pSize )
+            if( nullptr == pRequest )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetBoardProperties( hResContainer, count, pIndexes, pValues, pSize );
+        return pfnGetBoardProperties( hResource, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResContainerGetDeviceProperties
+    /// @brief Intercept function for xetSysmanResourceGetDeviceProperties
     xe_result_t __xecall
-    xetSysmanResContainerGetDeviceProperties(
-        xet_res_container_handle_t hResContainer,       ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_device_properties_t* pIndexes,        ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+    xetSysmanResourceGetDeviceProperties(
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_device_property_request_t* pRequest         ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnGetDeviceProperties = context.xetDdiTable.SysmanResContainer.pfnGetDeviceProperties;
+        auto pfnGetDeviceProperties = context.xetDdiTable.SysmanResource.pfnGetDeviceProperties;
 
         if( nullptr == pfnGetDeviceProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResContainer )
+            if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pSize )
+            if( nullptr == pRequest )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetDeviceProperties( hResContainer, count, pIndexes, pValues, pSize );
+        return pfnGetDeviceProperties( hResource, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResContainerSetDeviceProperties
+    /// @brief Intercept function for xetSysmanResourceSetDeviceProperties
     xe_result_t __xecall
-    xetSysmanResContainerSetDeviceProperties(
-        xet_res_container_handle_t hResContainer,       ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_device_properties_t* pIndexes,        ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+    xetSysmanResourceSetDeviceProperties(
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_device_property_request_t* pRequest         ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnSetDeviceProperties = context.xetDdiTable.SysmanResContainer.pfnSetDeviceProperties;
+        auto pfnSetDeviceProperties = context.xetDdiTable.SysmanResource.pfnSetDeviceProperties;
 
         if( nullptr == pfnSetDeviceProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResContainer )
+            if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
+            if( nullptr == pRequest )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnSetDeviceProperties( hResContainer, count, pIndexes, pValues, size );
+        return pfnSetDeviceProperties( hResource, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1248,18 +1178,8 @@ namespace layer
     xe_result_t __xecall
     xetSysmanResourceGetPsuProperties(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_psu_properties_t* pIndexes,           ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_psu_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         auto pfnGetPsuProperties = context.xetDdiTable.SysmanResource.pfnGetPsuProperties;
@@ -1272,30 +1192,21 @@ namespace layer
             if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pSize )
+            if( nullptr == pRequest )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetPsuProperties( hResource, count, pIndexes, pValues, pSize );
+        return pfnGetPsuProperties( hResource, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanResourceSetPsuProperties
     xe_result_t __xecall
     xetSysmanResourceSetPsuProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_psu_properties_t* pIndexes,           ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_psu_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         auto pfnSetPsuProperties = context.xetDdiTable.SysmanResource.pfnSetPsuProperties;
@@ -1308,15 +1219,12 @@ namespace layer
             if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
+            if( nullptr == pRequest )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnSetPsuProperties( hResource, count, pIndexes, pValues, size );
+        return pfnSetPsuProperties( hResource, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1324,18 +1232,8 @@ namespace layer
     xe_result_t __xecall
     xetSysmanResourceGetTempProperties(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_temp_properties_t* pIndexes,          ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_temp_property_request_t* pRequest           ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         auto pfnGetTempProperties = context.xetDdiTable.SysmanResource.pfnGetTempProperties;
@@ -1348,51 +1246,12 @@ namespace layer
             if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pSize )
+            if( nullptr == pRequest )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetTempProperties( hResource, count, pIndexes, pValues, pSize );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceSetTempProperties
-    xe_result_t __xecall
-    xetSysmanResourceSetTempProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_temp_properties_t* pIndexes,          ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
-        )
-    {
-        auto pfnSetTempProperties = context.xetDdiTable.SysmanResource.pfnSetTempProperties;
-
-        if( nullptr == pfnSetTempProperties )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hResource )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnSetTempProperties( hResource, count, pIndexes, pValues, size );
+        return pfnGetTempProperties( hResource, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1400,18 +1259,8 @@ namespace layer
     xe_result_t __xecall
     xetSysmanResourceGetFanProperties(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_fan_properties_t* pIndexes,           ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_fan_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         auto pfnGetFanProperties = context.xetDdiTable.SysmanResource.pfnGetFanProperties;
@@ -1424,30 +1273,21 @@ namespace layer
             if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pSize )
+            if( nullptr == pRequest )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetFanProperties( hResource, count, pIndexes, pValues, pSize );
+        return pfnGetFanProperties( hResource, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanResourceSetFanProperties
     xe_result_t __xecall
     xetSysmanResourceSetFanProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_fan_properties_t* pIndexes,           ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_fan_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         auto pfnSetFanProperties = context.xetDdiTable.SysmanResource.pfnSetFanProperties;
@@ -1460,15 +1300,12 @@ namespace layer
             if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
+            if( nullptr == pRequest )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnSetFanProperties( hResource, count, pIndexes, pValues, size );
+        return pfnSetFanProperties( hResource, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1476,18 +1313,8 @@ namespace layer
     xe_result_t __xecall
     xetSysmanResourceGetLedProperties(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_led_properties_t* pIndexes,           ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_led_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         auto pfnGetLedProperties = context.xetDdiTable.SysmanResource.pfnGetLedProperties;
@@ -1500,30 +1327,21 @@ namespace layer
             if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pSize )
+            if( nullptr == pRequest )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetLedProperties( hResource, count, pIndexes, pValues, pSize );
+        return pfnGetLedProperties( hResource, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanResourceSetLedProperties
     xe_result_t __xecall
     xetSysmanResourceSetLedProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_led_properties_t* pIndexes,           ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_led_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         auto pfnSetLedProperties = context.xetDdiTable.SysmanResource.pfnSetLedProperties;
@@ -1536,15 +1354,12 @@ namespace layer
             if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
+            if( nullptr == pRequest )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnSetLedProperties( hResource, count, pIndexes, pValues, size );
+        return pfnSetLedProperties( hResource, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1552,18 +1367,8 @@ namespace layer
     xe_result_t __xecall
     xetSysmanResourceGetFirmwareProperties(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_firmware_properties_t* pIndexes,      ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_firmware_property_request_t* pRequest       ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         auto pfnGetFirmwareProperties = context.xetDdiTable.SysmanResource.pfnGetFirmwareProperties;
@@ -1576,30 +1381,21 @@ namespace layer
             if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pSize )
+            if( nullptr == pRequest )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetFirmwareProperties( hResource, count, pIndexes, pValues, pSize );
+        return pfnGetFirmwareProperties( hResource, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanResourceSetFirmwareProperties
     xe_result_t __xecall
     xetSysmanResourceSetFirmwareProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_firmware_properties_t* pIndexes,      ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_firmware_property_request_t* pRequest       ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         auto pfnSetFirmwareProperties = context.xetDdiTable.SysmanResource.pfnSetFirmwareProperties;
@@ -1612,15 +1408,12 @@ namespace layer
             if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
+            if( nullptr == pRequest )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnSetFirmwareProperties( hResource, count, pIndexes, pValues, size );
+        return pfnSetFirmwareProperties( hResource, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1628,18 +1421,8 @@ namespace layer
     xe_result_t __xecall
     xetSysmanResourceGetPwrProperties(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_pwr_properties_t* pIndexes,           ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_pwr_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         auto pfnGetPwrProperties = context.xetDdiTable.SysmanResource.pfnGetPwrProperties;
@@ -1652,30 +1435,21 @@ namespace layer
             if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pSize )
+            if( nullptr == pRequest )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetPwrProperties( hResource, count, pIndexes, pValues, pSize );
+        return pfnGetPwrProperties( hResource, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanResourceSetPwrProperties
     xe_result_t __xecall
     xetSysmanResourceSetPwrProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_pwr_properties_t* pIndexes,           ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_pwr_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         auto pfnSetPwrProperties = context.xetDdiTable.SysmanResource.pfnSetPwrProperties;
@@ -1688,15 +1462,12 @@ namespace layer
             if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
+            if( nullptr == pRequest )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnSetPwrProperties( hResource, count, pIndexes, pValues, size );
+        return pfnSetPwrProperties( hResource, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1704,18 +1475,8 @@ namespace layer
     xe_result_t __xecall
     xetSysmanResourceGetFreqProperties(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_freq_properties_t* pIndexes,          ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_freq_property_request_t* pRequest           ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         auto pfnGetFreqProperties = context.xetDdiTable.SysmanResource.pfnGetFreqProperties;
@@ -1728,30 +1489,21 @@ namespace layer
             if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pSize )
+            if( nullptr == pRequest )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetFreqProperties( hResource, count, pIndexes, pValues, pSize );
+        return pfnGetFreqProperties( hResource, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanResourceSetFreqProperties
     xe_result_t __xecall
     xetSysmanResourceSetFreqProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_freq_properties_t* pIndexes,          ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_freq_property_request_t* pRequest           ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         auto pfnSetFreqProperties = context.xetDdiTable.SysmanResource.pfnSetFreqProperties;
@@ -1764,39 +1516,26 @@ namespace layer
             if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
+            if( nullptr == pRequest )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnSetFreqProperties( hResource, count, pIndexes, pValues, size );
+        return pfnSetFreqProperties( hResource, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceGetPwrWellProperties
+    /// @brief Intercept function for xetSysmanResourceGetPwrwellProperties
     xe_result_t __xecall
-    xetSysmanResourceGetPwrWellProperties(
+    xetSysmanResourceGetPwrwellProperties(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_pwrwell_properties_t* pIndexes,       ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_pwrwell_property_request_t* pRequest        ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnGetPwrWellProperties = context.xetDdiTable.SysmanResource.pfnGetPwrWellProperties;
+        auto pfnGetPwrwellProperties = context.xetDdiTable.SysmanResource.pfnGetPwrwellProperties;
 
-        if( nullptr == pfnGetPwrWellProperties )
+        if( nullptr == pfnGetPwrwellProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1804,35 +1543,26 @@ namespace layer
             if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pSize )
+            if( nullptr == pRequest )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetPwrWellProperties( hResource, count, pIndexes, pValues, pSize );
+        return pfnGetPwrwellProperties( hResource, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceSetPwrWellProperties
+    /// @brief Intercept function for xetSysmanResourceSetPwrwellProperties
     xe_result_t __xecall
-    xetSysmanResourceSetPwrWellProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_pwrwell_properties_t* pIndexes,       ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+    xetSysmanResourceSetPwrwellProperties(
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_pwrwell_property_request_t* pRequest        ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnSetPwrWellProperties = context.xetDdiTable.SysmanResource.pfnSetPwrWellProperties;
+        auto pfnSetPwrwellProperties = context.xetDdiTable.SysmanResource.pfnSetPwrwellProperties;
 
-        if( nullptr == pfnSetPwrWellProperties )
+        if( nullptr == pfnSetPwrwellProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1840,15 +1570,12 @@ namespace layer
             if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
+            if( nullptr == pRequest )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnSetPwrWellProperties( hResource, count, pIndexes, pValues, size );
+        return pfnSetPwrwellProperties( hResource, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1856,18 +1583,8 @@ namespace layer
     xe_result_t __xecall
     xetSysmanResourceGetAccelProperties(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_accel_properties_t* pIndexes,         ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_accel_property_request_t* pRequest          ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         auto pfnGetAccelProperties = context.xetDdiTable.SysmanResource.pfnGetAccelProperties;
@@ -1880,51 +1597,12 @@ namespace layer
             if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pSize )
+            if( nullptr == pRequest )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetAccelProperties( hResource, count, pIndexes, pValues, pSize );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceSetAccelProperties
-    xe_result_t __xecall
-    xetSysmanResourceSetAccelProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_accel_properties_t* pIndexes,         ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
-        )
-    {
-        auto pfnSetAccelProperties = context.xetDdiTable.SysmanResource.pfnSetAccelProperties;
-
-        if( nullptr == pfnSetAccelProperties )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hResource )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnSetAccelProperties( hResource, count, pIndexes, pValues, size );
+        return pfnGetAccelProperties( hResource, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1932,18 +1610,8 @@ namespace layer
     xe_result_t __xecall
     xetSysmanResourceGetMemProperties(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_mem_properties_t* pIndexes,           ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_mem_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         auto pfnGetMemProperties = context.xetDdiTable.SysmanResource.pfnGetMemProperties;
@@ -1956,30 +1624,21 @@ namespace layer
             if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pSize )
+            if( nullptr == pRequest )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetMemProperties( hResource, count, pIndexes, pValues, pSize );
+        return pfnGetMemProperties( hResource, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanResourceSetMemProperties
     xe_result_t __xecall
     xetSysmanResourceSetMemProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_mem_properties_t* pIndexes,           ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_mem_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         auto pfnSetMemProperties = context.xetDdiTable.SysmanResource.pfnSetMemProperties;
@@ -1992,15 +1651,12 @@ namespace layer
             if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
+            if( nullptr == pRequest )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnSetMemProperties( hResource, count, pIndexes, pValues, size );
+        return pfnSetMemProperties( hResource, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2008,18 +1664,8 @@ namespace layer
     xe_result_t __xecall
     xetSysmanResourceGetLinkProperties(
         xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_link_properties_t* pIndexes,          ///< [in] An array of property indexes to be read
-        void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-        uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                        ///< If size is zero, then the driver will update the value with the size
-                                                        ///< required to store the requested properties.
-                                                        ///< If size is less than that required to store the requested data for the
-                                                        ///< properties, the driver will update the value with the required size
-                                                        ///< and return an error.
-                                                        ///< If size is larger than that required to store the requested data for
-                                                        ///< the properties, the driver will update the value with the size of the
-                                                        ///< data returned.
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_link_property_request_t* pRequest           ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         auto pfnGetLinkProperties = context.xetDdiTable.SysmanResource.pfnGetLinkProperties;
@@ -2032,30 +1678,21 @@ namespace layer
             if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pSize )
+            if( nullptr == pRequest )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetLinkProperties( hResource, count, pIndexes, pValues, pSize );
+        return pfnGetLinkProperties( hResource, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanResourceSetLinkProperties
     xe_result_t __xecall
     xetSysmanResourceSetLinkProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource container
-        uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-        const xet_link_properties_t* pIndexes,          ///< [in] An array of property indexes to be set
-        void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                        ///< properties.
-        uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+        xet_link_property_request_t* pRequest           ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
         auto pfnSetLinkProperties = context.xetDdiTable.SysmanResource.pfnSetLinkProperties;
@@ -2068,15 +1705,12 @@ namespace layer
             if( nullptr == hResource )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pIndexes )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pValues )
+            if( nullptr == pRequest )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnSetLinkProperties( hResource, count, pIndexes, pValues, size );
+        return pfnSetLinkProperties( hResource, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2084,10 +1718,10 @@ namespace layer
     xe_result_t __xecall
     xetSysmanRegisterEvents(
         xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        xet_res_container_handle_t hResource,           ///< [in] Handle of the resource container. Events from any contained
+        xet_resource_handle_t hResource,                ///< [in] Handle of the parent resource. Events from any contained devices
+                                                        ///< will be registered.
+                                                        ///< If the handle is ::XET_INVALID_SYSMAN_RESOURCE_HANDLE, events from all
                                                         ///< devices will be registered.
-                                                        ///< If the handle is ::XET_INVALID_SYSMAN_RES_CONTAINER_HANDLE, events
-                                                        ///< from all devices will be registered.
         uint32_t events                                 ///< [in] Bitfield of events to register.
                                                         ///< Construct by ORing (1<<::xet_sysman_event_type_t).
                                                         ///< Set to (~0) to register to receive all events.
@@ -2116,10 +1750,10 @@ namespace layer
     xe_result_t __xecall
     xetSysmanUnregisterEvents(
         xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        xet_res_container_handle_t hResource,           ///< [in] Handle of the resource container. Events from any contained
+        xet_resource_handle_t hResource,                ///< [in] Handle of the parent resource. Events from any contained devices
+                                                        ///< will be unregistered.
+                                                        ///< If the handle is ::XET_INVALID_SYSMAN_RESOURCE_HANDLE, events from all
                                                         ///< devices will be unregistered.
-                                                        ///< If the handle is ::XET_INVALID_SYSMAN_RES_CONTAINER_HANDLE, events
-                                                        ///< from all devices will be unregistered.
         uint32_t events                                 ///< [in] Bitfield of events to unregister.
                                                         ///< Construct by ORing (1<<::xet_sysman_event_type_t).
                                                         ///< Set to (~0) to unregister all events.
@@ -2768,17 +2402,23 @@ xetGetSysmanProcAddrTable(
     dditable.pfnDestroy                                  = pDdiTable->pfnDestroy;
     pDdiTable->pfnDestroy                                = layer::xetSysmanDestroy;
 
+    dditable.pfnGetAccelAssetName                        = pDdiTable->pfnGetAccelAssetName;
+    pDdiTable->pfnGetAccelAssetName                      = layer::xetSysmanGetAccelAssetName;
+
     dditable.pfnConvertUuidToString                      = pDdiTable->pfnConvertUuidToString;
     pDdiTable->pfnConvertUuidToString                    = layer::xetSysmanConvertUuidToString;
 
-    dditable.pfnGetResourceContainers                    = pDdiTable->pfnGetResourceContainers;
-    pDdiTable->pfnGetResourceContainers                  = layer::xetSysmanGetResourceContainers;
+    dditable.pfnGetResources                             = pDdiTable->pfnGetResources;
+    pDdiTable->pfnGetResources                           = layer::xetSysmanGetResources;
 
-    dditable.pfnGetDeviceResourceContainer               = pDdiTable->pfnGetDeviceResourceContainer;
-    pDdiTable->pfnGetDeviceResourceContainer             = layer::xetSysmanGetDeviceResourceContainer;
+    dditable.pfnGetDeviceResource                        = pDdiTable->pfnGetDeviceResource;
+    pDdiTable->pfnGetDeviceResource                      = layer::xetSysmanGetDeviceResource;
 
-    dditable.pfnGetResourceContainerByUuid               = pDdiTable->pfnGetResourceContainerByUuid;
-    pDdiTable->pfnGetResourceContainerByUuid             = layer::xetSysmanGetResourceContainerByUuid;
+    dditable.pfnGetResourceByUuid                        = pDdiTable->pfnGetResourceByUuid;
+    pDdiTable->pfnGetResourceByUuid                      = layer::xetSysmanGetResourceByUuid;
+
+    dditable.pfnGetRasErrors                             = pDdiTable->pfnGetRasErrors;
+    pDdiTable->pfnGetRasErrors                           = layer::xetSysmanGetRasErrors;
 
     dditable.pfnRegisterEvents                           = pDdiTable->pfnRegisterEvents;
     pDdiTable->pfnRegisterEvents                         = layer::xetSysmanRegisterEvents;
@@ -2788,66 +2428,6 @@ xetGetSysmanProcAddrTable(
 
     dditable.pfnListenEvents                             = pDdiTable->pfnListenEvents;
     pDdiTable->pfnListenEvents                           = layer::xetSysmanListenEvents;
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanResContainer table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xetGetSysmanResContainerProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xet_sysman_res_container_dditable_t* pDdiTable  ///< [in,out] pointer to table of DDI function pointers
-    )
-{
-    auto& dditable = layer::context.xetDdiTable.SysmanResContainer;
-
-    if( nullptr == pDdiTable )
-        return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    if( layer::context.version < version )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    dditable.pfnIsSame                                   = pDdiTable->pfnIsSame;
-    pDdiTable->pfnIsSame                                 = layer::xetSysmanResContainerIsSame;
-
-    dditable.pfnGetInfo                                  = pDdiTable->pfnGetInfo;
-    pDdiTable->pfnGetInfo                                = layer::xetSysmanResContainerGetInfo;
-
-    dditable.pfnGetParent                                = pDdiTable->pfnGetParent;
-    pDdiTable->pfnGetParent                              = layer::xetSysmanResContainerGetParent;
-
-    dditable.pfnGetChildren                              = pDdiTable->pfnGetChildren;
-    pDdiTable->pfnGetChildren                            = layer::xetSysmanResContainerGetChildren;
-
-    dditable.pfnGetPeers                                 = pDdiTable->pfnGetPeers;
-    pDdiTable->pfnGetPeers                               = layer::xetSysmanResContainerGetPeers;
-
-    dditable.pfnGetAccelAssetName                        = pDdiTable->pfnGetAccelAssetName;
-    pDdiTable->pfnGetAccelAssetName                      = layer::xetSysmanResContainerGetAccelAssetName;
-
-    dditable.pfnGetResources                             = pDdiTable->pfnGetResources;
-    pDdiTable->pfnGetResources                           = layer::xetSysmanResContainerGetResources;
-
-    dditable.pfnGetBoardProperties                       = pDdiTable->pfnGetBoardProperties;
-    pDdiTable->pfnGetBoardProperties                     = layer::xetSysmanResContainerGetBoardProperties;
-
-    dditable.pfnGetDeviceProperties                      = pDdiTable->pfnGetDeviceProperties;
-    pDdiTable->pfnGetDeviceProperties                    = layer::xetSysmanResContainerGetDeviceProperties;
-
-    dditable.pfnSetDeviceProperties                      = pDdiTable->pfnSetDeviceProperties;
-    pDdiTable->pfnSetDeviceProperties                    = layer::xetSysmanResContainerSetDeviceProperties;
 
     return result;
 }
@@ -2885,6 +2465,24 @@ xetGetSysmanResourceProcAddrTable(
     dditable.pfnGetInfo                                  = pDdiTable->pfnGetInfo;
     pDdiTable->pfnGetInfo                                = layer::xetSysmanResourceGetInfo;
 
+    dditable.pfnGetParent                                = pDdiTable->pfnGetParent;
+    pDdiTable->pfnGetParent                              = layer::xetSysmanResourceGetParent;
+
+    dditable.pfnGetChildren                              = pDdiTable->pfnGetChildren;
+    pDdiTable->pfnGetChildren                            = layer::xetSysmanResourceGetChildren;
+
+    dditable.pfnGetPeers                                 = pDdiTable->pfnGetPeers;
+    pDdiTable->pfnGetPeers                               = layer::xetSysmanResourceGetPeers;
+
+    dditable.pfnGetBoardProperties                       = pDdiTable->pfnGetBoardProperties;
+    pDdiTable->pfnGetBoardProperties                     = layer::xetSysmanResourceGetBoardProperties;
+
+    dditable.pfnGetDeviceProperties                      = pDdiTable->pfnGetDeviceProperties;
+    pDdiTable->pfnGetDeviceProperties                    = layer::xetSysmanResourceGetDeviceProperties;
+
+    dditable.pfnSetDeviceProperties                      = pDdiTable->pfnSetDeviceProperties;
+    pDdiTable->pfnSetDeviceProperties                    = layer::xetSysmanResourceSetDeviceProperties;
+
     dditable.pfnGetPsuProperties                         = pDdiTable->pfnGetPsuProperties;
     pDdiTable->pfnGetPsuProperties                       = layer::xetSysmanResourceGetPsuProperties;
 
@@ -2893,9 +2491,6 @@ xetGetSysmanResourceProcAddrTable(
 
     dditable.pfnGetTempProperties                        = pDdiTable->pfnGetTempProperties;
     pDdiTable->pfnGetTempProperties                      = layer::xetSysmanResourceGetTempProperties;
-
-    dditable.pfnSetTempProperties                        = pDdiTable->pfnSetTempProperties;
-    pDdiTable->pfnSetTempProperties                      = layer::xetSysmanResourceSetTempProperties;
 
     dditable.pfnGetFanProperties                         = pDdiTable->pfnGetFanProperties;
     pDdiTable->pfnGetFanProperties                       = layer::xetSysmanResourceGetFanProperties;
@@ -2927,17 +2522,14 @@ xetGetSysmanResourceProcAddrTable(
     dditable.pfnSetFreqProperties                        = pDdiTable->pfnSetFreqProperties;
     pDdiTable->pfnSetFreqProperties                      = layer::xetSysmanResourceSetFreqProperties;
 
-    dditable.pfnGetPwrWellProperties                     = pDdiTable->pfnGetPwrWellProperties;
-    pDdiTable->pfnGetPwrWellProperties                   = layer::xetSysmanResourceGetPwrWellProperties;
+    dditable.pfnGetPwrwellProperties                     = pDdiTable->pfnGetPwrwellProperties;
+    pDdiTable->pfnGetPwrwellProperties                   = layer::xetSysmanResourceGetPwrwellProperties;
 
-    dditable.pfnSetPwrWellProperties                     = pDdiTable->pfnSetPwrWellProperties;
-    pDdiTable->pfnSetPwrWellProperties                   = layer::xetSysmanResourceSetPwrWellProperties;
+    dditable.pfnSetPwrwellProperties                     = pDdiTable->pfnSetPwrwellProperties;
+    pDdiTable->pfnSetPwrwellProperties                   = layer::xetSysmanResourceSetPwrwellProperties;
 
     dditable.pfnGetAccelProperties                       = pDdiTable->pfnGetAccelProperties;
     pDdiTable->pfnGetAccelProperties                     = layer::xetSysmanResourceGetAccelProperties;
-
-    dditable.pfnSetAccelProperties                       = pDdiTable->pfnSetAccelProperties;
-    pDdiTable->pfnSetAccelProperties                     = layer::xetSysmanResourceSetAccelProperties;
 
     dditable.pfnGetMemProperties                         = pDdiTable->pfnGetMemProperties;
     pDdiTable->pfnGetMemProperties                       = layer::xetSysmanResourceGetMemProperties;

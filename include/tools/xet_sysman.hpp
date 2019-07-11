@@ -23,7 +23,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef XET_RESOURCE_UUID_SIZE
-/// @brief Size of UUID number in bytes
+/// @brief Size of UUID in bytes
 #define XET_RESOURCE_UUID_SIZE  16
 #endif // XET_RESOURCE_UUID_SIZE
 
@@ -52,233 +52,24 @@
 namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_DEVICE_PROP_COLD_SHUTDOWN
-    using device_prop_driver_cold_shutdown_t = xe::bool_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_DEVICE_PROP_COLD_RESET
-    using device_prop_driver_cold_reset_t = xe::bool_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_PSU_PROP_AMP_LIMIT
-    using psu_prop_amp_limit_t = uint32_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_PSU_PROP_FAN_FAILURE
-    using psu_prop_fan_failure_t = xe::bool_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_PSU_PROP_TEMPERATURE
-    using psu_prop_temperature_t = uint32_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_PSU_PROP_AMPS
-    using psu_prop_amps_t = uint32_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_FAN_PROP_MAX_RPM
-    using fan_prop_max_rpm_t = uint32_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_FAN_PROP_MAX_TABLE_SIZE
-    using fan_prop_max_table_size_t = uint32_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_FAN_PROP_SPEED_RPM
-    using fan_prop_speed_rpm_t = uint32_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_FAN_PROP_SPEED_PERCENT
-    using fan_prop_speed_percent_t = uint32_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_LED_PROP_RGB_CAP
-    using led_prop_rgb_cap_t = xe::bool_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_PWR_PROP_ACCEL_ASSETS.
-    /// 
-    /// @details
-    ///     - Bitfield of (1<<::xet_accel_asset_t)
-    using pwr_prop_accel_assets_t = uint64_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_PWR_PROP_MAX_LIMIT
-    /// 
-    /// @details
-    ///     - Units are in millwatts
-    using pwr_prop_max_limit_t = uint32_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_PWR_PROP_ENERGY_COUNTER
-    /// 
-    /// @details
-    ///     - Units are in millijoules
-    using pwr_prop_energy_counter_t = uint64_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_FREQ_PROP_ACCEL_ASSETS
-    /// 
-    /// @details
-    ///     - Bitfield of (1<<::xet_accel_asset_t)
-    using freq_prop_accel_assets_t = uint64_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_FREQ_PROP_FREQ_TDP
-    /// 
-    /// @details
-    ///     - In units of MHz
-    using freq_prop_freq_tdp_t = uint32_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_FREQ_PROP_FREQ_EFFICIENT
-    /// 
-    /// @details
-    ///     - In units of MHz
-    using freq_prop_freq_efficient_t = uint32_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_FREQ_PROP_FREQ_REQUEST
-    /// 
-    /// @details
-    ///     - In units of MHz
-    using freq_prop_freq_request_t = uint32_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_FREQ_PROP_FREQ_RESOLVED
-    /// 
-    /// @details
-    ///     - In units of MHz
-    using freq_prop_freq_resolved_t = uint32_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_FREQ_PROP_THROTTLE_REASONS
-    /// 
-    /// @details
-    ///     - Bitfield of ::xet_freq_throttle_reasons_t
-    using freq_prop_throttle_reasons_t = uint32_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_FREQ_PROP_THROTTLE_TIME
-    /// 
-    /// @details
-    ///     - In units of microseconds
-    using freq_prop_throttle_time_t = uint32_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_PWRWELL_PROP_ACCEL_ASSETS
-    /// 
-    /// @details
-    ///     - Bitfield of (1<<::xet_accel_asset_t)
-    using pwrwell_prop_accel_assets_t = uint64_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_PWRWELL_PROP_PROMO_CAP
-    using pwrwell_prop_promo_cap_t = xe::bool_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_PWRWELL_PROP_SLEEP_COUNTER
-    /// 
-    /// @details
-    ///     - Monotonic counter in units of seconds.
-    using pwrwell_prop_sleep_counter_t = uint32_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_PWRWELL_PROP_IDLE_COUNTER
-    /// 
-    /// @details
-    ///     - Monotonic counter in units of seconds.
-    using pwrwell_prop_idle_counter_t = uint32_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_PWRWELL_PROP_ACTIVE_COUNTER
-    /// 
-    /// @details
-    ///     - Monotonic counter in units of seconds.
-    using pwrwell_prop_active_counter_t = uint32_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_PWRWELL_PROP_WAKE_COUNTER
-    /// 
-    /// @details
-    ///     - Monotonic counter.
-    using pwrwell_prop_wake_counter_t = uint32_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_PWRWELL_PROP_EXEC_COUNTER
-    /// 
-    /// @details
-    ///     - Monotonic counter.
-    using pwrwell_prop_exec_counter_t = uint32_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_ACCEL_PROP_ACCEL_ASSETS
-    /// 
-    /// @details
-    ///     - Bitfield of (1<<::xet_accel_asset_t)
-    using accel_prop_accel_assets_t = uint64_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_ACCEL_PROP_ACTIVE_COUNTER
-    /// 
-    /// @details
-    ///     - Monotonic counter in units of seconds.
-    using accel_prop_active_counter_t = uint32_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_ACCEL_PROP_IDLE_COUNTER
-    /// 
-    /// @details
-    ///     - Monotonic counter in units of seconds.
-    using accel_prop_idle_counter_t = uint32_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_MEM_PROP_ECC_CAP
-    using mem_prop_ecc_cap_t = xe::bool_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_MEM_PROP_ECC_CLEAR
-    using mem_prop_ecc_clear_t = xe::bool_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_MEM_PROP_ECC_POISON
-    using mem_prop_ecc_poison_t = xe::bool_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_LINK_PROP_PWR_CAP
-    using link_prop_pwr_cap_t = xe::bool_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_LINK_PROP_MAX_PACKET_SIZE
-    using link_prop_max_packet_size_t = uint32_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Data for the property ::XET_LINK_PROP_REPLAY_COUNTER
-    using link_prop_replay_counter_t = uint32_t;
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief C++ wrapper for SMI of a device group
     class Sysman
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief SMI initialization flags (bitfield)
-        enum class init_flags_t
+        /// @brief API version of SMI
+        enum class version_t
         {
-            NONE = 0,                                       ///< default initialization
-            WRITE = XE_BIT( 0 ),                            ///< request write/control access to resources
+            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Resource container types
-        enum class res_container_type_t
+        /// @brief SMI initialization flags (bitfield)
+        enum class init_flags_t
         {
-            UNIT = 0,                                       ///< Unit resource container
-            BOARD,                                          ///< Board resource container
-            DEVICE,                                         ///< Device resource container
-            SUBDEVICE,                                      ///< Sub-device resource container
-            MAX_TYPES,                                      ///< The number of resource container types
+            NONE = 0,                                       ///< Default initialization
+            WRITE = XE_BIT( 0 ),                            ///< Request write/control access to resources
 
         };
 
@@ -286,7 +77,11 @@ namespace xet
         /// @brief Resource types
         enum class resource_type_t
         {
-            PSU = 0,                                        ///< PSU resource
+            UNIT_CONTAINER = 0,                             ///< Unit resource container
+            BOARD_CONTAINER,                                ///< Board resource container
+            DEVICE_CONTAINER,                               ///< Device resource container
+            SUBDEVICE_CONTAINER,                            ///< Sub-device resource container
+            PSU,                                            ///< PSU resource
             TEMP,                                           ///< Temperature sensor resource
             FAN,                                            ///< Fan resource
             LED,                                            ///< LED resource
@@ -295,9 +90,84 @@ namespace xet
             FREQ,                                           ///< Frequency domain resource
             PWRWELL,                                        ///< Power-well resource
             ACCEL,                                          ///< Accelerator asset resource
-            MEMORY,                                         ///< Memory resource
+            MEM,                                            ///< Memory resource
             LINK,                                           ///< Link resource
             MAX_TYPES,                                      ///< The number of resource types
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Accelerator assets
+        enum class accel_asset_t
+        {
+            PCIE_CONTROLLER = 0,                            ///< PCIe controller
+            IDI_MEM_CONTROLLER,                             ///< IDI memory controller
+            HBM_MEM_CONTROLLER,                             ///< HBM memory controller
+            L3_CACHE,                                       ///< L3 cache
+            BLILTTER,                                       ///< Blitter
+            VIDEO_DECODER,                                  ///< Video decoder
+            VIDEO_ENCODER,                                  ///< Video encoder
+            VIDEO_PROCESSING,                               ///< Video processing
+            _3D_FF,                                         ///< 3D fixed-function hardware
+            _3D_RENDER,                                     ///< 3D programmable shader units
+            COMPUTE,                                        ///< Compute units
+            SYSTOLIC,                                       ///< Systolic array
+            RAYTRACING,                                     ///< Raytracing hardware
+            LOCAL_MEM,                                      ///< Local memory
+            LINK,                                           ///< High speed link
+            MAX_TYPES,                                      ///< The number of accelerator asset types
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief RAS error type
+        enum class ras_error_type_t
+        {
+            NONE = 0,                                       ///< No error type
+            FATAL = XE_BIT( 0 ),                            ///< Error was fatal
+            NON_FATAL = XE_BIT( 1 ),                        ///< Error was not fatal
+            CORRECTABLE = XE_BIT( 2 ),                      ///< Error was corrected
+            UNCORRECTABLE = XE_BIT( 3 ),                    ///< Error was not corrected
+            PARITY = XE_BIT( 4 ),                           ///< Parity error occurred
+            SINGLE_BIT = XE_BIT( 5 ),                       ///< Single bit error occurred
+            DOUBLE_BIT = XE_BIT( 6 ),                       ///< Single bit error occurred
+            REPLAY = XE_BIT( 7 ),                           ///< Replay occurred
+            ALL = ~0,                                       ///< Select all error types
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief RAS error structural location
+        enum class ras_error_loc_t
+        {
+            NONE = 0,                                       ///< No location
+            MAIN_MEM = XE_BIT( 0 ),                         ///< Error occurred in main onboard memory
+            L3_CACHE = XE_BIT( 1 ),                         ///< Error occurred in L3 cache
+            SAMPLER_SRAM = XE_BIT( 2 ),                     ///< Error occurred in sampler SRAM
+            GUC_SRAM = XE_BIT( 3 ),                         ///< Error occurred in microcontroller SRAM
+            INST_CACHE = XE_BIT( 4 ),                       ///< Error occurred in the compute unit instruction cache
+            GRF = XE_BIT( 5 ),                              ///< Error occurred in the compute unit register file
+            SLM = XE_BIT( 6 ),                              ///< Error occurred in the compute unit shared local memory
+            PCI = XE_BIT( 7 ),                              ///< Error occurred in the PCIe controller
+            PCI_ROUTING = XE_BIT( 8 ),                      ///< Error occurred routing PCIe traffic to/from sub-devices
+            SGUNIT = XE_BIT( 9 ),                           ///< Errors occurred handling transactions between PCI config space, MMIO
+                                                            ///< registers, local memory and sub-devices
+            GSC = XE_BIT( 10 ),                             ///< Security errors occurred
+            DISPLAY = XE_BIT( 11 ),                         ///< Errors occurred in the display
+            SOC = XE_BIT( 12 ),                             ///< Errors occurred in other parts of the device
+            GPU_HANG = XE_BIT( 13 ),                        ///< Driver detected that the GPU hardware was non-responsive
+            GPU_WARM_RESET = XE_BIT( 14 ),                  ///< Driver performed a GPU warm reset
+            ALL = ~0,                                       ///< Select all error locations
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief RAS data type
+        enum class ras_data_type_t
+        {
+            NONE = 0,                                       ///< Errors not supported
+            OCCURRED,                                       ///< Indicates if an error occurred
+            COUNTER,                                        ///< Provides a counter for the number of errors that have occurred
 
         };
 
@@ -317,8 +187,7 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Universal unique id (UUID) for Sysman objects (resource containers and
-        ///        resources)
+        /// @brief Universal unique id (UUID) for Sysman resources
         struct resource_uuid_t
         {
             uint8_t id[XET_RESOURCE_UUID_SIZE];             ///< [in,out] Universal unique id of Sysman object
@@ -326,17 +195,16 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Generic information about a resource container
-        struct res_container_info_t
+        /// @brief RAS error
+        struct res_error_t
         {
-            resource_uuid_t uuid;                           ///< [out] UUID for the resource container
-            res_container_type_t type;                      ///< [out] Type of resource container
-            xe::bool_t haveParent;                          ///< [out] Indicates if this resource container has a parent container
-            uint32_t numChildren;                           ///< [out] The number of child resource containers
-            uint32_t numPeers;                              ///< [out] The number of resource containers connected with peer-to-peer
-                                                            ///< links
-            uint32_t numResourcesByType[static_cast<int>(resource_type_t::MAX_TYPES)];  ///< [out] The number of resources of each type attached to this resource
-                                                            ///< container (not in the child resource containers)
+            uint32_t type;                                  ///< [out] Bitfield describing type of error, constructed from one or more
+                                                            ///< of ::xet_ras_error_type_t
+            uint32_t loc;                                   ///< [out] Bitfield describing structural location of the error,
+                                                            ///< constructed from one of ::xet_ras_error_loc_t
+            ras_data_type_t dataType;                       ///< [out] How to interpret the data
+            uint64_t data;                                  ///< [out] The value of the error - interpretation depends on dataType
+            resource_uuid_t uuid;                           ///< [out] UUID for the resource where the error was generated
 
         };
 
@@ -346,7 +214,19 @@ namespace xet
         {
             resource_uuid_t uuid;                           ///< [out] UUID for the resource
             resource_type_t type;                           ///< [out] Type of resource
-            resource_uuid_t resContainerUuid;               ///< [out] UUID for the resource container where this resouce is located
+            xe::bool_t haveParent;                          ///< [out] Indicates if this resource has a parent resource
+            uint32_t numChildren;                           ///< [out] The number of child resources
+            uint32_t numPeers;                              ///< [out] The number of resources connected to this resource with
+                                                            ///< peer-to-peer links
+            uint32_t numRas;                                ///< [out] The total number of RAS elements contained in this resource or
+                                                            ///< in any descendants.
+            uint32_t rasTypes;                              ///< [out] Bitfield of the type of RAS elements (::xet_ras_error_type_t)
+                                                            ///< contained in this resource or in any descendants.
+            uint32_t rasLocations;                          ///< [out] Bitfield of the structure location of RAS elements
+                                                            ///< (::xet_ras_error_loc_t) contained in this resource or in any
+                                                            ///< descendants.
+            uint32_t numResourcesByType[static_cast<int>(resource_type_t::MAX_TYPES)];  ///< [out] The number of resources of each type attached to this resource
+                                                            ///< (not in the child resources)
 
         };
 
@@ -354,7 +234,7 @@ namespace xet
         /// @brief Event data
         struct event_data_t
         {
-            resource_uuid_t uuid;                           ///< [out] The UUID of the resource container that generated the event
+            resource_uuid_t uuid;                           ///< [out] The UUID of the resource that generated the event
             uint32_t events;                                ///< [out] Bitfield of events (1<<::xet_sysman_event_type_t) that have been
                                                             ///< triggered.
 
@@ -391,23 +271,37 @@ namespace xet
         /// 
         /// @details
         ///     - Initializes internal structures to support SMI features.
+        ///     - If the write flag ::XET_SYSMAN_INIT_FLAGS_WRITE is specified, no
+        ///       access right checks are made during initialization. The check is done
+        ///       in functions that attempt to control a device.
+        ///     - If the write flag ::XET_SYSMAN_INIT_FLAGS_WRITE is not specified, any
+        ///       function attempting to control a device will return
+        ///       ::XE_RESULT_ACCESS_DENIED.
+        ///     - Multiple SMI handles can be created for the same device group and
+        ///       concurrent access through each handle to access underlying hardware
+        ///       resources is supported.
         /// 
         /// @remarks
         ///   _Analogues_
         ///     - **nvmlInit**
         ///     - **rsmi_init**
         /// @returns
-        ///     - Sysman*: handle for accessing SMI features
+        ///     - Sysman*: Handle for accessing SMI features
         /// 
         /// @throws result_t
         static Sysman* __xecall
         Create(
-            DeviceGroup* pDeviceGroup,                      ///< [in] pointer to the device group
-            uint32_t flags                                  ///< [in] bitfield of ::xet_sysman_init_flags_t
+            DeviceGroup* pDeviceGroup,                      ///< [in] Handle of the device group
+            version_t version,                              ///< [in] SMI version that application was built with
+            uint32_t flags                                  ///< [in] Bitfield of ::xet_sysman_init_flags_t
             );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Destroys a Sysman handle
+        /// 
+        /// @details
+        ///     - Only once all SMI handles to a device group have been destroyed will
+        ///       internal data structures be freed from the application memory.
         /// 
         /// @remarks
         ///   _Analogues_
@@ -420,7 +314,16 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Convert Sysman UUID to a string
+        /// @brief Get human-readable name for an accelerator asset
+        /// @throws result_t
+        void __xecall
+        GetAccelAssetName(
+            accel_asset_t type,                             ///< [in] The type of accelerator asset
+            const char** ppName                             ///< [in] Pointer to the asset name
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Convert SMI resource UUID to a string
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -435,7 +338,7 @@ namespace xet
                                                             ///< If size is non-zero and less than the required length, the storage
                                                             ///< size including end-of-string terminator will be returned and an error
                                                             ///< status given.
-                                                            ///< If size is non-zero and larger than the string length, the number of
+                                                            ///< If size is non-zero and larger than the required length, the number of
                                                             ///< characters stored in the buffer including the end-of-string terminator
                                                             ///< will be returned.
             char* pStr = nullptr                            ///< [in][optional] Pointer to storage for the string representation of the
@@ -443,59 +346,126 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Retrieves resource containers of a given type
+        /// @brief Retrieves resources of a given type having a specified parent resource
         /// 
         /// @details
+        ///     - If a parent resource is not specified, then all resources of the given
+        ///       type are returned. Otherwise only resources directly contained
+        ///       in/under the specified parent are returned.
+        ///     - There is a one-to-many mapping between the underlying hardware for a
+        ///       resource and the corresponding handles returned to the application.
+        ///       Thus, the numerical value of the handles should not be compared with
+        ///       those returned by previous function calls - instead, use the function
+        ///       ::xetSysmanResourceIsSame() to check if two handles reference the same
+        ///       hardware object.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @returns
-        ///     - SysmanResContainer*: array of handle of resource containers
+        ///     - SysmanResource*: Array of resources resources
         /// 
         /// @throws result_t
         void __xecall
-        GetResourceContainers(
-            res_container_type_t type,                      ///< [in] The type of resource containers to enumerate
-            uint32_t* pCount,                               ///< [in,out] Pointer to the number of resource containers.
+        GetResources(
+            SysmanResource* pParentResource,                ///< [in] Handle of the parent resource object (can be
+                                                            ///< ::XET_INVALID_SYSMAN_RESOURCE_HANDLE)
+            resource_type_t type,                           ///< [in] The type of resources to enumerate
+            uint32_t* pCount,                               ///< [in,out] Pointer to the number of elements in the array phResources.
                                                             ///< If count is zero, then the driver will update the value with the total
-                                                            ///< number of resource containers of the given type that are available.
+                                                            ///< number of resources that would be returned.
                                                             ///< If count is non-zero, then driver will only retrieve that number of
-                                                            ///< resource containers of the given type starting from index 0.
-                                                            ///< If count is larger than the number of resource containers available,
-                                                            ///< then the driver will update the value with the correct number of
-                                                            ///< resource containers of a given type that are available.
-            SysmanResContainer** ppResContainers = nullptr  ///< [out][optional][range(0, *pCount)] array of pointer to resource
-                                                            ///< containers
+                                                            ///< resources of the given type starting from index 0.
+                                                            ///< If count is larger than the number of resource that will be returned,
+                                                            ///< then the driver will update the value with actual number returned.
+            SysmanResource** ppResources = nullptr          ///< [out][optional][range(0, *pCount)] Array of resources resources
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Retrieves the resource container for a device
+        /// @brief Retrieves a resource handle for a device
         /// 
         /// @details
+        ///     - The specified device must be in the same device group that was used to
+        ///       create the SMI handle.
+        ///     - If the device handle refers to a device, then a resource handle of
+        ///       type ::XET_RESOURCE_TYPE_DEVICE_CONTAINER will be returned.
+        ///     - If the device handle refers to a sub-device, then a resource handle of
+        ///       type ::XET_RESOURCE_TYPE_SUBDEVICE_CONTAINER will be returned.
+        ///     - There is a one-to-many mapping between the underlying hardware for a
+        ///       resource and the corresponding handles returned to the application.
+        ///       Thus, the numerical value of the handles should not be compared with
+        ///       those returned by previous function calls - instead, use the function
+        ///       ::xetSysmanResourceIsSame() to check if two handles reference the same
+        ///       hardware object.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @returns
-        ///     - SysmanResContainer*: Resource container for the specified device.
+        ///     - SysmanResource*: Resource handle for the specified device
         /// 
         /// @throws result_t
-        SysmanResContainer* __xecall
-        GetDeviceResourceContainer(
-            xe::Device* pDevice                             ///< [in] Handle to the device. It must be a member of the same Device
-                                                            ///< Group as hSysman was created from.
+        SysmanResource* __xecall
+        GetDeviceResource(
+            xe::Device* pDevice                             ///< [in] Handle to the device.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Retrieves the resource container based on its UUID
+        /// @brief Retrieves a resource handle based on resource UUID
         /// 
         /// @details
+        ///     - There is a one-to-many mapping between the underlying hardware for a
+        ///       resource and the corresponding handles returned to the application.
+        ///       Thus, the numerical value of the handles should not be compared with
+        ///       those returned by previous function calls - instead, use the function
+        ///       ::xetSysmanResourceIsSame() to check if two handles reference the same
+        ///       hardware object.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @returns
-        ///     - SysmanResContainer*: Resource container with UUID.
+        ///     - SysmanResource*: Resource handle
         /// 
         /// @throws result_t
-        SysmanResContainer* __xecall
-        GetResourceContainerByUuid(
-            const resource_uuid_t* uuid                     ///< [in] UUID for the resource container.
+        SysmanResource* __xecall
+        GetResourceByUuid(
+            const resource_uuid_t* uuid                     ///< [in] UUID for the resource
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get RAS errors that have occurred
+        /// 
+        /// @details
+        ///     - Returned errors can be filtered by resource, type, location and
+        ///       threshold.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        GetRasErrors(
+            SysmanResource* pResource,                      ///< [in] Handle of the resource. If specified, only errors within that
+                                                            ///< resource of child resources are returned. Otherwise all errors are
+                                                            ///< returned.
+            uint32_t type,                                  ///< [in] Bitfield of error types to filter - one or more of
+                                                            ///< ::xet_ras_error_type_t. Set to ::XET_RAS_ERROR_TYPE_ALL to have all
+                                                            ///< error types returned.
+            uint32_t location,                              ///< [in] Bitfield of error locations to filter - one or more of
+                                                            ///< ::xet_ras_error_loc_t. Set to ::XET_RAS_ERROR_LOC_ALL to have all
+                                                            ///< error locations returned.
+            uint32_t threshold,                             ///< [in] Only return error elements that have occurred at least this
+                                                            ///< number of times.
+                                                            ///< If set to 0, will get a list of all possible RAS elements, even those
+                                                            ///< that have not had errors.
+                                                            ///< For error elements of type ::XET_RAS_DATA_TYPE_OCCURRED, there is no
+                                                            ///< underlying counter, so they will always be returned independent of the
+                                                            ///< threshold setting.
+            xe::bool_t clear,                               ///< [in] Set to true to clear the underlying counters after they are
+                                                            ///< returned
+            uint32_t* pCount,                               ///< [in] Pointer to the number of elements in the array pErrors.
+                                                            ///< If count is 0 or pErrors is nullptr, driver will update with the
+                                                            ///< number of errors matching the specified filters. Counters are not cleared.
+                                                            ///< If count is non-zero and less than the number of matching errors,
+                                                            ///< driver will update with the number of errors matching the specified
+                                                            ///< filters. No data is returned and counters are not cleared.
+                                                            ///< If count is greater than or equal to the number of matching errors,
+                                                            ///< all data is returned, counters are cleared if requested and count will
+                                                            ///< be set to actual number of errors returned.
+            res_error_t* pErrors                            ///< [in] Array of error data
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -510,10 +480,10 @@ namespace xet
         /// @throws result_t
         void __xecall
         RegisterEvents(
-            SysmanResContainer* pResource,                  ///< [in] Handle of the resource container. Events from any contained
+            SysmanResource* pResource,                      ///< [in] Handle of the parent resource. Events from any contained devices
+                                                            ///< will be registered.
+                                                            ///< If the handle is ::XET_INVALID_SYSMAN_RESOURCE_HANDLE, events from all
                                                             ///< devices will be registered.
-                                                            ///< If the handle is ::XET_INVALID_SYSMAN_RES_CONTAINER_HANDLE, events
-                                                            ///< from all devices will be registered.
             uint32_t events                                 ///< [in] Bitfield of events to register.
                                                             ///< Construct by ORing (1<<::xet_sysman_event_type_t).
                                                             ///< Set to (~0) to register to receive all events.
@@ -531,10 +501,10 @@ namespace xet
         /// @throws result_t
         void __xecall
         UnregisterEvents(
-            SysmanResContainer* pResource,                  ///< [in] Handle of the resource container. Events from any contained
+            SysmanResource* pResource,                      ///< [in] Handle of the parent resource. Events from any contained devices
+                                                            ///< will be unregistered.
+                                                            ///< If the handle is ::XET_INVALID_SYSMAN_RESOURCE_HANDLE, events from all
                                                             ///< devices will be unregistered.
-                                                            ///< If the handle is ::XET_INVALID_SYSMAN_RES_CONTAINER_HANDLE, events
-                                                            ///< from all devices will be unregistered.
             uint32_t events                                 ///< [in] Bitfield of events to unregister.
                                                             ///< Construct by ORing (1<<::xet_sysman_event_type_t).
                                                             ///< Set to (~0) to unregister all events.
@@ -569,39 +539,29 @@ namespace xet
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for SMI resource container
-    class SysmanResContainer
+    /// @brief C++ wrapper for SMI resource
+    class SysmanResource
     {
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Accelerator assets
-        enum class accel_asset_t
-        {
-            PCIE_CONTROLLER = 0,                            ///< PCIe controller
-            IDI_MEM_CONTROLLER,                             ///< IDI memory controller
-            HBM_MEM_CONTROLLER,                             ///< HBM memory controller
-            L3_CACHE,                                       ///< L3 cache
-            BLILTTER,                                       ///< Blitter
-            VIDEO_DECODER,                                  ///< Video decoder
-            VIDEO_ENCODER,                                  ///< Video encoder
-            VIDEO_PROCESSING,                               ///< Video processing
-            _3D_FF,                                         ///< 3D fixed-function hardware
-            _3D_RENDER,                                     ///< 3D programmable shader units
-            COMPUTE,                                        ///< Compute units
-            SYSTOLIC,                                       ///< Systolic array
-            RAYTRACING,                                     ///< Raytracing hardware
-            LOCAL_MEM,                                      ///< Local memory
-            LINK,                                           ///< High speed link
-            MAX_TYPES,                                      ///< The number of accelerator asset types
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Board resource container properties
+        /// @brief Board resource properties
+        /// 
+        /// @details
+        ///     - For every property, there is a corresponding structure used to hold
+        ///       the property data. The type of the data structure is derived from the
+        ///       property enumerator, converted to lower-case with '_t' appended.
+        ///     - Properties can be either read-only (ro), write-only (wo) or read-write
+        ///       (rw).
+        ///     - Properties can be either static or dynamic. Static properties are set
+        ///       during initialization and will not change during the lifetime of the
+        ///       application. Dynamic properties can change at any time and should be
+        ///       reread.
         enum class board_properties_t
         {
-            BOARD_PROP_SERIAL_NUMBER = 0,                   ///< (ro static) The serial number of a board container
-            BOARD_PROP_BOARD_NUMBER,                        ///< (ro static) The board number of a board container
+            BOARD_PROP_SERIAL_NUMBER = 0,                   ///< (ro static) The serial number of a board (data:
+                                                            ///< ::xet_board_prop_serial_number_t)
+            BOARD_PROP_BOARD_NUMBER,                        ///< (ro static) The board number of a board (data:
+                                                            ///< ::xet_board_prop_board_number_t)
 
         };
 
@@ -622,374 +582,41 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Hardware error types
-        enum class hw_error_type_t
-        {
-            HW_ERROR_MESSAGING = 0,                         ///< Error while sending messages between sub-devices
-            HW_ERROR_SGUNIT,                                ///< Error handling transactions between PCI config space, MMIO registers,
-                                                            ///< local memory and sub-devices
-            HW_ERROR_GSC,                                   ///< Authentication errors
-            HW_ERROR_DISPLAY,                               ///< Display sub-system single-bit correctable errors
-            HW_ERROR_GPU_EU_GRF,                            ///< Execution unit (EU) register file single-bit correctable errors
-            HW_ERROR_GPU_EU_INSTCACHE,                      ///< Execution unit (EU) instruction cache single-bit correctable errors
-            HW_ERROR_GPU_SLM,                               ///< Execution unit (EU) shared local memory single-bit correctable errors
-            HW_ERROR_GPU_SAMPLER,                           ///< Sampler single-bit correctable errors
-            HW_ERROR_GPU_GUC,                               ///< Micro-controller SRAM single-bit correctable errors
-            HW_ERROR_GPU_L3,                                ///< L3 single-bit correctable errors
-            HW_ERROR_GPU_ALL,                               ///< Total count of GPU errors
-            HW_ERROR_PCI,                                   ///< PCIe correctable or non-fatal errors
-            HW_ERROR_PCI_ROUTING,                           ///< Errors routing PCIe traffic to/from sub-devices
-            HW_ERROR_SOC,                                   ///< Errors in other parts of the device
-            HW_ERROR_COUNT,                                 ///< Maximum number of hardware error types
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Device resource container properties
+        /// @brief Device resource properties
+        /// 
+        /// @details
+        ///     - For every property, there is a corresponding structure used to hold
+        ///       the property data. The type of the data structure is derived from the
+        ///       property enumerator, converted to lower-case with '_t' appended.
+        ///     - Properties can be either read-only (ro), write-only (wo) or read-write
+        ///       (rw).
+        ///     - Properties can be either static or dynamic. Static properties are set
+        ///       during initialization and will not change during the lifetime of the
+        ///       application. Dynamic properties can change at any time and should be
+        ///       reread.
         enum class device_properties_t
         {
-            DEVICE_PROP_BRAND = 0,                          ///< (ro static) The brand name of the device
-            DEVICE_PROP_MODEL,                              ///< (ro static) The model name of the device
-            DEVICE_PROP_DEVICEID,                           ///< (ro static) The device ID of the device
-            DEVICE_PROP_VENDOR_NAME,                        ///< (ro static) The vendor name of the device
-            DEVICE_PROP_ACCEL_ASSETS,                       ///< (ro static) The accelerator assets available in the device
-            DEVICE_PROP_DRIVER_VERSION,                     ///< (ro static) The driver version associated with the device
-            DEVICE_PROP_BARS,                               ///< (ro static) The bars configured for the device
-            DEVICE_PROP_ERROR_STATS,                        ///< (ro dynamic) Error stats for the device
-            DEVICE_PROP_COLD_SHUTDOWN,                      ///< (wo dynamic) Cold shudown the device
-            DEVICE_PROP_COLD_RESET,                         ///< (wo dynamic) Cold reset the device
+            DEVICE_PROP_BRAND = 0,                          ///< (ro static) The brand name of the device (data:
+                                                            ///< ::xet_device_prop_brand_t)
+            DEVICE_PROP_MODEL,                              ///< (ro static) The model name of the device (data:
+                                                            ///< ::xet_device_prop_model_t)
+            DEVICE_PROP_DEVICEID,                           ///< (ro static) The device ID of the device (data:
+                                                            ///< ::xet_device_prop_deviceid_t)
+            DEVICE_PROP_VENDOR_NAME,                        ///< (ro static) The vendor name of the device (data:
+                                                            ///< ::xet_device_prop_vendor_name_t)
+            DEVICE_PROP_ACCEL_ASSETS,                       ///< (ro static) The accelerator assets available in the device (data:
+                                                            ///< ::xet_device_prop_accel_assets_t)
+            DEVICE_PROP_DRIVER_VERSION,                     ///< (ro static) The driver version associated with the device (data:
+                                                            ///< ::xet_device_prop_driver_version_t)
+            DEVICE_PROP_BARS,                               ///< (ro static) The bars configured for the device (data:
+                                                            ///< ::xet_device_prop_bars_t)
+            DEVICE_PROP_COLD_SHUTDOWN,                      ///< (wo dynamic) Cold shudown the device (data:
+                                                            ///< ::xet_device_prop_cold_shutdown_t)
+            DEVICE_PROP_COLD_RESET,                         ///< (wo dynamic) Cold reset the device (data:
+                                                            ///< ::xet_device_prop_cold_reset_t)
 
         };
 
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Data for property ::XET_BOARD_PROP_SERIAL_NUMBER
-        struct board_prop_serial_number_t
-        {
-            int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Data for property ::XET_BOARD_PROP_BOARD_NUMBER
-        struct board_prop_board_number_t
-        {
-            int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Data for a PCI bar
-        struct pci_bar_info_t
-        {
-            pci_bar_type_t type;                            ///< [out] The type of bar
-            uint64_t base;                                  ///< [out] Base address of the bar.
-            uint64_t size;                                  ///< [out] Size of the bar.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Data for property ::XET_DEVICE_PROP_BRAND
-        struct device_prop_brand_t
-        {
-            int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Data for property ::XET_DEVICE_PROP_MODEL
-        struct device_prop_model_t
-        {
-            int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Data for property ::XET_DEVICE_PROP_DEVICEID
-        struct device_prop_deviceid_t
-        {
-            int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Data for property ::XET_DEVICE_PROP_VENDOR_NAME
-        struct device_prop_vendor_name_t
-        {
-            int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Data about one type of accelerator asset
-        struct device_prop_accel_asset_t
-        {
-            accel_asset_t type;                             ///< [out] The type of asset
-            uint32_t numBlocks;                             ///< [out] The number of blocks of this asset type
-            uint32_t numEngines;                            ///< [out] The number of submission engines for this type of asset
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Data for the property ::XET_DEVICE_PROP_ACCEL_ASSETS
-        struct device_prop_accel_assets_t
-        {
-            uint64_t assetBitfield;                         ///< [out] A bitfield of assets available in the resource container
-            device_prop_accel_asset_t assetInfo[static_cast<int>(accel_asset_t::MAX_TYPES)];///< [out] Information about each asset.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Data for property ::XET_DEVICE_PROP_DRIVER_VERSION
-        struct device_prop_driver_version_t
-        {
-            int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Data for the property ::XET_DEVICE_PROP_BARS
-        struct device_prop_bars_t
-        {
-            uint32_t num;                                   ///< [out] The number of bars
-            const pci_bar_info_t* pBars;                    ///< [out][range(0, num-1)] Information about each bar.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Data for the property ::XET_DEVICE_PROP_ERROR_STATS
-        struct device_prop_error_stats_t
-        {
-            uint32_t TotalNonFatalError;                    ///< [out] The total number of non-fatal hardware errors that have occurred
-                                                            ///< since the driver booted
-            uint32_t errors[static_cast<int>(hw_error_type_t::HW_ERROR_COUNT)]; ///< [out] Error counters for each type (::xet_hw_error_type_t) of hardware
-                                                            ///< error.
-            uint32_t NumResets;                             ///< [out] The total number of hardware resets that have been performed
-                                                            ///< since the driver booted
-            uint32_t NumHangs;                              ///< [out] The total number of hardware hangs that have occurred since the
-                                                            ///< driver booted
-            uint32_t NumColdResets;                         ///< [out] The total number of cold resets that have been performanced
-                                                            ///< since the driver booted
-
-        };
-
-
-    protected:
-        ///////////////////////////////////////////////////////////////////////////////
-        res_container_handle_t m_handle = nullptr;      ///< [in] handle of the resource container
-        Sysman* m_pSysman;                              ///< [in] pointer to owner object
-
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        SysmanResContainer( void ) = delete;
-        SysmanResContainer( 
-            res_container_handle_t handle,                  ///< [in] handle of the resource container
-            Sysman* pSysman                                 ///< [in] pointer to owner object
-            );
-
-        ~SysmanResContainer( void ) = default;
-
-        SysmanResContainer( SysmanResContainer const& other ) = delete;
-        void operator=( SysmanResContainer const& other ) = delete;
-
-        SysmanResContainer( SysmanResContainer&& other ) = delete;
-        void operator=( SysmanResContainer&& other ) = delete;
-
-        ///////////////////////////////////////////////////////////////////////////////
-        auto getHandle( void ) const { return m_handle; }
-        auto getSysman( void ) const { return m_pSysman; }
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Compare if two resource container handles reference the same
-        ///        underlying resource container
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __xecall
-        IsSame(
-            SysmanResContainer* pRhs,                       ///< [in] Handle of the resource container
-            xe::bool_t* pIsSame                             ///< [in] Sets to True if the two resource containers reference the same
-                                                            ///< underlying resource container
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get generic information about a resource container
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @returns
-        ///     - Sysman::res_container_info_t: Generic information about the resource container.
-        /// 
-        /// @throws result_t
-        Sysman::res_container_info_t __xecall
-        GetInfo(
-            void
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get parent resource container
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @returns
-        ///     - SysmanResContainer*: Handle of the parent resource container.
-        /// 
-        /// @throws result_t
-        SysmanResContainer* __xecall
-        GetParent(
-            void
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get children resource containers
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @returns
-        ///     - SysmanResContainer*: array of handle of resource containers
-        /// 
-        /// @throws result_t
-        void __xecall
-        GetChildren(
-            uint32_t* pCount,                               ///< [in,out] Pointer to the number of child resource containers.
-                                                            ///< If count is zero, then the driver will update the value with the total
-                                                            ///< number of child resource containers.
-                                                            ///< If count is non-zero, then driver will only retrieve that number of
-                                                            ///< child resource containers starting from index 0.
-                                                            ///< If count is larger than the number of child resource containers
-                                                            ///< available, then the driver will update the value with the correct
-                                                            ///< number of child resource containers.
-            SysmanResContainer** ppResContainers = nullptr  ///< [out][optional][range(0, *pCount)] array of pointer to resource
-                                                            ///< containers
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get peer resource containers
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @returns
-        ///     - SysmanResContainer*: array of handle of resource containers
-        /// 
-        /// @throws result_t
-        void __xecall
-        GetPeers(
-            uint32_t* pCount,                               ///< [in,out] Pointer to the number of peer resource containers.
-                                                            ///< If count is zero, then the driver will update the value with the total
-                                                            ///< number of peer resource containers.
-                                                            ///< If count is non-zero, then driver will only retrieve that number of
-                                                            ///< peer resource containers starting from index 0.
-                                                            ///< If count is larger than the number of peer resource containers
-                                                            ///< available, then the driver will update the value with the correct
-                                                            ///< number of peer resource containers.
-            SysmanResContainer** ppResContainers = nullptr  ///< [out][optional][range(0, *pCount)] array of pointer to resource
-                                                            ///< containers
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get human-readable name for an accelerator asset
-        /// @throws result_t
-        void __xecall
-        GetAccelAssetName(
-            accel_asset_t type,                             ///< [in] The type of accelerator asset
-            const char** ppName                             ///< [in] Pointer to the string will be stored here
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Retrieves resources of a given type located in a container
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __xecall
-        GetResources(
-            Sysman::resource_type_t type,                   ///< [in] The type of resources to enumerate
-            uint32_t* pCount,                               ///< [in,out] Pointer to the number of resource.
-                                                            ///< If count is zero, then the driver will update the value with the total
-                                                            ///< number of resources of the given type that are available.
-                                                            ///< If count is non-zero, then driver will only retrieve that number of
-                                                            ///< resources of the given type starting from index 0.
-                                                            ///< If count is larger than the number of resources available, then the
-                                                            ///< driver will update the value with the correct number of resources of a
-                                                            ///< given type that are available.
-            SysmanResource** ppResources = nullptr          ///< [in][optional][range(0, *pCount)] array of pointer to resources
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get board property data
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __xecall
-        GetBoardProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const board_properties_t* pIndexes,             ///< [in] An array of property indexes to be read
-            void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-            uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                            ///< If size is zero, then the driver will update the value with the size
-                                                            ///< required to store the requested properties.
-                                                            ///< If size is less than that required to store the requested data for the
-                                                            ///< properties, the driver will update the value with the required size
-                                                            ///< and return an error.
-                                                            ///< If size is larger than that required to store the requested data for
-                                                            ///< the properties, the driver will update the value with the size of the
-                                                            ///< data returned.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get device property data
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __xecall
-        GetDeviceProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const device_properties_t* pIndexes,            ///< [in] An array of property indexes to be read
-            void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-            uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                            ///< If size is zero, then the driver will update the value with the size
-                                                            ///< required to store the requested properties.
-                                                            ///< If size is less than that required to store the requested data for the
-                                                            ///< properties, the driver will update the value with the required size
-                                                            ///< and return an error.
-                                                            ///< If size is larger than that required to store the requested data for
-                                                            ///< the properties, the driver will update the value with the size of the
-                                                            ///< data returned.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set new values of device properties
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __xecall
-        SetDeviceProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const device_properties_t* pIndexes,            ///< [in] An array of property indexes to be set
-            void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                            ///< properties.
-            uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
-            );
-
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for SMI resource
-    class SysmanResource
-    {
-    public:
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief PSU voltage status
         enum class psu_voltage_status_t
@@ -1002,23 +629,49 @@ namespace xet
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief PSU resource properties
+        /// 
+        /// @details
+        ///     - For every property, there is a corresponding structure used to hold
+        ///       the property data. The type of the data structure is derived from the
+        ///       property enumerator, converted to lower-case with '_t' appended.
+        ///     - Properties can be either read-only (ro), write-only (wo) or read-write
+        ///       (rw).
+        ///     - Properties can be either static or dynamic. Static properties are set
+        ///       during initialization and will not change during the lifetime of the
+        ///       application. Dynamic properties can change at any time and should be
+        ///       reread.
         enum class psu_properties_t
         {
-            PSU_PROP_AMP_LIMIT = 0,                         ///< (ro static) The maximum electrical current in Amperes that can be
-                                                            ///< drawn
-            PSU_PROP_VOLTAGE_STATUS,                        ///< (ro dynamic) Indicates if under or over voltage has occurred (one of
-                                                            ///< ::xet_psu_voltage_status_t)
-            PSU_PROP_FAN_FAILURE,                           ///< (ro dynamic) Indicates if the fan has failed
-            PSU_PROP_TEMPERATURE,                           ///< (ro dynamic) Read the current heatsink temperature in degrees celcius
-            PSU_PROP_AMPS,                                  ///< (ro dynamic) Read the amps being drawn in Amperes
+            PSU_PROP_AMP_LIMIT = 0,                         ///< (ro static) The maximum electrical current in amperes that can be
+                                                            ///< drawn (data: ::xet_psu_prop_amp_limit_t)
+            PSU_PROP_VOLTAGE_STATUS,                        ///< (ro dynamic) Indicates if under or over voltage has occurred (data:
+                                                            ///< ::xet_psu_prop_voltage_status_t)
+            PSU_PROP_FAN_FAILURE,                           ///< (ro dynamic) Indicates if the fan has failed (data:
+                                                            ///< ::xet_psu_prop_fan_failure_t)
+            PSU_PROP_TEMPERATURE,                           ///< (ro dynamic) The current heatsink temperature in degrees celcius
+                                                            ///< (data: ::xet_psu_prop_temperature_t)
+            PSU_PROP_AMPS,                                  ///< (ro dynamic) The current amps being drawn in amperes (data:
+                                                            ///< ::xet_psu_prop_amps_t)
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Temperature sensor resource properties
+        /// 
+        /// @details
+        ///     - For every property, there is a corresponding structure used to hold
+        ///       the property data. The type of the data structure is derived from the
+        ///       property enumerator, converted to lower-case with '_t' appended.
+        ///     - Properties can be either read-only (ro), write-only (wo) or read-write
+        ///       (rw).
+        ///     - Properties can be either static or dynamic. Static properties are set
+        ///       during initialization and will not change during the lifetime of the
+        ///       application. Dynamic properties can change at any time and should be
+        ///       reread.
         enum class temp_properties_t
         {
             TEMP_PROP_TEMPERATURE = 0,                      ///< (ro dynamic) The current temperature of the sensor in degrees celcius
+                                                            ///< (data: ::xet_temp_prop_temperature_t)
 
         };
 
@@ -1043,60 +696,110 @@ namespace xet
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Fan resource properties
+        /// 
+        /// @details
+        ///     - For every property, there is a corresponding structure used to hold
+        ///       the property data. The type of the data structure is derived from the
+        ///       property enumerator, converted to lower-case with '_t' appended.
+        ///     - Properties can be either read-only (ro), write-only (wo) or read-write
+        ///       (rw).
+        ///     - Properties can be either static or dynamic. Static properties are set
+        ///       during initialization and will not change during the lifetime of the
+        ///       application. Dynamic properties can change at any time and should be
+        ///       reread.
         enum class fan_properties_t
         {
-            FAN_PROP_MAX_RPM = 0,                           ///< (ro static) The maximum RPM of the fan
+            FAN_PROP_MAX_RPM = 0,                           ///< (ro static) The maximum RPM of the fan (data:
+                                                            ///< ::xet_fan_prop_max_rpm_t)
             FAN_PROP_MAX_TABLE_SIZE,                        ///< (ro static) The maximum number of points in the fan temp/speed table
+                                                            ///< (data: ::xet_fan_prop_max_table_size_t)
             FAN_PROP_SPEED_RPM,                             ///< (ro dynamic) The current fan speed in units of revolutions per minute
-                                                            ///< (rpm)
+                                                            ///< (rpm) (data: ::xet_fan_prop_speed_rpm_t)
             FAN_PROP_SPEED_PERCENT,                         ///< (ro dynamic) The current fan speed as a percentage of the maximum
-                                                            ///< speed of that fan
+                                                            ///< speed of that fan (data: ::xet_fan_prop_speed_percent_t)
             FAN_PROP_MODE,                                  ///< (ro dynamic) The current fan speed mode (one of
-                                                            ///< ::xet_fan_speed_mode_t)
-            FAN_PROP_FIXED_SPEED,                           ///< (rw dynamic) Read/write the fixed speed setting for the fan
-            FAN_PROP_SPEED_TABLE,                           ///< (rw dynamic) Read/write the fan speed table
+                                                            ///< ::xet_fan_speed_mode_t) (data: ::xet_fan_prop_mode_t)
+            FAN_PROP_FIXED_SPEED,                           ///< (rw dynamic) Read/write the fixed speed setting for the fan (data:
+                                                            ///< ::xet_fan_prop_fixed_speed_t)
+            FAN_PROP_SPEED_TABLE,                           ///< (rw dynamic) Read/write the fan speed table (data:
+                                                            ///< ::xet_fan_prop_speed_table_t)
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief LED resource properties
+        /// 
+        /// @details
+        ///     - For every property, there is a corresponding structure used to hold
+        ///       the property data. The type of the data structure is derived from the
+        ///       property enumerator, converted to lower-case with '_t' appended.
+        ///     - Properties can be either read-only (ro), write-only (wo) or read-write
+        ///       (rw).
+        ///     - Properties can be either static or dynamic. Static properties are set
+        ///       during initialization and will not change during the lifetime of the
+        ///       application. Dynamic properties can change at any time and should be
+        ///       reread.
         enum class led_properties_t
         {
-            LED_PROP_RGB_CAP = 0,                           ///< (ro static) Indicates if the LED is RGB capable
-            LED_PROP_STATE,                                 ///< (rw dynaic) The LED state (on/off and color)
+            LED_PROP_RGB_CAP = 0,                           ///< (ro static) Indicates if the LED is RGB capable (data:
+                                                            ///< ::xet_led_prop_rgb_cap_t)
+            LED_PROP_STATE,                                 ///< (rw dynaic) The LED state - on/off and color (data:
+                                                            ///< ::xet_led_prop_state_t)
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Firmware resource properties
+        /// 
+        /// @details
+        ///     - For every property, there is a corresponding structure used to hold
+        ///       the property data. The type of the data structure is derived from the
+        ///       property enumerator, converted to lower-case with '_t' appended.
+        ///     - Properties can be either read-only (ro), write-only (wo) or read-write
+        ///       (rw).
+        ///     - Properties can be either static or dynamic. Static properties are set
+        ///       during initialization and will not change during the lifetime of the
+        ///       application. Dynamic properties can change at any time and should be
+        ///       reread.
         enum class firmware_properties_t
         {
-            FIRMWARE_PROP_NAME = 0,                         ///< (ro static) Name encoded in the loaded firmware image
-            FIRMWARE_PROP_VERSION,                          ///< (ro static) The version of the loaded firmware image
-            FIRMWARE_PROP_CHECK,                            ///< (ro dynamic) Verify the checksum of the loaded firmware image
-            FIRMWARE_PROP_FLASH,                            ///< (wo dynamically) Flash a new firmware image
+            FIRMWARE_PROP_NAME = 0,                         ///< (ro static) Name encoded in the loaded firmware image (data:
+                                                            ///< ::xet_firmware_prop_name_t)
+            FIRMWARE_PROP_VERSION,                          ///< (ro static) The version of the loaded firmware image (data:
+                                                            ///< ::xet_firmware_prop_version_t)
+            FIRMWARE_PROP_CHECK,                            ///< (ro dynamic) Verify the checksum of the loaded firmware image (data:
+                                                            ///< ::xet_firmware_prop_check_t)
+            FIRMWARE_PROP_FLASH,                            ///< (wo dynamically) Flash a new firmware image (data:
+                                                            ///< ::xet_firmware_prop_flash_t)
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Power domain resource properties
+        /// 
+        /// @details
+        ///     - For every property, there is a corresponding structure used to hold
+        ///       the property data. The type of the data structure is derived from the
+        ///       property enumerator, converted to lower-case with '_t' appended.
+        ///     - Properties can be either read-only (ro), write-only (wo) or read-write
+        ///       (rw).
+        ///     - Properties can be either static or dynamic. Static properties are set
+        ///       during initialization and will not change during the lifetime of the
+        ///       application. Dynamic properties can change at any time and should be
+        ///       reread.
         enum class pwr_properties_t
         {
             PWR_PROP_ACCEL_ASSETS = 0,                      ///< (ro static) List of accelerator assets that contribute to this power
-                                                            ///< domain
-            PWR_PROP_MAX_LIMIT,                             ///< (ro static) The maximum power limit that can be requested
-            PWR_PROP_ENERGY_COUNTER,                        ///< (ro dynamic) The value of the monotonic energy counter
-            PWR_PROP_SUSTAINED_LIMIT,                       ///< (rw dynamic) The sustained power limit
-            PWR_PROP_BURST_LIMIT,                           ///< (rw dynamic) The burst power limit
-            PWR_PROP_PEAK_LIMIT,                            ///< (rw dynamic) The peak power limit
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief API version of ::xet_pwr_prop_sustained_limit_t
-        enum class pwr_sustained_limit_version_t
-        {
-            CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
+                                                            ///< domain (data: ::xet_pwr_prop_accel_assets_t)
+            PWR_PROP_MAX_LIMIT,                             ///< (ro static) The maximum power limit that can be requested (data:
+                                                            ///< ::xet_pwr_prop_max_limit_t)
+            PWR_PROP_ENERGY_COUNTER,                        ///< (ro dynamic) The value of the monotonic energy counter (data:
+                                                            ///< ::xet_pwr_prop_energy_counter_t)
+            PWR_PROP_SUSTAINED_LIMIT,                       ///< (rw dynamic) The sustained power limit (data:
+                                                            ///< ::xet_pwr_prop_sustained_limit_t)
+            PWR_PROP_BURST_LIMIT,                           ///< (rw dynamic) The burst power limit (data:
+                                                            ///< ::xet_pwr_prop_burst_limit_t)
+            PWR_PROP_PEAK_LIMIT,                            ///< (rw dynamic) The peak power limit (data: ::xet_pwr_prop_peak_limit_t)
 
         };
 
@@ -1146,31 +849,47 @@ namespace xet
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Frequency domain resource properties
+        /// 
+        /// @details
+        ///     - For every property, there is a corresponding structure used to hold
+        ///       the property data. The type of the data structure is derived from the
+        ///       property enumerator, converted to lower-case with '_t' appended.
+        ///     - Properties can be either read-only (ro), write-only (wo) or read-write
+        ///       (rw).
+        ///     - Properties can be either static or dynamic. Static properties are set
+        ///       during initialization and will not change during the lifetime of the
+        ///       application. Dynamic properties can change at any time and should be
+        ///       reread.
         enum class freq_properties_t
         {
             FREQ_PROP_ACCEL_ASSETS = 0,                     ///< (ro static) List of accelerator assets that are connected to this
-                                                            ///< power domain
-            FREQ_PROP_DOMAIN_TYPE,                          ///< (ro static) The type of frequency domain (one of
-                                                            ///< ::xet_freq_domain_type_t)
-            FREQ_PROP_AVAIL_CLOCKS,                         ///< (ro static) Available frequency clocks that this domain can run at.
-            FREQ_PROP_AVAIL_DIVIDERS,                       ///< (ro static) Available dividers that this domain can run with.
+                                                            ///< power domain (data: ::xet_freq_prop_accel_assets_t)
+            FREQ_PROP_DOMAIN_TYPE,                          ///< (ro static) The type of frequency domain (data:
+                                                            ///< ::xet_freq_prop_domain_type_t)
+            FREQ_PROP_AVAIL_CLOCKS,                         ///< (ro static) Available frequency clocks that this domain can run at
+                                                            ///< (data: ::xet_freq_prop_avail_clocks_t)
+            FREQ_PROP_AVAIL_DIVIDERS,                       ///< (ro static) Available dividers that this domain can run with (data:
+                                                            ///< ::xet_freq_prop_avail_dividers_t)
             FREQ_PROP_SRC_FREQ,                             ///< (ro static) Get the UUID of the source frequency domain resource if
-                                                            ///< the type is dependent.
+                                                            ///< the type is dependent (data: ::xet_freq_prop_src_freq_t)
             FREQ_PROP_DVFS_MODE,                            ///< (rw dynamic) The operating mode of dynamic frequency management for
-                                                            ///< this domain (one of ::xet_dvfs_mode_t).
+                                                            ///< this domain (data: ::xet_freq_prop_dvfs_mode_t)
             FREQ_PROP_FREQ_RANGE,                           ///< (rw dynamic) The frequencies between which dynamic frequency
-                                                            ///< management operates.
+                                                            ///< management operates (data: ::xet_freq_prop_freq_range_t)
             FREQ_PROP_FREQ_TDP,                             ///< (ro dynamic) The maximum frequency supported under the current TDP
-                                                            ///< conditions
-            FREQ_PROP_FREQ_EFFICIENT,                       ///< (ro dynamic) The efficient minimum frequency
-            FREQ_PROP_FREQ_REQUEST,                         ///< (ro dynamic) The current frequency request.
-            FREQ_PROP_FREQ_RESOLVED,                        ///< (ro dynamic) The resolved frequency.
+                                                            ///< conditions (data: ::xet_freq_prop_freq_tdp_t)
+            FREQ_PROP_FREQ_EFFICIENT,                       ///< (ro dynamic) The efficient minimum frequency (data:
+                                                            ///< ::xet_freq_prop_freq_efficient_t)
+            FREQ_PROP_FREQ_REQUEST,                         ///< (ro dynamic) The current frequency request (data:
+                                                            ///< ::xet_freq_prop_freq_request_t)
+            FREQ_PROP_FREQ_RESOLVED,                        ///< (ro dynamic) The resolved frequency (data:
+                                                            ///< ::xet_freq_prop_freq_resolved_t)
             FREQ_PROP_FREQ_DIVIDER,                         ///< (rw dynamic) The current frequency divider for dependent frequency
-                                                            ///< domains.
+                                                            ///< domains (data: ::xet_freq_prop_freq_divider_t)
             FREQ_PROP_THROTTLE_REASONS,                     ///< (ro dynamic) The reasons that the frequency is being limited by the
-                                                            ///< PCU.
+                                                            ///< PCU (data: ::xet_freq_prop_throttle_reasons_t)
             FREQ_PROP_THROTTLE_TIME,                        ///< (ro dynamic) The total time that the frequency has been limited by the
-                                                            ///< PCU.
+                                                            ///< PCU (data: ::xet_freq_prop_throttle_time_t)
 
         };
 
@@ -1194,37 +913,52 @@ namespace xet
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Power-well domain resource properties
+        /// 
+        /// @details
+        ///     - For every property, there is a corresponding structure used to hold
+        ///       the property data. The type of the data structure is derived from the
+        ///       property enumerator, converted to lower-case with '_t' appended.
+        ///     - Properties can be either read-only (ro), write-only (wo) or read-write
+        ///       (rw).
+        ///     - Properties can be either static or dynamic. Static properties are set
+        ///       during initialization and will not change during the lifetime of the
+        ///       application. Dynamic properties can change at any time and should be
+        ///       reread.
         enum class pwrwell_properties_t
         {
             PWRWELL_PROP_ACCEL_ASSETS = 0,                  ///< (ro static) List of accelerator assets that are connected to this
-                                                            ///< power-well domain
+                                                            ///< power-well domain (data: ::xet_pwrwell_prop_accel_assets_t)
             PWRWELL_PROP_PROMO_CAP,                         ///< (ro static) Find out if the power-well domain has a programmable
-                                                            ///< promotion setting
-            PWRWELL_PROP_PROMO_MODE,                        ///< (rw dynamic) The current promotion mode
-            PWRWELL_PROP_SLEEP_COUNTER,                     ///< (ro dynamic) The monotonic counter for the amount of time the
-                                                            ///< power-well is off
-            PWRWELL_PROP_IDLE_COUNTER,                      ///< (ro dynamic) The monotonic counter for the amount of time the
-                                                            ///< power-well is on but not executing any accelerator workloads
-            PWRWELL_PROP_ACTIVE_COUNTER,                    ///< (ro dynamic) The monotonic counter for the amount of time the
-                                                            ///< power-well is on and executing accelerator workloads
-            PWRWELL_PROP_WAKE_COUNTER,                      ///< (ro dynamic) The monotonic counter for the number of times that the
-                                                            ///< power-well has transitioned from a sleep state to a powered on state
-            PWRWELL_PROP_EXEC_COUNTER,                      ///< (ro dynamic) The monotonic counter for the number of times that the
-                                                            ///< power-well has transitioned from a sleep or idle state to an active
-                                                            ///< state
+                                                            ///< promotion setting (data: ::xet_pwrwell_prop_promo_cap_t)
+            PWRWELL_PROP_PROMO_MODE,                        ///< (rw dynamic) The current promotion mode (data:
+                                                            ///< ::xet_pwrwell_prop_promo_mode_t)
+            PWRWELL_PROP_UTILIZATION,                       ///< (ro dynamic) Monotonic counters for the amount of time the power-well
+                                                            ///< is off/idle/active (data: ::xet_pwrwell_prop_utilization_t)
+            PWRWELL_PROP_TRANSITIONS,                       ///< (ro dynamic) The monotonic counter for the number of times that the
+                                                            ///< power-well has transitioned between off/idle/active states (data:
+                                                            ///< ::xet_pwrwell_prop_transitions_t)
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Accelerator asset resource properties
+        /// 
+        /// @details
+        ///     - For every property, there is a corresponding structure used to hold
+        ///       the property data. The type of the data structure is derived from the
+        ///       property enumerator, converted to lower-case with '_t' appended.
+        ///     - Properties can be either read-only (ro), write-only (wo) or read-write
+        ///       (rw).
+        ///     - Properties can be either static or dynamic. Static properties are set
+        ///       during initialization and will not change during the lifetime of the
+        ///       application. Dynamic properties can change at any time and should be
+        ///       reread.
         enum class accel_properties_t
         {
             ACCEL_PROP_ACCEL_ASSETS = 0,                    ///< (ro static) List of accelerator assets that contribute to counters in
-                                                            ///< this resource
-            ACCEL_PROP_ACTIVE_COUNTER,                      ///< (ro dynamic) The total wall time accelerator assets in this resource
-                                                            ///< are active.
-            ACCEL_PROP_IDLE_COUNTER,                        ///< (ro dynamic) The total wall time no accelerator assets in this
-                                                            ///< resource are active
+                                                            ///< this resource (data: ::xet_accel_prop_accel_assets_t)
+            ACCEL_PROP_UTILIZATION,                         ///< (ro dynamic) The total wall time accelerator assets in this resource
+                                                            ///< are active (data: ::xet_accel_prop_utilization_t)
 
         };
 
@@ -1253,22 +987,33 @@ namespace xet
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Memory resource properties
+        /// 
+        /// @details
+        ///     - For every property, there is a corresponding structure used to hold
+        ///       the property data. The type of the data structure is derived from the
+        ///       property enumerator, converted to lower-case with '_t' appended.
+        ///     - Properties can be either read-only (ro), write-only (wo) or read-write
+        ///       (rw).
+        ///     - Properties can be either static or dynamic. Static properties are set
+        ///       during initialization and will not change during the lifetime of the
+        ///       application. Dynamic properties can change at any time and should be
+        ///       reread.
         enum class mem_properties_t
         {
-            MEM_PROP_TYPE = 0,                              ///< (ro static) The type of memory covered by this resource (one of
-                                                            ///< ::xet_mem_type_t)
+            MEM_PROP_TYPE = 0,                              ///< (ro static) The type of memory covered by this resource (data:
+                                                            ///< ::xet_mem_prop_type_t)
             MEM_PROP_ECC_CAP,                               ///< (ro static) Indicates if this memory resource supports ECC/RAS
-                                                            ///< features
+                                                            ///< features (data: ::xet_mem_prop_ecc_cap_t)
             MEM_PROP_BAD_LIST,                              ///< (ro static) Get the list of pages that have been permanently marked
-                                                            ///< bad
-            MEM_PROP_UTILIZATION,                           ///< (ro dynamic) Get current allocated/unallocated size
+                                                            ///< bad (data: ::xet_mem_prop_bad_list_t)
+            MEM_PROP_UTILIZATION,                           ///< (ro dynamic) Get current allocated/unallocated size (data:
+                                                            ///< ::xet_mem_prop_utilization_t)
             MEM_PROP_BANDWIDTH,                             ///< (ro dynamic) Get current read/write bandwidth counters and maximum
-                                                            ///< bandwidth
-            MEM_PROP_ECC_ENABLED,                           ///< (rw dynamic) Determine if ECC is enabled/disabled or change this
-                                                            ///< setting
-            MEM_PROP_ECC_COUNTERS,                          ///< (ro dynamic) ECC error counters
-            MEM_PROP_ECC_CLEAR,                             ///< (wo dynamic) Clear ECC error counters
-            MEM_PROP_ECC_POISON,                            ///< (wo dynamic) Poison the memory resource
+                                                            ///< bandwidth (data: ::xet_mem_prop_bandwidth_t)
+            MEM_PROP_ECC_ENABLE,                            ///< (rw dynamic) Determine if ECC is enabled/disabled or change this
+                                                            ///< setting (data: ::xet_mem_prop_ecc_enable_t)
+            MEM_PROP_ECC_POISON,                            ///< (wo dynamic) Poison the memory resource (data:
+                                                            ///< ::xet_mem_prop_ecc_poison_t)
 
         };
 
@@ -1283,18 +1028,177 @@ namespace xet
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Link resource properties
+        /// 
+        /// @details
+        ///     - For every property, there is a corresponding structure used to hold
+        ///       the property data. The type of the data structure is derived from the
+        ///       property enumerator, converted to lower-case with '_t' appended.
+        ///     - Properties can be either read-only (ro), write-only (wo) or read-write
+        ///       (rw).
+        ///     - Properties can be either static or dynamic. Static properties are set
+        ///       during initialization and will not change during the lifetime of the
+        ///       application. Dynamic properties can change at any time and should be
+        ///       reread.
         enum class link_properties_t
         {
-            LINK_PROP_TYPE = 0,                             ///< (ro static) The type of link (one of ::xet_link_type_t)
-            LINK_PROP_BUS_ADDRESS,                          ///< (ro static) The bus address of the link
+            LINK_PROP_TYPE = 0,                             ///< (ro static) The type of link (data: ::xet_link_prop_type_t)
+            LINK_PROP_BUS_ADDRESS,                          ///< (ro static) The bus address of the link (data:
+                                                            ///< ::xet_link_prop_bus_address_t)
             LINK_PROP_PWR_CAP,                              ///< (ro static) Indicates if the link frequency can adjust to control
-                                                            ///< power
-            LINK_PROP_AVAIL_SPEEDS,                         ///< (ro static) Available link speeds
-            LINK_PROP_MAX_PACKET_SIZE,                      ///< (ro static) Available link speeds
-            LINK_PROP_BANDWIDTH,                            ///< (ro dynamic) Available link speeds
-            LINK_PROP_REPLAY_COUNTER,                       ///< (ro dynamic) Total number of packet replays that have occurred
-            LINK_PROP_SPEED,                                ///< (ro dynamic) Current link speed
+                                                            ///< power (data: ::xet_link_prop_pwr_cap_t)
+            LINK_PROP_AVAIL_SPEEDS,                         ///< (ro static) Available link speeds (data:
+                                                            ///< ::xet_link_prop_avail_speeds_t)
+            LINK_PROP_MAX_PACKET_SIZE,                      ///< (ro static) Maximum packet size (data:
+                                                            ///< ::xet_link_prop_max_packet_size_t)
+            LINK_PROP_BANDWIDTH,                            ///< (ro dynamic) Monotonic bandwidth counters (data:
+                                                            ///< ::xet_link_prop_bandwidth_t)
+            LINK_PROP_SPEED,                                ///< (ro dynamic) Current link speed (data: ::xet_link_prop_speed_t)
             LINK_PROP_SPEED_RANGE,                          ///< (wo dynamic) Set the min/max speeds between which the link can operate
+                                                            ///< (data: ::xet_link_prop_speed_range_t)
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for property ::XET_BOARD_PROP_SERIAL_NUMBER
+        struct board_prop_serial_number_t
+        {
+            int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for property ::XET_BOARD_PROP_BOARD_NUMBER
+        struct board_prop_board_number_t
+        {
+            int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure used to query a board resource property
+        struct board_property_request_t
+        {
+            board_properties_t property;                    ///< [in] The property being requested (one of ::xet_board_properties_t).
+            void* pData;                                    ///< [in] Pointer to the data for the property.
+                                                            ///< Each property has a corresponding data structure. The type of the data
+                                                            ///< structure is derived from the property enumerator, converted to
+                                                            ///< lower-case with "_t" appended.
+            uint32_t size;                                  ///< [in] The size of the data structure pointed to by pData.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for a PCI bar
+        struct pci_bar_info_t
+        {
+            pci_bar_type_t type;                            ///< [out] The type of bar
+            uint64_t base;                                  ///< [out] Base address of the bar.
+            uint64_t size;                                  ///< [out] Size of the bar.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for property ::XET_DEVICE_PROP_BRAND
+        struct device_prop_brand_t
+        {
+            int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for property ::XET_DEVICE_PROP_MODEL
+        struct device_prop_model_t
+        {
+            int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for property ::XET_DEVICE_PROP_DEVICEID
+        struct device_prop_deviceid_t
+        {
+            int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for property ::XET_DEVICE_PROP_VENDOR_NAME
+        struct device_prop_vendor_name_t
+        {
+            int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data about one type of accelerator asset
+        struct device_prop_accel_asset_t
+        {
+            Sysman::accel_asset_t type;                     ///< [out] The type of asset
+            uint32_t numBlocks;                             ///< [out] The number of blocks of this asset type
+            uint32_t numEngines;                            ///< [out] The number of submission engines for this type of asset
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_DEVICE_PROP_ACCEL_ASSETS
+        struct device_prop_accel_assets_t
+        {
+            uint64_t assetBitfield;                         ///< [out] A bitfield of assets available in the resource
+            device_prop_accel_asset_t assetInfo[static_cast<int>(Sysman::accel_asset_t::MAX_TYPES)];///< [out] Information about each asset.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for property ::XET_DEVICE_PROP_DRIVER_VERSION
+        struct device_prop_driver_version_t
+        {
+            int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_DEVICE_PROP_BARS
+        struct device_prop_bars_t
+        {
+            uint32_t num;                                   ///< [out] The number of bars
+            const pci_bar_info_t* pBars;                    ///< [out][range(0, num-1)] Information about each bar.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_DEVICE_PROP_COLD_SHUTDOWN
+        struct device_prop_cold_shutdown_t
+        {
+            xe::bool_t doShutdown;                          ///< [in] Set to true to perform a cold shutdown of the device
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_DEVICE_PROP_COLD_RESET
+        struct device_prop_cold_reset_t
+        {
+            xe::bool_t doReset;                             ///< [in] Set to true to perform a cold shutdown of the device
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure used to query a device resource container property
+        struct device_property_request_t
+        {
+            device_properties_t property;                   ///< [in] The property being requested (one of ::xet_device_properties_t).
+            void* pData;                                    ///< [in] Pointer to the data for the property.
+                                                            ///< Each property has a corresponding data structure. The type of the data
+                                                            ///< structure is derived from the property enumerator, converted to
+                                                            ///< lower-case with "_t" appended.
+            uint32_t size;                                  ///< [in] The size of the data structure pointed to by pData.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_PSU_PROP_AMP_LIMIT
+        struct psu_prop_amp_limit_t
+        {
+            uint32_t limit;                                 ///< [out] The maximum electrical current in amperes that can be drawn
 
         };
 
@@ -1307,12 +1211,103 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_PSU_PROP_FAN_FAILURE
+        struct psu_prop_fan_failure_t
+        {
+            xe::bool_t status;                              ///< [out] Indicates if the fan has failed
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_PSU_PROP_TEMPERATURE
+        struct psu_prop_temperature_t
+        {
+            uint32_t temperature;                           ///< [out] Read the current heatsink temperature in degrees celcius
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_PSU_PROP_AMPS
+        struct psu_prop_amps_t
+        {
+            uint32_t current;                               ///< [out] The amps being drawn in amperes
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure used to query a PSU resource property
+        struct psu_property_request_t
+        {
+            psu_properties_t property;                      ///< [in] The property being requested (one of ::xet_psu_properties_t).
+            void* pData;                                    ///< [in] Pointer to the data for the property.
+                                                            ///< Each property has a corresponding data structure. The type of the data
+                                                            ///< structure is derived from the property enumerator, converted to
+                                                            ///< lower-case with "_t" appended.
+            uint32_t size;                                  ///< [in] The size of the data structure pointed to by pData.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_TEMP_PROP_TEMPERATURE
+        struct temp_prop_temperature_t
+        {
+            uint32_t temperature;                           ///< [out] The current temperature of the sensor in degrees celcius
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure used to query a temperature sensor resource property
+        struct temp_property_request_t
+        {
+            temp_properties_t property;                     ///< [in] The property being requested (one of ::xet_temp_properties_t).
+            void* pData;                                    ///< [in] Pointer to the data for the property.
+                                                            ///< Each property has a corresponding data structure. The type of the data
+                                                            ///< structure is derived from the property enumerator, converted to
+                                                            ///< lower-case with "_t" appended.
+            uint32_t size;                                  ///< [in] The size of the data structure pointed to by pData.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Fan temperature/speed pair
         struct fan_temp_speed_t
         {
             uint32_t temperature;                           ///< [in,out] Temperature in degrees celcius
             uint32_t speed;                                 ///< [in,out] The speed of the fan
             fan_speed_units_t units;                        ///< [in,out] The units of the member speed
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_FAN_PROP_MAX_RPM
+        struct fan_prop_max_rpm_t
+        {
+            uint32_t maxSpeed;                              ///< [out] The maximum RPM of the fan
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_FAN_PROP_MAX_TABLE_SIZE
+        struct fan_prop_max_table_size_t
+        {
+            uint32_t maxPoints;                             ///< [out] The maximum number of points in the fan temp/speed table
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_FAN_PROP_SPEED_RPM
+        struct fan_prop_speed_rpm_t
+        {
+            uint32_t speed;                                 ///< [out] The current fan speed in units of revolutions per minute (rpm)
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_FAN_PROP_SPEED_PERCENT
+        struct fan_prop_speed_percent_t
+        {
+            uint32_t speed;                                 ///< [out] The current fan speed as a percentage of the maximum speed of
+                                                            ///< that fan
 
         };
 
@@ -1347,6 +1342,27 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure used to query a fan resource property
+        struct fan_property_request_t
+        {
+            fan_properties_t property;                      ///< [in] The property being requested (one of ::xet_fan_properties_t).
+            void* pData;                                    ///< [in] Pointer to the data for the property.
+                                                            ///< Each property has a corresponding data structure. The type of the data
+                                                            ///< structure is derived from the property enumerator, converted to
+                                                            ///< lower-case with "_t" appended.
+            uint32_t size;                                  ///< [in] The size of the data structure pointed to by pData.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_LED_PROP_RGB_CAP
+        struct led_prop_rgb_cap_t
+        {
+            xe::bool_t haveRGB;                             ///< [out] Indicates if the LED is RGB capable
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Data for the property ::XET_LED_PROP_STATE
         struct led_prop_state_t
         {
@@ -1354,6 +1370,19 @@ namespace xet
             uint8_t red;                                    ///< [in,out][range(0, 255)] The LED red value
             uint8_t green;                                  ///< [in,out][range(0, 255)] The LED green value
             uint8_t blue;                                   ///< [in,out][range(0, 255)] The LED blue value
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure used to query a LED resource property
+        struct led_property_request_t
+        {
+            led_properties_t property;                      ///< [in] The property being requested (one of ::xet_led_properties_t).
+            void* pData;                                    ///< [in] Pointer to the data for the property.
+                                                            ///< Each property has a corresponding data structure. The type of the data
+                                                            ///< structure is derived from the property enumerator, converted to
+                                                            ///< lower-case with "_t" appended.
+            uint32_t size;                                  ///< [in] The size of the data structure pointed to by pData.
 
         };
 
@@ -1391,6 +1420,45 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure used to query a firmware resource property
+        struct firmware_property_request_t
+        {
+            firmware_properties_t property;                 ///< [in] The property being requested (one of
+                                                            ///< ::xet_firmware_properties_t).
+            void* pData;                                    ///< [in] Pointer to the data for the property.
+                                                            ///< Each property has a corresponding data structure. The type of the data
+                                                            ///< structure is derived from the property enumerator, converted to
+                                                            ///< lower-case with "_t" appended.
+            uint32_t size;                                  ///< [in] The size of the data structure pointed to by pData.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_PWR_PROP_ACCEL_ASSETS
+        struct pwr_prop_accel_assets_t
+        {
+            uint64_t assets;                                ///< [out] List of accelerator assets that contribute to this power domain
+                                                            ///< (Bitfield of (1<<::xet_accel_asset_t)).
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_PWR_PROP_MAX_LIMIT
+        struct pwr_prop_max_limit_t
+        {
+            uint32_t assets;                                ///< [out] The maximum power limit in milliwatts that can be requested.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_PWR_PROP_ENERGY_COUNTER
+        struct pwr_prop_energy_counter_t
+        {
+            uint64_t energy;                                ///< [out] The value of the monotonic energy counter in millijoules.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Data for the property ::XET_PWR_PROP_SUSTAINED_LIMIT
         /// 
         /// @details
@@ -1399,7 +1467,6 @@ namespace xet
         ///       limit.
         struct pwr_prop_sustained_limit_t
         {
-            pwr_sustained_limit_version_t version = pwr_sustained_limit_version_t::CURRENT; ///< [in] ::XET_PWR_SUSTAINED_LIMIT_VERSION_CURRENT
             xe::bool_t enabled;                             ///< [in,out] indicates if the limit is enabled (true) or ignored (false)
             uint32_t power;                                 ///< [in,out] power limit in milliwatts
             uint32_t interval;                              ///< [in,out] power averaging window (Tau) in milliseconds
@@ -1442,6 +1509,19 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure used to query a power domain resource property
+        struct pwr_property_request_t
+        {
+            pwr_properties_t property;                      ///< [in] The property being requested (one of ::xet_pwr_properties_t).
+            void* pData;                                    ///< [in] Pointer to the data for the property.
+                                                            ///< Each property has a corresponding data structure. The type of the data
+                                                            ///< structure is derived from the property enumerator, converted to
+                                                            ///< lower-case with "_t" appended.
+            uint32_t size;                                  ///< [in] The size of the data structure pointed to by pData.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Frequency divider element
         /// 
         /// @details
@@ -1452,6 +1532,15 @@ namespace xet
         {
             uint16_t numerator;                             ///< [in,out] numerator of the ratio
             uint16_t denominator;                           ///< [in,out] denominator of the ratio
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_FREQ_PROP_ACCEL_ASSETS
+        struct freq_prop_accel_assets_t
+        {
+            uint64_t assets;                                ///< [out] List of accelerator assets that are connected to this power
+                                                            ///< domain (Bitfield of (1<<::xet_accel_asset_t)).
 
         };
 
@@ -1515,6 +1604,39 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_FREQ_PROP_FREQ_TDP
+        struct freq_prop_freq_tdp_t
+        {
+            uint32_t freqTdp;                               ///< [out] The maximum frequency in MHz supported under the current TDP
+                                                            ///< conditions
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_FREQ_PROP_FREQ_EFFICIENT
+        struct freq_prop_freq_efficient_t
+        {
+            uint32_t freqEfficient;                         ///< [out] The efficient minimum frequency in MHz
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_FREQ_PROP_FREQ_REQUEST
+        struct freq_prop_freq_request_t
+        {
+            uint32_t freqRequest;                           ///< [out] The current frequency request in MHz
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_FREQ_PROP_FREQ_RESOLVED
+        struct freq_prop_freq_resolved_t
+        {
+            uint32_t freqResolved;                          ///< [out] The resolved frequency in MHz
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Data for the property ::XET_FREQ_PROP_FREQ_DIVIDER
         struct freq_prop_freq_divider_t
         {
@@ -1523,10 +1645,130 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_FREQ_PROP_THROTTLE_REASONS
+        struct freq_prop_throttle_reasons_t
+        {
+            uint32_t throttleReasons;                       ///< [out] The reasons that the frequency is being limited by the PCU
+                                                            ///< (Bitfield of (1<<::xet_freq_throttle_reasons_t)).
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_FREQ_PROP_THROTTLE_TIME
+        struct freq_prop_throttle_time_t
+        {
+            uint32_t throttleTime;                          ///< [out] The total time in microseconds that the frequency has been
+                                                            ///< limited by the PCU.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure used to query a frequency domain resource property
+        struct freq_property_request_t
+        {
+            freq_properties_t property;                     ///< [in] The property being requested (one of ::xet_freq_properties_t).
+            void* pData;                                    ///< [in] Pointer to the data for the property.
+                                                            ///< Each property has a corresponding data structure. The type of the data
+                                                            ///< structure is derived from the property enumerator, converted to
+                                                            ///< lower-case with "_t" appended.
+            uint32_t size;                                  ///< [in] The size of the data structure pointed to by pData.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_PWRWELL_PROP_ACCEL_ASSETS
+        struct pwrwell_prop_accel_assets_t
+        {
+            uint64_t assets;                                ///< [out] List of accelerator assets that are connected to this power-well
+                                                            ///< domain (bitfield of (1<<::xet_accel_asset_t)).
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_PWRWELL_PROP_PROMO_CAP
+        struct pwrwell_prop_promo_cap_t
+        {
+            xe::bool_t canChangePromoMode;                  ///< [out] Indicates if the power-well domain has a programmable promotion
+                                                            ///< setting.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Data for the property ::XET_PWRWELL_PROP_PROMO_MODE
         struct pwrwell_prop_promo_mode_t
         {
             pwrwell_promo_mode_t mode;                      ///< [in,out] Current promotion mode
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_PWRWELL_PROP_UTILIZATION
+        struct pwrwell_prop_utilization_t
+        {
+            uint32_t sleepCounter;                          ///< [out] The monotonic counter for the amount of time in microseconds
+                                                            ///< that the power-well is off.
+            uint32_t idleCounter;                           ///< [out] The monotonic counter for the amount of time in microseconds
+                                                            ///< that the power-well is on but not executing any accelerator workloads.
+            uint32_t activeCounter;                         ///< [out] The monotonic counter for the amount of time the power-well is
+                                                            ///< on and executing accelerator workloads.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_PWRWELL_PROP_TRANSITIONS
+        struct pwrwell_prop_transitions_t
+        {
+            uint32_t wakeCounter;                           ///< [out] The monotonic counter for the number of times that the
+                                                            ///< power-well has transitioned from a sleep state to a powered on state.
+            uint32_t execCounter;                           ///< [out] The monotonic counter for the number of times that the
+                                                            ///< power-well has transitioned from a sleep or idle state to an active
+                                                            ///< state.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure used to query a power-well domain resource property
+        struct pwrwell_property_request_t
+        {
+            pwrwell_properties_t property;                  ///< [in] The property being requested (one of ::xet_pwrwell_properties_t).
+            void* pData;                                    ///< [in] Pointer to the data for the property.
+                                                            ///< Each property has a corresponding data structure. The type of the data
+                                                            ///< structure is derived from the property enumerator, converted to
+                                                            ///< lower-case with "_t" appended.
+            uint32_t size;                                  ///< [in] The size of the data structure pointed to by pData.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_ACCEL_PROP_ACCEL_ASSETS
+        struct accel_prop_accel_assets_t
+        {
+            uint64_t assets;                                ///< [out] List of accelerator assets that contribute to counters in this
+                                                            ///< resource (bitfield of (1<<::xet_accel_asset_t)).
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_ACCEL_PROP_UTILIZATION
+        struct accel_prop_utilization_t
+        {
+            uint32_t activeCounter;                         ///< [out] Monotonic counter for total wall time in microseconds that
+                                                            ///< accelerator assets in this resource are active.
+            uint32_t idleCounter;                           ///< [out] Monotonic counter for total wall time in microseconds that no
+                                                            ///< accelerator assets in this resource are active.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure used to query an accelerator resource property
+        struct accel_property_request_t
+        {
+            accel_properties_t property;                    ///< [in] The property being requested (one of ::xet_accel_properties_t).
+            void* pData;                                    ///< [in] Pointer to the data for the property.
+                                                            ///< Each property has a corresponding data structure. The type of the data
+                                                            ///< structure is derived from the property enumerator, converted to
+                                                            ///< lower-case with "_t" appended.
+            uint32_t size;                                  ///< [in] The size of the data structure pointed to by pData.
 
         };
 
@@ -1544,6 +1786,14 @@ namespace xet
         struct mem_prop_type_t
         {
             mem_type_t type;                                ///< [out] The memory type
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_MEM_PROP_ECC_CAP
+        struct mem_prop_ecc_cap_t
+        {
+            xe::bool_t isEccCapable;                        ///< [out] Indicates if this memory resource supports ECC/RAS features.
 
         };
 
@@ -1583,14 +1833,31 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Data for the property ::XET_MEM_PROP_ECC_COUNTERS
-        struct mem_prop_ecc_counters_t
+        /// @brief Data for the property ::XET_MEM_PROP_ECC_ENABLE
+        struct mem_prop_ecc_enable_t
         {
-            uint32_t parityErrors;                          ///< [out] Total parity errors that have occurred
-            uint32_t correctableErrors;                     ///< [out] Total correctable errors that have occurred
-            uint32_t uncorrectableErrors;                   ///< [out] Total uncorrectable errors that have occurred
-            uint32_t retiredPages;                          ///< [out] Total number of pages that have been retired
-            uint32_t badPages;                              ///< [out] Total number of pages that have been permanently marked as bad
+            xe::bool_t enable;                              ///< [in] Whether or not ECC is enabled
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_MEM_PROP_ECC_POISON
+        struct mem_prop_ecc_poison_t
+        {
+            xe::bool_t doPoison;                            ///< [out] Poison the memory resource.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure used to query a memory resource property
+        struct mem_property_request_t
+        {
+            mem_properties_t property;                      ///< [in] The property being requested (one of ::xet_mem_properties_t).
+            void* pData;                                    ///< [in] Pointer to the data for the property.
+                                                            ///< Each property has a corresponding data structure. The type of the data
+                                                            ///< structure is derived from the property enumerator, converted to
+                                                            ///< lower-case with "_t" appended.
+            uint32_t size;                                  ///< [in] The size of the data structure pointed to by pData.
 
         };
 
@@ -1621,6 +1888,14 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_LINK_PROP_PWR_CAP
+        struct link_prop_pwr_cap_t
+        {
+            xe::bool_t havePwrMgmt;                         ///< [out] Indicates if the link frequency can adjust to control power.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Data for the property ::XET_LINK_PROP_AVAIL_SPEEDS
         /// 
         /// @details
@@ -1629,6 +1904,14 @@ namespace xet
         {
             uint32_t num;                                   ///< [out] The number of elements in pList
             const link_speed_t* pList;                      ///< [out][range(0, num-1)] Pointer to an array of link speeds
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for the property ::XET_LINK_PROP_MAX_PACKET_SIZE
+        struct link_prop_max_packet_size_t
+        {
+            uint32_t maxPacketSize;                         ///< [out] Maximum packet size in bytes.
 
         };
 
@@ -1661,18 +1944,31 @@ namespace xet
 
         };
 
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure used to query a link resource property
+        struct link_property_request_t
+        {
+            link_properties_t property;                     ///< [in] The property being requested (one of ::xet_link_properties_t).
+            void* pData;                                    ///< [in] Pointer to the data for the property.
+                                                            ///< Each property has a corresponding data structure. The type of the data
+                                                            ///< structure is derived from the property enumerator, converted to
+                                                            ///< lower-case with "_t" appended.
+            uint32_t size;                                  ///< [in] The size of the data structure pointed to by pData.
+
+        };
+
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         resource_handle_t m_handle = nullptr;           ///< [in] handle of resource
-        SysmanResContainer* m_pResContainer;            ///< [in] pointer to owner object
+        Sysman* m_pSysman;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         SysmanResource( void ) = delete;
         SysmanResource( 
             resource_handle_t handle,                       ///< [in] handle of resource
-            SysmanResContainer* pResContainer               ///< [in] pointer to owner object
+            Sysman* pSysman                                 ///< [in] pointer to owner object
             );
 
         ~SysmanResource( void ) = default;
@@ -1685,20 +1981,26 @@ namespace xet
 
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
-        auto getRescontainer( void ) const { return m_pResContainer; }
+        auto getSysman( void ) const { return m_pSysman; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Compare if two resource handles reference the same underlying resource
+        /// @brief Compare if two resource handles reference the same underlying hardware
+        ///        object
         /// 
         /// @details
+        ///     - There is a one-to-many mapping between the underlying hardware for a
+        ///       resource and the corresponding handles returned to the application.
+        ///       Thus, the numerical value of the handles should not be compared with
+        ///       those returned by previous function calls - instead, use this function
+        ///       to check if two handles reference the same hardware object.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
         IsSame(
-            SysmanResource* pRhs,                           ///< [in] Handle of the resource
+            SysmanResource* pRhs,                           ///< [in] Handle of the other resource
             xe::bool_t* pIsSame                             ///< [in] Sets to True if the two resources reference the same underlying
-                                                            ///< resource
+                                                            ///< hardware object
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1708,7 +2010,7 @@ namespace xet
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @returns
-        ///     - Sysman::resource_info_t: Generic information about the resource.
+        ///     - Sysman::resource_info_t: Generic information about the resource
         /// 
         /// @throws result_t
         Sysman::resource_info_t __xecall
@@ -1717,7 +2019,141 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get PSU property data
+        /// @brief Get a handle to the parent resource
+        /// 
+        /// @details
+        ///     - For resource containers, this will return the handle to parent
+        ///       container. For non-container resources, this will return the handle to
+        ///       the container resource in which the resource is located.
+        ///     - If there is no parent (e.g. resources of type
+        ///       ::XET_RESOURCE_TYPE_UNIT_CONTAINER), the returned handle will be
+        ///       ::XET_INVALID_SYSMAN_RESOURCE_HANDLE.
+        ///     - There is a one-to-many mapping between the underlying hardware for a
+        ///       resource and the corresponding handles returned to the application.
+        ///       Thus, the numerical value of the handles should not be compared with
+        ///       those returned by previous function calls - instead, use the function
+        ///       ::xetSysmanResourceIsSame() to check if two handles reference the same
+        ///       hardware object.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @returns
+        ///     - SysmanResource*: Handle of the parent resource
+        /// 
+        /// @throws result_t
+        SysmanResource* __xecall
+        GetParent(
+            void
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get children resources
+        /// 
+        /// @details
+        ///     - If the parent resource is not a container, no children resources will
+        ///       be returned.
+        ///     - Only resource containers will be returned by this function. The
+        ///       function ::xetSysmanGetResources should be used to get non-container
+        ///       resources located in a parent resource.
+        ///     - There is a one-to-many mapping between the underlying hardware for a
+        ///       resource and the corresponding handles returned to the application.
+        ///       Thus, the numerical value of the handles should not be compared with
+        ///       those returned by previous function calls - instead, use the function
+        ///       ::xetSysmanResourceIsSame() to check if two handles reference the same
+        ///       hardware object.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @returns
+        ///     - SysmanResource*: Array of resource handles.
+        /// 
+        /// @throws result_t
+        void __xecall
+        GetChildren(
+            uint32_t* pCount,                               ///< [in,out] Pointer to the number of elements in the array phResources.
+                                                            ///< If count is zero, then the driver will update the value with the total
+                                                            ///< number of child resources.
+                                                            ///< If count is non-zero, then driver will only retrieve that number of
+                                                            ///< child resources starting from index 0.
+                                                            ///< If count is larger than the number of child resources that will be
+                                                            ///< returned, then the driver will update the value with the resources
+                                                            ///< actually returned.
+            SysmanResource** ppResources = nullptr          ///< [out][optional][range(0, *pCount)] Array of resource handles.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get peer resources
+        /// 
+        /// @details
+        ///     - If the parent resource is not a container, no peer resources will be
+        ///       returned.
+        ///     - Only resource containers will be returned by this function. The
+        ///       function ::xetSysmanGetResources should be used to get non-container
+        ///       resources located in a parent resource.
+        ///     - There is a one-to-many mapping between the underlying hardware for a
+        ///       resource and the corresponding handles returned to the application.
+        ///       Thus, the numerical value of the handles should not be compared with
+        ///       those returned by previous function calls - instead, use the function
+        ///       ::xetSysmanResourceIsSame() to check if two handles reference the same
+        ///       hardware object.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @returns
+        ///     - SysmanResource*: Array of resource handles.
+        /// 
+        /// @throws result_t
+        void __xecall
+        GetPeers(
+            uint32_t* pCount,                               ///< [in,out] Pointer to the number of elements in the array phResources.
+                                                            ///< If count is zero, then the driver will update the value with the total
+                                                            ///< number of peer resources.
+                                                            ///< If count is non-zero, then driver will only retrieve that number of
+                                                            ///< peer resources starting from index 0.
+                                                            ///< If count is larger than the number of peer resources that will be
+                                                            ///< returned, then the driver will update the value with the resources
+                                                            ///< actually returned.
+            SysmanResource** ppResources = nullptr          ///< [out][optional][range(0, *pCount)] Array of resource handles.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get board property data
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        GetBoardProperties(
+            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+            board_property_request_t* pRequest              ///< [in] Pointer to list of properties and corresponding data storage
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get device container property data
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        GetDeviceProperties(
+            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+            device_property_request_t* pRequest             ///< [in] Pointer to list of properties and corresponding data storage
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Set device container property data
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        SetDeviceProperties(
+            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+            device_property_request_t* pRequest             ///< [in] Pointer to list of properties and corresponding data storage
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get PSU resource property data
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -1725,22 +2161,12 @@ namespace xet
         /// @throws result_t
         void __xecall
         GetPsuProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const psu_properties_t* pIndexes,               ///< [in] An array of property indexes to be read
-            void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-            uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                            ///< If size is zero, then the driver will update the value with the size
-                                                            ///< required to store the requested properties.
-                                                            ///< If size is less than that required to store the requested data for the
-                                                            ///< properties, the driver will update the value with the required size
-                                                            ///< and return an error.
-                                                            ///< If size is larger than that required to store the requested data for
-                                                            ///< the properties, the driver will update the value with the size of the
-                                                            ///< data returned.
+            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+            psu_property_request_t* pRequest                ///< [in] Pointer to list of properties and corresponding data storage
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set new PSU properties
+        /// @brief Set PSU resource property data
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -1748,15 +2174,12 @@ namespace xet
         /// @throws result_t
         void __xecall
         SetPsuProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const psu_properties_t* pIndexes,               ///< [in] An array of property indexes to be set
-            void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                            ///< properties.
-            uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+            psu_property_request_t* pRequest                ///< [in] Pointer to list of properties and corresponding data storage
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get temperature sensor property data
+        /// @brief Get temperature sensor resource property data
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -1764,38 +2187,12 @@ namespace xet
         /// @throws result_t
         void __xecall
         GetTempProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const temp_properties_t* pIndexes,              ///< [in] An array of property indexes to be read
-            void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-            uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                            ///< If size is zero, then the driver will update the value with the size
-                                                            ///< required to store the requested properties.
-                                                            ///< If size is less than that required to store the requested data for the
-                                                            ///< properties, the driver will update the value with the required size
-                                                            ///< and return an error.
-                                                            ///< If size is larger than that required to store the requested data for
-                                                            ///< the properties, the driver will update the value with the size of the
-                                                            ///< data returned.
+            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+            temp_property_request_t* pRequest               ///< [in] Pointer to list of properties and corresponding data storage
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set temperature sensor properties
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __xecall
-        SetTempProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const temp_properties_t* pIndexes,              ///< [in] An array of property indexes to be set
-            void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                            ///< properties.
-            uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get fan property data
+        /// @brief Get fan resource property data
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -1803,22 +2200,12 @@ namespace xet
         /// @throws result_t
         void __xecall
         GetFanProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const fan_properties_t* pIndexes,               ///< [in] An array of property indexes to be read
-            void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-            uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                            ///< If size is zero, then the driver will update the value with the size
-                                                            ///< required to store the requested properties.
-                                                            ///< If size is less than that required to store the requested data for the
-                                                            ///< properties, the driver will update the value with the required size
-                                                            ///< and return an error.
-                                                            ///< If size is larger than that required to store the requested data for
-                                                            ///< the properties, the driver will update the value with the size of the
-                                                            ///< data returned.
+            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+            fan_property_request_t* pRequest                ///< [in] Pointer to list of properties and corresponding data storage
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set new fan properties
+        /// @brief Set fan resource property data
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -1826,15 +2213,12 @@ namespace xet
         /// @throws result_t
         void __xecall
         SetFanProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const fan_properties_t* pIndexes,               ///< [in] An array of property indexes to be set
-            void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                            ///< properties.
-            uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+            fan_property_request_t* pRequest                ///< [in] Pointer to list of properties and corresponding data storage
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get LED property data
+        /// @brief Get LED resource property data
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -1842,22 +2226,12 @@ namespace xet
         /// @throws result_t
         void __xecall
         GetLedProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const led_properties_t* pIndexes,               ///< [in] An array of property indexes to be read
-            void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-            uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                            ///< If size is zero, then the driver will update the value with the size
-                                                            ///< required to store the requested properties.
-                                                            ///< If size is less than that required to store the requested data for the
-                                                            ///< properties, the driver will update the value with the required size
-                                                            ///< and return an error.
-                                                            ///< If size is larger than that required to store the requested data for
-                                                            ///< the properties, the driver will update the value with the size of the
-                                                            ///< data returned.
+            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+            led_property_request_t* pRequest                ///< [in] Pointer to list of properties and corresponding data storage
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set LED properties
+        /// @brief Set LED resource property data
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -1865,15 +2239,12 @@ namespace xet
         /// @throws result_t
         void __xecall
         SetLedProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const led_properties_t* pIndexes,               ///< [in] An array of property indexes to be set
-            void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                            ///< properties.
-            uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+            led_property_request_t* pRequest                ///< [in] Pointer to list of properties and corresponding data storage
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get firmware property data
+        /// @brief Get firmware resource property data
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -1881,22 +2252,12 @@ namespace xet
         /// @throws result_t
         void __xecall
         GetFirmwareProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const firmware_properties_t* pIndexes,          ///< [in] An array of property indexes to be read
-            void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-            uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                            ///< If size is zero, then the driver will update the value with the size
-                                                            ///< required to store the requested properties.
-                                                            ///< If size is less than that required to store the requested data for the
-                                                            ///< properties, the driver will update the value with the required size
-                                                            ///< and return an error.
-                                                            ///< If size is larger than that required to store the requested data for
-                                                            ///< the properties, the driver will update the value with the size of the
-                                                            ///< data returned.
+            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+            firmware_property_request_t* pRequest           ///< [in] Pointer to list of properties and corresponding data storage
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set firmware properties
+        /// @brief Set firmware resource property data
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -1904,15 +2265,12 @@ namespace xet
         /// @throws result_t
         void __xecall
         SetFirmwareProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const firmware_properties_t* pIndexes,          ///< [in] An array of property indexes to be set
-            void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                            ///< properties.
-            uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+            firmware_property_request_t* pRequest           ///< [in] Pointer to list of properties and corresponding data storage
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get power domain property data
+        /// @brief Get power domain resource property data
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -1920,22 +2278,12 @@ namespace xet
         /// @throws result_t
         void __xecall
         GetPwrProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const pwr_properties_t* pIndexes,               ///< [in] An array of property indexes to be read
-            void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-            uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                            ///< If size is zero, then the driver will update the value with the size
-                                                            ///< required to store the requested properties.
-                                                            ///< If size is less than that required to store the requested data for the
-                                                            ///< properties, the driver will update the value with the required size
-                                                            ///< and return an error.
-                                                            ///< If size is larger than that required to store the requested data for
-                                                            ///< the properties, the driver will update the value with the size of the
-                                                            ///< data returned.
+            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+            pwr_property_request_t* pRequest                ///< [in] Pointer to list of properties and corresponding data storage
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set power domain properties
+        /// @brief Set power power resource property data
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -1943,15 +2291,12 @@ namespace xet
         /// @throws result_t
         void __xecall
         SetPwrProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const pwr_properties_t* pIndexes,               ///< [in] An array of property indexes to be set
-            void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                            ///< properties.
-            uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+            pwr_property_request_t* pRequest                ///< [in] Pointer to list of properties and corresponding data storage
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get frequency domain property data
+        /// @brief Get frequency domain resource property data
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -1959,22 +2304,12 @@ namespace xet
         /// @throws result_t
         void __xecall
         GetFreqProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const freq_properties_t* pIndexes,              ///< [in] An array of property indexes to be read
-            void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-            uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                            ///< If size is zero, then the driver will update the value with the size
-                                                            ///< required to store the requested properties.
-                                                            ///< If size is less than that required to store the requested data for the
-                                                            ///< properties, the driver will update the value with the required size
-                                                            ///< and return an error.
-                                                            ///< If size is larger than that required to store the requested data for
-                                                            ///< the properties, the driver will update the value with the size of the
-                                                            ///< data returned.
+            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+            freq_property_request_t* pRequest               ///< [in] Pointer to list of properties and corresponding data storage
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set frequency domain properties
+        /// @brief Set frequency domain resource property data
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -1982,54 +2317,38 @@ namespace xet
         /// @throws result_t
         void __xecall
         SetFreqProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const freq_properties_t* pIndexes,              ///< [in] An array of property indexes to be set
-            void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                            ///< properties.
-            uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+            freq_property_request_t* pRequest               ///< [in] Pointer to list of properties and corresponding data storage
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get power-well domain property data
+        /// @brief Get power-well domain resource property data
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
-        GetPwrWellProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const pwrwell_properties_t* pIndexes,           ///< [in] An array of property indexes to be read
-            void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-            uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                            ///< If size is zero, then the driver will update the value with the size
-                                                            ///< required to store the requested properties.
-                                                            ///< If size is less than that required to store the requested data for the
-                                                            ///< properties, the driver will update the value with the required size
-                                                            ///< and return an error.
-                                                            ///< If size is larger than that required to store the requested data for
-                                                            ///< the properties, the driver will update the value with the size of the
-                                                            ///< data returned.
+        GetPwrwellProperties(
+            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+            pwrwell_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set power-well domain properties
+        /// @brief Set power-well domain resource property data
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
-        SetPwrWellProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const pwrwell_properties_t* pIndexes,           ///< [in] An array of property indexes to be set
-            void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                            ///< properties.
-            uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+        SetPwrwellProperties(
+            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+            pwrwell_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get accelerator asset resource properties
+        /// @brief Get accelerator resource property data
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -2037,38 +2356,12 @@ namespace xet
         /// @throws result_t
         void __xecall
         GetAccelProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const accel_properties_t* pIndexes,             ///< [in] An array of property indexes to be read
-            void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-            uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                            ///< If size is zero, then the driver will update the value with the size
-                                                            ///< required to store the requested properties.
-                                                            ///< If size is less than that required to store the requested data for the
-                                                            ///< properties, the driver will update the value with the required size
-                                                            ///< and return an error.
-                                                            ///< If size is larger than that required to store the requested data for
-                                                            ///< the properties, the driver will update the value with the size of the
-                                                            ///< data returned.
+            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+            accel_property_request_t* pRequest              ///< [in] Pointer to list of properties and corresponding data storage
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set accelerator asset resource properties
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __xecall
-        SetAccelProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const accel_properties_t* pIndexes,             ///< [in] An array of property indexes to be set
-            void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                            ///< properties.
-            uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get memory resource properties
+        /// @brief Get memory resource property data
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -2076,22 +2369,12 @@ namespace xet
         /// @throws result_t
         void __xecall
         GetMemProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const mem_properties_t* pIndexes,               ///< [in] An array of property indexes to be read
-            void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-            uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                            ///< If size is zero, then the driver will update the value with the size
-                                                            ///< required to store the requested properties.
-                                                            ///< If size is less than that required to store the requested data for the
-                                                            ///< properties, the driver will update the value with the required size
-                                                            ///< and return an error.
-                                                            ///< If size is larger than that required to store the requested data for
-                                                            ///< the properties, the driver will update the value with the size of the
-                                                            ///< data returned.
+            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+            mem_property_request_t* pRequest                ///< [in] Pointer to list of properties and corresponding data storage
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set memory resource properties
+        /// @brief Set memory resource property data
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -2099,15 +2382,12 @@ namespace xet
         /// @throws result_t
         void __xecall
         SetMemProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const mem_properties_t* pIndexes,               ///< [in] An array of property indexes to be set
-            void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                            ///< properties.
-            uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+            mem_property_request_t* pRequest                ///< [in] Pointer to list of properties and corresponding data storage
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get link resource properties
+        /// @brief Get link resource property data
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -2115,22 +2395,12 @@ namespace xet
         /// @throws result_t
         void __xecall
         GetLinkProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const link_properties_t* pIndexes,              ///< [in] An array of property indexes to be read
-            void* pValues,                                  ///< [in] A pointer to storage for the data of the requested properties.
-            uint32_t* pSize                                 ///< [in,out] Pointer to the total size of data pointed to by pValues.
-                                                            ///< If size is zero, then the driver will update the value with the size
-                                                            ///< required to store the requested properties.
-                                                            ///< If size is less than that required to store the requested data for the
-                                                            ///< properties, the driver will update the value with the required size
-                                                            ///< and return an error.
-                                                            ///< If size is larger than that required to store the requested data for
-                                                            ///< the properties, the driver will update the value with the size of the
-                                                            ///< data returned.
+            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+            link_property_request_t* pRequest               ///< [in] Pointer to list of properties and corresponding data storage
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set link resource properties
+        /// @brief Set link resource property data
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -2138,11 +2408,8 @@ namespace xet
         /// @throws result_t
         void __xecall
         SetLinkProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pIndexes
-            const link_properties_t* pIndexes,              ///< [in] An array of property indexes to be set
-            void* pValues,                                  ///< [in] A pointer to storage for new settings for the specified
-                                                            ///< properties.
-            uint32_t size                                   ///< [in] Size of property data pointed to by pValues.
+            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
+            link_property_request_t* pRequest               ///< [in] Pointer to list of properties and corresponding data storage
             );
 
     };
@@ -2152,24 +2419,40 @@ namespace xet
 namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::init_flags_t to std::string
-    std::string to_string( const Sysman::init_flags_t val );
+    /// @brief Converts Sysman::version_t to std::string
+    std::string to_string( const Sysman::version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::res_container_type_t to std::string
-    std::string to_string( const Sysman::res_container_type_t val );
+    /// @brief Converts Sysman::init_flags_t to std::string
+    std::string to_string( const Sysman::init_flags_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::resource_type_t to std::string
     std::string to_string( const Sysman::resource_type_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::accel_asset_t to std::string
+    std::string to_string( const Sysman::accel_asset_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::resource_uuid_t to std::string
     std::string to_string( const Sysman::resource_uuid_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::res_container_info_t to std::string
-    std::string to_string( const Sysman::res_container_info_t val );
+    /// @brief Converts Sysman::ras_error_type_t to std::string
+    std::string to_string( const Sysman::ras_error_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::ras_error_loc_t to std::string
+    std::string to_string( const Sysman::ras_error_loc_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::ras_data_type_t to std::string
+    std::string to_string( const Sysman::ras_data_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::res_error_t to std::string
+    std::string to_string( const Sysman::res_error_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::resource_info_t to std::string
@@ -2184,72 +2467,76 @@ namespace xet
     std::string to_string( const Sysman::event_data_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResContainer::accel_asset_t to std::string
-    std::string to_string( const SysmanResContainer::accel_asset_t val );
+    /// @brief Converts SysmanResource::board_properties_t to std::string
+    std::string to_string( const SysmanResource::board_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResContainer::board_properties_t to std::string
-    std::string to_string( const SysmanResContainer::board_properties_t val );
+    /// @brief Converts SysmanResource::board_prop_serial_number_t to std::string
+    std::string to_string( const SysmanResource::board_prop_serial_number_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResContainer::board_prop_serial_number_t to std::string
-    std::string to_string( const SysmanResContainer::board_prop_serial_number_t val );
+    /// @brief Converts SysmanResource::board_prop_board_number_t to std::string
+    std::string to_string( const SysmanResource::board_prop_board_number_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResContainer::board_prop_board_number_t to std::string
-    std::string to_string( const SysmanResContainer::board_prop_board_number_t val );
+    /// @brief Converts SysmanResource::board_property_request_t to std::string
+    std::string to_string( const SysmanResource::board_property_request_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResContainer::pci_bar_type_t to std::string
-    std::string to_string( const SysmanResContainer::pci_bar_type_t val );
+    /// @brief Converts SysmanResource::pci_bar_type_t to std::string
+    std::string to_string( const SysmanResource::pci_bar_type_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResContainer::pci_bar_info_t to std::string
-    std::string to_string( const SysmanResContainer::pci_bar_info_t val );
+    /// @brief Converts SysmanResource::pci_bar_info_t to std::string
+    std::string to_string( const SysmanResource::pci_bar_info_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResContainer::hw_error_type_t to std::string
-    std::string to_string( const SysmanResContainer::hw_error_type_t val );
+    /// @brief Converts SysmanResource::device_properties_t to std::string
+    std::string to_string( const SysmanResource::device_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResContainer::device_properties_t to std::string
-    std::string to_string( const SysmanResContainer::device_properties_t val );
+    /// @brief Converts SysmanResource::device_prop_brand_t to std::string
+    std::string to_string( const SysmanResource::device_prop_brand_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResContainer::device_prop_brand_t to std::string
-    std::string to_string( const SysmanResContainer::device_prop_brand_t val );
+    /// @brief Converts SysmanResource::device_prop_model_t to std::string
+    std::string to_string( const SysmanResource::device_prop_model_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResContainer::device_prop_model_t to std::string
-    std::string to_string( const SysmanResContainer::device_prop_model_t val );
+    /// @brief Converts SysmanResource::device_prop_deviceid_t to std::string
+    std::string to_string( const SysmanResource::device_prop_deviceid_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResContainer::device_prop_deviceid_t to std::string
-    std::string to_string( const SysmanResContainer::device_prop_deviceid_t val );
+    /// @brief Converts SysmanResource::device_prop_vendor_name_t to std::string
+    std::string to_string( const SysmanResource::device_prop_vendor_name_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResContainer::device_prop_vendor_name_t to std::string
-    std::string to_string( const SysmanResContainer::device_prop_vendor_name_t val );
+    /// @brief Converts SysmanResource::device_prop_accel_asset_t to std::string
+    std::string to_string( const SysmanResource::device_prop_accel_asset_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResContainer::device_prop_accel_asset_t to std::string
-    std::string to_string( const SysmanResContainer::device_prop_accel_asset_t val );
+    /// @brief Converts SysmanResource::device_prop_accel_assets_t to std::string
+    std::string to_string( const SysmanResource::device_prop_accel_assets_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResContainer::device_prop_accel_assets_t to std::string
-    std::string to_string( const SysmanResContainer::device_prop_accel_assets_t val );
+    /// @brief Converts SysmanResource::device_prop_driver_version_t to std::string
+    std::string to_string( const SysmanResource::device_prop_driver_version_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResContainer::device_prop_driver_version_t to std::string
-    std::string to_string( const SysmanResContainer::device_prop_driver_version_t val );
+    /// @brief Converts SysmanResource::device_prop_bars_t to std::string
+    std::string to_string( const SysmanResource::device_prop_bars_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResContainer::device_prop_bars_t to std::string
-    std::string to_string( const SysmanResContainer::device_prop_bars_t val );
+    /// @brief Converts SysmanResource::device_prop_cold_shutdown_t to std::string
+    std::string to_string( const SysmanResource::device_prop_cold_shutdown_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResContainer::device_prop_error_stats_t to std::string
-    std::string to_string( const SysmanResContainer::device_prop_error_stats_t val );
+    /// @brief Converts SysmanResource::device_prop_cold_reset_t to std::string
+    std::string to_string( const SysmanResource::device_prop_cold_reset_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::device_property_request_t to std::string
+    std::string to_string( const SysmanResource::device_property_request_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::psu_voltage_status_t to std::string
@@ -2260,12 +2547,40 @@ namespace xet
     std::string to_string( const SysmanResource::psu_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::psu_prop_amp_limit_t to std::string
+    std::string to_string( const SysmanResource::psu_prop_amp_limit_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::psu_prop_voltage_status_t to std::string
     std::string to_string( const SysmanResource::psu_prop_voltage_status_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::psu_prop_fan_failure_t to std::string
+    std::string to_string( const SysmanResource::psu_prop_fan_failure_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::psu_prop_temperature_t to std::string
+    std::string to_string( const SysmanResource::psu_prop_temperature_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::psu_prop_amps_t to std::string
+    std::string to_string( const SysmanResource::psu_prop_amps_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::psu_property_request_t to std::string
+    std::string to_string( const SysmanResource::psu_property_request_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::temp_properties_t to std::string
     std::string to_string( const SysmanResource::temp_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::temp_prop_temperature_t to std::string
+    std::string to_string( const SysmanResource::temp_prop_temperature_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::temp_property_request_t to std::string
+    std::string to_string( const SysmanResource::temp_property_request_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::fan_speed_mode_t to std::string
@@ -2284,6 +2599,22 @@ namespace xet
     std::string to_string( const SysmanResource::fan_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::fan_prop_max_rpm_t to std::string
+    std::string to_string( const SysmanResource::fan_prop_max_rpm_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::fan_prop_max_table_size_t to std::string
+    std::string to_string( const SysmanResource::fan_prop_max_table_size_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::fan_prop_speed_rpm_t to std::string
+    std::string to_string( const SysmanResource::fan_prop_speed_rpm_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::fan_prop_speed_percent_t to std::string
+    std::string to_string( const SysmanResource::fan_prop_speed_percent_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::fan_prop_mode_t to std::string
     std::string to_string( const SysmanResource::fan_prop_mode_t val );
 
@@ -2296,12 +2627,24 @@ namespace xet
     std::string to_string( const SysmanResource::fan_prop_speed_table_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::fan_property_request_t to std::string
+    std::string to_string( const SysmanResource::fan_property_request_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::led_properties_t to std::string
     std::string to_string( const SysmanResource::led_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::led_prop_rgb_cap_t to std::string
+    std::string to_string( const SysmanResource::led_prop_rgb_cap_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::led_prop_state_t to std::string
     std::string to_string( const SysmanResource::led_prop_state_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::led_property_request_t to std::string
+    std::string to_string( const SysmanResource::led_property_request_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::firmware_properties_t to std::string
@@ -2324,12 +2667,24 @@ namespace xet
     std::string to_string( const SysmanResource::firmware_prop_flash_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::firmware_property_request_t to std::string
+    std::string to_string( const SysmanResource::firmware_property_request_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::pwr_properties_t to std::string
     std::string to_string( const SysmanResource::pwr_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::pwr_sustained_limit_version_t to std::string
-    std::string to_string( const SysmanResource::pwr_sustained_limit_version_t val );
+    /// @brief Converts SysmanResource::pwr_prop_accel_assets_t to std::string
+    std::string to_string( const SysmanResource::pwr_prop_accel_assets_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::pwr_prop_max_limit_t to std::string
+    std::string to_string( const SysmanResource::pwr_prop_max_limit_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::pwr_prop_energy_counter_t to std::string
+    std::string to_string( const SysmanResource::pwr_prop_energy_counter_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::pwr_prop_sustained_limit_t to std::string
@@ -2342,6 +2697,10 @@ namespace xet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::pwr_prop_peak_limit_t to std::string
     std::string to_string( const SysmanResource::pwr_prop_peak_limit_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::pwr_property_request_t to std::string
+    std::string to_string( const SysmanResource::pwr_property_request_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::freq_domain_type_t to std::string
@@ -2362,6 +2721,10 @@ namespace xet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::freq_properties_t to std::string
     std::string to_string( const SysmanResource::freq_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::freq_prop_accel_assets_t to std::string
+    std::string to_string( const SysmanResource::freq_prop_accel_assets_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::freq_prop_domain_type_t to std::string
@@ -2388,8 +2751,36 @@ namespace xet
     std::string to_string( const SysmanResource::freq_prop_freq_range_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::freq_prop_freq_tdp_t to std::string
+    std::string to_string( const SysmanResource::freq_prop_freq_tdp_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::freq_prop_freq_efficient_t to std::string
+    std::string to_string( const SysmanResource::freq_prop_freq_efficient_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::freq_prop_freq_request_t to std::string
+    std::string to_string( const SysmanResource::freq_prop_freq_request_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::freq_prop_freq_resolved_t to std::string
+    std::string to_string( const SysmanResource::freq_prop_freq_resolved_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::freq_prop_freq_divider_t to std::string
     std::string to_string( const SysmanResource::freq_prop_freq_divider_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::freq_prop_throttle_reasons_t to std::string
+    std::string to_string( const SysmanResource::freq_prop_throttle_reasons_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::freq_prop_throttle_time_t to std::string
+    std::string to_string( const SysmanResource::freq_prop_throttle_time_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::freq_property_request_t to std::string
+    std::string to_string( const SysmanResource::freq_property_request_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::pwrwell_promo_mode_t to std::string
@@ -2400,12 +2791,44 @@ namespace xet
     std::string to_string( const SysmanResource::pwrwell_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::pwrwell_prop_accel_assets_t to std::string
+    std::string to_string( const SysmanResource::pwrwell_prop_accel_assets_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::pwrwell_prop_promo_cap_t to std::string
+    std::string to_string( const SysmanResource::pwrwell_prop_promo_cap_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::pwrwell_prop_promo_mode_t to std::string
     std::string to_string( const SysmanResource::pwrwell_prop_promo_mode_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::pwrwell_prop_utilization_t to std::string
+    std::string to_string( const SysmanResource::pwrwell_prop_utilization_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::pwrwell_prop_transitions_t to std::string
+    std::string to_string( const SysmanResource::pwrwell_prop_transitions_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::pwrwell_property_request_t to std::string
+    std::string to_string( const SysmanResource::pwrwell_property_request_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::accel_properties_t to std::string
     std::string to_string( const SysmanResource::accel_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::accel_prop_accel_assets_t to std::string
+    std::string to_string( const SysmanResource::accel_prop_accel_assets_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::accel_prop_utilization_t to std::string
+    std::string to_string( const SysmanResource::accel_prop_utilization_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::accel_property_request_t to std::string
+    std::string to_string( const SysmanResource::accel_property_request_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::mem_type_t to std::string
@@ -2428,6 +2851,10 @@ namespace xet
     std::string to_string( const SysmanResource::mem_prop_type_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::mem_prop_ecc_cap_t to std::string
+    std::string to_string( const SysmanResource::mem_prop_ecc_cap_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::mem_prop_bad_list_t to std::string
     std::string to_string( const SysmanResource::mem_prop_bad_list_t val );
 
@@ -2440,8 +2867,16 @@ namespace xet
     std::string to_string( const SysmanResource::mem_prop_bandwidth_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::mem_prop_ecc_counters_t to std::string
-    std::string to_string( const SysmanResource::mem_prop_ecc_counters_t val );
+    /// @brief Converts SysmanResource::mem_prop_ecc_enable_t to std::string
+    std::string to_string( const SysmanResource::mem_prop_ecc_enable_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::mem_prop_ecc_poison_t to std::string
+    std::string to_string( const SysmanResource::mem_prop_ecc_poison_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::mem_property_request_t to std::string
+    std::string to_string( const SysmanResource::mem_property_request_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::link_type_t to std::string
@@ -2464,8 +2899,16 @@ namespace xet
     std::string to_string( const SysmanResource::link_prop_bus_address_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::link_prop_pwr_cap_t to std::string
+    std::string to_string( const SysmanResource::link_prop_pwr_cap_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::link_prop_avail_speeds_t to std::string
     std::string to_string( const SysmanResource::link_prop_avail_speeds_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::link_prop_max_packet_size_t to std::string
+    std::string to_string( const SysmanResource::link_prop_max_packet_size_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::link_prop_bandwidth_t to std::string
@@ -2478,6 +2921,10 @@ namespace xet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts SysmanResource::link_prop_speed_range_t to std::string
     std::string to_string( const SysmanResource::link_prop_speed_range_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts SysmanResource::link_property_request_t to std::string
+    std::string to_string( const SysmanResource::link_property_request_t val );
 
 } // namespace xet
 #endif // defined(__cplusplus)

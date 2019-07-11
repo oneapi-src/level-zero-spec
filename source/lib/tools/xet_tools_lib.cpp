@@ -111,13 +111,6 @@ namespace xet_lib
 
         if( XE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<xet_pfnGetSysmanResContainerProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "xetGetSysmanResContainerProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &ddiTable.SysmanResContainer );
-        }
-
-        if( XE_RESULT_SUCCESS == result )
-        {
             auto getTable = reinterpret_cast<xet_pfnGetSysmanResourceProcAddrTable_t>(
                 GET_FUNCTION_PTR(loader, "xetGetSysmanResourceProcAddrTable") );
             result = getTable( XE_API_VERSION_1_0, &ddiTable.SysmanResource );
