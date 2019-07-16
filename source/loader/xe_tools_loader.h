@@ -52,7 +52,4 @@ namespace loader
     using xet_sysman_object_t                 = object_t < xet_sysman_handle_t >;
     using xet_sysman_factory_t                = singleton_factory_t < xet_sysman_object_t, xet_sysman_handle_t >;
 
-    using xet_resource_object_t               = object_t < xet_resource_handle_t >;
-    using xet_resource_factory_t              = singleton_factory_t < xet_resource_object_t, xet_resource_handle_t >;
-
 }

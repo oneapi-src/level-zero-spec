@@ -75,22 +75,6 @@ typedef struct _xet_tracer_handle_t *xet_tracer_handle_t;
 typedef struct _xet_sysman_handle_t *xet_sysman_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef XET_INVALID_SYSMAN_HANDLE
-/// @brief Invalid System Resource Management handle
-#define XET_INVALID_SYSMAN_HANDLE  NULL
-#endif // XET_INVALID_SYSMAN_HANDLE
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle for a Sysman resource
-typedef struct _xet_resource_handle_t *xet_resource_handle_t;
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef XET_INVALID_SYSMAN_RESOURCE_HANDLE
-/// @brief Invalid Sysman resource handle
-#define XET_INVALID_SYSMAN_RESOURCE_HANDLE  NULL
-#endif // XET_INVALID_SYSMAN_RESOURCE_HANDLE
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_metric_group_properties_t
 typedef struct _xet_metric_group_properties_t xet_metric_group_properties_t;
 
@@ -123,32 +107,36 @@ typedef struct _xet_profile_free_register_token_t xet_profile_free_register_toke
 typedef struct _xet_profile_register_sequence_t xet_profile_register_sequence_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resource_uuid_t
-typedef struct _xet_resource_uuid_t xet_resource_uuid_t;
+/// @brief Forward-declare xet_resource_id_t
+typedef struct _xet_resource_id_t xet_resource_id_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_ras_filter_t
+typedef struct _xet_ras_filter_t xet_ras_filter_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_res_error_t
 typedef struct _xet_res_error_t xet_res_error_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resource_info_t
-typedef struct _xet_resource_info_t xet_resource_info_t;
+/// @brief Forward-declare xet_device_prop_accel_asset_t
+typedef struct _xet_device_prop_accel_asset_t xet_device_prop_accel_asset_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_board_prop_serial_number_t
-typedef struct _xet_board_prop_serial_number_t xet_board_prop_serial_number_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_board_prop_board_number_t
-typedef struct _xet_board_prop_board_number_t xet_board_prop_board_number_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_board_property_request_t
-typedef struct _xet_board_property_request_t xet_board_property_request_t;
+/// @brief Forward-declare xet_sysman_info_t
+typedef struct _xet_sysman_info_t xet_sysman_info_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_pci_bar_info_t
 typedef struct _xet_pci_bar_info_t xet_pci_bar_info_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_device_prop_serial_number_t
+typedef struct _xet_device_prop_serial_number_t xet_device_prop_serial_number_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_device_prop_board_number_t
+typedef struct _xet_device_prop_board_number_t xet_device_prop_board_number_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_device_prop_brand_t
@@ -165,14 +153,6 @@ typedef struct _xet_device_prop_deviceid_t xet_device_prop_deviceid_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_device_prop_vendor_name_t
 typedef struct _xet_device_prop_vendor_name_t xet_device_prop_vendor_name_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_device_prop_accel_asset_t
-typedef struct _xet_device_prop_accel_asset_t xet_device_prop_accel_asset_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_device_prop_accel_assets_t
-typedef struct _xet_device_prop_accel_assets_t xet_device_prop_accel_assets_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_device_prop_driver_version_t
@@ -499,8 +479,8 @@ typedef struct _xet_link_prop_speed_range_t xet_link_prop_speed_range_t;
 typedef struct _xet_link_property_request_t xet_link_property_request_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_sysman_event_data_t
-typedef struct _xet_sysman_event_data_t xet_sysman_event_data_t;
+/// @brief Forward-declare xet_event_request_t
+typedef struct _xet_event_request_t xet_event_request_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_tracer_desc_t

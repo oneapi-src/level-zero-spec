@@ -670,7 +670,7 @@ namespace layer
     /// @brief Intercept function for xetSysmanCreate
     xe_result_t __xecall
     xetSysmanCreate(
-        xet_device_group_handle_t hDeviceGroup,         ///< [in] Handle of the device group
+        xet_device_handle_t hDevice,                    ///< [in] Handle of the device
         xet_sysman_version_t version,                   ///< [in] SMI version that application was built with
         uint32_t flags,                                 ///< [in] Bitfield of ::xet_sysman_init_flags_t
         xet_sysman_handle_t* phSysman                   ///< [out] Handle for accessing SMI features
@@ -683,7 +683,7 @@ namespace layer
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDeviceGroup )
+            if( nullptr == hDevice )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == phSysman )
@@ -691,7 +691,7 @@ namespace layer
 
         }
 
-        return pfnCreate( hDeviceGroup, version, flags, phSysman );
+        return pfnCreate( hDevice, version, flags, phSysman );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -744,27 +744,16 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanConvertUuidToString
+    /// @brief Intercept function for xetSysmanGetInfo
     xe_result_t __xecall
-    xetSysmanConvertUuidToString(
-        xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        const xet_resource_uuid_t* pUuid,               ///< [in] Pointer to a Sysman UUID
-        uint32_t* pSize,                                ///< [in,out] Pointer to the size of the string buffer pointed to by pStr.
-                                                        ///< If size is zero, the storage size including end-of-string terminator
-                                                        ///< will be returned.
-                                                        ///< If size is non-zero and less than the required length, the storage
-                                                        ///< size including end-of-string terminator will be returned and an error
-                                                        ///< status given.
-                                                        ///< If size is non-zero and larger than the required length, the number of
-                                                        ///< characters stored in the buffer including the end-of-string terminator
-                                                        ///< will be returned.
-        char* pStr                                      ///< [in][optional] Pointer to storage for the string representation of the
-                                                        ///< UUID
+    xetSysmanGetInfo(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of a device
+        xet_sysman_info_t* pInfo                        ///< [in] Returned information
         )
     {
-        auto pfnConvertUuidToString = context.xetDdiTable.Sysman.pfnConvertUuidToString;
+        auto pfnGetInfo = context.xetDdiTable.Sysman.pfnGetInfo;
 
-        if( nullptr == pfnConvertUuidToString )
+        if( nullptr == pfnGetInfo )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -772,114 +761,12 @@ namespace layer
             if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pUuid )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pSize )
+            if( nullptr == pInfo )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnConvertUuidToString( hSysman, pUuid, pSize, pStr );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanGetResources
-    xe_result_t __xecall
-    xetSysmanGetResources(
-        xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        xet_resource_handle_t hParentResource,          ///< [in] Handle of the parent resource object (can be
-                                                        ///< ::XET_INVALID_SYSMAN_RESOURCE_HANDLE)
-        xet_resource_type_t type,                       ///< [in] The type of resources to enumerate
-        uint32_t* pCount,                               ///< [in,out] Pointer to the number of elements in the array phResources.
-                                                        ///< If count is zero, then the driver will update the value with the total
-                                                        ///< number of resources that would be returned.
-                                                        ///< If count is non-zero, then driver will only retrieve that number of
-                                                        ///< resources of the given type starting from index 0.
-                                                        ///< If count is larger than the number of resource that will be returned,
-                                                        ///< then the driver will update the value with actual number returned.
-        xet_resource_handle_t* phResources              ///< [out][optional][range(0, *pCount)] Array of resources resources
-        )
-    {
-        auto pfnGetResources = context.xetDdiTable.Sysman.pfnGetResources;
-
-        if( nullptr == pfnGetResources )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == hParentResource )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pCount )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetResources( hSysman, hParentResource, type, pCount, phResources );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanGetDeviceResource
-    xe_result_t __xecall
-    xetSysmanGetDeviceResource(
-        xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        xe_device_handle_t hDevice,                     ///< [in] Handle to the device.
-        xet_resource_handle_t* phResource               ///< [out] Resource handle for the specified device
-        )
-    {
-        auto pfnGetDeviceResource = context.xetDdiTable.Sysman.pfnGetDeviceResource;
-
-        if( nullptr == pfnGetDeviceResource )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == hDevice )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == phResource )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetDeviceResource( hSysman, hDevice, phResource );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanGetResourceByUuid
-    xe_result_t __xecall
-    xetSysmanGetResourceByUuid(
-        xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        const xet_resource_uuid_t* uuid,                ///< [in] UUID for the resource
-        xet_resource_handle_t* phResource               ///< [out] Resource handle
-        )
-    {
-        auto pfnGetResourceByUuid = context.xetDdiTable.Sysman.pfnGetResourceByUuid;
-
-        if( nullptr == pfnGetResourceByUuid )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == uuid )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == phResource )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetResourceByUuid( hSysman, uuid, phResource );
+        return pfnGetInfo( hSysman, pInfo );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -887,22 +774,6 @@ namespace layer
     xe_result_t __xecall
     xetSysmanGetRasErrors(
         xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource. If specified, only errors within that
-                                                        ///< resource of child resources are returned. Otherwise all errors are
-                                                        ///< returned.
-        uint32_t type,                                  ///< [in] Bitfield of error types to filter - one or more of
-                                                        ///< ::xet_ras_error_type_t. Set to ::XET_RAS_ERROR_TYPE_ALL to have all
-                                                        ///< error types returned.
-        uint32_t location,                              ///< [in] Bitfield of error locations to filter - one or more of
-                                                        ///< ::xet_ras_error_loc_t. Set to ::XET_RAS_ERROR_LOC_ALL to have all
-                                                        ///< error locations returned.
-        uint32_t threshold,                             ///< [in] Only return error elements that have occurred at least this
-                                                        ///< number of times.
-                                                        ///< If set to 0, will get a list of all possible RAS elements, even those
-                                                        ///< that have not had errors.
-                                                        ///< For error elements of type ::XET_RAS_DATA_TYPE_OCCURRED, there is no
-                                                        ///< underlying counter, so they will always be returned independent of the
-                                                        ///< threshold setting.
         xe_bool_t clear,                                ///< [in] Set to true to clear the underlying counters after they are
                                                         ///< returned
         uint32_t* pCount,                               ///< [in] Pointer to the number of elements in the array pErrors.
@@ -927,9 +798,6 @@ namespace layer
             if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == hResource )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
             if( nullptr == pCount )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
@@ -938,204 +806,26 @@ namespace layer
 
         }
 
-        return pfnGetRasErrors( hSysman, hResource, type, location, threshold, clear, pCount, pErrors );
+        return pfnGetRasErrors( hSysman, clear, pCount, pErrors );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceIsSame
+    /// @brief Intercept function for xetSysmanGetDeviceProperties
     xe_result_t __xecall
-    xetSysmanResourceIsSame(
-        xet_resource_handle_t hLhs,                     ///< [in] Handle of of the resources
-        xet_resource_handle_t hRhs,                     ///< [in] Handle of the other resource
-        xe_bool_t* pIsSame                              ///< [in] Sets to True if the two resources reference the same underlying
-                                                        ///< hardware object
-        )
-    {
-        auto pfnIsSame = context.xetDdiTable.SysmanResource.pfnIsSame;
-
-        if( nullptr == pfnIsSame )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hLhs )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == hRhs )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pIsSame )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnIsSame( hLhs, hRhs, pIsSame );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceGetInfo
-    xe_result_t __xecall
-    xetSysmanResourceGetInfo(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        xet_resource_info_t* pInfo                      ///< [out] Generic information about the resource
-        )
-    {
-        auto pfnGetInfo = context.xetDdiTable.SysmanResource.pfnGetInfo;
-
-        if( nullptr == pfnGetInfo )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hResource )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pInfo )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetInfo( hResource, pInfo );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceGetParent
-    xe_result_t __xecall
-    xetSysmanResourceGetParent(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        xet_resource_handle_t* phResource               ///< [out] Handle of the parent resource
-        )
-    {
-        auto pfnGetParent = context.xetDdiTable.SysmanResource.pfnGetParent;
-
-        if( nullptr == pfnGetParent )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hResource )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == phResource )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetParent( hResource, phResource );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceGetChildren
-    xe_result_t __xecall
-    xetSysmanResourceGetChildren(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t* pCount,                               ///< [in,out] Pointer to the number of elements in the array phResources.
-                                                        ///< If count is zero, then the driver will update the value with the total
-                                                        ///< number of child resources.
-                                                        ///< If count is non-zero, then driver will only retrieve that number of
-                                                        ///< child resources starting from index 0.
-                                                        ///< If count is larger than the number of child resources that will be
-                                                        ///< returned, then the driver will update the value with the resources
-                                                        ///< actually returned.
-        xet_resource_handle_t* phResources              ///< [out][optional][range(0, *pCount)] Array of resource handles.
-        )
-    {
-        auto pfnGetChildren = context.xetDdiTable.SysmanResource.pfnGetChildren;
-
-        if( nullptr == pfnGetChildren )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hResource )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pCount )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetChildren( hResource, pCount, phResources );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceGetPeers
-    xe_result_t __xecall
-    xetSysmanResourceGetPeers(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t* pCount,                               ///< [in,out] Pointer to the number of elements in the array phResources.
-                                                        ///< If count is zero, then the driver will update the value with the total
-                                                        ///< number of peer resources.
-                                                        ///< If count is non-zero, then driver will only retrieve that number of
-                                                        ///< peer resources starting from index 0.
-                                                        ///< If count is larger than the number of peer resources that will be
-                                                        ///< returned, then the driver will update the value with the resources
-                                                        ///< actually returned.
-        xet_resource_handle_t* phResources              ///< [out][optional][range(0, *pCount)] Array of resource handles.
-        )
-    {
-        auto pfnGetPeers = context.xetDdiTable.SysmanResource.pfnGetPeers;
-
-        if( nullptr == pfnGetPeers )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hResource )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pCount )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetPeers( hResource, pCount, phResources );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceGetBoardProperties
-    xe_result_t __xecall
-    xetSysmanResourceGetBoardProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
-        xet_board_property_request_t* pRequest          ///< [in] Pointer to list of properties and corresponding data storage
-        )
-    {
-        auto pfnGetBoardProperties = context.xetDdiTable.SysmanResource.pfnGetBoardProperties;
-
-        if( nullptr == pfnGetBoardProperties )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hResource )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pRequest )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetBoardProperties( hResource, count, pRequest );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceGetDeviceProperties
-    xe_result_t __xecall
-    xetSysmanResourceGetDeviceProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+    xetSysmanGetDeviceProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
         uint32_t count,                                 ///< [in] The number of properties in the array pRequest
         xet_device_property_request_t* pRequest         ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnGetDeviceProperties = context.xetDdiTable.SysmanResource.pfnGetDeviceProperties;
+        auto pfnGetDeviceProperties = context.xetDdiTable.Sysman.pfnGetDeviceProperties;
 
         if( nullptr == pfnGetDeviceProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResource )
+            if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pRequest )
@@ -1143,26 +833,26 @@ namespace layer
 
         }
 
-        return pfnGetDeviceProperties( hResource, count, pRequest );
+        return pfnGetDeviceProperties( hSysman, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceSetDeviceProperties
+    /// @brief Intercept function for xetSysmanSetDeviceProperties
     xe_result_t __xecall
-    xetSysmanResourceSetDeviceProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+    xetSysmanSetDeviceProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
         uint32_t count,                                 ///< [in] The number of properties in the array pRequest
         xet_device_property_request_t* pRequest         ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnSetDeviceProperties = context.xetDdiTable.SysmanResource.pfnSetDeviceProperties;
+        auto pfnSetDeviceProperties = context.xetDdiTable.Sysman.pfnSetDeviceProperties;
 
         if( nullptr == pfnSetDeviceProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResource )
+            if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pRequest )
@@ -1170,26 +860,26 @@ namespace layer
 
         }
 
-        return pfnSetDeviceProperties( hResource, count, pRequest );
+        return pfnSetDeviceProperties( hSysman, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceGetPsuProperties
+    /// @brief Intercept function for xetSysmanGetPsuProperties
     xe_result_t __xecall
-    xetSysmanResourceGetPsuProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+    xetSysmanGetPsuProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
         uint32_t count,                                 ///< [in] The number of properties in the array pRequest
         xet_psu_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnGetPsuProperties = context.xetDdiTable.SysmanResource.pfnGetPsuProperties;
+        auto pfnGetPsuProperties = context.xetDdiTable.Sysman.pfnGetPsuProperties;
 
         if( nullptr == pfnGetPsuProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResource )
+            if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pRequest )
@@ -1197,26 +887,26 @@ namespace layer
 
         }
 
-        return pfnGetPsuProperties( hResource, count, pRequest );
+        return pfnGetPsuProperties( hSysman, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceSetPsuProperties
+    /// @brief Intercept function for xetSysmanSetPsuProperties
     xe_result_t __xecall
-    xetSysmanResourceSetPsuProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+    xetSysmanSetPsuProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
         uint32_t count,                                 ///< [in] The number of properties in the array pRequest
         xet_psu_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnSetPsuProperties = context.xetDdiTable.SysmanResource.pfnSetPsuProperties;
+        auto pfnSetPsuProperties = context.xetDdiTable.Sysman.pfnSetPsuProperties;
 
         if( nullptr == pfnSetPsuProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResource )
+            if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pRequest )
@@ -1224,26 +914,26 @@ namespace layer
 
         }
 
-        return pfnSetPsuProperties( hResource, count, pRequest );
+        return pfnSetPsuProperties( hSysman, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceGetTempProperties
+    /// @brief Intercept function for xetSysmanGetTempProperties
     xe_result_t __xecall
-    xetSysmanResourceGetTempProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+    xetSysmanGetTempProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
         uint32_t count,                                 ///< [in] The number of properties in the array pRequest
         xet_temp_property_request_t* pRequest           ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnGetTempProperties = context.xetDdiTable.SysmanResource.pfnGetTempProperties;
+        auto pfnGetTempProperties = context.xetDdiTable.Sysman.pfnGetTempProperties;
 
         if( nullptr == pfnGetTempProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResource )
+            if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pRequest )
@@ -1251,26 +941,26 @@ namespace layer
 
         }
 
-        return pfnGetTempProperties( hResource, count, pRequest );
+        return pfnGetTempProperties( hSysman, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceGetFanProperties
+    /// @brief Intercept function for xetSysmanGetFanProperties
     xe_result_t __xecall
-    xetSysmanResourceGetFanProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+    xetSysmanGetFanProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
         uint32_t count,                                 ///< [in] The number of properties in the array pRequest
         xet_fan_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnGetFanProperties = context.xetDdiTable.SysmanResource.pfnGetFanProperties;
+        auto pfnGetFanProperties = context.xetDdiTable.Sysman.pfnGetFanProperties;
 
         if( nullptr == pfnGetFanProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResource )
+            if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pRequest )
@@ -1278,26 +968,26 @@ namespace layer
 
         }
 
-        return pfnGetFanProperties( hResource, count, pRequest );
+        return pfnGetFanProperties( hSysman, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceSetFanProperties
+    /// @brief Intercept function for xetSysmanSetFanProperties
     xe_result_t __xecall
-    xetSysmanResourceSetFanProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+    xetSysmanSetFanProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
         uint32_t count,                                 ///< [in] The number of properties in the array pRequest
         xet_fan_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnSetFanProperties = context.xetDdiTable.SysmanResource.pfnSetFanProperties;
+        auto pfnSetFanProperties = context.xetDdiTable.Sysman.pfnSetFanProperties;
 
         if( nullptr == pfnSetFanProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResource )
+            if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pRequest )
@@ -1305,26 +995,26 @@ namespace layer
 
         }
 
-        return pfnSetFanProperties( hResource, count, pRequest );
+        return pfnSetFanProperties( hSysman, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceGetLedProperties
+    /// @brief Intercept function for xetSysmanGetLedProperties
     xe_result_t __xecall
-    xetSysmanResourceGetLedProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+    xetSysmanGetLedProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
         uint32_t count,                                 ///< [in] The number of properties in the array pRequest
         xet_led_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnGetLedProperties = context.xetDdiTable.SysmanResource.pfnGetLedProperties;
+        auto pfnGetLedProperties = context.xetDdiTable.Sysman.pfnGetLedProperties;
 
         if( nullptr == pfnGetLedProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResource )
+            if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pRequest )
@@ -1332,26 +1022,26 @@ namespace layer
 
         }
 
-        return pfnGetLedProperties( hResource, count, pRequest );
+        return pfnGetLedProperties( hSysman, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceSetLedProperties
+    /// @brief Intercept function for xetSysmanSetLedProperties
     xe_result_t __xecall
-    xetSysmanResourceSetLedProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+    xetSysmanSetLedProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
         uint32_t count,                                 ///< [in] The number of properties in the array pRequest
         xet_led_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnSetLedProperties = context.xetDdiTable.SysmanResource.pfnSetLedProperties;
+        auto pfnSetLedProperties = context.xetDdiTable.Sysman.pfnSetLedProperties;
 
         if( nullptr == pfnSetLedProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResource )
+            if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pRequest )
@@ -1359,26 +1049,26 @@ namespace layer
 
         }
 
-        return pfnSetLedProperties( hResource, count, pRequest );
+        return pfnSetLedProperties( hSysman, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceGetFirmwareProperties
+    /// @brief Intercept function for xetSysmanGetFirmwareProperties
     xe_result_t __xecall
-    xetSysmanResourceGetFirmwareProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+    xetSysmanGetFirmwareProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
         uint32_t count,                                 ///< [in] The number of properties in the array pRequest
         xet_firmware_property_request_t* pRequest       ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnGetFirmwareProperties = context.xetDdiTable.SysmanResource.pfnGetFirmwareProperties;
+        auto pfnGetFirmwareProperties = context.xetDdiTable.Sysman.pfnGetFirmwareProperties;
 
         if( nullptr == pfnGetFirmwareProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResource )
+            if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pRequest )
@@ -1386,26 +1076,26 @@ namespace layer
 
         }
 
-        return pfnGetFirmwareProperties( hResource, count, pRequest );
+        return pfnGetFirmwareProperties( hSysman, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceSetFirmwareProperties
+    /// @brief Intercept function for xetSysmanSetFirmwareProperties
     xe_result_t __xecall
-    xetSysmanResourceSetFirmwareProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+    xetSysmanSetFirmwareProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
         uint32_t count,                                 ///< [in] The number of properties in the array pRequest
         xet_firmware_property_request_t* pRequest       ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnSetFirmwareProperties = context.xetDdiTable.SysmanResource.pfnSetFirmwareProperties;
+        auto pfnSetFirmwareProperties = context.xetDdiTable.Sysman.pfnSetFirmwareProperties;
 
         if( nullptr == pfnSetFirmwareProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResource )
+            if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pRequest )
@@ -1413,26 +1103,26 @@ namespace layer
 
         }
 
-        return pfnSetFirmwareProperties( hResource, count, pRequest );
+        return pfnSetFirmwareProperties( hSysman, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceGetPwrProperties
+    /// @brief Intercept function for xetSysmanGetPwrProperties
     xe_result_t __xecall
-    xetSysmanResourceGetPwrProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+    xetSysmanGetPwrProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
         uint32_t count,                                 ///< [in] The number of properties in the array pRequest
         xet_pwr_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnGetPwrProperties = context.xetDdiTable.SysmanResource.pfnGetPwrProperties;
+        auto pfnGetPwrProperties = context.xetDdiTable.Sysman.pfnGetPwrProperties;
 
         if( nullptr == pfnGetPwrProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResource )
+            if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pRequest )
@@ -1440,26 +1130,26 @@ namespace layer
 
         }
 
-        return pfnGetPwrProperties( hResource, count, pRequest );
+        return pfnGetPwrProperties( hSysman, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceSetPwrProperties
+    /// @brief Intercept function for xetSysmanSetPwrProperties
     xe_result_t __xecall
-    xetSysmanResourceSetPwrProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+    xetSysmanSetPwrProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
         uint32_t count,                                 ///< [in] The number of properties in the array pRequest
         xet_pwr_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnSetPwrProperties = context.xetDdiTable.SysmanResource.pfnSetPwrProperties;
+        auto pfnSetPwrProperties = context.xetDdiTable.Sysman.pfnSetPwrProperties;
 
         if( nullptr == pfnSetPwrProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResource )
+            if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pRequest )
@@ -1467,26 +1157,26 @@ namespace layer
 
         }
 
-        return pfnSetPwrProperties( hResource, count, pRequest );
+        return pfnSetPwrProperties( hSysman, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceGetFreqProperties
+    /// @brief Intercept function for xetSysmanGetFreqProperties
     xe_result_t __xecall
-    xetSysmanResourceGetFreqProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+    xetSysmanGetFreqProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
         uint32_t count,                                 ///< [in] The number of properties in the array pRequest
         xet_freq_property_request_t* pRequest           ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnGetFreqProperties = context.xetDdiTable.SysmanResource.pfnGetFreqProperties;
+        auto pfnGetFreqProperties = context.xetDdiTable.Sysman.pfnGetFreqProperties;
 
         if( nullptr == pfnGetFreqProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResource )
+            if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pRequest )
@@ -1494,26 +1184,26 @@ namespace layer
 
         }
 
-        return pfnGetFreqProperties( hResource, count, pRequest );
+        return pfnGetFreqProperties( hSysman, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceSetFreqProperties
+    /// @brief Intercept function for xetSysmanSetFreqProperties
     xe_result_t __xecall
-    xetSysmanResourceSetFreqProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+    xetSysmanSetFreqProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
         uint32_t count,                                 ///< [in] The number of properties in the array pRequest
         xet_freq_property_request_t* pRequest           ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnSetFreqProperties = context.xetDdiTable.SysmanResource.pfnSetFreqProperties;
+        auto pfnSetFreqProperties = context.xetDdiTable.Sysman.pfnSetFreqProperties;
 
         if( nullptr == pfnSetFreqProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResource )
+            if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pRequest )
@@ -1521,26 +1211,26 @@ namespace layer
 
         }
 
-        return pfnSetFreqProperties( hResource, count, pRequest );
+        return pfnSetFreqProperties( hSysman, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceGetPwrwellProperties
+    /// @brief Intercept function for xetSysmanGetPwrwellProperties
     xe_result_t __xecall
-    xetSysmanResourceGetPwrwellProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+    xetSysmanGetPwrwellProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
         uint32_t count,                                 ///< [in] The number of properties in the array pRequest
         xet_pwrwell_property_request_t* pRequest        ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnGetPwrwellProperties = context.xetDdiTable.SysmanResource.pfnGetPwrwellProperties;
+        auto pfnGetPwrwellProperties = context.xetDdiTable.Sysman.pfnGetPwrwellProperties;
 
         if( nullptr == pfnGetPwrwellProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResource )
+            if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pRequest )
@@ -1548,26 +1238,26 @@ namespace layer
 
         }
 
-        return pfnGetPwrwellProperties( hResource, count, pRequest );
+        return pfnGetPwrwellProperties( hSysman, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceSetPwrwellProperties
+    /// @brief Intercept function for xetSysmanSetPwrwellProperties
     xe_result_t __xecall
-    xetSysmanResourceSetPwrwellProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+    xetSysmanSetPwrwellProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
         uint32_t count,                                 ///< [in] The number of properties in the array pRequest
         xet_pwrwell_property_request_t* pRequest        ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnSetPwrwellProperties = context.xetDdiTable.SysmanResource.pfnSetPwrwellProperties;
+        auto pfnSetPwrwellProperties = context.xetDdiTable.Sysman.pfnSetPwrwellProperties;
 
         if( nullptr == pfnSetPwrwellProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResource )
+            if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pRequest )
@@ -1575,26 +1265,26 @@ namespace layer
 
         }
 
-        return pfnSetPwrwellProperties( hResource, count, pRequest );
+        return pfnSetPwrwellProperties( hSysman, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceGetAccelProperties
+    /// @brief Intercept function for xetSysmanGetAccelProperties
     xe_result_t __xecall
-    xetSysmanResourceGetAccelProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+    xetSysmanGetAccelProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
         uint32_t count,                                 ///< [in] The number of properties in the array pRequest
         xet_accel_property_request_t* pRequest          ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnGetAccelProperties = context.xetDdiTable.SysmanResource.pfnGetAccelProperties;
+        auto pfnGetAccelProperties = context.xetDdiTable.Sysman.pfnGetAccelProperties;
 
         if( nullptr == pfnGetAccelProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResource )
+            if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pRequest )
@@ -1602,26 +1292,26 @@ namespace layer
 
         }
 
-        return pfnGetAccelProperties( hResource, count, pRequest );
+        return pfnGetAccelProperties( hSysman, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceGetMemProperties
+    /// @brief Intercept function for xetSysmanGetMemProperties
     xe_result_t __xecall
-    xetSysmanResourceGetMemProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+    xetSysmanGetMemProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
         uint32_t count,                                 ///< [in] The number of properties in the array pRequest
         xet_mem_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnGetMemProperties = context.xetDdiTable.SysmanResource.pfnGetMemProperties;
+        auto pfnGetMemProperties = context.xetDdiTable.Sysman.pfnGetMemProperties;
 
         if( nullptr == pfnGetMemProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResource )
+            if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pRequest )
@@ -1629,26 +1319,26 @@ namespace layer
 
         }
 
-        return pfnGetMemProperties( hResource, count, pRequest );
+        return pfnGetMemProperties( hSysman, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceSetMemProperties
+    /// @brief Intercept function for xetSysmanSetMemProperties
     xe_result_t __xecall
-    xetSysmanResourceSetMemProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+    xetSysmanSetMemProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
         uint32_t count,                                 ///< [in] The number of properties in the array pRequest
         xet_mem_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnSetMemProperties = context.xetDdiTable.SysmanResource.pfnSetMemProperties;
+        auto pfnSetMemProperties = context.xetDdiTable.Sysman.pfnSetMemProperties;
 
         if( nullptr == pfnSetMemProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResource )
+            if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pRequest )
@@ -1656,26 +1346,26 @@ namespace layer
 
         }
 
-        return pfnSetMemProperties( hResource, count, pRequest );
+        return pfnSetMemProperties( hSysman, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceGetLinkProperties
+    /// @brief Intercept function for xetSysmanGetLinkProperties
     xe_result_t __xecall
-    xetSysmanResourceGetLinkProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+    xetSysmanGetLinkProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
         uint32_t count,                                 ///< [in] The number of properties in the array pRequest
         xet_link_property_request_t* pRequest           ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnGetLinkProperties = context.xetDdiTable.SysmanResource.pfnGetLinkProperties;
+        auto pfnGetLinkProperties = context.xetDdiTable.Sysman.pfnGetLinkProperties;
 
         if( nullptr == pfnGetLinkProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResource )
+            if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pRequest )
@@ -1683,26 +1373,26 @@ namespace layer
 
         }
 
-        return pfnGetLinkProperties( hResource, count, pRequest );
+        return pfnGetLinkProperties( hSysman, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanResourceSetLinkProperties
+    /// @brief Intercept function for xetSysmanSetLinkProperties
     xe_result_t __xecall
-    xetSysmanResourceSetLinkProperties(
-        xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+    xetSysmanSetLinkProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
         uint32_t count,                                 ///< [in] The number of properties in the array pRequest
         xet_link_property_request_t* pRequest           ///< [in] Pointer to list of properties and corresponding data storage
         )
     {
-        auto pfnSetLinkProperties = context.xetDdiTable.SysmanResource.pfnSetLinkProperties;
+        auto pfnSetLinkProperties = context.xetDdiTable.Sysman.pfnSetLinkProperties;
 
         if( nullptr == pfnSetLinkProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hResource )
+            if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pRequest )
@@ -1710,21 +1400,17 @@ namespace layer
 
         }
 
-        return pfnSetLinkProperties( hResource, count, pRequest );
+        return pfnSetLinkProperties( hSysman, count, pRequest );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanRegisterEvents
     xe_result_t __xecall
     xetSysmanRegisterEvents(
-        xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        xet_resource_handle_t hResource,                ///< [in] Handle of the parent resource. Events from any contained devices
-                                                        ///< will be registered.
-                                                        ///< If the handle is ::XET_INVALID_SYSMAN_RESOURCE_HANDLE, events from all
-                                                        ///< devices will be registered.
-        uint32_t events                                 ///< [in] Bitfield of events to register.
-                                                        ///< Construct by ORing (1<<::xet_sysman_event_type_t).
-                                                        ///< Set to (~0) to register to receive all events.
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+        uint32_t count,                                 ///< [in] Number of entries in the array pEvents. If zero, all events will
+                                                        ///< be registered.
+        xet_event_request_t* pEvents                    ///< [in] Events to register.
         )
     {
         auto pfnRegisterEvents = context.xetDdiTable.Sysman.pfnRegisterEvents;
@@ -1737,12 +1423,12 @@ namespace layer
             if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == hResource )
+            if( nullptr == pEvents )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnRegisterEvents( hSysman, hResource, events );
+        return pfnRegisterEvents( hSysman, count, pEvents );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1750,13 +1436,9 @@ namespace layer
     xe_result_t __xecall
     xetSysmanUnregisterEvents(
         xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        xet_resource_handle_t hResource,                ///< [in] Handle of the parent resource. Events from any contained devices
-                                                        ///< will be unregistered.
-                                                        ///< If the handle is ::XET_INVALID_SYSMAN_RESOURCE_HANDLE, events from all
-                                                        ///< devices will be unregistered.
-        uint32_t events                                 ///< [in] Bitfield of events to unregister.
-                                                        ///< Construct by ORing (1<<::xet_sysman_event_type_t).
-                                                        ///< Set to (~0) to unregister all events.
+        uint32_t count,                                 ///< [in] Number of entries in the array pEvents. If zero, all events will
+                                                        ///< be unregistered.
+        xet_event_request_t* pEvents                    ///< [in] Events to unregister.
         )
     {
         auto pfnUnregisterEvents = context.xetDdiTable.Sysman.pfnUnregisterEvents;
@@ -1769,34 +1451,32 @@ namespace layer
             if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == hResource )
+            if( nullptr == pEvents )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnUnregisterEvents( hSysman, hResource, events );
+        return pfnUnregisterEvents( hSysman, count, pEvents );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanListenEvents
+    /// @brief Intercept function for xetSysmanGetEvents
     xe_result_t __xecall
-    xetSysmanListenEvents(
-        xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        xe_bool_t block,                                ///< [in] If set to true, the call will block the calling thread
-        uint32_t* pCount,                               ///< [in,out] Pointer to the number of elements in the array pointed to by pEventData.
-                                                        ///< If size is zero, then the driver will update the value with the number
-                                                        ///< of elements needed to retrieve the list of events.
-                                                        ///< If size is less than that required to store the list of events, the
-                                                        ///< driver will update the value with the required number of elements and
-                                                        ///< return an error.
-                                                        ///< If size is larger than that required to store the list of events, the
-                                                        ///< driver will update the value with the number of elements actually returned.
-        xet_sysman_event_data_t* pEventData             ///< [in] Pointer to an array of event data
+    xetSysmanGetEvents(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for a device. Set to nullptr to get events from any
+                                                        ///< device for which the application has registered to receive
+                                                        ///< notifications.
+        xe_bool_t clear,                                ///< [in] Clear the event status.
+        uint32_t timeout,                               ///< [in] How long to wait in milliseconds for events to arrive. Zero will
+                                                        ///< check status and return immediately. Set to ::XET_EVENT_WAIT_INFINITE
+                                                        ///< to block until events arrive.
+        uint32_t* pEvents                               ///< [in] Bitfield of events (1<<::xet_sysman_event_type_t) that have been
+                                                        ///< triggered.
         )
     {
-        auto pfnListenEvents = context.xetDdiTable.Sysman.pfnListenEvents;
+        auto pfnGetEvents = context.xetDdiTable.Sysman.pfnGetEvents;
 
-        if( nullptr == pfnListenEvents )
+        if( nullptr == pfnGetEvents )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1804,15 +1484,12 @@ namespace layer
             if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pCount )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pEventData )
+            if( nullptr == pEvents )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnListenEvents( hSysman, block, pCount, pEventData );
+        return pfnGetEvents( hSysman, clear, timeout, pEvents );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2405,20 +2082,77 @@ xetGetSysmanProcAddrTable(
     dditable.pfnGetAccelAssetName                        = pDdiTable->pfnGetAccelAssetName;
     pDdiTable->pfnGetAccelAssetName                      = layer::xetSysmanGetAccelAssetName;
 
-    dditable.pfnConvertUuidToString                      = pDdiTable->pfnConvertUuidToString;
-    pDdiTable->pfnConvertUuidToString                    = layer::xetSysmanConvertUuidToString;
-
-    dditable.pfnGetResources                             = pDdiTable->pfnGetResources;
-    pDdiTable->pfnGetResources                           = layer::xetSysmanGetResources;
-
-    dditable.pfnGetDeviceResource                        = pDdiTable->pfnGetDeviceResource;
-    pDdiTable->pfnGetDeviceResource                      = layer::xetSysmanGetDeviceResource;
-
-    dditable.pfnGetResourceByUuid                        = pDdiTable->pfnGetResourceByUuid;
-    pDdiTable->pfnGetResourceByUuid                      = layer::xetSysmanGetResourceByUuid;
+    dditable.pfnGetInfo                                  = pDdiTable->pfnGetInfo;
+    pDdiTable->pfnGetInfo                                = layer::xetSysmanGetInfo;
 
     dditable.pfnGetRasErrors                             = pDdiTable->pfnGetRasErrors;
     pDdiTable->pfnGetRasErrors                           = layer::xetSysmanGetRasErrors;
+
+    dditable.pfnGetDeviceProperties                      = pDdiTable->pfnGetDeviceProperties;
+    pDdiTable->pfnGetDeviceProperties                    = layer::xetSysmanGetDeviceProperties;
+
+    dditable.pfnSetDeviceProperties                      = pDdiTable->pfnSetDeviceProperties;
+    pDdiTable->pfnSetDeviceProperties                    = layer::xetSysmanSetDeviceProperties;
+
+    dditable.pfnGetPsuProperties                         = pDdiTable->pfnGetPsuProperties;
+    pDdiTable->pfnGetPsuProperties                       = layer::xetSysmanGetPsuProperties;
+
+    dditable.pfnSetPsuProperties                         = pDdiTable->pfnSetPsuProperties;
+    pDdiTable->pfnSetPsuProperties                       = layer::xetSysmanSetPsuProperties;
+
+    dditable.pfnGetTempProperties                        = pDdiTable->pfnGetTempProperties;
+    pDdiTable->pfnGetTempProperties                      = layer::xetSysmanGetTempProperties;
+
+    dditable.pfnGetFanProperties                         = pDdiTable->pfnGetFanProperties;
+    pDdiTable->pfnGetFanProperties                       = layer::xetSysmanGetFanProperties;
+
+    dditable.pfnSetFanProperties                         = pDdiTable->pfnSetFanProperties;
+    pDdiTable->pfnSetFanProperties                       = layer::xetSysmanSetFanProperties;
+
+    dditable.pfnGetLedProperties                         = pDdiTable->pfnGetLedProperties;
+    pDdiTable->pfnGetLedProperties                       = layer::xetSysmanGetLedProperties;
+
+    dditable.pfnSetLedProperties                         = pDdiTable->pfnSetLedProperties;
+    pDdiTable->pfnSetLedProperties                       = layer::xetSysmanSetLedProperties;
+
+    dditable.pfnGetFirmwareProperties                    = pDdiTable->pfnGetFirmwareProperties;
+    pDdiTable->pfnGetFirmwareProperties                  = layer::xetSysmanGetFirmwareProperties;
+
+    dditable.pfnSetFirmwareProperties                    = pDdiTable->pfnSetFirmwareProperties;
+    pDdiTable->pfnSetFirmwareProperties                  = layer::xetSysmanSetFirmwareProperties;
+
+    dditable.pfnGetPwrProperties                         = pDdiTable->pfnGetPwrProperties;
+    pDdiTable->pfnGetPwrProperties                       = layer::xetSysmanGetPwrProperties;
+
+    dditable.pfnSetPwrProperties                         = pDdiTable->pfnSetPwrProperties;
+    pDdiTable->pfnSetPwrProperties                       = layer::xetSysmanSetPwrProperties;
+
+    dditable.pfnGetFreqProperties                        = pDdiTable->pfnGetFreqProperties;
+    pDdiTable->pfnGetFreqProperties                      = layer::xetSysmanGetFreqProperties;
+
+    dditable.pfnSetFreqProperties                        = pDdiTable->pfnSetFreqProperties;
+    pDdiTable->pfnSetFreqProperties                      = layer::xetSysmanSetFreqProperties;
+
+    dditable.pfnGetPwrwellProperties                     = pDdiTable->pfnGetPwrwellProperties;
+    pDdiTable->pfnGetPwrwellProperties                   = layer::xetSysmanGetPwrwellProperties;
+
+    dditable.pfnSetPwrwellProperties                     = pDdiTable->pfnSetPwrwellProperties;
+    pDdiTable->pfnSetPwrwellProperties                   = layer::xetSysmanSetPwrwellProperties;
+
+    dditable.pfnGetAccelProperties                       = pDdiTable->pfnGetAccelProperties;
+    pDdiTable->pfnGetAccelProperties                     = layer::xetSysmanGetAccelProperties;
+
+    dditable.pfnGetMemProperties                         = pDdiTable->pfnGetMemProperties;
+    pDdiTable->pfnGetMemProperties                       = layer::xetSysmanGetMemProperties;
+
+    dditable.pfnSetMemProperties                         = pDdiTable->pfnSetMemProperties;
+    pDdiTable->pfnSetMemProperties                       = layer::xetSysmanSetMemProperties;
+
+    dditable.pfnGetLinkProperties                        = pDdiTable->pfnGetLinkProperties;
+    pDdiTable->pfnGetLinkProperties                      = layer::xetSysmanGetLinkProperties;
+
+    dditable.pfnSetLinkProperties                        = pDdiTable->pfnSetLinkProperties;
+    pDdiTable->pfnSetLinkProperties                      = layer::xetSysmanSetLinkProperties;
 
     dditable.pfnRegisterEvents                           = pDdiTable->pfnRegisterEvents;
     pDdiTable->pfnRegisterEvents                         = layer::xetSysmanRegisterEvents;
@@ -2426,122 +2160,8 @@ xetGetSysmanProcAddrTable(
     dditable.pfnUnregisterEvents                         = pDdiTable->pfnUnregisterEvents;
     pDdiTable->pfnUnregisterEvents                       = layer::xetSysmanUnregisterEvents;
 
-    dditable.pfnListenEvents                             = pDdiTable->pfnListenEvents;
-    pDdiTable->pfnListenEvents                           = layer::xetSysmanListenEvents;
-
-    return result;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's SysmanResource table
-///        with current process' addresses
-///
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + invalid value for version
-///         + nullptr for pDdiTable
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + version not supported
-__xedllexport xe_result_t __xecall
-xetGetSysmanResourceProcAddrTable(
-    xe_api_version_t version,                       ///< [in] API version requested
-    xet_sysman_resource_dditable_t* pDdiTable       ///< [in,out] pointer to table of DDI function pointers
-    )
-{
-    auto& dditable = layer::context.xetDdiTable.SysmanResource;
-
-    if( nullptr == pDdiTable )
-        return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-    if( layer::context.version < version )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    xe_result_t result = XE_RESULT_SUCCESS;
-
-    dditable.pfnIsSame                                   = pDdiTable->pfnIsSame;
-    pDdiTable->pfnIsSame                                 = layer::xetSysmanResourceIsSame;
-
-    dditable.pfnGetInfo                                  = pDdiTable->pfnGetInfo;
-    pDdiTable->pfnGetInfo                                = layer::xetSysmanResourceGetInfo;
-
-    dditable.pfnGetParent                                = pDdiTable->pfnGetParent;
-    pDdiTable->pfnGetParent                              = layer::xetSysmanResourceGetParent;
-
-    dditable.pfnGetChildren                              = pDdiTable->pfnGetChildren;
-    pDdiTable->pfnGetChildren                            = layer::xetSysmanResourceGetChildren;
-
-    dditable.pfnGetPeers                                 = pDdiTable->pfnGetPeers;
-    pDdiTable->pfnGetPeers                               = layer::xetSysmanResourceGetPeers;
-
-    dditable.pfnGetBoardProperties                       = pDdiTable->pfnGetBoardProperties;
-    pDdiTable->pfnGetBoardProperties                     = layer::xetSysmanResourceGetBoardProperties;
-
-    dditable.pfnGetDeviceProperties                      = pDdiTable->pfnGetDeviceProperties;
-    pDdiTable->pfnGetDeviceProperties                    = layer::xetSysmanResourceGetDeviceProperties;
-
-    dditable.pfnSetDeviceProperties                      = pDdiTable->pfnSetDeviceProperties;
-    pDdiTable->pfnSetDeviceProperties                    = layer::xetSysmanResourceSetDeviceProperties;
-
-    dditable.pfnGetPsuProperties                         = pDdiTable->pfnGetPsuProperties;
-    pDdiTable->pfnGetPsuProperties                       = layer::xetSysmanResourceGetPsuProperties;
-
-    dditable.pfnSetPsuProperties                         = pDdiTable->pfnSetPsuProperties;
-    pDdiTable->pfnSetPsuProperties                       = layer::xetSysmanResourceSetPsuProperties;
-
-    dditable.pfnGetTempProperties                        = pDdiTable->pfnGetTempProperties;
-    pDdiTable->pfnGetTempProperties                      = layer::xetSysmanResourceGetTempProperties;
-
-    dditable.pfnGetFanProperties                         = pDdiTable->pfnGetFanProperties;
-    pDdiTable->pfnGetFanProperties                       = layer::xetSysmanResourceGetFanProperties;
-
-    dditable.pfnSetFanProperties                         = pDdiTable->pfnSetFanProperties;
-    pDdiTable->pfnSetFanProperties                       = layer::xetSysmanResourceSetFanProperties;
-
-    dditable.pfnGetLedProperties                         = pDdiTable->pfnGetLedProperties;
-    pDdiTable->pfnGetLedProperties                       = layer::xetSysmanResourceGetLedProperties;
-
-    dditable.pfnSetLedProperties                         = pDdiTable->pfnSetLedProperties;
-    pDdiTable->pfnSetLedProperties                       = layer::xetSysmanResourceSetLedProperties;
-
-    dditable.pfnGetFirmwareProperties                    = pDdiTable->pfnGetFirmwareProperties;
-    pDdiTable->pfnGetFirmwareProperties                  = layer::xetSysmanResourceGetFirmwareProperties;
-
-    dditable.pfnSetFirmwareProperties                    = pDdiTable->pfnSetFirmwareProperties;
-    pDdiTable->pfnSetFirmwareProperties                  = layer::xetSysmanResourceSetFirmwareProperties;
-
-    dditable.pfnGetPwrProperties                         = pDdiTable->pfnGetPwrProperties;
-    pDdiTable->pfnGetPwrProperties                       = layer::xetSysmanResourceGetPwrProperties;
-
-    dditable.pfnSetPwrProperties                         = pDdiTable->pfnSetPwrProperties;
-    pDdiTable->pfnSetPwrProperties                       = layer::xetSysmanResourceSetPwrProperties;
-
-    dditable.pfnGetFreqProperties                        = pDdiTable->pfnGetFreqProperties;
-    pDdiTable->pfnGetFreqProperties                      = layer::xetSysmanResourceGetFreqProperties;
-
-    dditable.pfnSetFreqProperties                        = pDdiTable->pfnSetFreqProperties;
-    pDdiTable->pfnSetFreqProperties                      = layer::xetSysmanResourceSetFreqProperties;
-
-    dditable.pfnGetPwrwellProperties                     = pDdiTable->pfnGetPwrwellProperties;
-    pDdiTable->pfnGetPwrwellProperties                   = layer::xetSysmanResourceGetPwrwellProperties;
-
-    dditable.pfnSetPwrwellProperties                     = pDdiTable->pfnSetPwrwellProperties;
-    pDdiTable->pfnSetPwrwellProperties                   = layer::xetSysmanResourceSetPwrwellProperties;
-
-    dditable.pfnGetAccelProperties                       = pDdiTable->pfnGetAccelProperties;
-    pDdiTable->pfnGetAccelProperties                     = layer::xetSysmanResourceGetAccelProperties;
-
-    dditable.pfnGetMemProperties                         = pDdiTable->pfnGetMemProperties;
-    pDdiTable->pfnGetMemProperties                       = layer::xetSysmanResourceGetMemProperties;
-
-    dditable.pfnSetMemProperties                         = pDdiTable->pfnSetMemProperties;
-    pDdiTable->pfnSetMemProperties                       = layer::xetSysmanResourceSetMemProperties;
-
-    dditable.pfnGetLinkProperties                        = pDdiTable->pfnGetLinkProperties;
-    pDdiTable->pfnGetLinkProperties                      = layer::xetSysmanResourceGetLinkProperties;
-
-    dditable.pfnSetLinkProperties                        = pDdiTable->pfnSetLinkProperties;
-    pDdiTable->pfnSetLinkProperties                      = layer::xetSysmanResourceSetLinkProperties;
+    dditable.pfnGetEvents                                = pDdiTable->pfnGetEvents;
+    pDdiTable->pfnGetEvents                              = layer::xetSysmanGetEvents;
 
     return result;
 }

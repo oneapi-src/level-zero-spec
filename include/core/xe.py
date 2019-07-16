@@ -140,10 +140,8 @@ class xe_result_v(IntEnum):
     ERROR_OUT_OF_HOST_MEMORY = auto()               ## insufficient host memory to satisfy call
     ERROR_OUT_OF_DEVICE_MEMORY = auto()             ## insufficient device memory to satisfy call
     ERROR_MODULE_BUILD_FAILURE = auto()             ## error in building module
-    ACCESS_DENIED = auto()                          ## access denied
-    NOT_FOUND = auto()                              ## an object could not be found
-    TOO_SMALL = auto()                              ## an array argument doesn't have enough storage
-    MISMATCH_DEVICE_GROUP = auto()                  ## a specified device handle is not in the specified device group
+    ERROR_INSUFFICENT_PERMISSIONS = auto()          ## access denied
+    ERROR_ARRAY_SIZE_TOO_SMALL = auto()             ## an array argument doesn't have enough storage
     ERROR_UNKNOWN = 0x7fffffff                      ## unknown or internal error
 
 class xe_result_t(c_int):

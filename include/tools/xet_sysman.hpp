@@ -22,20 +22,10 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef XET_RESOURCE_UUID_SIZE
-/// @brief Size of UUID in bytes
-#define XET_RESOURCE_UUID_SIZE  16
-#endif // XET_RESOURCE_UUID_SIZE
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef XET_RESOURCE_UUID_STRING_SIZE
-/// @brief Maximum number of characters in string representation of a UUID
-/// 
-/// @details
-///     - Size does not including end-of-string terminator
-///     - Format of UUID string: ffffffff-ffff-ffff-ffff-ffffffffffff
-#define XET_RESOURCE_UUID_STRING_SIZE  36
-#endif // XET_RESOURCE_UUID_STRING_SIZE
+#ifndef XET_RESOURCE_ID_ANY
+/// @brief Any resource
+#define XET_RESOURCE_ID_ANY  { XET_RESOURCE_TYPE_ANY, 0x0 }
+#endif // XET_RESOURCE_ID_ANY
 
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef XET_STRING_PROPERTY_SIZE
@@ -48,6 +38,12 @@
 /// @brief Maximum number of fan temperature/speed pairs in the fan speed table.
 #define XET_FAN_TEMP_SPEED_PAIR_COUNT  32
 #endif // XET_FAN_TEMP_SPEED_PAIR_COUNT
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_EVENT_WAIT_INFINITE
+/// @brief Wait infinitely for events to arrive.
+#define XET_EVENT_WAIT_INFINITE  0xFFFFFFFF
+#endif // XET_EVENT_WAIT_INFINITE
 
 namespace xet
 {
@@ -77,11 +73,7 @@ namespace xet
         /// @brief Resource types
         enum class resource_type_t
         {
-            UNIT_CONTAINER = 0,                             ///< Unit resource container
-            BOARD_CONTAINER,                                ///< Board resource container
-            DEVICE_CONTAINER,                               ///< Device resource container
-            SUBDEVICE_CONTAINER,                            ///< Sub-device resource container
-            PSU,                                            ///< PSU resource
+            PSU = 0,                                        ///< PSU resource
             TEMP,                                           ///< Temperature sensor resource
             FAN,                                            ///< Fan resource
             LED,                                            ///< LED resource
@@ -93,6 +85,7 @@ namespace xet
             MEM,                                            ///< Memory resource
             LINK,                                           ///< Link resource
             MAX_TYPES,                                      ///< The number of resource types
+            ANY = -1,                                       ///< Any resource filter
 
         };
 
@@ -104,7 +97,7 @@ namespace xet
             IDI_MEM_CONTROLLER,                             ///< IDI memory controller
             HBM_MEM_CONTROLLER,                             ///< HBM memory controller
             L3_CACHE,                                       ///< L3 cache
-            BLILTTER,                                       ///< Blitter
+            BLITTER,                                        ///< Blitter
             VIDEO_DECODER,                                  ///< Video decoder
             VIDEO_ENCODER,                                  ///< Video encoder
             VIDEO_PROCESSING,                               ///< Video processing
@@ -172,400 +165,6 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Event types
-        enum class event_type_t
-        {
-            FREQ_THROTTLED = 0,                             ///< The frequency is being throttled
-            FREQ_POLICY_CHANGED,                            ///< Another API client has modified frequency domain properties
-            GPU_ERRORS,                                     ///< GPU hardware errors have occurred
-            RESET,                                          ///< Device reset has occurred
-            HANG,                                           ///< Device hang has occurred
-            MEM_ERRORS,                                     ///< ECC correctable errors have occurred in a memory resource
-            LINK_ERRORS,                                    ///< Link replays have occured in a link resource
-            COUNT,                                          ///< The number of event types
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Universal unique id (UUID) for Sysman resources
-        struct resource_uuid_t
-        {
-            uint8_t id[XET_RESOURCE_UUID_SIZE];             ///< [in,out] Universal unique id of Sysman object
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief RAS error
-        struct res_error_t
-        {
-            uint32_t type;                                  ///< [out] Bitfield describing type of error, constructed from one or more
-                                                            ///< of ::xet_ras_error_type_t
-            uint32_t loc;                                   ///< [out] Bitfield describing structural location of the error,
-                                                            ///< constructed from one of ::xet_ras_error_loc_t
-            ras_data_type_t dataType;                       ///< [out] How to interpret the data
-            uint64_t data;                                  ///< [out] The value of the error - interpretation depends on dataType
-            resource_uuid_t uuid;                           ///< [out] UUID for the resource where the error was generated
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Generic information about a resource
-        struct resource_info_t
-        {
-            resource_uuid_t uuid;                           ///< [out] UUID for the resource
-            resource_type_t type;                           ///< [out] Type of resource
-            xe::bool_t haveParent;                          ///< [out] Indicates if this resource has a parent resource
-            uint32_t numChildren;                           ///< [out] The number of child resources
-            uint32_t numPeers;                              ///< [out] The number of resources connected to this resource with
-                                                            ///< peer-to-peer links
-            uint32_t numRas;                                ///< [out] The total number of RAS elements contained in this resource or
-                                                            ///< in any descendants.
-            uint32_t rasTypes;                              ///< [out] Bitfield of the type of RAS elements (::xet_ras_error_type_t)
-                                                            ///< contained in this resource or in any descendants.
-            uint32_t rasLocations;                          ///< [out] Bitfield of the structure location of RAS elements
-                                                            ///< (::xet_ras_error_loc_t) contained in this resource or in any
-                                                            ///< descendants.
-            uint32_t numResourcesByType[static_cast<int>(resource_type_t::MAX_TYPES)];  ///< [out] The number of resources of each type attached to this resource
-                                                            ///< (not in the child resources)
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Event data
-        struct event_data_t
-        {
-            resource_uuid_t uuid;                           ///< [out] The UUID of the resource that generated the event
-            uint32_t events;                                ///< [out] Bitfield of events (1<<::xet_sysman_event_type_t) that have been
-                                                            ///< triggered.
-
-        };
-
-
-    protected:
-        ///////////////////////////////////////////////////////////////////////////////
-        sysman_handle_t m_handle = nullptr;             ///< [in] handle of SMI object
-        DeviceGroup* m_pDeviceGroup;                    ///< [in] pointer to owner object
-
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        Sysman( void ) = delete;
-        Sysman( 
-            sysman_handle_t handle,                         ///< [in] handle of SMI object
-            DeviceGroup* pDeviceGroup                       ///< [in] pointer to owner object
-            );
-
-        ~Sysman( void ) = default;
-
-        Sysman( Sysman const& other ) = delete;
-        void operator=( Sysman const& other ) = delete;
-
-        Sysman( Sysman&& other ) = delete;
-        void operator=( Sysman&& other ) = delete;
-
-        ///////////////////////////////////////////////////////////////////////////////
-        auto getHandle( void ) const { return m_handle; }
-        auto getDevicegroup( void ) const { return m_pDeviceGroup; }
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Creates a handle to access SMI features
-        /// 
-        /// @details
-        ///     - Initializes internal structures to support SMI features.
-        ///     - If the write flag ::XET_SYSMAN_INIT_FLAGS_WRITE is specified, no
-        ///       access right checks are made during initialization. The check is done
-        ///       in functions that attempt to control a device.
-        ///     - If the write flag ::XET_SYSMAN_INIT_FLAGS_WRITE is not specified, any
-        ///       function attempting to control a device will return
-        ///       ::XE_RESULT_ACCESS_DENIED.
-        ///     - Multiple SMI handles can be created for the same device group and
-        ///       concurrent access through each handle to access underlying hardware
-        ///       resources is supported.
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - **nvmlInit**
-        ///     - **rsmi_init**
-        /// @returns
-        ///     - Sysman*: Handle for accessing SMI features
-        /// 
-        /// @throws result_t
-        static Sysman* __xecall
-        Create(
-            DeviceGroup* pDeviceGroup,                      ///< [in] Handle of the device group
-            version_t version,                              ///< [in] SMI version that application was built with
-            uint32_t flags                                  ///< [in] Bitfield of ::xet_sysman_init_flags_t
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Destroys a Sysman handle
-        /// 
-        /// @details
-        ///     - Only once all SMI handles to a device group have been destroyed will
-        ///       internal data structures be freed from the application memory.
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - **nvmlShutdown**
-        ///     - **rsmi_shut_down**
-        /// @throws result_t
-        static void __xecall
-        Destroy(
-            Sysman* pSysman                                 ///< [in][release] SMI handle to destroy
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get human-readable name for an accelerator asset
-        /// @throws result_t
-        void __xecall
-        GetAccelAssetName(
-            accel_asset_t type,                             ///< [in] The type of accelerator asset
-            const char** ppName                             ///< [in] Pointer to the asset name
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Convert SMI resource UUID to a string
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __xecall
-        ConvertUuidToString(
-            const resource_uuid_t* pUuid,                   ///< [in] Pointer to a Sysman UUID
-            uint32_t* pSize,                                ///< [in,out] Pointer to the size of the string buffer pointed to by pStr.
-                                                            ///< If size is zero, the storage size including end-of-string terminator
-                                                            ///< will be returned.
-                                                            ///< If size is non-zero and less than the required length, the storage
-                                                            ///< size including end-of-string terminator will be returned and an error
-                                                            ///< status given.
-                                                            ///< If size is non-zero and larger than the required length, the number of
-                                                            ///< characters stored in the buffer including the end-of-string terminator
-                                                            ///< will be returned.
-            char* pStr = nullptr                            ///< [in][optional] Pointer to storage for the string representation of the
-                                                            ///< UUID
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Retrieves resources of a given type having a specified parent resource
-        /// 
-        /// @details
-        ///     - If a parent resource is not specified, then all resources of the given
-        ///       type are returned. Otherwise only resources directly contained
-        ///       in/under the specified parent are returned.
-        ///     - There is a one-to-many mapping between the underlying hardware for a
-        ///       resource and the corresponding handles returned to the application.
-        ///       Thus, the numerical value of the handles should not be compared with
-        ///       those returned by previous function calls - instead, use the function
-        ///       ::xetSysmanResourceIsSame() to check if two handles reference the same
-        ///       hardware object.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @returns
-        ///     - SysmanResource*: Array of resources resources
-        /// 
-        /// @throws result_t
-        void __xecall
-        GetResources(
-            SysmanResource* pParentResource,                ///< [in] Handle of the parent resource object (can be
-                                                            ///< ::XET_INVALID_SYSMAN_RESOURCE_HANDLE)
-            resource_type_t type,                           ///< [in] The type of resources to enumerate
-            uint32_t* pCount,                               ///< [in,out] Pointer to the number of elements in the array phResources.
-                                                            ///< If count is zero, then the driver will update the value with the total
-                                                            ///< number of resources that would be returned.
-                                                            ///< If count is non-zero, then driver will only retrieve that number of
-                                                            ///< resources of the given type starting from index 0.
-                                                            ///< If count is larger than the number of resource that will be returned,
-                                                            ///< then the driver will update the value with actual number returned.
-            SysmanResource** ppResources = nullptr          ///< [out][optional][range(0, *pCount)] Array of resources resources
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Retrieves a resource handle for a device
-        /// 
-        /// @details
-        ///     - The specified device must be in the same device group that was used to
-        ///       create the SMI handle.
-        ///     - If the device handle refers to a device, then a resource handle of
-        ///       type ::XET_RESOURCE_TYPE_DEVICE_CONTAINER will be returned.
-        ///     - If the device handle refers to a sub-device, then a resource handle of
-        ///       type ::XET_RESOURCE_TYPE_SUBDEVICE_CONTAINER will be returned.
-        ///     - There is a one-to-many mapping between the underlying hardware for a
-        ///       resource and the corresponding handles returned to the application.
-        ///       Thus, the numerical value of the handles should not be compared with
-        ///       those returned by previous function calls - instead, use the function
-        ///       ::xetSysmanResourceIsSame() to check if two handles reference the same
-        ///       hardware object.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @returns
-        ///     - SysmanResource*: Resource handle for the specified device
-        /// 
-        /// @throws result_t
-        SysmanResource* __xecall
-        GetDeviceResource(
-            xe::Device* pDevice                             ///< [in] Handle to the device.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Retrieves a resource handle based on resource UUID
-        /// 
-        /// @details
-        ///     - There is a one-to-many mapping between the underlying hardware for a
-        ///       resource and the corresponding handles returned to the application.
-        ///       Thus, the numerical value of the handles should not be compared with
-        ///       those returned by previous function calls - instead, use the function
-        ///       ::xetSysmanResourceIsSame() to check if two handles reference the same
-        ///       hardware object.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @returns
-        ///     - SysmanResource*: Resource handle
-        /// 
-        /// @throws result_t
-        SysmanResource* __xecall
-        GetResourceByUuid(
-            const resource_uuid_t* uuid                     ///< [in] UUID for the resource
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get RAS errors that have occurred
-        /// 
-        /// @details
-        ///     - Returned errors can be filtered by resource, type, location and
-        ///       threshold.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __xecall
-        GetRasErrors(
-            SysmanResource* pResource,                      ///< [in] Handle of the resource. If specified, only errors within that
-                                                            ///< resource of child resources are returned. Otherwise all errors are
-                                                            ///< returned.
-            uint32_t type,                                  ///< [in] Bitfield of error types to filter - one or more of
-                                                            ///< ::xet_ras_error_type_t. Set to ::XET_RAS_ERROR_TYPE_ALL to have all
-                                                            ///< error types returned.
-            uint32_t location,                              ///< [in] Bitfield of error locations to filter - one or more of
-                                                            ///< ::xet_ras_error_loc_t. Set to ::XET_RAS_ERROR_LOC_ALL to have all
-                                                            ///< error locations returned.
-            uint32_t threshold,                             ///< [in] Only return error elements that have occurred at least this
-                                                            ///< number of times.
-                                                            ///< If set to 0, will get a list of all possible RAS elements, even those
-                                                            ///< that have not had errors.
-                                                            ///< For error elements of type ::XET_RAS_DATA_TYPE_OCCURRED, there is no
-                                                            ///< underlying counter, so they will always be returned independent of the
-                                                            ///< threshold setting.
-            xe::bool_t clear,                               ///< [in] Set to true to clear the underlying counters after they are
-                                                            ///< returned
-            uint32_t* pCount,                               ///< [in] Pointer to the number of elements in the array pErrors.
-                                                            ///< If count is 0 or pErrors is nullptr, driver will update with the
-                                                            ///< number of errors matching the specified filters. Counters are not cleared.
-                                                            ///< If count is non-zero and less than the number of matching errors,
-                                                            ///< driver will update with the number of errors matching the specified
-                                                            ///< filters. No data is returned and counters are not cleared.
-                                                            ///< If count is greater than or equal to the number of matching errors,
-                                                            ///< all data is returned, counters are cleared if requested and count will
-                                                            ///< be set to actual number of errors returned.
-            res_error_t* pErrors                            ///< [in] Array of error data
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Register to receive events
-        /// 
-        /// @details
-        ///     - This will only register the specified list of events. If other events
-        ///       have been registered, notifications for them will continue.
-        ///     - Applies only to devices in the specified SMI handle.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __xecall
-        RegisterEvents(
-            SysmanResource* pResource,                      ///< [in] Handle of the parent resource. Events from any contained devices
-                                                            ///< will be registered.
-                                                            ///< If the handle is ::XET_INVALID_SYSMAN_RESOURCE_HANDLE, events from all
-                                                            ///< devices will be registered.
-            uint32_t events                                 ///< [in] Bitfield of events to register.
-                                                            ///< Construct by ORing (1<<::xet_sysman_event_type_t).
-                                                            ///< Set to (~0) to register to receive all events.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Unregister events
-        /// 
-        /// @details
-        ///     - This will only unregister the specified list of events. If other
-        ///       events have been registered, notifications for them will continue.
-        ///     - Applies only to devices in the specified SMI handle.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __xecall
-        UnregisterEvents(
-            SysmanResource* pResource,                      ///< [in] Handle of the parent resource. Events from any contained devices
-                                                            ///< will be unregistered.
-                                                            ///< If the handle is ::XET_INVALID_SYSMAN_RESOURCE_HANDLE, events from all
-                                                            ///< devices will be unregistered.
-            uint32_t events                                 ///< [in] Bitfield of events to unregister.
-                                                            ///< Construct by ORing (1<<::xet_sysman_event_type_t).
-                                                            ///< Set to (~0) to unregister all events.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Listen for events
-        /// 
-        /// @details
-        ///     - This will only unregister the specified list of events. If other
-        ///       events have been registered, notifications for them will continue.
-        ///     - Applies only to devices in the specified SMI handle.
-        ///     - At most, one event data per device will be returned.
-        ///     - If event data is returned, the corresponding event status is cleared.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __xecall
-        ListenEvents(
-            xe::bool_t block,                               ///< [in] If set to true, the call will block the calling thread
-            uint32_t* pCount,                               ///< [in,out] Pointer to the number of elements in the array pointed to by pEventData.
-                                                            ///< If size is zero, then the driver will update the value with the number
-                                                            ///< of elements needed to retrieve the list of events.
-                                                            ///< If size is less than that required to store the list of events, the
-                                                            ///< driver will update the value with the required number of elements and
-                                                            ///< return an error.
-                                                            ///< If size is larger than that required to store the list of events, the
-                                                            ///< driver will update the value with the number of elements actually returned.
-            event_data_t* pEventData                        ///< [in] Pointer to an array of event data
-            );
-
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for SMI resource
-    class SysmanResource
-    {
-    public:
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Board resource properties
-        /// 
-        /// @details
-        ///     - For every property, there is a corresponding structure used to hold
-        ///       the property data. The type of the data structure is derived from the
-        ///       property enumerator, converted to lower-case with '_t' appended.
-        ///     - Properties can be either read-only (ro), write-only (wo) or read-write
-        ///       (rw).
-        ///     - Properties can be either static or dynamic. Static properties are set
-        ///       during initialization and will not change during the lifetime of the
-        ///       application. Dynamic properties can change at any time and should be
-        ///       reread.
-        enum class board_properties_t
-        {
-            BOARD_PROP_SERIAL_NUMBER = 0,                   ///< (ro static) The serial number of a board (data:
-                                                            ///< ::xet_board_prop_serial_number_t)
-            BOARD_PROP_BOARD_NUMBER,                        ///< (ro static) The board number of a board (data:
-                                                            ///< ::xet_board_prop_board_number_t)
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief PCI bar types
         enum class pci_bar_type_t
         {
@@ -596,7 +195,11 @@ namespace xet
         ///       reread.
         enum class device_properties_t
         {
-            DEVICE_PROP_BRAND = 0,                          ///< (ro static) The brand name of the device (data:
+            DEVICE_PROP_SERIAL_NUMBER = 0,                  ///< (ro static) The serial number of the device (data:
+                                                            ///< ::xet_device_prop_serial_number_t)
+            DEVICE_PROP_BOARD_NUMBER,                       ///< (ro static) The board number of the device (data:
+                                                            ///< ::xet_device_prop_board_number_t)
+            DEVICE_PROP_BRAND,                              ///< (ro static) The brand name of the device (data:
                                                             ///< ::xet_device_prop_brand_t)
             DEVICE_PROP_MODEL,                              ///< (ro static) The model name of the device (data:
                                                             ///< ::xet_device_prop_model_t)
@@ -604,8 +207,6 @@ namespace xet
                                                             ///< ::xet_device_prop_deviceid_t)
             DEVICE_PROP_VENDOR_NAME,                        ///< (ro static) The vendor name of the device (data:
                                                             ///< ::xet_device_prop_vendor_name_t)
-            DEVICE_PROP_ACCEL_ASSETS,                       ///< (ro static) The accelerator assets available in the device (data:
-                                                            ///< ::xet_device_prop_accel_assets_t)
             DEVICE_PROP_DRIVER_VERSION,                     ///< (ro static) The driver version associated with the device (data:
                                                             ///< ::xet_device_prop_driver_version_t)
             DEVICE_PROP_BARS,                               ///< (ro static) The bars configured for the device (data:
@@ -870,8 +471,8 @@ namespace xet
                                                             ///< (data: ::xet_freq_prop_avail_clocks_t)
             FREQ_PROP_AVAIL_DIVIDERS,                       ///< (ro static) Available dividers that this domain can run with (data:
                                                             ///< ::xet_freq_prop_avail_dividers_t)
-            FREQ_PROP_SRC_FREQ,                             ///< (ro static) Get the UUID of the source frequency domain resource if
-                                                            ///< the type is dependent (data: ::xet_freq_prop_src_freq_t)
+            FREQ_PROP_SRC_FREQ,                             ///< (ro static) Get the resource ID of the source frequency domain
+                                                            ///< resource if the type is dependent (data: ::xet_freq_prop_src_freq_t)
             FREQ_PROP_DVFS_MODE,                            ///< (rw dynamic) The operating mode of dynamic frequency management for
                                                             ///< this domain (data: ::xet_freq_prop_dvfs_mode_t)
             FREQ_PROP_FREQ_RANGE,                           ///< (rw dynamic) The frequencies between which dynamic frequency
@@ -1059,31 +660,87 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Data for property ::XET_BOARD_PROP_SERIAL_NUMBER
-        struct board_prop_serial_number_t
+        /// @brief Event types
+        enum class event_type_t
         {
-            int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
+            FREQ_THROTTLED = 0,                             ///< The frequency is being throttled
+            FREQ_POLICY_CHANGED,                            ///< Another API client has modified frequency domain properties
+            RAS_ERRORS,                                     ///< ECC/RAS errors
+            COUNT,                                          ///< The number of event types
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Data for property ::XET_BOARD_PROP_BOARD_NUMBER
-        struct board_prop_board_number_t
+        /// @brief Resource ID
+        struct resource_id_t
         {
-            int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
+            resource_type_t type;                           ///< [in,out] Resource type
+            uint32_t index;                                 ///< [in,out] Resource index (0 ...
+                                                            ///< ::xet_sysman_info_t.numResourcesByType[::xet_resource_type_t]-1)
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Request structure used to query a board resource property
-        struct board_property_request_t
+        /// @brief Filter RAS errors
+        struct ras_filter_t
         {
-            board_properties_t property;                    ///< [in] The property being requested (one of ::xet_board_properties_t).
-            void* pData;                                    ///< [in] Pointer to the data for the property.
-                                                            ///< Each property has a corresponding data structure. The type of the data
-                                                            ///< structure is derived from the property enumerator, converted to
-                                                            ///< lower-case with "_t" appended.
-            uint32_t size;                                  ///< [in] The size of the data structure pointed to by pData.
+            resource_id_t resourceId;                       ///< [in] Filter based on resource ID. Set to ::XET_RESOURCE_ID_ANY to get
+                                                            ///< errors from anywhere in the device
+            uint32_t type;                                  ///< [in] Bitfield of error types to filter - one or more of
+                                                            ///< ::xet_ras_error_type_t. Set to ::XET_RAS_ERROR_TYPE_ALL to have all
+                                                            ///< error types returned.
+            uint32_t location;                              ///< [in] Bitfield of error locations to filter - one or more of
+                                                            ///< ::xet_ras_error_loc_t. Set to ::XET_RAS_ERROR_LOC_ALL to have all
+                                                            ///< error locations returned.
+            uint32_t threshold;                             ///< [in] Only return error elements that have occurred at least this
+                                                            ///< number of times.
+                                                            ///< If set to 0, will get a list of all possible RAS elements, even those
+                                                            ///< that have not had errors.
+                                                            ///< For error elements of type ::XET_RAS_DATA_TYPE_OCCURRED, there is no
+                                                            ///< underlying counter, so they will always be returned independent of the
+                                                            ///< threshold setting.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief RAS error
+        struct res_error_t
+        {
+            uint32_t type;                                  ///< [out] Bitfield describing type of error, constructed from one or more
+                                                            ///< of ::xet_ras_error_type_t
+            uint32_t loc;                                   ///< [out] Bitfield describing structural location of the error,
+                                                            ///< constructed from one of ::xet_ras_error_loc_t
+            ras_data_type_t dataType;                       ///< [out] How to interpret the data
+            uint64_t data;                                  ///< [out] The value of the error - interpretation depends on dataType
+            resource_id_t resourceId;                       ///< [out] Resource where the error was generated. If the error doesn't
+                                                            ///< come from a specific resource, this will be ::XET_RESOURCE_ID_ANY
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data about one type of accelerator asset
+        struct device_prop_accel_asset_t
+        {
+            accel_asset_t type;                             ///< [out] The type of asset
+            uint32_t numBlocks;                             ///< [out] The number of blocks of this asset type
+            uint32_t numEngines;                            ///< [out] The number of submission engines for this type of asset
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Generic SMI information about a device
+        struct info_t
+        {
+            uint64_t assetBitfield;                         ///< [out] A bitfield of assets (1<<::xet_accel_asset_t) available in the
+                                                            ///< resource
+            device_prop_accel_asset_t assetInfo[static_cast<int>(accel_asset_t::MAX_TYPES)];///< [out] Information about each asset.
+            uint32_t numRas;                                ///< [out] The total number of RAS elements available for querying in this
+                                                            ///< device.
+            uint32_t rasTypes;                              ///< [out] Bitfield of the type of RAS elements (::xet_ras_error_type_t)
+                                                            ///< available for querying in this device.
+            uint32_t rasLocations;                          ///< [out] Bitfield of the structure location of RAS elements
+                                                            ///< (::xet_ras_error_loc_t) available for querying in this device.
+            uint32_t numResourcesByType[static_cast<int>(resource_type_t::MAX_TYPES)];  ///< [out] The number of resources of each type in this device.
 
         };
 
@@ -1094,6 +751,22 @@ namespace xet
             pci_bar_type_t type;                            ///< [out] The type of bar
             uint64_t base;                                  ///< [out] Base address of the bar.
             uint64_t size;                                  ///< [out] Size of the bar.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for property ::XET_DEVICE_PROP_SERIAL_NUMBER
+        struct device_prop_serial_number_t
+        {
+            int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Data for property ::XET_DEVICE_PROP_BOARD_NUMBER
+        struct device_prop_board_number_t
+        {
+            int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
 
         };
 
@@ -1126,25 +799,6 @@ namespace xet
         struct device_prop_vendor_name_t
         {
             int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Data about one type of accelerator asset
-        struct device_prop_accel_asset_t
-        {
-            Sysman::accel_asset_t type;                     ///< [out] The type of asset
-            uint32_t numBlocks;                             ///< [out] The number of blocks of this asset type
-            uint32_t numEngines;                            ///< [out] The number of submission engines for this type of asset
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Data for the property ::XET_DEVICE_PROP_ACCEL_ASSETS
-        struct device_prop_accel_assets_t
-        {
-            uint64_t assetBitfield;                         ///< [out] A bitfield of assets available in the resource
-            device_prop_accel_asset_t assetInfo[static_cast<int>(Sysman::accel_asset_t::MAX_TYPES)];///< [out] Information about each asset.
 
         };
 
@@ -1182,7 +836,7 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Request structure used to query a device resource container property
+        /// @brief Request structure used to query a device property
         struct device_property_request_t
         {
             device_properties_t property;                   ///< [in] The property being requested (one of ::xet_device_properties_t).
@@ -1238,6 +892,8 @@ namespace xet
         /// @brief Request structure used to query a PSU resource property
         struct psu_property_request_t
         {
+            uint32_t index;                                 ///< [in] The index of the PSU resource (0 ...
+                                                            ///< ::xet_sysman_info_t.numResourcesByType[::XET_RESOURCE_TYPE_PSU]-1)
             psu_properties_t property;                      ///< [in] The property being requested (one of ::xet_psu_properties_t).
             void* pData;                                    ///< [in] Pointer to the data for the property.
                                                             ///< Each property has a corresponding data structure. The type of the data
@@ -1259,6 +915,8 @@ namespace xet
         /// @brief Request structure used to query a temperature sensor resource property
         struct temp_property_request_t
         {
+            uint32_t index;                                 ///< [in] The index of the temperature sensor resource (0 ...
+                                                            ///< ::xet_sysman_info_t.numResourcesByType[::XET_RESOURCE_TYPE_TEMP]-1)
             temp_properties_t property;                     ///< [in] The property being requested (one of ::xet_temp_properties_t).
             void* pData;                                    ///< [in] Pointer to the data for the property.
                                                             ///< Each property has a corresponding data structure. The type of the data
@@ -1345,6 +1003,8 @@ namespace xet
         /// @brief Request structure used to query a fan resource property
         struct fan_property_request_t
         {
+            uint32_t index;                                 ///< [in] The index of the fan resource (0 ...
+                                                            ///< ::xet_sysman_info_t.numResourcesByType[::XET_RESOURCE_TYPE_FAN]-1)
             fan_properties_t property;                      ///< [in] The property being requested (one of ::xet_fan_properties_t).
             void* pData;                                    ///< [in] Pointer to the data for the property.
                                                             ///< Each property has a corresponding data structure. The type of the data
@@ -1377,6 +1037,8 @@ namespace xet
         /// @brief Request structure used to query a LED resource property
         struct led_property_request_t
         {
+            uint32_t index;                                 ///< [in] The index of the LED resource (0 ...
+                                                            ///< ::xet_sysman_info_t.numResourcesByType[::XET_RESOURCE_TYPE_LED]-1)
             led_properties_t property;                      ///< [in] The property being requested (one of ::xet_led_properties_t).
             void* pData;                                    ///< [in] Pointer to the data for the property.
                                                             ///< Each property has a corresponding data structure. The type of the data
@@ -1423,6 +1085,8 @@ namespace xet
         /// @brief Request structure used to query a firmware resource property
         struct firmware_property_request_t
         {
+            uint32_t index;                                 ///< [in] The index of the firmware resource (0 ...
+                                                            ///< ::xet_sysman_info_t.numResourcesByType[::XET_RESOURCE_TYPE_FIRMWARE]-1)
             firmware_properties_t property;                 ///< [in] The property being requested (one of
                                                             ///< ::xet_firmware_properties_t).
             void* pData;                                    ///< [in] Pointer to the data for the property.
@@ -1512,6 +1176,8 @@ namespace xet
         /// @brief Request structure used to query a power domain resource property
         struct pwr_property_request_t
         {
+            uint32_t index;                                 ///< [in] The index of the power domain resource (0 ...
+                                                            ///< ::xet_sysman_info_t.numResourcesByType[::XET_RESOURCE_TYPE_PWR]-1)
             pwr_properties_t property;                      ///< [in] The property being requested (one of ::xet_pwr_properties_t).
             void* pData;                                    ///< [in] Pointer to the data for the property.
                                                             ///< Each property has a corresponding data structure. The type of the data
@@ -1582,7 +1248,7 @@ namespace xet
         /// @brief Data for the property ::XET_FREQ_PROP_SRC_FREQ
         struct freq_prop_src_freq_t
         {
-            Sysman::resource_uuid_t uuid;                   ///< [out] The resource UUID of the source frequency domain
+            resource_id_t resourceId;                       ///< [out] The resource ID of the source frequency domain
 
         };
 
@@ -1666,6 +1332,8 @@ namespace xet
         /// @brief Request structure used to query a frequency domain resource property
         struct freq_property_request_t
         {
+            uint32_t index;                                 ///< [in] The index of the frequency domain resource (0 ...
+                                                            ///< ::xet_sysman_info_t.numResourcesByType[::XET_RESOURCE_TYPE_FREQ]-1)
             freq_properties_t property;                     ///< [in] The property being requested (one of ::xet_freq_properties_t).
             void* pData;                                    ///< [in] Pointer to the data for the property.
                                                             ///< Each property has a corresponding data structure. The type of the data
@@ -1730,6 +1398,8 @@ namespace xet
         /// @brief Request structure used to query a power-well domain resource property
         struct pwrwell_property_request_t
         {
+            uint32_t index;                                 ///< [in] The index of the power-well domain resource (0 ...
+                                                            ///< ::xet_sysman_info_t.numResourcesByType[::XET_RESOURCE_TYPE_PWRWELL]-1)
             pwrwell_properties_t property;                  ///< [in] The property being requested (one of ::xet_pwrwell_properties_t).
             void* pData;                                    ///< [in] Pointer to the data for the property.
                                                             ///< Each property has a corresponding data structure. The type of the data
@@ -1763,6 +1433,8 @@ namespace xet
         /// @brief Request structure used to query an accelerator resource property
         struct accel_property_request_t
         {
+            uint32_t index;                                 ///< [in] The index of the accelerator resource (0 ...
+                                                            ///< ::xet_sysman_info_t.numResourcesByType[::XET_RESOURCE_TYPE_ACCEL]-1)
             accel_properties_t property;                    ///< [in] The property being requested (one of ::xet_accel_properties_t).
             void* pData;                                    ///< [in] Pointer to the data for the property.
                                                             ///< Each property has a corresponding data structure. The type of the data
@@ -1852,6 +1524,8 @@ namespace xet
         /// @brief Request structure used to query a memory resource property
         struct mem_property_request_t
         {
+            uint32_t index;                                 ///< [in] The index of the memory resource (0 ...
+                                                            ///< ::xet_sysman_info_t.numResourcesByType[::XET_RESOURCE_TYPE_MEM]-1)
             mem_properties_t property;                      ///< [in] The property being requested (one of ::xet_mem_properties_t).
             void* pData;                                    ///< [in] Pointer to the data for the property.
                                                             ///< Each property has a corresponding data structure. The type of the data
@@ -1948,6 +1622,8 @@ namespace xet
         /// @brief Request structure used to query a link resource property
         struct link_property_request_t
         {
+            uint32_t index;                                 ///< [in] The index of the link resource (0 ...
+                                                            ///< ::xet_sysman_info_t.numResourcesByType[::XET_RESOURCE_TYPE_LINK]-1)
             link_properties_t property;                     ///< [in] The property being requested (one of ::xet_link_properties_t).
             void* pData;                                    ///< [in] Pointer to the data for the property.
                                                             ///< Each property has a corresponding data structure. The type of the data
@@ -1957,177 +1633,141 @@ namespace xet
 
         };
 
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure used to register/unregister events
+        struct event_request_t
+        {
+            event_type_t event;                             ///< [in] The event type to register.
+            resource_id_t resourceId;                       ///< [in] Only events being generated by the specified resource. If
+                                                            ///< ::XET_RESOURCE_ID_ANY, then applies to all events from all resources
+                                                            ///< in the device.
+            uint32_t threshold;                             ///< [in] The application only receives a notification when the total count
+                                                            ///< exceeds this value. Set to zero to receive a notification for every
+                                                            ///< new event.
+
+        };
+
 
     protected:
         ///////////////////////////////////////////////////////////////////////////////
-        resource_handle_t m_handle = nullptr;           ///< [in] handle of resource
-        Sysman* m_pSysman;                              ///< [in] pointer to owner object
+        sysman_handle_t m_handle = nullptr;             ///< [in] handle of SMI object
+        DeviceGroup* m_pDeviceGroup;                    ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        SysmanResource( void ) = delete;
-        SysmanResource( 
-            resource_handle_t handle,                       ///< [in] handle of resource
-            Sysman* pSysman                                 ///< [in] pointer to owner object
+        Sysman( void ) = delete;
+        Sysman( 
+            sysman_handle_t handle,                         ///< [in] handle of SMI object
+            DeviceGroup* pDeviceGroup                       ///< [in] pointer to owner object
             );
 
-        ~SysmanResource( void ) = default;
+        ~Sysman( void ) = default;
 
-        SysmanResource( SysmanResource const& other ) = delete;
-        void operator=( SysmanResource const& other ) = delete;
+        Sysman( Sysman const& other ) = delete;
+        void operator=( Sysman const& other ) = delete;
 
-        SysmanResource( SysmanResource&& other ) = delete;
-        void operator=( SysmanResource&& other ) = delete;
+        Sysman( Sysman&& other ) = delete;
+        void operator=( Sysman&& other ) = delete;
 
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
-        auto getSysman( void ) const { return m_pSysman; }
+        auto getDevicegroup( void ) const { return m_pDeviceGroup; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Compare if two resource handles reference the same underlying hardware
-        ///        object
+        /// @brief Creates a handle to access SMI features for a device
         /// 
         /// @details
-        ///     - There is a one-to-many mapping between the underlying hardware for a
-        ///       resource and the corresponding handles returned to the application.
-        ///       Thus, the numerical value of the handles should not be compared with
-        ///       those returned by previous function calls - instead, use this function
-        ///       to check if two handles reference the same hardware object.
+        ///     - Initializes internal structures to support SMI features.
+        ///     - If the write flag ::XET_SYSMAN_INIT_FLAGS_WRITE is specified, no
+        ///       access right checks are made during initialization. The check is done
+        ///       in functions that attempt to control a device.
+        ///     - If the write flag ::XET_SYSMAN_INIT_FLAGS_WRITE is not specified, any
+        ///       function attempting to control a device will return
+        ///       ::XE_RESULT_ERROR_INSUFFICENT_PERMISSIONS.
+        ///     - Multiple SMI handles can be created for the same device and concurrent
+        ///       access through each handle to access underlying hardware resources is
+        ///       supported.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **nvmlInit**
+        ///     - **rsmi_init**
+        /// @returns
+        ///     - Sysman*: Handle for accessing SMI features
+        /// 
+        /// @throws result_t
+        static Sysman* __xecall
+        Create(
+            Device* pDevice,                                ///< [in] Handle of the device
+            version_t version,                              ///< [in] SMI version that application was built with
+            uint32_t flags                                  ///< [in] Bitfield of ::xet_sysman_init_flags_t
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Destroys a SMI handle
+        /// 
+        /// @details
+        ///     - Only once all SMI handles to a device have been destroyed will
+        ///       internal data structures be freed from the application memory.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **nvmlShutdown**
+        ///     - **rsmi_shut_down**
+        /// @throws result_t
+        static void __xecall
+        Destroy(
+            Sysman* pSysman                                 ///< [in][release] SMI handle to destroy
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get human-readable name for an accelerator asset
+        /// @throws result_t
+        void __xecall
+        GetAccelAssetName(
+            accel_asset_t type,                             ///< [in] The type of accelerator asset
+            const char** ppName                             ///< [in] Pointer to the asset name
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get SMI information for a device
+        /// 
+        /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
-        IsSame(
-            SysmanResource* pRhs,                           ///< [in] Handle of the other resource
-            xe::bool_t* pIsSame                             ///< [in] Sets to True if the two resources reference the same underlying
-                                                            ///< hardware object
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get generic information about a resource
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @returns
-        ///     - Sysman::resource_info_t: Generic information about the resource
-        /// 
-        /// @throws result_t
-        Sysman::resource_info_t __xecall
         GetInfo(
-            void
+            info_t* pInfo                                   ///< [in] Returned information
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get a handle to the parent resource
+        /// @brief Get RAS errors that have occurred
         /// 
         /// @details
-        ///     - For resource containers, this will return the handle to parent
-        ///       container. For non-container resources, this will return the handle to
-        ///       the container resource in which the resource is located.
-        ///     - If there is no parent (e.g. resources of type
-        ///       ::XET_RESOURCE_TYPE_UNIT_CONTAINER), the returned handle will be
-        ///       ::XET_INVALID_SYSMAN_RESOURCE_HANDLE.
-        ///     - There is a one-to-many mapping between the underlying hardware for a
-        ///       resource and the corresponding handles returned to the application.
-        ///       Thus, the numerical value of the handles should not be compared with
-        ///       those returned by previous function calls - instead, use the function
-        ///       ::xetSysmanResourceIsSame() to check if two handles reference the same
-        ///       hardware object.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @returns
-        ///     - SysmanResource*: Handle of the parent resource
-        /// 
-        /// @throws result_t
-        SysmanResource* __xecall
-        GetParent(
-            void
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get children resources
-        /// 
-        /// @details
-        ///     - If the parent resource is not a container, no children resources will
-        ///       be returned.
-        ///     - Only resource containers will be returned by this function. The
-        ///       function ::xetSysmanGetResources should be used to get non-container
-        ///       resources located in a parent resource.
-        ///     - There is a one-to-many mapping between the underlying hardware for a
-        ///       resource and the corresponding handles returned to the application.
-        ///       Thus, the numerical value of the handles should not be compared with
-        ///       those returned by previous function calls - instead, use the function
-        ///       ::xetSysmanResourceIsSame() to check if two handles reference the same
-        ///       hardware object.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @returns
-        ///     - SysmanResource*: Array of resource handles.
-        /// 
-        /// @throws result_t
-        void __xecall
-        GetChildren(
-            uint32_t* pCount,                               ///< [in,out] Pointer to the number of elements in the array phResources.
-                                                            ///< If count is zero, then the driver will update the value with the total
-                                                            ///< number of child resources.
-                                                            ///< If count is non-zero, then driver will only retrieve that number of
-                                                            ///< child resources starting from index 0.
-                                                            ///< If count is larger than the number of child resources that will be
-                                                            ///< returned, then the driver will update the value with the resources
-                                                            ///< actually returned.
-            SysmanResource** ppResources = nullptr          ///< [out][optional][range(0, *pCount)] Array of resource handles.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get peer resources
-        /// 
-        /// @details
-        ///     - If the parent resource is not a container, no peer resources will be
-        ///       returned.
-        ///     - Only resource containers will be returned by this function. The
-        ///       function ::xetSysmanGetResources should be used to get non-container
-        ///       resources located in a parent resource.
-        ///     - There is a one-to-many mapping between the underlying hardware for a
-        ///       resource and the corresponding handles returned to the application.
-        ///       Thus, the numerical value of the handles should not be compared with
-        ///       those returned by previous function calls - instead, use the function
-        ///       ::xetSysmanResourceIsSame() to check if two handles reference the same
-        ///       hardware object.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @returns
-        ///     - SysmanResource*: Array of resource handles.
-        /// 
-        /// @throws result_t
-        void __xecall
-        GetPeers(
-            uint32_t* pCount,                               ///< [in,out] Pointer to the number of elements in the array phResources.
-                                                            ///< If count is zero, then the driver will update the value with the total
-                                                            ///< number of peer resources.
-                                                            ///< If count is non-zero, then driver will only retrieve that number of
-                                                            ///< peer resources starting from index 0.
-                                                            ///< If count is larger than the number of peer resources that will be
-                                                            ///< returned, then the driver will update the value with the resources
-                                                            ///< actually returned.
-            SysmanResource** ppResources = nullptr          ///< [out][optional][range(0, *pCount)] Array of resource handles.
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get board property data
-        /// 
-        /// @details
+        ///     - Returned errors can be filtered by resource, type, location and
+        ///       threshold.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
-        GetBoardProperties(
-            uint32_t count,                                 ///< [in] The number of properties in the array pRequest
-            board_property_request_t* pRequest              ///< [in] Pointer to list of properties and corresponding data storage
+        GetRasErrors(
+            xe::bool_t clear,                               ///< [in] Set to true to clear the underlying counters after they are
+                                                            ///< returned
+            uint32_t* pCount,                               ///< [in] Pointer to the number of elements in the array pErrors.
+                                                            ///< If count is 0 or pErrors is nullptr, driver will update with the
+                                                            ///< number of errors matching the specified filters. Counters are not cleared.
+                                                            ///< If count is non-zero and less than the number of matching errors,
+                                                            ///< driver will update with the number of errors matching the specified
+                                                            ///< filters. No data is returned and counters are not cleared.
+                                                            ///< If count is greater than or equal to the number of matching errors,
+                                                            ///< all data is returned, counters are cleared if requested and count will
+                                                            ///< be set to actual number of errors returned.
+            res_error_t* pErrors                            ///< [in] Array of error data
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get device container property data
+        /// @brief Get device property data
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -2140,7 +1780,7 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set device container property data
+        /// @brief Set device property data
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -2412,6 +2052,64 @@ namespace xet
             link_property_request_t* pRequest               ///< [in] Pointer to list of properties and corresponding data storage
             );
 
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Register to receive events
+        /// 
+        /// @details
+        ///     - This will only register the specified list of events. If other events
+        ///       have been registered, notifications for them will continue.
+        ///     - Set count to zero to receive notifications for all events.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        RegisterEvents(
+            uint32_t count,                                 ///< [in] Number of entries in the array pEvents. If zero, all events will
+                                                            ///< be registered.
+            event_request_t* pEvents                        ///< [in] Events to register.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Unregister events
+        /// 
+        /// @details
+        ///     - This will only unregister the specified list of events. If other
+        ///       events have been registered, notifications for them will continue.
+        ///     - Set count to zero to no longer receive any notifications.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        UnregisterEvents(
+            uint32_t count,                                 ///< [in] Number of entries in the array pEvents. If zero, all events will
+                                                            ///< be unregistered.
+            event_request_t* pEvents                        ///< [in] Events to unregister.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get events that have been triggered for a specific device or from all
+        ///        registered devices
+        /// 
+        /// @details
+        ///     - If events have occurred, they are returned and the corresponding event
+        ///       status is cleared if the argument clear = true.
+        ///     - If listening to events from multiple devices, it is recommended to
+        ///       call this function with hSysman = nullptr, clear = false and timeout =
+        ///       ::XET_EVENT_WAIT_INFINITE. Then call this function for each device
+        ///       with clear = true and timeout = 0.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        GetEvents(
+            xe::bool_t clear,                               ///< [in] Clear the event status.
+            uint32_t timeout,                               ///< [in] How long to wait in milliseconds for events to arrive. Zero will
+                                                            ///< check status and return immediately. Set to ::XET_EVENT_WAIT_INFINITE
+                                                            ///< to block until events arrive.
+            uint32_t* pEvents                               ///< [in] Bitfield of events (1<<::xet_sysman_event_type_t) that have been
+                                                            ///< triggered.
+            );
+
     };
 
 } // namespace xet
@@ -2431,12 +2129,12 @@ namespace xet
     std::string to_string( const Sysman::resource_type_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::accel_asset_t to std::string
-    std::string to_string( const Sysman::accel_asset_t val );
+    /// @brief Converts Sysman::resource_id_t to std::string
+    std::string to_string( const Sysman::resource_id_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resource_uuid_t to std::string
-    std::string to_string( const Sysman::resource_uuid_t val );
+    /// @brief Converts Sysman::accel_asset_t to std::string
+    std::string to_string( const Sysman::accel_asset_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::ras_error_type_t to std::string
@@ -2451,480 +2149,472 @@ namespace xet
     std::string to_string( const Sysman::ras_data_type_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::ras_filter_t to std::string
+    std::string to_string( const Sysman::ras_filter_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::res_error_t to std::string
     std::string to_string( const Sysman::res_error_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resource_info_t to std::string
-    std::string to_string( const Sysman::resource_info_t val );
+    /// @brief Converts Sysman::device_prop_accel_asset_t to std::string
+    std::string to_string( const Sysman::device_prop_accel_asset_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::info_t to std::string
+    std::string to_string( const Sysman::info_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pci_bar_type_t to std::string
+    std::string to_string( const Sysman::pci_bar_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pci_bar_info_t to std::string
+    std::string to_string( const Sysman::pci_bar_info_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::device_properties_t to std::string
+    std::string to_string( const Sysman::device_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::device_prop_serial_number_t to std::string
+    std::string to_string( const Sysman::device_prop_serial_number_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::device_prop_board_number_t to std::string
+    std::string to_string( const Sysman::device_prop_board_number_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::device_prop_brand_t to std::string
+    std::string to_string( const Sysman::device_prop_brand_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::device_prop_model_t to std::string
+    std::string to_string( const Sysman::device_prop_model_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::device_prop_deviceid_t to std::string
+    std::string to_string( const Sysman::device_prop_deviceid_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::device_prop_vendor_name_t to std::string
+    std::string to_string( const Sysman::device_prop_vendor_name_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::device_prop_driver_version_t to std::string
+    std::string to_string( const Sysman::device_prop_driver_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::device_prop_bars_t to std::string
+    std::string to_string( const Sysman::device_prop_bars_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::device_prop_cold_shutdown_t to std::string
+    std::string to_string( const Sysman::device_prop_cold_shutdown_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::device_prop_cold_reset_t to std::string
+    std::string to_string( const Sysman::device_prop_cold_reset_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::device_property_request_t to std::string
+    std::string to_string( const Sysman::device_property_request_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::psu_voltage_status_t to std::string
+    std::string to_string( const Sysman::psu_voltage_status_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::psu_properties_t to std::string
+    std::string to_string( const Sysman::psu_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::psu_prop_amp_limit_t to std::string
+    std::string to_string( const Sysman::psu_prop_amp_limit_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::psu_prop_voltage_status_t to std::string
+    std::string to_string( const Sysman::psu_prop_voltage_status_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::psu_prop_fan_failure_t to std::string
+    std::string to_string( const Sysman::psu_prop_fan_failure_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::psu_prop_temperature_t to std::string
+    std::string to_string( const Sysman::psu_prop_temperature_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::psu_prop_amps_t to std::string
+    std::string to_string( const Sysman::psu_prop_amps_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::psu_property_request_t to std::string
+    std::string to_string( const Sysman::psu_property_request_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::temp_properties_t to std::string
+    std::string to_string( const Sysman::temp_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::temp_prop_temperature_t to std::string
+    std::string to_string( const Sysman::temp_prop_temperature_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::temp_property_request_t to std::string
+    std::string to_string( const Sysman::temp_property_request_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::fan_speed_mode_t to std::string
+    std::string to_string( const Sysman::fan_speed_mode_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::fan_speed_units_t to std::string
+    std::string to_string( const Sysman::fan_speed_units_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::fan_temp_speed_t to std::string
+    std::string to_string( const Sysman::fan_temp_speed_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::fan_properties_t to std::string
+    std::string to_string( const Sysman::fan_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::fan_prop_max_rpm_t to std::string
+    std::string to_string( const Sysman::fan_prop_max_rpm_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::fan_prop_max_table_size_t to std::string
+    std::string to_string( const Sysman::fan_prop_max_table_size_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::fan_prop_speed_rpm_t to std::string
+    std::string to_string( const Sysman::fan_prop_speed_rpm_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::fan_prop_speed_percent_t to std::string
+    std::string to_string( const Sysman::fan_prop_speed_percent_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::fan_prop_mode_t to std::string
+    std::string to_string( const Sysman::fan_prop_mode_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::fan_prop_fixed_speed_t to std::string
+    std::string to_string( const Sysman::fan_prop_fixed_speed_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::fan_prop_speed_table_t to std::string
+    std::string to_string( const Sysman::fan_prop_speed_table_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::fan_property_request_t to std::string
+    std::string to_string( const Sysman::fan_property_request_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::led_properties_t to std::string
+    std::string to_string( const Sysman::led_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::led_prop_rgb_cap_t to std::string
+    std::string to_string( const Sysman::led_prop_rgb_cap_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::led_prop_state_t to std::string
+    std::string to_string( const Sysman::led_prop_state_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::led_property_request_t to std::string
+    std::string to_string( const Sysman::led_property_request_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::firmware_properties_t to std::string
+    std::string to_string( const Sysman::firmware_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::firmware_prop_name_t to std::string
+    std::string to_string( const Sysman::firmware_prop_name_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::firmware_prop_version_t to std::string
+    std::string to_string( const Sysman::firmware_prop_version_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::firmware_prop_check_t to std::string
+    std::string to_string( const Sysman::firmware_prop_check_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::firmware_prop_flash_t to std::string
+    std::string to_string( const Sysman::firmware_prop_flash_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::firmware_property_request_t to std::string
+    std::string to_string( const Sysman::firmware_property_request_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pwr_properties_t to std::string
+    std::string to_string( const Sysman::pwr_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pwr_prop_accel_assets_t to std::string
+    std::string to_string( const Sysman::pwr_prop_accel_assets_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pwr_prop_max_limit_t to std::string
+    std::string to_string( const Sysman::pwr_prop_max_limit_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pwr_prop_energy_counter_t to std::string
+    std::string to_string( const Sysman::pwr_prop_energy_counter_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pwr_prop_sustained_limit_t to std::string
+    std::string to_string( const Sysman::pwr_prop_sustained_limit_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pwr_prop_burst_limit_t to std::string
+    std::string to_string( const Sysman::pwr_prop_burst_limit_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pwr_prop_peak_limit_t to std::string
+    std::string to_string( const Sysman::pwr_prop_peak_limit_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pwr_property_request_t to std::string
+    std::string to_string( const Sysman::pwr_property_request_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_domain_type_t to std::string
+    std::string to_string( const Sysman::freq_domain_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::dvfs_mode_t to std::string
+    std::string to_string( const Sysman::dvfs_mode_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_throttle_reasons_t to std::string
+    std::string to_string( const Sysman::freq_throttle_reasons_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_divider_t to std::string
+    std::string to_string( const Sysman::freq_divider_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_properties_t to std::string
+    std::string to_string( const Sysman::freq_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_prop_accel_assets_t to std::string
+    std::string to_string( const Sysman::freq_prop_accel_assets_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_prop_domain_type_t to std::string
+    std::string to_string( const Sysman::freq_prop_domain_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_prop_avail_clocks_t to std::string
+    std::string to_string( const Sysman::freq_prop_avail_clocks_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_prop_avail_dividers_t to std::string
+    std::string to_string( const Sysman::freq_prop_avail_dividers_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_prop_src_freq_t to std::string
+    std::string to_string( const Sysman::freq_prop_src_freq_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_prop_dvfs_mode_t to std::string
+    std::string to_string( const Sysman::freq_prop_dvfs_mode_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_prop_freq_range_t to std::string
+    std::string to_string( const Sysman::freq_prop_freq_range_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_prop_freq_tdp_t to std::string
+    std::string to_string( const Sysman::freq_prop_freq_tdp_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_prop_freq_efficient_t to std::string
+    std::string to_string( const Sysman::freq_prop_freq_efficient_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_prop_freq_request_t to std::string
+    std::string to_string( const Sysman::freq_prop_freq_request_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_prop_freq_resolved_t to std::string
+    std::string to_string( const Sysman::freq_prop_freq_resolved_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_prop_freq_divider_t to std::string
+    std::string to_string( const Sysman::freq_prop_freq_divider_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_prop_throttle_reasons_t to std::string
+    std::string to_string( const Sysman::freq_prop_throttle_reasons_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_prop_throttle_time_t to std::string
+    std::string to_string( const Sysman::freq_prop_throttle_time_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_property_request_t to std::string
+    std::string to_string( const Sysman::freq_property_request_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pwrwell_promo_mode_t to std::string
+    std::string to_string( const Sysman::pwrwell_promo_mode_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pwrwell_properties_t to std::string
+    std::string to_string( const Sysman::pwrwell_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pwrwell_prop_accel_assets_t to std::string
+    std::string to_string( const Sysman::pwrwell_prop_accel_assets_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pwrwell_prop_promo_cap_t to std::string
+    std::string to_string( const Sysman::pwrwell_prop_promo_cap_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pwrwell_prop_promo_mode_t to std::string
+    std::string to_string( const Sysman::pwrwell_prop_promo_mode_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pwrwell_prop_utilization_t to std::string
+    std::string to_string( const Sysman::pwrwell_prop_utilization_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pwrwell_prop_transitions_t to std::string
+    std::string to_string( const Sysman::pwrwell_prop_transitions_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pwrwell_property_request_t to std::string
+    std::string to_string( const Sysman::pwrwell_property_request_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::accel_properties_t to std::string
+    std::string to_string( const Sysman::accel_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::accel_prop_accel_assets_t to std::string
+    std::string to_string( const Sysman::accel_prop_accel_assets_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::accel_prop_utilization_t to std::string
+    std::string to_string( const Sysman::accel_prop_utilization_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::accel_property_request_t to std::string
+    std::string to_string( const Sysman::accel_property_request_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::mem_type_t to std::string
+    std::string to_string( const Sysman::mem_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::mem_retire_reason_t to std::string
+    std::string to_string( const Sysman::mem_retire_reason_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::mem_retire_info_t to std::string
+    std::string to_string( const Sysman::mem_retire_info_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::mem_properties_t to std::string
+    std::string to_string( const Sysman::mem_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::mem_prop_type_t to std::string
+    std::string to_string( const Sysman::mem_prop_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::mem_prop_ecc_cap_t to std::string
+    std::string to_string( const Sysman::mem_prop_ecc_cap_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::mem_prop_bad_list_t to std::string
+    std::string to_string( const Sysman::mem_prop_bad_list_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::mem_prop_utilization_t to std::string
+    std::string to_string( const Sysman::mem_prop_utilization_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::mem_prop_bandwidth_t to std::string
+    std::string to_string( const Sysman::mem_prop_bandwidth_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::mem_prop_ecc_enable_t to std::string
+    std::string to_string( const Sysman::mem_prop_ecc_enable_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::mem_prop_ecc_poison_t to std::string
+    std::string to_string( const Sysman::mem_prop_ecc_poison_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::mem_property_request_t to std::string
+    std::string to_string( const Sysman::mem_property_request_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::link_type_t to std::string
+    std::string to_string( const Sysman::link_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::link_speed_t to std::string
+    std::string to_string( const Sysman::link_speed_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::link_properties_t to std::string
+    std::string to_string( const Sysman::link_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::link_prop_type_t to std::string
+    std::string to_string( const Sysman::link_prop_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::link_prop_bus_address_t to std::string
+    std::string to_string( const Sysman::link_prop_bus_address_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::link_prop_pwr_cap_t to std::string
+    std::string to_string( const Sysman::link_prop_pwr_cap_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::link_prop_avail_speeds_t to std::string
+    std::string to_string( const Sysman::link_prop_avail_speeds_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::link_prop_max_packet_size_t to std::string
+    std::string to_string( const Sysman::link_prop_max_packet_size_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::link_prop_bandwidth_t to std::string
+    std::string to_string( const Sysman::link_prop_bandwidth_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::link_prop_speed_t to std::string
+    std::string to_string( const Sysman::link_prop_speed_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::link_prop_speed_range_t to std::string
+    std::string to_string( const Sysman::link_prop_speed_range_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::link_property_request_t to std::string
+    std::string to_string( const Sysman::link_property_request_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::event_type_t to std::string
     std::string to_string( const Sysman::event_type_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::event_data_t to std::string
-    std::string to_string( const Sysman::event_data_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::board_properties_t to std::string
-    std::string to_string( const SysmanResource::board_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::board_prop_serial_number_t to std::string
-    std::string to_string( const SysmanResource::board_prop_serial_number_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::board_prop_board_number_t to std::string
-    std::string to_string( const SysmanResource::board_prop_board_number_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::board_property_request_t to std::string
-    std::string to_string( const SysmanResource::board_property_request_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::pci_bar_type_t to std::string
-    std::string to_string( const SysmanResource::pci_bar_type_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::pci_bar_info_t to std::string
-    std::string to_string( const SysmanResource::pci_bar_info_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::device_properties_t to std::string
-    std::string to_string( const SysmanResource::device_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::device_prop_brand_t to std::string
-    std::string to_string( const SysmanResource::device_prop_brand_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::device_prop_model_t to std::string
-    std::string to_string( const SysmanResource::device_prop_model_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::device_prop_deviceid_t to std::string
-    std::string to_string( const SysmanResource::device_prop_deviceid_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::device_prop_vendor_name_t to std::string
-    std::string to_string( const SysmanResource::device_prop_vendor_name_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::device_prop_accel_asset_t to std::string
-    std::string to_string( const SysmanResource::device_prop_accel_asset_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::device_prop_accel_assets_t to std::string
-    std::string to_string( const SysmanResource::device_prop_accel_assets_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::device_prop_driver_version_t to std::string
-    std::string to_string( const SysmanResource::device_prop_driver_version_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::device_prop_bars_t to std::string
-    std::string to_string( const SysmanResource::device_prop_bars_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::device_prop_cold_shutdown_t to std::string
-    std::string to_string( const SysmanResource::device_prop_cold_shutdown_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::device_prop_cold_reset_t to std::string
-    std::string to_string( const SysmanResource::device_prop_cold_reset_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::device_property_request_t to std::string
-    std::string to_string( const SysmanResource::device_property_request_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::psu_voltage_status_t to std::string
-    std::string to_string( const SysmanResource::psu_voltage_status_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::psu_properties_t to std::string
-    std::string to_string( const SysmanResource::psu_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::psu_prop_amp_limit_t to std::string
-    std::string to_string( const SysmanResource::psu_prop_amp_limit_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::psu_prop_voltage_status_t to std::string
-    std::string to_string( const SysmanResource::psu_prop_voltage_status_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::psu_prop_fan_failure_t to std::string
-    std::string to_string( const SysmanResource::psu_prop_fan_failure_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::psu_prop_temperature_t to std::string
-    std::string to_string( const SysmanResource::psu_prop_temperature_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::psu_prop_amps_t to std::string
-    std::string to_string( const SysmanResource::psu_prop_amps_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::psu_property_request_t to std::string
-    std::string to_string( const SysmanResource::psu_property_request_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::temp_properties_t to std::string
-    std::string to_string( const SysmanResource::temp_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::temp_prop_temperature_t to std::string
-    std::string to_string( const SysmanResource::temp_prop_temperature_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::temp_property_request_t to std::string
-    std::string to_string( const SysmanResource::temp_property_request_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::fan_speed_mode_t to std::string
-    std::string to_string( const SysmanResource::fan_speed_mode_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::fan_speed_units_t to std::string
-    std::string to_string( const SysmanResource::fan_speed_units_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::fan_temp_speed_t to std::string
-    std::string to_string( const SysmanResource::fan_temp_speed_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::fan_properties_t to std::string
-    std::string to_string( const SysmanResource::fan_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::fan_prop_max_rpm_t to std::string
-    std::string to_string( const SysmanResource::fan_prop_max_rpm_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::fan_prop_max_table_size_t to std::string
-    std::string to_string( const SysmanResource::fan_prop_max_table_size_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::fan_prop_speed_rpm_t to std::string
-    std::string to_string( const SysmanResource::fan_prop_speed_rpm_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::fan_prop_speed_percent_t to std::string
-    std::string to_string( const SysmanResource::fan_prop_speed_percent_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::fan_prop_mode_t to std::string
-    std::string to_string( const SysmanResource::fan_prop_mode_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::fan_prop_fixed_speed_t to std::string
-    std::string to_string( const SysmanResource::fan_prop_fixed_speed_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::fan_prop_speed_table_t to std::string
-    std::string to_string( const SysmanResource::fan_prop_speed_table_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::fan_property_request_t to std::string
-    std::string to_string( const SysmanResource::fan_property_request_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::led_properties_t to std::string
-    std::string to_string( const SysmanResource::led_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::led_prop_rgb_cap_t to std::string
-    std::string to_string( const SysmanResource::led_prop_rgb_cap_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::led_prop_state_t to std::string
-    std::string to_string( const SysmanResource::led_prop_state_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::led_property_request_t to std::string
-    std::string to_string( const SysmanResource::led_property_request_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::firmware_properties_t to std::string
-    std::string to_string( const SysmanResource::firmware_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::firmware_prop_name_t to std::string
-    std::string to_string( const SysmanResource::firmware_prop_name_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::firmware_prop_version_t to std::string
-    std::string to_string( const SysmanResource::firmware_prop_version_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::firmware_prop_check_t to std::string
-    std::string to_string( const SysmanResource::firmware_prop_check_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::firmware_prop_flash_t to std::string
-    std::string to_string( const SysmanResource::firmware_prop_flash_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::firmware_property_request_t to std::string
-    std::string to_string( const SysmanResource::firmware_property_request_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::pwr_properties_t to std::string
-    std::string to_string( const SysmanResource::pwr_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::pwr_prop_accel_assets_t to std::string
-    std::string to_string( const SysmanResource::pwr_prop_accel_assets_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::pwr_prop_max_limit_t to std::string
-    std::string to_string( const SysmanResource::pwr_prop_max_limit_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::pwr_prop_energy_counter_t to std::string
-    std::string to_string( const SysmanResource::pwr_prop_energy_counter_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::pwr_prop_sustained_limit_t to std::string
-    std::string to_string( const SysmanResource::pwr_prop_sustained_limit_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::pwr_prop_burst_limit_t to std::string
-    std::string to_string( const SysmanResource::pwr_prop_burst_limit_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::pwr_prop_peak_limit_t to std::string
-    std::string to_string( const SysmanResource::pwr_prop_peak_limit_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::pwr_property_request_t to std::string
-    std::string to_string( const SysmanResource::pwr_property_request_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::freq_domain_type_t to std::string
-    std::string to_string( const SysmanResource::freq_domain_type_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::dvfs_mode_t to std::string
-    std::string to_string( const SysmanResource::dvfs_mode_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::freq_throttle_reasons_t to std::string
-    std::string to_string( const SysmanResource::freq_throttle_reasons_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::freq_divider_t to std::string
-    std::string to_string( const SysmanResource::freq_divider_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::freq_properties_t to std::string
-    std::string to_string( const SysmanResource::freq_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::freq_prop_accel_assets_t to std::string
-    std::string to_string( const SysmanResource::freq_prop_accel_assets_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::freq_prop_domain_type_t to std::string
-    std::string to_string( const SysmanResource::freq_prop_domain_type_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::freq_prop_avail_clocks_t to std::string
-    std::string to_string( const SysmanResource::freq_prop_avail_clocks_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::freq_prop_avail_dividers_t to std::string
-    std::string to_string( const SysmanResource::freq_prop_avail_dividers_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::freq_prop_src_freq_t to std::string
-    std::string to_string( const SysmanResource::freq_prop_src_freq_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::freq_prop_dvfs_mode_t to std::string
-    std::string to_string( const SysmanResource::freq_prop_dvfs_mode_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::freq_prop_freq_range_t to std::string
-    std::string to_string( const SysmanResource::freq_prop_freq_range_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::freq_prop_freq_tdp_t to std::string
-    std::string to_string( const SysmanResource::freq_prop_freq_tdp_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::freq_prop_freq_efficient_t to std::string
-    std::string to_string( const SysmanResource::freq_prop_freq_efficient_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::freq_prop_freq_request_t to std::string
-    std::string to_string( const SysmanResource::freq_prop_freq_request_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::freq_prop_freq_resolved_t to std::string
-    std::string to_string( const SysmanResource::freq_prop_freq_resolved_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::freq_prop_freq_divider_t to std::string
-    std::string to_string( const SysmanResource::freq_prop_freq_divider_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::freq_prop_throttle_reasons_t to std::string
-    std::string to_string( const SysmanResource::freq_prop_throttle_reasons_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::freq_prop_throttle_time_t to std::string
-    std::string to_string( const SysmanResource::freq_prop_throttle_time_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::freq_property_request_t to std::string
-    std::string to_string( const SysmanResource::freq_property_request_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::pwrwell_promo_mode_t to std::string
-    std::string to_string( const SysmanResource::pwrwell_promo_mode_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::pwrwell_properties_t to std::string
-    std::string to_string( const SysmanResource::pwrwell_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::pwrwell_prop_accel_assets_t to std::string
-    std::string to_string( const SysmanResource::pwrwell_prop_accel_assets_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::pwrwell_prop_promo_cap_t to std::string
-    std::string to_string( const SysmanResource::pwrwell_prop_promo_cap_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::pwrwell_prop_promo_mode_t to std::string
-    std::string to_string( const SysmanResource::pwrwell_prop_promo_mode_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::pwrwell_prop_utilization_t to std::string
-    std::string to_string( const SysmanResource::pwrwell_prop_utilization_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::pwrwell_prop_transitions_t to std::string
-    std::string to_string( const SysmanResource::pwrwell_prop_transitions_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::pwrwell_property_request_t to std::string
-    std::string to_string( const SysmanResource::pwrwell_property_request_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::accel_properties_t to std::string
-    std::string to_string( const SysmanResource::accel_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::accel_prop_accel_assets_t to std::string
-    std::string to_string( const SysmanResource::accel_prop_accel_assets_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::accel_prop_utilization_t to std::string
-    std::string to_string( const SysmanResource::accel_prop_utilization_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::accel_property_request_t to std::string
-    std::string to_string( const SysmanResource::accel_property_request_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::mem_type_t to std::string
-    std::string to_string( const SysmanResource::mem_type_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::mem_retire_reason_t to std::string
-    std::string to_string( const SysmanResource::mem_retire_reason_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::mem_retire_info_t to std::string
-    std::string to_string( const SysmanResource::mem_retire_info_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::mem_properties_t to std::string
-    std::string to_string( const SysmanResource::mem_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::mem_prop_type_t to std::string
-    std::string to_string( const SysmanResource::mem_prop_type_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::mem_prop_ecc_cap_t to std::string
-    std::string to_string( const SysmanResource::mem_prop_ecc_cap_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::mem_prop_bad_list_t to std::string
-    std::string to_string( const SysmanResource::mem_prop_bad_list_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::mem_prop_utilization_t to std::string
-    std::string to_string( const SysmanResource::mem_prop_utilization_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::mem_prop_bandwidth_t to std::string
-    std::string to_string( const SysmanResource::mem_prop_bandwidth_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::mem_prop_ecc_enable_t to std::string
-    std::string to_string( const SysmanResource::mem_prop_ecc_enable_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::mem_prop_ecc_poison_t to std::string
-    std::string to_string( const SysmanResource::mem_prop_ecc_poison_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::mem_property_request_t to std::string
-    std::string to_string( const SysmanResource::mem_property_request_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::link_type_t to std::string
-    std::string to_string( const SysmanResource::link_type_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::link_speed_t to std::string
-    std::string to_string( const SysmanResource::link_speed_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::link_properties_t to std::string
-    std::string to_string( const SysmanResource::link_properties_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::link_prop_type_t to std::string
-    std::string to_string( const SysmanResource::link_prop_type_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::link_prop_bus_address_t to std::string
-    std::string to_string( const SysmanResource::link_prop_bus_address_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::link_prop_pwr_cap_t to std::string
-    std::string to_string( const SysmanResource::link_prop_pwr_cap_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::link_prop_avail_speeds_t to std::string
-    std::string to_string( const SysmanResource::link_prop_avail_speeds_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::link_prop_max_packet_size_t to std::string
-    std::string to_string( const SysmanResource::link_prop_max_packet_size_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::link_prop_bandwidth_t to std::string
-    std::string to_string( const SysmanResource::link_prop_bandwidth_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::link_prop_speed_t to std::string
-    std::string to_string( const SysmanResource::link_prop_speed_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::link_prop_speed_range_t to std::string
-    std::string to_string( const SysmanResource::link_prop_speed_range_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts SysmanResource::link_property_request_t to std::string
-    std::string to_string( const SysmanResource::link_property_request_t val );
+    /// @brief Converts Sysman::event_request_t to std::string
+    std::string to_string( const Sysman::event_request_t val );
 
 } // namespace xet
 #endif // defined(__cplusplus)

@@ -109,13 +109,6 @@ namespace xet_lib
             result = getTable( XE_API_VERSION_1_0, &ddiTable.Sysman );
         }
 
-        if( XE_RESULT_SUCCESS == result )
-        {
-            auto getTable = reinterpret_cast<xet_pfnGetSysmanResourceProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "xetGetSysmanResourceProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &ddiTable.SysmanResource );
-        }
-
         return result;
     }
 } // namespace xet_lib

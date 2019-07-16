@@ -15,43 +15,9 @@
 #include <stdio.h>
 #include "xet_api.h"
 
-void ShowDeviceInfo(xet_sysman_handle_t hSysman, xet_resource_handle_t hDeviceContainer); // Forward declaration
-void ShowFanInfo(xet_sysman_handle_t hSysman, xet_resource_handle_t hFanResource); // Forward declaration
+int gNumDevices = 0;
 
-void ShowFans(xet_sysman_handle_t hSysman, xet_resource_handle_t hBoardContainer)
-{
-    uint32_t numFans = 0;
-    if (xetSysmanGetResources(hSysman, hBoardContainer, XET_RESOURCE_TYPE_FAN, &numFans, NULL) == XE_RESULT_SUCCESS)
-    {
-        xet_resource_handle_t* phFans = (xet_resource_handle_t*)malloc(numFans * sizeof(xet_resource_handle_t));
-        if (xetSysmanGetResources(hSysman, hBoardContainer, XET_RESOURCE_TYPE_FAN, &numFans, phFans) == XE_RESULT_SUCCESS)
-        {
-            for (uint32_t i = 0; i < numFans; i++)
-            {
-                ShowFanInfo(hSysman, phFans[i]);
-            }
-        }
-        free(phFans);
-    }
-}
-
-void ShowFanInfo(xet_sysman_handle_t hSysman, xet_resource_handle_t hFanResource)
-{
-    xet_resource_info_t info;
-    if (xetSysmanResourceGetInfo(hFanResource, &info) == XE_RESULT_SUCCESS)
-    {
-        char uuidStr[XET_RESOURCE_UUID_STRING_SIZE + 1] = { 0 };
-        uint32_t size = sizeof(uuidStr);
-        xetSysmanConvertUuidToString(hSysman, &info.uuid, &size, uuidStr);
-
-        fprintf(stdout, "Fan\n");
-        fprintf(stdout, "    UUID: %s\n", uuidStr);
-        fprintf(stdout, "\n");
-    }
-
-}
-
-void ShutdownDevice(xet_resource_handle_t hDeviceContainer)
+void ShutdownDevice(xet_sysman_handle_t hSysmanDevice)
 {
     struct
     {
@@ -63,8 +29,8 @@ void ShutdownDevice(xet_resource_handle_t hDeviceContainer)
     };
     data.shutdown.doShutdown = 1;
 
-    if (xetSysmanResourceSetDeviceProperties(
-        hDeviceContainer,
+    if (xetSysmanSetDeviceProperties(
+        hSysmanDevice,
         sizeof(requests) / sizeof(requests[0]),
         requests) == XE_RESULT_SUCCESS)
     {
@@ -76,103 +42,150 @@ void ShutdownDevice(xet_resource_handle_t hDeviceContainer)
     }
 }
 
-struct BoardData
+void ShowFanInfo(xet_sysman_handle_t hSysmanDevice, uint32_t FanIndex)
 {
-    xet_board_prop_serial_number_t  SerialNumber;
-    xet_board_prop_board_number_t   BoardNumber;
-};
-
-void ShowBoardInfo(xet_sysman_handle_t hSysman, xet_resource_handle_t hDeviceContainer)
-{
-    xet_resource_handle_t hParentContainer;
-    if (xetSysmanResourceGetParent(hDeviceContainer, &hParentContainer) != XE_RESULT_SUCCESS)
+    struct FanData
     {
-        // This device has no parent container
-        return;
-    }
-
-    xet_resource_info_t info;
-    if (xetSysmanResourceGetInfo(hParentContainer, &info) != XE_RESULT_SUCCESS)
-    {
-        // Can't get information about the parent
-        return;
-    }
-
-    if (info.type != XET_RESOURCE_TYPE_BOARD_CONTAINER)
-    {
-        // Parent is not a board
-        return;
-    }
-
-    BoardData data;
-    xet_board_property_request_t requests[] = 
-    {
-        { XET_BOARD_PROP_SERIAL_NUMBER,     &data.SerialNumber, sizeof(data.SerialNumber) },
-        { XET_BOARD_PROP_BOARD_NUMBER,      &data.BoardNumber,  sizeof(data.BoardNumber)  },
+        xet_fan_prop_speed_rpm_t        speedRpm;
+        xet_fan_prop_speed_percent_t    speedPercent;
     };
-    if (xetSysmanResourceGetBoardProperties(
-        hParentContainer,
+
+    FanData data;
+    xet_fan_property_request_t requests[] = 
+    {
+        { FanIndex, XET_FAN_PROP_SPEED_RPM,       &data.speedRpm,       sizeof(data.speedRpm) },
+        { FanIndex, XET_FAN_PROP_SPEED_PERCENT,   &data.speedPercent,   sizeof(data.speedPercent) },
+    };
+
+    if (xetSysmanGetFanProperties(
+        hSysmanDevice,
         sizeof(requests) / sizeof(requests[0]),
         requests) == XE_RESULT_SUCCESS)
     {
-        char uuidStr[XET_RESOURCE_UUID_STRING_SIZE + 1] = { 0 };
-        uint32_t size = sizeof(uuidStr);
-        xetSysmanConvertUuidToString(hSysman, &info.uuid, &size, uuidStr);
+        fprintf(stdout, "        Fan %u: %u rpm (%u %%)\n", FanIndex, data.speedRpm.speed, data.speedPercent.speed);
+    }
+}
 
-        fprintf(stdout, "Board\n");
-        fprintf(stdout, "    UUID:    %s\n", uuidStr);
+void ShowInventoryInfo(xet_sysman_handle_t hSysmanDevice)
+{
+    struct DeviceData
+    {
+        xet_device_prop_serial_number_t  SerialNumber;
+        xet_device_prop_board_number_t   BoardNumber;
+    };
+
+    DeviceData data;
+    xet_device_property_request_t requests[] = 
+    {
+        { XET_DEVICE_PROP_SERIAL_NUMBER,    &data.SerialNumber, sizeof(data.SerialNumber) },
+        { XET_DEVICE_PROP_BOARD_NUMBER,     &data.BoardNumber,  sizeof(data.BoardNumber)  },
+    };
+
+    if (xetSysmanGetDeviceProperties(
+        hSysmanDevice,
+        sizeof(requests) / sizeof(requests[0]),
+        requests) == XE_RESULT_SUCCESS)
+    {
         fprintf(stdout, "    Serial#: %s\n", data.SerialNumber.str);
         fprintf(stdout, "    Board#:  %s\n", data.BoardNumber.str);
     }
 }
 
-void ShowDeviceInfo(xet_sysman_handle_t hSysman, xet_resource_handle_t hDeviceContainer)
+void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
 {
-    xet_resource_info_t info;
-    if (xetSysmanResourceGetInfo(hDeviceContainer, &info) == XE_RESULT_SUCCESS)
+    xet_sysman_info_t info;
+    if (xetSysmanGetInfo(hSysmanDevice, &info) == XE_RESULT_SUCCESS)
     {
-        char uuidStr[XET_RESOURCE_UUID_STRING_SIZE + 1] = { 0 };
-        uint32_t size = sizeof(uuidStr);
-        xetSysmanConvertUuidToString(hSysman, &info.uuid, &size, uuidStr);
+        gNumDevices++;
 
-        fprintf(stdout, "Device\n");
-        fprintf(stdout, "    UUID: %s\n", uuidStr);
-        fprintf(stdout, "    # sub-devices: %u\n", info.numChildren);
-        fprintf(stdout, "    # p2p links: %u\n", info.numPeers);
+        fprintf(stdout, "Device %d\n", gNumDevices);
+
+        ShowInventoryInfo(hSysmanDevice);
+
+        fprintf(stdout, "    Num fans:                %u\n", info.numResourcesByType[XET_RESOURCE_TYPE_FAN]);
+        fprintf(stdout, "    Num temperature sensors: %u\n", info.numResourcesByType[XET_RESOURCE_TYPE_TEMP]);
+        fprintf(stdout, "    Num power domains:       %u\n", info.numResourcesByType[XET_RESOURCE_TYPE_PWR]);
+        fprintf(stdout, "    Num frequency domains:   %u\n", info.numResourcesByType[XET_RESOURCE_TYPE_FREQ]);
+        
+        if (info.numResourcesByType[XET_RESOURCE_TYPE_FAN])
+        {
+            fprintf(stdout, "    Fans:\n");
+            for (uint32_t i = 0; i < info.numResourcesByType[XET_RESOURCE_TYPE_FAN]; i++)
+            {
+                ShowFanInfo(hSysmanDevice, i);
+            }
+        }
+
         fprintf(stdout, "    Assets:\n");
         for (int i = 0; i < XET_ACCEL_ASSET_MAX_TYPES; i++)
         {
-            const char* pResName;
-            xetSysmanGetAccelAssetName(hSysman, (xet_accel_asset_t)i, &pResName);
-            if (info.numResourcesByType[i])
+            if (info.assetInfo[i].numBlocks)
             {
-                fprintf(stdout, "        %s: %u\n", pResName, info.numResourcesByType[i]);
+                const char* pResName;
+                xetSysmanGetAccelAssetName(hSysmanDevice, (xet_accel_asset_t)i, &pResName);
+                if (info.numResourcesByType[i])
+                {
+                    fprintf(stdout, "        %s: %u blocks, %u engines\n", pResName, info.assetInfo[i].numBlocks, info.assetInfo[i].numEngines);
+                }
             }
         }
         fprintf(stdout, "\n");
     }
 }
 
-void ListDevices(xet_sysman_handle_t hSysman)
+int ListDevices(xe_device_group_handle_t hDeviceGroup)
 {
-    uint32_t numDevices = 0;
-    if (xetSysmanGetResources(hSysman, XET_INVALID_SYSMAN_RESOURCE_HANDLE, XET_RESOURCE_TYPE_DEVICE_CONTAINER, &numDevices, NULL) == XE_RESULT_SUCCESS)
+    int ret = 0;
+    uint32_t deviceCount = 0;
+    if (xeDeviceGet(hDeviceGroup, &deviceCount, nullptr) == XE_RESULT_SUCCESS)
     {
-        xet_resource_handle_t* phContainers = (xet_resource_handle_t*)malloc(numDevices * sizeof(xet_resource_handle_t));
-        if (xetSysmanGetResources(hSysman, XET_INVALID_SYSMAN_RESOURCE_HANDLE, XET_RESOURCE_TYPE_DEVICE_CONTAINER, &numDevices, phContainers) == XE_RESULT_SUCCESS)
+        if (deviceCount)
         {
-            for (uint32_t i = 0; i < numDevices; i++)
+            xe_device_handle_t* allDevices = (xe_device_handle_t*)
+                malloc(deviceCount * sizeof(xe_device_handle_t));
+            xeDeviceGet(hDeviceGroup, &deviceCount, allDevices);
+
+            for (uint32_t i = 0; i < deviceCount; ++i)
             {
-                ShowDeviceInfo(hSysman, phContainers[i]);
+                xet_sysman_handle_t hSysmanDevice;
+                xe_result_t res = xetSysmanCreate(allDevices[i], XET_SYSMAN_VERSION_CURRENT, XET_SYSMAN_INIT_FLAGS_WRITE, &hSysmanDevice);
+                if (res == XE_RESULT_SUCCESS)
+                {
+                    if (xetSysmanDestroy(hSysmanDevice) == XE_RESULT_SUCCESS)
+                    {
+                        ShowDeviceInfo(hSysmanDevice);
+                    }
+                    else
+                    {
+                        fprintf(stderr, "ERROR: Problem freeing system resource management for this device.\n");
+                    }
+                }
+                else if (res == XE_RESULT_ERROR_INSUFFICENT_PERMISSIONS)
+                {
+                    fprintf(stderr, "ERROR: Don't have permissions to control this device.\n");
+                    ret++;
+                }
+                else
+                {
+                    fprintf(stderr, "ERROR: Can't initialize system resource management for this device.\n");
+                    ret++;
+                }
             }
+
+            free(allDevices);
         }
-        free(phContainers);
     }
+    else
+    {
+        fprintf(stderr, "ERROR: Couldn't get list of devices in a device group.\n");
+        ret = 1;
+    }
+
+    return ret;
 }
 
 int main( int argc, char *argv[] )
 {
-    xet_sysman_handle_t hSysman;
     int ret = -1;
     if ( (xeInit(XE_INIT_FLAG_NONE) != XE_RESULT_SUCCESS) ||
          (xetInit(XE_INIT_FLAG_NONE) != XE_RESULT_SUCCESS) )
@@ -182,28 +195,33 @@ int main( int argc, char *argv[] )
     }
     else
     {
-        uint32_t numDeviceGroups = 1;
-        xe_device_group_handle_t hDeviceGroup;
-        if (xeDeviceGroupGet(&numDeviceGroups, &hDeviceGroup) == XE_RESULT_SUCCESS)
+        // Discover all the device groups and devices
+        uint32_t groupCount = 0;
+        xeDeviceGroupGet(&groupCount, nullptr);
+        xe_device_group_handle_t* allDeviceGroups = (xe_device_group_handle_t*)
+            malloc(groupCount * sizeof(xe_device_group_handle_t));
+        xeDeviceGroupGet(&groupCount, allDeviceGroups);
+        // Find the first GPU device group
+        xe_device_group_handle_t hDeviceGroup = nullptr;
+        for(uint32_t i = 0; i < groupCount; ++i)
         {
-            xe_result_t res = xetSysmanCreate(hDeviceGroup, XET_SYSMAN_VERSION_CURRENT, XET_SYSMAN_INIT_FLAGS_WRITE, &hSysman);
-            if (res == XE_RESULT_SUCCESS)
+            xe_device_properties_t device_properties;
+            xeDeviceGroupGetDeviceProperties(allDeviceGroups[i], &device_properties);
+            if(XE_DEVICE_TYPE_GPU == device_properties.type)
             {
-                fprintf(stdout, "Have access to system resource management.\n\n");
-
-                ListDevices(hSysman);
-
-                xetSysmanDestroy(hSysman);
-            }
-            else if (res == XE_RESULT_ACCESS_DENIED)
-            {
-                fprintf(stderr, "ERROR: Don't have write access to accelerator resources.\n");
-            }
-            else
-            {
-                fprintf(stderr, "ERROR: Can't initialize management of accelerator resources.\n");
+                if ((ret = ListDevices(allDeviceGroups[i])) != 0)
+                {
+                    break;
+                }
             }
         }
+
+        free(allDeviceGroups);
+    }
+
+    if (gNumDevices == 0)
+    {
+        fprintf(stdout, "No managed devices found.\n");
     }
 
     return ret;

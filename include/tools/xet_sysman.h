@@ -44,7 +44,7 @@ typedef enum _xet_sysman_init_flags_t
 } xet_sysman_init_flags_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates a handle to access SMI features
+/// @brief Creates a handle to access SMI features for a device
 /// 
 /// @details
 ///     - Initializes internal structures to support SMI features.
@@ -53,10 +53,10 @@ typedef enum _xet_sysman_init_flags_t
 ///       in functions that attempt to control a device.
 ///     - If the write flag ::XET_SYSMAN_INIT_FLAGS_WRITE is not specified, any
 ///       function attempting to control a device will return
-///       ::XE_RESULT_ACCESS_DENIED.
-///     - Multiple SMI handles can be created for the same device group and
-///       concurrent access through each handle to access underlying hardware
-///       resources is supported.
+///       ::XE_RESULT_ERROR_INSUFFICENT_PERMISSIONS.
+///     - Multiple SMI handles can be created for the same device and concurrent
+///       access through each handle to access underlying hardware resources is
+///       supported.
 /// 
 /// @remarks
 ///   _Analogues_
@@ -68,22 +68,22 @@ typedef enum _xet_sysman_init_flags_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDevice
 ///         + nullptr == phSysman
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanCreate(
-    xet_device_group_handle_t hDeviceGroup,         ///< [in] Handle of the device group
+    xet_device_handle_t hDevice,                    ///< [in] Handle of the device
     xet_sysman_version_t version,                   ///< [in] SMI version that application was built with
     uint32_t flags,                                 ///< [in] Bitfield of ::xet_sysman_init_flags_t
     xet_sysman_handle_t* phSysman                   ///< [out] Handle for accessing SMI features
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Destroys a Sysman handle
+/// @brief Destroys a SMI handle
 /// 
 /// @details
-///     - Only once all SMI handles to a device group have been destroyed will
+///     - Only once all SMI handles to a device have been destroyed will
 ///       internal data structures be freed from the application memory.
 /// 
 /// @remarks
@@ -107,11 +107,7 @@ xetSysmanDestroy(
 /// @brief Resource types
 typedef enum _xet_resource_type_t
 {
-    XET_RESOURCE_TYPE_UNIT_CONTAINER = 0,           ///< Unit resource container
-    XET_RESOURCE_TYPE_BOARD_CONTAINER,              ///< Board resource container
-    XET_RESOURCE_TYPE_DEVICE_CONTAINER,             ///< Device resource container
-    XET_RESOURCE_TYPE_SUBDEVICE_CONTAINER,          ///< Sub-device resource container
-    XET_RESOURCE_TYPE_PSU,                          ///< PSU resource
+    XET_RESOURCE_TYPE_PSU = 0,                      ///< PSU resource
     XET_RESOURCE_TYPE_TEMP,                         ///< Temperature sensor resource
     XET_RESOURCE_TYPE_FAN,                          ///< Fan resource
     XET_RESOURCE_TYPE_LED,                          ///< LED resource
@@ -123,8 +119,25 @@ typedef enum _xet_resource_type_t
     XET_RESOURCE_TYPE_MEM,                          ///< Memory resource
     XET_RESOURCE_TYPE_LINK,                         ///< Link resource
     XET_RESOURCE_TYPE_MAX_TYPES,                    ///< The number of resource types
+    XET_RESOURCE_TYPE_ANY = -1,                     ///< Any resource filter
 
 } xet_resource_type_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Resource ID
+typedef struct _xet_resource_id_t
+{
+    xet_resource_type_t type;                       ///< [in,out] Resource type
+    uint32_t index;                                 ///< [in,out] Resource index (0 ...
+                                                    ///< ::xet_sysman_info_t.numResourcesByType[::xet_resource_type_t]-1)
+
+} xet_resource_id_t;
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_RESOURCE_ID_ANY
+/// @brief Any resource
+#define XET_RESOURCE_ID_ANY  { XET_RESOURCE_TYPE_ANY, 0x0 }
+#endif // XET_RESOURCE_ID_ANY
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Accelerator assets
@@ -134,7 +147,7 @@ typedef enum _xet_accel_asset_t
     XET_ACCEL_ASSET_IDI_MEM_CONTROLLER,             ///< IDI memory controller
     XET_ACCEL_ASSET_HBM_MEM_CONTROLLER,             ///< HBM memory controller
     XET_ACCEL_ASSET_L3_CACHE,                       ///< L3 cache
-    XET_ACCEL_ASSET_BLILTTER,                       ///< Blitter
+    XET_ACCEL_ASSET_BLITTER,                        ///< Blitter
     XET_ACCEL_ASSET_VIDEO_DECODER,                  ///< Video decoder
     XET_ACCEL_ASSET_VIDEO_ENCODER,                  ///< Video encoder
     XET_ACCEL_ASSET_VIDEO_PROCESSING,               ///< Video processing
@@ -165,63 +178,6 @@ xetSysmanGetAccelAssetName(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle
     xet_accel_asset_t type,                         ///< [in] The type of accelerator asset
     const char** ppName                             ///< [in] Pointer to the asset name
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef XET_RESOURCE_UUID_SIZE
-/// @brief Size of UUID in bytes
-#define XET_RESOURCE_UUID_SIZE  16
-#endif // XET_RESOURCE_UUID_SIZE
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef XET_RESOURCE_UUID_STRING_SIZE
-/// @brief Maximum number of characters in string representation of a UUID
-/// 
-/// @details
-///     - Size does not including end-of-string terminator
-///     - Format of UUID string: ffffffff-ffff-ffff-ffff-ffffffffffff
-#define XET_RESOURCE_UUID_STRING_SIZE  36
-#endif // XET_RESOURCE_UUID_STRING_SIZE
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Universal unique id (UUID) for Sysman resources
-typedef struct _xet_resource_uuid_t
-{
-    uint8_t id[XET_RESOURCE_UUID_SIZE];             ///< [in,out] Universal unique id of Sysman object
-
-} xet_resource_uuid_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Convert SMI resource UUID to a string
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pUuid
-///         + nullptr == pSize
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanConvertUuidToString(
-    xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-    const xet_resource_uuid_t* pUuid,               ///< [in] Pointer to a Sysman UUID
-    uint32_t* pSize,                                ///< [in,out] Pointer to the size of the string buffer pointed to by pStr.
-                                                    ///< If size is zero, the storage size including end-of-string terminator
-                                                    ///< will be returned.
-                                                    ///< If size is non-zero and less than the required length, the storage
-                                                    ///< size including end-of-string terminator will be returned and an error
-                                                    ///< status given.
-                                                    ///< If size is non-zero and larger than the required length, the number of
-                                                    ///< characters stored in the buffer including the end-of-string terminator
-                                                    ///< will be returned.
-    char* pStr                                      ///< [in][optional] Pointer to storage for the string representation of the
-                                                    ///< UUID
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -277,6 +233,28 @@ typedef enum _xet_ras_data_type_t
 } xet_ras_data_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Filter RAS errors
+typedef struct _xet_ras_filter_t
+{
+    xet_resource_id_t resourceId;                   ///< [in] Filter based on resource ID. Set to ::XET_RESOURCE_ID_ANY to get
+                                                    ///< errors from anywhere in the device
+    uint32_t type;                                  ///< [in] Bitfield of error types to filter - one or more of
+                                                    ///< ::xet_ras_error_type_t. Set to ::XET_RAS_ERROR_TYPE_ALL to have all
+                                                    ///< error types returned.
+    uint32_t location;                              ///< [in] Bitfield of error locations to filter - one or more of
+                                                    ///< ::xet_ras_error_loc_t. Set to ::XET_RAS_ERROR_LOC_ALL to have all
+                                                    ///< error locations returned.
+    uint32_t threshold;                             ///< [in] Only return error elements that have occurred at least this
+                                                    ///< number of times.
+                                                    ///< If set to 0, will get a list of all possible RAS elements, even those
+                                                    ///< that have not had errors.
+                                                    ///< For error elements of type ::XET_RAS_DATA_TYPE_OCCURRED, there is no
+                                                    ///< underlying counter, so they will always be returned independent of the
+                                                    ///< threshold setting.
+
+} xet_ras_filter_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief RAS error
 typedef struct _xet_res_error_t
 {
@@ -286,45 +264,42 @@ typedef struct _xet_res_error_t
                                                     ///< constructed from one of ::xet_ras_error_loc_t
     xet_ras_data_type_t dataType;                   ///< [out] How to interpret the data
     uint64_t data;                                  ///< [out] The value of the error - interpretation depends on dataType
-    xet_resource_uuid_t uuid;                       ///< [out] UUID for the resource where the error was generated
+    xet_resource_id_t resourceId;                   ///< [out] Resource where the error was generated. If the error doesn't
+                                                    ///< come from a specific resource, this will be ::XET_RESOURCE_ID_ANY
 
 } xet_res_error_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Generic information about a resource
-typedef struct _xet_resource_info_t
+/// @brief Data about one type of accelerator asset
+typedef struct _xet_device_prop_accel_asset_t
 {
-    xet_resource_uuid_t uuid;                       ///< [out] UUID for the resource
-    xet_resource_type_t type;                       ///< [out] Type of resource
-    xe_bool_t haveParent;                           ///< [out] Indicates if this resource has a parent resource
-    uint32_t numChildren;                           ///< [out] The number of child resources
-    uint32_t numPeers;                              ///< [out] The number of resources connected to this resource with
-                                                    ///< peer-to-peer links
-    uint32_t numRas;                                ///< [out] The total number of RAS elements contained in this resource or
-                                                    ///< in any descendants.
+    xet_accel_asset_t type;                         ///< [out] The type of asset
+    uint32_t numBlocks;                             ///< [out] The number of blocks of this asset type
+    uint32_t numEngines;                            ///< [out] The number of submission engines for this type of asset
+
+} xet_device_prop_accel_asset_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Generic SMI information about a device
+typedef struct _xet_sysman_info_t
+{
+    uint64_t assetBitfield;                         ///< [out] A bitfield of assets (1<<::xet_accel_asset_t) available in the
+                                                    ///< resource
+    xet_device_prop_accel_asset_t assetInfo[XET_ACCEL_ASSET_MAX_TYPES]; ///< [out] Information about each asset.
+    uint32_t numRas;                                ///< [out] The total number of RAS elements available for querying in this
+                                                    ///< device.
     uint32_t rasTypes;                              ///< [out] Bitfield of the type of RAS elements (::xet_ras_error_type_t)
-                                                    ///< contained in this resource or in any descendants.
+                                                    ///< available for querying in this device.
     uint32_t rasLocations;                          ///< [out] Bitfield of the structure location of RAS elements
-                                                    ///< (::xet_ras_error_loc_t) contained in this resource or in any
-                                                    ///< descendants.
-    uint32_t numResourcesByType[XET_RESOURCE_TYPE_MAX_TYPES];   ///< [out] The number of resources of each type attached to this resource
-                                                    ///< (not in the child resources)
+                                                    ///< (::xet_ras_error_loc_t) available for querying in this device.
+    uint32_t numResourcesByType[XET_RESOURCE_TYPE_MAX_TYPES];   ///< [out] The number of resources of each type in this device.
 
-} xet_resource_info_t;
+} xet_sysman_info_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves resources of a given type having a specified parent resource
+/// @brief Get SMI information for a device
 /// 
 /// @details
-///     - If a parent resource is not specified, then all resources of the given
-///       type are returned. Otherwise only resources directly contained
-///       in/under the specified parent are returned.
-///     - There is a one-to-many mapping between the underlying hardware for a
-///       resource and the corresponding handles returned to the application.
-///       Thus, the numerical value of the handles should not be compared with
-///       those returned by previous function calls - instead, use the function
-///       ::xetSysmanResourceIsSame() to check if two handles reference the same
-///       hardware object.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -334,91 +309,12 @@ typedef struct _xet_resource_info_t
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
-///         + nullptr == hParentResource
-///         + nullptr == pCount
+///         + nullptr == pInfo
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanGetResources(
-    xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-    xet_resource_handle_t hParentResource,          ///< [in] Handle of the parent resource object (can be
-                                                    ///< ::XET_INVALID_SYSMAN_RESOURCE_HANDLE)
-    xet_resource_type_t type,                       ///< [in] The type of resources to enumerate
-    uint32_t* pCount,                               ///< [in,out] Pointer to the number of elements in the array phResources.
-                                                    ///< If count is zero, then the driver will update the value with the total
-                                                    ///< number of resources that would be returned.
-                                                    ///< If count is non-zero, then driver will only retrieve that number of
-                                                    ///< resources of the given type starting from index 0.
-                                                    ///< If count is larger than the number of resource that will be returned,
-                                                    ///< then the driver will update the value with actual number returned.
-    xet_resource_handle_t* phResources              ///< [out][optional][range(0, *pCount)] Array of resources resources
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves a resource handle for a device
-/// 
-/// @details
-///     - The specified device must be in the same device group that was used to
-///       create the SMI handle.
-///     - If the device handle refers to a device, then a resource handle of
-///       type ::XET_RESOURCE_TYPE_DEVICE_CONTAINER will be returned.
-///     - If the device handle refers to a sub-device, then a resource handle of
-///       type ::XET_RESOURCE_TYPE_SUBDEVICE_CONTAINER will be returned.
-///     - There is a one-to-many mapping between the underlying hardware for a
-///       resource and the corresponding handles returned to the application.
-///       Thus, the numerical value of the handles should not be compared with
-///       those returned by previous function calls - instead, use the function
-///       ::xetSysmanResourceIsSame() to check if two handles reference the same
-///       hardware object.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == hDevice
-///         + nullptr == phResource
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_MISMATCH_DEVICE_GROUP
-///         + The device does not belong to the device group that was ued to create the SMI handle
-xe_result_t __xecall
-xetSysmanGetDeviceResource(
-    xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-    xe_device_handle_t hDevice,                     ///< [in] Handle to the device.
-    xet_resource_handle_t* phResource               ///< [out] Resource handle for the specified device
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves a resource handle based on resource UUID
-/// 
-/// @details
-///     - There is a one-to-many mapping between the underlying hardware for a
-///       resource and the corresponding handles returned to the application.
-///       Thus, the numerical value of the handles should not be compared with
-///       those returned by previous function calls - instead, use the function
-///       ::xetSysmanResourceIsSame() to check if two handles reference the same
-///       hardware object.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == uuid
-///         + nullptr == phResource
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_NOT_FOUND
-///         + No resource could be found with the specified UUID
-xe_result_t __xecall
-xetSysmanGetResourceByUuid(
-    xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-    const xet_resource_uuid_t* uuid,                ///< [in] UUID for the resource
-    xet_resource_handle_t* phResource               ///< [out] Resource handle
+xetSysmanGetInfo(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of a device
+    xet_sysman_info_t* pInfo                        ///< [in] Returned information
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -436,31 +332,14 @@ xetSysmanGetResourceByUuid(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
-///         + nullptr == hResource
 ///         + nullptr == pCount
 ///         + nullptr == pErrors
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_TOO_SMALL
+///     - ::XE_RESULT_ERROR_ARRAY_SIZE_TOO_SMALL
 ///         + The array doesn't have enough elements to store all the errors
 xe_result_t __xecall
 xetSysmanGetRasErrors(
     xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource. If specified, only errors within that
-                                                    ///< resource of child resources are returned. Otherwise all errors are
-                                                    ///< returned.
-    uint32_t type,                                  ///< [in] Bitfield of error types to filter - one or more of
-                                                    ///< ::xet_ras_error_type_t. Set to ::XET_RAS_ERROR_TYPE_ALL to have all
-                                                    ///< error types returned.
-    uint32_t location,                              ///< [in] Bitfield of error locations to filter - one or more of
-                                                    ///< ::xet_ras_error_loc_t. Set to ::XET_RAS_ERROR_LOC_ALL to have all
-                                                    ///< error locations returned.
-    uint32_t threshold,                             ///< [in] Only return error elements that have occurred at least this
-                                                    ///< number of times.
-                                                    ///< If set to 0, will get a list of all possible RAS elements, even those
-                                                    ///< that have not had errors.
-                                                    ///< For error elements of type ::XET_RAS_DATA_TYPE_OCCURRED, there is no
-                                                    ///< underlying counter, so they will always be returned independent of the
-                                                    ///< threshold setting.
     xe_bool_t clear,                                ///< [in] Set to true to clear the underlying counters after they are
                                                     ///< returned
     uint32_t* pCount,                               ///< [in] Pointer to the number of elements in the array pErrors.
@@ -476,248 +355,10 @@ xetSysmanGetRasErrors(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Compare if two resource handles reference the same underlying hardware
-///        object
-/// 
-/// @details
-///     - There is a one-to-many mapping between the underlying hardware for a
-///       resource and the corresponding handles returned to the application.
-///       Thus, the numerical value of the handles should not be compared with
-///       those returned by previous function calls - instead, use this function
-///       to check if two handles reference the same hardware object.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hLhs
-///         + nullptr == hRhs
-///         + nullptr == pIsSame
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanResourceIsSame(
-    xet_resource_handle_t hLhs,                     ///< [in] Handle of of the resources
-    xet_resource_handle_t hRhs,                     ///< [in] Handle of the other resource
-    xe_bool_t* pIsSame                              ///< [in] Sets to True if the two resources reference the same underlying
-                                                    ///< hardware object
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get generic information about a resource
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
-///         + nullptr == pInfo
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanResourceGetInfo(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-    xet_resource_info_t* pInfo                      ///< [out] Generic information about the resource
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get a handle to the parent resource
-/// 
-/// @details
-///     - For resource containers, this will return the handle to parent
-///       container. For non-container resources, this will return the handle to
-///       the container resource in which the resource is located.
-///     - If there is no parent (e.g. resources of type
-///       ::XET_RESOURCE_TYPE_UNIT_CONTAINER), the returned handle will be
-///       ::XET_INVALID_SYSMAN_RESOURCE_HANDLE.
-///     - There is a one-to-many mapping between the underlying hardware for a
-///       resource and the corresponding handles returned to the application.
-///       Thus, the numerical value of the handles should not be compared with
-///       those returned by previous function calls - instead, use the function
-///       ::xetSysmanResourceIsSame() to check if two handles reference the same
-///       hardware object.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
-///         + nullptr == phResource
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanResourceGetParent(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-    xet_resource_handle_t* phResource               ///< [out] Handle of the parent resource
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get children resources
-/// 
-/// @details
-///     - If the parent resource is not a container, no children resources will
-///       be returned.
-///     - Only resource containers will be returned by this function. The
-///       function ::xetSysmanGetResources should be used to get non-container
-///       resources located in a parent resource.
-///     - There is a one-to-many mapping between the underlying hardware for a
-///       resource and the corresponding handles returned to the application.
-///       Thus, the numerical value of the handles should not be compared with
-///       those returned by previous function calls - instead, use the function
-///       ::xetSysmanResourceIsSame() to check if two handles reference the same
-///       hardware object.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
-///         + nullptr == pCount
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanResourceGetChildren(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-    uint32_t* pCount,                               ///< [in,out] Pointer to the number of elements in the array phResources.
-                                                    ///< If count is zero, then the driver will update the value with the total
-                                                    ///< number of child resources.
-                                                    ///< If count is non-zero, then driver will only retrieve that number of
-                                                    ///< child resources starting from index 0.
-                                                    ///< If count is larger than the number of child resources that will be
-                                                    ///< returned, then the driver will update the value with the resources
-                                                    ///< actually returned.
-    xet_resource_handle_t* phResources              ///< [out][optional][range(0, *pCount)] Array of resource handles.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get peer resources
-/// 
-/// @details
-///     - If the parent resource is not a container, no peer resources will be
-///       returned.
-///     - Only resource containers will be returned by this function. The
-///       function ::xetSysmanGetResources should be used to get non-container
-///       resources located in a parent resource.
-///     - There is a one-to-many mapping between the underlying hardware for a
-///       resource and the corresponding handles returned to the application.
-///       Thus, the numerical value of the handles should not be compared with
-///       those returned by previous function calls - instead, use the function
-///       ::xetSysmanResourceIsSame() to check if two handles reference the same
-///       hardware object.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
-///         + nullptr == pCount
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanResourceGetPeers(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-    uint32_t* pCount,                               ///< [in,out] Pointer to the number of elements in the array phResources.
-                                                    ///< If count is zero, then the driver will update the value with the total
-                                                    ///< number of peer resources.
-                                                    ///< If count is non-zero, then driver will only retrieve that number of
-                                                    ///< peer resources starting from index 0.
-                                                    ///< If count is larger than the number of peer resources that will be
-                                                    ///< returned, then the driver will update the value with the resources
-                                                    ///< actually returned.
-    xet_resource_handle_t* phResources              ///< [out][optional][range(0, *pCount)] Array of resource handles.
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 #ifndef XET_STRING_PROPERTY_SIZE
 /// @brief Maximum number of characters in string properties.
 #define XET_STRING_PROPERTY_SIZE  32
 #endif // XET_STRING_PROPERTY_SIZE
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Board resource properties
-/// 
-/// @details
-///     - For every property, there is a corresponding structure used to hold
-///       the property data. The type of the data structure is derived from the
-///       property enumerator, converted to lower-case with '_t' appended.
-///     - Properties can be either read-only (ro), write-only (wo) or read-write
-///       (rw).
-///     - Properties can be either static or dynamic. Static properties are set
-///       during initialization and will not change during the lifetime of the
-///       application. Dynamic properties can change at any time and should be
-///       reread.
-typedef enum _xet_board_properties_t
-{
-    XET_BOARD_PROP_SERIAL_NUMBER = 0,               ///< (ro static) The serial number of a board (data:
-                                                    ///< ::xet_board_prop_serial_number_t)
-    XET_BOARD_PROP_BOARD_NUMBER,                    ///< (ro static) The board number of a board (data:
-                                                    ///< ::xet_board_prop_board_number_t)
-
-} xet_board_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for property ::XET_BOARD_PROP_SERIAL_NUMBER
-typedef struct _xet_board_prop_serial_number_t
-{
-    int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
-
-} xet_board_prop_serial_number_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for property ::XET_BOARD_PROP_BOARD_NUMBER
-typedef struct _xet_board_prop_board_number_t
-{
-    int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
-
-} xet_board_prop_board_number_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Request structure used to query a board resource property
-typedef struct _xet_board_property_request_t
-{
-    xet_board_properties_t property;                ///< [in] The property being requested (one of ::xet_board_properties_t).
-    void* pData;                                    ///< [in] Pointer to the data for the property.
-                                                    ///< Each property has a corresponding data structure. The type of the data
-                                                    ///< structure is derived from the property enumerator, converted to
-                                                    ///< lower-case with "_t" appended.
-    uint32_t size;                                  ///< [in] The size of the data structure pointed to by pData.
-
-} xet_board_property_request_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get board property data
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
-///         + nullptr == pRequest
-///         + The resource is not of type ::XET_RESOURCE_TYPE_BOARD_CONTAINER
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanResourceGetBoardProperties(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
-    uint32_t count,                                 ///< [in] The number of properties in the array pRequest
-    xet_board_property_request_t* pRequest          ///< [in] Pointer to list of properties and corresponding data storage
-    );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief PCI bar types
@@ -760,7 +401,11 @@ typedef struct _xet_pci_bar_info_t
 ///       reread.
 typedef enum _xet_device_properties_t
 {
-    XET_DEVICE_PROP_BRAND = 0,                      ///< (ro static) The brand name of the device (data:
+    XET_DEVICE_PROP_SERIAL_NUMBER = 0,              ///< (ro static) The serial number of the device (data:
+                                                    ///< ::xet_device_prop_serial_number_t)
+    XET_DEVICE_PROP_BOARD_NUMBER,                   ///< (ro static) The board number of the device (data:
+                                                    ///< ::xet_device_prop_board_number_t)
+    XET_DEVICE_PROP_BRAND,                          ///< (ro static) The brand name of the device (data:
                                                     ///< ::xet_device_prop_brand_t)
     XET_DEVICE_PROP_MODEL,                          ///< (ro static) The model name of the device (data:
                                                     ///< ::xet_device_prop_model_t)
@@ -768,8 +413,6 @@ typedef enum _xet_device_properties_t
                                                     ///< ::xet_device_prop_deviceid_t)
     XET_DEVICE_PROP_VENDOR_NAME,                    ///< (ro static) The vendor name of the device (data:
                                                     ///< ::xet_device_prop_vendor_name_t)
-    XET_DEVICE_PROP_ACCEL_ASSETS,                   ///< (ro static) The accelerator assets available in the device (data:
-                                                    ///< ::xet_device_prop_accel_assets_t)
     XET_DEVICE_PROP_DRIVER_VERSION,                 ///< (ro static) The driver version associated with the device (data:
                                                     ///< ::xet_device_prop_driver_version_t)
     XET_DEVICE_PROP_BARS,                           ///< (ro static) The bars configured for the device (data:
@@ -780,6 +423,22 @@ typedef enum _xet_device_properties_t
                                                     ///< ::xet_device_prop_cold_reset_t)
 
 } xet_device_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Data for property ::XET_DEVICE_PROP_SERIAL_NUMBER
+typedef struct _xet_device_prop_serial_number_t
+{
+    int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
+
+} xet_device_prop_serial_number_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Data for property ::XET_DEVICE_PROP_BOARD_NUMBER
+typedef struct _xet_device_prop_board_number_t
+{
+    int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
+
+} xet_device_prop_board_number_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Data for property ::XET_DEVICE_PROP_BRAND
@@ -812,25 +471,6 @@ typedef struct _xet_device_prop_vendor_name_t
     int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
 
 } xet_device_prop_vendor_name_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data about one type of accelerator asset
-typedef struct _xet_device_prop_accel_asset_t
-{
-    xet_accel_asset_t type;                         ///< [out] The type of asset
-    uint32_t numBlocks;                             ///< [out] The number of blocks of this asset type
-    uint32_t numEngines;                            ///< [out] The number of submission engines for this type of asset
-
-} xet_device_prop_accel_asset_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_DEVICE_PROP_ACCEL_ASSETS
-typedef struct _xet_device_prop_accel_assets_t
-{
-    uint64_t assetBitfield;                         ///< [out] A bitfield of assets available in the resource
-    xet_device_prop_accel_asset_t assetInfo[XET_ACCEL_ASSET_MAX_TYPES]; ///< [out] Information about each asset.
-
-} xet_device_prop_accel_assets_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Data for property ::XET_DEVICE_PROP_DRIVER_VERSION
@@ -866,7 +506,7 @@ typedef struct _xet_device_prop_cold_reset_t
 } xet_device_prop_cold_reset_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Request structure used to query a device resource container property
+/// @brief Request structure used to query a device property
 typedef struct _xet_device_property_request_t
 {
     xet_device_properties_t property;               ///< [in] The property being requested (one of ::xet_device_properties_t).
@@ -879,7 +519,7 @@ typedef struct _xet_device_property_request_t
 } xet_device_property_request_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get device container property data
+/// @brief Get device property data
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -890,19 +530,18 @@ typedef struct _xet_device_property_request_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
+///         + nullptr == hSysman
 ///         + nullptr == pRequest
-///         + The resource is not of type ::XET_RESOURCE_TYPE_DEVICE_CONTAINER
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanResourceGetDeviceProperties(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+xetSysmanGetDeviceProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
     uint32_t count,                                 ///< [in] The number of properties in the array pRequest
     xet_device_property_request_t* pRequest         ///< [in] Pointer to list of properties and corresponding data storage
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set device container property data
+/// @brief Set device property data
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -913,13 +552,12 @@ xetSysmanResourceGetDeviceProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
+///         + nullptr == hSysman
 ///         + nullptr == pRequest
-///         + The resource is not of type ::XET_RESOURCE_TYPE_DEVICE_CONTAINER
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanResourceSetDeviceProperties(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+xetSysmanSetDeviceProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
     uint32_t count,                                 ///< [in] The number of properties in the array pRequest
     xet_device_property_request_t* pRequest         ///< [in] Pointer to list of properties and corresponding data storage
     );
@@ -1006,6 +644,8 @@ typedef struct _xet_psu_prop_amps_t
 /// @brief Request structure used to query a PSU resource property
 typedef struct _xet_psu_property_request_t
 {
+    uint32_t index;                                 ///< [in] The index of the PSU resource (0 ...
+                                                    ///< ::xet_sysman_info_t.numResourcesByType[::XET_RESOURCE_TYPE_PSU]-1)
     xet_psu_properties_t property;                  ///< [in] The property being requested (one of ::xet_psu_properties_t).
     void* pData;                                    ///< [in] Pointer to the data for the property.
                                                     ///< Each property has a corresponding data structure. The type of the data
@@ -1027,13 +667,13 @@ typedef struct _xet_psu_property_request_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
+///         + nullptr == hSysman
 ///         + nullptr == pRequest
-///         + The resource is not of type ::XET_RESOURCE_TYPE_PSU
+///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanResourceGetPsuProperties(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+xetSysmanGetPsuProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
     uint32_t count,                                 ///< [in] The number of properties in the array pRequest
     xet_psu_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
     );
@@ -1050,13 +690,13 @@ xetSysmanResourceGetPsuProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
+///         + nullptr == hSysman
 ///         + nullptr == pRequest
-///         + The resource is not of type ::XET_RESOURCE_TYPE_PSU
+///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanResourceSetPsuProperties(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+xetSysmanSetPsuProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
     uint32_t count,                                 ///< [in] The number of properties in the array pRequest
     xet_psu_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
     );
@@ -1093,6 +733,8 @@ typedef struct _xet_temp_prop_temperature_t
 /// @brief Request structure used to query a temperature sensor resource property
 typedef struct _xet_temp_property_request_t
 {
+    uint32_t index;                                 ///< [in] The index of the temperature sensor resource (0 ...
+                                                    ///< ::xet_sysman_info_t.numResourcesByType[::XET_RESOURCE_TYPE_TEMP]-1)
     xet_temp_properties_t property;                 ///< [in] The property being requested (one of ::xet_temp_properties_t).
     void* pData;                                    ///< [in] Pointer to the data for the property.
                                                     ///< Each property has a corresponding data structure. The type of the data
@@ -1114,13 +756,13 @@ typedef struct _xet_temp_property_request_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
+///         + nullptr == hSysman
 ///         + nullptr == pRequest
-///         + The resource is not of type ::XET_RESOURCE_TYPE_TEMP
+///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanResourceGetTempProperties(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+xetSysmanGetTempProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
     uint32_t count,                                 ///< [in] The number of properties in the array pRequest
     xet_temp_property_request_t* pRequest           ///< [in] Pointer to list of properties and corresponding data storage
     );
@@ -1259,6 +901,8 @@ typedef struct _xet_fan_prop_speed_table_t
 /// @brief Request structure used to query a fan resource property
 typedef struct _xet_fan_property_request_t
 {
+    uint32_t index;                                 ///< [in] The index of the fan resource (0 ...
+                                                    ///< ::xet_sysman_info_t.numResourcesByType[::XET_RESOURCE_TYPE_FAN]-1)
     xet_fan_properties_t property;                  ///< [in] The property being requested (one of ::xet_fan_properties_t).
     void* pData;                                    ///< [in] Pointer to the data for the property.
                                                     ///< Each property has a corresponding data structure. The type of the data
@@ -1280,13 +924,13 @@ typedef struct _xet_fan_property_request_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
+///         + nullptr == hSysman
 ///         + nullptr == pRequest
-///         + The resource is not of type ::XET_RESOURCE_TYPE_FAN
+///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanResourceGetFanProperties(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+xetSysmanGetFanProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
     uint32_t count,                                 ///< [in] The number of properties in the array pRequest
     xet_fan_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
     );
@@ -1303,13 +947,13 @@ xetSysmanResourceGetFanProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
+///         + nullptr == hSysman
 ///         + nullptr == pRequest
-///         + The resource is not of type ::XET_RESOURCE_TYPE_FAN
+///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanResourceSetFanProperties(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+xetSysmanSetFanProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
     uint32_t count,                                 ///< [in] The number of properties in the array pRequest
     xet_fan_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
     );
@@ -1359,6 +1003,8 @@ typedef struct _xet_led_prop_state_t
 /// @brief Request structure used to query a LED resource property
 typedef struct _xet_led_property_request_t
 {
+    uint32_t index;                                 ///< [in] The index of the LED resource (0 ...
+                                                    ///< ::xet_sysman_info_t.numResourcesByType[::XET_RESOURCE_TYPE_LED]-1)
     xet_led_properties_t property;                  ///< [in] The property being requested (one of ::xet_led_properties_t).
     void* pData;                                    ///< [in] Pointer to the data for the property.
                                                     ///< Each property has a corresponding data structure. The type of the data
@@ -1380,13 +1026,13 @@ typedef struct _xet_led_property_request_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
+///         + nullptr == hSysman
 ///         + nullptr == pRequest
-///         + The resource is not of type ::XET_RESOURCE_TYPE_LED
+///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanResourceGetLedProperties(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+xetSysmanGetLedProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
     uint32_t count,                                 ///< [in] The number of properties in the array pRequest
     xet_led_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
     );
@@ -1403,13 +1049,13 @@ xetSysmanResourceGetLedProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
+///         + nullptr == hSysman
 ///         + nullptr == pRequest
-///         + The resource is not of type ::XET_RESOURCE_TYPE_LED
+///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanResourceSetLedProperties(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+xetSysmanSetLedProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
     uint32_t count,                                 ///< [in] The number of properties in the array pRequest
     xet_led_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
     );
@@ -1477,6 +1123,8 @@ typedef struct _xet_firmware_prop_flash_t
 /// @brief Request structure used to query a firmware resource property
 typedef struct _xet_firmware_property_request_t
 {
+    uint32_t index;                                 ///< [in] The index of the firmware resource (0 ...
+                                                    ///< ::xet_sysman_info_t.numResourcesByType[::XET_RESOURCE_TYPE_FIRMWARE]-1)
     xet_firmware_properties_t property;             ///< [in] The property being requested (one of
                                                     ///< ::xet_firmware_properties_t).
     void* pData;                                    ///< [in] Pointer to the data for the property.
@@ -1499,13 +1147,13 @@ typedef struct _xet_firmware_property_request_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
+///         + nullptr == hSysman
 ///         + nullptr == pRequest
-///         + The resource is not of type ::XET_RESOURCE_TYPE_FIRMWARE
+///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanResourceGetFirmwareProperties(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+xetSysmanGetFirmwareProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
     uint32_t count,                                 ///< [in] The number of properties in the array pRequest
     xet_firmware_property_request_t* pRequest       ///< [in] Pointer to list of properties and corresponding data storage
     );
@@ -1522,13 +1170,13 @@ xetSysmanResourceGetFirmwareProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
+///         + nullptr == hSysman
 ///         + nullptr == pRequest
-///         + The resource is not of type ::XET_RESOURCE_TYPE_FIRMWARE
+///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanResourceSetFirmwareProperties(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+xetSysmanSetFirmwareProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
     uint32_t count,                                 ///< [in] The number of properties in the array pRequest
     xet_firmware_property_request_t* pRequest       ///< [in] Pointer to list of properties and corresponding data storage
     );
@@ -1641,6 +1289,8 @@ typedef struct _xet_pwr_prop_peak_limit_t
 /// @brief Request structure used to query a power domain resource property
 typedef struct _xet_pwr_property_request_t
 {
+    uint32_t index;                                 ///< [in] The index of the power domain resource (0 ...
+                                                    ///< ::xet_sysman_info_t.numResourcesByType[::XET_RESOURCE_TYPE_PWR]-1)
     xet_pwr_properties_t property;                  ///< [in] The property being requested (one of ::xet_pwr_properties_t).
     void* pData;                                    ///< [in] Pointer to the data for the property.
                                                     ///< Each property has a corresponding data structure. The type of the data
@@ -1662,13 +1312,13 @@ typedef struct _xet_pwr_property_request_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
+///         + nullptr == hSysman
 ///         + nullptr == pRequest
-///         + The resource is not of type ::XET_RESOURCE_TYPE_PWR
+///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanResourceGetPwrProperties(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+xetSysmanGetPwrProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
     uint32_t count,                                 ///< [in] The number of properties in the array pRequest
     xet_pwr_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
     );
@@ -1685,13 +1335,13 @@ xetSysmanResourceGetPwrProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
+///         + nullptr == hSysman
 ///         + nullptr == pRequest
-///         + The resource is not of type ::XET_RESOURCE_TYPE_PWR
+///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanResourceSetPwrProperties(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+xetSysmanSetPwrProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
     uint32_t count,                                 ///< [in] The number of properties in the array pRequest
     xet_pwr_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
     );
@@ -1777,8 +1427,8 @@ typedef enum _xet_freq_properties_t
                                                     ///< (data: ::xet_freq_prop_avail_clocks_t)
     XET_FREQ_PROP_AVAIL_DIVIDERS,                   ///< (ro static) Available dividers that this domain can run with (data:
                                                     ///< ::xet_freq_prop_avail_dividers_t)
-    XET_FREQ_PROP_SRC_FREQ,                         ///< (ro static) Get the UUID of the source frequency domain resource if
-                                                    ///< the type is dependent (data: ::xet_freq_prop_src_freq_t)
+    XET_FREQ_PROP_SRC_FREQ,                         ///< (ro static) Get the resource ID of the source frequency domain
+                                                    ///< resource if the type is dependent (data: ::xet_freq_prop_src_freq_t)
     XET_FREQ_PROP_DVFS_MODE,                        ///< (rw dynamic) The operating mode of dynamic frequency management for
                                                     ///< this domain (data: ::xet_freq_prop_dvfs_mode_t)
     XET_FREQ_PROP_FREQ_RANGE,                       ///< (rw dynamic) The frequencies between which dynamic frequency
@@ -1847,7 +1497,7 @@ typedef struct _xet_freq_prop_avail_dividers_t
 /// @brief Data for the property ::XET_FREQ_PROP_SRC_FREQ
 typedef struct _xet_freq_prop_src_freq_t
 {
-    xet_resource_uuid_t uuid;                       ///< [out] The resource UUID of the source frequency domain
+    xet_resource_id_t resourceId;                   ///< [out] The resource ID of the source frequency domain
 
 } xet_freq_prop_src_freq_t;
 
@@ -1931,6 +1581,8 @@ typedef struct _xet_freq_prop_throttle_time_t
 /// @brief Request structure used to query a frequency domain resource property
 typedef struct _xet_freq_property_request_t
 {
+    uint32_t index;                                 ///< [in] The index of the frequency domain resource (0 ...
+                                                    ///< ::xet_sysman_info_t.numResourcesByType[::XET_RESOURCE_TYPE_FREQ]-1)
     xet_freq_properties_t property;                 ///< [in] The property being requested (one of ::xet_freq_properties_t).
     void* pData;                                    ///< [in] Pointer to the data for the property.
                                                     ///< Each property has a corresponding data structure. The type of the data
@@ -1952,13 +1604,13 @@ typedef struct _xet_freq_property_request_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
+///         + nullptr == hSysman
 ///         + nullptr == pRequest
-///         + The resource is not of type ::XET_RESOURCE_TYPE_FREQ
+///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanResourceGetFreqProperties(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+xetSysmanGetFreqProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
     uint32_t count,                                 ///< [in] The number of properties in the array pRequest
     xet_freq_property_request_t* pRequest           ///< [in] Pointer to list of properties and corresponding data storage
     );
@@ -1975,13 +1627,13 @@ xetSysmanResourceGetFreqProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
+///         + nullptr == hSysman
 ///         + nullptr == pRequest
-///         + The resource is not of type ::XET_RESOURCE_TYPE_FREQ
+///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanResourceSetFreqProperties(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+xetSysmanSetFreqProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
     uint32_t count,                                 ///< [in] The number of properties in the array pRequest
     xet_freq_property_request_t* pRequest           ///< [in] Pointer to list of properties and corresponding data storage
     );
@@ -2088,6 +1740,8 @@ typedef struct _xet_pwrwell_prop_transitions_t
 /// @brief Request structure used to query a power-well domain resource property
 typedef struct _xet_pwrwell_property_request_t
 {
+    uint32_t index;                                 ///< [in] The index of the power-well domain resource (0 ...
+                                                    ///< ::xet_sysman_info_t.numResourcesByType[::XET_RESOURCE_TYPE_PWRWELL]-1)
     xet_pwrwell_properties_t property;              ///< [in] The property being requested (one of ::xet_pwrwell_properties_t).
     void* pData;                                    ///< [in] Pointer to the data for the property.
                                                     ///< Each property has a corresponding data structure. The type of the data
@@ -2109,13 +1763,13 @@ typedef struct _xet_pwrwell_property_request_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
+///         + nullptr == hSysman
 ///         + nullptr == pRequest
-///         + The resource is not of type ::XET_RESOURCE_TYPE_PWRWELL
+///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanResourceGetPwrwellProperties(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+xetSysmanGetPwrwellProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
     uint32_t count,                                 ///< [in] The number of properties in the array pRequest
     xet_pwrwell_property_request_t* pRequest        ///< [in] Pointer to list of properties and corresponding data storage
     );
@@ -2132,13 +1786,13 @@ xetSysmanResourceGetPwrwellProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
+///         + nullptr == hSysman
 ///         + nullptr == pRequest
-///         + The resource is not of type ::XET_RESOURCE_TYPE_PWRWELL
+///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanResourceSetPwrwellProperties(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+xetSysmanSetPwrwellProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
     uint32_t count,                                 ///< [in] The number of properties in the array pRequest
     xet_pwrwell_property_request_t* pRequest        ///< [in] Pointer to list of properties and corresponding data storage
     );
@@ -2189,6 +1843,8 @@ typedef struct _xet_accel_prop_utilization_t
 /// @brief Request structure used to query an accelerator resource property
 typedef struct _xet_accel_property_request_t
 {
+    uint32_t index;                                 ///< [in] The index of the accelerator resource (0 ...
+                                                    ///< ::xet_sysman_info_t.numResourcesByType[::XET_RESOURCE_TYPE_ACCEL]-1)
     xet_accel_properties_t property;                ///< [in] The property being requested (one of ::xet_accel_properties_t).
     void* pData;                                    ///< [in] Pointer to the data for the property.
                                                     ///< Each property has a corresponding data structure. The type of the data
@@ -2210,13 +1866,13 @@ typedef struct _xet_accel_property_request_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
+///         + nullptr == hSysman
 ///         + nullptr == pRequest
-///         + The resource is not of type ::XET_RESOURCE_TYPE_ACCEL
+///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanResourceGetAccelProperties(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+xetSysmanGetAccelProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
     uint32_t count,                                 ///< [in] The number of properties in the array pRequest
     xet_accel_property_request_t* pRequest          ///< [in] Pointer to list of properties and corresponding data storage
     );
@@ -2356,6 +2012,8 @@ typedef struct _xet_mem_prop_ecc_poison_t
 /// @brief Request structure used to query a memory resource property
 typedef struct _xet_mem_property_request_t
 {
+    uint32_t index;                                 ///< [in] The index of the memory resource (0 ...
+                                                    ///< ::xet_sysman_info_t.numResourcesByType[::XET_RESOURCE_TYPE_MEM]-1)
     xet_mem_properties_t property;                  ///< [in] The property being requested (one of ::xet_mem_properties_t).
     void* pData;                                    ///< [in] Pointer to the data for the property.
                                                     ///< Each property has a corresponding data structure. The type of the data
@@ -2377,13 +2035,13 @@ typedef struct _xet_mem_property_request_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
+///         + nullptr == hSysman
 ///         + nullptr == pRequest
-///         + The resource is not of type ::XET_RESOURCE_TYPE_MEM
+///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanResourceGetMemProperties(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+xetSysmanGetMemProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
     uint32_t count,                                 ///< [in] The number of properties in the array pRequest
     xet_mem_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
     );
@@ -2400,13 +2058,13 @@ xetSysmanResourceGetMemProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
+///         + nullptr == hSysman
 ///         + nullptr == pRequest
-///         + The resource is not of type ::XET_RESOURCE_TYPE_MEM
+///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanResourceSetMemProperties(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+xetSysmanSetMemProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
     uint32_t count,                                 ///< [in] The number of properties in the array pRequest
     xet_mem_property_request_t* pRequest            ///< [in] Pointer to list of properties and corresponding data storage
     );
@@ -2539,6 +2197,8 @@ typedef struct _xet_link_prop_speed_range_t
 /// @brief Request structure used to query a link resource property
 typedef struct _xet_link_property_request_t
 {
+    uint32_t index;                                 ///< [in] The index of the link resource (0 ...
+                                                    ///< ::xet_sysman_info_t.numResourcesByType[::XET_RESOURCE_TYPE_LINK]-1)
     xet_link_properties_t property;                 ///< [in] The property being requested (one of ::xet_link_properties_t).
     void* pData;                                    ///< [in] Pointer to the data for the property.
                                                     ///< Each property has a corresponding data structure. The type of the data
@@ -2560,13 +2220,13 @@ typedef struct _xet_link_property_request_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
+///         + nullptr == hSysman
 ///         + nullptr == pRequest
-///         + The resource is not of type ::XET_RESOURCE_TYPE_LINK
+///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanResourceGetLinkProperties(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+xetSysmanGetLinkProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
     uint32_t count,                                 ///< [in] The number of properties in the array pRequest
     xet_link_property_request_t* pRequest           ///< [in] Pointer to list of properties and corresponding data storage
     );
@@ -2583,13 +2243,13 @@ xetSysmanResourceGetLinkProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hResource
+///         + nullptr == hSysman
 ///         + nullptr == pRequest
-///         + The resource is not of type ::XET_RESOURCE_TYPE_LINK
+///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanResourceSetLinkProperties(
-    xet_resource_handle_t hResource,                ///< [in] Handle of the resource
+xetSysmanSetLinkProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
     uint32_t count,                                 ///< [in] The number of properties in the array pRequest
     xet_link_property_request_t* pRequest           ///< [in] Pointer to list of properties and corresponding data storage
     );
@@ -2600,14 +2260,24 @@ typedef enum _xet_sysman_event_type_t
 {
     XET_SYSMAN_EVENT_TYPE_FREQ_THROTTLED = 0,       ///< The frequency is being throttled
     XET_SYSMAN_EVENT_TYPE_FREQ_POLICY_CHANGED,      ///< Another API client has modified frequency domain properties
-    XET_SYSMAN_EVENT_TYPE_GPU_ERRORS,               ///< GPU hardware errors have occurred
-    XET_SYSMAN_EVENT_TYPE_RESET,                    ///< Device reset has occurred
-    XET_SYSMAN_EVENT_TYPE_HANG,                     ///< Device hang has occurred
-    XET_SYSMAN_EVENT_TYPE_MEM_ERRORS,               ///< ECC correctable errors have occurred in a memory resource
-    XET_SYSMAN_EVENT_TYPE_LINK_ERRORS,              ///< Link replays have occured in a link resource
+    XET_SYSMAN_EVENT_TYPE_RAS_ERRORS,               ///< ECC/RAS errors
     XET_SYSMAN_EVENT_TYPE_COUNT,                    ///< The number of event types
 
 } xet_sysman_event_type_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Request structure used to register/unregister events
+typedef struct _xet_event_request_t
+{
+    xet_sysman_event_type_t event;                  ///< [in] The event type to register.
+    xet_resource_id_t resourceId;                   ///< [in] Only events being generated by the specified resource. If
+                                                    ///< ::XET_RESOURCE_ID_ANY, then applies to all events from all resources
+                                                    ///< in the device.
+    uint32_t threshold;                             ///< [in] The application only receives a notification when the total count
+                                                    ///< exceeds this value. Set to zero to receive a notification for every
+                                                    ///< new event.
+
+} xet_event_request_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Register to receive events
@@ -2615,7 +2285,7 @@ typedef enum _xet_sysman_event_type_t
 /// @details
 ///     - This will only register the specified list of events. If other events
 ///       have been registered, notifications for them will continue.
-///     - Applies only to devices in the specified SMI handle.
+///     - Set count to zero to receive notifications for all events.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -2625,18 +2295,14 @@ typedef enum _xet_sysman_event_type_t
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
-///         + nullptr == hResource
+///         + nullptr == pEvents
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanRegisterEvents(
-    xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-    xet_resource_handle_t hResource,                ///< [in] Handle of the parent resource. Events from any contained devices
-                                                    ///< will be registered.
-                                                    ///< If the handle is ::XET_INVALID_SYSMAN_RESOURCE_HANDLE, events from all
-                                                    ///< devices will be registered.
-    uint32_t events                                 ///< [in] Bitfield of events to register.
-                                                    ///< Construct by ORing (1<<::xet_sysman_event_type_t).
-                                                    ///< Set to (~0) to register to receive all events.
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+    uint32_t count,                                 ///< [in] Number of entries in the array pEvents. If zero, all events will
+                                                    ///< be registered.
+    xet_event_request_t* pEvents                    ///< [in] Events to register.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2645,7 +2311,7 @@ xetSysmanRegisterEvents(
 /// @details
 ///     - This will only unregister the specified list of events. If other
 ///       events have been registered, notifications for them will continue.
-///     - Applies only to devices in the specified SMI handle.
+///     - Set count to zero to no longer receive any notifications.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -2655,39 +2321,33 @@ xetSysmanRegisterEvents(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
-///         + nullptr == hResource
+///         + nullptr == pEvents
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetSysmanUnregisterEvents(
     xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-    xet_resource_handle_t hResource,                ///< [in] Handle of the parent resource. Events from any contained devices
-                                                    ///< will be unregistered.
-                                                    ///< If the handle is ::XET_INVALID_SYSMAN_RESOURCE_HANDLE, events from all
-                                                    ///< devices will be unregistered.
-    uint32_t events                                 ///< [in] Bitfield of events to unregister.
-                                                    ///< Construct by ORing (1<<::xet_sysman_event_type_t).
-                                                    ///< Set to (~0) to unregister all events.
+    uint32_t count,                                 ///< [in] Number of entries in the array pEvents. If zero, all events will
+                                                    ///< be unregistered.
+    xet_event_request_t* pEvents                    ///< [in] Events to unregister.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Event data
-typedef struct _xet_sysman_event_data_t
-{
-    xet_resource_uuid_t uuid;                       ///< [out] The UUID of the resource that generated the event
-    uint32_t events;                                ///< [out] Bitfield of events (1<<::xet_sysman_event_type_t) that have been
-                                                    ///< triggered.
-
-} xet_sysman_event_data_t;
+#ifndef XET_EVENT_WAIT_INFINITE
+/// @brief Wait infinitely for events to arrive.
+#define XET_EVENT_WAIT_INFINITE  0xFFFFFFFF
+#endif // XET_EVENT_WAIT_INFINITE
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Listen for events
+/// @brief Get events that have been triggered for a specific device or from all
+///        registered devices
 /// 
 /// @details
-///     - This will only unregister the specified list of events. If other
-///       events have been registered, notifications for them will continue.
-///     - Applies only to devices in the specified SMI handle.
-///     - At most, one event data per device will be returned.
-///     - If event data is returned, the corresponding event status is cleared.
+///     - If events have occurred, they are returned and the corresponding event
+///       status is cleared if the argument clear = true.
+///     - If listening to events from multiple devices, it is recommended to
+///       call this function with hSysman = nullptr, clear = false and timeout =
+///       ::XET_EVENT_WAIT_INFINITE. Then call this function for each device
+///       with clear = true and timeout = 0.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -2697,22 +2357,19 @@ typedef struct _xet_sysman_event_data_t
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
-///         + nullptr == pCount
-///         + nullptr == pEventData
+///         + nullptr == pEvents
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanListenEvents(
-    xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-    xe_bool_t block,                                ///< [in] If set to true, the call will block the calling thread
-    uint32_t* pCount,                               ///< [in,out] Pointer to the number of elements in the array pointed to by pEventData.
-                                                    ///< If size is zero, then the driver will update the value with the number
-                                                    ///< of elements needed to retrieve the list of events.
-                                                    ///< If size is less than that required to store the list of events, the
-                                                    ///< driver will update the value with the required number of elements and
-                                                    ///< return an error.
-                                                    ///< If size is larger than that required to store the list of events, the
-                                                    ///< driver will update the value with the number of elements actually returned.
-    xet_sysman_event_data_t* pEventData             ///< [in] Pointer to an array of event data
+xetSysmanGetEvents(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for a device. Set to nullptr to get events from any
+                                                    ///< device for which the application has registered to receive
+                                                    ///< notifications.
+    xe_bool_t clear,                                ///< [in] Clear the event status.
+    uint32_t timeout,                               ///< [in] How long to wait in milliseconds for events to arrive. Zero will
+                                                    ///< check status and return immediately. Set to ::XET_EVENT_WAIT_INFINITE
+                                                    ///< to block until events arrive.
+    uint32_t* pEvents                               ///< [in] Bitfield of events (1<<::xet_sysman_event_type_t) that have been
+                                                    ///< triggered.
     );
 
 #if defined(__cplusplus)

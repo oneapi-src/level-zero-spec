@@ -21,18 +21,6 @@
 #pragma message("warning: this file is not intended to be included directly")
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-#ifndef XET_INVALID_SYSMAN_HANDLE
-/// @brief Invalid System Resource Management handle
-#define XET_INVALID_SYSMAN_HANDLE  NULL
-#endif // XET_INVALID_SYSMAN_HANDLE
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef XET_INVALID_SYSMAN_RESOURCE_HANDLE
-/// @brief Invalid Sysman resource handle
-#define XET_INVALID_SYSMAN_RESOURCE_HANDLE  NULL
-#endif // XET_INVALID_SYSMAN_RESOURCE_HANDLE
-
 namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
@@ -106,12 +94,6 @@ namespace xet
     class Sysman;
     struct _sysman_handle_t;
     using sysman_handle_t = _sysman_handle_t*;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle for a Sysman resource
-    class SysmanResource;
-    struct _resource_handle_t;
-    using resource_handle_t = _resource_handle_t*;
 
 } // namespace xet
 

@@ -72,18 +72,3 @@ type: handle
 desc: "Handle for accessing System Resource Management features"
 class: $tSysman
 name: "$t_sysman_handle_t"
---- #--------------------------------------------------------------------------
-type: macro
-desc: "Invalid System Resource Management handle"
-name: $T_INVALID_SYSMAN_HANDLE
-value: "NULL"
---- #--------------------------------------------------------------------------
-type: handle
-desc: "Handle for a Sysman resource"
-class: $tSysmanResource
-name: "$t_resource_handle_t"
---- #--------------------------------------------------------------------------
-type: macro
-desc: "Invalid Sysman resource handle"
-name: $T_INVALID_SYSMAN_RESOURCE_HANDLE
-value: "NULL"

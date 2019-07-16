@@ -70,20 +70,12 @@ namespace xe
             str = "result_t::ERROR_MODULE_BUILD_FAILURE";
             break;
 
-        case result_t::ACCESS_DENIED:
-            str = "result_t::ACCESS_DENIED";
+        case result_t::ERROR_INSUFFICENT_PERMISSIONS:
+            str = "result_t::ERROR_INSUFFICENT_PERMISSIONS";
             break;
 
-        case result_t::NOT_FOUND:
-            str = "result_t::NOT_FOUND";
-            break;
-
-        case result_t::TOO_SMALL:
-            str = "result_t::TOO_SMALL";
-            break;
-
-        case result_t::MISMATCH_DEVICE_GROUP:
-            str = "result_t::MISMATCH_DEVICE_GROUP";
+        case result_t::ERROR_ARRAY_SIZE_TOO_SMALL:
+            str = "result_t::ERROR_ARRAY_SIZE_TOO_SMALL";
             break;
 
         case result_t::ERROR_UNKNOWN:
