@@ -492,6 +492,14 @@ class xet_ras_filter_t(Structure):
     ]
 
 ###############################################################################
+## @brief Filter to get all RAS error counters
+XET_RAS_FILTER_ALL_COUNTERS = { XET_RESOURCE_ID_ANY, (uint32_t)XET_RAS_ERROR_TYPE_ALL, (uint32_t)XET_RAS_ERROR_LOC_ALL, 0 }
+
+###############################################################################
+## @brief Filter to get all RAS error counters that have errors
+XET_RAS_FILTER_ALL_ERRORS = { XET_RESOURCE_ID_ANY, (uint32_t)XET_RAS_ERROR_TYPE_ALL, (uint32_t)XET_RAS_ERROR_LOC_ALL, 1 }
+
+###############################################################################
 ## @brief RAS error
 class xet_res_error_t(Structure):
     _fields_ = [
@@ -673,6 +681,42 @@ class xet_device_prop_cold_reset_t(Structure):
     ]
 
 ###############################################################################
+## @brief Property support
+class xet_prop_support_v(IntEnum):
+    NONE = 0                                        ## The property is not supported by this version of the API
+    API = XE_BIT( 0 )                               ## The property is supported by the the API
+    DEVICE_CLASS = XE_BIT( 1 )                      ## The property is supported for the class of device
+    DEVICE = XE_BIT( 2 )                            ## The property is supported for the device
+
+class xet_prop_support_t(c_int):
+    def __str__(self):
+        return str(xet_prop_support_v(value))
+
+
+###############################################################################
+## @brief Property access permissions
+class xet_prop_access_v(IntEnum):
+    NO_PERMISSIONS = 0                              ## The application does not have read-write access to the property
+    READ_PERMISSIONS = XE_BIT( 0 )                  ## The application has only read access to the property
+    WRITE_PERMISSIONS = XE_BIT( 1 )                 ## The application has write access to the property
+
+class xet_prop_access_t(c_int):
+    def __str__(self):
+        return str(xet_prop_access_v(value))
+
+
+###############################################################################
+## @brief Request structure to determine device properties that are
+##        supported/accessible
+class xet_device_prop_capability_t(Structure):
+    _fields_ = [
+        ("property", xet_device_properties_t),                          ## [in] The property
+        ("support", c_ubyte),                                           ## [out] API support for the property - one of ::xet_prop_support_t
+        ("access", c_ubyte)                                             ## [out] The access permissions for the property - one of
+                                                                        ## ::xet_prop_access_t
+    ]
+
+###############################################################################
 ## @brief Request structure used to query a device property
 class xet_device_property_request_t(Structure):
     _fields_ = [
@@ -762,6 +806,16 @@ class xet_psu_prop_amps_t(Structure):
     ]
 
 ###############################################################################
+## @brief Request structure to determine PSU resource properties that are
+##        supported/accessible
+class xet_psu_prop_capability_t(Structure):
+    _fields_ = [
+        ("property", xet_psu_properties_t),                             ## [in] The property
+        ("support", xet_prop_support_t),                                ## [out] API support for the property
+        ("access", xet_prop_access_t)                                   ## [out] The access permissions for the property
+    ]
+
+###############################################################################
 ## @brief Request structure used to query a PSU resource property
 class xet_psu_property_request_t(Structure):
     _fields_ = [
@@ -802,6 +856,16 @@ class xet_temp_properties_t(c_int):
 class xet_temp_prop_temperature_t(Structure):
     _fields_ = [
         ("temperature", c_ulong)                                        ## [out] The current temperature of the sensor in degrees celcius
+    ]
+
+###############################################################################
+## @brief Request structure to determine temperature sensor properties that are
+##        supported/accessible
+class xet_temp_prop_capability_t(Structure):
+    _fields_ = [
+        ("property", xet_temp_properties_t),                            ## [in] The property
+        ("support", xet_prop_support_t),                                ## [out] API support for the property
+        ("access", xet_prop_access_t)                                   ## [out] The access permissions for the property
     ]
 
 ###############################################################################
@@ -945,6 +1009,16 @@ class xet_fan_prop_speed_table_t(Structure):
     ]
 
 ###############################################################################
+## @brief Request structure to determine fan resource properties that are
+##        supported/accessible
+class xet_fan_prop_capability_t(Structure):
+    _fields_ = [
+        ("property", xet_fan_properties_t),                             ## [in] The property
+        ("support", xet_prop_support_t),                                ## [out] API support for the property
+        ("access", xet_prop_access_t)                                   ## [out] The access permissions for the property
+    ]
+
+###############################################################################
 ## @brief Request structure used to query a fan resource property
 class xet_fan_property_request_t(Structure):
     _fields_ = [
@@ -997,6 +1071,16 @@ class xet_led_prop_state_t(Structure):
         ("red", c_ubyte),                                               ## [in,out][range(0, 255)] The LED red value
         ("green", c_ubyte),                                             ## [in,out][range(0, 255)] The LED green value
         ("blue", c_ubyte)                                               ## [in,out][range(0, 255)] The LED blue value
+    ]
+
+###############################################################################
+## @brief Request structure to determine LED resource properties that are
+##        supported/accessible
+class xet_led_prop_capability_t(Structure):
+    _fields_ = [
+        ("property", xet_led_properties_t),                             ## [in] The property
+        ("support", xet_prop_support_t),                                ## [out] API support for the property
+        ("access", xet_prop_access_t)                                   ## [out] The access permissions for the property
     ]
 
 ###############################################################################
@@ -1068,6 +1152,16 @@ class xet_firmware_prop_flash_t(Structure):
     _fields_ = [
         ("pImage", c_void_p),                                           ## [in] Pointer to the image to be flashed
         ("size", c_ulong)                                               ## [in] Size in bytes of the image pointed to by pImage
+    ]
+
+###############################################################################
+## @brief Request structure to determine firmware resource properties that are
+##        supported/accessible
+class xet_firmware_prop_capability_t(Structure):
+    _fields_ = [
+        ("property", xet_firmware_properties_t),                        ## [in] The property
+        ("support", xet_prop_support_t),                                ## [out] API support for the property
+        ("access", xet_prop_access_t)                                   ## [out] The access permissions for the property
     ]
 
 ###############################################################################
@@ -1183,6 +1277,16 @@ class xet_pwr_prop_burst_limit_t(Structure):
 class xet_pwr_prop_peak_limit_t(Structure):
     _fields_ = [
         ("power", c_ulong)                                              ## [in,out] power limit in milliwatts
+    ]
+
+###############################################################################
+## @brief Request structure to determine power domain resource properties that
+##        are supported/accessible
+class xet_pwr_prop_capability_t(Structure):
+    _fields_ = [
+        ("property", xet_pwr_properties_t),                             ## [in] The property
+        ("support", xet_prop_support_t),                                ## [out] API support for the property
+        ("access", xet_prop_access_t)                                   ## [out] The access permissions for the property
     ]
 
 ###############################################################################
@@ -1424,6 +1528,16 @@ class xet_freq_prop_throttle_time_t(Structure):
     ]
 
 ###############################################################################
+## @brief Request structure to determine frequency domain resource properties
+##        that are supported/accessible
+class xet_freq_prop_capability_t(Structure):
+    _fields_ = [
+        ("property", xet_freq_properties_t),                            ## [in] The property
+        ("support", xet_prop_support_t),                                ## [out] API support for the property
+        ("access", xet_prop_access_t)                                   ## [out] The access permissions for the property
+    ]
+
+###############################################################################
 ## @brief Request structure used to query a frequency domain resource property
 class xet_freq_property_request_t(Structure):
     _fields_ = [
@@ -1535,6 +1649,16 @@ class xet_pwrwell_prop_transitions_t(Structure):
     ]
 
 ###############################################################################
+## @brief Request structure to determine power-well domain resource properties
+##        that are supported/accessible
+class xet_pwrwell_prop_capability_t(Structure):
+    _fields_ = [
+        ("property", xet_pwrwell_properties_t),                         ## [in] The property
+        ("support", xet_prop_support_t),                                ## [out] API support for the property
+        ("access", xet_prop_access_t)                                   ## [out] The access permissions for the property
+    ]
+
+###############################################################################
 ## @brief Request structure used to query a power-well domain resource property
 class xet_pwrwell_property_request_t(Structure):
     _fields_ = [
@@ -1588,6 +1712,16 @@ class xet_accel_prop_utilization_t(Structure):
                                                                         ## accelerator assets in this resource are active.
         ("idleCounter", c_ulong)                                        ## [out] Monotonic counter for total wall time in microseconds that no
                                                                         ## accelerator assets in this resource are active.
+    ]
+
+###############################################################################
+## @brief Request structure to determine accelerator resource properties that
+##        are supported/accessible
+class xet_accel_prop_capability_t(Structure):
+    _fields_ = [
+        ("property", xet_accel_properties_t),                           ## [in] The property
+        ("support", xet_prop_support_t),                                ## [out] API support for the property
+        ("access", xet_prop_access_t)                                   ## [out] The access permissions for the property
     ]
 
 ###############################################################################
@@ -1665,8 +1799,6 @@ class xet_mem_properties_v(IntEnum):
                                                     ## bandwidth (data: ::xet_mem_prop_bandwidth_t)
     MEM_PROP_ECC_ENABLE = auto()                    ## (rw dynamic) Determine if ECC is enabled/disabled or change this
                                                     ## setting (data: ::xet_mem_prop_ecc_enable_t)
-    MEM_PROP_ECC_POISON = auto()                    ## (wo dynamic) Poison the memory resource (data:
-                                                    ## ::xet_mem_prop_ecc_poison_t)
 
 class xet_mem_properties_t(c_int):
     def __str__(self):
@@ -1704,8 +1836,18 @@ class xet_mem_prop_bad_list_t(Structure):
 
 ###############################################################################
 ## @brief Data for the property ::XET_MEM_PROP_UTILIZATION
+## 
+## @details
+##     - The total physical memory is the sum of all others (stolen + bad +
+##       allocated + unallocated).
+##     - Percent software memory utilization given by 100 * allocated /
+##       (allocated + unallocated).
+##     - Percent bad memory given by 100 * bad / total
 class xet_mem_prop_utilization_t(Structure):
     _fields_ = [
+        ("total", c_ulonglong),                                         ## [out] The total physical memory in bytes
+        ("stolen", c_ulonglong),                                        ## [out] The total stolen memory in bytes
+        ("bad", c_ulonglong),                                           ## [out] The total bad memory in bytes
         ("allocated", c_ulonglong),                                     ## [out] The total allocated bytes
         ("unallocated", c_ulonglong)                                    ## [out] The total unallocated bytes
     ]
@@ -1727,10 +1869,13 @@ class xet_mem_prop_ecc_enable_t(Structure):
     ]
 
 ###############################################################################
-## @brief Data for the property ::XET_MEM_PROP_ECC_POISON
-class xet_mem_prop_ecc_poison_t(Structure):
+## @brief Request structure to determine memory resource properties that are
+##        supported/accessible
+class xet_mem_prop_capability_t(Structure):
     _fields_ = [
-        ("doPoison", xe_bool_t)                                         ## [out] Poison the memory resource.
+        ("property", xet_mem_properties_t),                             ## [in] The property
+        ("support", xet_prop_support_t),                                ## [out] API support for the property
+        ("access", xet_prop_access_t)                                   ## [out] The access permissions for the property
     ]
 
 ###############################################################################
@@ -1867,6 +2012,16 @@ class xet_link_prop_speed_range_t(Structure):
     ]
 
 ###############################################################################
+## @brief Request structure to determine link resource properties that are
+##        supported/accessible
+class xet_link_prop_capability_t(Structure):
+    _fields_ = [
+        ("property", xet_link_properties_t),                            ## [in] The property
+        ("support", xet_prop_support_t),                                ## [out] API support for the property
+        ("access", xet_prop_access_t)                                   ## [out] The access permissions for the property
+    ]
+
+###############################################################################
 ## @brief Request structure used to query a link resource property
 class xet_link_property_request_t(Structure):
     _fields_ = [
@@ -1884,7 +2039,6 @@ class xet_link_property_request_t(Structure):
 ## @brief Event types
 class xet_sysman_event_type_v(IntEnum):
     FREQ_THROTTLED = 0                              ## The frequency is being throttled
-    FREQ_POLICY_CHANGED = auto()                    ## Another API client has modified frequency domain properties
     RAS_ERRORS = auto()                             ## ECC/RAS errors
     COUNT = auto()                                  ## The number of event types
 
@@ -1892,6 +2046,14 @@ class xet_sysman_event_type_t(c_int):
     def __str__(self):
         return str(xet_sysman_event_type_v(value))
 
+
+###############################################################################
+## @brief Request structure to determine events that are supported
+class xet_event_support_t(Structure):
+    _fields_ = [
+        ("event", xet_sysman_event_type_t),                             ## [in] The event
+        ("supported", xe_bool_t)                                        ## [out] Set to true/false to know if the event is supported
+    ]
 
 ###############################################################################
 ## @brief Request structure used to register/unregister events
@@ -2288,9 +2450,16 @@ else:
 ###############################################################################
 ## @brief Function-pointer for xetSysmanGetRasErrors
 if __use_win_types:
-    _xetSysmanGetRasErrors_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xe_bool_t, POINTER(c_ulong), POINTER(xet_res_error_t) )
+    _xetSysmanGetRasErrors_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_ras_filter_t), xe_bool_t, POINTER(c_ulong), POINTER(xet_res_error_t) )
 else:
-    _xetSysmanGetRasErrors_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xe_bool_t, POINTER(c_ulong), POINTER(xet_res_error_t) )
+    _xetSysmanGetRasErrors_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_ras_filter_t), xe_bool_t, POINTER(c_ulong), POINTER(xet_res_error_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanAvailableDeviceProperties
+if __use_win_types:
+    _xetSysmanAvailableDeviceProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_device_prop_capability_t) )
+else:
+    _xetSysmanAvailableDeviceProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_device_prop_capability_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanGetDeviceProperties
@@ -2307,6 +2476,13 @@ else:
     _xetSysmanSetDeviceProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_device_property_request_t) )
 
 ###############################################################################
+## @brief Function-pointer for xetSysmanAvailablePsuProperties
+if __use_win_types:
+    _xetSysmanAvailablePsuProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_psu_prop_capability_t) )
+else:
+    _xetSysmanAvailablePsuProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_psu_prop_capability_t) )
+
+###############################################################################
 ## @brief Function-pointer for xetSysmanGetPsuProperties
 if __use_win_types:
     _xetSysmanGetPsuProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_psu_property_request_t) )
@@ -2321,11 +2497,25 @@ else:
     _xetSysmanSetPsuProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_psu_property_request_t) )
 
 ###############################################################################
+## @brief Function-pointer for xetSysmanAvailableTempProperties
+if __use_win_types:
+    _xetSysmanAvailableTempProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_temp_prop_capability_t) )
+else:
+    _xetSysmanAvailableTempProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_temp_prop_capability_t) )
+
+###############################################################################
 ## @brief Function-pointer for xetSysmanGetTempProperties
 if __use_win_types:
     _xetSysmanGetTempProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_temp_property_request_t) )
 else:
     _xetSysmanGetTempProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_temp_property_request_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanAvailableFanProperties
+if __use_win_types:
+    _xetSysmanAvailableFanProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_fan_prop_capability_t) )
+else:
+    _xetSysmanAvailableFanProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_fan_prop_capability_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanGetFanProperties
@@ -2342,6 +2532,13 @@ else:
     _xetSysmanSetFanProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_fan_property_request_t) )
 
 ###############################################################################
+## @brief Function-pointer for xetSysmanAvailableLedProperties
+if __use_win_types:
+    _xetSysmanAvailableLedProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_led_prop_capability_t) )
+else:
+    _xetSysmanAvailableLedProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_led_prop_capability_t) )
+
+###############################################################################
 ## @brief Function-pointer for xetSysmanGetLedProperties
 if __use_win_types:
     _xetSysmanGetLedProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_led_property_request_t) )
@@ -2354,6 +2551,13 @@ if __use_win_types:
     _xetSysmanSetLedProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_led_property_request_t) )
 else:
     _xetSysmanSetLedProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_led_property_request_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanAvailableFirmwareProperties
+if __use_win_types:
+    _xetSysmanAvailableFirmwareProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_firmware_prop_capability_t) )
+else:
+    _xetSysmanAvailableFirmwareProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_firmware_prop_capability_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanGetFirmwareProperties
@@ -2370,6 +2574,13 @@ else:
     _xetSysmanSetFirmwareProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_firmware_property_request_t) )
 
 ###############################################################################
+## @brief Function-pointer for xetSysmanAvailablePwrProperties
+if __use_win_types:
+    _xetSysmanAvailablePwrProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_pwr_prop_capability_t) )
+else:
+    _xetSysmanAvailablePwrProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_pwr_prop_capability_t) )
+
+###############################################################################
 ## @brief Function-pointer for xetSysmanGetPwrProperties
 if __use_win_types:
     _xetSysmanGetPwrProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_pwr_property_request_t) )
@@ -2382,6 +2593,13 @@ if __use_win_types:
     _xetSysmanSetPwrProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_pwr_property_request_t) )
 else:
     _xetSysmanSetPwrProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_pwr_property_request_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanAvailableFreqProperties
+if __use_win_types:
+    _xetSysmanAvailableFreqProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_freq_prop_capability_t) )
+else:
+    _xetSysmanAvailableFreqProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_freq_prop_capability_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanGetFreqProperties
@@ -2398,6 +2616,13 @@ else:
     _xetSysmanSetFreqProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_freq_property_request_t) )
 
 ###############################################################################
+## @brief Function-pointer for xetSysmanAvailablePwrwellProperties
+if __use_win_types:
+    _xetSysmanAvailablePwrwellProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_pwrwell_prop_capability_t) )
+else:
+    _xetSysmanAvailablePwrwellProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_pwrwell_prop_capability_t) )
+
+###############################################################################
 ## @brief Function-pointer for xetSysmanGetPwrwellProperties
 if __use_win_types:
     _xetSysmanGetPwrwellProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_pwrwell_property_request_t) )
@@ -2412,11 +2637,25 @@ else:
     _xetSysmanSetPwrwellProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_pwrwell_property_request_t) )
 
 ###############################################################################
+## @brief Function-pointer for xetSysmanAvailableAccelProperties
+if __use_win_types:
+    _xetSysmanAvailableAccelProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_accel_prop_capability_t) )
+else:
+    _xetSysmanAvailableAccelProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_accel_prop_capability_t) )
+
+###############################################################################
 ## @brief Function-pointer for xetSysmanGetAccelProperties
 if __use_win_types:
     _xetSysmanGetAccelProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_accel_property_request_t) )
 else:
     _xetSysmanGetAccelProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_accel_property_request_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanAvailableMemProperties
+if __use_win_types:
+    _xetSysmanAvailableMemProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_mem_prop_capability_t) )
+else:
+    _xetSysmanAvailableMemProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_mem_prop_capability_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanGetMemProperties
@@ -2433,6 +2672,13 @@ else:
     _xetSysmanSetMemProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_mem_property_request_t) )
 
 ###############################################################################
+## @brief Function-pointer for xetSysmanAvailableLinkProperties
+if __use_win_types:
+    _xetSysmanAvailableLinkProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_link_prop_capability_t) )
+else:
+    _xetSysmanAvailableLinkProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_link_prop_capability_t) )
+
+###############################################################################
 ## @brief Function-pointer for xetSysmanGetLinkProperties
 if __use_win_types:
     _xetSysmanGetLinkProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_link_property_request_t) )
@@ -2445,6 +2691,13 @@ if __use_win_types:
     _xetSysmanSetLinkProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_link_property_request_t) )
 else:
     _xetSysmanSetLinkProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_link_property_request_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanSupportedEvents
+if __use_win_types:
+    _xetSysmanSupportedEvents_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_event_support_t) )
+else:
+    _xetSysmanSupportedEvents_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_event_support_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanRegisterEvents
@@ -2477,28 +2730,41 @@ class _xet_sysman_dditable_t(Structure):
         ("pfnGetAccelAssetName", c_void_p),                             ## _xetSysmanGetAccelAssetName_t
         ("pfnGetInfo", c_void_p),                                       ## _xetSysmanGetInfo_t
         ("pfnGetRasErrors", c_void_p),                                  ## _xetSysmanGetRasErrors_t
+        ("pfnAvailableDeviceProperties", c_void_p),                     ## _xetSysmanAvailableDeviceProperties_t
         ("pfnGetDeviceProperties", c_void_p),                           ## _xetSysmanGetDeviceProperties_t
         ("pfnSetDeviceProperties", c_void_p),                           ## _xetSysmanSetDeviceProperties_t
+        ("pfnAvailablePsuProperties", c_void_p),                        ## _xetSysmanAvailablePsuProperties_t
         ("pfnGetPsuProperties", c_void_p),                              ## _xetSysmanGetPsuProperties_t
         ("pfnSetPsuProperties", c_void_p),                              ## _xetSysmanSetPsuProperties_t
+        ("pfnAvailableTempProperties", c_void_p),                       ## _xetSysmanAvailableTempProperties_t
         ("pfnGetTempProperties", c_void_p),                             ## _xetSysmanGetTempProperties_t
+        ("pfnAvailableFanProperties", c_void_p),                        ## _xetSysmanAvailableFanProperties_t
         ("pfnGetFanProperties", c_void_p),                              ## _xetSysmanGetFanProperties_t
         ("pfnSetFanProperties", c_void_p),                              ## _xetSysmanSetFanProperties_t
+        ("pfnAvailableLedProperties", c_void_p),                        ## _xetSysmanAvailableLedProperties_t
         ("pfnGetLedProperties", c_void_p),                              ## _xetSysmanGetLedProperties_t
         ("pfnSetLedProperties", c_void_p),                              ## _xetSysmanSetLedProperties_t
+        ("pfnAvailableFirmwareProperties", c_void_p),                   ## _xetSysmanAvailableFirmwareProperties_t
         ("pfnGetFirmwareProperties", c_void_p),                         ## _xetSysmanGetFirmwareProperties_t
         ("pfnSetFirmwareProperties", c_void_p),                         ## _xetSysmanSetFirmwareProperties_t
+        ("pfnAvailablePwrProperties", c_void_p),                        ## _xetSysmanAvailablePwrProperties_t
         ("pfnGetPwrProperties", c_void_p),                              ## _xetSysmanGetPwrProperties_t
         ("pfnSetPwrProperties", c_void_p),                              ## _xetSysmanSetPwrProperties_t
+        ("pfnAvailableFreqProperties", c_void_p),                       ## _xetSysmanAvailableFreqProperties_t
         ("pfnGetFreqProperties", c_void_p),                             ## _xetSysmanGetFreqProperties_t
         ("pfnSetFreqProperties", c_void_p),                             ## _xetSysmanSetFreqProperties_t
+        ("pfnAvailablePwrwellProperties", c_void_p),                    ## _xetSysmanAvailablePwrwellProperties_t
         ("pfnGetPwrwellProperties", c_void_p),                          ## _xetSysmanGetPwrwellProperties_t
         ("pfnSetPwrwellProperties", c_void_p),                          ## _xetSysmanSetPwrwellProperties_t
+        ("pfnAvailableAccelProperties", c_void_p),                      ## _xetSysmanAvailableAccelProperties_t
         ("pfnGetAccelProperties", c_void_p),                            ## _xetSysmanGetAccelProperties_t
+        ("pfnAvailableMemProperties", c_void_p),                        ## _xetSysmanAvailableMemProperties_t
         ("pfnGetMemProperties", c_void_p),                              ## _xetSysmanGetMemProperties_t
         ("pfnSetMemProperties", c_void_p),                              ## _xetSysmanSetMemProperties_t
+        ("pfnAvailableLinkProperties", c_void_p),                       ## _xetSysmanAvailableLinkProperties_t
         ("pfnGetLinkProperties", c_void_p),                             ## _xetSysmanGetLinkProperties_t
         ("pfnSetLinkProperties", c_void_p),                             ## _xetSysmanSetLinkProperties_t
+        ("pfnSupportedEvents", c_void_p),                               ## _xetSysmanSupportedEvents_t
         ("pfnRegisterEvents", c_void_p),                                ## _xetSysmanRegisterEvents_t
         ("pfnUnregisterEvents", c_void_p),                              ## _xetSysmanUnregisterEvents_t
         ("pfnGetEvents", c_void_p)                                      ## _xetSysmanGetEvents_t
@@ -2674,28 +2940,41 @@ class XET_DDI:
         self.xetSysmanGetAccelAssetName = _xetSysmanGetAccelAssetName_t(self.__dditable.Sysman.pfnGetAccelAssetName)
         self.xetSysmanGetInfo = _xetSysmanGetInfo_t(self.__dditable.Sysman.pfnGetInfo)
         self.xetSysmanGetRasErrors = _xetSysmanGetRasErrors_t(self.__dditable.Sysman.pfnGetRasErrors)
+        self.xetSysmanAvailableDeviceProperties = _xetSysmanAvailableDeviceProperties_t(self.__dditable.Sysman.pfnAvailableDeviceProperties)
         self.xetSysmanGetDeviceProperties = _xetSysmanGetDeviceProperties_t(self.__dditable.Sysman.pfnGetDeviceProperties)
         self.xetSysmanSetDeviceProperties = _xetSysmanSetDeviceProperties_t(self.__dditable.Sysman.pfnSetDeviceProperties)
+        self.xetSysmanAvailablePsuProperties = _xetSysmanAvailablePsuProperties_t(self.__dditable.Sysman.pfnAvailablePsuProperties)
         self.xetSysmanGetPsuProperties = _xetSysmanGetPsuProperties_t(self.__dditable.Sysman.pfnGetPsuProperties)
         self.xetSysmanSetPsuProperties = _xetSysmanSetPsuProperties_t(self.__dditable.Sysman.pfnSetPsuProperties)
+        self.xetSysmanAvailableTempProperties = _xetSysmanAvailableTempProperties_t(self.__dditable.Sysman.pfnAvailableTempProperties)
         self.xetSysmanGetTempProperties = _xetSysmanGetTempProperties_t(self.__dditable.Sysman.pfnGetTempProperties)
+        self.xetSysmanAvailableFanProperties = _xetSysmanAvailableFanProperties_t(self.__dditable.Sysman.pfnAvailableFanProperties)
         self.xetSysmanGetFanProperties = _xetSysmanGetFanProperties_t(self.__dditable.Sysman.pfnGetFanProperties)
         self.xetSysmanSetFanProperties = _xetSysmanSetFanProperties_t(self.__dditable.Sysman.pfnSetFanProperties)
+        self.xetSysmanAvailableLedProperties = _xetSysmanAvailableLedProperties_t(self.__dditable.Sysman.pfnAvailableLedProperties)
         self.xetSysmanGetLedProperties = _xetSysmanGetLedProperties_t(self.__dditable.Sysman.pfnGetLedProperties)
         self.xetSysmanSetLedProperties = _xetSysmanSetLedProperties_t(self.__dditable.Sysman.pfnSetLedProperties)
+        self.xetSysmanAvailableFirmwareProperties = _xetSysmanAvailableFirmwareProperties_t(self.__dditable.Sysman.pfnAvailableFirmwareProperties)
         self.xetSysmanGetFirmwareProperties = _xetSysmanGetFirmwareProperties_t(self.__dditable.Sysman.pfnGetFirmwareProperties)
         self.xetSysmanSetFirmwareProperties = _xetSysmanSetFirmwareProperties_t(self.__dditable.Sysman.pfnSetFirmwareProperties)
+        self.xetSysmanAvailablePwrProperties = _xetSysmanAvailablePwrProperties_t(self.__dditable.Sysman.pfnAvailablePwrProperties)
         self.xetSysmanGetPwrProperties = _xetSysmanGetPwrProperties_t(self.__dditable.Sysman.pfnGetPwrProperties)
         self.xetSysmanSetPwrProperties = _xetSysmanSetPwrProperties_t(self.__dditable.Sysman.pfnSetPwrProperties)
+        self.xetSysmanAvailableFreqProperties = _xetSysmanAvailableFreqProperties_t(self.__dditable.Sysman.pfnAvailableFreqProperties)
         self.xetSysmanGetFreqProperties = _xetSysmanGetFreqProperties_t(self.__dditable.Sysman.pfnGetFreqProperties)
         self.xetSysmanSetFreqProperties = _xetSysmanSetFreqProperties_t(self.__dditable.Sysman.pfnSetFreqProperties)
+        self.xetSysmanAvailablePwrwellProperties = _xetSysmanAvailablePwrwellProperties_t(self.__dditable.Sysman.pfnAvailablePwrwellProperties)
         self.xetSysmanGetPwrwellProperties = _xetSysmanGetPwrwellProperties_t(self.__dditable.Sysman.pfnGetPwrwellProperties)
         self.xetSysmanSetPwrwellProperties = _xetSysmanSetPwrwellProperties_t(self.__dditable.Sysman.pfnSetPwrwellProperties)
+        self.xetSysmanAvailableAccelProperties = _xetSysmanAvailableAccelProperties_t(self.__dditable.Sysman.pfnAvailableAccelProperties)
         self.xetSysmanGetAccelProperties = _xetSysmanGetAccelProperties_t(self.__dditable.Sysman.pfnGetAccelProperties)
+        self.xetSysmanAvailableMemProperties = _xetSysmanAvailableMemProperties_t(self.__dditable.Sysman.pfnAvailableMemProperties)
         self.xetSysmanGetMemProperties = _xetSysmanGetMemProperties_t(self.__dditable.Sysman.pfnGetMemProperties)
         self.xetSysmanSetMemProperties = _xetSysmanSetMemProperties_t(self.__dditable.Sysman.pfnSetMemProperties)
+        self.xetSysmanAvailableLinkProperties = _xetSysmanAvailableLinkProperties_t(self.__dditable.Sysman.pfnAvailableLinkProperties)
         self.xetSysmanGetLinkProperties = _xetSysmanGetLinkProperties_t(self.__dditable.Sysman.pfnGetLinkProperties)
         self.xetSysmanSetLinkProperties = _xetSysmanSetLinkProperties_t(self.__dditable.Sysman.pfnSetLinkProperties)
+        self.xetSysmanSupportedEvents = _xetSysmanSupportedEvents_t(self.__dditable.Sysman.pfnSupportedEvents)
         self.xetSysmanRegisterEvents = _xetSysmanRegisterEvents_t(self.__dditable.Sysman.pfnRegisterEvents)
         self.xetSysmanUnregisterEvents = _xetSysmanUnregisterEvents_t(self.__dditable.Sysman.pfnUnregisterEvents)
         self.xetSysmanGetEvents = _xetSysmanGetEvents_t(self.__dditable.Sysman.pfnGetEvents)

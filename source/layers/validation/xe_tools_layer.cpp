@@ -774,6 +774,7 @@ namespace layer
     xe_result_t __xecall
     xetSysmanGetRasErrors(
         xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
+        xet_ras_filter_t* pFilter,                      ///< [in] Filter for RAS errors to return
         xe_bool_t clear,                                ///< [in] Set to true to clear the underlying counters after they are
                                                         ///< returned
         uint32_t* pCount,                               ///< [in] Pointer to the number of elements in the array pErrors.
@@ -798,6 +799,9 @@ namespace layer
             if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
+            if( nullptr == pFilter )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
             if( nullptr == pCount )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
@@ -806,7 +810,34 @@ namespace layer
 
         }
 
-        return pfnGetRasErrors( hSysman, clear, pCount, pErrors );
+        return pfnGetRasErrors( hSysman, pFilter, clear, pCount, pErrors );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailableDeviceProperties
+    xe_result_t __xecall
+    xetSysmanAvailableDeviceProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_device_prop_capability_t* pCap              ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto pfnAvailableDeviceProperties = context.xetDdiTable.Sysman.pfnAvailableDeviceProperties;
+
+        if( nullptr == pfnAvailableDeviceProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCap )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnAvailableDeviceProperties( hSysman, count, pCap );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -864,6 +895,33 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailablePsuProperties
+    xe_result_t __xecall
+    xetSysmanAvailablePsuProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_psu_prop_capability_t* pCap                 ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto pfnAvailablePsuProperties = context.xetDdiTable.Sysman.pfnAvailablePsuProperties;
+
+        if( nullptr == pfnAvailablePsuProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCap )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnAvailablePsuProperties( hSysman, count, pCap );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanGetPsuProperties
     xe_result_t __xecall
     xetSysmanGetPsuProperties(
@@ -918,6 +976,33 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailableTempProperties
+    xe_result_t __xecall
+    xetSysmanAvailableTempProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_temp_prop_capability_t* pCap                ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto pfnAvailableTempProperties = context.xetDdiTable.Sysman.pfnAvailableTempProperties;
+
+        if( nullptr == pfnAvailableTempProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCap )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnAvailableTempProperties( hSysman, count, pCap );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanGetTempProperties
     xe_result_t __xecall
     xetSysmanGetTempProperties(
@@ -942,6 +1027,33 @@ namespace layer
         }
 
         return pfnGetTempProperties( hSysman, count, pRequest );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailableFanProperties
+    xe_result_t __xecall
+    xetSysmanAvailableFanProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_fan_prop_capability_t* pCap                 ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto pfnAvailableFanProperties = context.xetDdiTable.Sysman.pfnAvailableFanProperties;
+
+        if( nullptr == pfnAvailableFanProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCap )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnAvailableFanProperties( hSysman, count, pCap );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -999,6 +1111,33 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailableLedProperties
+    xe_result_t __xecall
+    xetSysmanAvailableLedProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_led_prop_capability_t* pCap                 ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto pfnAvailableLedProperties = context.xetDdiTable.Sysman.pfnAvailableLedProperties;
+
+        if( nullptr == pfnAvailableLedProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCap )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnAvailableLedProperties( hSysman, count, pCap );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanGetLedProperties
     xe_result_t __xecall
     xetSysmanGetLedProperties(
@@ -1050,6 +1189,33 @@ namespace layer
         }
 
         return pfnSetLedProperties( hSysman, count, pRequest );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailableFirmwareProperties
+    xe_result_t __xecall
+    xetSysmanAvailableFirmwareProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_firmware_prop_capability_t* pCap            ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto pfnAvailableFirmwareProperties = context.xetDdiTable.Sysman.pfnAvailableFirmwareProperties;
+
+        if( nullptr == pfnAvailableFirmwareProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCap )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnAvailableFirmwareProperties( hSysman, count, pCap );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1107,6 +1273,33 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailablePwrProperties
+    xe_result_t __xecall
+    xetSysmanAvailablePwrProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_pwr_prop_capability_t* pCap                 ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto pfnAvailablePwrProperties = context.xetDdiTable.Sysman.pfnAvailablePwrProperties;
+
+        if( nullptr == pfnAvailablePwrProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCap )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnAvailablePwrProperties( hSysman, count, pCap );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanGetPwrProperties
     xe_result_t __xecall
     xetSysmanGetPwrProperties(
@@ -1158,6 +1351,33 @@ namespace layer
         }
 
         return pfnSetPwrProperties( hSysman, count, pRequest );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailableFreqProperties
+    xe_result_t __xecall
+    xetSysmanAvailableFreqProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_freq_prop_capability_t* pCap                ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto pfnAvailableFreqProperties = context.xetDdiTable.Sysman.pfnAvailableFreqProperties;
+
+        if( nullptr == pfnAvailableFreqProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCap )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnAvailableFreqProperties( hSysman, count, pCap );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1215,6 +1435,33 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailablePwrwellProperties
+    xe_result_t __xecall
+    xetSysmanAvailablePwrwellProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_pwrwell_prop_capability_t* pCap             ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto pfnAvailablePwrwellProperties = context.xetDdiTable.Sysman.pfnAvailablePwrwellProperties;
+
+        if( nullptr == pfnAvailablePwrwellProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCap )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnAvailablePwrwellProperties( hSysman, count, pCap );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanGetPwrwellProperties
     xe_result_t __xecall
     xetSysmanGetPwrwellProperties(
@@ -1269,6 +1516,33 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailableAccelProperties
+    xe_result_t __xecall
+    xetSysmanAvailableAccelProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_accel_prop_capability_t* pCap               ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto pfnAvailableAccelProperties = context.xetDdiTable.Sysman.pfnAvailableAccelProperties;
+
+        if( nullptr == pfnAvailableAccelProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCap )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnAvailableAccelProperties( hSysman, count, pCap );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanGetAccelProperties
     xe_result_t __xecall
     xetSysmanGetAccelProperties(
@@ -1293,6 +1567,33 @@ namespace layer
         }
 
         return pfnGetAccelProperties( hSysman, count, pRequest );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailableMemProperties
+    xe_result_t __xecall
+    xetSysmanAvailableMemProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_mem_prop_capability_t* pCap                 ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto pfnAvailableMemProperties = context.xetDdiTable.Sysman.pfnAvailableMemProperties;
+
+        if( nullptr == pfnAvailableMemProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCap )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnAvailableMemProperties( hSysman, count, pCap );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1350,6 +1651,33 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailableLinkProperties
+    xe_result_t __xecall
+    xetSysmanAvailableLinkProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_link_prop_capability_t* pCap                ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto pfnAvailableLinkProperties = context.xetDdiTable.Sysman.pfnAvailableLinkProperties;
+
+        if( nullptr == pfnAvailableLinkProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pCap )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnAvailableLinkProperties( hSysman, count, pCap );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanGetLinkProperties
     xe_result_t __xecall
     xetSysmanGetLinkProperties(
@@ -1401,6 +1729,33 @@ namespace layer
         }
 
         return pfnSetLinkProperties( hSysman, count, pRequest );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanSupportedEvents
+    xe_result_t __xecall
+    xetSysmanSupportedEvents(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pAccess
+        xet_event_support_t* pAccess                    ///< [in] Pointer to an array of event support requests
+        )
+    {
+        auto pfnSupportedEvents = context.xetDdiTable.Sysman.pfnSupportedEvents;
+
+        if( nullptr == pfnSupportedEvents )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pAccess )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnSupportedEvents( hSysman, count, pAccess );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2088,11 +2443,17 @@ xetGetSysmanProcAddrTable(
     dditable.pfnGetRasErrors                             = pDdiTable->pfnGetRasErrors;
     pDdiTable->pfnGetRasErrors                           = layer::xetSysmanGetRasErrors;
 
+    dditable.pfnAvailableDeviceProperties                = pDdiTable->pfnAvailableDeviceProperties;
+    pDdiTable->pfnAvailableDeviceProperties              = layer::xetSysmanAvailableDeviceProperties;
+
     dditable.pfnGetDeviceProperties                      = pDdiTable->pfnGetDeviceProperties;
     pDdiTable->pfnGetDeviceProperties                    = layer::xetSysmanGetDeviceProperties;
 
     dditable.pfnSetDeviceProperties                      = pDdiTable->pfnSetDeviceProperties;
     pDdiTable->pfnSetDeviceProperties                    = layer::xetSysmanSetDeviceProperties;
+
+    dditable.pfnAvailablePsuProperties                   = pDdiTable->pfnAvailablePsuProperties;
+    pDdiTable->pfnAvailablePsuProperties                 = layer::xetSysmanAvailablePsuProperties;
 
     dditable.pfnGetPsuProperties                         = pDdiTable->pfnGetPsuProperties;
     pDdiTable->pfnGetPsuProperties                       = layer::xetSysmanGetPsuProperties;
@@ -2100,8 +2461,14 @@ xetGetSysmanProcAddrTable(
     dditable.pfnSetPsuProperties                         = pDdiTable->pfnSetPsuProperties;
     pDdiTable->pfnSetPsuProperties                       = layer::xetSysmanSetPsuProperties;
 
+    dditable.pfnAvailableTempProperties                  = pDdiTable->pfnAvailableTempProperties;
+    pDdiTable->pfnAvailableTempProperties                = layer::xetSysmanAvailableTempProperties;
+
     dditable.pfnGetTempProperties                        = pDdiTable->pfnGetTempProperties;
     pDdiTable->pfnGetTempProperties                      = layer::xetSysmanGetTempProperties;
+
+    dditable.pfnAvailableFanProperties                   = pDdiTable->pfnAvailableFanProperties;
+    pDdiTable->pfnAvailableFanProperties                 = layer::xetSysmanAvailableFanProperties;
 
     dditable.pfnGetFanProperties                         = pDdiTable->pfnGetFanProperties;
     pDdiTable->pfnGetFanProperties                       = layer::xetSysmanGetFanProperties;
@@ -2109,11 +2476,17 @@ xetGetSysmanProcAddrTable(
     dditable.pfnSetFanProperties                         = pDdiTable->pfnSetFanProperties;
     pDdiTable->pfnSetFanProperties                       = layer::xetSysmanSetFanProperties;
 
+    dditable.pfnAvailableLedProperties                   = pDdiTable->pfnAvailableLedProperties;
+    pDdiTable->pfnAvailableLedProperties                 = layer::xetSysmanAvailableLedProperties;
+
     dditable.pfnGetLedProperties                         = pDdiTable->pfnGetLedProperties;
     pDdiTable->pfnGetLedProperties                       = layer::xetSysmanGetLedProperties;
 
     dditable.pfnSetLedProperties                         = pDdiTable->pfnSetLedProperties;
     pDdiTable->pfnSetLedProperties                       = layer::xetSysmanSetLedProperties;
+
+    dditable.pfnAvailableFirmwareProperties              = pDdiTable->pfnAvailableFirmwareProperties;
+    pDdiTable->pfnAvailableFirmwareProperties            = layer::xetSysmanAvailableFirmwareProperties;
 
     dditable.pfnGetFirmwareProperties                    = pDdiTable->pfnGetFirmwareProperties;
     pDdiTable->pfnGetFirmwareProperties                  = layer::xetSysmanGetFirmwareProperties;
@@ -2121,11 +2494,17 @@ xetGetSysmanProcAddrTable(
     dditable.pfnSetFirmwareProperties                    = pDdiTable->pfnSetFirmwareProperties;
     pDdiTable->pfnSetFirmwareProperties                  = layer::xetSysmanSetFirmwareProperties;
 
+    dditable.pfnAvailablePwrProperties                   = pDdiTable->pfnAvailablePwrProperties;
+    pDdiTable->pfnAvailablePwrProperties                 = layer::xetSysmanAvailablePwrProperties;
+
     dditable.pfnGetPwrProperties                         = pDdiTable->pfnGetPwrProperties;
     pDdiTable->pfnGetPwrProperties                       = layer::xetSysmanGetPwrProperties;
 
     dditable.pfnSetPwrProperties                         = pDdiTable->pfnSetPwrProperties;
     pDdiTable->pfnSetPwrProperties                       = layer::xetSysmanSetPwrProperties;
+
+    dditable.pfnAvailableFreqProperties                  = pDdiTable->pfnAvailableFreqProperties;
+    pDdiTable->pfnAvailableFreqProperties                = layer::xetSysmanAvailableFreqProperties;
 
     dditable.pfnGetFreqProperties                        = pDdiTable->pfnGetFreqProperties;
     pDdiTable->pfnGetFreqProperties                      = layer::xetSysmanGetFreqProperties;
@@ -2133,14 +2512,23 @@ xetGetSysmanProcAddrTable(
     dditable.pfnSetFreqProperties                        = pDdiTable->pfnSetFreqProperties;
     pDdiTable->pfnSetFreqProperties                      = layer::xetSysmanSetFreqProperties;
 
+    dditable.pfnAvailablePwrwellProperties               = pDdiTable->pfnAvailablePwrwellProperties;
+    pDdiTable->pfnAvailablePwrwellProperties             = layer::xetSysmanAvailablePwrwellProperties;
+
     dditable.pfnGetPwrwellProperties                     = pDdiTable->pfnGetPwrwellProperties;
     pDdiTable->pfnGetPwrwellProperties                   = layer::xetSysmanGetPwrwellProperties;
 
     dditable.pfnSetPwrwellProperties                     = pDdiTable->pfnSetPwrwellProperties;
     pDdiTable->pfnSetPwrwellProperties                   = layer::xetSysmanSetPwrwellProperties;
 
+    dditable.pfnAvailableAccelProperties                 = pDdiTable->pfnAvailableAccelProperties;
+    pDdiTable->pfnAvailableAccelProperties               = layer::xetSysmanAvailableAccelProperties;
+
     dditable.pfnGetAccelProperties                       = pDdiTable->pfnGetAccelProperties;
     pDdiTable->pfnGetAccelProperties                     = layer::xetSysmanGetAccelProperties;
+
+    dditable.pfnAvailableMemProperties                   = pDdiTable->pfnAvailableMemProperties;
+    pDdiTable->pfnAvailableMemProperties                 = layer::xetSysmanAvailableMemProperties;
 
     dditable.pfnGetMemProperties                         = pDdiTable->pfnGetMemProperties;
     pDdiTable->pfnGetMemProperties                       = layer::xetSysmanGetMemProperties;
@@ -2148,11 +2536,17 @@ xetGetSysmanProcAddrTable(
     dditable.pfnSetMemProperties                         = pDdiTable->pfnSetMemProperties;
     pDdiTable->pfnSetMemProperties                       = layer::xetSysmanSetMemProperties;
 
+    dditable.pfnAvailableLinkProperties                  = pDdiTable->pfnAvailableLinkProperties;
+    pDdiTable->pfnAvailableLinkProperties                = layer::xetSysmanAvailableLinkProperties;
+
     dditable.pfnGetLinkProperties                        = pDdiTable->pfnGetLinkProperties;
     pDdiTable->pfnGetLinkProperties                      = layer::xetSysmanGetLinkProperties;
 
     dditable.pfnSetLinkProperties                        = pDdiTable->pfnSetLinkProperties;
     pDdiTable->pfnSetLinkProperties                      = layer::xetSysmanSetLinkProperties;
+
+    dditable.pfnSupportedEvents                          = pDdiTable->pfnSupportedEvents;
+    pDdiTable->pfnSupportedEvents                        = layer::xetSysmanSupportedEvents;
 
     dditable.pfnRegisterEvents                           = pDdiTable->pfnRegisterEvents;
     pDdiTable->pfnRegisterEvents                         = layer::xetSysmanRegisterEvents;

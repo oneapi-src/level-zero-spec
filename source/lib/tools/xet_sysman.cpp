@@ -159,6 +159,7 @@ xetSysmanGetInfo(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
+///         + nullptr == pFilter
 ///         + nullptr == pCount
 ///         + nullptr == pErrors
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -167,6 +168,7 @@ xetSysmanGetInfo(
 xe_result_t __xecall
 xetSysmanGetRasErrors(
     xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
+    xet_ras_filter_t* pFilter,                      ///< [in] Filter for RAS errors to return
     xe_bool_t clear,                                ///< [in] Set to true to clear the underlying counters after they are
                                                     ///< returned
     uint32_t* pCount,                               ///< [in] Pointer to the number of elements in the array pErrors.
@@ -185,7 +187,40 @@ xetSysmanGetRasErrors(
     if( nullptr == pfnGetRasErrors )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetRasErrors( hSysman, clear, pCount, pErrors );
+    return pfnGetRasErrors( hSysman, pFilter, clear, pCount, pErrors );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which device properties are available on a given device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailableDeviceProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_device_prop_capability_t* pCap              ///< [in] Pointer to an array of avilable property requests
+    )
+{
+    auto pfnAvailableDeviceProperties = xet_lib::context.ddiTable.Sysman.pfnAvailableDeviceProperties;
+    if( nullptr == pfnAvailableDeviceProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnAvailableDeviceProperties( hSysman, count, pCap );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -203,6 +238,7 @@ xetSysmanGetRasErrors(
 ///         + nullptr == hSysman
 ///         + nullptr == pRequest
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetDeviceProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
@@ -232,6 +268,7 @@ xetSysmanGetDeviceProperties(
 ///         + nullptr == hSysman
 ///         + nullptr == pRequest
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanSetDeviceProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
@@ -244,6 +281,39 @@ xetSysmanSetDeviceProperties(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     return pfnSetDeviceProperties( hSysman, count, pRequest );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which PSU resource properties are available on a given device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailablePsuProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_psu_prop_capability_t* pCap                 ///< [in] Pointer to an array of avilable property requests
+    )
+{
+    auto pfnAvailablePsuProperties = xet_lib::context.ddiTable.Sysman.pfnAvailablePsuProperties;
+    if( nullptr == pfnAvailablePsuProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnAvailablePsuProperties( hSysman, count, pCap );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -262,6 +332,7 @@ xetSysmanSetDeviceProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetPsuProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -292,6 +363,7 @@ xetSysmanGetPsuProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanSetPsuProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -304,6 +376,40 @@ xetSysmanSetPsuProperties(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     return pfnSetPsuProperties( hSysman, count, pRequest );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which temperature sensor properties are available on a given
+///        device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailableTempProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_temp_prop_capability_t* pCap                ///< [in] Pointer to an array of avilable property requests
+    )
+{
+    auto pfnAvailableTempProperties = xet_lib::context.ddiTable.Sysman.pfnAvailableTempProperties;
+    if( nullptr == pfnAvailableTempProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnAvailableTempProperties( hSysman, count, pCap );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -322,6 +428,7 @@ xetSysmanSetPsuProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetTempProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -334,6 +441,39 @@ xetSysmanGetTempProperties(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     return pfnGetTempProperties( hSysman, count, pRequest );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which fan resource properties are available on a given device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailableFanProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_fan_prop_capability_t* pCap                 ///< [in] Pointer to an array of avilable property requests
+    )
+{
+    auto pfnAvailableFanProperties = xet_lib::context.ddiTable.Sysman.pfnAvailableFanProperties;
+    if( nullptr == pfnAvailableFanProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnAvailableFanProperties( hSysman, count, pCap );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -352,6 +492,7 @@ xetSysmanGetTempProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetFanProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -382,6 +523,7 @@ xetSysmanGetFanProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanSetFanProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -394,6 +536,39 @@ xetSysmanSetFanProperties(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     return pfnSetFanProperties( hSysman, count, pRequest );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which LED resource properties are available on a given device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailableLedProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_led_prop_capability_t* pCap                 ///< [in] Pointer to an array of avilable property requests
+    )
+{
+    auto pfnAvailableLedProperties = xet_lib::context.ddiTable.Sysman.pfnAvailableLedProperties;
+    if( nullptr == pfnAvailableLedProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnAvailableLedProperties( hSysman, count, pCap );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -412,6 +587,7 @@ xetSysmanSetFanProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetLedProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -442,6 +618,7 @@ xetSysmanGetLedProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanSetLedProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -454,6 +631,40 @@ xetSysmanSetLedProperties(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     return pfnSetLedProperties( hSysman, count, pRequest );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which firmware resource properties are available on a given
+///        device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailableFirmwareProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_firmware_prop_capability_t* pCap            ///< [in] Pointer to an array of avilable property requests
+    )
+{
+    auto pfnAvailableFirmwareProperties = xet_lib::context.ddiTable.Sysman.pfnAvailableFirmwareProperties;
+    if( nullptr == pfnAvailableFirmwareProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnAvailableFirmwareProperties( hSysman, count, pCap );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -472,6 +683,7 @@ xetSysmanSetLedProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetFirmwareProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -502,6 +714,7 @@ xetSysmanGetFirmwareProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanSetFirmwareProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -514,6 +727,40 @@ xetSysmanSetFirmwareProperties(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     return pfnSetFirmwareProperties( hSysman, count, pRequest );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which power domain resource properties are available on a
+///        given device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailablePwrProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_pwr_prop_capability_t* pCap                 ///< [in] Pointer to an array of avilable property requests
+    )
+{
+    auto pfnAvailablePwrProperties = xet_lib::context.ddiTable.Sysman.pfnAvailablePwrProperties;
+    if( nullptr == pfnAvailablePwrProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnAvailablePwrProperties( hSysman, count, pCap );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -532,6 +779,7 @@ xetSysmanSetFirmwareProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetPwrProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -562,6 +810,7 @@ xetSysmanGetPwrProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanSetPwrProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -574,6 +823,40 @@ xetSysmanSetPwrProperties(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     return pfnSetPwrProperties( hSysman, count, pRequest );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which frequency domain resource properties are available on a
+///        given device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailableFreqProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_freq_prop_capability_t* pCap                ///< [in] Pointer to an array of avilable property requests
+    )
+{
+    auto pfnAvailableFreqProperties = xet_lib::context.ddiTable.Sysman.pfnAvailableFreqProperties;
+    if( nullptr == pfnAvailableFreqProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnAvailableFreqProperties( hSysman, count, pCap );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -592,6 +875,7 @@ xetSysmanSetPwrProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetFreqProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -622,6 +906,7 @@ xetSysmanGetFreqProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanSetFreqProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -634,6 +919,40 @@ xetSysmanSetFreqProperties(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     return pfnSetFreqProperties( hSysman, count, pRequest );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which power-well domain resource properties are available on
+///        a given device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailablePwrwellProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_pwrwell_prop_capability_t* pCap             ///< [in] Pointer to an array of avilable property requests
+    )
+{
+    auto pfnAvailablePwrwellProperties = xet_lib::context.ddiTable.Sysman.pfnAvailablePwrwellProperties;
+    if( nullptr == pfnAvailablePwrwellProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnAvailablePwrwellProperties( hSysman, count, pCap );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -652,6 +971,7 @@ xetSysmanSetFreqProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetPwrwellProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -682,6 +1002,7 @@ xetSysmanGetPwrwellProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanSetPwrwellProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -694,6 +1015,40 @@ xetSysmanSetPwrwellProperties(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     return pfnSetPwrwellProperties( hSysman, count, pRequest );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which accelerator resource properties are available on a
+///        given device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailableAccelProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_accel_prop_capability_t* pCap               ///< [in] Pointer to an array of avilable property requests
+    )
+{
+    auto pfnAvailableAccelProperties = xet_lib::context.ddiTable.Sysman.pfnAvailableAccelProperties;
+    if( nullptr == pfnAvailableAccelProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnAvailableAccelProperties( hSysman, count, pCap );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -712,6 +1067,7 @@ xetSysmanSetPwrwellProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetAccelProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -724,6 +1080,40 @@ xetSysmanGetAccelProperties(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     return pfnGetAccelProperties( hSysman, count, pRequest );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which memory resource properties are available on a given
+///        device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailableMemProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_mem_prop_capability_t* pCap                 ///< [in] Pointer to an array of avilable property requests
+    )
+{
+    auto pfnAvailableMemProperties = xet_lib::context.ddiTable.Sysman.pfnAvailableMemProperties;
+    if( nullptr == pfnAvailableMemProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnAvailableMemProperties( hSysman, count, pCap );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -742,6 +1132,7 @@ xetSysmanGetAccelProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetMemProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -772,6 +1163,7 @@ xetSysmanGetMemProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanSetMemProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -784,6 +1176,40 @@ xetSysmanSetMemProperties(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     return pfnSetMemProperties( hSysman, count, pRequest );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which link resource properties are available on a given
+///        device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailableLinkProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_link_prop_capability_t* pCap                ///< [in] Pointer to an array of avilable property requests
+    )
+{
+    auto pfnAvailableLinkProperties = xet_lib::context.ddiTable.Sysman.pfnAvailableLinkProperties;
+    if( nullptr == pfnAvailableLinkProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnAvailableLinkProperties( hSysman, count, pCap );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -802,6 +1228,7 @@ xetSysmanSetMemProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetLinkProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -832,6 +1259,7 @@ xetSysmanGetLinkProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanSetLinkProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -844,6 +1272,36 @@ xetSysmanSetLinkProperties(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     return pfnSetLinkProperties( hSysman, count, pRequest );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which events are supported on a given device
+/// 
+/// @details
+///     - Event support is the same for all devices with the same device ID.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pAccess
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanSupportedEvents(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pAccess
+    xet_event_support_t* pAccess                    ///< [in] Pointer to an array of event support requests
+    )
+{
+    auto pfnSupportedEvents = xet_lib::context.ddiTable.Sysman.pfnSupportedEvents;
+    if( nullptr == pfnSupportedEvents )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnSupportedEvents( hSysman, count, pAccess );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1106,6 +1564,7 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::GetRasErrors(
+        ras_filter_t* pFilter,                          ///< [in] Filter for RAS errors to return
         xe::bool_t clear,                               ///< [in] Set to true to clear the underlying counters after they are
                                                         ///< returned
         uint32_t* pCount,                               ///< [in] Pointer to the number of elements in the array pErrors.
@@ -1122,12 +1581,40 @@ namespace xet
     {
         auto result = static_cast<result_t>( ::xetSysmanGetRasErrors(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<xet_ras_filter_t*>( pFilter ),
             static_cast<xe_bool_t>( clear ),
             pCount,
             reinterpret_cast<xet_res_error_t*>( pErrors ) ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::GetRasErrors" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Find out which device properties are available on a given device
+    /// 
+    /// @details
+    ///     - Access rights are specific to the device. Need to check separately on
+    ///       each device.
+    ///     - API support is based on the device class and doesn't need to be
+    ///       checked for each device.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::AvailableDeviceProperties(
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        device_prop_capability_t* pCap                  ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanAvailableDeviceProperties(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            count,
+            reinterpret_cast<xet_device_prop_capability_t*>( pCap ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::AvailableDeviceProperties" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1177,6 +1664,33 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Find out which PSU resource properties are available on a given device
+    /// 
+    /// @details
+    ///     - Access rights are specific to the device. Need to check separately on
+    ///       each device.
+    ///     - API support is based on the device class and doesn't need to be
+    ///       checked for each device.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::AvailablePsuProperties(
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        psu_prop_capability_t* pCap                     ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanAvailablePsuProperties(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            count,
+            reinterpret_cast<xet_psu_prop_capability_t*>( pCap ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::AvailablePsuProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Get PSU resource property data
     /// 
     /// @details
@@ -1223,6 +1737,34 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Find out which temperature sensor properties are available on a given
+    ///        device
+    /// 
+    /// @details
+    ///     - Access rights are specific to the device. Need to check separately on
+    ///       each device.
+    ///     - API support is based on the device class and doesn't need to be
+    ///       checked for each device.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::AvailableTempProperties(
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        temp_prop_capability_t* pCap                    ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanAvailableTempProperties(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            count,
+            reinterpret_cast<xet_temp_prop_capability_t*>( pCap ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::AvailableTempProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Get temperature sensor resource property data
     /// 
     /// @details
@@ -1243,6 +1785,33 @@ namespace xet
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::GetTempProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Find out which fan resource properties are available on a given device
+    /// 
+    /// @details
+    ///     - Access rights are specific to the device. Need to check separately on
+    ///       each device.
+    ///     - API support is based on the device class and doesn't need to be
+    ///       checked for each device.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::AvailableFanProperties(
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        fan_prop_capability_t* pCap                     ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanAvailableFanProperties(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            count,
+            reinterpret_cast<xet_fan_prop_capability_t*>( pCap ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::AvailableFanProperties" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1292,6 +1861,33 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Find out which LED resource properties are available on a given device
+    /// 
+    /// @details
+    ///     - Access rights are specific to the device. Need to check separately on
+    ///       each device.
+    ///     - API support is based on the device class and doesn't need to be
+    ///       checked for each device.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::AvailableLedProperties(
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        led_prop_capability_t* pCap                     ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanAvailableLedProperties(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            count,
+            reinterpret_cast<xet_led_prop_capability_t*>( pCap ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::AvailableLedProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Get LED resource property data
     /// 
     /// @details
@@ -1335,6 +1931,34 @@ namespace xet
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::SetLedProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Find out which firmware resource properties are available on a given
+    ///        device
+    /// 
+    /// @details
+    ///     - Access rights are specific to the device. Need to check separately on
+    ///       each device.
+    ///     - API support is based on the device class and doesn't need to be
+    ///       checked for each device.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::AvailableFirmwareProperties(
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        firmware_prop_capability_t* pCap                ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanAvailableFirmwareProperties(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            count,
+            reinterpret_cast<xet_firmware_prop_capability_t*>( pCap ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::AvailableFirmwareProperties" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1384,6 +2008,34 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Find out which power domain resource properties are available on a
+    ///        given device
+    /// 
+    /// @details
+    ///     - Access rights are specific to the device. Need to check separately on
+    ///       each device.
+    ///     - API support is based on the device class and doesn't need to be
+    ///       checked for each device.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::AvailablePwrProperties(
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        pwr_prop_capability_t* pCap                     ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanAvailablePwrProperties(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            count,
+            reinterpret_cast<xet_pwr_prop_capability_t*>( pCap ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::AvailablePwrProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Get power domain resource property data
     /// 
     /// @details
@@ -1427,6 +2079,34 @@ namespace xet
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::SetPwrProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Find out which frequency domain resource properties are available on a
+    ///        given device
+    /// 
+    /// @details
+    ///     - Access rights are specific to the device. Need to check separately on
+    ///       each device.
+    ///     - API support is based on the device class and doesn't need to be
+    ///       checked for each device.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::AvailableFreqProperties(
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        freq_prop_capability_t* pCap                    ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanAvailableFreqProperties(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            count,
+            reinterpret_cast<xet_freq_prop_capability_t*>( pCap ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::AvailableFreqProperties" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1476,6 +2156,34 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Find out which power-well domain resource properties are available on
+    ///        a given device
+    /// 
+    /// @details
+    ///     - Access rights are specific to the device. Need to check separately on
+    ///       each device.
+    ///     - API support is based on the device class and doesn't need to be
+    ///       checked for each device.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::AvailablePwrwellProperties(
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        pwrwell_prop_capability_t* pCap                 ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanAvailablePwrwellProperties(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            count,
+            reinterpret_cast<xet_pwrwell_prop_capability_t*>( pCap ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::AvailablePwrwellProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Get power-well domain resource property data
     /// 
     /// @details
@@ -1522,6 +2230,34 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Find out which accelerator resource properties are available on a
+    ///        given device
+    /// 
+    /// @details
+    ///     - Access rights are specific to the device. Need to check separately on
+    ///       each device.
+    ///     - API support is based on the device class and doesn't need to be
+    ///       checked for each device.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::AvailableAccelProperties(
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        accel_prop_capability_t* pCap                   ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanAvailableAccelProperties(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            count,
+            reinterpret_cast<xet_accel_prop_capability_t*>( pCap ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::AvailableAccelProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Get accelerator resource property data
     /// 
     /// @details
@@ -1542,6 +2278,34 @@ namespace xet
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::GetAccelProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Find out which memory resource properties are available on a given
+    ///        device
+    /// 
+    /// @details
+    ///     - Access rights are specific to the device. Need to check separately on
+    ///       each device.
+    ///     - API support is based on the device class and doesn't need to be
+    ///       checked for each device.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::AvailableMemProperties(
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        mem_prop_capability_t* pCap                     ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanAvailableMemProperties(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            count,
+            reinterpret_cast<xet_mem_prop_capability_t*>( pCap ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::AvailableMemProperties" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1591,6 +2355,34 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Find out which link resource properties are available on a given
+    ///        device
+    /// 
+    /// @details
+    ///     - Access rights are specific to the device. Need to check separately on
+    ///       each device.
+    ///     - API support is based on the device class and doesn't need to be
+    ///       checked for each device.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::AvailableLinkProperties(
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        link_prop_capability_t* pCap                    ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanAvailableLinkProperties(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            count,
+            reinterpret_cast<xet_link_prop_capability_t*>( pCap ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::AvailableLinkProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Get link resource property data
     /// 
     /// @details
@@ -1634,6 +2426,30 @@ namespace xet
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::SetLinkProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Find out which events are supported on a given device
+    /// 
+    /// @details
+    ///     - Event support is the same for all devices with the same device ID.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::SupportedEvents(
+        uint32_t count,                                 ///< [in] The number of entries in the array pAccess
+        event_support_t* pAccess                        ///< [in] Pointer to an array of event support requests
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanSupportedEvents(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            count,
+            reinterpret_cast<xet_event_support_t*>( pAccess ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::SupportedEvents" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2157,6 +2973,53 @@ namespace xet
         };
 
         return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::prop_support_t to std::string
+    std::string to_string( const Sysman::prop_support_t val )
+    {
+        const auto bits = static_cast<uint32_t>( val );
+
+        std::string str;
+        
+        if( 0 == bits )
+            str += "NONE   ";
+        
+        if( static_cast<uint32_t>(Sysman::prop_support_t::API) & bits )
+            str += "API | ";
+        
+        if( static_cast<uint32_t>(Sysman::prop_support_t::DEVICE_CLASS) & bits )
+            str += "DEVICE_CLASS | ";
+        
+        if( static_cast<uint32_t>(Sysman::prop_support_t::DEVICE) & bits )
+            str += "DEVICE | ";
+
+        return ( str.size() > 3 ) 
+            ? "Sysman::prop_support_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Sysman::prop_support_t::{ ? }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::prop_access_t to std::string
+    std::string to_string( const Sysman::prop_access_t val )
+    {
+        const auto bits = static_cast<uint32_t>( val );
+
+        std::string str;
+        
+        if( 0 == bits )
+            str += "NO_PERMISSIONS   ";
+        
+        if( static_cast<uint32_t>(Sysman::prop_access_t::READ_PERMISSIONS) & bits )
+            str += "READ_PERMISSIONS | ";
+        
+        if( static_cast<uint32_t>(Sysman::prop_access_t::WRITE_PERMISSIONS) & bits )
+            str += "WRITE_PERMISSIONS | ";
+
+        return ( str.size() > 3 ) 
+            ? "Sysman::prop_access_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Sysman::prop_access_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2800,10 +3663,6 @@ namespace xet
             str = "Sysman::mem_properties_t::MEM_PROP_ECC_ENABLE";
             break;
 
-        case Sysman::mem_properties_t::MEM_PROP_ECC_POISON:
-            str = "Sysman::mem_properties_t::MEM_PROP_ECC_POISON";
-            break;
-
         default:
             str = "Sysman::mem_properties_t::?";
             break;
@@ -2894,10 +3753,6 @@ namespace xet
         {
         case Sysman::event_type_t::FREQ_THROTTLED:
             str = "Sysman::event_type_t::FREQ_THROTTLED";
-            break;
-
-        case Sysman::event_type_t::FREQ_POLICY_CHANGED:
-            str = "Sysman::event_type_t::FREQ_POLICY_CHANGED";
             break;
 
         case Sysman::event_type_t::RAS_ERRORS:
@@ -3273,6 +4128,27 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::device_prop_capability_t to std::string
+    std::string to_string( const Sysman::device_prop_capability_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::device_prop_capability_t::property : ";
+        str += to_string(val.property);
+        str += "\n";
+        
+        str += "Sysman::device_prop_capability_t::support : ";
+        str += std::to_string(val.support);
+        str += "\n";
+        
+        str += "Sysman::device_prop_capability_t::access : ";
+        str += std::to_string(val.access);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::device_property_request_t to std::string
     std::string to_string( const Sysman::device_property_request_t val )
     {
@@ -3363,6 +4239,27 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::psu_prop_capability_t to std::string
+    std::string to_string( const Sysman::psu_prop_capability_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::psu_prop_capability_t::property : ";
+        str += to_string(val.property);
+        str += "\n";
+        
+        str += "Sysman::psu_prop_capability_t::support : ";
+        str += to_string(val.support);
+        str += "\n";
+        
+        str += "Sysman::psu_prop_capability_t::access : ";
+        str += to_string(val.access);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::psu_property_request_t to std::string
     std::string to_string( const Sysman::psu_property_request_t val )
     {
@@ -3399,6 +4296,27 @@ namespace xet
         
         str += "Sysman::temp_prop_temperature_t::temperature : ";
         str += std::to_string(val.temperature);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::temp_prop_capability_t to std::string
+    std::string to_string( const Sysman::temp_prop_capability_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::temp_prop_capability_t::property : ";
+        str += to_string(val.property);
+        str += "\n";
+        
+        str += "Sysman::temp_prop_capability_t::support : ";
+        str += to_string(val.support);
+        str += "\n";
+        
+        str += "Sysman::temp_prop_capability_t::access : ";
+        str += to_string(val.access);
         str += "\n";
 
         return str;
@@ -3566,6 +4484,27 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::fan_prop_capability_t to std::string
+    std::string to_string( const Sysman::fan_prop_capability_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::fan_prop_capability_t::property : ";
+        str += to_string(val.property);
+        str += "\n";
+        
+        str += "Sysman::fan_prop_capability_t::support : ";
+        str += to_string(val.support);
+        str += "\n";
+        
+        str += "Sysman::fan_prop_capability_t::access : ";
+        str += to_string(val.access);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::fan_property_request_t to std::string
     std::string to_string( const Sysman::fan_property_request_t val )
     {
@@ -3627,6 +4566,27 @@ namespace xet
         
         str += "Sysman::led_prop_state_t::blue : ";
         str += std::to_string(val.blue);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::led_prop_capability_t to std::string
+    std::string to_string( const Sysman::led_prop_capability_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::led_prop_capability_t::property : ";
+        str += to_string(val.property);
+        str += "\n";
+        
+        str += "Sysman::led_prop_capability_t::support : ";
+        str += to_string(val.support);
+        str += "\n";
+        
+        str += "Sysman::led_prop_capability_t::access : ";
+        str += to_string(val.access);
         str += "\n";
 
         return str;
@@ -3732,6 +4692,27 @@ namespace xet
         
         str += "Sysman::firmware_prop_flash_t::size : ";
         str += std::to_string(val.size);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::firmware_prop_capability_t to std::string
+    std::string to_string( const Sysman::firmware_prop_capability_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::firmware_prop_capability_t::property : ";
+        str += to_string(val.property);
+        str += "\n";
+        
+        str += "Sysman::firmware_prop_capability_t::support : ";
+        str += to_string(val.support);
+        str += "\n";
+        
+        str += "Sysman::firmware_prop_capability_t::access : ";
+        str += to_string(val.access);
         str += "\n";
 
         return str;
@@ -3851,6 +4832,27 @@ namespace xet
         
         str += "Sysman::pwr_prop_peak_limit_t::power : ";
         str += std::to_string(val.power);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pwr_prop_capability_t to std::string
+    std::string to_string( const Sysman::pwr_prop_capability_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::pwr_prop_capability_t::property : ";
+        str += to_string(val.property);
+        str += "\n";
+        
+        str += "Sysman::pwr_prop_capability_t::support : ";
+        str += to_string(val.support);
+        str += "\n";
+        
+        str += "Sysman::pwr_prop_capability_t::access : ";
+        str += to_string(val.access);
         str += "\n";
 
         return str;
@@ -4105,6 +5107,27 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_prop_capability_t to std::string
+    std::string to_string( const Sysman::freq_prop_capability_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::freq_prop_capability_t::property : ";
+        str += to_string(val.property);
+        str += "\n";
+        
+        str += "Sysman::freq_prop_capability_t::support : ";
+        str += to_string(val.support);
+        str += "\n";
+        
+        str += "Sysman::freq_prop_capability_t::access : ";
+        str += to_string(val.access);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::freq_property_request_t to std::string
     std::string to_string( const Sysman::freq_property_request_t val )
     {
@@ -4211,6 +5234,27 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pwrwell_prop_capability_t to std::string
+    std::string to_string( const Sysman::pwrwell_prop_capability_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::pwrwell_prop_capability_t::property : ";
+        str += to_string(val.property);
+        str += "\n";
+        
+        str += "Sysman::pwrwell_prop_capability_t::support : ";
+        str += to_string(val.support);
+        str += "\n";
+        
+        str += "Sysman::pwrwell_prop_capability_t::access : ";
+        str += to_string(val.access);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::pwrwell_property_request_t to std::string
     std::string to_string( const Sysman::pwrwell_property_request_t val )
     {
@@ -4264,6 +5308,27 @@ namespace xet
         
         str += "Sysman::accel_prop_utilization_t::idleCounter : ";
         str += std::to_string(val.idleCounter);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::accel_prop_capability_t to std::string
+    std::string to_string( const Sysman::accel_prop_capability_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::accel_prop_capability_t::property : ";
+        str += to_string(val.property);
+        str += "\n";
+        
+        str += "Sysman::accel_prop_capability_t::support : ";
+        str += to_string(val.support);
+        str += "\n";
+        
+        str += "Sysman::accel_prop_capability_t::access : ";
+        str += to_string(val.access);
         str += "\n";
 
         return str;
@@ -4372,6 +5437,18 @@ namespace xet
     {
         std::string str;
         
+        str += "Sysman::mem_prop_utilization_t::total : ";
+        str += std::to_string(val.total);
+        str += "\n";
+        
+        str += "Sysman::mem_prop_utilization_t::stolen : ";
+        str += std::to_string(val.stolen);
+        str += "\n";
+        
+        str += "Sysman::mem_prop_utilization_t::bad : ";
+        str += std::to_string(val.bad);
+        str += "\n";
+        
         str += "Sysman::mem_prop_utilization_t::allocated : ";
         str += std::to_string(val.allocated);
         str += "\n";
@@ -4418,13 +5495,21 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::mem_prop_ecc_poison_t to std::string
-    std::string to_string( const Sysman::mem_prop_ecc_poison_t val )
+    /// @brief Converts Sysman::mem_prop_capability_t to std::string
+    std::string to_string( const Sysman::mem_prop_capability_t val )
     {
         std::string str;
         
-        str += "Sysman::mem_prop_ecc_poison_t::doPoison : ";
-        str += std::to_string(val.doPoison);
+        str += "Sysman::mem_prop_capability_t::property : ";
+        str += to_string(val.property);
+        str += "\n";
+        
+        str += "Sysman::mem_prop_capability_t::support : ";
+        str += to_string(val.support);
+        str += "\n";
+        
+        str += "Sysman::mem_prop_capability_t::access : ";
+        str += to_string(val.access);
         str += "\n";
 
         return str;
@@ -4625,6 +5710,27 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::link_prop_capability_t to std::string
+    std::string to_string( const Sysman::link_prop_capability_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::link_prop_capability_t::property : ";
+        str += to_string(val.property);
+        str += "\n";
+        
+        str += "Sysman::link_prop_capability_t::support : ";
+        str += to_string(val.support);
+        str += "\n";
+        
+        str += "Sysman::link_prop_capability_t::access : ";
+        str += to_string(val.access);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::link_property_request_t to std::string
     std::string to_string( const Sysman::link_property_request_t val )
     {
@@ -4648,6 +5754,23 @@ namespace xet
         
         str += "Sysman::link_property_request_t::size : ";
         str += std::to_string(val.size);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::event_support_t to std::string
+    std::string to_string( const Sysman::event_support_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::event_support_t::event : ";
+        str += to_string(val.event);
+        str += "\n";
+        
+        str += "Sysman::event_support_t::supported : ";
+        str += std::to_string(val.supported);
         str += "\n";
 
         return str;

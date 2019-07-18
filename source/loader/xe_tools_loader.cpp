@@ -868,6 +868,7 @@ namespace loader
     xe_result_t __xecall
     xetSysmanGetRasErrors(
         xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
+        xet_ras_filter_t* pFilter,                      ///< [in] Filter for RAS errors to return
         xe_bool_t clear,                                ///< [in] Set to true to clear the underlying counters after they are
                                                         ///< returned
         uint32_t* pCount,                               ///< [in] Pointer to the number of elements in the array pErrors.
@@ -894,7 +895,33 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnGetRasErrors( hSysman, clear, pCount, pErrors );
+        result = pfnGetRasErrors( hSysman, pFilter, clear, pCount, pErrors );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailableDeviceProperties
+    xe_result_t __xecall
+    xetSysmanAvailableDeviceProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_device_prop_capability_t* pCap              ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnAvailableDeviceProperties = dditable->xet.Sysman.pfnAvailableDeviceProperties;
+        if( nullptr == pfnAvailableDeviceProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnAvailableDeviceProperties( hSysman, count, pCap );
 
         return result;
     }
@@ -952,6 +979,32 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailablePsuProperties
+    xe_result_t __xecall
+    xetSysmanAvailablePsuProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_psu_prop_capability_t* pCap                 ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnAvailablePsuProperties = dditable->xet.Sysman.pfnAvailablePsuProperties;
+        if( nullptr == pfnAvailablePsuProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnAvailablePsuProperties( hSysman, count, pCap );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanGetPsuProperties
     xe_result_t __xecall
     xetSysmanGetPsuProperties(
@@ -1004,6 +1057,32 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailableTempProperties
+    xe_result_t __xecall
+    xetSysmanAvailableTempProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_temp_prop_capability_t* pCap                ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnAvailableTempProperties = dditable->xet.Sysman.pfnAvailableTempProperties;
+        if( nullptr == pfnAvailableTempProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnAvailableTempProperties( hSysman, count, pCap );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanGetTempProperties
     xe_result_t __xecall
     xetSysmanGetTempProperties(
@@ -1025,6 +1104,32 @@ namespace loader
 
         // forward to device-driver
         result = pfnGetTempProperties( hSysman, count, pRequest );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailableFanProperties
+    xe_result_t __xecall
+    xetSysmanAvailableFanProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_fan_prop_capability_t* pCap                 ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnAvailableFanProperties = dditable->xet.Sysman.pfnAvailableFanProperties;
+        if( nullptr == pfnAvailableFanProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnAvailableFanProperties( hSysman, count, pCap );
 
         return result;
     }
@@ -1082,6 +1187,32 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailableLedProperties
+    xe_result_t __xecall
+    xetSysmanAvailableLedProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_led_prop_capability_t* pCap                 ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnAvailableLedProperties = dditable->xet.Sysman.pfnAvailableLedProperties;
+        if( nullptr == pfnAvailableLedProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnAvailableLedProperties( hSysman, count, pCap );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanGetLedProperties
     xe_result_t __xecall
     xetSysmanGetLedProperties(
@@ -1129,6 +1260,32 @@ namespace loader
 
         // forward to device-driver
         result = pfnSetLedProperties( hSysman, count, pRequest );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailableFirmwareProperties
+    xe_result_t __xecall
+    xetSysmanAvailableFirmwareProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_firmware_prop_capability_t* pCap            ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnAvailableFirmwareProperties = dditable->xet.Sysman.pfnAvailableFirmwareProperties;
+        if( nullptr == pfnAvailableFirmwareProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnAvailableFirmwareProperties( hSysman, count, pCap );
 
         return result;
     }
@@ -1186,6 +1343,32 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailablePwrProperties
+    xe_result_t __xecall
+    xetSysmanAvailablePwrProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_pwr_prop_capability_t* pCap                 ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnAvailablePwrProperties = dditable->xet.Sysman.pfnAvailablePwrProperties;
+        if( nullptr == pfnAvailablePwrProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnAvailablePwrProperties( hSysman, count, pCap );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanGetPwrProperties
     xe_result_t __xecall
     xetSysmanGetPwrProperties(
@@ -1233,6 +1416,32 @@ namespace loader
 
         // forward to device-driver
         result = pfnSetPwrProperties( hSysman, count, pRequest );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailableFreqProperties
+    xe_result_t __xecall
+    xetSysmanAvailableFreqProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_freq_prop_capability_t* pCap                ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnAvailableFreqProperties = dditable->xet.Sysman.pfnAvailableFreqProperties;
+        if( nullptr == pfnAvailableFreqProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnAvailableFreqProperties( hSysman, count, pCap );
 
         return result;
     }
@@ -1290,6 +1499,32 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailablePwrwellProperties
+    xe_result_t __xecall
+    xetSysmanAvailablePwrwellProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_pwrwell_prop_capability_t* pCap             ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnAvailablePwrwellProperties = dditable->xet.Sysman.pfnAvailablePwrwellProperties;
+        if( nullptr == pfnAvailablePwrwellProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnAvailablePwrwellProperties( hSysman, count, pCap );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanGetPwrwellProperties
     xe_result_t __xecall
     xetSysmanGetPwrwellProperties(
@@ -1342,6 +1577,32 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailableAccelProperties
+    xe_result_t __xecall
+    xetSysmanAvailableAccelProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_accel_prop_capability_t* pCap               ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnAvailableAccelProperties = dditable->xet.Sysman.pfnAvailableAccelProperties;
+        if( nullptr == pfnAvailableAccelProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnAvailableAccelProperties( hSysman, count, pCap );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanGetAccelProperties
     xe_result_t __xecall
     xetSysmanGetAccelProperties(
@@ -1363,6 +1624,32 @@ namespace loader
 
         // forward to device-driver
         result = pfnGetAccelProperties( hSysman, count, pRequest );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailableMemProperties
+    xe_result_t __xecall
+    xetSysmanAvailableMemProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_mem_prop_capability_t* pCap                 ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnAvailableMemProperties = dditable->xet.Sysman.pfnAvailableMemProperties;
+        if( nullptr == pfnAvailableMemProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnAvailableMemProperties( hSysman, count, pCap );
 
         return result;
     }
@@ -1420,6 +1707,32 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanAvailableLinkProperties
+    xe_result_t __xecall
+    xetSysmanAvailableLinkProperties(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pCap
+        xet_link_prop_capability_t* pCap                ///< [in] Pointer to an array of avilable property requests
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnAvailableLinkProperties = dditable->xet.Sysman.pfnAvailableLinkProperties;
+        if( nullptr == pfnAvailableLinkProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnAvailableLinkProperties( hSysman, count, pCap );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanGetLinkProperties
     xe_result_t __xecall
     xetSysmanGetLinkProperties(
@@ -1467,6 +1780,32 @@ namespace loader
 
         // forward to device-driver
         result = pfnSetLinkProperties( hSysman, count, pRequest );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanSupportedEvents
+    xe_result_t __xecall
+    xetSysmanSupportedEvents(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t count,                                 ///< [in] The number of entries in the array pAccess
+        xet_event_support_t* pAccess                    ///< [in] Pointer to an array of event support requests
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnSupportedEvents = dditable->xet.Sysman.pfnSupportedEvents;
+        if( nullptr == pfnSupportedEvents )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnSupportedEvents( hSysman, count, pAccess );
 
         return result;
     }
@@ -2476,28 +2815,41 @@ xetGetSysmanProcAddrTable(
             pDdiTable->pfnGetAccelAssetName                        = loader::xetSysmanGetAccelAssetName;
             pDdiTable->pfnGetInfo                                  = loader::xetSysmanGetInfo;
             pDdiTable->pfnGetRasErrors                             = loader::xetSysmanGetRasErrors;
+            pDdiTable->pfnAvailableDeviceProperties                = loader::xetSysmanAvailableDeviceProperties;
             pDdiTable->pfnGetDeviceProperties                      = loader::xetSysmanGetDeviceProperties;
             pDdiTable->pfnSetDeviceProperties                      = loader::xetSysmanSetDeviceProperties;
+            pDdiTable->pfnAvailablePsuProperties                   = loader::xetSysmanAvailablePsuProperties;
             pDdiTable->pfnGetPsuProperties                         = loader::xetSysmanGetPsuProperties;
             pDdiTable->pfnSetPsuProperties                         = loader::xetSysmanSetPsuProperties;
+            pDdiTable->pfnAvailableTempProperties                  = loader::xetSysmanAvailableTempProperties;
             pDdiTable->pfnGetTempProperties                        = loader::xetSysmanGetTempProperties;
+            pDdiTable->pfnAvailableFanProperties                   = loader::xetSysmanAvailableFanProperties;
             pDdiTable->pfnGetFanProperties                         = loader::xetSysmanGetFanProperties;
             pDdiTable->pfnSetFanProperties                         = loader::xetSysmanSetFanProperties;
+            pDdiTable->pfnAvailableLedProperties                   = loader::xetSysmanAvailableLedProperties;
             pDdiTable->pfnGetLedProperties                         = loader::xetSysmanGetLedProperties;
             pDdiTable->pfnSetLedProperties                         = loader::xetSysmanSetLedProperties;
+            pDdiTable->pfnAvailableFirmwareProperties              = loader::xetSysmanAvailableFirmwareProperties;
             pDdiTable->pfnGetFirmwareProperties                    = loader::xetSysmanGetFirmwareProperties;
             pDdiTable->pfnSetFirmwareProperties                    = loader::xetSysmanSetFirmwareProperties;
+            pDdiTable->pfnAvailablePwrProperties                   = loader::xetSysmanAvailablePwrProperties;
             pDdiTable->pfnGetPwrProperties                         = loader::xetSysmanGetPwrProperties;
             pDdiTable->pfnSetPwrProperties                         = loader::xetSysmanSetPwrProperties;
+            pDdiTable->pfnAvailableFreqProperties                  = loader::xetSysmanAvailableFreqProperties;
             pDdiTable->pfnGetFreqProperties                        = loader::xetSysmanGetFreqProperties;
             pDdiTable->pfnSetFreqProperties                        = loader::xetSysmanSetFreqProperties;
+            pDdiTable->pfnAvailablePwrwellProperties               = loader::xetSysmanAvailablePwrwellProperties;
             pDdiTable->pfnGetPwrwellProperties                     = loader::xetSysmanGetPwrwellProperties;
             pDdiTable->pfnSetPwrwellProperties                     = loader::xetSysmanSetPwrwellProperties;
+            pDdiTable->pfnAvailableAccelProperties                 = loader::xetSysmanAvailableAccelProperties;
             pDdiTable->pfnGetAccelProperties                       = loader::xetSysmanGetAccelProperties;
+            pDdiTable->pfnAvailableMemProperties                   = loader::xetSysmanAvailableMemProperties;
             pDdiTable->pfnGetMemProperties                         = loader::xetSysmanGetMemProperties;
             pDdiTable->pfnSetMemProperties                         = loader::xetSysmanSetMemProperties;
+            pDdiTable->pfnAvailableLinkProperties                  = loader::xetSysmanAvailableLinkProperties;
             pDdiTable->pfnGetLinkProperties                        = loader::xetSysmanGetLinkProperties;
             pDdiTable->pfnSetLinkProperties                        = loader::xetSysmanSetLinkProperties;
+            pDdiTable->pfnSupportedEvents                          = loader::xetSysmanSupportedEvents;
             pDdiTable->pfnRegisterEvents                           = loader::xetSysmanRegisterEvents;
             pDdiTable->pfnUnregisterEvents                         = loader::xetSysmanUnregisterEvents;
             pDdiTable->pfnGetEvents                                = loader::xetSysmanGetEvents;

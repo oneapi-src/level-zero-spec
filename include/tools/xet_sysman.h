@@ -255,6 +255,18 @@ typedef struct _xet_ras_filter_t
 } xet_ras_filter_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_RAS_FILTER_ALL_COUNTERS
+/// @brief Filter to get all RAS error counters
+#define XET_RAS_FILTER_ALL_COUNTERS  { XET_RESOURCE_ID_ANY, (uint32_t)XET_RAS_ERROR_TYPE_ALL, (uint32_t)XET_RAS_ERROR_LOC_ALL, 0 }
+#endif // XET_RAS_FILTER_ALL_COUNTERS
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_RAS_FILTER_ALL_ERRORS
+/// @brief Filter to get all RAS error counters that have errors
+#define XET_RAS_FILTER_ALL_ERRORS  { XET_RESOURCE_ID_ANY, (uint32_t)XET_RAS_ERROR_TYPE_ALL, (uint32_t)XET_RAS_ERROR_LOC_ALL, 1 }
+#endif // XET_RAS_FILTER_ALL_ERRORS
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief RAS error
 typedef struct _xet_res_error_t
 {
@@ -332,6 +344,7 @@ xetSysmanGetInfo(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
+///         + nullptr == pFilter
 ///         + nullptr == pCount
 ///         + nullptr == pErrors
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -340,6 +353,7 @@ xetSysmanGetInfo(
 xe_result_t __xecall
 xetSysmanGetRasErrors(
     xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
+    xet_ras_filter_t* pFilter,                      ///< [in] Filter for RAS errors to return
     xe_bool_t clear,                                ///< [in] Set to true to clear the underlying counters after they are
                                                     ///< returned
     uint32_t* pCount,                               ///< [in] Pointer to the number of elements in the array pErrors.
@@ -506,6 +520,65 @@ typedef struct _xet_device_prop_cold_reset_t
 } xet_device_prop_cold_reset_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Property support
+typedef enum _xet_prop_support_t
+{
+    XET_PROP_SUPPORT_NONE = 0,                      ///< The property is not supported by this version of the API
+    XET_PROP_SUPPORT_API = XE_BIT( 0 ),             ///< The property is supported by the the API
+    XET_PROP_SUPPORT_DEVICE_CLASS = XE_BIT( 1 ),    ///< The property is supported for the class of device
+    XET_PROP_SUPPORT_DEVICE = XE_BIT( 2 ),          ///< The property is supported for the device
+
+} xet_prop_support_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Property access permissions
+typedef enum _xet_prop_access_t
+{
+    XET_PROP_ACCESS_NO_PERMISSIONS = 0,             ///< The application does not have read-write access to the property
+    XET_PROP_ACCESS_READ_PERMISSIONS = XE_BIT( 0 ), ///< The application has only read access to the property
+    XET_PROP_ACCESS_WRITE_PERMISSIONS = XE_BIT( 1 ),///< The application has write access to the property
+
+} xet_prop_access_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Request structure to determine device properties that are
+///        supported/accessible
+typedef struct _xet_device_prop_capability_t
+{
+    xet_device_properties_t property;               ///< [in] The property
+    uint8_t support;                                ///< [out] API support for the property - one of ::xet_prop_support_t
+    uint8_t access;                                 ///< [out] The access permissions for the property - one of
+                                                    ///< ::xet_prop_access_t
+
+} xet_device_prop_capability_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which device properties are available on a given device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailableDeviceProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_device_prop_capability_t* pCap              ///< [in] Pointer to an array of avilable property requests
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Request structure used to query a device property
 typedef struct _xet_device_property_request_t
 {
@@ -533,6 +606,7 @@ typedef struct _xet_device_property_request_t
 ///         + nullptr == hSysman
 ///         + nullptr == pRequest
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetDeviceProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
@@ -555,6 +629,7 @@ xetSysmanGetDeviceProperties(
 ///         + nullptr == hSysman
 ///         + nullptr == pRequest
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanSetDeviceProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
@@ -641,6 +716,43 @@ typedef struct _xet_psu_prop_amps_t
 } xet_psu_prop_amps_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Request structure to determine PSU resource properties that are
+///        supported/accessible
+typedef struct _xet_psu_prop_capability_t
+{
+    xet_psu_properties_t property;                  ///< [in] The property
+    xet_prop_support_t support;                     ///< [out] API support for the property
+    xet_prop_access_t access;                       ///< [out] The access permissions for the property
+
+} xet_psu_prop_capability_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which PSU resource properties are available on a given device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailablePsuProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_psu_prop_capability_t* pCap                 ///< [in] Pointer to an array of avilable property requests
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Request structure used to query a PSU resource property
 typedef struct _xet_psu_property_request_t
 {
@@ -671,6 +783,7 @@ typedef struct _xet_psu_property_request_t
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetPsuProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -694,6 +807,7 @@ xetSysmanGetPsuProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanSetPsuProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -730,6 +844,44 @@ typedef struct _xet_temp_prop_temperature_t
 } xet_temp_prop_temperature_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Request structure to determine temperature sensor properties that are
+///        supported/accessible
+typedef struct _xet_temp_prop_capability_t
+{
+    xet_temp_properties_t property;                 ///< [in] The property
+    xet_prop_support_t support;                     ///< [out] API support for the property
+    xet_prop_access_t access;                       ///< [out] The access permissions for the property
+
+} xet_temp_prop_capability_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which temperature sensor properties are available on a given
+///        device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailableTempProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_temp_prop_capability_t* pCap                ///< [in] Pointer to an array of avilable property requests
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Request structure used to query a temperature sensor resource property
 typedef struct _xet_temp_property_request_t
 {
@@ -760,6 +912,7 @@ typedef struct _xet_temp_property_request_t
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetTempProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -898,6 +1051,43 @@ typedef struct _xet_fan_prop_speed_table_t
 } xet_fan_prop_speed_table_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Request structure to determine fan resource properties that are
+///        supported/accessible
+typedef struct _xet_fan_prop_capability_t
+{
+    xet_fan_properties_t property;                  ///< [in] The property
+    xet_prop_support_t support;                     ///< [out] API support for the property
+    xet_prop_access_t access;                       ///< [out] The access permissions for the property
+
+} xet_fan_prop_capability_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which fan resource properties are available on a given device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailableFanProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_fan_prop_capability_t* pCap                 ///< [in] Pointer to an array of avilable property requests
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Request structure used to query a fan resource property
 typedef struct _xet_fan_property_request_t
 {
@@ -928,6 +1118,7 @@ typedef struct _xet_fan_property_request_t
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetFanProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -951,6 +1142,7 @@ xetSysmanGetFanProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanSetFanProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -1000,6 +1192,43 @@ typedef struct _xet_led_prop_state_t
 } xet_led_prop_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Request structure to determine LED resource properties that are
+///        supported/accessible
+typedef struct _xet_led_prop_capability_t
+{
+    xet_led_properties_t property;                  ///< [in] The property
+    xet_prop_support_t support;                     ///< [out] API support for the property
+    xet_prop_access_t access;                       ///< [out] The access permissions for the property
+
+} xet_led_prop_capability_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which LED resource properties are available on a given device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailableLedProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_led_prop_capability_t* pCap                 ///< [in] Pointer to an array of avilable property requests
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Request structure used to query a LED resource property
 typedef struct _xet_led_property_request_t
 {
@@ -1030,6 +1259,7 @@ typedef struct _xet_led_property_request_t
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetLedProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -1053,6 +1283,7 @@ xetSysmanGetLedProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanSetLedProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -1120,6 +1351,44 @@ typedef struct _xet_firmware_prop_flash_t
 } xet_firmware_prop_flash_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Request structure to determine firmware resource properties that are
+///        supported/accessible
+typedef struct _xet_firmware_prop_capability_t
+{
+    xet_firmware_properties_t property;             ///< [in] The property
+    xet_prop_support_t support;                     ///< [out] API support for the property
+    xet_prop_access_t access;                       ///< [out] The access permissions for the property
+
+} xet_firmware_prop_capability_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which firmware resource properties are available on a given
+///        device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailableFirmwareProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_firmware_prop_capability_t* pCap            ///< [in] Pointer to an array of avilable property requests
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Request structure used to query a firmware resource property
 typedef struct _xet_firmware_property_request_t
 {
@@ -1151,6 +1420,7 @@ typedef struct _xet_firmware_property_request_t
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetFirmwareProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -1174,6 +1444,7 @@ xetSysmanGetFirmwareProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanSetFirmwareProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -1286,6 +1557,44 @@ typedef struct _xet_pwr_prop_peak_limit_t
 } xet_pwr_prop_peak_limit_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Request structure to determine power domain resource properties that
+///        are supported/accessible
+typedef struct _xet_pwr_prop_capability_t
+{
+    xet_pwr_properties_t property;                  ///< [in] The property
+    xet_prop_support_t support;                     ///< [out] API support for the property
+    xet_prop_access_t access;                       ///< [out] The access permissions for the property
+
+} xet_pwr_prop_capability_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which power domain resource properties are available on a
+///        given device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailablePwrProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_pwr_prop_capability_t* pCap                 ///< [in] Pointer to an array of avilable property requests
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Request structure used to query a power domain resource property
 typedef struct _xet_pwr_property_request_t
 {
@@ -1316,6 +1625,7 @@ typedef struct _xet_pwr_property_request_t
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetPwrProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -1339,6 +1649,7 @@ xetSysmanGetPwrProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanSetPwrProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -1578,6 +1889,44 @@ typedef struct _xet_freq_prop_throttle_time_t
 } xet_freq_prop_throttle_time_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Request structure to determine frequency domain resource properties
+///        that are supported/accessible
+typedef struct _xet_freq_prop_capability_t
+{
+    xet_freq_properties_t property;                 ///< [in] The property
+    xet_prop_support_t support;                     ///< [out] API support for the property
+    xet_prop_access_t access;                       ///< [out] The access permissions for the property
+
+} xet_freq_prop_capability_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which frequency domain resource properties are available on a
+///        given device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailableFreqProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_freq_prop_capability_t* pCap                ///< [in] Pointer to an array of avilable property requests
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Request structure used to query a frequency domain resource property
 typedef struct _xet_freq_property_request_t
 {
@@ -1608,6 +1957,7 @@ typedef struct _xet_freq_property_request_t
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetFreqProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -1631,6 +1981,7 @@ xetSysmanGetFreqProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanSetFreqProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -1737,6 +2088,44 @@ typedef struct _xet_pwrwell_prop_transitions_t
 } xet_pwrwell_prop_transitions_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Request structure to determine power-well domain resource properties
+///        that are supported/accessible
+typedef struct _xet_pwrwell_prop_capability_t
+{
+    xet_pwrwell_properties_t property;              ///< [in] The property
+    xet_prop_support_t support;                     ///< [out] API support for the property
+    xet_prop_access_t access;                       ///< [out] The access permissions for the property
+
+} xet_pwrwell_prop_capability_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which power-well domain resource properties are available on
+///        a given device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailablePwrwellProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_pwrwell_prop_capability_t* pCap             ///< [in] Pointer to an array of avilable property requests
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Request structure used to query a power-well domain resource property
 typedef struct _xet_pwrwell_property_request_t
 {
@@ -1767,6 +2156,7 @@ typedef struct _xet_pwrwell_property_request_t
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetPwrwellProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -1790,6 +2180,7 @@ xetSysmanGetPwrwellProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanSetPwrwellProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -1840,6 +2231,44 @@ typedef struct _xet_accel_prop_utilization_t
 } xet_accel_prop_utilization_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Request structure to determine accelerator resource properties that
+///        are supported/accessible
+typedef struct _xet_accel_prop_capability_t
+{
+    xet_accel_properties_t property;                ///< [in] The property
+    xet_prop_support_t support;                     ///< [out] API support for the property
+    xet_prop_access_t access;                       ///< [out] The access permissions for the property
+
+} xet_accel_prop_capability_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which accelerator resource properties are available on a
+///        given device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailableAccelProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_accel_prop_capability_t* pCap               ///< [in] Pointer to an array of avilable property requests
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Request structure used to query an accelerator resource property
 typedef struct _xet_accel_property_request_t
 {
@@ -1870,6 +2299,7 @@ typedef struct _xet_accel_property_request_t
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetAccelProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -1936,8 +2366,6 @@ typedef enum _xet_mem_properties_t
                                                     ///< bandwidth (data: ::xet_mem_prop_bandwidth_t)
     XET_MEM_PROP_ECC_ENABLE,                        ///< (rw dynamic) Determine if ECC is enabled/disabled or change this
                                                     ///< setting (data: ::xet_mem_prop_ecc_enable_t)
-    XET_MEM_PROP_ECC_POISON,                        ///< (wo dynamic) Poison the memory resource (data:
-                                                    ///< ::xet_mem_prop_ecc_poison_t)
 
 } xet_mem_properties_t;
 
@@ -1975,8 +2403,18 @@ typedef struct _xet_mem_prop_bad_list_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Data for the property ::XET_MEM_PROP_UTILIZATION
+/// 
+/// @details
+///     - The total physical memory is the sum of all others (stolen + bad +
+///       allocated + unallocated).
+///     - Percent software memory utilization given by 100 * allocated /
+///       (allocated + unallocated).
+///     - Percent bad memory given by 100 * bad / total
 typedef struct _xet_mem_prop_utilization_t
 {
+    uint64_t total;                                 ///< [out] The total physical memory in bytes
+    uint64_t stolen;                                ///< [out] The total stolen memory in bytes
+    uint64_t bad;                                   ///< [out] The total bad memory in bytes
     uint64_t allocated;                             ///< [out] The total allocated bytes
     uint64_t unallocated;                           ///< [out] The total unallocated bytes
 
@@ -2001,12 +2439,42 @@ typedef struct _xet_mem_prop_ecc_enable_t
 } xet_mem_prop_ecc_enable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_MEM_PROP_ECC_POISON
-typedef struct _xet_mem_prop_ecc_poison_t
+/// @brief Request structure to determine memory resource properties that are
+///        supported/accessible
+typedef struct _xet_mem_prop_capability_t
 {
-    xe_bool_t doPoison;                             ///< [out] Poison the memory resource.
+    xet_mem_properties_t property;                  ///< [in] The property
+    xet_prop_support_t support;                     ///< [out] API support for the property
+    xet_prop_access_t access;                       ///< [out] The access permissions for the property
 
-} xet_mem_prop_ecc_poison_t;
+} xet_mem_prop_capability_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which memory resource properties are available on a given
+///        device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailableMemProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_mem_prop_capability_t* pCap                 ///< [in] Pointer to an array of avilable property requests
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Request structure used to query a memory resource property
@@ -2039,6 +2507,7 @@ typedef struct _xet_mem_property_request_t
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetMemProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -2062,6 +2531,7 @@ xetSysmanGetMemProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanSetMemProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -2194,6 +2664,44 @@ typedef struct _xet_link_prop_speed_range_t
 } xet_link_prop_speed_range_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Request structure to determine link resource properties that are
+///        supported/accessible
+typedef struct _xet_link_prop_capability_t
+{
+    xet_link_properties_t property;                 ///< [in] The property
+    xet_prop_support_t support;                     ///< [out] API support for the property
+    xet_prop_access_t access;                       ///< [out] The access permissions for the property
+
+} xet_link_prop_capability_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which link resource properties are available on a given
+///        device
+/// 
+/// @details
+///     - Access rights are specific to the device. Need to check separately on
+///       each device.
+///     - API support is based on the device class and doesn't need to be
+///       checked for each device.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pCap
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanAvailableLinkProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pCap
+    xet_link_prop_capability_t* pCap                ///< [in] Pointer to an array of avilable property requests
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Request structure used to query a link resource property
 typedef struct _xet_link_property_request_t
 {
@@ -2224,6 +2732,7 @@ typedef struct _xet_link_property_request_t
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanGetLinkProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -2247,6 +2756,7 @@ xetSysmanGetLinkProperties(
 ///         + nullptr == pRequest
 ///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
 xetSysmanSetLinkProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
@@ -2259,11 +2769,42 @@ xetSysmanSetLinkProperties(
 typedef enum _xet_sysman_event_type_t
 {
     XET_SYSMAN_EVENT_TYPE_FREQ_THROTTLED = 0,       ///< The frequency is being throttled
-    XET_SYSMAN_EVENT_TYPE_FREQ_POLICY_CHANGED,      ///< Another API client has modified frequency domain properties
     XET_SYSMAN_EVENT_TYPE_RAS_ERRORS,               ///< ECC/RAS errors
     XET_SYSMAN_EVENT_TYPE_COUNT,                    ///< The number of event types
 
 } xet_sysman_event_type_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Request structure to determine events that are supported
+typedef struct _xet_event_support_t
+{
+    xet_sysman_event_type_t event;                  ///< [in] The event
+    xe_bool_t supported;                            ///< [out] Set to true/false to know if the event is supported
+
+} xet_event_support_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Find out which events are supported on a given device
+/// 
+/// @details
+///     - Event support is the same for all devices with the same device ID.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pAccess
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanSupportedEvents(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t count,                                 ///< [in] The number of entries in the array pAccess
+    xet_event_support_t* pAccess                    ///< [in] Pointer to an array of event support requests
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Request structure used to register/unregister events

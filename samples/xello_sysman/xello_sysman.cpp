@@ -17,6 +17,25 @@
 
 int gNumDevices = 0;
 
+void ShowRasCounters(xet_sysman_handle_t hSysmanDevice)
+{
+    xet_sysman_info_t info;
+    if ((xetSysmanGetInfo(hSysmanDevice, &info) == XE_RESULT_SUCCESS) && (info.numRas))
+    {
+        xet_ras_filter_t filter = XET_RAS_FILTER_ALL_COUNTERS;
+        xet_res_error_t* pCounters = (xet_res_error_t*)malloc(info.numRas * sizeof(xet_res_error_t));
+
+        if (xetSysmanGetRasErrors(hSysmanDevice, &filter, false, &info.numRas, pCounters) == XE_RESULT_SUCCESS)
+        {
+            for (uint32_t i = 0; i < info.numRas; i++)
+            {
+                fprintf(stdout, "RAS error %d: type=0x%x loc=0x%x resource=%d,%u value=%llu\n",
+                    i, pCounters[i].type, pCounters[i].loc, pCounters[i].resourceId.type, pCounters[i].resourceId.index, pCounters[i].data);
+            }
+        }
+    }
+}
+
 void ShutdownDevice(xet_sysman_handle_t hSysmanDevice)
 {
     struct
@@ -40,6 +59,22 @@ void ShutdownDevice(xet_sysman_handle_t hSysmanDevice)
     {
         fprintf(stderr, "ERROR: Problem shutting down the device.\n");
     }
+}
+
+bool HaveFanControl(xet_sysman_handle_t hSysmanDevice)
+{
+    bool ret = false;
+    xet_fan_prop_capability_t cap;
+    cap.property = XET_FAN_PROP_FIXED_SPEED;
+    if (xetSysmanAvailableFanProperties(hSysmanDevice, 1, &cap) == XE_RESULT_SUCCESS)
+    {
+        if ((cap.support & XET_PROP_SUPPORT_DEVICE) &&
+            (cap.access & XET_PROP_ACCESS_WRITE_PERMISSIONS))
+        {
+            ret = true;
+        }
+    }
+    return ret;
 }
 
 void ShowFanInfo(xet_sysman_handle_t hSysmanDevice, uint32_t FanIndex)

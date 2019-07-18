@@ -297,6 +297,16 @@ members:
             If set to 0, will get a list of all possible RAS elements, even those that have not had errors.
             For error elements of type $T_RAS_DATA_TYPE_OCCURRED, there is no underlying counter, so they will always be returned independent of the threshold setting.
 --- #--------------------------------------------------------------------------
+type: macro
+desc: "Filter to get all RAS error counters"
+name: $T_RAS_FILTER_ALL_COUNTERS
+value: "{ $T_RESOURCE_ID_ANY, (uint32_t)$T_RAS_ERROR_TYPE_ALL, (uint32_t)$T_RAS_ERROR_LOC_ALL, 0 }"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Filter to get all RAS error counters that have errors"
+name: $T_RAS_FILTER_ALL_ERRORS
+value: "{ $T_RESOURCE_ID_ANY, (uint32_t)$T_RAS_ERROR_TYPE_ALL, (uint32_t)$T_RAS_ERROR_LOC_ALL, 1 }"
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "RAS error"
 class: $tSysman
@@ -384,6 +394,9 @@ params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] Handle of the SMI object"
+    - type: $t_ras_filter_t*
+      name: pFilter
+      desc: "[in] Filter for RAS errors to return"
     - type: $x_bool_t
       name: clear
       desc: "[in] Set to true to clear the underlying counters after they are returned"
@@ -570,6 +583,74 @@ members:
       name: "doReset"
       desc: "[in] Set to true to perform a cold shutdown of the device"
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Property support"
+class: $tSysman
+name: $t_prop_support_t
+etors:
+    - name: $T_PROP_SUPPORT_NONE
+      value: "0"
+      desc: "The property is not supported by this version of the API"
+    - name: $T_PROP_SUPPORT_API
+      value: "$X_BIT( 0 )"
+      desc: "The property is supported by the the API"
+    - name: $T_PROP_SUPPORT_DEVICE_CLASS
+      value: "$X_BIT( 1 )"
+      desc: "The property is supported for the class of device"
+    - name: $T_PROP_SUPPORT_DEVICE
+      value: "$X_BIT( 2 )"
+      desc: "The property is supported for the device"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Property access permissions"
+class: $tSysman
+name: $t_prop_access_t
+etors:
+    - name: $T_PROP_ACCESS_NO_PERMISSIONS
+      value: "0"
+      desc: "The application does not have read-write access to the property"
+    - name: $T_PROP_ACCESS_READ_PERMISSIONS
+      value: "$X_BIT( 0 )"
+      desc: "The application has only read access to the property"
+    - name: $T_PROP_ACCESS_WRITE_PERMISSIONS
+      value: "$X_BIT( 1 )"
+      desc: "The application has write access to the property"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Request structure to determine device properties that are supported/accessible"
+class: $tSysman
+name: $t_device_prop_capability_t
+members:
+    - type: $t_device_properties_t
+      name: "property"
+      desc: "[in] The property"
+    - type: uint8_t
+      name: "support"
+      desc: "[out] API support for the property - one of $t_prop_support_t"
+    - type: uint8_t
+      name: "access"
+      desc: "[out] The access permissions for the property - one of $t_prop_access_t"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Find out which device properties are available on a given device"
+class: $tSysman
+name: AvailableDeviceProperties
+details:
+    - "Access rights are specific to the device. Need to check separately on each device."
+    - "API support is based on the device class and doesn't need to be checked for each device."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: count
+      desc: "[in] The number of entries in the array pCap"
+    - type: $t_device_prop_capability_t*
+      name: pCap
+      desc: "[in] Pointer to an array of avilable property requests"
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "Request structure used to query a device property"
 class: $tSysman
@@ -604,6 +685,9 @@ params:
     - type: $t_device_property_request_t*
       name: pRequest
       desc: "[in] Pointer to list of properties and corresponding data storage"
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "One or more requested properties is not supported on this device"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set device property data"
@@ -622,6 +706,9 @@ params:
     - type: $t_device_property_request_t*
       name: pRequest
       desc: "[in] Pointer to list of properties and corresponding data storage"
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "One or more requested properties is not supported on this device"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "PSU voltage status"
@@ -703,6 +790,41 @@ members:
       desc: "[out] The amps being drawn in amperes"
 --- #--------------------------------------------------------------------------
 type: struct
+desc: "Request structure to determine PSU resource properties that are supported/accessible"
+class: $tSysman
+name: $t_psu_prop_capability_t
+members:
+    - type: $t_psu_properties_t
+      name: "property"
+      desc: "[in] The property"
+    - type: $t_prop_support_t
+      name: "support"
+      desc: "[out] API support for the property"
+    - type: $t_prop_access_t
+      name: "access"
+      desc: "[out] The access permissions for the property"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Find out which PSU resource properties are available on a given device"
+class: $tSysman
+name: AvailablePsuProperties
+details:
+    - "Access rights are specific to the device. Need to check separately on each device."
+    - "API support is based on the device class and doesn't need to be checked for each device."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: count
+      desc: "[in] The number of entries in the array pCap"
+    - type: $t_psu_prop_capability_t*
+      name: pCap
+      desc: "[in] Pointer to an array of avilable property requests"
+--- #--------------------------------------------------------------------------
+type: struct
 desc: "Request structure used to query a PSU resource property"
 class: $tSysman
 name: $t_psu_property_request_t
@@ -742,6 +864,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "An invalid resource index was specified in one or more of the requests"
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "One or more requested properties is not supported on this device"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set PSU resource property data"
@@ -763,6 +887,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "An invalid resource index was specified in one or more of the requests"
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "One or more requested properties is not supported on this device"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Temperature sensor resource properties"
@@ -785,6 +911,41 @@ members:
     - type: uint32_t
       name: "temperature"
       desc: "[out] The current temperature of the sensor in degrees celcius"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Request structure to determine temperature sensor properties that are supported/accessible"
+class: $tSysman
+name: $t_temp_prop_capability_t
+members:
+    - type: $t_temp_properties_t
+      name: "property"
+      desc: "[in] The property"
+    - type: $t_prop_support_t
+      name: "support"
+      desc: "[out] API support for the property"
+    - type: $t_prop_access_t
+      name: "access"
+      desc: "[out] The access permissions for the property"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Find out which temperature sensor properties are available on a given device"
+class: $tSysman
+name: AvailableTempProperties
+details:
+    - "Access rights are specific to the device. Need to check separately on each device."
+    - "API support is based on the device class and doesn't need to be checked for each device."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: count
+      desc: "[in] The number of entries in the array pCap"
+    - type: $t_temp_prop_capability_t*
+      name: pCap
+      desc: "[in] Pointer to an array of avilable property requests"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Request structure used to query a temperature sensor resource property"
@@ -826,6 +987,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "An invalid resource index was specified in one or more of the requests"
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "One or more requested properties is not supported on this device"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Fan resource speed mode"
@@ -967,6 +1130,41 @@ members:
       desc: "[in,out][range(0, *pCount)] Array of temperature/fan speed pairs"
 --- #--------------------------------------------------------------------------
 type: struct
+desc: "Request structure to determine fan resource properties that are supported/accessible"
+class: $tSysman
+name: $t_fan_prop_capability_t
+members:
+    - type: $t_fan_properties_t
+      name: "property"
+      desc: "[in] The property"
+    - type: $t_prop_support_t
+      name: "support"
+      desc: "[out] API support for the property"
+    - type: $t_prop_access_t
+      name: "access"
+      desc: "[out] The access permissions for the property"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Find out which fan resource properties are available on a given device"
+class: $tSysman
+name: AvailableFanProperties
+details:
+    - "Access rights are specific to the device. Need to check separately on each device."
+    - "API support is based on the device class and doesn't need to be checked for each device."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: count
+      desc: "[in] The number of entries in the array pCap"
+    - type: $t_fan_prop_capability_t*
+      name: pCap
+      desc: "[in] Pointer to an array of avilable property requests"
+--- #--------------------------------------------------------------------------
+type: struct
 desc: "Request structure used to query a fan resource property"
 class: $tSysman
 name: $t_fan_property_request_t
@@ -1006,6 +1204,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "An invalid resource index was specified in one or more of the requests"
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "One or more requested properties is not supported on this device"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set fan resource property data"
@@ -1027,6 +1227,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "An invalid resource index was specified in one or more of the requests"
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "One or more requested properties is not supported on this device"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "LED resource properties"
@@ -1071,6 +1273,41 @@ members:
       desc: "[in,out][range(0, 255)] The LED blue value"
 --- #--------------------------------------------------------------------------
 type: struct
+desc: "Request structure to determine LED resource properties that are supported/accessible"
+class: $tSysman
+name: $t_led_prop_capability_t
+members:
+    - type: $t_led_properties_t
+      name: "property"
+      desc: "[in] The property"
+    - type: $t_prop_support_t
+      name: "support"
+      desc: "[out] API support for the property"
+    - type: $t_prop_access_t
+      name: "access"
+      desc: "[out] The access permissions for the property"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Find out which LED resource properties are available on a given device"
+class: $tSysman
+name: AvailableLedProperties
+details:
+    - "Access rights are specific to the device. Need to check separately on each device."
+    - "API support is based on the device class and doesn't need to be checked for each device."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: count
+      desc: "[in] The number of entries in the array pCap"
+    - type: $t_led_prop_capability_t*
+      name: pCap
+      desc: "[in] Pointer to an array of avilable property requests"
+--- #--------------------------------------------------------------------------
+type: struct
 desc: "Request structure used to query a LED resource property"
 class: $tSysman
 name: $t_led_property_request_t
@@ -1110,6 +1347,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "An invalid resource index was specified in one or more of the requests"
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "One or more requested properties is not supported on this device"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set LED resource property data"
@@ -1131,6 +1370,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "An invalid resource index was specified in one or more of the requests"
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "One or more requested properties is not supported on this device"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Firmware resource properties"
@@ -1191,6 +1432,41 @@ members:
       desc: "[in] Size in bytes of the image pointed to by pImage"
 --- #--------------------------------------------------------------------------
 type: struct
+desc: "Request structure to determine firmware resource properties that are supported/accessible"
+class: $tSysman
+name: $t_firmware_prop_capability_t
+members:
+    - type: $t_firmware_properties_t
+      name: "property"
+      desc: "[in] The property"
+    - type: $t_prop_support_t
+      name: "support"
+      desc: "[out] API support for the property"
+    - type: $t_prop_access_t
+      name: "access"
+      desc: "[out] The access permissions for the property"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Find out which firmware resource properties are available on a given device"
+class: $tSysman
+name: AvailableFirmwareProperties
+details:
+    - "Access rights are specific to the device. Need to check separately on each device."
+    - "API support is based on the device class and doesn't need to be checked for each device."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: count
+      desc: "[in] The number of entries in the array pCap"
+    - type: $t_firmware_prop_capability_t*
+      name: pCap
+      desc: "[in] Pointer to an array of avilable property requests"
+--- #--------------------------------------------------------------------------
+type: struct
 desc: "Request structure used to query a firmware resource property"
 class: $tSysman
 name: $t_firmware_property_request_t
@@ -1230,6 +1506,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "An invalid resource index was specified in one or more of the requests"
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "One or more requested properties is not supported on this device"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set firmware resource property data"
@@ -1251,6 +1529,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "An invalid resource index was specified in one or more of the requests"
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "One or more requested properties is not supported on this device"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Power domain resource properties"
@@ -1346,6 +1626,41 @@ members:
       desc: "[in,out] power limit in milliwatts"
 --- #--------------------------------------------------------------------------
 type: struct
+desc: "Request structure to determine power domain resource properties that are supported/accessible"
+class: $tSysman
+name: $t_pwr_prop_capability_t
+members:
+    - type: $t_pwr_properties_t
+      name: "property"
+      desc: "[in] The property"
+    - type: $t_prop_support_t
+      name: "support"
+      desc: "[out] API support for the property"
+    - type: $t_prop_access_t
+      name: "access"
+      desc: "[out] The access permissions for the property"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Find out which power domain resource properties are available on a given device"
+class: $tSysman
+name: AvailablePwrProperties
+details:
+    - "Access rights are specific to the device. Need to check separately on each device."
+    - "API support is based on the device class and doesn't need to be checked for each device."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: count
+      desc: "[in] The number of entries in the array pCap"
+    - type: $t_pwr_prop_capability_t*
+      name: pCap
+      desc: "[in] Pointer to an array of avilable property requests"
+--- #--------------------------------------------------------------------------
+type: struct
 desc: "Request structure used to query a power domain resource property"
 class: $tSysman
 name: $t_pwr_property_request_t
@@ -1385,6 +1700,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "An invalid resource index was specified in one or more of the requests"
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "One or more requested properties is not supported on this device"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set power power resource property data"
@@ -1406,6 +1723,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "An invalid resource index was specified in one or more of the requests"
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "One or more requested properties is not supported on this device"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Frequency domain types"
@@ -1661,6 +1980,41 @@ members:
       desc: "[out] The total time in microseconds that the frequency has been limited by the PCU."
 --- #--------------------------------------------------------------------------
 type: struct
+desc: "Request structure to determine frequency domain resource properties that are supported/accessible"
+class: $tSysman
+name: $t_freq_prop_capability_t
+members:
+    - type: $t_freq_properties_t
+      name: "property"
+      desc: "[in] The property"
+    - type: $t_prop_support_t
+      name: "support"
+      desc: "[out] API support for the property"
+    - type: $t_prop_access_t
+      name: "access"
+      desc: "[out] The access permissions for the property"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Find out which frequency domain resource properties are available on a given device"
+class: $tSysman
+name: AvailableFreqProperties
+details:
+    - "Access rights are specific to the device. Need to check separately on each device."
+    - "API support is based on the device class and doesn't need to be checked for each device."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: count
+      desc: "[in] The number of entries in the array pCap"
+    - type: $t_freq_prop_capability_t*
+      name: pCap
+      desc: "[in] Pointer to an array of avilable property requests"
+--- #--------------------------------------------------------------------------
+type: struct
 desc: "Request structure used to query a frequency domain resource property"
 class: $tSysman
 name: $t_freq_property_request_t
@@ -1700,6 +2054,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "An invalid resource index was specified in one or more of the requests"
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "One or more requested properties is not supported on this device"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set frequency domain resource property data"
@@ -1721,6 +2077,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "An invalid resource index was specified in one or more of the requests"
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "One or more requested properties is not supported on this device"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Power-well domain promotion modes"
@@ -1815,6 +2173,41 @@ members:
       desc: "[out] The monotonic counter for the number of times that the power-well has transitioned from a sleep or idle state to an active state."
 --- #--------------------------------------------------------------------------
 type: struct
+desc: "Request structure to determine power-well domain resource properties that are supported/accessible"
+class: $tSysman
+name: $t_pwrwell_prop_capability_t
+members:
+    - type: $t_pwrwell_properties_t
+      name: "property"
+      desc: "[in] The property"
+    - type: $t_prop_support_t
+      name: "support"
+      desc: "[out] API support for the property"
+    - type: $t_prop_access_t
+      name: "access"
+      desc: "[out] The access permissions for the property"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Find out which power-well domain resource properties are available on a given device"
+class: $tSysman
+name: AvailablePwrwellProperties
+details:
+    - "Access rights are specific to the device. Need to check separately on each device."
+    - "API support is based on the device class and doesn't need to be checked for each device."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: count
+      desc: "[in] The number of entries in the array pCap"
+    - type: $t_pwrwell_prop_capability_t*
+      name: pCap
+      desc: "[in] Pointer to an array of avilable property requests"
+--- #--------------------------------------------------------------------------
+type: struct
 desc: "Request structure used to query a power-well domain resource property"
 class: $tSysman
 name: $t_pwrwell_property_request_t
@@ -1854,6 +2247,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "An invalid resource index was specified in one or more of the requests"
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "One or more requested properties is not supported on this device"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set power-well domain resource property data"
@@ -1875,6 +2270,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "An invalid resource index was specified in one or more of the requests"
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "One or more requested properties is not supported on this device"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Accelerator asset resource properties"
@@ -1911,6 +2308,41 @@ members:
     - type: uint32_t
       name: "idleCounter"
       desc: "[out] Monotonic counter for total wall time in microseconds that no accelerator assets in this resource are active."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Request structure to determine accelerator resource properties that are supported/accessible"
+class: $tSysman
+name: $t_accel_prop_capability_t
+members:
+    - type: $t_accel_properties_t
+      name: "property"
+      desc: "[in] The property"
+    - type: $t_prop_support_t
+      name: "support"
+      desc: "[out] API support for the property"
+    - type: $t_prop_access_t
+      name: "access"
+      desc: "[out] The access permissions for the property"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Find out which accelerator resource properties are available on a given device"
+class: $tSysman
+name: AvailableAccelProperties
+details:
+    - "Access rights are specific to the device. Need to check separately on each device."
+    - "API support is based on the device class and doesn't need to be checked for each device."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: count
+      desc: "[in] The number of entries in the array pCap"
+    - type: $t_accel_prop_capability_t*
+      name: pCap
+      desc: "[in] Pointer to an array of avilable property requests"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Request structure used to query an accelerator resource property"
@@ -1952,6 +2384,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "An invalid resource index was specified in one or more of the requests"
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "One or more requested properties is not supported on this device"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Memory resource types"
@@ -2019,8 +2453,6 @@ etors:
       desc: "(ro dynamic) Get current read/write bandwidth counters and maximum bandwidth (data: $t_mem_prop_bandwidth_t)"
     - name: $T_MEM_PROP_ECC_ENABLE
       desc: "(rw dynamic) Determine if ECC is enabled/disabled or change this setting (data: $t_mem_prop_ecc_enable_t)"
-    - name: $T_MEM_PROP_ECC_POISON
-      desc: "(wo dynamic) Poison the memory resource (data: $t_mem_prop_ecc_poison_t)"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Data for the property $T_MEM_PROP_TYPE"
@@ -2060,7 +2492,20 @@ type: struct
 desc: "Data for the property $T_MEM_PROP_UTILIZATION"
 class: $tSysman
 name: $t_mem_prop_utilization_t
+details:
+    - "The total physical memory is the sum of all others (stolen + bad + allocated + unallocated)."
+    - "Percent software memory utilization given by 100 * allocated / (allocated + unallocated)."
+    - "Percent bad memory given by 100 * bad / total"
 members:
+    - type: uint64_t
+      name: total
+      desc: "[out] The total physical memory in bytes"
+    - type: uint64_t
+      name: stolen
+      desc: "[out] The total stolen memory in bytes"
+    - type: uint64_t
+      name: bad
+      desc: "[out] The total bad memory in bytes"
     - type: uint64_t
       name: allocated
       desc: "[out] The total allocated bytes"
@@ -2093,13 +2538,39 @@ members:
       desc: "[in] Whether or not ECC is enabled"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_MEM_PROP_ECC_POISON"
+desc: "Request structure to determine memory resource properties that are supported/accessible"
 class: $tSysman
-name: $t_mem_prop_ecc_poison_t
+name: $t_mem_prop_capability_t
 members:
-    - type: $x_bool_t
-      name: "doPoison"
-      desc: "[out] Poison the memory resource."
+    - type: $t_mem_properties_t
+      name: "property"
+      desc: "[in] The property"
+    - type: $t_prop_support_t
+      name: "support"
+      desc: "[out] API support for the property"
+    - type: $t_prop_access_t
+      name: "access"
+      desc: "[out] The access permissions for the property"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Find out which memory resource properties are available on a given device"
+class: $tSysman
+name: AvailableMemProperties
+details:
+    - "Access rights are specific to the device. Need to check separately on each device."
+    - "API support is based on the device class and doesn't need to be checked for each device."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: count
+      desc: "[in] The number of entries in the array pCap"
+    - type: $t_mem_prop_capability_t*
+      name: pCap
+      desc: "[in] Pointer to an array of avilable property requests"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Request structure used to query a memory resource property"
@@ -2141,6 +2612,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "An invalid resource index was specified in one or more of the requests"
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "One or more requested properties is not supported on this device"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set memory resource property data"
@@ -2162,6 +2635,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "An invalid resource index was specified in one or more of the requests"
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "One or more requested properties is not supported on this device"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Link resource types"
@@ -2303,6 +2778,41 @@ members:
       desc: "[out] Pointer to the max speed configuration (one of those in the array returned by property $T_LINK_PROP_AVAIL_SPEEDS)"
 --- #--------------------------------------------------------------------------
 type: struct
+desc: "Request structure to determine link resource properties that are supported/accessible"
+class: $tSysman
+name: $t_link_prop_capability_t
+members:
+    - type: $t_link_properties_t
+      name: "property"
+      desc: "[in] The property"
+    - type: $t_prop_support_t
+      name: "support"
+      desc: "[out] API support for the property"
+    - type: $t_prop_access_t
+      name: "access"
+      desc: "[out] The access permissions for the property"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Find out which link resource properties are available on a given device"
+class: $tSysman
+name: AvailableLinkProperties
+details:
+    - "Access rights are specific to the device. Need to check separately on each device."
+    - "API support is based on the device class and doesn't need to be checked for each device."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: count
+      desc: "[in] The number of entries in the array pCap"
+    - type: $t_link_prop_capability_t*
+      name: pCap
+      desc: "[in] Pointer to an array of avilable property requests"
+--- #--------------------------------------------------------------------------
+type: struct
 desc: "Request structure used to query a link resource property"
 class: $tSysman
 name: $t_link_property_request_t
@@ -2342,6 +2852,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "An invalid resource index was specified in one or more of the requests"
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "One or more requested properties is not supported on this device"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set link resource property data"
@@ -2363,6 +2875,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "An invalid resource index was specified in one or more of the requests"
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "One or more requested properties is not supported on this device"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Event types"
@@ -2372,12 +2886,41 @@ etors:
     - name: $T_SYSMAN_EVENT_TYPE_FREQ_THROTTLED
       value: "0"
       desc: "The frequency is being throttled"
-    - name: $T_SYSMAN_EVENT_TYPE_FREQ_POLICY_CHANGED
-      desc: "Another API client has modified frequency domain properties"
     - name: $T_SYSMAN_EVENT_TYPE_RAS_ERRORS
       desc: "ECC/RAS errors"
     - name: $T_SYSMAN_EVENT_TYPE_COUNT
       desc: "The number of event types"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Request structure to determine events that are supported"
+class: $tSysman
+name: $t_event_support_t
+members:
+    - type: $t_sysman_event_type_t
+      name: "event"
+      desc: "[in] The event"
+    - type: $x_bool_t
+      name: "supported"
+      desc: "[out] Set to true/false to know if the event is supported"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Find out which events are supported on a given device"
+class: $tSysman
+name: SupportedEvents
+details:
+    - "Event support is the same for all devices with the same device ID."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: count
+      desc: "[in] The number of entries in the array pAccess"
+    - type: $t_event_support_t*
+      name: pAccess
+      desc: "[in] Pointer to an array of event support requests"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Request structure used to register/unregister events"

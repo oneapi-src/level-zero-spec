@@ -626,9 +626,18 @@ typedef xe_result_t (__xecall *xet_pfnSysmanGetInfo_t)(
 /// @brief Function-pointer for xetSysmanGetRasErrors 
 typedef xe_result_t (__xecall *xet_pfnSysmanGetRasErrors_t)(
     xet_sysman_handle_t,
+    xet_ras_filter_t*,
     xe_bool_t,
     uint32_t*,
     xet_res_error_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanAvailableDeviceProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanAvailableDeviceProperties_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_device_prop_capability_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -648,6 +657,14 @@ typedef xe_result_t (__xecall *xet_pfnSysmanSetDeviceProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanAvailablePsuProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanAvailablePsuProperties_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_psu_prop_capability_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetSysmanGetPsuProperties 
 typedef xe_result_t (__xecall *xet_pfnSysmanGetPsuProperties_t)(
     xet_sysman_handle_t,
@@ -664,11 +681,27 @@ typedef xe_result_t (__xecall *xet_pfnSysmanSetPsuProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanAvailableTempProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanAvailableTempProperties_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_temp_prop_capability_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetSysmanGetTempProperties 
 typedef xe_result_t (__xecall *xet_pfnSysmanGetTempProperties_t)(
     xet_sysman_handle_t,
     uint32_t,
     xet_temp_property_request_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanAvailableFanProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanAvailableFanProperties_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_fan_prop_capability_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -688,6 +721,14 @@ typedef xe_result_t (__xecall *xet_pfnSysmanSetFanProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanAvailableLedProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanAvailableLedProperties_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_led_prop_capability_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetSysmanGetLedProperties 
 typedef xe_result_t (__xecall *xet_pfnSysmanGetLedProperties_t)(
     xet_sysman_handle_t,
@@ -701,6 +742,14 @@ typedef xe_result_t (__xecall *xet_pfnSysmanSetLedProperties_t)(
     xet_sysman_handle_t,
     uint32_t,
     xet_led_property_request_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanAvailableFirmwareProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanAvailableFirmwareProperties_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_firmware_prop_capability_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -720,6 +769,14 @@ typedef xe_result_t (__xecall *xet_pfnSysmanSetFirmwareProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanAvailablePwrProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanAvailablePwrProperties_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_pwr_prop_capability_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetSysmanGetPwrProperties 
 typedef xe_result_t (__xecall *xet_pfnSysmanGetPwrProperties_t)(
     xet_sysman_handle_t,
@@ -733,6 +790,14 @@ typedef xe_result_t (__xecall *xet_pfnSysmanSetPwrProperties_t)(
     xet_sysman_handle_t,
     uint32_t,
     xet_pwr_property_request_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanAvailableFreqProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanAvailableFreqProperties_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_freq_prop_capability_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -752,6 +817,14 @@ typedef xe_result_t (__xecall *xet_pfnSysmanSetFreqProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanAvailablePwrwellProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanAvailablePwrwellProperties_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_pwrwell_prop_capability_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetSysmanGetPwrwellProperties 
 typedef xe_result_t (__xecall *xet_pfnSysmanGetPwrwellProperties_t)(
     xet_sysman_handle_t,
@@ -768,11 +841,27 @@ typedef xe_result_t (__xecall *xet_pfnSysmanSetPwrwellProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanAvailableAccelProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanAvailableAccelProperties_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_accel_prop_capability_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetSysmanGetAccelProperties 
 typedef xe_result_t (__xecall *xet_pfnSysmanGetAccelProperties_t)(
     xet_sysman_handle_t,
     uint32_t,
     xet_accel_property_request_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanAvailableMemProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanAvailableMemProperties_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_mem_prop_capability_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -792,6 +881,14 @@ typedef xe_result_t (__xecall *xet_pfnSysmanSetMemProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanAvailableLinkProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanAvailableLinkProperties_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_link_prop_capability_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetSysmanGetLinkProperties 
 typedef xe_result_t (__xecall *xet_pfnSysmanGetLinkProperties_t)(
     xet_sysman_handle_t,
@@ -805,6 +902,14 @@ typedef xe_result_t (__xecall *xet_pfnSysmanSetLinkProperties_t)(
     xet_sysman_handle_t,
     uint32_t,
     xet_link_property_request_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanSupportedEvents 
+typedef xe_result_t (__xecall *xet_pfnSysmanSupportedEvents_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_event_support_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -841,28 +946,41 @@ typedef struct _xet_sysman_dditable_t
     xet_pfnSysmanGetAccelAssetName_t                            pfnGetAccelAssetName;
     xet_pfnSysmanGetInfo_t                                      pfnGetInfo;
     xet_pfnSysmanGetRasErrors_t                                 pfnGetRasErrors;
+    xet_pfnSysmanAvailableDeviceProperties_t                    pfnAvailableDeviceProperties;
     xet_pfnSysmanGetDeviceProperties_t                          pfnGetDeviceProperties;
     xet_pfnSysmanSetDeviceProperties_t                          pfnSetDeviceProperties;
+    xet_pfnSysmanAvailablePsuProperties_t                       pfnAvailablePsuProperties;
     xet_pfnSysmanGetPsuProperties_t                             pfnGetPsuProperties;
     xet_pfnSysmanSetPsuProperties_t                             pfnSetPsuProperties;
+    xet_pfnSysmanAvailableTempProperties_t                      pfnAvailableTempProperties;
     xet_pfnSysmanGetTempProperties_t                            pfnGetTempProperties;
+    xet_pfnSysmanAvailableFanProperties_t                       pfnAvailableFanProperties;
     xet_pfnSysmanGetFanProperties_t                             pfnGetFanProperties;
     xet_pfnSysmanSetFanProperties_t                             pfnSetFanProperties;
+    xet_pfnSysmanAvailableLedProperties_t                       pfnAvailableLedProperties;
     xet_pfnSysmanGetLedProperties_t                             pfnGetLedProperties;
     xet_pfnSysmanSetLedProperties_t                             pfnSetLedProperties;
+    xet_pfnSysmanAvailableFirmwareProperties_t                  pfnAvailableFirmwareProperties;
     xet_pfnSysmanGetFirmwareProperties_t                        pfnGetFirmwareProperties;
     xet_pfnSysmanSetFirmwareProperties_t                        pfnSetFirmwareProperties;
+    xet_pfnSysmanAvailablePwrProperties_t                       pfnAvailablePwrProperties;
     xet_pfnSysmanGetPwrProperties_t                             pfnGetPwrProperties;
     xet_pfnSysmanSetPwrProperties_t                             pfnSetPwrProperties;
+    xet_pfnSysmanAvailableFreqProperties_t                      pfnAvailableFreqProperties;
     xet_pfnSysmanGetFreqProperties_t                            pfnGetFreqProperties;
     xet_pfnSysmanSetFreqProperties_t                            pfnSetFreqProperties;
+    xet_pfnSysmanAvailablePwrwellProperties_t                   pfnAvailablePwrwellProperties;
     xet_pfnSysmanGetPwrwellProperties_t                         pfnGetPwrwellProperties;
     xet_pfnSysmanSetPwrwellProperties_t                         pfnSetPwrwellProperties;
+    xet_pfnSysmanAvailableAccelProperties_t                     pfnAvailableAccelProperties;
     xet_pfnSysmanGetAccelProperties_t                           pfnGetAccelProperties;
+    xet_pfnSysmanAvailableMemProperties_t                       pfnAvailableMemProperties;
     xet_pfnSysmanGetMemProperties_t                             pfnGetMemProperties;
     xet_pfnSysmanSetMemProperties_t                             pfnSetMemProperties;
+    xet_pfnSysmanAvailableLinkProperties_t                      pfnAvailableLinkProperties;
     xet_pfnSysmanGetLinkProperties_t                            pfnGetLinkProperties;
     xet_pfnSysmanSetLinkProperties_t                            pfnSetLinkProperties;
+    xet_pfnSysmanSupportedEvents_t                              pfnSupportedEvents;
     xet_pfnSysmanRegisterEvents_t                               pfnRegisterEvents;
     xet_pfnSysmanUnregisterEvents_t                             pfnUnregisterEvents;
     xet_pfnSysmanGetEvents_t                                    pfnGetEvents;

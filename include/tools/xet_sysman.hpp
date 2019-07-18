@@ -28,6 +28,18 @@
 #endif // XET_RESOURCE_ID_ANY
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_RAS_FILTER_ALL_COUNTERS
+/// @brief Filter to get all RAS error counters
+#define XET_RAS_FILTER_ALL_COUNTERS  { XET_RESOURCE_ID_ANY, (uint32_t)XET_RAS_ERROR_TYPE_ALL, (uint32_t)XET_RAS_ERROR_LOC_ALL, 0 }
+#endif // XET_RAS_FILTER_ALL_COUNTERS
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_RAS_FILTER_ALL_ERRORS
+/// @brief Filter to get all RAS error counters that have errors
+#define XET_RAS_FILTER_ALL_ERRORS  { XET_RESOURCE_ID_ANY, (uint32_t)XET_RAS_ERROR_TYPE_ALL, (uint32_t)XET_RAS_ERROR_LOC_ALL, 1 }
+#endif // XET_RAS_FILTER_ALL_ERRORS
+
+///////////////////////////////////////////////////////////////////////////////
 #ifndef XET_STRING_PROPERTY_SIZE
 /// @brief Maximum number of characters in string properties.
 #define XET_STRING_PROPERTY_SIZE  32
@@ -215,6 +227,27 @@ namespace xet
                                                             ///< ::xet_device_prop_cold_shutdown_t)
             DEVICE_PROP_COLD_RESET,                         ///< (wo dynamic) Cold reset the device (data:
                                                             ///< ::xet_device_prop_cold_reset_t)
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Property support
+        enum class prop_support_t
+        {
+            NONE = 0,                                       ///< The property is not supported by this version of the API
+            API = XE_BIT( 0 ),                              ///< The property is supported by the the API
+            DEVICE_CLASS = XE_BIT( 1 ),                     ///< The property is supported for the class of device
+            DEVICE = XE_BIT( 2 ),                           ///< The property is supported for the device
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Property access permissions
+        enum class prop_access_t
+        {
+            NO_PERMISSIONS = 0,                             ///< The application does not have read-write access to the property
+            READ_PERMISSIONS = XE_BIT( 0 ),                 ///< The application has only read access to the property
+            WRITE_PERMISSIONS = XE_BIT( 1 ),                ///< The application has write access to the property
 
         };
 
@@ -613,8 +646,6 @@ namespace xet
                                                             ///< bandwidth (data: ::xet_mem_prop_bandwidth_t)
             MEM_PROP_ECC_ENABLE,                            ///< (rw dynamic) Determine if ECC is enabled/disabled or change this
                                                             ///< setting (data: ::xet_mem_prop_ecc_enable_t)
-            MEM_PROP_ECC_POISON,                            ///< (wo dynamic) Poison the memory resource (data:
-                                                            ///< ::xet_mem_prop_ecc_poison_t)
 
         };
 
@@ -664,7 +695,6 @@ namespace xet
         enum class event_type_t
         {
             FREQ_THROTTLED = 0,                             ///< The frequency is being throttled
-            FREQ_POLICY_CHANGED,                            ///< Another API client has modified frequency domain properties
             RAS_ERRORS,                                     ///< ECC/RAS errors
             COUNT,                                          ///< The number of event types
 
@@ -836,6 +866,18 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure to determine device properties that are
+        ///        supported/accessible
+        struct device_prop_capability_t
+        {
+            device_properties_t property;                   ///< [in] The property
+            uint8_t support;                                ///< [out] API support for the property - one of ::xet_prop_support_t
+            uint8_t access;                                 ///< [out] The access permissions for the property - one of
+                                                            ///< ::xet_prop_access_t
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Request structure used to query a device property
         struct device_property_request_t
         {
@@ -889,6 +931,17 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure to determine PSU resource properties that are
+        ///        supported/accessible
+        struct psu_prop_capability_t
+        {
+            psu_properties_t property;                      ///< [in] The property
+            prop_support_t support;                         ///< [out] API support for the property
+            prop_access_t access;                           ///< [out] The access permissions for the property
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Request structure used to query a PSU resource property
         struct psu_property_request_t
         {
@@ -908,6 +961,17 @@ namespace xet
         struct temp_prop_temperature_t
         {
             uint32_t temperature;                           ///< [out] The current temperature of the sensor in degrees celcius
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure to determine temperature sensor properties that are
+        ///        supported/accessible
+        struct temp_prop_capability_t
+        {
+            temp_properties_t property;                     ///< [in] The property
+            prop_support_t support;                         ///< [out] API support for the property
+            prop_access_t access;                           ///< [out] The access permissions for the property
 
         };
 
@@ -1000,6 +1064,17 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure to determine fan resource properties that are
+        ///        supported/accessible
+        struct fan_prop_capability_t
+        {
+            fan_properties_t property;                      ///< [in] The property
+            prop_support_t support;                         ///< [out] API support for the property
+            prop_access_t access;                           ///< [out] The access permissions for the property
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Request structure used to query a fan resource property
         struct fan_property_request_t
         {
@@ -1030,6 +1105,17 @@ namespace xet
             uint8_t red;                                    ///< [in,out][range(0, 255)] The LED red value
             uint8_t green;                                  ///< [in,out][range(0, 255)] The LED green value
             uint8_t blue;                                   ///< [in,out][range(0, 255)] The LED blue value
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure to determine LED resource properties that are
+        ///        supported/accessible
+        struct led_prop_capability_t
+        {
+            led_properties_t property;                      ///< [in] The property
+            prop_support_t support;                         ///< [out] API support for the property
+            prop_access_t access;                           ///< [out] The access permissions for the property
 
         };
 
@@ -1078,6 +1164,17 @@ namespace xet
         {
             void* pImage;                                   ///< [in] Pointer to the image to be flashed
             uint32_t size;                                  ///< [in] Size in bytes of the image pointed to by pImage
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure to determine firmware resource properties that are
+        ///        supported/accessible
+        struct firmware_prop_capability_t
+        {
+            firmware_properties_t property;                 ///< [in] The property
+            prop_support_t support;                         ///< [out] API support for the property
+            prop_access_t access;                           ///< [out] The access permissions for the property
 
         };
 
@@ -1169,6 +1266,17 @@ namespace xet
         struct pwr_prop_peak_limit_t
         {
             uint32_t power;                                 ///< [in,out] power limit in milliwatts
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure to determine power domain resource properties that
+        ///        are supported/accessible
+        struct pwr_prop_capability_t
+        {
+            pwr_properties_t property;                      ///< [in] The property
+            prop_support_t support;                         ///< [out] API support for the property
+            prop_access_t access;                           ///< [out] The access permissions for the property
 
         };
 
@@ -1329,6 +1437,17 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure to determine frequency domain resource properties
+        ///        that are supported/accessible
+        struct freq_prop_capability_t
+        {
+            freq_properties_t property;                     ///< [in] The property
+            prop_support_t support;                         ///< [out] API support for the property
+            prop_access_t access;                           ///< [out] The access permissions for the property
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Request structure used to query a frequency domain resource property
         struct freq_property_request_t
         {
@@ -1395,6 +1514,17 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure to determine power-well domain resource properties
+        ///        that are supported/accessible
+        struct pwrwell_prop_capability_t
+        {
+            pwrwell_properties_t property;                  ///< [in] The property
+            prop_support_t support;                         ///< [out] API support for the property
+            prop_access_t access;                           ///< [out] The access permissions for the property
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Request structure used to query a power-well domain resource property
         struct pwrwell_property_request_t
         {
@@ -1426,6 +1556,17 @@ namespace xet
                                                             ///< accelerator assets in this resource are active.
             uint32_t idleCounter;                           ///< [out] Monotonic counter for total wall time in microseconds that no
                                                             ///< accelerator assets in this resource are active.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure to determine accelerator resource properties that
+        ///        are supported/accessible
+        struct accel_prop_capability_t
+        {
+            accel_properties_t property;                    ///< [in] The property
+            prop_support_t support;                         ///< [out] API support for the property
+            prop_access_t access;                           ///< [out] The access permissions for the property
 
         };
 
@@ -1487,8 +1628,18 @@ namespace xet
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Data for the property ::XET_MEM_PROP_UTILIZATION
+        /// 
+        /// @details
+        ///     - The total physical memory is the sum of all others (stolen + bad +
+        ///       allocated + unallocated).
+        ///     - Percent software memory utilization given by 100 * allocated /
+        ///       (allocated + unallocated).
+        ///     - Percent bad memory given by 100 * bad / total
         struct mem_prop_utilization_t
         {
+            uint64_t total;                                 ///< [out] The total physical memory in bytes
+            uint64_t stolen;                                ///< [out] The total stolen memory in bytes
+            uint64_t bad;                                   ///< [out] The total bad memory in bytes
             uint64_t allocated;                             ///< [out] The total allocated bytes
             uint64_t unallocated;                           ///< [out] The total unallocated bytes
 
@@ -1513,10 +1664,13 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Data for the property ::XET_MEM_PROP_ECC_POISON
-        struct mem_prop_ecc_poison_t
+        /// @brief Request structure to determine memory resource properties that are
+        ///        supported/accessible
+        struct mem_prop_capability_t
         {
-            xe::bool_t doPoison;                            ///< [out] Poison the memory resource.
+            mem_properties_t property;                      ///< [in] The property
+            prop_support_t support;                         ///< [out] API support for the property
+            prop_access_t access;                           ///< [out] The access permissions for the property
 
         };
 
@@ -1619,6 +1773,17 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure to determine link resource properties that are
+        ///        supported/accessible
+        struct link_prop_capability_t
+        {
+            link_properties_t property;                     ///< [in] The property
+            prop_support_t support;                         ///< [out] API support for the property
+            prop_access_t access;                           ///< [out] The access permissions for the property
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Request structure used to query a link resource property
         struct link_property_request_t
         {
@@ -1630,6 +1795,15 @@ namespace xet
                                                             ///< structure is derived from the property enumerator, converted to
                                                             ///< lower-case with "_t" appended.
             uint32_t size;                                  ///< [in] The size of the data structure pointed to by pData.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Request structure to determine events that are supported
+        struct event_support_t
+        {
+            event_type_t event;                             ///< [in] The event
+            xe::bool_t supported;                           ///< [out] Set to true/false to know if the event is supported
 
         };
 
@@ -1752,6 +1926,7 @@ namespace xet
         /// @throws result_t
         void __xecall
         GetRasErrors(
+            ras_filter_t* pFilter,                          ///< [in] Filter for RAS errors to return
             xe::bool_t clear,                               ///< [in] Set to true to clear the underlying counters after they are
                                                             ///< returned
             uint32_t* pCount,                               ///< [in] Pointer to the number of elements in the array pErrors.
@@ -1764,6 +1939,23 @@ namespace xet
                                                             ///< all data is returned, counters are cleared if requested and count will
                                                             ///< be set to actual number of errors returned.
             res_error_t* pErrors                            ///< [in] Array of error data
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Find out which device properties are available on a given device
+        /// 
+        /// @details
+        ///     - Access rights are specific to the device. Need to check separately on
+        ///       each device.
+        ///     - API support is based on the device class and doesn't need to be
+        ///       checked for each device.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        AvailableDeviceProperties(
+            uint32_t count,                                 ///< [in] The number of entries in the array pCap
+            device_prop_capability_t* pCap                  ///< [in] Pointer to an array of avilable property requests
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1793,6 +1985,23 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Find out which PSU resource properties are available on a given device
+        /// 
+        /// @details
+        ///     - Access rights are specific to the device. Need to check separately on
+        ///       each device.
+        ///     - API support is based on the device class and doesn't need to be
+        ///       checked for each device.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        AvailablePsuProperties(
+            uint32_t count,                                 ///< [in] The number of entries in the array pCap
+            psu_prop_capability_t* pCap                     ///< [in] Pointer to an array of avilable property requests
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get PSU resource property data
         /// 
         /// @details
@@ -1819,6 +2028,24 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Find out which temperature sensor properties are available on a given
+        ///        device
+        /// 
+        /// @details
+        ///     - Access rights are specific to the device. Need to check separately on
+        ///       each device.
+        ///     - API support is based on the device class and doesn't need to be
+        ///       checked for each device.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        AvailableTempProperties(
+            uint32_t count,                                 ///< [in] The number of entries in the array pCap
+            temp_prop_capability_t* pCap                    ///< [in] Pointer to an array of avilable property requests
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get temperature sensor resource property data
         /// 
         /// @details
@@ -1829,6 +2056,23 @@ namespace xet
         GetTempProperties(
             uint32_t count,                                 ///< [in] The number of properties in the array pRequest
             temp_property_request_t* pRequest               ///< [in] Pointer to list of properties and corresponding data storage
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Find out which fan resource properties are available on a given device
+        /// 
+        /// @details
+        ///     - Access rights are specific to the device. Need to check separately on
+        ///       each device.
+        ///     - API support is based on the device class and doesn't need to be
+        ///       checked for each device.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        AvailableFanProperties(
+            uint32_t count,                                 ///< [in] The number of entries in the array pCap
+            fan_prop_capability_t* pCap                     ///< [in] Pointer to an array of avilable property requests
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1858,6 +2102,23 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Find out which LED resource properties are available on a given device
+        /// 
+        /// @details
+        ///     - Access rights are specific to the device. Need to check separately on
+        ///       each device.
+        ///     - API support is based on the device class and doesn't need to be
+        ///       checked for each device.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        AvailableLedProperties(
+            uint32_t count,                                 ///< [in] The number of entries in the array pCap
+            led_prop_capability_t* pCap                     ///< [in] Pointer to an array of avilable property requests
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get LED resource property data
         /// 
         /// @details
@@ -1881,6 +2142,24 @@ namespace xet
         SetLedProperties(
             uint32_t count,                                 ///< [in] The number of properties in the array pRequest
             led_property_request_t* pRequest                ///< [in] Pointer to list of properties and corresponding data storage
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Find out which firmware resource properties are available on a given
+        ///        device
+        /// 
+        /// @details
+        ///     - Access rights are specific to the device. Need to check separately on
+        ///       each device.
+        ///     - API support is based on the device class and doesn't need to be
+        ///       checked for each device.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        AvailableFirmwareProperties(
+            uint32_t count,                                 ///< [in] The number of entries in the array pCap
+            firmware_prop_capability_t* pCap                ///< [in] Pointer to an array of avilable property requests
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1910,6 +2189,24 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Find out which power domain resource properties are available on a
+        ///        given device
+        /// 
+        /// @details
+        ///     - Access rights are specific to the device. Need to check separately on
+        ///       each device.
+        ///     - API support is based on the device class and doesn't need to be
+        ///       checked for each device.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        AvailablePwrProperties(
+            uint32_t count,                                 ///< [in] The number of entries in the array pCap
+            pwr_prop_capability_t* pCap                     ///< [in] Pointer to an array of avilable property requests
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get power domain resource property data
         /// 
         /// @details
@@ -1933,6 +2230,24 @@ namespace xet
         SetPwrProperties(
             uint32_t count,                                 ///< [in] The number of properties in the array pRequest
             pwr_property_request_t* pRequest                ///< [in] Pointer to list of properties and corresponding data storage
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Find out which frequency domain resource properties are available on a
+        ///        given device
+        /// 
+        /// @details
+        ///     - Access rights are specific to the device. Need to check separately on
+        ///       each device.
+        ///     - API support is based on the device class and doesn't need to be
+        ///       checked for each device.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        AvailableFreqProperties(
+            uint32_t count,                                 ///< [in] The number of entries in the array pCap
+            freq_prop_capability_t* pCap                    ///< [in] Pointer to an array of avilable property requests
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1962,6 +2277,24 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Find out which power-well domain resource properties are available on
+        ///        a given device
+        /// 
+        /// @details
+        ///     - Access rights are specific to the device. Need to check separately on
+        ///       each device.
+        ///     - API support is based on the device class and doesn't need to be
+        ///       checked for each device.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        AvailablePwrwellProperties(
+            uint32_t count,                                 ///< [in] The number of entries in the array pCap
+            pwrwell_prop_capability_t* pCap                 ///< [in] Pointer to an array of avilable property requests
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get power-well domain resource property data
         /// 
         /// @details
@@ -1988,6 +2321,24 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Find out which accelerator resource properties are available on a
+        ///        given device
+        /// 
+        /// @details
+        ///     - Access rights are specific to the device. Need to check separately on
+        ///       each device.
+        ///     - API support is based on the device class and doesn't need to be
+        ///       checked for each device.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        AvailableAccelProperties(
+            uint32_t count,                                 ///< [in] The number of entries in the array pCap
+            accel_prop_capability_t* pCap                   ///< [in] Pointer to an array of avilable property requests
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get accelerator resource property data
         /// 
         /// @details
@@ -1998,6 +2349,24 @@ namespace xet
         GetAccelProperties(
             uint32_t count,                                 ///< [in] The number of properties in the array pRequest
             accel_property_request_t* pRequest              ///< [in] Pointer to list of properties and corresponding data storage
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Find out which memory resource properties are available on a given
+        ///        device
+        /// 
+        /// @details
+        ///     - Access rights are specific to the device. Need to check separately on
+        ///       each device.
+        ///     - API support is based on the device class and doesn't need to be
+        ///       checked for each device.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        AvailableMemProperties(
+            uint32_t count,                                 ///< [in] The number of entries in the array pCap
+            mem_prop_capability_t* pCap                     ///< [in] Pointer to an array of avilable property requests
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2027,6 +2396,24 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Find out which link resource properties are available on a given
+        ///        device
+        /// 
+        /// @details
+        ///     - Access rights are specific to the device. Need to check separately on
+        ///       each device.
+        ///     - API support is based on the device class and doesn't need to be
+        ///       checked for each device.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        AvailableLinkProperties(
+            uint32_t count,                                 ///< [in] The number of entries in the array pCap
+            link_prop_capability_t* pCap                    ///< [in] Pointer to an array of avilable property requests
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get link resource property data
         /// 
         /// @details
@@ -2050,6 +2437,20 @@ namespace xet
         SetLinkProperties(
             uint32_t count,                                 ///< [in] The number of properties in the array pRequest
             link_property_request_t* pRequest               ///< [in] Pointer to list of properties and corresponding data storage
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Find out which events are supported on a given device
+        /// 
+        /// @details
+        ///     - Event support is the same for all devices with the same device ID.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        SupportedEvents(
+            uint32_t count,                                 ///< [in] The number of entries in the array pAccess
+            event_support_t* pAccess                        ///< [in] Pointer to an array of event support requests
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2217,6 +2618,18 @@ namespace xet
     std::string to_string( const Sysman::device_prop_cold_reset_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::prop_support_t to std::string
+    std::string to_string( const Sysman::prop_support_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::prop_access_t to std::string
+    std::string to_string( const Sysman::prop_access_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::device_prop_capability_t to std::string
+    std::string to_string( const Sysman::device_prop_capability_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::device_property_request_t to std::string
     std::string to_string( const Sysman::device_property_request_t val );
 
@@ -2249,6 +2662,10 @@ namespace xet
     std::string to_string( const Sysman::psu_prop_amps_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::psu_prop_capability_t to std::string
+    std::string to_string( const Sysman::psu_prop_capability_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::psu_property_request_t to std::string
     std::string to_string( const Sysman::psu_property_request_t val );
 
@@ -2259,6 +2676,10 @@ namespace xet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::temp_prop_temperature_t to std::string
     std::string to_string( const Sysman::temp_prop_temperature_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::temp_prop_capability_t to std::string
+    std::string to_string( const Sysman::temp_prop_capability_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::temp_property_request_t to std::string
@@ -2309,6 +2730,10 @@ namespace xet
     std::string to_string( const Sysman::fan_prop_speed_table_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::fan_prop_capability_t to std::string
+    std::string to_string( const Sysman::fan_prop_capability_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::fan_property_request_t to std::string
     std::string to_string( const Sysman::fan_property_request_t val );
 
@@ -2323,6 +2748,10 @@ namespace xet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::led_prop_state_t to std::string
     std::string to_string( const Sysman::led_prop_state_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::led_prop_capability_t to std::string
+    std::string to_string( const Sysman::led_prop_capability_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::led_property_request_t to std::string
@@ -2347,6 +2776,10 @@ namespace xet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::firmware_prop_flash_t to std::string
     std::string to_string( const Sysman::firmware_prop_flash_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::firmware_prop_capability_t to std::string
+    std::string to_string( const Sysman::firmware_prop_capability_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::firmware_property_request_t to std::string
@@ -2379,6 +2812,10 @@ namespace xet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::pwr_prop_peak_limit_t to std::string
     std::string to_string( const Sysman::pwr_prop_peak_limit_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pwr_prop_capability_t to std::string
+    std::string to_string( const Sysman::pwr_prop_capability_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::pwr_property_request_t to std::string
@@ -2461,6 +2898,10 @@ namespace xet
     std::string to_string( const Sysman::freq_prop_throttle_time_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_prop_capability_t to std::string
+    std::string to_string( const Sysman::freq_prop_capability_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::freq_property_request_t to std::string
     std::string to_string( const Sysman::freq_property_request_t val );
 
@@ -2493,6 +2934,10 @@ namespace xet
     std::string to_string( const Sysman::pwrwell_prop_transitions_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pwrwell_prop_capability_t to std::string
+    std::string to_string( const Sysman::pwrwell_prop_capability_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::pwrwell_property_request_t to std::string
     std::string to_string( const Sysman::pwrwell_property_request_t val );
 
@@ -2507,6 +2952,10 @@ namespace xet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::accel_prop_utilization_t to std::string
     std::string to_string( const Sysman::accel_prop_utilization_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::accel_prop_capability_t to std::string
+    std::string to_string( const Sysman::accel_prop_capability_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::accel_property_request_t to std::string
@@ -2553,8 +3002,8 @@ namespace xet
     std::string to_string( const Sysman::mem_prop_ecc_enable_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::mem_prop_ecc_poison_t to std::string
-    std::string to_string( const Sysman::mem_prop_ecc_poison_t val );
+    /// @brief Converts Sysman::mem_prop_capability_t to std::string
+    std::string to_string( const Sysman::mem_prop_capability_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::mem_property_request_t to std::string
@@ -2605,12 +3054,20 @@ namespace xet
     std::string to_string( const Sysman::link_prop_speed_range_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::link_prop_capability_t to std::string
+    std::string to_string( const Sysman::link_prop_capability_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::link_property_request_t to std::string
     std::string to_string( const Sysman::link_property_request_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::event_type_t to std::string
     std::string to_string( const Sysman::event_type_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::event_support_t to std::string
+    std::string to_string( const Sysman::event_support_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::event_request_t to std::string

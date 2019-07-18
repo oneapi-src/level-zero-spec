@@ -171,6 +171,10 @@ typedef struct _xet_device_prop_cold_shutdown_t xet_device_prop_cold_shutdown_t;
 typedef struct _xet_device_prop_cold_reset_t xet_device_prop_cold_reset_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_device_prop_capability_t
+typedef struct _xet_device_prop_capability_t xet_device_prop_capability_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_device_property_request_t
 typedef struct _xet_device_property_request_t xet_device_property_request_t;
 
@@ -195,12 +199,20 @@ typedef struct _xet_psu_prop_temperature_t xet_psu_prop_temperature_t;
 typedef struct _xet_psu_prop_amps_t xet_psu_prop_amps_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_psu_prop_capability_t
+typedef struct _xet_psu_prop_capability_t xet_psu_prop_capability_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_psu_property_request_t
 typedef struct _xet_psu_property_request_t xet_psu_property_request_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_temp_prop_temperature_t
 typedef struct _xet_temp_prop_temperature_t xet_temp_prop_temperature_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_temp_prop_capability_t
+typedef struct _xet_temp_prop_capability_t xet_temp_prop_capability_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_temp_property_request_t
@@ -239,6 +251,10 @@ typedef struct _xet_fan_prop_fixed_speed_t xet_fan_prop_fixed_speed_t;
 typedef struct _xet_fan_prop_speed_table_t xet_fan_prop_speed_table_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_fan_prop_capability_t
+typedef struct _xet_fan_prop_capability_t xet_fan_prop_capability_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_fan_property_request_t
 typedef struct _xet_fan_property_request_t xet_fan_property_request_t;
 
@@ -249,6 +265,10 @@ typedef struct _xet_led_prop_rgb_cap_t xet_led_prop_rgb_cap_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_led_prop_state_t
 typedef struct _xet_led_prop_state_t xet_led_prop_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_led_prop_capability_t
+typedef struct _xet_led_prop_capability_t xet_led_prop_capability_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_led_property_request_t
@@ -269,6 +289,10 @@ typedef struct _xet_firmware_prop_check_t xet_firmware_prop_check_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_firmware_prop_flash_t
 typedef struct _xet_firmware_prop_flash_t xet_firmware_prop_flash_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_firmware_prop_capability_t
+typedef struct _xet_firmware_prop_capability_t xet_firmware_prop_capability_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_firmware_property_request_t
@@ -297,6 +321,10 @@ typedef struct _xet_pwr_prop_burst_limit_t xet_pwr_prop_burst_limit_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_pwr_prop_peak_limit_t
 typedef struct _xet_pwr_prop_peak_limit_t xet_pwr_prop_peak_limit_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_pwr_prop_capability_t
+typedef struct _xet_pwr_prop_capability_t xet_pwr_prop_capability_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_pwr_property_request_t
@@ -363,6 +391,10 @@ typedef struct _xet_freq_prop_throttle_reasons_t xet_freq_prop_throttle_reasons_
 typedef struct _xet_freq_prop_throttle_time_t xet_freq_prop_throttle_time_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_freq_prop_capability_t
+typedef struct _xet_freq_prop_capability_t xet_freq_prop_capability_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_freq_property_request_t
 typedef struct _xet_freq_property_request_t xet_freq_property_request_t;
 
@@ -387,6 +419,10 @@ typedef struct _xet_pwrwell_prop_utilization_t xet_pwrwell_prop_utilization_t;
 typedef struct _xet_pwrwell_prop_transitions_t xet_pwrwell_prop_transitions_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_pwrwell_prop_capability_t
+typedef struct _xet_pwrwell_prop_capability_t xet_pwrwell_prop_capability_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_pwrwell_property_request_t
 typedef struct _xet_pwrwell_property_request_t xet_pwrwell_property_request_t;
 
@@ -397,6 +433,10 @@ typedef struct _xet_accel_prop_accel_assets_t xet_accel_prop_accel_assets_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_accel_prop_utilization_t
 typedef struct _xet_accel_prop_utilization_t xet_accel_prop_utilization_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_accel_prop_capability_t
+typedef struct _xet_accel_prop_capability_t xet_accel_prop_capability_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_accel_property_request_t
@@ -431,8 +471,8 @@ typedef struct _xet_mem_prop_bandwidth_t xet_mem_prop_bandwidth_t;
 typedef struct _xet_mem_prop_ecc_enable_t xet_mem_prop_ecc_enable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_mem_prop_ecc_poison_t
-typedef struct _xet_mem_prop_ecc_poison_t xet_mem_prop_ecc_poison_t;
+/// @brief Forward-declare xet_mem_prop_capability_t
+typedef struct _xet_mem_prop_capability_t xet_mem_prop_capability_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_mem_property_request_t
@@ -475,8 +515,16 @@ typedef struct _xet_link_prop_speed_t xet_link_prop_speed_t;
 typedef struct _xet_link_prop_speed_range_t xet_link_prop_speed_range_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_link_prop_capability_t
+typedef struct _xet_link_prop_capability_t xet_link_prop_capability_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_link_property_request_t
 typedef struct _xet_link_property_request_t xet_link_property_request_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_event_support_t
+typedef struct _xet_event_support_t xet_event_support_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_event_request_t
