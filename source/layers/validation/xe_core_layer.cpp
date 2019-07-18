@@ -1414,9 +1414,6 @@ namespace layer
             if( nullptr == hDevice )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == hIpc )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
             if( nullptr == phEventPool )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
@@ -2071,9 +2068,6 @@ namespace layer
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == hDevice )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == handle )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pptr )

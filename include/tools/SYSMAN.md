@@ -14,6 +14,4 @@ Sysman is the System Resource Management Interface (SMI) providing accelerator d
 
 ![Introduction](../images/tools_sysman_object_hierarchy.png?raw=true) 
 
-![Introduction](../images/tools_sysman_containers.png?raw=true) 
-
 (more details coming soon...)

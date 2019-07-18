@@ -318,7 +318,6 @@ xeDeviceGroupGetMemIpcHandle(
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDeviceGroup
 ///         + nullptr == hDevice
-///         + nullptr == handle
 ///         + nullptr == pptr
 ///         + invalid flags
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -651,7 +650,7 @@ namespace xe
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetMemIpcHandle" );
 
-        return reinterpret_cast<ipc_mem_handle_t>( ipcHandle );
+        return *reinterpret_cast<ipc_mem_handle_t*>( &ipcHandle );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -686,7 +685,7 @@ namespace xe
         auto result = static_cast<result_t>( ::xeDeviceGroupOpenMemIpcHandle(
             reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
             reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
-            reinterpret_cast<xe_ipc_mem_handle_t>( handle ),
+            *reinterpret_cast<xe_ipc_mem_handle_t*>( &handle ),
             static_cast<xe_ipc_memory_flag_t>( flags ),
             &pptr ) );
 

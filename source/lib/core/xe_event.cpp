@@ -216,7 +216,6 @@ xeEventPoolGetIpcHandle(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
-///         + nullptr == hIpc
 ///         + nullptr == phEventPool
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
@@ -724,7 +723,7 @@ namespace xe
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::EventPool::GetIpcHandle" );
 
-        return reinterpret_cast<ipc_event_pool_handle_t>( hIpc );
+        return *reinterpret_cast<ipc_event_pool_handle_t*>( &hIpc );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -754,7 +753,7 @@ namespace xe
 
         auto result = static_cast<result_t>( ::xeEventPoolOpenIpcHandle(
             reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
-            reinterpret_cast<xe_ipc_event_pool_handle_t>( pIpc ),
+            *reinterpret_cast<xe_ipc_event_pool_handle_t*>( &pIpc ),
             &hEventPool ) );
 
         if( result_t::SUCCESS != result )

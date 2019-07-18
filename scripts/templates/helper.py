@@ -64,6 +64,7 @@ class class_traits:
 """
 class type_traits:
     RE_HANDLE   = r"(.*)handle_t"
+    RE_IPC      = r"(.*)ipc(.*)handle_t"
     RE_POINTER  = r"(.*\w+)\*+"
     RE_DESC     = r"(.*)desc_t.*"
 
@@ -71,6 +72,13 @@ class type_traits:
     def is_handle(cls, name):
         try:
             return True if re.match(cls.RE_HANDLE, name) else False
+        except:
+            return False
+
+    @classmethod
+    def is_ipc_handle(cls, name):
+        try:
+            return True if re.match(cls.RE_IPC, name) else False
         except:
             return False
 
@@ -1065,7 +1073,7 @@ def make_wrapper_params(namespace, tags, obj, meta, specs):
                     'name': local_name
                 })
                 if c_tname != cpp_tname:
-                    if type_traits.is_pointer(_remove_ptr(item['type'])) or type_traits.is_handle(item['type']):
+                    if type_traits.is_pointer(_remove_ptr(item['type'])) or (type_traits.is_handle(item['type']) and not type_traits.is_ipc_handle(item['type'])):
                         returns.append("reinterpret_cast<%s>( %s )"%(_remove_const_ptr(cpp_tname), local_name))
                     else:
                         returns.append("*reinterpret_cast<%s*>( &%s )"%(_remove_const_ptr(cpp_tname), local_name))
@@ -1073,7 +1081,11 @@ def make_wrapper_params(namespace, tags, obj, meta, specs):
                     returns.append(local_name)
 
             elif c_tname != cpp_tname:
-                if type_traits.is_pointer(item['type']) or type_traits.is_handle(item['type']):
+                if type_traits.is_ipc_handle(item['type']):
+                    params.append({
+                        'arg': "*reinterpret_cast<%s*>( &%s )"%(c_tname, cpp_name)
+                    })
+                elif type_traits.is_pointer(item['type']) or type_traits.is_handle(item['type']):
                     params.append({
                         'arg': "reinterpret_cast<%s>( %s )"%(c_tname, cpp_name)
                     })
@@ -1201,11 +1213,12 @@ def make_param_checks(namespace, tags, obj, comment=False, cpp=False):
         if not param_traits.is_optional(item):
             is_pointer = type_traits.is_pointer(item['type'])
             is_handle = type_traits.is_handle(item['type'])
+            is_ipc_handle = type_traits.is_ipc_handle(item['type'])
             is_desc = type_traits.is_descriptor(item['type'])
 
             if is_pointer:
                 checks[eip].append("nullptr == %s"%subt(namespace, tags, item['name'], comment, cpp))
-            elif is_handle:
+            elif is_handle and not is_ipc_handle:
                 checks[eip].append("nullptr == %s"%subt(namespace, tags, item['name'], comment, cpp))
 
             if is_desc: # descriptor-type

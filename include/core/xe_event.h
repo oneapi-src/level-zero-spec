@@ -255,7 +255,6 @@ xeEventPoolGetIpcHandle(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDevice
-///         + nullptr == hIpc
 ///         + nullptr == phEventPool
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall

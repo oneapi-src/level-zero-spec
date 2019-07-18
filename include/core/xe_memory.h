@@ -337,7 +337,6 @@ typedef enum _xe_ipc_memory_flag_t
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDeviceGroup
 ///         + nullptr == hDevice
-///         + nullptr == handle
 ///         + nullptr == pptr
 ///         + invalid flags
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
