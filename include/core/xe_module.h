@@ -62,8 +62,8 @@ typedef struct _xe_module_desc_t
 /// @details
 ///     - Compiles the module for execution on the device.
 ///     - The module can only be used on the device on which it was created.
-///     - The module can be copied to other devices within the same device group
-///       by using ::xeModuleGetNativeBinary.
+///     - The module can be copied to other devices within the same driver
+///       instance by using ::xeModuleGetNativeBinary.
 ///     - The following build options are supported:
 ///         + "-xe-opt-disable" - Disable optimizations
 ///         + "-xe-opt-greater-than-4GB-buffer-required" - Use 64-bit offset

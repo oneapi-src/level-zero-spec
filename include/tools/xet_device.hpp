@@ -24,8 +24,8 @@
 namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for device group
-    class DeviceGroup : public xe::DeviceGroup
+    /// @brief C++ wrapper for instance
+    class Driver : public xe::Driver
     {
     public:
 
@@ -34,15 +34,15 @@ namespace xet
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
-        using xe::DeviceGroup::DeviceGroup;
+        using xe::Driver::Driver;
 
-        ~DeviceGroup( void ) = default;
+        ~Driver( void ) = default;
 
-        DeviceGroup( DeviceGroup const& other ) = delete;
-        void operator=( DeviceGroup const& other ) = delete;
+        Driver( Driver const& other ) = delete;
+        void operator=( Driver const& other ) = delete;
 
-        DeviceGroup( DeviceGroup&& other ) = delete;
-        void operator=( DeviceGroup&& other ) = delete;
+        Driver( Driver&& other ) = delete;
+        void operator=( Driver&& other ) = delete;
 
         ///////////////////////////////////////////////////////////////////////////////
 

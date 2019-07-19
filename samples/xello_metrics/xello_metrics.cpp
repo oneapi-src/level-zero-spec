@@ -18,24 +18,38 @@ int main( int argc, char *argv[] )
         putenv( const_cast<char *>( "XE_ENABLE_NULL_DRIVER=1" ) );
     }
 
-    xet::DeviceGroup* pDeviceGroup = nullptr;
+    const xe::Driver::device_type_t type = xe::Driver::device_type_t::GPU;
+
+    xet::Driver* pDriver = nullptr;
+    xet::Device* pDevice = nullptr;
     if( init_xe() && init_xet() )
-        pDeviceGroup = reinterpret_cast<xet::DeviceGroup*>( findDeviceGroup( xe::DeviceGroup::device_type_t::GPU ) );
-    if( !pDeviceGroup )
+    {
+        uint32_t driverCount = 0;
+        xe::GetDrivers( &driverCount );
+
+        std::vector<xe::Driver*> drivers( driverCount );
+        xe::GetDrivers( &driverCount, drivers.data() );
+
+        for( uint32_t driver = 0; driver < driverCount; ++driver )
+        {
+            pDriver = reinterpret_cast<xet::Driver*>( drivers[driver] );
+            pDevice = reinterpret_cast<xet::Device*>( findDevice( pDriver, type ) );
+            if( pDevice )
+            {
+                break;
+            }
+        }
+    }
+    if( !pDevice )
         return -1;
 
     // Find an event-based metric group
-    auto pMetricGroup = findMetricGroup( pDeviceGroup, xet::MetricGroup::sampling_type_t::EVENT_BASED );
+    auto pMetricGroup = findMetricGroup( pDevice, xet::MetricGroup::sampling_type_t::EVENT_BASED );
     if( !pMetricGroup )
         return -1;
 
     try
     {
-        // Get the first device within the device group
-        xet::Device* pDevice = nullptr;
-        uint32_t deviceCount = 1;
-        xe::Device::Get( reinterpret_cast<xe::DeviceGroup*>( pDeviceGroup ), &deviceCount, reinterpret_cast<xe::Device**>( &pDevice ) );
-
         // Active the metric group on the device
         pDevice->ActivateMetricGroups( 1, &pMetricGroup );
 
@@ -51,7 +65,7 @@ int main( int argc, char *argv[] )
         pool_desc.flags = xe::EventPool::flag_t::HOST_VISIBLE;
         pool_desc.count = numSamples;
         auto pEventPool = std::shared_ptr<xe::EventPool>(
-            xe::EventPool::Create( reinterpret_cast<xe::DeviceGroup*>( pDeviceGroup ), &pool_desc, 0, nullptr ),
+            xe::EventPool::Create( pDriver, &pool_desc, 0, nullptr ),
             []( xe::EventPool* p ){ xe::EventPool::Destroy( p ); } );
 
         xe::Event::desc_t event_desc;

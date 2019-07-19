@@ -234,7 +234,28 @@ void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
 
 int gNumDevices = 0;    // Global
 
-int ListDevices(xe_device_group_handle_t hDeviceGroup); // Forward declaration
+int ListDevice(xe_device_handle_t hDevice)
+{
+    int ret = 0;
+
+    xet_sysman_handle_t hSysmanDevice;
+    xe_result_t res = xetSysmanGet(hDevice, XET_SYSMAN_VERSION_CURRENT, &hSysmanDevice);
+    if (res == XE_RESULT_SUCCESS)
+    {
+        gNumDevices++;
+
+        fprintf(stdout, "Device %d\n", gNumDevices);
+
+        ShowDeviceInfo(hSysmanDevice);
+    }
+    else
+    {
+        fprintf(stderr, "ERROR: Can't initialize system resource management for this device.\n");
+        ret++;
+    }
+
+    return ret;
+}
 
 int main( int argc, char *argv[] )
 {
@@ -248,27 +269,40 @@ int main( int argc, char *argv[] )
     else
     {
         // Discover all the device groups and devices
-        uint32_t groupCount = 0;
-        xeDeviceGroupGet(&groupCount, nullptr);
-        xe_device_group_handle_t* allDeviceGroups = (xe_device_group_handle_t*)
-            malloc(groupCount * sizeof(xe_device_group_handle_t));
-        xeDeviceGroupGet(&groupCount, allDeviceGroups);
+        uint32_t driversCount = 0;
+        xeGetDrivers(&driversCount, nullptr);
+        xe_driver_handle_t* allDrivers = (xe_driver_handle_t*)
+            malloc(driversCount * sizeof(xe_driver_handle_t));
+        xeGetDrivers(&driversCount, allDrivers);
+
         // Find the first GPU device group
-        xe_device_group_handle_t hDeviceGroup = nullptr;
-        for(uint32_t i = 0; i < groupCount; ++i)
+        xe_driver_handle_t hDriver = nullptr;
+        for(uint32_t i = 0; i < driversCount; ++i)
         {
-            xe_device_properties_t device_properties;
-            xeDeviceGroupGetDeviceProperties(allDeviceGroups[i], &device_properties);
-            if(XE_DEVICE_TYPE_GPU == device_properties.type)
+            uint32_t deviceCount = 0;
+            xeDriverGetDevices(allDrivers[i], &deviceCount, nullptr);
+
+            xe_device_handle_t* allDevices = (xe_device_handle_t*)
+                malloc(deviceCount * sizeof(xe_device_handle_t));
+            xeDriverGetDevices(allDrivers[i], &deviceCount, allDevices);
+
+            for(uint32_t d = 0; d < deviceCount; ++i)
             {
-                if ((ret = ListDevices(allDeviceGroups[i])) != 0)
+                xe_device_properties_t device_properties;
+                xeDeviceGetProperties(allDevices[d], &device_properties);
+                if(XE_DEVICE_TYPE_GPU == device_properties.type)
                 {
-                    break;
+                    if ((ret = ListDevice(allDevices[d])) != 0)
+                    {
+                        break;
+                    }
                 }
             }
+
+            free(allDevices);
         }
 
-        free(allDeviceGroups);
+        free(allDrivers);
     }
 
     if (gNumDevices == 0)
@@ -278,47 +312,3 @@ int main( int argc, char *argv[] )
 
     return ret;
 }
-
-int ListDevices(xe_device_group_handle_t hDeviceGroup)
-{
-    int ret = 0;
-    uint32_t deviceCount = 0;
-    if (xeDeviceGet(hDeviceGroup, &deviceCount, nullptr) == XE_RESULT_SUCCESS)
-    {
-        if (deviceCount)
-        {
-            xe_device_handle_t* allDevices = (xe_device_handle_t*)
-                malloc(deviceCount * sizeof(xe_device_handle_t));
-            xeDeviceGet(hDeviceGroup, &deviceCount, allDevices);
-
-            for (uint32_t i = 0; i < deviceCount; ++i)
-            {
-                xet_sysman_handle_t hSysmanDevice;
-                xe_result_t res = xetSysmanGet(allDevices[i], XET_SYSMAN_VERSION_CURRENT, &hSysmanDevice);
-                if (res == XE_RESULT_SUCCESS)
-                {
-                    gNumDevices++;
-
-                    fprintf(stdout, "Device %d\n", gNumDevices);
-
-                    ShowDeviceInfo(hSysmanDevice);
-                }
-                else
-                {
-                    fprintf(stderr, "ERROR: Can't initialize system resource management for this device.\n");
-                    ret++;
-                }
-            }
-
-            free(allDevices);
-        }
-    }
-    else
-    {
-        fprintf(stderr, "ERROR: Couldn't get list of devices in a device group.\n");
-        ret = 1;
-    }
-
-    return ret;
-}
-

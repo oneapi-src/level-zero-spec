@@ -50,8 +50,8 @@ class xe_bool_t(c_ubyte):
     pass
 
 ###############################################################################
-## @brief Handle of driver's device group object
-class xe_device_group_handle_t(c_void_p):
+## @brief Handle of a driver instance
+class xe_driver_handle_t(c_void_p):
     pass
 
 ###############################################################################
@@ -184,6 +184,27 @@ class xe_api_version_t(c_int):
 
 
 ###############################################################################
+## @brief API version of ::xe_driver_ipc_properties_t
+class xe_driver_ipc_properties_version_v(IntEnum):
+    CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
+
+class xe_driver_ipc_properties_version_t(c_int):
+    def __str__(self):
+        return str(xe_driver_ipc_properties_version_v(value))
+
+
+###############################################################################
+## @brief IPC properties queried using ::xeDriverGetIPCProperties
+class xe_driver_ipc_properties_t(Structure):
+    _fields_ = [
+        ("version", xe_driver_ipc_properties_version_t),                ## [in] ::XE_DRIVER_IPC_PROPERTIES_VERSION_CURRENT
+        ("memsSupported", xe_bool_t),                                   ## [out] Supports passing memory allocations between processes. See
+                                                                        ## ::::xeDriverGetMemIpcHandle.
+        ("eventsSupported", xe_bool_t)                                  ## [out] Supports passing events between processes. See
+                                                                        ## ::::xeEventPoolGetIpcHandle.
+    ]
+
+###############################################################################
 ## @brief API version of ::xe_device_properties_t
 class xe_device_properties_version_v(IntEnum):
     CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
@@ -220,7 +241,7 @@ class xe_device_uuid_t(Structure):
 XE_MAX_DEVICE_NAME = 256
 
 ###############################################################################
-## @brief Device properties queried using ::xeDeviceGroupGetDeviceProperties
+## @brief Device properties queried using ::xeDeviceGetProperties
 class xe_device_properties_t(Structure):
     _fields_ = [
         ("version", xe_device_properties_version_t),                    ## [in] ::XE_DEVICE_PROPERTIES_VERSION_CURRENT
@@ -262,8 +283,7 @@ class xe_device_compute_properties_version_t(c_int):
 XE_SUBGROUPSIZE_COUNT = 8
 
 ###############################################################################
-## @brief Device compute properties queried using
-##        ::xeDeviceGroupGetComputeProperties
+## @brief Device compute properties queried using ::xeDeviceGetComputeProperties
 class xe_device_compute_properties_t(Structure):
     _fields_ = [
         ("version", xe_device_compute_properties_version_t),            ## [in] ::XE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT
@@ -293,7 +313,7 @@ class xe_device_memory_properties_version_t(c_int):
 
 ###############################################################################
 ## @brief Device local memory properties queried using
-##        ::xeDeviceGroupGetMemoryProperties
+##        ::xeDeviceGetMemoryProperties
 class xe_device_memory_properties_t(Structure):
     _fields_ = [
         ("version", xe_device_memory_properties_version_t),             ## [in] ::XE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
@@ -332,7 +352,7 @@ class xe_memory_access_capabilities_t(c_int):
 
 ###############################################################################
 ## @brief Device memory access properties queried using
-##        ::xeDeviceGroupGetMemoryAccessProperties
+##        ::xeDeviceGetMemoryAccessProperties
 class xe_device_memory_access_properties_t(Structure):
     _fields_ = [
         ("version", xe_device_memory_access_properties_version_t),      ## [in] ::XE_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT
@@ -354,8 +374,7 @@ class xe_device_cache_properties_version_t(c_int):
 
 
 ###############################################################################
-## @brief Device cache properties queried using
-##        ::xeDeviceGroupGetCacheProperties
+## @brief Device cache properties queried using ::xeDeviceGetCacheProperties
 class xe_device_cache_properties_t(Structure):
     _fields_ = [
         ("version", xe_device_cache_properties_version_t),              ## [in] ::XE_DEVICE_CACHE_PROPERTIES_VERSION_CURRENT
@@ -378,8 +397,7 @@ class xe_device_image_properties_version_t(c_int):
 
 
 ###############################################################################
-## @brief Device image properties queried using
-##        ::xeDeviceGroupGetComputeProperties
+## @brief Device image properties queried using ::xeDeviceGetComputeProperties
 class xe_device_image_properties_t(Structure):
     _fields_ = [
         ("version", xe_device_image_properties_version_t),              ## [in] ::XE_DEVICE_IMAGE_PROPERTIES_VERSION_CURRENT
@@ -389,27 +407,6 @@ class xe_device_image_properties_t(Structure):
         ("maxImageDims2D", c_ulong),                                    ## [out] Maximum image dimensions for 2D resources.
         ("maxImageDims3D", c_ulong),                                    ## [out] Maximum image dimensions for 3D resources.
         ("maxImageArraySlices", c_ulong)                                ## [out] Maximum image array slices
-    ]
-
-###############################################################################
-## @brief API version of ::xe_device_ipc_properties_t
-class xe_device_ipc_properties_version_v(IntEnum):
-    CURRENT = XE_MAKE_VERSION( 1, 0 )               ## version 1.0
-
-class xe_device_ipc_properties_version_t(c_int):
-    def __str__(self):
-        return str(xe_device_ipc_properties_version_v(value))
-
-
-###############################################################################
-## @brief Device IPC properties queried using ::xeDeviceGroupGetIPCProperties
-class xe_device_ipc_properties_t(Structure):
-    _fields_ = [
-        ("version", xe_device_ipc_properties_version_t),                ## [in] ::XE_DEVICE_IPC_PROPERTIES_VERSION_CURRENT
-        ("memsSupported", xe_bool_t),                                   ## [out] Supports passing memory allocations between processes. See
-                                                                        ## ::::xeDeviceGroupGetMemIpcHandle.
-        ("eventsSupported", xe_bool_t)                                  ## [out] Supports passing events between processes. See
-                                                                        ## ::::xeEventPoolGetIpcHandle.
     ]
 
 ###############################################################################
@@ -877,7 +874,7 @@ class xe_image_properties_t(Structure):
     ]
 
 ###############################################################################
-## @brief Supported device memory allocation flags
+## @brief Supported memory allocation flags
 class xe_device_mem_alloc_flag_v(IntEnum):
     DEFAULT = 0                                     ## implicit default behavior; uses driver-based heuristics
     BIAS_CACHED = XE_BIT( 0 )                       ## device should cache allocation
@@ -925,8 +922,7 @@ class xe_memory_type_t(c_int):
 
 
 ###############################################################################
-## @brief Memory allocation properties queried using
-##        ::xeDeviceGroupGetMemProperties
+## @brief Memory allocation properties queried using ::xeDriverGetMemProperties
 class xe_memory_allocation_properties_t(Structure):
     _fields_ = [
         ("version", xe_memory_allocation_properties_version_t),         ## [in] ::XE_MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT
@@ -1134,20 +1130,21 @@ if __use_win_types:
 else:
     _xeInit_t = CFUNCTYPE( xe_result_t, xe_init_flag_t )
 
+###############################################################################
+## @brief Function-pointer for xeGetDrivers
+if __use_win_types:
+    _xeGetDrivers_t = WINFUNCTYPE( xe_result_t, POINTER(c_ulong), POINTER(xe_driver_handle_t) )
+else:
+    _xeGetDrivers_t = CFUNCTYPE( xe_result_t, POINTER(c_ulong), POINTER(xe_driver_handle_t) )
+
 
 ###############################################################################
 ## @brief Table of Global functions pointers
 class _xe_global_dditable_t(Structure):
     _fields_ = [
-        ("pfnInit", c_void_p)                                           ## _xeInit_t
+        ("pfnInit", c_void_p),                                          ## _xeInit_t
+        ("pfnGetDrivers", c_void_p)                                     ## _xeGetDrivers_t
     ]
-
-###############################################################################
-## @brief Function-pointer for xeDeviceGet
-if __use_win_types:
-    _xeDeviceGet_t = WINFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(c_ulong), POINTER(xe_device_handle_t) )
-else:
-    _xeDeviceGet_t = CFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(c_ulong), POINTER(xe_device_handle_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xeDeviceGetSubDevices
@@ -1155,6 +1152,48 @@ if __use_win_types:
     _xeDeviceGetSubDevices_t = WINFUNCTYPE( xe_result_t, xe_device_handle_t, POINTER(c_ulong), POINTER(xe_device_handle_t) )
 else:
     _xeDeviceGetSubDevices_t = CFUNCTYPE( xe_result_t, xe_device_handle_t, POINTER(c_ulong), POINTER(xe_device_handle_t) )
+
+###############################################################################
+## @brief Function-pointer for xeDeviceGetProperties
+if __use_win_types:
+    _xeDeviceGetProperties_t = WINFUNCTYPE( xe_result_t, xe_device_handle_t, POINTER(xe_device_properties_t) )
+else:
+    _xeDeviceGetProperties_t = CFUNCTYPE( xe_result_t, xe_device_handle_t, POINTER(xe_device_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for xeDeviceGetComputeProperties
+if __use_win_types:
+    _xeDeviceGetComputeProperties_t = WINFUNCTYPE( xe_result_t, xe_device_handle_t, POINTER(xe_device_compute_properties_t) )
+else:
+    _xeDeviceGetComputeProperties_t = CFUNCTYPE( xe_result_t, xe_device_handle_t, POINTER(xe_device_compute_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for xeDeviceGetMemoryProperties
+if __use_win_types:
+    _xeDeviceGetMemoryProperties_t = WINFUNCTYPE( xe_result_t, xe_device_handle_t, POINTER(c_ulong), POINTER(xe_device_memory_properties_t) )
+else:
+    _xeDeviceGetMemoryProperties_t = CFUNCTYPE( xe_result_t, xe_device_handle_t, POINTER(c_ulong), POINTER(xe_device_memory_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for xeDeviceGetMemoryAccessProperties
+if __use_win_types:
+    _xeDeviceGetMemoryAccessProperties_t = WINFUNCTYPE( xe_result_t, xe_device_handle_t, POINTER(xe_device_memory_access_properties_t) )
+else:
+    _xeDeviceGetMemoryAccessProperties_t = CFUNCTYPE( xe_result_t, xe_device_handle_t, POINTER(xe_device_memory_access_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for xeDeviceGetCacheProperties
+if __use_win_types:
+    _xeDeviceGetCacheProperties_t = WINFUNCTYPE( xe_result_t, xe_device_handle_t, POINTER(xe_device_cache_properties_t) )
+else:
+    _xeDeviceGetCacheProperties_t = CFUNCTYPE( xe_result_t, xe_device_handle_t, POINTER(xe_device_cache_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for xeDeviceGetImageProperties
+if __use_win_types:
+    _xeDeviceGetImageProperties_t = WINFUNCTYPE( xe_result_t, xe_device_handle_t, POINTER(xe_device_image_properties_t) )
+else:
+    _xeDeviceGetImageProperties_t = CFUNCTYPE( xe_result_t, xe_device_handle_t, POINTER(xe_device_image_properties_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xeDeviceGetP2PProperties
@@ -1233,8 +1272,13 @@ else:
 ## @brief Table of Device functions pointers
 class _xe_device_dditable_t(Structure):
     _fields_ = [
-        ("pfnGet", c_void_p),                                           ## _xeDeviceGet_t
         ("pfnGetSubDevices", c_void_p),                                 ## _xeDeviceGetSubDevices_t
+        ("pfnGetProperties", c_void_p),                                 ## _xeDeviceGetProperties_t
+        ("pfnGetComputeProperties", c_void_p),                          ## _xeDeviceGetComputeProperties_t
+        ("pfnGetMemoryProperties", c_void_p),                           ## _xeDeviceGetMemoryProperties_t
+        ("pfnGetMemoryAccessProperties", c_void_p),                     ## _xeDeviceGetMemoryAccessProperties_t
+        ("pfnGetCacheProperties", c_void_p),                            ## _xeDeviceGetCacheProperties_t
+        ("pfnGetImageProperties", c_void_p),                            ## _xeDeviceGetImageProperties_t
         ("pfnGetP2PProperties", c_void_p),                              ## _xeDeviceGetP2PProperties_t
         ("pfnCanAccessPeer", c_void_p),                                 ## _xeDeviceCanAccessPeer_t
         ("pfnSetIntermediateCacheConfig", c_void_p),                    ## _xeDeviceSetIntermediateCacheConfig_t
@@ -1247,162 +1291,114 @@ class _xe_device_dditable_t(Structure):
     ]
 
 ###############################################################################
-## @brief Function-pointer for xeDeviceGroupGet
+## @brief Function-pointer for xeDriverGetDevices
 if __use_win_types:
-    _xeDeviceGroupGet_t = WINFUNCTYPE( xe_result_t, POINTER(c_ulong), POINTER(xe_device_group_handle_t) )
+    _xeDriverGetDevices_t = WINFUNCTYPE( xe_result_t, xe_driver_handle_t, POINTER(c_ulong), POINTER(xe_device_handle_t) )
 else:
-    _xeDeviceGroupGet_t = CFUNCTYPE( xe_result_t, POINTER(c_ulong), POINTER(xe_device_group_handle_t) )
+    _xeDriverGetDevices_t = CFUNCTYPE( xe_result_t, xe_driver_handle_t, POINTER(c_ulong), POINTER(xe_device_handle_t) )
 
 ###############################################################################
-## @brief Function-pointer for xeDeviceGroupGetDriverVersion
+## @brief Function-pointer for xeDriverGetDriverVersion
 if __use_win_types:
-    _xeDeviceGroupGetDriverVersion_t = WINFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(c_ulong) )
+    _xeDriverGetDriverVersion_t = WINFUNCTYPE( xe_result_t, xe_driver_handle_t, POINTER(c_ulong) )
 else:
-    _xeDeviceGroupGetDriverVersion_t = CFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(c_ulong) )
+    _xeDriverGetDriverVersion_t = CFUNCTYPE( xe_result_t, xe_driver_handle_t, POINTER(c_ulong) )
 
 ###############################################################################
-## @brief Function-pointer for xeDeviceGroupGetApiVersion
+## @brief Function-pointer for xeDriverGetApiVersion
 if __use_win_types:
-    _xeDeviceGroupGetApiVersion_t = WINFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(xe_api_version_t) )
+    _xeDriverGetApiVersion_t = WINFUNCTYPE( xe_result_t, xe_driver_handle_t, POINTER(xe_api_version_t) )
 else:
-    _xeDeviceGroupGetApiVersion_t = CFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(xe_api_version_t) )
+    _xeDriverGetApiVersion_t = CFUNCTYPE( xe_result_t, xe_driver_handle_t, POINTER(xe_api_version_t) )
 
 ###############################################################################
-## @brief Function-pointer for xeDeviceGroupGetDeviceProperties
+## @brief Function-pointer for xeDriverGetIPCProperties
 if __use_win_types:
-    _xeDeviceGroupGetDeviceProperties_t = WINFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(xe_device_properties_t) )
+    _xeDriverGetIPCProperties_t = WINFUNCTYPE( xe_result_t, xe_driver_handle_t, POINTER(xe_driver_ipc_properties_t) )
 else:
-    _xeDeviceGroupGetDeviceProperties_t = CFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(xe_device_properties_t) )
+    _xeDriverGetIPCProperties_t = CFUNCTYPE( xe_result_t, xe_driver_handle_t, POINTER(xe_driver_ipc_properties_t) )
 
 ###############################################################################
-## @brief Function-pointer for xeDeviceGroupGetComputeProperties
+## @brief Function-pointer for xeDriverAllocSharedMem
 if __use_win_types:
-    _xeDeviceGroupGetComputeProperties_t = WINFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(xe_device_compute_properties_t) )
+    _xeDriverAllocSharedMem_t = WINFUNCTYPE( xe_result_t, xe_driver_handle_t, xe_device_handle_t, xe_device_mem_alloc_flag_t, c_ulong, xe_host_mem_alloc_flag_t, c_size_t, c_size_t, POINTER(c_void_p) )
 else:
-    _xeDeviceGroupGetComputeProperties_t = CFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(xe_device_compute_properties_t) )
+    _xeDriverAllocSharedMem_t = CFUNCTYPE( xe_result_t, xe_driver_handle_t, xe_device_handle_t, xe_device_mem_alloc_flag_t, c_ulong, xe_host_mem_alloc_flag_t, c_size_t, c_size_t, POINTER(c_void_p) )
 
 ###############################################################################
-## @brief Function-pointer for xeDeviceGroupGetMemoryProperties
+## @brief Function-pointer for xeDriverAllocDeviceMem
 if __use_win_types:
-    _xeDeviceGroupGetMemoryProperties_t = WINFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(c_ulong), POINTER(xe_device_memory_properties_t) )
+    _xeDriverAllocDeviceMem_t = WINFUNCTYPE( xe_result_t, xe_driver_handle_t, xe_device_handle_t, xe_device_mem_alloc_flag_t, c_ulong, c_size_t, c_size_t, POINTER(c_void_p) )
 else:
-    _xeDeviceGroupGetMemoryProperties_t = CFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(c_ulong), POINTER(xe_device_memory_properties_t) )
+    _xeDriverAllocDeviceMem_t = CFUNCTYPE( xe_result_t, xe_driver_handle_t, xe_device_handle_t, xe_device_mem_alloc_flag_t, c_ulong, c_size_t, c_size_t, POINTER(c_void_p) )
 
 ###############################################################################
-## @brief Function-pointer for xeDeviceGroupGetMemoryAccessProperties
+## @brief Function-pointer for xeDriverAllocHostMem
 if __use_win_types:
-    _xeDeviceGroupGetMemoryAccessProperties_t = WINFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(xe_device_memory_access_properties_t) )
+    _xeDriverAllocHostMem_t = WINFUNCTYPE( xe_result_t, xe_driver_handle_t, xe_host_mem_alloc_flag_t, c_size_t, c_size_t, POINTER(c_void_p) )
 else:
-    _xeDeviceGroupGetMemoryAccessProperties_t = CFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(xe_device_memory_access_properties_t) )
+    _xeDriverAllocHostMem_t = CFUNCTYPE( xe_result_t, xe_driver_handle_t, xe_host_mem_alloc_flag_t, c_size_t, c_size_t, POINTER(c_void_p) )
 
 ###############################################################################
-## @brief Function-pointer for xeDeviceGroupGetCacheProperties
+## @brief Function-pointer for xeDriverFreeMem
 if __use_win_types:
-    _xeDeviceGroupGetCacheProperties_t = WINFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(xe_device_cache_properties_t) )
+    _xeDriverFreeMem_t = WINFUNCTYPE( xe_result_t, xe_driver_handle_t, c_void_p )
 else:
-    _xeDeviceGroupGetCacheProperties_t = CFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(xe_device_cache_properties_t) )
+    _xeDriverFreeMem_t = CFUNCTYPE( xe_result_t, xe_driver_handle_t, c_void_p )
 
 ###############################################################################
-## @brief Function-pointer for xeDeviceGroupGetImageProperties
+## @brief Function-pointer for xeDriverGetMemProperties
 if __use_win_types:
-    _xeDeviceGroupGetImageProperties_t = WINFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(xe_device_image_properties_t) )
+    _xeDriverGetMemProperties_t = WINFUNCTYPE( xe_result_t, xe_driver_handle_t, c_void_p, POINTER(xe_memory_allocation_properties_t), POINTER(xe_device_handle_t) )
 else:
-    _xeDeviceGroupGetImageProperties_t = CFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(xe_device_image_properties_t) )
+    _xeDriverGetMemProperties_t = CFUNCTYPE( xe_result_t, xe_driver_handle_t, c_void_p, POINTER(xe_memory_allocation_properties_t), POINTER(xe_device_handle_t) )
 
 ###############################################################################
-## @brief Function-pointer for xeDeviceGroupGetIPCProperties
+## @brief Function-pointer for xeDriverGetMemAddressRange
 if __use_win_types:
-    _xeDeviceGroupGetIPCProperties_t = WINFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(xe_device_ipc_properties_t) )
+    _xeDriverGetMemAddressRange_t = WINFUNCTYPE( xe_result_t, xe_driver_handle_t, c_void_p, POINTER(c_void_p), POINTER(c_size_t) )
 else:
-    _xeDeviceGroupGetIPCProperties_t = CFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(xe_device_ipc_properties_t) )
+    _xeDriverGetMemAddressRange_t = CFUNCTYPE( xe_result_t, xe_driver_handle_t, c_void_p, POINTER(c_void_p), POINTER(c_size_t) )
 
 ###############################################################################
-## @brief Function-pointer for xeDeviceGroupAllocSharedMem
+## @brief Function-pointer for xeDriverGetMemIpcHandle
 if __use_win_types:
-    _xeDeviceGroupAllocSharedMem_t = WINFUNCTYPE( xe_result_t, xe_device_group_handle_t, xe_device_handle_t, xe_device_mem_alloc_flag_t, c_ulong, xe_host_mem_alloc_flag_t, c_size_t, c_size_t, POINTER(c_void_p) )
+    _xeDriverGetMemIpcHandle_t = WINFUNCTYPE( xe_result_t, xe_driver_handle_t, c_void_p, POINTER(xe_ipc_mem_handle_t) )
 else:
-    _xeDeviceGroupAllocSharedMem_t = CFUNCTYPE( xe_result_t, xe_device_group_handle_t, xe_device_handle_t, xe_device_mem_alloc_flag_t, c_ulong, xe_host_mem_alloc_flag_t, c_size_t, c_size_t, POINTER(c_void_p) )
+    _xeDriverGetMemIpcHandle_t = CFUNCTYPE( xe_result_t, xe_driver_handle_t, c_void_p, POINTER(xe_ipc_mem_handle_t) )
 
 ###############################################################################
-## @brief Function-pointer for xeDeviceGroupAllocDeviceMem
+## @brief Function-pointer for xeDriverOpenMemIpcHandle
 if __use_win_types:
-    _xeDeviceGroupAllocDeviceMem_t = WINFUNCTYPE( xe_result_t, xe_device_group_handle_t, xe_device_handle_t, xe_device_mem_alloc_flag_t, c_ulong, c_size_t, c_size_t, POINTER(c_void_p) )
+    _xeDriverOpenMemIpcHandle_t = WINFUNCTYPE( xe_result_t, xe_driver_handle_t, xe_device_handle_t, xe_ipc_mem_handle_t, xe_ipc_memory_flag_t, POINTER(c_void_p) )
 else:
-    _xeDeviceGroupAllocDeviceMem_t = CFUNCTYPE( xe_result_t, xe_device_group_handle_t, xe_device_handle_t, xe_device_mem_alloc_flag_t, c_ulong, c_size_t, c_size_t, POINTER(c_void_p) )
+    _xeDriverOpenMemIpcHandle_t = CFUNCTYPE( xe_result_t, xe_driver_handle_t, xe_device_handle_t, xe_ipc_mem_handle_t, xe_ipc_memory_flag_t, POINTER(c_void_p) )
 
 ###############################################################################
-## @brief Function-pointer for xeDeviceGroupAllocHostMem
+## @brief Function-pointer for xeDriverCloseMemIpcHandle
 if __use_win_types:
-    _xeDeviceGroupAllocHostMem_t = WINFUNCTYPE( xe_result_t, xe_device_group_handle_t, xe_host_mem_alloc_flag_t, c_size_t, c_size_t, POINTER(c_void_p) )
+    _xeDriverCloseMemIpcHandle_t = WINFUNCTYPE( xe_result_t, xe_driver_handle_t, c_void_p )
 else:
-    _xeDeviceGroupAllocHostMem_t = CFUNCTYPE( xe_result_t, xe_device_group_handle_t, xe_host_mem_alloc_flag_t, c_size_t, c_size_t, POINTER(c_void_p) )
-
-###############################################################################
-## @brief Function-pointer for xeDeviceGroupFreeMem
-if __use_win_types:
-    _xeDeviceGroupFreeMem_t = WINFUNCTYPE( xe_result_t, xe_device_group_handle_t, c_void_p )
-else:
-    _xeDeviceGroupFreeMem_t = CFUNCTYPE( xe_result_t, xe_device_group_handle_t, c_void_p )
-
-###############################################################################
-## @brief Function-pointer for xeDeviceGroupGetMemProperties
-if __use_win_types:
-    _xeDeviceGroupGetMemProperties_t = WINFUNCTYPE( xe_result_t, xe_device_group_handle_t, c_void_p, POINTER(xe_memory_allocation_properties_t), POINTER(xe_device_handle_t) )
-else:
-    _xeDeviceGroupGetMemProperties_t = CFUNCTYPE( xe_result_t, xe_device_group_handle_t, c_void_p, POINTER(xe_memory_allocation_properties_t), POINTER(xe_device_handle_t) )
-
-###############################################################################
-## @brief Function-pointer for xeDeviceGroupGetMemAddressRange
-if __use_win_types:
-    _xeDeviceGroupGetMemAddressRange_t = WINFUNCTYPE( xe_result_t, xe_device_group_handle_t, c_void_p, POINTER(c_void_p), POINTER(c_size_t) )
-else:
-    _xeDeviceGroupGetMemAddressRange_t = CFUNCTYPE( xe_result_t, xe_device_group_handle_t, c_void_p, POINTER(c_void_p), POINTER(c_size_t) )
-
-###############################################################################
-## @brief Function-pointer for xeDeviceGroupGetMemIpcHandle
-if __use_win_types:
-    _xeDeviceGroupGetMemIpcHandle_t = WINFUNCTYPE( xe_result_t, xe_device_group_handle_t, c_void_p, POINTER(xe_ipc_mem_handle_t) )
-else:
-    _xeDeviceGroupGetMemIpcHandle_t = CFUNCTYPE( xe_result_t, xe_device_group_handle_t, c_void_p, POINTER(xe_ipc_mem_handle_t) )
-
-###############################################################################
-## @brief Function-pointer for xeDeviceGroupOpenMemIpcHandle
-if __use_win_types:
-    _xeDeviceGroupOpenMemIpcHandle_t = WINFUNCTYPE( xe_result_t, xe_device_group_handle_t, xe_device_handle_t, xe_ipc_mem_handle_t, xe_ipc_memory_flag_t, POINTER(c_void_p) )
-else:
-    _xeDeviceGroupOpenMemIpcHandle_t = CFUNCTYPE( xe_result_t, xe_device_group_handle_t, xe_device_handle_t, xe_ipc_mem_handle_t, xe_ipc_memory_flag_t, POINTER(c_void_p) )
-
-###############################################################################
-## @brief Function-pointer for xeDeviceGroupCloseMemIpcHandle
-if __use_win_types:
-    _xeDeviceGroupCloseMemIpcHandle_t = WINFUNCTYPE( xe_result_t, xe_device_group_handle_t, c_void_p )
-else:
-    _xeDeviceGroupCloseMemIpcHandle_t = CFUNCTYPE( xe_result_t, xe_device_group_handle_t, c_void_p )
+    _xeDriverCloseMemIpcHandle_t = CFUNCTYPE( xe_result_t, xe_driver_handle_t, c_void_p )
 
 
 ###############################################################################
-## @brief Table of DeviceGroup functions pointers
-class _xe_device_group_dditable_t(Structure):
+## @brief Table of Driver functions pointers
+class _xe_driver_dditable_t(Structure):
     _fields_ = [
-        ("pfnGet", c_void_p),                                           ## _xeDeviceGroupGet_t
-        ("pfnGetDriverVersion", c_void_p),                              ## _xeDeviceGroupGetDriverVersion_t
-        ("pfnGetApiVersion", c_void_p),                                 ## _xeDeviceGroupGetApiVersion_t
-        ("pfnGetDeviceProperties", c_void_p),                           ## _xeDeviceGroupGetDeviceProperties_t
-        ("pfnGetComputeProperties", c_void_p),                          ## _xeDeviceGroupGetComputeProperties_t
-        ("pfnGetMemoryProperties", c_void_p),                           ## _xeDeviceGroupGetMemoryProperties_t
-        ("pfnGetMemoryAccessProperties", c_void_p),                     ## _xeDeviceGroupGetMemoryAccessProperties_t
-        ("pfnGetCacheProperties", c_void_p),                            ## _xeDeviceGroupGetCacheProperties_t
-        ("pfnGetImageProperties", c_void_p),                            ## _xeDeviceGroupGetImageProperties_t
-        ("pfnGetIPCProperties", c_void_p),                              ## _xeDeviceGroupGetIPCProperties_t
-        ("pfnAllocSharedMem", c_void_p),                                ## _xeDeviceGroupAllocSharedMem_t
-        ("pfnAllocDeviceMem", c_void_p),                                ## _xeDeviceGroupAllocDeviceMem_t
-        ("pfnAllocHostMem", c_void_p),                                  ## _xeDeviceGroupAllocHostMem_t
-        ("pfnFreeMem", c_void_p),                                       ## _xeDeviceGroupFreeMem_t
-        ("pfnGetMemProperties", c_void_p),                              ## _xeDeviceGroupGetMemProperties_t
-        ("pfnGetMemAddressRange", c_void_p),                            ## _xeDeviceGroupGetMemAddressRange_t
-        ("pfnGetMemIpcHandle", c_void_p),                               ## _xeDeviceGroupGetMemIpcHandle_t
-        ("pfnOpenMemIpcHandle", c_void_p),                              ## _xeDeviceGroupOpenMemIpcHandle_t
-        ("pfnCloseMemIpcHandle", c_void_p)                              ## _xeDeviceGroupCloseMemIpcHandle_t
+        ("pfnGetDevices", c_void_p),                                    ## _xeDriverGetDevices_t
+        ("pfnGetDriverVersion", c_void_p),                              ## _xeDriverGetDriverVersion_t
+        ("pfnGetApiVersion", c_void_p),                                 ## _xeDriverGetApiVersion_t
+        ("pfnGetIPCProperties", c_void_p),                              ## _xeDriverGetIPCProperties_t
+        ("pfnAllocSharedMem", c_void_p),                                ## _xeDriverAllocSharedMem_t
+        ("pfnAllocDeviceMem", c_void_p),                                ## _xeDriverAllocDeviceMem_t
+        ("pfnAllocHostMem", c_void_p),                                  ## _xeDriverAllocHostMem_t
+        ("pfnFreeMem", c_void_p),                                       ## _xeDriverFreeMem_t
+        ("pfnGetMemProperties", c_void_p),                              ## _xeDriverGetMemProperties_t
+        ("pfnGetMemAddressRange", c_void_p),                            ## _xeDriverGetMemAddressRange_t
+        ("pfnGetMemIpcHandle", c_void_p),                               ## _xeDriverGetMemIpcHandle_t
+        ("pfnOpenMemIpcHandle", c_void_p),                              ## _xeDriverOpenMemIpcHandle_t
+        ("pfnCloseMemIpcHandle", c_void_p)                              ## _xeDriverCloseMemIpcHandle_t
     ]
 
 ###############################################################################
@@ -1709,9 +1705,9 @@ class _xe_fence_dditable_t(Structure):
 ###############################################################################
 ## @brief Function-pointer for xeEventPoolCreate
 if __use_win_types:
-    _xeEventPoolCreate_t = WINFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(xe_event_pool_desc_t), c_ulong, POINTER(xe_device_handle_t), POINTER(xe_event_pool_handle_t) )
+    _xeEventPoolCreate_t = WINFUNCTYPE( xe_result_t, xe_driver_handle_t, POINTER(xe_event_pool_desc_t), c_ulong, POINTER(xe_device_handle_t), POINTER(xe_event_pool_handle_t) )
 else:
-    _xeEventPoolCreate_t = CFUNCTYPE( xe_result_t, xe_device_group_handle_t, POINTER(xe_event_pool_desc_t), c_ulong, POINTER(xe_device_handle_t), POINTER(xe_event_pool_handle_t) )
+    _xeEventPoolCreate_t = CFUNCTYPE( xe_result_t, xe_driver_handle_t, POINTER(xe_event_pool_desc_t), c_ulong, POINTER(xe_device_handle_t), POINTER(xe_event_pool_handle_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xeEventPoolDestroy
@@ -2000,7 +1996,7 @@ class _xe_dditable_t(Structure):
     _fields_ = [
         ("Global", _xe_global_dditable_t),
         ("Device", _xe_device_dditable_t),
-        ("DeviceGroup", _xe_device_group_dditable_t),
+        ("Driver", _xe_driver_dditable_t),
         ("CommandQueue", _xe_command_queue_dditable_t),
         ("CommandList", _xe_command_list_dditable_t),
         ("Fence", _xe_fence_dditable_t),
@@ -2035,6 +2031,7 @@ class XE_DDI:
 
         # attach function interface to function address
         self.xeInit = _xeInit_t(self.__dditable.Global.pfnInit)
+        self.xeGetDrivers = _xeGetDrivers_t(self.__dditable.Global.pfnGetDrivers)
 
         # call driver to get function pointers
         _Device = _xe_device_dditable_t()
@@ -2044,8 +2041,13 @@ class XE_DDI:
         self.__dditable.Device = _Device
 
         # attach function interface to function address
-        self.xeDeviceGet = _xeDeviceGet_t(self.__dditable.Device.pfnGet)
         self.xeDeviceGetSubDevices = _xeDeviceGetSubDevices_t(self.__dditable.Device.pfnGetSubDevices)
+        self.xeDeviceGetProperties = _xeDeviceGetProperties_t(self.__dditable.Device.pfnGetProperties)
+        self.xeDeviceGetComputeProperties = _xeDeviceGetComputeProperties_t(self.__dditable.Device.pfnGetComputeProperties)
+        self.xeDeviceGetMemoryProperties = _xeDeviceGetMemoryProperties_t(self.__dditable.Device.pfnGetMemoryProperties)
+        self.xeDeviceGetMemoryAccessProperties = _xeDeviceGetMemoryAccessProperties_t(self.__dditable.Device.pfnGetMemoryAccessProperties)
+        self.xeDeviceGetCacheProperties = _xeDeviceGetCacheProperties_t(self.__dditable.Device.pfnGetCacheProperties)
+        self.xeDeviceGetImageProperties = _xeDeviceGetImageProperties_t(self.__dditable.Device.pfnGetImageProperties)
         self.xeDeviceGetP2PProperties = _xeDeviceGetP2PProperties_t(self.__dditable.Device.pfnGetP2PProperties)
         self.xeDeviceCanAccessPeer = _xeDeviceCanAccessPeer_t(self.__dditable.Device.pfnCanAccessPeer)
         self.xeDeviceSetIntermediateCacheConfig = _xeDeviceSetIntermediateCacheConfig_t(self.__dditable.Device.pfnSetIntermediateCacheConfig)
@@ -2057,32 +2059,26 @@ class XE_DDI:
         self.xeDeviceEvictImage = _xeDeviceEvictImage_t(self.__dditable.Device.pfnEvictImage)
 
         # call driver to get function pointers
-        _DeviceGroup = _xe_device_group_dditable_t()
-        r = xe_result_v(self.__dll.xeGetDeviceGroupProcAddrTable(version, byref(_DeviceGroup)))
+        _Driver = _xe_driver_dditable_t()
+        r = xe_result_v(self.__dll.xeGetDriverProcAddrTable(version, byref(_Driver)))
         if r != xe_result_v.SUCCESS:
             raise Exception(r)
-        self.__dditable.DeviceGroup = _DeviceGroup
+        self.__dditable.Driver = _Driver
 
         # attach function interface to function address
-        self.xeDeviceGroupGet = _xeDeviceGroupGet_t(self.__dditable.DeviceGroup.pfnGet)
-        self.xeDeviceGroupGetDriverVersion = _xeDeviceGroupGetDriverVersion_t(self.__dditable.DeviceGroup.pfnGetDriverVersion)
-        self.xeDeviceGroupGetApiVersion = _xeDeviceGroupGetApiVersion_t(self.__dditable.DeviceGroup.pfnGetApiVersion)
-        self.xeDeviceGroupGetDeviceProperties = _xeDeviceGroupGetDeviceProperties_t(self.__dditable.DeviceGroup.pfnGetDeviceProperties)
-        self.xeDeviceGroupGetComputeProperties = _xeDeviceGroupGetComputeProperties_t(self.__dditable.DeviceGroup.pfnGetComputeProperties)
-        self.xeDeviceGroupGetMemoryProperties = _xeDeviceGroupGetMemoryProperties_t(self.__dditable.DeviceGroup.pfnGetMemoryProperties)
-        self.xeDeviceGroupGetMemoryAccessProperties = _xeDeviceGroupGetMemoryAccessProperties_t(self.__dditable.DeviceGroup.pfnGetMemoryAccessProperties)
-        self.xeDeviceGroupGetCacheProperties = _xeDeviceGroupGetCacheProperties_t(self.__dditable.DeviceGroup.pfnGetCacheProperties)
-        self.xeDeviceGroupGetImageProperties = _xeDeviceGroupGetImageProperties_t(self.__dditable.DeviceGroup.pfnGetImageProperties)
-        self.xeDeviceGroupGetIPCProperties = _xeDeviceGroupGetIPCProperties_t(self.__dditable.DeviceGroup.pfnGetIPCProperties)
-        self.xeDeviceGroupAllocSharedMem = _xeDeviceGroupAllocSharedMem_t(self.__dditable.DeviceGroup.pfnAllocSharedMem)
-        self.xeDeviceGroupAllocDeviceMem = _xeDeviceGroupAllocDeviceMem_t(self.__dditable.DeviceGroup.pfnAllocDeviceMem)
-        self.xeDeviceGroupAllocHostMem = _xeDeviceGroupAllocHostMem_t(self.__dditable.DeviceGroup.pfnAllocHostMem)
-        self.xeDeviceGroupFreeMem = _xeDeviceGroupFreeMem_t(self.__dditable.DeviceGroup.pfnFreeMem)
-        self.xeDeviceGroupGetMemProperties = _xeDeviceGroupGetMemProperties_t(self.__dditable.DeviceGroup.pfnGetMemProperties)
-        self.xeDeviceGroupGetMemAddressRange = _xeDeviceGroupGetMemAddressRange_t(self.__dditable.DeviceGroup.pfnGetMemAddressRange)
-        self.xeDeviceGroupGetMemIpcHandle = _xeDeviceGroupGetMemIpcHandle_t(self.__dditable.DeviceGroup.pfnGetMemIpcHandle)
-        self.xeDeviceGroupOpenMemIpcHandle = _xeDeviceGroupOpenMemIpcHandle_t(self.__dditable.DeviceGroup.pfnOpenMemIpcHandle)
-        self.xeDeviceGroupCloseMemIpcHandle = _xeDeviceGroupCloseMemIpcHandle_t(self.__dditable.DeviceGroup.pfnCloseMemIpcHandle)
+        self.xeDriverGetDevices = _xeDriverGetDevices_t(self.__dditable.Driver.pfnGetDevices)
+        self.xeDriverGetDriverVersion = _xeDriverGetDriverVersion_t(self.__dditable.Driver.pfnGetDriverVersion)
+        self.xeDriverGetApiVersion = _xeDriverGetApiVersion_t(self.__dditable.Driver.pfnGetApiVersion)
+        self.xeDriverGetIPCProperties = _xeDriverGetIPCProperties_t(self.__dditable.Driver.pfnGetIPCProperties)
+        self.xeDriverAllocSharedMem = _xeDriverAllocSharedMem_t(self.__dditable.Driver.pfnAllocSharedMem)
+        self.xeDriverAllocDeviceMem = _xeDriverAllocDeviceMem_t(self.__dditable.Driver.pfnAllocDeviceMem)
+        self.xeDriverAllocHostMem = _xeDriverAllocHostMem_t(self.__dditable.Driver.pfnAllocHostMem)
+        self.xeDriverFreeMem = _xeDriverFreeMem_t(self.__dditable.Driver.pfnFreeMem)
+        self.xeDriverGetMemProperties = _xeDriverGetMemProperties_t(self.__dditable.Driver.pfnGetMemProperties)
+        self.xeDriverGetMemAddressRange = _xeDriverGetMemAddressRange_t(self.__dditable.Driver.pfnGetMemAddressRange)
+        self.xeDriverGetMemIpcHandle = _xeDriverGetMemIpcHandle_t(self.__dditable.Driver.pfnGetMemIpcHandle)
+        self.xeDriverOpenMemIpcHandle = _xeDriverOpenMemIpcHandle_t(self.__dditable.Driver.pfnOpenMemIpcHandle)
+        self.xeDriverCloseMemIpcHandle = _xeDriverCloseMemIpcHandle_t(self.__dditable.Driver.pfnCloseMemIpcHandle)
 
         # call driver to get function pointers
         _CommandQueue = _xe_command_queue_dditable_t()

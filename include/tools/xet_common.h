@@ -27,8 +27,8 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle of device group object
-typedef xe_device_group_handle_t xet_device_group_handle_t;
+/// @brief Handle to a driver instance
+typedef xe_driver_handle_t xet_driver_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of device object

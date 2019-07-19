@@ -16,8 +16,8 @@
 namespace loader
 {
     ///////////////////////////////////////////////////////////////////////////////
-    using xet_device_group_object_t           = object_t < xet_device_group_handle_t >;
-    using xet_device_group_factory_t          = singleton_factory_t < xet_device_group_object_t, xet_device_group_handle_t >;
+    using xet_driver_object_t                 = object_t < xet_driver_handle_t >;
+    using xet_driver_factory_t                = singleton_factory_t < xet_driver_object_t, xet_driver_handle_t >;
 
     using xet_device_object_t                 = object_t < xet_device_handle_t >;
     using xet_device_factory_t                = singleton_factory_t < xet_device_object_t, xet_device_handle_t >;

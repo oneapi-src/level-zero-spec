@@ -38,7 +38,7 @@ namespace layer
     /// @brief Intercept function for xetMetricGroupGet
     xe_result_t __xecall
     xetMetricGroupGet(
-        xet_device_group_handle_t hDeviceGroup,         ///< [in] handle of the device group
+        xet_device_handle_t hDevice,                    ///< [in] handle of the device
         uint32_t* pCount,                               ///< [in,out] pointer to the number of metric groups.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of metric groups available.
@@ -57,7 +57,7 @@ namespace layer
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDeviceGroup )
+            if( nullptr == hDevice )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pCount )
@@ -65,7 +65,7 @@ namespace layer
 
         }
 
-        return pfnGet( hDeviceGroup, pCount, phMetricGroups );
+        return pfnGet( hDevice, pCount, phMetricGroups );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1145,7 +1145,7 @@ namespace layer
     /// @brief Intercept function for xetTracerCreate
     xe_result_t __xecall
     xetTracerCreate(
-        xet_device_group_handle_t hDeviceGroup,         ///< [in] handle of the device group
+        xet_device_handle_t hDevice,                    ///< [in] handle of the device
         const xet_tracer_desc_t* desc,                  ///< [in] pointer to tracer descriptor
         xet_tracer_handle_t* phTracer                   ///< [out] pointer to handle of tracer object created
         )
@@ -1157,7 +1157,7 @@ namespace layer
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDeviceGroup )
+            if( nullptr == hDevice )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == desc )
@@ -1171,7 +1171,7 @@ namespace layer
 
         }
 
-        return pfnCreate( hDeviceGroup, desc, phTracer );
+        return pfnCreate( hDevice, desc, phTracer );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

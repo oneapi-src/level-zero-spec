@@ -45,20 +45,20 @@ members:
       desc: "[in] pointer passed to every tracer's callbacks"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Creates a tracer on the device group."
+desc: "Creates a tracer for the specified device."
 class: $tTracer
 name: Create
 decl: static
 ordinal: "0"
 details:
-    - "The tracer can only be used on the device group on which it was created."
+    - "The tracer can only be used on the device on which it was created."
     - "The tracer is created in the disabled state."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
-    - type: $t_device_group_handle_t
-      name: hDeviceGroup
-      desc: "[in] handle of the device group"
+    - type: $t_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
     - type: "const $t_tracer_desc_t*"
       name: desc
       desc: "[in] pointer to tracer descriptor"
@@ -138,13 +138,13 @@ params:
 type: class
 desc: "C++ wrapper for tracer"
 name: $tTracer
-owner: $tDeviceGroup
+owner: $tDevice
 members:
     - type: $t_tracer_handle_t
       name: handle
       desc: "[in] handle of tracer object"
-    - type: $tDeviceGroup*
-      name: pDeviceGroup
+    - type: $tDevice*
+      name: pDevice
       desc: "[in] pointer to owner object"
     - type: $t_tracer_desc_t
       name: desc

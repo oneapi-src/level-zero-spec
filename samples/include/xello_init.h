@@ -62,60 +62,60 @@ inline bool init_xet( void )
 }
 
 //////////////////////////////////////////////////////////////////////////
-inline xe::DeviceGroup* findDeviceGroup(
-    const xe::DeviceGroup::device_type_t type )
+inline xe::Device* findDevice(
+    xe::Driver* pDriver,
+    const xe::Driver::device_type_t type )
 {
-    // get all device groups
-    uint32_t groupCount = 0;
-    xe::DeviceGroup::Get( &groupCount );
+    // get all devices
+    uint32_t deviceCount = 0;
+    xe::Driver::GetDevices( pDriver, &deviceCount );
 
-    std::vector<xe::DeviceGroup*> deviceGroups( groupCount );
-    xe::DeviceGroup::Get( &groupCount, deviceGroups.data() );
+    std::vector<xe::Device*> devices( deviceCount );
+    xe::Driver::GetDevices( pDriver, &deviceCount, devices.data() );
 
-    xe::DeviceGroup* found = nullptr;
+    xe::Device* found = nullptr;
 
-    // for each device group, find the first one matching the type
-    for( uint32_t grp = 0; grp < groupCount; ++grp )
+    // for each device, find the first one matching the type
+    for( uint32_t device = 0; device < deviceCount; ++device )
     {
-        auto pDeviceGroup = deviceGroups[ grp ];
-        auto device_properties = pDeviceGroup->GetDeviceProperties();
+        auto pDevice = devices[device];
+
+        auto device_properties = pDevice->GetProperties();
 
         if( type == device_properties.type )
         {
-            found = pDeviceGroup;
+            found = pDevice;
 
-            std::cout << "Found "<< xe::to_string(type) << " device group..." << "\n";
-            std::cout << "Driver version: " << pDeviceGroup->GetDriverVersion() << "\n";
-            std::cout << "API version: " << xe::to_string( pDeviceGroup->GetApiVersion() ) << "\n";
+            std::cout << "Found "<< xe::to_string(type) << " device..." << "\n";
+            std::cout << "Driver version: " << pDriver->GetDriverVersion() << "\n";
+            std::cout << "API version: " << xe::to_string( pDriver->GetApiVersion() ) << "\n";
 
             std::cout << xe::to_string( device_properties ) << "\n";
 
-            auto compute_properties = pDeviceGroup->GetComputeProperties();
+            auto compute_properties = pDevice->GetComputeProperties();
             std::cout << xe::to_string( compute_properties ) << "\n";
 
             uint32_t memoryCount = 0;
-            pDeviceGroup->GetMemoryProperties( &memoryCount );
-            auto pMemoryProperties = new xe::DeviceGroup::device_memory_properties_t[ memoryCount ];
-            pDeviceGroup->GetMemoryProperties( &memoryCount, pMemoryProperties );
+            pDevice->GetMemoryProperties( &memoryCount );
+            auto pMemoryProperties = new xe::Device::memory_properties_t[ memoryCount ];
+            pDevice->GetMemoryProperties( &memoryCount, pMemoryProperties );
             for( uint32_t mem = 0; mem < memoryCount; ++mem )
             {
                 std::cout << xe::to_string( pMemoryProperties[ mem ] ) << "\n";
             }
             delete[] pMemoryProperties;
 
-            auto memory_access_properties = pDeviceGroup->GetMemoryAccessProperties();
+            auto memory_access_properties = pDevice->GetMemoryAccessProperties();
             std::cout << xe::to_string( memory_access_properties ) << "\n";
 
-            auto cache_properties = pDeviceGroup->GetCacheProperties();
+            auto cache_properties = pDevice->GetCacheProperties();
             std::cout << xe::to_string( cache_properties ) << "\n";
 
-            auto image_properties = pDeviceGroup->GetImageProperties();
+            auto image_properties = pDevice->GetImageProperties();
             std::cout << xe::to_string( image_properties ) << "\n";
+
+            break;
         }
-    }
-    if( !found )
-    {
-        std::cout << "Did NOT find matching " << xe::to_string(type) <<" device group!" << "\n";
     }
 
     return found;

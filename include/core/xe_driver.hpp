@@ -34,7 +34,7 @@ namespace xe
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Initialize the 'One API' driver and must be called before any other
-    ///        API function.
+    ///        API function
     /// 
     /// @details
     ///     - If this function is not called then all other functions will return
@@ -51,6 +51,33 @@ namespace xe
     void __xecall
     Init(
         init_flag_t flags                               ///< [in] initialization flags
+        );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Retrieves driver instances
+    /// 
+    /// @details
+    ///     - A driver represents a collection of physical devices.
+    ///     - The application may pass nullptr for pDrivers when only querying the
+    ///       number of drivers.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - clGetPlatformIDs
+    /// 
+    /// @throws result_t
+    void __xecall
+    GetDrivers(
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of driver instances.
+                                                        ///< if count is zero, then the loader will update the value with the total
+                                                        ///< number of drivers available.
+                                                        ///< if count is non-zero, then the loader will only retrieve that number
+                                                        ///< of drivers.
+                                                        ///< if count is larger than the number of drivers available, then the
+                                                        ///< loader will update the value with the correct number of drivers available.
+        Driver** ppDrivers = nullptr                    ///< [in,out][optional][range(0, *pCount)] array of driver instance handles
         );
 
 } // namespace xe

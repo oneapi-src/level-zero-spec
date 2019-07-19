@@ -16,7 +16,7 @@
 namespace loader
 {
     ///////////////////////////////////////////////////////////////////////////////
-    xe_device_group_factory_t           xe_device_group_factory;
+    xe_driver_factory_t                 xe_driver_factory;
     xe_device_factory_t                 xe_device_factory;
     xe_command_queue_factory_t          xe_command_queue_factory;
     xe_command_list_factory_t           xe_command_list_factory;
@@ -50,43 +50,17 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetDriverVersion
+    /// @brief Intercept function for xeGetDrivers
     xe_result_t __xecall
-    xeDeviceGroupGetDriverVersion(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of device group
-        uint32_t* version                               ///< [out] driver version
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
-        auto pfnGetDriverVersion = dditable->xe.DeviceGroup.pfnGetDriverVersion;
-        if( nullptr == pfnGetDriverVersion )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
-
-        // forward to device-driver
-        result = pfnGetDriverVersion( hDeviceGroup, version );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGet
-    xe_result_t __xecall
-    xeDeviceGroupGet(
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of device groups available.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of
-                                                        ///< device groups.
-                                                        ///< if count is larger than the number of device groups available, then
-                                                        ///< the driver will update the value with the correct number of device
-                                                        ///< groups available.
-        xe_device_group_handle_t* phDeviceGroups        ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
+    xeGetDrivers(
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of driver instances.
+                                                        ///< if count is zero, then the loader will update the value with the total
+                                                        ///< number of drivers available.
+                                                        ///< if count is non-zero, then the loader will only retrieve that number
+                                                        ///< of drivers.
+                                                        ///< if count is larger than the number of drivers available, then the
+                                                        ///< loader will update the value with the correct number of drivers available.
+        xe_driver_handle_t* phDrivers                   ///< [in,out][optional][range(0, *pCount)] array of driver instance handles
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -97,22 +71,22 @@ namespace loader
         {
             uint32_t count = 0;
 
-            result = drv.dditable.xe.DeviceGroup.pfnGet( &count, nullptr );
+            result = drv.dditable.xe.Global.pfnGetDrivers( &count, nullptr );
             if( XE_RESULT_SUCCESS != result ) break;
 
             if( ( 0 < *pCount ) && ( *pCount > total_count + count ) )
                 break;
 
-            if( nullptr != phDeviceGroups )
+            if( nullptr != phDrivers )
             {
-                result = drv.dditable.xe.DeviceGroup.pfnGet( &count, &phDeviceGroups[ total_count ] );
+                result = drv.dditable.xe.Global.pfnGetDrivers( &count, &phDrivers[ total_count ] );
                 if( XE_RESULT_SUCCESS != result ) break;
 
                 try
                 {
                     for( uint32_t i = total_count; i < count; ++i )
-                        phDeviceGroups[ i ] = reinterpret_cast<xe_device_group_handle_t>( 
-                            xe_device_group_factory.getInstance( phDeviceGroups[ i ], &drv.dditable ) );
+                        phDrivers[ i ] = reinterpret_cast<xe_driver_handle_t>( 
+                            xe_driver_factory.getInstance( phDrivers[ i ], &drv.dditable ) );
                 }
                 catch( std::bad_alloc& )
                 {
@@ -130,10 +104,85 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGet
+    /// @brief Intercept function for xeDriverGetDriverVersion
     xe_result_t __xecall
-    xeDeviceGet(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDriverGetDriverVersion(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
+        uint32_t* version                               ///< [out] driver version
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xe_driver_object_t*>( hDriver )->dditable;
+        auto pfnGetDriverVersion = dditable->xe.Driver.pfnGetDriverVersion;
+        if( nullptr == pfnGetDriverVersion )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hDriver = reinterpret_cast<xe_driver_object_t*>( hDriver )->handle;
+
+        // forward to device-driver
+        result = pfnGetDriverVersion( hDriver, version );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeDriverGetApiVersion
+    xe_result_t __xecall
+    xeDriverGetApiVersion(
+        xe_driver_handle_t hDrivers,                    ///< [in] handle of the driver instance
+        xe_api_version_t* version                       ///< [out] api version
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xe_driver_object_t*>( hDrivers )->dditable;
+        auto pfnGetApiVersion = dditable->xe.Driver.pfnGetApiVersion;
+        if( nullptr == pfnGetApiVersion )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hDrivers = reinterpret_cast<xe_driver_object_t*>( hDrivers )->handle;
+
+        // forward to device-driver
+        result = pfnGetApiVersion( hDrivers, version );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeDriverGetIPCProperties
+    xe_result_t __xecall
+    xeDriverGetIPCProperties(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
+        xe_driver_ipc_properties_t* pIPCProperties      ///< [out] query result for IPC properties
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xe_driver_object_t*>( hDriver )->dditable;
+        auto pfnGetIPCProperties = dditable->xe.Driver.pfnGetIPCProperties;
+        if( nullptr == pfnGetIPCProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hDriver = reinterpret_cast<xe_driver_object_t*>( hDriver )->handle;
+
+        // forward to device-driver
+        result = pfnGetIPCProperties( hDriver, pIPCProperties );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeDriverGetDevices
+    xe_result_t __xecall
+    xeDriverGetDevices(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of devices available.
@@ -146,16 +195,16 @@ namespace loader
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
-        auto pfnGet = dditable->xe.Device.pfnGet;
-        if( nullptr == pfnGet )
+        auto dditable = reinterpret_cast<xe_driver_object_t*>( hDriver )->dditable;
+        auto pfnGetDevices = dditable->xe.Driver.pfnGetDevices;
+        if( nullptr == pfnGetDevices )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
+        hDriver = reinterpret_cast<xe_driver_object_t*>( hDriver )->handle;
 
         // forward to device-driver
-        result = pfnGet( hDeviceGroup, pCount, phDevices );
+        result = pfnGetDevices( hDriver, pCount, phDevices );
 
         try
         {
@@ -216,85 +265,60 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetApiVersion
+    /// @brief Intercept function for xeDeviceGetProperties
     xe_result_t __xecall
-    xeDeviceGroupGetApiVersion(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-        xe_api_version_t* version                       ///< [out] api version
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
-        auto pfnGetApiVersion = dditable->xe.DeviceGroup.pfnGetApiVersion;
-        if( nullptr == pfnGetApiVersion )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
-
-        // forward to device-driver
-        result = pfnGetApiVersion( hDeviceGroup, version );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetDeviceProperties
-    xe_result_t __xecall
-    xeDeviceGroupGetDeviceProperties(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDeviceGetProperties(
+        xe_device_handle_t hDevice,                     ///< [in] handle of the device
         xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
-        auto pfnGetDeviceProperties = dditable->xe.DeviceGroup.pfnGetDeviceProperties;
-        if( nullptr == pfnGetDeviceProperties )
+        auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnGetProperties = dditable->xe.Device.pfnGetProperties;
+        if( nullptr == pfnGetProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
+        hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        result = pfnGetDeviceProperties( hDeviceGroup, pDeviceProperties );
+        result = pfnGetProperties( hDevice, pDeviceProperties );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetComputeProperties
+    /// @brief Intercept function for xeDeviceGetComputeProperties
     xe_result_t __xecall
-    xeDeviceGroupGetComputeProperties(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDeviceGetComputeProperties(
+        xe_device_handle_t hDevice,                     ///< [in] handle of the device
         xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
-        auto pfnGetComputeProperties = dditable->xe.DeviceGroup.pfnGetComputeProperties;
+        auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnGetComputeProperties = dditable->xe.Device.pfnGetComputeProperties;
         if( nullptr == pfnGetComputeProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
+        hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        result = pfnGetComputeProperties( hDeviceGroup, pComputeProperties );
+        result = pfnGetComputeProperties( hDevice, pComputeProperties );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetMemoryProperties
+    /// @brief Intercept function for xeDeviceGetMemoryProperties
     xe_result_t __xecall
-    xeDeviceGroupGetMemoryProperties(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDeviceGetMemoryProperties(
+        xe_device_handle_t hDevice,                     ///< [in] handle of the device
         uint32_t* pCount,                               ///< [in,out] pointer to the number of memory properties supported.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of memory properties available.
@@ -310,116 +334,91 @@ namespace loader
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
-        auto pfnGetMemoryProperties = dditable->xe.DeviceGroup.pfnGetMemoryProperties;
+        auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnGetMemoryProperties = dditable->xe.Device.pfnGetMemoryProperties;
         if( nullptr == pfnGetMemoryProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
+        hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        result = pfnGetMemoryProperties( hDeviceGroup, pCount, pMemProperties );
+        result = pfnGetMemoryProperties( hDevice, pCount, pMemProperties );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetMemoryAccessProperties
+    /// @brief Intercept function for xeDeviceGetMemoryAccessProperties
     xe_result_t __xecall
-    xeDeviceGroupGetMemoryAccessProperties(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDeviceGetMemoryAccessProperties(
+        xe_device_handle_t hDevice,                     ///< [in] handle of the device
         xe_device_memory_access_properties_t* pMemAccessProperties  ///< [out] query result for memory access properties
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
-        auto pfnGetMemoryAccessProperties = dditable->xe.DeviceGroup.pfnGetMemoryAccessProperties;
+        auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnGetMemoryAccessProperties = dditable->xe.Device.pfnGetMemoryAccessProperties;
         if( nullptr == pfnGetMemoryAccessProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
+        hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        result = pfnGetMemoryAccessProperties( hDeviceGroup, pMemAccessProperties );
+        result = pfnGetMemoryAccessProperties( hDevice, pMemAccessProperties );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetCacheProperties
+    /// @brief Intercept function for xeDeviceGetCacheProperties
     xe_result_t __xecall
-    xeDeviceGroupGetCacheProperties(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDeviceGetCacheProperties(
+        xe_device_handle_t hDevice,                     ///< [in] handle of the device
         xe_device_cache_properties_t* pCacheProperties  ///< [out] query result for cache properties
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
-        auto pfnGetCacheProperties = dditable->xe.DeviceGroup.pfnGetCacheProperties;
+        auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnGetCacheProperties = dditable->xe.Device.pfnGetCacheProperties;
         if( nullptr == pfnGetCacheProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
+        hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        result = pfnGetCacheProperties( hDeviceGroup, pCacheProperties );
+        result = pfnGetCacheProperties( hDevice, pCacheProperties );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetImageProperties
+    /// @brief Intercept function for xeDeviceGetImageProperties
     xe_result_t __xecall
-    xeDeviceGroupGetImageProperties(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDeviceGetImageProperties(
+        xe_device_handle_t hDevice,                     ///< [in] handle of the device
         xe_device_image_properties_t* pImageProperties  ///< [out] query result for image properties
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
-        auto pfnGetImageProperties = dditable->xe.DeviceGroup.pfnGetImageProperties;
+        auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto pfnGetImageProperties = dditable->xe.Device.pfnGetImageProperties;
         if( nullptr == pfnGetImageProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
+        hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        result = pfnGetImageProperties( hDeviceGroup, pImageProperties );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetIPCProperties
-    xe_result_t __xecall
-    xeDeviceGroupGetIPCProperties(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-        xe_device_ipc_properties_t* pIPCProperties      ///< [out] query result for IPC properties
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
-        auto pfnGetIPCProperties = dditable->xe.DeviceGroup.pfnGetIPCProperties;
-        if( nullptr == pfnGetIPCProperties )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
-
-        // forward to device-driver
-        result = pfnGetIPCProperties( hDeviceGroup, pIPCProperties );
+        result = pfnGetImageProperties( hDevice, pImageProperties );
 
         return result;
     }
@@ -1390,32 +1389,33 @@ namespace loader
     /// @brief Intercept function for xeEventPoolCreate
     xe_result_t __xecall
     xeEventPoolCreate(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const xe_event_pool_desc_t* desc,               ///< [in] pointer to event pool descriptor
         uint32_t numDevices,                            ///< [in] number of device handles
         xe_device_handle_t* phDevices,                  ///< [in][optional][range(0, numDevices)] array of device handles which
                                                         ///< have visibility to the event pool.
-                                                        ///< if nullptr, then event pool is visible to all devices in the device group.
+                                                        ///< if nullptr, then event pool is visible to all devices supported by the
+                                                        ///< driver instance.
         xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto dditable = reinterpret_cast<xe_driver_object_t*>( hDriver )->dditable;
         auto pfnCreate = dditable->xe.EventPool.pfnCreate;
         if( nullptr == pfnCreate )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
+        hDriver = reinterpret_cast<xe_driver_object_t*>( hDriver )->handle;
 
         // convert loader handles to driver handles
         for( size_t i = 0; ( nullptr != phDevices ) && ( i < numDevices ); ++i )
             phDevices[ i ] = reinterpret_cast<xe_device_object_t*>( phDevices[ i ] )->handle;
 
         // forward to device-driver
-        result = pfnCreate( hDeviceGroup, desc, numDevices, phDevices, phEventPool );
+        result = pfnCreate( hDriver, desc, numDevices, phDevices, phEventPool );
 
         try
         {
@@ -2031,14 +2031,14 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupAllocSharedMem
+    /// @brief Intercept function for xeDriverAllocSharedMem
     xe_result_t __xecall
-    xeDeviceGroupAllocSharedMem(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDriverAllocSharedMem(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         xe_device_handle_t hDevice,                     ///< [in] handle of a device
         xe_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
         uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
-                                                        ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
+                                                        ///< must be less than the count returned from ::xeDeviceGetMemoryProperties
         xe_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
@@ -2048,32 +2048,32 @@ namespace loader
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
-        auto pfnAllocSharedMem = dditable->xe.DeviceGroup.pfnAllocSharedMem;
+        auto dditable = reinterpret_cast<xe_driver_object_t*>( hDriver )->dditable;
+        auto pfnAllocSharedMem = dditable->xe.Driver.pfnAllocSharedMem;
         if( nullptr == pfnAllocSharedMem )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
+        hDriver = reinterpret_cast<xe_driver_object_t*>( hDriver )->handle;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        result = pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, ordinal, host_flags, size, alignment, pptr );
+        result = pfnAllocSharedMem( hDriver, hDevice, device_flags, ordinal, host_flags, size, alignment, pptr );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupAllocDeviceMem
+    /// @brief Intercept function for xeDriverAllocDeviceMem
     xe_result_t __xecall
-    xeDeviceGroupAllocDeviceMem(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDriverAllocDeviceMem(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
         xe_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
         uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
-                                                        ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
+                                                        ///< must be less than the count returned from ::xeDeviceGetMemoryProperties
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
         void** pptr                                     ///< [out] pointer to device allocation
@@ -2082,28 +2082,28 @@ namespace loader
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
-        auto pfnAllocDeviceMem = dditable->xe.DeviceGroup.pfnAllocDeviceMem;
+        auto dditable = reinterpret_cast<xe_driver_object_t*>( hDriver )->dditable;
+        auto pfnAllocDeviceMem = dditable->xe.Driver.pfnAllocDeviceMem;
         if( nullptr == pfnAllocDeviceMem )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
+        hDriver = reinterpret_cast<xe_driver_object_t*>( hDriver )->handle;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        result = pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, ordinal, size, alignment, pptr );
+        result = pfnAllocDeviceMem( hDriver, hDevice, flags, ordinal, size, alignment, pptr );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupAllocHostMem
+    /// @brief Intercept function for xeDriverAllocHostMem
     xe_result_t __xecall
-    xeDeviceGroupAllocHostMem(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDriverAllocHostMem(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         xe_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
@@ -2113,50 +2113,50 @@ namespace loader
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
-        auto pfnAllocHostMem = dditable->xe.DeviceGroup.pfnAllocHostMem;
+        auto dditable = reinterpret_cast<xe_driver_object_t*>( hDriver )->dditable;
+        auto pfnAllocHostMem = dditable->xe.Driver.pfnAllocHostMem;
         if( nullptr == pfnAllocHostMem )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
+        hDriver = reinterpret_cast<xe_driver_object_t*>( hDriver )->handle;
 
         // forward to device-driver
-        result = pfnAllocHostMem( hDeviceGroup, flags, size, alignment, pptr );
+        result = pfnAllocHostMem( hDriver, flags, size, alignment, pptr );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupFreeMem
+    /// @brief Intercept function for xeDriverFreeMem
     xe_result_t __xecall
-    xeDeviceGroupFreeMem(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDriverFreeMem(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         void* ptr                                       ///< [in][release] pointer to memory to free
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
-        auto pfnFreeMem = dditable->xe.DeviceGroup.pfnFreeMem;
+        auto dditable = reinterpret_cast<xe_driver_object_t*>( hDriver )->dditable;
+        auto pfnFreeMem = dditable->xe.Driver.pfnFreeMem;
         if( nullptr == pfnFreeMem )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
+        hDriver = reinterpret_cast<xe_driver_object_t*>( hDriver )->handle;
 
         // forward to device-driver
-        result = pfnFreeMem( hDeviceGroup, ptr );
+        result = pfnFreeMem( hDriver, ptr );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetMemProperties
+    /// @brief Intercept function for xeDriverGetMemProperties
     xe_result_t __xecall
-    xeDeviceGroupGetMemProperties(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDriverGetMemProperties(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const void* ptr,                                ///< [in] memory pointer to query
         xe_memory_allocation_properties_t* pMemProperties,  ///< [out] query result for memory allocation properties
         xe_device_handle_t* phDevice                    ///< [out][optional] device associated with this allocation
@@ -2165,16 +2165,16 @@ namespace loader
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
-        auto pfnGetMemProperties = dditable->xe.DeviceGroup.pfnGetMemProperties;
+        auto dditable = reinterpret_cast<xe_driver_object_t*>( hDriver )->dditable;
+        auto pfnGetMemProperties = dditable->xe.Driver.pfnGetMemProperties;
         if( nullptr == pfnGetMemProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
+        hDriver = reinterpret_cast<xe_driver_object_t*>( hDriver )->handle;
 
         // forward to device-driver
-        result = pfnGetMemProperties( hDeviceGroup, ptr, pMemProperties, phDevice );
+        result = pfnGetMemProperties( hDriver, ptr, pMemProperties, phDevice );
 
         try
         {
@@ -2192,10 +2192,10 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetMemAddressRange
+    /// @brief Intercept function for xeDriverGetMemAddressRange
     xe_result_t __xecall
-    xeDeviceGroupGetMemAddressRange(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDriverGetMemAddressRange(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const void* ptr,                                ///< [in] memory pointer to query
         void** pBase,                                   ///< [in,out][optional] base address of the allocation
         size_t* pSize                                   ///< [in,out][optional] size of the allocation
@@ -2204,25 +2204,25 @@ namespace loader
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
-        auto pfnGetMemAddressRange = dditable->xe.DeviceGroup.pfnGetMemAddressRange;
+        auto dditable = reinterpret_cast<xe_driver_object_t*>( hDriver )->dditable;
+        auto pfnGetMemAddressRange = dditable->xe.Driver.pfnGetMemAddressRange;
         if( nullptr == pfnGetMemAddressRange )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
+        hDriver = reinterpret_cast<xe_driver_object_t*>( hDriver )->handle;
 
         // forward to device-driver
-        result = pfnGetMemAddressRange( hDeviceGroup, ptr, pBase, pSize );
+        result = pfnGetMemAddressRange( hDriver, ptr, pBase, pSize );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetMemIpcHandle
+    /// @brief Intercept function for xeDriverGetMemIpcHandle
     xe_result_t __xecall
-    xeDeviceGroupGetMemIpcHandle(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDriverGetMemIpcHandle(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const void* ptr,                                ///< [in] pointer to the device memory allocation
         xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
         )
@@ -2230,25 +2230,25 @@ namespace loader
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
-        auto pfnGetMemIpcHandle = dditable->xe.DeviceGroup.pfnGetMemIpcHandle;
+        auto dditable = reinterpret_cast<xe_driver_object_t*>( hDriver )->dditable;
+        auto pfnGetMemIpcHandle = dditable->xe.Driver.pfnGetMemIpcHandle;
         if( nullptr == pfnGetMemIpcHandle )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
+        hDriver = reinterpret_cast<xe_driver_object_t*>( hDriver )->handle;
 
         // forward to device-driver
-        result = pfnGetMemIpcHandle( hDeviceGroup, ptr, pIpcHandle );
+        result = pfnGetMemIpcHandle( hDriver, ptr, pIpcHandle );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupOpenMemIpcHandle
+    /// @brief Intercept function for xeDriverOpenMemIpcHandle
     xe_result_t __xecall
-    xeDeviceGroupOpenMemIpcHandle(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDriverOpenMemIpcHandle(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
         xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
         xe_ipc_memory_flag_t flags,                     ///< [in] flags controlling the operation
@@ -2258,44 +2258,44 @@ namespace loader
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
-        auto pfnOpenMemIpcHandle = dditable->xe.DeviceGroup.pfnOpenMemIpcHandle;
+        auto dditable = reinterpret_cast<xe_driver_object_t*>( hDriver )->dditable;
+        auto pfnOpenMemIpcHandle = dditable->xe.Driver.pfnOpenMemIpcHandle;
         if( nullptr == pfnOpenMemIpcHandle )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
+        hDriver = reinterpret_cast<xe_driver_object_t*>( hDriver )->handle;
 
         // convert loader handle to driver handle
         hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        result = pfnOpenMemIpcHandle( hDeviceGroup, hDevice, handle, flags, pptr );
+        result = pfnOpenMemIpcHandle( hDriver, hDevice, handle, flags, pptr );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupCloseMemIpcHandle
+    /// @brief Intercept function for xeDriverCloseMemIpcHandle
     xe_result_t __xecall
-    xeDeviceGroupCloseMemIpcHandle(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDriverCloseMemIpcHandle(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const void* ptr                                 ///< [in][release] pointer to device allocation in this process
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->dditable;
-        auto pfnCloseMemIpcHandle = dditable->xe.DeviceGroup.pfnCloseMemIpcHandle;
+        auto dditable = reinterpret_cast<xe_driver_object_t*>( hDriver )->dditable;
+        auto pfnCloseMemIpcHandle = dditable->xe.Driver.pfnCloseMemIpcHandle;
         if( nullptr == pfnCloseMemIpcHandle )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hDeviceGroup = reinterpret_cast<xe_device_group_object_t*>( hDeviceGroup )->handle;
+        hDriver = reinterpret_cast<xe_driver_object_t*>( hDriver )->handle;
 
         // forward to device-driver
-        result = pfnCloseMemIpcHandle( hDeviceGroup, ptr );
+        result = pfnCloseMemIpcHandle( hDriver, ptr );
 
         return result;
     }
@@ -3095,6 +3095,7 @@ xeGetGlobalProcAddrTable(
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnInit                                     = loader::xeInit;
+            pDdiTable->pfnGetDrivers                               = loader::xeGetDrivers;
         }
         else
         {
@@ -3158,8 +3159,13 @@ xeGetDeviceProcAddrTable(
         if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
         {
             // return pointers to loader's DDIs
-            pDdiTable->pfnGet                                      = loader::xeDeviceGet;
             pDdiTable->pfnGetSubDevices                            = loader::xeDeviceGetSubDevices;
+            pDdiTable->pfnGetProperties                            = loader::xeDeviceGetProperties;
+            pDdiTable->pfnGetComputeProperties                     = loader::xeDeviceGetComputeProperties;
+            pDdiTable->pfnGetMemoryProperties                      = loader::xeDeviceGetMemoryProperties;
+            pDdiTable->pfnGetMemoryAccessProperties                = loader::xeDeviceGetMemoryAccessProperties;
+            pDdiTable->pfnGetCacheProperties                       = loader::xeDeviceGetCacheProperties;
+            pDdiTable->pfnGetImageProperties                       = loader::xeDeviceGetImageProperties;
             pDdiTable->pfnGetP2PProperties                         = loader::xeDeviceGetP2PProperties;
             pDdiTable->pfnCanAccessPeer                            = loader::xeDeviceCanAccessPeer;
             pDdiTable->pfnSetIntermediateCacheConfig               = loader::xeDeviceSetIntermediateCacheConfig;
@@ -3198,7 +3204,7 @@ xeGetDeviceProcAddrTable(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's DeviceGroup table
+/// @brief Exported function for filling application's Driver table
 ///        with current process' addresses
 ///
 /// @returns
@@ -3209,9 +3215,9 @@ xeGetDeviceProcAddrTable(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
-xeGetDeviceGroupProcAddrTable(
+xeGetDriverProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_device_group_dditable_t* pDdiTable           ///< [in,out] pointer to table of DDI function pointers
+    xe_driver_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     )
 {
     if( loader::context.drivers.size() < 1 )
@@ -3230,9 +3236,9 @@ xeGetDeviceGroupProcAddrTable(
     {
         if( XE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<xe_pfnGetDeviceGroupProcAddrTable_t>(
-                GET_FUNCTION_PTR( drv.handle, "xeGetDeviceGroupProcAddrTable") );
-            result = getTable( version, &drv.dditable.xe.DeviceGroup );
+            auto getTable = reinterpret_cast<xe_pfnGetDriverProcAddrTable_t>(
+                GET_FUNCTION_PTR( drv.handle, "xeGetDriverProcAddrTable") );
+            result = getTable( version, &drv.dditable.xe.Driver );
         }
     }
 
@@ -3241,38 +3247,32 @@ xeGetDeviceGroupProcAddrTable(
         if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
         {
             // return pointers to loader's DDIs
-            pDdiTable->pfnGet                                      = loader::xeDeviceGroupGet;
-            pDdiTable->pfnGetDriverVersion                         = loader::xeDeviceGroupGetDriverVersion;
-            pDdiTable->pfnGetApiVersion                            = loader::xeDeviceGroupGetApiVersion;
-            pDdiTable->pfnGetDeviceProperties                      = loader::xeDeviceGroupGetDeviceProperties;
-            pDdiTable->pfnGetComputeProperties                     = loader::xeDeviceGroupGetComputeProperties;
-            pDdiTable->pfnGetMemoryProperties                      = loader::xeDeviceGroupGetMemoryProperties;
-            pDdiTable->pfnGetMemoryAccessProperties                = loader::xeDeviceGroupGetMemoryAccessProperties;
-            pDdiTable->pfnGetCacheProperties                       = loader::xeDeviceGroupGetCacheProperties;
-            pDdiTable->pfnGetImageProperties                       = loader::xeDeviceGroupGetImageProperties;
-            pDdiTable->pfnGetIPCProperties                         = loader::xeDeviceGroupGetIPCProperties;
-            pDdiTable->pfnAllocSharedMem                           = loader::xeDeviceGroupAllocSharedMem;
-            pDdiTable->pfnAllocDeviceMem                           = loader::xeDeviceGroupAllocDeviceMem;
-            pDdiTable->pfnAllocHostMem                             = loader::xeDeviceGroupAllocHostMem;
-            pDdiTable->pfnFreeMem                                  = loader::xeDeviceGroupFreeMem;
-            pDdiTable->pfnGetMemProperties                         = loader::xeDeviceGroupGetMemProperties;
-            pDdiTable->pfnGetMemAddressRange                       = loader::xeDeviceGroupGetMemAddressRange;
-            pDdiTable->pfnGetMemIpcHandle                          = loader::xeDeviceGroupGetMemIpcHandle;
-            pDdiTable->pfnOpenMemIpcHandle                         = loader::xeDeviceGroupOpenMemIpcHandle;
-            pDdiTable->pfnCloseMemIpcHandle                        = loader::xeDeviceGroupCloseMemIpcHandle;
+            pDdiTable->pfnGetDevices                               = loader::xeDriverGetDevices;
+            pDdiTable->pfnGetDriverVersion                         = loader::xeDriverGetDriverVersion;
+            pDdiTable->pfnGetApiVersion                            = loader::xeDriverGetApiVersion;
+            pDdiTable->pfnGetIPCProperties                         = loader::xeDriverGetIPCProperties;
+            pDdiTable->pfnAllocSharedMem                           = loader::xeDriverAllocSharedMem;
+            pDdiTable->pfnAllocDeviceMem                           = loader::xeDriverAllocDeviceMem;
+            pDdiTable->pfnAllocHostMem                             = loader::xeDriverAllocHostMem;
+            pDdiTable->pfnFreeMem                                  = loader::xeDriverFreeMem;
+            pDdiTable->pfnGetMemProperties                         = loader::xeDriverGetMemProperties;
+            pDdiTable->pfnGetMemAddressRange                       = loader::xeDriverGetMemAddressRange;
+            pDdiTable->pfnGetMemIpcHandle                          = loader::xeDriverGetMemIpcHandle;
+            pDdiTable->pfnOpenMemIpcHandle                         = loader::xeDriverOpenMemIpcHandle;
+            pDdiTable->pfnCloseMemIpcHandle                        = loader::xeDriverCloseMemIpcHandle;
         }
         else
         {
             // return pointers directly to driver's DDIs
-            *pDdiTable = loader::context.drivers.front().dditable.xe.DeviceGroup;
+            *pDdiTable = loader::context.drivers.front().dditable.xe.Driver;
         }
     }
 
     // If the validation layer is enabled, then intercept the loader's DDIs
     if(( XE_RESULT_SUCCESS == result ) && ( nullptr != loader::context.validationLayer ))
     {
-        auto getTable = reinterpret_cast<xe_pfnGetDeviceGroupProcAddrTable_t>(
-            GET_FUNCTION_PTR(loader::context.validationLayer, "xeGetDeviceGroupProcAddrTable") );
+        auto getTable = reinterpret_cast<xe_pfnGetDriverProcAddrTable_t>(
+            GET_FUNCTION_PTR(loader::context.validationLayer, "xeGetDriverProcAddrTable") );
         result = getTable( version, pDdiTable );
     }
 

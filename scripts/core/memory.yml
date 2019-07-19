@@ -8,8 +8,8 @@ type: header
 desc: "Intel $OneApi Level-Zero APIs for Memory"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Supported device memory allocation flags"
-class: $xDeviceGroup
+desc: "Supported memory allocation flags"
+class: $xDriver
 name: $x_device_mem_alloc_flag_t
 etors:
     - name: $X_DEVICE_MEM_ALLOC_FLAG_DEFAULT
@@ -24,7 +24,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported host memory allocation flags"
-class: $xDeviceGroup
+class: $xDriver
 name: $x_host_mem_alloc_flag_t
 etors:
     - name: $X_HOST_MEM_ALLOC_FLAG_DEFAULT
@@ -42,19 +42,19 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Allocates memory that is shared between the host and one or more devices"
-class: $xDeviceGroup
+class: $xDriver
 name: AllocSharedMem
 analogue:
     - "**cudaMallocManaged**"
 details:
     - "Shared allocations share ownership between the host and one or more devices."
-    - "By default, shared allocations are visible to all devices in the device group."
+    - "By default, shared allocations are visible to all devices supported by the driver."
     - "A shared allocation can be restricted to be only visible to the host and a single device by specifying a single device handle."
     - "The application may call this function from simultaneous threads."
 params:
-    - type: $x_device_group_handle_t
-      name: hDeviceGroup
-      desc: "[in] handle of the device group object"
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver instance"
     - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of a device"
@@ -65,7 +65,7 @@ params:
       name: ordinal
       desc: |
             [in] ordinal of the device's local memory to allocate from;
-            must be less than the count returned from $xDeviceGroupGetMemoryProperties
+            must be less than the count returned from $xDeviceGetMemoryProperties
     - type: "$x_host_mem_alloc_flag_t"
       name: host_flags
       desc: "[in] flags specifying additional host allocation controls"
@@ -87,7 +87,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Allocates memory specific to a device"
-class: $xDeviceGroup
+class: $xDriver
 name: AllocDeviceMem
 analogue:
     - "**cudaMalloc**"
@@ -96,9 +96,9 @@ details:
     - "In general, a device allocation may only be accessed by the device that owns it."
     - "The application may call this function from simultaneous threads."
 params:
-    - type: $x_device_group_handle_t
-      name: hDeviceGroup
-      desc: "[in] handle of the device group object"
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver instance"
     - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
@@ -109,7 +109,7 @@ params:
       name: ordinal
       desc: |
             [in] ordinal of the device's local memory to allocate from;
-            must be less than the count returned from $xDeviceGroupGetMemoryProperties
+            must be less than the count returned from $xDeviceGetMemoryProperties
     - type: size_t
       name: size
       desc: "[in] size in bytes to allocate"
@@ -128,19 +128,19 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Allocates host memory"
-class: $xDeviceGroup
+class: $xDriver
 name: AllocHostMem
 analogue:
     - "**cudaHostAlloc**"
 details:
     - "A host allocation is owned by the host process."
-    - "Host allocations are accessible by the host and all devices within the device group."
+    - "Host allocations are accessible by the host and all devices within the driver driver."
     - "Host allocations are frequently used as staging areas to transfer data to or from devices."
     - "The application may call this function from simultaneous threads."
 params:
-    - type: $x_device_group_handle_t
-      name: hDeviceGroup
-      desc: "[in] handle of the device group object"
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver instance"
     - type: "$x_host_mem_alloc_flag_t"
       name: flags
       desc: "[in] flags specifying additional allocation controls"
@@ -162,7 +162,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Frees allocated host memory, device memory, or shared memory"
-class: $xDeviceGroup
+class: $xDriver
 name: FreeMem
 analogue:
     - "**cudaFree**"
@@ -172,16 +172,16 @@ details:
     - "The implementation of this function will immediately free all Host and Device allocations associated with this memory"
     - "The application may **not** call this function from simultaneous threads with the same pointer."
 params:
-    - type: $x_device_group_handle_t
-      name: hDeviceGroup
-      desc: "[in] handle of the device group object"
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver instance"
     - type: "void*"
       name: ptr
       desc: "[in][release] pointer to memory to free"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $x_memory_allocation_properties_t"
-class: $xDeviceGroup
+class: $xDriver
 name: $x_memory_allocation_properties_version_t
 etors:
     - name: $X_MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT
@@ -190,7 +190,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Memory allocation type"
-class: $xDeviceGroup
+class: $xDriver
 name: $x_memory_type_t
 etors:
     - name: $X_MEMORY_TYPE_UNKNOWN
@@ -204,8 +204,8 @@ etors:
       desc: "the memory pointed to is a shared ownership allocation"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Memory allocation properties queried using $xDeviceGroupGetMemProperties"
-class: $xDeviceGroup
+desc: "Memory allocation properties queried using $xDriverGetMemProperties"
+class: $xDriver
 name: $x_memory_allocation_properties_t
 members:
     - type: $x_memory_allocation_properties_version_t
@@ -221,16 +221,16 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves attributes of a memory allocation"
-class: $xDeviceGroup
+class: $xDriver
 name: GetMemProperties
 analogue:
     - "**cuPointerGetAttribute**"
 details:
     - "The application may call this function from simultaneous threads."
 params:
-    - type: $x_device_group_handle_t
-      name: hDeviceGroup
-      desc: "[in] handle of the device group object"
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver instance"
     - type: "const void*"
       name: ptr
       desc: "[in] memory pointer to query"
@@ -243,16 +243,16 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves the base address and/or size of an allocation"
-class: $xDeviceGroup
+class: $xDriver
 name: GetMemAddressRange
 analogue:
     - "**cuMemGetAddressRange**"
 details:
     - "The application may call this function from simultaneous threads."
 params:
-    - type: $x_device_group_handle_t
-      name: hDeviceGroup
-      desc: "[in] handle of the device group object"
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver instance"
     - type: "const void*"
       name: ptr
       desc: "[in] memory pointer to query"
@@ -265,7 +265,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates an IPC memory handle for the specified allocation in the sending process"
-class: $xDeviceGroup
+class: $xDriver
 name: GetMemIpcHandle
 analogue:
     - "**cuIpcGetMemHandle**"
@@ -273,9 +273,9 @@ details:
     - "Takes a pointer to the base of a device memory allocation and exports it for use in another process."
     - "The application may call this function from simultaneous threads."
 params:
-    - type: $x_device_group_handle_t
-      name: hDeviceGroup
-      desc: "[in] handle of the device group object"
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver instance"
     - type: "const void*"
       name: ptr
       desc: "[in] pointer to the device memory allocation"
@@ -285,7 +285,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported IPC memory flags"
-class: $xDeviceGroup
+class: $xDriver
 name: $x_ipc_memory_flag_t
 etors:
     - name: $X_IPC_MEMORY_FLAG_NONE
@@ -294,18 +294,18 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Opens an IPC memory handle to retrieve a device pointer in a receiving process"
-class: $xDeviceGroup
+class: $xDriver
 name: OpenMemIpcHandle
 analogue:
     - "**cuIpcOpenMemHandle**"
 details:
     - "Takes an IPC memory handle from a sending process and associates it with a device pointer usable in this process."
-    - "The device pointer in this process should not be freed with $xDeviceGroupFreeMem, but rather with $xDeviceGroupCloseMemIpcHandle."
+    - "The device pointer in this process should not be freed with $xDriverFreeMem, but rather with $xDriverCloseMemIpcHandle."
     - "The application may call this function from simultaneous threads."
 params:
-    - type: $x_device_group_handle_t
-      name: hDeviceGroup
-      desc: "[in] handle of the device group object"
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver instance"
     - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device to associate with the IPC memory handle"
@@ -324,17 +324,17 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Closes an IPC memory handle in a receiving process"
-class: $xDeviceGroup
+class: $xDriver
 name: CloseMemIpcHandle
 analogue:
     - "**cuIpcCloseMemHandle**"
 details:
-    - "Closes an IPC memory handle by unmapping memory that was opened in this process using $xDeviceGroupOpenMemIpcHandle."
+    - "Closes an IPC memory handle by unmapping memory that was opened in this process using $xDriverOpenMemIpcHandle."
     - "The application may **not** call this function from simultaneous threads with the same pointer."
 params:
-    - type: $x_device_group_handle_t
-      name: hDeviceGroup
-      desc: "[in] handle of the device group object"
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver instance"
     - type: "const void*"
       name: ptr
       desc: "[in][release] pointer to device allocation in this process"

@@ -132,14 +132,14 @@ namespace xet
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         metric_group_handle_t m_handle = nullptr;       ///< [in] handle of metric group object
-        DeviceGroup* m_pDeviceGroup;                    ///< [in] pointer to owner object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         MetricGroup( void ) = delete;
         MetricGroup( 
             metric_group_handle_t handle,                   ///< [in] handle of metric group object
-            DeviceGroup* pDeviceGroup                       ///< [in] pointer to owner object
+            Device* pDevice                                 ///< [in] pointer to owner object
             );
 
         ~MetricGroup( void ) = default;
@@ -152,17 +152,17 @@ namespace xet
 
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
-        auto getDevicegroup( void ) const { return m_pDeviceGroup; }
+        auto getDevice( void ) const { return m_pDevice; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Retrieves metric group for a device group.
+        /// @brief Retrieves metric group for a device.
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         /// @throws result_t
         static void __xecall
         Get(
-            DeviceGroup* pDeviceGroup,                      ///< [in] pointer to the device group
+            Device* pDevice,                                ///< [in] pointer to the device
             uint32_t* pCount,                               ///< [in,out] pointer to the number of metric groups.
                                                             ///< if count is zero, then the driver will update the value with the total
                                                             ///< number of metric groups available.

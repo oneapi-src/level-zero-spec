@@ -251,7 +251,7 @@ typedef xe_result_t (__xecall *xet_pfnGetFunctionProcAddrTable_t)(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetMetricGroupGet 
 typedef xe_result_t (__xecall *xet_pfnMetricGroupGet_t)(
-    xet_device_group_handle_t,
+    xet_device_handle_t,
     uint32_t*,
     xet_metric_group_handle_t*
     );
@@ -523,7 +523,7 @@ typedef xe_result_t (__xecall *xet_pfnGetMetricQueryProcAddrTable_t)(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetTracerCreate 
 typedef xe_result_t (__xecall *xet_pfnTracerCreate_t)(
-    xet_device_group_handle_t,
+    xet_device_handle_t,
     const xet_tracer_desc_t*,
     xet_tracer_handle_t*
     );

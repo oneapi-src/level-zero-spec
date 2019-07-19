@@ -35,49 +35,22 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetDriverVersion
+    /// @brief Intercept function for xeGetDrivers
     xe_result_t __xecall
-    xeDeviceGroupGetDriverVersion(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of device group
-        uint32_t* version                               ///< [out] driver version
+    xeGetDrivers(
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of driver instances.
+                                                        ///< if count is zero, then the loader will update the value with the total
+                                                        ///< number of drivers available.
+                                                        ///< if count is non-zero, then the loader will only retrieve that number
+                                                        ///< of drivers.
+                                                        ///< if count is larger than the number of drivers available, then the
+                                                        ///< loader will update the value with the correct number of drivers available.
+        xe_driver_handle_t* phDrivers                   ///< [in,out][optional][range(0, *pCount)] array of driver instance handles
         )
     {
-        auto pfnGetDriverVersion = context.xeDdiTable.DeviceGroup.pfnGetDriverVersion;
+        auto pfnGetDrivers = context.xeDdiTable.Global.pfnGetDrivers;
 
-        if( nullptr == pfnGetDriverVersion )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hDeviceGroup )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == version )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetDriverVersion( hDeviceGroup, version );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGet
-    xe_result_t __xecall
-    xeDeviceGroupGet(
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of device groups available.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of
-                                                        ///< device groups.
-                                                        ///< if count is larger than the number of device groups available, then
-                                                        ///< the driver will update the value with the correct number of device
-                                                        ///< groups available.
-        xe_device_group_handle_t* phDeviceGroups        ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
-        )
-    {
-        auto pfnGet = context.xeDdiTable.DeviceGroup.pfnGet;
-
-        if( nullptr == pfnGet )
+        if( nullptr == pfnGetDrivers )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -87,14 +60,92 @@ namespace layer
 
         }
 
-        return pfnGet( pCount, phDeviceGroups );
+        return pfnGetDrivers( pCount, phDrivers );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGet
+    /// @brief Intercept function for xeDriverGetDriverVersion
     xe_result_t __xecall
-    xeDeviceGet(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDriverGetDriverVersion(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
+        uint32_t* version                               ///< [out] driver version
+        )
+    {
+        auto pfnGetDriverVersion = context.xeDdiTable.Driver.pfnGetDriverVersion;
+
+        if( nullptr == pfnGetDriverVersion )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDriver )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == version )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetDriverVersion( hDriver, version );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeDriverGetApiVersion
+    xe_result_t __xecall
+    xeDriverGetApiVersion(
+        xe_driver_handle_t hDrivers,                    ///< [in] handle of the driver instance
+        xe_api_version_t* version                       ///< [out] api version
+        )
+    {
+        auto pfnGetApiVersion = context.xeDdiTable.Driver.pfnGetApiVersion;
+
+        if( nullptr == pfnGetApiVersion )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDrivers )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == version )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetApiVersion( hDrivers, version );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeDriverGetIPCProperties
+    xe_result_t __xecall
+    xeDriverGetIPCProperties(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
+        xe_driver_ipc_properties_t* pIPCProperties      ///< [out] query result for IPC properties
+        )
+    {
+        auto pfnGetIPCProperties = context.xeDdiTable.Driver.pfnGetIPCProperties;
+
+        if( nullptr == pfnGetIPCProperties )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hDriver )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pIPCProperties )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetIPCProperties( hDriver, pIPCProperties );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeDriverGetDevices
+    xe_result_t __xecall
+    xeDriverGetDevices(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of devices available.
@@ -104,14 +155,14 @@ namespace layer
         xe_device_handle_t* phDevices                   ///< [in,out][optional][range(0, *pCount)] array of handle of devices
         )
     {
-        auto pfnGet = context.xeDdiTable.Device.pfnGet;
+        auto pfnGetDevices = context.xeDdiTable.Driver.pfnGetDevices;
 
-        if( nullptr == pfnGet )
+        if( nullptr == pfnGetDevices )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDeviceGroup )
+            if( nullptr == hDriver )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pCount )
@@ -119,7 +170,7 @@ namespace layer
 
         }
 
-        return pfnGet( hDeviceGroup, pCount, phDevices );
+        return pfnGetDevices( hDriver, pCount, phDevices );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -155,47 +206,21 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetApiVersion
+    /// @brief Intercept function for xeDeviceGetProperties
     xe_result_t __xecall
-    xeDeviceGroupGetApiVersion(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-        xe_api_version_t* version                       ///< [out] api version
-        )
-    {
-        auto pfnGetApiVersion = context.xeDdiTable.DeviceGroup.pfnGetApiVersion;
-
-        if( nullptr == pfnGetApiVersion )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hDeviceGroup )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == version )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetApiVersion( hDeviceGroup, version );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetDeviceProperties
-    xe_result_t __xecall
-    xeDeviceGroupGetDeviceProperties(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDeviceGetProperties(
+        xe_device_handle_t hDevice,                     ///< [in] handle of the device
         xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
         )
     {
-        auto pfnGetDeviceProperties = context.xeDdiTable.DeviceGroup.pfnGetDeviceProperties;
+        auto pfnGetProperties = context.xeDdiTable.Device.pfnGetProperties;
 
-        if( nullptr == pfnGetDeviceProperties )
+        if( nullptr == pfnGetProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDeviceGroup )
+            if( nullptr == hDevice )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pDeviceProperties )
@@ -203,25 +228,25 @@ namespace layer
 
         }
 
-        return pfnGetDeviceProperties( hDeviceGroup, pDeviceProperties );
+        return pfnGetProperties( hDevice, pDeviceProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetComputeProperties
+    /// @brief Intercept function for xeDeviceGetComputeProperties
     xe_result_t __xecall
-    xeDeviceGroupGetComputeProperties(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDeviceGetComputeProperties(
+        xe_device_handle_t hDevice,                     ///< [in] handle of the device
         xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
         )
     {
-        auto pfnGetComputeProperties = context.xeDdiTable.DeviceGroup.pfnGetComputeProperties;
+        auto pfnGetComputeProperties = context.xeDdiTable.Device.pfnGetComputeProperties;
 
         if( nullptr == pfnGetComputeProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDeviceGroup )
+            if( nullptr == hDevice )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pComputeProperties )
@@ -229,14 +254,14 @@ namespace layer
 
         }
 
-        return pfnGetComputeProperties( hDeviceGroup, pComputeProperties );
+        return pfnGetComputeProperties( hDevice, pComputeProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetMemoryProperties
+    /// @brief Intercept function for xeDeviceGetMemoryProperties
     xe_result_t __xecall
-    xeDeviceGroupGetMemoryProperties(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDeviceGetMemoryProperties(
+        xe_device_handle_t hDevice,                     ///< [in] handle of the device
         uint32_t* pCount,                               ///< [in,out] pointer to the number of memory properties supported.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of memory properties available.
@@ -249,14 +274,14 @@ namespace layer
                                                         ///< memory properties
         )
     {
-        auto pfnGetMemoryProperties = context.xeDdiTable.DeviceGroup.pfnGetMemoryProperties;
+        auto pfnGetMemoryProperties = context.xeDdiTable.Device.pfnGetMemoryProperties;
 
         if( nullptr == pfnGetMemoryProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDeviceGroup )
+            if( nullptr == hDevice )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pCount )
@@ -264,25 +289,25 @@ namespace layer
 
         }
 
-        return pfnGetMemoryProperties( hDeviceGroup, pCount, pMemProperties );
+        return pfnGetMemoryProperties( hDevice, pCount, pMemProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetMemoryAccessProperties
+    /// @brief Intercept function for xeDeviceGetMemoryAccessProperties
     xe_result_t __xecall
-    xeDeviceGroupGetMemoryAccessProperties(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDeviceGetMemoryAccessProperties(
+        xe_device_handle_t hDevice,                     ///< [in] handle of the device
         xe_device_memory_access_properties_t* pMemAccessProperties  ///< [out] query result for memory access properties
         )
     {
-        auto pfnGetMemoryAccessProperties = context.xeDdiTable.DeviceGroup.pfnGetMemoryAccessProperties;
+        auto pfnGetMemoryAccessProperties = context.xeDdiTable.Device.pfnGetMemoryAccessProperties;
 
         if( nullptr == pfnGetMemoryAccessProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDeviceGroup )
+            if( nullptr == hDevice )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pMemAccessProperties )
@@ -290,25 +315,25 @@ namespace layer
 
         }
 
-        return pfnGetMemoryAccessProperties( hDeviceGroup, pMemAccessProperties );
+        return pfnGetMemoryAccessProperties( hDevice, pMemAccessProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetCacheProperties
+    /// @brief Intercept function for xeDeviceGetCacheProperties
     xe_result_t __xecall
-    xeDeviceGroupGetCacheProperties(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDeviceGetCacheProperties(
+        xe_device_handle_t hDevice,                     ///< [in] handle of the device
         xe_device_cache_properties_t* pCacheProperties  ///< [out] query result for cache properties
         )
     {
-        auto pfnGetCacheProperties = context.xeDdiTable.DeviceGroup.pfnGetCacheProperties;
+        auto pfnGetCacheProperties = context.xeDdiTable.Device.pfnGetCacheProperties;
 
         if( nullptr == pfnGetCacheProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDeviceGroup )
+            if( nullptr == hDevice )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pCacheProperties )
@@ -316,25 +341,25 @@ namespace layer
 
         }
 
-        return pfnGetCacheProperties( hDeviceGroup, pCacheProperties );
+        return pfnGetCacheProperties( hDevice, pCacheProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetImageProperties
+    /// @brief Intercept function for xeDeviceGetImageProperties
     xe_result_t __xecall
-    xeDeviceGroupGetImageProperties(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDeviceGetImageProperties(
+        xe_device_handle_t hDevice,                     ///< [in] handle of the device
         xe_device_image_properties_t* pImageProperties  ///< [out] query result for image properties
         )
     {
-        auto pfnGetImageProperties = context.xeDdiTable.DeviceGroup.pfnGetImageProperties;
+        auto pfnGetImageProperties = context.xeDdiTable.Device.pfnGetImageProperties;
 
         if( nullptr == pfnGetImageProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDeviceGroup )
+            if( nullptr == hDevice )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pImageProperties )
@@ -342,33 +367,7 @@ namespace layer
 
         }
 
-        return pfnGetImageProperties( hDeviceGroup, pImageProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetIPCProperties
-    xe_result_t __xecall
-    xeDeviceGroupGetIPCProperties(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-        xe_device_ipc_properties_t* pIPCProperties      ///< [out] query result for IPC properties
-        )
-    {
-        auto pfnGetIPCProperties = context.xeDdiTable.DeviceGroup.pfnGetIPCProperties;
-
-        if( nullptr == pfnGetIPCProperties )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hDeviceGroup )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pIPCProperties )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetIPCProperties( hDeviceGroup, pIPCProperties );
+        return pfnGetImageProperties( hDevice, pImageProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1259,12 +1258,13 @@ namespace layer
     /// @brief Intercept function for xeEventPoolCreate
     xe_result_t __xecall
     xeEventPoolCreate(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const xe_event_pool_desc_t* desc,               ///< [in] pointer to event pool descriptor
         uint32_t numDevices,                            ///< [in] number of device handles
         xe_device_handle_t* phDevices,                  ///< [in][optional][range(0, numDevices)] array of device handles which
                                                         ///< have visibility to the event pool.
-                                                        ///< if nullptr, then event pool is visible to all devices in the device group.
+                                                        ///< if nullptr, then event pool is visible to all devices supported by the
+                                                        ///< driver instance.
         xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
         )
     {
@@ -1275,7 +1275,7 @@ namespace layer
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDeviceGroup )
+            if( nullptr == hDriver )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == desc )
@@ -1289,7 +1289,7 @@ namespace layer
 
         }
 
-        return pfnCreate( hDeviceGroup, desc, numDevices, phDevices, phEventPool );
+        return pfnCreate( hDriver, desc, numDevices, phDevices, phEventPool );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1832,28 +1832,28 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupAllocSharedMem
+    /// @brief Intercept function for xeDriverAllocSharedMem
     xe_result_t __xecall
-    xeDeviceGroupAllocSharedMem(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDriverAllocSharedMem(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         xe_device_handle_t hDevice,                     ///< [in] handle of a device
         xe_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
         uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
-                                                        ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
+                                                        ///< must be less than the count returned from ::xeDeviceGetMemoryProperties
         xe_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
         void** pptr                                     ///< [out] pointer to shared allocation
         )
     {
-        auto pfnAllocSharedMem = context.xeDdiTable.DeviceGroup.pfnAllocSharedMem;
+        auto pfnAllocSharedMem = context.xeDdiTable.Driver.pfnAllocSharedMem;
 
         if( nullptr == pfnAllocSharedMem )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDeviceGroup )
+            if( nullptr == hDriver )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == hDevice )
@@ -1864,31 +1864,31 @@ namespace layer
 
         }
 
-        return pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, ordinal, host_flags, size, alignment, pptr );
+        return pfnAllocSharedMem( hDriver, hDevice, device_flags, ordinal, host_flags, size, alignment, pptr );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupAllocDeviceMem
+    /// @brief Intercept function for xeDriverAllocDeviceMem
     xe_result_t __xecall
-    xeDeviceGroupAllocDeviceMem(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDriverAllocDeviceMem(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
         xe_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
         uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
-                                                        ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
+                                                        ///< must be less than the count returned from ::xeDeviceGetMemoryProperties
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
         void** pptr                                     ///< [out] pointer to device allocation
         )
     {
-        auto pfnAllocDeviceMem = context.xeDdiTable.DeviceGroup.pfnAllocDeviceMem;
+        auto pfnAllocDeviceMem = context.xeDdiTable.Driver.pfnAllocDeviceMem;
 
         if( nullptr == pfnAllocDeviceMem )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDeviceGroup )
+            if( nullptr == hDriver )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == hDevice )
@@ -1899,28 +1899,28 @@ namespace layer
 
         }
 
-        return pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, ordinal, size, alignment, pptr );
+        return pfnAllocDeviceMem( hDriver, hDevice, flags, ordinal, size, alignment, pptr );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupAllocHostMem
+    /// @brief Intercept function for xeDriverAllocHostMem
     xe_result_t __xecall
-    xeDeviceGroupAllocHostMem(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDriverAllocHostMem(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         xe_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
         void** pptr                                     ///< [out] pointer to host allocation
         )
     {
-        auto pfnAllocHostMem = context.xeDdiTable.DeviceGroup.pfnAllocHostMem;
+        auto pfnAllocHostMem = context.xeDdiTable.Driver.pfnAllocHostMem;
 
         if( nullptr == pfnAllocHostMem )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDeviceGroup )
+            if( nullptr == hDriver )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pptr )
@@ -1928,25 +1928,25 @@ namespace layer
 
         }
 
-        return pfnAllocHostMem( hDeviceGroup, flags, size, alignment, pptr );
+        return pfnAllocHostMem( hDriver, flags, size, alignment, pptr );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupFreeMem
+    /// @brief Intercept function for xeDriverFreeMem
     xe_result_t __xecall
-    xeDeviceGroupFreeMem(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDriverFreeMem(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         void* ptr                                       ///< [in][release] pointer to memory to free
         )
     {
-        auto pfnFreeMem = context.xeDdiTable.DeviceGroup.pfnFreeMem;
+        auto pfnFreeMem = context.xeDdiTable.Driver.pfnFreeMem;
 
         if( nullptr == pfnFreeMem )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDeviceGroup )
+            if( nullptr == hDriver )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == ptr )
@@ -1954,27 +1954,27 @@ namespace layer
 
         }
 
-        return pfnFreeMem( hDeviceGroup, ptr );
+        return pfnFreeMem( hDriver, ptr );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetMemProperties
+    /// @brief Intercept function for xeDriverGetMemProperties
     xe_result_t __xecall
-    xeDeviceGroupGetMemProperties(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDriverGetMemProperties(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const void* ptr,                                ///< [in] memory pointer to query
         xe_memory_allocation_properties_t* pMemProperties,  ///< [out] query result for memory allocation properties
         xe_device_handle_t* phDevice                    ///< [out][optional] device associated with this allocation
         )
     {
-        auto pfnGetMemProperties = context.xeDdiTable.DeviceGroup.pfnGetMemProperties;
+        auto pfnGetMemProperties = context.xeDdiTable.Driver.pfnGetMemProperties;
 
         if( nullptr == pfnGetMemProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDeviceGroup )
+            if( nullptr == hDriver )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == ptr )
@@ -1985,27 +1985,27 @@ namespace layer
 
         }
 
-        return pfnGetMemProperties( hDeviceGroup, ptr, pMemProperties, phDevice );
+        return pfnGetMemProperties( hDriver, ptr, pMemProperties, phDevice );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetMemAddressRange
+    /// @brief Intercept function for xeDriverGetMemAddressRange
     xe_result_t __xecall
-    xeDeviceGroupGetMemAddressRange(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDriverGetMemAddressRange(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const void* ptr,                                ///< [in] memory pointer to query
         void** pBase,                                   ///< [in,out][optional] base address of the allocation
         size_t* pSize                                   ///< [in,out][optional] size of the allocation
         )
     {
-        auto pfnGetMemAddressRange = context.xeDdiTable.DeviceGroup.pfnGetMemAddressRange;
+        auto pfnGetMemAddressRange = context.xeDdiTable.Driver.pfnGetMemAddressRange;
 
         if( nullptr == pfnGetMemAddressRange )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDeviceGroup )
+            if( nullptr == hDriver )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == ptr )
@@ -2013,26 +2013,26 @@ namespace layer
 
         }
 
-        return pfnGetMemAddressRange( hDeviceGroup, ptr, pBase, pSize );
+        return pfnGetMemAddressRange( hDriver, ptr, pBase, pSize );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupGetMemIpcHandle
+    /// @brief Intercept function for xeDriverGetMemIpcHandle
     xe_result_t __xecall
-    xeDeviceGroupGetMemIpcHandle(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDriverGetMemIpcHandle(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const void* ptr,                                ///< [in] pointer to the device memory allocation
         xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
         )
     {
-        auto pfnGetMemIpcHandle = context.xeDdiTable.DeviceGroup.pfnGetMemIpcHandle;
+        auto pfnGetMemIpcHandle = context.xeDdiTable.Driver.pfnGetMemIpcHandle;
 
         if( nullptr == pfnGetMemIpcHandle )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDeviceGroup )
+            if( nullptr == hDriver )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == ptr )
@@ -2043,28 +2043,28 @@ namespace layer
 
         }
 
-        return pfnGetMemIpcHandle( hDeviceGroup, ptr, pIpcHandle );
+        return pfnGetMemIpcHandle( hDriver, ptr, pIpcHandle );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupOpenMemIpcHandle
+    /// @brief Intercept function for xeDriverOpenMemIpcHandle
     xe_result_t __xecall
-    xeDeviceGroupOpenMemIpcHandle(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDriverOpenMemIpcHandle(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
         xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
         xe_ipc_memory_flag_t flags,                     ///< [in] flags controlling the operation
         void** pptr                                     ///< [out] pointer to device allocation in this process
         )
     {
-        auto pfnOpenMemIpcHandle = context.xeDdiTable.DeviceGroup.pfnOpenMemIpcHandle;
+        auto pfnOpenMemIpcHandle = context.xeDdiTable.Driver.pfnOpenMemIpcHandle;
 
         if( nullptr == pfnOpenMemIpcHandle )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDeviceGroup )
+            if( nullptr == hDriver )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == hDevice )
@@ -2075,25 +2075,25 @@ namespace layer
 
         }
 
-        return pfnOpenMemIpcHandle( hDeviceGroup, hDevice, handle, flags, pptr );
+        return pfnOpenMemIpcHandle( hDriver, hDevice, handle, flags, pptr );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDeviceGroupCloseMemIpcHandle
+    /// @brief Intercept function for xeDriverCloseMemIpcHandle
     xe_result_t __xecall
-    xeDeviceGroupCloseMemIpcHandle(
-        xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+    xeDriverCloseMemIpcHandle(
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const void* ptr                                 ///< [in][release] pointer to device allocation in this process
         )
     {
-        auto pfnCloseMemIpcHandle = context.xeDdiTable.DeviceGroup.pfnCloseMemIpcHandle;
+        auto pfnCloseMemIpcHandle = context.xeDdiTable.Driver.pfnCloseMemIpcHandle;
 
         if( nullptr == pfnCloseMemIpcHandle )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
         {
-            if( nullptr == hDeviceGroup )
+            if( nullptr == hDriver )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == ptr )
@@ -2101,7 +2101,7 @@ namespace layer
 
         }
 
-        return pfnCloseMemIpcHandle( hDeviceGroup, ptr );
+        return pfnCloseMemIpcHandle( hDriver, ptr );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2828,6 +2828,9 @@ xeGetGlobalProcAddrTable(
     dditable.pfnInit                                     = pDdiTable->pfnInit;
     pDdiTable->pfnInit                                   = layer::xeInit;
 
+    dditable.pfnGetDrivers                               = pDdiTable->pfnGetDrivers;
+    pDdiTable->pfnGetDrivers                             = layer::xeGetDrivers;
+
     return result;
 }
 
@@ -2858,11 +2861,26 @@ xeGetDeviceProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnGet                                      = pDdiTable->pfnGet;
-    pDdiTable->pfnGet                                    = layer::xeDeviceGet;
-
     dditable.pfnGetSubDevices                            = pDdiTable->pfnGetSubDevices;
     pDdiTable->pfnGetSubDevices                          = layer::xeDeviceGetSubDevices;
+
+    dditable.pfnGetProperties                            = pDdiTable->pfnGetProperties;
+    pDdiTable->pfnGetProperties                          = layer::xeDeviceGetProperties;
+
+    dditable.pfnGetComputeProperties                     = pDdiTable->pfnGetComputeProperties;
+    pDdiTable->pfnGetComputeProperties                   = layer::xeDeviceGetComputeProperties;
+
+    dditable.pfnGetMemoryProperties                      = pDdiTable->pfnGetMemoryProperties;
+    pDdiTable->pfnGetMemoryProperties                    = layer::xeDeviceGetMemoryProperties;
+
+    dditable.pfnGetMemoryAccessProperties                = pDdiTable->pfnGetMemoryAccessProperties;
+    pDdiTable->pfnGetMemoryAccessProperties              = layer::xeDeviceGetMemoryAccessProperties;
+
+    dditable.pfnGetCacheProperties                       = pDdiTable->pfnGetCacheProperties;
+    pDdiTable->pfnGetCacheProperties                     = layer::xeDeviceGetCacheProperties;
+
+    dditable.pfnGetImageProperties                       = pDdiTable->pfnGetImageProperties;
+    pDdiTable->pfnGetImageProperties                     = layer::xeDeviceGetImageProperties;
 
     dditable.pfnGetP2PProperties                         = pDdiTable->pfnGetP2PProperties;
     pDdiTable->pfnGetP2PProperties                       = layer::xeDeviceGetP2PProperties;
@@ -2910,7 +2928,7 @@ xeGetDeviceProcAddrTable(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's DeviceGroup table
+/// @brief Exported function for filling application's Driver table
 ///        with current process' addresses
 ///
 /// @returns
@@ -2921,12 +2939,12 @@ xeGetDeviceProcAddrTable(
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
-xeGetDeviceGroupProcAddrTable(
+xeGetDriverProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_device_group_dditable_t* pDdiTable           ///< [in,out] pointer to table of DDI function pointers
+    xe_driver_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     )
 {
-    auto& dditable = layer::context.xeDdiTable.DeviceGroup;
+    auto& dditable = layer::context.xeDdiTable.Driver;
 
     if( nullptr == pDdiTable )
         return XE_RESULT_ERROR_INVALID_ARGUMENT;
@@ -2936,62 +2954,44 @@ xeGetDeviceGroupProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnGet                                      = pDdiTable->pfnGet;
-    pDdiTable->pfnGet                                    = layer::xeDeviceGroupGet;
+    dditable.pfnGetDevices                               = pDdiTable->pfnGetDevices;
+    pDdiTable->pfnGetDevices                             = layer::xeDriverGetDevices;
 
     dditable.pfnGetDriverVersion                         = pDdiTable->pfnGetDriverVersion;
-    pDdiTable->pfnGetDriverVersion                       = layer::xeDeviceGroupGetDriverVersion;
+    pDdiTable->pfnGetDriverVersion                       = layer::xeDriverGetDriverVersion;
 
     dditable.pfnGetApiVersion                            = pDdiTable->pfnGetApiVersion;
-    pDdiTable->pfnGetApiVersion                          = layer::xeDeviceGroupGetApiVersion;
-
-    dditable.pfnGetDeviceProperties                      = pDdiTable->pfnGetDeviceProperties;
-    pDdiTable->pfnGetDeviceProperties                    = layer::xeDeviceGroupGetDeviceProperties;
-
-    dditable.pfnGetComputeProperties                     = pDdiTable->pfnGetComputeProperties;
-    pDdiTable->pfnGetComputeProperties                   = layer::xeDeviceGroupGetComputeProperties;
-
-    dditable.pfnGetMemoryProperties                      = pDdiTable->pfnGetMemoryProperties;
-    pDdiTable->pfnGetMemoryProperties                    = layer::xeDeviceGroupGetMemoryProperties;
-
-    dditable.pfnGetMemoryAccessProperties                = pDdiTable->pfnGetMemoryAccessProperties;
-    pDdiTable->pfnGetMemoryAccessProperties              = layer::xeDeviceGroupGetMemoryAccessProperties;
-
-    dditable.pfnGetCacheProperties                       = pDdiTable->pfnGetCacheProperties;
-    pDdiTable->pfnGetCacheProperties                     = layer::xeDeviceGroupGetCacheProperties;
-
-    dditable.pfnGetImageProperties                       = pDdiTable->pfnGetImageProperties;
-    pDdiTable->pfnGetImageProperties                     = layer::xeDeviceGroupGetImageProperties;
+    pDdiTable->pfnGetApiVersion                          = layer::xeDriverGetApiVersion;
 
     dditable.pfnGetIPCProperties                         = pDdiTable->pfnGetIPCProperties;
-    pDdiTable->pfnGetIPCProperties                       = layer::xeDeviceGroupGetIPCProperties;
+    pDdiTable->pfnGetIPCProperties                       = layer::xeDriverGetIPCProperties;
 
     dditable.pfnAllocSharedMem                           = pDdiTable->pfnAllocSharedMem;
-    pDdiTable->pfnAllocSharedMem                         = layer::xeDeviceGroupAllocSharedMem;
+    pDdiTable->pfnAllocSharedMem                         = layer::xeDriverAllocSharedMem;
 
     dditable.pfnAllocDeviceMem                           = pDdiTable->pfnAllocDeviceMem;
-    pDdiTable->pfnAllocDeviceMem                         = layer::xeDeviceGroupAllocDeviceMem;
+    pDdiTable->pfnAllocDeviceMem                         = layer::xeDriverAllocDeviceMem;
 
     dditable.pfnAllocHostMem                             = pDdiTable->pfnAllocHostMem;
-    pDdiTable->pfnAllocHostMem                           = layer::xeDeviceGroupAllocHostMem;
+    pDdiTable->pfnAllocHostMem                           = layer::xeDriverAllocHostMem;
 
     dditable.pfnFreeMem                                  = pDdiTable->pfnFreeMem;
-    pDdiTable->pfnFreeMem                                = layer::xeDeviceGroupFreeMem;
+    pDdiTable->pfnFreeMem                                = layer::xeDriverFreeMem;
 
     dditable.pfnGetMemProperties                         = pDdiTable->pfnGetMemProperties;
-    pDdiTable->pfnGetMemProperties                       = layer::xeDeviceGroupGetMemProperties;
+    pDdiTable->pfnGetMemProperties                       = layer::xeDriverGetMemProperties;
 
     dditable.pfnGetMemAddressRange                       = pDdiTable->pfnGetMemAddressRange;
-    pDdiTable->pfnGetMemAddressRange                     = layer::xeDeviceGroupGetMemAddressRange;
+    pDdiTable->pfnGetMemAddressRange                     = layer::xeDriverGetMemAddressRange;
 
     dditable.pfnGetMemIpcHandle                          = pDdiTable->pfnGetMemIpcHandle;
-    pDdiTable->pfnGetMemIpcHandle                        = layer::xeDeviceGroupGetMemIpcHandle;
+    pDdiTable->pfnGetMemIpcHandle                        = layer::xeDriverGetMemIpcHandle;
 
     dditable.pfnOpenMemIpcHandle                         = pDdiTable->pfnOpenMemIpcHandle;
-    pDdiTable->pfnOpenMemIpcHandle                       = layer::xeDeviceGroupOpenMemIpcHandle;
+    pDdiTable->pfnOpenMemIpcHandle                       = layer::xeDriverOpenMemIpcHandle;
 
     dditable.pfnCloseMemIpcHandle                        = pDdiTable->pfnCloseMemIpcHandle;
-    pDdiTable->pfnCloseMemIpcHandle                      = layer::xeDeviceGroupCloseMemIpcHandle;
+    pDdiTable->pfnCloseMemIpcHandle                      = layer::xeDriverCloseMemIpcHandle;
 
     return result;
 }

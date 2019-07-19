@@ -86,10 +86,10 @@ namespace xe
     using bool_t = uint8_t;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle of driver's device group object
-    class DeviceGroup;
-    struct _device_group_handle_t;
-    using device_group_handle_t = _device_group_handle_t*;
+    /// @brief Handle of a driver instance
+    class Driver;
+    struct _driver_handle_t;
+    using driver_handle_t = _driver_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of driver's device object

@@ -20,7 +20,7 @@ The callbacks provide direct access to the input and output parameters for viewi
 Tools may also use these notifications as triggers to block and inject new API calls into the command stream, such as metrics.
 
 ## Registration
-Tools may independently register for enter and exist callbacks for individual API calls, per Device Group.
+Tools may independently register for enter and exist callbacks for individual API calls, per driver instance.
 * ::xetTracerSetPrologues is used to specify all the enter callbacks
 * ::xetTracerSetEpilogues is used to specify all the exist callbacks
 * If the value of a callback is nullptr, then it will be ignored.
@@ -91,7 +91,7 @@ The following sample code demonstrates a basic usage of API tracing:
         tracer_desc.version = XET_TRACER_DESC_VERSION_CURRENT;
         tracer_desc.pUserData = &tracer_data;
         xet_tracer_handle_t hTracer;
-        xetTracerCreate(hDeviceGroup, &tracer_desc, &hTracer);
+        xetTracerCreate(hDevice, &tracer_desc, &hTracer);
 
         // Set all callbacks
         xet_core_callbacks_t prologCbs = {};
@@ -189,23 +189,23 @@ To enumerate through the Metric tree:
    Metric (::xet_metric_handle_t).
 
 
-The following sample code demonstrates a basic enumaration over all available metric groups and their metrics.
+The following sample code demonstrates a basic enumeration over all available metric groups and their metrics.
 Additionally, it returns a metric group with a chosen name and sampling type. Similar code could be used
 for selecting a preferred metric group for a specific type of measurements.
 ```c
-    xe_result_t FindMetricGroup( xe_device_group_handle_t hDeviceGroup,
+    xe_result_t FindMetricGroup( xe_device_handle_t hDevice,
                                    char* pMetricGroupName,
                                    uint32_t desiredSamplingType,
                                    xet_metric_group_handle_t* phMetricGroup )
     {
-        // Obtain available metric groups for the specific device group
+        // Obtain available metric groups for the specific device
         uint32_t metricGroupCount = 0;
-        xetMetricGroupGet( hDeviceGroup, &metricGroupCount, nullptr );
+        xetMetricGroupGet( hDevice, &metricGroupCount, nullptr );
 
         xet_metric_group_handle_t* phMetricGroups = malloc(metricGroupCount * sizeof(xet_metric_group_handle_t));
-        xetMetricGroupGet( hDeviceGroup, &metricGroupCount, phMetricGroups );
+        xetMetricGroupGet( hDevice, &metricGroupCount, phMetricGroups );
 
-        // Interate over all metric groups available
+        // Iterate over all metric groups available
         for( uint32_t i = 0; i < metricGroupCount; i++ )
         {   
             // Get metric group under index 'i' and its properties
@@ -236,7 +236,7 @@ Use the ::xetDeviceActivateMetricGroups API call to configure the device for dat
 - To avoid undefined results only call the ::xetDeviceActivateMetricGroups between experiments i.e. while not collecting data.
 
 Programming restrictions:
-- Any combination of metric groups can be configured simultanously provided that all of them have
+- Any combination of metric groups can be configured simultaneously provided that all of them have
   different ::xet_metric_group_properties_t.domain.
 - MetricGroup must be active until ::xetMetricQueryGetData and ::xetMetricTracerClose.
 - Conflicting Groups cannot be activated, in such case the call to ::xetDeviceActivateMetricGroups would fail.
@@ -261,7 +261,7 @@ Time-based collection uses a simple Open, Wait, Read, Close scheme:
 
 The following sample code demonstrates a basic sequence for tracer-based collection:
 ```c
-    xe_result_t TimeBasedUsageExample( xe_device_group_handle_t hDeviceGroup,
+    xe_result_t TimeBasedUsageExample( xe_driver_handle_t hDriver,
                                          xe_device_handle_t hDevice )
     {
         xet_metric_group_handle_t     hMetricGroup           = nullptr;
@@ -273,13 +273,13 @@ The following sample code demonstrates a basic sequence for tracer-based collect
         xet_metric_tracer_desc_t      metricTracerDescriptor = {XET_METRIC_TRACER_DESC_VERSION_CURRENT}; 
 
         // Find a "ComputeBasic" metric group suitable for Time Based collection
-        FindMetricGroup( hDeviceGroup, "ComputeBasic", XET_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED, &hMetricGroup );
+        FindMetricGroup( hDevice, "ComputeBasic", XET_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED, &hMetricGroup );
 
         // Configure the HW
         xetDeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
 
         // Create notification event
-        xeEventPoolCreate( hDeviceGroup, &eventPoolDesc, 1, &hDevice, &hEventPool );
+        xeEventPoolCreate( hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool );
         eventDesc.index  = 0;
         eventDesc.signal = XE_EVENT_SCOPE_FLAG_HOST;
         eventDesc.wait   = XE_EVENT_SCOPE_FLAG_HOST; 
@@ -295,7 +295,7 @@ The following sample code demonstrates a basic sequence for tracer-based collect
         // Optionally insert markers during workload execution
         //xetCommandListAppendMetricTracerMarker( hCommandList, hMetricTracer, tool_marker_value ); 
 
-        // Wait for data, optional in this example since the whole workload has already been executedby now
+        // Wait for data, optional in this example since the whole workload has already been executed by now
         //xeEventHostSynchronize( hNotificationEvent, 1000 /*timeout*/ );
         // reset the event if it fired
 
@@ -337,7 +337,7 @@ A Query Pool is used to efficiently use and reuse device meory for multiple quer
 
 The following sample code demonstrates a basic sequence for query-based collection:
 ```c
-    xe_result_t MetricQueryUsageExample( xe_device_group_handle_t hDeviceGroup,
+    xe_result_t MetricQueryUsageExample( xe_driver_handle_t hDriver,
                                            xe_device_handle_t hDevice )
     {
         xet_metric_group_handle_t      hMetricGroup          = nullptr;
@@ -350,7 +350,7 @@ The following sample code demonstrates a basic sequence for query-based collecti
         xet_metric_query_pool_desc_t   queryPoolDesc         = {XET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT};
     
         // Find a "ComputeBasic" metric group suitable for Event Based collection
-        FindMetricGroup( hDeviceGroup, "ComputeBasic", XET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED, &hMetricGroup );
+        FindMetricGroup( hDevice, "ComputeBasic", XET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED, &hMetricGroup );
 
         // Configure HW
         xetDeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
@@ -361,7 +361,7 @@ The following sample code demonstrates a basic sequence for query-based collecti
         xetMetricQueryPoolCreate( hDevice, hMetricGroup, &queryPoolDesc, &hMetricQueryPool );
         eventPoolDesc.flags = XE_EVENT_POOL_FLAG_DEFAULT;
         eventPoolDesc.count = 1000;
-        xeEventPoolCreate( hDeviceGroup, &eventPoolDesc, 1, &hDevice, &hEventPool );
+        xeEventPoolCreate( hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool );
 
         // Write BEGIN metric query to command list 
         xetMetricQueryCreate( hMetricQueryPool, 0 /*slot*/, &hMetricQuery );

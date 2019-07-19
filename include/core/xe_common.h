@@ -77,8 +77,8 @@ extern "C" {
 typedef uint8_t xe_bool_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Handle of driver's device group object
-typedef struct _xe_device_group_handle_t *xe_device_group_handle_t;
+/// @brief Handle of a driver instance
+typedef struct _xe_driver_handle_t *xe_driver_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Handle of driver's device object
@@ -185,6 +185,10 @@ typedef struct _xe_ipc_mem_handle_t xe_ipc_mem_handle_t;
 typedef struct _xe_ipc_event_pool_handle_t xe_ipc_event_pool_handle_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xe_driver_ipc_properties_t
+typedef struct _xe_driver_ipc_properties_t xe_driver_ipc_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xe_device_uuid_t
 typedef struct _xe_device_uuid_t xe_device_uuid_t;
 
@@ -211,10 +215,6 @@ typedef struct _xe_device_cache_properties_t xe_device_cache_properties_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xe_device_image_properties_t
 typedef struct _xe_device_image_properties_t xe_device_image_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xe_device_ipc_properties_t
-typedef struct _xe_device_ipc_properties_t xe_device_ipc_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xe_device_p2p_properties_t

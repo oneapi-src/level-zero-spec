@@ -18,11 +18,10 @@
 extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates a tracer on the device group.
+/// @brief Creates a tracer for the specified device.
 /// 
 /// @details
-///     - The tracer can only be used on the device group on which it was
-///       created.
+///     - The tracer can only be used on the device on which it was created.
 ///     - The tracer is created in the disabled state.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
@@ -32,7 +31,7 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDevice
 ///         + nullptr == desc
 ///         + nullptr == phTracer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -40,7 +39,7 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 xe_result_t __xecall
 xetTracerCreate(
-    xet_device_group_handle_t hDeviceGroup,         ///< [in] handle of the device group
+    xet_device_handle_t hDevice,                    ///< [in] handle of the device
     const xet_tracer_desc_t* desc,                  ///< [in] pointer to tracer descriptor
     xet_tracer_handle_t* phTracer                   ///< [out] pointer to handle of tracer object created
     )
@@ -49,7 +48,7 @@ xetTracerCreate(
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnCreate( hDeviceGroup, desc, phTracer );
+    return pfnCreate( hDevice, desc, phTracer );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -186,21 +185,20 @@ namespace xet
     ///////////////////////////////////////////////////////////////////////////////
     Tracer::Tracer( 
         tracer_handle_t handle,                         ///< [in] handle of tracer object
-        DeviceGroup* pDeviceGroup,                      ///< [in] pointer to owner object
+        Device* pDevice,                                ///< [in] pointer to owner object
         const desc_t* desc                              ///< [in] descriptor of the tracer object
         ) :
         m_handle( handle ),
-        m_pDeviceGroup( pDeviceGroup ),
+        m_pDevice( pDevice ),
         m_desc( ( desc ) ? *desc : desc_t{} )
     {
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Creates a tracer on the device group.
+    /// @brief Creates a tracer for the specified device.
     /// 
     /// @details
-    ///     - The tracer can only be used on the device group on which it was
-    ///       created.
+    ///     - The tracer can only be used on the device on which it was created.
     ///     - The tracer is created in the disabled state.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
@@ -211,14 +209,14 @@ namespace xet
     /// @throws result_t
     Tracer* __xecall
     Tracer::Create(
-        DeviceGroup* pDeviceGroup,                      ///< [in] pointer to the device group
+        Device* pDevice,                                ///< [in] pointer to the device
         const desc_t* desc                              ///< [in] pointer to tracer descriptor
         )
     {
         xet_tracer_handle_t hTracer;
 
         auto result = static_cast<result_t>( ::xetTracerCreate(
-            reinterpret_cast<xet_device_group_handle_t>( pDeviceGroup->getHandle() ),
+            reinterpret_cast<xet_device_handle_t>( pDevice->getHandle() ),
             reinterpret_cast<const xet_tracer_desc_t*>( desc ),
             &hTracer ) );
 
@@ -229,7 +227,7 @@ namespace xet
 
         try
         {
-            pTracer = new Tracer( reinterpret_cast<tracer_handle_t>( hTracer ), pDeviceGroup, desc );
+            pTracer = new Tracer( reinterpret_cast<tracer_handle_t>( hTracer ), pDevice, desc );
         }
         catch( std::bad_alloc& )
         {

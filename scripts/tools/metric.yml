@@ -8,16 +8,16 @@ type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for Metric"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Retrieves metric group for a device group."
+desc: "Retrieves metric group for a device."
 class: $tMetricGroup
 name: Get
 decl: static
 details:
     - "The application may call this function from simultaneous threads."
 params:
-    - type: "$t_device_group_handle_t"
-      name: hDeviceGroup
-      desc: "[in] handle of the device group"
+    - type: "$t_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device"
     - type: uint32_t*
       name: pCount
       desc: |
@@ -653,14 +653,14 @@ type: class
 desc: "C++ wrapper for metric group"
 name: $tMetricGroup
 attribute: singleton
-owner: $tDeviceGroup
+owner: $tDevice
 members:
     - type: $t_metric_group_handle_t
       name: handle
       desc: "[in] handle of metric group object" 
       init: nullptr
-    - type: $tDeviceGroup*
-      name: pDeviceGroup
+    - type: $tDevice*
+      name: pDevice
       desc: "[in] pointer to owner object"
 --- #--------------------------------------------------------------------------
 type: class

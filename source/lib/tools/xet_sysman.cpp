@@ -551,10 +551,10 @@ namespace xet
     ///////////////////////////////////////////////////////////////////////////////
     Sysman::Sysman( 
         sysman_handle_t handle,                         ///< [in] handle of SMI object
-        DeviceGroup* pDeviceGroup                       ///< [in] pointer to owner object
+        Device* pDevice                                 ///< [in] pointer to owner object
         ) :
         m_handle( handle ),
-        m_pDeviceGroup( pDeviceGroup )
+        m_pDevice( pDevice )
     {
     }
 
@@ -588,7 +588,7 @@ namespace xet
 
         try
         {
-            pSysman = new Sysman( reinterpret_cast<sysman_handle_t>( hSysman ), nullptr );
+            pSysman = new Sysman( reinterpret_cast<sysman_handle_t>( hSysman ), pDevice );
         }
         catch( std::bad_alloc& )
         {

@@ -45,35 +45,35 @@ typedef void (__xecall *xe_pfnInitCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Table of Global callback functions pointers
-typedef struct _xe_global_callbacks_t
-{
-    xe_pfnInitCb_t                                                  pfnInitCb;
-} xe_global_callbacks_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeDeviceGet 
+/// @brief Callback function parameters for xeGetDrivers 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_device_get_params_t
+typedef struct _xe_get_drivers_params_t
 {
-    xe_device_group_handle_t* phDeviceGroup;
     uint32_t** ppCount;
-    xe_device_handle_t** pphDevices;
-} xe_device_get_params_t;
+    xe_driver_handle_t** pphDrivers;
+} xe_get_drivers_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeDeviceGet 
+/// @brief Callback function-pointer for xeGetDrivers 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnDeviceGetCb_t)(
-    xe_device_get_params_t* params,
+typedef void (__xecall *xe_pfnGetDriversCb_t)(
+    xe_get_drivers_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Table of Global callback functions pointers
+typedef struct _xe_global_callbacks_t
+{
+    xe_pfnInitCb_t                                                  pfnInitCb;
+    xe_pfnGetDriversCb_t                                            pfnGetDriversCb;
+} xe_global_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeDeviceGetSubDevices 
@@ -94,6 +94,145 @@ typedef struct _xe_device_get_sub_devices_params_t
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
 typedef void (__xecall *xe_pfnDeviceGetSubDevicesCb_t)(
     xe_device_get_sub_devices_params_t* params,
+    xe_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for xeDeviceGetProperties 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _xe_device_get_properties_params_t
+{
+    xe_device_handle_t* phDevice;
+    xe_device_properties_t** ppDeviceProperties;
+} xe_device_get_properties_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for xeDeviceGetProperties 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__xecall *xe_pfnDeviceGetPropertiesCb_t)(
+    xe_device_get_properties_params_t* params,
+    xe_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for xeDeviceGetComputeProperties 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _xe_device_get_compute_properties_params_t
+{
+    xe_device_handle_t* phDevice;
+    xe_device_compute_properties_t** ppComputeProperties;
+} xe_device_get_compute_properties_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for xeDeviceGetComputeProperties 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__xecall *xe_pfnDeviceGetComputePropertiesCb_t)(
+    xe_device_get_compute_properties_params_t* params,
+    xe_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for xeDeviceGetMemoryProperties 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _xe_device_get_memory_properties_params_t
+{
+    xe_device_handle_t* phDevice;
+    uint32_t** ppCount;
+    xe_device_memory_properties_t** ppMemProperties;
+} xe_device_get_memory_properties_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for xeDeviceGetMemoryProperties 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__xecall *xe_pfnDeviceGetMemoryPropertiesCb_t)(
+    xe_device_get_memory_properties_params_t* params,
+    xe_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for xeDeviceGetMemoryAccessProperties 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _xe_device_get_memory_access_properties_params_t
+{
+    xe_device_handle_t* phDevice;
+    xe_device_memory_access_properties_t** ppMemAccessProperties;
+} xe_device_get_memory_access_properties_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for xeDeviceGetMemoryAccessProperties 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__xecall *xe_pfnDeviceGetMemoryAccessPropertiesCb_t)(
+    xe_device_get_memory_access_properties_params_t* params,
+    xe_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for xeDeviceGetCacheProperties 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _xe_device_get_cache_properties_params_t
+{
+    xe_device_handle_t* phDevice;
+    xe_device_cache_properties_t** ppCacheProperties;
+} xe_device_get_cache_properties_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for xeDeviceGetCacheProperties 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__xecall *xe_pfnDeviceGetCachePropertiesCb_t)(
+    xe_device_get_cache_properties_params_t* params,
+    xe_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for xeDeviceGetImageProperties 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _xe_device_get_image_properties_params_t
+{
+    xe_device_handle_t* phDevice;
+    xe_device_image_properties_t** ppImageProperties;
+} xe_device_get_image_properties_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for xeDeviceGetImageProperties 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__xecall *xe_pfnDeviceGetImagePropertiesCb_t)(
+    xe_device_get_image_properties_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
@@ -400,8 +539,13 @@ typedef void (__xecall *xe_pfnDeviceEvictImageCb_t)(
 /// @brief Table of Device callback functions pointers
 typedef struct _xe_device_callbacks_t
 {
-    xe_pfnDeviceGetCb_t                                             pfnGetCb;
     xe_pfnDeviceGetSubDevicesCb_t                                   pfnGetSubDevicesCb;
+    xe_pfnDeviceGetPropertiesCb_t                                   pfnGetPropertiesCb;
+    xe_pfnDeviceGetComputePropertiesCb_t                            pfnGetComputePropertiesCb;
+    xe_pfnDeviceGetMemoryPropertiesCb_t                             pfnGetMemoryPropertiesCb;
+    xe_pfnDeviceGetMemoryAccessPropertiesCb_t                       pfnGetMemoryAccessPropertiesCb;
+    xe_pfnDeviceGetCachePropertiesCb_t                              pfnGetCachePropertiesCb;
+    xe_pfnDeviceGetImagePropertiesCb_t                              pfnGetImagePropertiesCb;
     xe_pfnDeviceGetP2PPropertiesCb_t                                pfnGetP2PPropertiesCb;
     xe_pfnDeviceCanAccessPeerCb_t                                   pfnCanAccessPeerCb;
     xe_pfnDeviceSetIntermediateCacheConfigCb_t                      pfnSetIntermediateCacheConfigCb;
@@ -423,243 +567,105 @@ typedef struct _xe_device_callbacks_t
 } xe_device_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeDeviceGroupGet 
+/// @brief Callback function parameters for xeDriverGetDevices 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_device_group_get_params_t
+typedef struct _xe_driver_get_devices_params_t
 {
+    xe_driver_handle_t* phDriver;
     uint32_t** ppCount;
-    xe_device_group_handle_t** pphDeviceGroups;
-} xe_device_group_get_params_t;
+    xe_device_handle_t** pphDevices;
+} xe_driver_get_devices_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeDeviceGroupGet 
+/// @brief Callback function-pointer for xeDriverGetDevices 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnDeviceGroupGetCb_t)(
-    xe_device_group_get_params_t* params,
+typedef void (__xecall *xe_pfnDriverGetDevicesCb_t)(
+    xe_driver_get_devices_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeDeviceGroupGetDriverVersion 
+/// @brief Callback function parameters for xeDriverGetDriverVersion 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_device_group_get_driver_version_params_t
+typedef struct _xe_driver_get_driver_version_params_t
 {
-    xe_device_group_handle_t* phDeviceGroup;
+    xe_driver_handle_t* phDriver;
     uint32_t** pversion;
-} xe_device_group_get_driver_version_params_t;
+} xe_driver_get_driver_version_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeDeviceGroupGetDriverVersion 
+/// @brief Callback function-pointer for xeDriverGetDriverVersion 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnDeviceGroupGetDriverVersionCb_t)(
-    xe_device_group_get_driver_version_params_t* params,
+typedef void (__xecall *xe_pfnDriverGetDriverVersionCb_t)(
+    xe_driver_get_driver_version_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeDeviceGroupGetApiVersion 
+/// @brief Callback function parameters for xeDriverGetApiVersion 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_device_group_get_api_version_params_t
+typedef struct _xe_driver_get_api_version_params_t
 {
-    xe_device_group_handle_t* phDeviceGroup;
+    xe_driver_handle_t* phDrivers;
     xe_api_version_t** pversion;
-} xe_device_group_get_api_version_params_t;
+} xe_driver_get_api_version_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeDeviceGroupGetApiVersion 
+/// @brief Callback function-pointer for xeDriverGetApiVersion 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnDeviceGroupGetApiVersionCb_t)(
-    xe_device_group_get_api_version_params_t* params,
+typedef void (__xecall *xe_pfnDriverGetApiVersionCb_t)(
+    xe_driver_get_api_version_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeDeviceGroupGetDeviceProperties 
+/// @brief Callback function parameters for xeDriverGetIPCProperties 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_device_group_get_device_properties_params_t
+typedef struct _xe_driver_get_ipc_properties_params_t
 {
-    xe_device_group_handle_t* phDeviceGroup;
-    xe_device_properties_t** ppDeviceProperties;
-} xe_device_group_get_device_properties_params_t;
+    xe_driver_handle_t* phDriver;
+    xe_driver_ipc_properties_t** ppIPCProperties;
+} xe_driver_get_ipc_properties_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeDeviceGroupGetDeviceProperties 
+/// @brief Callback function-pointer for xeDriverGetIPCProperties 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnDeviceGroupGetDevicePropertiesCb_t)(
-    xe_device_group_get_device_properties_params_t* params,
+typedef void (__xecall *xe_pfnDriverGetIPCPropertiesCb_t)(
+    xe_driver_get_ipc_properties_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeDeviceGroupGetComputeProperties 
+/// @brief Callback function parameters for xeDriverAllocSharedMem 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_device_group_get_compute_properties_params_t
+typedef struct _xe_driver_alloc_shared_mem_params_t
 {
-    xe_device_group_handle_t* phDeviceGroup;
-    xe_device_compute_properties_t** ppComputeProperties;
-} xe_device_group_get_compute_properties_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeDeviceGroupGetComputeProperties 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnDeviceGroupGetComputePropertiesCb_t)(
-    xe_device_group_get_compute_properties_params_t* params,
-    xe_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeDeviceGroupGetMemoryProperties 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_device_group_get_memory_properties_params_t
-{
-    xe_device_group_handle_t* phDeviceGroup;
-    uint32_t** ppCount;
-    xe_device_memory_properties_t** ppMemProperties;
-} xe_device_group_get_memory_properties_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeDeviceGroupGetMemoryProperties 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnDeviceGroupGetMemoryPropertiesCb_t)(
-    xe_device_group_get_memory_properties_params_t* params,
-    xe_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeDeviceGroupGetMemoryAccessProperties 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_device_group_get_memory_access_properties_params_t
-{
-    xe_device_group_handle_t* phDeviceGroup;
-    xe_device_memory_access_properties_t** ppMemAccessProperties;
-} xe_device_group_get_memory_access_properties_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeDeviceGroupGetMemoryAccessProperties 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnDeviceGroupGetMemoryAccessPropertiesCb_t)(
-    xe_device_group_get_memory_access_properties_params_t* params,
-    xe_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeDeviceGroupGetCacheProperties 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_device_group_get_cache_properties_params_t
-{
-    xe_device_group_handle_t* phDeviceGroup;
-    xe_device_cache_properties_t** ppCacheProperties;
-} xe_device_group_get_cache_properties_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeDeviceGroupGetCacheProperties 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnDeviceGroupGetCachePropertiesCb_t)(
-    xe_device_group_get_cache_properties_params_t* params,
-    xe_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeDeviceGroupGetImageProperties 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_device_group_get_image_properties_params_t
-{
-    xe_device_group_handle_t* phDeviceGroup;
-    xe_device_image_properties_t** ppImageProperties;
-} xe_device_group_get_image_properties_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeDeviceGroupGetImageProperties 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnDeviceGroupGetImagePropertiesCb_t)(
-    xe_device_group_get_image_properties_params_t* params,
-    xe_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeDeviceGroupGetIPCProperties 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_device_group_get_ipc_properties_params_t
-{
-    xe_device_group_handle_t* phDeviceGroup;
-    xe_device_ipc_properties_t** ppIPCProperties;
-} xe_device_group_get_ipc_properties_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeDeviceGroupGetIPCProperties 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnDeviceGroupGetIPCPropertiesCb_t)(
-    xe_device_group_get_ipc_properties_params_t* params,
-    xe_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeDeviceGroupAllocSharedMem 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_device_group_alloc_shared_mem_params_t
-{
-    xe_device_group_handle_t* phDeviceGroup;
+    xe_driver_handle_t* phDriver;
     xe_device_handle_t* phDevice;
     xe_device_mem_alloc_flag_t* pdevice_flags;
     uint32_t* pordinal;
@@ -667,245 +673,239 @@ typedef struct _xe_device_group_alloc_shared_mem_params_t
     size_t* psize;
     size_t* palignment;
     void*** ppptr;
-} xe_device_group_alloc_shared_mem_params_t;
+} xe_driver_alloc_shared_mem_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeDeviceGroupAllocSharedMem 
+/// @brief Callback function-pointer for xeDriverAllocSharedMem 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnDeviceGroupAllocSharedMemCb_t)(
-    xe_device_group_alloc_shared_mem_params_t* params,
+typedef void (__xecall *xe_pfnDriverAllocSharedMemCb_t)(
+    xe_driver_alloc_shared_mem_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeDeviceGroupAllocDeviceMem 
+/// @brief Callback function parameters for xeDriverAllocDeviceMem 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_device_group_alloc_device_mem_params_t
+typedef struct _xe_driver_alloc_device_mem_params_t
 {
-    xe_device_group_handle_t* phDeviceGroup;
+    xe_driver_handle_t* phDriver;
     xe_device_handle_t* phDevice;
     xe_device_mem_alloc_flag_t* pflags;
     uint32_t* pordinal;
     size_t* psize;
     size_t* palignment;
     void*** ppptr;
-} xe_device_group_alloc_device_mem_params_t;
+} xe_driver_alloc_device_mem_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeDeviceGroupAllocDeviceMem 
+/// @brief Callback function-pointer for xeDriverAllocDeviceMem 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnDeviceGroupAllocDeviceMemCb_t)(
-    xe_device_group_alloc_device_mem_params_t* params,
+typedef void (__xecall *xe_pfnDriverAllocDeviceMemCb_t)(
+    xe_driver_alloc_device_mem_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeDeviceGroupAllocHostMem 
+/// @brief Callback function parameters for xeDriverAllocHostMem 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_device_group_alloc_host_mem_params_t
+typedef struct _xe_driver_alloc_host_mem_params_t
 {
-    xe_device_group_handle_t* phDeviceGroup;
+    xe_driver_handle_t* phDriver;
     xe_host_mem_alloc_flag_t* pflags;
     size_t* psize;
     size_t* palignment;
     void*** ppptr;
-} xe_device_group_alloc_host_mem_params_t;
+} xe_driver_alloc_host_mem_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeDeviceGroupAllocHostMem 
+/// @brief Callback function-pointer for xeDriverAllocHostMem 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnDeviceGroupAllocHostMemCb_t)(
-    xe_device_group_alloc_host_mem_params_t* params,
+typedef void (__xecall *xe_pfnDriverAllocHostMemCb_t)(
+    xe_driver_alloc_host_mem_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeDeviceGroupFreeMem 
+/// @brief Callback function parameters for xeDriverFreeMem 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_device_group_free_mem_params_t
+typedef struct _xe_driver_free_mem_params_t
 {
-    xe_device_group_handle_t* phDeviceGroup;
+    xe_driver_handle_t* phDriver;
     void** pptr;
-} xe_device_group_free_mem_params_t;
+} xe_driver_free_mem_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeDeviceGroupFreeMem 
+/// @brief Callback function-pointer for xeDriverFreeMem 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnDeviceGroupFreeMemCb_t)(
-    xe_device_group_free_mem_params_t* params,
+typedef void (__xecall *xe_pfnDriverFreeMemCb_t)(
+    xe_driver_free_mem_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeDeviceGroupGetMemProperties 
+/// @brief Callback function parameters for xeDriverGetMemProperties 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_device_group_get_mem_properties_params_t
+typedef struct _xe_driver_get_mem_properties_params_t
 {
-    xe_device_group_handle_t* phDeviceGroup;
+    xe_driver_handle_t* phDriver;
     const void** pptr;
     xe_memory_allocation_properties_t** ppMemProperties;
     xe_device_handle_t** pphDevice;
-} xe_device_group_get_mem_properties_params_t;
+} xe_driver_get_mem_properties_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeDeviceGroupGetMemProperties 
+/// @brief Callback function-pointer for xeDriverGetMemProperties 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnDeviceGroupGetMemPropertiesCb_t)(
-    xe_device_group_get_mem_properties_params_t* params,
+typedef void (__xecall *xe_pfnDriverGetMemPropertiesCb_t)(
+    xe_driver_get_mem_properties_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeDeviceGroupGetMemAddressRange 
+/// @brief Callback function parameters for xeDriverGetMemAddressRange 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_device_group_get_mem_address_range_params_t
+typedef struct _xe_driver_get_mem_address_range_params_t
 {
-    xe_device_group_handle_t* phDeviceGroup;
+    xe_driver_handle_t* phDriver;
     const void** pptr;
     void*** ppBase;
     size_t** ppSize;
-} xe_device_group_get_mem_address_range_params_t;
+} xe_driver_get_mem_address_range_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeDeviceGroupGetMemAddressRange 
+/// @brief Callback function-pointer for xeDriverGetMemAddressRange 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnDeviceGroupGetMemAddressRangeCb_t)(
-    xe_device_group_get_mem_address_range_params_t* params,
+typedef void (__xecall *xe_pfnDriverGetMemAddressRangeCb_t)(
+    xe_driver_get_mem_address_range_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeDeviceGroupGetMemIpcHandle 
+/// @brief Callback function parameters for xeDriverGetMemIpcHandle 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_device_group_get_mem_ipc_handle_params_t
+typedef struct _xe_driver_get_mem_ipc_handle_params_t
 {
-    xe_device_group_handle_t* phDeviceGroup;
+    xe_driver_handle_t* phDriver;
     const void** pptr;
     xe_ipc_mem_handle_t** ppIpcHandle;
-} xe_device_group_get_mem_ipc_handle_params_t;
+} xe_driver_get_mem_ipc_handle_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeDeviceGroupGetMemIpcHandle 
+/// @brief Callback function-pointer for xeDriverGetMemIpcHandle 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnDeviceGroupGetMemIpcHandleCb_t)(
-    xe_device_group_get_mem_ipc_handle_params_t* params,
+typedef void (__xecall *xe_pfnDriverGetMemIpcHandleCb_t)(
+    xe_driver_get_mem_ipc_handle_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeDeviceGroupOpenMemIpcHandle 
+/// @brief Callback function parameters for xeDriverOpenMemIpcHandle 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_device_group_open_mem_ipc_handle_params_t
+typedef struct _xe_driver_open_mem_ipc_handle_params_t
 {
-    xe_device_group_handle_t* phDeviceGroup;
+    xe_driver_handle_t* phDriver;
     xe_device_handle_t* phDevice;
     xe_ipc_mem_handle_t* phandle;
     xe_ipc_memory_flag_t* pflags;
     void*** ppptr;
-} xe_device_group_open_mem_ipc_handle_params_t;
+} xe_driver_open_mem_ipc_handle_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeDeviceGroupOpenMemIpcHandle 
+/// @brief Callback function-pointer for xeDriverOpenMemIpcHandle 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnDeviceGroupOpenMemIpcHandleCb_t)(
-    xe_device_group_open_mem_ipc_handle_params_t* params,
+typedef void (__xecall *xe_pfnDriverOpenMemIpcHandleCb_t)(
+    xe_driver_open_mem_ipc_handle_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeDeviceGroupCloseMemIpcHandle 
+/// @brief Callback function parameters for xeDriverCloseMemIpcHandle 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_device_group_close_mem_ipc_handle_params_t
+typedef struct _xe_driver_close_mem_ipc_handle_params_t
 {
-    xe_device_group_handle_t* phDeviceGroup;
+    xe_driver_handle_t* phDriver;
     const void** pptr;
-} xe_device_group_close_mem_ipc_handle_params_t;
+} xe_driver_close_mem_ipc_handle_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeDeviceGroupCloseMemIpcHandle 
+/// @brief Callback function-pointer for xeDriverCloseMemIpcHandle 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnDeviceGroupCloseMemIpcHandleCb_t)(
-    xe_device_group_close_mem_ipc_handle_params_t* params,
+typedef void (__xecall *xe_pfnDriverCloseMemIpcHandleCb_t)(
+    xe_driver_close_mem_ipc_handle_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Table of DeviceGroup callback functions pointers
-typedef struct _xe_device_group_callbacks_t
+/// @brief Table of Driver callback functions pointers
+typedef struct _xe_driver_callbacks_t
 {
-    xe_pfnDeviceGroupGetCb_t                                        pfnGetCb;
-    xe_pfnDeviceGroupGetDriverVersionCb_t                           pfnGetDriverVersionCb;
-    xe_pfnDeviceGroupGetApiVersionCb_t                              pfnGetApiVersionCb;
-    xe_pfnDeviceGroupGetDevicePropertiesCb_t                        pfnGetDevicePropertiesCb;
-    xe_pfnDeviceGroupGetComputePropertiesCb_t                       pfnGetComputePropertiesCb;
-    xe_pfnDeviceGroupGetMemoryPropertiesCb_t                        pfnGetMemoryPropertiesCb;
-    xe_pfnDeviceGroupGetMemoryAccessPropertiesCb_t                  pfnGetMemoryAccessPropertiesCb;
-    xe_pfnDeviceGroupGetCachePropertiesCb_t                         pfnGetCachePropertiesCb;
-    xe_pfnDeviceGroupGetImagePropertiesCb_t                         pfnGetImagePropertiesCb;
-    xe_pfnDeviceGroupGetIPCPropertiesCb_t                           pfnGetIPCPropertiesCb;
-    xe_pfnDeviceGroupAllocSharedMemCb_t                             pfnAllocSharedMemCb;
-    xe_pfnDeviceGroupAllocDeviceMemCb_t                             pfnAllocDeviceMemCb;
-    xe_pfnDeviceGroupAllocHostMemCb_t                               pfnAllocHostMemCb;
-    xe_pfnDeviceGroupFreeMemCb_t                                    pfnFreeMemCb;
-    xe_pfnDeviceGroupGetMemPropertiesCb_t                           pfnGetMemPropertiesCb;
-    xe_pfnDeviceGroupGetMemAddressRangeCb_t                         pfnGetMemAddressRangeCb;
-    xe_pfnDeviceGroupGetMemIpcHandleCb_t                            pfnGetMemIpcHandleCb;
-    xe_pfnDeviceGroupOpenMemIpcHandleCb_t                           pfnOpenMemIpcHandleCb;
-    xe_pfnDeviceGroupCloseMemIpcHandleCb_t                          pfnCloseMemIpcHandleCb;
-} xe_device_group_callbacks_t;
+    xe_pfnDriverGetDevicesCb_t                                      pfnGetDevicesCb;
+    xe_pfnDriverGetDriverVersionCb_t                                pfnGetDriverVersionCb;
+    xe_pfnDriverGetApiVersionCb_t                                   pfnGetApiVersionCb;
+    xe_pfnDriverGetIPCPropertiesCb_t                                pfnGetIPCPropertiesCb;
+    xe_pfnDriverAllocSharedMemCb_t                                  pfnAllocSharedMemCb;
+    xe_pfnDriverAllocDeviceMemCb_t                                  pfnAllocDeviceMemCb;
+    xe_pfnDriverAllocHostMemCb_t                                    pfnAllocHostMemCb;
+    xe_pfnDriverFreeMemCb_t                                         pfnFreeMemCb;
+    xe_pfnDriverGetMemPropertiesCb_t                                pfnGetMemPropertiesCb;
+    xe_pfnDriverGetMemAddressRangeCb_t                              pfnGetMemAddressRangeCb;
+    xe_pfnDriverGetMemIpcHandleCb_t                                 pfnGetMemIpcHandleCb;
+    xe_pfnDriverOpenMemIpcHandleCb_t                                pfnOpenMemIpcHandleCb;
+    xe_pfnDriverCloseMemIpcHandleCb_t                               pfnCloseMemIpcHandleCb;
+} xe_driver_callbacks_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandQueueCreate 
@@ -1825,7 +1825,7 @@ typedef struct _xe_fence_callbacks_t
 ///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_event_pool_create_params_t
 {
-    xe_device_group_handle_t* phDeviceGroup;
+    xe_driver_handle_t* phDriver;
     const xe_event_pool_desc_t** pdesc;
     uint32_t* pnumDevices;
     xe_device_handle_t** pphDevices;
@@ -2602,7 +2602,7 @@ typedef struct _xe_callbacks_t
 {
     xe_global_callbacks_t               Global;
     xe_device_callbacks_t               Device;
-    xe_device_group_callbacks_t         DeviceGroup;
+    xe_driver_callbacks_t               Driver;
     xe_command_queue_callbacks_t        CommandQueue;
     xe_command_list_callbacks_t         CommandList;
     xe_fence_callbacks_t                Fence;

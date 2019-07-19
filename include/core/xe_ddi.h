@@ -29,10 +29,18 @@ typedef xe_result_t (__xecall *xe_pfnInit_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeGetDrivers 
+typedef xe_result_t (__xecall *xe_pfnGetDrivers_t)(
+    uint32_t*,
+    xe_driver_handle_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Global functions pointers
 typedef struct _xe_global_dditable_t
 {
     xe_pfnInit_t                                                pfnInit;
+    xe_pfnGetDrivers_t                                          pfnGetDrivers;
 } xe_global_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -60,19 +68,54 @@ typedef xe_result_t (__xecall *xe_pfnGetGlobalProcAddrTable_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGet 
-typedef xe_result_t (__xecall *xe_pfnDeviceGet_t)(
-    xe_device_group_handle_t,
-    uint32_t*,
-    xe_device_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeDeviceGetSubDevices 
 typedef xe_result_t (__xecall *xe_pfnDeviceGetSubDevices_t)(
     xe_device_handle_t,
     uint32_t*,
     xe_device_handle_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeDeviceGetProperties 
+typedef xe_result_t (__xecall *xe_pfnDeviceGetProperties_t)(
+    xe_device_handle_t,
+    xe_device_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeDeviceGetComputeProperties 
+typedef xe_result_t (__xecall *xe_pfnDeviceGetComputeProperties_t)(
+    xe_device_handle_t,
+    xe_device_compute_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeDeviceGetMemoryProperties 
+typedef xe_result_t (__xecall *xe_pfnDeviceGetMemoryProperties_t)(
+    xe_device_handle_t,
+    uint32_t*,
+    xe_device_memory_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeDeviceGetMemoryAccessProperties 
+typedef xe_result_t (__xecall *xe_pfnDeviceGetMemoryAccessProperties_t)(
+    xe_device_handle_t,
+    xe_device_memory_access_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeDeviceGetCacheProperties 
+typedef xe_result_t (__xecall *xe_pfnDeviceGetCacheProperties_t)(
+    xe_device_handle_t,
+    xe_device_cache_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeDeviceGetImageProperties 
+typedef xe_result_t (__xecall *xe_pfnDeviceGetImageProperties_t)(
+    xe_device_handle_t,
+    xe_device_image_properties_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -178,8 +221,13 @@ typedef xe_result_t (__xecall *xe_pfnDeviceEvictImage_t)(
 /// @brief Table of Device functions pointers
 typedef struct _xe_device_dditable_t
 {
-    xe_pfnDeviceGet_t                                           pfnGet;
     xe_pfnDeviceGetSubDevices_t                                 pfnGetSubDevices;
+    xe_pfnDeviceGetProperties_t                                 pfnGetProperties;
+    xe_pfnDeviceGetComputeProperties_t                          pfnGetComputeProperties;
+    xe_pfnDeviceGetMemoryProperties_t                           pfnGetMemoryProperties;
+    xe_pfnDeviceGetMemoryAccessProperties_t                     pfnGetMemoryAccessProperties;
+    xe_pfnDeviceGetCacheProperties_t                            pfnGetCacheProperties;
+    xe_pfnDeviceGetImageProperties_t                            pfnGetImageProperties;
     xe_pfnDeviceGetP2PProperties_t                              pfnGetP2PProperties;
     xe_pfnDeviceCanAccessPeer_t                                 pfnCanAccessPeer;
     xe_pfnDeviceSetIntermediateCacheConfig_t                    pfnSetIntermediateCacheConfig;
@@ -225,80 +273,38 @@ typedef xe_result_t (__xecall *xe_pfnGetDeviceProcAddrTable_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupGet 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupGet_t)(
+/// @brief Function-pointer for xeDriverGetDevices 
+typedef xe_result_t (__xecall *xe_pfnDriverGetDevices_t)(
+    xe_driver_handle_t,
     uint32_t*,
-    xe_device_group_handle_t*
+    xe_device_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupGetDriverVersion 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetDriverVersion_t)(
-    xe_device_group_handle_t,
+/// @brief Function-pointer for xeDriverGetDriverVersion 
+typedef xe_result_t (__xecall *xe_pfnDriverGetDriverVersion_t)(
+    xe_driver_handle_t,
     uint32_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupGetApiVersion 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetApiVersion_t)(
-    xe_device_group_handle_t,
+/// @brief Function-pointer for xeDriverGetApiVersion 
+typedef xe_result_t (__xecall *xe_pfnDriverGetApiVersion_t)(
+    xe_driver_handle_t,
     xe_api_version_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupGetDeviceProperties 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetDeviceProperties_t)(
-    xe_device_group_handle_t,
-    xe_device_properties_t*
+/// @brief Function-pointer for xeDriverGetIPCProperties 
+typedef xe_result_t (__xecall *xe_pfnDriverGetIPCProperties_t)(
+    xe_driver_handle_t,
+    xe_driver_ipc_properties_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupGetComputeProperties 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetComputeProperties_t)(
-    xe_device_group_handle_t,
-    xe_device_compute_properties_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupGetMemoryProperties 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetMemoryProperties_t)(
-    xe_device_group_handle_t,
-    uint32_t*,
-    xe_device_memory_properties_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupGetMemoryAccessProperties 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetMemoryAccessProperties_t)(
-    xe_device_group_handle_t,
-    xe_device_memory_access_properties_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupGetCacheProperties 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetCacheProperties_t)(
-    xe_device_group_handle_t,
-    xe_device_cache_properties_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupGetImageProperties 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetImageProperties_t)(
-    xe_device_group_handle_t,
-    xe_device_image_properties_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupGetIPCProperties 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetIPCProperties_t)(
-    xe_device_group_handle_t,
-    xe_device_ipc_properties_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupAllocSharedMem 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupAllocSharedMem_t)(
-    xe_device_group_handle_t,
+/// @brief Function-pointer for xeDriverAllocSharedMem 
+typedef xe_result_t (__xecall *xe_pfnDriverAllocSharedMem_t)(
+    xe_driver_handle_t,
     xe_device_handle_t,
     xe_device_mem_alloc_flag_t,
     uint32_t,
@@ -309,9 +315,9 @@ typedef xe_result_t (__xecall *xe_pfnDeviceGroupAllocSharedMem_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupAllocDeviceMem 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupAllocDeviceMem_t)(
-    xe_device_group_handle_t,
+/// @brief Function-pointer for xeDriverAllocDeviceMem 
+typedef xe_result_t (__xecall *xe_pfnDriverAllocDeviceMem_t)(
+    xe_driver_handle_t,
     xe_device_handle_t,
     xe_device_mem_alloc_flag_t,
     uint32_t,
@@ -321,9 +327,9 @@ typedef xe_result_t (__xecall *xe_pfnDeviceGroupAllocDeviceMem_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupAllocHostMem 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupAllocHostMem_t)(
-    xe_device_group_handle_t,
+/// @brief Function-pointer for xeDriverAllocHostMem 
+typedef xe_result_t (__xecall *xe_pfnDriverAllocHostMem_t)(
+    xe_driver_handle_t,
     xe_host_mem_alloc_flag_t,
     size_t,
     size_t,
@@ -331,42 +337,42 @@ typedef xe_result_t (__xecall *xe_pfnDeviceGroupAllocHostMem_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupFreeMem 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupFreeMem_t)(
-    xe_device_group_handle_t,
+/// @brief Function-pointer for xeDriverFreeMem 
+typedef xe_result_t (__xecall *xe_pfnDriverFreeMem_t)(
+    xe_driver_handle_t,
     void*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupGetMemProperties 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetMemProperties_t)(
-    xe_device_group_handle_t,
+/// @brief Function-pointer for xeDriverGetMemProperties 
+typedef xe_result_t (__xecall *xe_pfnDriverGetMemProperties_t)(
+    xe_driver_handle_t,
     const void*,
     xe_memory_allocation_properties_t*,
     xe_device_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupGetMemAddressRange 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetMemAddressRange_t)(
-    xe_device_group_handle_t,
+/// @brief Function-pointer for xeDriverGetMemAddressRange 
+typedef xe_result_t (__xecall *xe_pfnDriverGetMemAddressRange_t)(
+    xe_driver_handle_t,
     const void*,
     void**,
     size_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupGetMemIpcHandle 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupGetMemIpcHandle_t)(
-    xe_device_group_handle_t,
+/// @brief Function-pointer for xeDriverGetMemIpcHandle 
+typedef xe_result_t (__xecall *xe_pfnDriverGetMemIpcHandle_t)(
+    xe_driver_handle_t,
     const void*,
     xe_ipc_mem_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupOpenMemIpcHandle 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupOpenMemIpcHandle_t)(
-    xe_device_group_handle_t,
+/// @brief Function-pointer for xeDriverOpenMemIpcHandle 
+typedef xe_result_t (__xecall *xe_pfnDriverOpenMemIpcHandle_t)(
+    xe_driver_handle_t,
     xe_device_handle_t,
     xe_ipc_mem_handle_t,
     xe_ipc_memory_flag_t,
@@ -374,39 +380,33 @@ typedef xe_result_t (__xecall *xe_pfnDeviceGroupOpenMemIpcHandle_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDeviceGroupCloseMemIpcHandle 
-typedef xe_result_t (__xecall *xe_pfnDeviceGroupCloseMemIpcHandle_t)(
-    xe_device_group_handle_t,
+/// @brief Function-pointer for xeDriverCloseMemIpcHandle 
+typedef xe_result_t (__xecall *xe_pfnDriverCloseMemIpcHandle_t)(
+    xe_driver_handle_t,
     const void*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Table of DeviceGroup functions pointers
-typedef struct _xe_device_group_dditable_t
+/// @brief Table of Driver functions pointers
+typedef struct _xe_driver_dditable_t
 {
-    xe_pfnDeviceGroupGet_t                                      pfnGet;
-    xe_pfnDeviceGroupGetDriverVersion_t                         pfnGetDriverVersion;
-    xe_pfnDeviceGroupGetApiVersion_t                            pfnGetApiVersion;
-    xe_pfnDeviceGroupGetDeviceProperties_t                      pfnGetDeviceProperties;
-    xe_pfnDeviceGroupGetComputeProperties_t                     pfnGetComputeProperties;
-    xe_pfnDeviceGroupGetMemoryProperties_t                      pfnGetMemoryProperties;
-    xe_pfnDeviceGroupGetMemoryAccessProperties_t                pfnGetMemoryAccessProperties;
-    xe_pfnDeviceGroupGetCacheProperties_t                       pfnGetCacheProperties;
-    xe_pfnDeviceGroupGetImageProperties_t                       pfnGetImageProperties;
-    xe_pfnDeviceGroupGetIPCProperties_t                         pfnGetIPCProperties;
-    xe_pfnDeviceGroupAllocSharedMem_t                           pfnAllocSharedMem;
-    xe_pfnDeviceGroupAllocDeviceMem_t                           pfnAllocDeviceMem;
-    xe_pfnDeviceGroupAllocHostMem_t                             pfnAllocHostMem;
-    xe_pfnDeviceGroupFreeMem_t                                  pfnFreeMem;
-    xe_pfnDeviceGroupGetMemProperties_t                         pfnGetMemProperties;
-    xe_pfnDeviceGroupGetMemAddressRange_t                       pfnGetMemAddressRange;
-    xe_pfnDeviceGroupGetMemIpcHandle_t                          pfnGetMemIpcHandle;
-    xe_pfnDeviceGroupOpenMemIpcHandle_t                         pfnOpenMemIpcHandle;
-    xe_pfnDeviceGroupCloseMemIpcHandle_t                        pfnCloseMemIpcHandle;
-} xe_device_group_dditable_t;
+    xe_pfnDriverGetDevices_t                                    pfnGetDevices;
+    xe_pfnDriverGetDriverVersion_t                              pfnGetDriverVersion;
+    xe_pfnDriverGetApiVersion_t                                 pfnGetApiVersion;
+    xe_pfnDriverGetIPCProperties_t                              pfnGetIPCProperties;
+    xe_pfnDriverAllocSharedMem_t                                pfnAllocSharedMem;
+    xe_pfnDriverAllocDeviceMem_t                                pfnAllocDeviceMem;
+    xe_pfnDriverAllocHostMem_t                                  pfnAllocHostMem;
+    xe_pfnDriverFreeMem_t                                       pfnFreeMem;
+    xe_pfnDriverGetMemProperties_t                              pfnGetMemProperties;
+    xe_pfnDriverGetMemAddressRange_t                            pfnGetMemAddressRange;
+    xe_pfnDriverGetMemIpcHandle_t                               pfnGetMemIpcHandle;
+    xe_pfnDriverOpenMemIpcHandle_t                              pfnOpenMemIpcHandle;
+    xe_pfnDriverCloseMemIpcHandle_t                             pfnCloseMemIpcHandle;
+} xe_driver_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Exported function for filling application's DeviceGroup table
+/// @brief Exported function for filling application's Driver table
 ///        with current process' addresses
 ///
 /// @returns
@@ -417,16 +417,16 @@ typedef struct _xe_device_group_dditable_t
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 ///         + version not supported
 __xedllexport xe_result_t __xecall
-xeGetDeviceGroupProcAddrTable(
+xeGetDriverProcAddrTable(
     xe_api_version_t version,                       ///< [in] API version requested
-    xe_device_group_dditable_t* pDdiTable           ///< [in,out] pointer to table of DDI function pointers
+    xe_driver_dditable_t* pDdiTable                 ///< [in,out] pointer to table of DDI function pointers
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeGetDeviceGroupProcAddrTable
-typedef xe_result_t (__xecall *xe_pfnGetDeviceGroupProcAddrTable_t)(
+/// @brief Function-pointer for xeGetDriverProcAddrTable
+typedef xe_result_t (__xecall *xe_pfnGetDriverProcAddrTable_t)(
     xe_api_version_t,
-    xe_device_group_dditable_t*
+    xe_driver_dditable_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -856,7 +856,7 @@ typedef xe_result_t (__xecall *xe_pfnGetFenceProcAddrTable_t)(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeEventPoolCreate 
 typedef xe_result_t (__xecall *xe_pfnEventPoolCreate_t)(
-    xe_device_group_handle_t,
+    xe_driver_handle_t,
     const xe_event_pool_desc_t*,
     uint32_t,
     xe_device_handle_t*,
@@ -1324,7 +1324,7 @@ typedef struct _xe_dditable_t
 {
     xe_global_dditable_t                Global;
     xe_device_dditable_t                Device;
-    xe_device_group_dditable_t          DeviceGroup;
+    xe_driver_dditable_t                Driver;
     xe_command_queue_dditable_t         CommandQueue;
     xe_command_list_dditable_t          CommandList;
     xe_fence_dditable_t                 Fence;

@@ -41,9 +41,9 @@ namespace xe_lib
 
         if( XE_RESULT_SUCCESS == result )
         {
-            auto getTable = reinterpret_cast<xe_pfnGetDeviceGroupProcAddrTable_t>(
-                GET_FUNCTION_PTR(loader, "xeGetDeviceGroupProcAddrTable") );
-            result = getTable( XE_API_VERSION_1_0, &ddiTable.DeviceGroup );
+            auto getTable = reinterpret_cast<xe_pfnGetDriverProcAddrTable_t>(
+                GET_FUNCTION_PTR(loader, "xeGetDriverProcAddrTable") );
+            result = getTable( XE_API_VERSION_1_0, &ddiTable.Driver );
         }
 
         if( XE_RESULT_SUCCESS == result )

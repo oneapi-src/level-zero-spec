@@ -9,9 +9,9 @@ desc: "Intel $OneApi Level-Zero Tool APIs for Device"
 ordinal: "1"
 --- #--------------------------------------------------------------------------
 type: class
-desc: "C++ wrapper for device group"
-name: $tDeviceGroup
-base: $xDeviceGroup
+desc: "C++ wrapper for instance"
+name: $tDriver
+base: $xDriver
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for device"
