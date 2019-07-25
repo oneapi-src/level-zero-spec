@@ -291,7 +291,7 @@ Public:
     if cpp, then remove each tag['key'] if matches namespace
     if comment, then insert doxygen '::' notation at beginning (for autogen links)
 """
-def subt(namespace, tags, string, comment=False, cpp=False):
+def subt(namespace, tags, string, comment=False, cpp=False, remove_namespace=False):
     for key, value in tags.items():
         if comment or not cpp:                                                  # generating c names
             string = re.sub(r"-%s"%re.escape(key), "-"+value, string)           # hack for compile options
@@ -300,6 +300,10 @@ def subt(namespace, tags, string, comment=False, cpp=False):
             string = re.sub(re.escape(key.upper()), repl.upper(), string)
         elif re.match(namespace, value):                                        # generating c++ names and tag matches current namespace
             repl = ""                                                           # remove tags; e.g., "$x" -> ""
+            string = re.sub(r"%s_?"%re.escape(key), repl, string)
+            string = re.sub(r"%s_?"%re.escape(key.upper()), repl.upper(), string)
+        elif remove_namespace:                                                  # generating c++ names and tags do _not_ match current namespace
+            repl = ""                                                           # remove namespace; e.g. "$x" -> ""
             string = re.sub(r"%s_?"%re.escape(key), repl, string)
             string = re.sub(r"%s_?"%re.escape(key.upper()), repl.upper(), string)
         else:                                                                   # generating c++ names and tags do _not_ match current namespace
@@ -578,7 +582,8 @@ def get_type_name(namespace, tags, obj, item, cpp=False, meta=None, handle_to_cl
             cname = subt(namespace, tags, cname, cpp=cpp)   # remove tags from class name
 
             if not (is_global or is_namespace or is_handle or is_inscope):
-                # need to prepend the class name to the type
+                # need to prepend the class name to the type after removing namespace from the type
+                name = subt(namespace, tags, item, cpp=cpp, remove_namespace=True)
                 name = _add_class(name, cname)
 
             elif handle_to_class and is_handle and not obj_traits.is_class(obj):
