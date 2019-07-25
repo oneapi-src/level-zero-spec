@@ -864,6 +864,36 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanRasSetup
+    xe_result_t __xecall
+    xetSysmanRasSetup(
+        xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
+        uint32_t enableLoc,                             ///< [in] Structural locations where RAS should be enabled (bitfield of
+                                                        ///< ::xet_ras_error_loc_t)
+        uint32_t disableLoc,                            ///< [in] Structural locations where RAS should be disabled (bitfield of
+                                                        ///< ::xet_ras_error_loc_t)
+        uint32_t* pEnabledLoc                           ///< [in] Structural locations where RAS is currently enabled after
+                                                        ///< applying enableLoc and disableLoc (bitfield of ::xet_ras_error_loc_t)
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnRasSetup = dditable->xet.Sysman.pfnRasSetup;
+        if( nullptr == pfnRasSetup )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnRasSetup( hSysman, enableLoc, disableLoc, pEnabledLoc );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanGetRasErrors
     xe_result_t __xecall
     xetSysmanGetRasErrors(
@@ -880,7 +910,7 @@ namespace loader
                                                         ///< If count is greater than or equal to the number of matching errors,
                                                         ///< all data is returned, counters are cleared if requested and count will
                                                         ///< be set to actual number of errors returned.
-        xet_res_error_t* pErrors                        ///< [in] Array of error data
+        xet_ras_error_t* pErrors                        ///< [in] Array of error data
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -1865,6 +1895,32 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanRunDiagnostics
+    xe_result_t __xecall
+    xetSysmanRunDiagnostics(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+        xet_diag_type_t type,                           ///< [in] Type of diagnostic to run
+        xet_diag_result_t* pResult                      ///< [in] The result of the diagnostics
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnRunDiagnostics = dditable->xet.Sysman.pfnRunDiagnostics;
+        if( nullptr == pfnRunDiagnostics )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnRunDiagnostics( hSysman, type, pResult );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanGetEvents
     xe_result_t __xecall
     xetSysmanGetEvents(
@@ -2814,6 +2870,7 @@ xetGetSysmanProcAddrTable(
             pDdiTable->pfnDestroy                                  = loader::xetSysmanDestroy;
             pDdiTable->pfnGetAccelAssetName                        = loader::xetSysmanGetAccelAssetName;
             pDdiTable->pfnGetInfo                                  = loader::xetSysmanGetInfo;
+            pDdiTable->pfnRasSetup                                 = loader::xetSysmanRasSetup;
             pDdiTable->pfnGetRasErrors                             = loader::xetSysmanGetRasErrors;
             pDdiTable->pfnAvailableDeviceProperties                = loader::xetSysmanAvailableDeviceProperties;
             pDdiTable->pfnGetDeviceProperties                      = loader::xetSysmanGetDeviceProperties;
@@ -2852,6 +2909,7 @@ xetGetSysmanProcAddrTable(
             pDdiTable->pfnSupportedEvents                          = loader::xetSysmanSupportedEvents;
             pDdiTable->pfnRegisterEvents                           = loader::xetSysmanRegisterEvents;
             pDdiTable->pfnUnregisterEvents                         = loader::xetSysmanUnregisterEvents;
+            pDdiTable->pfnRunDiagnostics                           = loader::xetSysmanRunDiagnostics;
             pDdiTable->pfnGetEvents                                = loader::xetSysmanGetEvents;
         }
         else

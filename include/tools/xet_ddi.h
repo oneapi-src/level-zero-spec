@@ -623,13 +623,22 @@ typedef xe_result_t (__xecall *xet_pfnSysmanGetInfo_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanRasSetup 
+typedef xe_result_t (__xecall *xet_pfnSysmanRasSetup_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    uint32_t,
+    uint32_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetSysmanGetRasErrors 
 typedef xe_result_t (__xecall *xet_pfnSysmanGetRasErrors_t)(
     xet_sysman_handle_t,
     xet_ras_filter_t*,
     xe_bool_t,
     uint32_t*,
-    xet_res_error_t*
+    xet_ras_error_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -929,6 +938,14 @@ typedef xe_result_t (__xecall *xet_pfnSysmanUnregisterEvents_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanRunDiagnostics 
+typedef xe_result_t (__xecall *xet_pfnSysmanRunDiagnostics_t)(
+    xet_sysman_handle_t,
+    xet_diag_type_t,
+    xet_diag_result_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetSysmanGetEvents 
 typedef xe_result_t (__xecall *xet_pfnSysmanGetEvents_t)(
     xet_sysman_handle_t,
@@ -945,6 +962,7 @@ typedef struct _xet_sysman_dditable_t
     xet_pfnSysmanDestroy_t                                      pfnDestroy;
     xet_pfnSysmanGetAccelAssetName_t                            pfnGetAccelAssetName;
     xet_pfnSysmanGetInfo_t                                      pfnGetInfo;
+    xet_pfnSysmanRasSetup_t                                     pfnRasSetup;
     xet_pfnSysmanGetRasErrors_t                                 pfnGetRasErrors;
     xet_pfnSysmanAvailableDeviceProperties_t                    pfnAvailableDeviceProperties;
     xet_pfnSysmanGetDeviceProperties_t                          pfnGetDeviceProperties;
@@ -983,6 +1001,7 @@ typedef struct _xet_sysman_dditable_t
     xet_pfnSysmanSupportedEvents_t                              pfnSupportedEvents;
     xet_pfnSysmanRegisterEvents_t                               pfnRegisterEvents;
     xet_pfnSysmanUnregisterEvents_t                             pfnUnregisterEvents;
+    xet_pfnSysmanRunDiagnostics_t                               pfnRunDiagnostics;
     xet_pfnSysmanGetEvents_t                                    pfnGetEvents;
 } xet_sysman_dditable_t;
 

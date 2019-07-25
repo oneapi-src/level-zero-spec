@@ -115,12 +115,8 @@ typedef struct _xet_resource_id_t xet_resource_id_t;
 typedef struct _xet_ras_filter_t xet_ras_filter_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_res_error_t
-typedef struct _xet_res_error_t xet_res_error_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_device_prop_accel_asset_t
-typedef struct _xet_device_prop_accel_asset_t xet_device_prop_accel_asset_t;
+/// @brief Forward-declare xet_ras_error_t
+typedef struct _xet_ras_error_t xet_ras_error_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_sysman_info_t
@@ -163,12 +159,8 @@ typedef struct _xet_device_prop_driver_version_t xet_device_prop_driver_version_
 typedef struct _xet_device_prop_bars_t xet_device_prop_bars_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_device_prop_cold_shutdown_t
-typedef struct _xet_device_prop_cold_shutdown_t xet_device_prop_cold_shutdown_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_device_prop_cold_reset_t
-typedef struct _xet_device_prop_cold_reset_t xet_device_prop_cold_reset_t;
+/// @brief Forward-declare xet_device_prop_reset_t
+typedef struct _xet_device_prop_reset_t xet_device_prop_reset_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_device_prop_capability_t
@@ -335,8 +327,16 @@ typedef struct _xet_pwr_property_request_t xet_pwr_property_request_t;
 typedef struct _xet_freq_divider_t xet_freq_divider_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_freq_multiplier_t
+typedef struct _xet_freq_multiplier_t xet_freq_multiplier_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_freq_prop_accel_assets_t
 typedef struct _xet_freq_prop_accel_assets_t xet_freq_prop_accel_assets_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_freq_prop_power_domain_t
+typedef struct _xet_freq_prop_power_domain_t xet_freq_prop_power_domain_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_freq_prop_domain_type_t
@@ -351,16 +351,24 @@ typedef struct _xet_freq_prop_avail_clocks_t xet_freq_prop_avail_clocks_t;
 typedef struct _xet_freq_prop_avail_dividers_t xet_freq_prop_avail_dividers_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_freq_prop_avail_multipliers_t
+typedef struct _xet_freq_prop_avail_multipliers_t xet_freq_prop_avail_multipliers_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_freq_prop_src_freq_t
 typedef struct _xet_freq_prop_src_freq_t xet_freq_prop_src_freq_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_freq_prop_dvfs_mode_t
-typedef struct _xet_freq_prop_dvfs_mode_t xet_freq_prop_dvfs_mode_t;
+/// @brief Forward-declare xet_freq_prop_freq_request_t
+typedef struct _xet_freq_prop_freq_request_t xet_freq_prop_freq_request_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_freq_prop_freq_range_t
-typedef struct _xet_freq_prop_freq_range_t xet_freq_prop_freq_range_t;
+/// @brief Forward-declare xet_freq_prop_freq_divider_t
+typedef struct _xet_freq_prop_freq_divider_t xet_freq_prop_freq_divider_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_freq_prop_freq_multiplier_t
+typedef struct _xet_freq_prop_freq_multiplier_t xet_freq_prop_freq_multiplier_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_freq_prop_freq_tdp_t
@@ -371,16 +379,8 @@ typedef struct _xet_freq_prop_freq_tdp_t xet_freq_prop_freq_tdp_t;
 typedef struct _xet_freq_prop_freq_efficient_t xet_freq_prop_freq_efficient_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_freq_prop_freq_request_t
-typedef struct _xet_freq_prop_freq_request_t xet_freq_prop_freq_request_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_freq_prop_freq_resolved_t
 typedef struct _xet_freq_prop_freq_resolved_t xet_freq_prop_freq_resolved_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_freq_prop_freq_divider_t
-typedef struct _xet_freq_prop_freq_divider_t xet_freq_prop_freq_divider_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_freq_prop_throttle_reasons_t
@@ -451,24 +451,12 @@ typedef struct _xet_mem_retire_info_t xet_mem_retire_info_t;
 typedef struct _xet_mem_prop_type_t xet_mem_prop_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_mem_prop_ecc_cap_t
-typedef struct _xet_mem_prop_ecc_cap_t xet_mem_prop_ecc_cap_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_mem_prop_bad_list_t
-typedef struct _xet_mem_prop_bad_list_t xet_mem_prop_bad_list_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_mem_prop_utilization_t
 typedef struct _xet_mem_prop_utilization_t xet_mem_prop_utilization_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_mem_prop_bandwidth_t
 typedef struct _xet_mem_prop_bandwidth_t xet_mem_prop_bandwidth_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_mem_prop_ecc_enable_t
-typedef struct _xet_mem_prop_ecc_enable_t xet_mem_prop_ecc_enable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_mem_prop_capability_t

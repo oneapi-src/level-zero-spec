@@ -268,7 +268,7 @@ typedef struct _xet_ras_filter_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief RAS error
-typedef struct _xet_res_error_t
+typedef struct _xet_ras_error_t
 {
     uint32_t type;                                  ///< [out] Bitfield describing type of error, constructed from one or more
                                                     ///< of ::xet_ras_error_type_t
@@ -279,25 +279,13 @@ typedef struct _xet_res_error_t
     xet_resource_id_t resourceId;                   ///< [out] Resource where the error was generated. If the error doesn't
                                                     ///< come from a specific resource, this will be ::XET_RESOURCE_ID_ANY
 
-} xet_res_error_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data about one type of accelerator asset
-typedef struct _xet_device_prop_accel_asset_t
-{
-    xet_accel_asset_t type;                         ///< [out] The type of asset
-    uint32_t numBlocks;                             ///< [out] The number of blocks of this asset type
-    uint32_t numEngines;                            ///< [out] The number of submission engines for this type of asset
-
-} xet_device_prop_accel_asset_t;
+} xet_ras_error_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Generic SMI information about a device
 typedef struct _xet_sysman_info_t
 {
-    uint64_t assetBitfield;                         ///< [out] A bitfield of assets (1<<::xet_accel_asset_t) available in the
-                                                    ///< resource
-    xet_device_prop_accel_asset_t assetInfo[XET_ACCEL_ASSET_MAX_TYPES]; ///< [out] Information about each asset.
+    uint32_t numAssets[XET_ACCEL_ASSET_MAX_TYPES];  ///< [out] The number of each accelerator asset in the device.
     uint32_t numRas;                                ///< [out] The total number of RAS elements available for querying in this
                                                     ///< device.
     uint32_t rasTypes;                              ///< [out] Bitfield of the type of RAS elements (::xet_ras_error_type_t)
@@ -327,6 +315,32 @@ xe_result_t __xecall
 xetSysmanGetInfo(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of a device
     xet_sysman_info_t* pInfo                        ///< [in] Returned information
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Setup (enable/disable) RAS
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pEnabledLoc
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanRasSetup(
+    xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
+    uint32_t enableLoc,                             ///< [in] Structural locations where RAS should be enabled (bitfield of
+                                                    ///< ::xet_ras_error_loc_t)
+    uint32_t disableLoc,                            ///< [in] Structural locations where RAS should be disabled (bitfield of
+                                                    ///< ::xet_ras_error_loc_t)
+    uint32_t* pEnabledLoc                           ///< [in] Structural locations where RAS is currently enabled after
+                                                    ///< applying enableLoc and disableLoc (bitfield of ::xet_ras_error_loc_t)
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -365,7 +379,7 @@ xetSysmanGetRasErrors(
                                                     ///< If count is greater than or equal to the number of matching errors,
                                                     ///< all data is returned, counters are cleared if requested and count will
                                                     ///< be set to actual number of errors returned.
-    xet_res_error_t* pErrors                        ///< [in] Array of error data
+    xet_ras_error_t* pErrors                        ///< [in] Array of error data
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -431,10 +445,7 @@ typedef enum _xet_device_properties_t
                                                     ///< ::xet_device_prop_driver_version_t)
     XET_DEVICE_PROP_BARS,                           ///< (ro static) The bars configured for the device (data:
                                                     ///< ::xet_device_prop_bars_t)
-    XET_DEVICE_PROP_COLD_SHUTDOWN,                  ///< (wo dynamic) Cold shudown the device (data:
-                                                    ///< ::xet_device_prop_cold_shutdown_t)
-    XET_DEVICE_PROP_COLD_RESET,                     ///< (wo dynamic) Cold reset the device (data:
-                                                    ///< ::xet_device_prop_cold_reset_t)
+    XET_DEVICE_PROP_RESET,                          ///< (wo dynamic) Reset the device (data: ::xet_device_prop_reset_t)
 
 } xet_device_properties_t;
 
@@ -504,20 +515,12 @@ typedef struct _xet_device_prop_bars_t
 } xet_device_prop_bars_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_DEVICE_PROP_COLD_SHUTDOWN
-typedef struct _xet_device_prop_cold_shutdown_t
+/// @brief Data for the property ::XET_DEVICE_PROP_RESET
+typedef struct _xet_device_prop_reset_t
 {
-    xe_bool_t doShutdown;                           ///< [in] Set to true to perform a cold shutdown of the device
+    xe_bool_t doReset;                              ///< [in] Set to true to perform a reset of the device
 
-} xet_device_prop_cold_shutdown_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_DEVICE_PROP_COLD_RESET
-typedef struct _xet_device_prop_cold_reset_t
-{
-    xe_bool_t doReset;                              ///< [in] Set to true to perform a cold shutdown of the device
-
-} xet_device_prop_cold_reset_t;
+} xet_device_prop_reset_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Property support
@@ -549,6 +552,8 @@ typedef struct _xet_device_prop_capability_t
     uint8_t support;                                ///< [out] API support for the property - one of ::xet_prop_support_t
     uint8_t access;                                 ///< [out] The access permissions for the property - one of
                                                     ///< ::xet_prop_access_t
+    uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
+                                                    ///< polled
 
 } xet_device_prop_capability_t;
 
@@ -723,6 +728,8 @@ typedef struct _xet_psu_prop_capability_t
     xet_psu_properties_t property;                  ///< [in] The property
     xet_prop_support_t support;                     ///< [out] API support for the property
     xet_prop_access_t access;                       ///< [out] The access permissions for the property
+    uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
+                                                    ///< polled
 
 } xet_psu_prop_capability_t;
 
@@ -851,6 +858,8 @@ typedef struct _xet_temp_prop_capability_t
     xet_temp_properties_t property;                 ///< [in] The property
     xet_prop_support_t support;                     ///< [out] API support for the property
     xet_prop_access_t access;                       ///< [out] The access permissions for the property
+    uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
+                                                    ///< polled
 
 } xet_temp_prop_capability_t;
 
@@ -1058,6 +1067,8 @@ typedef struct _xet_fan_prop_capability_t
     xet_fan_properties_t property;                  ///< [in] The property
     xet_prop_support_t support;                     ///< [out] API support for the property
     xet_prop_access_t access;                       ///< [out] The access permissions for the property
+    uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
+                                                    ///< polled
 
 } xet_fan_prop_capability_t;
 
@@ -1199,6 +1210,8 @@ typedef struct _xet_led_prop_capability_t
     xet_led_properties_t property;                  ///< [in] The property
     xet_prop_support_t support;                     ///< [out] API support for the property
     xet_prop_access_t access;                       ///< [out] The access permissions for the property
+    uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
+                                                    ///< polled
 
 } xet_led_prop_capability_t;
 
@@ -1358,6 +1371,8 @@ typedef struct _xet_firmware_prop_capability_t
     xet_firmware_properties_t property;             ///< [in] The property
     xet_prop_support_t support;                     ///< [out] API support for the property
     xet_prop_access_t access;                       ///< [out] The access permissions for the property
+    uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
+                                                    ///< polled
 
 } xet_firmware_prop_capability_t;
 
@@ -1564,6 +1579,8 @@ typedef struct _xet_pwr_prop_capability_t
     xet_pwr_properties_t property;                  ///< [in] The property
     xet_prop_support_t support;                     ///< [out] API support for the property
     xet_prop_access_t access;                       ///< [out] The access permissions for the property
+    uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
+                                                    ///< polled
 
 } xet_pwr_prop_capability_t;
 
@@ -1661,29 +1678,24 @@ xetSysmanSetPwrProperties(
 /// @brief Frequency domain types
 typedef enum _xet_freq_domain_type_t
 {
-    XET_FREQ_DOMAIN_TYPE_INDEPENDENT = 0,           ///< The frequency of this domain can be managed independently of other
-                                                    ///< domains
-    XET_FREQ_DOMAIN_TYPE_DEPENDENT,                 ///< The frequency of this domain is dependent on another domain through a
-                                                    ///< clock divider
+    XET_FREQ_DOMAIN_TYPE_PLL = 0,                   ///< The frequency of this domain is controlled by a phased-locked loop
+                                                    ///< (PLL). It can generally accept a range of frequencies with a fixed
+                                                    ///< step.
+    XET_FREQ_DOMAIN_TYPE_DIVIDER,                   ///< The frequency of this domain is dependent on another domain through a
+                                                    ///< clock divider. There is generally a limit set of divider ratios.
+    XET_FREQ_DOMAIN_TYPE_MULTIPLIER,                ///< The frequency of this domain is dependent on another domain through a
+                                                    ///< fractional multiplier.
 
 } xet_freq_domain_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief DVFS mode
-typedef enum _xet_dvfs_mode_t
+/// @brief Frequency mode
+typedef enum _xet_freq_mode_t
 {
-    XET_DVFS_MODE_MIN = 0,                          ///< Fixed minimum frequency will be requested unless specific applications
-                                                    ///< request otherwise.
-    XET_DVFS_MODE_EFFICIENT,                        ///< Dynamic frequency management that prefers power saving over
-                                                    ///< performance.
-    XET_DVFS_MODE_STABLE,                           ///< Fixed frequency that should not be throttled under normal operating
-                                                    ///< conditions.
-    XET_DVFS_MODE_DEFAULT,                          ///< Dynamic frequency management that balances power and performance.
-    XET_DVFS_MODE_AGGRESSIVE,                       ///< Dynamic frequency management that trades more power for better
-                                                    ///< performance.
-    XET_DVFS_MODE_MAX,                              ///< Fixed maximum frequency.
+    XET_FREQ_MODE_DEFAULT = 0,                      ///< The frequency of this domain is managed autonomously by the hardware.
+    XET_FREQ_MODE_FIXED,                            ///< The frequency of this domain has been fixed by SMI.
 
-} xet_dvfs_mode_t;
+} xet_freq_mode_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Frequency throttle reasons
@@ -1705,7 +1717,7 @@ typedef enum _xet_freq_throttle_reasons_t
 /// @brief Frequency divider element
 /// 
 /// @details
-///     - The frequency of a domain of type ::XET_FREQ_DOMAIN_TYPE_DEPENDENT is
+///     - The frequency of a domain of type ::XET_FREQ_DOMAIN_TYPE_DIVIDER is
 ///       obtained by the formula:
 ///     - freq = source domain freq * numerator / denominator
 typedef struct _xet_freq_divider_t
@@ -1714,6 +1726,19 @@ typedef struct _xet_freq_divider_t
     uint16_t denominator;                           ///< [in,out] denominator of the ratio
 
 } xet_freq_divider_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Frequency multiplier
+/// 
+/// @details
+///     - The frequency of a domain of type ::XET_FREQ_DOMAIN_TYPE_MULTIPLIER is
+///       obtained by the formula:
+///     - freq = source domain freq * multiplierFP8_8 / 2^8
+typedef struct _xet_freq_multiplier_t
+{
+    uint16_t multiplierFP8_8;                       ///< [in,out] Multiplier in fixed-point U8.8 format
+
+} xet_freq_multiplier_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Frequency domain resource properties
@@ -1732,28 +1757,32 @@ typedef enum _xet_freq_properties_t
 {
     XET_FREQ_PROP_ACCEL_ASSETS = 0,                 ///< (ro static) List of accelerator assets that are connected to this
                                                     ///< power domain (data: ::xet_freq_prop_accel_assets_t)
+    XET_FREQ_PROP_POWER_DOMAIN,                     ///< (ro static) Resource ID of the power domain to which this frequency
+                                                    ///< domain is connected
     XET_FREQ_PROP_DOMAIN_TYPE,                      ///< (ro static) The type of frequency domain (data:
                                                     ///< ::xet_freq_prop_domain_type_t)
     XET_FREQ_PROP_AVAIL_CLOCKS,                     ///< (ro static) Available frequency clocks that this domain can run at
                                                     ///< (data: ::xet_freq_prop_avail_clocks_t)
     XET_FREQ_PROP_AVAIL_DIVIDERS,                   ///< (ro static) Available dividers that this domain can run with (data:
                                                     ///< ::xet_freq_prop_avail_dividers_t)
+    XET_FREQ_PROP_AVAIL_MULTIPLIERS,                ///< (ro static) The range of multiplier values (data:
+                                                    ///< ::xet_freq_prop_avail_multipliers_t)
     XET_FREQ_PROP_SRC_FREQ,                         ///< (ro static) Get the resource ID of the source frequency domain
                                                     ///< resource if the type is dependent (data: ::xet_freq_prop_src_freq_t)
-    XET_FREQ_PROP_DVFS_MODE,                        ///< (rw dynamic) The operating mode of dynamic frequency management for
-                                                    ///< this domain (data: ::xet_freq_prop_dvfs_mode_t)
-    XET_FREQ_PROP_FREQ_RANGE,                       ///< (rw dynamic) The frequencies between which dynamic frequency
-                                                    ///< management operates (data: ::xet_freq_prop_freq_range_t)
+    XET_FREQ_PROP_FREQ_REQUEST,                     ///< (rw dynamic) The current frequency request (data:
+                                                    ///< ::xet_freq_prop_freq_request_t)
+    XET_FREQ_PROP_FREQ_DIVIDER,                     ///< (rw dynamic) The current frequency divider for frequency domains of
+                                                    ///< type ::XET_FREQ_DOMAIN_TYPE_DIVIDER (data:
+                                                    ///< ::xet_freq_prop_freq_divider_t)
+    XET_FREQ_PROP_FREQ_MULTIPLIER,                  ///< (rw dynamic) The current frequency multiplier for frequency domains of
+                                                    ///< type ::XET_FREQ_DOMAIN_TYPE_MULTIPLIER  (data:
+                                                    ///< ::xet_freq_prop_freq_divider_t)
     XET_FREQ_PROP_FREQ_TDP,                         ///< (ro dynamic) The maximum frequency supported under the current TDP
                                                     ///< conditions (data: ::xet_freq_prop_freq_tdp_t)
     XET_FREQ_PROP_FREQ_EFFICIENT,                   ///< (ro dynamic) The efficient minimum frequency (data:
                                                     ///< ::xet_freq_prop_freq_efficient_t)
-    XET_FREQ_PROP_FREQ_REQUEST,                     ///< (ro dynamic) The current frequency request (data:
-                                                    ///< ::xet_freq_prop_freq_request_t)
     XET_FREQ_PROP_FREQ_RESOLVED,                    ///< (ro dynamic) The resolved frequency (data:
                                                     ///< ::xet_freq_prop_freq_resolved_t)
-    XET_FREQ_PROP_FREQ_DIVIDER,                     ///< (rw dynamic) The current frequency divider for dependent frequency
-                                                    ///< domains (data: ::xet_freq_prop_freq_divider_t)
     XET_FREQ_PROP_THROTTLE_REASONS,                 ///< (ro dynamic) The reasons that the frequency is being limited by the
                                                     ///< PCU (data: ::xet_freq_prop_throttle_reasons_t)
     XET_FREQ_PROP_THROTTLE_TIME,                    ///< (ro dynamic) The total time that the frequency has been limited by the
@@ -1771,6 +1800,14 @@ typedef struct _xet_freq_prop_accel_assets_t
 } xet_freq_prop_accel_assets_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Data for the property ::XET_FREQ_PROP_POWER_DOMAIN
+typedef struct _xet_freq_prop_power_domain_t
+{
+    xet_resource_id_t resource;                     ///< [out] The resource ID of the power domain
+
+} xet_freq_prop_power_domain_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Data for the property ::XET_FREQ_PROP_DOMAIN_TYPE
 typedef struct _xet_freq_prop_domain_type_t
 {
@@ -1782,13 +1819,20 @@ typedef struct _xet_freq_prop_domain_type_t
 /// @brief Data for the property ::XET_FREQ_PROP_AVAIL_CLOCKS
 /// 
 /// @details
-///     - The list is ordered from the smallest frequency to the largest
-///       frequency.
+///     - Provides the set of frequencies as a list and as a range/step.
+///     - It is generally recommended that applications choose frequencies from
+///       the list. However applications can also construct the list themselves
+///       using the range/steps provided.
 typedef struct _xet_freq_prop_avail_clocks_t
 {
+    uint32_t minFP16_16;                            ///< [out] The minimum clock frequency in units of MHz (fixed point
+                                                    ///< U16.16).
+    uint32_t maxFP16_16;                            ///< [out] The maximum clock frequency in units of MHz (fixed point
+                                                    ///< U16.16).
+    uint32_t stepFP16_16;                           ///< [out] The step clock frequency in units of MHz (fixed point U16.16).
     uint32_t num;                                   ///< [out] The number of clocks
-    const uint32_t* pClocks;                        ///< [out] Array of clock frequencies in MHz ordered from smallest to
-                                                    ///< largest.
+    const uint32_t* pClocksFP16_16;                 ///< [out] Array of clock frequencies in units of MHz (fixed-point U16.16)
+                                                    ///< ordered from smallest to largest.
 
 } xet_freq_prop_avail_clocks_t;
 
@@ -1805,6 +1849,19 @@ typedef struct _xet_freq_prop_avail_dividers_t
 } xet_freq_prop_avail_dividers_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Data for the property ::XET_FREQ_PROP_AVAIL_MULTIPLIERS
+/// 
+/// @details
+///     - The range of multiplier values.
+typedef struct _xet_freq_prop_avail_multipliers_t
+{
+    uint16_t minFP8_8;                              ///< [out] The minimum multiplier value in fixed-point U8.8 format
+    uint16_t maxFP8_8;                              ///< [out] The maximum multiplier value in fixed-point U8.8 format
+    uint16_t minStepFP8_8;                          ///< [out] The smallest multiplier step size in fixed-point U8.8
+
+} xet_freq_prop_avail_multipliers_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Data for the property ::XET_FREQ_PROP_SRC_FREQ
 typedef struct _xet_freq_prop_src_freq_t
 {
@@ -1813,21 +1870,37 @@ typedef struct _xet_freq_prop_src_freq_t
 } xet_freq_prop_src_freq_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_FREQ_PROP_DVFS_MODE
-typedef struct _xet_freq_prop_dvfs_mode_t
+/// @brief Data for the property ::XET_FREQ_PROP_FREQ_REQUEST
+typedef struct _xet_freq_prop_freq_request_t
 {
-    xet_dvfs_mode_t mode;                           ///< [in,out] The DVFS operating mode
+    xet_freq_mode_t mode;                           ///< [in,out] The frequency mode
+    uint32_t freqRequest;                           ///< [out] The current frequency request in MHz. If setting this property,
+                                                    ///< the value will be used if mode is ::XET_FREQ_MODE_FIXED, otherwise the
+                                                    ///< hardware will take back control.
 
-} xet_freq_prop_dvfs_mode_t;
+} xet_freq_prop_freq_request_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_FREQ_PROP_FREQ_RANGE
-typedef struct _xet_freq_prop_freq_range_t
+/// @brief Data for the property ::XET_FREQ_PROP_FREQ_DIVIDER
+typedef struct _xet_freq_prop_freq_divider_t
 {
-    uint32_t min;                                   ///< [in,out] Minimum frequency in MHz
-    uint16_t max;                                   ///< [in,out] Maximum frequency in MHz
+    xet_freq_mode_t mode;                           ///< [in,out] The frequency mode
+    xet_freq_divider_t divider;                     ///< [in,out] The frequency divider. If setting this property, the value
+                                                    ///< will be used if mode is ::XET_FREQ_MODE_FIXED, otherwise the hardware
+                                                    ///< will take back control.
 
-} xet_freq_prop_freq_range_t;
+} xet_freq_prop_freq_divider_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Data for the property ::XET_FREQ_PROP_FREQ_MULTIPLIER
+typedef struct _xet_freq_prop_freq_multiplier_t
+{
+    xet_freq_mode_t mode;                           ///< [in,out] The frequency mode
+    xet_freq_multiplier_t multiplier;               ///< [in,out] The frequency multiplier. If setting this property, the value
+                                                    ///< will be used if mode is ::XET_FREQ_MODE_FIXED, otherwise the hardware
+                                                    ///< will take back control.
+
+} xet_freq_prop_freq_multiplier_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Data for the property ::XET_FREQ_PROP_FREQ_TDP
@@ -1847,28 +1920,12 @@ typedef struct _xet_freq_prop_freq_efficient_t
 } xet_freq_prop_freq_efficient_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_FREQ_PROP_FREQ_REQUEST
-typedef struct _xet_freq_prop_freq_request_t
-{
-    uint32_t freqRequest;                           ///< [out] The current frequency request in MHz
-
-} xet_freq_prop_freq_request_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Data for the property ::XET_FREQ_PROP_FREQ_RESOLVED
 typedef struct _xet_freq_prop_freq_resolved_t
 {
     uint32_t freqResolved;                          ///< [out] The resolved frequency in MHz
 
 } xet_freq_prop_freq_resolved_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_FREQ_PROP_FREQ_DIVIDER
-typedef struct _xet_freq_prop_freq_divider_t
-{
-    xet_freq_divider_t divider;                     ///< [in,out] The frequency divider
-
-} xet_freq_prop_freq_divider_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Data for the property ::XET_FREQ_PROP_THROTTLE_REASONS
@@ -1896,6 +1953,8 @@ typedef struct _xet_freq_prop_capability_t
     xet_freq_properties_t property;                 ///< [in] The property
     xet_prop_support_t support;                     ///< [out] API support for the property
     xet_prop_access_t access;                       ///< [out] The access permissions for the property
+    uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
+                                                    ///< polled
 
 } xet_freq_prop_capability_t;
 
@@ -2095,6 +2154,8 @@ typedef struct _xet_pwrwell_prop_capability_t
     xet_pwrwell_properties_t property;              ///< [in] The property
     xet_prop_support_t support;                     ///< [out] API support for the property
     xet_prop_access_t access;                       ///< [out] The access permissions for the property
+    uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
+                                                    ///< polled
 
 } xet_pwrwell_prop_capability_t;
 
@@ -2238,6 +2299,8 @@ typedef struct _xet_accel_prop_capability_t
     xet_accel_properties_t property;                ///< [in] The property
     xet_prop_support_t support;                     ///< [out] API support for the property
     xet_prop_access_t access;                       ///< [out] The access permissions for the property
+    uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
+                                                    ///< polled
 
 } xet_accel_prop_capability_t;
 
@@ -2356,16 +2419,10 @@ typedef enum _xet_mem_properties_t
 {
     XET_MEM_PROP_TYPE = 0,                          ///< (ro static) The type of memory covered by this resource (data:
                                                     ///< ::xet_mem_prop_type_t)
-    XET_MEM_PROP_ECC_CAP,                           ///< (ro static) Indicates if this memory resource supports ECC/RAS
-                                                    ///< features (data: ::xet_mem_prop_ecc_cap_t)
-    XET_MEM_PROP_BAD_LIST,                          ///< (ro static) Get the list of pages that have been permanently marked
-                                                    ///< bad (data: ::xet_mem_prop_bad_list_t)
     XET_MEM_PROP_UTILIZATION,                       ///< (ro dynamic) Get current allocated/unallocated size (data:
                                                     ///< ::xet_mem_prop_utilization_t)
     XET_MEM_PROP_BANDWIDTH,                         ///< (ro dynamic) Get current read/write bandwidth counters and maximum
                                                     ///< bandwidth (data: ::xet_mem_prop_bandwidth_t)
-    XET_MEM_PROP_ECC_ENABLE,                        ///< (rw dynamic) Determine if ECC is enabled/disabled or change this
-                                                    ///< setting (data: ::xet_mem_prop_ecc_enable_t)
 
 } xet_mem_properties_t;
 
@@ -2376,30 +2433,6 @@ typedef struct _xet_mem_prop_type_t
     xet_mem_type_t type;                            ///< [out] The memory type
 
 } xet_mem_prop_type_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_MEM_PROP_ECC_CAP
-typedef struct _xet_mem_prop_ecc_cap_t
-{
-    xe_bool_t isEccCapable;                         ///< [out] Indicates if this memory resource supports ECC/RAS features.
-
-} xet_mem_prop_ecc_cap_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_MEM_PROP_BAD_LIST
-typedef struct _xet_mem_prop_bad_list_t
-{
-    uint32_t* pCount;                               ///< [in,out] The number of elements in pList
-                                                    ///< If pCount is zero, then the driver will update the value with the
-                                                    ///< number of elements needed to store the bad list.
-                                                    ///< If pCount is less than that required to store the bad list, the driver
-                                                    ///< will update the value with the required number of elements and return
-                                                    ///< an error.
-                                                    ///< If pCount is larger than that required to store the bad list, the
-                                                    ///< driver will update the value with the number of elements actually returned.
-    xet_mem_retire_info_t* pList;                   ///< [in] Pointer to storage for information about each bad page.
-
-} xet_mem_prop_bad_list_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Data for the property ::XET_MEM_PROP_UTILIZATION
@@ -2431,14 +2464,6 @@ typedef struct _xet_mem_prop_bandwidth_t
 } xet_mem_prop_bandwidth_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_MEM_PROP_ECC_ENABLE
-typedef struct _xet_mem_prop_ecc_enable_t
-{
-    xe_bool_t enable;                               ///< [in] Whether or not ECC is enabled
-
-} xet_mem_prop_ecc_enable_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Request structure to determine memory resource properties that are
 ///        supported/accessible
 typedef struct _xet_mem_prop_capability_t
@@ -2446,6 +2471,8 @@ typedef struct _xet_mem_prop_capability_t
     xet_mem_properties_t property;                  ///< [in] The property
     xet_prop_support_t support;                     ///< [out] API support for the property
     xet_prop_access_t access;                       ///< [out] The access permissions for the property
+    uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
+                                                    ///< polled
 
 } xet_mem_prop_capability_t;
 
@@ -2671,6 +2698,8 @@ typedef struct _xet_link_prop_capability_t
     xet_link_properties_t property;                 ///< [in] The property
     xet_prop_support_t support;                     ///< [out] API support for the property
     xet_prop_access_t access;                       ///< [out] The access permissions for the property
+    uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
+                                                    ///< polled
 
 } xet_link_prop_capability_t;
 
@@ -2870,6 +2899,47 @@ xetSysmanUnregisterEvents(
     uint32_t count,                                 ///< [in] Number of entries in the array pEvents. If zero, all events will
                                                     ///< be unregistered.
     xet_event_request_t* pEvents                    ///< [in] Events to unregister.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Diagnostic type
+typedef enum _xet_diag_type_t
+{
+    XET_DIAG_TYPE_SCAN = 0,                         ///< Run SCAN diagnostics
+    XET_DIAG_TYPE_ARRAY,                            ///< Run Array diagnostics
+
+} xet_diag_type_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Diagnostic results
+typedef enum _xet_diag_result_t
+{
+    XET_DIAG_RESULT_NO_ERRORS = 0,                  ///< Diagnostic completed without finding errors to repair
+    XET_DIAG_RESULT_FAILED,                         ///< Diagnostic had problems running tests or attempting to setup repairs
+    XET_DIAG_RESULT_REBOOT_FOR_REPAIR,              ///< Diagnostics found errors, setup for repair and reboot is required to
+                                                    ///< complete the process
+
+} xet_diag_result_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Run diagnostics
+/// 
+/// @details
+///     - This function will block until the diagnostics have completed.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pResult
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanRunDiagnostics(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+    xet_diag_type_t type,                           ///< [in] Type of diagnostic to run
+    xet_diag_result_t* pResult                      ///< [in] The result of the diagnostics
     );
 
 ///////////////////////////////////////////////////////////////////////////////

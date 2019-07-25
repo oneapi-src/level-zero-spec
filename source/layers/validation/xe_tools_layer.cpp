@@ -770,6 +770,37 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanRasSetup
+    xe_result_t __xecall
+    xetSysmanRasSetup(
+        xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
+        uint32_t enableLoc,                             ///< [in] Structural locations where RAS should be enabled (bitfield of
+                                                        ///< ::xet_ras_error_loc_t)
+        uint32_t disableLoc,                            ///< [in] Structural locations where RAS should be disabled (bitfield of
+                                                        ///< ::xet_ras_error_loc_t)
+        uint32_t* pEnabledLoc                           ///< [in] Structural locations where RAS is currently enabled after
+                                                        ///< applying enableLoc and disableLoc (bitfield of ::xet_ras_error_loc_t)
+        )
+    {
+        auto pfnRasSetup = context.xetDdiTable.Sysman.pfnRasSetup;
+
+        if( nullptr == pfnRasSetup )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pEnabledLoc )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnRasSetup( hSysman, enableLoc, disableLoc, pEnabledLoc );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanGetRasErrors
     xe_result_t __xecall
     xetSysmanGetRasErrors(
@@ -786,7 +817,7 @@ namespace layer
                                                         ///< If count is greater than or equal to the number of matching errors,
                                                         ///< all data is returned, counters are cleared if requested and count will
                                                         ///< be set to actual number of errors returned.
-        xet_res_error_t* pErrors                        ///< [in] Array of error data
+        xet_ras_error_t* pErrors                        ///< [in] Array of error data
         )
     {
         auto pfnGetRasErrors = context.xetDdiTable.Sysman.pfnGetRasErrors;
@@ -1815,6 +1846,33 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanRunDiagnostics
+    xe_result_t __xecall
+    xetSysmanRunDiagnostics(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+        xet_diag_type_t type,                           ///< [in] Type of diagnostic to run
+        xet_diag_result_t* pResult                      ///< [in] The result of the diagnostics
+        )
+    {
+        auto pfnRunDiagnostics = context.xetDdiTable.Sysman.pfnRunDiagnostics;
+
+        if( nullptr == pfnRunDiagnostics )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pResult )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnRunDiagnostics( hSysman, type, pResult );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanGetEvents
     xe_result_t __xecall
     xetSysmanGetEvents(
@@ -2440,6 +2498,9 @@ xetGetSysmanProcAddrTable(
     dditable.pfnGetInfo                                  = pDdiTable->pfnGetInfo;
     pDdiTable->pfnGetInfo                                = layer::xetSysmanGetInfo;
 
+    dditable.pfnRasSetup                                 = pDdiTable->pfnRasSetup;
+    pDdiTable->pfnRasSetup                               = layer::xetSysmanRasSetup;
+
     dditable.pfnGetRasErrors                             = pDdiTable->pfnGetRasErrors;
     pDdiTable->pfnGetRasErrors                           = layer::xetSysmanGetRasErrors;
 
@@ -2553,6 +2614,9 @@ xetGetSysmanProcAddrTable(
 
     dditable.pfnUnregisterEvents                         = pDdiTable->pfnUnregisterEvents;
     pDdiTable->pfnUnregisterEvents                       = layer::xetSysmanUnregisterEvents;
+
+    dditable.pfnRunDiagnostics                           = pDdiTable->pfnRunDiagnostics;
+    pDdiTable->pfnRunDiagnostics                         = layer::xetSysmanRunDiagnostics;
 
     dditable.pfnGetEvents                                = pDdiTable->pfnGetEvents;
     pDdiTable->pfnGetEvents                              = layer::xetSysmanGetEvents;

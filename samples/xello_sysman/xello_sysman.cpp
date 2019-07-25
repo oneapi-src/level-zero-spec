@@ -23,7 +23,7 @@ void ShowRasCounters(xet_sysman_handle_t hSysmanDevice)
     if ((xetSysmanGetInfo(hSysmanDevice, &info) == XE_RESULT_SUCCESS) && (info.numRas))
     {
         xet_ras_filter_t filter = XET_RAS_FILTER_ALL_COUNTERS;
-        xet_res_error_t* pCounters = (xet_res_error_t*)malloc(info.numRas * sizeof(xet_res_error_t));
+        xet_ras_error_t* pCounters = (xet_ras_error_t*)malloc(info.numRas * sizeof(xet_ras_error_t));
 
         if (xetSysmanGetRasErrors(hSysmanDevice, &filter, false, &info.numRas, pCounters) == XE_RESULT_SUCCESS)
         {
@@ -36,17 +36,66 @@ void ShowRasCounters(xet_sysman_handle_t hSysmanDevice)
     }
 }
 
-void ShutdownDevice(xet_sysman_handle_t hSysmanDevice)
+void LocalMemoryRasConfig(xet_sysman_handle_t hSysmanDevice)
+{
+    xet_sysman_info_t info;
+    if (xetSysmanGetInfo(hSysmanDevice, &info) == XE_RESULT_SUCCESS)
+    {
+        fprintf(stdout, "Local memory:\n");
+        if (info.rasLocations & XET_RAS_ERROR_LOC_MAIN_MEM)
+        {
+            uint32_t enabled;
+            fprintf(stdout, "    RAS support: yes\n");
+            if (xetSysmanRasSetup(hSysmanDevice, 0, 0, &enabled) == XE_RESULT_SUCCESS)
+            {
+                fprintf(stdout, "    RAS enabled: %s\n", (enabled & XET_RAS_ERROR_LOC_MAIN_MEM) ? "yes" : "no");
+            }
+        }
+        else
+        {
+            fprintf(stdout, "    RAS support: no\n");
+        }
+    }
+}
+
+void MediaUtilizationResources(xet_sysman_handle_t hSysmanDevice)
+{
+    xet_sysman_info_t info;
+    if (xetSysmanGetInfo(hSysmanDevice, &info) == XE_RESULT_SUCCESS)
+    {
+        const uint64_t mediaAssetBitfield = (XET_ACCEL_ASSET_VIDEO_DECODER | XET_ACCEL_ASSET_VIDEO_ENCODER | XET_ACCEL_ASSET_VIDEO_PROCESSING);
+        struct
+        {
+            xet_accel_prop_accel_assets_t assets;
+        } data;
+        xet_accel_property_request_t request{ 0, XET_ACCEL_PROP_ACCEL_ASSETS, &data.assets, sizeof(data.assets) };
+
+        fprintf(stdout, "Accelerator asset resources counting only media utilization:\n");
+        for (uint32_t i = 0; i < info.numResourcesByType[XET_RESOURCE_TYPE_ACCEL]; i++)
+        {
+            request.index = i;
+            if (xetSysmanGetAccelProperties(hSysmanDevice, 1, &request) == XE_RESULT_SUCCESS)
+            {
+                if ((data.assets.assets & mediaAssetBitfield) == mediaAssetBitfield)
+                {
+                    fprintf(stdout, "    index=%u: assets=0x%llx\n", i, data.assets.assets);
+                }
+            }
+        }
+    }
+}
+
+void ResetDevice(xet_sysman_handle_t hSysmanDevice)
 {
     struct
     {
-        xet_device_prop_cold_shutdown_t shutdown;
+        xet_device_prop_reset_t reset;
     } data;
     xet_device_property_request_t requests[] = 
     {
-        { XET_DEVICE_PROP_COLD_SHUTDOWN,    &data.shutdown, sizeof(data.shutdown) },
+        { XET_DEVICE_PROP_RESET,    &data.reset, sizeof(data.reset) },
     };
-    data.shutdown.doShutdown = 1;
+    data.reset.doReset = 1;
 
     if (xetSysmanSetDeviceProperties(
         hSysmanDevice,
@@ -126,6 +175,25 @@ void ShowInventoryInfo(xet_sysman_handle_t hSysmanDevice)
     }
 }
 
+void ShowAcceleratorAssets(xet_sysman_handle_t hSysmanDevice)
+{
+    xet_sysman_info_t info;
+    if (xetSysmanGetInfo(hSysmanDevice, &info) == XE_RESULT_SUCCESS)
+    {
+        fprintf(stdout, "    Assets:\n");
+        for (int i = 0; i < XET_ACCEL_ASSET_MAX_TYPES; i++)
+        {
+            if (info.numAssets[i])
+            {
+                const char* pAssetName;
+                xetSysmanGetAccelAssetName(hSysmanDevice, (xet_accel_asset_t)i, &pAssetName);
+                fprintf(stdout, "        %s: %u\n", pAssetName, info.numAssets[i]);
+            }
+        }
+        fprintf(stdout, "\n");
+    }
+}
+
 void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
 {
     xet_sysman_info_t info;
@@ -151,20 +219,7 @@ void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
             }
         }
 
-        fprintf(stdout, "    Assets:\n");
-        for (int i = 0; i < XET_ACCEL_ASSET_MAX_TYPES; i++)
-        {
-            if (info.assetInfo[i].numBlocks)
-            {
-                const char* pResName;
-                xetSysmanGetAccelAssetName(hSysmanDevice, (xet_accel_asset_t)i, &pResName);
-                if (info.numResourcesByType[i])
-                {
-                    fprintf(stdout, "        %s: %u blocks, %u engines\n", pResName, info.assetInfo[i].numBlocks, info.assetInfo[i].numEngines);
-                }
-            }
-        }
-        fprintf(stdout, "\n");
+        ShowAcceleratorAssets(hSysmanDevice);
     }
 }
 

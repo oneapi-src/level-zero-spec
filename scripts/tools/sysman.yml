@@ -310,7 +310,7 @@ value: "{ $T_RESOURCE_ID_ANY, (uint32_t)$T_RAS_ERROR_TYPE_ALL, (uint32_t)$T_RAS_
 type: struct
 desc: "RAS error"
 class: $tSysman
-name: $t_res_error_t
+name: $t_ras_error_t
 members:
     - type: uint32_t
       name: "type"
@@ -329,31 +329,13 @@ members:
       desc: "[out] Resource where the error was generated. If the error doesn't come from a specific resource, this will be $T_RESOURCE_ID_ANY"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data about one type of accelerator asset"
-class: $tSysman
-name: $t_device_prop_accel_asset_t
-members:
-    - type: $t_accel_asset_t
-      name: "type"
-      desc: "[out] The type of asset"
-    - type: uint32_t
-      name: "numBlocks"
-      desc: "[out] The number of blocks of this asset type"
-    - type: uint32_t
-      name: "numEngines"
-      desc: "[out] The number of submission engines for this type of asset"
---- #--------------------------------------------------------------------------
-type: struct
 desc: "Generic SMI information about a device"
 class: $tSysman
 name: $t_sysman_info_t
 members:
-    - type: uint64_t
-      name: "assetBitfield"
-      desc: "[out] A bitfield of assets (1<<$t_accel_asset_t) available in the resource"
-    - type: $t_device_prop_accel_asset_t
-      name: "assetInfo[$T_ACCEL_ASSET_MAX_TYPES]"
-      desc: "[out] Information about each asset."
+    - type: uint32_t
+      name: "numAssets[$T_ACCEL_ASSET_MAX_TYPES]"
+      desc: "[out] The number of each accelerator asset in the device."
     - type: uint32_t
       name: "numRas"
       desc: "[out] The total number of RAS elements available for querying in this device."
@@ -383,6 +365,27 @@ params:
       desc: "[in] Returned information"
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Setup (enable/disable) RAS"
+class: $tSysman
+name: RasSetup
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] Handle of the SMI object"
+    - type: uint32_t
+      name: enableLoc
+      desc: "[in] Structural locations where RAS should be enabled (bitfield of $t_ras_error_loc_t)"
+    - type: uint32_t
+      name: disableLoc
+      desc: "[in] Structural locations where RAS should be disabled (bitfield of $t_ras_error_loc_t)"
+    - type: uint32_t*
+      name: pEnabledLoc
+      desc: "[in] Structural locations where RAS is currently enabled after applying enableLoc and disableLoc (bitfield of $t_ras_error_loc_t)"
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Get RAS errors that have occurred"
 class: $tSysman
 name: GetRasErrors
@@ -407,7 +410,7 @@ params:
             If count is 0 or pErrors is nullptr, driver will update with the number of errors matching the specified filters. Counters are not cleared.
             If count is non-zero and less than the number of matching errors, driver will update with the number of errors matching the specified filters. No data is returned and counters are not cleared.
             If count is greater than or equal to the number of matching errors, all data is returned, counters are cleared if requested and count will be set to actual number of errors returned.
-    - type: $t_res_error_t*
+    - type: $t_ras_error_t*
       name: pErrors
       desc: "[in] Array of error data"
 returns:
@@ -485,10 +488,8 @@ etors:
       desc: "(ro static) The driver version associated with the device (data: $t_device_prop_driver_version_t)"
     - name: $T_DEVICE_PROP_BARS
       desc: "(ro static) The bars configured for the device (data: $t_device_prop_bars_t)"
-    - name: $T_DEVICE_PROP_COLD_SHUTDOWN
-      desc: "(wo dynamic) Cold shudown the device (data: $t_device_prop_cold_shutdown_t)"
-    - name: $T_DEVICE_PROP_COLD_RESET
-      desc: "(wo dynamic) Cold reset the device (data: $t_device_prop_cold_reset_t)"
+    - name: $T_DEVICE_PROP_RESET
+      desc: "(wo dynamic) Reset the device (data: $t_device_prop_reset_t)"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Data for property $T_DEVICE_PROP_SERIAL_NUMBER"
@@ -566,22 +567,13 @@ members:
       desc: "[out][range(0, num-1)] Information about each bar."
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_DEVICE_PROP_COLD_SHUTDOWN"
+desc: "Data for the property $T_DEVICE_PROP_RESET"
 class: $tSysman
-name: $t_device_prop_cold_shutdown_t
-members:
-    - type: $x_bool_t
-      name: "doShutdown"
-      desc: "[in] Set to true to perform a cold shutdown of the device"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_DEVICE_PROP_COLD_RESET"
-class: $tSysman
-name: $t_device_prop_cold_reset_t
+name: $t_device_prop_reset_t
 members:
     - type: $x_bool_t
       name: "doReset"
-      desc: "[in] Set to true to perform a cold shutdown of the device"
+      desc: "[in] Set to true to perform a reset of the device"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Property support"
@@ -630,6 +622,9 @@ members:
     - type: uint8_t
       name: "access"
       desc: "[out] The access permissions for the property - one of $t_prop_access_t"
+    - type: uint32_t
+      name: "minSampleRate"
+      desc: "[out] The minimum rate in microseconds that this property can be polled"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which device properties are available on a given device"
@@ -803,6 +798,9 @@ members:
     - type: $t_prop_access_t
       name: "access"
       desc: "[out] The access permissions for the property"
+    - type: uint32_t
+      name: "minSampleRate"
+      desc: "[out] The minimum rate in microseconds that this property can be polled"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which PSU resource properties are available on a given device"
@@ -926,6 +924,9 @@ members:
     - type: $t_prop_access_t
       name: "access"
       desc: "[out] The access permissions for the property"
+    - type: uint32_t
+      name: "minSampleRate"
+      desc: "[out] The minimum rate in microseconds that this property can be polled"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which temperature sensor properties are available on a given device"
@@ -1143,6 +1144,9 @@ members:
     - type: $t_prop_access_t
       name: "access"
       desc: "[out] The access permissions for the property"
+    - type: uint32_t
+      name: "minSampleRate"
+      desc: "[out] The minimum rate in microseconds that this property can be polled"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which fan resource properties are available on a given device"
@@ -1286,6 +1290,9 @@ members:
     - type: $t_prop_access_t
       name: "access"
       desc: "[out] The access permissions for the property"
+    - type: uint32_t
+      name: "minSampleRate"
+      desc: "[out] The minimum rate in microseconds that this property can be polled"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which LED resource properties are available on a given device"
@@ -1445,6 +1452,9 @@ members:
     - type: $t_prop_access_t
       name: "access"
       desc: "[out] The access permissions for the property"
+    - type: uint32_t
+      name: "minSampleRate"
+      desc: "[out] The minimum rate in microseconds that this property can be polled"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which firmware resource properties are available on a given device"
@@ -1639,6 +1649,9 @@ members:
     - type: $t_prop_access_t
       name: "access"
       desc: "[out] The access permissions for the property"
+    - type: uint32_t
+      name: "minSampleRate"
+      desc: "[out] The minimum rate in microseconds that this property can be polled"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which power domain resource properties are available on a given device"
@@ -1731,30 +1744,24 @@ desc: "Frequency domain types"
 class: $tSysman
 name: $t_freq_domain_type_t
 etors:
-    - name: $T_FREQ_DOMAIN_TYPE_INDEPENDENT
+    - name: $T_FREQ_DOMAIN_TYPE_PLL
       value: "0"
-      desc: "The frequency of this domain can be managed independently of other domains"
-    - name: $T_FREQ_DOMAIN_TYPE_DEPENDENT
-      desc: "The frequency of this domain is dependent on another domain through a clock divider"
+      desc: "The frequency of this domain is controlled by a phased-locked loop (PLL). It can generally accept a range of frequencies with a fixed step."
+    - name: $T_FREQ_DOMAIN_TYPE_DIVIDER
+      desc: "The frequency of this domain is dependent on another domain through a clock divider. There is generally a limit set of divider ratios."
+    - name: $T_FREQ_DOMAIN_TYPE_MULTIPLIER
+      desc: "The frequency of this domain is dependent on another domain through a fractional multiplier."
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "DVFS mode"
+desc: "Frequency mode"
 class: $tSysman
-name: $t_dvfs_mode_t
+name: $t_freq_mode_t
 etors:
-    - name: $T_DVFS_MODE_MIN
+    - name: $T_FREQ_MODE_DEFAULT
       value: "0"
-      desc: "Fixed minimum frequency will be requested unless specific applications request otherwise."
-    - name: $T_DVFS_MODE_EFFICIENT
-      desc: "Dynamic frequency management that prefers power saving over performance."
-    - name: $T_DVFS_MODE_STABLE
-      desc: "Fixed frequency that should not be throttled under normal operating conditions."
-    - name: $T_DVFS_MODE_DEFAULT
-      desc: "Dynamic frequency management that balances power and performance."
-    - name: $T_DVFS_MODE_AGGRESSIVE
-      desc: "Dynamic frequency management that trades more power for better performance."
-    - name: $T_DVFS_MODE_MAX
-      desc: "Fixed maximum frequency."
+      desc: "The frequency of this domain is managed autonomously by the hardware."
+    - name: $T_FREQ_MODE_FIXED
+      desc: "The frequency of this domain has been fixed by SMI."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Frequency throttle reasons"
@@ -1791,7 +1798,7 @@ desc: "Frequency divider element"
 class: $tSysman
 name: $t_freq_divider_t
 details:
-    - "The frequency of a domain of type $T_FREQ_DOMAIN_TYPE_DEPENDENT is obtained by the formula:"
+    - "The frequency of a domain of type $T_FREQ_DOMAIN_TYPE_DIVIDER is obtained by the formula:"
     - "freq = source domain freq * numerator / denominator"
 members:
     - type: uint16_t
@@ -1800,6 +1807,18 @@ members:
     - type: uint16_t
       name: denominator
       desc: "[in,out] denominator of the ratio"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Frequency multiplier"
+class: $tSysman
+name: $t_freq_multiplier_t
+details:
+    - "The frequency of a domain of type $T_FREQ_DOMAIN_TYPE_MULTIPLIER is obtained by the formula:"
+    - "freq = source domain freq * multiplierFP8_8 / 2^8"
+members:
+    - type: uint16_t
+      name: multiplierFP8_8
+      desc: "[in,out] Multiplier in fixed-point U8.8 format"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Frequency domain resource properties"
@@ -1813,28 +1832,30 @@ etors:
     - name: $T_FREQ_PROP_ACCEL_ASSETS
       value: "0"
       desc: "(ro static) List of accelerator assets that are connected to this power domain (data: $t_freq_prop_accel_assets_t)"
+    - name: $T_FREQ_PROP_POWER_DOMAIN
+      desc: "(ro static) Resource ID of the power domain to which this frequency domain is connected"
     - name: $T_FREQ_PROP_DOMAIN_TYPE
       desc: "(ro static) The type of frequency domain (data: $t_freq_prop_domain_type_t)"
     - name: $T_FREQ_PROP_AVAIL_CLOCKS
       desc: "(ro static) Available frequency clocks that this domain can run at (data: $t_freq_prop_avail_clocks_t)"
     - name: $T_FREQ_PROP_AVAIL_DIVIDERS
       desc: "(ro static) Available dividers that this domain can run with (data: $t_freq_prop_avail_dividers_t)"
+    - name: $T_FREQ_PROP_AVAIL_MULTIPLIERS
+      desc: "(ro static) The range of multiplier values (data: $t_freq_prop_avail_multipliers_t)"
     - name: $T_FREQ_PROP_SRC_FREQ
       desc: "(ro static) Get the resource ID of the source frequency domain resource if the type is dependent (data: $t_freq_prop_src_freq_t)"
-    - name: $T_FREQ_PROP_DVFS_MODE
-      desc: "(rw dynamic) The operating mode of dynamic frequency management for this domain (data: $t_freq_prop_dvfs_mode_t)"
-    - name: $T_FREQ_PROP_FREQ_RANGE
-      desc: "(rw dynamic) The frequencies between which dynamic frequency management operates (data: $t_freq_prop_freq_range_t)"
+    - name: $T_FREQ_PROP_FREQ_REQUEST
+      desc: "(rw dynamic) The current frequency request (data: $t_freq_prop_freq_request_t)"
+    - name: $T_FREQ_PROP_FREQ_DIVIDER
+      desc: "(rw dynamic) The current frequency divider for frequency domains of type $T_FREQ_DOMAIN_TYPE_DIVIDER (data: $t_freq_prop_freq_divider_t)"
+    - name: $T_FREQ_PROP_FREQ_MULTIPLIER
+      desc: "(rw dynamic) The current frequency multiplier for frequency domains of type $T_FREQ_DOMAIN_TYPE_MULTIPLIER  (data: $t_freq_prop_freq_divider_t)"
     - name: $T_FREQ_PROP_FREQ_TDP
       desc: "(ro dynamic) The maximum frequency supported under the current TDP conditions (data: $t_freq_prop_freq_tdp_t)"
     - name: $T_FREQ_PROP_FREQ_EFFICIENT
       desc: "(ro dynamic) The efficient minimum frequency (data: $t_freq_prop_freq_efficient_t)"
-    - name: $T_FREQ_PROP_FREQ_REQUEST
-      desc: "(ro dynamic) The current frequency request (data: $t_freq_prop_freq_request_t)"
     - name: $T_FREQ_PROP_FREQ_RESOLVED
       desc: "(ro dynamic) The resolved frequency (data: $t_freq_prop_freq_resolved_t)"
-    - name: $T_FREQ_PROP_FREQ_DIVIDER
-      desc: "(rw dynamic) The current frequency divider for dependent frequency domains (data: $t_freq_prop_freq_divider_t)"
     - name: $T_FREQ_PROP_THROTTLE_REASONS
       desc: "(ro dynamic) The reasons that the frequency is being limited by the PCU (data: $t_freq_prop_throttle_reasons_t)"
     - name: $T_FREQ_PROP_THROTTLE_TIME
@@ -1850,6 +1871,15 @@ members:
       desc: "[out] List of accelerator assets that are connected to this power domain (Bitfield of (1<<$t_accel_asset_t))."
 --- #--------------------------------------------------------------------------
 type: struct
+desc: "Data for the property $T_FREQ_PROP_POWER_DOMAIN"
+class: $tSysman
+name: $t_freq_prop_power_domain_t
+members:
+    - type: $t_resource_id_t
+      name: "resource"
+      desc: "[out] The resource ID of the power domain"
+--- #--------------------------------------------------------------------------
+type: struct
 desc: "Data for the property $T_FREQ_PROP_DOMAIN_TYPE"
 class: $tSysman
 name: $t_freq_prop_domain_type_t
@@ -1863,14 +1893,24 @@ desc: "Data for the property $T_FREQ_PROP_AVAIL_CLOCKS"
 class: $tSysman
 name: $t_freq_prop_avail_clocks_t
 details:
-    - "The list is ordered from the smallest frequency to the largest frequency."
+    - "Provides the set of frequencies as a list and as a range/step."
+    - "It is generally recommended that applications choose frequencies from the list. However applications can also construct the list themselves using the range/steps provided."
 members:
+    - type: uint32_t
+      name: minFP16_16
+      desc: "[out] The minimum clock frequency in units of MHz (fixed point U16.16)."
+    - type: uint32_t
+      name: maxFP16_16
+      desc: "[out] The maximum clock frequency in units of MHz (fixed point U16.16)."
+    - type: uint32_t
+      name: stepFP16_16
+      desc: "[out] The step clock frequency in units of MHz (fixed point U16.16)."
     - type: uint32_t
       name: num
       desc: "[out] The number of clocks"
     - type: "const uint32_t*"
-      name: "pClocks"
-      desc: "[out] Array of clock frequencies in MHz ordered from smallest to largest."
+      name: "pClocksFP16_16"
+      desc: "[out] Array of clock frequencies in units of MHz (fixed-point U16.16) ordered from smallest to largest."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Data for the property $T_FREQ_PROP_AVAIL_DIVIDERS"
@@ -1887,6 +1927,23 @@ members:
       desc: "[out] Array of numerator/denominator for each divider"
 --- #--------------------------------------------------------------------------
 type: struct
+desc: "Data for the property $T_FREQ_PROP_AVAIL_MULTIPLIERS"
+class: $tSysman
+name: $t_freq_prop_avail_multipliers_t
+details:
+    - "The range of multiplier values."
+members:
+    - type: uint16_t
+      name: minFP8_8
+      desc: "[out] The minimum multiplier value in fixed-point U8.8 format"
+    - type: uint16_t
+      name: maxFP8_8
+      desc: "[out] The maximum multiplier value in fixed-point U8.8 format"
+    - type: uint16_t
+      name: minStepFP8_8
+      desc: "[out] The smallest multiplier step size in fixed-point U8.8"
+--- #--------------------------------------------------------------------------
+type: struct
 desc: "Data for the property $T_FREQ_PROP_SRC_FREQ"
 class: $tSysman
 name: $t_freq_prop_src_freq_t
@@ -1896,25 +1953,40 @@ members:
       desc: "[out] The resource ID of the source frequency domain"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_FREQ_PROP_DVFS_MODE"
+desc: "Data for the property $T_FREQ_PROP_FREQ_REQUEST"
 class: $tSysman
-name: $t_freq_prop_dvfs_mode_t
+name: $t_freq_prop_freq_request_t
 members:
-    - type: $t_dvfs_mode_t
+    - type: $t_freq_mode_t
       name: mode
-      desc: "[in,out] The DVFS operating mode"
+      desc: "[in,out] The frequency mode"
+    - type: uint32_t
+      name: "freqRequest"
+      desc: "[out] The current frequency request in MHz. If setting this property, the value will be used if mode is $T_FREQ_MODE_FIXED, otherwise the hardware will take back control."
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_FREQ_PROP_FREQ_RANGE"
+desc: "Data for the property $T_FREQ_PROP_FREQ_DIVIDER"
 class: $tSysman
-name: $t_freq_prop_freq_range_t
+name: $t_freq_prop_freq_divider_t
 members:
-    - type: uint32_t
-      name: min
-      desc: "[in,out] Minimum frequency in MHz"
-    - type: uint16_t
-      name: max
-      desc: "[in,out] Maximum frequency in MHz"
+    - type: $t_freq_mode_t
+      name: mode
+      desc: "[in,out] The frequency mode"
+    - type: $t_freq_divider_t
+      name: divider
+      desc: "[in,out] The frequency divider. If setting this property, the value will be used if mode is $T_FREQ_MODE_FIXED, otherwise the hardware will take back control."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Data for the property $T_FREQ_PROP_FREQ_MULTIPLIER"
+class: $tSysman
+name: $t_freq_prop_freq_multiplier_t
+members:
+    - type: $t_freq_mode_t
+      name: mode
+      desc: "[in,out] The frequency mode"
+    - type: $t_freq_multiplier_t
+      name: multiplier
+      desc: "[in,out] The frequency multiplier. If setting this property, the value will be used if mode is $T_FREQ_MODE_FIXED, otherwise the hardware will take back control."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Data for the property $T_FREQ_PROP_FREQ_TDP"
@@ -1935,15 +2007,6 @@ members:
       desc: "[out] The efficient minimum frequency in MHz"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_FREQ_PROP_FREQ_REQUEST"
-class: $tSysman
-name: $t_freq_prop_freq_request_t
-members:
-    - type: uint32_t
-      name: "freqRequest"
-      desc: "[out] The current frequency request in MHz"
---- #--------------------------------------------------------------------------
-type: struct
 desc: "Data for the property $T_FREQ_PROP_FREQ_RESOLVED"
 class: $tSysman
 name: $t_freq_prop_freq_resolved_t
@@ -1951,15 +2014,6 @@ members:
     - type: uint32_t
       name: "freqResolved"
       desc: "[out] The resolved frequency in MHz"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_FREQ_PROP_FREQ_DIVIDER"
-class: $tSysman
-name: $t_freq_prop_freq_divider_t
-members:
-    - type: $t_freq_divider_t
-      name: divider
-      desc: "[in,out] The frequency divider"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Data for the property $T_FREQ_PROP_THROTTLE_REASONS"
@@ -1993,6 +2047,9 @@ members:
     - type: $t_prop_access_t
       name: "access"
       desc: "[out] The access permissions for the property"
+    - type: uint32_t
+      name: "minSampleRate"
+      desc: "[out] The minimum rate in microseconds that this property can be polled"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which frequency domain resource properties are available on a given device"
@@ -2186,6 +2243,9 @@ members:
     - type: $t_prop_access_t
       name: "access"
       desc: "[out] The access permissions for the property"
+    - type: uint32_t
+      name: "minSampleRate"
+      desc: "[out] The minimum rate in microseconds that this property can be polled"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which power-well domain resource properties are available on a given device"
@@ -2323,6 +2383,9 @@ members:
     - type: $t_prop_access_t
       name: "access"
       desc: "[out] The access permissions for the property"
+    - type: uint32_t
+      name: "minSampleRate"
+      desc: "[out] The minimum rate in microseconds that this property can be polled"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which accelerator resource properties are available on a given device"
@@ -2443,16 +2506,10 @@ etors:
     - name: $T_MEM_PROP_TYPE
       value: "0"
       desc: "(ro static) The type of memory covered by this resource (data: $t_mem_prop_type_t)"
-    - name: $T_MEM_PROP_ECC_CAP
-      desc: "(ro static) Indicates if this memory resource supports ECC/RAS features (data: $t_mem_prop_ecc_cap_t)"
-    - name: $T_MEM_PROP_BAD_LIST
-      desc: "(ro static) Get the list of pages that have been permanently marked bad (data: $t_mem_prop_bad_list_t)"
     - name: $T_MEM_PROP_UTILIZATION
       desc: "(ro dynamic) Get current allocated/unallocated size (data: $t_mem_prop_utilization_t)"
     - name: $T_MEM_PROP_BANDWIDTH
       desc: "(ro dynamic) Get current read/write bandwidth counters and maximum bandwidth (data: $t_mem_prop_bandwidth_t)"
-    - name: $T_MEM_PROP_ECC_ENABLE
-      desc: "(rw dynamic) Determine if ECC is enabled/disabled or change this setting (data: $t_mem_prop_ecc_enable_t)"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Data for the property $T_MEM_PROP_TYPE"
@@ -2462,31 +2519,6 @@ members:
     - type: $t_mem_type_t
       name: type
       desc: "[out] The memory type"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_MEM_PROP_ECC_CAP"
-class: $tSysman
-name: $t_mem_prop_ecc_cap_t
-members:
-    - type: $x_bool_t
-      name: "isEccCapable"
-      desc: "[out] Indicates if this memory resource supports ECC/RAS features."
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_MEM_PROP_BAD_LIST"
-class: $tSysman
-name: $t_mem_prop_bad_list_t
-members:
-    - type: uint32_t*
-      name: pCount
-      desc: |
-            [in,out] The number of elements in pList
-            If pCount is zero, then the driver will update the value with the number of elements needed to store the bad list.
-            If pCount is less than that required to store the bad list, the driver will update the value with the required number of elements and return an error.
-            If pCount is larger than that required to store the bad list, the driver will update the value with the number of elements actually returned.
-    - type: $t_mem_retire_info_t*
-      name: "pList"
-      desc: "[in] Pointer to storage for information about each bad page."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Data for the property $T_MEM_PROP_UTILIZATION"
@@ -2529,15 +2561,6 @@ members:
       desc: "[out] Current maximum bandwidth in units of bytes/sec"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_MEM_PROP_ECC_ENABLE"
-class: $tSysman
-name: $t_mem_prop_ecc_enable_t
-members:
-    - type: $x_bool_t
-      name: "enable"
-      desc: "[in] Whether or not ECC is enabled"
---- #--------------------------------------------------------------------------
-type: struct
 desc: "Request structure to determine memory resource properties that are supported/accessible"
 class: $tSysman
 name: $t_mem_prop_capability_t
@@ -2551,6 +2574,9 @@ members:
     - type: $t_prop_access_t
       name: "access"
       desc: "[out] The access permissions for the property"
+    - type: uint32_t
+      name: "minSampleRate"
+      desc: "[out] The minimum rate in microseconds that this property can be polled"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which memory resource properties are available on a given device"
@@ -2678,8 +2704,6 @@ etors:
       desc: "(ro static) The type of link (data: $t_link_prop_type_t)"
     - name: $T_LINK_PROP_BUS_ADDRESS
       desc: "(ro static) The bus address of the link (data: $t_link_prop_bus_address_t)"
-    - name: $T_LINK_PROP_PWR_CAP
-      desc: "(ro static) Indicates if the link frequency can adjust to control power (data: $t_link_prop_pwr_cap_t)"
     - name: $T_LINK_PROP_AVAIL_SPEEDS
       desc: "(ro static) Available link speeds (data: $t_link_prop_avail_speeds_t)"
     - name: $T_LINK_PROP_MAX_PACKET_SIZE
@@ -2708,15 +2732,6 @@ members:
     - type: int8_t
       name: "str[$T_STRING_PROPERTY_SIZE]"
       desc: "[out] NULL terminated string value"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_LINK_PROP_PWR_CAP"
-class: $tSysman
-name: $t_link_prop_pwr_cap_t
-members:
-    - type: $x_bool_t
-      name: "havePwrMgmt"
-      desc: "[out] Indicates if the link frequency can adjust to control power."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Data for the property $T_LINK_PROP_AVAIL_SPEEDS"
@@ -2791,6 +2806,9 @@ members:
     - type: $t_prop_access_t
       name: "access"
       desc: "[out] The access permissions for the property"
+    - type: uint32_t
+      name: "minSampleRate"
+      desc: "[out] The minimum rate in microseconds that this property can be polled"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which link resource properties are available on a given device"
@@ -2977,6 +2995,47 @@ params:
       name: pEvents
       desc: "[in] Events to unregister."
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Diagnostic type"
+class: $tSysman
+name: $t_diag_type_t
+etors:
+    - name: $T_DIAG_TYPE_SCAN
+      value: "0"
+      desc: "Run SCAN diagnostics"
+    - name: $T_DIAG_TYPE_ARRAY
+      desc: "Run Array diagnostics"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Diagnostic results"
+class: $tSysman
+name: $t_diag_result_t
+etors:
+    - name: $T_DIAG_RESULT_NO_ERRORS
+      value: "0"
+      desc: "Diagnostic completed without finding errors to repair"
+    - name: $T_DIAG_RESULT_FAILED
+      desc: "Diagnostic had problems running tests or attempting to setup repairs"
+    - name: $T_DIAG_RESULT_REBOOT_FOR_REPAIR
+      desc: "Diagnostics found errors, setup for repair and reboot is required to complete the process"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Run diagnostics"
+class: $tSysman
+name: RunDiagnostics
+details:
+    - "This function will block until the diagnostics have completed."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle for the device"
+    - type: $t_diag_type_t
+      name: type
+      desc: "[in] Type of diagnostic to run"
+    - type: $t_diag_result_t*
+      name: pResult
+      desc: "[in] The result of the diagnostics"
+--- #--------------------------------------------------------------------------
 type: macro
 desc: "Wait infinitely for events to arrive."
 name: $T_EVENT_WAIT_INFINITE
@@ -2985,6 +3044,7 @@ value: "0xFFFFFFFF"
 type: function
 desc: "Get events that have been triggered for a specific device or from all registered devices"
 class: $tSysman
+decl: static
 name: GetEvents
 details:
     - "If events have occurred, they are returned and the corresponding event status is cleared if the argument clear = true."

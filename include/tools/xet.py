@@ -501,7 +501,7 @@ XET_RAS_FILTER_ALL_ERRORS = { XET_RESOURCE_ID_ANY, (uint32_t)XET_RAS_ERROR_TYPE_
 
 ###############################################################################
 ## @brief RAS error
-class xet_res_error_t(Structure):
+class xet_ras_error_t(Structure):
     _fields_ = [
         ("type", c_ulong),                                              ## [out] Bitfield describing type of error, constructed from one or more
                                                                         ## of ::xet_ras_error_type_t
@@ -514,21 +514,10 @@ class xet_res_error_t(Structure):
     ]
 
 ###############################################################################
-## @brief Data about one type of accelerator asset
-class xet_device_prop_accel_asset_t(Structure):
-    _fields_ = [
-        ("type", xet_accel_asset_t),                                    ## [out] The type of asset
-        ("numBlocks", c_ulong),                                         ## [out] The number of blocks of this asset type
-        ("numEngines", c_ulong)                                         ## [out] The number of submission engines for this type of asset
-    ]
-
-###############################################################################
 ## @brief Generic SMI information about a device
 class xet_sysman_info_t(Structure):
     _fields_ = [
-        ("assetBitfield", c_ulonglong),                                 ## [out] A bitfield of assets (1<<::xet_accel_asset_t) available in the
-                                                                        ## resource
-        ("assetInfo", xet_device_prop_accel_asset_t * XET_ACCEL_ASSET_MAX_TYPES),   ## [out] Information about each asset.
+        ("numAssets", c_ulong * XET_ACCEL_ASSET_MAX_TYPES),             ## [out] The number of each accelerator asset in the device.
         ("numRas", c_ulong),                                            ## [out] The total number of RAS elements available for querying in this
                                                                         ## device.
         ("rasTypes", c_ulong),                                          ## [out] Bitfield of the type of RAS elements (::xet_ras_error_type_t)
@@ -599,10 +588,7 @@ class xet_device_properties_v(IntEnum):
                                                     ## ::xet_device_prop_driver_version_t)
     DEVICE_PROP_BARS = auto()                       ## (ro static) The bars configured for the device (data:
                                                     ## ::xet_device_prop_bars_t)
-    DEVICE_PROP_COLD_SHUTDOWN = auto()              ## (wo dynamic) Cold shudown the device (data:
-                                                    ## ::xet_device_prop_cold_shutdown_t)
-    DEVICE_PROP_COLD_RESET = auto()                 ## (wo dynamic) Cold reset the device (data:
-                                                    ## ::xet_device_prop_cold_reset_t)
+    DEVICE_PROP_RESET = auto()                      ## (wo dynamic) Reset the device (data: ::xet_device_prop_reset_t)
 
 class xet_device_properties_t(c_int):
     def __str__(self):
@@ -667,17 +653,10 @@ class xet_device_prop_bars_t(Structure):
     ]
 
 ###############################################################################
-## @brief Data for the property ::XET_DEVICE_PROP_COLD_SHUTDOWN
-class xet_device_prop_cold_shutdown_t(Structure):
+## @brief Data for the property ::XET_DEVICE_PROP_RESET
+class xet_device_prop_reset_t(Structure):
     _fields_ = [
-        ("doShutdown", xe_bool_t)                                       ## [in] Set to true to perform a cold shutdown of the device
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_DEVICE_PROP_COLD_RESET
-class xet_device_prop_cold_reset_t(Structure):
-    _fields_ = [
-        ("doReset", xe_bool_t)                                          ## [in] Set to true to perform a cold shutdown of the device
+        ("doReset", xe_bool_t)                                          ## [in] Set to true to perform a reset of the device
     ]
 
 ###############################################################################
@@ -712,8 +691,10 @@ class xet_device_prop_capability_t(Structure):
     _fields_ = [
         ("property", xet_device_properties_t),                          ## [in] The property
         ("support", c_ubyte),                                           ## [out] API support for the property - one of ::xet_prop_support_t
-        ("access", c_ubyte)                                             ## [out] The access permissions for the property - one of
+        ("access", c_ubyte),                                            ## [out] The access permissions for the property - one of
                                                                         ## ::xet_prop_access_t
+        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
+                                                                        ## polled
     ]
 
 ###############################################################################
@@ -812,7 +793,9 @@ class xet_psu_prop_capability_t(Structure):
     _fields_ = [
         ("property", xet_psu_properties_t),                             ## [in] The property
         ("support", xet_prop_support_t),                                ## [out] API support for the property
-        ("access", xet_prop_access_t)                                   ## [out] The access permissions for the property
+        ("access", xet_prop_access_t),                                  ## [out] The access permissions for the property
+        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
+                                                                        ## polled
     ]
 
 ###############################################################################
@@ -865,7 +848,9 @@ class xet_temp_prop_capability_t(Structure):
     _fields_ = [
         ("property", xet_temp_properties_t),                            ## [in] The property
         ("support", xet_prop_support_t),                                ## [out] API support for the property
-        ("access", xet_prop_access_t)                                   ## [out] The access permissions for the property
+        ("access", xet_prop_access_t),                                  ## [out] The access permissions for the property
+        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
+                                                                        ## polled
     ]
 
 ###############################################################################
@@ -1015,7 +1000,9 @@ class xet_fan_prop_capability_t(Structure):
     _fields_ = [
         ("property", xet_fan_properties_t),                             ## [in] The property
         ("support", xet_prop_support_t),                                ## [out] API support for the property
-        ("access", xet_prop_access_t)                                   ## [out] The access permissions for the property
+        ("access", xet_prop_access_t),                                  ## [out] The access permissions for the property
+        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
+                                                                        ## polled
     ]
 
 ###############################################################################
@@ -1080,7 +1067,9 @@ class xet_led_prop_capability_t(Structure):
     _fields_ = [
         ("property", xet_led_properties_t),                             ## [in] The property
         ("support", xet_prop_support_t),                                ## [out] API support for the property
-        ("access", xet_prop_access_t)                                   ## [out] The access permissions for the property
+        ("access", xet_prop_access_t),                                  ## [out] The access permissions for the property
+        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
+                                                                        ## polled
     ]
 
 ###############################################################################
@@ -1161,7 +1150,9 @@ class xet_firmware_prop_capability_t(Structure):
     _fields_ = [
         ("property", xet_firmware_properties_t),                        ## [in] The property
         ("support", xet_prop_support_t),                                ## [out] API support for the property
-        ("access", xet_prop_access_t)                                   ## [out] The access permissions for the property
+        ("access", xet_prop_access_t),                                  ## [out] The access permissions for the property
+        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
+                                                                        ## polled
     ]
 
 ###############################################################################
@@ -1286,7 +1277,9 @@ class xet_pwr_prop_capability_t(Structure):
     _fields_ = [
         ("property", xet_pwr_properties_t),                             ## [in] The property
         ("support", xet_prop_support_t),                                ## [out] API support for the property
-        ("access", xet_prop_access_t)                                   ## [out] The access permissions for the property
+        ("access", xet_prop_access_t),                                  ## [out] The access permissions for the property
+        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
+                                                                        ## polled
     ]
 
 ###############################################################################
@@ -1306,10 +1299,13 @@ class xet_pwr_property_request_t(Structure):
 ###############################################################################
 ## @brief Frequency domain types
 class xet_freq_domain_type_v(IntEnum):
-    INDEPENDENT = 0                                 ## The frequency of this domain can be managed independently of other
-                                                    ## domains
-    DEPENDENT = auto()                              ## The frequency of this domain is dependent on another domain through a
-                                                    ## clock divider
+    PLL = 0                                         ## The frequency of this domain is controlled by a phased-locked loop
+                                                    ## (PLL). It can generally accept a range of frequencies with a fixed
+                                                    ## step.
+    DIVIDER = auto()                                ## The frequency of this domain is dependent on another domain through a
+                                                    ## clock divider. There is generally a limit set of divider ratios.
+    MULTIPLIER = auto()                             ## The frequency of this domain is dependent on another domain through a
+                                                    ## fractional multiplier.
 
 class xet_freq_domain_type_t(c_int):
     def __str__(self):
@@ -1317,22 +1313,14 @@ class xet_freq_domain_type_t(c_int):
 
 
 ###############################################################################
-## @brief DVFS mode
-class xet_dvfs_mode_v(IntEnum):
-    MIN = 0                                         ## Fixed minimum frequency will be requested unless specific applications
-                                                    ## request otherwise.
-    EFFICIENT = auto()                              ## Dynamic frequency management that prefers power saving over
-                                                    ## performance.
-    STABLE = auto()                                 ## Fixed frequency that should not be throttled under normal operating
-                                                    ## conditions.
-    DEFAULT = auto()                                ## Dynamic frequency management that balances power and performance.
-    AGGRESSIVE = auto()                             ## Dynamic frequency management that trades more power for better
-                                                    ## performance.
-    MAX = auto()                                    ## Fixed maximum frequency.
+## @brief Frequency mode
+class xet_freq_mode_v(IntEnum):
+    DEFAULT = 0                                     ## The frequency of this domain is managed autonomously by the hardware.
+    FIXED = auto()                                  ## The frequency of this domain has been fixed by SMI.
 
-class xet_dvfs_mode_t(c_int):
+class xet_freq_mode_t(c_int):
     def __str__(self):
-        return str(xet_dvfs_mode_v(value))
+        return str(xet_freq_mode_v(value))
 
 
 ###############################################################################
@@ -1357,13 +1345,25 @@ class xet_freq_throttle_reasons_t(c_int):
 ## @brief Frequency divider element
 ## 
 ## @details
-##     - The frequency of a domain of type ::XET_FREQ_DOMAIN_TYPE_DEPENDENT is
+##     - The frequency of a domain of type ::XET_FREQ_DOMAIN_TYPE_DIVIDER is
 ##       obtained by the formula:
 ##     - freq = source domain freq * numerator / denominator
 class xet_freq_divider_t(Structure):
     _fields_ = [
         ("numerator", c_ushort),                                        ## [in,out] numerator of the ratio
         ("denominator", c_ushort)                                       ## [in,out] denominator of the ratio
+    ]
+
+###############################################################################
+## @brief Frequency multiplier
+## 
+## @details
+##     - The frequency of a domain of type ::XET_FREQ_DOMAIN_TYPE_MULTIPLIER is
+##       obtained by the formula:
+##     - freq = source domain freq * multiplierFP8_8 / 2^8
+class xet_freq_multiplier_t(Structure):
+    _fields_ = [
+        ("multiplierFP8_8", c_ushort)                                   ## [in,out] Multiplier in fixed-point U8.8 format
     ]
 
 ###############################################################################
@@ -1382,28 +1382,32 @@ class xet_freq_divider_t(Structure):
 class xet_freq_properties_v(IntEnum):
     FREQ_PROP_ACCEL_ASSETS = 0                      ## (ro static) List of accelerator assets that are connected to this
                                                     ## power domain (data: ::xet_freq_prop_accel_assets_t)
+    FREQ_PROP_POWER_DOMAIN = auto()                 ## (ro static) Resource ID of the power domain to which this frequency
+                                                    ## domain is connected
     FREQ_PROP_DOMAIN_TYPE = auto()                  ## (ro static) The type of frequency domain (data:
                                                     ## ::xet_freq_prop_domain_type_t)
     FREQ_PROP_AVAIL_CLOCKS = auto()                 ## (ro static) Available frequency clocks that this domain can run at
                                                     ## (data: ::xet_freq_prop_avail_clocks_t)
     FREQ_PROP_AVAIL_DIVIDERS = auto()               ## (ro static) Available dividers that this domain can run with (data:
                                                     ## ::xet_freq_prop_avail_dividers_t)
+    FREQ_PROP_AVAIL_MULTIPLIERS = auto()            ## (ro static) The range of multiplier values (data:
+                                                    ## ::xet_freq_prop_avail_multipliers_t)
     FREQ_PROP_SRC_FREQ = auto()                     ## (ro static) Get the resource ID of the source frequency domain
                                                     ## resource if the type is dependent (data: ::xet_freq_prop_src_freq_t)
-    FREQ_PROP_DVFS_MODE = auto()                    ## (rw dynamic) The operating mode of dynamic frequency management for
-                                                    ## this domain (data: ::xet_freq_prop_dvfs_mode_t)
-    FREQ_PROP_FREQ_RANGE = auto()                   ## (rw dynamic) The frequencies between which dynamic frequency
-                                                    ## management operates (data: ::xet_freq_prop_freq_range_t)
+    FREQ_PROP_FREQ_REQUEST = auto()                 ## (rw dynamic) The current frequency request (data:
+                                                    ## ::xet_freq_prop_freq_request_t)
+    FREQ_PROP_FREQ_DIVIDER = auto()                 ## (rw dynamic) The current frequency divider for frequency domains of
+                                                    ## type ::XET_FREQ_DOMAIN_TYPE_DIVIDER (data:
+                                                    ## ::xet_freq_prop_freq_divider_t)
+    FREQ_PROP_FREQ_MULTIPLIER = auto()              ## (rw dynamic) The current frequency multiplier for frequency domains of
+                                                    ## type ::XET_FREQ_DOMAIN_TYPE_MULTIPLIER  (data:
+                                                    ## ::xet_freq_prop_freq_divider_t)
     FREQ_PROP_FREQ_TDP = auto()                     ## (ro dynamic) The maximum frequency supported under the current TDP
                                                     ## conditions (data: ::xet_freq_prop_freq_tdp_t)
     FREQ_PROP_FREQ_EFFICIENT = auto()               ## (ro dynamic) The efficient minimum frequency (data:
                                                     ## ::xet_freq_prop_freq_efficient_t)
-    FREQ_PROP_FREQ_REQUEST = auto()                 ## (ro dynamic) The current frequency request (data:
-                                                    ## ::xet_freq_prop_freq_request_t)
     FREQ_PROP_FREQ_RESOLVED = auto()                ## (ro dynamic) The resolved frequency (data:
                                                     ## ::xet_freq_prop_freq_resolved_t)
-    FREQ_PROP_FREQ_DIVIDER = auto()                 ## (rw dynamic) The current frequency divider for dependent frequency
-                                                    ## domains (data: ::xet_freq_prop_freq_divider_t)
     FREQ_PROP_THROTTLE_REASONS = auto()             ## (ro dynamic) The reasons that the frequency is being limited by the
                                                     ## PCU (data: ::xet_freq_prop_throttle_reasons_t)
     FREQ_PROP_THROTTLE_TIME = auto()                ## (ro dynamic) The total time that the frequency has been limited by the
@@ -1423,6 +1427,13 @@ class xet_freq_prop_accel_assets_t(Structure):
     ]
 
 ###############################################################################
+## @brief Data for the property ::XET_FREQ_PROP_POWER_DOMAIN
+class xet_freq_prop_power_domain_t(Structure):
+    _fields_ = [
+        ("resource", xet_resource_id_t)                                 ## [out] The resource ID of the power domain
+    ]
+
+###############################################################################
 ## @brief Data for the property ::XET_FREQ_PROP_DOMAIN_TYPE
 class xet_freq_prop_domain_type_t(Structure):
     _fields_ = [
@@ -1433,13 +1444,20 @@ class xet_freq_prop_domain_type_t(Structure):
 ## @brief Data for the property ::XET_FREQ_PROP_AVAIL_CLOCKS
 ## 
 ## @details
-##     - The list is ordered from the smallest frequency to the largest
-##       frequency.
+##     - Provides the set of frequencies as a list and as a range/step.
+##     - It is generally recommended that applications choose frequencies from
+##       the list. However applications can also construct the list themselves
+##       using the range/steps provided.
 class xet_freq_prop_avail_clocks_t(Structure):
     _fields_ = [
+        ("minFP16_16", c_ulong),                                        ## [out] The minimum clock frequency in units of MHz (fixed point
+                                                                        ## U16.16).
+        ("maxFP16_16", c_ulong),                                        ## [out] The maximum clock frequency in units of MHz (fixed point
+                                                                        ## U16.16).
+        ("stepFP16_16", c_ulong),                                       ## [out] The step clock frequency in units of MHz (fixed point U16.16).
         ("num", c_ulong),                                               ## [out] The number of clocks
-        ("pClocks", POINTER(c_ulong))                                   ## [out] Array of clock frequencies in MHz ordered from smallest to
-                                                                        ## largest.
+        ("pClocksFP16_16", POINTER(c_ulong))                            ## [out] Array of clock frequencies in units of MHz (fixed-point U16.16)
+                                                                        ## ordered from smallest to largest.
     ]
 
 ###############################################################################
@@ -1454,6 +1472,18 @@ class xet_freq_prop_avail_dividers_t(Structure):
     ]
 
 ###############################################################################
+## @brief Data for the property ::XET_FREQ_PROP_AVAIL_MULTIPLIERS
+## 
+## @details
+##     - The range of multiplier values.
+class xet_freq_prop_avail_multipliers_t(Structure):
+    _fields_ = [
+        ("minFP8_8", c_ushort),                                         ## [out] The minimum multiplier value in fixed-point U8.8 format
+        ("maxFP8_8", c_ushort),                                         ## [out] The maximum multiplier value in fixed-point U8.8 format
+        ("minStepFP8_8", c_ushort)                                      ## [out] The smallest multiplier step size in fixed-point U8.8
+    ]
+
+###############################################################################
 ## @brief Data for the property ::XET_FREQ_PROP_SRC_FREQ
 class xet_freq_prop_src_freq_t(Structure):
     _fields_ = [
@@ -1461,18 +1491,33 @@ class xet_freq_prop_src_freq_t(Structure):
     ]
 
 ###############################################################################
-## @brief Data for the property ::XET_FREQ_PROP_DVFS_MODE
-class xet_freq_prop_dvfs_mode_t(Structure):
+## @brief Data for the property ::XET_FREQ_PROP_FREQ_REQUEST
+class xet_freq_prop_freq_request_t(Structure):
     _fields_ = [
-        ("mode", xet_dvfs_mode_t)                                       ## [in,out] The DVFS operating mode
+        ("mode", xet_freq_mode_t),                                      ## [in,out] The frequency mode
+        ("freqRequest", c_ulong)                                        ## [out] The current frequency request in MHz. If setting this property,
+                                                                        ## the value will be used if mode is ::XET_FREQ_MODE_FIXED, otherwise the
+                                                                        ## hardware will take back control.
     ]
 
 ###############################################################################
-## @brief Data for the property ::XET_FREQ_PROP_FREQ_RANGE
-class xet_freq_prop_freq_range_t(Structure):
+## @brief Data for the property ::XET_FREQ_PROP_FREQ_DIVIDER
+class xet_freq_prop_freq_divider_t(Structure):
     _fields_ = [
-        ("min", c_ulong),                                               ## [in,out] Minimum frequency in MHz
-        ("max", c_ushort)                                               ## [in,out] Maximum frequency in MHz
+        ("mode", xet_freq_mode_t),                                      ## [in,out] The frequency mode
+        ("divider", xet_freq_divider_t)                                 ## [in,out] The frequency divider. If setting this property, the value
+                                                                        ## will be used if mode is ::XET_FREQ_MODE_FIXED, otherwise the hardware
+                                                                        ## will take back control.
+    ]
+
+###############################################################################
+## @brief Data for the property ::XET_FREQ_PROP_FREQ_MULTIPLIER
+class xet_freq_prop_freq_multiplier_t(Structure):
+    _fields_ = [
+        ("mode", xet_freq_mode_t),                                      ## [in,out] The frequency mode
+        ("multiplier", xet_freq_multiplier_t)                           ## [in,out] The frequency multiplier. If setting this property, the value
+                                                                        ## will be used if mode is ::XET_FREQ_MODE_FIXED, otherwise the hardware
+                                                                        ## will take back control.
     ]
 
 ###############################################################################
@@ -1491,24 +1536,10 @@ class xet_freq_prop_freq_efficient_t(Structure):
     ]
 
 ###############################################################################
-## @brief Data for the property ::XET_FREQ_PROP_FREQ_REQUEST
-class xet_freq_prop_freq_request_t(Structure):
-    _fields_ = [
-        ("freqRequest", c_ulong)                                        ## [out] The current frequency request in MHz
-    ]
-
-###############################################################################
 ## @brief Data for the property ::XET_FREQ_PROP_FREQ_RESOLVED
 class xet_freq_prop_freq_resolved_t(Structure):
     _fields_ = [
         ("freqResolved", c_ulong)                                       ## [out] The resolved frequency in MHz
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_FREQ_PROP_FREQ_DIVIDER
-class xet_freq_prop_freq_divider_t(Structure):
-    _fields_ = [
-        ("divider", xet_freq_divider_t)                                 ## [in,out] The frequency divider
     ]
 
 ###############################################################################
@@ -1534,7 +1565,9 @@ class xet_freq_prop_capability_t(Structure):
     _fields_ = [
         ("property", xet_freq_properties_t),                            ## [in] The property
         ("support", xet_prop_support_t),                                ## [out] API support for the property
-        ("access", xet_prop_access_t)                                   ## [out] The access permissions for the property
+        ("access", xet_prop_access_t),                                  ## [out] The access permissions for the property
+        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
+                                                                        ## polled
     ]
 
 ###############################################################################
@@ -1655,7 +1688,9 @@ class xet_pwrwell_prop_capability_t(Structure):
     _fields_ = [
         ("property", xet_pwrwell_properties_t),                         ## [in] The property
         ("support", xet_prop_support_t),                                ## [out] API support for the property
-        ("access", xet_prop_access_t)                                   ## [out] The access permissions for the property
+        ("access", xet_prop_access_t),                                  ## [out] The access permissions for the property
+        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
+                                                                        ## polled
     ]
 
 ###############################################################################
@@ -1721,7 +1756,9 @@ class xet_accel_prop_capability_t(Structure):
     _fields_ = [
         ("property", xet_accel_properties_t),                           ## [in] The property
         ("support", xet_prop_support_t),                                ## [out] API support for the property
-        ("access", xet_prop_access_t)                                   ## [out] The access permissions for the property
+        ("access", xet_prop_access_t),                                  ## [out] The access permissions for the property
+        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
+                                                                        ## polled
     ]
 
 ###############################################################################
@@ -1789,16 +1826,10 @@ class xet_mem_retire_info_t(Structure):
 class xet_mem_properties_v(IntEnum):
     MEM_PROP_TYPE = 0                               ## (ro static) The type of memory covered by this resource (data:
                                                     ## ::xet_mem_prop_type_t)
-    MEM_PROP_ECC_CAP = auto()                       ## (ro static) Indicates if this memory resource supports ECC/RAS
-                                                    ## features (data: ::xet_mem_prop_ecc_cap_t)
-    MEM_PROP_BAD_LIST = auto()                      ## (ro static) Get the list of pages that have been permanently marked
-                                                    ## bad (data: ::xet_mem_prop_bad_list_t)
     MEM_PROP_UTILIZATION = auto()                   ## (ro dynamic) Get current allocated/unallocated size (data:
                                                     ## ::xet_mem_prop_utilization_t)
     MEM_PROP_BANDWIDTH = auto()                     ## (ro dynamic) Get current read/write bandwidth counters and maximum
                                                     ## bandwidth (data: ::xet_mem_prop_bandwidth_t)
-    MEM_PROP_ECC_ENABLE = auto()                    ## (rw dynamic) Determine if ECC is enabled/disabled or change this
-                                                    ## setting (data: ::xet_mem_prop_ecc_enable_t)
 
 class xet_mem_properties_t(c_int):
     def __str__(self):
@@ -1810,28 +1841,6 @@ class xet_mem_properties_t(c_int):
 class xet_mem_prop_type_t(Structure):
     _fields_ = [
         ("type", xet_mem_type_t)                                        ## [out] The memory type
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_MEM_PROP_ECC_CAP
-class xet_mem_prop_ecc_cap_t(Structure):
-    _fields_ = [
-        ("isEccCapable", xe_bool_t)                                     ## [out] Indicates if this memory resource supports ECC/RAS features.
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_MEM_PROP_BAD_LIST
-class xet_mem_prop_bad_list_t(Structure):
-    _fields_ = [
-        ("pCount", POINTER(c_ulong)),                                   ## [in,out] The number of elements in pList
-                                                                        ## If pCount is zero, then the driver will update the value with the
-                                                                        ## number of elements needed to store the bad list.
-                                                                        ## If pCount is less than that required to store the bad list, the driver
-                                                                        ## will update the value with the required number of elements and return
-                                                                        ## an error.
-                                                                        ## If pCount is larger than that required to store the bad list, the
-                                                                        ## driver will update the value with the number of elements actually returned.
-        ("pList", POINTER(xet_mem_retire_info_t))                       ## [in] Pointer to storage for information about each bad page.
     ]
 
 ###############################################################################
@@ -1862,20 +1871,15 @@ class xet_mem_prop_bandwidth_t(Structure):
     ]
 
 ###############################################################################
-## @brief Data for the property ::XET_MEM_PROP_ECC_ENABLE
-class xet_mem_prop_ecc_enable_t(Structure):
-    _fields_ = [
-        ("enable", xe_bool_t)                                           ## [in] Whether or not ECC is enabled
-    ]
-
-###############################################################################
 ## @brief Request structure to determine memory resource properties that are
 ##        supported/accessible
 class xet_mem_prop_capability_t(Structure):
     _fields_ = [
         ("property", xet_mem_properties_t),                             ## [in] The property
         ("support", xet_prop_support_t),                                ## [out] API support for the property
-        ("access", xet_prop_access_t)                                   ## [out] The access permissions for the property
+        ("access", xet_prop_access_t),                                  ## [out] The access permissions for the property
+        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
+                                                                        ## polled
     ]
 
 ###############################################################################
@@ -2018,7 +2022,9 @@ class xet_link_prop_capability_t(Structure):
     _fields_ = [
         ("property", xet_link_properties_t),                            ## [in] The property
         ("support", xet_prop_support_t),                                ## [out] API support for the property
-        ("access", xet_prop_access_t)                                   ## [out] The access permissions for the property
+        ("access", xet_prop_access_t),                                  ## [out] The access permissions for the property
+        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
+                                                                        ## polled
     ]
 
 ###############################################################################
@@ -2067,6 +2073,30 @@ class xet_event_request_t(Structure):
                                                                         ## exceeds this value. Set to zero to receive a notification for every
                                                                         ## new event.
     ]
+
+###############################################################################
+## @brief Diagnostic type
+class xet_diag_type_v(IntEnum):
+    SCAN = 0                                        ## Run SCAN diagnostics
+    ARRAY = auto()                                  ## Run Array diagnostics
+
+class xet_diag_type_t(c_int):
+    def __str__(self):
+        return str(xet_diag_type_v(value))
+
+
+###############################################################################
+## @brief Diagnostic results
+class xet_diag_result_v(IntEnum):
+    NO_ERRORS = 0                                   ## Diagnostic completed without finding errors to repair
+    FAILED = auto()                                 ## Diagnostic had problems running tests or attempting to setup repairs
+    REBOOT_FOR_REPAIR = auto()                      ## Diagnostics found errors, setup for repair and reboot is required to
+                                                    ## complete the process
+
+class xet_diag_result_t(c_int):
+    def __str__(self):
+        return str(xet_diag_result_v(value))
+
 
 ###############################################################################
 ## @brief Wait infinitely for events to arrive.
@@ -2448,11 +2478,18 @@ else:
     _xetSysmanGetInfo_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_sysman_info_t) )
 
 ###############################################################################
+## @brief Function-pointer for xetSysmanRasSetup
+if __use_win_types:
+    _xetSysmanRasSetup_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, c_ulong, POINTER(c_ulong) )
+else:
+    _xetSysmanRasSetup_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, c_ulong, POINTER(c_ulong) )
+
+###############################################################################
 ## @brief Function-pointer for xetSysmanGetRasErrors
 if __use_win_types:
-    _xetSysmanGetRasErrors_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_ras_filter_t), xe_bool_t, POINTER(c_ulong), POINTER(xet_res_error_t) )
+    _xetSysmanGetRasErrors_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_ras_filter_t), xe_bool_t, POINTER(c_ulong), POINTER(xet_ras_error_t) )
 else:
-    _xetSysmanGetRasErrors_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_ras_filter_t), xe_bool_t, POINTER(c_ulong), POINTER(xet_res_error_t) )
+    _xetSysmanGetRasErrors_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_ras_filter_t), xe_bool_t, POINTER(c_ulong), POINTER(xet_ras_error_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanAvailableDeviceProperties
@@ -2714,6 +2751,13 @@ else:
     _xetSysmanUnregisterEvents_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_event_request_t) )
 
 ###############################################################################
+## @brief Function-pointer for xetSysmanRunDiagnostics
+if __use_win_types:
+    _xetSysmanRunDiagnostics_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_diag_type_t, POINTER(xet_diag_result_t) )
+else:
+    _xetSysmanRunDiagnostics_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_diag_type_t, POINTER(xet_diag_result_t) )
+
+###############################################################################
 ## @brief Function-pointer for xetSysmanGetEvents
 if __use_win_types:
     _xetSysmanGetEvents_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xe_bool_t, c_ulong, POINTER(c_ulong) )
@@ -2729,6 +2773,7 @@ class _xet_sysman_dditable_t(Structure):
         ("pfnDestroy", c_void_p),                                       ## _xetSysmanDestroy_t
         ("pfnGetAccelAssetName", c_void_p),                             ## _xetSysmanGetAccelAssetName_t
         ("pfnGetInfo", c_void_p),                                       ## _xetSysmanGetInfo_t
+        ("pfnRasSetup", c_void_p),                                      ## _xetSysmanRasSetup_t
         ("pfnGetRasErrors", c_void_p),                                  ## _xetSysmanGetRasErrors_t
         ("pfnAvailableDeviceProperties", c_void_p),                     ## _xetSysmanAvailableDeviceProperties_t
         ("pfnGetDeviceProperties", c_void_p),                           ## _xetSysmanGetDeviceProperties_t
@@ -2767,6 +2812,7 @@ class _xet_sysman_dditable_t(Structure):
         ("pfnSupportedEvents", c_void_p),                               ## _xetSysmanSupportedEvents_t
         ("pfnRegisterEvents", c_void_p),                                ## _xetSysmanRegisterEvents_t
         ("pfnUnregisterEvents", c_void_p),                              ## _xetSysmanUnregisterEvents_t
+        ("pfnRunDiagnostics", c_void_p),                                ## _xetSysmanRunDiagnostics_t
         ("pfnGetEvents", c_void_p)                                      ## _xetSysmanGetEvents_t
     ]
 
@@ -2939,6 +2985,7 @@ class XET_DDI:
         self.xetSysmanDestroy = _xetSysmanDestroy_t(self.__dditable.Sysman.pfnDestroy)
         self.xetSysmanGetAccelAssetName = _xetSysmanGetAccelAssetName_t(self.__dditable.Sysman.pfnGetAccelAssetName)
         self.xetSysmanGetInfo = _xetSysmanGetInfo_t(self.__dditable.Sysman.pfnGetInfo)
+        self.xetSysmanRasSetup = _xetSysmanRasSetup_t(self.__dditable.Sysman.pfnRasSetup)
         self.xetSysmanGetRasErrors = _xetSysmanGetRasErrors_t(self.__dditable.Sysman.pfnGetRasErrors)
         self.xetSysmanAvailableDeviceProperties = _xetSysmanAvailableDeviceProperties_t(self.__dditable.Sysman.pfnAvailableDeviceProperties)
         self.xetSysmanGetDeviceProperties = _xetSysmanGetDeviceProperties_t(self.__dditable.Sysman.pfnGetDeviceProperties)
@@ -2977,6 +3024,7 @@ class XET_DDI:
         self.xetSysmanSupportedEvents = _xetSysmanSupportedEvents_t(self.__dditable.Sysman.pfnSupportedEvents)
         self.xetSysmanRegisterEvents = _xetSysmanRegisterEvents_t(self.__dditable.Sysman.pfnRegisterEvents)
         self.xetSysmanUnregisterEvents = _xetSysmanUnregisterEvents_t(self.__dditable.Sysman.pfnUnregisterEvents)
+        self.xetSysmanRunDiagnostics = _xetSysmanRunDiagnostics_t(self.__dditable.Sysman.pfnRunDiagnostics)
         self.xetSysmanGetEvents = _xetSysmanGetEvents_t(self.__dditable.Sysman.pfnGetEvents)
 
         # success!

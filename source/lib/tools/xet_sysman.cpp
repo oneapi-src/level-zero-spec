@@ -145,6 +145,39 @@ xetSysmanGetInfo(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Setup (enable/disable) RAS
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pEnabledLoc
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanRasSetup(
+    xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
+    uint32_t enableLoc,                             ///< [in] Structural locations where RAS should be enabled (bitfield of
+                                                    ///< ::xet_ras_error_loc_t)
+    uint32_t disableLoc,                            ///< [in] Structural locations where RAS should be disabled (bitfield of
+                                                    ///< ::xet_ras_error_loc_t)
+    uint32_t* pEnabledLoc                           ///< [in] Structural locations where RAS is currently enabled after
+                                                    ///< applying enableLoc and disableLoc (bitfield of ::xet_ras_error_loc_t)
+    )
+{
+    auto pfnRasSetup = xet_lib::context.ddiTable.Sysman.pfnRasSetup;
+    if( nullptr == pfnRasSetup )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnRasSetup( hSysman, enableLoc, disableLoc, pEnabledLoc );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Get RAS errors that have occurred
 /// 
 /// @details
@@ -180,7 +213,7 @@ xetSysmanGetRasErrors(
                                                     ///< If count is greater than or equal to the number of matching errors,
                                                     ///< all data is returned, counters are cleared if requested and count will
                                                     ///< be set to actual number of errors returned.
-    xet_res_error_t* pErrors                        ///< [in] Array of error data
+    xet_ras_error_t* pErrors                        ///< [in] Array of error data
     )
 {
     auto pfnGetRasErrors = xet_lib::context.ddiTable.Sysman.pfnGetRasErrors;
@@ -1371,6 +1404,34 @@ xetSysmanUnregisterEvents(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Run diagnostics
+/// 
+/// @details
+///     - This function will block until the diagnostics have completed.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pResult
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanRunDiagnostics(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+    xet_diag_type_t type,                           ///< [in] Type of diagnostic to run
+    xet_diag_result_t* pResult                      ///< [in] The result of the diagnostics
+    )
+{
+    auto pfnRunDiagnostics = xet_lib::context.ddiTable.Sysman.pfnRunDiagnostics;
+    if( nullptr == pfnRunDiagnostics )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnRunDiagnostics( hSysman, type, pResult );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Get events that have been triggered for a specific device or from all
 ///        registered devices
 /// 
@@ -1553,6 +1614,34 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Setup (enable/disable) RAS
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::RasSetup(
+        uint32_t enableLoc,                             ///< [in] Structural locations where RAS should be enabled (bitfield of
+                                                        ///< ::xet_ras_error_loc_t)
+        uint32_t disableLoc,                            ///< [in] Structural locations where RAS should be disabled (bitfield of
+                                                        ///< ::xet_ras_error_loc_t)
+        uint32_t* pEnabledLoc                           ///< [in] Structural locations where RAS is currently enabled after
+                                                        ///< applying enableLoc and disableLoc (bitfield of ::xet_ras_error_loc_t)
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanRasSetup(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            enableLoc,
+            disableLoc,
+            pEnabledLoc ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::RasSetup" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Get RAS errors that have occurred
     /// 
     /// @details
@@ -1576,7 +1665,7 @@ namespace xet
                                                         ///< If count is greater than or equal to the number of matching errors,
                                                         ///< all data is returned, counters are cleared if requested and count will
                                                         ///< be set to actual number of errors returned.
-        res_error_t* pErrors                            ///< [in] Array of error data
+        ras_error_t* pErrors                            ///< [in] Array of error data
         )
     {
         auto result = static_cast<result_t>( ::xetSysmanGetRasErrors(
@@ -1584,7 +1673,7 @@ namespace xet
             reinterpret_cast<xet_ras_filter_t*>( pFilter ),
             static_cast<xe_bool_t>( clear ),
             pCount,
-            reinterpret_cast<xet_res_error_t*>( pErrors ) ) );
+            reinterpret_cast<xet_ras_error_t*>( pErrors ) ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::GetRasErrors" );
@@ -2507,6 +2596,28 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Run diagnostics
+    /// 
+    /// @details
+    ///     - This function will block until the diagnostics have completed.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::RunDiagnostics(
+        diag_type_t type,                               ///< [in] Type of diagnostic to run
+        diag_result_t* pResult                          ///< [in] The result of the diagnostics
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanRunDiagnostics(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            static_cast<xet_diag_type_t>( type ),
+            reinterpret_cast<xet_diag_result_t*>( pResult ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::RunDiagnostics" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Get events that have been triggered for a specific device or from all
     ///        registered devices
     /// 
@@ -2523,6 +2634,9 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::GetEvents(
+        Sysman* pSysman,                                ///< [in] SMI handle for a device. Set to nullptr to get events from any
+                                                        ///< device for which the application has registered to receive
+                                                        ///< notifications.
         xe::bool_t clear,                               ///< [in] Clear the event status.
         uint32_t timeout,                               ///< [in] How long to wait in milliseconds for events to arrive. Zero will
                                                         ///< check status and return immediately. Set to ::XET_EVENT_WAIT_INFINITE
@@ -2532,7 +2646,7 @@ namespace xet
         )
     {
         auto result = static_cast<result_t>( ::xetSysmanGetEvents(
-            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<xet_sysman_handle_t>( pSysman->getHandle() ),
             static_cast<xe_bool_t>( clear ),
             timeout,
             pEvents ) );
@@ -2959,12 +3073,8 @@ namespace xet
             str = "Sysman::device_properties_t::DEVICE_PROP_BARS";
             break;
 
-        case Sysman::device_properties_t::DEVICE_PROP_COLD_SHUTDOWN:
-            str = "Sysman::device_properties_t::DEVICE_PROP_COLD_SHUTDOWN";
-            break;
-
-        case Sysman::device_properties_t::DEVICE_PROP_COLD_RESET:
-            str = "Sysman::device_properties_t::DEVICE_PROP_COLD_RESET";
+        case Sysman::device_properties_t::DEVICE_PROP_RESET:
+            str = "Sysman::device_properties_t::DEVICE_PROP_RESET";
             break;
 
         default:
@@ -3302,12 +3412,16 @@ namespace xet
 
         switch( val )
         {
-        case Sysman::freq_domain_type_t::INDEPENDENT:
-            str = "Sysman::freq_domain_type_t::INDEPENDENT";
+        case Sysman::freq_domain_type_t::PLL:
+            str = "Sysman::freq_domain_type_t::PLL";
             break;
 
-        case Sysman::freq_domain_type_t::DEPENDENT:
-            str = "Sysman::freq_domain_type_t::DEPENDENT";
+        case Sysman::freq_domain_type_t::DIVIDER:
+            str = "Sysman::freq_domain_type_t::DIVIDER";
+            break;
+
+        case Sysman::freq_domain_type_t::MULTIPLIER:
+            str = "Sysman::freq_domain_type_t::MULTIPLIER";
             break;
 
         default:
@@ -3319,39 +3433,23 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::dvfs_mode_t to std::string
-    std::string to_string( const Sysman::dvfs_mode_t val )
+    /// @brief Converts Sysman::freq_mode_t to std::string
+    std::string to_string( const Sysman::freq_mode_t val )
     {
         std::string str;
 
         switch( val )
         {
-        case Sysman::dvfs_mode_t::MIN:
-            str = "Sysman::dvfs_mode_t::MIN";
+        case Sysman::freq_mode_t::DEFAULT:
+            str = "Sysman::freq_mode_t::DEFAULT";
             break;
 
-        case Sysman::dvfs_mode_t::EFFICIENT:
-            str = "Sysman::dvfs_mode_t::EFFICIENT";
-            break;
-
-        case Sysman::dvfs_mode_t::STABLE:
-            str = "Sysman::dvfs_mode_t::STABLE";
-            break;
-
-        case Sysman::dvfs_mode_t::DEFAULT:
-            str = "Sysman::dvfs_mode_t::DEFAULT";
-            break;
-
-        case Sysman::dvfs_mode_t::AGGRESSIVE:
-            str = "Sysman::dvfs_mode_t::AGGRESSIVE";
-            break;
-
-        case Sysman::dvfs_mode_t::MAX:
-            str = "Sysman::dvfs_mode_t::MAX";
+        case Sysman::freq_mode_t::FIXED:
+            str = "Sysman::freq_mode_t::FIXED";
             break;
 
         default:
-            str = "Sysman::dvfs_mode_t::?";
+            str = "Sysman::freq_mode_t::?";
             break;
         };
 
@@ -3407,6 +3505,10 @@ namespace xet
             str = "Sysman::freq_properties_t::FREQ_PROP_ACCEL_ASSETS";
             break;
 
+        case Sysman::freq_properties_t::FREQ_PROP_POWER_DOMAIN:
+            str = "Sysman::freq_properties_t::FREQ_PROP_POWER_DOMAIN";
+            break;
+
         case Sysman::freq_properties_t::FREQ_PROP_DOMAIN_TYPE:
             str = "Sysman::freq_properties_t::FREQ_PROP_DOMAIN_TYPE";
             break;
@@ -3419,16 +3521,24 @@ namespace xet
             str = "Sysman::freq_properties_t::FREQ_PROP_AVAIL_DIVIDERS";
             break;
 
+        case Sysman::freq_properties_t::FREQ_PROP_AVAIL_MULTIPLIERS:
+            str = "Sysman::freq_properties_t::FREQ_PROP_AVAIL_MULTIPLIERS";
+            break;
+
         case Sysman::freq_properties_t::FREQ_PROP_SRC_FREQ:
             str = "Sysman::freq_properties_t::FREQ_PROP_SRC_FREQ";
             break;
 
-        case Sysman::freq_properties_t::FREQ_PROP_DVFS_MODE:
-            str = "Sysman::freq_properties_t::FREQ_PROP_DVFS_MODE";
+        case Sysman::freq_properties_t::FREQ_PROP_FREQ_REQUEST:
+            str = "Sysman::freq_properties_t::FREQ_PROP_FREQ_REQUEST";
             break;
 
-        case Sysman::freq_properties_t::FREQ_PROP_FREQ_RANGE:
-            str = "Sysman::freq_properties_t::FREQ_PROP_FREQ_RANGE";
+        case Sysman::freq_properties_t::FREQ_PROP_FREQ_DIVIDER:
+            str = "Sysman::freq_properties_t::FREQ_PROP_FREQ_DIVIDER";
+            break;
+
+        case Sysman::freq_properties_t::FREQ_PROP_FREQ_MULTIPLIER:
+            str = "Sysman::freq_properties_t::FREQ_PROP_FREQ_MULTIPLIER";
             break;
 
         case Sysman::freq_properties_t::FREQ_PROP_FREQ_TDP:
@@ -3439,16 +3549,8 @@ namespace xet
             str = "Sysman::freq_properties_t::FREQ_PROP_FREQ_EFFICIENT";
             break;
 
-        case Sysman::freq_properties_t::FREQ_PROP_FREQ_REQUEST:
-            str = "Sysman::freq_properties_t::FREQ_PROP_FREQ_REQUEST";
-            break;
-
         case Sysman::freq_properties_t::FREQ_PROP_FREQ_RESOLVED:
             str = "Sysman::freq_properties_t::FREQ_PROP_FREQ_RESOLVED";
-            break;
-
-        case Sysman::freq_properties_t::FREQ_PROP_FREQ_DIVIDER:
-            str = "Sysman::freq_properties_t::FREQ_PROP_FREQ_DIVIDER";
             break;
 
         case Sysman::freq_properties_t::FREQ_PROP_THROTTLE_REASONS:
@@ -3643,24 +3745,12 @@ namespace xet
             str = "Sysman::mem_properties_t::MEM_PROP_TYPE";
             break;
 
-        case Sysman::mem_properties_t::MEM_PROP_ECC_CAP:
-            str = "Sysman::mem_properties_t::MEM_PROP_ECC_CAP";
-            break;
-
-        case Sysman::mem_properties_t::MEM_PROP_BAD_LIST:
-            str = "Sysman::mem_properties_t::MEM_PROP_BAD_LIST";
-            break;
-
         case Sysman::mem_properties_t::MEM_PROP_UTILIZATION:
             str = "Sysman::mem_properties_t::MEM_PROP_UTILIZATION";
             break;
 
         case Sysman::mem_properties_t::MEM_PROP_BANDWIDTH:
             str = "Sysman::mem_properties_t::MEM_PROP_BANDWIDTH";
-            break;
-
-        case Sysman::mem_properties_t::MEM_PROP_ECC_ENABLE:
-            str = "Sysman::mem_properties_t::MEM_PROP_ECC_ENABLE";
             break;
 
         default:
@@ -3772,6 +3862,58 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::diag_type_t to std::string
+    std::string to_string( const Sysman::diag_type_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Sysman::diag_type_t::SCAN:
+            str = "Sysman::diag_type_t::SCAN";
+            break;
+
+        case Sysman::diag_type_t::ARRAY:
+            str = "Sysman::diag_type_t::ARRAY";
+            break;
+
+        default:
+            str = "Sysman::diag_type_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::diag_result_t to std::string
+    std::string to_string( const Sysman::diag_result_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Sysman::diag_result_t::NO_ERRORS:
+            str = "Sysman::diag_result_t::NO_ERRORS";
+            break;
+
+        case Sysman::diag_result_t::FAILED:
+            str = "Sysman::diag_result_t::FAILED";
+            break;
+
+        case Sysman::diag_result_t::REBOOT_FOR_REPAIR:
+            str = "Sysman::diag_result_t::REBOOT_FOR_REPAIR";
+            break;
+
+        default:
+            str = "Sysman::diag_result_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::resource_id_t to std::string
     std::string to_string( const Sysman::resource_id_t val )
     {
@@ -3814,50 +3956,29 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::res_error_t to std::string
-    std::string to_string( const Sysman::res_error_t val )
+    /// @brief Converts Sysman::ras_error_t to std::string
+    std::string to_string( const Sysman::ras_error_t val )
     {
         std::string str;
         
-        str += "Sysman::res_error_t::type : ";
+        str += "Sysman::ras_error_t::type : ";
         str += std::to_string(val.type);
         str += "\n";
         
-        str += "Sysman::res_error_t::loc : ";
+        str += "Sysman::ras_error_t::loc : ";
         str += std::to_string(val.loc);
         str += "\n";
         
-        str += "Sysman::res_error_t::dataType : ";
+        str += "Sysman::ras_error_t::dataType : ";
         str += to_string(val.dataType);
         str += "\n";
         
-        str += "Sysman::res_error_t::data : ";
+        str += "Sysman::ras_error_t::data : ";
         str += std::to_string(val.data);
         str += "\n";
         
-        str += "Sysman::res_error_t::resourceId : ";
+        str += "Sysman::ras_error_t::resourceId : ";
         str += to_string(val.resourceId);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::device_prop_accel_asset_t to std::string
-    std::string to_string( const Sysman::device_prop_accel_asset_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::device_prop_accel_asset_t::type : ";
-        str += to_string(val.type);
-        str += "\n";
-        
-        str += "Sysman::device_prop_accel_asset_t::numBlocks : ";
-        str += std::to_string(val.numBlocks);
-        str += "\n";
-        
-        str += "Sysman::device_prop_accel_asset_t::numEngines : ";
-        str += std::to_string(val.numEngines);
         str += "\n";
 
         return str;
@@ -3869,16 +3990,12 @@ namespace xet
     {
         std::string str;
         
-        str += "Sysman::info_t::assetBitfield : ";
-        str += std::to_string(val.assetBitfield);
-        str += "\n";
-        
-        str += "Sysman::info_t::assetInfo : ";
+        str += "Sysman::info_t::numAssets : ";
         {
             std::string tmp;
-            for( auto& entry : val.assetInfo )
+            for( auto& entry : val.numAssets )
             {
-                tmp += to_string( entry );
+                tmp += std::to_string( entry );
                 tmp += ", ";
             }
             str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
@@ -4102,25 +4219,12 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::device_prop_cold_shutdown_t to std::string
-    std::string to_string( const Sysman::device_prop_cold_shutdown_t val )
+    /// @brief Converts Sysman::device_prop_reset_t to std::string
+    std::string to_string( const Sysman::device_prop_reset_t val )
     {
         std::string str;
         
-        str += "Sysman::device_prop_cold_shutdown_t::doShutdown : ";
-        str += std::to_string(val.doShutdown);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::device_prop_cold_reset_t to std::string
-    std::string to_string( const Sysman::device_prop_cold_reset_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::device_prop_cold_reset_t::doReset : ";
+        str += "Sysman::device_prop_reset_t::doReset : ";
         str += std::to_string(val.doReset);
         str += "\n";
 
@@ -4143,6 +4247,10 @@ namespace xet
         
         str += "Sysman::device_prop_capability_t::access : ";
         str += std::to_string(val.access);
+        str += "\n";
+        
+        str += "Sysman::device_prop_capability_t::minSampleRate : ";
+        str += std::to_string(val.minSampleRate);
         str += "\n";
 
         return str;
@@ -4255,6 +4363,10 @@ namespace xet
         str += "Sysman::psu_prop_capability_t::access : ";
         str += to_string(val.access);
         str += "\n";
+        
+        str += "Sysman::psu_prop_capability_t::minSampleRate : ";
+        str += std::to_string(val.minSampleRate);
+        str += "\n";
 
         return str;
     }
@@ -4317,6 +4429,10 @@ namespace xet
         
         str += "Sysman::temp_prop_capability_t::access : ";
         str += to_string(val.access);
+        str += "\n";
+        
+        str += "Sysman::temp_prop_capability_t::minSampleRate : ";
+        str += std::to_string(val.minSampleRate);
         str += "\n";
 
         return str;
@@ -4500,6 +4616,10 @@ namespace xet
         str += "Sysman::fan_prop_capability_t::access : ";
         str += to_string(val.access);
         str += "\n";
+        
+        str += "Sysman::fan_prop_capability_t::minSampleRate : ";
+        str += std::to_string(val.minSampleRate);
+        str += "\n";
 
         return str;
     }
@@ -4587,6 +4707,10 @@ namespace xet
         
         str += "Sysman::led_prop_capability_t::access : ";
         str += to_string(val.access);
+        str += "\n";
+        
+        str += "Sysman::led_prop_capability_t::minSampleRate : ";
+        str += std::to_string(val.minSampleRate);
         str += "\n";
 
         return str;
@@ -4713,6 +4837,10 @@ namespace xet
         
         str += "Sysman::firmware_prop_capability_t::access : ";
         str += to_string(val.access);
+        str += "\n";
+        
+        str += "Sysman::firmware_prop_capability_t::minSampleRate : ";
+        str += std::to_string(val.minSampleRate);
         str += "\n";
 
         return str;
@@ -4854,6 +4982,10 @@ namespace xet
         str += "Sysman::pwr_prop_capability_t::access : ";
         str += to_string(val.access);
         str += "\n";
+        
+        str += "Sysman::pwr_prop_capability_t::minSampleRate : ";
+        str += std::to_string(val.minSampleRate);
+        str += "\n";
 
         return str;
     }
@@ -4905,6 +5037,19 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_multiplier_t to std::string
+    std::string to_string( const Sysman::freq_multiplier_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::freq_multiplier_t::multiplierFP8_8 : ";
+        str += std::to_string(val.multiplierFP8_8);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::freq_prop_accel_assets_t to std::string
     std::string to_string( const Sysman::freq_prop_accel_assets_t val )
     {
@@ -4912,6 +5057,19 @@ namespace xet
         
         str += "Sysman::freq_prop_accel_assets_t::assets : ";
         str += std::to_string(val.assets);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_prop_power_domain_t to std::string
+    std::string to_string( const Sysman::freq_prop_power_domain_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::freq_prop_power_domain_t::resource : ";
+        str += to_string(val.resource);
         str += "\n";
 
         return str;
@@ -4936,14 +5094,26 @@ namespace xet
     {
         std::string str;
         
+        str += "Sysman::freq_prop_avail_clocks_t::minFP16_16 : ";
+        str += std::to_string(val.minFP16_16);
+        str += "\n";
+        
+        str += "Sysman::freq_prop_avail_clocks_t::maxFP16_16 : ";
+        str += std::to_string(val.maxFP16_16);
+        str += "\n";
+        
+        str += "Sysman::freq_prop_avail_clocks_t::stepFP16_16 : ";
+        str += std::to_string(val.stepFP16_16);
+        str += "\n";
+        
         str += "Sysman::freq_prop_avail_clocks_t::num : ";
         str += std::to_string(val.num);
         str += "\n";
         
-        str += "Sysman::freq_prop_avail_clocks_t::pClocks : ";
+        str += "Sysman::freq_prop_avail_clocks_t::pClocksFP16_16 : ";
         {
             std::stringstream ss;
-            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pClocks);
+            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pClocksFP16_16);
             str += ss.str();
         }
         str += "\n";
@@ -4973,6 +5143,27 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_prop_avail_multipliers_t to std::string
+    std::string to_string( const Sysman::freq_prop_avail_multipliers_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::freq_prop_avail_multipliers_t::minFP8_8 : ";
+        str += std::to_string(val.minFP8_8);
+        str += "\n";
+        
+        str += "Sysman::freq_prop_avail_multipliers_t::maxFP8_8 : ";
+        str += std::to_string(val.maxFP8_8);
+        str += "\n";
+        
+        str += "Sysman::freq_prop_avail_multipliers_t::minStepFP8_8 : ";
+        str += std::to_string(val.minStepFP8_8);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::freq_prop_src_freq_t to std::string
     std::string to_string( const Sysman::freq_prop_src_freq_t val )
     {
@@ -4986,30 +5177,51 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::freq_prop_dvfs_mode_t to std::string
-    std::string to_string( const Sysman::freq_prop_dvfs_mode_t val )
+    /// @brief Converts Sysman::freq_prop_freq_request_t to std::string
+    std::string to_string( const Sysman::freq_prop_freq_request_t val )
     {
         std::string str;
         
-        str += "Sysman::freq_prop_dvfs_mode_t::mode : ";
+        str += "Sysman::freq_prop_freq_request_t::mode : ";
         str += to_string(val.mode);
+        str += "\n";
+        
+        str += "Sysman::freq_prop_freq_request_t::freqRequest : ";
+        str += std::to_string(val.freqRequest);
         str += "\n";
 
         return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::freq_prop_freq_range_t to std::string
-    std::string to_string( const Sysman::freq_prop_freq_range_t val )
+    /// @brief Converts Sysman::freq_prop_freq_divider_t to std::string
+    std::string to_string( const Sysman::freq_prop_freq_divider_t val )
     {
         std::string str;
         
-        str += "Sysman::freq_prop_freq_range_t::min : ";
-        str += std::to_string(val.min);
+        str += "Sysman::freq_prop_freq_divider_t::mode : ";
+        str += to_string(val.mode);
         str += "\n";
         
-        str += "Sysman::freq_prop_freq_range_t::max : ";
-        str += std::to_string(val.max);
+        str += "Sysman::freq_prop_freq_divider_t::divider : ";
+        str += to_string(val.divider);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_prop_freq_multiplier_t to std::string
+    std::string to_string( const Sysman::freq_prop_freq_multiplier_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::freq_prop_freq_multiplier_t::mode : ";
+        str += to_string(val.mode);
+        str += "\n";
+        
+        str += "Sysman::freq_prop_freq_multiplier_t::multiplier : ";
+        str += to_string(val.multiplier);
         str += "\n";
 
         return str;
@@ -5042,19 +5254,6 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::freq_prop_freq_request_t to std::string
-    std::string to_string( const Sysman::freq_prop_freq_request_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::freq_prop_freq_request_t::freqRequest : ";
-        str += std::to_string(val.freqRequest);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::freq_prop_freq_resolved_t to std::string
     std::string to_string( const Sysman::freq_prop_freq_resolved_t val )
     {
@@ -5062,19 +5261,6 @@ namespace xet
         
         str += "Sysman::freq_prop_freq_resolved_t::freqResolved : ";
         str += std::to_string(val.freqResolved);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::freq_prop_freq_divider_t to std::string
-    std::string to_string( const Sysman::freq_prop_freq_divider_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::freq_prop_freq_divider_t::divider : ";
-        str += to_string(val.divider);
         str += "\n";
 
         return str;
@@ -5122,6 +5308,10 @@ namespace xet
         
         str += "Sysman::freq_prop_capability_t::access : ";
         str += to_string(val.access);
+        str += "\n";
+        
+        str += "Sysman::freq_prop_capability_t::minSampleRate : ";
+        str += std::to_string(val.minSampleRate);
         str += "\n";
 
         return str;
@@ -5250,6 +5440,10 @@ namespace xet
         str += "Sysman::pwrwell_prop_capability_t::access : ";
         str += to_string(val.access);
         str += "\n";
+        
+        str += "Sysman::pwrwell_prop_capability_t::minSampleRate : ";
+        str += std::to_string(val.minSampleRate);
+        str += "\n";
 
         return str;
     }
@@ -5330,6 +5524,10 @@ namespace xet
         str += "Sysman::accel_prop_capability_t::access : ";
         str += to_string(val.access);
         str += "\n";
+        
+        str += "Sysman::accel_prop_capability_t::minSampleRate : ";
+        str += std::to_string(val.minSampleRate);
+        str += "\n";
 
         return str;
     }
@@ -5394,44 +5592,6 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::mem_prop_ecc_cap_t to std::string
-    std::string to_string( const Sysman::mem_prop_ecc_cap_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::mem_prop_ecc_cap_t::isEccCapable : ";
-        str += std::to_string(val.isEccCapable);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::mem_prop_bad_list_t to std::string
-    std::string to_string( const Sysman::mem_prop_bad_list_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::mem_prop_bad_list_t::pCount : ";
-        {
-            std::stringstream ss;
-            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pCount);
-            str += ss.str();
-        }
-        str += "\n";
-        
-        str += "Sysman::mem_prop_bad_list_t::pList : ";
-        {
-            std::stringstream ss;
-            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pList);
-            str += ss.str();
-        }
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::mem_prop_utilization_t to std::string
     std::string to_string( const Sysman::mem_prop_utilization_t val )
     {
@@ -5482,19 +5642,6 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::mem_prop_ecc_enable_t to std::string
-    std::string to_string( const Sysman::mem_prop_ecc_enable_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::mem_prop_ecc_enable_t::enable : ";
-        str += std::to_string(val.enable);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::mem_prop_capability_t to std::string
     std::string to_string( const Sysman::mem_prop_capability_t val )
     {
@@ -5510,6 +5657,10 @@ namespace xet
         
         str += "Sysman::mem_prop_capability_t::access : ";
         str += to_string(val.access);
+        str += "\n";
+        
+        str += "Sysman::mem_prop_capability_t::minSampleRate : ";
+        str += std::to_string(val.minSampleRate);
         str += "\n";
 
         return str;
@@ -5725,6 +5876,10 @@ namespace xet
         
         str += "Sysman::link_prop_capability_t::access : ";
         str += to_string(val.access);
+        str += "\n";
+        
+        str += "Sysman::link_prop_capability_t::minSampleRate : ";
+        str += std::to_string(val.minSampleRate);
         str += "\n";
 
         return str;
