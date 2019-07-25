@@ -623,8 +623,11 @@ members:
       name: "access"
       desc: "[out] The access permissions for the property - one of $t_prop_access_t"
     - type: uint32_t
-      name: "minSampleRate"
-      desc: "[out] The minimum rate in microseconds that this property can be polled"
+      name: "minGetInterval"
+      desc: "[out] The minimum interval in microseconds between reads to this property"
+    - type: uint32_t
+      name: "minSetInterval"
+      desc: "[out] The minimum interval in microseconds between writes to this property"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which device properties are available on a given device"
@@ -799,8 +802,11 @@ members:
       name: "access"
       desc: "[out] The access permissions for the property"
     - type: uint32_t
-      name: "minSampleRate"
-      desc: "[out] The minimum rate in microseconds that this property can be polled"
+      name: "minGetInterval"
+      desc: "[out] The minimum interval in microseconds between reads to this property"
+    - type: uint32_t
+      name: "minSetInterval"
+      desc: "[out] The minimum interval in microseconds between writes to this property"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which PSU resource properties are available on a given device"
@@ -925,8 +931,11 @@ members:
       name: "access"
       desc: "[out] The access permissions for the property"
     - type: uint32_t
-      name: "minSampleRate"
-      desc: "[out] The minimum rate in microseconds that this property can be polled"
+      name: "minGetInterval"
+      desc: "[out] The minimum interval in microseconds between reads to this property"
+    - type: uint32_t
+      name: "minSetInterval"
+      desc: "[out] The minimum interval in microseconds between writes to this property"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which temperature sensor properties are available on a given device"
@@ -1145,8 +1154,11 @@ members:
       name: "access"
       desc: "[out] The access permissions for the property"
     - type: uint32_t
-      name: "minSampleRate"
-      desc: "[out] The minimum rate in microseconds that this property can be polled"
+      name: "minGetInterval"
+      desc: "[out] The minimum interval in microseconds between reads to this property"
+    - type: uint32_t
+      name: "minSetInterval"
+      desc: "[out] The minimum interval in microseconds between writes to this property"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which fan resource properties are available on a given device"
@@ -1291,8 +1303,11 @@ members:
       name: "access"
       desc: "[out] The access permissions for the property"
     - type: uint32_t
-      name: "minSampleRate"
-      desc: "[out] The minimum rate in microseconds that this property can be polled"
+      name: "minGetInterval"
+      desc: "[out] The minimum interval in microseconds between reads to this property"
+    - type: uint32_t
+      name: "minSetInterval"
+      desc: "[out] The minimum interval in microseconds between writes to this property"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which LED resource properties are available on a given device"
@@ -1453,8 +1468,11 @@ members:
       name: "access"
       desc: "[out] The access permissions for the property"
     - type: uint32_t
-      name: "minSampleRate"
-      desc: "[out] The minimum rate in microseconds that this property can be polled"
+      name: "minGetInterval"
+      desc: "[out] The minimum interval in microseconds between reads to this property"
+    - type: uint32_t
+      name: "minSetInterval"
+      desc: "[out] The minimum interval in microseconds between writes to this property"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which firmware resource properties are available on a given device"
@@ -1650,8 +1668,11 @@ members:
       name: "access"
       desc: "[out] The access permissions for the property"
     - type: uint32_t
-      name: "minSampleRate"
-      desc: "[out] The minimum rate in microseconds that this property can be polled"
+      name: "minGetInterval"
+      desc: "[out] The minimum interval in microseconds between reads to this property"
+    - type: uint32_t
+      name: "minSetInterval"
+      desc: "[out] The minimum interval in microseconds between writes to this property"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which power domain resource properties are available on a given device"
@@ -2048,8 +2069,11 @@ members:
       name: "access"
       desc: "[out] The access permissions for the property"
     - type: uint32_t
-      name: "minSampleRate"
-      desc: "[out] The minimum rate in microseconds that this property can be polled"
+      name: "minGetInterval"
+      desc: "[out] The minimum interval in microseconds between reads to this property"
+    - type: uint32_t
+      name: "minSetInterval"
+      desc: "[out] The minimum interval in microseconds between writes to this property"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which frequency domain resource properties are available on a given device"
@@ -2244,8 +2268,11 @@ members:
       name: "access"
       desc: "[out] The access permissions for the property"
     - type: uint32_t
-      name: "minSampleRate"
-      desc: "[out] The minimum rate in microseconds that this property can be polled"
+      name: "minGetInterval"
+      desc: "[out] The minimum interval in microseconds between reads to this property"
+    - type: uint32_t
+      name: "minSetInterval"
+      desc: "[out] The minimum interval in microseconds between writes to this property"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which power-well domain resource properties are available on a given device"
@@ -2384,8 +2411,11 @@ members:
       name: "access"
       desc: "[out] The access permissions for the property"
     - type: uint32_t
-      name: "minSampleRate"
-      desc: "[out] The minimum rate in microseconds that this property can be polled"
+      name: "minGetInterval"
+      desc: "[out] The minimum interval in microseconds between reads to this property"
+    - type: uint32_t
+      name: "minSetInterval"
+      desc: "[out] The minimum interval in microseconds between writes to this property"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which accelerator resource properties are available on a given device"
@@ -2575,8 +2605,11 @@ members:
       name: "access"
       desc: "[out] The access permissions for the property"
     - type: uint32_t
-      name: "minSampleRate"
-      desc: "[out] The minimum rate in microseconds that this property can be polled"
+      name: "minGetInterval"
+      desc: "[out] The minimum interval in microseconds between reads to this property"
+    - type: uint32_t
+      name: "minSetInterval"
+      desc: "[out] The minimum interval in microseconds between writes to this property"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which memory resource properties are available on a given device"
@@ -2704,6 +2737,8 @@ etors:
       desc: "(ro static) The type of link (data: $t_link_prop_type_t)"
     - name: $T_LINK_PROP_BUS_ADDRESS
       desc: "(ro static) The bus address of the link (data: $t_link_prop_bus_address_t)"
+    - name: $T_LINK_PROP_PEER_DEVICE
+      desc: "(ro static) For links of type $T_LINK_TYPE_PEER_TO_PEER, this gives the UUID of the peer device (data: $t_link_prop_peer_device_t)"
     - name: $T_LINK_PROP_AVAIL_SPEEDS
       desc: "(ro static) Available link speeds (data: $t_link_prop_avail_speeds_t)"
     - name: $T_LINK_PROP_MAX_PACKET_SIZE
@@ -2732,6 +2767,15 @@ members:
     - type: int8_t
       name: "str[$T_STRING_PROPERTY_SIZE]"
       desc: "[out] NULL terminated string value"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Data for property $T_LINK_PROP_PEER_DEVICE"
+class: $tSysman
+name: $t_link_prop_peer_device_t
+members:
+    - type: $x_device_uuid_t
+      name: "uuid"
+      desc: "[out] UUID of the peer device connected to through this link"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Data for the property $T_LINK_PROP_AVAIL_SPEEDS"
@@ -2807,8 +2851,11 @@ members:
       name: "access"
       desc: "[out] The access permissions for the property"
     - type: uint32_t
-      name: "minSampleRate"
-      desc: "[out] The minimum rate in microseconds that this property can be polled"
+      name: "minGetInterval"
+      desc: "[out] The minimum interval in microseconds between reads to this property"
+    - type: uint32_t
+      name: "minSetInterval"
+      desc: "[out] The minimum interval in microseconds between writes to this property"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out which link resource properties are available on a given device"
@@ -3014,15 +3061,73 @@ etors:
     - name: $T_DIAG_RESULT_NO_ERRORS
       value: "0"
       desc: "Diagnostic completed without finding errors to repair"
-    - name: $T_DIAG_RESULT_FAILED
-      desc: "Diagnostic had problems running tests or attempting to setup repairs"
+    - name: $T_DIAG_RESULT_ABORT
+      desc: "Diagnostic had problems running tests"
+    - name: $T_DIAG_RESULT_FAIL_CANT_REPAIR
+      desc: "Diagnostic had problems setting up repairs"
     - name: $T_DIAG_RESULT_REBOOT_FOR_REPAIR
       desc: "Diagnostics found errors, setup for repair and reboot is required to complete the process"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Diagnostic test index to use for the very first test."
+name: $T_DIAG_FIRST_TEST_INDEX
+value: "0x0"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Diagnostic test index to use for the very last test."
+name: $T_DIAG_LAST_TEST_INDEX
+value: "0xFFFFFFFF"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Diagnostic test"
+class: $tSysman
+name: $t_diag_test_t
+members:
+    - type: uint32_t
+      name: "index"
+      desc: "[out] Index of the test"
+    - type: const char*
+      name: "name"
+      desc: "[out] Name of the test"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "List of all diagnostic tests of a given type $t_diag_type_t"
+class: $tSysman
+name: $t_diag_test_list_t
+members:
+    - type: $t_diag_type_t
+      name: "type"
+      desc: "[out] The type of tests"
+    - type: uint32_t
+      name: "count"
+      desc: "[out] The number of tests in the array pTests"
+    - type: $t_diag_test_t*
+      name: "pTests"
+      desc: "[out] Array of tests, sorted by increasing value of $t_diag_test_t.index"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get diagnostic tests"
+class: $tSysman
+name: GetDiagnosticTests
+details:
+    - "Tests are returned in order of increasing index."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle for the device"
+    - type: $t_diag_type_t
+      name: type
+      desc: "[in] Type of diagnostic to run"
+    - type: const $t_diag_test_list_t**
+      name: ppTests
+      desc: "[in] Returns a constant pointer to the list of diagnostic tests"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Run diagnostics"
 class: $tSysman
-name: RunDiagnostics
+name: RunDiagnosticTests
 details:
     - "This function will block until the diagnostics have completed."
 params:
@@ -3032,6 +3137,12 @@ params:
     - type: $t_diag_type_t
       name: type
       desc: "[in] Type of diagnostic to run"
+    - type: uint32_t
+      name: start
+      desc: "[in] The index of the first test to run. Set to $T_DIAG_FIRST_TEST_INDEX to start from the beginning."
+    - type: uint32_t
+      name: end
+      desc: "[in] The index of the last test to run. Set to $T_DIAG_LAST_TEST_INDEX to complete all tests after the start test."
     - type: $t_diag_result_t*
       name: pResult
       desc: "[in] The result of the diagnostics"

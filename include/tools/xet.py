@@ -693,8 +693,10 @@ class xet_device_prop_capability_t(Structure):
         ("support", c_ubyte),                                           ## [out] API support for the property - one of ::xet_prop_support_t
         ("access", c_ubyte),                                            ## [out] The access permissions for the property - one of
                                                                         ## ::xet_prop_access_t
-        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
-                                                                        ## polled
+        ("minGetInterval", c_ulong),                                    ## [out] The minimum interval in microseconds between reads to this
+                                                                        ## property
+        ("minSetInterval", c_ulong)                                     ## [out] The minimum interval in microseconds between writes to this
+                                                                        ## property
     ]
 
 ###############################################################################
@@ -794,8 +796,10 @@ class xet_psu_prop_capability_t(Structure):
         ("property", xet_psu_properties_t),                             ## [in] The property
         ("support", xet_prop_support_t),                                ## [out] API support for the property
         ("access", xet_prop_access_t),                                  ## [out] The access permissions for the property
-        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
-                                                                        ## polled
+        ("minGetInterval", c_ulong),                                    ## [out] The minimum interval in microseconds between reads to this
+                                                                        ## property
+        ("minSetInterval", c_ulong)                                     ## [out] The minimum interval in microseconds between writes to this
+                                                                        ## property
     ]
 
 ###############################################################################
@@ -849,8 +853,10 @@ class xet_temp_prop_capability_t(Structure):
         ("property", xet_temp_properties_t),                            ## [in] The property
         ("support", xet_prop_support_t),                                ## [out] API support for the property
         ("access", xet_prop_access_t),                                  ## [out] The access permissions for the property
-        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
-                                                                        ## polled
+        ("minGetInterval", c_ulong),                                    ## [out] The minimum interval in microseconds between reads to this
+                                                                        ## property
+        ("minSetInterval", c_ulong)                                     ## [out] The minimum interval in microseconds between writes to this
+                                                                        ## property
     ]
 
 ###############################################################################
@@ -1001,8 +1007,10 @@ class xet_fan_prop_capability_t(Structure):
         ("property", xet_fan_properties_t),                             ## [in] The property
         ("support", xet_prop_support_t),                                ## [out] API support for the property
         ("access", xet_prop_access_t),                                  ## [out] The access permissions for the property
-        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
-                                                                        ## polled
+        ("minGetInterval", c_ulong),                                    ## [out] The minimum interval in microseconds between reads to this
+                                                                        ## property
+        ("minSetInterval", c_ulong)                                     ## [out] The minimum interval in microseconds between writes to this
+                                                                        ## property
     ]
 
 ###############################################################################
@@ -1068,8 +1076,10 @@ class xet_led_prop_capability_t(Structure):
         ("property", xet_led_properties_t),                             ## [in] The property
         ("support", xet_prop_support_t),                                ## [out] API support for the property
         ("access", xet_prop_access_t),                                  ## [out] The access permissions for the property
-        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
-                                                                        ## polled
+        ("minGetInterval", c_ulong),                                    ## [out] The minimum interval in microseconds between reads to this
+                                                                        ## property
+        ("minSetInterval", c_ulong)                                     ## [out] The minimum interval in microseconds between writes to this
+                                                                        ## property
     ]
 
 ###############################################################################
@@ -1151,8 +1161,10 @@ class xet_firmware_prop_capability_t(Structure):
         ("property", xet_firmware_properties_t),                        ## [in] The property
         ("support", xet_prop_support_t),                                ## [out] API support for the property
         ("access", xet_prop_access_t),                                  ## [out] The access permissions for the property
-        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
-                                                                        ## polled
+        ("minGetInterval", c_ulong),                                    ## [out] The minimum interval in microseconds between reads to this
+                                                                        ## property
+        ("minSetInterval", c_ulong)                                     ## [out] The minimum interval in microseconds between writes to this
+                                                                        ## property
     ]
 
 ###############################################################################
@@ -1278,8 +1290,10 @@ class xet_pwr_prop_capability_t(Structure):
         ("property", xet_pwr_properties_t),                             ## [in] The property
         ("support", xet_prop_support_t),                                ## [out] API support for the property
         ("access", xet_prop_access_t),                                  ## [out] The access permissions for the property
-        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
-                                                                        ## polled
+        ("minGetInterval", c_ulong),                                    ## [out] The minimum interval in microseconds between reads to this
+                                                                        ## property
+        ("minSetInterval", c_ulong)                                     ## [out] The minimum interval in microseconds between writes to this
+                                                                        ## property
     ]
 
 ###############################################################################
@@ -1566,8 +1580,10 @@ class xet_freq_prop_capability_t(Structure):
         ("property", xet_freq_properties_t),                            ## [in] The property
         ("support", xet_prop_support_t),                                ## [out] API support for the property
         ("access", xet_prop_access_t),                                  ## [out] The access permissions for the property
-        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
-                                                                        ## polled
+        ("minGetInterval", c_ulong),                                    ## [out] The minimum interval in microseconds between reads to this
+                                                                        ## property
+        ("minSetInterval", c_ulong)                                     ## [out] The minimum interval in microseconds between writes to this
+                                                                        ## property
     ]
 
 ###############################################################################
@@ -1689,8 +1705,10 @@ class xet_pwrwell_prop_capability_t(Structure):
         ("property", xet_pwrwell_properties_t),                         ## [in] The property
         ("support", xet_prop_support_t),                                ## [out] API support for the property
         ("access", xet_prop_access_t),                                  ## [out] The access permissions for the property
-        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
-                                                                        ## polled
+        ("minGetInterval", c_ulong),                                    ## [out] The minimum interval in microseconds between reads to this
+                                                                        ## property
+        ("minSetInterval", c_ulong)                                     ## [out] The minimum interval in microseconds between writes to this
+                                                                        ## property
     ]
 
 ###############################################################################
@@ -1757,8 +1775,10 @@ class xet_accel_prop_capability_t(Structure):
         ("property", xet_accel_properties_t),                           ## [in] The property
         ("support", xet_prop_support_t),                                ## [out] API support for the property
         ("access", xet_prop_access_t),                                  ## [out] The access permissions for the property
-        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
-                                                                        ## polled
+        ("minGetInterval", c_ulong),                                    ## [out] The minimum interval in microseconds between reads to this
+                                                                        ## property
+        ("minSetInterval", c_ulong)                                     ## [out] The minimum interval in microseconds between writes to this
+                                                                        ## property
     ]
 
 ###############################################################################
@@ -1878,8 +1898,10 @@ class xet_mem_prop_capability_t(Structure):
         ("property", xet_mem_properties_t),                             ## [in] The property
         ("support", xet_prop_support_t),                                ## [out] API support for the property
         ("access", xet_prop_access_t),                                  ## [out] The access permissions for the property
-        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
-                                                                        ## polled
+        ("minGetInterval", c_ulong),                                    ## [out] The minimum interval in microseconds between reads to this
+                                                                        ## property
+        ("minSetInterval", c_ulong)                                     ## [out] The minimum interval in microseconds between writes to this
+                                                                        ## property
     ]
 
 ###############################################################################
@@ -1933,8 +1955,8 @@ class xet_link_properties_v(IntEnum):
     LINK_PROP_TYPE = 0                              ## (ro static) The type of link (data: ::xet_link_prop_type_t)
     LINK_PROP_BUS_ADDRESS = auto()                  ## (ro static) The bus address of the link (data:
                                                     ## ::xet_link_prop_bus_address_t)
-    LINK_PROP_PWR_CAP = auto()                      ## (ro static) Indicates if the link frequency can adjust to control
-                                                    ## power (data: ::xet_link_prop_pwr_cap_t)
+    LINK_PROP_PEER_DEVICE = auto()                  ## (ro static) For links of type ::XET_LINK_TYPE_PEER_TO_PEER, this gives
+                                                    ## the UUID of the peer device (data: ::xet_link_prop_peer_device_t)
     LINK_PROP_AVAIL_SPEEDS = auto()                 ## (ro static) Available link speeds (data:
                                                     ## ::xet_link_prop_avail_speeds_t)
     LINK_PROP_MAX_PACKET_SIZE = auto()              ## (ro static) Maximum packet size (data:
@@ -1965,10 +1987,10 @@ class xet_link_prop_bus_address_t(Structure):
     ]
 
 ###############################################################################
-## @brief Data for the property ::XET_LINK_PROP_PWR_CAP
-class xet_link_prop_pwr_cap_t(Structure):
+## @brief Data for property ::XET_LINK_PROP_PEER_DEVICE
+class xet_link_prop_peer_device_t(Structure):
     _fields_ = [
-        ("havePwrMgmt", xe_bool_t)                                      ## [out] Indicates if the link frequency can adjust to control power.
+        ("uuid", xe_device_uuid_t)                                      ## [out] UUID of the peer device connected to through this link
     ]
 
 ###############################################################################
@@ -2023,8 +2045,10 @@ class xet_link_prop_capability_t(Structure):
         ("property", xet_link_properties_t),                            ## [in] The property
         ("support", xet_prop_support_t),                                ## [out] API support for the property
         ("access", xet_prop_access_t),                                  ## [out] The access permissions for the property
-        ("minSampleRate", c_ulong)                                      ## [out] The minimum rate in microseconds that this property can be
-                                                                        ## polled
+        ("minGetInterval", c_ulong),                                    ## [out] The minimum interval in microseconds between reads to this
+                                                                        ## property
+        ("minSetInterval", c_ulong)                                     ## [out] The minimum interval in microseconds between writes to this
+                                                                        ## property
     ]
 
 ###############################################################################
@@ -2089,7 +2113,8 @@ class xet_diag_type_t(c_int):
 ## @brief Diagnostic results
 class xet_diag_result_v(IntEnum):
     NO_ERRORS = 0                                   ## Diagnostic completed without finding errors to repair
-    FAILED = auto()                                 ## Diagnostic had problems running tests or attempting to setup repairs
+    ABORT = auto()                                  ## Diagnostic had problems running tests
+    FAIL_CANT_REPAIR = auto()                       ## Diagnostic had problems setting up repairs
     REBOOT_FOR_REPAIR = auto()                      ## Diagnostics found errors, setup for repair and reboot is required to
                                                     ## complete the process
 
@@ -2097,6 +2122,32 @@ class xet_diag_result_t(c_int):
     def __str__(self):
         return str(xet_diag_result_v(value))
 
+
+###############################################################################
+## @brief Diagnostic test index to use for the very first test.
+XET_DIAG_FIRST_TEST_INDEX = 0x0
+
+###############################################################################
+## @brief Diagnostic test index to use for the very last test.
+XET_DIAG_LAST_TEST_INDEX = 0xFFFFFFFF
+
+###############################################################################
+## @brief Diagnostic test
+class xet_diag_test_t(Structure):
+    _fields_ = [
+        ("index", c_ulong),                                             ## [out] Index of the test
+        ("name", POINTER(c_char))                                       ## [out] Name of the test
+    ]
+
+###############################################################################
+## @brief List of all diagnostic tests of a given type ::xet_diag_type_t
+class xet_diag_test_list_t(Structure):
+    _fields_ = [
+        ("type", xet_diag_type_t),                                      ## [out] The type of tests
+        ("count", c_ulong),                                             ## [out] The number of tests in the array pTests
+        ("pTests", POINTER(xet_diag_test_t))                            ## [out] Array of tests, sorted by increasing value of
+                                                                        ## ::xet_diag_test_t.index
+    ]
 
 ###############################################################################
 ## @brief Wait infinitely for events to arrive.
@@ -2751,11 +2802,18 @@ else:
     _xetSysmanUnregisterEvents_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_event_request_t) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanRunDiagnostics
+## @brief Function-pointer for xetSysmanGetDiagnosticTests
 if __use_win_types:
-    _xetSysmanRunDiagnostics_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_diag_type_t, POINTER(xet_diag_result_t) )
+    _xetSysmanGetDiagnosticTests_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_diag_type_t, POINTER(xet_diag_test_list_t*) )
 else:
-    _xetSysmanRunDiagnostics_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_diag_type_t, POINTER(xet_diag_result_t) )
+    _xetSysmanGetDiagnosticTests_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_diag_type_t, POINTER(xet_diag_test_list_t*) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanRunDiagnosticTests
+if __use_win_types:
+    _xetSysmanRunDiagnosticTests_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_diag_type_t, c_ulong, c_ulong, POINTER(xet_diag_result_t) )
+else:
+    _xetSysmanRunDiagnosticTests_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_diag_type_t, c_ulong, c_ulong, POINTER(xet_diag_result_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanGetEvents
@@ -2812,7 +2870,8 @@ class _xet_sysman_dditable_t(Structure):
         ("pfnSupportedEvents", c_void_p),                               ## _xetSysmanSupportedEvents_t
         ("pfnRegisterEvents", c_void_p),                                ## _xetSysmanRegisterEvents_t
         ("pfnUnregisterEvents", c_void_p),                              ## _xetSysmanUnregisterEvents_t
-        ("pfnRunDiagnostics", c_void_p),                                ## _xetSysmanRunDiagnostics_t
+        ("pfnGetDiagnosticTests", c_void_p),                            ## _xetSysmanGetDiagnosticTests_t
+        ("pfnRunDiagnosticTests", c_void_p),                            ## _xetSysmanRunDiagnosticTests_t
         ("pfnGetEvents", c_void_p)                                      ## _xetSysmanGetEvents_t
     ]
 
@@ -3024,7 +3083,8 @@ class XET_DDI:
         self.xetSysmanSupportedEvents = _xetSysmanSupportedEvents_t(self.__dditable.Sysman.pfnSupportedEvents)
         self.xetSysmanRegisterEvents = _xetSysmanRegisterEvents_t(self.__dditable.Sysman.pfnRegisterEvents)
         self.xetSysmanUnregisterEvents = _xetSysmanUnregisterEvents_t(self.__dditable.Sysman.pfnUnregisterEvents)
-        self.xetSysmanRunDiagnostics = _xetSysmanRunDiagnostics_t(self.__dditable.Sysman.pfnRunDiagnostics)
+        self.xetSysmanGetDiagnosticTests = _xetSysmanGetDiagnosticTests_t(self.__dditable.Sysman.pfnGetDiagnosticTests)
+        self.xetSysmanRunDiagnosticTests = _xetSysmanRunDiagnosticTests_t(self.__dditable.Sysman.pfnRunDiagnosticTests)
         self.xetSysmanGetEvents = _xetSysmanGetEvents_t(self.__dditable.Sysman.pfnGetEvents)
 
         # success!

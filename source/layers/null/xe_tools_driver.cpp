@@ -1732,21 +1732,50 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanRunDiagnostics
+    /// @brief Intercept function for xetSysmanGetDiagnosticTests
     xe_result_t __xecall
-    xetSysmanRunDiagnostics(
+    xetSysmanGetDiagnosticTests(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
         xet_diag_type_t type,                           ///< [in] Type of diagnostic to run
+        const xet_diag_test_list_t** ppTests            ///< [in] Returns a constant pointer to the list of diagnostic tests
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnGetDiagnosticTests = context.xetDdiTable.Sysman.pfnGetDiagnosticTests;
+        if( nullptr != pfnGetDiagnosticTests )
+        {
+            result = pfnGetDiagnosticTests( hSysman, type, ppTests );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanRunDiagnosticTests
+    xe_result_t __xecall
+    xetSysmanRunDiagnosticTests(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+        xet_diag_type_t type,                           ///< [in] Type of diagnostic to run
+        uint32_t start,                                 ///< [in] The index of the first test to run. Set to
+                                                        ///< ::XET_DIAG_FIRST_TEST_INDEX to start from the beginning.
+        uint32_t end,                                   ///< [in] The index of the last test to run. Set to
+                                                        ///< ::XET_DIAG_LAST_TEST_INDEX to complete all tests after the start test.
         xet_diag_result_t* pResult                      ///< [in] The result of the diagnostics
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnRunDiagnostics = context.xetDdiTable.Sysman.pfnRunDiagnostics;
-        if( nullptr != pfnRunDiagnostics )
+        auto pfnRunDiagnosticTests = context.xetDdiTable.Sysman.pfnRunDiagnosticTests;
+        if( nullptr != pfnRunDiagnosticTests )
         {
-            result = pfnRunDiagnostics( hSysman, type, pResult );
+            result = pfnRunDiagnosticTests( hSysman, type, start, end, pResult );
         }
         else
         {
@@ -2395,7 +2424,9 @@ xetGetSysmanProcAddrTable(
 
     pDdiTable->pfnUnregisterEvents                       = driver::xetSysmanUnregisterEvents;
 
-    pDdiTable->pfnRunDiagnostics                         = driver::xetSysmanRunDiagnostics;
+    pDdiTable->pfnGetDiagnosticTests                     = driver::xetSysmanGetDiagnosticTests;
+
+    pDdiTable->pfnRunDiagnosticTests                     = driver::xetSysmanRunDiagnosticTests;
 
     pDdiTable->pfnGetEvents                              = driver::xetSysmanGetEvents;
 

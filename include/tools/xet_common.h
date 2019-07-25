@@ -479,8 +479,8 @@ typedef struct _xet_link_prop_type_t xet_link_prop_type_t;
 typedef struct _xet_link_prop_bus_address_t xet_link_prop_bus_address_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_link_prop_pwr_cap_t
-typedef struct _xet_link_prop_pwr_cap_t xet_link_prop_pwr_cap_t;
+/// @brief Forward-declare xet_link_prop_peer_device_t
+typedef struct _xet_link_prop_peer_device_t xet_link_prop_peer_device_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_link_prop_avail_speeds_t
@@ -517,6 +517,14 @@ typedef struct _xet_event_support_t xet_event_support_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_event_request_t
 typedef struct _xet_event_request_t xet_event_request_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_diag_test_t
+typedef struct _xet_diag_test_t xet_diag_test_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_diag_test_list_t
+typedef struct _xet_diag_test_list_t xet_diag_test_list_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_tracer_desc_t

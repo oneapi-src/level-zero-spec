@@ -1404,6 +1404,36 @@ xetSysmanUnregisterEvents(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Get diagnostic tests
+/// 
+/// @details
+///     - Tests are returned in order of increasing index.
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == ppTests
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanGetDiagnosticTests(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+    xet_diag_type_t type,                           ///< [in] Type of diagnostic to run
+    const xet_diag_test_list_t** ppTests            ///< [in] Returns a constant pointer to the list of diagnostic tests
+    )
+{
+    auto pfnGetDiagnosticTests = xet_lib::context.ddiTable.Sysman.pfnGetDiagnosticTests;
+    if( nullptr == pfnGetDiagnosticTests )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnGetDiagnosticTests( hSysman, type, ppTests );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Run diagnostics
 /// 
 /// @details
@@ -1418,17 +1448,21 @@ xetSysmanUnregisterEvents(
 ///         + nullptr == pResult
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanRunDiagnostics(
+xetSysmanRunDiagnosticTests(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
     xet_diag_type_t type,                           ///< [in] Type of diagnostic to run
+    uint32_t start,                                 ///< [in] The index of the first test to run. Set to
+                                                    ///< ::XET_DIAG_FIRST_TEST_INDEX to start from the beginning.
+    uint32_t end,                                   ///< [in] The index of the last test to run. Set to
+                                                    ///< ::XET_DIAG_LAST_TEST_INDEX to complete all tests after the start test.
     xet_diag_result_t* pResult                      ///< [in] The result of the diagnostics
     )
 {
-    auto pfnRunDiagnostics = xet_lib::context.ddiTable.Sysman.pfnRunDiagnostics;
-    if( nullptr == pfnRunDiagnostics )
+    auto pfnRunDiagnosticTests = xet_lib::context.ddiTable.Sysman.pfnRunDiagnosticTests;
+    if( nullptr == pfnRunDiagnosticTests )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnRunDiagnostics( hSysman, type, pResult );
+    return pfnRunDiagnosticTests( hSysman, type, start, end, pResult );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2596,6 +2630,30 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get diagnostic tests
+    /// 
+    /// @details
+    ///     - Tests are returned in order of increasing index.
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::GetDiagnosticTests(
+        diag_type_t type,                               ///< [in] Type of diagnostic to run
+        const diag_test_list_t** ppTests                ///< [in] Returns a constant pointer to the list of diagnostic tests
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanGetDiagnosticTests(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            static_cast<xet_diag_type_t>( type ),
+            reinterpret_cast<const xet_diag_test_list_t**>( ppTests ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::GetDiagnosticTests" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Run diagnostics
     /// 
     /// @details
@@ -2603,18 +2661,24 @@ namespace xet
     /// 
     /// @throws result_t
     void __xecall
-    Sysman::RunDiagnostics(
+    Sysman::RunDiagnosticTests(
         diag_type_t type,                               ///< [in] Type of diagnostic to run
+        uint32_t start,                                 ///< [in] The index of the first test to run. Set to
+                                                        ///< ::XET_DIAG_FIRST_TEST_INDEX to start from the beginning.
+        uint32_t end,                                   ///< [in] The index of the last test to run. Set to
+                                                        ///< ::XET_DIAG_LAST_TEST_INDEX to complete all tests after the start test.
         diag_result_t* pResult                          ///< [in] The result of the diagnostics
         )
     {
-        auto result = static_cast<result_t>( ::xetSysmanRunDiagnostics(
+        auto result = static_cast<result_t>( ::xetSysmanRunDiagnosticTests(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
             static_cast<xet_diag_type_t>( type ),
+            start,
+            end,
             reinterpret_cast<xet_diag_result_t*>( pResult ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::RunDiagnostics" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::RunDiagnosticTests" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3801,8 +3865,8 @@ namespace xet
             str = "Sysman::link_properties_t::LINK_PROP_BUS_ADDRESS";
             break;
 
-        case Sysman::link_properties_t::LINK_PROP_PWR_CAP:
-            str = "Sysman::link_properties_t::LINK_PROP_PWR_CAP";
+        case Sysman::link_properties_t::LINK_PROP_PEER_DEVICE:
+            str = "Sysman::link_properties_t::LINK_PROP_PEER_DEVICE";
             break;
 
         case Sysman::link_properties_t::LINK_PROP_AVAIL_SPEEDS:
@@ -3897,8 +3961,12 @@ namespace xet
             str = "Sysman::diag_result_t::NO_ERRORS";
             break;
 
-        case Sysman::diag_result_t::FAILED:
-            str = "Sysman::diag_result_t::FAILED";
+        case Sysman::diag_result_t::ABORT:
+            str = "Sysman::diag_result_t::ABORT";
+            break;
+
+        case Sysman::diag_result_t::FAIL_CANT_REPAIR:
+            str = "Sysman::diag_result_t::FAIL_CANT_REPAIR";
             break;
 
         case Sysman::diag_result_t::REBOOT_FOR_REPAIR:
@@ -4249,8 +4317,12 @@ namespace xet
         str += std::to_string(val.access);
         str += "\n";
         
-        str += "Sysman::device_prop_capability_t::minSampleRate : ";
-        str += std::to_string(val.minSampleRate);
+        str += "Sysman::device_prop_capability_t::minGetInterval : ";
+        str += std::to_string(val.minGetInterval);
+        str += "\n";
+        
+        str += "Sysman::device_prop_capability_t::minSetInterval : ";
+        str += std::to_string(val.minSetInterval);
         str += "\n";
 
         return str;
@@ -4364,8 +4436,12 @@ namespace xet
         str += to_string(val.access);
         str += "\n";
         
-        str += "Sysman::psu_prop_capability_t::minSampleRate : ";
-        str += std::to_string(val.minSampleRate);
+        str += "Sysman::psu_prop_capability_t::minGetInterval : ";
+        str += std::to_string(val.minGetInterval);
+        str += "\n";
+        
+        str += "Sysman::psu_prop_capability_t::minSetInterval : ";
+        str += std::to_string(val.minSetInterval);
         str += "\n";
 
         return str;
@@ -4431,8 +4507,12 @@ namespace xet
         str += to_string(val.access);
         str += "\n";
         
-        str += "Sysman::temp_prop_capability_t::minSampleRate : ";
-        str += std::to_string(val.minSampleRate);
+        str += "Sysman::temp_prop_capability_t::minGetInterval : ";
+        str += std::to_string(val.minGetInterval);
+        str += "\n";
+        
+        str += "Sysman::temp_prop_capability_t::minSetInterval : ";
+        str += std::to_string(val.minSetInterval);
         str += "\n";
 
         return str;
@@ -4617,8 +4697,12 @@ namespace xet
         str += to_string(val.access);
         str += "\n";
         
-        str += "Sysman::fan_prop_capability_t::minSampleRate : ";
-        str += std::to_string(val.minSampleRate);
+        str += "Sysman::fan_prop_capability_t::minGetInterval : ";
+        str += std::to_string(val.minGetInterval);
+        str += "\n";
+        
+        str += "Sysman::fan_prop_capability_t::minSetInterval : ";
+        str += std::to_string(val.minSetInterval);
         str += "\n";
 
         return str;
@@ -4709,8 +4793,12 @@ namespace xet
         str += to_string(val.access);
         str += "\n";
         
-        str += "Sysman::led_prop_capability_t::minSampleRate : ";
-        str += std::to_string(val.minSampleRate);
+        str += "Sysman::led_prop_capability_t::minGetInterval : ";
+        str += std::to_string(val.minGetInterval);
+        str += "\n";
+        
+        str += "Sysman::led_prop_capability_t::minSetInterval : ";
+        str += std::to_string(val.minSetInterval);
         str += "\n";
 
         return str;
@@ -4839,8 +4927,12 @@ namespace xet
         str += to_string(val.access);
         str += "\n";
         
-        str += "Sysman::firmware_prop_capability_t::minSampleRate : ";
-        str += std::to_string(val.minSampleRate);
+        str += "Sysman::firmware_prop_capability_t::minGetInterval : ";
+        str += std::to_string(val.minGetInterval);
+        str += "\n";
+        
+        str += "Sysman::firmware_prop_capability_t::minSetInterval : ";
+        str += std::to_string(val.minSetInterval);
         str += "\n";
 
         return str;
@@ -4983,8 +5075,12 @@ namespace xet
         str += to_string(val.access);
         str += "\n";
         
-        str += "Sysman::pwr_prop_capability_t::minSampleRate : ";
-        str += std::to_string(val.minSampleRate);
+        str += "Sysman::pwr_prop_capability_t::minGetInterval : ";
+        str += std::to_string(val.minGetInterval);
+        str += "\n";
+        
+        str += "Sysman::pwr_prop_capability_t::minSetInterval : ";
+        str += std::to_string(val.minSetInterval);
         str += "\n";
 
         return str;
@@ -5310,8 +5406,12 @@ namespace xet
         str += to_string(val.access);
         str += "\n";
         
-        str += "Sysman::freq_prop_capability_t::minSampleRate : ";
-        str += std::to_string(val.minSampleRate);
+        str += "Sysman::freq_prop_capability_t::minGetInterval : ";
+        str += std::to_string(val.minGetInterval);
+        str += "\n";
+        
+        str += "Sysman::freq_prop_capability_t::minSetInterval : ";
+        str += std::to_string(val.minSetInterval);
         str += "\n";
 
         return str;
@@ -5441,8 +5541,12 @@ namespace xet
         str += to_string(val.access);
         str += "\n";
         
-        str += "Sysman::pwrwell_prop_capability_t::minSampleRate : ";
-        str += std::to_string(val.minSampleRate);
+        str += "Sysman::pwrwell_prop_capability_t::minGetInterval : ";
+        str += std::to_string(val.minGetInterval);
+        str += "\n";
+        
+        str += "Sysman::pwrwell_prop_capability_t::minSetInterval : ";
+        str += std::to_string(val.minSetInterval);
         str += "\n";
 
         return str;
@@ -5525,8 +5629,12 @@ namespace xet
         str += to_string(val.access);
         str += "\n";
         
-        str += "Sysman::accel_prop_capability_t::minSampleRate : ";
-        str += std::to_string(val.minSampleRate);
+        str += "Sysman::accel_prop_capability_t::minGetInterval : ";
+        str += std::to_string(val.minGetInterval);
+        str += "\n";
+        
+        str += "Sysman::accel_prop_capability_t::minSetInterval : ";
+        str += std::to_string(val.minSetInterval);
         str += "\n";
 
         return str;
@@ -5659,8 +5767,12 @@ namespace xet
         str += to_string(val.access);
         str += "\n";
         
-        str += "Sysman::mem_prop_capability_t::minSampleRate : ";
-        str += std::to_string(val.minSampleRate);
+        str += "Sysman::mem_prop_capability_t::minGetInterval : ";
+        str += std::to_string(val.minGetInterval);
+        str += "\n";
+        
+        str += "Sysman::mem_prop_capability_t::minSetInterval : ";
+        str += std::to_string(val.minSetInterval);
         str += "\n";
 
         return str;
@@ -5751,13 +5863,13 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::link_prop_pwr_cap_t to std::string
-    std::string to_string( const Sysman::link_prop_pwr_cap_t val )
+    /// @brief Converts Sysman::link_prop_peer_device_t to std::string
+    std::string to_string( const Sysman::link_prop_peer_device_t val )
     {
         std::string str;
         
-        str += "Sysman::link_prop_pwr_cap_t::havePwrMgmt : ";
-        str += std::to_string(val.havePwrMgmt);
+        str += "Sysman::link_prop_peer_device_t::uuid : ";
+        str += to_string(val.uuid);
         str += "\n";
 
         return str;
@@ -5878,8 +5990,12 @@ namespace xet
         str += to_string(val.access);
         str += "\n";
         
-        str += "Sysman::link_prop_capability_t::minSampleRate : ";
-        str += std::to_string(val.minSampleRate);
+        str += "Sysman::link_prop_capability_t::minGetInterval : ";
+        str += std::to_string(val.minGetInterval);
+        str += "\n";
+        
+        str += "Sysman::link_prop_capability_t::minSetInterval : ";
+        str += std::to_string(val.minSetInterval);
         str += "\n";
 
         return str;
@@ -5947,6 +6063,48 @@ namespace xet
         
         str += "Sysman::event_request_t::threshold : ";
         str += std::to_string(val.threshold);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::diag_test_t to std::string
+    std::string to_string( const Sysman::diag_test_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::diag_test_t::index : ";
+        str += std::to_string(val.index);
+        str += "\n";
+        
+        str += "Sysman::diag_test_t::name : ";
+        str += val.name;
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::diag_test_list_t to std::string
+    std::string to_string( const Sysman::diag_test_list_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::diag_test_list_t::type : ";
+        str += to_string(val.type);
+        str += "\n";
+        
+        str += "Sysman::diag_test_list_t::count : ";
+        str += std::to_string(val.count);
+        str += "\n";
+        
+        str += "Sysman::diag_test_list_t::pTests : ";
+        {
+            std::stringstream ss;
+            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pTests);
+            str += ss.str();
+        }
         str += "\n";
 
         return str;

@@ -1846,17 +1846,48 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanRunDiagnostics
+    /// @brief Intercept function for xetSysmanGetDiagnosticTests
     xe_result_t __xecall
-    xetSysmanRunDiagnostics(
+    xetSysmanGetDiagnosticTests(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
         xet_diag_type_t type,                           ///< [in] Type of diagnostic to run
+        const xet_diag_test_list_t** ppTests            ///< [in] Returns a constant pointer to the list of diagnostic tests
+        )
+    {
+        auto pfnGetDiagnosticTests = context.xetDdiTable.Sysman.pfnGetDiagnosticTests;
+
+        if( nullptr == pfnGetDiagnosticTests )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == ppTests )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnGetDiagnosticTests( hSysman, type, ppTests );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanRunDiagnosticTests
+    xe_result_t __xecall
+    xetSysmanRunDiagnosticTests(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+        xet_diag_type_t type,                           ///< [in] Type of diagnostic to run
+        uint32_t start,                                 ///< [in] The index of the first test to run. Set to
+                                                        ///< ::XET_DIAG_FIRST_TEST_INDEX to start from the beginning.
+        uint32_t end,                                   ///< [in] The index of the last test to run. Set to
+                                                        ///< ::XET_DIAG_LAST_TEST_INDEX to complete all tests after the start test.
         xet_diag_result_t* pResult                      ///< [in] The result of the diagnostics
         )
     {
-        auto pfnRunDiagnostics = context.xetDdiTable.Sysman.pfnRunDiagnostics;
+        auto pfnRunDiagnosticTests = context.xetDdiTable.Sysman.pfnRunDiagnosticTests;
 
-        if( nullptr == pfnRunDiagnostics )
+        if( nullptr == pfnRunDiagnosticTests )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1869,7 +1900,7 @@ namespace layer
 
         }
 
-        return pfnRunDiagnostics( hSysman, type, pResult );
+        return pfnRunDiagnosticTests( hSysman, type, start, end, pResult );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2615,8 +2646,11 @@ xetGetSysmanProcAddrTable(
     dditable.pfnUnregisterEvents                         = pDdiTable->pfnUnregisterEvents;
     pDdiTable->pfnUnregisterEvents                       = layer::xetSysmanUnregisterEvents;
 
-    dditable.pfnRunDiagnostics                           = pDdiTable->pfnRunDiagnostics;
-    pDdiTable->pfnRunDiagnostics                         = layer::xetSysmanRunDiagnostics;
+    dditable.pfnGetDiagnosticTests                       = pDdiTable->pfnGetDiagnosticTests;
+    pDdiTable->pfnGetDiagnosticTests                     = layer::xetSysmanGetDiagnosticTests;
+
+    dditable.pfnRunDiagnosticTests                       = pDdiTable->pfnRunDiagnosticTests;
+    pDdiTable->pfnRunDiagnosticTests                     = layer::xetSysmanRunDiagnosticTests;
 
     dditable.pfnGetEvents                                = pDdiTable->pfnGetEvents;
     pDdiTable->pfnGetEvents                              = layer::xetSysmanGetEvents;

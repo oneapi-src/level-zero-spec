@@ -938,10 +938,20 @@ typedef xe_result_t (__xecall *xet_pfnSysmanUnregisterEvents_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanRunDiagnostics 
-typedef xe_result_t (__xecall *xet_pfnSysmanRunDiagnostics_t)(
+/// @brief Function-pointer for xetSysmanGetDiagnosticTests 
+typedef xe_result_t (__xecall *xet_pfnSysmanGetDiagnosticTests_t)(
     xet_sysman_handle_t,
     xet_diag_type_t,
+    const xet_diag_test_list_t**
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanRunDiagnosticTests 
+typedef xe_result_t (__xecall *xet_pfnSysmanRunDiagnosticTests_t)(
+    xet_sysman_handle_t,
+    xet_diag_type_t,
+    uint32_t,
+    uint32_t,
     xet_diag_result_t*
     );
 
@@ -1001,7 +1011,8 @@ typedef struct _xet_sysman_dditable_t
     xet_pfnSysmanSupportedEvents_t                              pfnSupportedEvents;
     xet_pfnSysmanRegisterEvents_t                               pfnRegisterEvents;
     xet_pfnSysmanUnregisterEvents_t                             pfnUnregisterEvents;
-    xet_pfnSysmanRunDiagnostics_t                               pfnRunDiagnostics;
+    xet_pfnSysmanGetDiagnosticTests_t                           pfnGetDiagnosticTests;
+    xet_pfnSysmanRunDiagnosticTests_t                           pfnRunDiagnosticTests;
     xet_pfnSysmanGetEvents_t                                    pfnGetEvents;
 } xet_sysman_dditable_t;
 

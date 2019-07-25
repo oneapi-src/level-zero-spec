@@ -52,6 +52,18 @@
 #endif // XET_FAN_TEMP_SPEED_PAIR_COUNT
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_DIAG_FIRST_TEST_INDEX
+/// @brief Diagnostic test index to use for the very first test.
+#define XET_DIAG_FIRST_TEST_INDEX  0x0
+#endif // XET_DIAG_FIRST_TEST_INDEX
+
+///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_DIAG_LAST_TEST_INDEX
+/// @brief Diagnostic test index to use for the very last test.
+#define XET_DIAG_LAST_TEST_INDEX  0xFFFFFFFF
+#endif // XET_DIAG_LAST_TEST_INDEX
+
+///////////////////////////////////////////////////////////////////////////////
 #ifndef XET_EVENT_WAIT_INFINITE
 /// @brief Wait infinitely for events to arrive.
 #define XET_EVENT_WAIT_INFINITE  0xFFFFFFFF
@@ -666,8 +678,8 @@ namespace xet
             LINK_PROP_TYPE = 0,                             ///< (ro static) The type of link (data: ::xet_link_prop_type_t)
             LINK_PROP_BUS_ADDRESS,                          ///< (ro static) The bus address of the link (data:
                                                             ///< ::xet_link_prop_bus_address_t)
-            LINK_PROP_PWR_CAP,                              ///< (ro static) Indicates if the link frequency can adjust to control
-                                                            ///< power (data: ::xet_link_prop_pwr_cap_t)
+            LINK_PROP_PEER_DEVICE,                          ///< (ro static) For links of type ::XET_LINK_TYPE_PEER_TO_PEER, this gives
+                                                            ///< the UUID of the peer device (data: ::xet_link_prop_peer_device_t)
             LINK_PROP_AVAIL_SPEEDS,                         ///< (ro static) Available link speeds (data:
                                                             ///< ::xet_link_prop_avail_speeds_t)
             LINK_PROP_MAX_PACKET_SIZE,                      ///< (ro static) Maximum packet size (data:
@@ -704,7 +716,8 @@ namespace xet
         enum class diag_result_t
         {
             NO_ERRORS = 0,                                  ///< Diagnostic completed without finding errors to repair
-            FAILED,                                         ///< Diagnostic had problems running tests or attempting to setup repairs
+            ABORT,                                          ///< Diagnostic had problems running tests
+            FAIL_CANT_REPAIR,                               ///< Diagnostic had problems setting up repairs
             REBOOT_FOR_REPAIR,                              ///< Diagnostics found errors, setup for repair and reboot is required to
                                                             ///< complete the process
 
@@ -864,8 +877,10 @@ namespace xet
             uint8_t support;                                ///< [out] API support for the property - one of ::xet_prop_support_t
             uint8_t access;                                 ///< [out] The access permissions for the property - one of
                                                             ///< ::xet_prop_access_t
-            uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
-                                                            ///< polled
+            uint32_t minGetInterval;                        ///< [out] The minimum interval in microseconds between reads to this
+                                                            ///< property
+            uint32_t minSetInterval;                        ///< [out] The minimum interval in microseconds between writes to this
+                                                            ///< property
 
         };
 
@@ -930,8 +945,10 @@ namespace xet
             psu_properties_t property;                      ///< [in] The property
             prop_support_t support;                         ///< [out] API support for the property
             prop_access_t access;                           ///< [out] The access permissions for the property
-            uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
-                                                            ///< polled
+            uint32_t minGetInterval;                        ///< [out] The minimum interval in microseconds between reads to this
+                                                            ///< property
+            uint32_t minSetInterval;                        ///< [out] The minimum interval in microseconds between writes to this
+                                                            ///< property
 
         };
 
@@ -966,8 +983,10 @@ namespace xet
             temp_properties_t property;                     ///< [in] The property
             prop_support_t support;                         ///< [out] API support for the property
             prop_access_t access;                           ///< [out] The access permissions for the property
-            uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
-                                                            ///< polled
+            uint32_t minGetInterval;                        ///< [out] The minimum interval in microseconds between reads to this
+                                                            ///< property
+            uint32_t minSetInterval;                        ///< [out] The minimum interval in microseconds between writes to this
+                                                            ///< property
 
         };
 
@@ -1067,8 +1086,10 @@ namespace xet
             fan_properties_t property;                      ///< [in] The property
             prop_support_t support;                         ///< [out] API support for the property
             prop_access_t access;                           ///< [out] The access permissions for the property
-            uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
-                                                            ///< polled
+            uint32_t minGetInterval;                        ///< [out] The minimum interval in microseconds between reads to this
+                                                            ///< property
+            uint32_t minSetInterval;                        ///< [out] The minimum interval in microseconds between writes to this
+                                                            ///< property
 
         };
 
@@ -1114,8 +1135,10 @@ namespace xet
             led_properties_t property;                      ///< [in] The property
             prop_support_t support;                         ///< [out] API support for the property
             prop_access_t access;                           ///< [out] The access permissions for the property
-            uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
-                                                            ///< polled
+            uint32_t minGetInterval;                        ///< [out] The minimum interval in microseconds between reads to this
+                                                            ///< property
+            uint32_t minSetInterval;                        ///< [out] The minimum interval in microseconds between writes to this
+                                                            ///< property
 
         };
 
@@ -1175,8 +1198,10 @@ namespace xet
             firmware_properties_t property;                 ///< [in] The property
             prop_support_t support;                         ///< [out] API support for the property
             prop_access_t access;                           ///< [out] The access permissions for the property
-            uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
-                                                            ///< polled
+            uint32_t minGetInterval;                        ///< [out] The minimum interval in microseconds between reads to this
+                                                            ///< property
+            uint32_t minSetInterval;                        ///< [out] The minimum interval in microseconds between writes to this
+                                                            ///< property
 
         };
 
@@ -1279,8 +1304,10 @@ namespace xet
             pwr_properties_t property;                      ///< [in] The property
             prop_support_t support;                         ///< [out] API support for the property
             prop_access_t access;                           ///< [out] The access permissions for the property
-            uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
-                                                            ///< polled
+            uint32_t minGetInterval;                        ///< [out] The minimum interval in microseconds between reads to this
+                                                            ///< property
+            uint32_t minSetInterval;                        ///< [out] The minimum interval in microseconds between writes to this
+                                                            ///< property
 
         };
 
@@ -1489,8 +1516,10 @@ namespace xet
             freq_properties_t property;                     ///< [in] The property
             prop_support_t support;                         ///< [out] API support for the property
             prop_access_t access;                           ///< [out] The access permissions for the property
-            uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
-                                                            ///< polled
+            uint32_t minGetInterval;                        ///< [out] The minimum interval in microseconds between reads to this
+                                                            ///< property
+            uint32_t minSetInterval;                        ///< [out] The minimum interval in microseconds between writes to this
+                                                            ///< property
 
         };
 
@@ -1568,8 +1597,10 @@ namespace xet
             pwrwell_properties_t property;                  ///< [in] The property
             prop_support_t support;                         ///< [out] API support for the property
             prop_access_t access;                           ///< [out] The access permissions for the property
-            uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
-                                                            ///< polled
+            uint32_t minGetInterval;                        ///< [out] The minimum interval in microseconds between reads to this
+                                                            ///< property
+            uint32_t minSetInterval;                        ///< [out] The minimum interval in microseconds between writes to this
+                                                            ///< property
 
         };
 
@@ -1616,8 +1647,10 @@ namespace xet
             accel_properties_t property;                    ///< [in] The property
             prop_support_t support;                         ///< [out] API support for the property
             prop_access_t access;                           ///< [out] The access permissions for the property
-            uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
-                                                            ///< polled
+            uint32_t minGetInterval;                        ///< [out] The minimum interval in microseconds between reads to this
+                                                            ///< property
+            uint32_t minSetInterval;                        ///< [out] The minimum interval in microseconds between writes to this
+                                                            ///< property
 
         };
 
@@ -1690,8 +1723,10 @@ namespace xet
             mem_properties_t property;                      ///< [in] The property
             prop_support_t support;                         ///< [out] API support for the property
             prop_access_t access;                           ///< [out] The access permissions for the property
-            uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
-                                                            ///< polled
+            uint32_t minGetInterval;                        ///< [out] The minimum interval in microseconds between reads to this
+                                                            ///< property
+            uint32_t minSetInterval;                        ///< [out] The minimum interval in microseconds between writes to this
+                                                            ///< property
 
         };
 
@@ -1737,10 +1772,10 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Data for the property ::XET_LINK_PROP_PWR_CAP
-        struct link_prop_pwr_cap_t
+        /// @brief Data for property ::XET_LINK_PROP_PEER_DEVICE
+        struct link_prop_peer_device_t
         {
-            xe::bool_t havePwrMgmt;                         ///< [out] Indicates if the link frequency can adjust to control power.
+            xe::DeviceGroup::device_uuid_t uuid;            ///< [out] UUID of the peer device connected to through this link
 
         };
 
@@ -1801,8 +1836,10 @@ namespace xet
             link_properties_t property;                     ///< [in] The property
             prop_support_t support;                         ///< [out] API support for the property
             prop_access_t access;                           ///< [out] The access permissions for the property
-            uint32_t minSampleRate;                         ///< [out] The minimum rate in microseconds that this property can be
-                                                            ///< polled
+            uint32_t minGetInterval;                        ///< [out] The minimum interval in microseconds between reads to this
+                                                            ///< property
+            uint32_t minSetInterval;                        ///< [out] The minimum interval in microseconds between writes to this
+                                                            ///< property
 
         };
 
@@ -1841,6 +1878,26 @@ namespace xet
             uint32_t threshold;                             ///< [in] The application only receives a notification when the total count
                                                             ///< exceeds this value. Set to zero to receive a notification for every
                                                             ///< new event.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Diagnostic test
+        struct diag_test_t
+        {
+            uint32_t index;                                 ///< [out] Index of the test
+            const char* name;                               ///< [out] Name of the test
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief List of all diagnostic tests of a given type ::xet_diag_type_t
+        struct diag_test_list_t
+        {
+            diag_type_t type;                               ///< [out] The type of tests
+            uint32_t count;                                 ///< [out] The number of tests in the array pTests
+            diag_test_t* pTests;                            ///< [out] Array of tests, sorted by increasing value of
+                                                            ///< ::xet_diag_test_t.index
 
         };
 
@@ -2528,14 +2585,32 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get diagnostic tests
+        /// 
+        /// @details
+        ///     - Tests are returned in order of increasing index.
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        GetDiagnosticTests(
+            diag_type_t type,                               ///< [in] Type of diagnostic to run
+            const diag_test_list_t** ppTests                ///< [in] Returns a constant pointer to the list of diagnostic tests
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Run diagnostics
         /// 
         /// @details
         ///     - This function will block until the diagnostics have completed.
         /// @throws result_t
         void __xecall
-        RunDiagnostics(
+        RunDiagnosticTests(
             diag_type_t type,                               ///< [in] Type of diagnostic to run
+            uint32_t start,                                 ///< [in] The index of the first test to run. Set to
+                                                            ///< ::XET_DIAG_FIRST_TEST_INDEX to start from the beginning.
+            uint32_t end,                                   ///< [in] The index of the last test to run. Set to
+                                                            ///< ::XET_DIAG_LAST_TEST_INDEX to complete all tests after the start test.
             diag_result_t* pResult                          ///< [in] The result of the diagnostics
             );
 
@@ -3073,8 +3148,8 @@ namespace xet
     std::string to_string( const Sysman::link_prop_bus_address_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::link_prop_pwr_cap_t to std::string
-    std::string to_string( const Sysman::link_prop_pwr_cap_t val );
+    /// @brief Converts Sysman::link_prop_peer_device_t to std::string
+    std::string to_string( const Sysman::link_prop_peer_device_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::link_prop_avail_speeds_t to std::string
@@ -3123,6 +3198,14 @@ namespace xet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::diag_result_t to std::string
     std::string to_string( const Sysman::diag_result_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::diag_test_t to std::string
+    std::string to_string( const Sysman::diag_test_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::diag_test_list_t to std::string
+    std::string to_string( const Sysman::diag_test_list_t val );
 
 } // namespace xet
 #endif // defined(__cplusplus)

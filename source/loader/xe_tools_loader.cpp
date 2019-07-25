@@ -1895,11 +1895,41 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanRunDiagnostics
+    /// @brief Intercept function for xetSysmanGetDiagnosticTests
     xe_result_t __xecall
-    xetSysmanRunDiagnostics(
+    xetSysmanGetDiagnosticTests(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
         xet_diag_type_t type,                           ///< [in] Type of diagnostic to run
+        const xet_diag_test_list_t** ppTests            ///< [in] Returns a constant pointer to the list of diagnostic tests
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnGetDiagnosticTests = dditable->xet.Sysman.pfnGetDiagnosticTests;
+        if( nullptr == pfnGetDiagnosticTests )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnGetDiagnosticTests( hSysman, type, ppTests );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanRunDiagnosticTests
+    xe_result_t __xecall
+    xetSysmanRunDiagnosticTests(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
+        xet_diag_type_t type,                           ///< [in] Type of diagnostic to run
+        uint32_t start,                                 ///< [in] The index of the first test to run. Set to
+                                                        ///< ::XET_DIAG_FIRST_TEST_INDEX to start from the beginning.
+        uint32_t end,                                   ///< [in] The index of the last test to run. Set to
+                                                        ///< ::XET_DIAG_LAST_TEST_INDEX to complete all tests after the start test.
         xet_diag_result_t* pResult                      ///< [in] The result of the diagnostics
         )
     {
@@ -1907,15 +1937,15 @@ namespace loader
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnRunDiagnostics = dditable->xet.Sysman.pfnRunDiagnostics;
-        if( nullptr == pfnRunDiagnostics )
+        auto pfnRunDiagnosticTests = dditable->xet.Sysman.pfnRunDiagnosticTests;
+        if( nullptr == pfnRunDiagnosticTests )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnRunDiagnostics( hSysman, type, pResult );
+        result = pfnRunDiagnosticTests( hSysman, type, start, end, pResult );
 
         return result;
     }
@@ -2909,7 +2939,8 @@ xetGetSysmanProcAddrTable(
             pDdiTable->pfnSupportedEvents                          = loader::xetSysmanSupportedEvents;
             pDdiTable->pfnRegisterEvents                           = loader::xetSysmanRegisterEvents;
             pDdiTable->pfnUnregisterEvents                         = loader::xetSysmanUnregisterEvents;
-            pDdiTable->pfnRunDiagnostics                           = loader::xetSysmanRunDiagnostics;
+            pDdiTable->pfnGetDiagnosticTests                       = loader::xetSysmanGetDiagnosticTests;
+            pDdiTable->pfnRunDiagnosticTests                       = loader::xetSysmanRunDiagnosticTests;
             pDdiTable->pfnGetEvents                                = loader::xetSysmanGetEvents;
         }
         else

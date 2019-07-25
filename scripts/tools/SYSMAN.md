@@ -227,14 +227,20 @@ void ShowFanInfo(${t}_sysman_handle_t hSysmanDevice, uint32_t FanIndex)
 
 ${"##"} <a name="pry">Property accuracy</a>
 All readable dynamic properties have a minimum sample-rate that is related to the time interval between updates of the underlying telemetry. If the property returns the
-instantaneous value at the time of reading, we say that the sample-rate is 0. If the property will have an updated value every 1 millisecond, we say that the sample-rate
-is 1 millisecond. This means that software should not expect an accuracy of this property if sampled faster than 1 millisecond.
+instantaneous value at the time of reading, we say that the sample interval is 0. If the property will have an updated value every 1 millisecond, we say that the
+sample interval is 1 millisecond. This means that software should not expect an accuracy of this property if sampled faster than 1 millisecond.
 
-Software can determine the minimum sample-rate for each property by using the appropriate availability function. The returned data gives the sample-rate in addition to
-the support and access-rights for the property. For example, calling ::${t}SysmanAvailableFreqProperties() with the property ::${T}_FREQ_PROP_FREQ_REQUEST will return
-a value of 1000 microseconds in ::${t}_freq_prop_capability_t.minSampleRate. This means that software should not expect to see new values for the current frequency
-for 1 millisecond after the last time it read the value.
+Software can determine the minimum sample interval for each property by using the appropriate availability function. The returned data gives the sample interval.
+For example, if calling ::${t}SysmanAvailableFreqProperties() with the property ::${T}_FREQ_PROP_FREQ_REQUEST returns ::${t}_freq_prop_capability_t.minGetInterval = 1000,
+this means that software should not expect to see new values for the current frequency for 1 millisecond after the last time it read the value.
 
+Similarly, writable dynamic properties have a minimum update-rate that is related to the time it takes for the hardware to accept the new value. Software can update
+the property faster than this rate, but it is unlikely that the new value will take effect immediately. If hardware changes immediately when a new property value is
+written, we say that the update interval is 0. If the property will only react to a new value after 1 millisecond, we say that the update interval is 1 millisecond.
+
+Software can determine the minimum update interval for each property by using the appropriate availability function. For example, if calling
+::${t}SysmanAvailableFreqProperties() with the property ::${T}_FREQ_PROP_FREQ_REQUEST returns ::${t}_freq_prop_capability_t.minSetInterval = 1000,
+this means that software should not expect a new frequency request to take effect until 1 millisecond has elapsed.
 
 ${"#"} <a name="ac">Accelerator assets</a>
 Some resources apply to more than one part of a device, but not necessarily the entire device. For example, there may be two frequency domains. One controls the performance
@@ -675,12 +681,21 @@ requesting that the event status be cleared.
 
 ${"#"} <a name="di">Diagnostics</a>
 Diagnostics is the process of taking a device offline and requesting that the hardware run self-checks and repairs. This is achieved using the function
-::${t}SysmanRunDiagnostics(). On return from the function, software can use the diagnostics return code (::${t}_diag_result_t) to determine the new course of action:
+::${t}SysmanRunDiagnosticTests(). On return from the function, software can use the diagnostics return code (::${t}_diag_result_t) to determine the new course of action:
 
 1. ::${T}_DIAG_RESULT_NO_ERRORS - No errors found and workloads can resume submission to the hardware.
-2. ::${T}_DIAG_RESULT_FAILED - Hardware had problems running diagnostic tests or failed to setup for repair. Card should be removed from the system.
-3. ::${T}_DIAG_RESULT_REBOOT_FOR_REPAIR - Hardware has prepared for repair and requires a reboot after which time workloads can resume submission.
+2. ::${T}_DIAG_RESULT_ABORT - Hardware had problems running diagnostic tests.
+3. ::${T}_DIAG_RESULT_FAIL_CANT_REPAIR - Hardware had problems setting up repair. Card should be removed from the system.
+4. ::${T}_DIAG_RESULT_REBOOT_FOR_REPAIR - Hardware has prepared for repair and requires a reboot after which time workloads can resume submission.
 
+There are multiple types of diagnostic tests that can be run and these are defined in the enumeration ::${t}_diag_type_t.
+
+When running diagnostics, the start and end tests need to be specified. To run all tests, set the start to ::${T}_DIAG_FIRST_TEST_INDEX and the end to
+::${T}_DIAG_LAST_TEST_INDEX. However, it is possible to enumerate all possible tests using the function ::${t}SysmanGetDiagnosticTests(). This will return
+a list of tests in the structure ::${t}_diag_test_list_t - from this software can get the name of each test and the corresponding index value that can be
+used to specify start/end points when calling the function ::${t}SysmanRunDiagnosticTests(). If the driver doesn't return any tests (::${t}_diag_test_list_t.count = 0)
+then it is not possible on that platform to run a subset of the diagnostic tests and ::${T}_DIAG_FIRST_TEST_INDEX and ::${T}_DIAG_LAST_TEST_INDEX should be
+used instead for the start/stop indices respectively.
 
 ${"#"} <a name="iv">Inventory</a>
 Device properties ::${t}_device_properties_t can be used to obtain inventory information:
@@ -721,7 +736,7 @@ Not supported - no read/write access to any properties.
 
 
 ${"###"} <a name="pdpi">PVC - Firmware resources</a>
-Not supported - no read/write access to any properties.
+Multiple firmwares will be enumerated.
 
 
 ${"###"} <a name="pdpf">PVC - Frequency domain resources</a>
@@ -798,11 +813,9 @@ One memory resource will be exposed for the device HBM memory.
 
 
 ${"###"} <a name="pdpk">PVC - Link resources</a>
-Two link resources will be exposed:
+Link with index 0 will be the PCIe link.
 
-
-- Index 0: PCIe link
-- Index 1: Peer-to-peer link
+Links with index 1+ will be the peer-to-peer connections, one for each peer device that is accessible through the link.
 
 
 ${"###"} <a name="pdps">PVC - Reliability, availability and serviceability (RAS)</a>
