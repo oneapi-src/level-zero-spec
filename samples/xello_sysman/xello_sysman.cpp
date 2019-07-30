@@ -19,18 +19,18 @@ int gNumDevices = 0;
 
 void ShowRasCounters(xet_sysman_handle_t hSysmanDevice)
 {
-    xet_sysman_info_t info;
-    if ((xetSysmanGetInfo(hSysmanDevice, &info) == XE_RESULT_SUCCESS) && (info.numRas))
+    uint32_t numRas;
+    xet_ras_filter_t filter = XET_RAS_FILTER_ALL_COUNTERS;
+    if (xetSysmanGetRasErrors(hSysmanDevice, &filter, false, &numRas, NULL) == XE_RESULT_SUCCESS)
     {
-        xet_ras_filter_t filter = XET_RAS_FILTER_ALL_COUNTERS;
-        xet_ras_error_t* pCounters = (xet_ras_error_t*)malloc(info.numRas * sizeof(xet_ras_error_t));
+        xet_ras_error_t* pCounters = (xet_ras_error_t*)malloc(numRas * sizeof(xet_ras_error_t));
 
-        if (xetSysmanGetRasErrors(hSysmanDevice, &filter, false, &info.numRas, pCounters) == XE_RESULT_SUCCESS)
+        if (xetSysmanGetRasErrors(hSysmanDevice, &filter, false, &numRas, pCounters) == XE_RESULT_SUCCESS)
         {
-            for (uint32_t i = 0; i < info.numRas; i++)
+            for (uint32_t i = 0; i < numRas; i++)
             {
-                fprintf(stdout, "RAS error %d: type=0x%x loc=0x%x resource=%d,%u value=%llu\n",
-                    i, pCounters[i].type, pCounters[i].loc, pCounters[i].resourceId.type, pCounters[i].resourceId.index, pCounters[i].data);
+                fprintf(stdout, "RAS error %s: value=%llu\n",
+                    pCounters[i].pName, pCounters[i].data);
             }
         }
     }
@@ -38,18 +38,14 @@ void ShowRasCounters(xet_sysman_handle_t hSysmanDevice)
 
 void LocalMemoryRasConfig(xet_sysman_handle_t hSysmanDevice)
 {
-    xet_sysman_info_t info;
-    if (xetSysmanGetInfo(hSysmanDevice, &info) == XE_RESULT_SUCCESS)
+    xet_ras_config_t config;
+    if (xetSysmanGetRasConfig(hSysmanDevice, &config) == XE_RESULT_SUCCESS)
     {
         fprintf(stdout, "Local memory:\n");
-        if (info.rasLocations & XET_RAS_ERROR_LOC_MAIN_MEM)
+        if (config.numRas)
         {
-            uint32_t enabled;
             fprintf(stdout, "    RAS support: yes\n");
-            if (xetSysmanRasSetup(hSysmanDevice, 0, 0, &enabled) == XE_RESULT_SUCCESS)
-            {
-                fprintf(stdout, "    RAS enabled: %s\n", (enabled & XET_RAS_ERROR_LOC_MAIN_MEM) ? "yes" : "no");
-            }
+            fprintf(stdout, "    RAS enabled: %s\n", (config.enabled & XET_RAS_ERROR_LOC_MAIN_MEM) ? "yes" : "no");
         }
         else
         {
@@ -58,67 +54,41 @@ void LocalMemoryRasConfig(xet_sysman_handle_t hSysmanDevice)
     }
 }
 
-void MediaUtilizationResources(xet_sysman_handle_t hSysmanDevice)
-{
-    xet_sysman_info_t info;
-    if (xetSysmanGetInfo(hSysmanDevice, &info) == XE_RESULT_SUCCESS)
-    {
-        const uint64_t mediaAssetBitfield = (XET_ACCEL_ASSET_VIDEO_DECODER | XET_ACCEL_ASSET_VIDEO_ENCODER | XET_ACCEL_ASSET_VIDEO_PROCESSING);
-        struct
-        {
-            xet_accel_prop_accel_assets_t assets;
-        } data;
-        xet_accel_property_request_t request{ 0, XET_ACCEL_PROP_ACCEL_ASSETS, &data.assets, sizeof(data.assets) };
-
-        fprintf(stdout, "Accelerator asset resources counting only media utilization:\n");
-        for (uint32_t i = 0; i < info.numResourcesByType[XET_RESOURCE_TYPE_ACCEL]; i++)
-        {
-            request.index = i;
-            if (xetSysmanGetAccelProperties(hSysmanDevice, 1, &request) == XE_RESULT_SUCCESS)
-            {
-                if ((data.assets.assets & mediaAssetBitfield) == mediaAssetBitfield)
-                {
-                    fprintf(stdout, "    index=%u: assets=0x%llx\n", i, data.assets.assets);
-                }
-            }
-        }
-    }
-}
-
 void ResetDevice(xet_sysman_handle_t hSysmanDevice)
 {
-    struct
+    if (xetSysmanDeviceReset(hSysmanDevice))
     {
-        xet_device_prop_reset_t reset;
-    } data;
-    xet_device_property_request_t requests[] = 
-    {
-        { XET_DEVICE_PROP_RESET,    &data.reset, sizeof(data.reset) },
-    };
-    data.reset.doReset = 1;
-
-    if (xetSysmanSetDeviceProperties(
-        hSysmanDevice,
-        sizeof(requests) / sizeof(requests[0]),
-        requests) == XE_RESULT_SUCCESS)
-    {
-        fprintf(stdout, "Device shutdown initiated.\n");
+        fprintf(stdout, "Device reset initiated.\n");
     }
     else
     {
-        fprintf(stderr, "ERROR: Problem shutting down the device.\n");
+        fprintf(stderr, "ERROR: Problem resetting the device.\n");
+    }
+}
+
+void GetFreqIntervals(xet_sysman_handle_t hSysmanDevice)
+{
+    xet_resprop_info_t info[] =
+    {
+        { XET_RESPROP_FREQ_RANGE },
+        { XET_RESPROP_FREQ_RESOLVED_FREQ },
+    };
+    if (xetSysmanGetPropertyInfo(hSysmanDevice, sizeof(info) / sizeof(info[0]), info) == XE_RESULT_SUCCESS)
+    {
+        fprintf(stdout, "Frequency update interval: %u microseconds\n", info[0].minSetInterval);
+        fprintf(stdout, "Frequency sample interval: %u microseconds\n", info[1].minGetInterval);
     }
 }
 
 bool HaveFanControl(xet_sysman_handle_t hSysmanDevice)
 {
     bool ret = false;
-    xet_fan_prop_capability_t cap;
-    cap.property = XET_FAN_PROP_FIXED_SPEED;
-    if (xetSysmanAvailableFanProperties(hSysmanDevice, 1, &cap) == XE_RESULT_SUCCESS)
+    xet_resprop_info_t info;
+    info.property = XET_RESPROP_FAN_FIXED_SPEED;
+    if (xetSysmanGetPropertyInfo(hSysmanDevice, 1, &info) == XE_RESULT_SUCCESS)
     {
-        if ((cap.support & XET_PROP_SUPPORT_DEVICE) &&
-            (cap.access & XET_PROP_ACCESS_WRITE_PERMISSIONS))
+        if ((info.support & XET_PROP_SUPPORT_DEVICE) &&
+            (info.access & XET_PROP_ACCESS_WRITE_PERMISSIONS))
         {
             ret = true;
         }
@@ -126,46 +96,128 @@ bool HaveFanControl(xet_sysman_handle_t hSysmanDevice)
     return ret;
 }
 
-void ShowFanInfo(xet_sysman_handle_t hSysmanDevice, uint32_t FanIndex)
+void ShowFanInfo(xet_sysman_handle_t hSysmanDevice, xet_resid_t FanId)
 {
     struct FanData
     {
-        xet_fan_prop_speed_rpm_t        speedRpm;
-        xet_fan_prop_speed_percent_t    speedPercent;
+        xet_resprop_fan_speed_rpm_t        speedRpm;
+        xet_resprop_fan_speed_percent_t    speedPercent;
     };
 
     FanData data;
-    xet_fan_property_request_t requests[] = 
+    xet_resprop_request_t requests[] = 
     {
-        { FanIndex, XET_FAN_PROP_SPEED_RPM,       &data.speedRpm,       sizeof(data.speedRpm) },
-        { FanIndex, XET_FAN_PROP_SPEED_PERCENT,   &data.speedPercent,   sizeof(data.speedPercent) },
+        { FanId, XET_RESPROP_FAN_SPEED_RPM,       &data.speedRpm,       sizeof(data.speedRpm) },
+        { FanId, XET_RESPROP_FAN_SPEED_PERCENT,   &data.speedPercent,   sizeof(data.speedPercent) },
     };
 
-    if (xetSysmanGetFanProperties(
+    xe_result_t res = xetSysmanGetProperties(
         hSysmanDevice,
         sizeof(requests) / sizeof(requests[0]),
-        requests) == XE_RESULT_SUCCESS)
+        requests);
+
+    if ((res == XE_RESULT_SUCCESS) || (res == XE_RESULT_ERROR_UNKNOWN))
     {
-        fprintf(stdout, "        Fan %u: %u rpm (%u %%)\n", FanIndex, data.speedRpm.speed, data.speedPercent.speed);
+        if (requests[0].status == XE_RESULT_SUCCESS)
+        {
+            fprintf(stdout, "        Fan %u: speed = %u rpm\n", FanId, data.speedRpm.speed);
+        }
+        else
+        {
+            fprintf(stderr, "        Fan %u: error reading XET_RESPROP_FAN_SPEED_RPM\n", FanId);
+        }
+        if (requests[1].status == XE_RESULT_SUCCESS)
+        {
+            fprintf(stdout, "        Fan %u: speed = %u %%\n", FanId, data.speedPercent.speed);
+        }
+        else
+        {
+            fprintf(stderr, "        Fan %u: error reading XET_RESPROP_FAN_SPEED_PERCENT\n", FanId);
+        }
+    }
+    else
+    {
+        fprintf(stderr, "ERROR: Can't request data.\n");
+    }
+}
+
+void CheckResources(xet_sysman_handle_t hSysmanDevice)
+{
+    xet_resid_info_t resources [] =
+    {
+        { XET_RESID_UTIL_GPU },
+        { XET_RESID_UTIL_COMPUTE },
+        { XET_RESID_UTIL_MEDIA },
+        { XET_RESID_UTIL_VIDEO_DECODE },
+        { XET_RESID_UTIL_VIDEO_ENCODE }
+    };
+    uint32_t count = sizeof(resources) / sizeof(resources[0]);
+    if (xetSysmanGetResourceInfo(hSysmanDevice, count, resources) == XE_RESULT_SUCCESS)
+    {
+        for (uint32_t i = 0; i < count; i++)
+        {
+            fprintf(stdout, "Resource %d: %s = %s\n", resources[i].id, resources[i].pName, resources[i].available ? "supported" : "not supported");
+        }
+    }
+}
+
+void ShowAllResources(xet_sysman_handle_t hSysmanDevice)
+{
+    uint32_t numResources;
+    if (xetSysmanGetResources(hSysmanDevice, XET_RESOURCE_TYPE_ANY, &numResources, NULL) == XE_RESULT_SUCCESS)
+    {
+        if (numResources)
+        {
+            xet_resid_info_t* pInfo = (xet_resid_info_t*)malloc(numResources * sizeof(xet_resid_info_t));
+            if (xetSysmanGetResources(hSysmanDevice, XET_RESOURCE_TYPE_ANY, &numResources, pInfo) == XE_RESULT_SUCCESS)
+            {
+                for (uint32_t i = 0; i < numResources; i++)
+                {
+                    fprintf(stdout, "Resource %d: %s = %s\n", pInfo->id, pInfo->pName, pInfo->pDesc);
+                }
+            }
+            free(pInfo);
+        }
+    }
+}
+
+void ShowFans(xet_sysman_handle_t hSysmanDevice)
+{
+    uint32_t numFans;
+    if (xetSysmanGetResources(hSysmanDevice, XET_RESOURCE_TYPE_FAN, &numFans, NULL) == XE_RESULT_SUCCESS)
+    {
+        if (numFans)
+        {
+            xet_resid_info_t* pInfo = (xet_resid_info_t*)malloc(numFans * sizeof(xet_resid_info_t));
+            if (xetSysmanGetResources(hSysmanDevice, XET_RESOURCE_TYPE_FAN, &numFans, pInfo) == XE_RESULT_SUCCESS)
+            {
+                for (uint32_t i = 0; i < numFans; i++)
+                {
+                    fprintf(stdout, "    Fan %s\n", pInfo->pName);
+                    ShowFanInfo(hSysmanDevice, pInfo->id);
+                }
+            }
+            free(pInfo);
+        }
     }
 }
 
 void ShowInventoryInfo(xet_sysman_handle_t hSysmanDevice)
 {
-    struct DeviceData
+    struct InventoryData
     {
-        xet_device_prop_serial_number_t  SerialNumber;
-        xet_device_prop_board_number_t   BoardNumber;
+        xet_resprop_dev_serial_number_t  SerialNumber;
+        xet_resprop_dev_board_number_t   BoardNumber;
     };
 
-    DeviceData data;
-    xet_device_property_request_t requests[] = 
+    InventoryData data;
+    xet_resprop_request_t requests[] = 
     {
-        { XET_DEVICE_PROP_SERIAL_NUMBER,    &data.SerialNumber, sizeof(data.SerialNumber) },
-        { XET_DEVICE_PROP_BOARD_NUMBER,     &data.BoardNumber,  sizeof(data.BoardNumber)  },
+        { XET_RESID_DEV_INVENTORY, XET_RESPROP_DEV_SERIAL_NUMBER,    &data.SerialNumber, sizeof(data.SerialNumber) },
+        { XET_RESID_DEV_INVENTORY, XET_RESPROP_DEV_BOARD_NUMBER,     &data.BoardNumber,  sizeof(data.BoardNumber)  },
     };
 
-    if (xetSysmanGetDeviceProperties(
+    if (xetSysmanGetProperties(
         hSysmanDevice,
         sizeof(requests) / sizeof(requests[0]),
         requests) == XE_RESULT_SUCCESS)
@@ -175,52 +227,15 @@ void ShowInventoryInfo(xet_sysman_handle_t hSysmanDevice)
     }
 }
 
-void ShowAcceleratorAssets(xet_sysman_handle_t hSysmanDevice)
-{
-    xet_sysman_info_t info;
-    if (xetSysmanGetInfo(hSysmanDevice, &info) == XE_RESULT_SUCCESS)
-    {
-        fprintf(stdout, "    Assets:\n");
-        for (int i = 0; i < XET_ACCEL_ASSET_MAX_TYPES; i++)
-        {
-            if (info.numAssets[i])
-            {
-                const char* pAssetName;
-                xetSysmanGetAccelAssetName(hSysmanDevice, (xet_accel_asset_t)i, &pAssetName);
-                fprintf(stdout, "        %s: %u\n", pAssetName, info.numAssets[i]);
-            }
-        }
-        fprintf(stdout, "\n");
-    }
-}
-
 void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
 {
-    xet_sysman_info_t info;
-    if (xetSysmanGetInfo(hSysmanDevice, &info) == XE_RESULT_SUCCESS)
-    {
-        gNumDevices++;
+    gNumDevices++;
 
-        fprintf(stdout, "Device %d\n", gNumDevices);
+    fprintf(stdout, "Device %d\n", gNumDevices);
 
-        ShowInventoryInfo(hSysmanDevice);
+    ShowInventoryInfo(hSysmanDevice);
 
-        fprintf(stdout, "    Num fans:                %u\n", info.numResourcesByType[XET_RESOURCE_TYPE_FAN]);
-        fprintf(stdout, "    Num temperature sensors: %u\n", info.numResourcesByType[XET_RESOURCE_TYPE_TEMP]);
-        fprintf(stdout, "    Num power domains:       %u\n", info.numResourcesByType[XET_RESOURCE_TYPE_PWR]);
-        fprintf(stdout, "    Num frequency domains:   %u\n", info.numResourcesByType[XET_RESOURCE_TYPE_FREQ]);
-        
-        if (info.numResourcesByType[XET_RESOURCE_TYPE_FAN])
-        {
-            fprintf(stdout, "    Fans:\n");
-            for (uint32_t i = 0; i < info.numResourcesByType[XET_RESOURCE_TYPE_FAN]; i++)
-            {
-                ShowFanInfo(hSysmanDevice, i);
-            }
-        }
-
-        ShowAcceleratorAssets(hSysmanDevice);
-    }
+    ShowFans(hSysmanDevice);
 }
 
 int ListDevices(xe_device_group_handle_t hDeviceGroup)
@@ -238,22 +253,10 @@ int ListDevices(xe_device_group_handle_t hDeviceGroup)
             for (uint32_t i = 0; i < deviceCount; ++i)
             {
                 xet_sysman_handle_t hSysmanDevice;
-                xe_result_t res = xetSysmanCreate(allDevices[i], XET_SYSMAN_VERSION_CURRENT, XET_SYSMAN_INIT_FLAGS_WRITE, &hSysmanDevice);
+                xe_result_t res = xetSysmanGet(allDevices[i], XET_SYSMAN_VERSION_CURRENT, &hSysmanDevice);
                 if (res == XE_RESULT_SUCCESS)
                 {
-                    if (xetSysmanDestroy(hSysmanDevice) == XE_RESULT_SUCCESS)
-                    {
-                        ShowDeviceInfo(hSysmanDevice);
-                    }
-                    else
-                    {
-                        fprintf(stderr, "ERROR: Problem freeing system resource management for this device.\n");
-                    }
-                }
-                else if (res == XE_RESULT_ERROR_INSUFFICENT_PERMISSIONS)
-                {
-                    fprintf(stderr, "ERROR: Don't have permissions to control this device.\n");
-                    ret++;
+                    ShowDeviceInfo(hSysmanDevice);
                 }
                 else
                 {

@@ -104,6 +104,10 @@ namespace xe
             str = "result_t::ERROR_ARRAY_SIZE_TOO_SMALL";
             break;
 
+        case result_t::ERROR_DEVICE_ACCESS:
+            str = "result_t::ERROR_DEVICE_ACCESS";
+            break;
+
         case result_t::ERROR_UNKNOWN:
             str = "result_t::ERROR_UNKNOWN";
             break;

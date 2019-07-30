@@ -9,11 +9,12 @@ The following documents the high-level programming models and guidelines.
 * [Introduction](#in)
 * [Sysman handle](#hd)
 * [Properties](#pr)
-    + [Property groups and lists](#prg)
+    + [Property identifier](#pri)
+    + [Property data](#prd)
     + [Property types](#prt)
     + [Property availability](#pra)
-    + [Property value access](#prw)
     + [Property accuracy](#pry)
+    + [Property access](#prw)
 * [Accelerator assets](#ac)
 * [Inventory](#iv)
 * [Resources](#re)
@@ -32,6 +33,7 @@ The following documents the high-level programming models and guidelines.
 * [Events](#ev)
 * [Diagnostics](#di)
 * [Reset](#rt)
+* [Sub-devices] (#sd)
 * [Product reference](#pd)
     + [PVC](#pdp)
         + [PVC - PSU resources](#pdpu)
@@ -45,57 +47,144 @@ The following documents the high-level programming models and guidelines.
         + [PVC - Accelerator asset resources](#pdpa)
         + [PVC - Memory resources](#pdpm)
         + [PVC - Link resources](#pdpk)
-        + [PVC - PVC - Reliability, availability and serviceability (RAS)](#pdps)
+        + [PVC - Reliability, availability and serviceability (RAS)](#pdps)
 
 
 # <a name="in">Introduction</a>
-Sysman is the System Resource Management Interface (SMI) used to monitor and control accelerator power and performance..
+Sysman is the System Resource Management Interface (SMI) used to monitor and control the power and performance of accelerator devices.
 
 # <a name="hd">Sysman handle</a>
 An application wishing to manage power and performance for devices first needs to use the Level0 Core API to enumerate through available accelerator devices in the system and
 select those of interest.
 
-For each selected device handle, applications use the XetSysman interface to create a Sysman handle for the device.
+For each selected device handle, applications use the function ::xetSysmanGet to get an SMI handle to manage system resources of the device.
 
 ![Object hierarchy](../images/tools_sysman_object_hierarchy.png?raw=true) 
 
-The application uses the function ::xetSysmanCreate() to create a Sysman handle for a device. By default, the handle only permits monitoring of system resources,
-but the application can request write access using the flag ::XET_SYSMAN_INIT_FLAGS_WRITE so that it can also make system configuration changes through the handle.
-At the time of creation, no check is made to determine if the application has the necessary access rights since this is a function of specific configuration knobs.
-Instead the application can use other functions to determine what it has read access to and what it has write access to.
+There is a unique handle for each device. Multiple threads can use the handle. If concurrent accesses are made to the same device property through the handle, the last request wins.
 
-An application can create multiple handles to the same underlying device. For example, an application could create a handle with only read access to a devices power and
-performance telemetry and have a separate handle that it uses for making system configuration changes, or it could opt to use the same handle for both.
+# <a name="re">Resources</a>
+A device is broken into resources. For example, the GPU frequency of a device is a resource. Resources are broken into groups, defined by the enumerator
+$::{t}_resource_type_t. The groups are summarized in the table below:
 
-Multithreaded accesses using the same Sysman handle are premitted and where possible, the accesses will be lock-free. The exception would be a simultaneous change to the same
-configuration, whether through the same Sysman handle or through multiple Sysman handles to the same device - these requests will be serialized at the device layer.
+| Resource group         | C API key | Resource Type |Description                                                                                                       |
+| :--:                   | :--:      | :--:                          | :--:                                                                                             |
+| **Inventory**          | dev       | ::XET_RESOURCE_TYPE_DEV      | Properties provide device and driver inventory information.                                      |
+| **Power domain**       | pwr       | ::XET_RESOURCE_TYPE_PWR      | Properties permit monitoring of power consumption and setting operating power limits.            |
+| **Frequency domain**   | freq      | ::XET_RESOURCE_TYPE_FREQ     | Properties permit monitoring of frequency and setting frequency limits.                          |
+| **Utilization**        | util      | ::XET_RESOURCE_TYPE_UTIL     | Properties permit monitoring of activity of different component                                  |
+| **Memory**             | mem       | ::XET_RESOURCE_TYPE_MEM      | Properties permit monitoring of memory utilization.                                              |
+| **Link**               | link      | ::XET_RESOURCE_TYPE_LINK     | Properties permit monitoring utilization of PCIe and peer-to-peer links.                         |
+| **Temperature**        | temp      | ::XET_RESOURCE_TYPE_TEMP     | Properties permit monitoring temperatures.                                                       |
+| **Standby**            | stby      | ::XET_RESOURCE_TYPE_STBY     | Properties permit setting standby behavior of different components of the device.                |
+| **Firmware**           | fw        | ::XET_RESOURCE_TYPE_FW       | Properties provide firmware version and uploading new images.                                    |
+| **PSU**                | psu       | ::XET_RESOURCE_TYPE_PSU      | Properties provide status information about power supplies.                                      |
+| **Fan**                | fan       | ::XET_RESOURCE_TYPE_FAN      | Properties permit monitoring and controlling fans.                                               |
+| **LED**                | led       | ::XET_RESOURCE_TYPE_LED      | Properties permit changing the behavior of LEDs.                                                 |
 
-When the first Sysman handle is created for a given device by an application, the driver creates memory resources for that device. Any subsequent Sysman handles update the
-reference count on this underlying storage. Only once all Sysman handles for a given device are destroyed will the underlying memory be freed.
+Each resource in the system is identified uniquely by one of the values in the enumerator ::xet_resid_t. Some of these resources are expected to be available on all devices
+and are listed in the table below:
+
+| Resource ID                 | Description                                                |
+| :--:                        | :--:                                                       |
+| ::XET_RESID_DEV_INVENTORY  | Provides access to device inventory information            |
+| ::XET_RESID_PWR_PACKAGE    | Provides access to total device power telemetry and limits |
+| ::XET_RESID_FREQ_GPU       | Provides access to GPU frequency                           |
+| ::XET_RESID_FREQ_LOCAL_MEM | Provides access to local memory frequency                  |
+| ::XET_RESID_UTIL_GPU       | Provides access to GPU utilization counters                |
+| ::XET_RESID_MEM_LOCAL      | Provides access to local memory utilization counters       |
+| ::XET_RESID_LINK_PCIE      | Provides access to PCIe bandwidth counters                 |
+| ::XET_RESID_TEMP_PACKAGE   | Provides access to device temperature                      |
+
+It's possible to get a list of all available resources using the function ::xetSysmanGetResources(), as shown in the example below:
+
+```c
+void ShowAllResources(xet_sysman_handle_t hSysmanDevice)
+{
+    uint32_t numResources;
+    if (xetSysmanGetResources(hSysmanDevice, XET_RESOURCE_TYPE_ANY, &numResources, NULL) == XE_RESULT_SUCCESS)
+    {
+        if (numResources)
+        {
+            xet_resid_info_t* pInfo = (xet_resid_info_t*)malloc(numResources * sizeof(xet_resid_info_t));
+            if (xetSysmanGetResources(hSysmanDevice, XET_RESOURCE_TYPE_ANY, &numResources, pInfo) == XE_RESULT_SUCCESS)
+            {
+                for (uint32_t i = 0; i < numResources; i++)
+                {
+                    fprintf(stdout, "Resource %d: %s = %s\n", pInfo->id, pInfo->pName, pInfo->pDesc);
+                }
+            }
+            free(pInfo);
+        }
+    }
+}
+```
+
+It is also possible to get a list of all resources of a given type. The example below shows how to get a list of all fans associated with a device:
+
+```c
+void ShowFans(xet_sysman_handle_t hSysmanDevice)
+{
+    uint32_t numFans;
+    if (xetSysmanGetResources(hSysmanDevice, XET_RESOURCE_TYPE_FAN, &numFans, NULL) == XE_RESULT_SUCCESS)
+    {
+        if (numFans)
+        {
+            xet_resid_info_t* pInfo = (xet_resid_info_t*)malloc(numFans * sizeof(xet_resid_info_t));
+            if (xetSysmanGetResources(hSysmanDevice, XET_RESOURCE_TYPE_FAN, &numFans, pInfo) == XE_RESULT_SUCCESS)
+            {
+                for (uint32_t i = 0; i < numFans; i++)
+                {
+                    fprintf(stdout, "    Fan %s\n", pInfo->pName);
+                }
+            }
+            free(pInfo);
+        }
+    }
+}
+```
+
+Finally, it is possible to provide a list of resources and get information about their availability on a device using the function ::xetSysmanGetResourceInfo().
+The example below shows how to check whether specific resources are supported:
+
+```c
+void CheckResources(xet_sysman_handle_t hSysmanDevice)
+{
+    xet_resid_info_t resources [] =
+    {
+        { XET_RESID_UTIL_GPU },
+        { XET_RESID_UTIL_COMPUTE },
+        { XET_RESID_UTIL_MEDIA },
+        { XET_RESID_UTIL_VIDEO_DECODE },
+        { XET_RESID_UTIL_VIDEO_ENCODE }
+    };
+    uint32_t count = sizeof(resources) / sizeof(resources[0]);
+    if (xetSysmanGetResourceInfo(hSysmanDevice, count, resources) == XE_RESULT_SUCCESS)
+    {
+        for (uint32_t i = 0; i < count; i++)
+        {
+            fprintf(stdout, "Resource %d: %s = %s\n", resources[i].id, resources[i].pName, resources[i].available ? "supported" : "not supported");
+        }
+    }
+}
+```
+
 
 # <a name="pr">Properties</a>
-Most telemetry and configuration controls are accessed through **properties**.
+For every resource type, there are a set of **properties** that can be accessed. These correspond to either telemetry or controls that modify the behavior of the resource.
 
-## <a name="prg">Property groups and lists</a>
-Properties are broken into groups. For each group, there is an enumerator for all properties (property list)
+In the following sections, we will discuss where to get the list of properties, the type of properties, how to determine which are available, how to determine if
+an application has permissions to modify properties, how often properties can be accessed and how to read and write property values.
 
-| Property group         | C API key | Property list |Description                                                                                                      |
-| :--:                   | :--:      | :--:                         | :--:                                                                                             |
-| **Device**             | device    | ::xet_device_properties_t   | Properties provide device and driver inventory information and the ability to reset.             |
-| **PSU**                | psu       | ::xet_psu_properties_t      | Properties provide status information about power supplies.                                      |
-| **Temperature sensor** | temp      | ::xet_temp_properties_t     | Properties permit monitoring temperature sensors.                                                |
-| **Fan**                | fan       | ::xet_fan_properties_t      | Properties permit monitoring and controlling fans.                                               |
-| **LED**                | led       | ::xet_led_properties_t      | Properties permit changing the behavior of LEDs.                                                 |
-| **Firmware**           | firmware  | ::xet_firmware_properties_t | Properties provide firmware version and uploading new images.                                    |
-| **Power domain**       | pwr       | ::xet_pwr_properties_t      | Properties permit monitoring of power consumption and setting operating power limits.            |
-| **Frequency domain**   | freq      | ::xet_freq_properties_t     | Properties permit monitoring of frequency and setting frequency limits.                          |
-| **Power-well domain**  | pwrwell   | ::xet_pwrwell_properties_t  | Properties permit monitoring the sleep states of the chip and changing the sleep state behavior. |
-| **Accelerator asset**  | accel     | ::xet_accel_properties_t    | Properties permit monitoring of activity of accelerator assets.                                  |
-| **Memory**             | mem       | ::xet_mem_properties_t      | Properties permit monitoring of memory utilization and errors.                                   |
-| **Link**               | link      | ::xet_link_properties_t     | Properties permit monitoring utilization and errors of peer-to-peer links.                       |
+## <a name="pri">Property identifier</a>
+All properties are defined in the enumeration ::xet_resprop_t. As an example, consider the property used to read the current fan speed in RPM: ::XET_RESPROP_FAN_SPEED_RPM.
+Note that resource type C API key (fan) is contained in the name of the property identifier following RESPROP. This provides an easy visual way to determine which resource
+type the property can be used with.
 
-For each group, there are separate API functions that determine access capabilities for a property and to read/write property values.
-Separation of the API in this way groups common functionality together.
+## <a name="prd">Property data</a>
+For every property, there is a corresponding property data structure that can be used to get the current value or set a new value. The name of the property structure
+is given by the writing the property identifier in lowercase and adding "_t" to the end. For example, the property ::XET_RESPROP_FAN_SPEED_RPM has a corresponding
+data structure ::xet_resprop_fan_speed_rpm_t.
 
 ## <a name="prt">Property types</a>
 There are four types of properties:
@@ -109,30 +198,10 @@ and read in order to get the last value that was set.
 but cannot be read back to get the last value - these are properties that trigger some behavior but don't have a backing value.
 
 ## <a name="pra">Property availability</a>
-Determining if properties are supported and accessible is achieved by calling the API function xetSysmanAvailableXxxProperties(), where **xxx** is replaced with the
-C API key from the table above for the appropriate group (**Xxx** means that the first character in the key is capitalized, **XXX** means that all characters in the key are capitalized).
-
-Each function xetSysmanAvailableXxxProperties() receives an array or requests. Each request specifies a property. On return from the function, each request will indicate the API support
-(one of ::xet_prop_support_t) and the access permissions (::xet_prop_access_t). API support indicates if the property is supported by the current version of the API, the device class
-and the device. It is possible that the API supports a property but not for a particular device class or device. Access permissions are specific to a device and so should be checked for
-every device.
-
-The table below gives the function and request structure needed to determine the availability for any property in each group:
-
-| Property group         | Property availability func               | Property availability request struct | Properties enum type         |
-| :--:                   | :--:                                     | :--:                                 | :--:                         |
-| **Device**             | ::xetSysmanAvailableDeviceProperties    | ::xet_device_prop_capability_t      | ::xet_device_properties_t   |
-| **PSU**                | ::xetSysmanAvailablePsuProperties       | ::xet_psu_prop_capability_t         | ::xet_psu_properties_t      |
-| **Temperature sensor** | ::xetSysmanAvailableTempProperties      | ::xet_temp_prop_capability_t        | ::xet_temp_properties_t     |
-| **Fan**                | ::xetSysmanAvailableFanProperties       | ::xet_fan_prop_capability_t         | ::xet_fan_properties_t      |
-| **LED**                | ::xetSysmanAvailableLedProperties       | ::xet_led_prop_capability_t         | ::xet_led_properties_t      |
-| **Firmware**           | ::xetSysmanAvailableFirmwareProperties  | ::xet_firmware_prop_capability_t    | ::xet_firmware_properties_t |
-| **Power domain**       | ::xetSysmanAvailablePwrProperties       | ::xet_pwr_prop_capability_t         | ::xet_pwr_properties_t      |
-| **Frequency domain**   | ::xetSysmanAvailableFreqProperties      | ::xet_freq_prop_capability_t        | ::xet_freq_properties_t     |
-| **Power-well domain**  | ::xetSysmanAvailablePwrwellProperties   | ::xet_pwrwell_prop_capability_t     | ::xet_pwrwell_properties_t  |
-| **Accelerator asset**  | ::xetSysmanAvailableAccelProperties     | ::xet_accel_prop_capability_t       | ::xet_accel_properties_t    |
-| **Memory**             | ::xetSysmanAvailableMemProperties       | ::xet_mem_prop_capability_t         | ::xet_mem_properties_t      |
-| **Link**               | ::xetSysmanAvailableLinkProperties      | ::xet_link_prop_capability_t        | ::xet_link_properties_t     |
+Determining if properties are supported and accessible is achieved by calling the API function ::{t}SysmanGetPropertyInfo(). The function is called with an array that indicates
+the property identifiers of interest. On return, the array is populated with the API support (one of ::xet_prop_support_t) and the access permissions (::xet_prop_access_t)
+for each property. API support indicates if the property is supported by the current version of the API, the device class and the device. It is possible that the API supports
+a property but not for a particular device class or device. Access permissions are specific to a device and so should be checked for every device.
 
 The example below shows how an application can determine if it can set a fixed fan speed on a specific device:
 
@@ -140,12 +209,12 @@ The example below shows how an application can determine if it can set a fixed f
 bool HaveFanControl(xet_sysman_handle_t hSysmanDevice)
 {
     bool ret = false;
-    xet_fan_prop_capability_t cap;
-    cap.property = XET_FAN_PROP_FIXED_SPEED;
-    if (xetSysmanAvailableFanProperties(hSysmanDevice, 1, &cap) == XE_RESULT_SUCCESS)
+    xet_resprop_info_t info;
+    info.property = XET_RESPROP_FAN_FIXED_SPEED;
+    if (xetSysmanGetPropertyInfo(hSysmanDevice, 1, &info) == XE_RESULT_SUCCESS)
     {
-        if ((cap.support & XET_PROP_SUPPORT_DEVICE) &&
-            (cap.access & XET_PROP_ACCESS_WRITE_PERMISSIONS))
+        if ((info.support & XET_PROP_SUPPORT_DEVICE) &&
+            (info.access & XET_PROP_ACCESS_WRITE_PERMISSIONS))
         {
             ret = true;
         }
@@ -154,162 +223,103 @@ bool HaveFanControl(xet_sysman_handle_t hSysmanDevice)
 }
 ```
 
-## <a name="prw">Property access</a>
-To read/write a property, a common code syntax is used for all properties. There is an enumerator for the property which gives it a unique ID within a property group, there is a property structure
-to hold the associated value and there is a request structure used to make read/write requests.
-
-The table below lists all property group enumerator types and corresponding request structures and get/set functions:
-
-| Property group         | Property enum type           | Request struc                       | Get property func                  | Set property func                 |
-| :--:                   | :--:                         | :--:                                | :--:                               | :--:                              |
-| **Device**             | ::xet_device_properties_t   |  ::xet_device_property_request_t   | ::xetSysmanGetDeviceProperties    | ::xetSysmanSetDeviceProperties   |
-| **PSU**                | ::xet_psu_properties_t      |  ::xet_psu_property_request_t      | ::xetSysmanGetPsuProperties       | ::xetSysmanSetPsuProperties      |
-| **Temperature sensor** | ::xet_temp_properties_t     |  ::xet_temp_property_request_t     | ::xetSysmanGetTempProperties      |                                   |
-| **Fan**                | ::xet_fan_properties_t      |  ::xet_fan_property_request_t      | ::xetSysmanGetFanProperties       | ::xetSysmanSetFanProperties      |
-| **LED**                | ::xet_led_properties_t      |  ::xet_led_property_request_t      | ::xetSysmanGetLedProperties       | ::xetSysmanSetLedProperties      |
-| **Firmware**           | ::xet_firmware_properties_t |  ::xet_firmware_property_request_t | ::xetSysmanGetFirmwareProperties  | ::xetSysmanSetFirmwareProperties |
-| **Power domain**       | ::xet_pwr_properties_t      |  ::xet_pwr_property_request_t      | ::xetSysmanGetPwrProperties       | ::xetSysmanSetPwrProperties      |
-| **Frequency domain**   | ::xet_freq_properties_t     |  ::xet_freq_property_request_t     | ::xetSysmanGetFreqProperties      | ::xetSysmanSetFreqProperties     |
-| **Power-well domain**  | ::xet_pwrwell_properties_t  |  ::xet_pwrwell_property_request_t  | ::xetSysmanGetPwrwellProperties   | ::xetSysmanSetPwrwellProperties  |
-| **Accelerator asset**  | ::xet_accel_properties_t    |   ::xet_accel_property_request_t   | ::xetSysmanGetAccelProperties     |                                   |
-| **Memory**             | ::xet_mem_properties_t      |  ::xet_mem_property_request_t      | ::xetSysmanGetMemProperties       | ::xetSysmanSetMemProperties      |
-| **Link**               | ::xet_link_properties_t     |  ::xet_link_property_request_t     | ::xetSysmanGetLinkProperties      | ::xetSysmanSetLinkProperties     |
-
-The get/set functions accept an array of request structures. This enables querying multiple properties in the same group at once. It also enables querying properties across multiple
-resources in the same group e.g. query the fan speed across all fans connected to a device.
-
-As an example, consider the fan property that gives the speed in RPM:
-
-| Description                | C-API                          |
-| :--:                       | :--:                           |
-| Property enumerator type   | ::xet_fan_properties_t        |
-| Property enumerator        | ::XET_FAN_PROP_SPEED_RPM      |
-| Property value structure   | ::xet_fan_prop_speed_rpm_t    |
-| Property request structure | ::xet_fan_property_request_t  |
-| Property get function      | ::xetSysmanGetFanProperties() |
-| Property set function      | ::xetSysmanSetFanProperties() |
-
-Notice how the property value structure is the same as the property enumerator but in low-caps with "_t" appended to the end. All properties follow this convention.
-
-The code below shows how to read the fan speed:
-
-```c
-void ShowFanInfo(xet_sysman_handle_t hSysmanDevice, uint32_t FanIndex)
-{
-    struct FanData
-    {
-        xet_fan_prop_speed_rpm_t        speedRpm;
-        xet_fan_prop_speed_percent_t    speedPercent;
-    };
-
-    FanData data;
-    xet_fan_property_request_t requests[] = 
-    {
-        { FanIndex, XET_FAN_PROP_SPEED_RPM,       &data.speedRpm,       sizeof(data.speedRpm) },
-        { FanIndex, XET_FAN_PROP_SPEED_PERCENT,   &data.speedPercent,   sizeof(data.speedPercent) },
-    };
-
-    if (xetSysmanGetFanProperties(hSysmanDevice, sizeof(requests) / sizeof(requests[0]), requests)
-	    == XE_RESULT_SUCCESS)
-    {
-        fprintf(stdout,
-                "        Fan %u: %u rpm (%u %%)\n",
-                FanIndex, data.speedRpm.speed, data.speedPercent.speed);
-    }
-}
-```
-
 ## <a name="pry">Property accuracy</a>
 All readable dynamic properties have a minimum sample-rate that is related to the time interval between updates of the underlying telemetry. If the property returns the
 instantaneous value at the time of reading, we say that the sample interval is 0. If the property will have an updated value every 1 millisecond, we say that the
 sample interval is 1 millisecond. This means that software should not expect an accuracy of this property if sampled faster than 1 millisecond.
 
-Software can determine the minimum sample interval for each property by using the appropriate availability function. The returned data gives the sample interval.
-For example, if calling ::xetSysmanAvailableFreqProperties() with the property ::XET_FREQ_PROP_FREQ_REQUEST returns ::xet_freq_prop_capability_t.minGetInterval = 1000,
-this means that software should not expect to see new values for the current frequency for 1 millisecond after the last time it read the value.
-
 Similarly, writable dynamic properties have a minimum update-rate that is related to the time it takes for the hardware to accept the new value. Software can update
 the property faster than this rate, but it is unlikely that the new value will take effect immediately. If hardware changes immediately when a new property value is
 written, we say that the update interval is 0. If the property will only react to a new value after 1 millisecond, we say that the update interval is 1 millisecond.
 
-Software can determine the minimum update interval for each property by using the appropriate availability function. For example, if calling
-::xetSysmanAvailableFreqProperties() with the property ::XET_FREQ_PROP_FREQ_REQUEST returns ::xet_freq_prop_capability_t.minSetInterval = 1000,
-this means that software should not expect a new frequency request to take effect until 1 millisecond has elapsed.
-
-# <a name="ac">Accelerator assets</a>
-Some resources apply to more than one part of a device, but not necessarily the entire device. For example, there may be two frequency domains. One controls the performance
-of media accelerator assets and one controls the performance of compute accelerator assets. Rather than enumerate all possible combinations for all products, a more generic
-solution is achieved by defining all accelerator assets and then for each resource, indicating the list of assets that are measured/affected by the resource. The list is
-defined in the enumerator type ::xet_accel_asset_t. 
-
-A frequency domain resource is a good example of how this list is used. Each frequency domain resource has a property ::XET_FREQ_PROP_ACCEL_ASSETS. The data structure for
-the value of this property is given by ::xet_freq_prop_accel_assets_t (lower-case everything and add "_t" to the end). It contains the member
-::xet_freq_prop_accel_assets_t.assets that is of type uint64_t. This is a bitfield which will have a bit for each accelerator asset whose performance will be impacted
-by this frequency domain resource. All devices of the same class (same device ID) will have the same frequency resources with the same associated accelerator assets since
-this is a property of the product hardware and not of specific devices.
-
-It is possible to use ::xetSysmanGetInfo() to determine the list of all accelerator assets available on the device along with the number
-of such assets (::xet_sysman_info_t.numAssets[]).
-
-The example below shows how to output the list of assets on the device:
+Software can determine the minimum sample and update intervals for each property by using the function ::{t}SysmanGetPropertyInfo(). The example below shows how
+to determine these intervals for frequency control and monitoring the resolved frequency:
 
 ```c
-void ShowAcceleratorAssets(xet_sysman_handle_t hSysmanDevice)
+void GetFreqIntervals(xet_sysman_handle_t hSysmanDevice)
 {
-    xet_sysman_info_t info;
-    if (xetSysmanGetInfo(hSysmanDevice, &info) == XE_RESULT_SUCCESS)
+    xet_resprop_info_t info[] =
     {
-        fprintf(stdout, "    Assets:\n");
-        for (int i = 0; i < XET_ACCEL_ASSET_MAX_TYPES; i++)
-        {
-            if (info.numAssets[i])
-            {
-                const char* pAssetName;
-                xetSysmanGetAccelAssetName(hSysmanDevice, (xet_accel_asset_t)i, &pAssetName);
-                fprintf(stdout, "        %s: %u\n", pAssetName, info.numAssets[i]);
-            }
-        }
-        fprintf(stdout, "\n");
+        { XET_RESPROP_FREQ_RANGE },
+        { XET_RESPROP_FREQ_RESOLVED_FREQ },
+    };
+    if (xetSysmanGetPropertyInfo(hSysmanDevice, sizeof(info) / sizeof(info[0]), info) == XE_RESULT_SUCCESS)
+    {
+        fprintf(stdout, "Frequency update interval: %u microseconds\n", info[0].minSetInterval);
+        fprintf(stdout, "Frequency sample interval: %u microseconds\n", info[1].minGetInterval);
     }
 }
 ```
 
-# <a name="re">Resources</a>
-Except for the device property group, the other groups describe properties for one or more resources. For example, there can be multiple fans associated with a device and each
-fan has the same property such as speed. Each fan is a resource with a zero-based index. Resources are grouped in the same way as property groups. These are defined in the
-enumerator type ::{t}_resource_type_t.
+## <a name="prw">Property access</a>
+To read/write a property, use the functions ::xetSysmanGetProperties() and ::xetSysmanSetProperties() respectively.
 
-A resource ID is defined as the combination of the resource type (::{t}_resource_type_t) and the index. The structure ::xet_resource_id_t is used to specify a resource ID.
-This uniquely specifies a resource in a device. It is expected that resource IDs are valid across all devices of the same class (same device ID). For example Fan0 will be the
-same on all devices from the same product family.
+Software passes in an array of ::xet_resprop_request_t entries. Each entry specifies the resource identifier and the property identifier to be read/written. In the case
+of writing data, the entry also stores the new values.
 
-For a given device, it is possible to determine the number of resources of each type using the API function ::xetSysmanGetInfo(). This populates the structure
-::xet_sysman_info_t. The member ::xet_sysman_info_t.numResourcesByType[] is an array which will give you the number of resources for each type.
+If all accesses complete successfully, the function will return ::XE_RESULT_SUCCESS. If some of the accesses fail, the function will return ::XE_RESULT_ERROR_UNKNOWN
+in which case software should check the ::xet_resprop_request_t.status of each entry to determine the resource/properties that had problems.
 
-The example below shows how to determine the number of fans associated with a device and then show the speed for each fan using the function ShowFanInfo() shown
-in the previous example:
+The code below shows how to read the fan speed and handle errors:
 
 ```c
-void ShowNumFans(xet_sysman_handle_t hSysmanDevice)
+void ShowFanInfo(xet_sysman_handle_t hSysmanDevice, xet_resid_t FanId)
 {
-    xet_sysman_info_t info;
-    if (xetSysmanGetInfo(hSysmanDevice, &info) == XE_RESULT_SUCCESS)
+    struct FanData
     {
-        fprintf(stdout,
-                "Num fans: %u\n",
-                info.numResourcesByType[XET_RESOURCE_TYPE_FAN]);
+        xet_resprop_fan_speed_rpm_t        speedRpm;
+        xet_resprop_fan_speed_percent_t    speedPercent;
+    };
 
-        for (uint32_t i = 0; i < info.numResourcesByType[XET_RESOURCE_TYPE_FAN]; i++)
+    FanData data;
+    xet_resprop_request_t requests[] = 
+    {
+        { FanId, XET_RESPROP_FAN_SPEED_RPM,       &data.speedRpm,       sizeof(data.speedRpm) },
+        { FanId, XET_RESPROP_FAN_SPEED_PERCENT,   &data.speedPercent,   sizeof(data.speedPercent) },
+    };
+
+    xe_result_t res = xetSysmanGetProperties(hSysmanDevice, sizeof(requests) / sizeof(requests[0]), requests);
+
+    if ((res == XE_RESULT_SUCCESS) || (res == XE_RESULT_ERROR_UNKNOWN))
+    {
+        if (requests[0].status == XE_RESULT_SUCCESS)
         {
-            fprintf(stdout, "Fan %u\n", i);
-            ShowFanInfo(hSysmanDevice, i);
+            fprintf(stdout, "        Fan %u: speed = %u rpm\n", FanId, data.speedRpm.speed);
         }
+        else
+        {
+            fprintf(stderr, "        Fan %u: error reading XET_RESPROP_FAN_SPEED_RPM\n", FanId);
+        }
+        if (requests[1].status == XE_RESULT_SUCCESS)
+        {
+            fprintf(stdout, "        Fan %u: speed = %u %%\n", FanId, data.speedPercent.speed);
+        }
+        else
+        {
+            fprintf(stderr, "        Fan %u: error reading XET_RESPROP_FAN_SPEED_PERCENT\n", FanId);
+        }
+    }
+    else
+    {
+        fprintf(stderr, "ERROR: Can't request data.\n");
+    }
 }
 ```
 
-## <a name="reu">PSU resources resources</a>
-Property enumerator: ::xet_psu_properties_t
 
+# <a name="re">Resources</a>
+
+## <a name="red">Device resource</a>
+The device resource type (::XET_RESOURCE_TYPE_DEV) has one resource ID (::XET_RESID_DEV_INVENTORY) can be used to obtain inventory information:
+
+- Serial number
+- Board number
+- Device ID
+- Vendor ID
+- Driver version
+- PCI bars
+
+## <a name="reu">PSU resources resources</a>
 These resources provide information about power supply units attached to the device.
 
 - Read maximum amp limit
@@ -320,16 +330,12 @@ These resources provide information about power supply units attached to the dev
 
 
 ## <a name="ret">Temperature sensor resources</a>
-Property enumerator: ::xet_temp_properties_t
-
 These resources provides access to temperature sensors on the device:
 
 - Monitor temperature sensor value
 
 
 ## <a name="ren">Fan resources</a>
-Property enumerator: ::xet_fan_properties_t
-
 These resources provides access to fans on the device:
 
 - Read maximum speed
@@ -341,24 +347,20 @@ Fan speeds can be given in units of RPM (revolutions per minute) or percentage o
 
 Software can either request fixed fan speed, including turning the fan off, or depending on hardware capabilities, as a fan speed table. This is a table of temperature/speed
 points. When programmed, the hardware will dynamically choose the fan speed based on the maximum temperature measured on the chip. Software should use the function
-::xetSysmanAvailableFanProperties() with the property ::XET_FAN_PROP_SPEED_TABLE to determine if the hardware supports this mode.
+::xetSysmanGetPropertyInfo() with the property ::XET_RESPROP_FAN_SPEED_TABLE to determine if the hardware supports this mode.
 
 
 ## <a name="rel">LED resources</a>
-Property enumerator: ::xet_led_properties_t
-
 These resources provide access to LEDs on the device:
 
 - Turn LED on/off
 - Change LED color
 
-Not all LEDs support color control. Software should use the function ::xetSysmanGetLedProperties() with the property ::XET_LED_PROP_RGB_CAP to determine if the LED
+Not all LEDs support color control. Software should use the function ::xetSysmanGetPropertyInfo() with the property ::XET_RESPROP_LED_RGB_CAP to determine if the LED
 supports programming the R/G/B color values.
 
 
 ## <a name="rei">Firmware resources</a>
-Property enumerator: ::xet_firmware_properties_t
-
 These resources provide access to firmwares on the device.
 
 - Read firmware name
@@ -366,44 +368,20 @@ These resources provide access to firmwares on the device.
 - Verify firmware image
 - Flash firmware image
 
-Not all firmwares can be flashed through this API. Software should use the function ::xetSysmanAvailableFirmwareProperties() with the property ::XET_FIRMWARE_PROP_FLASH
+Not all firmwares can be flashed through this API. Software should use the function ::xetSysmanGetPropertyInfo() with the property ::XET_RESPROP_FW_FLASH
 to determine if write access is permitted.
 
 
 ## <a name="ref">Frequency domain resources</a>
-Property enumerator: ::xet_freq_properties_t
-
 These resources provide access to device frequencies:
 
 - Get available frequencies
 - Monitor frequency
 - Monitor frequency throttle stats and reasons
-- Set frequency
+- Set frequency range (min/max)
 
-The performance of accelerator assets is governed in part by the clock frequency that they run at and the maximum power that can be delivered and dissipated as heat. A
-device can have one or more frequency domains and each accelerator asset will fall into only one of them.
-
-For example, a PVC device consists of five frequency domains - the base die, the media assets, the compute assets, base-chiplet link and local memory. This means that
-::xet_sysman_info_t.numResourcesByType[::XET_RESOURCE_TYPE_FREQ] will return 5. It is thus possible to obtain properties each of these 5 frequency domains.
-
-For system management software to effectively control the performance of a device, it needs to know which accelerator assets are in each frequency domain. This is
-returned by the property ::{T}_FREQ_PROP_ACCEL_ASSETS. Software can thus read the value of this property for each frequency domain in order to build up an understanding
-of which assets are controleld by which frequency. This information is the same for all devices with the same device ID.
-
-The diagram below shows which accelerator asset is controlled by each of the 5 frequency domains on the PVC product:
-
-![Frequency Domains](../images/tools_sysman_freq_domains.png?raw=true) 
-
-There are three types of frequency domains described by the enumerator ::xet_freq_domain_type_t:
-
-1. PLL - Frequency domain is driven by a phase-locked loop. 
-2. Divider - Frequency is linked to another PLL frequency domain by clock divider hardware. The divider ratio can be changed so as to down-clock that part of the circuit.
-3. Multiplier - Frequency is a multiplier of another frequency domain. The underlying hardware is a PLL but software is able to request a fixed frequency ratio with another
-frequency domain.
 
 ## <a name="rep">Power domain resources</a>
-Property enumerator: ::xet_pwr_properties_t
-
 These resources provide access to device power limits:
 
 - Monitor power
@@ -439,29 +417,15 @@ utilization of the device continues.
 The factory defaults tend to be conservative and attempt to provide best behavior for a variety of workloads. Devices that will be running specialized workloads can
 benefit from raising these limits. This is the purpose of the power domain resource.
 
-A power domain represents a collection of one or more frequency domains whose total power is being managed and limited by the hardware. If the power limit is reached,
-hardware starts capping the associated frequency domains until the total power drops below the limit.
+Frequency throttling is the term given to the situation where the Punit needs to resolve the software frequency requests to lower values in order to bring power
+and/or thermals under control. The reasons for throttling can be obtained using the function ::xetSysmanGetProperties() with the property ::XET_RESPROP_FREQ_THROTTLE_REASONS.
+This will return a bitfield of reasons taken from the enumerator ::xet_freq_throttle_reasons_t.
 
-Every frequency domain resource has a property ::XET_FREQ_PROP_POWER_DOMAIN which gives the resource ID of the power domain of which it is part. In this way, software can
-determine the relationship between frequency domains and power domains and accelerator assets. An example of this is illustrated in the diagram below where we see a product
-that has only one power domain:
 
-![Power Domains](../images/tools_sysman_pwr_domains.png?raw=true) 
+## <a name="rew">Standby resources</a>
+These resources provide access to standby settings:
 
-Notice that we are not giving names to the power domains and the frequency domains. The significance of each domain comes from the underlying accelerator assets.
-
-Every PLL frequency domain has a request which is either statically set by external tools or dynamically controlled by a hardware algorithm. Under certain circumstances,
-the hardware may need to resolve the request to a lower frequency. This is known as frequency throttling. The reasons for the throttling can be determined using the
-property ::XET_FREQ_PROP_THROTTLE_REASONS. These are given by the enumerator ::xet_freq_prop_throttle_reasons_t. When a PLL frequency domain is throttled, the
-corresponding divider and multiplier frequency domains that depend on that PLL domain will also be throttled and the same throttle reasons as the source PLL domain.
-
-## <a name="rew">Power-well domain resources</a>
-Property enumerator: ::xet_pwrwell_properties_t
-
-These resources provide access to power-wells:
-
-- Monitor power-gating stats (number of wakes, idle time)
-- Set power-gating promotion mode
+- Set standby promotion mode
 
 Power-well domains are parts of a device that can be powered off when there is no activity. While this saves power, it can also come with a performance cost given the
 latency exiting from a power-gated (sleep) state. Generally the hardware effectively manages this trade-off, however properties of power-well domain resources enable
@@ -470,9 +434,7 @@ software to influence how easy it is for the hardware to promote the hardware to
 As with frequency and power domains, power-well domains come with a list of enclosed accelerator assets. An asset can be found in only one power-well domain. When the
 power-well domain enters a sleep state, all accelerator assets in that domain are no longer connected to power.
 
-## <a name="rea">Accelerator asset resources</a>
-Property enumerator: ::xet_accel_properties_t
-
+## <a name="rea">Utilization resources</a>
 These resources provide access to activity statistics for a device:
 
 - Monitor utilization
@@ -486,61 +448,24 @@ and software should always enumerate through all these resources and choose the 
 
 The code example below shows how software can determine the indices, if any, of resources that measure only the activity of media accelerators:
 
-```c
-void MediaUtilizationResources(xet_sysman_handle_t hSysmanDevice)
-{
-    xet_sysman_info_t info;
-    if (xetSysmanGetInfo(hSysmanDevice, &info) == XE_RESULT_SUCCESS)
-    {
-        const uint64_t mediaAssetBitfield =
-		    (XET_ACCEL_ASSET_VIDEO_DECODER | XET_ACCEL_ASSET_VIDEO_ENCODER | XET_ACCEL_ASSET_VIDEO_PROCESSING);
-        struct
-        {
-            xet_accel_prop_accel_assets_t assets;
-        } data;
-        xet_accel_property_request_t request{ 0, XET_ACCEL_PROP_ACCEL_ASSETS, &data.assets, sizeof(data.assets) };
-
-        fprintf(stdout, "Accelerator asset resources counting only media utilization:\n");
-        for (uint32_t i = 0; i < info.numResourcesByType[XET_RESOURCE_TYPE_ACCEL]; i++)
-        {
-            request.index = i;
-            if (xetSysmanGetAccelProperties(hSysmanDevice, 1, &request) == XE_RESULT_SUCCESS)
-            {
-                if ((data.assets.assets & mediaAssetBitfield) == mediaAssetBitfield)
-                {
-                    fprintf(stdout, "    index=%u: assets=0x%llx\n", i, data.assets.assets);
-                }
-            }
-        }
-    }
-}
-```
 
 ## <a name="rem">Memory resources</a>
-Property enumerator: ::xet_mem_properties_t
-
 Memory resources provide access to memory statistics:
 
 - Monitor memory bandwidth
 - Monitor memory utilization
 
-In general, the memory resource with index 0 refers to the local main memory of the device.
-
 
 ## <a name="rek">Link resources</a>
-Property enumerator: ::xet_link_properties_t
-
 Link resources provide access to link statistics:
 
 - Read available link speeds
 - Monitor link bandwidth
 - Set link speed range
 
-Software can determine if it is possible to change the link speed (number of lanes, frequency) by calling the function ::xetSysmanAvailableLinkProperties()
-and passing in the property ::XET_LINK_PROP_SPEED_RANGE. If the resulting value of ::xet_link_prop_capability_t.access indicates write access, then it is
+Software can determine if it is possible to change the link speed (number of lanes, frequency) by calling the function ::xetSysmanGetPropertyInfo()
+and passing in the property ::XET_RESPROP_LINK_SPEED_RANGE. If the resulting value of ::xet_resprop_info_t.access indicates write access, then it is
 possible to change the speed of the link.
-
-In general, the link resource with index 0 refers to the PCIe connection to the device. Other resources will relate to peer-to-peer high-speed links.
 
 
 # <a name="ra">Reliability, availability and serviceability (RAS)</a>
@@ -574,8 +499,8 @@ Macros define two generic filters:
 
 The function ::xetSysmanGetRasErrors() is used to get the current status of error metrics. When calling this function, an array of elements ::xet_ras_error_t
 is provided where the error counter data will be returned. If the provided size of the array is too small to match the errors matching the filter, an error
-will be returned and the required size if provided. The function ::xetSysmanGetInfo() can be used to find the total number of errors counters that are available
-and hence the total array size that should be passed into the ::xetSysmanGetRasErrors() function.
+will be returned and the required size if provided. The function ::xetSysmanGetRasConfig() can be used to find the total number of errors counters that are available
+(::xet_ras_config_t.numRas) and hence the total array size that should be passed into the ::xetSysmanGetRasErrors() function.
 
 Note that for each error, the interpretation of the data depends on the provided error type in ::xet_ras_error_t.dataType. Some errors may be counters
 (::XET_RAS_DATA_TYPE_COUNTER) while other errors may only indicate that errors have occurred (::XET_RAS_DATA_TYPE_OCCURRED).
@@ -589,51 +514,45 @@ The code below shows how to get a list of all available error counters. This is 
 ```c
 void ShowRasCounters(xet_sysman_handle_t hSysmanDevice)
 {
-    xet_sysman_info_t info;
-    if ((xetSysmanGetInfo(hSysmanDevice, &info) == XE_RESULT_SUCCESS) && (info.numRas))
+    uint32_t numRas;
+    xet_ras_filter_t filter = XET_RAS_FILTER_ALL_COUNTERS;
+    if (xetSysmanGetRasErrors(hSysmanDevice, &filter, false, &numRas, NULL) == XE_RESULT_SUCCESS)
     {
-        xet_ras_filter_t filter = XET_RAS_FILTER_ALL_COUNTERS;
-        xet_ras_error_t* pCounters = (xet_ras_error_t*)malloc(info.numRas * sizeof(xet_ras_error_t));
+        xet_ras_error_t* pCounters = (xet_ras_error_t*)malloc(numRas * sizeof(xet_ras_error_t));
 
-        if (xetSysmanGetRasErrors(hSysmanDevice, &filter, false, &info.numRas, pCounters)
-            == XE_RESULT_SUCCESS)
+        if (xetSysmanGetRasErrors(hSysmanDevice, &filter, false, &numRas, pCounters) == XE_RESULT_SUCCESS)
         {
-            for (int i = 0; i < info.numRas; i++)
+            for (uint32_t i = 0; i < numRas; i++)
             {
-                fprintf(stdout,
-                        "RAS error %d: type=0x%x loc=0x%x resource=%d,%u value=%llu\n",
-                        i, pCounters[i].type, pCounters[i].loc,
-                        pCounters[i].resourceId.type, pCounters[i].resourceId.index,
-                        pCounters[i].data);
+                fprintf(stdout, "RAS error %s: value=%llu\n",
+                    pCounters[i].pName, pCounters[i].data);
             }
         }
     }
 }
 ```
 
-The function ::xetSysmanGetInfo(), in addition to returning the total number of RAS error counters available on a device class, also returns a list of all types and
-structural locations. This is not a list of all counters but a merging of all type and location bitfields into ::xet_sysman_info_t.rasTypes and
-::xet_sysman_info_t.rasLocations. This permits an application to quickly determine if the API is likely to provide specific types of counters.
+The function ::xetSysmanGetRasConfig() returns structure ::xet_ras_config_t. This gives the total number of RAS errors available on the device
+(::xet_ras_config_t.numRas). It also gives a quick snapshot of all RAS error types (::xet_ras_config_t.rasTypes) and all RAS error structural locations
+(::xet_ras_config_t.rasLocations) - these are not an enumeration all error counters (use ::xetSysmanGetRasErrors() for that) but
+a merging of all possible types (::xet_ras_error_type_t) and locations (::xet_ras_error_loc_t) so that software can quickly determine what might
+be supported. The structure also indicates all structural locations where RAS counters are enabled (::xet_ras_config_t.enabled).
 
-If ::xet_sysman_info_t.rasLocations is not zero, it indicates the structural locations where RAS is supported. The function ::xetSysmanRasSetup() can be used to
+If ::xet_ras_config_t.rasLocations is not zero, it indicates the structural locations where RAS is supported. The function ::xetSysmanRasSetup() can be used to
 enable/disable RAS at any of those structural locations. On return, the function indicates the structual locations where RAS is enabled. The code below
 shows how to determine if RAS is enabled for the local memory:
 
 ```c
 void LocalMemoryRasConfig(xet_sysman_handle_t hSysmanDevice)
 {
-    xet_sysman_info_t info;
-    if (xetSysmanGetInfo(hSysmanDevice, &info) == XE_RESULT_SUCCESS)
+    xet_ras_config_t config;
+    if (xetSysmanGetRasConfig(hSysmanDevice, &config) == XE_RESULT_SUCCESS)
     {
         fprintf(stdout, "Local memory:\n");
-        if (info.rasLocations & XET_RAS_ERROR_LOC_MAIN_MEM)
+        if (config.numRas)
         {
-            uint32_t enabled;
             fprintf(stdout, "    RAS support: yes\n");
-            if (xetSysmanRasSetup(hSysmanDevice, 0, 0, &enabled) == XE_RESULT_SUCCESS)
-            {
-                fprintf(stdout, "    RAS enabled: %s\n", (enabled & XET_RAS_ERROR_LOC_MAIN_MEM) ? "yes" : "no");
-            }
+            fprintf(stdout, "    RAS enabled: %s\n", (config.enabled & XET_RAS_ERROR_LOC_MAIN_MEM) ? "yes" : "no");
         }
         else
         {
@@ -691,131 +610,29 @@ used to specify start/end points when calling the function ::xetSysmanRunDiagnos
 then it is not possible on that platform to run a subset of the diagnostic tests and ::XET_DIAG_FIRST_TEST_INDEX and ::XET_DIAG_LAST_TEST_INDEX should be
 used instead for the start/stop indices respectively.
 
-# <a name="iv">Inventory</a>
-Device properties ::xet_device_properties_t can be used to obtain inventory information:
-
-- Serial number
-- Board number
-- Device ID
-- Vendor ID
-- Driver version
-- PCI bars
-
 
 # <a name="rt">Reset</a>
-A device can be reset (PCI device reset) can be achieved using the function ::xetSysmanSetDeviceProperties() with the property ::XET_DEVICE_PROP_RESET.
+A device can be reset (PCI device reset) can be achieved using the function ::xetSysmanDeviceReset().
 
 
-# <a name="pd">Product reference</a>
+# <a name="sd">Sub-devices</a>
+Multi-tile devices consists of sub-devices that are arranged under a logical device. A Sysman handle ::xet_sysman_handle_t can be created for a sub-device
+in the same way as it is created for a device. This enables software to manage properties of sub-devices in the same as device. However, the meaning of
+some properties changes depending on whether a Sysman handle for a device or sub-device is used. The table below summarizes these differences.
 
+| Property group         | Device functionality                                                | Sub-device functionality                                                   |
+| :--:                   | :--:                                                                | :--:                                                                       |
+| **Device**             | All properties supported. Reset request will reset all sub-devices. | All properties supported. Reset request applies only to the sub-device.    |
+| **PSU**                | All resources available for management.                             | No resources available for management.                                     |
+| **Temperature sensor** | Maximum temperature across all sub-devices is reported.             | Temperature of the sub-device components are reported.                     |
+| **Fan**                | All resources available for management.                             | No resources available for management.                                     |
+| **LED**                | All resources available for management.                             | No resources available for management.                                     |
+| **Firmware**           | No resources available for management.                              | All resources available for management.                                    |
+| **Power domain**       | Access power limits for the entire device.                          | Access power limits of the sub-device.                                     |
+| **Frequency domain**   | Sets same frequency of all sub-devices. Provides no telemetry.      | Access frequency domain properties of the sub-device.                      |
+| **Power-well domain**  | Sets standby promotion policy for all sub-devices.                  | Access standby properties of the sub-device.                               |
+| **Accelerator asset**  | Get the sum of activity metrics across all sub-devices.             | Access activity metrics for the sub-device.                                |
+| **Memory**             | Get sum of memory utilization metrics across all sub-devices.       | Access memory utilization metrics for the sub-device.                      |
+| **Link**               | No resources available for management.                              | Access link properties for the sub-device.                                 |
 
-## <a name="pdp">PVC</a>
-The following sections give specific details of the PVC device.
-
-
-### <a name="pdpu">PVC - PSU resources</a>
-Not supported - no read/write access to any properties.
-
-
-### <a name="pdpt">PVC - Temperature sensor resources</a>
-One temperature sensor resource is available.
-
-
-### <a name="pdpn">PVC - Fan resources</a>
-Not supported - no read/write access to any properties.
-
-
-### <a name="pdpl">PVC - LED resources</a>
-Not supported - no read/write access to any properties.
-
-
-### <a name="pdpi">PVC - Firmware resources</a>
-Multiple firmwares will be enumerated.
-
-
-### <a name="pdpf">PVC - Frequency domain resources</a>
-Not supported - no read/write access to any properties.
-
-The diagram below shows the 5 frequency domains that will be enumerated by this API, including the resource indices:
-
-![PVC frequency domains](../images/tools_sysman_pvc_freq_domains.png?raw=true) 
-
-By default, the hardware will dynamically set the frequency of all domains to achieve best performance as workloads run and optimized for efficiency when the
-device is power/temperature limited. In some cases, external software may want to take control of the frequencies and the comments that follow intend to
-give an overview of the restrictions that should be considered when doing this.
-
-The base die contains many common assets including memory controller and L3 cache. The frequency is controlled by a PLL. To ensure that memory and cache access
-is not a bottleneck when compute workloads are running, it is recommended that the frequency of the base die be set to 1.2x the frequency of the chiplet die.
-
-The frequency of media assets (encode/decode) is directly related to the frequency of the base die by a divider. There are two divider values:
-
-- 1:1 - This means that the media assets will run at the same frequency as the base die.
-- 1:2 - This means that the media assets will run at half the frequency of the base die.
-
-The API will reveal that the base die has a maximum frequency of 2GHz whereas the media frequency domain has a maximum frequency of 1.4GHz (these are examples
-and may differ based on the part - use ::xetSysmanGetFreqProperties() with property ::XET_FREQ_PROP_AVAIL_CLOCKS to find the exact values). Since the media
-frequency domain is dependent on the base die frequency domain, this means that when media assets are in use, the base domain frequency will be limited to the
-maximum frequency of the media frequency domain. For example, if the current frequency request for the base domain is 2GHz and the media frequency domain
-divider is 1:1, then the media frequency domain will need to run at 2GHz. However, since it is limited to run at 1.4GHz, the hardware will limit the base
-frequency domain to 1.4GHz. Since the base die contains the PCIe controller and the L3 cache, this can affect performance if the media workloads are bandwidth
-limited at that frequency. The solution is to change the media frequency domain divider to 1:2. In this case, the resulting frequency of the media frequency domain
-will be 2GHz / 2 = 1GHz. This is less than the maximum frequency of the media frequency domain and so the frequency of the base die will not be throttled. However,
-setting the divider to 1:2 has resulted in a lower maximum frequency for the media frequency domain. The tradeoff between using divider 1:1 and having a lower base
-frequency or using divider 1:2 and having a lower media frequency is workload specific. It also depends on whether compute assets are running concurrently - if
-it is more important to give performance to them, it is preferable to run with 1:2 ratio so that the base can run at a higher frequency.
-
-By default, the hardware will attempt to dynamically choose the media frequency domain divider value to optimize most scenarios. However, there are workloads
-that will benefit from statically fixing the media frequency domain divider using the property ::XET_FREQ_PROP_FREQ_DIVIDER.
-
-Memory traffic between the chiplet die (compute and systolic resources) and the base die (PCIe, L3 cache, HBM) goes across the link frequency domain. The frequency
-of the link domain is critical to providing adequate bandwidth to sustain workload performance. By default, the hardware will set the frequency of the link domain to
-1.5x the frequency request of the chiplet frequency domain. In some cases, this might be excessive or might not be enough and the API can be used to change the
-frequency to a more suitable value using the property ::XET_FREQ_PROP_FREQ_MULTIPLIER.
-
-The chiplet contains a systolic array. When the compute units execute instructions requiring this array, the maximum frequency of the chiplet is reduced. There
-is no way to control this behavior but it should be kept in mind.
-
-The HBM memory frequency cannot be controlled by software. As such, software will not have write permissions to the property ::XET_FREQ_PROP_FREQ_REQUEST for
-this domain.
-
-### <a name="pdpp">PVC - Power domain resources</a>
-Not supported - no read/write access to any properties.
-
-PVC has only one power domain. The Punit measures the entire consumption of device and when it exceeds the various limits (peak/burst/sustained) the independent
-frequency domains are limited.
-
-
-### <a name="pdpw">PVC - Power-well domain resources</a>
-Not supported - no read/write access to any properties.
-
-PVC has three power-wells, as shown in the diagram below. The base power-well is always on when the PCIe device is in a power-on state.
-
-![PVC power-well domains](../images/tools_sysman_pvc_pwrwell_domains.png?raw=true)
-
-
-### <a name="pdpa">PVC - Accelerator asset resources</a>
-The following activity resources will be available:
-
-- Index 0: Total activity of media and compute assets combined.
-- Index 1: Activity of the compute assets.
-- Index 2: Activity of all media assets combined.
-- Index 3-8: Activity of each video decoder.
-
-
-### <a name="pdpm">PVC - Memory resources</a>
-One memory resource will be exposed for the device HBM memory.
-
-
-### <a name="pdpk">PVC - Link resources</a>
-Link with index 0 will be the PCIe link.
-
-Links with index 1+ will be the peer-to-peer connections, one for each peer device that is accessible through the link.
-
-
-### <a name="pdps">PVC - Reliability, availability and serviceability (RAS)</a>
-The following RAS counters are available:
-
-| Error type | Structural location | Comments |
-| :--:       | :--:                | :--:     |
-| TBD        | TBD                 | TBD      |
-
+RAS, diagnostics and events can only be applied at the sub-device level for multi-tile devices.

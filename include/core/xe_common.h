@@ -171,6 +171,7 @@ typedef enum _xe_result_t
     XE_RESULT_ERROR_MODULE_BUILD_FAILURE,           ///< error in building module
     XE_RESULT_ERROR_INSUFFICENT_PERMISSIONS,        ///< access denied
     XE_RESULT_ERROR_ARRAY_SIZE_TOO_SMALL,           ///< an array argument doesn't have enough storage
+    XE_RESULT_ERROR_DEVICE_ACCESS,                  ///< there was a problem accessing device data
     XE_RESULT_ERROR_UNKNOWN = 0x7fffffff,           ///< unknown or internal error
 
 } xe_result_t;

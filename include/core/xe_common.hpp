@@ -192,6 +192,7 @@ namespace xe
         ERROR_MODULE_BUILD_FAILURE,                     ///< error in building module
         ERROR_INSUFFICENT_PERMISSIONS,                  ///< access denied
         ERROR_ARRAY_SIZE_TOO_SMALL,                     ///< an array argument doesn't have enough storage
+        ERROR_DEVICE_ACCESS,                            ///< there was a problem accessing device data
         ERROR_UNKNOWN = 0x7fffffff,                     ///< unknown or internal error
 
     };

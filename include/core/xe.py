@@ -150,6 +150,7 @@ class xe_result_v(IntEnum):
     ERROR_MODULE_BUILD_FAILURE = auto()             ## error in building module
     ERROR_INSUFFICENT_PERMISSIONS = auto()          ## access denied
     ERROR_ARRAY_SIZE_TOO_SMALL = auto()             ## an array argument doesn't have enough storage
+    ERROR_DEVICE_ACCESS = auto()                    ## there was a problem accessing device data
     ERROR_UNKNOWN = 0x7fffffff                      ## unknown or internal error
 
 class xe_result_t(c_int):
