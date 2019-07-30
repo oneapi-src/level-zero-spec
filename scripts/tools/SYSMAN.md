@@ -14,6 +14,7 @@ The following documents the high-level programming models and guidelines.
 ${"##"} Table of Contents
 * [Introduction](#in)
 * [Sysman handle](#hd)
+* [Resources](#re)
 * [Properties](#pr)
     + [Property identifier](#pri)
     + [Property data](#prd)
@@ -21,39 +22,24 @@ ${"##"} Table of Contents
     + [Property availability](#pra)
     + [Property accuracy](#pry)
     + [Property access](#prw)
-* [Accelerator assets](#ac)
-* [Inventory](#iv)
-* [Resources](#re)
-    + [PSU resources](#reu)
-    + [Temperature sensor resources](#ret)
-    + [Fan resources](#ren)
-    + [LED resources](#rel)
-    + [Firmware resources](#rei)
-    + [Frequency domain resources](#ref)
-    + [Power domain resources](#rep)
-    + [Power-well domain resources](#rew)
-    + [Accelerator asset resources](#rea)
-    + [Memory resources](#rem)
-    + [Link resources](#rek)
+    + [Property reference](#prr)
+        + [Device properties](#prri)
+        + [Power properties](#prrp)
+		+ [Frequency properties](#prrf)
+		+ [Utilization properties](#prru)
+		+ [Memory properties](#prrm)
+		+ [Link properties](#prrl)
+		+ [Temperature properties](#prrt)
+		+ [Standby properties](#prrs)
+		+ [Firmware properties](#prrw)
+		+ [PSU properties](#prry)
+		+ [Fan properties](#prrn)
+		+ [LED properties](#prrd)
 * [Reliability, availability and serviceability (RAS)](#ra)
 * [Events](#ev)
 * [Diagnostics](#di)
 * [Reset](#rt)
 * [Sub-devices] (#sd)
-* [Product reference](#pd)
-    + [PVC](#pdp)
-        + [PVC - PSU resources](#pdpu)
-        + [PVC - Temperature sensor resources](#pdpt)
-        + [PVC - Fan resources](#pdpn)
-        + [PVC - LED resources](#pdpl)
-        + [PVC - Firmware resources](#pdpi)
-        + [PVC - Frequency domain resources](#pdpf)
-        + [PVC - Power domain resources](#pdpp)
-        + [PVC - Power-well domain resources](#pdpw)
-        + [PVC - Accelerator asset resources](#pdpa)
-        + [PVC - Memory resources](#pdpm)
-        + [PVC - Link resources](#pdpk)
-        + [PVC - Reliability, availability and serviceability (RAS)](#pdps)
 
 
 ${"#"} <a name="in">Introduction</a>
@@ -75,7 +61,7 @@ $::{t}_resource_type_t. The groups are summarized in the table below:
 
 | Resource group         | C API key | Resource Type |Description                                                                                                       |
 | :--:                   | :--:      | :--:                          | :--:                                                                                             |
-| **Inventory**          | dev       | ::${T}_RESOURCE_TYPE_DEV      | Properties provide device and driver inventory information.                                      |
+| **Device**             | dev       | ::${T}_RESOURCE_TYPE_DEV      | Properties provide device and driver inventory information.                                      |
 | **Power domain**       | pwr       | ::${T}_RESOURCE_TYPE_PWR      | Properties permit monitoring of power consumption and setting operating power limits.            |
 | **Frequency domain**   | freq      | ::${T}_RESOURCE_TYPE_FREQ     | Properties permit monitoring of frequency and setting frequency limits.                          |
 | **Utilization**        | util      | ::${T}_RESOURCE_TYPE_UTIL     | Properties permit monitoring of activity of different component                                  |
@@ -312,86 +298,42 @@ void ShowFanInfo(xet_sysman_handle_t hSysmanDevice, xet_resid_t FanId)
 }
 ```
 
+${"##"} <a name="prr">Property reference</a>
+The following sub-sections discuss the properties that are available for each resource type.
 
-${"#"} <a name="re">Resources</a>
+${"###"} <a name="prri">Device properties</a>
+Device properties give access to inventory information.
 
-${"##"} <a name="red">Device resource</a>
-The device resource type (::${T}_RESOURCE_TYPE_DEV) has one resource ID (::${T}_RESID_DEV_INVENTORY) can be used to obtain inventory information:
+Resource type: ::${T}_RESOURCE_TYPE_DEV
 
-- Serial number
-- Board number
-- Device ID
-- Vendor ID
-- Driver version
-- PCI bars
+Resource IDs: ::${T}_RESID_DEV_INVENTORY
 
-${"##"} <a name="reu">PSU resources resources</a>
-These resources provide information about power supply units attached to the device.
-
-- Read maximum amp limit
-- Monitor voltage status
-- Monitor fan failure
-- Monitor heatsink temperature
-- Monitor current amps
-
-
-${"##"} <a name="ret">Temperature sensor resources</a>
-These resources provides access to temperature sensors on the device:
-
-- Monitor temperature sensor value
+| Property ID                           | Description |
+| :--:                                  | :--: |
+| ::${T}_RESPROP_DEV_SERIAL_NUMBER      | Get the manufacturing serial number of the device.     |
+| ::${T}_RESPROP_DEV_BOARD_NUMBER       | Get the manufacturing board number of the device.     |
+| ::${T}_RESPROP_DEV_BRAND              | Get the device brand name.     |
+| ::${T}_RESPROP_DEV_MODEL              | Get the device model name.     |
+| ::${T}_RESPROP_DEV_DEVICEID           | Get the device ID.     |
+| ::${T}_RESPROP_DEV_VENDOR_NAME        | Get the device vendor name.     |
+| ::${T}_RESPROP_DEV_DRIVER_VERSION     | Get the intalled device driver version.     |
+| ::${T}_RESPROP_DEV_BARS               | Get configured bars.     |
 
 
-${"##"} <a name="ren">Fan resources</a>
-These resources provides access to fans on the device:
+${"###"} <a name="prrp">Power properties</a>
+Power properties can be used to monitor energy consumption and set power limits.
 
-- Read maximum speed
-- Monitor fan speed
-- Set fixed fan speed
-- Set fan speed table (table of temperature-speed points)
+Resource type: ::${T}_RESOURCE_TYPE_PWR
 
-Fan speeds can be given in units of RPM (revolutions per minute) or percentage of maximum RPM.
+Resource IDs: ::${T}_RESID_PWR_PACKAGE
 
-Software can either request fixed fan speed, including turning the fan off, or depending on hardware capabilities, as a fan speed table. This is a table of temperature/speed
-points. When programmed, the hardware will dynamically choose the fan speed based on the maximum temperature measured on the chip. Software should use the function
-::${t}SysmanGetPropertyInfo() with the property ::${T}_RESPROP_FAN_SPEED_TABLE to determine if the hardware supports this mode.
-
-
-${"##"} <a name="rel">LED resources</a>
-These resources provide access to LEDs on the device:
-
-- Turn LED on/off
-- Change LED color
-
-Not all LEDs support color control. Software should use the function ::${t}SysmanGetPropertyInfo() with the property ::${T}_RESPROP_LED_RGB_CAP to determine if the LED
-supports programming the R/G/B color values.
-
-
-${"##"} <a name="rei">Firmware resources</a>
-These resources provide access to firmwares on the device.
-
-- Read firmware name
-- Read firmware version
-- Verify firmware image
-- Flash firmware image
-
-Not all firmwares can be flashed through this API. Software should use the function ::${t}SysmanGetPropertyInfo() with the property ::${T}_RESPROP_FW_FLASH
-to determine if write access is permitted.
-
-
-${"##"} <a name="ref">Frequency domain resources</a>
-These resources provide access to device frequencies:
-
-- Get available frequencies
-- Monitor frequency
-- Monitor frequency throttle stats and reasons
-- Set frequency range (min/max)
-
-
-${"##"} <a name="rep">Power domain resources</a>
-These resources provide access to device power limits:
-
-- Monitor power
-- Set power limits (sustained, burst, peak)
+| Property ID                           | Description |
+| :--:                                  | :--: |
+| ::${T}_RESPROP_PWR_MAX_LIMIT          | The maximum power limit that can be set.     |
+| ::${T}_RESPROP_PWR_ENERGY_COUNTER     | Monitor energy consumption.     |
+| ::${T}_RESPROP_PWR_SUSTAINED_LIMIT    | Set sustained power limit (see discussion below).     |
+| ::${T}_RESPROP_PWR_BURST_LIMIT        | Set burst power limit (see discussion below).     |
+| ::${T}_RESPROP_PWR_PEAK_LIMIT         | Set peak power limit (see discussion below).     |
 
 The PSU (Power Supply Unit) provides power to a device. The amount of power drawn by a device is a function of the voltage and frequency, both of which are controlled
 by the Punit, a micro-controller on the device. If the voltage and frequency are two high, two conditions can occur:
@@ -428,50 +370,175 @@ and/or thermals under control. The reasons for throttling can be obtained using 
 This will return a bitfield of reasons taken from the enumerator ::${t}_freq_throttle_reasons_t.
 
 
-${"##"} <a name="rew">Standby resources</a>
-These resources provide access to standby settings:
+${"###"} <a name="prrf">Frequency properties</a>
+Frequency properties can be used to monitor and set frequencies.
 
-- Set standby promotion mode
+Resource type: ::${T}_RESOURCE_TYPE_FREQ
 
-Power-well domains are parts of a device that can be powered off when there is no activity. While this saves power, it can also come with a performance cost given the
-latency exiting from a power-gated (sleep) state. Generally the hardware effectively manages this trade-off, however properties of power-well domain resources enable
-software to influence how easy it is for the hardware to promote the hardware to sleep states when idle.
+Resource IDs: ::${T}_RESID_FREQ_GPU, ::${T}_RESID_FREQ_LOCAL_MEM
 
-As with frequency and power domains, power-well domains come with a list of enclosed accelerator assets. An asset can be found in only one power-well domain. When the
-power-well domain enters a sleep state, all accelerator assets in that domain are no longer connected to power.
-
-${"##"} <a name="rea">Utilization resources</a>
-These resources provide access to activity statistics for a device:
-
-- Monitor utilization
-
-An accelerator asset resource enables monitoring the activity of one or more accelerator assets. Activity is defined as the wall time that assets are executing
-workloads.
-
-Software can query the accelerator assets that are included in the activity counters. The same accelerator asset resources will be available for all devices with
-the device ID. In general, the accelerator asset resource with index 0 will provide the global activity of the entire devices. However this should not be assumed
-and software should always enumerate through all these resources and choose the ones that cover the relevant accelerator assets.
-
-The code example below shows how software can determine the indices, if any, of resources that measure only the activity of media accelerators:
+| Property ID                           | Description |
+| :--:                                  | :--: |
+| ::${T}_RESPROP_FREQ_AVAIL_CLOCKS      |  Get the list of frequencies that hardware can support.    |
+| ::${T}_RESPROP_FREQ_RANGE             |  Set range between which hardware DVFS can operate.    |
+| ::${T}_RESPROP_FREQ_REQUESTED_FREQ    |  Read current requested frequency.    |
+| ::${T}_RESPROP_FREQ_TDP_FREQ          |  Read maximum frequency that hardware can safely operate at under current conditions.    |
+| ::${T}_RESPROP_FREQ_EFFICIENT_FREQ    |  Read the most efficient frequency.    |
+| ::${T}_RESPROP_FREQ_RESOLVED_FREQ     |  Read the current resolved frequency.    |
+| ::${T}_RESPROP_FREQ_THROTTLE_REASONS  |  Read the reasons frequency is current throttled by the Punit.    |
+| ::${T}_RESPROP_FREQ_THROTTLE_TIME     |  Read the time that frequency has been throttled below the request.    |
 
 
-${"##"} <a name="rem">Memory resources</a>
-Memory resources provide access to memory statistics:
+${"###"} <a name="prru">Utilization properties</a>
+Utilization properties enable monitoring the load on different parts of the device.
 
-- Monitor memory bandwidth
-- Monitor memory utilization
+Resource type: ::${T}_RESOURCE_TYPE_UTIL
+
+Resource IDs: ::${T}_RESID_UTIL_GPU, ::${T}_RESID_UTIL_COMPUTE, ::${T}_RESID_UTIL_MEDIA, ::${T}_RESID_UTIL_VIDEO_DECODE, ::${T}_RESID_UTIL_VIDEO_ENCODE
+
+| Property ID                           | Description |
+| :--:                                  | :--: |
+| ::${T}_RESPROP_UTIL_COUNTERS          | Get utilization counters so that percentage load can be calculated.     |
 
 
-${"##"} <a name="rek">Link resources</a>
-Link resources provide access to link statistics:
+${"###"} <a name="prrm">Memory properties</a>
+Memory properties enable monitoring memory utilization and bandwidth.
 
-- Read available link speeds
-- Monitor link bandwidth
-- Set link speed range
+Resource type: ::${T}_RESOURCE_TYPE_MEM
+
+Resource IDs: ::${T}_RESID_MEM_LOCAL
+
+| Property ID                           | Description |
+| :--:                                  | :--: |
+| ::${T}_RESPROP_MEM_TYPE               | The type of memory (HBM, DDR5, ...).    |
+| ::${T}_RESPROP_MEM_UTILIZATION        | Counters that can be used to calculate utilization of memory.    |
+| ::${T}_RESPROP_MEM_BANDWIDTH          | Counters that can be used to calculate the memory bandwidth      |
+
+
+${"###"} <a name="prrl">Link properties</a>
+Link properties enable monitoring link bandwidth and in some cases controlling available operating configuration.
+
+Resource type: ::${T}_RESOURCE_TYPE_LINK
+
+Resource IDs: ::${T}_RESID_LINK_PCIE, ::${T}_RESID_LINK_P2P1 - ::${T}_RESID_LINK_P2P4
+
+| Property ID                           | Description |
+| :--:                                  | :--: |
+| ::${T}_RESPROP_LINK_TYPE              | The type of link (PCIe, peer-to-peer).     |
+| ::${T}_RESPROP_LINK_BUS_ADDRESS       | The address of the link on the bus fabric.     |
+| ::${T}_RESPROP_LINK_PEER_DEVICE       | The UUID of the remove device.     |
+| ::${T}_RESPROP_LINK_AVAIL_SPEEDS      | The available speed configurations of the link.     |
+| ::${T}_RESPROP_LINK_MAX_PACKET_SIZE   | The maximum packet size that can be transmitted across the link.     |
+| ::${T}_RESPROP_LINK_BANDWIDTH         | Counters that can be used to calculate current link bandwidth.     |
+| ::${T}_RESPROP_LINK_SPEED             | Current link speed.     |
+| ::${T}_RESPROP_LINK_SPEED_RANGE       | Set the range of speeds between which the link can operate.     |
 
 Software can determine if it is possible to change the link speed (number of lanes, frequency) by calling the function ::${t}SysmanGetPropertyInfo()
 and passing in the property ::${T}_RESPROP_LINK_SPEED_RANGE. If the resulting value of ::${t}_resprop_info_t.access indicates write access, then it is
 possible to change the speed of the link.
+
+
+${"###"} <a name="prrt">Temperature properties</a>
+Temperature properties enable monitoring temperatures on different parts of the chip.
+
+Resource type: ::${T}_RESOURCE_TYPE_TEMP
+
+Resource IDs: ::${T}_RESID_TEMP_PACKAGE, ::${T}_RESID_TEMP_GPU, ::${T}_RESID_TEMP_LOCAL_MEM
+
+
+| Property ID                           | Description |
+| :--:                                  | :--: |
+| ::${T}_RESPROP_TEMP_TEMPERATURE       | Current temperature.     |
+
+
+${"###"} <a name="prrs">Standby properties</a>
+Control standby of parts of the device.
+
+Resource type: ::${T}_RESOURCE_TYPE_STBY
+
+Resource IDs: ::${T}_RESID_STBY_GLOBAL, ::${T}_RESID_STBY_COMPUTE, ::${T}_RESID_STBY_MEDIA
+
+| Property ID                           | Description |
+| :--:                                  | :--: |
+| ::${T}_RESPROP_STBY_PROMO_MODE        | Set standby promotion mode (immediate, default, never).     |
+
+Different parts of a device may powered off when there is no activity. This is known as standby. While this saves power, it can also come with a performance cost
+given the latency exiting from a power-gated state. Generally the hardware effectively manages this trade-off, however these properties can be used to
+influence standby behavior.
+
+
+${"###"} <a name="prrw">Firmware properties</a>
+Firmware properties enable querying installed versions, verify the image and possibly flashing a new image.
+
+Resource type: ::${T}_RESOURCE_TYPE_FW
+
+Resource IDs: ::${T}_RESID_FW_1 - ::${T}_RESID_FW_20
+
+| Property ID                           | Description |
+| :--:                                  | :--: |
+| ::${T}_RESPROP_FW_NAME                | Get firmware name encoded in the installed image.     |
+| ::${T}_RESPROP_FW_VERSION             | Get firmware version encoded in the installed image.     |
+| ::${T}_RESPROP_FW_CHECK               | Check the firmware image.     |
+| ::${T}_RESPROP_FW_FLASH               | Flash a new firmware image.     |
+
+Not all firmwares can be flashed through this API. Software should use the function ::${t}SysmanGetPropertyInfo() with the property ::${T}_RESPROP_FW_FLASH
+to determine if write access is permitted.
+
+
+${"###"} <a name="prry">PSU properties</a>
+These properties provide information about power supply units attached to the device.
+
+Resource type: ::${T}_RESOURCE_TYPE_PSU
+
+Resource IDs: ::${T}_RESID_PSU_MAIN, ::${T}_RESID_PSU_AUX, ::${T}_RESID_PSU_1 - ::${T}_RESID_PSU_2
+
+| Property ID                           | Description |
+| :--:                                  | :--: |
+| ::${T}_RESPROP_PSU_AMP_LIMIT          | The maximum electrical current in amperes that can be drawn.     |
+| ::${T}_RESPROP_PSU_VOLTAGE_STATUS     | Indicates if under or over voltage has occurred.     |
+| ::${T}_RESPROP_PSU_FAN_FAILURE        | Indicates if the fan has failed.     |
+| ::${T}_RESPROP_PSU_TEMPERATURE        | The current heatsink temperature in degrees celcius     |
+| ::${T}_RESPROP_PSU_AMPS               | The current amps being drawn in amperes     |
+
+
+${"###"} <a name="prrn">Fan properties</a>
+The properties enable monitoring fans and setting fan speeds.
+
+Resource type: ::${T}_RESOURCE_TYPE_FAN
+
+Resource IDs: ::${T}_RESID_FAN_MAIN, ::${T}_RESID_FAN_1 - ::${T}_RESID_FAN_3
+
+| Property ID                           | Description |
+| :--:                                  | :--: |
+| ::${T}_RESPROP_FAN_MAX_RPM            | The maximum RPM of the fan.     |
+| ::${T}_RESPROP_FAN_MAX_TABLE_SIZE     | The maximum number of points in the fan temp/speed table.     |
+| ::${T}_RESPROP_FAN_SPEED_RPM          | The current fan speed in units of revolutions per minute (rpm).     |
+| ::${T}_RESPROP_FAN_SPEED_PERCENT      | The current fan speed as a percentage of the maximum speed of that fan.    |
+| ::${T}_RESPROP_FAN_MODE               | The current fan speed mode.     |
+| ::${T}_RESPROP_FAN_FIXED_SPEED        | Read/write the fixed speed setting for the fan.     |
+| ::${T}_RESPROP_FAN_SPEED_TABLE        | Read/write the fan speed table.     |
+
+Fan speeds can be given in units of RPM (revolutions per minute) or percentage of maximum RPM.
+
+Software can either request fixed fan speed, including turning the fan off, or depending on hardware capabilities, as a fan speed table. This is a table of temperature/speed
+points. When programmed, the hardware will dynamically choose the fan speed based on the maximum temperature measured on the chip. Software should use the function
+::${t}SysmanGetPropertyInfo() with the property ::${T}_RESPROP_FAN_SPEED_TABLE to determine if the hardware supports this mode.
+
+
+${"###"} <a name="prrd">LED properties</a>
+These properties enable turning LEDs on/off and changing the color.
+
+Resource type: ::${T}_RESOURCE_TYPE_LED
+
+Resource IDs: ::${T}_RESID_LED_MAIN, ::${T}_RESID_LED_1 - ::${T}_RESID_LED_3
+
+| Property ID                           | Description |
+| :--:                                  | :--: |
+| ::${T}_RESPROP_LED_RGB_CAP            | Check if LED supports color programming.     |
+| ::${T}_RESPROP_LED_STATE              | Turn LED on/off and change the color.     |
+
+Not all LEDs support color control. Software should use the function ::${t}SysmanGetPropertyInfo() with the property ::${T}_RESPROP_LED_RGB_CAP to determine if the LED
+supports programming the R/G/B color values.
 
 
 ${"#"} <a name="ra">Reliability, availability and serviceability (RAS)</a>
