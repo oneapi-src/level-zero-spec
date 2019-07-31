@@ -55,15 +55,109 @@ For each selected device handle, applications use the function ::${t}SysmanGet t
 
 There is a unique handle for each device. Multiple threads can use the handle. If concurrent accesses are made to the same device property through the handle, the last request wins.
 
+The code example below shows how to enumerate the GPU devices in the system and create SMI handles for them:
+
+```c
+int gNumDevices = 0;    // Global
+
+int ListDevices(xe_device_group_handle_t hDeviceGroup); // Forward declaration
+
+int main( int argc, char *argv[] )
+{
+    int ret = -1;
+    if ( (xeInit(XE_INIT_FLAG_NONE) != XE_RESULT_SUCCESS) ||
+         (xetInit(XE_INIT_FLAG_NONE) != XE_RESULT_SUCCESS) )
+    {
+        fprintf(stderr, "Can't initialize the API.\n");
+        ret = 1;
+    }
+    else
+    {
+        // Discover all the device groups and devices
+        uint32_t groupCount = 0;
+        xeDeviceGroupGet(&groupCount, nullptr);
+        xe_device_group_handle_t* allDeviceGroups = (xe_device_group_handle_t*)
+            malloc(groupCount * sizeof(xe_device_group_handle_t));
+        xeDeviceGroupGet(&groupCount, allDeviceGroups);
+        // Find the first GPU device group
+        xe_device_group_handle_t hDeviceGroup = nullptr;
+        for(uint32_t i = 0; i < groupCount; ++i)
+        {
+            xe_device_properties_t device_properties;
+            xeDeviceGroupGetDeviceProperties(allDeviceGroups[i], &device_properties);
+            if(XE_DEVICE_TYPE_GPU == device_properties.type)
+            {
+                if ((ret = ListDevices(allDeviceGroups[i])) != 0)
+                {
+                    break;
+                }
+            }
+        }
+
+        free(allDeviceGroups);
+    }
+
+    if (gNumDevices == 0)
+    {
+        fprintf(stdout, "No managed devices found.\n");
+    }
+
+    return ret;
+}
+
+int ListDevices(xe_device_group_handle_t hDeviceGroup)
+{
+    int ret = 0;
+    uint32_t deviceCount = 0;
+    if (xeDeviceGet(hDeviceGroup, &deviceCount, nullptr) == XE_RESULT_SUCCESS)
+    {
+        if (deviceCount)
+        {
+            xe_device_handle_t* allDevices = (xe_device_handle_t*)
+                malloc(deviceCount * sizeof(xe_device_handle_t));
+            xeDeviceGet(hDeviceGroup, &deviceCount, allDevices);
+
+            for (uint32_t i = 0; i < deviceCount; ++i)
+            {
+                xet_sysman_handle_t hSysmanDevice;
+                xe_result_t res = xetSysmanGet(allDevices[i], XET_SYSMAN_VERSION_CURRENT, &hSysmanDevice);
+                if (res == XE_RESULT_SUCCESS)
+                {
+                    gNumDevices++;
+
+                    fprintf(stdout, "Device %d\n", gNumDevices);
+
+                    ShowDeviceInfo(hSysmanDevice);
+                }
+                else
+                {
+                    fprintf(stderr, "ERROR: Can't initialize system resource management for this device.\n");
+                    ret++;
+                }
+            }
+
+            free(allDevices);
+        }
+    }
+    else
+    {
+        fprintf(stderr, "ERROR: Couldn't get list of devices in a device group.\n");
+        ret = 1;
+    }
+
+    return ret;
+}
+```
+
 ${"#"} <a name="re">Resources</a>
 A device is broken into resources. For example, the GPU frequency of a device is a resource. Resources are broken into groups, defined by the enumerator
-$::{t}_resource_type_t. The groups are summarized in the table below:
+::${t}_resource_type_t. The groups are summarized in the table below:
 
 | Resource group         | C API key | Resource Type |Description                                                                                                       |
 | :--:                   | :--:      | :--:                          | :--:                                                                                             |
 | **Device**             | dev       | ::${T}_RESOURCE_TYPE_DEV      | Properties provide device and driver inventory information.                                      |
-| **Power domain**       | pwr       | ::${T}_RESOURCE_TYPE_PWR      | Properties permit monitoring of power consumption and setting operating power limits.            |
-| **Frequency domain**   | freq      | ::${T}_RESOURCE_TYPE_FREQ     | Properties permit monitoring of frequency and setting frequency limits.                          |
+| **Power**              | pwr       | ::${T}_RESOURCE_TYPE_PWR      | Properties permit monitoring of power consumption and setting operating power limits.            |
+| **Frequency**          | freq      | ::${T}_RESOURCE_TYPE_FREQ     | Properties permit monitoring of frequency and setting frequency limits.                          |
 | **Utilization**        | util      | ::${T}_RESOURCE_TYPE_UTIL     | Properties permit monitoring of activity of different component                                  |
 | **Memory**             | mem       | ::${T}_RESOURCE_TYPE_MEM      | Properties permit monitoring of memory utilization.                                              |
 | **Link**               | link      | ::${T}_RESOURCE_TYPE_LINK     | Properties permit monitoring utilization of PCIe and peer-to-peer links.                         |
@@ -164,6 +258,12 @@ void CheckResources(xet_sysman_handle_t hSysmanDevice)
 
 ${"#"} <a name="pr">Properties</a>
 For every resource type, there are a set of **properties** that can be accessed. These correspond to either telemetry or controls that modify the behavior of the resource.
+
+The diagram below describes the mapping between resources and properties. It shows two types of resources (frequency and power) and examples of properties that can be
+read or controlled for each. Notices that there are two frequency resources; they each have the same set of properties but will have different values depending on the
+configuration of the device.
+
+![Resource property mapping](../images/tools_sysman_resprops.png?raw=true) 
 
 In the following sections, we will discuss where to get the list of properties, the type of properties, how to determine which are available, how to determine if
 an application has permissions to modify properties, how often properties can be accessed and how to read and write property values.

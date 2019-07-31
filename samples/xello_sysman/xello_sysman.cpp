@@ -15,8 +15,6 @@
 #include <stdio.h>
 #include "xet_api.h"
 
-int gNumDevices = 0;
-
 void ShowRasCounters(xet_sysman_handle_t hSysmanDevice)
 {
     uint32_t numRas;
@@ -229,53 +227,14 @@ void ShowInventoryInfo(xet_sysman_handle_t hSysmanDevice)
 
 void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
 {
-    gNumDevices++;
-
-    fprintf(stdout, "Device %d\n", gNumDevices);
-
     ShowInventoryInfo(hSysmanDevice);
 
     ShowFans(hSysmanDevice);
 }
 
-int ListDevices(xe_device_group_handle_t hDeviceGroup)
-{
-    int ret = 0;
-    uint32_t deviceCount = 0;
-    if (xeDeviceGet(hDeviceGroup, &deviceCount, nullptr) == XE_RESULT_SUCCESS)
-    {
-        if (deviceCount)
-        {
-            xe_device_handle_t* allDevices = (xe_device_handle_t*)
-                malloc(deviceCount * sizeof(xe_device_handle_t));
-            xeDeviceGet(hDeviceGroup, &deviceCount, allDevices);
+int gNumDevices = 0;
 
-            for (uint32_t i = 0; i < deviceCount; ++i)
-            {
-                xet_sysman_handle_t hSysmanDevice;
-                xe_result_t res = xetSysmanGet(allDevices[i], XET_SYSMAN_VERSION_CURRENT, &hSysmanDevice);
-                if (res == XE_RESULT_SUCCESS)
-                {
-                    ShowDeviceInfo(hSysmanDevice);
-                }
-                else
-                {
-                    fprintf(stderr, "ERROR: Can't initialize system resource management for this device.\n");
-                    ret++;
-                }
-            }
-
-            free(allDevices);
-        }
-    }
-    else
-    {
-        fprintf(stderr, "ERROR: Couldn't get list of devices in a device group.\n");
-        ret = 1;
-    }
-
-    return ret;
-}
+int ListDevices(xe_device_group_handle_t hDeviceGroup); // Forward declaration
 
 int main( int argc, char *argv[] )
 {
@@ -315,6 +274,49 @@ int main( int argc, char *argv[] )
     if (gNumDevices == 0)
     {
         fprintf(stdout, "No managed devices found.\n");
+    }
+
+    return ret;
+}
+
+int ListDevices(xe_device_group_handle_t hDeviceGroup)
+{
+    int ret = 0;
+    uint32_t deviceCount = 0;
+    if (xeDeviceGet(hDeviceGroup, &deviceCount, nullptr) == XE_RESULT_SUCCESS)
+    {
+        if (deviceCount)
+        {
+            xe_device_handle_t* allDevices = (xe_device_handle_t*)
+                malloc(deviceCount * sizeof(xe_device_handle_t));
+            xeDeviceGet(hDeviceGroup, &deviceCount, allDevices);
+
+            for (uint32_t i = 0; i < deviceCount; ++i)
+            {
+                xet_sysman_handle_t hSysmanDevice;
+                xe_result_t res = xetSysmanGet(allDevices[i], XET_SYSMAN_VERSION_CURRENT, &hSysmanDevice);
+                if (res == XE_RESULT_SUCCESS)
+                {
+                    gNumDevices++;
+
+                    fprintf(stdout, "Device %d\n", gNumDevices);
+
+                    ShowDeviceInfo(hSysmanDevice);
+                }
+                else
+                {
+                    fprintf(stderr, "ERROR: Can't initialize system resource management for this device.\n");
+                    ret++;
+                }
+            }
+
+            free(allDevices);
+        }
+    }
+    else
+    {
+        fprintf(stderr, "ERROR: Couldn't get list of devices in a device group.\n");
+        ret = 1;
     }
 
     return ret;
