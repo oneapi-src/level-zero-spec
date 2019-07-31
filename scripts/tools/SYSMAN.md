@@ -290,7 +290,7 @@ and read in order to get the last value that was set.
 but cannot be read back to get the last value - these are properties that trigger some behavior but don't have a backing value.
 
 ${"##"} <a name="pra">Property availability</a>
-Determining if properties are supported and accessible is achieved by calling the API function ::{t}SysmanGetPropertyInfo(). The function is called with an array that indicates
+Determining if properties are supported and accessible is achieved by calling the API function ::${t}SysmanGetPropertyInfo(). The function is called with an array that indicates
 the property identifiers of interest. On return, the array is populated with the API support (one of ::${t}_prop_support_t) and the access permissions (::${t}_prop_access_t)
 for each property. API support indicates if the property is supported by the current version of the API, the device class and the device. It is possible that the API supports
 a property but not for a particular device class or device. Access permissions are specific to a device and so should be checked for every device.
@@ -324,7 +324,7 @@ Similarly, writable dynamic properties have a minimum update-rate that is relate
 the property faster than this rate, but it is unlikely that the new value will take effect immediately. If hardware changes immediately when a new property value is
 written, we say that the update interval is 0. If the property will only react to a new value after 1 millisecond, we say that the update interval is 1 millisecond.
 
-Software can determine the minimum sample and update intervals for each property by using the function ::{t}SysmanGetPropertyInfo(). The example below shows how
+Software can determine the minimum sample and update intervals for each property by using the function ::${t}SysmanGetPropertyInfo(). The example below shows how
 to determine these intervals for frequency control and monitoring the resolved frequency:
 
 ```c
