@@ -1135,6 +1135,8 @@ namespace xet
                                                             ///< constructed from one of ::xet_ras_error_loc_t
             ras_data_type_t dataType;                       ///< [out] How to interpret the data
             uint64_t data;                                  ///< [out] The value of the error - interpretation depends on dataType
+            uint64_t accumulated;                           ///< [out] The accumulated value of the error (never cleared until device
+                                                            ///< driver is reloaded)
             resid_t resourceId;                             ///< [out] Resource where the error was generated. If the error doesn't
                                                             ///< come from a specific resource, this will be ::XET_RESID_ANY
 
@@ -1341,6 +1343,9 @@ namespace xet
         /// @details
         ///     - Returned errors can be filtered by resource, type, location and
         ///       threshold.
+        ///     - Clearing error counters will affect any subsequent calls to this
+        ///       function from any application. Accumulated counter values are not
+        ///       affected by this.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t

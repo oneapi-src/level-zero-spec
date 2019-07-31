@@ -675,12 +675,13 @@ is provided where the error counter data will be returned. If the provided size 
 will be returned and the required size if provided. The function ::${t}SysmanGetRasConfig() can be used to find the total number of errors counters that are available
 (::${t}_ras_config_t.numRas) and hence the total array size that should be passed into the ::${t}SysmanGetRasErrors() function.
 
-Note that for each error, the interpretation of the data depends on the provided error type in ::${t}_ras_error_t.dataType. Some errors may be counters
-(::${T}_RAS_DATA_TYPE_COUNTER) while other errors may only indicate that errors have occurred (::${T}_RAS_DATA_TYPE_OCCURRED).
+Note that for each error, the interpretation of the data in ::${t}_ras_error_t.data depends on the provided error type in ::${t}_ras_error_t.dataType.
+Some errors may be counters (::${T}_RAS_DATA_TYPE_COUNTER) while other errors may only indicate that errors have occurred (::${T}_RAS_DATA_TYPE_OCCURRED).
 
-When calling ::${t}SysmanGetRasErrors(), it is possible to request that the error data (counter or occurrence) be cleared. This means that if the filter threshold is set
-to 1 or more, the next call to ::${t}SysmanGetRasErrors() will only show new errors that have occurred since the last call. The counters are cleared per
-application. This means that if there are multiple threads calling this function and requesting clearing of the counters, only one thread will see the new errors.
+When calling ::${t}SysmanGetRasErrors(), it is possible to request that the error data (counter or occurrence) be cleared. This means that any subsequent call
+to this function from any application will show no errors (::${t}_ras_error_t.data = 0) for those counters that were cleared until new errors have occurred.
+While the driver will clear the counter values, it still maintains accumulated values and these are returned in ::${t}_ras_error_t.accumulated - these counters
+are only cleared when the device driver is reloaded.
 
 The code below shows how to get a list of all available error counters. This is something that an application could do during initialization:
 

@@ -1354,6 +1354,8 @@ class xet_ras_error_t(Structure):
                                                                         ## constructed from one of ::xet_ras_error_loc_t
         ("dataType", xet_ras_data_type_t),                              ## [out] How to interpret the data
         ("data", c_ulonglong),                                          ## [out] The value of the error - interpretation depends on dataType
+        ("accumulated", c_ulonglong),                                   ## [out] The accumulated value of the error (never cleared until device
+                                                                        ## driver is reloaded)
         ("resourceId", xet_resid_t)                                     ## [out] Resource where the error was generated. If the error doesn't
                                                                         ## come from a specific resource, this will be ::XET_RESID_ANY
     ]

@@ -1505,33 +1505,30 @@ etors:
     - name: $T_RAS_ERROR_LOC_SLM
       value: "$X_BIT( 6 )"
       desc: "Error occurred in the compute unit shared local memory"
-    - name: $T_RAS_ERROR_LOC_PCI
+    - name: $T_RAS_ERROR_LOC_MESSAGING
       value: "$X_BIT( 7 )"
-      desc: "Error occurred in the PCIe controller"
-    - name: $T_RAS_ERROR_LOC_PCI_ROUTING
-      value: "$X_BIT( 8 )"
-      desc: "Error occurred routing PCIe traffic to/from sub-devices"
-    - name: $T_RAS_ERROR_LOC_SGUNIT
-      value: "$X_BIT( 9 )"
       desc: "Errors occurred handling transactions between PCI config space, MMIO registers, local memory and sub-devices"
-    - name: $T_RAS_ERROR_LOC_GSC
-      value: "$X_BIT( 10 )"
+    - name: $T_RAS_ERROR_LOC_SECURITY
+      value: "$X_BIT( 8 )"
       desc: "Security errors occurred"
     - name: $T_RAS_ERROR_LOC_DISPLAY
-      value: "$X_BIT( 11 )"
+      value: "$X_BIT( 9 )"
       desc: "Errors occurred in the display"
     - name: $T_RAS_ERROR_LOC_SOC
-      value: "$X_BIT( 12 )"
+      value: "$X_BIT( 10 )"
       desc: "Errors occurred in other parts of the device"
     - name: $T_RAS_ERROR_LOC_GPU_HANG
-      value: "$X_BIT( 13 )"
+      value: "$X_BIT( 11 )"
       desc: "Driver detected that the GPU hardware was non-responsive"
-    - name: $T_RAS_ERROR_LOC_GPU_WARM_RESET
-      value: "$X_BIT( 14 )"
-      desc: "Driver performed a GPU warm reset"
+    - name: $T_RAS_ERROR_LOC_PCI
+      value: "$X_BIT( 12 )"
+      desc: "Error occurred in the PCIe controller"
+    - name: $T_RAS_ERROR_LOC_PCI_ROUTING
+      value: "$X_BIT( 13 )"
+      desc: "Error occurred routing PCIe traffic to/from sub-devices"
     - name: $T_RAS_ERROR_LOC_P2P_LINK
-      value: "$X_BIT( 15 )"
-      desc: "Driver performed a GPU warm reset"
+      value: "$X_BIT( 14 )"
+      desc: "Errors detected with peer-to-peer connection"
     - name: $T_RAS_ERROR_LOC_ALL
       value: "~0"
       desc: "Select all error locations"
@@ -1621,6 +1618,9 @@ members:
     - type: uint64_t
       name: "data"
       desc: "[out] The value of the error - interpretation depends on dataType"
+    - type: uint64_t
+      name: "accumulated"
+      desc: "[out] The accumulated value of the error (never cleared until device driver is reloaded)"
     - type: $t_resid_t
       name: "resourceId"
       desc: "[out] Resource where the error was generated. If the error doesn't come from a specific resource, this will be $T_RESID_ANY"
@@ -1667,6 +1667,7 @@ class: $tSysman
 name: GetRasErrors
 details:
     - "Returned errors can be filtered by resource, type, location and threshold."
+    - "Clearing error counters will affect any subsequent calls to this function from any application. Accumulated counter values are not affected by this."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:

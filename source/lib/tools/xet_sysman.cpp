@@ -279,6 +279,9 @@ xetSysmanRasSetup(
 /// @details
 ///     - Returned errors can be filtered by resource, type, location and
 ///       threshold.
+///     - Clearing error counters will affect any subsequent calls to this
+///       function from any application. Accumulated counter values are not
+///       affected by this.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -786,6 +789,9 @@ namespace xet
     /// @details
     ///     - Returned errors can be filtered by resource, type, location and
     ///       threshold.
+    ///     - Clearing error counters will affect any subsequent calls to this
+    ///       function from any application. Accumulated counter values are not
+    ///       affected by this.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
@@ -3248,6 +3254,10 @@ namespace xet
         
         str += "Sysman::ras_error_t::data : ";
         str += std::to_string(val.data);
+        str += "\n";
+        
+        str += "Sysman::ras_error_t::accumulated : ";
+        str += std::to_string(val.accumulated);
         str += "\n";
         
         str += "Sysman::ras_error_t::resourceId : ";
