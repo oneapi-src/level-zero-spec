@@ -232,7 +232,7 @@ void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
     ShowFans(hSysmanDevice);
 }
 
-int gNumDevices = 0;
+int gNumDevices = 0;    // Global
 
 int ListDevices(xe_device_group_handle_t hDeviceGroup); // Forward declaration
 
