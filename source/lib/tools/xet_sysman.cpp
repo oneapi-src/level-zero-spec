@@ -1460,6 +1460,10 @@ namespace xet
             str = "Sysman::resprop_t::LINK_MAX_PACKET_SIZE";
             break;
 
+        case Sysman::resprop_t::LINK_STATE:
+            str = "Sysman::resprop_t::LINK_STATE";
+            break;
+
         case Sysman::resprop_t::LINK_BANDWIDTH:
             str = "Sysman::resprop_t::LINK_BANDWIDTH";
             break;
@@ -1711,6 +1715,34 @@ namespace xet
 
         default:
             str = "Sysman::link_type_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::link_state_t to std::string
+    std::string to_string( const Sysman::link_state_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Sysman::link_state_t::OFF:
+            str = "Sysman::link_state_t::OFF";
+            break;
+
+        case Sysman::link_state_t::ON:
+            str = "Sysman::link_state_t::ON";
+            break;
+
+        case Sysman::link_state_t::CONNECTED:
+            str = "Sysman::link_state_t::CONNECTED";
+            break;
+
+        default:
+            str = "Sysman::link_state_t::?";
             break;
         };
 
@@ -2648,6 +2680,19 @@ namespace xet
             ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pList);
             str += ss.str();
         }
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::resprop_link_state_t to std::string
+    std::string to_string( const Sysman::resprop_link_state_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::resprop_link_state_t::state : ";
+        str += to_string(val.state);
         str += "\n";
 
         return str;

@@ -162,109 +162,111 @@ typedef enum _xet_resid_t
 ///       reread.
 typedef enum _xet_resprop_t
 {
-    XET_RESPROP_DEV_SERIAL_NUMBER = 0,              ///< (ro static) The serial number of the device (data:
+    XET_RESPROP_DEV_SERIAL_NUMBER = 0x00000,        ///< (ro static) The serial number of the device (data:
                                                     ///< ::xet_resprop_dev_serial_number_t)
-    XET_RESPROP_DEV_BOARD_NUMBER = 1,               ///< (ro static) The board number of the device (data:
+    XET_RESPROP_DEV_BOARD_NUMBER = 0x00001,         ///< (ro static) The board number of the device (data:
                                                     ///< ::xet_resprop_dev_board_number_t)
-    XET_RESPROP_DEV_BRAND = 2,                      ///< (ro static) The brand name of the device (data:
+    XET_RESPROP_DEV_BRAND = 0x00002,                ///< (ro static) The brand name of the device (data:
                                                     ///< ::xet_resprop_dev_brand_t)
-    XET_RESPROP_DEV_MODEL = 3,                      ///< (ro static) The model name of the device (data:
+    XET_RESPROP_DEV_MODEL = 0x00003,                ///< (ro static) The model name of the device (data:
                                                     ///< ::xet_resprop_dev_model_t)
-    XET_RESPROP_DEV_DEVICEID = 4,                   ///< (ro static) The device ID of the device (data:
+    XET_RESPROP_DEV_DEVICEID = 0x00004,             ///< (ro static) The device ID of the device (data:
                                                     ///< ::xet_resprop_dev_deviceid_t)
-    XET_RESPROP_DEV_VENDOR_NAME = 5,                ///< (ro static) The vendor name of the device (data:
+    XET_RESPROP_DEV_VENDOR_NAME = 0x00005,          ///< (ro static) The vendor name of the device (data:
                                                     ///< ::xet_resprop_dev_vendor_name_t)
-    XET_RESPROP_DEV_DRIVER_VERSION = 6,             ///< (ro static) The driver version associated with the device (data:
+    XET_RESPROP_DEV_DRIVER_VERSION = 0x00006,       ///< (ro static) The driver version associated with the device (data:
                                                     ///< ::xet_resprop_dev_driver_version_t)
-    XET_RESPROP_DEV_BARS = 7,                       ///< (ro static) The bars configured for the device (data:
+    XET_RESPROP_DEV_BARS = 0x00007,                 ///< (ro static) The bars configured for the device (data:
                                                     ///< ::xet_resprop_dev_bars_t)
-    XET_RESPROP_PWR_MAX_LIMIT = 100,                ///< (ro static) The maximum power limit that can be requested (data:
+    XET_RESPROP_PWR_MAX_LIMIT = 0x10000,            ///< (ro static) The maximum power limit that can be requested (data:
                                                     ///< ::xet_resprop_pwr_max_limit_t)
-    XET_RESPROP_PWR_ENERGY_COUNTER = 101,           ///< (ro dynamic) The value of the monotonic energy counter (data:
+    XET_RESPROP_PWR_ENERGY_COUNTER = 0x10001,       ///< (ro dynamic) The value of the monotonic energy counter (data:
                                                     ///< ::xet_resprop_pwr_energy_counter_t)
-    XET_RESPROP_PWR_SUSTAINED_LIMIT = 102,          ///< (rw dynamic) The sustained power limit (data:
+    XET_RESPROP_PWR_SUSTAINED_LIMIT = 0x10002,      ///< (rw dynamic) The sustained power limit (data:
                                                     ///< ::xet_resprop_pwr_sustained_limit_t)
-    XET_RESPROP_PWR_BURST_LIMIT = 103,              ///< (rw dynamic) The burst power limit (data:
+    XET_RESPROP_PWR_BURST_LIMIT = 0x10003,          ///< (rw dynamic) The burst power limit (data:
                                                     ///< ::xet_resprop_pwr_burst_limit_t)
-    XET_RESPROP_PWR_PEAK_LIMIT = 104,               ///< (rw dynamic) The peak power limit (data:
+    XET_RESPROP_PWR_PEAK_LIMIT = 0x10004,           ///< (rw dynamic) The peak power limit (data:
                                                     ///< ::xet_resprop_pwr_peak_limit_t)
-    XET_RESPROP_FREQ_AVAIL_CLOCKS = 200,            ///< (ro static) Available frequency clocks that this domain can run at
+    XET_RESPROP_FREQ_AVAIL_CLOCKS = 0x20000,        ///< (ro static) Available frequency clocks that this domain can run at
                                                     ///< (data: ::xet_resprop_freq_avail_clocks_t)
-    XET_RESPROP_FREQ_RANGE = 201,                   ///< (rw dynamic) The current frequency range (data:
+    XET_RESPROP_FREQ_RANGE = 0x20001,               ///< (rw dynamic) The current frequency range (data:
                                                     ///< ::xet_resprop_freq_range_t)
-    XET_RESPROP_FREQ_REQUESTED_FREQ = 202,          ///< (ro dynamic) The current frequency request (data:
+    XET_RESPROP_FREQ_REQUESTED_FREQ = 0x20002,      ///< (ro dynamic) The current frequency request (data:
                                                     ///< ::xet_resprop_freq_requested_freq_t)
-    XET_RESPROP_FREQ_TDP_FREQ = 203,                ///< (ro dynamic) The maximum frequency supported under the current TDP
+    XET_RESPROP_FREQ_TDP_FREQ = 0x20003,            ///< (ro dynamic) The maximum frequency supported under the current TDP
                                                     ///< conditions (data: ::xet_resprop_freq_tdp_freq_t)
-    XET_RESPROP_FREQ_EFFICIENT_FREQ = 204,          ///< (ro dynamic) The efficient minimum frequency (data:
+    XET_RESPROP_FREQ_EFFICIENT_FREQ = 0x20004,      ///< (ro dynamic) The efficient minimum frequency (data:
                                                     ///< ::xet_resprop_freq_efficient_freq_t)
-    XET_RESPROP_FREQ_RESOLVED_FREQ = 205,           ///< (ro dynamic) The resolved frequency (data:
+    XET_RESPROP_FREQ_RESOLVED_FREQ = 0x20005,       ///< (ro dynamic) The resolved frequency (data:
                                                     ///< ::xet_resprop_freq_resolved_freq_t)
-    XET_RESPROP_FREQ_THROTTLE_REASONS = 206,        ///< (ro dynamic) The reasons that the frequency is being limited by the
+    XET_RESPROP_FREQ_THROTTLE_REASONS = 0x20006,    ///< (ro dynamic) The reasons that the frequency is being limited by the
                                                     ///< PCU (data: ::xet_resprop_freq_throttle_reasons_t)
-    XET_RESPROP_FREQ_THROTTLE_TIME = 207,           ///< (ro dynamic) The total time that the frequency has been limited by the
+    XET_RESPROP_FREQ_THROTTLE_TIME = 0x20007,       ///< (ro dynamic) The total time that the frequency has been limited by the
                                                     ///< PCU (data: ::xet_resprop_freq_throttle_time_t)
-    XET_RESPROP_UTIL_COUNTERS = 300,                ///< (ro dynamic) The total wall time this resource is active (data:
+    XET_RESPROP_UTIL_COUNTERS = 0x30000,            ///< (ro dynamic) The total wall time this resource is active (data:
                                                     ///< ::xet_resprop_util_counters_t)
-    XET_RESPROP_MEM_TYPE = 400,                     ///< (ro static) The type of memory covered by this resource (data:
+    XET_RESPROP_MEM_TYPE = 0x40000,                 ///< (ro static) The type of memory covered by this resource (data:
                                                     ///< ::xet_resprop_mem_type_t)
-    XET_RESPROP_MEM_UTILIZATION = 401,              ///< (ro dynamic) Get current allocated/unallocated size (data:
+    XET_RESPROP_MEM_UTILIZATION = 0x40001,          ///< (ro dynamic) Get current allocated/unallocated size (data:
                                                     ///< ::xet_resprop_mem_utilization_t)
-    XET_RESPROP_MEM_BANDWIDTH = 402,                ///< (ro dynamic) Get current read/write bandwidth counters and maximum
+    XET_RESPROP_MEM_BANDWIDTH = 0x40002,            ///< (ro dynamic) Get current read/write bandwidth counters and maximum
                                                     ///< bandwidth (data: ::xet_resprop_mem_bandwidth_t)
-    XET_RESPROP_LINK_TYPE = 500,                    ///< (ro static) The type of link (data: ::xet_resprop_link_type_t)
-    XET_RESPROP_LINK_BUS_ADDRESS = 501,             ///< (ro static) The bus address of the link (data:
+    XET_RESPROP_LINK_TYPE = 0x50000,                ///< (ro static) The type of link (data: ::xet_resprop_link_type_t)
+    XET_RESPROP_LINK_BUS_ADDRESS = 0x50001,         ///< (ro static) The bus address of the link (data:
                                                     ///< ::xet_resprop_link_bus_address_t)
-    XET_RESPROP_LINK_PEER_DEVICE = 502,             ///< (ro static) For links of type ::XET_LINK_TYPE_PEER_TO_PEER, this gives
+    XET_RESPROP_LINK_PEER_DEVICE = 0x50002,         ///< (ro static) For links of type ::XET_LINK_TYPE_PEER_TO_PEER, this gives
                                                     ///< the UUID of the peer device (data: ::xet_resprop_link_peer_device_t)
-    XET_RESPROP_LINK_AVAIL_SPEEDS = 503,            ///< (ro static) Available link speeds (data:
+    XET_RESPROP_LINK_AVAIL_SPEEDS = 0x50003,        ///< (ro static) Available link speeds (data:
                                                     ///< ::xet_resprop_link_avail_speeds_t)
-    XET_RESPROP_LINK_MAX_PACKET_SIZE = 504,         ///< (ro static) Maximum packet size (data:
+    XET_RESPROP_LINK_MAX_PACKET_SIZE = 0x50004,     ///< (ro static) Maximum packet size (data:
                                                     ///< ::xet_resprop_link_max_packet_size_t)
-    XET_RESPROP_LINK_BANDWIDTH = 505,               ///< (ro dynamic) Monotonic bandwidth counters (data:
+    XET_RESPROP_LINK_STATE = 0x50005,               ///< (ro dynamic) Monotonic bandwidth counters (data:
+                                                    ///< ::xet_resprop_link_state_t)
+    XET_RESPROP_LINK_BANDWIDTH = 0x50006,           ///< (ro dynamic) Monotonic bandwidth counters (data:
                                                     ///< ::xet_resprop_link_bandwidth_t)
-    XET_RESPROP_LINK_SPEED = 506,                   ///< (ro dynamic) Current link speed (data: ::xet_resprop_link_speed_t)
-    XET_RESPROP_LINK_SPEED_RANGE = 507,             ///< (wo dynamic) Set the min/max speeds between which the link can operate
+    XET_RESPROP_LINK_SPEED = 0x50007,               ///< (ro dynamic) Current link speed (data: ::xet_resprop_link_speed_t)
+    XET_RESPROP_LINK_SPEED_RANGE = 0x50008,         ///< (wo dynamic) Set the min/max speeds between which the link can operate
                                                     ///< (data: ::xet_resprop_link_speed_range_t)
-    XET_RESPROP_TEMP_TEMPERATURE = 600,             ///< (ro dynamic) The current temperature of the sensor in degrees celcius
+    XET_RESPROP_TEMP_TEMPERATURE = 0x60000,         ///< (ro dynamic) The current temperature of the sensor in degrees celcius
                                                     ///< (data: ::xet_resprop_temp_temperature_t)
-    XET_RESPROP_STBY_PROMO_MODE = 700,              ///< (rw dynamic) The current promotion mode (data:
+    XET_RESPROP_STBY_PROMO_MODE = 0x70000,          ///< (rw dynamic) The current promotion mode (data:
                                                     ///< ::xet_resprop_stby_promo_mode_t)
-    XET_RESPROP_FW_NAME = 800,                      ///< (ro static) Name encoded in the loaded firmware image (data:
+    XET_RESPROP_FW_NAME = 0x80000,                  ///< (ro static) Name encoded in the loaded firmware image (data:
                                                     ///< ::xet_resprop_fw_name_t)
-    XET_RESPROP_FW_VERSION = 801,                   ///< (ro static) The version of the loaded firmware image (data:
+    XET_RESPROP_FW_VERSION = 0x80001,               ///< (ro static) The version of the loaded firmware image (data:
                                                     ///< ::xet_resprop_fw_version_t)
-    XET_RESPROP_FW_CHECK = 802,                     ///< (ro dynamic) Verify the checksum of the loaded firmware image (data:
+    XET_RESPROP_FW_CHECK = 0x80002,                 ///< (ro dynamic) Verify the checksum of the loaded firmware image (data:
                                                     ///< ::xet_resprop_fw_check_t)
-    XET_RESPROP_FW_FLASH = 803,                     ///< (wo dynamically) Flash a new firmware image (data:
+    XET_RESPROP_FW_FLASH = 0x80003,                 ///< (wo dynamically) Flash a new firmware image (data:
                                                     ///< ::xet_resprop_fw_flash_t)
-    XET_RESPROP_PSU_AMP_LIMIT = 900,                ///< (ro static) The maximum electrical current in amperes that can be
+    XET_RESPROP_PSU_AMP_LIMIT = 0x90000,            ///< (ro static) The maximum electrical current in amperes that can be
                                                     ///< drawn (data: ::xet_resprop_psu_amp_limit_t)
-    XET_RESPROP_PSU_VOLTAGE_STATUS = 901,           ///< (ro dynamic) Indicates if under or over voltage has occurred (data:
+    XET_RESPROP_PSU_VOLTAGE_STATUS = 0x90001,       ///< (ro dynamic) Indicates if under or over voltage has occurred (data:
                                                     ///< ::xet_resprop_psu_voltage_status_t)
-    XET_RESPROP_PSU_FAN_FAILURE = 902,              ///< (ro dynamic) Indicates if the fan has failed (data:
+    XET_RESPROP_PSU_FAN_FAILURE = 0x90002,          ///< (ro dynamic) Indicates if the fan has failed (data:
                                                     ///< ::xet_resprop_psu_fan_failure_t)
-    XET_RESPROP_PSU_TEMPERATURE = 903,              ///< (ro dynamic) The current heatsink temperature in degrees celcius
+    XET_RESPROP_PSU_TEMPERATURE = 0x90003,          ///< (ro dynamic) The current heatsink temperature in degrees celcius
                                                     ///< (data: ::xet_resprop_psu_temperature_t)
-    XET_RESPROP_PSU_AMPS = 904,                     ///< (ro dynamic) The current amps being drawn in amperes (data:
+    XET_RESPROP_PSU_AMPS = 0x90004,                 ///< (ro dynamic) The current amps being drawn in amperes (data:
                                                     ///< ::xet_resprop_psu_amps_t)
-    XET_RESPROP_FAN_MAX_RPM = 1000,                 ///< (ro static) The maximum RPM of the fan (data:
+    XET_RESPROP_FAN_MAX_RPM = 0xA0000,              ///< (ro static) The maximum RPM of the fan (data:
                                                     ///< ::xet_resprop_fan_max_rpm_t)
-    XET_RESPROP_FAN_MAX_TABLE_SIZE = 1001,          ///< (ro static) The maximum number of points in the fan temp/speed table
+    XET_RESPROP_FAN_MAX_TABLE_SIZE = 0xA0001,       ///< (ro static) The maximum number of points in the fan temp/speed table
                                                     ///< (data: ::xet_resprop_fan_max_table_size_t)
-    XET_RESPROP_FAN_SPEED_RPM = 1002,               ///< (ro dynamic) The current fan speed in units of revolutions per minute
+    XET_RESPROP_FAN_SPEED_RPM = 0xA0002,            ///< (ro dynamic) The current fan speed in units of revolutions per minute
                                                     ///< (rpm) (data: ::xet_resprop_fan_speed_rpm_t)
-    XET_RESPROP_FAN_SPEED_PERCENT = 1003,           ///< (ro dynamic) The current fan speed as a percentage of the maximum
+    XET_RESPROP_FAN_SPEED_PERCENT = 0xA0003,        ///< (ro dynamic) The current fan speed as a percentage of the maximum
                                                     ///< speed of that fan (data: ::xet_resprop_fan_speed_percent_t)
-    XET_RESPROP_FAN_MODE = 1004,                    ///< (ro dynamic) The current fan speed mode (one of
+    XET_RESPROP_FAN_MODE = 0xA0004,                 ///< (ro dynamic) The current fan speed mode (one of
                                                     ///< ::xet_fan_speed_mode_t) (data: ::xet_resprop_fan_mode_t)
-    XET_RESPROP_FAN_FIXED_SPEED = 1005,             ///< (rw dynamic) Read/write the fixed speed setting for the fan (data:
+    XET_RESPROP_FAN_FIXED_SPEED = 0xA0005,          ///< (rw dynamic) Read/write the fixed speed setting for the fan (data:
                                                     ///< ::xet_resprop_fan_fixed_speed_t)
-    XET_RESPROP_FAN_SPEED_TABLE = 1006,             ///< (rw dynamic) Read/write the fan speed table (data:
+    XET_RESPROP_FAN_SPEED_TABLE = 0xA0006,          ///< (rw dynamic) Read/write the fan speed table (data:
                                                     ///< ::xet_resprop_fan_speed_table_t)
-    XET_RESPROP_LED_RGB_CAP = 1100,                 ///< (ro static) Indicates if the LED is RGB capable (data:
+    XET_RESPROP_LED_RGB_CAP = 0xB0000,              ///< (ro static) Indicates if the LED is RGB capable (data:
                                                     ///< ::xet_resprop_led_rgb_cap_t)
-    XET_RESPROP_LED_STATE = 1101,                   ///< (rw dynaic) The LED state - on/off and color (data:
+    XET_RESPROP_LED_STATE = 0xB0001,                ///< (rw dynaic) The LED state - on/off and color (data:
                                                     ///< ::xet_resprop_led_state_t)
 
 } xet_resprop_t;
@@ -607,6 +609,16 @@ typedef enum _xet_link_type_t
 } xet_link_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Link resource state
+typedef enum _xet_link_state_t
+{
+    XET_LINK_STATE_OFF = 0,                         ///< The link is powered off
+    XET_LINK_STATE_ON,                              ///< The link is powered on but not connected
+    XET_LINK_STATE_CONNECTED,                       ///< The link is powered on and connected to the remote port
+
+} xet_link_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Link speed element
 typedef struct _xet_link_speed_t
 {
@@ -651,6 +663,14 @@ typedef struct _xet_resprop_link_avail_speeds_t
     const xet_link_speed_t* pList;                  ///< [out][range(0, num-1)] Pointer to an array of link speeds
 
 } xet_resprop_link_avail_speeds_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Data for the property ::XET_RESPROP_LINK_STATE
+typedef struct _xet_resprop_link_state_t
+{
+    xet_link_state_t state;                         ///< [out] Status of the link device.
+
+} xet_resprop_link_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Data for the property ::XET_RESPROP_LINK_MAX_PACKET_SIZE

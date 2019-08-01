@@ -270,174 +270,177 @@ details:
     - "Properties can be either static or dynamic. Static properties are set during initialization and will not change during the lifetime of the application. Dynamic properties can change at any time and should be reread."
 etors:
     - name: $T_RESPROP_DEV_SERIAL_NUMBER
-      value: "0"
+      value: "0x00000"
       desc: "(ro static) The serial number of the device (data: $t_resprop_dev_serial_number_t)"
     - name: $T_RESPROP_DEV_BOARD_NUMBER
-      value: "1"
+      value: "0x00001"
       desc: "(ro static) The board number of the device (data: $t_resprop_dev_board_number_t)"
     - name: $T_RESPROP_DEV_BRAND
-      value: "2"
+      value: "0x00002"
       desc: "(ro static) The brand name of the device (data: $t_resprop_dev_brand_t)"
     - name: $T_RESPROP_DEV_MODEL
-      value: "3"
+      value: "0x00003"
       desc: "(ro static) The model name of the device (data: $t_resprop_dev_model_t)"
     - name: $T_RESPROP_DEV_DEVICEID
-      value: "4"
+      value: "0x00004"
       desc: "(ro static) The device ID of the device (data: $t_resprop_dev_deviceid_t)"
     - name: $T_RESPROP_DEV_VENDOR_NAME
-      value: "5"
+      value: "0x00005"
       desc: "(ro static) The vendor name of the device (data: $t_resprop_dev_vendor_name_t)"
     - name: $T_RESPROP_DEV_DRIVER_VERSION
-      value: "6"
+      value: "0x00006"
       desc: "(ro static) The driver version associated with the device (data: $t_resprop_dev_driver_version_t)"
     - name: $T_RESPROP_DEV_BARS
-      value: "7"
+      value: "0x00007"
       desc: "(ro static) The bars configured for the device (data: $t_resprop_dev_bars_t)"
 
     - name: $T_RESPROP_PWR_MAX_LIMIT
-      value: "100"
+      value: "0x10000"
       desc: "(ro static) The maximum power limit that can be requested (data: $t_resprop_pwr_max_limit_t)"
     - name: $T_RESPROP_PWR_ENERGY_COUNTER
-      value: "101"
+      value: "0x10001"
       desc: "(ro dynamic) The value of the monotonic energy counter (data: $t_resprop_pwr_energy_counter_t)"
     - name: $T_RESPROP_PWR_SUSTAINED_LIMIT
-      value: "102"
+      value: "0x10002"
       desc: "(rw dynamic) The sustained power limit (data: $t_resprop_pwr_sustained_limit_t)"
     - name: $T_RESPROP_PWR_BURST_LIMIT
-      value: "103"
+      value: "0x10003"
       desc: "(rw dynamic) The burst power limit (data: $t_resprop_pwr_burst_limit_t)"
     - name: $T_RESPROP_PWR_PEAK_LIMIT
-      value: "104"
+      value: "0x10004"
       desc: "(rw dynamic) The peak power limit (data: $t_resprop_pwr_peak_limit_t)"
 
     - name: $T_RESPROP_FREQ_AVAIL_CLOCKS
-      value: "200"
+      value: "0x20000"
       desc: "(ro static) Available frequency clocks that this domain can run at (data: $t_resprop_freq_avail_clocks_t)"
     - name: $T_RESPROP_FREQ_RANGE
-      value: "201"
+      value: "0x20001"
       desc: "(rw dynamic) The current frequency range (data: $t_resprop_freq_range_t)"
     - name: $T_RESPROP_FREQ_REQUESTED_FREQ
-      value: "202"
+      value: "0x20002"
       desc: "(ro dynamic) The current frequency request (data: $t_resprop_freq_requested_freq_t)"
     - name: $T_RESPROP_FREQ_TDP_FREQ
-      value: "203"
+      value: "0x20003"
       desc: "(ro dynamic) The maximum frequency supported under the current TDP conditions (data: $t_resprop_freq_tdp_freq_t)"
     - name: $T_RESPROP_FREQ_EFFICIENT_FREQ
-      value: "204"
+      value: "0x20004"
       desc: "(ro dynamic) The efficient minimum frequency (data: $t_resprop_freq_efficient_freq_t)"
     - name: $T_RESPROP_FREQ_RESOLVED_FREQ
-      value: "205"
+      value: "0x20005"
       desc: "(ro dynamic) The resolved frequency (data: $t_resprop_freq_resolved_freq_t)"
     - name: $T_RESPROP_FREQ_THROTTLE_REASONS
-      value: "206"
+      value: "0x20006"
       desc: "(ro dynamic) The reasons that the frequency is being limited by the PCU (data: $t_resprop_freq_throttle_reasons_t)"
     - name: $T_RESPROP_FREQ_THROTTLE_TIME
-      value: "207"
+      value: "0x20007"
       desc: "(ro dynamic) The total time that the frequency has been limited by the PCU (data: $t_resprop_freq_throttle_time_t)"
 
     - name: $T_RESPROP_UTIL_COUNTERS
-      value: "300"
+      value: "0x30000"
       desc: "(ro dynamic) The total wall time this resource is active (data: $t_resprop_util_counters_t)"
 
     - name: $T_RESPROP_MEM_TYPE
-      value: "400"
+      value: "0x40000"
       desc: "(ro static) The type of memory covered by this resource (data: $t_resprop_mem_type_t)"
     - name: $T_RESPROP_MEM_UTILIZATION
-      value: "401"
+      value: "0x40001"
       desc: "(ro dynamic) Get current allocated/unallocated size (data: $t_resprop_mem_utilization_t)"
     - name: $T_RESPROP_MEM_BANDWIDTH
-      value: "402"
+      value: "0x40002"
       desc: "(ro dynamic) Get current read/write bandwidth counters and maximum bandwidth (data: $t_resprop_mem_bandwidth_t)"
 
     - name: $T_RESPROP_LINK_TYPE
-      value: "500"
+      value: "0x50000"
       desc: "(ro static) The type of link (data: $t_resprop_link_type_t)"
     - name: $T_RESPROP_LINK_BUS_ADDRESS
-      value: "501"
+      value: "0x50001"
       desc: "(ro static) The bus address of the link (data: $t_resprop_link_bus_address_t)"
     - name: $T_RESPROP_LINK_PEER_DEVICE
-      value: "502"
+      value: "0x50002"
       desc: "(ro static) For links of type $T_LINK_TYPE_PEER_TO_PEER, this gives the UUID of the peer device (data: $t_resprop_link_peer_device_t)"
     - name: $T_RESPROP_LINK_AVAIL_SPEEDS
-      value: "503"
+      value: "0x50003"
       desc: "(ro static) Available link speeds (data: $t_resprop_link_avail_speeds_t)"
     - name: $T_RESPROP_LINK_MAX_PACKET_SIZE
-      value: "504"
+      value: "0x50004"
       desc: "(ro static) Maximum packet size (data: $t_resprop_link_max_packet_size_t)"
+    - name: $T_RESPROP_LINK_STATE
+      value: "0x50005"
+      desc: "(ro dynamic) Monotonic bandwidth counters (data: $t_resprop_link_state_t)"
     - name: $T_RESPROP_LINK_BANDWIDTH
-      value: "505"
+      value: "0x50006"
       desc: "(ro dynamic) Monotonic bandwidth counters (data: $t_resprop_link_bandwidth_t)"
     - name: $T_RESPROP_LINK_SPEED
-      value: "506"
+      value: "0x50007"
       desc: "(ro dynamic) Current link speed (data: $t_resprop_link_speed_t)"
     - name: $T_RESPROP_LINK_SPEED_RANGE
-      value: "507"
+      value: "0x50008"
       desc: "(wo dynamic) Set the min/max speeds between which the link can operate (data: $t_resprop_link_speed_range_t)"
 
     - name: $T_RESPROP_TEMP_TEMPERATURE
-      value: "600"
+      value: "0x60000"
       desc: "(ro dynamic) The current temperature of the sensor in degrees celcius (data: $t_resprop_temp_temperature_t)"
 
     - name: $T_RESPROP_STBY_PROMO_MODE
-      value: "700"
+      value: "0x70000"
       desc: "(rw dynamic) The current promotion mode (data: $t_resprop_stby_promo_mode_t)"
 
     - name: $T_RESPROP_FW_NAME
-      value: "800"
+      value: "0x80000"
       desc: "(ro static) Name encoded in the loaded firmware image (data: $t_resprop_fw_name_t)"
     - name: $T_RESPROP_FW_VERSION
-      value: "801"
+      value: "0x80001"
       desc: "(ro static) The version of the loaded firmware image (data: $t_resprop_fw_version_t)"
     - name: $T_RESPROP_FW_CHECK
-      value: "802"
+      value: "0x80002"
       desc: "(ro dynamic) Verify the checksum of the loaded firmware image (data: $t_resprop_fw_check_t)"
     - name: $T_RESPROP_FW_FLASH
-      value: "803"
+      value: "0x80003"
       desc: "(wo dynamically) Flash a new firmware image (data: $t_resprop_fw_flash_t)"
 
     - name: $T_RESPROP_PSU_AMP_LIMIT
-      value: "900"
+      value: "0x90000"
       desc: "(ro static) The maximum electrical current in amperes that can be drawn (data: $t_resprop_psu_amp_limit_t)"
     - name: $T_RESPROP_PSU_VOLTAGE_STATUS
-      value: "901"
+      value: "0x90001"
       desc: "(ro dynamic) Indicates if under or over voltage has occurred (data: $t_resprop_psu_voltage_status_t)"
     - name: $T_RESPROP_PSU_FAN_FAILURE
-      value: "902"
+      value: "0x90002"
       desc: "(ro dynamic) Indicates if the fan has failed (data: $t_resprop_psu_fan_failure_t)"
     - name: $T_RESPROP_PSU_TEMPERATURE
-      value: "903"
+      value: "0x90003"
       desc: "(ro dynamic) The current heatsink temperature in degrees celcius (data: $t_resprop_psu_temperature_t)"
     - name: $T_RESPROP_PSU_AMPS
-      value: "904"
+      value: "0x90004"
       desc: "(ro dynamic) The current amps being drawn in amperes (data: $t_resprop_psu_amps_t)"
 
     - name: $T_RESPROP_FAN_MAX_RPM
-      value: "1000"
+      value: "0xA0000"
       desc: "(ro static) The maximum RPM of the fan (data: $t_resprop_fan_max_rpm_t)"
     - name: $T_RESPROP_FAN_MAX_TABLE_SIZE
-      value: "1001"
+      value: "0xA0001"
       desc: "(ro static) The maximum number of points in the fan temp/speed table (data: $t_resprop_fan_max_table_size_t)"
     - name: $T_RESPROP_FAN_SPEED_RPM
-      value: "1002"
+      value: "0xA0002"
       desc: "(ro dynamic) The current fan speed in units of revolutions per minute (rpm) (data: $t_resprop_fan_speed_rpm_t)"
     - name: $T_RESPROP_FAN_SPEED_PERCENT
-      value: "1003"
+      value: "0xA0003"
       desc: "(ro dynamic) The current fan speed as a percentage of the maximum speed of that fan (data: $t_resprop_fan_speed_percent_t)"
     - name: $T_RESPROP_FAN_MODE
-      value: "1004"
+      value: "0xA0004"
       desc: "(ro dynamic) The current fan speed mode (one of $t_fan_speed_mode_t) (data: $t_resprop_fan_mode_t)"
     - name: $T_RESPROP_FAN_FIXED_SPEED
-      value: "1005"
+      value: "0xA0005"
       desc: "(rw dynamic) Read/write the fixed speed setting for the fan (data: $t_resprop_fan_fixed_speed_t)"
     - name: $T_RESPROP_FAN_SPEED_TABLE
-      value: "1006"
+      value: "0xA0006"
       desc: "(rw dynamic) Read/write the fan speed table (data: $t_resprop_fan_speed_table_t)"
 
     - name: $T_RESPROP_LED_RGB_CAP
-      value: "1100"
+      value: "0xB0000"
       desc: "(ro static) Indicates if the LED is RGB capable (data: $t_resprop_led_rgb_cap_t)"
     - name: $T_RESPROP_LED_STATE
-      value: "1101"
+      value: "0xB0001"
       desc: "(rw dynaic) The LED state - on/off and color (data: $t_resprop_led_state_t)"
 
 --- #--------------------------------------------------------------------------
@@ -842,6 +845,19 @@ etors:
     - name: $T_LINK_TYPE_PEER_TO_PEER
       desc: "Peer-to-peer connection"
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Link resource state"
+class: $tSysman
+name: $t_link_state_t
+etors:
+    - name: $T_LINK_STATE_OFF
+      value: "0"
+      desc: "The link is powered off"
+    - name: $T_LINK_STATE_ON
+      desc: "The link is powered on but not connected"
+    - name: $T_LINK_STATE_CONNECTED
+      desc: "The link is powered on and connected to the remote port"
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "Link speed element"
 class: $tSysman
@@ -897,6 +913,15 @@ members:
     - type: "const $t_link_speed_t*"
       name: "pList"
       desc: "[out][range(0, num-1)] Pointer to an array of link speeds"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Data for the property $T_RESPROP_LINK_STATE"
+class: $tSysman
+name: $t_resprop_link_state_t
+members:
+    - type: $t_link_state_t
+      name: "state"
+      desc: "[out] Status of the link device."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Data for the property $T_RESPROP_LINK_MAX_PACKET_SIZE"

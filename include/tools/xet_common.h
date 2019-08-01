@@ -231,6 +231,10 @@ typedef struct _xet_resprop_link_peer_device_t xet_resprop_link_peer_device_t;
 typedef struct _xet_resprop_link_avail_speeds_t xet_resprop_link_avail_speeds_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_resprop_link_state_t
+typedef struct _xet_resprop_link_state_t xet_resprop_link_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_resprop_link_max_packet_size_t
 typedef struct _xet_resprop_link_max_packet_size_t xet_resprop_link_max_packet_size_t;
 
