@@ -59,19 +59,18 @@ xetSysmanGet(
 /// @brief Resource types
 typedef enum _xet_resource_type_t
 {
-    XET_RESOURCE_TYPE_DEV = 0,                      ///< Inventory resource
-    XET_RESOURCE_TYPE_PWR,                          ///< Power domain resource
-    XET_RESOURCE_TYPE_FREQ,                         ///< Frequency domain resource
-    XET_RESOURCE_TYPE_UTIL,                         ///< Resource used to monitor GPU utilization
-    XET_RESOURCE_TYPE_MEM,                          ///< Memory resource
-    XET_RESOURCE_TYPE_LINK,                         ///< Link resource
-    XET_RESOURCE_TYPE_TEMP,                         ///< Temperature sensor resource
-    XET_RESOURCE_TYPE_STBY,                         ///< Resource used to control standby mode
-    XET_RESOURCE_TYPE_FW,                           ///< Firmware resource
-    XET_RESOURCE_TYPE_PSU,                          ///< PSU resource
-    XET_RESOURCE_TYPE_FAN,                          ///< Fan resource
-    XET_RESOURCE_TYPE_LED,                          ///< LED resource
-    XET_RESOURCE_TYPE_MAX_TYPES,                    ///< The number of resource types
+    XET_RESOURCE_TYPE_DEV = 0x0,                    ///< Inventory resource
+    XET_RESOURCE_TYPE_PWR = 0x1,                    ///< Power domain resource
+    XET_RESOURCE_TYPE_FREQ = 0x2,                   ///< Frequency domain resource
+    XET_RESOURCE_TYPE_UTIL = 0x3,                   ///< Resource used to monitor GPU utilization
+    XET_RESOURCE_TYPE_MEM = 0x4,                    ///< Memory resource
+    XET_RESOURCE_TYPE_LINK = 0x5,                   ///< Link resource
+    XET_RESOURCE_TYPE_TEMP = 0x6,                   ///< Temperature sensor resource
+    XET_RESOURCE_TYPE_STBY = 0x7,                   ///< Resource used to control standby mode
+    XET_RESOURCE_TYPE_FW = 0x8,                     ///< Firmware resource
+    XET_RESOURCE_TYPE_PSU = 0x9,                    ///< PSU resource
+    XET_RESOURCE_TYPE_FAN = 0xA,                    ///< Fan resource
+    XET_RESOURCE_TYPE_LED = 0xB,                    ///< LED resource
     XET_RESOURCE_TYPE_ANY = -1,                     ///< Any resource filter
 
 } xet_resource_type_t;
@@ -85,63 +84,65 @@ typedef enum _xet_resource_type_t
 ///       API.
 ///     - Never assume that resources of the same type have numerically
 ///       sequential values.
+///     - The resource ID has the resource type (::xet_resource_type_t) in the
+///       upper 16 bits.
 typedef enum _xet_resid_t
 {
     XET_RESID_DEV_INVENTORY = 0,                    ///< General device inventory
-    XET_RESID_PWR_PACKAGE = 100,                    ///< Primary power supply
-    XET_RESID_FREQ_GPU = 200,                       ///< GPU frequency
-    XET_RESID_FREQ_LOCAL_MEM = 201,                 ///< Local memory frequency
-    XET_RESID_UTIL_GPU = 300,                       ///< Utilization of the entire GPU
-    XET_RESID_UTIL_COMPUTE = 301,                   ///< Utilization of the compute/3D units
-    XET_RESID_UTIL_MEDIA = 302,                     ///< Utilization of the media units
-    XET_RESID_UTIL_VIDEO_DECODE = 303,              ///< Utilization of the video decode units
-    XET_RESID_UTIL_VIDEO_ENCODE = 304,              ///< Utilization of the video encode units
-    XET_RESID_MEM_LOCAL = 400,                      ///< Local GPU memory
-    XET_RESID_LINK_PCIE = 500,                      ///< PCIe link
-    XET_RESID_LINK_P2P1 = 501,                      ///< High speed peer-to-peer link 1
-    XET_RESID_LINK_P2P2 = 502,                      ///< High speed peer-to-peer link 2
-    XET_RESID_LINK_P2P3 = 503,                      ///< High speed peer-to-peer link 3
-    XET_RESID_LINK_P2P4 = 504,                      ///< High speed peer-to-peer link 4
-    XET_RESID_TEMP_PACKAGE = 600,                   ///< The maximum temperature reported by the sensors in the device
-    XET_RESID_TEMP_GPU = 601,                       ///< The maximum temperature reported by the sensors in the GPU component
+    XET_RESID_PWR_PACKAGE = 0x10000,                ///< Primary power supply
+    XET_RESID_FREQ_GPU = 0x20000,                   ///< GPU frequency
+    XET_RESID_FREQ_LOCAL_MEM = 0x20001,             ///< Local memory frequency
+    XET_RESID_UTIL_GPU = 0x30000,                   ///< Utilization of the entire GPU
+    XET_RESID_UTIL_COMPUTE = 0x30001,               ///< Utilization of the compute/3D units
+    XET_RESID_UTIL_MEDIA = 0x30002,                 ///< Utilization of the media units
+    XET_RESID_UTIL_VIDEO_DECODE = 0x30003,          ///< Utilization of the video decode units
+    XET_RESID_UTIL_VIDEO_ENCODE = 0x30004,          ///< Utilization of the video encode units
+    XET_RESID_MEM_LOCAL = 0x40000,                  ///< Local GPU memory
+    XET_RESID_LINK_PCIE = 0x50000,                  ///< PCIe link
+    XET_RESID_LINK_P2P1 = 0x50001,                  ///< High speed peer-to-peer link 1
+    XET_RESID_LINK_P2P2 = 0x50002,                  ///< High speed peer-to-peer link 2
+    XET_RESID_LINK_P2P3 = 0x50003,                  ///< High speed peer-to-peer link 3
+    XET_RESID_LINK_P2P4 = 0x50004,                  ///< High speed peer-to-peer link 4
+    XET_RESID_TEMP_PACKAGE = 0x60000,               ///< The maximum temperature reported by the sensors in the device
+    XET_RESID_TEMP_GPU = 0x60001,                   ///< The maximum temperature reported by the sensors in the GPU component
                                                     ///< of the device
-    XET_RESID_TEMP_LOCAL_MEM = 602,                 ///< The maximum temperature reported by the sensors in the local memory of
+    XET_RESID_TEMP_LOCAL_MEM = 0x60002,             ///< The maximum temperature reported by the sensors in the local memory of
                                                     ///< device
-    XET_RESID_STBY_GLOBAL = 700,                    ///< Control sleep promotion of the global device
-    XET_RESID_STBY_COMPUTE = 701,                   ///< Control sleep promotion of the compute components of the GPU
-    XET_RESID_STBY_MEDIA = 702,                     ///< Control sleep promotion of the media components of the GPU
-    XET_RESID_FW_1 = 801,                           ///< Firmware 1
-    XET_RESID_FW_2 = 802,                           ///< Firmware 2
-    XET_RESID_FW_3 = 803,                           ///< Firmware 3
-    XET_RESID_FW_4 = 804,                           ///< Firmware 4
-    XET_RESID_FW_5 = 805,                           ///< Firmware 5
-    XET_RESID_FW_6 = 806,                           ///< Firmware 6
-    XET_RESID_FW_7 = 807,                           ///< Firmware 7
-    XET_RESID_FW_8 = 808,                           ///< Firmware 8
-    XET_RESID_FW_9 = 809,                           ///< Firmware 9
-    XET_RESID_FW_10 = 810,                          ///< Firmware 10
-    XET_RESID_FW_11 = 811,                          ///< Firmware 11
-    XET_RESID_FW_12 = 812,                          ///< Firmware 12
-    XET_RESID_FW_13 = 813,                          ///< Firmware 13
-    XET_RESID_FW_14 = 814,                          ///< Firmware 14
-    XET_RESID_FW_15 = 815,                          ///< Firmware 15
-    XET_RESID_FW_16 = 816,                          ///< Firmware 16
-    XET_RESID_FW_17 = 817,                          ///< Firmware 17
-    XET_RESID_FW_18 = 818,                          ///< Firmware 18
-    XET_RESID_FW_19 = 819,                          ///< Firmware 19
-    XET_RESID_FW_20 = 820,                          ///< Firmware 20
-    XET_RESID_PSU_MAIN = 900,                       ///< Primary power supply
-    XET_RESID_PSU_AUX = 901,                        ///< Auxilary power supply
-    XET_RESID_PSU_1 = 902,                          ///< Power supply 1
-    XET_RESID_PSU_2 = 903,                          ///< Power supply 2
-    XET_RESID_FAN_MAIN = 1000,                      ///< The main fan
-    XET_RESID_FAN_1 = 1001,                         ///< Fan 1
-    XET_RESID_FAN_2 = 1002,                         ///< Fan 2
-    XET_RESID_FAN_3 = 1003,                         ///< Fan 3
-    XET_RESID_LED_MAIN = 1100,                      ///< The main LED
-    XET_RESID_LED_1 = 1101,                         ///< LED 1
-    XET_RESID_LED_2 = 1102,                         ///< LED 1
-    XET_RESID_LED_3 = 1103,                         ///< LED 1
+    XET_RESID_STBY_GLOBAL = 0x70000,                ///< Control sleep promotion of the global device
+    XET_RESID_STBY_COMPUTE = 0x70001,               ///< Control sleep promotion of the compute components of the GPU
+    XET_RESID_STBY_MEDIA = 0x70002,                 ///< Control sleep promotion of the media components of the GPU
+    XET_RESID_FW_1 = 0x80001,                       ///< Firmware 1
+    XET_RESID_FW_2 = 0x80002,                       ///< Firmware 2
+    XET_RESID_FW_3 = 0x80003,                       ///< Firmware 3
+    XET_RESID_FW_4 = 0x80004,                       ///< Firmware 4
+    XET_RESID_FW_5 = 0x80005,                       ///< Firmware 5
+    XET_RESID_FW_6 = 0x80006,                       ///< Firmware 6
+    XET_RESID_FW_7 = 0x80007,                       ///< Firmware 7
+    XET_RESID_FW_8 = 0x80008,                       ///< Firmware 8
+    XET_RESID_FW_9 = 0x80009,                       ///< Firmware 9
+    XET_RESID_FW_10 = 0x8000A,                      ///< Firmware 10
+    XET_RESID_FW_11 = 0x8000B,                      ///< Firmware 11
+    XET_RESID_FW_12 = 0x8000C,                      ///< Firmware 12
+    XET_RESID_FW_13 = 0x8000D,                      ///< Firmware 13
+    XET_RESID_FW_14 = 0x8000E,                      ///< Firmware 14
+    XET_RESID_FW_15 = 0x8000F,                      ///< Firmware 15
+    XET_RESID_FW_16 = 0x80010,                      ///< Firmware 16
+    XET_RESID_FW_17 = 0x80011,                      ///< Firmware 17
+    XET_RESID_FW_18 = 0x80012,                      ///< Firmware 18
+    XET_RESID_FW_19 = 0x80013,                      ///< Firmware 19
+    XET_RESID_FW_20 = 0x80014,                      ///< Firmware 20
+    XET_RESID_PSU_MAIN = 0x90000,                   ///< Primary power supply
+    XET_RESID_PSU_AUX = 0x90001,                    ///< Auxilary power supply
+    XET_RESID_PSU_1 = 0x90002,                      ///< Power supply 1
+    XET_RESID_PSU_2 = 0x90003,                      ///< Power supply 2
+    XET_RESID_FAN_MAIN = 0xA0000,                   ///< The main fan
+    XET_RESID_FAN_1 = 0xA0001,                      ///< Fan 1
+    XET_RESID_FAN_2 = 0xA0002,                      ///< Fan 2
+    XET_RESID_FAN_3 = 0xA0003,                      ///< Fan 3
+    XET_RESID_LED_MAIN = 0xB0000,                   ///< The main LED
+    XET_RESID_LED_1 = 0xB0001,                      ///< LED 1
+    XET_RESID_LED_2 = 0xB0002,                      ///< LED 1
+    XET_RESID_LED_3 = 0xB0003,                      ///< LED 1
     XET_RESID_ANY = -1,                             ///< Any resource ID
 
 } xet_resid_t;
@@ -1153,16 +1154,15 @@ typedef enum _xet_ras_error_loc_t
     XET_RAS_ERROR_LOC_INST_CACHE = XE_BIT( 4 ),     ///< Error occurred in the compute unit instruction cache
     XET_RAS_ERROR_LOC_GRF = XE_BIT( 5 ),            ///< Error occurred in the compute unit register file
     XET_RAS_ERROR_LOC_SLM = XE_BIT( 6 ),            ///< Error occurred in the compute unit shared local memory
-    XET_RAS_ERROR_LOC_PCI = XE_BIT( 7 ),            ///< Error occurred in the PCIe controller
-    XET_RAS_ERROR_LOC_PCI_ROUTING = XE_BIT( 8 ),    ///< Error occurred routing PCIe traffic to/from sub-devices
-    XET_RAS_ERROR_LOC_SGUNIT = XE_BIT( 9 ),         ///< Errors occurred handling transactions between PCI config space, MMIO
+    XET_RAS_ERROR_LOC_MESSAGING = XE_BIT( 7 ),      ///< Errors occurred handling transactions between PCI config space, MMIO
                                                     ///< registers, local memory and sub-devices
-    XET_RAS_ERROR_LOC_GSC = XE_BIT( 10 ),           ///< Security errors occurred
-    XET_RAS_ERROR_LOC_DISPLAY = XE_BIT( 11 ),       ///< Errors occurred in the display
-    XET_RAS_ERROR_LOC_SOC = XE_BIT( 12 ),           ///< Errors occurred in other parts of the device
-    XET_RAS_ERROR_LOC_GPU_HANG = XE_BIT( 13 ),      ///< Driver detected that the GPU hardware was non-responsive
-    XET_RAS_ERROR_LOC_GPU_WARM_RESET = XE_BIT( 14 ),///< Driver performed a GPU warm reset
-    XET_RAS_ERROR_LOC_P2P_LINK = XE_BIT( 15 ),      ///< Driver performed a GPU warm reset
+    XET_RAS_ERROR_LOC_SECURITY = XE_BIT( 8 ),       ///< Security errors occurred
+    XET_RAS_ERROR_LOC_DISPLAY = XE_BIT( 9 ),        ///< Errors occurred in the display
+    XET_RAS_ERROR_LOC_SOC = XE_BIT( 10 ),           ///< Errors occurred in other parts of the device
+    XET_RAS_ERROR_LOC_GPU_HANG = XE_BIT( 11 ),      ///< Driver detected that the GPU hardware was non-responsive
+    XET_RAS_ERROR_LOC_PCI = XE_BIT( 12 ),           ///< Error occurred in the PCIe controller
+    XET_RAS_ERROR_LOC_PCI_ROUTING = XE_BIT( 13 ),   ///< Error occurred routing PCIe traffic to/from sub-devices
+    XET_RAS_ERROR_LOC_P2P_LINK = XE_BIT( 14 ),      ///< Errors detected with peer-to-peer connection
     XET_RAS_ERROR_LOC_ALL = ~0,                     ///< Select all error locations
 
 } xet_ras_error_loc_t;

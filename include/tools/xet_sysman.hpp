@@ -82,19 +82,18 @@ namespace xet
         /// @brief Resource types
         enum class resource_type_t
         {
-            DEV = 0,                                        ///< Inventory resource
-            PWR,                                            ///< Power domain resource
-            FREQ,                                           ///< Frequency domain resource
-            UTIL,                                           ///< Resource used to monitor GPU utilization
-            MEM,                                            ///< Memory resource
-            LINK,                                           ///< Link resource
-            TEMP,                                           ///< Temperature sensor resource
-            STBY,                                           ///< Resource used to control standby mode
-            FW,                                             ///< Firmware resource
-            PSU,                                            ///< PSU resource
-            FAN,                                            ///< Fan resource
-            LED,                                            ///< LED resource
-            MAX_TYPES,                                      ///< The number of resource types
+            DEV = 0x0,                                      ///< Inventory resource
+            PWR = 0x1,                                      ///< Power domain resource
+            FREQ = 0x2,                                     ///< Frequency domain resource
+            UTIL = 0x3,                                     ///< Resource used to monitor GPU utilization
+            MEM = 0x4,                                      ///< Memory resource
+            LINK = 0x5,                                     ///< Link resource
+            TEMP = 0x6,                                     ///< Temperature sensor resource
+            STBY = 0x7,                                     ///< Resource used to control standby mode
+            FW = 0x8,                                       ///< Firmware resource
+            PSU = 0x9,                                      ///< PSU resource
+            FAN = 0xA,                                      ///< Fan resource
+            LED = 0xB,                                      ///< LED resource
             ANY = -1,                                       ///< Any resource filter
 
         };
@@ -108,63 +107,65 @@ namespace xet
         ///       API.
         ///     - Never assume that resources of the same type have numerically
         ///       sequential values.
+        ///     - The resource ID has the resource type (::xet_resource_type_t) in the
+        ///       upper 16 bits.
         enum class resid_t
         {
             DEV_INVENTORY = 0,                              ///< General device inventory
-            PWR_PACKAGE = 100,                              ///< Primary power supply
-            FREQ_GPU = 200,                                 ///< GPU frequency
-            FREQ_LOCAL_MEM = 201,                           ///< Local memory frequency
-            UTIL_GPU = 300,                                 ///< Utilization of the entire GPU
-            UTIL_COMPUTE = 301,                             ///< Utilization of the compute/3D units
-            UTIL_MEDIA = 302,                               ///< Utilization of the media units
-            UTIL_VIDEO_DECODE = 303,                        ///< Utilization of the video decode units
-            UTIL_VIDEO_ENCODE = 304,                        ///< Utilization of the video encode units
-            MEM_LOCAL = 400,                                ///< Local GPU memory
-            LINK_PCIE = 500,                                ///< PCIe link
-            LINK_P2P1 = 501,                                ///< High speed peer-to-peer link 1
-            LINK_P2P2 = 502,                                ///< High speed peer-to-peer link 2
-            LINK_P2P3 = 503,                                ///< High speed peer-to-peer link 3
-            LINK_P2P4 = 504,                                ///< High speed peer-to-peer link 4
-            TEMP_PACKAGE = 600,                             ///< The maximum temperature reported by the sensors in the device
-            TEMP_GPU = 601,                                 ///< The maximum temperature reported by the sensors in the GPU component
+            PWR_PACKAGE = 0x10000,                          ///< Primary power supply
+            FREQ_GPU = 0x20000,                             ///< GPU frequency
+            FREQ_LOCAL_MEM = 0x20001,                       ///< Local memory frequency
+            UTIL_GPU = 0x30000,                             ///< Utilization of the entire GPU
+            UTIL_COMPUTE = 0x30001,                         ///< Utilization of the compute/3D units
+            UTIL_MEDIA = 0x30002,                           ///< Utilization of the media units
+            UTIL_VIDEO_DECODE = 0x30003,                    ///< Utilization of the video decode units
+            UTIL_VIDEO_ENCODE = 0x30004,                    ///< Utilization of the video encode units
+            MEM_LOCAL = 0x40000,                            ///< Local GPU memory
+            LINK_PCIE = 0x50000,                            ///< PCIe link
+            LINK_P2P1 = 0x50001,                            ///< High speed peer-to-peer link 1
+            LINK_P2P2 = 0x50002,                            ///< High speed peer-to-peer link 2
+            LINK_P2P3 = 0x50003,                            ///< High speed peer-to-peer link 3
+            LINK_P2P4 = 0x50004,                            ///< High speed peer-to-peer link 4
+            TEMP_PACKAGE = 0x60000,                         ///< The maximum temperature reported by the sensors in the device
+            TEMP_GPU = 0x60001,                             ///< The maximum temperature reported by the sensors in the GPU component
                                                             ///< of the device
-            TEMP_LOCAL_MEM = 602,                           ///< The maximum temperature reported by the sensors in the local memory of
+            TEMP_LOCAL_MEM = 0x60002,                       ///< The maximum temperature reported by the sensors in the local memory of
                                                             ///< device
-            STBY_GLOBAL = 700,                              ///< Control sleep promotion of the global device
-            STBY_COMPUTE = 701,                             ///< Control sleep promotion of the compute components of the GPU
-            STBY_MEDIA = 702,                               ///< Control sleep promotion of the media components of the GPU
-            FW_1 = 801,                                     ///< Firmware 1
-            FW_2 = 802,                                     ///< Firmware 2
-            FW_3 = 803,                                     ///< Firmware 3
-            FW_4 = 804,                                     ///< Firmware 4
-            FW_5 = 805,                                     ///< Firmware 5
-            FW_6 = 806,                                     ///< Firmware 6
-            FW_7 = 807,                                     ///< Firmware 7
-            FW_8 = 808,                                     ///< Firmware 8
-            FW_9 = 809,                                     ///< Firmware 9
-            FW_10 = 810,                                    ///< Firmware 10
-            FW_11 = 811,                                    ///< Firmware 11
-            FW_12 = 812,                                    ///< Firmware 12
-            FW_13 = 813,                                    ///< Firmware 13
-            FW_14 = 814,                                    ///< Firmware 14
-            FW_15 = 815,                                    ///< Firmware 15
-            FW_16 = 816,                                    ///< Firmware 16
-            FW_17 = 817,                                    ///< Firmware 17
-            FW_18 = 818,                                    ///< Firmware 18
-            FW_19 = 819,                                    ///< Firmware 19
-            FW_20 = 820,                                    ///< Firmware 20
-            PSU_MAIN = 900,                                 ///< Primary power supply
-            PSU_AUX = 901,                                  ///< Auxilary power supply
-            PSU_1 = 902,                                    ///< Power supply 1
-            PSU_2 = 903,                                    ///< Power supply 2
-            FAN_MAIN = 1000,                                ///< The main fan
-            FAN_1 = 1001,                                   ///< Fan 1
-            FAN_2 = 1002,                                   ///< Fan 2
-            FAN_3 = 1003,                                   ///< Fan 3
-            LED_MAIN = 1100,                                ///< The main LED
-            LED_1 = 1101,                                   ///< LED 1
-            LED_2 = 1102,                                   ///< LED 1
-            LED_3 = 1103,                                   ///< LED 1
+            STBY_GLOBAL = 0x70000,                          ///< Control sleep promotion of the global device
+            STBY_COMPUTE = 0x70001,                         ///< Control sleep promotion of the compute components of the GPU
+            STBY_MEDIA = 0x70002,                           ///< Control sleep promotion of the media components of the GPU
+            FW_1 = 0x80001,                                 ///< Firmware 1
+            FW_2 = 0x80002,                                 ///< Firmware 2
+            FW_3 = 0x80003,                                 ///< Firmware 3
+            FW_4 = 0x80004,                                 ///< Firmware 4
+            FW_5 = 0x80005,                                 ///< Firmware 5
+            FW_6 = 0x80006,                                 ///< Firmware 6
+            FW_7 = 0x80007,                                 ///< Firmware 7
+            FW_8 = 0x80008,                                 ///< Firmware 8
+            FW_9 = 0x80009,                                 ///< Firmware 9
+            FW_10 = 0x8000A,                                ///< Firmware 10
+            FW_11 = 0x8000B,                                ///< Firmware 11
+            FW_12 = 0x8000C,                                ///< Firmware 12
+            FW_13 = 0x8000D,                                ///< Firmware 13
+            FW_14 = 0x8000E,                                ///< Firmware 14
+            FW_15 = 0x8000F,                                ///< Firmware 15
+            FW_16 = 0x80010,                                ///< Firmware 16
+            FW_17 = 0x80011,                                ///< Firmware 17
+            FW_18 = 0x80012,                                ///< Firmware 18
+            FW_19 = 0x80013,                                ///< Firmware 19
+            FW_20 = 0x80014,                                ///< Firmware 20
+            PSU_MAIN = 0x90000,                             ///< Primary power supply
+            PSU_AUX = 0x90001,                              ///< Auxilary power supply
+            PSU_1 = 0x90002,                                ///< Power supply 1
+            PSU_2 = 0x90003,                                ///< Power supply 2
+            FAN_MAIN = 0xA0000,                             ///< The main fan
+            FAN_1 = 0xA0001,                                ///< Fan 1
+            FAN_2 = 0xA0002,                                ///< Fan 2
+            FAN_3 = 0xA0003,                                ///< Fan 3
+            LED_MAIN = 0xB0000,                             ///< The main LED
+            LED_1 = 0xB0001,                                ///< LED 1
+            LED_2 = 0xB0002,                                ///< LED 1
+            LED_3 = 0xB0003,                                ///< LED 1
             ANY = -1,                                       ///< Any resource ID
 
         };
@@ -439,16 +440,15 @@ namespace xet
             INST_CACHE = XE_BIT( 4 ),                       ///< Error occurred in the compute unit instruction cache
             GRF = XE_BIT( 5 ),                              ///< Error occurred in the compute unit register file
             SLM = XE_BIT( 6 ),                              ///< Error occurred in the compute unit shared local memory
-            PCI = XE_BIT( 7 ),                              ///< Error occurred in the PCIe controller
-            PCI_ROUTING = XE_BIT( 8 ),                      ///< Error occurred routing PCIe traffic to/from sub-devices
-            SGUNIT = XE_BIT( 9 ),                           ///< Errors occurred handling transactions between PCI config space, MMIO
+            MESSAGING = XE_BIT( 7 ),                        ///< Errors occurred handling transactions between PCI config space, MMIO
                                                             ///< registers, local memory and sub-devices
-            GSC = XE_BIT( 10 ),                             ///< Security errors occurred
-            DISPLAY = XE_BIT( 11 ),                         ///< Errors occurred in the display
-            SOC = XE_BIT( 12 ),                             ///< Errors occurred in other parts of the device
-            GPU_HANG = XE_BIT( 13 ),                        ///< Driver detected that the GPU hardware was non-responsive
-            GPU_WARM_RESET = XE_BIT( 14 ),                  ///< Driver performed a GPU warm reset
-            P2P_LINK = XE_BIT( 15 ),                        ///< Driver performed a GPU warm reset
+            SECURITY = XE_BIT( 8 ),                         ///< Security errors occurred
+            DISPLAY = XE_BIT( 9 ),                          ///< Errors occurred in the display
+            SOC = XE_BIT( 10 ),                             ///< Errors occurred in other parts of the device
+            GPU_HANG = XE_BIT( 11 ),                        ///< Driver detected that the GPU hardware was non-responsive
+            PCI = XE_BIT( 12 ),                             ///< Error occurred in the PCIe controller
+            PCI_ROUTING = XE_BIT( 13 ),                     ///< Error occurred routing PCIe traffic to/from sub-devices
+            P2P_LINK = XE_BIT( 14 ),                        ///< Errors detected with peer-to-peer connection
             ALL = ~0,                                       ///< Select all error locations
 
         };

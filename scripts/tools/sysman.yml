@@ -35,32 +35,41 @@ class: $tSysman
 name: $t_resource_type_t
 etors:
     - name: $T_RESOURCE_TYPE_DEV
-      value: "0"
+      value: "0x0"
       desc: "Inventory resource"
     - name: $T_RESOURCE_TYPE_PWR
+      value: "0x1"
       desc: "Power domain resource"
     - name: $T_RESOURCE_TYPE_FREQ
+      value: "0x2"
       desc: "Frequency domain resource"
     - name: $T_RESOURCE_TYPE_UTIL
+      value: "0x3"
       desc: "Resource used to monitor GPU utilization"
     - name: $T_RESOURCE_TYPE_MEM
+      value: "0x4"
       desc: "Memory resource"
     - name: $T_RESOURCE_TYPE_LINK
+      value: "0x5"
       desc: "Link resource"
     - name: $T_RESOURCE_TYPE_TEMP
+      value: "0x6"
       desc: "Temperature sensor resource"
     - name: $T_RESOURCE_TYPE_STBY
+      value: "0x7"
       desc: "Resource used to control standby mode"
     - name: $T_RESOURCE_TYPE_FW
+      value: "0x8"
       desc: "Firmware resource"
     - name: $T_RESOURCE_TYPE_PSU
+      value: "0x9"
       desc: "PSU resource"
     - name: $T_RESOURCE_TYPE_FAN
+      value: "0xA"
       desc: "Fan resource"
     - name: $T_RESOURCE_TYPE_LED
+      value: "0xB"
       desc: "LED resource"
-    - name: $T_RESOURCE_TYPE_MAX_TYPES
-      desc: "The number of resource types"
     - name: $T_RESOURCE_TYPE_ANY
       value: "-1"
       desc: "Any resource filter"
@@ -73,176 +82,177 @@ details:
     - "Every resource in the system has a unique identify."
     - "Resource IDs will always have the same value between versions of the API."
     - "Never assume that resources of the same type have numerically sequential values."
+    - "The resource ID has the resource type ($t_resource_type_t) in the upper 16 bits."
 etors:
     - name: $T_RESID_DEV_INVENTORY
       value: "0"
       desc: "General device inventory"
 
     - name: $T_RESID_PWR_PACKAGE
-      value: "100"
+      value: "0x10000"
       desc: "Primary power supply"
 
     - name: $T_RESID_FREQ_GPU
-      value: "200"
+      value: "0x20000"
       desc: "GPU frequency"
     - name: $T_RESID_FREQ_LOCAL_MEM
-      value: "201"
+      value: "0x20001"
       desc: "Local memory frequency"
 
     - name: $T_RESID_UTIL_GPU
-      value: "300"
+      value: "0x30000"
       desc: "Utilization of the entire GPU"
     - name: $T_RESID_UTIL_COMPUTE
-      value: "301"
+      value: "0x30001"
       desc: "Utilization of the compute/3D units"
     - name: $T_RESID_UTIL_MEDIA
-      value: "302"
+      value: "0x30002"
       desc: "Utilization of the media units"
     - name: $T_RESID_UTIL_VIDEO_DECODE
-      value: "303"
+      value: "0x30003"
       desc: "Utilization of the video decode units"
     - name: $T_RESID_UTIL_VIDEO_ENCODE
-      value: "304"
+      value: "0x30004"
       desc: "Utilization of the video encode units"
 
     - name: $T_RESID_MEM_LOCAL
-      value: "400"
+      value: "0x40000"
       desc: "Local GPU memory"
 
     - name: $T_RESID_LINK_PCIE
-      value: "500"
+      value: "0x50000"
       desc: "PCIe link"
     - name: $T_RESID_LINK_P2P1
-      value: "501"
+      value: "0x50001"
       desc: "High speed peer-to-peer link 1"
     - name: $T_RESID_LINK_P2P2
-      value: "502"
+      value: "0x50002"
       desc: "High speed peer-to-peer link 2"
     - name: $T_RESID_LINK_P2P3
-      value: "503"
+      value: "0x50003"
       desc: "High speed peer-to-peer link 3"
     - name: $T_RESID_LINK_P2P4
-      value: "504"
+      value: "0x50004"
       desc: "High speed peer-to-peer link 4"
 
     - name: $T_RESID_TEMP_PACKAGE
-      value: "600"
+      value: "0x60000"
       desc: "The maximum temperature reported by the sensors in the device"
     - name: $T_RESID_TEMP_GPU
-      value: "601"
+      value: "0x60001"
       desc: "The maximum temperature reported by the sensors in the GPU component of the device"
     - name: $T_RESID_TEMP_LOCAL_MEM
-      value: "602"
+      value: "0x60002"
       desc: "The maximum temperature reported by the sensors in the local memory of device"
 
     - name: $T_RESID_STBY_GLOBAL
-      value: "700"
+      value: "0x70000"
       desc: "Control sleep promotion of the global device"
     - name: $T_RESID_STBY_COMPUTE
-      value: "701"
+      value: "0x70001"
       desc: "Control sleep promotion of the compute components of the GPU"
     - name: $T_RESID_STBY_MEDIA
-      value: "702"
+      value: "0x70002"
       desc: "Control sleep promotion of the media components of the GPU"
 
     - name: $T_RESID_FW_1
-      value: "801"
+      value: "0x80001"
       desc: "Firmware 1"
     - name: $T_RESID_FW_2
-      value: "802"
+      value: "0x80002"
       desc: "Firmware 2"
     - name: $T_RESID_FW_3
-      value: "803"
+      value: "0x80003"
       desc: "Firmware 3"
     - name: $T_RESID_FW_4
-      value: "804"
+      value: "0x80004"
       desc: "Firmware 4"
     - name: $T_RESID_FW_5
-      value: "805"
+      value: "0x80005"
       desc: "Firmware 5"
     - name: $T_RESID_FW_6
-      value: "806"
+      value: "0x80006"
       desc: "Firmware 6"
     - name: $T_RESID_FW_7
-      value: "807"
+      value: "0x80007"
       desc: "Firmware 7"
     - name: $T_RESID_FW_8
-      value: "808"
+      value: "0x80008"
       desc: "Firmware 8"
     - name: $T_RESID_FW_9
-      value: "809"
+      value: "0x80009"
       desc: "Firmware 9"
     - name: $T_RESID_FW_10
-      value: "810"
+      value: "0x8000A"
       desc: "Firmware 10"
     - name: $T_RESID_FW_11
-      value: "811"
+      value: "0x8000B"
       desc: "Firmware 11"
     - name: $T_RESID_FW_12
-      value: "812"
+      value: "0x8000C"
       desc: "Firmware 12"
     - name: $T_RESID_FW_13
-      value: "813"
+      value: "0x8000D"
       desc: "Firmware 13"
     - name: $T_RESID_FW_14
-      value: "814"
+      value: "0x8000E"
       desc: "Firmware 14"
     - name: $T_RESID_FW_15
-      value: "815"
+      value: "0x8000F"
       desc: "Firmware 15"
     - name: $T_RESID_FW_16
-      value: "816"
+      value: "0x80010"
       desc: "Firmware 16"
     - name: $T_RESID_FW_17
-      value: "817"
+      value: "0x80011"
       desc: "Firmware 17"
     - name: $T_RESID_FW_18
-      value: "818"
+      value: "0x80012"
       desc: "Firmware 18"
     - name: $T_RESID_FW_19
-      value: "819"
+      value: "0x80013"
       desc: "Firmware 19"
     - name: $T_RESID_FW_20
-      value: "820"
+      value: "0x80014"
       desc: "Firmware 20"
 
     - name: $T_RESID_PSU_MAIN
-      value: "900"
+      value: "0x90000"
       desc: "Primary power supply"
     - name: $T_RESID_PSU_AUX
-      value: "901"
+      value: "0x90001"
       desc: "Auxilary power supply"
     - name: $T_RESID_PSU_1
-      value: "902"
+      value: "0x90002"
       desc: "Power supply 1"
     - name: $T_RESID_PSU_2
-      value: "903"
+      value: "0x90003"
       desc: "Power supply 2"
 
     - name: $T_RESID_FAN_MAIN
-      value: "1000"
+      value: "0xA0000"
       desc: "The main fan"
     - name: $T_RESID_FAN_1
-      value: "1001"
+      value: "0xA0001"
       desc: "Fan 1"
     - name: $T_RESID_FAN_2
-      value: "1002"
+      value: "0xA0002"
       desc: "Fan 2"
     - name: $T_RESID_FAN_3
-      value: "1003"
+      value: "0xA0003"
       desc: "Fan 3"
 
     - name: $T_RESID_LED_MAIN
-      value: "1100"
+      value: "0xB0000"
       desc: "The main LED"
     - name: $T_RESID_LED_1
-      value: "1101"
+      value: "0xB0001"
       desc: "LED 1"
     - name: $T_RESID_LED_2
-      value: "1102"
+      value: "0xB0002"
       desc: "LED 1"
     - name: $T_RESID_LED_3
-      value: "1103"
+      value: "0xB0003"
       desc: "LED 1"
 
     - name: $T_RESID_ANY

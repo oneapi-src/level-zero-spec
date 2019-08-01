@@ -1088,10 +1088,6 @@ namespace xet
             str = "Sysman::resource_type_t::LED";
             break;
 
-        case Sysman::resource_type_t::MAX_TYPES:
-            str = "Sysman::resource_type_t::MAX_TYPES";
-            break;
-
         case Sysman::resource_type_t::ANY:
             str = "Sysman::resource_type_t::ANY";
             break;
@@ -1950,17 +1946,11 @@ namespace xet
         if( static_cast<uint32_t>(Sysman::ras_error_loc_t::SLM) & bits )
             str += "SLM | ";
         
-        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::PCI) & bits )
-            str += "PCI | ";
+        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::MESSAGING) & bits )
+            str += "MESSAGING | ";
         
-        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::PCI_ROUTING) & bits )
-            str += "PCI_ROUTING | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::SGUNIT) & bits )
-            str += "SGUNIT | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::GSC) & bits )
-            str += "GSC | ";
+        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::SECURITY) & bits )
+            str += "SECURITY | ";
         
         if( static_cast<uint32_t>(Sysman::ras_error_loc_t::DISPLAY) & bits )
             str += "DISPLAY | ";
@@ -1971,8 +1961,11 @@ namespace xet
         if( static_cast<uint32_t>(Sysman::ras_error_loc_t::GPU_HANG) & bits )
             str += "GPU_HANG | ";
         
-        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::GPU_WARM_RESET) & bits )
-            str += "GPU_WARM_RESET | ";
+        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::PCI) & bits )
+            str += "PCI | ";
+        
+        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::PCI_ROUTING) & bits )
+            str += "PCI_ROUTING | ";
         
         if( static_cast<uint32_t>(Sysman::ras_error_loc_t::P2P_LINK) & bits )
             str += "P2P_LINK | ";
