@@ -112,7 +112,7 @@ namespace xet
         enum class resid_t
         {
             DEV_INVENTORY = 0,                              ///< General device inventory
-            PWR_PACKAGE = 0x10000,                          ///< Primary power supply
+            PWR_TOTAL = 0x10000,                            ///< Device total power
             FREQ_GPU = 0x20000,                             ///< GPU frequency
             FREQ_LOCAL_MEM = 0x20001,                       ///< Local memory frequency
             UTIL_GPU = 0x30000,                             ///< Utilization of the entire GPU
@@ -122,16 +122,28 @@ namespace xet
             UTIL_VIDEO_ENCODE = 0x30004,                    ///< Utilization of the video encode units
             MEM_LOCAL = 0x40000,                            ///< Local GPU memory
             LINK_PCIE = 0x50000,                            ///< PCIe link
-            LINK_P2P1 = 0x50001,                            ///< High speed peer-to-peer link 1
-            LINK_P2P2 = 0x50002,                            ///< High speed peer-to-peer link 2
-            LINK_P2P3 = 0x50003,                            ///< High speed peer-to-peer link 3
-            LINK_P2P4 = 0x50004,                            ///< High speed peer-to-peer link 4
-            TEMP_PACKAGE = 0x60000,                         ///< The maximum temperature reported by the sensors in the device
+            LINK_CD_PORT1 = 0x50001,                        ///< High speed companion die switch port 1
+            LINK_CD_PORT2 = 0x50002,                        ///< High speed companion die switch port 2
+            LINK_CD_PORT3 = 0x50003,                        ///< High speed companion die switch port 3
+            LINK_CD_PORT4 = 0x50004,                        ///< High speed companion die switch port 4
+            LINK_CD_PORT5 = 0x50005,                        ///< High speed companion die switch port 5
+            LINK_CD_PORT6 = 0x50006,                        ///< High speed companion die switch port 6
+            LINK_CD_PORT7 = 0x50007,                        ///< High speed companion die switch port 7
+            LINK_CD_PORT8 = 0x50008,                        ///< High speed companion die switch port 8
+            LINK_CD_PORT9 = 0x50009,                        ///< High speed companion die switch port 9
+            LINK_CD_PORT10 = 0x5000A,                       ///< High speed companion die switch port 10
+            LINK_CD_PORT11 = 0x5000B,                       ///< High speed companion die switch port 11
+            LINK_CD_PORT12 = 0x5000C,                       ///< High speed companion die switch port 12
+            LINK_CD_PORT13 = 0x5000D,                       ///< High speed companion die switch port 13
+            LINK_CD_PORT14 = 0x5000E,                       ///< High speed companion die switch port 14
+            LINK_CD_PORT15 = 0x5000F,                       ///< High speed companion die switch port 15
+            LINK_CD_PORT16 = 0x50010,                       ///< High speed companion die switch port 16
+            TEMP_MAX = 0x60000,                             ///< The maximum temperature reported by the sensors in the device
             TEMP_GPU = 0x60001,                             ///< The maximum temperature reported by the sensors in the GPU component
                                                             ///< of the device
             TEMP_LOCAL_MEM = 0x60002,                       ///< The maximum temperature reported by the sensors in the local memory of
                                                             ///< device
-            STBY_GLOBAL = 0x70000,                          ///< Control sleep promotion of the global device
+            STBY_GLOBAL = 0x70000,                          ///< Control sleep promotion of the common parts of the device
             STBY_COMPUTE = 0x70001,                         ///< Control sleep promotion of the compute components of the GPU
             STBY_MEDIA = 0x70002,                           ///< Control sleep promotion of the media components of the GPU
             FW_1 = 0x80001,                                 ///< Firmware 1
@@ -238,13 +250,13 @@ namespace xet
             LINK_TYPE = 0x50000,                            ///< (ro static) The type of link (data: ::xet_resprop_link_type_t)
             LINK_BUS_ADDRESS = 0x50001,                     ///< (ro static) The bus address of the link (data:
                                                             ///< ::xet_resprop_link_bus_address_t)
-            LINK_PEER_DEVICE = 0x50002,                     ///< (ro static) For links of type ::XET_LINK_TYPE_PEER_TO_PEER, this gives
-                                                            ///< the UUID of the peer device (data: ::xet_resprop_link_peer_device_t)
+            LINK_PEER_DEVICE = 0x50002,                     ///< (ro static) For links of type ::XET_LINK_TYPE_CD_PORT, this gives the
+                                                            ///< UUID of the peer device (data: ::xet_resprop_link_peer_device_t)
             LINK_AVAIL_SPEEDS = 0x50003,                    ///< (ro static) Available link speeds (data:
                                                             ///< ::xet_resprop_link_avail_speeds_t)
             LINK_MAX_PACKET_SIZE = 0x50004,                 ///< (ro static) Maximum packet size (data:
                                                             ///< ::xet_resprop_link_max_packet_size_t)
-            LINK_STATE = 0x50005,                           ///< (ro dynamic) Monotonic bandwidth counters (data:
+            LINK_STATE = 0x50005,                           ///< (rw dynamic) Link state (enabled/disabled) (data:
                                                             ///< ::xet_resprop_link_state_t)
             LINK_BANDWIDTH = 0x50006,                       ///< (ro dynamic) Monotonic bandwidth counters (data:
                                                             ///< ::xet_resprop_link_bandwidth_t)
@@ -345,17 +357,7 @@ namespace xet
         enum class link_type_t
         {
             PCI = 0,                                        ///< PCI connection
-            PEER_TO_PEER,                                   ///< Peer-to-peer connection
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Link resource state
-        enum class link_state_t
-        {
-            OFF = 0,                                        ///< The link is powered off
-            ON,                                             ///< The link is powered on but not connected
-            CONNECTED,                                      ///< The link is powered on and connected to the remote port
+            CD_PORT,                                        ///< Companion die physical port
 
         };
 
@@ -832,7 +834,7 @@ namespace xet
         /// @brief Data for the property ::XET_RESPROP_LINK_STATE
         struct resprop_link_state_t
         {
-            link_state_t state;                             ///< [out] Status of the link device.
+            xe::bool_t enable;                              ///< [out] Indicates if the link is disabled/endabled.
 
         };
 
@@ -1064,6 +1066,8 @@ namespace xet
             const char* pDesc;                              ///< [out] Human readable description of this resouce
             xe::bool_t available;                           ///< [out] Set to TRUE if the resource with this ID is available on the
                                                             ///< device, otherwise set to FALSE
+            xe::bool_t propsOnSubdevices;                   ///< [out] Set to TRUE if this resource will change properties on
+                                                            ///< sub-devices or is merging telemetry from sub-devices
 
         };
 
@@ -1640,10 +1644,6 @@ namespace xet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::link_type_t to std::string
     std::string to_string( const Sysman::link_type_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::link_state_t to std::string
-    std::string to_string( const Sysman::link_state_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::link_speed_t to std::string

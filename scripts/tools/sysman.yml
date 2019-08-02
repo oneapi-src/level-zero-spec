@@ -88,9 +88,9 @@ etors:
       value: "0"
       desc: "General device inventory"
 
-    - name: $T_RESID_PWR_PACKAGE
+    - name: $T_RESID_PWR_TOTAL
       value: "0x10000"
-      desc: "Primary power supply"
+      desc: "Device total power"
 
     - name: $T_RESID_FREQ_GPU
       value: "0x20000"
@@ -122,20 +122,56 @@ etors:
     - name: $T_RESID_LINK_PCIE
       value: "0x50000"
       desc: "PCIe link"
-    - name: $T_RESID_LINK_P2P1
+    - name: $T_RESID_LINK_CD_PORT1
       value: "0x50001"
-      desc: "High speed peer-to-peer link 1"
-    - name: $T_RESID_LINK_P2P2
+      desc: "High speed companion die switch port 1"
+    - name: $T_RESID_LINK_CD_PORT2
       value: "0x50002"
-      desc: "High speed peer-to-peer link 2"
-    - name: $T_RESID_LINK_P2P3
+      desc: "High speed companion die switch port 2"
+    - name: $T_RESID_LINK_CD_PORT3
       value: "0x50003"
-      desc: "High speed peer-to-peer link 3"
-    - name: $T_RESID_LINK_P2P4
+      desc: "High speed companion die switch port 3"
+    - name: $T_RESID_LINK_CD_PORT4
       value: "0x50004"
-      desc: "High speed peer-to-peer link 4"
+      desc: "High speed companion die switch port 4"
+    - name: $T_RESID_LINK_CD_PORT5
+      value: "0x50005"
+      desc: "High speed companion die switch port 5"
+    - name: $T_RESID_LINK_CD_PORT6
+      value: "0x50006"
+      desc: "High speed companion die switch port 6"
+    - name: $T_RESID_LINK_CD_PORT7
+      value: "0x50007"
+      desc: "High speed companion die switch port 7"
+    - name: $T_RESID_LINK_CD_PORT8
+      value: "0x50008"
+      desc: "High speed companion die switch port 8"
+    - name: $T_RESID_LINK_CD_PORT9
+      value: "0x50009"
+      desc: "High speed companion die switch port 9"
+    - name: $T_RESID_LINK_CD_PORT10
+      value: "0x5000A"
+      desc: "High speed companion die switch port 10"
+    - name: $T_RESID_LINK_CD_PORT11
+      value: "0x5000B"
+      desc: "High speed companion die switch port 11"
+    - name: $T_RESID_LINK_CD_PORT12
+      value: "0x5000C"
+      desc: "High speed companion die switch port 12"
+    - name: $T_RESID_LINK_CD_PORT13
+      value: "0x5000D"
+      desc: "High speed companion die switch port 13"
+    - name: $T_RESID_LINK_CD_PORT14
+      value: "0x5000E"
+      desc: "High speed companion die switch port 14"
+    - name: $T_RESID_LINK_CD_PORT15
+      value: "0x5000F"
+      desc: "High speed companion die switch port 15"
+    - name: $T_RESID_LINK_CD_PORT16
+      value: "0x50010"
+      desc: "High speed companion die switch port 16"
 
-    - name: $T_RESID_TEMP_PACKAGE
+    - name: $T_RESID_TEMP_MAX
       value: "0x60000"
       desc: "The maximum temperature reported by the sensors in the device"
     - name: $T_RESID_TEMP_GPU
@@ -147,7 +183,7 @@ etors:
 
     - name: $T_RESID_STBY_GLOBAL
       value: "0x70000"
-      desc: "Control sleep promotion of the global device"
+      desc: "Control sleep promotion of the common parts of the device"
     - name: $T_RESID_STBY_COMPUTE
       value: "0x70001"
       desc: "Control sleep promotion of the compute components of the GPU"
@@ -357,7 +393,7 @@ etors:
       desc: "(ro static) The bus address of the link (data: $t_resprop_link_bus_address_t)"
     - name: $T_RESPROP_LINK_PEER_DEVICE
       value: "0x50002"
-      desc: "(ro static) For links of type $T_LINK_TYPE_PEER_TO_PEER, this gives the UUID of the peer device (data: $t_resprop_link_peer_device_t)"
+      desc: "(ro static) For links of type $T_LINK_TYPE_CD_PORT, this gives the UUID of the peer device (data: $t_resprop_link_peer_device_t)"
     - name: $T_RESPROP_LINK_AVAIL_SPEEDS
       value: "0x50003"
       desc: "(ro static) Available link speeds (data: $t_resprop_link_avail_speeds_t)"
@@ -366,7 +402,7 @@ etors:
       desc: "(ro static) Maximum packet size (data: $t_resprop_link_max_packet_size_t)"
     - name: $T_RESPROP_LINK_STATE
       value: "0x50005"
-      desc: "(ro dynamic) Monotonic bandwidth counters (data: $t_resprop_link_state_t)"
+      desc: "(rw dynamic) Link state (enabled/disabled) (data: $t_resprop_link_state_t)"
     - name: $T_RESPROP_LINK_BANDWIDTH
       value: "0x50006"
       desc: "(ro dynamic) Monotonic bandwidth counters (data: $t_resprop_link_bandwidth_t)"
@@ -842,21 +878,8 @@ etors:
     - name: $T_LINK_TYPE_PCI
       value: "0"
       desc: "PCI connection"
-    - name: $T_LINK_TYPE_PEER_TO_PEER
-      desc: "Peer-to-peer connection"
---- #--------------------------------------------------------------------------
-type: enum
-desc: "Link resource state"
-class: $tSysman
-name: $t_link_state_t
-etors:
-    - name: $T_LINK_STATE_OFF
-      value: "0"
-      desc: "The link is powered off"
-    - name: $T_LINK_STATE_ON
-      desc: "The link is powered on but not connected"
-    - name: $T_LINK_STATE_CONNECTED
-      desc: "The link is powered on and connected to the remote port"
+    - name: $T_LINK_TYPE_CD_PORT
+      desc: "Companion die physical port"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Link speed element"
@@ -919,9 +942,9 @@ desc: "Data for the property $T_RESPROP_LINK_STATE"
 class: $tSysman
 name: $t_resprop_link_state_t
 members:
-    - type: $t_link_state_t
-      name: "state"
-      desc: "[out] Status of the link device."
+    - type: $x_bool_t
+      name: "enable"
+      desc: "[out] Indicates if the link is disabled/endabled."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Data for the property $T_RESPROP_LINK_MAX_PACKET_SIZE"
@@ -1297,6 +1320,9 @@ members:
     - type: $x_bool_t
       name: "available"
       desc: "[out] Set to TRUE if the resource with this ID is available on the device, otherwise set to FALSE"
+    - type: $x_bool_t
+      name: "propsOnSubdevices"
+      desc: "[out] Set to TRUE if this resource will change properties on sub-devices or is merging telemetry from sub-devices"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Find out if specific resources are available on this device"
@@ -1315,9 +1341,6 @@ params:
     - type: $t_resid_info_t*
       name: pResources
       desc: "[in] Pointer to an array that hold the ID of resources on input and will contain the availability on output"
-return:
-    - $X_RESULT_ERROR_ARRAY_SIZE_TOO_SMALL:
-        - "The array doesn't have enough elements to store all the errors"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get list of resources available on this device of a given type"

@@ -89,7 +89,7 @@ typedef enum _xet_resource_type_t
 typedef enum _xet_resid_t
 {
     XET_RESID_DEV_INVENTORY = 0,                    ///< General device inventory
-    XET_RESID_PWR_PACKAGE = 0x10000,                ///< Primary power supply
+    XET_RESID_PWR_TOTAL = 0x10000,                  ///< Device total power
     XET_RESID_FREQ_GPU = 0x20000,                   ///< GPU frequency
     XET_RESID_FREQ_LOCAL_MEM = 0x20001,             ///< Local memory frequency
     XET_RESID_UTIL_GPU = 0x30000,                   ///< Utilization of the entire GPU
@@ -99,16 +99,28 @@ typedef enum _xet_resid_t
     XET_RESID_UTIL_VIDEO_ENCODE = 0x30004,          ///< Utilization of the video encode units
     XET_RESID_MEM_LOCAL = 0x40000,                  ///< Local GPU memory
     XET_RESID_LINK_PCIE = 0x50000,                  ///< PCIe link
-    XET_RESID_LINK_P2P1 = 0x50001,                  ///< High speed peer-to-peer link 1
-    XET_RESID_LINK_P2P2 = 0x50002,                  ///< High speed peer-to-peer link 2
-    XET_RESID_LINK_P2P3 = 0x50003,                  ///< High speed peer-to-peer link 3
-    XET_RESID_LINK_P2P4 = 0x50004,                  ///< High speed peer-to-peer link 4
-    XET_RESID_TEMP_PACKAGE = 0x60000,               ///< The maximum temperature reported by the sensors in the device
+    XET_RESID_LINK_CD_PORT1 = 0x50001,              ///< High speed companion die switch port 1
+    XET_RESID_LINK_CD_PORT2 = 0x50002,              ///< High speed companion die switch port 2
+    XET_RESID_LINK_CD_PORT3 = 0x50003,              ///< High speed companion die switch port 3
+    XET_RESID_LINK_CD_PORT4 = 0x50004,              ///< High speed companion die switch port 4
+    XET_RESID_LINK_CD_PORT5 = 0x50005,              ///< High speed companion die switch port 5
+    XET_RESID_LINK_CD_PORT6 = 0x50006,              ///< High speed companion die switch port 6
+    XET_RESID_LINK_CD_PORT7 = 0x50007,              ///< High speed companion die switch port 7
+    XET_RESID_LINK_CD_PORT8 = 0x50008,              ///< High speed companion die switch port 8
+    XET_RESID_LINK_CD_PORT9 = 0x50009,              ///< High speed companion die switch port 9
+    XET_RESID_LINK_CD_PORT10 = 0x5000A,             ///< High speed companion die switch port 10
+    XET_RESID_LINK_CD_PORT11 = 0x5000B,             ///< High speed companion die switch port 11
+    XET_RESID_LINK_CD_PORT12 = 0x5000C,             ///< High speed companion die switch port 12
+    XET_RESID_LINK_CD_PORT13 = 0x5000D,             ///< High speed companion die switch port 13
+    XET_RESID_LINK_CD_PORT14 = 0x5000E,             ///< High speed companion die switch port 14
+    XET_RESID_LINK_CD_PORT15 = 0x5000F,             ///< High speed companion die switch port 15
+    XET_RESID_LINK_CD_PORT16 = 0x50010,             ///< High speed companion die switch port 16
+    XET_RESID_TEMP_MAX = 0x60000,                   ///< The maximum temperature reported by the sensors in the device
     XET_RESID_TEMP_GPU = 0x60001,                   ///< The maximum temperature reported by the sensors in the GPU component
                                                     ///< of the device
     XET_RESID_TEMP_LOCAL_MEM = 0x60002,             ///< The maximum temperature reported by the sensors in the local memory of
                                                     ///< device
-    XET_RESID_STBY_GLOBAL = 0x70000,                ///< Control sleep promotion of the global device
+    XET_RESID_STBY_GLOBAL = 0x70000,                ///< Control sleep promotion of the common parts of the device
     XET_RESID_STBY_COMPUTE = 0x70001,               ///< Control sleep promotion of the compute components of the GPU
     XET_RESID_STBY_MEDIA = 0x70002,                 ///< Control sleep promotion of the media components of the GPU
     XET_RESID_FW_1 = 0x80001,                       ///< Firmware 1
@@ -215,13 +227,13 @@ typedef enum _xet_resprop_t
     XET_RESPROP_LINK_TYPE = 0x50000,                ///< (ro static) The type of link (data: ::xet_resprop_link_type_t)
     XET_RESPROP_LINK_BUS_ADDRESS = 0x50001,         ///< (ro static) The bus address of the link (data:
                                                     ///< ::xet_resprop_link_bus_address_t)
-    XET_RESPROP_LINK_PEER_DEVICE = 0x50002,         ///< (ro static) For links of type ::XET_LINK_TYPE_PEER_TO_PEER, this gives
-                                                    ///< the UUID of the peer device (data: ::xet_resprop_link_peer_device_t)
+    XET_RESPROP_LINK_PEER_DEVICE = 0x50002,         ///< (ro static) For links of type ::XET_LINK_TYPE_CD_PORT, this gives the
+                                                    ///< UUID of the peer device (data: ::xet_resprop_link_peer_device_t)
     XET_RESPROP_LINK_AVAIL_SPEEDS = 0x50003,        ///< (ro static) Available link speeds (data:
                                                     ///< ::xet_resprop_link_avail_speeds_t)
     XET_RESPROP_LINK_MAX_PACKET_SIZE = 0x50004,     ///< (ro static) Maximum packet size (data:
                                                     ///< ::xet_resprop_link_max_packet_size_t)
-    XET_RESPROP_LINK_STATE = 0x50005,               ///< (ro dynamic) Monotonic bandwidth counters (data:
+    XET_RESPROP_LINK_STATE = 0x50005,               ///< (rw dynamic) Link state (enabled/disabled) (data:
                                                     ///< ::xet_resprop_link_state_t)
     XET_RESPROP_LINK_BANDWIDTH = 0x50006,           ///< (ro dynamic) Monotonic bandwidth counters (data:
                                                     ///< ::xet_resprop_link_bandwidth_t)
@@ -604,19 +616,9 @@ typedef struct _xet_resprop_mem_bandwidth_t
 typedef enum _xet_link_type_t
 {
     XET_LINK_TYPE_PCI = 0,                          ///< PCI connection
-    XET_LINK_TYPE_PEER_TO_PEER,                     ///< Peer-to-peer connection
+    XET_LINK_TYPE_CD_PORT,                          ///< Companion die physical port
 
 } xet_link_type_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Link resource state
-typedef enum _xet_link_state_t
-{
-    XET_LINK_STATE_OFF = 0,                         ///< The link is powered off
-    XET_LINK_STATE_ON,                              ///< The link is powered on but not connected
-    XET_LINK_STATE_CONNECTED,                       ///< The link is powered on and connected to the remote port
-
-} xet_link_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Link speed element
@@ -668,7 +670,7 @@ typedef struct _xet_resprop_link_avail_speeds_t
 /// @brief Data for the property ::XET_RESPROP_LINK_STATE
 typedef struct _xet_resprop_link_state_t
 {
-    xet_link_state_t state;                         ///< [out] Status of the link device.
+    xe_bool_t enable;                               ///< [out] Indicates if the link is disabled/endabled.
 
 } xet_resprop_link_state_t;
 
@@ -969,6 +971,8 @@ typedef struct _xet_resid_info_t
     const char* pDesc;                              ///< [out] Human readable description of this resouce
     xe_bool_t available;                            ///< [out] Set to TRUE if the resource with this ID is available on the
                                                     ///< device, otherwise set to FALSE
+    xe_bool_t propsOnSubdevices;                    ///< [out] Set to TRUE if this resource will change properties on
+                                                    ///< sub-devices or is merging telemetry from sub-devices
 
 } xet_resid_info_t;
 

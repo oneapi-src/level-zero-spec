@@ -1,6 +1,7 @@
 # Programming Guide (Sysman)
 
-[DO NOT EDIT]: # (generated from /scripts/tools/SYSMAN.md)
+
+[DO NOT EDIT]: # "generated from /scripts/tools/SYSMAN.md"
 
 The following documents the high-level programming models and guidelines.
 
@@ -148,7 +149,7 @@ A device is broken into resources. For example, the GPU frequency of a device is
 ::xet_resource_type_t. The groups are summarized in the table below:
 
 | Resource group         | C API key | Resource Type |Description                                                                                                       |
-| :--:                   | :--:      | :--:                          | :--:                                                                                             |
+| :---                   | :---      | :---                          | :---                                                                                             |
 | **Device**             | dev       | ::XET_RESOURCE_TYPE_DEV      | Properties provide device and driver inventory information.                                      |
 | **Power**              | pwr       | ::XET_RESOURCE_TYPE_PWR      | Properties permit monitoring of power consumption and setting operating power limits.            |
 | **Frequency**          | freq      | ::XET_RESOURCE_TYPE_FREQ     | Properties permit monitoring of frequency and setting frequency limits.                          |
@@ -165,16 +166,16 @@ A device is broken into resources. For example, the GPU frequency of a device is
 Each resource in the system is identified uniquely by one of the values in the enumerator ::xet_resid_t. Some of these resources are expected to be available on all devices
 and are listed in the table below:
 
-| Resource ID                 | Description                                                |
-| :--:                        | :--:                                                       |
-| ::XET_RESID_DEV_INVENTORY  | Provides access to device inventory information            |
-| ::XET_RESID_PWR_PACKAGE    | Provides access to total device power telemetry and limits |
-| ::XET_RESID_FREQ_GPU       | Provides access to GPU frequency                           |
-| ::XET_RESID_FREQ_LOCAL_MEM | Provides access to local memory frequency                  |
-| ::XET_RESID_UTIL_GPU       | Provides access to GPU utilization counters                |
-| ::XET_RESID_MEM_LOCAL      | Provides access to local memory utilization counters       |
-| ::XET_RESID_LINK_PCIE      | Provides access to PCIe bandwidth counters                 |
-| ::XET_RESID_TEMP_PACKAGE   | Provides access to device temperature                      |
+|         Resource ID         |                        Description                         |
+| :---                        | :---                                                       |
+| ::XET_RESID_DEV_INVENTORY  |      Provides access to device inventory information       |
+|   ::XET_RESID_PWR_TOTAL    | Provides access to total device power telemetry and limits |
+|    ::XET_RESID_FREQ_GPU    |              Provides access to GPU frequency              |
+| ::XET_RESID_FREQ_LOCAL_MEM |         Provides access to local memory frequency          |
+|    ::XET_RESID_UTIL_GPU    |        Provides access to GPU utilization counters         |
+|   ::XET_RESID_MEM_LOCAL    |    Provides access to local memory utilization counters    |
+|   ::XET_RESID_LINK_PCIE    |         Provides access to PCIe bandwidth counters         |
+|    ::XET_RESID_TEMP_MAX    |           Provides access to device temperature            |
 
 It's possible to get a list of all available resources using the function ::xetSysmanGetResources(), as shown in the example below:
 
@@ -403,7 +404,7 @@ Resource type: ::XET_RESOURCE_TYPE_DEV
 Resource IDs: ::XET_RESID_DEV_INVENTORY
 
 | Property ID                           | Description |
-| :--:                                  | :--: |
+| :---                                  | :--- |
 | ::XET_RESPROP_DEV_SERIAL_NUMBER      | Get the manufacturing serial number of the device.     |
 | ::XET_RESPROP_DEV_BOARD_NUMBER       | Get the manufacturing board number of the device.     |
 | ::XET_RESPROP_DEV_BRAND              | Get the device brand name.     |
@@ -419,10 +420,10 @@ Power properties can be used to monitor energy consumption and set power limits.
 
 Resource type: ::XET_RESOURCE_TYPE_PWR
 
-Resource IDs: ::XET_RESID_PWR_PACKAGE
+Resource IDs: ::XET_RESID_PWR_TOTAL
 
 | Property ID                           | Description |
-| :--:                                  | :--: |
+| :---                                  | :--- |
 | ::XET_RESPROP_PWR_MAX_LIMIT          | The maximum power limit that can be set.     |
 | ::XET_RESPROP_PWR_ENERGY_COUNTER     | Monitor energy consumption.     |
 | ::XET_RESPROP_PWR_SUSTAINED_LIMIT    | Set sustained power limit (see discussion below).     |
@@ -442,7 +443,7 @@ The Punit avoids such severe throttling by measuring the actual power being cons
 Three limits are monitored by the Punit:
 
 | Limit     | Window        | Description                                                                                                                                                                                                                |
-| :--:      | :--:          | :--:                                                                                                                                                                                                                       |
+| :---      | :---          | :---                                                                                                                                                                                                                       |
 | Peak      | Instantaneous | Punit tracks the instantaneous power. When this exceeds a programmable threshold, the Punit will aggressively throttle frequencies/voltages. The threshold is referred to as PL4 - Power Limit 4 - or peak power.          |
 | Burst     | 2ms           | Punit tracks the 2ms weighted moving average of power. When this exceeds a programmable threshold, the Punit starts throttling frequencies/voltages. The threshold is referred to as PL2 - Power Limit 2 - or burst power. |
 | Sustained | 28sec         | Punit tracks the 28sec weighted moving average of power. When this exceeds a programmable threshold, the Punit throttles frequencies/voltages. The threshold is referred to as PL1 - Power Limit 1 - or sustained power.   |
@@ -472,7 +473,7 @@ Resource type: ::XET_RESOURCE_TYPE_FREQ
 Resource IDs: ::XET_RESID_FREQ_GPU, ::XET_RESID_FREQ_LOCAL_MEM
 
 | Property ID                           | Description |
-| :--:                                  | :--: |
+| :---                                  | :--- |
 | ::XET_RESPROP_FREQ_AVAIL_CLOCKS      |  Get the list of frequencies that hardware can support.    |
 | ::XET_RESPROP_FREQ_RANGE             |  Set range between which hardware DVFS can operate.    |
 | ::XET_RESPROP_FREQ_REQUESTED_FREQ    |  Read current requested frequency.    |
@@ -491,7 +492,7 @@ Resource type: ::XET_RESOURCE_TYPE_UTIL
 Resource IDs: ::XET_RESID_UTIL_GPU, ::XET_RESID_UTIL_COMPUTE, ::XET_RESID_UTIL_MEDIA, ::XET_RESID_UTIL_VIDEO_DECODE, ::XET_RESID_UTIL_VIDEO_ENCODE
 
 | Property ID                           | Description |
-| :--:                                  | :--: |
+| :---                                  | :--- |
 | ::XET_RESPROP_UTIL_COUNTERS          | Get utilization counters so that percentage load can be calculated.     |
 
 
@@ -503,7 +504,7 @@ Resource type: ::XET_RESOURCE_TYPE_MEM
 Resource IDs: ::XET_RESID_MEM_LOCAL
 
 | Property ID                           | Description |
-| :--:                                  | :--: |
+| :---                                  | :--- |
 | ::XET_RESPROP_MEM_TYPE               | The type of memory (HBM, DDR5, ...).    |
 | ::XET_RESPROP_MEM_UTILIZATION        | Counters that can be used to calculate utilization of memory.    |
 | ::XET_RESPROP_MEM_BANDWIDTH          | Counters that can be used to calculate the memory bandwidth      |
@@ -514,15 +515,16 @@ Link properties enable monitoring link bandwidth and in some cases controlling a
 
 Resource type: ::XET_RESOURCE_TYPE_LINK
 
-Resource IDs: ::XET_RESID_LINK_PCIE, ::XET_RESID_LINK_P2P1 - ::XET_RESID_LINK_P2P4
+Resource IDs: ::XET_RESID_LINK_PCIE, ::XET_RESID_LINK_CD_PORT1 - ::XET_RESID_LINK_CD_PORT16
 
 | Property ID                           | Description |
-| :--:                                  | :--: |
+| :---                                  | :--- |
 | ::XET_RESPROP_LINK_TYPE              | The type of link (PCIe, peer-to-peer).     |
 | ::XET_RESPROP_LINK_BUS_ADDRESS       | The address of the link on the bus fabric.     |
 | ::XET_RESPROP_LINK_PEER_DEVICE       | The UUID of the remove device.     |
 | ::XET_RESPROP_LINK_AVAIL_SPEEDS      | The available speed configurations of the link.     |
 | ::XET_RESPROP_LINK_MAX_PACKET_SIZE   | The maximum packet size that can be transmitted across the link.     |
+| ::XET_RESPROP_LINK_STATE             | Get the current state of the link (enabled/disabled).     |
 | ::XET_RESPROP_LINK_BANDWIDTH         | Counters that can be used to calculate current link bandwidth.     |
 | ::XET_RESPROP_LINK_SPEED             | Current link speed.     |
 | ::XET_RESPROP_LINK_SPEED_RANGE       | Set the range of speeds between which the link can operate.     |
@@ -537,11 +539,11 @@ Temperature properties enable monitoring temperatures on different parts of the 
 
 Resource type: ::XET_RESOURCE_TYPE_TEMP
 
-Resource IDs: ::XET_RESID_TEMP_PACKAGE, ::XET_RESID_TEMP_GPU, ::XET_RESID_TEMP_LOCAL_MEM
+Resource IDs: ::XET_RESID_TEMP_MAX, ::XET_RESID_TEMP_GPU, ::XET_RESID_TEMP_LOCAL_MEM
 
 
 | Property ID                           | Description |
-| :--:                                  | :--: |
+| :---                                  | :--- |
 | ::XET_RESPROP_TEMP_TEMPERATURE       | Current temperature.     |
 
 
@@ -553,7 +555,7 @@ Resource type: ::XET_RESOURCE_TYPE_STBY
 Resource IDs: ::XET_RESID_STBY_GLOBAL, ::XET_RESID_STBY_COMPUTE, ::XET_RESID_STBY_MEDIA
 
 | Property ID                           | Description |
-| :--:                                  | :--: |
+| :---                                  | :--- |
 | ::XET_RESPROP_STBY_PROMO_MODE        | Set standby promotion mode (immediate, default, never).     |
 
 Different parts of a device may powered off when there is no activity. This is known as standby. While this saves power, it can also come with a performance cost
@@ -569,7 +571,7 @@ Resource type: ::XET_RESOURCE_TYPE_FW
 Resource IDs: ::XET_RESID_FW_1 - ::XET_RESID_FW_20
 
 | Property ID                           | Description |
-| :--:                                  | :--: |
+| :---                                  | :--- |
 | ::XET_RESPROP_FW_NAME                | Get firmware name encoded in the installed image.     |
 | ::XET_RESPROP_FW_VERSION             | Get firmware version encoded in the installed image.     |
 | ::XET_RESPROP_FW_CHECK               | Check the firmware image.     |
@@ -587,7 +589,7 @@ Resource type: ::XET_RESOURCE_TYPE_PSU
 Resource IDs: ::XET_RESID_PSU_MAIN, ::XET_RESID_PSU_AUX, ::XET_RESID_PSU_1 - ::XET_RESID_PSU_2
 
 | Property ID                           | Description |
-| :--:                                  | :--: |
+| :---                                  | :--- |
 | ::XET_RESPROP_PSU_AMP_LIMIT          | The maximum electrical current in amperes that can be drawn.     |
 | ::XET_RESPROP_PSU_VOLTAGE_STATUS     | Indicates if under or over voltage has occurred.     |
 | ::XET_RESPROP_PSU_FAN_FAILURE        | Indicates if the fan has failed.     |
@@ -603,7 +605,7 @@ Resource type: ::XET_RESOURCE_TYPE_FAN
 Resource IDs: ::XET_RESID_FAN_MAIN, ::XET_RESID_FAN_1 - ::XET_RESID_FAN_3
 
 | Property ID                           | Description |
-| :--:                                  | :--: |
+| :---                                  | :--- |
 | ::XET_RESPROP_FAN_MAX_RPM            | The maximum RPM of the fan.     |
 | ::XET_RESPROP_FAN_MAX_TABLE_SIZE     | The maximum number of points in the fan temp/speed table.     |
 | ::XET_RESPROP_FAN_SPEED_RPM          | The current fan speed in units of revolutions per minute (rpm).     |
@@ -627,7 +629,7 @@ Resource type: ::XET_RESOURCE_TYPE_LED
 Resource IDs: ::XET_RESID_LED_MAIN, ::XET_RESID_LED_1 - ::XET_RESID_LED_3
 
 | Property ID                           | Description |
-| :--:                                  | :--: |
+| :---                                  | :--- |
 | ::XET_RESPROP_LED_RGB_CAP            | Check if LED supports color programming.     |
 | ::XET_RESPROP_LED_STATE              | Turn LED on/off and change the color.     |
 
@@ -653,7 +655,7 @@ following filter will show all RAS telemetry for errors that were corrected anyw
 The API defines a RAS error filter ::xet_ras_filter_t with the following memebers:
 
 | Member                  | Description                                                                                                                  |
-| :--:                    | :--:                                                                                                                         |
+| :---                    | :---                                                                                                                         |
 | Resource ID             | Only show errors related to a particular resource, otherwise all resources if this member is set to ::XET_RESOURCE_TYPE_ANY |
 | RAS error type          | Bitfield of one or more of ::xet_ras_error_type_t                                                                           |
 | RAS structural location | Bitfield of one or more of ::xet_ras_error_loc_t                                                                            |
@@ -759,7 +761,6 @@ NULL in order to query event notifications across all devices for which the appl
 not to request event status clearing. In this way, the application can no when any event has occurred and can then make individual requests to each device, this time
 requesting that the event status be cleared.
 
-
 # <a name="di">Diagnostics</a>
 Diagnostics is the process of taking a device offline and requesting that the hardware run self-checks and repairs. This is achieved using the function
 ::xetSysmanRunDiagnosticTests(). On return from the function, software can use the diagnostics return code (::xet_diag_result_t) to determine the new course of action:
@@ -782,8 +783,41 @@ used instead for the start/stop indices respectively.
 # <a name="rt">Reset</a>
 A device can be reset (PCI device reset) can be achieved using the function ::xetSysmanDeviceReset().
 
+This operation is not supported on sub-devices.
 
 # <a name="sd">Sub-devices</a>
-Multi-tile devices consists of sub-devices that are arranged under a logical device. At this stage, no resources are supported for managing resources on sub-devices and
-an attempt to call ::xetSysmanGet() with a device handle for a sub-device will receive an error ::XE_RESULT_ERROR_UNSUPPORTED. Resources managed at the device level
-will impact the configuration of sub-devices.
+Multi-tile devices consist of sub-devices that are arranged under a logical device, otherwise known as **tiles**.
+
+When ::xetSysmanGet() is called with a device handle for a sub-device, the returned SMI handle can be used to manage resources only on that sub-device.
+
+Not all resource types are available on sub-devices. In addition, devices having sub-devices may have different meanings for resources depending on
+whether they are accessed with a device or a sub-device SMI handle.
+
+If a resource exists on the sub-device, there will be an equivalent resource on the device, but the significance of the device-level resource will be
+different. For example, the frequency resource for a sub-device controls only the frequency of the sub-device; if the same resource is controlled at
+the device level, it will overwrite the frequency on all sub-devices. These differences are summarized in the table below:
+
+| Resource type  | Device operations | Sub-device operations |
+| :---           | :--- | :--- |
+| Device         | Only at the device level | Not supported. |
+| Power          | Get: Power consumption of whole device, including sub-devices<br />Set: Maximum power limit of the whole device | Get: Power consumption of the sub-device<br />Set: Maximum power limit of the sub-device (if supported) |
+| Frequency      | Get: Average frequency across sub-devices<br />Set: Set same frequency on all sub-devices | Get: Actual frequency of sub-device<br />Set: Set frequency of sub-device |
+| Utilization    | Get: Averages utilization across all sub-devices. | Get: Activity of sub-device. |
+| Memory         | Get: Gives total memory utilization for all sub-devices; memory bandwidth is averaged across all sub-devices | Get: Memory bandwidth and utilization for memory located in the sub-device |
+| Link           | Get: Only PCIe link<br />Set: Only PCIe link | Get: Only CD ports<br />set: Only CD ports |
+| Temperature    | Get: Maximum temperature across all sensors, including sub-devices | Get: Maximum temperature of sensors on the sub-device |
+| Standby        | Set: Changes standby mode for all sub-devices                | Set: Change standby mode for the sub-device. |
+| Firmware       | Get/Set: Only firmwares in the device but not in the sub-device | Get/Set: Only firmwares in the sub-device |
+| PSU            | Only at the device level | Not supported |
+| Fan            | Only at the device level | Not supported |
+| LED            | Only at the device level | Not supported |
+
+The driving principle behind this table is to provide software the ability to control the device at the device level only without needing to go to the
+sub-device level. The only exception to this rule is for resources like **link** and **firmware** where it is important to enumerate these resources
+on any sub-devices since the resources enumerated at the device level only relate to components not contained in the sub-devices.
+
+As a general rule, software should always check which resources and properties are available on a device and it's sub-devices. However, it is possible
+ to enumerate resources first at the device level and check the flag  ::xet_resid_info_t.propsOnSubdevices for each resource. If this flag is TRUE,
+it means that there are sub-devices and that properties of this resource at the device level have different behavior than the same properties at the
+ sub-device level. This is because the properties at the device level merging telemetry from sub-devices or apply the same changes to all sub-devices.
+This flag signals to software that it needs to consider whether it wants to manage those resources at the device level or at the sub-device level.

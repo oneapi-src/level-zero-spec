@@ -1112,8 +1112,8 @@ namespace xet
             str = "Sysman::resid_t::DEV_INVENTORY";
             break;
 
-        case Sysman::resid_t::PWR_PACKAGE:
-            str = "Sysman::resid_t::PWR_PACKAGE";
+        case Sysman::resid_t::PWR_TOTAL:
+            str = "Sysman::resid_t::PWR_TOTAL";
             break;
 
         case Sysman::resid_t::FREQ_GPU:
@@ -1152,24 +1152,72 @@ namespace xet
             str = "Sysman::resid_t::LINK_PCIE";
             break;
 
-        case Sysman::resid_t::LINK_P2P1:
-            str = "Sysman::resid_t::LINK_P2P1";
+        case Sysman::resid_t::LINK_CD_PORT1:
+            str = "Sysman::resid_t::LINK_CD_PORT1";
             break;
 
-        case Sysman::resid_t::LINK_P2P2:
-            str = "Sysman::resid_t::LINK_P2P2";
+        case Sysman::resid_t::LINK_CD_PORT2:
+            str = "Sysman::resid_t::LINK_CD_PORT2";
             break;
 
-        case Sysman::resid_t::LINK_P2P3:
-            str = "Sysman::resid_t::LINK_P2P3";
+        case Sysman::resid_t::LINK_CD_PORT3:
+            str = "Sysman::resid_t::LINK_CD_PORT3";
             break;
 
-        case Sysman::resid_t::LINK_P2P4:
-            str = "Sysman::resid_t::LINK_P2P4";
+        case Sysman::resid_t::LINK_CD_PORT4:
+            str = "Sysman::resid_t::LINK_CD_PORT4";
             break;
 
-        case Sysman::resid_t::TEMP_PACKAGE:
-            str = "Sysman::resid_t::TEMP_PACKAGE";
+        case Sysman::resid_t::LINK_CD_PORT5:
+            str = "Sysman::resid_t::LINK_CD_PORT5";
+            break;
+
+        case Sysman::resid_t::LINK_CD_PORT6:
+            str = "Sysman::resid_t::LINK_CD_PORT6";
+            break;
+
+        case Sysman::resid_t::LINK_CD_PORT7:
+            str = "Sysman::resid_t::LINK_CD_PORT7";
+            break;
+
+        case Sysman::resid_t::LINK_CD_PORT8:
+            str = "Sysman::resid_t::LINK_CD_PORT8";
+            break;
+
+        case Sysman::resid_t::LINK_CD_PORT9:
+            str = "Sysman::resid_t::LINK_CD_PORT9";
+            break;
+
+        case Sysman::resid_t::LINK_CD_PORT10:
+            str = "Sysman::resid_t::LINK_CD_PORT10";
+            break;
+
+        case Sysman::resid_t::LINK_CD_PORT11:
+            str = "Sysman::resid_t::LINK_CD_PORT11";
+            break;
+
+        case Sysman::resid_t::LINK_CD_PORT12:
+            str = "Sysman::resid_t::LINK_CD_PORT12";
+            break;
+
+        case Sysman::resid_t::LINK_CD_PORT13:
+            str = "Sysman::resid_t::LINK_CD_PORT13";
+            break;
+
+        case Sysman::resid_t::LINK_CD_PORT14:
+            str = "Sysman::resid_t::LINK_CD_PORT14";
+            break;
+
+        case Sysman::resid_t::LINK_CD_PORT15:
+            str = "Sysman::resid_t::LINK_CD_PORT15";
+            break;
+
+        case Sysman::resid_t::LINK_CD_PORT16:
+            str = "Sysman::resid_t::LINK_CD_PORT16";
+            break;
+
+        case Sysman::resid_t::TEMP_MAX:
+            str = "Sysman::resid_t::TEMP_MAX";
             break;
 
         case Sysman::resid_t::TEMP_GPU:
@@ -1709,40 +1757,12 @@ namespace xet
             str = "Sysman::link_type_t::PCI";
             break;
 
-        case Sysman::link_type_t::PEER_TO_PEER:
-            str = "Sysman::link_type_t::PEER_TO_PEER";
+        case Sysman::link_type_t::CD_PORT:
+            str = "Sysman::link_type_t::CD_PORT";
             break;
 
         default:
             str = "Sysman::link_type_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::link_state_t to std::string
-    std::string to_string( const Sysman::link_state_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case Sysman::link_state_t::OFF:
-            str = "Sysman::link_state_t::OFF";
-            break;
-
-        case Sysman::link_state_t::ON:
-            str = "Sysman::link_state_t::ON";
-            break;
-
-        case Sysman::link_state_t::CONNECTED:
-            str = "Sysman::link_state_t::CONNECTED";
-            break;
-
-        default:
-            str = "Sysman::link_state_t::?";
             break;
         };
 
@@ -2691,8 +2711,8 @@ namespace xet
     {
         std::string str;
         
-        str += "Sysman::resprop_link_state_t::state : ";
-        str += to_string(val.state);
+        str += "Sysman::resprop_link_state_t::enable : ";
+        str += std::to_string(val.enable);
         str += "\n";
 
         return str;
@@ -3135,6 +3155,10 @@ namespace xet
         
         str += "Sysman::resid_info_t::available : ";
         str += std::to_string(val.available);
+        str += "\n";
+        
+        str += "Sysman::resid_info_t::propsOnSubdevices : ";
+        str += std::to_string(val.propsOnSubdevices);
         str += "\n";
 
         return str;
