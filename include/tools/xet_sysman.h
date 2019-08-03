@@ -190,6 +190,8 @@ typedef enum _xet_resprop_t
                                                     ///< ::xet_resprop_dev_driver_version_t)
     XET_RESPROP_DEV_BARS = 0x00007,                 ///< (ro static) The bars configured for the device (data:
                                                     ///< ::xet_resprop_dev_bars_t)
+    XET_RESPROP_DEV_UUID = 0x00008,                 ///< (ro static) Universal Unique ID for the device (data:
+                                                    ///< ::xet_resprop_dev_uuid_t)
     XET_RESPROP_PWR_MAX_LIMIT = 0x10000,            ///< (ro static) The maximum power limit that can be requested (data:
                                                     ///< ::xet_resprop_pwr_max_limit_t)
     XET_RESPROP_PWR_ENERGY_COUNTER = 0x10001,       ///< (ro dynamic) The value of the monotonic energy counter (data:
@@ -379,6 +381,14 @@ typedef struct _xet_resprop_dev_bars_t
     const xet_pci_bar_info_t* pBars;                ///< [out][range(0, num-1)] Information about each bar.
 
 } xet_resprop_dev_bars_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Data for the property ::XET_RESPROP_DEV_UUID
+typedef struct _xet_resprop_dev_uuid_t
+{
+    xe_device_uuid_t uuid;                          ///< [out] Device UUID
+
+} xet_resprop_dev_uuid_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Data for the property ::XET_RESPROP_PWR_MAX_LIMIT

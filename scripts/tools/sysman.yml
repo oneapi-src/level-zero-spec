@@ -329,6 +329,9 @@ etors:
     - name: $T_RESPROP_DEV_BARS
       value: "0x00007"
       desc: "(ro static) The bars configured for the device (data: $t_resprop_dev_bars_t)"
+    - name: $T_RESPROP_DEV_UUID
+      value: "0x00008"
+      desc: "(ro static) Universal Unique ID for the device (data: $t_resprop_dev_uuid_t)"
 
     - name: $T_RESPROP_PWR_MAX_LIMIT
       value: "0x10000"
@@ -599,6 +602,15 @@ members:
     - type: "const $t_pci_bar_info_t*"
       name: "pBars"
       desc: "[out][range(0, num-1)] Information about each bar."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Data for the property $T_RESPROP_DEV_UUID"
+class: $tSysman
+name: $t_resprop_dev_uuid_t
+members:
+    - type: $x_device_uuid_t
+      name: "uuid"
+      desc: "[out] Device UUID"
 
 --- #--------------------------------------------------------------------------
 type: struct

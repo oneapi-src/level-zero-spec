@@ -479,6 +479,8 @@ class xet_resprop_v(IntEnum):
                                                     ## ::xet_resprop_dev_driver_version_t)
     DEV_BARS = 0x00007                              ## (ro static) The bars configured for the device (data:
                                                     ## ::xet_resprop_dev_bars_t)
+    DEV_UUID = 0x00008                              ## (ro static) Universal Unique ID for the device (data:
+                                                    ## ::xet_resprop_dev_uuid_t)
     PWR_MAX_LIMIT = 0x10000                         ## (ro static) The maximum power limit that can be requested (data:
                                                     ## ::xet_resprop_pwr_max_limit_t)
     PWR_ENERGY_COUNTER = 0x10001                    ## (ro dynamic) The value of the monotonic energy counter (data:
@@ -661,6 +663,13 @@ class xet_resprop_dev_bars_t(Structure):
     _fields_ = [
         ("num", c_ulong),                                               ## [out] The number of bars
         ("pBars", POINTER(xet_pci_bar_info_t))                          ## [out][range(0, num-1)] Information about each bar.
+    ]
+
+###############################################################################
+## @brief Data for the property ::XET_RESPROP_DEV_UUID
+class xet_resprop_dev_uuid_t(Structure):
+    _fields_ = [
+        ("uuid", xe_device_uuid_t)                                      ## [out] Device UUID
     ]
 
 ###############################################################################

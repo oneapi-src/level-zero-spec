@@ -143,6 +143,10 @@ typedef struct _xet_resprop_dev_driver_version_t xet_resprop_dev_driver_version_
 typedef struct _xet_resprop_dev_bars_t xet_resprop_dev_bars_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_resprop_dev_uuid_t
+typedef struct _xet_resprop_dev_uuid_t xet_resprop_dev_uuid_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_resprop_pwr_max_limit_t
 typedef struct _xet_resprop_pwr_max_limit_t xet_resprop_pwr_max_limit_t;
 

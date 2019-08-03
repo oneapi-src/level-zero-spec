@@ -411,6 +411,7 @@ Resource IDs: ::${T}_RESID_DEV_INVENTORY
 
 | Property ID                           | Description |
 | :---                                  | :--- |
+| ::${T}_RESPROP_DEV_UUID               | Device UUID     |
 | ::${T}_RESPROP_DEV_SERIAL_NUMBER      | Get the manufacturing serial number of the device.     |
 | ::${T}_RESPROP_DEV_BOARD_NUMBER       | Get the manufacturing board number of the device.     |
 | ::${T}_RESPROP_DEV_BRAND              | Get the device brand name.     |

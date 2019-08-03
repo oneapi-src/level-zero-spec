@@ -405,6 +405,7 @@ Resource IDs: ::XET_RESID_DEV_INVENTORY
 
 | Property ID                           | Description |
 | :---                                  | :--- |
+| ::XET_RESPROP_DEV_UUID               | Device UUID     |
 | ::XET_RESPROP_DEV_SERIAL_NUMBER      | Get the manufacturing serial number of the device.     |
 | ::XET_RESPROP_DEV_BOARD_NUMBER       | Get the manufacturing board number of the device.     |
 | ::XET_RESPROP_DEV_BRAND              | Get the device brand name.     |

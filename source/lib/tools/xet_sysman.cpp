@@ -1420,6 +1420,10 @@ namespace xet
             str = "Sysman::resprop_t::DEV_BARS";
             break;
 
+        case Sysman::resprop_t::DEV_UUID:
+            str = "Sysman::resprop_t::DEV_UUID";
+            break;
+
         case Sysman::resprop_t::PWR_MAX_LIMIT:
             str = "Sysman::resprop_t::PWR_MAX_LIMIT";
             break;
@@ -2326,6 +2330,19 @@ namespace xet
             ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pBars);
             str += ss.str();
         }
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::resprop_dev_uuid_t to std::string
+    std::string to_string( const Sysman::resprop_dev_uuid_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::resprop_dev_uuid_t::uuid : ";
+        str += to_string(val.uuid);
         str += "\n";
 
         return str;
