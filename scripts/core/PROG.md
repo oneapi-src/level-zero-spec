@@ -455,7 +455,8 @@ An event is used to communicate fine-grain host-to-device, device-to-host or dev
   + signaled from within a device's command list and waited upon from the host, another command queue or another device
   + signaled from the host, and waited upon from within a device's command list.
 - An event only has two states: not signaled and signaled.
-- An event can be reset from the Host or device.
+- An event doesn't implicitly reset. Signaling a signaled event (or resetting an unsignaled event) is valid and has no effect on the state of the event.
+- An event can be explicitly reset from the Host or device.
 - An event can be appended into multiple command lists simultaneously.
 - An event can be shared across devices and processes.
 - An event can invoke an execution and/or memory barrier; which should be used sparingly to avoid device underutilization.
