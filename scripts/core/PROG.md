@@ -302,7 +302,7 @@ ${"###"} Appending
   the same command list simultaneously.
 - By default, commands are executed in the same order in which they are appended.
   However, an application may allow the driver to optimize the ordering by using
-  ::${X}_COMMAND_LIST_FLAG_RELAXED_ORDERING.  Reordering is guarenteed to be only occur
+  ::${X}_COMMAND_LIST_FLAG_RELAXED_ORDERING.  Reordering is guaranteed to be only occur
   between barriers and synchronization primitives.
 - By default, commands submitted to a command list are optimized for execution by
   balancing both device throughput and Host latency. For very low-level latency
@@ -336,6 +336,7 @@ ${"###"} Submission
 - The application is responsible for calling close before submission to a command queue.
 - Command lists do not inherit state from other command lists executed on the same
   command queue.  i.e. each command list begins execution in its own default state.
+- A command list may be submitted multiple times.  It is up to the application to ensure that the command list can be executed multiple times.  Events, for example, must be explicitly reset prior to re-execution.
 
 The following sample code demonstrates submission of commands to a command queue, via a command list:
 ```c
