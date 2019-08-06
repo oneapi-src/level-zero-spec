@@ -302,7 +302,7 @@ ${"###"} Appending
   the same command list simultaneously.
 - By default, commands are executed in the same order in which they are appended.
   However, an application may allow the driver to optimize the ordering by using
-  ::${X}_COMMAND_LIST_FLAG_RELAXED_ORDERING.  Reordering is guarenteed to be only occur
+  ::${X}_COMMAND_LIST_FLAG_RELAXED_ORDERING.  Reordering is guaranteed to be only occur
   between barriers and synchronization primitives.
 - By default, commands submitted to a command list are optimized for execution by
   balancing both device throughput and Host latency. For very low-level latency
@@ -336,6 +336,7 @@ ${"###"} Submission
 - The application is responsible for calling close before submission to a command queue.
 - Command lists do not inherit state from other command lists executed on the same
   command queue.  i.e. each command list begins execution in its own default state.
+- A command list may be submitted multiple times.  It is up to the application to ensure that the command list can be executed multiple times.  Events, for example, must be explicitly reset prior to re-execution.
 
 The following sample code demonstrates submission of commands to a command queue, via a command list:
 ```c
@@ -454,7 +455,8 @@ An event is used to communicate fine-grain host-to-device, device-to-host or dev
   + signaled from within a device's command list and waited upon from the host, another command queue or another device
   + signaled from the host, and waited upon from within a device's command list.
 - An event only has two states: not signaled and signaled.
-- An event can be reset from the Host or device.
+- An event doesn't implicitly reset. Signaling a signaled event (or resetting an unsignaled event) is valid and has no effect on the state of the event.
+- An event can be explicitly reset from the Host or device.
 - An event can be appended into multiple command lists simultaneously.
 - An event can be shared across devices and processes.
 - An event can invoke an execution and/or memory barrier; which should be used sparingly to avoid device underutilization.
