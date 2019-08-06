@@ -183,13 +183,7 @@ etors:
 
     - name: $T_RESID_STBY_GLOBAL
       value: "0x70000"
-      desc: "Control sleep promotion of the common parts of the device"
-    - name: $T_RESID_STBY_COMPUTE
-      value: "0x70001"
-      desc: "Control sleep promotion of the compute components of the GPU"
-    - name: $T_RESID_STBY_MEDIA
-      value: "0x70002"
-      desc: "Control sleep promotion of the media components of the GPU"
+      desc: "Control sleep promotion of the entire device"
 
     - name: $T_RESID_FW_1
       value: "0x80001"
@@ -956,7 +950,7 @@ name: $t_resprop_link_state_t
 members:
     - type: $x_bool_t
       name: "enable"
-      desc: "[out] Indicates if the link is disabled/endabled."
+      desc: "[out] Indicates if the link is disabled/enabled."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Data for the property $T_RESPROP_LINK_MAX_PACKET_SIZE"
@@ -1019,10 +1013,8 @@ desc: "Standby promotion modes"
 class: $tSysman
 name: $t_stby_promo_mode_t
 etors:
-    - name: $T_STBY_PROMO_MODE_IMMEDIATE
-      value: "0"
-      desc: "The device/component will shutdown immediately when all contained units are idle. This improves energy savings at the expense of performance."
     - name: $T_STBY_PROMO_MODE_DEFAULT
+      value: "0"
       desc: "Best compromise between performance and energy savings."
     - name: $T_STBY_PROMO_MODE_NEVER
       desc: "The device/component will never shutdown. This can improve performance but uses more energy."

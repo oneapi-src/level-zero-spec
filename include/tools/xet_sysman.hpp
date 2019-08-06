@@ -143,9 +143,7 @@ namespace xet
                                                             ///< of the device
             TEMP_LOCAL_MEM = 0x60002,                       ///< The maximum temperature reported by the sensors in the local memory of
                                                             ///< device
-            STBY_GLOBAL = 0x70000,                          ///< Control sleep promotion of the common parts of the device
-            STBY_COMPUTE = 0x70001,                         ///< Control sleep promotion of the compute components of the GPU
-            STBY_MEDIA = 0x70002,                           ///< Control sleep promotion of the media components of the GPU
+            STBY_GLOBAL = 0x70000,                          ///< Control sleep promotion of the entire device
             FW_1 = 0x80001,                                 ///< Firmware 1
             FW_2 = 0x80002,                                 ///< Firmware 2
             FW_3 = 0x80003,                                 ///< Firmware 3
@@ -367,10 +365,7 @@ namespace xet
         /// @brief Standby promotion modes
         enum class stby_promo_mode_t
         {
-            IMMEDIATE = 0,                                  ///< The device/component will shutdown immediately when all contained
-                                                            ///< units are idle. This improves energy savings at the expense of
-                                                            ///< performance.
-            DEFAULT,                                        ///< Best compromise between performance and energy savings.
+            DEFAULT = 0,                                    ///< Best compromise between performance and energy savings.
             NEVER,                                          ///< The device/component will never shutdown. This can improve performance
                                                             ///< but uses more energy.
 
@@ -844,7 +839,7 @@ namespace xet
         /// @brief Data for the property ::XET_RESPROP_LINK_STATE
         struct resprop_link_state_t
         {
-            xe::bool_t enable;                              ///< [out] Indicates if the link is disabled/endabled.
+            xe::bool_t enable;                              ///< [out] Indicates if the link is disabled/enabled.
 
         };
 

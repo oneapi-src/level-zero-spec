@@ -120,9 +120,7 @@ typedef enum _xet_resid_t
                                                     ///< of the device
     XET_RESID_TEMP_LOCAL_MEM = 0x60002,             ///< The maximum temperature reported by the sensors in the local memory of
                                                     ///< device
-    XET_RESID_STBY_GLOBAL = 0x70000,                ///< Control sleep promotion of the common parts of the device
-    XET_RESID_STBY_COMPUTE = 0x70001,               ///< Control sleep promotion of the compute components of the GPU
-    XET_RESID_STBY_MEDIA = 0x70002,                 ///< Control sleep promotion of the media components of the GPU
+    XET_RESID_STBY_GLOBAL = 0x70000,                ///< Control sleep promotion of the entire device
     XET_RESID_FW_1 = 0x80001,                       ///< Firmware 1
     XET_RESID_FW_2 = 0x80002,                       ///< Firmware 2
     XET_RESID_FW_3 = 0x80003,                       ///< Firmware 3
@@ -680,7 +678,7 @@ typedef struct _xet_resprop_link_avail_speeds_t
 /// @brief Data for the property ::XET_RESPROP_LINK_STATE
 typedef struct _xet_resprop_link_state_t
 {
-    xe_bool_t enable;                               ///< [out] Indicates if the link is disabled/endabled.
+    xe_bool_t enable;                               ///< [out] Indicates if the link is disabled/enabled.
 
 } xet_resprop_link_state_t;
 
@@ -733,10 +731,7 @@ typedef struct _xet_resprop_temp_temperature_t
 /// @brief Standby promotion modes
 typedef enum _xet_stby_promo_mode_t
 {
-    XET_STBY_PROMO_MODE_IMMEDIATE = 0,              ///< The device/component will shutdown immediately when all contained
-                                                    ///< units are idle. This improves energy savings at the expense of
-                                                    ///< performance.
-    XET_STBY_PROMO_MODE_DEFAULT,                    ///< Best compromise between performance and energy savings.
+    XET_STBY_PROMO_MODE_DEFAULT = 0,                ///< Best compromise between performance and energy savings.
     XET_STBY_PROMO_MODE_NEVER,                      ///< The device/component will never shutdown. This can improve performance
                                                     ///< but uses more energy.
 

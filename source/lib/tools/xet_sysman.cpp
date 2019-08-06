@@ -1232,14 +1232,6 @@ namespace xet
             str = "Sysman::resid_t::STBY_GLOBAL";
             break;
 
-        case Sysman::resid_t::STBY_COMPUTE:
-            str = "Sysman::resid_t::STBY_COMPUTE";
-            break;
-
-        case Sysman::resid_t::STBY_MEDIA:
-            str = "Sysman::resid_t::STBY_MEDIA";
-            break;
-
         case Sysman::resid_t::FW_1:
             str = "Sysman::resid_t::FW_1";
             break;
@@ -1781,10 +1773,6 @@ namespace xet
 
         switch( val )
         {
-        case Sysman::stby_promo_mode_t::IMMEDIATE:
-            str = "Sysman::stby_promo_mode_t::IMMEDIATE";
-            break;
-
         case Sysman::stby_promo_mode_t::DEFAULT:
             str = "Sysman::stby_promo_mode_t::DEFAULT";
             break;

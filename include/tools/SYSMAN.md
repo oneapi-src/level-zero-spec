@@ -553,11 +553,11 @@ Control standby of parts of the device.
 
 Resource type: ::XET_RESOURCE_TYPE_STBY
 
-Resource IDs: ::XET_RESID_STBY_GLOBAL, ::XET_RESID_STBY_COMPUTE, ::XET_RESID_STBY_MEDIA
+Resource IDs: ::XET_RESID_STBY_GLOBAL
 
 | Property ID                           | Description |
 | :---                                  | :--- |
-| ::XET_RESPROP_STBY_PROMO_MODE        | Set standby promotion mode (immediate, default, never).     |
+| ::XET_RESPROP_STBY_PROMO_MODE        | Set standby promotion mode (default, never).     |
 
 Different parts of a device may powered off when there is no activity. This is known as standby. While this saves power, it can also come with a performance cost
 given the latency exiting from a power-gated state. Generally the hardware effectively manages this trade-off, however these properties can be used to

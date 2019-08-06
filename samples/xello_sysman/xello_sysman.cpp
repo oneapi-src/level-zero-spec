@@ -321,3 +321,4 @@ int ListDevices(xe_device_group_handle_t hDeviceGroup)
 
     return ret;
 }
+
