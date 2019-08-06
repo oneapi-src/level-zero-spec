@@ -240,7 +240,7 @@ params:
       desc: "[in] handle of the device group object"
     - type: "$x_device_properties_t*"
       name: pDeviceProperties
-      desc: "[out] query result for device properties"
+      desc: "[in,out] query result for device properties"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $x_device_compute_properties_t"
@@ -313,7 +313,7 @@ params:
       desc: "[in] handle of the device group object"
     - type: "$x_device_compute_properties_t*"
       name: pComputeProperties
-      desc: "[out] query result for compute properties"
+      desc: "[in,out] query result for compute properties"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $x_device_memory_properties_t"
@@ -446,7 +446,7 @@ params:
       desc: "[in] handle of the device group object"
     - type: "$x_device_memory_access_properties_t*"
       name: pMemAccessProperties
-      desc: "[out] query result for memory access properties"
+      desc: "[in,out] query result for memory access properties"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $x_device_cache_properties_t"
@@ -497,7 +497,7 @@ params:
       desc: "[in] handle of the device group object"
     - type: "$x_device_cache_properties_t*"
       name: pCacheProperties
-      desc: "[out] query result for cache properties"
+      desc: "[in,out] query result for cache properties"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $x_device_image_properties_t"
@@ -549,7 +549,7 @@ params:
       desc: "[in] handle of the device group object"
     - type: "$x_device_image_properties_t*"
       name: pImageProperties
-      desc: "[out] query result for image properties"
+      desc: "[in,out] query result for image properties"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $x_device_ipc_properties_t"
@@ -592,7 +592,7 @@ params:
       desc: "[in] handle of the device group object"
     - type: "$x_device_ipc_properties_t*"
       name: pIPCProperties
-      desc: "[out] query result for IPC properties"
+      desc: "[in,out] query result for IPC properties"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API version of $x_device_p2p_properties_t"
@@ -638,7 +638,7 @@ params:
       desc: "[in] handle of the peer device with the allocation"
     - type: "$x_device_p2p_properties_t*"
       name: pP2PProperties
-      desc: "[out] Peer-to-Peer properties between source and peer device"
+      desc: "[in,out] Peer-to-Peer properties between source and peer device"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries if one device can directly access peer device allocations"
@@ -700,7 +700,7 @@ params:
       desc: "[in] handle of the device "
     - type: "$x_cache_config_t"
       name: CacheConfig
-      desc: "[in] CacheConfig"
+      desc: "[in,out] CacheConfig"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "devices do not support CacheConfig"

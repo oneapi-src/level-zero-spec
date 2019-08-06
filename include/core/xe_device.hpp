@@ -429,13 +429,10 @@ namespace xe
         ///     - **cuDeviceGetAttribute**
         ///     - cuDeviceGetName
         ///     - clGetDeviceInfo
-        /// @returns
-        ///     - device_properties_t: query result for device properties
-        /// 
         /// @throws result_t
-        device_properties_t __xecall
+        void __xecall
         GetDeviceProperties(
-            void
+            device_properties_t* pDeviceProperties          ///< [in,out] query result for device properties
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -449,13 +446,10 @@ namespace xe
         ///   _Analogues_
         ///     - **cuDeviceGetAttribute**
         ///     - clGetDeviceInfo
-        /// @returns
-        ///     - device_compute_properties_t: query result for compute properties
-        /// 
         /// @throws result_t
-        device_compute_properties_t __xecall
+        void __xecall
         GetComputeProperties(
-            void
+            device_compute_properties_t* pComputeProperties ///< [in,out] query result for compute properties
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -499,13 +493,10 @@ namespace xe
         ///     - **cuDeviceGetAttribute**
         ///     - cuDeviceTotalMem
         ///     - clGetDeviceInfo
-        /// @returns
-        ///     - device_memory_access_properties_t: query result for memory access properties
-        /// 
         /// @throws result_t
-        device_memory_access_properties_t __xecall
+        void __xecall
         GetMemoryAccessProperties(
-            void
+            device_memory_access_properties_t* pMemAccessProperties ///< [in,out] query result for memory access properties
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -520,13 +511,10 @@ namespace xe
         ///     - **cuDeviceGetAttribute**
         ///     - cuDeviceTotalMem
         ///     - clGetDeviceInfo
-        /// @returns
-        ///     - device_cache_properties_t: query result for cache properties
-        /// 
         /// @throws result_t
-        device_cache_properties_t __xecall
+        void __xecall
         GetCacheProperties(
-            void
+            device_cache_properties_t* pCacheProperties     ///< [in,out] query result for cache properties
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -539,13 +527,10 @@ namespace xe
         /// @remarks
         ///   _Analogues_
         ///     - **cuDeviceGetAttribute**
-        /// @returns
-        ///     - device_image_properties_t: query result for image properties
-        /// 
         /// @throws result_t
-        device_image_properties_t __xecall
+        void __xecall
         GetImageProperties(
-            void
+            device_image_properties_t* pImageProperties     ///< [in,out] query result for image properties
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -558,13 +543,10 @@ namespace xe
         /// @remarks
         ///   _Analogues_
         ///     - **cuDeviceGetAttribute**
-        /// @returns
-        ///     - device_ipc_properties_t: query result for IPC properties
-        /// 
         /// @throws result_t
-        device_ipc_properties_t __xecall
+        void __xecall
         GetIPCProperties(
-            void
+            device_ipc_properties_t* pIPCProperties         ///< [in,out] query result for IPC properties
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -892,13 +874,11 @@ namespace xe
         /// @remarks
         ///   _Analogues_
         ///     - **cudaDeviceGetP2PAttribute**
-        /// @returns
-        ///     - p2p_properties_t: Peer-to-Peer properties between source and peer device
-        /// 
         /// @throws result_t
-        p2p_properties_t __xecall
+        void __xecall
         GetP2PProperties(
-            Device* pPeerDevice                             ///< [in] pointer to the peer device with the allocation
+            Device* pPeerDevice,                            ///< [in] pointer to the peer device with the allocation
+            p2p_properties_t* pP2PProperties                ///< [in,out] Peer-to-Peer properties between source and peer device
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -945,7 +925,7 @@ namespace xe
         /// @throws result_t
         void __xecall
         SetIntermediateCacheConfig(
-            cache_config_t CacheConfig                      ///< [in] CacheConfig
+            cache_config_t CacheConfig                      ///< [in,out] CacheConfig
             );
 
         ///////////////////////////////////////////////////////////////////////////////
