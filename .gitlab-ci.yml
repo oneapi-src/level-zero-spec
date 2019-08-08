@@ -25,6 +25,8 @@ generate_html:
       - staging_ci
   tags:
     - win
+    - git
+    - docs
 
 pages:
   stage: deploy
@@ -41,6 +43,8 @@ pages:
       - staging_ci
   tags:
     - win
+    - git
+    - docs
   when: always
 
 linux:
