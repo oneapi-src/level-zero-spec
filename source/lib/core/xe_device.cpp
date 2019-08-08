@@ -18,86 +18,6 @@
 extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves device groups
-/// 
-/// @details
-///     - A device group represents a collection of physical, homogeneous
-///       devices.
-///     - The application may pass nullptr for pDeviceGroups when only querying
-///       the number of device groups.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - clGetDeviceIDs
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == pCount
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xeDeviceGroupGet(
-    uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
-                                                    ///< if count is zero, then the driver will update the value with the total
-                                                    ///< number of device groups available.
-                                                    ///< if count is non-zero, then driver will only retrieve that number of
-                                                    ///< device groups.
-                                                    ///< if count is larger than the number of device groups available, then
-                                                    ///< the driver will update the value with the correct number of device
-                                                    ///< groups available.
-    xe_device_group_handle_t* phDeviceGroups        ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
-    )
-{
-    auto pfnGet = xe_lib::context.ddiTable.DeviceGroup.pfnGet;
-    if( nullptr == pfnGet )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    return pfnGet( pCount, phDeviceGroups );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves devices within a device group
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuDeviceGet**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
-///         + nullptr == pCount
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xeDeviceGet(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
-                                                    ///< if count is zero, then the driver will update the value with the total
-                                                    ///< number of devices available.
-                                                    ///< if count is non-zero, then driver will only retrieve that number of devices.
-                                                    ///< if count is larger than the number of devices available, then the
-                                                    ///< driver will update the value with the correct number of devices available.
-    xe_device_handle_t* phDevices                   ///< [in,out][optional][range(0, *pCount)] array of handle of devices
-    )
-{
-    auto pfnGet = xe_lib::context.ddiTable.Device.pfnGet;
-    if( nullptr == pfnGet )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    return pfnGet( hDeviceGroup, pCount, phDevices );
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves a sub-device from a device
 /// 
 /// @details
@@ -136,39 +56,7 @@ xeDeviceGetSubDevices(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns the API version supported by the device group
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuCtxGetApiVersion**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
-///         + nullptr == version
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xeDeviceGroupGetApiVersion(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    xe_api_version_t* version                       ///< [out] api version
-    )
-{
-    auto pfnGetApiVersion = xe_lib::context.ddiTable.DeviceGroup.pfnGetApiVersion;
-    if( nullptr == pfnGetApiVersion )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    return pfnGetApiVersion( hDeviceGroup, version );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves attributes of all devices in the device group.
+/// @brief Retrieves properties of the device.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -185,24 +73,24 @@ xeDeviceGroupGetApiVersion(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDevice
 ///         + nullptr == pDeviceProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetDeviceProperties(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDeviceGetProperties(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
     )
 {
-    auto pfnGetDeviceProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetDeviceProperties;
-    if( nullptr == pfnGetDeviceProperties )
+    auto pfnGetProperties = xe_lib::context.ddiTable.Device.pfnGetProperties;
+    if( nullptr == pfnGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetDeviceProperties( hDeviceGroup, pDeviceProperties );
+    return pfnGetProperties( hDevice, pDeviceProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves compute attributes of all devices in the device group.
+/// @brief Retrieves compute properties of the device.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -218,24 +106,24 @@ xeDeviceGroupGetDeviceProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDevice
 ///         + nullptr == pComputeProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetComputeProperties(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDeviceGetComputeProperties(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
     )
 {
-    auto pfnGetComputeProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetComputeProperties;
+    auto pfnGetComputeProperties = xe_lib::context.ddiTable.Device.pfnGetComputeProperties;
     if( nullptr == pfnGetComputeProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetComputeProperties( hDeviceGroup, pComputeProperties );
+    return pfnGetComputeProperties( hDevice, pComputeProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves local memory attributes of all devices in the device group.
+/// @brief Retrieves local memory properties of the device.
 /// 
 /// @details
 ///     - Properties are reported for each physical memory type supported by the
@@ -254,12 +142,12 @@ xeDeviceGroupGetComputeProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDevice
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetMemoryProperties(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDeviceGetMemoryProperties(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
     uint32_t* pCount,                               ///< [in,out] pointer to the number of memory properties supported.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of memory properties available.
@@ -272,15 +160,15 @@ xeDeviceGroupGetMemoryProperties(
                                                     ///< memory properties
     )
 {
-    auto pfnGetMemoryProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetMemoryProperties;
+    auto pfnGetMemoryProperties = xe_lib::context.ddiTable.Device.pfnGetMemoryProperties;
     if( nullptr == pfnGetMemoryProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetMemoryProperties( hDeviceGroup, pCount, pMemProperties );
+    return pfnGetMemoryProperties( hDevice, pCount, pMemProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves memory access attributes of all devices in the device group.
+/// @brief Retrieves memory access properties of the device.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -297,24 +185,24 @@ xeDeviceGroupGetMemoryProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDevice
 ///         + nullptr == pMemAccessProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetMemoryAccessProperties(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDeviceGetMemoryAccessProperties(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_memory_access_properties_t* pMemAccessProperties  ///< [out] query result for memory access properties
     )
 {
-    auto pfnGetMemoryAccessProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetMemoryAccessProperties;
+    auto pfnGetMemoryAccessProperties = xe_lib::context.ddiTable.Device.pfnGetMemoryAccessProperties;
     if( nullptr == pfnGetMemoryAccessProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetMemoryAccessProperties( hDeviceGroup, pMemAccessProperties );
+    return pfnGetMemoryAccessProperties( hDevice, pMemAccessProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves cache attributes of the device
+/// @brief Retrieves cache propreties of the device
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -331,24 +219,25 @@ xeDeviceGroupGetMemoryAccessProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDevice
 ///         + nullptr == pCacheProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetCacheProperties(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDeviceGetCacheProperties(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_cache_properties_t* pCacheProperties  ///< [out] query result for cache properties
     )
 {
-    auto pfnGetCacheProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetCacheProperties;
+    auto pfnGetCacheProperties = xe_lib::context.ddiTable.Device.pfnGetCacheProperties;
     if( nullptr == pfnGetCacheProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetCacheProperties( hDeviceGroup, pCacheProperties );
+    return pfnGetCacheProperties( hDevice, pCacheProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves image attributes of the device
+/// @brief Retrieves image X_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT of
+///        the device
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -363,52 +252,20 @@ xeDeviceGroupGetCacheProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDevice
 ///         + nullptr == pImageProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetImageProperties(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDeviceGetImageProperties(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_image_properties_t* pImageProperties  ///< [out] query result for image properties
     )
 {
-    auto pfnGetImageProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetImageProperties;
+    auto pfnGetImageProperties = xe_lib::context.ddiTable.Device.pfnGetImageProperties;
     if( nullptr == pfnGetImageProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetImageProperties( hDeviceGroup, pImageProperties );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves IPC attributes of the device
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuDeviceGetAttribute**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
-///         + nullptr == pIPCProperties
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xeDeviceGroupGetIPCProperties(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    xe_device_ipc_properties_t* pIPCProperties      ///< [out] query result for IPC properties
-    )
-{
-    auto pfnGetIPCProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetIPCProperties;
-    if( nullptr == pfnGetIPCProperties )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    return pfnGetIPCProperties( hDeviceGroup, pIPCProperties );
+    return pfnGetImageProperties( hDevice, pImageProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -561,8 +418,8 @@ xeDeviceSetLastLevelCacheConfig(
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    DeviceGroup::DeviceGroup( 
-        device_group_handle_t handle                    ///< [in] handle of device group object
+    Driver::Driver( 
+        driver_handle_t handle                          ///< [in] handle of the driver instance
         ) :
         m_handle( handle )
     {
@@ -571,114 +428,11 @@ namespace xe
     ///////////////////////////////////////////////////////////////////////////////
     Device::Device( 
         device_handle_t handle,                         ///< [in] handle of device object
-        DeviceGroup* pDeviceGroup                       ///< [in] pointer to owner object
+        Driver* pDriver                                 ///< [in] pointer to owner object
         ) :
         m_handle( handle ),
-        m_pDeviceGroup( pDeviceGroup )
+        m_pDriver( pDriver )
     {
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieves device groups
-    /// 
-    /// @details
-    ///     - A device group represents a collection of physical, homogeneous
-    ///       devices.
-    ///     - The application may pass nullptr for pDeviceGroups when only querying
-    ///       the number of device groups.
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - clGetDeviceIDs
-    /// 
-    /// @throws result_t
-    void __xecall
-    DeviceGroup::Get(
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of device groups available.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of
-                                                        ///< device groups.
-                                                        ///< if count is larger than the number of device groups available, then
-                                                        ///< the driver will update the value with the correct number of device
-                                                        ///< groups available.
-        DeviceGroup** ppDeviceGroups                    ///< [in,out][optional][range(0, *pCount)] array of pointer to device
-                                                        ///< groups
-        )
-    {
-        thread_local std::vector<xe_device_group_handle_t> hDeviceGroups;
-        hDeviceGroups.resize( ( ppDeviceGroups ) ? *pCount : 0 );
-
-        auto result = static_cast<result_t>( ::xeDeviceGroupGet(
-            pCount,
-            hDeviceGroups.data() ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::Get" );
-
-        for( uint32_t i = 0; ( ppDeviceGroups ) && ( i < *pCount ); ++i )
-            ppDeviceGroups[ i ] = nullptr;
-
-        try
-        {
-            for( uint32_t i = 0; ( ppDeviceGroups ) && ( i < *pCount ); ++i )
-                ppDeviceGroups[ i ] = xe_lib::context.deviceGroupFactory.getInstance( reinterpret_cast<device_group_handle_t>( hDeviceGroups[ i ] ) );
-        }
-        catch( std::bad_alloc& )
-        {
-            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::DeviceGroup::Get" );
-        }
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieves devices within a device group
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuDeviceGet**
-    /// 
-    /// @throws result_t
-    void __xecall
-    Device::Get(
-        DeviceGroup* pDeviceGroup,                      ///< [in] pointer to the device group object
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of devices available.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of devices.
-                                                        ///< if count is larger than the number of devices available, then the
-                                                        ///< driver will update the value with the correct number of devices available.
-        Device** ppDevices                              ///< [in,out][optional][range(0, *pCount)] array of pointer to devices
-        )
-    {
-        thread_local std::vector<xe_device_handle_t> hDevices;
-        hDevices.resize( ( ppDevices ) ? *pCount : 0 );
-
-        auto result = static_cast<result_t>( ::xeDeviceGet(
-            reinterpret_cast<xe_device_group_handle_t>( pDeviceGroup->getHandle() ),
-            pCount,
-            hDevices.data() ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::Get" );
-
-        for( uint32_t i = 0; ( ppDevices ) && ( i < *pCount ); ++i )
-            ppDevices[ i ] = nullptr;
-
-        try
-        {
-            for( uint32_t i = 0; ( ppDevices ) && ( i < *pCount ); ++i )
-                ppDevices[ i ] = xe_lib::context.deviceFactory.getInstance( reinterpret_cast<device_handle_t>( hDevices[ i ] ), pDeviceGroup );
-        }
-        catch( std::bad_alloc& )
-        {
-            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Device::Get" );
-        }
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -721,7 +475,7 @@ namespace xe
         try
         {
             for( uint32_t i = 0; ( ppSubdevices ) && ( i < *pCount ); ++i )
-                ppSubdevices[ i ] = xe_lib::context.deviceFactory.getInstance( reinterpret_cast<device_handle_t>( hSubdevices[ i ] ), m_pDeviceGroup );
+                ppSubdevices[ i ] = xe_lib::context.deviceFactory.getInstance( reinterpret_cast<device_handle_t>( hSubdevices[ i ] ), m_pDriver );
         }
         catch( std::bad_alloc& )
         {
@@ -730,39 +484,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Returns the API version supported by the device group
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuCtxGetApiVersion**
-    /// 
-    /// @returns
-    ///     - api_version_t: api version
-    /// 
-    /// @throws result_t
-    DeviceGroup::api_version_t __xecall
-    DeviceGroup::GetApiVersion(
-        void
-        )
-    {
-        xe_api_version_t version;
-
-        auto result = static_cast<result_t>( ::xeDeviceGroupGetApiVersion(
-            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
-            &version ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetApiVersion" );
-
-        return *reinterpret_cast<api_version_t*>( &version );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieves attributes of all devices in the device group.
+    /// @brief Retrieves properties of the device.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -775,28 +497,28 @@ namespace xe
     ///     - clGetDeviceInfo
     /// 
     /// @returns
-    ///     - device_properties_t: query result for device properties
+    ///     - properties_t: query result for device properties
     /// 
     /// @throws result_t
-    DeviceGroup::device_properties_t __xecall
-    DeviceGroup::GetDeviceProperties(
+    Device::properties_t __xecall
+    Device::GetProperties(
         void
         )
     {
         xe_device_properties_t deviceProperties;
 
-        auto result = static_cast<result_t>( ::xeDeviceGroupGetDeviceProperties(
-            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+        auto result = static_cast<result_t>( ::xeDeviceGetProperties(
+            reinterpret_cast<xe_device_handle_t>( getHandle() ),
             &deviceProperties ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetDeviceProperties" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::GetProperties" );
 
-        return *reinterpret_cast<device_properties_t*>( &deviceProperties );
+        return *reinterpret_cast<properties_t*>( &deviceProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieves compute attributes of all devices in the device group.
+    /// @brief Retrieves compute properties of the device.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -808,28 +530,28 @@ namespace xe
     ///     - clGetDeviceInfo
     /// 
     /// @returns
-    ///     - device_compute_properties_t: query result for compute properties
+    ///     - compute_properties_t: query result for compute properties
     /// 
     /// @throws result_t
-    DeviceGroup::device_compute_properties_t __xecall
-    DeviceGroup::GetComputeProperties(
+    Device::compute_properties_t __xecall
+    Device::GetComputeProperties(
         void
         )
     {
         xe_device_compute_properties_t computeProperties;
 
-        auto result = static_cast<result_t>( ::xeDeviceGroupGetComputeProperties(
-            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+        auto result = static_cast<result_t>( ::xeDeviceGetComputeProperties(
+            reinterpret_cast<xe_device_handle_t>( getHandle() ),
             &computeProperties ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetComputeProperties" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::GetComputeProperties" );
 
-        return *reinterpret_cast<device_compute_properties_t*>( &computeProperties );
+        return *reinterpret_cast<compute_properties_t*>( &computeProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieves local memory attributes of all devices in the device group.
+    /// @brief Retrieves local memory properties of the device.
     /// 
     /// @details
     ///     - Properties are reported for each physical memory type supported by the
@@ -845,7 +567,7 @@ namespace xe
     /// 
     /// @throws result_t
     void __xecall
-    DeviceGroup::GetMemoryProperties(
+    Device::GetMemoryProperties(
         uint32_t* pCount,                               ///< [in,out] pointer to the number of memory properties supported.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of memory properties available.
@@ -854,21 +576,21 @@ namespace xe
                                                         ///< if count is larger than the number of memory properties available,
                                                         ///< then the driver will update the value with the correct number of
                                                         ///< memory properties available.
-        device_memory_properties_t* pMemProperties      ///< [in,out][optional][range(0, *pCount)] array of query results for
+        memory_properties_t* pMemProperties             ///< [in,out][optional][range(0, *pCount)] array of query results for
                                                         ///< memory properties
         )
     {
-        auto result = static_cast<result_t>( ::xeDeviceGroupGetMemoryProperties(
-            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+        auto result = static_cast<result_t>( ::xeDeviceGetMemoryProperties(
+            reinterpret_cast<xe_device_handle_t>( getHandle() ),
             pCount,
             reinterpret_cast<xe_device_memory_properties_t*>( pMemProperties ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetMemoryProperties" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::GetMemoryProperties" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieves memory access attributes of all devices in the device group.
+    /// @brief Retrieves memory access properties of the device.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -881,28 +603,28 @@ namespace xe
     ///     - clGetDeviceInfo
     /// 
     /// @returns
-    ///     - device_memory_access_properties_t: query result for memory access properties
+    ///     - memory_access_properties_t: query result for memory access properties
     /// 
     /// @throws result_t
-    DeviceGroup::device_memory_access_properties_t __xecall
-    DeviceGroup::GetMemoryAccessProperties(
+    Device::memory_access_properties_t __xecall
+    Device::GetMemoryAccessProperties(
         void
         )
     {
         xe_device_memory_access_properties_t memAccessProperties;
 
-        auto result = static_cast<result_t>( ::xeDeviceGroupGetMemoryAccessProperties(
-            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+        auto result = static_cast<result_t>( ::xeDeviceGetMemoryAccessProperties(
+            reinterpret_cast<xe_device_handle_t>( getHandle() ),
             &memAccessProperties ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetMemoryAccessProperties" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::GetMemoryAccessProperties" );
 
-        return *reinterpret_cast<device_memory_access_properties_t*>( &memAccessProperties );
+        return *reinterpret_cast<memory_access_properties_t*>( &memAccessProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieves cache attributes of the device
+    /// @brief Retrieves cache propreties of the device
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -915,28 +637,29 @@ namespace xe
     ///     - clGetDeviceInfo
     /// 
     /// @returns
-    ///     - device_cache_properties_t: query result for cache properties
+    ///     - cache_properties_t: query result for cache properties
     /// 
     /// @throws result_t
-    DeviceGroup::device_cache_properties_t __xecall
-    DeviceGroup::GetCacheProperties(
+    Device::cache_properties_t __xecall
+    Device::GetCacheProperties(
         void
         )
     {
         xe_device_cache_properties_t cacheProperties;
 
-        auto result = static_cast<result_t>( ::xeDeviceGroupGetCacheProperties(
-            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+        auto result = static_cast<result_t>( ::xeDeviceGetCacheProperties(
+            reinterpret_cast<xe_device_handle_t>( getHandle() ),
             &cacheProperties ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetCacheProperties" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::GetCacheProperties" );
 
-        return *reinterpret_cast<device_cache_properties_t*>( &cacheProperties );
+        return *reinterpret_cast<cache_properties_t*>( &cacheProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieves image attributes of the device
+    /// @brief Retrieves image X_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT of
+    ///        the device
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -947,56 +670,24 @@ namespace xe
     ///     - **cuDeviceGetAttribute**
     /// 
     /// @returns
-    ///     - device_image_properties_t: query result for image properties
+    ///     - image_properties_t: query result for image properties
     /// 
     /// @throws result_t
-    DeviceGroup::device_image_properties_t __xecall
-    DeviceGroup::GetImageProperties(
+    Device::image_properties_t __xecall
+    Device::GetImageProperties(
         void
         )
     {
         xe_device_image_properties_t imageProperties;
 
-        auto result = static_cast<result_t>( ::xeDeviceGroupGetImageProperties(
-            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+        auto result = static_cast<result_t>( ::xeDeviceGetImageProperties(
+            reinterpret_cast<xe_device_handle_t>( getHandle() ),
             &imageProperties ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetImageProperties" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::GetImageProperties" );
 
-        return *reinterpret_cast<device_image_properties_t*>( &imageProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieves IPC attributes of the device
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuDeviceGetAttribute**
-    /// 
-    /// @returns
-    ///     - device_ipc_properties_t: query result for IPC properties
-    /// 
-    /// @throws result_t
-    DeviceGroup::device_ipc_properties_t __xecall
-    DeviceGroup::GetIPCProperties(
-        void
-        )
-    {
-        xe_device_ipc_properties_t iPCProperties;
-
-        auto result = static_cast<result_t>( ::xeDeviceGroupGetIPCProperties(
-            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
-            &iPCProperties ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetIPCProperties" );
-
-        return *reinterpret_cast<device_ipc_properties_t*>( &iPCProperties );
+        return *reinterpret_cast<image_properties_t*>( &imageProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1133,19 +824,19 @@ namespace xe
 namespace xe
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::api_version_t to std::string
-    std::string to_string( const DeviceGroup::api_version_t val )
+    /// @brief Converts Driver::api_version_t to std::string
+    std::string to_string( const Driver::api_version_t val )
     {
         std::string str;
 
         switch( val )
         {
-        case DeviceGroup::api_version_t::_1_0:
-            str = "DeviceGroup::api_version_t::_1_0";
+        case Driver::api_version_t::_1_0:
+            str = "Driver::api_version_t::_1_0";
             break;
 
         default:
-            str = "DeviceGroup::api_version_t::?";
+            str = "Driver::api_version_t::?";
             break;
         };
 
@@ -1153,19 +844,19 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::device_properties_version_t to std::string
-    std::string to_string( const DeviceGroup::device_properties_version_t val )
+    /// @brief Converts Driver::ipc_properties_version_t to std::string
+    std::string to_string( const Driver::ipc_properties_version_t val )
     {
         std::string str;
 
         switch( val )
         {
-        case DeviceGroup::device_properties_version_t::CURRENT:
-            str = "DeviceGroup::device_properties_version_t::CURRENT";
+        case Driver::ipc_properties_version_t::CURRENT:
+            str = "Driver::ipc_properties_version_t::CURRENT";
             break;
 
         default:
-            str = "DeviceGroup::device_properties_version_t::?";
+            str = "Driver::ipc_properties_version_t::?";
             break;
         };
 
@@ -1173,23 +864,23 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::device_type_t to std::string
-    std::string to_string( const DeviceGroup::device_type_t val )
+    /// @brief Converts Driver::device_type_t to std::string
+    std::string to_string( const Driver::device_type_t val )
     {
         std::string str;
 
         switch( val )
         {
-        case DeviceGroup::device_type_t::GPU:
-            str = "DeviceGroup::device_type_t::GPU";
+        case Driver::device_type_t::GPU:
+            str = "Driver::device_type_t::GPU";
             break;
 
-        case DeviceGroup::device_type_t::FPGA:
-            str = "DeviceGroup::device_type_t::FPGA";
+        case Driver::device_type_t::FPGA:
+            str = "Driver::device_type_t::FPGA";
             break;
 
         default:
-            str = "DeviceGroup::device_type_t::?";
+            str = "Driver::device_type_t::?";
             break;
         };
 
@@ -1197,156 +888,8 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::device_compute_properties_version_t to std::string
-    std::string to_string( const DeviceGroup::device_compute_properties_version_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case DeviceGroup::device_compute_properties_version_t::CURRENT:
-            str = "DeviceGroup::device_compute_properties_version_t::CURRENT";
-            break;
-
-        default:
-            str = "DeviceGroup::device_compute_properties_version_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::device_memory_properties_version_t to std::string
-    std::string to_string( const DeviceGroup::device_memory_properties_version_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case DeviceGroup::device_memory_properties_version_t::CURRENT:
-            str = "DeviceGroup::device_memory_properties_version_t::CURRENT";
-            break;
-
-        default:
-            str = "DeviceGroup::device_memory_properties_version_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::device_memory_access_properties_version_t to std::string
-    std::string to_string( const DeviceGroup::device_memory_access_properties_version_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case DeviceGroup::device_memory_access_properties_version_t::CURRENT:
-            str = "DeviceGroup::device_memory_access_properties_version_t::CURRENT";
-            break;
-
-        default:
-            str = "DeviceGroup::device_memory_access_properties_version_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::memory_access_capabilities_t to std::string
-    std::string to_string( const DeviceGroup::memory_access_capabilities_t val )
-    {
-        const auto bits = static_cast<uint32_t>( val );
-
-        std::string str;
-        
-        if( 0 == bits )
-            str += "MEMORY_ACCESS_NONE   ";
-        
-        if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_ACCESS) & bits )
-            str += "MEMORY_ACCESS | ";
-        
-        if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_ATOMIC_ACCESS) & bits )
-            str += "MEMORY_ATOMIC_ACCESS | ";
-        
-        if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ACCESS) & bits )
-            str += "MEMORY_CONCURRENT_ACCESS | ";
-        
-        if( static_cast<uint32_t>(DeviceGroup::memory_access_capabilities_t::MEMORY_CONCURRENT_ATOMIC_ACCESS) & bits )
-            str += "MEMORY_CONCURRENT_ATOMIC_ACCESS | ";
-
-        return ( str.size() > 3 ) 
-            ? "DeviceGroup::memory_access_capabilities_t::{ " + str.substr(0, str.size() - 3) + " }"
-            : "DeviceGroup::memory_access_capabilities_t::{ ? }";
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::device_cache_properties_version_t to std::string
-    std::string to_string( const DeviceGroup::device_cache_properties_version_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case DeviceGroup::device_cache_properties_version_t::CURRENT:
-            str = "DeviceGroup::device_cache_properties_version_t::CURRENT";
-            break;
-
-        default:
-            str = "DeviceGroup::device_cache_properties_version_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::device_image_properties_version_t to std::string
-    std::string to_string( const DeviceGroup::device_image_properties_version_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case DeviceGroup::device_image_properties_version_t::CURRENT:
-            str = "DeviceGroup::device_image_properties_version_t::CURRENT";
-            break;
-
-        default:
-            str = "DeviceGroup::device_image_properties_version_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::device_ipc_properties_version_t to std::string
-    std::string to_string( const DeviceGroup::device_ipc_properties_version_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case DeviceGroup::device_ipc_properties_version_t::CURRENT:
-            str = "DeviceGroup::device_ipc_properties_version_t::CURRENT";
-            break;
-
-        default:
-            str = "DeviceGroup::device_ipc_properties_version_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::device_mem_alloc_flag_t to std::string
-    std::string to_string( const DeviceGroup::device_mem_alloc_flag_t val )
+    /// @brief Converts Driver::device_mem_alloc_flag_t to std::string
+    std::string to_string( const Driver::device_mem_alloc_flag_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
 
@@ -1355,20 +898,20 @@ namespace xe
         if( 0 == bits )
             str += "DEFAULT   ";
         
-        if( static_cast<uint32_t>(DeviceGroup::device_mem_alloc_flag_t::BIAS_CACHED) & bits )
+        if( static_cast<uint32_t>(Driver::device_mem_alloc_flag_t::BIAS_CACHED) & bits )
             str += "BIAS_CACHED | ";
         
-        if( static_cast<uint32_t>(DeviceGroup::device_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
+        if( static_cast<uint32_t>(Driver::device_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
             str += "BIAS_UNCACHED | ";
 
         return ( str.size() > 3 ) 
-            ? "DeviceGroup::device_mem_alloc_flag_t::{ " + str.substr(0, str.size() - 3) + " }"
-            : "DeviceGroup::device_mem_alloc_flag_t::{ ? }";
+            ? "Driver::device_mem_alloc_flag_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Driver::device_mem_alloc_flag_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::host_mem_alloc_flag_t to std::string
-    std::string to_string( const DeviceGroup::host_mem_alloc_flag_t val )
+    /// @brief Converts Driver::host_mem_alloc_flag_t to std::string
+    std::string to_string( const Driver::host_mem_alloc_flag_t val )
     {
         const auto bits = static_cast<uint32_t>( val );
 
@@ -1377,34 +920,34 @@ namespace xe
         if( 0 == bits )
             str += "DEFAULT   ";
         
-        if( static_cast<uint32_t>(DeviceGroup::host_mem_alloc_flag_t::BIAS_CACHED) & bits )
+        if( static_cast<uint32_t>(Driver::host_mem_alloc_flag_t::BIAS_CACHED) & bits )
             str += "BIAS_CACHED | ";
         
-        if( static_cast<uint32_t>(DeviceGroup::host_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
+        if( static_cast<uint32_t>(Driver::host_mem_alloc_flag_t::BIAS_UNCACHED) & bits )
             str += "BIAS_UNCACHED | ";
         
-        if( static_cast<uint32_t>(DeviceGroup::host_mem_alloc_flag_t::BIAS_WRITE_COMBINED) & bits )
+        if( static_cast<uint32_t>(Driver::host_mem_alloc_flag_t::BIAS_WRITE_COMBINED) & bits )
             str += "BIAS_WRITE_COMBINED | ";
 
         return ( str.size() > 3 ) 
-            ? "DeviceGroup::host_mem_alloc_flag_t::{ " + str.substr(0, str.size() - 3) + " }"
-            : "DeviceGroup::host_mem_alloc_flag_t::{ ? }";
+            ? "Driver::host_mem_alloc_flag_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Driver::host_mem_alloc_flag_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::memory_allocation_properties_version_t to std::string
-    std::string to_string( const DeviceGroup::memory_allocation_properties_version_t val )
+    /// @brief Converts Driver::memory_allocation_properties_version_t to std::string
+    std::string to_string( const Driver::memory_allocation_properties_version_t val )
     {
         std::string str;
 
         switch( val )
         {
-        case DeviceGroup::memory_allocation_properties_version_t::CURRENT:
-            str = "DeviceGroup::memory_allocation_properties_version_t::CURRENT";
+        case Driver::memory_allocation_properties_version_t::CURRENT:
+            str = "Driver::memory_allocation_properties_version_t::CURRENT";
             break;
 
         default:
-            str = "DeviceGroup::memory_allocation_properties_version_t::?";
+            str = "Driver::memory_allocation_properties_version_t::?";
             break;
         };
 
@@ -1412,31 +955,31 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::memory_type_t to std::string
-    std::string to_string( const DeviceGroup::memory_type_t val )
+    /// @brief Converts Driver::memory_type_t to std::string
+    std::string to_string( const Driver::memory_type_t val )
     {
         std::string str;
 
         switch( val )
         {
-        case DeviceGroup::memory_type_t::UNKNOWN:
-            str = "DeviceGroup::memory_type_t::UNKNOWN";
+        case Driver::memory_type_t::UNKNOWN:
+            str = "Driver::memory_type_t::UNKNOWN";
             break;
 
-        case DeviceGroup::memory_type_t::HOST:
-            str = "DeviceGroup::memory_type_t::HOST";
+        case Driver::memory_type_t::HOST:
+            str = "Driver::memory_type_t::HOST";
             break;
 
-        case DeviceGroup::memory_type_t::DEVICE:
-            str = "DeviceGroup::memory_type_t::DEVICE";
+        case Driver::memory_type_t::DEVICE:
+            str = "Driver::memory_type_t::DEVICE";
             break;
 
-        case DeviceGroup::memory_type_t::SHARED:
-            str = "DeviceGroup::memory_type_t::SHARED";
+        case Driver::memory_type_t::SHARED:
+            str = "Driver::memory_type_t::SHARED";
             break;
 
         default:
-            str = "DeviceGroup::memory_type_t::?";
+            str = "Driver::memory_type_t::?";
             break;
         };
 
@@ -1444,19 +987,19 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::ipc_memory_flag_t to std::string
-    std::string to_string( const DeviceGroup::ipc_memory_flag_t val )
+    /// @brief Converts Driver::ipc_memory_flag_t to std::string
+    std::string to_string( const Driver::ipc_memory_flag_t val )
     {
         std::string str;
 
         switch( val )
         {
-        case DeviceGroup::ipc_memory_flag_t::NONE:
-            str = "DeviceGroup::ipc_memory_flag_t::NONE";
+        case Driver::ipc_memory_flag_t::NONE:
+            str = "Driver::ipc_memory_flag_t::NONE";
             break;
 
         default:
-            str = "DeviceGroup::ipc_memory_flag_t::?";
+            str = "Driver::ipc_memory_flag_t::?";
             break;
         };
 
@@ -1464,12 +1007,33 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::device_uuid_t to std::string
-    std::string to_string( const DeviceGroup::device_uuid_t val )
+    /// @brief Converts Driver::ipc_properties_t to std::string
+    std::string to_string( const Driver::ipc_properties_t val )
     {
         std::string str;
         
-        str += "DeviceGroup::device_uuid_t::id : ";
+        str += "Driver::ipc_properties_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "Driver::ipc_properties_t::memsSupported : ";
+        str += std::to_string(val.memsSupported);
+        str += "\n";
+        
+        str += "Driver::ipc_properties_t::eventsSupported : ";
+        str += std::to_string(val.eventsSupported);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Driver::device_uuid_t to std::string
+    std::string to_string( const Driver::device_uuid_t val )
+    {
+        std::string str;
+        
+        str += "Driver::device_uuid_t::id : ";
         {
             std::string tmp;
             for( auto& entry : val.id )
@@ -1485,317 +1049,170 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::device_properties_t to std::string
-    std::string to_string( const DeviceGroup::device_properties_t val )
+    /// @brief Converts Driver::memory_allocation_properties_t to std::string
+    std::string to_string( const Driver::memory_allocation_properties_t val )
     {
         std::string str;
         
-        str += "DeviceGroup::device_properties_t::version : ";
+        str += "Driver::memory_allocation_properties_t::version : ";
         str += to_string(val.version);
         str += "\n";
         
-        str += "DeviceGroup::device_properties_t::type : ";
+        str += "Driver::memory_allocation_properties_t::type : ";
         str += to_string(val.type);
         str += "\n";
         
-        str += "DeviceGroup::device_properties_t::vendorId : ";
-        str += std::to_string(val.vendorId);
-        str += "\n";
-        
-        str += "DeviceGroup::device_properties_t::deviceId : ";
-        str += std::to_string(val.deviceId);
-        str += "\n";
-        
-        str += "DeviceGroup::device_properties_t::uuid : ";
-        str += to_string(val.uuid);
-        str += "\n";
-        
-        str += "DeviceGroup::device_properties_t::isSubdevice : ";
-        str += std::to_string(val.isSubdevice);
-        str += "\n";
-        
-        str += "DeviceGroup::device_properties_t::subdeviceId : ";
-        str += std::to_string(val.subdeviceId);
-        str += "\n";
-        
-        str += "DeviceGroup::device_properties_t::coreClockRate : ";
-        str += std::to_string(val.coreClockRate);
-        str += "\n";
-        
-        str += "DeviceGroup::device_properties_t::unifiedMemorySupported : ";
-        str += std::to_string(val.unifiedMemorySupported);
-        str += "\n";
-        
-        str += "DeviceGroup::device_properties_t::onDemandPageFaultsSupported : ";
-        str += std::to_string(val.onDemandPageFaultsSupported);
-        str += "\n";
-        
-        str += "DeviceGroup::device_properties_t::maxCommandQueues : ";
-        str += std::to_string(val.maxCommandQueues);
-        str += "\n";
-        
-        str += "DeviceGroup::device_properties_t::numAsyncComputeEngines : ";
-        str += std::to_string(val.numAsyncComputeEngines);
-        str += "\n";
-        
-        str += "DeviceGroup::device_properties_t::numAsyncCopyEngines : ";
-        str += std::to_string(val.numAsyncCopyEngines);
-        str += "\n";
-        
-        str += "DeviceGroup::device_properties_t::maxCommandQueuePriority : ";
-        str += std::to_string(val.maxCommandQueuePriority);
-        str += "\n";
-        
-        str += "DeviceGroup::device_properties_t::numThreadsPerEU : ";
-        str += std::to_string(val.numThreadsPerEU);
-        str += "\n";
-        
-        str += "DeviceGroup::device_properties_t::physicalEUSimdWidth : ";
-        str += std::to_string(val.physicalEUSimdWidth);
-        str += "\n";
-        
-        str += "DeviceGroup::device_properties_t::numEUsPerSubslice : ";
-        str += std::to_string(val.numEUsPerSubslice);
-        str += "\n";
-        
-        str += "DeviceGroup::device_properties_t::numSubslicesPerSlice : ";
-        str += std::to_string(val.numSubslicesPerSlice);
-        str += "\n";
-        
-        str += "DeviceGroup::device_properties_t::numSlicesPerTile : ";
-        str += std::to_string(val.numSlicesPerTile);
-        str += "\n";
-        
-        str += "DeviceGroup::device_properties_t::numTiles : ";
-        str += std::to_string(val.numTiles);
-        str += "\n";
-        
-        str += "DeviceGroup::device_properties_t::name : ";
-        str += val.name;
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::device_compute_properties_t to std::string
-    std::string to_string( const DeviceGroup::device_compute_properties_t val )
-    {
-        std::string str;
-        
-        str += "DeviceGroup::device_compute_properties_t::version : ";
-        str += to_string(val.version);
-        str += "\n";
-        
-        str += "DeviceGroup::device_compute_properties_t::maxTotalGroupSize : ";
-        str += std::to_string(val.maxTotalGroupSize);
-        str += "\n";
-        
-        str += "DeviceGroup::device_compute_properties_t::maxGroupSizeX : ";
-        str += std::to_string(val.maxGroupSizeX);
-        str += "\n";
-        
-        str += "DeviceGroup::device_compute_properties_t::maxGroupSizeY : ";
-        str += std::to_string(val.maxGroupSizeY);
-        str += "\n";
-        
-        str += "DeviceGroup::device_compute_properties_t::maxGroupSizeZ : ";
-        str += std::to_string(val.maxGroupSizeZ);
-        str += "\n";
-        
-        str += "DeviceGroup::device_compute_properties_t::maxGroupCountX : ";
-        str += std::to_string(val.maxGroupCountX);
-        str += "\n";
-        
-        str += "DeviceGroup::device_compute_properties_t::maxGroupCountY : ";
-        str += std::to_string(val.maxGroupCountY);
-        str += "\n";
-        
-        str += "DeviceGroup::device_compute_properties_t::maxGroupCountZ : ";
-        str += std::to_string(val.maxGroupCountZ);
-        str += "\n";
-        
-        str += "DeviceGroup::device_compute_properties_t::maxSharedLocalMemory : ";
-        str += std::to_string(val.maxSharedLocalMemory);
-        str += "\n";
-        
-        str += "DeviceGroup::device_compute_properties_t::numSubGroupSizes : ";
-        str += std::to_string(val.numSubGroupSizes);
-        str += "\n";
-        
-        str += "DeviceGroup::device_compute_properties_t::subGroupSizes : ";
-        {
-            std::string tmp;
-            for( auto& entry : val.subGroupSizes )
-            {
-                tmp += std::to_string( entry );
-                tmp += ", ";
-            }
-            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
-        }
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::device_memory_properties_t to std::string
-    std::string to_string( const DeviceGroup::device_memory_properties_t val )
-    {
-        std::string str;
-        
-        str += "DeviceGroup::device_memory_properties_t::version : ";
-        str += to_string(val.version);
-        str += "\n";
-        
-        str += "DeviceGroup::device_memory_properties_t::maxClockRate : ";
-        str += std::to_string(val.maxClockRate);
-        str += "\n";
-        
-        str += "DeviceGroup::device_memory_properties_t::maxBusWidth : ";
-        str += std::to_string(val.maxBusWidth);
-        str += "\n";
-        
-        str += "DeviceGroup::device_memory_properties_t::totalSize : ";
-        str += std::to_string(val.totalSize);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::device_memory_access_properties_t to std::string
-    std::string to_string( const DeviceGroup::device_memory_access_properties_t val )
-    {
-        std::string str;
-        
-        str += "DeviceGroup::device_memory_access_properties_t::version : ";
-        str += to_string(val.version);
-        str += "\n";
-        
-        str += "DeviceGroup::device_memory_access_properties_t::hostAllocCapabilities : ";
-        str += to_string(val.hostAllocCapabilities);
-        str += "\n";
-        
-        str += "DeviceGroup::device_memory_access_properties_t::deviceAllocCapabilities : ";
-        str += to_string(val.deviceAllocCapabilities);
-        str += "\n";
-        
-        str += "DeviceGroup::device_memory_access_properties_t::sharedSingleDeviceAllocCapabilities : ";
-        str += to_string(val.sharedSingleDeviceAllocCapabilities);
-        str += "\n";
-        
-        str += "DeviceGroup::device_memory_access_properties_t::sharedCrossDeviceAllocCapabilities : ";
-        str += to_string(val.sharedCrossDeviceAllocCapabilities);
-        str += "\n";
-        
-        str += "DeviceGroup::device_memory_access_properties_t::sharedSystemAllocCapabilities : ";
-        str += to_string(val.sharedSystemAllocCapabilities);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::device_cache_properties_t to std::string
-    std::string to_string( const DeviceGroup::device_cache_properties_t val )
-    {
-        std::string str;
-        
-        str += "DeviceGroup::device_cache_properties_t::version : ";
-        str += to_string(val.version);
-        str += "\n";
-        
-        str += "DeviceGroup::device_cache_properties_t::intermediateCacheControlSupported : ";
-        str += std::to_string(val.intermediateCacheControlSupported);
-        str += "\n";
-        
-        str += "DeviceGroup::device_cache_properties_t::intermediateCacheSize : ";
-        str += std::to_string(val.intermediateCacheSize);
-        str += "\n";
-        
-        str += "DeviceGroup::device_cache_properties_t::lastLevelCacheSizeControlSupported : ";
-        str += std::to_string(val.lastLevelCacheSizeControlSupported);
-        str += "\n";
-        
-        str += "DeviceGroup::device_cache_properties_t::lastLevelCacheSize : ";
-        str += std::to_string(val.lastLevelCacheSize);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::device_image_properties_t to std::string
-    std::string to_string( const DeviceGroup::device_image_properties_t val )
-    {
-        std::string str;
-        
-        str += "DeviceGroup::device_image_properties_t::version : ";
-        str += to_string(val.version);
-        str += "\n";
-        
-        str += "DeviceGroup::device_image_properties_t::supported : ";
-        str += std::to_string(val.supported);
-        str += "\n";
-        
-        str += "DeviceGroup::device_image_properties_t::maxImageDims1D : ";
-        str += std::to_string(val.maxImageDims1D);
-        str += "\n";
-        
-        str += "DeviceGroup::device_image_properties_t::maxImageDims2D : ";
-        str += std::to_string(val.maxImageDims2D);
-        str += "\n";
-        
-        str += "DeviceGroup::device_image_properties_t::maxImageDims3D : ";
-        str += std::to_string(val.maxImageDims3D);
-        str += "\n";
-        
-        str += "DeviceGroup::device_image_properties_t::maxImageArraySlices : ";
-        str += std::to_string(val.maxImageArraySlices);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::device_ipc_properties_t to std::string
-    std::string to_string( const DeviceGroup::device_ipc_properties_t val )
-    {
-        std::string str;
-        
-        str += "DeviceGroup::device_ipc_properties_t::version : ";
-        str += to_string(val.version);
-        str += "\n";
-        
-        str += "DeviceGroup::device_ipc_properties_t::memsSupported : ";
-        str += std::to_string(val.memsSupported);
-        str += "\n";
-        
-        str += "DeviceGroup::device_ipc_properties_t::eventsSupported : ";
-        str += std::to_string(val.eventsSupported);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts DeviceGroup::memory_allocation_properties_t to std::string
-    std::string to_string( const DeviceGroup::memory_allocation_properties_t val )
-    {
-        std::string str;
-        
-        str += "DeviceGroup::memory_allocation_properties_t::version : ";
-        str += to_string(val.version);
-        str += "\n";
-        
-        str += "DeviceGroup::memory_allocation_properties_t::type : ";
-        str += to_string(val.type);
-        str += "\n";
-        
-        str += "DeviceGroup::memory_allocation_properties_t::id : ";
+        str += "Driver::memory_allocation_properties_t::id : ";
         str += std::to_string(val.id);
         str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::properties_version_t to std::string
+    std::string to_string( const Device::properties_version_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Device::properties_version_t::CURRENT:
+            str = "Device::properties_version_t::CURRENT";
+            break;
+
+        default:
+            str = "Device::properties_version_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::compute_properties_version_t to std::string
+    std::string to_string( const Device::compute_properties_version_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Device::compute_properties_version_t::CURRENT:
+            str = "Device::compute_properties_version_t::CURRENT";
+            break;
+
+        default:
+            str = "Device::compute_properties_version_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::memory_properties_version_t to std::string
+    std::string to_string( const Device::memory_properties_version_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Device::memory_properties_version_t::CURRENT:
+            str = "Device::memory_properties_version_t::CURRENT";
+            break;
+
+        default:
+            str = "Device::memory_properties_version_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::memory_access_properties_version_t to std::string
+    std::string to_string( const Device::memory_access_properties_version_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Device::memory_access_properties_version_t::CURRENT:
+            str = "Device::memory_access_properties_version_t::CURRENT";
+            break;
+
+        default:
+            str = "Device::memory_access_properties_version_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::memory_access_capabilities_t to std::string
+    std::string to_string( const Device::memory_access_capabilities_t val )
+    {
+        const auto bits = static_cast<uint32_t>( val );
+
+        std::string str;
+        
+        if( 0 == bits )
+            str += "MEMORY_ACCESS_NONE   ";
+        
+        if( static_cast<uint32_t>(Device::memory_access_capabilities_t::MEMORY_ACCESS) & bits )
+            str += "MEMORY_ACCESS | ";
+        
+        if( static_cast<uint32_t>(Device::memory_access_capabilities_t::MEMORY_ATOMIC_ACCESS) & bits )
+            str += "MEMORY_ATOMIC_ACCESS | ";
+        
+        if( static_cast<uint32_t>(Device::memory_access_capabilities_t::MEMORY_CONCURRENT_ACCESS) & bits )
+            str += "MEMORY_CONCURRENT_ACCESS | ";
+        
+        if( static_cast<uint32_t>(Device::memory_access_capabilities_t::MEMORY_CONCURRENT_ATOMIC_ACCESS) & bits )
+            str += "MEMORY_CONCURRENT_ATOMIC_ACCESS | ";
+
+        return ( str.size() > 3 ) 
+            ? "Device::memory_access_capabilities_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Device::memory_access_capabilities_t::{ ? }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::cache_properties_version_t to std::string
+    std::string to_string( const Device::cache_properties_version_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Device::cache_properties_version_t::CURRENT:
+            str = "Device::cache_properties_version_t::CURRENT";
+            break;
+
+        default:
+            str = "Device::cache_properties_version_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::image_properties_version_t to std::string
+    std::string to_string( const Device::image_properties_version_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Device::image_properties_version_t::CURRENT:
+            str = "Device::image_properties_version_t::CURRENT";
+            break;
+
+        default:
+            str = "Device::image_properties_version_t::?";
+            break;
+        };
 
         return str;
     }
@@ -1840,6 +1257,280 @@ namespace xe
         return ( str.size() > 3 ) 
             ? "Device::cache_config_t::{ " + str.substr(0, str.size() - 3) + " }"
             : "Device::cache_config_t::{ ? }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::properties_t to std::string
+    std::string to_string( const Device::properties_t val )
+    {
+        std::string str;
+        
+        str += "Device::properties_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "Device::properties_t::type : ";
+        str += to_string(val.type);
+        str += "\n";
+        
+        str += "Device::properties_t::vendorId : ";
+        str += std::to_string(val.vendorId);
+        str += "\n";
+        
+        str += "Device::properties_t::deviceId : ";
+        str += std::to_string(val.deviceId);
+        str += "\n";
+        
+        str += "Device::properties_t::uuid : ";
+        str += to_string(val.uuid);
+        str += "\n";
+        
+        str += "Device::properties_t::isSubdevice : ";
+        str += std::to_string(val.isSubdevice);
+        str += "\n";
+        
+        str += "Device::properties_t::subdeviceId : ";
+        str += std::to_string(val.subdeviceId);
+        str += "\n";
+        
+        str += "Device::properties_t::coreClockRate : ";
+        str += std::to_string(val.coreClockRate);
+        str += "\n";
+        
+        str += "Device::properties_t::unifiedMemorySupported : ";
+        str += std::to_string(val.unifiedMemorySupported);
+        str += "\n";
+        
+        str += "Device::properties_t::onDemandPageFaultsSupported : ";
+        str += std::to_string(val.onDemandPageFaultsSupported);
+        str += "\n";
+        
+        str += "Device::properties_t::maxCommandQueues : ";
+        str += std::to_string(val.maxCommandQueues);
+        str += "\n";
+        
+        str += "Device::properties_t::numAsyncComputeEngines : ";
+        str += std::to_string(val.numAsyncComputeEngines);
+        str += "\n";
+        
+        str += "Device::properties_t::numAsyncCopyEngines : ";
+        str += std::to_string(val.numAsyncCopyEngines);
+        str += "\n";
+        
+        str += "Device::properties_t::maxCommandQueuePriority : ";
+        str += std::to_string(val.maxCommandQueuePriority);
+        str += "\n";
+        
+        str += "Device::properties_t::numThreadsPerEU : ";
+        str += std::to_string(val.numThreadsPerEU);
+        str += "\n";
+        
+        str += "Device::properties_t::physicalEUSimdWidth : ";
+        str += std::to_string(val.physicalEUSimdWidth);
+        str += "\n";
+        
+        str += "Device::properties_t::numEUsPerSubslice : ";
+        str += std::to_string(val.numEUsPerSubslice);
+        str += "\n";
+        
+        str += "Device::properties_t::numSubslicesPerSlice : ";
+        str += std::to_string(val.numSubslicesPerSlice);
+        str += "\n";
+        
+        str += "Device::properties_t::numSlicesPerTile : ";
+        str += std::to_string(val.numSlicesPerTile);
+        str += "\n";
+        
+        str += "Device::properties_t::numTiles : ";
+        str += std::to_string(val.numTiles);
+        str += "\n";
+        
+        str += "Device::properties_t::name : ";
+        str += val.name;
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::compute_properties_t to std::string
+    std::string to_string( const Device::compute_properties_t val )
+    {
+        std::string str;
+        
+        str += "Device::compute_properties_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "Device::compute_properties_t::maxTotalGroupSize : ";
+        str += std::to_string(val.maxTotalGroupSize);
+        str += "\n";
+        
+        str += "Device::compute_properties_t::maxGroupSizeX : ";
+        str += std::to_string(val.maxGroupSizeX);
+        str += "\n";
+        
+        str += "Device::compute_properties_t::maxGroupSizeY : ";
+        str += std::to_string(val.maxGroupSizeY);
+        str += "\n";
+        
+        str += "Device::compute_properties_t::maxGroupSizeZ : ";
+        str += std::to_string(val.maxGroupSizeZ);
+        str += "\n";
+        
+        str += "Device::compute_properties_t::maxGroupCountX : ";
+        str += std::to_string(val.maxGroupCountX);
+        str += "\n";
+        
+        str += "Device::compute_properties_t::maxGroupCountY : ";
+        str += std::to_string(val.maxGroupCountY);
+        str += "\n";
+        
+        str += "Device::compute_properties_t::maxGroupCountZ : ";
+        str += std::to_string(val.maxGroupCountZ);
+        str += "\n";
+        
+        str += "Device::compute_properties_t::maxSharedLocalMemory : ";
+        str += std::to_string(val.maxSharedLocalMemory);
+        str += "\n";
+        
+        str += "Device::compute_properties_t::numSubGroupSizes : ";
+        str += std::to_string(val.numSubGroupSizes);
+        str += "\n";
+        
+        str += "Device::compute_properties_t::subGroupSizes : ";
+        {
+            std::string tmp;
+            for( auto& entry : val.subGroupSizes )
+            {
+                tmp += std::to_string( entry );
+                tmp += ", ";
+            }
+            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
+        }
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::memory_properties_t to std::string
+    std::string to_string( const Device::memory_properties_t val )
+    {
+        std::string str;
+        
+        str += "Device::memory_properties_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "Device::memory_properties_t::maxClockRate : ";
+        str += std::to_string(val.maxClockRate);
+        str += "\n";
+        
+        str += "Device::memory_properties_t::maxBusWidth : ";
+        str += std::to_string(val.maxBusWidth);
+        str += "\n";
+        
+        str += "Device::memory_properties_t::totalSize : ";
+        str += std::to_string(val.totalSize);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::memory_access_properties_t to std::string
+    std::string to_string( const Device::memory_access_properties_t val )
+    {
+        std::string str;
+        
+        str += "Device::memory_access_properties_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "Device::memory_access_properties_t::hostAllocCapabilities : ";
+        str += to_string(val.hostAllocCapabilities);
+        str += "\n";
+        
+        str += "Device::memory_access_properties_t::deviceAllocCapabilities : ";
+        str += to_string(val.deviceAllocCapabilities);
+        str += "\n";
+        
+        str += "Device::memory_access_properties_t::sharedSingleDeviceAllocCapabilities : ";
+        str += to_string(val.sharedSingleDeviceAllocCapabilities);
+        str += "\n";
+        
+        str += "Device::memory_access_properties_t::sharedCrossDeviceAllocCapabilities : ";
+        str += to_string(val.sharedCrossDeviceAllocCapabilities);
+        str += "\n";
+        
+        str += "Device::memory_access_properties_t::sharedSystemAllocCapabilities : ";
+        str += to_string(val.sharedSystemAllocCapabilities);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::cache_properties_t to std::string
+    std::string to_string( const Device::cache_properties_t val )
+    {
+        std::string str;
+        
+        str += "Device::cache_properties_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "Device::cache_properties_t::intermediateCacheControlSupported : ";
+        str += std::to_string(val.intermediateCacheControlSupported);
+        str += "\n";
+        
+        str += "Device::cache_properties_t::intermediateCacheSize : ";
+        str += std::to_string(val.intermediateCacheSize);
+        str += "\n";
+        
+        str += "Device::cache_properties_t::lastLevelCacheSizeControlSupported : ";
+        str += std::to_string(val.lastLevelCacheSizeControlSupported);
+        str += "\n";
+        
+        str += "Device::cache_properties_t::lastLevelCacheSize : ";
+        str += std::to_string(val.lastLevelCacheSize);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Device::image_properties_t to std::string
+    std::string to_string( const Device::image_properties_t val )
+    {
+        std::string str;
+        
+        str += "Device::image_properties_t::version : ";
+        str += to_string(val.version);
+        str += "\n";
+        
+        str += "Device::image_properties_t::supported : ";
+        str += std::to_string(val.supported);
+        str += "\n";
+        
+        str += "Device::image_properties_t::maxImageDims1D : ";
+        str += std::to_string(val.maxImageDims1D);
+        str += "\n";
+        
+        str += "Device::image_properties_t::maxImageDims2D : ";
+        str += std::to_string(val.maxImageDims2D);
+        str += "\n";
+        
+        str += "Device::image_properties_t::maxImageDims3D : ";
+        str += std::to_string(val.maxImageDims3D);
+        str += "\n";
+        
+        str += "Device::image_properties_t::maxImageArraySlices : ";
+        str += std::to_string(val.maxImageArraySlices);
+        str += "\n";
+
+        return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////

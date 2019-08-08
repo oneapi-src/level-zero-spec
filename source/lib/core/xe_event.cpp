@@ -18,7 +18,7 @@
 extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates a pool for a set of event(s) for the device group.
+/// @brief Creates a pool for a set of event(s) for the driver
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -29,7 +29,7 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDriver
 ///         + nullptr == desc
 ///         + nullptr == phEventPool
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -38,12 +38,13 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
 xeEventPoolCreate(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group
+    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     const xe_event_pool_desc_t* desc,               ///< [in] pointer to event pool descriptor
     uint32_t numDevices,                            ///< [in] number of device handles
     xe_device_handle_t* phDevices,                  ///< [in][optional][range(0, numDevices)] array of device handles which
                                                     ///< have visibility to the event pool.
-                                                    ///< if nullptr, then event pool is visible to all devices in the device group.
+                                                    ///< if nullptr, then event pool is visible to all devices supported by the
+                                                    ///< driver instance.
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
     )
 {
@@ -51,7 +52,7 @@ xeEventPoolCreate(
     if( nullptr == pfnCreate )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnCreate( hDeviceGroup, desc, numDevices, phDevices, phEventPool );
+    return pfnCreate( hDriver, desc, numDevices, phDevices, phEventPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -502,11 +503,11 @@ namespace xe
     ///////////////////////////////////////////////////////////////////////////////
     EventPool::EventPool( 
         event_pool_handle_t handle,                     ///< [in] handle of event pool object
-        DeviceGroup* pDeviceGroup,                      ///< [in] pointer to owner object
+        Driver* pDriver,                                ///< [in] pointer to owner object
         const desc_t* desc                              ///< [in] descriptor of the event pool object
         ) :
         m_handle( handle ),
-        m_pDeviceGroup( pDeviceGroup ),
+        m_pDriver( pDriver ),
         m_desc( ( desc ) ? *desc : desc_t{} )
     {
     }
@@ -524,7 +525,7 @@ namespace xe
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Creates a pool for a set of event(s) for the device group.
+    /// @brief Creates a pool for a set of event(s) for the driver
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -536,12 +537,13 @@ namespace xe
     /// @throws result_t
     EventPool* __xecall
     EventPool::Create(
-        DeviceGroup* pDeviceGroup,                      ///< [in] pointer to the device group
+        Driver* pDriver,                                ///< [in] pointer to the driver instance
         const desc_t* desc,                             ///< [in] pointer to event pool descriptor
         uint32_t numDevices,                            ///< [in] number of device handles
         Device** ppDevices                              ///< [in][optional][range(0, numDevices)] array of device handles which
                                                         ///< have visibility to the event pool.
-                                                        ///< if nullptr, then event pool is visible to all devices in the device group.
+                                                        ///< if nullptr, then event pool is visible to all devices supported by the
+                                                        ///< driver instance.
         )
     {
         thread_local std::vector<xe_device_handle_t> hDevices;
@@ -553,7 +555,7 @@ namespace xe
         xe_event_pool_handle_t hEventPool;
 
         auto result = static_cast<result_t>( ::xeEventPoolCreate(
-            reinterpret_cast<xe_device_group_handle_t>( pDeviceGroup->getHandle() ),
+            reinterpret_cast<xe_driver_handle_t>( pDriver->getHandle() ),
             reinterpret_cast<const xe_event_pool_desc_t*>( desc ),
             numDevices,
             hDevices.data(),
@@ -566,7 +568,7 @@ namespace xe
 
         try
         {
-            pEventPool = new EventPool( reinterpret_cast<event_pool_handle_t>( hEventPool ), pDeviceGroup, desc );
+            pEventPool = new EventPool( reinterpret_cast<event_pool_handle_t>( hEventPool ), pDriver, desc );
         }
         catch( std::bad_alloc& )
         {

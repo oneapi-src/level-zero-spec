@@ -26,7 +26,7 @@ The callbacks provide direct access to the input and output parameters for viewi
 Tools may also use these notifications as triggers to block and inject new API calls into the command stream, such as metrics.
 
 ${"##"} Registration
-Tools may independently register for enter and exist callbacks for individual API calls, per Device Group.
+Tools may independently register for enter and exist callbacks for individual API calls, per driver instance.
 * ::${t}TracerSetPrologues is used to specify all the enter callbacks
 * ::${t}TracerSetEpilogues is used to specify all the exist callbacks
 * If the value of a callback is nullptr, then it will be ignored.
@@ -99,7 +99,7 @@ The following sample code demonstrates a basic usage of API tracing:
         tracer_desc.version = ${T}_TRACER_DESC_VERSION_CURRENT;
         tracer_desc.pUserData = &tracer_data;
         ${t}_tracer_handle_t hTracer;
-        ${t}TracerCreate(hDeviceGroup, &tracer_desc, &hTracer);
+        ${t}TracerCreate(hDevice, &tracer_desc, &hTracer);
 
         // Set all callbacks
         ${t}_core_callbacks_t prologCbs = {};
@@ -197,23 +197,23 @@ To enumerate through the Metric tree:
    Metric (::${t}_metric_handle_t).
 
 
-The following sample code demonstrates a basic enumaration over all available metric groups and their metrics.
+The following sample code demonstrates a basic enumeration over all available metric groups and their metrics.
 Additionally, it returns a metric group with a chosen name and sampling type. Similar code could be used
 for selecting a preferred metric group for a specific type of measurements.
 ```c
-    ${x}_result_t FindMetricGroup( ${x}_device_group_handle_t hDeviceGroup,
+    ${x}_result_t FindMetricGroup( ${x}_device_handle_t hDevice,
                                    char* pMetricGroupName,
                                    uint32_t desiredSamplingType,
                                    ${t}_metric_group_handle_t* phMetricGroup )
     {
-        // Obtain available metric groups for the specific device group
+        // Obtain available metric groups for the specific device
         uint32_t metricGroupCount = 0;
-        ${t}MetricGroupGet( hDeviceGroup, &metricGroupCount, nullptr );
+        ${t}MetricGroupGet( hDevice, &metricGroupCount, nullptr );
 
         ${t}_metric_group_handle_t* phMetricGroups = malloc(metricGroupCount * sizeof(${t}_metric_group_handle_t));
-        ${t}MetricGroupGet( hDeviceGroup, &metricGroupCount, phMetricGroups );
+        ${t}MetricGroupGet( hDevice, &metricGroupCount, phMetricGroups );
 
-        // Interate over all metric groups available
+        // Iterate over all metric groups available
         for( uint32_t i = 0; i < metricGroupCount; i++ )
         {   
             // Get metric group under index 'i' and its properties
@@ -244,7 +244,7 @@ Use the ::${t}DeviceActivateMetricGroups API call to configure the device for da
 - To avoid undefined results only call the ::${t}DeviceActivateMetricGroups between experiments i.e. while not collecting data.
 
 Programming restrictions:
-- Any combination of metric groups can be configured simultanously provided that all of them have
+- Any combination of metric groups can be configured simultaneously provided that all of them have
   different ::${t}_metric_group_properties_t.domain.
 - MetricGroup must be active until ::${t}MetricQueryGetData and ::${t}MetricTracerClose.
 - Conflicting Groups cannot be activated, in such case the call to ::${t}DeviceActivateMetricGroups would fail.
@@ -269,7 +269,7 @@ Time-based collection uses a simple Open, Wait, Read, Close scheme:
 
 The following sample code demonstrates a basic sequence for tracer-based collection:
 ```c
-    ${x}_result_t TimeBasedUsageExample( ${x}_device_group_handle_t hDeviceGroup,
+    ${x}_result_t TimeBasedUsageExample( ${x}_driver_handle_t hDriver,
                                          ${x}_device_handle_t hDevice )
     {
         ${t}_metric_group_handle_t     hMetricGroup           = nullptr;
@@ -281,13 +281,13 @@ The following sample code demonstrates a basic sequence for tracer-based collect
         ${t}_metric_tracer_desc_t      metricTracerDescriptor = {${T}_METRIC_TRACER_DESC_VERSION_CURRENT}; 
 
         // Find a "ComputeBasic" metric group suitable for Time Based collection
-        FindMetricGroup( hDeviceGroup, "ComputeBasic", ${T}_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED, &hMetricGroup );
+        FindMetricGroup( hDevice, "ComputeBasic", ${T}_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED, &hMetricGroup );
 
         // Configure the HW
         ${t}DeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
 
         // Create notification event
-        ${x}EventPoolCreate( hDeviceGroup, &eventPoolDesc, 1, &hDevice, &hEventPool );
+        ${x}EventPoolCreate( hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool );
         eventDesc.index  = 0;
         eventDesc.signal = XE_EVENT_SCOPE_FLAG_HOST;
         eventDesc.wait   = XE_EVENT_SCOPE_FLAG_HOST; 
@@ -303,7 +303,7 @@ The following sample code demonstrates a basic sequence for tracer-based collect
         // Optionally insert markers during workload execution
         //${t}CommandListAppendMetricTracerMarker( hCommandList, hMetricTracer, tool_marker_value ); 
 
-        // Wait for data, optional in this example since the whole workload has already been executedby now
+        // Wait for data, optional in this example since the whole workload has already been executed by now
         //${x}EventHostSynchronize( hNotificationEvent, 1000 /*timeout*/ );
         // reset the event if it fired
 
@@ -345,7 +345,7 @@ A Query Pool is used to efficiently use and reuse device meory for multiple quer
 
 The following sample code demonstrates a basic sequence for query-based collection:
 ```c
-    ${x}_result_t MetricQueryUsageExample( ${x}_device_group_handle_t hDeviceGroup,
+    ${x}_result_t MetricQueryUsageExample( ${x}_driver_handle_t hDriver,
                                            ${x}_device_handle_t hDevice )
     {
         ${t}_metric_group_handle_t      hMetricGroup          = nullptr;
@@ -358,7 +358,7 @@ The following sample code demonstrates a basic sequence for query-based collecti
         ${t}_metric_query_pool_desc_t   queryPoolDesc         = {${T}_METRIC_QUERY_POOL_DESC_VERSION_CURRENT};
     
         // Find a "ComputeBasic" metric group suitable for Event Based collection
-        FindMetricGroup( hDeviceGroup, "ComputeBasic", ${T}_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED, &hMetricGroup );
+        FindMetricGroup( hDevice, "ComputeBasic", ${T}_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED, &hMetricGroup );
 
         // Configure HW
         ${t}DeviceActivateMetricGroups( hDevice, 1 /* count */, &hMetricGroup );
@@ -369,7 +369,7 @@ The following sample code demonstrates a basic sequence for query-based collecti
         ${t}MetricQueryPoolCreate( hDevice, hMetricGroup, &queryPoolDesc, &hMetricQueryPool );
         eventPoolDesc.flags = ${X}_EVENT_POOL_FLAG_DEFAULT;
         eventPoolDesc.count = 1000;
-        ${x}EventPoolCreate( hDeviceGroup, &eventPoolDesc, 1, &hDevice, &hEventPool );
+        ${x}EventPoolCreate( hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool );
 
         // Write BEGIN metric query to command list 
         ${t}MetricQueryCreate( hMetricQueryPool, 0 /*slot*/, &hMetricQuery );

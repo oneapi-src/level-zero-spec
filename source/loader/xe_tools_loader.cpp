@@ -16,7 +16,7 @@
 namespace loader
 {
     ///////////////////////////////////////////////////////////////////////////////
-    xet_device_group_factory_t          xet_device_group_factory;
+    xet_driver_factory_t                xet_driver_factory;
     xet_device_factory_t                xet_device_factory;
     xet_command_list_factory_t          xet_command_list_factory;
     xet_module_factory_t                xet_module_factory;
@@ -53,7 +53,7 @@ namespace loader
     /// @brief Intercept function for xetMetricGroupGet
     xe_result_t __xecall
     xetMetricGroupGet(
-        xet_device_group_handle_t hDeviceGroup,         ///< [in] handle of the device group
+        xet_device_handle_t hDevice,                    ///< [in] handle of the device
         uint32_t* pCount,                               ///< [in,out] pointer to the number of metric groups.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of metric groups available.
@@ -68,16 +68,16 @@ namespace loader
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xet_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto dditable = reinterpret_cast<xet_device_object_t*>( hDevice )->dditable;
         auto pfnGet = dditable->xet.MetricGroup.pfnGet;
         if( nullptr == pfnGet )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hDeviceGroup = reinterpret_cast<xet_device_group_object_t*>( hDeviceGroup )->handle;
+        hDevice = reinterpret_cast<xet_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        result = pfnGet( hDeviceGroup, pCount, phMetricGroups );
+        result = pfnGet( hDevice, pCount, phMetricGroups );
 
         try
         {
@@ -1215,7 +1215,7 @@ namespace loader
     /// @brief Intercept function for xetTracerCreate
     xe_result_t __xecall
     xetTracerCreate(
-        xet_device_group_handle_t hDeviceGroup,         ///< [in] handle of the device group
+        xet_device_handle_t hDevice,                    ///< [in] handle of the device
         const xet_tracer_desc_t* desc,                  ///< [in] pointer to tracer descriptor
         xet_tracer_handle_t* phTracer                   ///< [out] pointer to handle of tracer object created
         )
@@ -1223,16 +1223,16 @@ namespace loader
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xet_device_group_object_t*>( hDeviceGroup )->dditable;
+        auto dditable = reinterpret_cast<xet_device_object_t*>( hDevice )->dditable;
         auto pfnCreate = dditable->xet.Tracer.pfnCreate;
         if( nullptr == pfnCreate )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hDeviceGroup = reinterpret_cast<xet_device_group_object_t*>( hDeviceGroup )->handle;
+        hDevice = reinterpret_cast<xet_device_object_t*>( hDevice )->handle;
 
         // forward to device-driver
-        result = pfnCreate( hDeviceGroup, desc, phTracer );
+        result = pfnCreate( hDevice, desc, phTracer );
 
         try
         {

@@ -49,9 +49,9 @@ name: $x_bool_t
 value: uint8_t
 --- #--------------------------------------------------------------------------
 type: handle
-desc: "Handle of driver's device group object"
-class: $xDeviceGroup
-name: "$x_device_group_handle_t"
+desc: "Handle of a driver instance"
+class: $xDriver
+name: "$x_driver_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of driver's device object"

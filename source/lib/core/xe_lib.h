@@ -16,7 +16,7 @@
 
 namespace xe_lib
 {
-    using device_group_factory_t = singleton_factory_t<xe::DeviceGroup, xe::device_group_handle_t>;
+    using driver_factory_t = singleton_factory_t<xe::Driver, xe::driver_handle_t>;
     using device_factory_t = singleton_factory_t<xe::Device, xe::device_handle_t>;
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -32,8 +32,8 @@ namespace xe_lib
 
         xe_dditable_t   ddiTable = {};
 
-        device_group_factory_t  deviceGroupFactory;
-        device_factory_t        deviceFactory;
+        driver_factory_t    driverFactory;
+        device_factory_t    deviceFactory;
     };
 
     extern context_t context;

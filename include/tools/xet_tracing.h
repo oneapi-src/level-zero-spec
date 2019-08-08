@@ -54,11 +54,10 @@ typedef struct _xet_tracer_desc_t
 } xet_tracer_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates a tracer on the device group.
+/// @brief Creates a tracer for the specified device.
 /// 
 /// @details
-///     - The tracer can only be used on the device group on which it was
-///       created.
+///     - The tracer can only be used on the device on which it was created.
 ///     - The tracer is created in the disabled state.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
@@ -68,7 +67,7 @@ typedef struct _xet_tracer_desc_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDevice
 ///         + nullptr == desc
 ///         + nullptr == phTracer
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -76,7 +75,7 @@ typedef struct _xet_tracer_desc_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 xe_result_t __xecall
 xetTracerCreate(
-    xet_device_group_handle_t hDeviceGroup,         ///< [in] handle of the device group
+    xet_device_handle_t hDevice,                    ///< [in] handle of the device
     const xet_tracer_desc_t* desc,                  ///< [in] pointer to tracer descriptor
     xet_tracer_handle_t* phTracer                   ///< [out] pointer to handle of tracer object created
     );

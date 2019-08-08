@@ -27,20 +27,37 @@ int main( int argc, char *argv[] )
         putenv( const_cast<char *>( "XE_ENABLE_PARAMETER_VALIDATION=1" ) );
     }
 
-    xe::DeviceGroup* pDeviceGroup = nullptr;
-    if( init_xe() )
-        pDeviceGroup = findDeviceGroup( xe::DeviceGroup::device_type_t::GPU );
+    const xe::Driver::device_type_t type = xe::Driver::device_type_t::GPU;
 
-    if( !pDeviceGroup )
+    xe::Driver* pDriver = nullptr;
+    xe::Device* pDevice = nullptr;
+    if( init_xe() )
+    {
+        uint32_t driverCount = 0;
+        xe::GetDrivers( &driverCount );
+
+        std::vector<xe::Driver*> drivers( driverCount );
+        xe::GetDrivers( &driverCount, drivers.data() );
+
+        for( uint32_t driver = 0; driver < driverCount; ++driver )
+        {
+            pDriver = drivers[driver];
+            pDevice = findDevice( pDriver, type );
+            if( pDevice )
+            {
+                break;
+            }
+        }
+    }
+
+    if( !pDevice )
+    {
+        std::cout << "Did NOT find matching " << xe::to_string(type) <<" device!" << "\n";
         return -1;
+    }
 
     try
     {
-        // Get the first device within the device group
-        xe::Device* pDevice = nullptr;
-        uint32_t deviceCount = 1;
-        xe::Device::Get( pDeviceGroup, &deviceCount, &pDevice );
-
         // Create an immediate command list for direct submission
         xe::CommandQueue::desc_t queue_desc;
         auto pCommandList = std::shared_ptr<xe::CommandList>(
@@ -52,7 +69,7 @@ int main( int argc, char *argv[] )
         pool_desc.flags = xe::EventPool::flag_t::HOST_VISIBLE;
         pool_desc.count = 1;
         auto pEventPool = std::shared_ptr<xe::EventPool>(
-            xe::EventPool::Create( pDeviceGroup, &pool_desc, 0, nullptr ),
+            xe::EventPool::Create( pDriver, &pool_desc, 0, nullptr ),
             []( xe::EventPool* p ){ xe::EventPool::Destroy( p ); } );
 
         xe::Event::desc_t event_desc;

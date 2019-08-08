@@ -18,18 +18,21 @@ namespace driver
     context_t::context_t()
     {
         //////////////////////////////////////////////////////////////////////////
-        xeDdiTable.DeviceGroup.pfnGet = [](
+        xeDdiTable.Driver.pfnGetDevices = [](
+            xe_driver_handle_t,
             uint32_t* pCount,
-            xe_device_group_handle_t* phDeviceGroups )
+            xe_device_handle_t* phDevices )
         {
             *pCount = 1;
-            if( nullptr != phDeviceGroups ) *reinterpret_cast<void**>( phDeviceGroups ) = context.get();
+            if( nullptr != phDevices) *reinterpret_cast<void**>( phDevices ) = context.get();
             return XE_RESULT_SUCCESS;
         };
 
+        //pfnCreateEventPool
+
         //////////////////////////////////////////////////////////////////////////
-        xeDdiTable.DeviceGroup.pfnGetDriverVersion = [](
-            xe_device_group_handle_t,
+        xeDdiTable.Driver.pfnGetDriverVersion = [](
+            xe_driver_handle_t,
             uint32_t* version )
         {
             *version = 0;
@@ -37,17 +40,78 @@ namespace driver
         };
 
         //////////////////////////////////////////////////////////////////////////
-        xeDdiTable.DeviceGroup.pfnGetApiVersion = [](
-            xe_device_group_handle_t,
+        xeDdiTable.Driver.pfnGetApiVersion = [](
+            xe_driver_handle_t,
             xe_api_version_t* version )
         {
             *version = context.version;
             return XE_RESULT_SUCCESS;
         };
 
+        //pfnGetIPCProperties
+        
         //////////////////////////////////////////////////////////////////////////
-        xeDdiTable.DeviceGroup.pfnGetDeviceProperties = [](
-            xe_device_group_handle_t,
+        xeDdiTable.Driver.pfnAllocSharedMem = [](
+            xe_driver_handle_t,
+            xe_device_handle_t,
+            xe_device_mem_alloc_flag_t,
+            uint32_t,
+            xe_host_mem_alloc_flag_t,
+            size_t size,
+            size_t alignment,
+            void** pptr)
+        {
+            *pptr = malloc(size);
+            return XE_RESULT_SUCCESS;
+        };
+
+        //////////////////////////////////////////////////////////////////////////
+        xeDdiTable.Driver.pfnAllocDeviceMem = [](
+            xe_driver_handle_t,
+            xe_device_handle_t,
+            xe_device_mem_alloc_flag_t,
+            uint32_t,
+            size_t size,
+            size_t alignment,
+            void** pptr)
+        {
+            *pptr = malloc(size);
+            return XE_RESULT_SUCCESS;
+        };
+
+        //////////////////////////////////////////////////////////////////////////
+        xeDdiTable.Driver.pfnAllocHostMem = [](
+            xe_driver_handle_t,
+            xe_host_mem_alloc_flag_t,
+            size_t size,
+            size_t alignment,
+            void** pptr)
+        {
+            *pptr = malloc(size);
+            return XE_RESULT_SUCCESS;
+        };
+
+        //////////////////////////////////////////////////////////////////////////
+        xeDdiTable.Driver.pfnFreeMem = [](
+            xe_driver_handle_t,
+            void* ptr)
+        {
+            free(ptr);
+            return XE_RESULT_SUCCESS;
+        };
+
+        //pfnGetMemProperties
+        //pfnGetMemAddressRange
+        //pfnGetMemIpcHandle
+        //pfnOpenMemIpcHandle
+        //pfnCloseMemIpcHandle
+
+        //////////////////////////////////////////////////////////////////////////
+        //pfnGetSubDevices
+
+        //////////////////////////////////////////////////////////////////////////
+        xeDdiTable.Device.pfnGetProperties = [](
+            xe_device_handle_t,
             xe_device_properties_t* pDeviceProperties )
         {
             xe_device_properties_t deviceProperties = {};
@@ -63,8 +127,8 @@ namespace driver
         };
 
         //////////////////////////////////////////////////////////////////////////
-        xeDdiTable.DeviceGroup.pfnGetComputeProperties = [](
-            xe_device_group_handle_t,
+        xeDdiTable.Device.pfnGetComputeProperties = [](
+            xe_device_handle_t,
             xe_device_compute_properties_t* pComputeProperties )
         {
             xe_device_compute_properties_t computeProperties = {};
@@ -75,8 +139,8 @@ namespace driver
         };
 
         //////////////////////////////////////////////////////////////////////////
-        xeDdiTable.DeviceGroup.pfnGetMemoryProperties = [](
-            xe_device_group_handle_t,
+        xeDdiTable.Device.pfnGetMemoryProperties = [](
+            xe_device_handle_t,
             uint32_t* pCount,
             xe_device_memory_properties_t* pMemProperties )
         {
@@ -90,8 +154,8 @@ namespace driver
         };
 
         //////////////////////////////////////////////////////////////////////////
-        xeDdiTable.DeviceGroup.pfnGetMemoryAccessProperties = [](
-            xe_device_group_handle_t,
+        xeDdiTable.Device.pfnGetMemoryAccessProperties = [](
+            xe_device_handle_t,
             xe_device_memory_access_properties_t* pMemAccessProperties )
         {
             xe_device_memory_access_properties_t memoryAccessProperties = {};
@@ -102,8 +166,8 @@ namespace driver
         };
 
         //////////////////////////////////////////////////////////////////////////
-        xeDdiTable.DeviceGroup.pfnGetCacheProperties = [](
-            xe_device_group_handle_t,
+        xeDdiTable.Device.pfnGetCacheProperties = [](
+            xe_device_handle_t,
             xe_device_cache_properties_t* pCacheProperties )
         {
             xe_device_cache_properties_t cacheProperties = {};
@@ -114,8 +178,8 @@ namespace driver
         };
 
         //////////////////////////////////////////////////////////////////////////
-        xeDdiTable.DeviceGroup.pfnGetImageProperties = [](
-            xe_device_group_handle_t,
+        xeDdiTable.Device.pfnGetImageProperties = [](
+            xe_device_handle_t,
             xe_device_image_properties_t* pImageProperties )
         {
             xe_device_image_properties_t imageProperties = {};
@@ -126,69 +190,8 @@ namespace driver
         };
 
         //////////////////////////////////////////////////////////////////////////
-        xeDdiTable.DeviceGroup.pfnAllocDeviceMem = [](
-            xe_device_group_handle_t,
-            xe_device_handle_t,
-            xe_device_mem_alloc_flag_t,
-            uint32_t,
-            size_t size,
-            size_t alignment,
-            void** pptr )
-        {
-            *pptr = malloc( size );
-            return XE_RESULT_SUCCESS;
-        };
-
-        //////////////////////////////////////////////////////////////////////////
-        xeDdiTable.DeviceGroup.pfnAllocHostMem = [](
-            xe_device_group_handle_t,
-            xe_host_mem_alloc_flag_t,
-            size_t size,
-            size_t alignment,
-            void** pptr )
-        {
-            *pptr = malloc( size );
-            return XE_RESULT_SUCCESS;
-        };
-
-        //////////////////////////////////////////////////////////////////////////
-        xeDdiTable.DeviceGroup.pfnAllocSharedMem = [](
-            xe_device_group_handle_t,
-            xe_device_handle_t,
-            xe_device_mem_alloc_flag_t,
-            uint32_t,
-            xe_host_mem_alloc_flag_t,
-            size_t size,
-            size_t alignment,
-            void** pptr )
-        {
-            *pptr = malloc( size );
-            return XE_RESULT_SUCCESS;
-        };
-
-        //////////////////////////////////////////////////////////////////////////
-        xeDdiTable.DeviceGroup.pfnFreeMem = [](
-            xe_device_group_handle_t,
-            void* ptr )
-        {
-            free( ptr );
-            return XE_RESULT_SUCCESS;
-        };
-
-        //////////////////////////////////////////////////////////////////////////
-        xeDdiTable.Device.pfnGet = [](
-            xe_device_group_handle_t,
-            uint32_t* pCount,
-            xe_device_handle_t* phDevices )
-        {
-            *pCount = 1;
-            if( nullptr != phDevices ) *reinterpret_cast<void**>( phDevices ) = context.get();
-            return XE_RESULT_SUCCESS;
-        };
-
-        //////////////////////////////////////////////////////////////////////////
         xetDdiTable.MetricGroup.pfnGet = [](
-            xet_device_group_handle_t,
+            xet_device_handle_t,
             uint32_t* pCount,
             xet_metric_group_handle_t* phMetricGroups )
         {
@@ -294,7 +297,7 @@ namespace instrumented
 
             //////////////////////////////////////////////////////////////////////////
             driver::context.xetDdiTable.Tracer.pfnCreate = [](
-                xet_device_group_handle_t,
+                xet_device_handle_t,
                 const xet_tracer_desc_t* desc,
                 xet_tracer_handle_t* phTracer )
             {

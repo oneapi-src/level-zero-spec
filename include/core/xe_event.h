@@ -55,7 +55,7 @@ typedef struct _xe_event_pool_desc_t
 } xe_event_pool_desc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Creates a pool for a set of event(s) for the device group.
+/// @brief Creates a pool for a set of event(s) for the driver
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -66,7 +66,7 @@ typedef struct _xe_event_pool_desc_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDriver
 ///         + nullptr == desc
 ///         + nullptr == phEventPool
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
@@ -75,12 +75,13 @@ typedef struct _xe_event_pool_desc_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
 xeEventPoolCreate(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group
+    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     const xe_event_pool_desc_t* desc,               ///< [in] pointer to event pool descriptor
     uint32_t numDevices,                            ///< [in] number of device handles
     xe_device_handle_t* phDevices,                  ///< [in][optional][range(0, numDevices)] array of device handles which
                                                     ///< have visibility to the event pool.
-                                                    ///< if nullptr, then event pool is visible to all devices in the device group.
+                                                    ///< if nullptr, then event pool is visible to all devices supported by the
+                                                    ///< driver instance.
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
     );
 

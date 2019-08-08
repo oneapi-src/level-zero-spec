@@ -59,7 +59,7 @@ namespace xet
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         tracer_handle_t m_handle;                       ///< [in] handle of tracer object
-        DeviceGroup* m_pDeviceGroup;                    ///< [in] pointer to owner object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
         desc_t m_desc;                                  ///< [in] descriptor of the tracer object
 
     public:
@@ -67,7 +67,7 @@ namespace xet
         Tracer( void ) = delete;
         Tracer( 
             tracer_handle_t handle,                         ///< [in] handle of tracer object
-            DeviceGroup* pDeviceGroup,                      ///< [in] pointer to owner object
+            Device* pDevice,                                ///< [in] pointer to owner object
             const desc_t* desc                              ///< [in] descriptor of the tracer object
             );
 
@@ -81,15 +81,14 @@ namespace xet
 
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
-        auto getDevicegroup( void ) const { return m_pDeviceGroup; }
+        auto getDevice( void ) const { return m_pDevice; }
         auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Creates a tracer on the device group.
+        /// @brief Creates a tracer for the specified device.
         /// 
         /// @details
-        ///     - The tracer can only be used on the device group on which it was
-        ///       created.
+        ///     - The tracer can only be used on the device on which it was created.
         ///     - The tracer is created in the disabled state.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
@@ -99,7 +98,7 @@ namespace xet
         /// @throws result_t
         static Tracer* __xecall
         Create(
-            DeviceGroup* pDeviceGroup,                      ///< [in] pointer to the device group
+            Device* pDevice,                                ///< [in] pointer to the device
             const desc_t* desc                              ///< [in] pointer to tracer descriptor
             );
 

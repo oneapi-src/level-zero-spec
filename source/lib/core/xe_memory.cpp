@@ -24,8 +24,8 @@ extern "C" {
 /// @details
 ///     - Shared allocations share ownership between the host and one or more
 ///       devices.
-///     - By default, shared allocations are visible to all devices in the
-///       device group.
+///     - By default, shared allocations are visible to all devices supported by
+///       the driver.
 ///     - A shared allocation can be restricted to be only visible to the host
 ///       and a single device by specifying a single device handle.
 ///     - The application may call this function from simultaneous threads.
@@ -39,7 +39,7 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDriver
 ///         + nullptr == hDevice
 ///         + nullptr == pptr
 ///         + unsupported allocation size
@@ -48,23 +48,23 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
-xeDeviceGroupAllocSharedMem(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDriverAllocSharedMem(
+    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     xe_device_handle_t hDevice,                     ///< [in] handle of a device
     xe_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
     uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
-                                                    ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
+                                                    ///< must be less than the count returned from ::xeDeviceGetMemoryProperties
     xe_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
     void** pptr                                     ///< [out] pointer to shared allocation
     )
 {
-    auto pfnAllocSharedMem = xe_lib::context.ddiTable.DeviceGroup.pfnAllocSharedMem;
+    auto pfnAllocSharedMem = xe_lib::context.ddiTable.Driver.pfnAllocSharedMem;
     if( nullptr == pfnAllocSharedMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnAllocSharedMem( hDeviceGroup, hDevice, device_flags, ordinal, host_flags, size, alignment, pptr );
+    return pfnAllocSharedMem( hDriver, hDevice, device_flags, ordinal, host_flags, size, alignment, pptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -85,7 +85,7 @@ xeDeviceGroupAllocSharedMem(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDriver
 ///         + nullptr == hDevice
 ///         + nullptr == pptr
 ///         + unsupported allocation size
@@ -94,22 +94,22 @@ xeDeviceGroupAllocSharedMem(
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
-xeDeviceGroupAllocDeviceMem(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDriverAllocDeviceMem(
+    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
     uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
-                                                    ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
+                                                    ///< must be less than the count returned from ::xeDeviceGetMemoryProperties
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
     void** pptr                                     ///< [out] pointer to device allocation
     )
 {
-    auto pfnAllocDeviceMem = xe_lib::context.ddiTable.DeviceGroup.pfnAllocDeviceMem;
+    auto pfnAllocDeviceMem = xe_lib::context.ddiTable.Driver.pfnAllocDeviceMem;
     if( nullptr == pfnAllocDeviceMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnAllocDeviceMem( hDeviceGroup, hDevice, flags, ordinal, size, alignment, pptr );
+    return pfnAllocDeviceMem( hDriver, hDevice, flags, ordinal, size, alignment, pptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -118,7 +118,7 @@ xeDeviceGroupAllocDeviceMem(
 /// @details
 ///     - A host allocation is owned by the host process.
 ///     - Host allocations are accessible by the host and all devices within the
-///       device group.
+///       driver driver.
 ///     - Host allocations are frequently used as staging areas to transfer data
 ///       to or from devices.
 ///     - The application may call this function from simultaneous threads.
@@ -132,7 +132,7 @@ xeDeviceGroupAllocDeviceMem(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDriver
 ///         + nullptr == pptr
 ///         + unsupported allocation size
 ///         + unsupported alignment
@@ -140,19 +140,19 @@ xeDeviceGroupAllocDeviceMem(
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
-xeDeviceGroupAllocHostMem(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDriverAllocHostMem(
+    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     xe_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
     void** pptr                                     ///< [out] pointer to host allocation
     )
 {
-    auto pfnAllocHostMem = xe_lib::context.ddiTable.DeviceGroup.pfnAllocHostMem;
+    auto pfnAllocHostMem = xe_lib::context.ddiTable.Driver.pfnAllocHostMem;
     if( nullptr == pfnAllocHostMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnAllocHostMem( hDeviceGroup, flags, size, alignment, pptr );
+    return pfnAllocHostMem( hDriver, flags, size, alignment, pptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -176,20 +176,20 @@ xeDeviceGroupAllocHostMem(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDriver
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupFreeMem(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDriverFreeMem(
+    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     void* ptr                                       ///< [in][release] pointer to memory to free
     )
 {
-    auto pfnFreeMem = xe_lib::context.ddiTable.DeviceGroup.pfnFreeMem;
+    auto pfnFreeMem = xe_lib::context.ddiTable.Driver.pfnFreeMem;
     if( nullptr == pfnFreeMem )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnFreeMem( hDeviceGroup, ptr );
+    return pfnFreeMem( hDriver, ptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -207,23 +207,23 @@ xeDeviceGroupFreeMem(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDriver
 ///         + nullptr == ptr
 ///         + nullptr == pMemProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetMemProperties(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDriverGetMemProperties(
+    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     const void* ptr,                                ///< [in] memory pointer to query
     xe_memory_allocation_properties_t* pMemProperties,  ///< [out] query result for memory allocation properties
     xe_device_handle_t* phDevice                    ///< [out][optional] device associated with this allocation
     )
 {
-    auto pfnGetMemProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetMemProperties;
+    auto pfnGetMemProperties = xe_lib::context.ddiTable.Driver.pfnGetMemProperties;
     if( nullptr == pfnGetMemProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetMemProperties( hDeviceGroup, ptr, pMemProperties, phDevice );
+    return pfnGetMemProperties( hDriver, ptr, pMemProperties, phDevice );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -241,22 +241,22 @@ xeDeviceGroupGetMemProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDriver
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetMemAddressRange(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDriverGetMemAddressRange(
+    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     const void* ptr,                                ///< [in] memory pointer to query
     void** pBase,                                   ///< [in,out][optional] base address of the allocation
     size_t* pSize                                   ///< [in,out][optional] size of the allocation
     )
 {
-    auto pfnGetMemAddressRange = xe_lib::context.ddiTable.DeviceGroup.pfnGetMemAddressRange;
+    auto pfnGetMemAddressRange = xe_lib::context.ddiTable.Driver.pfnGetMemAddressRange;
     if( nullptr == pfnGetMemAddressRange )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetMemAddressRange( hDeviceGroup, ptr, pBase, pSize );
+    return pfnGetMemAddressRange( hDriver, ptr, pBase, pSize );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -277,22 +277,22 @@ xeDeviceGroupGetMemAddressRange(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDriver
 ///         + nullptr == ptr
 ///         + nullptr == pIpcHandle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetMemIpcHandle(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDriverGetMemIpcHandle(
+    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     const void* ptr,                                ///< [in] pointer to the device memory allocation
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
     )
 {
-    auto pfnGetMemIpcHandle = xe_lib::context.ddiTable.DeviceGroup.pfnGetMemIpcHandle;
+    auto pfnGetMemIpcHandle = xe_lib::context.ddiTable.Driver.pfnGetMemIpcHandle;
     if( nullptr == pfnGetMemIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetMemIpcHandle( hDeviceGroup, ptr, pIpcHandle );
+    return pfnGetMemIpcHandle( hDriver, ptr, pIpcHandle );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -303,8 +303,7 @@ xeDeviceGroupGetMemIpcHandle(
 ///     - Takes an IPC memory handle from a sending process and associates it
 ///       with a device pointer usable in this process.
 ///     - The device pointer in this process should not be freed with
-///       ::xeDeviceGroupFreeMem, but rather with
-///       ::xeDeviceGroupCloseMemIpcHandle.
+///       ::xeDriverFreeMem, but rather with ::xeDriverCloseMemIpcHandle.
 ///     - The application may call this function from simultaneous threads.
 /// 
 /// @remarks
@@ -316,25 +315,25 @@ xeDeviceGroupGetMemIpcHandle(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDriver
 ///         + nullptr == hDevice
 ///         + nullptr == pptr
 ///         + invalid flags
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupOpenMemIpcHandle(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDriverOpenMemIpcHandle(
+    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
     xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
     xe_ipc_memory_flag_t flags,                     ///< [in] flags controlling the operation
     void** pptr                                     ///< [out] pointer to device allocation in this process
     )
 {
-    auto pfnOpenMemIpcHandle = xe_lib::context.ddiTable.DeviceGroup.pfnOpenMemIpcHandle;
+    auto pfnOpenMemIpcHandle = xe_lib::context.ddiTable.Driver.pfnOpenMemIpcHandle;
     if( nullptr == pfnOpenMemIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnOpenMemIpcHandle( hDeviceGroup, hDevice, handle, flags, pptr );
+    return pfnOpenMemIpcHandle( hDriver, hDevice, handle, flags, pptr );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -342,7 +341,7 @@ xeDeviceGroupOpenMemIpcHandle(
 /// 
 /// @details
 ///     - Closes an IPC memory handle by unmapping memory that was opened in
-///       this process using ::xeDeviceGroupOpenMemIpcHandle.
+///       this process using ::xeDriverOpenMemIpcHandle.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same pointer.
 /// 
@@ -355,20 +354,20 @@ xeDeviceGroupOpenMemIpcHandle(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDriver
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupCloseMemIpcHandle(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDriverCloseMemIpcHandle(
+    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     const void* ptr                                 ///< [in][release] pointer to device allocation in this process
     )
 {
-    auto pfnCloseMemIpcHandle = xe_lib::context.ddiTable.DeviceGroup.pfnCloseMemIpcHandle;
+    auto pfnCloseMemIpcHandle = xe_lib::context.ddiTable.Driver.pfnCloseMemIpcHandle;
     if( nullptr == pfnCloseMemIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnCloseMemIpcHandle( hDeviceGroup, ptr );
+    return pfnCloseMemIpcHandle( hDriver, ptr );
 }
 
 } // extern "C"
@@ -382,8 +381,8 @@ namespace xe
     /// @details
     ///     - Shared allocations share ownership between the host and one or more
     ///       devices.
-    ///     - By default, shared allocations are visible to all devices in the
-    ///       device group.
+    ///     - By default, shared allocations are visible to all devices supported by
+    ///       the driver.
     ///     - A shared allocation can be restricted to be only visible to the host
     ///       and a single device by specifying a single device handle.
     ///     - The application may call this function from simultaneous threads.
@@ -397,11 +396,11 @@ namespace xe
     /// 
     /// @throws result_t
     void* __xecall
-    DeviceGroup::AllocSharedMem(
+    Driver::AllocSharedMem(
         Device* pDevice,                                ///< [in] pointer to a device
         device_mem_alloc_flag_t device_flags,           ///< [in] flags specifying additional device allocation controls
         uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
-                                                        ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
+                                                        ///< must be less than the count returned from ::xeDeviceGetMemoryProperties
         host_mem_alloc_flag_t host_flags,               ///< [in] flags specifying additional host allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
@@ -409,8 +408,8 @@ namespace xe
     {
         void* pptr;
 
-        auto result = static_cast<result_t>( ::xeDeviceGroupAllocSharedMem(
-            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+        auto result = static_cast<result_t>( ::xeDriverAllocSharedMem(
+            reinterpret_cast<xe_driver_handle_t>( getHandle() ),
             reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
             static_cast<xe_device_mem_alloc_flag_t>( device_flags ),
             ordinal,
@@ -420,7 +419,7 @@ namespace xe
             &pptr ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::AllocSharedMem" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Driver::AllocSharedMem" );
 
         return pptr;
     }
@@ -443,19 +442,19 @@ namespace xe
     /// 
     /// @throws result_t
     void* __xecall
-    DeviceGroup::AllocDeviceMem(
+    Driver::AllocDeviceMem(
         Device* pDevice,                                ///< [in] pointer to the device
         device_mem_alloc_flag_t flags,                  ///< [in] flags specifying additional allocation controls
         uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
-                                                        ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
+                                                        ///< must be less than the count returned from ::xeDeviceGetMemoryProperties
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
         )
     {
         void* pptr;
 
-        auto result = static_cast<result_t>( ::xeDeviceGroupAllocDeviceMem(
-            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+        auto result = static_cast<result_t>( ::xeDriverAllocDeviceMem(
+            reinterpret_cast<xe_driver_handle_t>( getHandle() ),
             reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
             static_cast<xe_device_mem_alloc_flag_t>( flags ),
             ordinal,
@@ -464,7 +463,7 @@ namespace xe
             &pptr ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::AllocDeviceMem" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Driver::AllocDeviceMem" );
 
         return pptr;
     }
@@ -475,7 +474,7 @@ namespace xe
     /// @details
     ///     - A host allocation is owned by the host process.
     ///     - Host allocations are accessible by the host and all devices within the
-    ///       device group.
+    ///       driver driver.
     ///     - Host allocations are frequently used as staging areas to transfer data
     ///       to or from devices.
     ///     - The application may call this function from simultaneous threads.
@@ -489,7 +488,7 @@ namespace xe
     /// 
     /// @throws result_t
     void* __xecall
-    DeviceGroup::AllocHostMem(
+    Driver::AllocHostMem(
         host_mem_alloc_flag_t flags,                    ///< [in] flags specifying additional allocation controls
         size_t size,                                    ///< [in] size in bytes to allocate
         size_t alignment                                ///< [in] minimum alignment in bytes for the allocation
@@ -497,15 +496,15 @@ namespace xe
     {
         void* pptr;
 
-        auto result = static_cast<result_t>( ::xeDeviceGroupAllocHostMem(
-            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+        auto result = static_cast<result_t>( ::xeDriverAllocHostMem(
+            reinterpret_cast<xe_driver_handle_t>( getHandle() ),
             static_cast<xe_host_mem_alloc_flag_t>( flags ),
             size,
             alignment,
             &pptr ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::AllocHostMem" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Driver::AllocHostMem" );
 
         return pptr;
     }
@@ -528,16 +527,16 @@ namespace xe
     /// 
     /// @throws result_t
     void __xecall
-    DeviceGroup::FreeMem(
+    Driver::FreeMem(
         void* ptr                                       ///< [in][release] pointer to memory to free
         )
     {
-        auto result = static_cast<result_t>( ::xeDeviceGroupFreeMem(
-            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+        auto result = static_cast<result_t>( ::xeDriverFreeMem(
+            reinterpret_cast<xe_driver_handle_t>( getHandle() ),
             ptr ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::FreeMem" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Driver::FreeMem" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -555,8 +554,8 @@ namespace xe
     ///     - Device*: device associated with this allocation
     /// 
     /// @throws result_t
-    DeviceGroup::memory_allocation_properties_t __xecall
-    DeviceGroup::GetMemProperties(
+    Driver::memory_allocation_properties_t __xecall
+    Driver::GetMemProperties(
         const void* ptr,                                ///< [in] memory pointer to query
         Device** ppDevice                               ///< [out][optional] device associated with this allocation
         )
@@ -565,14 +564,14 @@ namespace xe
 
         xe_device_handle_t hDevice;
 
-        auto result = static_cast<result_t>( ::xeDeviceGroupGetMemProperties(
-            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+        auto result = static_cast<result_t>( ::xeDriverGetMemProperties(
+            reinterpret_cast<xe_driver_handle_t>( getHandle() ),
             ptr,
             &memProperties,
             ( ppDevice ) ? &hDevice : nullptr ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetMemProperties" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Driver::GetMemProperties" );
 
         if( ppDevice )
             *ppDevice =  nullptr;
@@ -584,7 +583,7 @@ namespace xe
         }
         catch( std::bad_alloc& )
         {
-            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetMemProperties" );
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Driver::GetMemProperties" );
         }
 
         return *reinterpret_cast<memory_allocation_properties_t*>( &memProperties );
@@ -602,20 +601,20 @@ namespace xe
     /// 
     /// @throws result_t
     void __xecall
-    DeviceGroup::GetMemAddressRange(
+    Driver::GetMemAddressRange(
         const void* ptr,                                ///< [in] memory pointer to query
         void** pBase,                                   ///< [in,out][optional] base address of the allocation
         size_t* pSize                                   ///< [in,out][optional] size of the allocation
         )
     {
-        auto result = static_cast<result_t>( ::xeDeviceGroupGetMemAddressRange(
-            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+        auto result = static_cast<result_t>( ::xeDriverGetMemAddressRange(
+            reinterpret_cast<xe_driver_handle_t>( getHandle() ),
             ptr,
             pBase,
             pSize ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetMemAddressRange" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Driver::GetMemAddressRange" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -636,19 +635,19 @@ namespace xe
     /// 
     /// @throws result_t
     ipc_mem_handle_t __xecall
-    DeviceGroup::GetMemIpcHandle(
+    Driver::GetMemIpcHandle(
         const void* ptr                                 ///< [in] pointer to the device memory allocation
         )
     {
         xe_ipc_mem_handle_t ipcHandle;
 
-        auto result = static_cast<result_t>( ::xeDeviceGroupGetMemIpcHandle(
-            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+        auto result = static_cast<result_t>( ::xeDriverGetMemIpcHandle(
+            reinterpret_cast<xe_driver_handle_t>( getHandle() ),
             ptr,
             &ipcHandle ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetMemIpcHandle" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Driver::GetMemIpcHandle" );
 
         return *reinterpret_cast<ipc_mem_handle_t*>( &ipcHandle );
     }
@@ -661,8 +660,7 @@ namespace xe
     ///     - Takes an IPC memory handle from a sending process and associates it
     ///       with a device pointer usable in this process.
     ///     - The device pointer in this process should not be freed with
-    ///       ::xeDeviceGroupFreeMem, but rather with
-    ///       ::xeDeviceGroupCloseMemIpcHandle.
+    ///       ::xeDriverFreeMem, but rather with ::xeDriverCloseMemIpcHandle.
     ///     - The application may call this function from simultaneous threads.
     /// 
     /// @remarks
@@ -674,7 +672,7 @@ namespace xe
     /// 
     /// @throws result_t
     void* __xecall
-    DeviceGroup::OpenMemIpcHandle(
+    Driver::OpenMemIpcHandle(
         Device* pDevice,                                ///< [in] pointer to the device to associate with the IPC memory handle
         ipc_mem_handle_t handle,                        ///< [in] IPC memory handle
         ipc_memory_flag_t flags                         ///< [in] flags controlling the operation
@@ -682,15 +680,15 @@ namespace xe
     {
         void* pptr;
 
-        auto result = static_cast<result_t>( ::xeDeviceGroupOpenMemIpcHandle(
-            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+        auto result = static_cast<result_t>( ::xeDriverOpenMemIpcHandle(
+            reinterpret_cast<xe_driver_handle_t>( getHandle() ),
             reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
             *reinterpret_cast<xe_ipc_mem_handle_t*>( &handle ),
             static_cast<xe_ipc_memory_flag_t>( flags ),
             &pptr ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::OpenMemIpcHandle" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Driver::OpenMemIpcHandle" );
 
         return pptr;
     }
@@ -700,7 +698,7 @@ namespace xe
     /// 
     /// @details
     ///     - Closes an IPC memory handle by unmapping memory that was opened in
-    ///       this process using ::xeDeviceGroupOpenMemIpcHandle.
+    ///       this process using ::xeDriverOpenMemIpcHandle.
     ///     - The application may **not** call this function from simultaneous
     ///       threads with the same pointer.
     /// 
@@ -710,16 +708,16 @@ namespace xe
     /// 
     /// @throws result_t
     void __xecall
-    DeviceGroup::CloseMemIpcHandle(
+    Driver::CloseMemIpcHandle(
         const void* ptr                                 ///< [in][release] pointer to device allocation in this process
         )
     {
-        auto result = static_cast<result_t>( ::xeDeviceGroupCloseMemIpcHandle(
-            reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
+        auto result = static_cast<result_t>( ::xeDriverCloseMemIpcHandle(
+            reinterpret_cast<xe_driver_handle_t>( getHandle() ),
             ptr ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::CloseMemIpcHandle" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Driver::CloseMemIpcHandle" );
     }
 
 } // namespace xe

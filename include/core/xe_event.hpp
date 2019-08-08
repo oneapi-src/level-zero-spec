@@ -60,7 +60,7 @@ namespace xe
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         event_pool_handle_t m_handle;                   ///< [in] handle of event pool object
-        DeviceGroup* m_pDeviceGroup;                    ///< [in] pointer to owner object
+        Driver* m_pDriver;                              ///< [in] pointer to owner object
         desc_t m_desc;                                  ///< [in] descriptor of the event pool object
 
     public:
@@ -68,7 +68,7 @@ namespace xe
         EventPool( void ) = delete;
         EventPool( 
             event_pool_handle_t handle,                     ///< [in] handle of event pool object
-            DeviceGroup* pDeviceGroup,                      ///< [in] pointer to owner object
+            Driver* pDriver,                                ///< [in] pointer to owner object
             const desc_t* desc                              ///< [in] descriptor of the event pool object
             );
 
@@ -82,11 +82,11 @@ namespace xe
 
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
-        auto getDevicegroup( void ) const { return m_pDeviceGroup; }
+        auto getDriver( void ) const { return m_pDriver; }
         auto getDesc( void ) const { return m_desc; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Creates a pool for a set of event(s) for the device group.
+        /// @brief Creates a pool for a set of event(s) for the driver
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
@@ -97,12 +97,13 @@ namespace xe
         /// @throws result_t
         static EventPool* __xecall
         Create(
-            DeviceGroup* pDeviceGroup,                      ///< [in] pointer to the device group
+            Driver* pDriver,                                ///< [in] pointer to the driver instance
             const desc_t* desc,                             ///< [in] pointer to event pool descriptor
             uint32_t numDevices,                            ///< [in] number of device handles
             Device** ppDevices = nullptr                    ///< [in][optional][range(0, numDevices)] array of device handles which
                                                             ///< have visibility to the event pool.
-                                                            ///< if nullptr, then event pool is visible to all devices in the device group.
+                                                            ///< if nullptr, then event pool is visible to all devices supported by the
+                                                            ///< driver instance.
             );
 
         ///////////////////////////////////////////////////////////////////////////////

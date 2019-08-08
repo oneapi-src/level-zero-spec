@@ -18,7 +18,7 @@
 extern "C" {
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves metric group for a device group.
+/// @brief Retrieves metric group for a device.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -28,13 +28,13 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDevice
 ///         + nullptr == pCount
 ///         + devices do not contain a given metric group
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetMetricGroupGet(
-    xet_device_group_handle_t hDeviceGroup,         ///< [in] handle of the device group
+    xet_device_handle_t hDevice,                    ///< [in] handle of the device
     uint32_t* pCount,                               ///< [in,out] pointer to the number of metric groups.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of metric groups available.
@@ -50,7 +50,7 @@ xetMetricGroupGet(
     if( nullptr == pfnGet )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGet( hDeviceGroup, pCount, phMetricGroups );
+    return pfnGet( hDevice, pCount, phMetricGroups );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -627,10 +627,10 @@ namespace xet
     ///////////////////////////////////////////////////////////////////////////////
     MetricGroup::MetricGroup( 
         metric_group_handle_t handle,                   ///< [in] handle of metric group object
-        DeviceGroup* pDeviceGroup                       ///< [in] pointer to owner object
+        Device* pDevice                                 ///< [in] pointer to owner object
         ) :
         m_handle( handle ),
-        m_pDeviceGroup( pDeviceGroup )
+        m_pDevice( pDevice )
     {
     }
 
@@ -679,7 +679,7 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieves metric group for a device group.
+    /// @brief Retrieves metric group for a device.
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -687,7 +687,7 @@ namespace xet
     /// @throws result_t
     void __xecall
     MetricGroup::Get(
-        DeviceGroup* pDeviceGroup,                      ///< [in] pointer to the device group
+        Device* pDevice,                                ///< [in] pointer to the device
         uint32_t* pCount,                               ///< [in,out] pointer to the number of metric groups.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of metric groups available.
@@ -704,7 +704,7 @@ namespace xet
         hMetricGroups.resize( ( ppMetricGroups ) ? *pCount : 0 );
 
         auto result = static_cast<result_t>( ::xetMetricGroupGet(
-            reinterpret_cast<xet_device_group_handle_t>( pDeviceGroup->getHandle() ),
+            reinterpret_cast<xet_device_handle_t>( pDevice->getHandle() ),
             pCount,
             hMetricGroups.data() ) );
 
@@ -717,7 +717,7 @@ namespace xet
         try
         {
             for( uint32_t i = 0; ( ppMetricGroups ) && ( i < *pCount ); ++i )
-                ppMetricGroups[ i ] = xet_lib::context.metricGroupFactory.getInstance( reinterpret_cast<metric_group_handle_t>( hMetricGroups[ i ] ), pDeviceGroup );
+                ppMetricGroups[ i ] = xet_lib::context.metricGroupFactory.getInstance( reinterpret_cast<metric_group_handle_t>( hMetricGroups[ i ] ), pDevice );
         }
         catch( std::bad_alloc& )
         {

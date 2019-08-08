@@ -27,72 +27,6 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves device groups
-/// 
-/// @details
-///     - A device group represents a collection of physical, homogeneous
-///       devices.
-///     - The application may pass nullptr for pDeviceGroups when only querying
-///       the number of device groups.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - clGetDeviceIDs
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == pCount
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xeDeviceGroupGet(
-    uint32_t* pCount,                               ///< [in,out] pointer to the number of device groups.
-                                                    ///< if count is zero, then the driver will update the value with the total
-                                                    ///< number of device groups available.
-                                                    ///< if count is non-zero, then driver will only retrieve that number of
-                                                    ///< device groups.
-                                                    ///< if count is larger than the number of device groups available, then
-                                                    ///< the driver will update the value with the correct number of device
-                                                    ///< groups available.
-    xe_device_group_handle_t* phDeviceGroups        ///< [in,out][optional][range(0, *pCount)] array of handle of device groups
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves devices within a device group
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuDeviceGet**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
-///         + nullptr == pCount
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xeDeviceGet(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
-                                                    ///< if count is zero, then the driver will update the value with the total
-                                                    ///< number of devices available.
-                                                    ///< if count is non-zero, then driver will only retrieve that number of devices.
-                                                    ///< if count is larger than the number of devices available, then the
-                                                    ///< driver will update the value with the correct number of devices available.
-    xe_device_handle_t* phDevices                   ///< [in,out][optional][range(0, *pCount)] array of handle of devices
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Retrieves a sub-device from a device
 /// 
 /// @details
@@ -121,43 +55,6 @@ xeDeviceGetSubDevices(
                                                     ///< if count is larger than the number of sub-devices available, then the
                                                     ///< driver will update the value with the correct number of sub-devices available.
     xe_device_handle_t* phSubdevices                ///< [in,out][optional][range(0, *pCount)] array of handle of sub-devices
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported API versions
-/// 
-/// @details
-///     - API versions contain major and minor attributes, use
-///       ::XE_MAJOR_VERSION and ::XE_MINOR_VERSION
-typedef enum _xe_api_version_t
-{
-    XE_API_VERSION_1_0 = XE_MAKE_VERSION( 1, 0 ),   ///< 1.0
-
-} xe_api_version_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Returns the API version supported by the device group
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuCtxGetApiVersion**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
-///         + nullptr == version
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xeDeviceGroupGetApiVersion(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    xe_api_version_t* version                       ///< [out] api version
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -198,7 +95,7 @@ typedef struct _xe_device_uuid_t
 #endif // XE_MAX_DEVICE_NAME
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Device properties queried using ::xeDeviceGroupGetDeviceProperties
+/// @brief Device properties queried using ::xeDeviceGetProperties
 typedef struct _xe_device_properties_t
 {
     xe_device_properties_version_t version;         ///< [in] ::XE_DEVICE_PROPERTIES_VERSION_CURRENT
@@ -227,7 +124,7 @@ typedef struct _xe_device_properties_t
 } xe_device_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves attributes of all devices in the device group.
+/// @brief Retrieves properties of the device.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -244,12 +141,12 @@ typedef struct _xe_device_properties_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDevice
 ///         + nullptr == pDeviceProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetDeviceProperties(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDeviceGetProperties(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
     );
 
@@ -268,8 +165,7 @@ typedef enum _xe_device_compute_properties_version_t
 #endif // XE_SUBGROUPSIZE_COUNT
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Device compute properties queried using
-///        ::xeDeviceGroupGetComputeProperties
+/// @brief Device compute properties queried using ::xeDeviceGetComputeProperties
 typedef struct _xe_device_compute_properties_t
 {
     xe_device_compute_properties_version_t version; ///< [in] ::XE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT
@@ -289,7 +185,7 @@ typedef struct _xe_device_compute_properties_t
 } xe_device_compute_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves compute attributes of all devices in the device group.
+/// @brief Retrieves compute properties of the device.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -305,12 +201,12 @@ typedef struct _xe_device_compute_properties_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDevice
 ///         + nullptr == pComputeProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetComputeProperties(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDeviceGetComputeProperties(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
     );
 
@@ -324,7 +220,7 @@ typedef enum _xe_device_memory_properties_version_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Device local memory properties queried using
-///        ::xeDeviceGroupGetMemoryProperties
+///        ::xeDeviceGetMemoryProperties
 typedef struct _xe_device_memory_properties_t
 {
     xe_device_memory_properties_version_t version;  ///< [in] ::XE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT
@@ -335,7 +231,7 @@ typedef struct _xe_device_memory_properties_t
 } xe_device_memory_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves local memory attributes of all devices in the device group.
+/// @brief Retrieves local memory properties of the device.
 /// 
 /// @details
 ///     - Properties are reported for each physical memory type supported by the
@@ -354,12 +250,12 @@ typedef struct _xe_device_memory_properties_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDevice
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetMemoryProperties(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDeviceGetMemoryProperties(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
     uint32_t* pCount,                               ///< [in,out] pointer to the number of memory properties supported.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of memory properties available.
@@ -398,7 +294,7 @@ typedef enum _xe_memory_access_capabilities_t
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Device memory access properties queried using
-///        ::xeDeviceGroupGetMemoryAccessProperties
+///        ::xeDeviceGetMemoryAccessProperties
 typedef struct _xe_device_memory_access_properties_t
 {
     xe_device_memory_access_properties_version_t version;   ///< [in] ::XE_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT
@@ -411,7 +307,7 @@ typedef struct _xe_device_memory_access_properties_t
 } xe_device_memory_access_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves memory access attributes of all devices in the device group.
+/// @brief Retrieves memory access properties of the device.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -428,12 +324,12 @@ typedef struct _xe_device_memory_access_properties_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDevice
 ///         + nullptr == pMemAccessProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetMemoryAccessProperties(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDeviceGetMemoryAccessProperties(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_memory_access_properties_t* pMemAccessProperties  ///< [out] query result for memory access properties
     );
 
@@ -446,8 +342,7 @@ typedef enum _xe_device_cache_properties_version_t
 } xe_device_cache_properties_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Device cache properties queried using
-///        ::xeDeviceGroupGetCacheProperties
+/// @brief Device cache properties queried using ::xeDeviceGetCacheProperties
 typedef struct _xe_device_cache_properties_t
 {
     xe_device_cache_properties_version_t version;   ///< [in] ::XE_DEVICE_CACHE_PROPERTIES_VERSION_CURRENT
@@ -461,7 +356,7 @@ typedef struct _xe_device_cache_properties_t
 } xe_device_cache_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves cache attributes of the device
+/// @brief Retrieves cache propreties of the device
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -478,12 +373,12 @@ typedef struct _xe_device_cache_properties_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDevice
 ///         + nullptr == pCacheProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetCacheProperties(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDeviceGetCacheProperties(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_cache_properties_t* pCacheProperties  ///< [out] query result for cache properties
     );
 
@@ -496,8 +391,7 @@ typedef enum _xe_device_image_properties_version_t
 } xe_device_image_properties_version_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Device image properties queried using
-///        ::xeDeviceGroupGetComputeProperties
+/// @brief Device image properties queried using ::xeDeviceGetComputeProperties
 typedef struct _xe_device_image_properties_t
 {
     xe_device_image_properties_version_t version;   ///< [in] ::XE_DEVICE_IMAGE_PROPERTIES_VERSION_CURRENT
@@ -511,7 +405,8 @@ typedef struct _xe_device_image_properties_t
 } xe_device_image_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves image attributes of the device
+/// @brief Retrieves image X_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT of
+///        the device
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -526,58 +421,13 @@ typedef struct _xe_device_image_properties_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDevice
 ///         + nullptr == pImageProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetImageProperties(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDeviceGetImageProperties(
+    xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_image_properties_t* pImageProperties  ///< [out] query result for image properties
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief API version of ::xe_device_ipc_properties_t
-typedef enum _xe_device_ipc_properties_version_t
-{
-    XE_DEVICE_IPC_PROPERTIES_VERSION_CURRENT = XE_MAKE_VERSION( 1, 0 ), ///< version 1.0
-
-} xe_device_ipc_properties_version_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Device IPC properties queried using ::xeDeviceGroupGetIPCProperties
-typedef struct _xe_device_ipc_properties_t
-{
-    xe_device_ipc_properties_version_t version;     ///< [in] ::XE_DEVICE_IPC_PROPERTIES_VERSION_CURRENT
-    xe_bool_t memsSupported;                        ///< [out] Supports passing memory allocations between processes. See
-                                                    ///< ::::xeDeviceGroupGetMemIpcHandle.
-    xe_bool_t eventsSupported;                      ///< [out] Supports passing events between processes. See
-                                                    ///< ::::xeEventPoolGetIpcHandle.
-
-} xe_device_ipc_properties_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves IPC attributes of the device
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuDeviceGetAttribute**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
-///         + nullptr == pIPCProperties
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xeDeviceGroupGetIPCProperties(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    xe_device_ipc_properties_t* pIPCProperties      ///< [out] query result for IPC properties
     );
 
 ///////////////////////////////////////////////////////////////////////////////

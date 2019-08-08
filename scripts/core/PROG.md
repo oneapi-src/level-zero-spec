@@ -14,7 +14,7 @@ NOTE: Sample code in this document contains little or no error checking for brev
 
 
 ${"##"} Table of Contents
-* [Devices](#dd)
+* [Drivers and Devices](#dd)
 * [Memory and Images](#mi)
     + [Memory](#mem)
     + [Images](#img)
@@ -38,21 +38,22 @@ ${"##"} Table of Contents
     + [Peer-to-Peer Access and Queries](#peer)
 
 ${"#"} <a name="dd">Devices</a>
-${"##"} Device Group
-A device group represents a collection of physical, homogeneous devices in the system that support Level-Zero.
-- The application may query the number device groups and the properties of each device group.
-- More than one device group may be available in the system. For example, group 0 may contain two GPUs, group 1 may contain one FPGA, and finally group 2 may contain another GPU with different properties than group 0.
-- A device group is primarily used for allocating and freeing memory used by one or more devices
-- Memory is **not** implicitly shared across all devices within a device group.  However, it is available to be explicitly shared.
+${"##"} Drivers
+
+A driver represents a collection of physical devices in the system using the same Level-Zero driver.
+- The application may query the number of Level-Zero drivers installed on the system and the properties of each driver.
+- More than one driver may be available in the system. For example, one driver may support two GPUs from one vendor, another driver support a GPU from a different vendor, and finally a different driver may support an FPGA.
+- A driver is primarily used to allocate and manage resources that are used by multiple devices.
+- Memory is **not** implicitly shared across all devices supported by a driver.  However, it is available to be explicitly shared.
 
 ${"##"} Device
+
 A device represents a physical device in the system that support Level-Zero.
-- The application may query the number devices within a device group.
-- All devices in the device group share the same properties.
+- The application may query the number devices supported by a driver.
 - The application is responsible for sharing memory and explicit submission and synchronization across multiple devices.
 - Device may expose sub-devices that allow finer-grained partition and control; such as each tile of a multi-tile devices.
 
-The following diagram illustrates the relationship between the device group, device and other objects described in this document.  
+The following diagram illustrates the relationship between the driver, device and other objects described in this document.  
 ![Device](../images/core_device.png?raw=true)  
 @image latex core_device.png
 
@@ -60,42 +61,51 @@ ${"##"} Initialization and Discovery
 The driver must be initialized by calling ::${x}Init before any other function.
 This function will load and initialize all Level-Zero driver(s) in the system for all threads in the current process.
 Simultaneous calls to ::${x}Init are thread-safe and only one instance of driver(s) will be loaded per-process.
-This function will allow queries of the available device groups in the system.
+This function will allow queries of the available driver instances in the system.
 
 The following sample code demonstrates a basic initialization and device discovery sequence:
 ```c
     // Initialize the driver
     ${x}Init(${X}_INIT_FLAG_NONE);
 
+    // Discover all the driver instances
+    uint32_t driverCount = 0;
+    ${x}GetDrivers(&driverCount, nullptr);
 
-    // Discover all the device groups and devices
-    uint32_t groupCount = 0;
-    ${x}DeviceGroupGet(&groupCount, nullptr);
+    ${x}_driver_handle_t* allDrivers = (${x}_driver_handle_t*)
+        malloc(driverCount * sizeof(${x}_driver_handle_t));
+    ${x}GetDrivers(&driverCount, allDrivers);
 
-    ${x}_device_group_handle_t* allDeviceGroups = (${x}_device_group_handle_t*)
-        malloc(groupCount * sizeof(${x}_device_group_handle_t));
-    ${x}DeviceGroupGet(&groupCount, allDeviceGroups);
+    // Find a driver instance with a GPU device
+    ${x}_driver_handle_t hDriver = nullptr;
+    ${x}_device_handle_t hDevice = nullptr;
+    for(uint32_t i = 0; i < driverCount; ++i) {
+        uint32_t deviceCount = 0;
+        ${x}DriverGetDevices(allDrivers[i], &deviceCount, nullptr);
 
+        ${x}_device_handle_t* allDevices = (${x}_device_handle_t*)
+            malloc(deviceCount * sizeof(${x}_device_handle_t));
+        ${x}DriverGetDevices(allDrivers[i], &deviceCount, allDevices);
 
-    // Find the first GPU device group
-    ${x}_device_group_handle_t hDeviceGroup = nullptr;
-    for(uint32_t i = 0; i < groupCount; ++i) {
-        ${x}_device_properties_t device_properties;
-        ${x}DeviceGroupGetDeviceProperties(allDeviceGroups[i], &device_properties);
+        for(uint32_t d = 0; d < deviceCount; ++d) {
+            ${x}_device_properties_t device_properties;
+            ${x}DeviceGetProperties(allDevices[d], &device_properties);
     
-        if(${X}_DEVICE_TYPE_GPU == device_properties.type) {
-            hDeviceGroup = allDeviceGroups[i];
+            if(${X}_DEVICE_TYPE_GPU == device_properties.type) {
+                hDevice = allDevices[d];
+                break;
+            }
+        }
+
+        free(allDevices);
+        if(nullptr != hDevice) {
             break;
         }
     }
-    if(nullptr == hDeviceGroup)
+
+    free(allDrivers);
+    if(nullptr == hDevice)
         return; // no GPU devices found
-
-
-    // Get the first device within the device group
-    ${x}_device_handle_t hDevice = nullptr;
-    uint32_t deviceCount = 1;
-    ${x}DeviceGet(hDeviceGroup, &deviceCount, &hDevice);
 
     ...
 
@@ -479,7 +489,7 @@ The following sample code demonstrates a sequence for creation and submission of
         1
     };
     ${x}_event_pool_handle_t hEventPool;
-    ${x}EventPoolCreate(hDeviceGroup, &eventPoolDesc, 0, nullptr, &hEventPool);
+    ${x}EventPoolCreate(hDriver, &eventPoolDesc, 0, nullptr, &hEventPool);
 
     ${x}_event_desc_t eventDesc = {
         ${X}_EVENT_DESC_VERSION_CURRENT,
@@ -815,7 +825,7 @@ device to generate the parameters.
     ${x}_thread_group_dimensions_t* pIndirectArgs;
     
     ...
-    ${x}DeviceGroupAllocDeviceMem(hDeviceGroup, hDevice, flags, 0, sizeof(${x}_thread_group_dimensions_t), sizeof(uint32_t), &pIndirectArgs);
+    ${x}DriverAllocDeviceMem(hDriver, hDevice, flags, 0, sizeof(${x}_thread_group_dimensions_t), sizeof(uint32_t), &pIndirectArgs);
 
     // Append function
     ${x}CommandListAppendLaunchFunctionIndirect(hCommandList, hFunction, &pIndirectArgs, nullptr, 0, nullptr);
@@ -879,7 +889,7 @@ This ordinal specifies which physical compute queue on the device or sub-device 
 The application needs to query ::${x}_device_properties_t.numAsyncComputeEngines from the sub-device to determine how to set this ordinal.
 See ::${x}_command_queue_desc_t for more details.
 
-A 16-byte unique device identifier (uuid) can be obtained for a device or sub-device using ::${x}DeviceGroupGetDeviceProperties.
+A 16-byte unique device identifier (uuid) can be obtained for a device or sub-device using ::${x}DeviceGetProperties.
 
 ```c
     // Query for all sub-devices of the device
@@ -896,13 +906,13 @@ A 16-byte unique device identifier (uuid) can be obtained for a device or sub-de
 
     // Query sub-device properties.
     ${x}_device_properties_t subdeviceProps;
-    ${x}DeviceGroupGetDeviceProperties(hSubdevice, &subdeviceProps);
+    ${x}DeviceGetProperties(hSubdevice, &subdeviceProps);
 
     assert(subdeviceProps.isSubdevice == true); // Ensure that we have a handle to a sub-device.
     assert(subdeviceProps.subdeviceId == 2);    // Ensure that we have a handle to the sub-device we asked for.
 
     void* pMemForSubDevice2;
-    ${x}DeviceGroupAllocDeviceMem(hDeviceGroup, hSubdevice, ${X}_DEVICE_MEM_ALLOC_FLAG_DEFAULT, 0, memSize, sizeof(uint32_t), &pMemForSubDevice2);
+    ${x}DriverAllocDeviceMem(hDriver, hSubdevice, ${X}_DEVICE_MEM_ALLOC_FLAG_DEFAULT, 0, memSize, sizeof(uint32_t), &pMemForSubDevice2);
     ...
 
     ...
@@ -936,9 +946,9 @@ The following sample code demonstrate a sequence for using coarse-grain residenc
         node* next;
     };
     node* begin = nullptr;
-    ${x}DeviceGroupAllocHostMem(hDeviceGroup, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
-    ${x}DeviceGroupAllocHostMem(hDeviceGroup, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
-    ${x}DeviceGroupAllocHostMem(hDeviceGroup, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
+    ${x}DriverAllocHostMem(hDriver, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
+    ${x}DriverAllocHostMem(hDriver, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
+    ${x}DriverAllocHostMem(hDriver, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
 
     // 'begin' is passed as function argument and appended into command list
     ${x}FunctionSetAttribute(hFuncArgs, ${X}_FUNCTION_SET_ATTR_INDIRECT_HOST_ACCESS, TRUE);
@@ -956,9 +966,9 @@ The following sample code demonstrate a sequence for using fine-grain residency 
         node* next;
     };
     node* begin = nullptr;
-    ${x}DeviceGroupAllocHostMem(hDeviceGroup, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
-    ${x}DeviceGroupAllocHostMem(hDeviceGroup, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
-    ${x}DeviceGroupAllocHostMem(hDeviceGroup, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
+    ${x}DriverAllocHostMem(hDriver, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin);
+    ${x}DriverAllocHostMem(hDriver, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next);
+    ${x}DriverAllocHostMem(hDriver, ${X}_HOST_MEM_ALLOC_FLAG_DEFAULT, sizeof(node), 1, &begin->next->next);
 
     // 'begin' is passed as function argument and appended into command list
     ${x}FunctionSetArgumentValue(hFunction, 0, sizeof(node*), &begin);
@@ -1034,10 +1044,10 @@ The following code examples demonstrate how to use the memory IPC APIs:
 1. First, the allocation is made, packaged, and sent on the sending process:
 ```c
     void* dptr = nullptr;
-    ${x}DeviceGroupAllocDeviceMem(hDeviceGroup, hDevice, flags, 0, size, alignment, &dptr);
+    ${x}DriverAllocDeviceMem(hDriver, hDevice, flags, 0, size, alignment, &dptr);
 
     ${x}_ipc_mem_handle_t hIPC;
-    ${x}DeviceGroupGetMemIpcHandle(hDeviceGroup, dptr, &hIPC);
+    ${x}DriverGetMemIpcHandle(hDriver, dptr, &hIPC);
 
     // Method of sending to receiving process is not defined by Level-Zero:
     send_to_receiving_process(hIPC);
@@ -1050,7 +1060,7 @@ The following code examples demonstrate how to use the memory IPC APIs:
     hIPC = receive_from_sending_process();
 
     void* dptr = nullptr;
-    ${x}DeviceGroupOpenMemIpcHandle(hDeviceGroup, hDevice, hIPC, ${X}_IPC_MEMORY_FLAG_NONE, &dptr);
+    ${x}DriverOpenMemIpcHandle(hDriver, hDevice, hIPC, ${X}_IPC_MEMORY_FLAG_NONE, &dptr);
 ```
 
 3. Each process may now refer to the same device memory allocation via its `dptr`.
@@ -1058,12 +1068,12 @@ Note, there is no guaranteed address equivalence for the values of `dptr` in eac
 
 4. To cleanup, first close the handle in the receiving process:
 ```c
-    ${x}DeviceGroupCloseMemIpcHandle(hDeviceGroup, dptr);
+    ${x}DriverCloseMemIpcHandle(hDriver, dptr);
 ```
 
 5. Finally, free the device pointer in the sending process:
 ```c
-    ${x}DeviceGroupFreeMem(hDeviceGroup, dptr);
+    ${x}DriverFreeMem(hDriver, dptr);
 ```
 
 ${"###"} Events
@@ -1078,7 +1088,7 @@ The following code examples demonstrate how to use the event IPC APIs:
         10
     };
     ${x}_event_pool_handle_t hEventPool;
-    ${x}EventPoolCreate(hDeviceGroup, &eventPoolDesc, 1, &hDevice, &hEventPool);
+    ${x}EventPoolCreate(hDriver, &eventPoolDesc, 1, &hDevice, &hEventPool);
  
     // get IPC handle and send to another process
     ${x}_ipc_event_pool_handle_t hIpcEvent;

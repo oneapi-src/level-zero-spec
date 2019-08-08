@@ -8,15 +8,16 @@
 #include "xello_init.h"
 
 //////////////////////////////////////////////////////////////////////////
-inline xet::MetricGroup* findMetricGroup( xet::DeviceGroup* pDeviceGroup,
+inline xet::MetricGroup* findMetricGroup(
+    xet::Device* pDevice,
     const xet::MetricGroup::sampling_type_t type,
     const char* name = "" )
 {
     uint32_t groupCount = 0;
-    xet::MetricGroup::Get( pDeviceGroup, &groupCount );
+    xet::MetricGroup::Get( pDevice, &groupCount );
 
     std::vector< xet::MetricGroup*> metricGroups( groupCount );
-    xet::MetricGroup::Get( pDeviceGroup, &groupCount, metricGroups.data() );
+    xet::MetricGroup::Get( pDevice, &groupCount, metricGroups.data() );
 
     xet::MetricGroup* found = nullptr;
 

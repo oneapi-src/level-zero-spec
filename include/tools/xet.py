@@ -18,8 +18,8 @@ from enum import *
 __version__ = "1.0"
 
 ###############################################################################
-## @brief Handle of device group object
-class xet_device_group_handle_t(c_void_p):
+## @brief Handle to a driver instance
+class xet_driver_handle_t(c_void_p):
     pass
 
 ###############################################################################
@@ -1631,9 +1631,9 @@ class _xet_function_dditable_t(Structure):
 ###############################################################################
 ## @brief Function-pointer for xetMetricGroupGet
 if __use_win_types:
-    _xetMetricGroupGet_t = WINFUNCTYPE( xe_result_t, xet_device_group_handle_t, POINTER(c_ulong), POINTER(xet_metric_group_handle_t) )
+    _xetMetricGroupGet_t = WINFUNCTYPE( xe_result_t, xet_device_handle_t, POINTER(c_ulong), POINTER(xet_metric_group_handle_t) )
 else:
-    _xetMetricGroupGet_t = CFUNCTYPE( xe_result_t, xet_device_group_handle_t, POINTER(c_ulong), POINTER(xet_metric_group_handle_t) )
+    _xetMetricGroupGet_t = CFUNCTYPE( xe_result_t, xet_device_handle_t, POINTER(c_ulong), POINTER(xet_metric_group_handle_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetMetricGroupGetProperties
@@ -1778,9 +1778,9 @@ class _xet_metric_query_dditable_t(Structure):
 ###############################################################################
 ## @brief Function-pointer for xetTracerCreate
 if __use_win_types:
-    _xetTracerCreate_t = WINFUNCTYPE( xe_result_t, xet_device_group_handle_t, POINTER(xet_tracer_desc_t), POINTER(xet_tracer_handle_t) )
+    _xetTracerCreate_t = WINFUNCTYPE( xe_result_t, xet_device_handle_t, POINTER(xet_tracer_desc_t), POINTER(xet_tracer_handle_t) )
 else:
-    _xetTracerCreate_t = CFUNCTYPE( xe_result_t, xet_device_group_handle_t, POINTER(xet_tracer_desc_t), POINTER(xet_tracer_handle_t) )
+    _xetTracerCreate_t = CFUNCTYPE( xe_result_t, xet_device_handle_t, POINTER(xet_tracer_desc_t), POINTER(xet_tracer_handle_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetTracerDestroy

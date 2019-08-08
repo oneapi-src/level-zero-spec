@@ -66,7 +66,7 @@
 namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief C++ wrapper for SMI of a device group
+    /// @brief C++ wrapper for SMI of a device
     class Sysman
     {
     public:
@@ -584,7 +584,7 @@ namespace xet
         /// @brief Data for the property ::XET_RESPROP_DEV_UUID
         struct resprop_dev_uuid_t
         {
-            xe::DeviceGroup::device_uuid_t uuid;            ///< [out] Device UUID
+            xe::Driver::device_uuid_t uuid;                 ///< [out] Device UUID
 
         };
 
@@ -819,7 +819,7 @@ namespace xet
         /// @brief Data for property ::XET_RESPROP_LINK_PEER_DEVICE
         struct resprop_link_peer_device_t
         {
-            xe::DeviceGroup::device_uuid_t uuid;            ///< [out] UUID of the peer device connected to through this link
+            xe::Driver::device_uuid_t uuid;                 ///< [out] UUID of the peer device connected to through this link
 
         };
 
@@ -1218,14 +1218,14 @@ namespace xet
     protected:
         ///////////////////////////////////////////////////////////////////////////////
         sysman_handle_t m_handle = nullptr;             ///< [in] handle of SMI object
-        DeviceGroup* m_pDeviceGroup;                    ///< [in] pointer to owner object
+        Device* m_pDevice;                              ///< [in] pointer to owner object
 
     public:
         ///////////////////////////////////////////////////////////////////////////////
         Sysman( void ) = delete;
         Sysman( 
             sysman_handle_t handle,                         ///< [in] handle of SMI object
-            DeviceGroup* pDeviceGroup                       ///< [in] pointer to owner object
+            Device* pDevice                                 ///< [in] pointer to owner object
             );
 
         ~Sysman( void ) = default;
@@ -1238,7 +1238,7 @@ namespace xet
 
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
-        auto getDevicegroup( void ) const { return m_pDeviceGroup; }
+        auto getDevice( void ) const { return m_pDevice; }
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Get the handle to access SMI features for a device

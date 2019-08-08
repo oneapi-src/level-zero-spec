@@ -24,10 +24,10 @@
 namespace xet
 {
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Handle of device group object
-    class DeviceGroup;
-    struct _device_group_handle_t;
-    using device_group_handle_t = _device_group_handle_t*;
+    /// @brief Handle to a driver instance
+    class Driver;
+    struct _driver_handle_t;
+    using driver_handle_t = _driver_handle_t*;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Handle of device object

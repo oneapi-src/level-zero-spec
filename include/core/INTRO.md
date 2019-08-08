@@ -109,14 +109,14 @@ There are multiple versions that should be used by the application to determine 
 1. API Version - this is the version of the API supported by the device.
     - This is typically used to determine if the device supports the minimum set of APIs required by the application.
     - There is a single API version that represents a collection of APIs.
-    - The value is determined from calling ::xeDeviceGroupGetApiVersion
+    - The value is determined from calling ::xeDriverGetApiVersion
     - The value returned will be the minimum of the ::xe_api_version_t supported by the device and known by the driver.
 2. Structure Version - these are the versions of the structures passed-by-pointer to the driver.
     - These are typically used by the driver to support applications written to older versions of the API.
     - They are provided as the first member of every structure passed to the driver.
 3. Driver Version - this is the version of the driver installed in the system.
     - This is typically used to mitigate driver implementation issues for a feature.
-    - The value is determined from calling ::xeDeviceGroupGetDriverVersion
+    - The value is determined from calling ::xeDriverGetDriverVersion
 
 
 ## Error Handling

@@ -59,7 +59,7 @@ namespace loader
             }
         }
 
-        %elif re.match(r"\w+DeviceGroupGet$", th.make_func_name(n, tags, obj)):
+        %elif re.match(r"\w+GetDrivers$", th.make_func_name(n, tags, obj)):
         uint32_t total_count = 0;
 
         for( auto& drv : context.drivers )
@@ -80,8 +80,8 @@ namespace loader
                 try
                 {
                     for( uint32_t i = total_count; i < count; ++i )
-                        ${obj['params'][1]['name']}[ i ] = reinterpret_cast<${n}_device_group_handle_t>( 
-                            ${n}_device_group_factory.getInstance( ${obj['params'][1]['name']}[ i ], &drv.dditable ) );
+                        ${obj['params'][1]['name']}[ i ] = reinterpret_cast<${n}_driver_handle_t>( 
+                            ${n}_driver_factory.getInstance( ${obj['params'][1]['name']}[ i ], &drv.dditable ) );
                 }
                 catch( std::bad_alloc& )
                 {

@@ -2003,14 +2003,14 @@ params:
 
 --- #--------------------------------------------------------------------------
 type: class
-desc: "C++ wrapper for SMI of a device group"
+desc: "C++ wrapper for SMI of a device"
 name: $tSysman
-owner: $tDeviceGroup
+owner: $tDevice
 members:
     - type: $t_sysman_handle_t
       name: handle
       desc: "[in] handle of SMI object" 
       init: nullptr
-    - type: $tDeviceGroup*
-      name: pDeviceGroup
+    - type: $tDevice*
+      name: pDevice
       desc: "[in] pointer to owner object"

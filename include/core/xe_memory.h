@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Supported device memory allocation flags
+/// @brief Supported memory allocation flags
 typedef enum _xe_device_mem_alloc_flag_t
 {
     XE_DEVICE_MEM_ALLOC_FLAG_DEFAULT = 0,           ///< implicit default behavior; uses driver-based heuristics
@@ -54,8 +54,8 @@ typedef enum _xe_host_mem_alloc_flag_t
 /// @details
 ///     - Shared allocations share ownership between the host and one or more
 ///       devices.
-///     - By default, shared allocations are visible to all devices in the
-///       device group.
+///     - By default, shared allocations are visible to all devices supported by
+///       the driver.
 ///     - A shared allocation can be restricted to be only visible to the host
 ///       and a single device by specifying a single device handle.
 ///     - The application may call this function from simultaneous threads.
@@ -69,7 +69,7 @@ typedef enum _xe_host_mem_alloc_flag_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDriver
 ///         + nullptr == hDevice
 ///         + nullptr == pptr
 ///         + unsupported allocation size
@@ -78,12 +78,12 @@ typedef enum _xe_host_mem_alloc_flag_t
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
-xeDeviceGroupAllocSharedMem(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDriverAllocSharedMem(
+    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     xe_device_handle_t hDevice,                     ///< [in] handle of a device
     xe_device_mem_alloc_flag_t device_flags,        ///< [in] flags specifying additional device allocation controls
     uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
-                                                    ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
+                                                    ///< must be less than the count returned from ::xeDeviceGetMemoryProperties
     xe_host_mem_alloc_flag_t host_flags,            ///< [in] flags specifying additional host allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
@@ -108,7 +108,7 @@ xeDeviceGroupAllocSharedMem(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDriver
 ///         + nullptr == hDevice
 ///         + nullptr == pptr
 ///         + unsupported allocation size
@@ -117,12 +117,12 @@ xeDeviceGroupAllocSharedMem(
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
-xeDeviceGroupAllocDeviceMem(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDriverAllocDeviceMem(
+    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     xe_device_handle_t hDevice,                     ///< [in] handle of the device
     xe_device_mem_alloc_flag_t flags,               ///< [in] flags specifying additional allocation controls
     uint32_t ordinal,                               ///< [in] ordinal of the device's local memory to allocate from;
-                                                    ///< must be less than the count returned from ::xeDeviceGroupGetMemoryProperties
+                                                    ///< must be less than the count returned from ::xeDeviceGetMemoryProperties
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
     void** pptr                                     ///< [out] pointer to device allocation
@@ -134,7 +134,7 @@ xeDeviceGroupAllocDeviceMem(
 /// @details
 ///     - A host allocation is owned by the host process.
 ///     - Host allocations are accessible by the host and all devices within the
-///       device group.
+///       driver driver.
 ///     - Host allocations are frequently used as staging areas to transfer data
 ///       to or from devices.
 ///     - The application may call this function from simultaneous threads.
@@ -148,7 +148,7 @@ xeDeviceGroupAllocDeviceMem(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDriver
 ///         + nullptr == pptr
 ///         + unsupported allocation size
 ///         + unsupported alignment
@@ -156,8 +156,8 @@ xeDeviceGroupAllocDeviceMem(
 ///     - ::XE_RESULT_ERROR_OUT_OF_HOST_MEMORY
 ///     - ::XE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 xe_result_t __xecall
-xeDeviceGroupAllocHostMem(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDriverAllocHostMem(
+    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     xe_host_mem_alloc_flag_t flags,                 ///< [in] flags specifying additional allocation controls
     size_t size,                                    ///< [in] size in bytes to allocate
     size_t alignment,                               ///< [in] minimum alignment in bytes for the allocation
@@ -185,12 +185,12 @@ xeDeviceGroupAllocHostMem(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDriver
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupFreeMem(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDriverFreeMem(
+    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     void* ptr                                       ///< [in][release] pointer to memory to free
     );
 
@@ -214,8 +214,7 @@ typedef enum _xe_memory_type_t
 } xe_memory_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Memory allocation properties queried using
-///        ::xeDeviceGroupGetMemProperties
+/// @brief Memory allocation properties queried using ::xeDriverGetMemProperties
 typedef struct _xe_memory_allocation_properties_t
 {
     xe_memory_allocation_properties_version_t version;  ///< [in] ::XE_MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT
@@ -239,13 +238,13 @@ typedef struct _xe_memory_allocation_properties_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDriver
 ///         + nullptr == ptr
 ///         + nullptr == pMemProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetMemProperties(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDriverGetMemProperties(
+    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     const void* ptr,                                ///< [in] memory pointer to query
     xe_memory_allocation_properties_t* pMemProperties,  ///< [out] query result for memory allocation properties
     xe_device_handle_t* phDevice                    ///< [out][optional] device associated with this allocation
@@ -266,12 +265,12 @@ xeDeviceGroupGetMemProperties(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDriver
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetMemAddressRange(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDriverGetMemAddressRange(
+    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     const void* ptr,                                ///< [in] memory pointer to query
     void** pBase,                                   ///< [in,out][optional] base address of the allocation
     size_t* pSize                                   ///< [in,out][optional] size of the allocation
@@ -295,13 +294,13 @@ xeDeviceGroupGetMemAddressRange(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDriver
 ///         + nullptr == ptr
 ///         + nullptr == pIpcHandle
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupGetMemIpcHandle(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDriverGetMemIpcHandle(
+    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     const void* ptr,                                ///< [in] pointer to the device memory allocation
     xe_ipc_mem_handle_t* pIpcHandle                 ///< [out] Returned IPC memory handle
     );
@@ -322,8 +321,7 @@ typedef enum _xe_ipc_memory_flag_t
 ///     - Takes an IPC memory handle from a sending process and associates it
 ///       with a device pointer usable in this process.
 ///     - The device pointer in this process should not be freed with
-///       ::xeDeviceGroupFreeMem, but rather with
-///       ::xeDeviceGroupCloseMemIpcHandle.
+///       ::xeDriverFreeMem, but rather with ::xeDriverCloseMemIpcHandle.
 ///     - The application may call this function from simultaneous threads.
 /// 
 /// @remarks
@@ -335,14 +333,14 @@ typedef enum _xe_ipc_memory_flag_t
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDriver
 ///         + nullptr == hDevice
 ///         + nullptr == pptr
 ///         + invalid flags
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupOpenMemIpcHandle(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDriverOpenMemIpcHandle(
+    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC memory handle
     xe_ipc_mem_handle_t handle,                     ///< [in] IPC memory handle
     xe_ipc_memory_flag_t flags,                     ///< [in] flags controlling the operation
@@ -354,7 +352,7 @@ xeDeviceGroupOpenMemIpcHandle(
 /// 
 /// @details
 ///     - Closes an IPC memory handle by unmapping memory that was opened in
-///       this process using ::xeDeviceGroupOpenMemIpcHandle.
+///       this process using ::xeDriverOpenMemIpcHandle.
 ///     - The application may **not** call this function from simultaneous
 ///       threads with the same pointer.
 /// 
@@ -367,12 +365,12 @@ xeDeviceGroupOpenMemIpcHandle(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDriver
 ///         + nullptr == ptr
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDeviceGroupCloseMemIpcHandle(
-    xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
+xeDriverCloseMemIpcHandle(
+    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     const void* ptr                                 ///< [in][release] pointer to device allocation in this process
     );
 

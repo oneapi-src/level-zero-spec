@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves metric group for a device group.
+/// @brief Retrieves metric group for a device.
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -37,13 +37,13 @@ extern "C" {
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDeviceGroup
+///         + nullptr == hDevice
 ///         + nullptr == pCount
 ///         + devices do not contain a given metric group
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xetMetricGroupGet(
-    xet_device_group_handle_t hDeviceGroup,         ///< [in] handle of the device group
+    xet_device_handle_t hDevice,                    ///< [in] handle of the device
     uint32_t* pCount,                               ///< [in,out] pointer to the number of metric groups.
                                                     ///< if count is zero, then the driver will update the value with the total
                                                     ///< number of metric groups available.
