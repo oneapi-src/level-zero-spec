@@ -185,7 +185,7 @@ namespace layer
     xe_result_t __xecall
     xeDeviceGroupGetDeviceProperties(
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-        xe_device_properties_t* pDeviceProperties       ///< [in,out] query result for device properties
+        xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
         )
     {
         auto pfnGetDeviceProperties = context.xeDdiTable.DeviceGroup.pfnGetDeviceProperties;
@@ -211,7 +211,7 @@ namespace layer
     xe_result_t __xecall
     xeDeviceGroupGetComputeProperties(
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-        xe_device_compute_properties_t* pComputeProperties  ///< [in,out] query result for compute properties
+        xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
         )
     {
         auto pfnGetComputeProperties = context.xeDdiTable.DeviceGroup.pfnGetComputeProperties;
@@ -272,7 +272,7 @@ namespace layer
     xe_result_t __xecall
     xeDeviceGroupGetMemoryAccessProperties(
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-        xe_device_memory_access_properties_t* pMemAccessProperties  ///< [in,out] query result for memory access properties
+        xe_device_memory_access_properties_t* pMemAccessProperties  ///< [out] query result for memory access properties
         )
     {
         auto pfnGetMemoryAccessProperties = context.xeDdiTable.DeviceGroup.pfnGetMemoryAccessProperties;
@@ -298,7 +298,7 @@ namespace layer
     xe_result_t __xecall
     xeDeviceGroupGetCacheProperties(
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-        xe_device_cache_properties_t* pCacheProperties  ///< [in,out] query result for cache properties
+        xe_device_cache_properties_t* pCacheProperties  ///< [out] query result for cache properties
         )
     {
         auto pfnGetCacheProperties = context.xeDdiTable.DeviceGroup.pfnGetCacheProperties;
@@ -324,7 +324,7 @@ namespace layer
     xe_result_t __xecall
     xeDeviceGroupGetImageProperties(
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-        xe_device_image_properties_t* pImageProperties  ///< [in,out] query result for image properties
+        xe_device_image_properties_t* pImageProperties  ///< [out] query result for image properties
         )
     {
         auto pfnGetImageProperties = context.xeDdiTable.DeviceGroup.pfnGetImageProperties;
@@ -350,7 +350,7 @@ namespace layer
     xe_result_t __xecall
     xeDeviceGroupGetIPCProperties(
         xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-        xe_device_ipc_properties_t* pIPCProperties      ///< [in,out] query result for IPC properties
+        xe_device_ipc_properties_t* pIPCProperties      ///< [out] query result for IPC properties
         )
     {
         auto pfnGetIPCProperties = context.xeDdiTable.DeviceGroup.pfnGetIPCProperties;
@@ -377,7 +377,7 @@ namespace layer
     xeDeviceGetP2PProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
         xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
-        xe_device_p2p_properties_t* pP2PProperties      ///< [in,out] Peer-to-Peer properties between source and peer device
+        xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
         )
     {
         auto pfnGetP2PProperties = context.xeDdiTable.Device.pfnGetP2PProperties;
@@ -436,7 +436,7 @@ namespace layer
     xe_result_t __xecall
     xeDeviceSetIntermediateCacheConfig(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device 
-        xe_cache_config_t CacheConfig                   ///< [in,out] CacheConfig
+        xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
         )
     {
         auto pfnSetIntermediateCacheConfig = context.xeDdiTable.Device.pfnSetIntermediateCacheConfig;

@@ -191,7 +191,7 @@ xeDeviceGroupGetApiVersion(
 xe_result_t __xecall
 xeDeviceGroupGetDeviceProperties(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    xe_device_properties_t* pDeviceProperties       ///< [in,out] query result for device properties
+    xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
     )
 {
     auto pfnGetDeviceProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetDeviceProperties;
@@ -224,7 +224,7 @@ xeDeviceGroupGetDeviceProperties(
 xe_result_t __xecall
 xeDeviceGroupGetComputeProperties(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    xe_device_compute_properties_t* pComputeProperties  ///< [in,out] query result for compute properties
+    xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
     )
 {
     auto pfnGetComputeProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetComputeProperties;
@@ -303,7 +303,7 @@ xeDeviceGroupGetMemoryProperties(
 xe_result_t __xecall
 xeDeviceGroupGetMemoryAccessProperties(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    xe_device_memory_access_properties_t* pMemAccessProperties  ///< [in,out] query result for memory access properties
+    xe_device_memory_access_properties_t* pMemAccessProperties  ///< [out] query result for memory access properties
     )
 {
     auto pfnGetMemoryAccessProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetMemoryAccessProperties;
@@ -337,7 +337,7 @@ xeDeviceGroupGetMemoryAccessProperties(
 xe_result_t __xecall
 xeDeviceGroupGetCacheProperties(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    xe_device_cache_properties_t* pCacheProperties  ///< [in,out] query result for cache properties
+    xe_device_cache_properties_t* pCacheProperties  ///< [out] query result for cache properties
     )
 {
     auto pfnGetCacheProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetCacheProperties;
@@ -369,7 +369,7 @@ xeDeviceGroupGetCacheProperties(
 xe_result_t __xecall
 xeDeviceGroupGetImageProperties(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    xe_device_image_properties_t* pImageProperties  ///< [in,out] query result for image properties
+    xe_device_image_properties_t* pImageProperties  ///< [out] query result for image properties
     )
 {
     auto pfnGetImageProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetImageProperties;
@@ -401,7 +401,7 @@ xeDeviceGroupGetImageProperties(
 xe_result_t __xecall
 xeDeviceGroupGetIPCProperties(
     xe_device_group_handle_t hDeviceGroup,          ///< [in] handle of the device group object
-    xe_device_ipc_properties_t* pIPCProperties      ///< [in,out] query result for IPC properties
+    xe_device_ipc_properties_t* pIPCProperties      ///< [out] query result for IPC properties
     )
 {
     auto pfnGetIPCProperties = xe_lib::context.ddiTable.DeviceGroup.pfnGetIPCProperties;
@@ -436,7 +436,7 @@ xe_result_t __xecall
 xeDeviceGetP2PProperties(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
     xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
-    xe_device_p2p_properties_t* pP2PProperties      ///< [in,out] Peer-to-Peer properties between source and peer device
+    xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
     )
 {
     auto pfnGetP2PProperties = xe_lib::context.ddiTable.Device.pfnGetP2PProperties;
@@ -514,7 +514,7 @@ xeDeviceCanAccessPeer(
 xe_result_t __xecall
 xeDeviceSetIntermediateCacheConfig(
     xe_device_handle_t hDevice,                     ///< [in] handle of the device 
-    xe_cache_config_t CacheConfig                   ///< [in,out] CacheConfig
+    xe_cache_config_t CacheConfig                   ///< [in] CacheConfig
     )
 {
     auto pfnSetIntermediateCacheConfig = xe_lib::context.ddiTable.Device.pfnSetIntermediateCacheConfig;
@@ -774,18 +774,25 @@ namespace xe
     ///     - cuDeviceGetName
     ///     - clGetDeviceInfo
     /// 
+    /// @returns
+    ///     - device_properties_t: query result for device properties
+    /// 
     /// @throws result_t
-    void __xecall
+    DeviceGroup::device_properties_t __xecall
     DeviceGroup::GetDeviceProperties(
-        device_properties_t* pDeviceProperties          ///< [in,out] query result for device properties
+        void
         )
     {
+        xe_device_properties_t deviceProperties;
+
         auto result = static_cast<result_t>( ::xeDeviceGroupGetDeviceProperties(
             reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
-            reinterpret_cast<xe_device_properties_t*>( pDeviceProperties ) ) );
+            &deviceProperties ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetDeviceProperties" );
+
+        return *reinterpret_cast<device_properties_t*>( &deviceProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -800,18 +807,25 @@ namespace xe
     ///     - **cuDeviceGetAttribute**
     ///     - clGetDeviceInfo
     /// 
+    /// @returns
+    ///     - device_compute_properties_t: query result for compute properties
+    /// 
     /// @throws result_t
-    void __xecall
+    DeviceGroup::device_compute_properties_t __xecall
     DeviceGroup::GetComputeProperties(
-        device_compute_properties_t* pComputeProperties ///< [in,out] query result for compute properties
+        void
         )
     {
+        xe_device_compute_properties_t computeProperties;
+
         auto result = static_cast<result_t>( ::xeDeviceGroupGetComputeProperties(
             reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
-            reinterpret_cast<xe_device_compute_properties_t*>( pComputeProperties ) ) );
+            &computeProperties ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetComputeProperties" );
+
+        return *reinterpret_cast<device_compute_properties_t*>( &computeProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -866,18 +880,25 @@ namespace xe
     ///     - cuDeviceTotalMem
     ///     - clGetDeviceInfo
     /// 
+    /// @returns
+    ///     - device_memory_access_properties_t: query result for memory access properties
+    /// 
     /// @throws result_t
-    void __xecall
+    DeviceGroup::device_memory_access_properties_t __xecall
     DeviceGroup::GetMemoryAccessProperties(
-        device_memory_access_properties_t* pMemAccessProperties ///< [in,out] query result for memory access properties
+        void
         )
     {
+        xe_device_memory_access_properties_t memAccessProperties;
+
         auto result = static_cast<result_t>( ::xeDeviceGroupGetMemoryAccessProperties(
             reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
-            reinterpret_cast<xe_device_memory_access_properties_t*>( pMemAccessProperties ) ) );
+            &memAccessProperties ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetMemoryAccessProperties" );
+
+        return *reinterpret_cast<device_memory_access_properties_t*>( &memAccessProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -893,18 +914,25 @@ namespace xe
     ///     - cuDeviceTotalMem
     ///     - clGetDeviceInfo
     /// 
+    /// @returns
+    ///     - device_cache_properties_t: query result for cache properties
+    /// 
     /// @throws result_t
-    void __xecall
+    DeviceGroup::device_cache_properties_t __xecall
     DeviceGroup::GetCacheProperties(
-        device_cache_properties_t* pCacheProperties     ///< [in,out] query result for cache properties
+        void
         )
     {
+        xe_device_cache_properties_t cacheProperties;
+
         auto result = static_cast<result_t>( ::xeDeviceGroupGetCacheProperties(
             reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
-            reinterpret_cast<xe_device_cache_properties_t*>( pCacheProperties ) ) );
+            &cacheProperties ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetCacheProperties" );
+
+        return *reinterpret_cast<device_cache_properties_t*>( &cacheProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -918,18 +946,25 @@ namespace xe
     ///   _Analogues_
     ///     - **cuDeviceGetAttribute**
     /// 
+    /// @returns
+    ///     - device_image_properties_t: query result for image properties
+    /// 
     /// @throws result_t
-    void __xecall
+    DeviceGroup::device_image_properties_t __xecall
     DeviceGroup::GetImageProperties(
-        device_image_properties_t* pImageProperties     ///< [in,out] query result for image properties
+        void
         )
     {
+        xe_device_image_properties_t imageProperties;
+
         auto result = static_cast<result_t>( ::xeDeviceGroupGetImageProperties(
             reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
-            reinterpret_cast<xe_device_image_properties_t*>( pImageProperties ) ) );
+            &imageProperties ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetImageProperties" );
+
+        return *reinterpret_cast<device_image_properties_t*>( &imageProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -943,18 +978,25 @@ namespace xe
     ///   _Analogues_
     ///     - **cuDeviceGetAttribute**
     /// 
+    /// @returns
+    ///     - device_ipc_properties_t: query result for IPC properties
+    /// 
     /// @throws result_t
-    void __xecall
+    DeviceGroup::device_ipc_properties_t __xecall
     DeviceGroup::GetIPCProperties(
-        device_ipc_properties_t* pIPCProperties         ///< [in,out] query result for IPC properties
+        void
         )
     {
+        xe_device_ipc_properties_t iPCProperties;
+
         auto result = static_cast<result_t>( ::xeDeviceGroupGetIPCProperties(
             reinterpret_cast<xe_device_group_handle_t>( getHandle() ),
-            reinterpret_cast<xe_device_ipc_properties_t*>( pIPCProperties ) ) );
+            &iPCProperties ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::DeviceGroup::GetIPCProperties" );
+
+        return *reinterpret_cast<device_ipc_properties_t*>( &iPCProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -969,20 +1011,26 @@ namespace xe
     ///   _Analogues_
     ///     - **cudaDeviceGetP2PAttribute**
     /// 
+    /// @returns
+    ///     - p2p_properties_t: Peer-to-Peer properties between source and peer device
+    /// 
     /// @throws result_t
-    void __xecall
+    Device::p2p_properties_t __xecall
     Device::GetP2PProperties(
-        Device* pPeerDevice,                            ///< [in] pointer to the peer device with the allocation
-        p2p_properties_t* pP2PProperties                ///< [in,out] Peer-to-Peer properties between source and peer device
+        Device* pPeerDevice                             ///< [in] pointer to the peer device with the allocation
         )
     {
+        xe_device_p2p_properties_t p2PProperties;
+
         auto result = static_cast<result_t>( ::xeDeviceGetP2PProperties(
             reinterpret_cast<xe_device_handle_t>( getHandle() ),
             reinterpret_cast<xe_device_handle_t>( pPeerDevice->getHandle() ),
-            reinterpret_cast<xe_device_p2p_properties_t*>( pP2PProperties ) ) );
+            &p2PProperties ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Device::GetP2PProperties" );
+
+        return *reinterpret_cast<p2p_properties_t*>( &p2PProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1044,7 +1092,7 @@ namespace xe
     /// @throws result_t
     void __xecall
     Device::SetIntermediateCacheConfig(
-        cache_config_t CacheConfig                      ///< [in,out] CacheConfig
+        cache_config_t CacheConfig                      ///< [in] CacheConfig
         )
     {
         auto result = static_cast<result_t>( ::xeDeviceSetIntermediateCacheConfig(
