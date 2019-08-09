@@ -1499,262 +1499,112 @@ returns:
         - "One or more requested properties is not supported on this device"
 
 --- #--------------------------------------------------------------------------
+type: struct
+desc: "RAS properties"
+class: $tSysman
+name: $t_ras_properties_t
+members:
+    - type: $x_bool_t
+      name: "supported"
+      desc: "[out] True if RAS is supported on this device"
+    - type: $x_bool_t
+      name: "enabled"
+      desc: "[out] True if RAS is enabled on this device"
+    - type: $x_bool_t
+      name: "repaired"
+      desc: "[out] True if the device has been repaired"
+--- #--------------------------------------------------------------------------
 type: enum
 desc: "RAS error type"
 class: $tSysman
 name: $t_ras_error_type_t
 etors:
-    - name: $T_RAS_ERROR_TYPE_NONE
-      value: "0"
-      desc: "No error type"
-    - name: $T_RAS_ERROR_TYPE_FATAL
-      value: "$X_BIT( 0 )"
-      desc: "Error was fatal"
-    - name: $T_RAS_ERROR_TYPE_NON_FATAL
-      value: "$X_BIT( 1 )"
-      desc: "Error was not fatal"
     - name: $T_RAS_ERROR_TYPE_CORRECTABLE
-      value: "$X_BIT( 2 )"
-      desc: "Error was corrected"
+      value: "0"
+      desc: "Errors were corrected by hardware"
     - name: $T_RAS_ERROR_TYPE_UNCORRECTABLE
-      value: "$X_BIT( 3 )"
-      desc: "Error was not corrected"
-    - name: $T_RAS_ERROR_TYPE_PARITY
-      value: "$X_BIT( 4 )"
-      desc: "Parity error occurred"
-    - name: $T_RAS_ERROR_TYPE_SINGLE_BIT
-      value: "$X_BIT( 5 )"
-      desc: "Single bit error occurred"
-    - name: $T_RAS_ERROR_TYPE_DOUBLE_BIT
-      value: "$X_BIT( 6 )"
-      desc: "Single bit error occurred"
-    - name: $T_RAS_ERROR_TYPE_REPLAY
-      value: "$X_BIT( 7 )"
-      desc: "Replay occurred"
-    - name: $T_RAS_ERROR_TYPE_RESET
-      value: "$X_BIT( 8 )"
-      desc: "Resets occurred"
-    - name: $T_RAS_ERROR_TYPE_ALL
-      value: "~0"
-      desc: "Select all error types"
---- #--------------------------------------------------------------------------
-type: enum
-desc: "RAS error structural location"
-class: $tSysman
-name: $t_ras_error_loc_t
-etors:
-    - name: $T_RAS_ERROR_LOC_NONE
-      value: "0"
-      desc: "No location"
-    - name: $T_RAS_ERROR_LOC_MAIN_MEM
-      value: "$X_BIT( 0 )"
-      desc: "Error occurred in main onboard memory"
-    - name: $T_RAS_ERROR_LOC_L3_CACHE
-      value: "$X_BIT( 1 )"
-      desc: "Error occurred in L3 cache"
-    - name: $T_RAS_ERROR_LOC_SAMPLER_SRAM
-      value: "$X_BIT( 2 )"
-      desc: "Error occurred in sampler SRAM"
-    - name: $T_RAS_ERROR_LOC_GUC_SRAM
-      value: "$X_BIT( 3 )"
-      desc: "Error occurred in microcontroller SRAM"
-    - name: $T_RAS_ERROR_LOC_INST_CACHE
-      value: "$X_BIT( 4 )"
-      desc: "Error occurred in the compute unit instruction cache"
-    - name: $T_RAS_ERROR_LOC_GRF
-      value: "$X_BIT( 5 )"
-      desc: "Error occurred in the compute unit register file"
-    - name: $T_RAS_ERROR_LOC_SLM
-      value: "$X_BIT( 6 )"
-      desc: "Error occurred in the compute unit shared local memory"
-    - name: $T_RAS_ERROR_LOC_MESSAGING
-      value: "$X_BIT( 7 )"
-      desc: "Errors occurred handling transactions between PCI config space, MMIO registers, local memory and sub-devices"
-    - name: $T_RAS_ERROR_LOC_SECURITY
-      value: "$X_BIT( 8 )"
-      desc: "Security errors occurred"
-    - name: $T_RAS_ERROR_LOC_DISPLAY
-      value: "$X_BIT( 9 )"
-      desc: "Errors occurred in the display"
-    - name: $T_RAS_ERROR_LOC_SOC
-      value: "$X_BIT( 10 )"
-      desc: "Errors occurred in other parts of the device"
-    - name: $T_RAS_ERROR_LOC_GPU_HANG
-      value: "$X_BIT( 11 )"
-      desc: "Driver detected that the GPU hardware was non-responsive"
-    - name: $T_RAS_ERROR_LOC_PCI
-      value: "$X_BIT( 12 )"
-      desc: "Error occurred in the PCIe controller"
-    - name: $T_RAS_ERROR_LOC_PCI_ROUTING
-      value: "$X_BIT( 13 )"
-      desc: "Error occurred routing PCIe traffic to/from sub-devices"
-    - name: $T_RAS_ERROR_LOC_P2P_LINK
-      value: "$X_BIT( 14 )"
-      desc: "Errors detected with peer-to-peer connection"
-    - name: $T_RAS_ERROR_LOC_ALL
-      value: "~0"
-      desc: "Select all error locations"
+      desc: "Error were not corrected"
+    - name: $T_RAS_ERROR_TYPE_NUM
+      desc: "The number of error types"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "RAS configuration"
+desc: "RAS error details"
 class: $tSysman
-name: $t_ras_config_t
+name: $t_ras_details_t
 members:
-    - type: uint32_t
-      name: numRas
-      desc: "[in] Total number of RAS counters available on this device"
-    - type: uint32_t
-      name: rasTypes
-      desc: "[in] All RAS types supported on this device (bitfield of $t_ras_error_type_t)"
-    - type: uint32_t
-      name: rasLocations
-      desc: "[in] All structural locations where RAS is supported on this device (bitfield of $t_ras_error_loc_t)"
-    - type: uint32_t
-      name: enabled
-      desc: "[in] All structural locations where RAS is currently enabled on this device (bitfield of $t_ras_error_loc_t)"
+    - type: uint64_t
+      name: "numResets"
+      desc: "[out] The number of accelerator resets that have taken place"
+    - type: uint64_t
+      name: "numProgrammingErrors"
+      desc: "[out] The number of hardware exceptions generated by the way workloads have programmed the hardware"
+    - type: uint64_t
+      name: "numDriverErrors"
+      desc: "[out] The number of low level driver communication errors have occurred"
+    - type: uint64_t
+      name: "numComputeErrors"
+      desc: "[out] The number of errors that have occurred in the compute accelerator hardware"
+    - type: uint64_t
+      name: "numNonComputeErrors"
+      desc: "[out] The number of errors that have occurred in the fixed-function accelerator hardware"
+    - type: uint64_t
+      name: "numCacheErrors"
+      desc: "[out] The number of errors that have occurred in caches (L1/L3/register file/shared local memory/sampler)"
+    - type: uint64_t
+      name: "numMemoryErrors"
+      desc: "[out] The number of errors that have occurred in the local memory"
+    - type: uint64_t
+      name: "numLinkErrors"
+      desc: "[out] The number of errors that have occurred in the PCI or peer-to-peer links"
+    - type: uint64_t
+      name: "numDisplayErrors"
+      desc: "[out] The number of errors that have occurred in the display"
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "RAS data type"
+type: function
+desc: "Get RAS properties of the device"
 class: $tSysman
-name: $t_ras_data_type_t
-etors:
-    - name: $T_RAS_DATA_TYPE_NONE
-      value: "0"
-      desc: "Errors not supported"
-    - name: $T_RAS_DATA_TYPE_OCCURRED
-      desc: "Indicates if an error occurred"
-    - name: $T_RAS_DATA_TYPE_COUNTER
-      desc: "Provides a counter for the number of errors that have occurred"
+name: RasGetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] Handle of the SMI object"
+    - type: $t_ras_properties_t*
+      name: pProperties
+      desc: "[in] Structure describing RAS properties"
 --- #--------------------------------------------------------------------------
-type: struct
-desc: "Filter RAS errors"
+type: function
+desc: "Get the number of errors of a given type"
 class: $tSysman
-name: $t_ras_filter_t
-members:
-    - type: $t_resid_t
-      name: resourceId
-      desc: "[in] Filter based on resource ID. Set to $T_RESID_ANY to get errors from anywhere in the device"
-    - type: uint32_t
+name: RasGetErrors
+details:
+    - "Clearing errors will affect other threads/applications - the counter values will start from zero."
+    - "Clearing errors requires write permissions."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] Handle of the SMI object"
+    - type: $t_ras_error_type_t
       name: type
-      desc: "[in] Bitfield of error types to filter - one or more of $t_ras_error_type_t. Set to $T_RAS_ERROR_TYPE_ALL to have all error types returned."
-    - type: uint32_t
-      name: location
-      desc: "[in] Bitfield of error locations to filter - one or more of $t_ras_error_loc_t. Set to $T_RAS_ERROR_LOC_ALL to have all error locations returned."
-    - type: uint32_t
-      name: threshold
-      desc: |
-            [in] Only return error elements that have occurred at least this number of times.
-            If set to 0, will get a list of all possible RAS elements, even those that have not had errors.
-            For error elements of type $T_RAS_DATA_TYPE_OCCURRED, there is no underlying counter, so they will always be returned independent of the threshold setting.
---- #--------------------------------------------------------------------------
-type: macro
-desc: "Filter to get all RAS error counters"
-name: $T_RAS_FILTER_ALL_COUNTERS
-value: "{ $T_RESID_ANY, (uint32_t)$T_RAS_ERROR_TYPE_ALL, (uint32_t)$T_RAS_ERROR_LOC_ALL, 0 }"
---- #--------------------------------------------------------------------------
-type: macro
-desc: "Filter to get all RAS error counters that have errors"
-name: $T_RAS_FILTER_ALL_ERRORS
-value: "{ $T_RESID_ANY, (uint32_t)$T_RAS_ERROR_TYPE_ALL, (uint32_t)$T_RAS_ERROR_LOC_ALL, 1 }"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "RAS error"
-class: $tSysman
-name: $t_ras_error_t
-members:
-    - type: const char*
-      name: "pName"
-      desc: "[out] Name of this error"
-    - type: const char*
-      name: "pDesc"
-      desc: "[out] Human readable description of this error"
-    - type: uint32_t
-      name: "type"
-      desc: "[out] Bitfield describing type of error, constructed from one or more of $t_ras_error_type_t"
-    - type: uint32_t
-      name: "loc"
-      desc: "[out] Bitfield describing structural location of the error, constructed from one of $t_ras_error_loc_t"
-    - type: $t_ras_data_type_t
-      name: "dataType"
-      desc: "[out] How to interpret the data"
-    - type: uint64_t
-      name: "data"
-      desc: "[out] The value of the error - interpretation depends on dataType"
-    - type: uint64_t
-      name: "accumulated"
-      desc: "[out] The accumulated value of the error (never cleared until device driver is reloaded)"
-    - type: $t_resid_t
-      name: "resourceId"
-      desc: "[out] Resource where the error was generated. If the error doesn't come from a specific resource, this will be $T_RESID_ANY"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get RAS configuration"
-class: $tSysman
-name: GetRasConfig
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] Handle of the SMI object"
-    - type: $t_ras_config_t*
-      name: pConfig
-      desc: "[in] Pointer to storage for current RAS configuration"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Setup (enable/disable) RAS"
-class: $tSysman
-name: RasSetup
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] Handle of the SMI object"
-    - type: uint32_t
-      name: enableLoc
-      desc: "[in] Structural locations where RAS should be enabled (bitfield of $t_ras_error_loc_t)"
-    - type: uint32_t
-      name: disableLoc
-      desc: "[in] Structural locations where RAS should be disabled (bitfield of $t_ras_error_loc_t)"
-    - type: uint32_t*
-      name: pEnabledLoc
-      desc: "[in] Structural locations where RAS is currently enabled after applying enableLoc and disableLoc (bitfield of $t_ras_error_loc_t)"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get RAS errors that have occurred"
-class: $tSysman
-name: GetRasErrors
-details:
-    - "Returned errors can be filtered by resource, type, location and threshold."
-    - "Clearing error counters will affect any subsequent calls to this function from any application. Accumulated counter values are not affected by this."
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] Handle of the SMI object"
-    - type: $t_ras_filter_t*
-      name: pFilter
-      desc: "[in] Filter for RAS errors to return"
+      desc: "[in] The type of errors"
     - type: $x_bool_t
       name: clear
-      desc: "[in] Set to true to clear the underlying counters after they are returned"
-    - type: uint32_t*
-      name: pCount
-      desc: |
-            [in] Pointer to the number of elements in the array pErrors.
-            If count is 0 or pErrors is nullptr, driver will update with the number of errors matching the specified filters. Counters are not cleared.
-            If count is non-zero and less than the number of matching errors, driver will update with the number of errors matching the specified filters. No data is returned and counters are not cleared.
-            If count is greater than or equal to the number of matching errors, all data is returned, counters are cleared if requested and count will be set to actual number of errors returned.
-    - type: $t_ras_error_t*
-      name: pErrors
-      desc: "[in] Array of error data"
+      desc: "[in] Set to 1 to clear the counters of this type"
+    - type: uint64_t*
+      name: pTotalErrors
+      desc: "[in] The number total number of errors of the given type that have occurred"
+    - type: $t_ras_details_t*
+      name: pDetails
+      desc: "[in][optional] Breakdown of where errors have occurred"
 returns:
-    - $X_RESULT_ERROR_ARRAY_SIZE_TOO_SMALL:
-        - "The array doesn't have enough elements to store all the errors"
+    - $X_RESULT_ERROR_UNSUPPORTED:
+        - "This device does not support RAS."
+    - $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS:
+        - "Don't have permissions to clear error counters."
 
 --- #--------------------------------------------------------------------------
 type: enum

@@ -845,16 +845,16 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanGetRasConfig
+    /// @brief Intercept function for xetSysmanRasGetProperties
     xe_result_t __xecall
-    xetSysmanGetRasConfig(
+    xetSysmanRasGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        xet_ras_config_t* pConfig                       ///< [in] Pointer to storage for current RAS configuration
+        xet_ras_properties_t* pProperties               ///< [in] Structure describing RAS properties
         )
     {
-        auto pfnGetRasConfig = context.xetDdiTable.Sysman.pfnGetRasConfig;
+        auto pfnRasGetProperties = context.xetDdiTable.Sysman.pfnRasGetProperties;
 
-        if( nullptr == pfnGetRasConfig )
+        if( nullptr == pfnRasGetProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -862,30 +862,29 @@ namespace layer
             if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pConfig )
+            if( nullptr == pProperties )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetRasConfig( hSysman, pConfig );
+        return pfnRasGetProperties( hSysman, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanRasSetup
+    /// @brief Intercept function for xetSysmanRasGetErrors
     xe_result_t __xecall
-    xetSysmanRasSetup(
+    xetSysmanRasGetErrors(
         xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        uint32_t enableLoc,                             ///< [in] Structural locations where RAS should be enabled (bitfield of
-                                                        ///< ::xet_ras_error_loc_t)
-        uint32_t disableLoc,                            ///< [in] Structural locations where RAS should be disabled (bitfield of
-                                                        ///< ::xet_ras_error_loc_t)
-        uint32_t* pEnabledLoc                           ///< [in] Structural locations where RAS is currently enabled after
-                                                        ///< applying enableLoc and disableLoc (bitfield of ::xet_ras_error_loc_t)
+        xet_ras_error_type_t type,                      ///< [in] The type of errors
+        xe_bool_t clear,                                ///< [in] Set to 1 to clear the counters of this type
+        uint64_t* pTotalErrors,                         ///< [in] The number total number of errors of the given type that have
+                                                        ///< occurred
+        xet_ras_details_t* pDetails                     ///< [in][optional] Breakdown of where errors have occurred
         )
     {
-        auto pfnRasSetup = context.xetDdiTable.Sysman.pfnRasSetup;
+        auto pfnRasGetErrors = context.xetDdiTable.Sysman.pfnRasGetErrors;
 
-        if( nullptr == pfnRasSetup )
+        if( nullptr == pfnRasGetErrors )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -893,56 +892,12 @@ namespace layer
             if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pEnabledLoc )
+            if( nullptr == pTotalErrors )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnRasSetup( hSysman, enableLoc, disableLoc, pEnabledLoc );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanGetRasErrors
-    xe_result_t __xecall
-    xetSysmanGetRasErrors(
-        xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        xet_ras_filter_t* pFilter,                      ///< [in] Filter for RAS errors to return
-        xe_bool_t clear,                                ///< [in] Set to true to clear the underlying counters after they are
-                                                        ///< returned
-        uint32_t* pCount,                               ///< [in] Pointer to the number of elements in the array pErrors.
-                                                        ///< If count is 0 or pErrors is nullptr, driver will update with the
-                                                        ///< number of errors matching the specified filters. Counters are not cleared.
-                                                        ///< If count is non-zero and less than the number of matching errors,
-                                                        ///< driver will update with the number of errors matching the specified
-                                                        ///< filters. No data is returned and counters are not cleared.
-                                                        ///< If count is greater than or equal to the number of matching errors,
-                                                        ///< all data is returned, counters are cleared if requested and count will
-                                                        ///< be set to actual number of errors returned.
-        xet_ras_error_t* pErrors                        ///< [in] Array of error data
-        )
-    {
-        auto pfnGetRasErrors = context.xetDdiTable.Sysman.pfnGetRasErrors;
-
-        if( nullptr == pfnGetRasErrors )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pFilter )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pCount )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == pErrors )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetRasErrors( hSysman, pFilter, clear, pCount, pErrors );
+        return pfnRasGetErrors( hSysman, type, clear, pTotalErrors, pDetails );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1740,14 +1695,11 @@ xetGetSysmanProcAddrTable(
     dditable.pfnSetProperties                            = pDdiTable->pfnSetProperties;
     pDdiTable->pfnSetProperties                          = layer::xetSysmanSetProperties;
 
-    dditable.pfnGetRasConfig                             = pDdiTable->pfnGetRasConfig;
-    pDdiTable->pfnGetRasConfig                           = layer::xetSysmanGetRasConfig;
+    dditable.pfnRasGetProperties                         = pDdiTable->pfnRasGetProperties;
+    pDdiTable->pfnRasGetProperties                       = layer::xetSysmanRasGetProperties;
 
-    dditable.pfnRasSetup                                 = pDdiTable->pfnRasSetup;
-    pDdiTable->pfnRasSetup                               = layer::xetSysmanRasSetup;
-
-    dditable.pfnGetRasErrors                             = pDdiTable->pfnGetRasErrors;
-    pDdiTable->pfnGetRasErrors                           = layer::xetSysmanGetRasErrors;
+    dditable.pfnRasGetErrors                             = pDdiTable->pfnRasGetErrors;
+    pDdiTable->pfnRasGetErrors                           = layer::xetSysmanRasGetErrors;
 
     dditable.pfnSupportedEvents                          = pDdiTable->pfnSupportedEvents;
     pDdiTable->pfnSupportedEvents                        = layer::xetSysmanSupportedEvents;

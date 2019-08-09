@@ -351,16 +351,12 @@ typedef struct _xet_resprop_info_t xet_resprop_info_t;
 typedef struct _xet_resprop_request_t xet_resprop_request_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_ras_config_t
-typedef struct _xet_ras_config_t xet_ras_config_t;
+/// @brief Forward-declare xet_ras_properties_t
+typedef struct _xet_ras_properties_t xet_ras_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_ras_filter_t
-typedef struct _xet_ras_filter_t xet_ras_filter_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_ras_error_t
-typedef struct _xet_ras_error_t xet_ras_error_t;
+/// @brief Forward-declare xet_ras_details_t
+typedef struct _xet_ras_details_t xet_ras_details_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_event_support_t

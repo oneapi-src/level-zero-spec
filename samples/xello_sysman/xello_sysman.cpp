@@ -15,42 +15,51 @@
 #include <stdio.h>
 #include "xet_api.h"
 
-void ShowRasCounters(xet_sysman_handle_t hSysmanDevice)
+void PrintRasDetails(xet_ras_details_t* pDetails)
 {
-    uint32_t numRas;
-    xet_ras_filter_t filter = XET_RAS_FILTER_ALL_COUNTERS;
-    if (xetSysmanGetRasErrors(hSysmanDevice, &filter, false, &numRas, NULL) == XE_RESULT_SUCCESS)
-    {
-        xet_ras_error_t* pCounters = (xet_ras_error_t*)malloc(numRas * sizeof(xet_ras_error_t));
+    fprintf(stdout, "    Number new resets:                %llu\n", pDetails->numResets);
+    fprintf(stdout, "    Number new programming errors:    %llu\n", pDetails->numProgrammingErrors);
+    fprintf(stdout, "    Number new driver errors:         %llu\n", pDetails->numDriverErrors);
+    fprintf(stdout, "    Number new compute errors:        %llu\n", pDetails->numComputeErrors);
+    fprintf(stdout, "    Number new non-compute errors:    %llu\n", pDetails->numNonComputeErrors);
+    fprintf(stdout, "    Number new cache errors:          %llu\n", pDetails->numCacheErrors);
+    fprintf(stdout, "    Number new memory errors:         %llu\n", pDetails->numMemoryErrors);
+    fprintf(stdout, "    Number new link errors:           %llu\n", pDetails->numLinkErrors);
+    fprintf(stdout, "    Number new display errors:        %llu\n", pDetails->numDisplayErrors);
+}
 
-        if (xetSysmanGetRasErrors(hSysmanDevice, &filter, false, &numRas, pCounters) == XE_RESULT_SUCCESS)
+void ShowRasErrors(xet_sysman_handle_t hSysmanDevice)
+{
+    xet_ras_properties_t props;
+    if (xetSysmanRasGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
+    {
+        fprintf(stdout, "RAS supported: %s\n", props.supported ? "yes" : "no");
+        fprintf(stdout, "RAS enabled: %s\n", props.enabled ? "yes" : "no");
+        fprintf(stdout, "RAS repaired: %s\n", props.repaired ? "yes" : "no");
+        if (props.supported && props.enabled)
         {
-            for (uint32_t i = 0; i < numRas; i++)
+            uint64_t newErrors;
+            xet_ras_details_t errorDetails;
+            if (xetSysmanRasGetErrors(hSysmanDevice, XET_RAS_ERROR_TYPE_UNCORRECTABLE, 1, &newErrors, &errorDetails) == XE_RESULT_SUCCESS)
             {
-                fprintf(stdout, "RAS error %s: value=%llu\n",
-                    pCounters[i].pName, pCounters[i].data);
+                fprintf(stdout, "RAS new uncorrectable errors: %llu\n", newErrors);
+                if (newErrors)
+                {
+                    PrintRasDetails(&errorDetails);
+                }
+            }
+            if (xetSysmanRasGetErrors(hSysmanDevice, XET_RAS_ERROR_TYPE_CORRECTABLE, 1, &newErrors, &errorDetails) == XE_RESULT_SUCCESS)
+            {
+                fprintf(stdout, "RAS new correctable errors: %llu\n", newErrors);
+                if (newErrors)
+                {
+                    PrintRasDetails(&errorDetails);
+                }
             }
         }
     }
 }
 
-void LocalMemoryRasConfig(xet_sysman_handle_t hSysmanDevice)
-{
-    xet_ras_config_t config;
-    if (xetSysmanGetRasConfig(hSysmanDevice, &config) == XE_RESULT_SUCCESS)
-    {
-        fprintf(stdout, "Local memory:\n");
-        if (config.numRas)
-        {
-            fprintf(stdout, "    RAS support: yes\n");
-            fprintf(stdout, "    RAS enabled: %s\n", (config.enabled & XET_RAS_ERROR_LOC_MAIN_MEM) ? "yes" : "no");
-        }
-        else
-        {
-            fprintf(stdout, "    RAS support: no\n");
-        }
-    }
-}
 
 void ResetDevice(xet_sysman_handle_t hSysmanDevice)
 {

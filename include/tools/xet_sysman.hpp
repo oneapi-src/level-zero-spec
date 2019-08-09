@@ -34,18 +34,6 @@
 #endif // XET_FAN_TEMP_SPEED_PAIR_COUNT
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef XET_RAS_FILTER_ALL_COUNTERS
-/// @brief Filter to get all RAS error counters
-#define XET_RAS_FILTER_ALL_COUNTERS  { XET_RESID_ANY, (uint32_t)XET_RAS_ERROR_TYPE_ALL, (uint32_t)XET_RAS_ERROR_LOC_ALL, 0 }
-#endif // XET_RAS_FILTER_ALL_COUNTERS
-
-///////////////////////////////////////////////////////////////////////////////
-#ifndef XET_RAS_FILTER_ALL_ERRORS
-/// @brief Filter to get all RAS error counters that have errors
-#define XET_RAS_FILTER_ALL_ERRORS  { XET_RESID_ANY, (uint32_t)XET_RAS_ERROR_TYPE_ALL, (uint32_t)XET_RAS_ERROR_LOC_ALL, 1 }
-#endif // XET_RAS_FILTER_ALL_ERRORS
-
-///////////////////////////////////////////////////////////////////////////////
 #ifndef XET_EVENT_WAIT_INFINITE
 /// @brief Wait infinitely for events to arrive.
 #define XET_EVENT_WAIT_INFINITE  0xFFFFFFFF
@@ -425,52 +413,9 @@ namespace xet
         /// @brief RAS error type
         enum class ras_error_type_t
         {
-            NONE = 0,                                       ///< No error type
-            FATAL = XE_BIT( 0 ),                            ///< Error was fatal
-            NON_FATAL = XE_BIT( 1 ),                        ///< Error was not fatal
-            CORRECTABLE = XE_BIT( 2 ),                      ///< Error was corrected
-            UNCORRECTABLE = XE_BIT( 3 ),                    ///< Error was not corrected
-            PARITY = XE_BIT( 4 ),                           ///< Parity error occurred
-            SINGLE_BIT = XE_BIT( 5 ),                       ///< Single bit error occurred
-            DOUBLE_BIT = XE_BIT( 6 ),                       ///< Single bit error occurred
-            REPLAY = XE_BIT( 7 ),                           ///< Replay occurred
-            RESET = XE_BIT( 8 ),                            ///< Resets occurred
-            ALL = ~0,                                       ///< Select all error types
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief RAS error structural location
-        enum class ras_error_loc_t
-        {
-            NONE = 0,                                       ///< No location
-            MAIN_MEM = XE_BIT( 0 ),                         ///< Error occurred in main onboard memory
-            L3_CACHE = XE_BIT( 1 ),                         ///< Error occurred in L3 cache
-            SAMPLER_SRAM = XE_BIT( 2 ),                     ///< Error occurred in sampler SRAM
-            GUC_SRAM = XE_BIT( 3 ),                         ///< Error occurred in microcontroller SRAM
-            INST_CACHE = XE_BIT( 4 ),                       ///< Error occurred in the compute unit instruction cache
-            GRF = XE_BIT( 5 ),                              ///< Error occurred in the compute unit register file
-            SLM = XE_BIT( 6 ),                              ///< Error occurred in the compute unit shared local memory
-            MESSAGING = XE_BIT( 7 ),                        ///< Errors occurred handling transactions between PCI config space, MMIO
-                                                            ///< registers, local memory and sub-devices
-            SECURITY = XE_BIT( 8 ),                         ///< Security errors occurred
-            DISPLAY = XE_BIT( 9 ),                          ///< Errors occurred in the display
-            SOC = XE_BIT( 10 ),                             ///< Errors occurred in other parts of the device
-            GPU_HANG = XE_BIT( 11 ),                        ///< Driver detected that the GPU hardware was non-responsive
-            PCI = XE_BIT( 12 ),                             ///< Error occurred in the PCIe controller
-            PCI_ROUTING = XE_BIT( 13 ),                     ///< Error occurred routing PCIe traffic to/from sub-devices
-            P2P_LINK = XE_BIT( 14 ),                        ///< Errors detected with peer-to-peer connection
-            ALL = ~0,                                       ///< Select all error locations
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief RAS data type
-        enum class ras_data_type_t
-        {
-            NONE = 0,                                       ///< Errors not supported
-            OCCURRED,                                       ///< Indicates if an error occurred
-            COUNTER,                                        ///< Provides a counter for the number of errors that have occurred
+            CORRECTABLE = 0,                                ///< Errors were corrected by hardware
+            UNCORRECTABLE,                                  ///< Error were not corrected
+            NUM,                                            ///< The number of error types
 
         };
 
@@ -1117,57 +1062,34 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief RAS configuration
-        struct ras_config_t
+        /// @brief RAS properties
+        struct ras_properties_t
         {
-            uint32_t numRas;                                ///< [in] Total number of RAS counters available on this device
-            uint32_t rasTypes;                              ///< [in] All RAS types supported on this device (bitfield of
-                                                            ///< ::xet_ras_error_type_t)
-            uint32_t rasLocations;                          ///< [in] All structural locations where RAS is supported on this device
-                                                            ///< (bitfield of ::xet_ras_error_loc_t)
-            uint32_t enabled;                               ///< [in] All structural locations where RAS is currently enabled on this
-                                                            ///< device (bitfield of ::xet_ras_error_loc_t)
+            xe::bool_t supported;                           ///< [out] True if RAS is supported on this device
+            xe::bool_t enabled;                             ///< [out] True if RAS is enabled on this device
+            xe::bool_t repaired;                            ///< [out] True if the device has been repaired
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Filter RAS errors
-        struct ras_filter_t
+        /// @brief RAS error details
+        struct ras_details_t
         {
-            resid_t resourceId;                             ///< [in] Filter based on resource ID. Set to ::XET_RESID_ANY to get errors
-                                                            ///< from anywhere in the device
-            uint32_t type;                                  ///< [in] Bitfield of error types to filter - one or more of
-                                                            ///< ::xet_ras_error_type_t. Set to ::XET_RAS_ERROR_TYPE_ALL to have all
-                                                            ///< error types returned.
-            uint32_t location;                              ///< [in] Bitfield of error locations to filter - one or more of
-                                                            ///< ::xet_ras_error_loc_t. Set to ::XET_RAS_ERROR_LOC_ALL to have all
-                                                            ///< error locations returned.
-            uint32_t threshold;                             ///< [in] Only return error elements that have occurred at least this
-                                                            ///< number of times.
-                                                            ///< If set to 0, will get a list of all possible RAS elements, even those
-                                                            ///< that have not had errors.
-                                                            ///< For error elements of type ::XET_RAS_DATA_TYPE_OCCURRED, there is no
-                                                            ///< underlying counter, so they will always be returned independent of the
-                                                            ///< threshold setting.
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief RAS error
-        struct ras_error_t
-        {
-            const char* pName;                              ///< [out] Name of this error
-            const char* pDesc;                              ///< [out] Human readable description of this error
-            uint32_t type;                                  ///< [out] Bitfield describing type of error, constructed from one or more
-                                                            ///< of ::xet_ras_error_type_t
-            uint32_t loc;                                   ///< [out] Bitfield describing structural location of the error,
-                                                            ///< constructed from one of ::xet_ras_error_loc_t
-            ras_data_type_t dataType;                       ///< [out] How to interpret the data
-            uint64_t data;                                  ///< [out] The value of the error - interpretation depends on dataType
-            uint64_t accumulated;                           ///< [out] The accumulated value of the error (never cleared until device
-                                                            ///< driver is reloaded)
-            resid_t resourceId;                             ///< [out] Resource where the error was generated. If the error doesn't
-                                                            ///< come from a specific resource, this will be ::XET_RESID_ANY
+            uint64_t numResets;                             ///< [out] The number of accelerator resets that have taken place
+            uint64_t numProgrammingErrors;                  ///< [out] The number of hardware exceptions generated by the way workloads
+                                                            ///< have programmed the hardware
+            uint64_t numDriverErrors;                       ///< [out] The number of low level driver communication errors have
+                                                            ///< occurred
+            uint64_t numComputeErrors;                      ///< [out] The number of errors that have occurred in the compute
+                                                            ///< accelerator hardware
+            uint64_t numNonComputeErrors;                   ///< [out] The number of errors that have occurred in the fixed-function
+                                                            ///< accelerator hardware
+            uint64_t numCacheErrors;                        ///< [out] The number of errors that have occurred in caches
+                                                            ///< (L1/L3/register file/shared local memory/sampler)
+            uint64_t numMemoryErrors;                       ///< [out] The number of errors that have occurred in the local memory
+            uint64_t numLinkErrors;                         ///< [out] The number of errors that have occurred in the PCI or
+                                                            ///< peer-to-peer links
+            uint64_t numDisplayErrors;                      ///< [out] The number of errors that have occurred in the display
 
         };
 
@@ -1338,61 +1260,34 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get RAS configuration
+        /// @brief Get RAS properties of the device
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
-        GetRasConfig(
-            ras_config_t* pConfig                           ///< [in] Pointer to storage for current RAS configuration
+        RasGetProperties(
+            ras_properties_t* pProperties                   ///< [in] Structure describing RAS properties
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Setup (enable/disable) RAS
+        /// @brief Get the number of errors of a given type
         /// 
         /// @details
+        ///     - Clearing errors will affect other threads/applications - the counter
+        ///       values will start from zero.
+        ///     - Clearing errors requires write permissions.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
-        RasSetup(
-            uint32_t enableLoc,                             ///< [in] Structural locations where RAS should be enabled (bitfield of
-                                                            ///< ::xet_ras_error_loc_t)
-            uint32_t disableLoc,                            ///< [in] Structural locations where RAS should be disabled (bitfield of
-                                                            ///< ::xet_ras_error_loc_t)
-            uint32_t* pEnabledLoc                           ///< [in] Structural locations where RAS is currently enabled after
-                                                            ///< applying enableLoc and disableLoc (bitfield of ::xet_ras_error_loc_t)
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get RAS errors that have occurred
-        /// 
-        /// @details
-        ///     - Returned errors can be filtered by resource, type, location and
-        ///       threshold.
-        ///     - Clearing error counters will affect any subsequent calls to this
-        ///       function from any application. Accumulated counter values are not
-        ///       affected by this.
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __xecall
-        GetRasErrors(
-            ras_filter_t* pFilter,                          ///< [in] Filter for RAS errors to return
-            xe::bool_t clear,                               ///< [in] Set to true to clear the underlying counters after they are
-                                                            ///< returned
-            uint32_t* pCount,                               ///< [in] Pointer to the number of elements in the array pErrors.
-                                                            ///< If count is 0 or pErrors is nullptr, driver will update with the
-                                                            ///< number of errors matching the specified filters. Counters are not cleared.
-                                                            ///< If count is non-zero and less than the number of matching errors,
-                                                            ///< driver will update with the number of errors matching the specified
-                                                            ///< filters. No data is returned and counters are not cleared.
-                                                            ///< If count is greater than or equal to the number of matching errors,
-                                                            ///< all data is returned, counters are cleared if requested and count will
-                                                            ///< be set to actual number of errors returned.
-            ras_error_t* pErrors                            ///< [in] Array of error data
+        RasGetErrors(
+            ras_error_type_t type,                          ///< [in] The type of errors
+            xe::bool_t clear,                               ///< [in] Set to 1 to clear the counters of this type
+            uint64_t* pTotalErrors,                         ///< [in] The number total number of errors of the given type that have
+                                                            ///< occurred
+            ras_details_t* pDetails = nullptr               ///< [in][optional] Breakdown of where errors have occurred
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1815,28 +1710,16 @@ namespace xet
     std::string to_string( const Sysman::resprop_request_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::ras_properties_t to std::string
+    std::string to_string( const Sysman::ras_properties_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::ras_error_type_t to std::string
     std::string to_string( const Sysman::ras_error_type_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::ras_error_loc_t to std::string
-    std::string to_string( const Sysman::ras_error_loc_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::ras_config_t to std::string
-    std::string to_string( const Sysman::ras_config_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::ras_data_type_t to std::string
-    std::string to_string( const Sysman::ras_data_type_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::ras_filter_t to std::string
-    std::string to_string( const Sysman::ras_filter_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::ras_error_t to std::string
-    std::string to_string( const Sysman::ras_error_t val );
+    /// @brief Converts Sysman::ras_details_t to std::string
+    std::string to_string( const Sysman::ras_details_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::event_type_t to std::string

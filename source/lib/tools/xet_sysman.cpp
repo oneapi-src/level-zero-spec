@@ -213,7 +213,7 @@ xetSysmanSetProperties(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get RAS configuration
+/// @brief Get RAS properties of the device
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -225,25 +225,28 @@ xetSysmanSetProperties(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
-///         + nullptr == pConfig
+///         + nullptr == pProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanGetRasConfig(
+xetSysmanRasGetProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-    xet_ras_config_t* pConfig                       ///< [in] Pointer to storage for current RAS configuration
+    xet_ras_properties_t* pProperties               ///< [in] Structure describing RAS properties
     )
 {
-    auto pfnGetRasConfig = xet_lib::context.ddiTable.Sysman.pfnGetRasConfig;
-    if( nullptr == pfnGetRasConfig )
+    auto pfnRasGetProperties = xet_lib::context.ddiTable.Sysman.pfnRasGetProperties;
+    if( nullptr == pfnRasGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetRasConfig( hSysman, pConfig );
+    return pfnRasGetProperties( hSysman, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Setup (enable/disable) RAS
+/// @brief Get the number of errors of a given type
 /// 
 /// @details
+///     - Clearing errors will affect other threads/applications - the counter
+///       values will start from zero.
+///     - Clearing errors requires write permissions.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -253,73 +256,26 @@ xetSysmanGetRasConfig(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
-///         + nullptr == pEnabledLoc
+///         + nullptr == pTotalErrors
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
+///         + This device does not support RAS.
+///     - ::XE_RESULT_ERROR_INSUFFICENT_PERMISSIONS
+///         + Don't have permissions to clear error counters.
 xe_result_t __xecall
-xetSysmanRasSetup(
+xetSysmanRasGetErrors(
     xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-    uint32_t enableLoc,                             ///< [in] Structural locations where RAS should be enabled (bitfield of
-                                                    ///< ::xet_ras_error_loc_t)
-    uint32_t disableLoc,                            ///< [in] Structural locations where RAS should be disabled (bitfield of
-                                                    ///< ::xet_ras_error_loc_t)
-    uint32_t* pEnabledLoc                           ///< [in] Structural locations where RAS is currently enabled after
-                                                    ///< applying enableLoc and disableLoc (bitfield of ::xet_ras_error_loc_t)
+    xet_ras_error_type_t type,                      ///< [in] The type of errors
+    xe_bool_t clear,                                ///< [in] Set to 1 to clear the counters of this type
+    uint64_t* pTotalErrors,                         ///< [in] The number total number of errors of the given type that have
+                                                    ///< occurred
+    xet_ras_details_t* pDetails                     ///< [in][optional] Breakdown of where errors have occurred
     )
 {
-    auto pfnRasSetup = xet_lib::context.ddiTable.Sysman.pfnRasSetup;
-    if( nullptr == pfnRasSetup )
+    auto pfnRasGetErrors = xet_lib::context.ddiTable.Sysman.pfnRasGetErrors;
+    if( nullptr == pfnRasGetErrors )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnRasSetup( hSysman, enableLoc, disableLoc, pEnabledLoc );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get RAS errors that have occurred
-/// 
-/// @details
-///     - Returned errors can be filtered by resource, type, location and
-///       threshold.
-///     - Clearing error counters will affect any subsequent calls to this
-///       function from any application. Accumulated counter values are not
-///       affected by this.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pFilter
-///         + nullptr == pCount
-///         + nullptr == pErrors
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_ERROR_ARRAY_SIZE_TOO_SMALL
-///         + The array doesn't have enough elements to store all the errors
-xe_result_t __xecall
-xetSysmanGetRasErrors(
-    xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-    xet_ras_filter_t* pFilter,                      ///< [in] Filter for RAS errors to return
-    xe_bool_t clear,                                ///< [in] Set to true to clear the underlying counters after they are
-                                                    ///< returned
-    uint32_t* pCount,                               ///< [in] Pointer to the number of elements in the array pErrors.
-                                                    ///< If count is 0 or pErrors is nullptr, driver will update with the
-                                                    ///< number of errors matching the specified filters. Counters are not cleared.
-                                                    ///< If count is non-zero and less than the number of matching errors,
-                                                    ///< driver will update with the number of errors matching the specified
-                                                    ///< filters. No data is returned and counters are not cleared.
-                                                    ///< If count is greater than or equal to the number of matching errors,
-                                                    ///< all data is returned, counters are cleared if requested and count will
-                                                    ///< be set to actual number of errors returned.
-    xet_ras_error_t* pErrors                        ///< [in] Array of error data
-    )
-{
-    auto pfnGetRasErrors = xet_lib::context.ddiTable.Sysman.pfnGetRasErrors;
-    if( nullptr == pfnGetRasErrors )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    return pfnGetRasErrors( hSysman, pFilter, clear, pCount, pErrors );
+    return pfnRasGetErrors( hSysman, type, clear, pTotalErrors, pDetails );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -735,7 +691,7 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get RAS configuration
+    /// @brief Get RAS properties of the device
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -743,85 +699,47 @@ namespace xet
     /// 
     /// @throws result_t
     void __xecall
-    Sysman::GetRasConfig(
-        ras_config_t* pConfig                           ///< [in] Pointer to storage for current RAS configuration
+    Sysman::RasGetProperties(
+        ras_properties_t* pProperties                   ///< [in] Structure describing RAS properties
         )
     {
-        auto result = static_cast<result_t>( ::xetSysmanGetRasConfig(
+        auto result = static_cast<result_t>( ::xetSysmanRasGetProperties(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            reinterpret_cast<xet_ras_config_t*>( pConfig ) ) );
+            reinterpret_cast<xet_ras_properties_t*>( pProperties ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::GetRasConfig" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::RasGetProperties" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Setup (enable/disable) RAS
+    /// @brief Get the number of errors of a given type
     /// 
     /// @details
+    ///     - Clearing errors will affect other threads/applications - the counter
+    ///       values will start from zero.
+    ///     - Clearing errors requires write permissions.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
     void __xecall
-    Sysman::RasSetup(
-        uint32_t enableLoc,                             ///< [in] Structural locations where RAS should be enabled (bitfield of
-                                                        ///< ::xet_ras_error_loc_t)
-        uint32_t disableLoc,                            ///< [in] Structural locations where RAS should be disabled (bitfield of
-                                                        ///< ::xet_ras_error_loc_t)
-        uint32_t* pEnabledLoc                           ///< [in] Structural locations where RAS is currently enabled after
-                                                        ///< applying enableLoc and disableLoc (bitfield of ::xet_ras_error_loc_t)
+    Sysman::RasGetErrors(
+        ras_error_type_t type,                          ///< [in] The type of errors
+        xe::bool_t clear,                               ///< [in] Set to 1 to clear the counters of this type
+        uint64_t* pTotalErrors,                         ///< [in] The number total number of errors of the given type that have
+                                                        ///< occurred
+        ras_details_t* pDetails                         ///< [in][optional] Breakdown of where errors have occurred
         )
     {
-        auto result = static_cast<result_t>( ::xetSysmanRasSetup(
+        auto result = static_cast<result_t>( ::xetSysmanRasGetErrors(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            enableLoc,
-            disableLoc,
-            pEnabledLoc ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::RasSetup" );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get RAS errors that have occurred
-    /// 
-    /// @details
-    ///     - Returned errors can be filtered by resource, type, location and
-    ///       threshold.
-    ///     - Clearing error counters will affect any subsequent calls to this
-    ///       function from any application. Accumulated counter values are not
-    ///       affected by this.
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @throws result_t
-    void __xecall
-    Sysman::GetRasErrors(
-        ras_filter_t* pFilter,                          ///< [in] Filter for RAS errors to return
-        xe::bool_t clear,                               ///< [in] Set to true to clear the underlying counters after they are
-                                                        ///< returned
-        uint32_t* pCount,                               ///< [in] Pointer to the number of elements in the array pErrors.
-                                                        ///< If count is 0 or pErrors is nullptr, driver will update with the
-                                                        ///< number of errors matching the specified filters. Counters are not cleared.
-                                                        ///< If count is non-zero and less than the number of matching errors,
-                                                        ///< driver will update with the number of errors matching the specified
-                                                        ///< filters. No data is returned and counters are not cleared.
-                                                        ///< If count is greater than or equal to the number of matching errors,
-                                                        ///< all data is returned, counters are cleared if requested and count will
-                                                        ///< be set to actual number of errors returned.
-        ras_error_t* pErrors                            ///< [in] Array of error data
-        )
-    {
-        auto result = static_cast<result_t>( ::xetSysmanGetRasErrors(
-            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            reinterpret_cast<xet_ras_filter_t*>( pFilter ),
+            static_cast<xet_ras_error_type_t>( type ),
             static_cast<xe_bool_t>( clear ),
-            pCount,
-            reinterpret_cast<xet_ras_error_t*>( pErrors ) ) );
+            pTotalErrors,
+            reinterpret_cast<xet_ras_details_t*>( pDetails ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::GetRasErrors" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::RasGetErrors" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1916,134 +1834,24 @@ namespace xet
     /// @brief Converts Sysman::ras_error_type_t to std::string
     std::string to_string( const Sysman::ras_error_type_t val )
     {
-        const auto bits = static_cast<uint32_t>( val );
-
-        std::string str;
-        
-        if( 0 == bits )
-            str += "NONE   ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_type_t::FATAL) & bits )
-            str += "FATAL | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_type_t::NON_FATAL) & bits )
-            str += "NON_FATAL | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_type_t::CORRECTABLE) & bits )
-            str += "CORRECTABLE | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_type_t::UNCORRECTABLE) & bits )
-            str += "UNCORRECTABLE | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_type_t::PARITY) & bits )
-            str += "PARITY | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_type_t::SINGLE_BIT) & bits )
-            str += "SINGLE_BIT | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_type_t::DOUBLE_BIT) & bits )
-            str += "DOUBLE_BIT | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_type_t::REPLAY) & bits )
-            str += "REPLAY | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_type_t::RESET) & bits )
-            str += "RESET | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_type_t::ALL) & bits )
-            str += "ALL | ";
-
-        return ( str.size() > 3 ) 
-            ? "Sysman::ras_error_type_t::{ " + str.substr(0, str.size() - 3) + " }"
-            : "Sysman::ras_error_type_t::{ ? }";
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::ras_error_loc_t to std::string
-    std::string to_string( const Sysman::ras_error_loc_t val )
-    {
-        const auto bits = static_cast<uint32_t>( val );
-
-        std::string str;
-        
-        if( 0 == bits )
-            str += "NONE   ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::MAIN_MEM) & bits )
-            str += "MAIN_MEM | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::L3_CACHE) & bits )
-            str += "L3_CACHE | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::SAMPLER_SRAM) & bits )
-            str += "SAMPLER_SRAM | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::GUC_SRAM) & bits )
-            str += "GUC_SRAM | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::INST_CACHE) & bits )
-            str += "INST_CACHE | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::GRF) & bits )
-            str += "GRF | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::SLM) & bits )
-            str += "SLM | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::MESSAGING) & bits )
-            str += "MESSAGING | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::SECURITY) & bits )
-            str += "SECURITY | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::DISPLAY) & bits )
-            str += "DISPLAY | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::SOC) & bits )
-            str += "SOC | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::GPU_HANG) & bits )
-            str += "GPU_HANG | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::PCI) & bits )
-            str += "PCI | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::PCI_ROUTING) & bits )
-            str += "PCI_ROUTING | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::P2P_LINK) & bits )
-            str += "P2P_LINK | ";
-        
-        if( static_cast<uint32_t>(Sysman::ras_error_loc_t::ALL) & bits )
-            str += "ALL | ";
-
-        return ( str.size() > 3 ) 
-            ? "Sysman::ras_error_loc_t::{ " + str.substr(0, str.size() - 3) + " }"
-            : "Sysman::ras_error_loc_t::{ ? }";
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::ras_data_type_t to std::string
-    std::string to_string( const Sysman::ras_data_type_t val )
-    {
         std::string str;
 
         switch( val )
         {
-        case Sysman::ras_data_type_t::NONE:
-            str = "Sysman::ras_data_type_t::NONE";
+        case Sysman::ras_error_type_t::CORRECTABLE:
+            str = "Sysman::ras_error_type_t::CORRECTABLE";
             break;
 
-        case Sysman::ras_data_type_t::OCCURRED:
-            str = "Sysman::ras_data_type_t::OCCURRED";
+        case Sysman::ras_error_type_t::UNCORRECTABLE:
+            str = "Sysman::ras_error_type_t::UNCORRECTABLE";
             break;
 
-        case Sysman::ras_data_type_t::COUNTER:
-            str = "Sysman::ras_data_type_t::COUNTER";
+        case Sysman::ras_error_type_t::NUM:
+            str = "Sysman::ras_error_type_t::NUM";
             break;
 
         default:
-            str = "Sysman::ras_data_type_t::?";
+            str = "Sysman::ras_error_type_t::?";
             break;
         };
 
@@ -3244,91 +3052,66 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::ras_config_t to std::string
-    std::string to_string( const Sysman::ras_config_t val )
+    /// @brief Converts Sysman::ras_properties_t to std::string
+    std::string to_string( const Sysman::ras_properties_t val )
     {
         std::string str;
         
-        str += "Sysman::ras_config_t::numRas : ";
-        str += std::to_string(val.numRas);
+        str += "Sysman::ras_properties_t::supported : ";
+        str += std::to_string(val.supported);
         str += "\n";
         
-        str += "Sysman::ras_config_t::rasTypes : ";
-        str += std::to_string(val.rasTypes);
-        str += "\n";
-        
-        str += "Sysman::ras_config_t::rasLocations : ";
-        str += std::to_string(val.rasLocations);
-        str += "\n";
-        
-        str += "Sysman::ras_config_t::enabled : ";
+        str += "Sysman::ras_properties_t::enabled : ";
         str += std::to_string(val.enabled);
         str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::ras_filter_t to std::string
-    std::string to_string( const Sysman::ras_filter_t val )
-    {
-        std::string str;
         
-        str += "Sysman::ras_filter_t::resourceId : ";
-        str += to_string(val.resourceId);
-        str += "\n";
-        
-        str += "Sysman::ras_filter_t::type : ";
-        str += std::to_string(val.type);
-        str += "\n";
-        
-        str += "Sysman::ras_filter_t::location : ";
-        str += std::to_string(val.location);
-        str += "\n";
-        
-        str += "Sysman::ras_filter_t::threshold : ";
-        str += std::to_string(val.threshold);
+        str += "Sysman::ras_properties_t::repaired : ";
+        str += std::to_string(val.repaired);
         str += "\n";
 
         return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::ras_error_t to std::string
-    std::string to_string( const Sysman::ras_error_t val )
+    /// @brief Converts Sysman::ras_details_t to std::string
+    std::string to_string( const Sysman::ras_details_t val )
     {
         std::string str;
         
-        str += "Sysman::ras_error_t::pName : ";
-        str += val.pName;
+        str += "Sysman::ras_details_t::numResets : ";
+        str += std::to_string(val.numResets);
         str += "\n";
         
-        str += "Sysman::ras_error_t::pDesc : ";
-        str += val.pDesc;
+        str += "Sysman::ras_details_t::numProgrammingErrors : ";
+        str += std::to_string(val.numProgrammingErrors);
         str += "\n";
         
-        str += "Sysman::ras_error_t::type : ";
-        str += std::to_string(val.type);
+        str += "Sysman::ras_details_t::numDriverErrors : ";
+        str += std::to_string(val.numDriverErrors);
         str += "\n";
         
-        str += "Sysman::ras_error_t::loc : ";
-        str += std::to_string(val.loc);
+        str += "Sysman::ras_details_t::numComputeErrors : ";
+        str += std::to_string(val.numComputeErrors);
         str += "\n";
         
-        str += "Sysman::ras_error_t::dataType : ";
-        str += to_string(val.dataType);
+        str += "Sysman::ras_details_t::numNonComputeErrors : ";
+        str += std::to_string(val.numNonComputeErrors);
         str += "\n";
         
-        str += "Sysman::ras_error_t::data : ";
-        str += std::to_string(val.data);
+        str += "Sysman::ras_details_t::numCacheErrors : ";
+        str += std::to_string(val.numCacheErrors);
         str += "\n";
         
-        str += "Sysman::ras_error_t::accumulated : ";
-        str += std::to_string(val.accumulated);
+        str += "Sysman::ras_details_t::numMemoryErrors : ";
+        str += std::to_string(val.numMemoryErrors);
         str += "\n";
         
-        str += "Sysman::ras_error_t::resourceId : ";
-        str += to_string(val.resourceId);
+        str += "Sysman::ras_details_t::numLinkErrors : ";
+        str += std::to_string(val.numLinkErrors);
+        str += "\n";
+        
+        str += "Sysman::ras_details_t::numDisplayErrors : ";
+        str += std::to_string(val.numDisplayErrors);
         str += "\n";
 
         return str;

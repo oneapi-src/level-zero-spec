@@ -804,20 +804,20 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanGetRasConfig
+    /// @brief Intercept function for xetSysmanRasGetProperties
     xe_result_t __xecall
-    xetSysmanGetRasConfig(
+    xetSysmanRasGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        xet_ras_config_t* pConfig                       ///< [in] Pointer to storage for current RAS configuration
+        xet_ras_properties_t* pProperties               ///< [in] Structure describing RAS properties
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetRasConfig = context.xetDdiTable.Sysman.pfnGetRasConfig;
-        if( nullptr != pfnGetRasConfig )
+        auto pfnRasGetProperties = context.xetDdiTable.Sysman.pfnRasGetProperties;
+        if( nullptr != pfnRasGetProperties )
         {
-            result = pfnGetRasConfig( hSysman, pConfig );
+            result = pfnRasGetProperties( hSysman, pProperties );
         }
         else
         {
@@ -828,61 +828,24 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanRasSetup
+    /// @brief Intercept function for xetSysmanRasGetErrors
     xe_result_t __xecall
-    xetSysmanRasSetup(
+    xetSysmanRasGetErrors(
         xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        uint32_t enableLoc,                             ///< [in] Structural locations where RAS should be enabled (bitfield of
-                                                        ///< ::xet_ras_error_loc_t)
-        uint32_t disableLoc,                            ///< [in] Structural locations where RAS should be disabled (bitfield of
-                                                        ///< ::xet_ras_error_loc_t)
-        uint32_t* pEnabledLoc                           ///< [in] Structural locations where RAS is currently enabled after
-                                                        ///< applying enableLoc and disableLoc (bitfield of ::xet_ras_error_loc_t)
+        xet_ras_error_type_t type,                      ///< [in] The type of errors
+        xe_bool_t clear,                                ///< [in] Set to 1 to clear the counters of this type
+        uint64_t* pTotalErrors,                         ///< [in] The number total number of errors of the given type that have
+                                                        ///< occurred
+        xet_ras_details_t* pDetails                     ///< [in][optional] Breakdown of where errors have occurred
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnRasSetup = context.xetDdiTable.Sysman.pfnRasSetup;
-        if( nullptr != pfnRasSetup )
+        auto pfnRasGetErrors = context.xetDdiTable.Sysman.pfnRasGetErrors;
+        if( nullptr != pfnRasGetErrors )
         {
-            result = pfnRasSetup( hSysman, enableLoc, disableLoc, pEnabledLoc );
-        }
-        else
-        {
-            // generic implementation
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanGetRasErrors
-    xe_result_t __xecall
-    xetSysmanGetRasErrors(
-        xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
-        xet_ras_filter_t* pFilter,                      ///< [in] Filter for RAS errors to return
-        xe_bool_t clear,                                ///< [in] Set to true to clear the underlying counters after they are
-                                                        ///< returned
-        uint32_t* pCount,                               ///< [in] Pointer to the number of elements in the array pErrors.
-                                                        ///< If count is 0 or pErrors is nullptr, driver will update with the
-                                                        ///< number of errors matching the specified filters. Counters are not cleared.
-                                                        ///< If count is non-zero and less than the number of matching errors,
-                                                        ///< driver will update with the number of errors matching the specified
-                                                        ///< filters. No data is returned and counters are not cleared.
-                                                        ///< If count is greater than or equal to the number of matching errors,
-                                                        ///< all data is returned, counters are cleared if requested and count will
-                                                        ///< be set to actual number of errors returned.
-        xet_ras_error_t* pErrors                        ///< [in] Array of error data
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetRasErrors = context.xetDdiTable.Sysman.pfnGetRasErrors;
-        if( nullptr != pfnGetRasErrors )
-        {
-            result = pfnGetRasErrors( hSysman, pFilter, clear, pCount, pErrors );
+            result = pfnRasGetErrors( hSysman, type, clear, pTotalErrors, pDetails );
         }
         else
         {
@@ -1611,11 +1574,9 @@ xetGetSysmanProcAddrTable(
 
     pDdiTable->pfnSetProperties                          = driver::xetSysmanSetProperties;
 
-    pDdiTable->pfnGetRasConfig                           = driver::xetSysmanGetRasConfig;
+    pDdiTable->pfnRasGetProperties                       = driver::xetSysmanRasGetProperties;
 
-    pDdiTable->pfnRasSetup                               = driver::xetSysmanRasSetup;
-
-    pDdiTable->pfnGetRasErrors                           = driver::xetSysmanGetRasErrors;
+    pDdiTable->pfnRasGetErrors                           = driver::xetSysmanRasGetErrors;
 
     pDdiTable->pfnSupportedEvents                        = driver::xetSysmanSupportedEvents;
 

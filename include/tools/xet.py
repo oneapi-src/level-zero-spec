@@ -1269,19 +1269,20 @@ class xet_resprop_request_t(Structure):
     ]
 
 ###############################################################################
+## @brief RAS properties
+class xet_ras_properties_t(Structure):
+    _fields_ = [
+        ("supported", xe_bool_t),                                       ## [out] True if RAS is supported on this device
+        ("enabled", xe_bool_t),                                         ## [out] True if RAS is enabled on this device
+        ("repaired", xe_bool_t)                                         ## [out] True if the device has been repaired
+    ]
+
+###############################################################################
 ## @brief RAS error type
 class xet_ras_error_type_v(IntEnum):
-    NONE = 0                                        ## No error type
-    FATAL = XE_BIT( 0 )                             ## Error was fatal
-    NON_FATAL = XE_BIT( 1 )                         ## Error was not fatal
-    CORRECTABLE = XE_BIT( 2 )                       ## Error was corrected
-    UNCORRECTABLE = XE_BIT( 3 )                     ## Error was not corrected
-    PARITY = XE_BIT( 4 )                            ## Parity error occurred
-    SINGLE_BIT = XE_BIT( 5 )                        ## Single bit error occurred
-    DOUBLE_BIT = XE_BIT( 6 )                        ## Single bit error occurred
-    REPLAY = XE_BIT( 7 )                            ## Replay occurred
-    RESET = XE_BIT( 8 )                             ## Resets occurred
-    ALL = ~0                                        ## Select all error types
+    CORRECTABLE = 0                                 ## Errors were corrected by hardware
+    UNCORRECTABLE = auto()                          ## Error were not corrected
+    NUM = auto()                                    ## The number of error types
 
 class xet_ras_error_type_t(c_int):
     def __str__(self):
@@ -1289,102 +1290,24 @@ class xet_ras_error_type_t(c_int):
 
 
 ###############################################################################
-## @brief RAS error structural location
-class xet_ras_error_loc_v(IntEnum):
-    NONE = 0                                        ## No location
-    MAIN_MEM = XE_BIT( 0 )                          ## Error occurred in main onboard memory
-    L3_CACHE = XE_BIT( 1 )                          ## Error occurred in L3 cache
-    SAMPLER_SRAM = XE_BIT( 2 )                      ## Error occurred in sampler SRAM
-    GUC_SRAM = XE_BIT( 3 )                          ## Error occurred in microcontroller SRAM
-    INST_CACHE = XE_BIT( 4 )                        ## Error occurred in the compute unit instruction cache
-    GRF = XE_BIT( 5 )                               ## Error occurred in the compute unit register file
-    SLM = XE_BIT( 6 )                               ## Error occurred in the compute unit shared local memory
-    MESSAGING = XE_BIT( 7 )                         ## Errors occurred handling transactions between PCI config space, MMIO
-                                                    ## registers, local memory and sub-devices
-    SECURITY = XE_BIT( 8 )                          ## Security errors occurred
-    DISPLAY = XE_BIT( 9 )                           ## Errors occurred in the display
-    SOC = XE_BIT( 10 )                              ## Errors occurred in other parts of the device
-    GPU_HANG = XE_BIT( 11 )                         ## Driver detected that the GPU hardware was non-responsive
-    PCI = XE_BIT( 12 )                              ## Error occurred in the PCIe controller
-    PCI_ROUTING = XE_BIT( 13 )                      ## Error occurred routing PCIe traffic to/from sub-devices
-    P2P_LINK = XE_BIT( 14 )                         ## Errors detected with peer-to-peer connection
-    ALL = ~0                                        ## Select all error locations
-
-class xet_ras_error_loc_t(c_int):
-    def __str__(self):
-        return str(xet_ras_error_loc_v(value))
-
-
-###############################################################################
-## @brief RAS configuration
-class xet_ras_config_t(Structure):
+## @brief RAS error details
+class xet_ras_details_t(Structure):
     _fields_ = [
-        ("numRas", c_ulong),                                            ## [in] Total number of RAS counters available on this device
-        ("rasTypes", c_ulong),                                          ## [in] All RAS types supported on this device (bitfield of
-                                                                        ## ::xet_ras_error_type_t)
-        ("rasLocations", c_ulong),                                      ## [in] All structural locations where RAS is supported on this device
-                                                                        ## (bitfield of ::xet_ras_error_loc_t)
-        ("enabled", c_ulong)                                            ## [in] All structural locations where RAS is currently enabled on this
-                                                                        ## device (bitfield of ::xet_ras_error_loc_t)
-    ]
-
-###############################################################################
-## @brief RAS data type
-class xet_ras_data_type_v(IntEnum):
-    NONE = 0                                        ## Errors not supported
-    OCCURRED = auto()                               ## Indicates if an error occurred
-    COUNTER = auto()                                ## Provides a counter for the number of errors that have occurred
-
-class xet_ras_data_type_t(c_int):
-    def __str__(self):
-        return str(xet_ras_data_type_v(value))
-
-
-###############################################################################
-## @brief Filter RAS errors
-class xet_ras_filter_t(Structure):
-    _fields_ = [
-        ("resourceId", xet_resid_t),                                    ## [in] Filter based on resource ID. Set to ::XET_RESID_ANY to get errors
-                                                                        ## from anywhere in the device
-        ("type", c_ulong),                                              ## [in] Bitfield of error types to filter - one or more of
-                                                                        ## ::xet_ras_error_type_t. Set to ::XET_RAS_ERROR_TYPE_ALL to have all
-                                                                        ## error types returned.
-        ("location", c_ulong),                                          ## [in] Bitfield of error locations to filter - one or more of
-                                                                        ## ::xet_ras_error_loc_t. Set to ::XET_RAS_ERROR_LOC_ALL to have all
-                                                                        ## error locations returned.
-        ("threshold", c_ulong)                                          ## [in] Only return error elements that have occurred at least this
-                                                                        ## number of times.
-                                                                        ## If set to 0, will get a list of all possible RAS elements, even those
-                                                                        ## that have not had errors.
-                                                                        ## For error elements of type ::XET_RAS_DATA_TYPE_OCCURRED, there is no
-                                                                        ## underlying counter, so they will always be returned independent of the
-                                                                        ## threshold setting.
-    ]
-
-###############################################################################
-## @brief Filter to get all RAS error counters
-XET_RAS_FILTER_ALL_COUNTERS = { XET_RESID_ANY, (uint32_t)XET_RAS_ERROR_TYPE_ALL, (uint32_t)XET_RAS_ERROR_LOC_ALL, 0 }
-
-###############################################################################
-## @brief Filter to get all RAS error counters that have errors
-XET_RAS_FILTER_ALL_ERRORS = { XET_RESID_ANY, (uint32_t)XET_RAS_ERROR_TYPE_ALL, (uint32_t)XET_RAS_ERROR_LOC_ALL, 1 }
-
-###############################################################################
-## @brief RAS error
-class xet_ras_error_t(Structure):
-    _fields_ = [
-        ("pName", POINTER(c_char)),                                     ## [out] Name of this error
-        ("pDesc", POINTER(c_char)),                                     ## [out] Human readable description of this error
-        ("type", c_ulong),                                              ## [out] Bitfield describing type of error, constructed from one or more
-                                                                        ## of ::xet_ras_error_type_t
-        ("loc", c_ulong),                                               ## [out] Bitfield describing structural location of the error,
-                                                                        ## constructed from one of ::xet_ras_error_loc_t
-        ("dataType", xet_ras_data_type_t),                              ## [out] How to interpret the data
-        ("data", c_ulonglong),                                          ## [out] The value of the error - interpretation depends on dataType
-        ("accumulated", c_ulonglong),                                   ## [out] The accumulated value of the error (never cleared until device
-                                                                        ## driver is reloaded)
-        ("resourceId", xet_resid_t)                                     ## [out] Resource where the error was generated. If the error doesn't
-                                                                        ## come from a specific resource, this will be ::XET_RESID_ANY
+        ("numResets", c_ulonglong),                                     ## [out] The number of accelerator resets that have taken place
+        ("numProgrammingErrors", c_ulonglong),                          ## [out] The number of hardware exceptions generated by the way workloads
+                                                                        ## have programmed the hardware
+        ("numDriverErrors", c_ulonglong),                               ## [out] The number of low level driver communication errors have
+                                                                        ## occurred
+        ("numComputeErrors", c_ulonglong),                              ## [out] The number of errors that have occurred in the compute
+                                                                        ## accelerator hardware
+        ("numNonComputeErrors", c_ulonglong),                           ## [out] The number of errors that have occurred in the fixed-function
+                                                                        ## accelerator hardware
+        ("numCacheErrors", c_ulonglong),                                ## [out] The number of errors that have occurred in caches
+                                                                        ## (L1/L3/register file/shared local memory/sampler)
+        ("numMemoryErrors", c_ulonglong),                               ## [out] The number of errors that have occurred in the local memory
+        ("numLinkErrors", c_ulonglong),                                 ## [out] The number of errors that have occurred in the PCI or
+                                                                        ## peer-to-peer links
+        ("numDisplayErrors", c_ulonglong)                               ## [out] The number of errors that have occurred in the display
     ]
 
 ###############################################################################
@@ -1865,25 +1788,18 @@ else:
     _xetSysmanSetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_resprop_request_t) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanGetRasConfig
+## @brief Function-pointer for xetSysmanRasGetProperties
 if __use_win_types:
-    _xetSysmanGetRasConfig_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_ras_config_t) )
+    _xetSysmanRasGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_ras_properties_t) )
 else:
-    _xetSysmanGetRasConfig_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_ras_config_t) )
+    _xetSysmanRasGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_ras_properties_t) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanRasSetup
+## @brief Function-pointer for xetSysmanRasGetErrors
 if __use_win_types:
-    _xetSysmanRasSetup_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, c_ulong, POINTER(c_ulong) )
+    _xetSysmanRasGetErrors_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_ras_error_type_t, xe_bool_t, POINTER(c_ulonglong), POINTER(xet_ras_details_t) )
 else:
-    _xetSysmanRasSetup_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, c_ulong, POINTER(c_ulong) )
-
-###############################################################################
-## @brief Function-pointer for xetSysmanGetRasErrors
-if __use_win_types:
-    _xetSysmanGetRasErrors_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_ras_filter_t), xe_bool_t, POINTER(c_ulong), POINTER(xet_ras_error_t) )
-else:
-    _xetSysmanGetRasErrors_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_ras_filter_t), xe_bool_t, POINTER(c_ulong), POINTER(xet_ras_error_t) )
+    _xetSysmanRasGetErrors_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_ras_error_type_t, xe_bool_t, POINTER(c_ulonglong), POINTER(xet_ras_details_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanSupportedEvents
@@ -1945,9 +1861,8 @@ class _xet_sysman_dditable_t(Structure):
         ("pfnGetPropertyInfo", c_void_p),                               ## _xetSysmanGetPropertyInfo_t
         ("pfnGetProperties", c_void_p),                                 ## _xetSysmanGetProperties_t
         ("pfnSetProperties", c_void_p),                                 ## _xetSysmanSetProperties_t
-        ("pfnGetRasConfig", c_void_p),                                  ## _xetSysmanGetRasConfig_t
-        ("pfnRasSetup", c_void_p),                                      ## _xetSysmanRasSetup_t
-        ("pfnGetRasErrors", c_void_p),                                  ## _xetSysmanGetRasErrors_t
+        ("pfnRasGetProperties", c_void_p),                              ## _xetSysmanRasGetProperties_t
+        ("pfnRasGetErrors", c_void_p),                                  ## _xetSysmanRasGetErrors_t
         ("pfnSupportedEvents", c_void_p),                               ## _xetSysmanSupportedEvents_t
         ("pfnRegisterEvents", c_void_p),                                ## _xetSysmanRegisterEvents_t
         ("pfnUnregisterEvents", c_void_p),                              ## _xetSysmanUnregisterEvents_t
@@ -2128,9 +2043,8 @@ class XET_DDI:
         self.xetSysmanGetPropertyInfo = _xetSysmanGetPropertyInfo_t(self.__dditable.Sysman.pfnGetPropertyInfo)
         self.xetSysmanGetProperties = _xetSysmanGetProperties_t(self.__dditable.Sysman.pfnGetProperties)
         self.xetSysmanSetProperties = _xetSysmanSetProperties_t(self.__dditable.Sysman.pfnSetProperties)
-        self.xetSysmanGetRasConfig = _xetSysmanGetRasConfig_t(self.__dditable.Sysman.pfnGetRasConfig)
-        self.xetSysmanRasSetup = _xetSysmanRasSetup_t(self.__dditable.Sysman.pfnRasSetup)
-        self.xetSysmanGetRasErrors = _xetSysmanGetRasErrors_t(self.__dditable.Sysman.pfnGetRasErrors)
+        self.xetSysmanRasGetProperties = _xetSysmanRasGetProperties_t(self.__dditable.Sysman.pfnRasGetProperties)
+        self.xetSysmanRasGetErrors = _xetSysmanRasGetErrors_t(self.__dditable.Sysman.pfnRasGetErrors)
         self.xetSysmanSupportedEvents = _xetSysmanSupportedEvents_t(self.__dditable.Sysman.pfnSupportedEvents)
         self.xetSysmanRegisterEvents = _xetSysmanRegisterEvents_t(self.__dditable.Sysman.pfnRegisterEvents)
         self.xetSysmanUnregisterEvents = _xetSysmanUnregisterEvents_t(self.__dditable.Sysman.pfnUnregisterEvents)

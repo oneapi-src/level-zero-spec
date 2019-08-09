@@ -639,95 +639,72 @@ supports programming the R/G/B color values.
 
 
 # <a name="ra">Reliability, availability and serviceability (RAS)</a>
-Devices may expose RAS telemetry. Rather than call out every type of unique metric, we define the set of orthogonal properties that can be combined to describe any metric.
-This consists of error types ::xet_ras_error_type_t (e.g. fatal and non-fatal) and error structural locations ::xet_ras_error_loc_t (e.g. L3 cache).
+The device driver maintains counters for hardware and software errors related to the device. There are two types of errors and they are defined in
+the enumerator ::xet_ras_error_type_t:
 
-An example of a RAS metric would be HBM correctable single-bit errors:
+| Error Type                          | Description |
+| :---                                | :---        |
+| ::XET_RAS_ERROR_TYPE_UNCORRECTABLE | Hardware errors occurred which most likely resulted in loss of data or even a device hang. If an error results in device lockup, a warm boot is required before those errors will be reported. |
+| ::XET_RAS_ERROR_TYPE_CORRECTABLE   | These are errors that were corrected by the hardware and did not cause data corruption. |
 
-- Type: ::XET_RAS_ERROR_TYPE_NON_FATAL | ::XET_RAS_ERROR_TYPE_CORRECTABLE | ::XET_RAS_ERROR_TYPE_SINGLE_BIT
-- Location: ::XET_RAS_ERROR_LOC_MAIN_MEM
+Software can use the function ::xetSysmanRasGetProperties() to find out if the device supports RAS and if it is enabled. This will also indicate
+if the device had hardware repairs applied in the past. This information is returned in the structure ::xet_ras_properties_t.
 
-The reason for making these properties bitfields is so that when querying errors, it is possible to filter the list of metrics based on any combination. For example, the
-following filter will show all RAS telemetry for errors that were corrected anywhere in the device:
+To determine if errors have occurred, software uses the function ::xetSysmanRasGetErrors(). This will return the total number of errors of a given type
+(correctable/uncorrectable) that have occurred.
 
-- Type: ::XET_RAS_ERROR_TYPE_CORRECTABLE
-- Location: ::XET_RAS_ERROR_LOC_ALL
+When calling ::xetSysmanRasGetErrors(), software can request that the error counters be cleared. When this is done, all counters of the specified
+type (correctable/uncorrectable) will be set to zero and any subsequent calls to this function will only show new errors that have occurred.
+If software intends to clear errors, it should be the only application doing so and it should store the counters in an appropriate database
+for historical analysis.
 
-The API defines a RAS error filter ::xet_ras_filter_t with the following memebers:
+When calling ::xetSysmanRasGetErrors(), an optional pointer to a structure of type ::xet_ras_details_t can be supplied. This will give a
+breakdown of the main device components where the errors occurred.
 
-| Member                  | Description                                                                                                                  |
-| :---                    | :---                                                                                                                         |
-| Resource ID             | Only show errors related to a particular resource, otherwise all resources if this member is set to ::XET_RESOURCE_TYPE_ANY |
-| RAS error type          | Bitfield of one or more of ::xet_ras_error_type_t                                                                           |
-| RAS structural location | Bitfield of one or more of ::xet_ras_error_loc_t                                                                            |
-| Threshold               | Only show errors if they have occurred more than the specified amount of times                                               |
-
-Macros define two generic filters:
-
-- ::XET_RAS_FILTER_ALL_COUNTERS - Show all error counters independent of whether errors have occurred
-- ::XET_RAS_FILTER_ALL_ERRORS - Show only error counters where at least one error has occurred
-
-The function ::xetSysmanGetRasErrors() is used to get the current status of error metrics. When calling this function, an array of elements ::xet_ras_error_t
-is provided where the error counter data will be returned. If the provided size of the array is too small to match the errors matching the filter, an error
-will be returned and the required size if provided. The function ::xetSysmanGetRasConfig() can be used to find the total number of errors counters that are available
-(::xet_ras_config_t.numRas) and hence the total array size that should be passed into the ::xetSysmanGetRasErrors() function.
-
-Note that for each error, the interpretation of the data in ::xet_ras_error_t.data depends on the provided error type in ::xet_ras_error_t.dataType.
-Some errors may be counters (::XET_RAS_DATA_TYPE_COUNTER) while other errors may only indicate that errors have occurred (::XET_RAS_DATA_TYPE_OCCURRED).
-
-When calling ::xetSysmanGetRasErrors(), it is possible to request that the error data (counter or occurrence) be cleared. This means that any subsequent call
-to this function from any application will show no errors (::xet_ras_error_t.data = 0) for those counters that were cleared until new errors have occurred.
-While the driver will clear the counter values, it still maintains accumulated values and these are returned in ::xet_ras_error_t.accumulated - these counters
-are only cleared when the device driver is reloaded.
-
-The code below shows how to get a list of all available error counters. This is something that an application could do during initialization:
+The code below shows how to determine if RAS is supported and the current state of RAS errors:
 
 ```c
-void ShowRasCounters(xet_sysman_handle_t hSysmanDevice)
+void PrintRasDetails(xet_ras_details_t* pDetails)
 {
-    uint32_t numRas;
-    xet_ras_filter_t filter = XET_RAS_FILTER_ALL_COUNTERS;
-    if (xetSysmanGetRasErrors(hSysmanDevice, &filter, false, &numRas, NULL) == XE_RESULT_SUCCESS)
-    {
-        xet_ras_error_t* pCounters = (xet_ras_error_t*)malloc(numRas * sizeof(xet_ras_error_t));
-
-        if (xetSysmanGetRasErrors(hSysmanDevice, &filter, false, &numRas, pCounters) == XE_RESULT_SUCCESS)
-        {
-            for (uint32_t i = 0; i < numRas; i++)
-            {
-                fprintf(stdout, "RAS error %s: value=%llu\n",
-                    pCounters[i].pName, pCounters[i].data);
-            }
-        }
-    }
+    fprintf(stdout, "    Number new resets:                %llu\n", pDetails->numResets);
+    fprintf(stdout, "    Number new programming errors:    %llu\n", pDetails->numProgrammingErrors);
+    fprintf(stdout, "    Number new driver errors:         %llu\n", pDetails->numDriverErrors);
+    fprintf(stdout, "    Number new compute errors:        %llu\n", pDetails->numComputeErrors);
+    fprintf(stdout, "    Number new non-compute errors:    %llu\n", pDetails->numNonComputeErrors);
+    fprintf(stdout, "    Number new cache errors:          %llu\n", pDetails->numCacheErrors);
+    fprintf(stdout, "    Number new memory errors:         %llu\n", pDetails->numMemoryErrors);
+    fprintf(stdout, "    Number new link errors:           %llu\n", pDetails->numLinkErrors);
+    fprintf(stdout, "    Number new display errors:        %llu\n", pDetails->numDisplayErrors);
 }
-```
 
-The function ::xetSysmanGetRasConfig() returns structure ::xet_ras_config_t. This gives the total number of RAS errors available on the device
-(::xet_ras_config_t.numRas). It also gives a quick snapshot of all RAS error types (::xet_ras_config_t.rasTypes) and all RAS error structural locations
-(::xet_ras_config_t.rasLocations) - these are not an enumeration all error counters (use ::xetSysmanGetRasErrors() for that) but
-a merging of all possible types (::xet_ras_error_type_t) and locations (::xet_ras_error_loc_t) so that software can quickly determine what might
-be supported. The structure also indicates all structural locations where RAS counters are enabled (::xet_ras_config_t.enabled).
-
-If ::xet_ras_config_t.rasLocations is not zero, it indicates the structural locations where RAS is supported. The function ::xetSysmanRasSetup() can be used to
-enable/disable RAS at any of those structural locations. On return, the function indicates the structual locations where RAS is enabled. The code below
-shows how to determine if RAS is enabled for the local memory:
-
-```c
-void LocalMemoryRasConfig(xet_sysman_handle_t hSysmanDevice)
+void ShowRasErrors(xet_sysman_handle_t hSysmanDevice)
 {
-    xet_ras_config_t config;
-    if (xetSysmanGetRasConfig(hSysmanDevice, &config) == XE_RESULT_SUCCESS)
+    xet_ras_properties_t props;
+    if (xetSysmanRasGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
     {
-        fprintf(stdout, "Local memory:\n");
-        if (config.numRas)
+        fprintf(stdout, "RAS supported: %s\n", props.supported ? "yes" : "no");
+        fprintf(stdout, "RAS enabled: %s\n", props.enabled ? "yes" : "no");
+        fprintf(stdout, "RAS repaired: %s\n", props.repaired ? "yes" : "no");
+        if (props.supported && props.enabled)
         {
-            fprintf(stdout, "    RAS support: yes\n");
-            fprintf(stdout, "    RAS enabled: %s\n", (config.enabled & XET_RAS_ERROR_LOC_MAIN_MEM) ? "yes" : "no");
-        }
-        else
-        {
-            fprintf(stdout, "    RAS support: no\n");
+            uint64_t newErrors;
+            xet_ras_details_t errorDetails;
+            if (xetSysmanRasGetErrors(hSysmanDevice, XET_RAS_ERROR_TYPE_UNCORRECTABLE, 1, &newErrors, &errorDetails) == XE_RESULT_SUCCESS)
+            {
+                fprintf(stdout, "RAS new uncorrectable errors: %llu\n", newErrors);
+                if (newErrors)
+                {
+                    PrintRasDetails(&errorDetails);
+                }
+            }
+            if (xetSysmanRasGetErrors(hSysmanDevice, XET_RAS_ERROR_TYPE_CORRECTABLE, 1, &newErrors, &errorDetails) == XE_RESULT_SUCCESS)
+            {
+                fprintf(stdout, "RAS new correctable errors: %llu\n", newErrors);
+                if (newErrors)
+                {
+                    PrintRasDetails(&errorDetails);
+                }
+            }
         }
     }
 }

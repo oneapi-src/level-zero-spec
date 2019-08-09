@@ -642,29 +642,20 @@ typedef xe_result_t (__xecall *xet_pfnSysmanSetProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanGetRasConfig 
-typedef xe_result_t (__xecall *xet_pfnSysmanGetRasConfig_t)(
+/// @brief Function-pointer for xetSysmanRasGetProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanRasGetProperties_t)(
     xet_sysman_handle_t,
-    xet_ras_config_t*
+    xet_ras_properties_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanRasSetup 
-typedef xe_result_t (__xecall *xet_pfnSysmanRasSetup_t)(
+/// @brief Function-pointer for xetSysmanRasGetErrors 
+typedef xe_result_t (__xecall *xet_pfnSysmanRasGetErrors_t)(
     xet_sysman_handle_t,
-    uint32_t,
-    uint32_t,
-    uint32_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanGetRasErrors 
-typedef xe_result_t (__xecall *xet_pfnSysmanGetRasErrors_t)(
-    xet_sysman_handle_t,
-    xet_ras_filter_t*,
+    xet_ras_error_type_t,
     xe_bool_t,
-    uint32_t*,
-    xet_ras_error_t*
+    uint64_t*,
+    xet_ras_details_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -734,9 +725,8 @@ typedef struct _xet_sysman_dditable_t
     xet_pfnSysmanGetPropertyInfo_t                              pfnGetPropertyInfo;
     xet_pfnSysmanGetProperties_t                                pfnGetProperties;
     xet_pfnSysmanSetProperties_t                                pfnSetProperties;
-    xet_pfnSysmanGetRasConfig_t                                 pfnGetRasConfig;
-    xet_pfnSysmanRasSetup_t                                     pfnRasSetup;
-    xet_pfnSysmanGetRasErrors_t                                 pfnGetRasErrors;
+    xet_pfnSysmanRasGetProperties_t                             pfnRasGetProperties;
+    xet_pfnSysmanRasGetErrors_t                                 pfnRasGetErrors;
     xet_pfnSysmanSupportedEvents_t                              pfnSupportedEvents;
     xet_pfnSysmanRegisterEvents_t                               pfnRegisterEvents;
     xet_pfnSysmanUnregisterEvents_t                             pfnUnregisterEvents;
