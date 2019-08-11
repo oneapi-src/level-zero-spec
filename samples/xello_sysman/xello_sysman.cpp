@@ -73,172 +73,213 @@ void ResetDevice(xet_sysman_handle_t hSysmanDevice)
     }
 }
 
-void GetFreqIntervals(xet_sysman_handle_t hSysmanDevice)
+void ShowSwitchInfo(xet_sysman_handle_t hSysmanDevice)
 {
-    xet_resprop_info_t info[] =
+    xet_switch_properties_t swprops;
+    if (xetSysmanSwitchGetProperties(hSysmanDevice, &swprops) == XE_RESULT_SUCCESS)
     {
-        { XET_RESPROP_FREQ_RANGE },
-        { XET_RESPROP_FREQ_RESOLVED_FREQ },
-    };
-    if (xetSysmanGetPropertyInfo(hSysmanDevice, sizeof(info) / sizeof(info[0]), info) == XE_RESULT_SUCCESS)
-    {
-        fprintf(stdout, "Frequency update interval: %u microseconds\n", info[0].minSetInterval);
-        fprintf(stdout, "Frequency sample interval: %u microseconds\n", info[1].minGetInterval);
-    }
-}
-
-bool HaveFanControl(xet_sysman_handle_t hSysmanDevice)
-{
-    bool ret = false;
-    xet_resprop_info_t info;
-    info.property = XET_RESPROP_FAN_FIXED_SPEED;
-    if (xetSysmanGetPropertyInfo(hSysmanDevice, 1, &info) == XE_RESULT_SUCCESS)
-    {
-        if ((info.support & XET_PROP_SUPPORT_DEVICE) &&
-            (info.access & XET_PROP_ACCESS_WRITE_PERMISSIONS))
+        xet_switch_state_t swstate;
+        if (xetSysmanSwitchGetState(hSysmanDevice, &swstate) == XE_RESULT_SUCCESS)
         {
-            ret = true;
-        }
-    }
-    return ret;
-}
-
-void ShowFanInfo(xet_sysman_handle_t hSysmanDevice, xet_resid_t FanId)
-{
-    struct FanData
-    {
-        xet_resprop_fan_speed_rpm_t        speedRpm;
-        xet_resprop_fan_speed_percent_t    speedPercent;
-    };
-
-    FanData data;
-    xet_resprop_request_t requests[] = 
-    {
-        { FanId, XET_RESPROP_FAN_SPEED_RPM,       &data.speedRpm,       sizeof(data.speedRpm) },
-        { FanId, XET_RESPROP_FAN_SPEED_PERCENT,   &data.speedPercent,   sizeof(data.speedPercent) },
-    };
-
-    xe_result_t res = xetSysmanGetProperties(
-        hSysmanDevice,
-        sizeof(requests) / sizeof(requests[0]),
-        requests);
-
-    if ((res == XE_RESULT_SUCCESS) || (res == XE_RESULT_ERROR_UNKNOWN))
-    {
-        if (requests[0].status == XE_RESULT_SUCCESS)
-        {
-            fprintf(stdout, "        Fan %u: speed = %u rpm\n", FanId, data.speedRpm.speed);
-        }
-        else
-        {
-            fprintf(stderr, "        Fan %u: error reading XET_RESPROP_FAN_SPEED_RPM\n", FanId);
-        }
-        if (requests[1].status == XE_RESULT_SUCCESS)
-        {
-            fprintf(stdout, "        Fan %u: speed = %u %%\n", FanId, data.speedPercent.speed);
-        }
-        else
-        {
-            fprintf(stderr, "        Fan %u: error reading XET_RESPROP_FAN_SPEED_PERCENT\n", FanId);
-        }
-    }
-    else
-    {
-        fprintf(stderr, "ERROR: Can't request data.\n");
-    }
-}
-
-void CheckResources(xet_sysman_handle_t hSysmanDevice)
-{
-    xet_resid_info_t resources [] =
-    {
-        { XET_RESID_UTIL_GPU },
-        { XET_RESID_UTIL_COMPUTE },
-        { XET_RESID_UTIL_MEDIA },
-        { XET_RESID_UTIL_VIDEO_DECODE },
-        { XET_RESID_UTIL_VIDEO_ENCODE }
-    };
-    uint32_t count = sizeof(resources) / sizeof(resources[0]);
-    if (xetSysmanGetResourceInfo(hSysmanDevice, count, resources) == XE_RESULT_SUCCESS)
-    {
-        for (uint32_t i = 0; i < count; i++)
-        {
-            fprintf(stdout, "Resource %d: %s = %s\n", resources[i].id, resources[i].pName, resources[i].available ? "supported" : "not supported");
-        }
-    }
-}
-
-void ShowAllResources(xet_sysman_handle_t hSysmanDevice)
-{
-    uint32_t numResources;
-    if (xetSysmanGetResources(hSysmanDevice, XET_RESOURCE_TYPE_ANY, &numResources, NULL) == XE_RESULT_SUCCESS)
-    {
-        if (numResources)
-        {
-            xet_resid_info_t* pInfo = (xet_resid_info_t*)malloc(numResources * sizeof(xet_resid_info_t));
-            if (xetSysmanGetResources(hSysmanDevice, XET_RESOURCE_TYPE_ANY, &numResources, pInfo) == XE_RESULT_SUCCESS)
+            fprintf(stdout, "        GUID:  %s\n", swprops.address.guid);
+            fprintf(stdout, "        #port: %u\n", swprops.numPorts);
+            fprintf(stdout, "        State: %s\n", swstate.enabled ? "Enabled" : "Disabled");
+            if (swstate.enabled)
             {
-                for (uint32_t i = 0; i < numResources; i++)
+                fprintf(stdout, "        Ports:\n");
+                for (uint32_t portIndex = 0; portIndex < swprops.numPorts; portIndex++)
                 {
-                    fprintf(stdout, "Resource %d: %s = %s\n", pInfo->id, pInfo->pName, pInfo->pDesc);
+                    xet_switch_port_state_t portstate;
+                    if (xetSysmanSwitchPortGetState(hSysmanDevice, portIndex, &portstate)
+                        == XE_RESULT_SUCCESS)
+                    {
+                        if (portstate.connected)
+                        {
+                            fprintf(stdout,
+                                "            %u: "
+                                "connected to switch with GUID %s, max bandwidth %u bytes/sec\n",
+                                portIndex, portstate.remote.guid, portstate.maxBandwidth);
+                        }
+                        else
+                        {
+                            fprintf(stdout, "            %u: not connected\n", portIndex);
+                        }
+                    }
                 }
             }
-            free(pInfo);
+        }
+    }
+}
+
+void ShowSwitches(xet_sysman_handle_t hSysmanDevice)
+{
+    xet_sysman_properties_t props;
+    if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
+    {
+        if (props.haveSwitch)
+        {
+            fprintf(stdout, "    Device switch:\n");
+            ShowSwitchInfo(hSysmanDevice);
+        }
+        if (props.numSubdevices)
+        {
+            for (uint32_t subdeviceIndex = 0; subdeviceIndex < props.numSubdevices; subdeviceIndex++)
+            {
+                xet_sysman_handle_t hSubdevice;
+                if (xetSysmanGetSubdevice(hSysmanDevice, subdeviceIndex, &hSubdevice) == XE_RESULT_SUCCESS)
+                {
+                    if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
+                    {
+                        if (props.haveSwitch)
+                        {
+                            fprintf(stdout, "    Sub-device %u switch:\n", subdeviceIndex);
+                            ShowSwitchInfo(hSubdevice);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+void FixFrequency(xet_sysman_handle_t hSysmanDevice, xet_freq_domain_t Domain, double FreqMHz)
+{
+    xet_sysman_properties_t props;
+    
+    if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
+    {
+        if (props.haveFreqControl[Domain])
+        {
+            xet_freq_limits_t limits;
+            limits.min = FreqMHz;
+            limits.max = FreqMHz;
+            if (xetSysmanFrequencySetLimits(hSysmanDevice, Domain, &limits) != XE_RESULT_SUCCESS)
+            {
+                fprintf(stderr, "ERROR: Problem setting the frequency limits.\n");
+            }
+        }
+        else
+        {
+            fprintf(stderr, "ERROR: Can't control this frequency domain.\n");
+        }
+    }
+}
+
+void SetFanSpeed(xet_sysman_handle_t hSysmanDevice, uint32_t SpeedRpm)
+{
+    xet_sysman_properties_t props;
+    
+    if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
+    {
+        if (props.haveFreqControl)
+        {
+            xet_fan_config_t config;
+            config.mode = XET_FAN_SPEED_MODE_FIXED;
+            config.speed = SpeedRpm;
+            config.speedUnits = XET_FAN_SPEED_UNITS_RPM;
+            for (uint32_t fanIndex = 0; fanIndex < props.numFans; fanIndex++)
+            {
+                xetSysmanFanSetConfig(hSysmanDevice, fanIndex, &config);
+            }
+        }
+        else
+        {
+            fprintf(stderr, "ERROR: Can't control the fans on this device.\n");
         }
     }
 }
 
 void ShowFans(xet_sysman_handle_t hSysmanDevice)
 {
-    uint32_t numFans;
-    if (xetSysmanGetResources(hSysmanDevice, XET_RESOURCE_TYPE_FAN, &numFans, NULL) == XE_RESULT_SUCCESS)
+    xet_sysman_properties_t props;
+    
+    if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
     {
-        if (numFans)
+        if (props.numFans)
         {
-            xet_resid_info_t* pInfo = (xet_resid_info_t*)malloc(numFans * sizeof(xet_resid_info_t));
-            if (xetSysmanGetResources(hSysmanDevice, XET_RESOURCE_TYPE_FAN, &numFans, pInfo) == XE_RESULT_SUCCESS)
+            fprintf(stdout, "    Fans\n");
+            for (uint32_t fanIndex = 0; fanIndex < props.numFans; fanIndex++)
             {
-                for (uint32_t i = 0; i < numFans; i++)
+                xet_fan_state_t state;
+                if (xetSysmanFanGetState(hSysmanDevice, fanIndex, XET_FAN_SPEED_UNITS_RPM, &state)
+                    == XE_RESULT_SUCCESS)
                 {
-                    fprintf(stdout, "    Fan %s\n", pInfo->pName);
-                    ShowFanInfo(hSysmanDevice, pInfo->id);
+                    fprintf(stdout, "        Fan %u: %u RPM\n", fanIndex, state.speed);
                 }
             }
-            free(pInfo);
         }
     }
 }
 
-void ShowInventoryInfo(xet_sysman_handle_t hSysmanDevice)
+void ShowAveragePower(xet_sysman_handle_t hSysmanDevice, xet_power_energy_counter_t* pPrevEnergyCounter)
 {
-    struct InventoryData
+    xet_power_energy_counter_t newEnergyCounter;
+    if (xetSysmanPowerGetEnergyCounter(hSysmanDevice, &newEnergyCounter) == XE_RESULT_SUCCESS)
     {
-        xet_resprop_dev_serial_number_t  SerialNumber;
-        xet_resprop_dev_board_number_t   BoardNumber;
-    };
+        uint64_t deltaTime = newEnergyCounter.timestamp - pPrevEnergyCounter->timestamp;
+        if (deltaTime)
+        {
+            fprintf(stdout, "    Average power: %.3f W\n",
+                ((double)(newEnergyCounter.energy - pPrevEnergyCounter->energy)) / ((double)deltaTime));
+            *pPrevEnergyCounter = newEnergyCounter;
+        }
+    }
+}
 
-    InventoryData data;
-    xet_resprop_request_t requests[] = 
+void ShowPowerLimits(xet_sysman_handle_t hSysmanDevice)
+{
+    xet_power_sustained_limit_t sustainedLimits;
+    xet_power_burst_limit_t burstLimits;
+    xet_power_peak_limit_t peakLimits;
+    if (xetSysmanPowerGetLimits(hSysmanDevice, &sustainedLimits, &burstLimits, &peakLimits) == XE_RESULT_SUCCESS)
     {
-        { XET_RESID_DEV_INVENTORY, XET_RESPROP_DEV_SERIAL_NUMBER,    &data.SerialNumber, sizeof(data.SerialNumber) },
-        { XET_RESID_DEV_INVENTORY, XET_RESPROP_DEV_BOARD_NUMBER,     &data.BoardNumber,  sizeof(data.BoardNumber)  },
-    };
-
-    if (xetSysmanGetProperties(
-        hSysmanDevice,
-        sizeof(requests) / sizeof(requests[0]),
-        requests) == XE_RESULT_SUCCESS)
-    {
-        fprintf(stdout, "    Serial#: %s\n", data.SerialNumber.str);
-        fprintf(stdout, "    Board#:  %s\n", data.BoardNumber.str);
+        fprintf(stdout, "    Power limits\n");
+        if (sustainedLimits.enabled)
+        {
+            fprintf(stdout, "        Sustained: %.3f W %.3f sec\n",
+                ((double)sustainedLimits.power) / 1000, ((double)sustainedLimits.interval) / 1000);
+        }
+        else
+        {
+            fprintf(stdout, "        Sustained: Disabled\n");
+        }
+        if (burstLimits.enabled)
+        {
+            fprintf(stdout, "        Burst:     %.3f\n", ((double)burstLimits.power) / 1000);
+        }
+        else
+        {
+            fprintf(stdout, "        Burst:     Disabled\n");
+        }
+        fprintf(stdout, "        Burst:     %.3f\n", ((double)peakLimits.power) / 1000);
     }
 }
 
 void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
 {
-    ShowInventoryInfo(hSysmanDevice);
-
-    ShowFans(hSysmanDevice);
+    xet_sysman_properties_t props;
+    xet_operating_mode_t mode;
+    
+    if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
+    {
+        fprintf(stdout, "    UUID:    %s\n", props.uuid.id);
+        fprintf(stdout, "    brand:   %s\n", props.brandName);
+        fprintf(stdout, "    model:   %s\n", props.modelName);
+        fprintf(stdout, "    serial#: %s\n", props.serialNumber);
+        fprintf(stdout, "    board#:  %s\n", props.boardNumber);
+    }
+    if (xetSysmanDeviceGetOperatingMode(hSysmanDevice, &mode) == XE_RESULT_SUCCESS)
+    {
+        switch (mode)
+        {
+        case XET_OPERATING_MODE_EXCLUSIVE_COMPUTE_PROCESS:
+            fprintf(stdout, "    mode:    exclusive compute process\n");
+            break;
+        default:
+            fprintf(stdout, "    mode:    multiply process\n");
+            break;
+        }
+    }
 }
 
 int gNumDevices = 0;    // Global

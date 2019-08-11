@@ -46,7 +46,7 @@ xetSysmanGet(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Find out if specific resources are available on this device
+/// @brief Get a SMI handle to a subdevice
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -58,72 +58,26 @@ xetSysmanGet(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
-///         + nullptr == pResources
+///         + nullptr == phSysmanSubdevice
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanGetResourceInfo(
+xetSysmanGetSubdevice(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t count,                                 ///< [in] The number of entries in the the array pResources
-    xet_resid_info_t* pResources                    ///< [in] Pointer to an array that hold the ID of resources on input and
-                                                    ///< will contain the availability on output
+    uint32_t ordinal,                               ///< [in] The index of the sub-device.
+    xet_sysman_handle_t* phSysmanSubdevice          ///< [out] The handle for accessing the sub-device.
     )
 {
-    auto pfnGetResourceInfo = xet_lib::context.ddiTable.Sysman.pfnGetResourceInfo;
-    if( nullptr == pfnGetResourceInfo )
+    auto pfnGetSubdevice = xet_lib::context.ddiTable.Sysman.pfnGetSubdevice;
+    if( nullptr == pfnGetSubdevice )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetResourceInfo( hSysman, count, pResources );
+    return pfnGetSubdevice( hSysman, ordinal, phSysmanSubdevice );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get list of resources available on this device of a given type
+/// @brief Get properties about the device
 /// 
 /// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pCount
-///         + nullptr == pResources
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanGetResources(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    xet_resource_type_t type,                       ///< [in] Get a list of resources of given type. If this is
-                                                    ///< ::XET_RESOURCE_TYPE_ANY, then all resources will be returned.
-    uint32_t* pCount,                               ///< [in] Pointer to the number of elements in the array pResources.
-                                                    ///< If count is 0 or pResources is nullptr, driver will update with the
-                                                    ///< number of supported resources on this device.
-                                                    ///< If count is non-zero and less than the number of supported resources,
-                                                    ///< driver will update with the number of resources. No data is returned
-                                                    ///< and an error is generated.
-                                                    ///< If count is greater than or equal to the number of supported
-                                                    ///< resources, all data is returned and count will be set to the number of
-                                                    ///< returned resources.
-    xet_resid_info_t* pResources                    ///< [in] Pointer to an array that will hold the ID of information about
-                                                    ///< supported resources
-    )
-{
-    auto pfnGetResources = xet_lib::context.ddiTable.Sysman.pfnGetResources;
-    if( nullptr == pfnGetResources )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    return pfnGetResources( hSysman, type, pCount, pResources );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Find out which resources properties are available on a given device
-/// 
-/// @details
-///     - Access rights are specific to the device. Need to check separately on
-///       each device.
-///     - API support is based on the device class and doesn't need to be
-///       checked for each device.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -136,22 +90,20 @@ xetSysmanGetResources(
 ///         + nullptr == pProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanGetPropertyInfo(
+xetSysmanDeviceGetProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t count,                                 ///< [in] The number of entries in the array pProperties
-    xet_resprop_info_t* pProperties                 ///< [in] Pointer to an array of property info. Contains the property ID on
-                                                    ///< input and the property info completed on output
+    xet_sysman_properties_t* pProperties            ///< [in] Structure that will contain information about the device.
     )
 {
-    auto pfnGetPropertyInfo = xet_lib::context.ddiTable.Sysman.pfnGetPropertyInfo;
-    if( nullptr == pfnGetPropertyInfo )
+    auto pfnDeviceGetProperties = xet_lib::context.ddiTable.Sysman.pfnDeviceGetProperties;
+    if( nullptr == pfnDeviceGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetPropertyInfo( hSysman, count, pProperties );
+    return pfnDeviceGetProperties( hSysman, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get resource property data
+/// @brief Get operating mode of the device
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -163,26 +115,23 @@ xetSysmanGetPropertyInfo(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
-///         + nullptr == pRequest
+///         + nullptr == pMode
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_ERROR_UNKNOWN
-///         + One or more of the specified resource/properties had access errors. Check ::xet_resprop_request_t.status for each request.
 xe_result_t __xecall
-xetSysmanGetProperties(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
-    uint32_t count,                                 ///< [in] The number of properties in the array pRequest
-    xet_resprop_request_t* pRequest                 ///< [in] Pointer to list of properties and corresponding data storage
+xetSysmanDeviceGetOperatingMode(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_operating_mode_t* pMode                     ///< [in] The current operating mode of the device.
     )
 {
-    auto pfnGetProperties = xet_lib::context.ddiTable.Sysman.pfnGetProperties;
-    if( nullptr == pfnGetProperties )
+    auto pfnDeviceGetOperatingMode = xet_lib::context.ddiTable.Sysman.pfnDeviceGetOperatingMode;
+    if( nullptr == pfnDeviceGetOperatingMode )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetProperties( hSysman, count, pRequest );
+    return pfnDeviceGetOperatingMode( hSysman, pMode );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set resource property data
+/// @brief Set operating mode of the device
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -194,22 +143,1208 @@ xetSysmanGetProperties(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
-///         + nullptr == pRequest
-///         + An invalid resource index was specified in one or more of the requests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
-xetSysmanSetProperties(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
-    uint32_t count,                                 ///< [in] The number of properties in the array pRequest
-    xet_resprop_request_t* pRequest                 ///< [in] Pointer to list of properties and corresponding data storage
+xetSysmanDeviceSetOperatingMode(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_operating_mode_t pMode                      ///< [in] The new operating mode of the device.
     )
 {
-    auto pfnSetProperties = xet_lib::context.ddiTable.Sysman.pfnSetProperties;
-    if( nullptr == pfnSetProperties )
+    auto pfnDeviceSetOperatingMode = xet_lib::context.ddiTable.Sysman.pfnDeviceSetOperatingMode;
+    if( nullptr == pfnDeviceSetOperatingMode )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSetProperties( hSysman, count, pRequest );
+    return pfnDeviceSetOperatingMode( hSysman, pMode );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Reset device
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanDeviceReset(
+    xet_sysman_handle_t hSysman                     ///< [in] SMI handle for the device
+    )
+{
+    auto pfnDeviceReset = xet_lib::context.ddiTable.Sysman.pfnDeviceReset;
+    if( nullptr == pfnDeviceReset )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnDeviceReset( hSysman );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get properties related to power
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPowerGetProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_power_properties_t* pProperties             ///< [in] Structure that will contain property data.
+    )
+{
+    auto pfnPowerGetProperties = xet_lib::context.ddiTable.Sysman.pfnPowerGetProperties;
+    if( nullptr == pfnPowerGetProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnPowerGetProperties( hSysman, pProperties );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get energy counter
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pEnergy
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPowerGetEnergyCounter(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_power_energy_counter_t* pEnergy             ///< [in] Will contain the latest snapshot of the energy counter and
+                                                    ///< timestamp when the last counter value was measured.
+    )
+{
+    auto pfnPowerGetEnergyCounter = xet_lib::context.ddiTable.Sysman.pfnPowerGetEnergyCounter;
+    if( nullptr == pfnPowerGetEnergyCounter )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnPowerGetEnergyCounter( hSysman, pEnergy );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get power limits
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPowerGetLimits(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_power_sustained_limit_t* pSustained,        ///< [in][optional] The sustained power limit.
+    xet_power_burst_limit_t* pBurst,                ///< [in][optional] The burst power limit.
+    xet_power_peak_limit_t* pPeak                   ///< [in][optional] The peak power limit.
+    )
+{
+    auto pfnPowerGetLimits = xet_lib::context.ddiTable.Sysman.pfnPowerGetLimits;
+    if( nullptr == pfnPowerGetLimits )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnPowerGetLimits( hSysman, pSustained, pBurst, pPeak );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set power limits
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPowerSetLimits(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    const xet_power_sustained_limit_t* pSustained,  ///< [in][optional] The sustained power limit.
+    const xet_power_burst_limit_t* pBurst,          ///< [in][optional] The burst power limit.
+    const xet_power_peak_limit_t* pPeak             ///< [in][optional] The peak power limit.
+    )
+{
+    auto pfnPowerSetLimits = xet_lib::context.ddiTable.Sysman.pfnPowerSetLimits;
+    if( nullptr == pfnPowerSetLimits )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnPowerSetLimits( hSysman, pSustained, pBurst, pPeak );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get frequency properties - available frequencies
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencyGetProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_freq_domain_t domain,                       ///< [in] The frequency domain.
+    xet_freq_properties_t* pProperties              ///< [in] The frequency properties for the specified domain.
+    )
+{
+    auto pfnFrequencyGetProperties = xet_lib::context.ddiTable.Sysman.pfnFrequencyGetProperties;
+    if( nullptr == pfnFrequencyGetProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnFrequencyGetProperties( hSysman, domain, pProperties );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get current frequency limits
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pLimits
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencyGetLimits(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_freq_domain_t domain,                       ///< [in] The frequency domain.
+    xet_freq_limits_t* pLimits                      ///< [in] The limits between which the hardware can operate for the
+                                                    ///< specified domain.
+    )
+{
+    auto pfnFrequencyGetLimits = xet_lib::context.ddiTable.Sysman.pfnFrequencyGetLimits;
+    if( nullptr == pfnFrequencyGetLimits )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnFrequencyGetLimits( hSysman, domain, pLimits );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set frequency limits between which the hardware can operate.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pLimits
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencySetLimits(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_freq_domain_t domain,                       ///< [in] The frequency domain.
+    const xet_freq_limits_t* pLimits                ///< [in] The limits between which the hardware can operate for the
+                                                    ///< specified domain.
+    )
+{
+    auto pfnFrequencySetLimits = xet_lib::context.ddiTable.Sysman.pfnFrequencySetLimits;
+    if( nullptr == pfnFrequencySetLimits )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnFrequencySetLimits( hSysman, domain, pLimits );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get current frequency state - frequency request, actual frequency, TDP
+///        limits
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pState
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencyGetState(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_freq_domain_t domain,                       ///< [in] The frequency domain.
+    xet_freq_state_t* pState                        ///< [in] Frequency state for the specified domain.
+    )
+{
+    auto pfnFrequencyGetState = xet_lib::context.ddiTable.Sysman.pfnFrequencyGetState;
+    if( nullptr == pfnFrequencyGetState )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnFrequencyGetState( hSysman, domain, pState );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get frequency throttle time
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pThrottleTime
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencyGetThrottleTime(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_freq_domain_t domain,                       ///< [in] The frequency domain.
+    xet_freq_throttle_time_t* pThrottleTime         ///< [in] Will contain a snapshot of the throttle time counters for the
+                                                    ///< specified domain.
+    )
+{
+    auto pfnFrequencyGetThrottleTime = xet_lib::context.ddiTable.Sysman.pfnFrequencyGetThrottleTime;
+    if( nullptr == pfnFrequencyGetThrottleTime )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnFrequencyGetThrottleTime( hSysman, domain, pThrottleTime );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get the activity counters of a part of the device
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pStats
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanActivityGetStats(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_activity_type_t type,                       ///< [in] The type of activity stats.
+    xet_activity_stats_t* pStats                    ///< [in] Will contain a snapshot of the activity counters.
+    )
+{
+    auto pfnActivityGetStats = xet_lib::context.ddiTable.Sysman.pfnActivityGetStats;
+    if( nullptr == pfnActivityGetStats )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnActivityGetStats( hSysman, type, pStats );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get memory properties
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanMemoryGetProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_mem_properties_t* pProperties               ///< [in] Will contain memory properties.
+    )
+{
+    auto pfnMemoryGetProperties = xet_lib::context.ddiTable.Sysman.pfnMemoryGetProperties;
+    if( nullptr == pfnMemoryGetProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnMemoryGetProperties( hSysman, pProperties );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get memory bandwidth
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pBandwidth
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanMemoryGetBandwidth(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_mem_bandwidth_t* pBandwidth                 ///< [in] Will contain a snapshot of the bandwidth counters.
+    )
+{
+    auto pfnMemoryGetBandwidth = xet_lib::context.ddiTable.Sysman.pfnMemoryGetBandwidth;
+    if( nullptr == pfnMemoryGetBandwidth )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnMemoryGetBandwidth( hSysman, pBandwidth );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get memory allocation
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pAllocated
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanMemoryGetAllocated(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_mem_alloc_t* pAllocated                     ///< [in] Will contain the current allocated memory.
+    )
+{
+    auto pfnMemoryGetAllocated = xet_lib::context.ddiTable.Sysman.pfnMemoryGetAllocated;
+    if( nullptr == pfnMemoryGetAllocated )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnMemoryGetAllocated( hSysman, pAllocated );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get PCI properties - address, max speed
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPciGetProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_pci_properties_t* pProperties               ///< [in] Will contain the PCI properties.
+    )
+{
+    auto pfnPciGetProperties = xet_lib::context.ddiTable.Sysman.pfnPciGetProperties;
+    if( nullptr == pfnPciGetProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnPciGetProperties( hSysman, pProperties );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get current PCI state - current speed
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pState
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPciGetState(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_pci_state_t* pState                         ///< [in] Will contain the PCI properties.
+    )
+{
+    auto pfnPciGetState = xet_lib::context.ddiTable.Sysman.pfnPciGetState;
+    if( nullptr == pfnPciGetState )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnPciGetState( hSysman, pState );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get properties of a bar
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPciGetBarProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_pci_properties_t.numBars -
+                                                    ///< 1]).
+    xet_pci_bar_properties_t* pProperties           ///< [in] Will contain properties of the specified bar
+    )
+{
+    auto pfnPciGetBarProperties = xet_lib::context.ddiTable.Sysman.pfnPciGetBarProperties;
+    if( nullptr == pfnPciGetBarProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnPciGetBarProperties( hSysman, ordinal, pProperties );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get PCI throughput
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pThroughput
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPciGetThroughput(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_pci_throughput_t* pThroughput               ///< [in] Will contain a snapshot of the latest throughput counters.
+    )
+{
+    auto pfnPciGetThroughput = xet_lib::context.ddiTable.Sysman.pfnPciGetThroughput;
+    if( nullptr == pfnPciGetThroughput )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnPciGetThroughput( hSysman, pThroughput );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get PCI stats
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pStats
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPciGetStats(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_pci_stats_t* pStats                         ///< [in] Will contain a snapshot of the latest stats.
+    )
+{
+    auto pfnPciGetStats = xet_lib::context.ddiTable.Sysman.pfnPciGetStats;
+    if( nullptr == pfnPciGetStats )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnPciGetStats( hSysman, pStats );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get Switch properties
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanSwitchGetProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_switch_properties_t* pProperties            ///< [in] Will contain the Switch properties.
+    )
+{
+    auto pfnSwitchGetProperties = xet_lib::context.ddiTable.Sysman.pfnSwitchGetProperties;
+    if( nullptr == pfnSwitchGetProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnSwitchGetProperties( hSysman, pProperties );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get Switch state
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pState
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanSwitchGetState(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_switch_state_t* pState                      ///< [in] Will contain the current state of the switch (enabled/disabled).
+    )
+{
+    auto pfnSwitchGetState = xet_lib::context.ddiTable.Sysman.pfnSwitchGetState;
+    if( nullptr == pfnSwitchGetState )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnSwitchGetState( hSysman, pState );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set Switch state
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanSwitchSetState(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xe_bool_t enable                                ///< [in] Set to true to enable the Switch, otherwise it will be disabled.
+    )
+{
+    auto pfnSwitchSetState = xet_lib::context.ddiTable.Sysman.pfnSwitchSetState;
+    if( nullptr == pfnSwitchSetState )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnSwitchSetState( hSysman, enable );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get Switch Port properties
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanSwitchPortGetProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+                                                    ///< - 1]).
+    xet_switch_port_properties_t* pProperties       ///< [in] Will contain properties of the Switch Port
+    )
+{
+    auto pfnSwitchPortGetProperties = xet_lib::context.ddiTable.Sysman.pfnSwitchPortGetProperties;
+    if( nullptr == pfnSwitchPortGetProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnSwitchPortGetProperties( hSysman, ordinal, pProperties );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get Switch Port state
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pState
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanSwitchPortGetState(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+                                                    ///< - 1]).
+    xet_switch_port_state_t* pState                 ///< [in] Will contain the current state of the Switch Port
+    )
+{
+    auto pfnSwitchPortGetState = xet_lib::context.ddiTable.Sysman.pfnSwitchPortGetState;
+    if( nullptr == pfnSwitchPortGetState )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnSwitchPortGetState( hSysman, ordinal, pState );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get Switch Port throughput
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pThroughput
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanSwitchPortGetThroughput(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+                                                    ///< - 1]).
+    xet_switch_port_throughput_t* pThroughput       ///< [in] Will contain the Switch port throughput counters.
+    )
+{
+    auto pfnSwitchPortGetThroughput = xet_lib::context.ddiTable.Sysman.pfnSwitchPortGetThroughput;
+    if( nullptr == pfnSwitchPortGetThroughput )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnSwitchPortGetThroughput( hSysman, ordinal, pThroughput );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get Switch Port stats
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pStats
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanSwitchPortGetStats(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+                                                    ///< - 1]).
+    xet_switch_port_stats_t* pStats                 ///< [in] Will contain the Switch port stats.
+    )
+{
+    auto pfnSwitchPortGetStats = xet_lib::context.ddiTable.Sysman.pfnSwitchPortGetStats;
+    if( nullptr == pfnSwitchPortGetStats )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnSwitchPortGetStats( hSysman, ordinal, pStats );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get the temperature from a specified sensor
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pTemperature
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanTemperatureGet(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_temp_sensors_t sensor,                      ///< [in] The port address.
+    uint32_t* pTemperature                          ///< [in] Will contain the temperature read from the specified sensor.
+    )
+{
+    auto pfnTemperatureGet = xet_lib::context.ddiTable.Sysman.pfnTemperatureGet;
+    if( nullptr == pfnTemperatureGet )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnTemperatureGet( hSysman, sensor, pTemperature );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get the current standby promotion mode
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pMode
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanStandbyGetMode(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_stby_promo_mode_t* pMode                    ///< [in] Will contain the current standby mode.
+    )
+{
+    auto pfnStandbyGetMode = xet_lib::context.ddiTable.Sysman.pfnStandbyGetMode;
+    if( nullptr == pfnStandbyGetMode )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnStandbyGetMode( hSysman, pMode );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set standby promotion mode
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanStandbySetMode(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_stby_promo_mode_t mode                      ///< [in] New standby mode.
+    )
+{
+    auto pfnStandbySetMode = xet_lib::context.ddiTable.Sysman.pfnStandbySetMode;
+    if( nullptr == pfnStandbySetMode )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnStandbySetMode( hSysman, mode );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get firmware properties
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFirmwareGetProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+                                                    ///< [::xet_sysman_properties_t.numFirmwares - 1]).
+    xet_firmware_properties_t* pProperties          ///< [in] Pointer to an array that will hold the properties of the firmware
+    )
+{
+    auto pfnFirmwareGetProperties = xet_lib::context.ddiTable.Sysman.pfnFirmwareGetProperties;
+    if( nullptr == pfnFirmwareGetProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnFirmwareGetProperties( hSysman, ordinal, pProperties );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get firmware checksum
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pChecksum
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFirmwareGetChecksum(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+                                                    ///< [::xet_sysman_properties_t.numFirmwares - 1]).
+    uint32_t* pChecksum                             ///< [in] Calculated checksum of the installed firmware.
+    )
+{
+    auto pfnFirmwareGetChecksum = xet_lib::context.ddiTable.Sysman.pfnFirmwareGetChecksum;
+    if( nullptr == pfnFirmwareGetChecksum )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnFirmwareGetChecksum( hSysman, ordinal, pChecksum );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Flash a new firmware image
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pImage
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFirmwareFlash(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+                                                    ///< [::xet_sysman_properties_t.numFirmwares - 1]).
+    void* pImage,                                   ///< [in] Image of the new firmware to flash.
+    uint32_t size                                   ///< [in] Size of the flash image.
+    )
+{
+    auto pfnFirmwareFlash = xet_lib::context.ddiTable.Sysman.pfnFirmwareFlash;
+    if( nullptr == pfnFirmwareFlash )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnFirmwareFlash( hSysman, ordinal, pImage, size );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get power supply properties
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPsuGetProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the power supply (0 ...
+                                                    ///< [::xet_sysman_properties_t.numPsus - 1]).
+    xet_psu_properties_t* pProperties               ///< [in] Will contain the properties of the power supply.
+    )
+{
+    auto pfnPsuGetProperties = xet_lib::context.ddiTable.Sysman.pfnPsuGetProperties;
+    if( nullptr == pfnPsuGetProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnPsuGetProperties( hSysman, ordinal, pProperties );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get current power supply state
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pState
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPsuGetState(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the power supply (0 ...
+                                                    ///< [::xet_sysman_properties_t.numPsus - 1]).
+    xet_psu_state_t* pState                         ///< [in] Will contain the current state of the power supply.
+    )
+{
+    auto pfnPsuGetState = xet_lib::context.ddiTable.Sysman.pfnPsuGetState;
+    if( nullptr == pfnPsuGetState )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnPsuGetState( hSysman, ordinal, pState );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get fan properties
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFanGetProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+                                                    ///< 1]).
+    xet_fan_properties_t* pProperties               ///< [in] Will contain the properties of the fan.
+    )
+{
+    auto pfnFanGetProperties = xet_lib::context.ddiTable.Sysman.pfnFanGetProperties;
+    if( nullptr == pfnFanGetProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnFanGetProperties( hSysman, ordinal, pProperties );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get current fan configuration
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pConfig
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFanGetConfig(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+                                                    ///< 1]).
+    xet_fan_config_t* pConfig                       ///< [in] Will contain the current configuration of the fan.
+    )
+{
+    auto pfnFanGetConfig = xet_lib::context.ddiTable.Sysman.pfnFanGetConfig;
+    if( nullptr == pfnFanGetConfig )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnFanGetConfig( hSysman, ordinal, pConfig );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set fan configuration
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pConfig
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFanSetConfig(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+                                                    ///< 1]).
+    const xet_fan_config_t* pConfig                 ///< [in] New fan configuration.
+    )
+{
+    auto pfnFanSetConfig = xet_lib::context.ddiTable.Sysman.pfnFanSetConfig;
+    if( nullptr == pfnFanSetConfig )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnFanSetConfig( hSysman, ordinal, pConfig );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get current state of a fan - current mode and speed
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pState
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFanGetState(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+                                                    ///< 1]).
+    xet_fan_speed_units_t units,                    ///< [in] The units in which the fan speed should be returned.
+    xet_fan_state_t* pState                         ///< [in] Will contain the current state of the fan.
+    )
+{
+    auto pfnFanGetState = xet_lib::context.ddiTable.Sysman.pfnFanGetState;
+    if( nullptr == pfnFanGetState )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnFanGetState( hSysman, ordinal, units, pState );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get LED properties
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanLedGetProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+                                                    ///< 1]).
+    xet_led_properties_t* pProperties               ///< [in] Will contain the properties of the LED.
+    )
+{
+    auto pfnLedGetProperties = xet_lib::context.ddiTable.Sysman.pfnLedGetProperties;
+    if( nullptr == pfnLedGetProperties )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnLedGetProperties( hSysman, ordinal, pProperties );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get current state of a LED - on/off, color
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pState
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanLedGetState(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+                                                    ///< 1]).
+    xet_led_state_t* pState                         ///< [in] Will contain the current state of the LED.
+    )
+{
+    auto pfnLedGetState = xet_lib::context.ddiTable.Sysman.pfnLedGetState;
+    if( nullptr == pfnLedGetState )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnLedGetState( hSysman, ordinal, pState );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set state of a LED - on/off, color
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pState
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanLedSetState(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+                                                    ///< 1]).
+    const xet_led_state_t* pState                   ///< [in] New state of the LED.
+    )
+{
+    auto pfnLedSetState = xet_lib::context.ddiTable.Sysman.pfnLedSetState;
+    if( nullptr == pfnLedSetState )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnLedSetState( hSysman, ordinal, pState );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -279,36 +1414,6 @@ xetSysmanRasGetErrors(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Find out which events are supported on a given device
-/// 
-/// @details
-///     - Event support is the same for all devices with the same device ID.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pAccess
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanSupportedEvents(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t count,                                 ///< [in] The number of entries in the array pAccess
-    xet_event_support_t* pAccess                    ///< [in] Pointer to an array of event support requests
-    )
-{
-    auto pfnSupportedEvents = xet_lib::context.ddiTable.Sysman.pfnSupportedEvents;
-    if( nullptr == pfnSupportedEvents )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    return pfnSupportedEvents( hSysman, count, pAccess );
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Register to receive events
 /// 
 /// @details
@@ -324,21 +1429,20 @@ xetSysmanSupportedEvents(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
-///         + nullptr == pEvents
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanRegisterEvents(
+xetSysmanEventsRegister(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
     uint32_t count,                                 ///< [in] Number of entries in the array pEvents. If zero, all events will
                                                     ///< be registered.
-    xet_event_request_t* pEvents                    ///< [in] Events to register.
+    xet_event_request_t* pEvents                    ///< [in][optional] Events to register.
     )
 {
-    auto pfnRegisterEvents = xet_lib::context.ddiTable.Sysman.pfnRegisterEvents;
-    if( nullptr == pfnRegisterEvents )
+    auto pfnEventsRegister = xet_lib::context.ddiTable.Sysman.pfnEventsRegister;
+    if( nullptr == pfnEventsRegister )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnRegisterEvents( hSysman, count, pEvents );
+    return pfnEventsRegister( hSysman, count, pEvents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -357,21 +1461,20 @@ xetSysmanRegisterEvents(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
-///         + nullptr == pEvents
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanUnregisterEvents(
+xetSysmanEventsUnregister(
     xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
     uint32_t count,                                 ///< [in] Number of entries in the array pEvents. If zero, all events will
                                                     ///< be unregistered.
-    xet_event_request_t* pEvents                    ///< [in] Events to unregister.
+    xet_event_request_t* pEvents                    ///< [in][optional] Events to unregister.
     )
 {
-    auto pfnUnregisterEvents = xet_lib::context.ddiTable.Sysman.pfnUnregisterEvents;
-    if( nullptr == pfnUnregisterEvents )
+    auto pfnEventsUnregister = xet_lib::context.ddiTable.Sysman.pfnEventsUnregister;
+    if( nullptr == pfnEventsUnregister )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnUnregisterEvents( hSysman, count, pEvents );
+    return pfnEventsUnregister( hSysman, count, pEvents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -397,7 +1500,7 @@ xetSysmanUnregisterEvents(
 ///         + nullptr == pEvents
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanGetEvents(
+xetSysmanEventsListen(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for a device. Set to nullptr to get events from any
                                                     ///< device for which the application has registered to receive
                                                     ///< notifications.
@@ -409,11 +1512,11 @@ xetSysmanGetEvents(
                                                     ///< triggered.
     )
 {
-    auto pfnGetEvents = xet_lib::context.ddiTable.Sysman.pfnGetEvents;
-    if( nullptr == pfnGetEvents )
+    auto pfnEventsListen = xet_lib::context.ddiTable.Sysman.pfnEventsListen;
+    if( nullptr == pfnEventsListen )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetEvents( hSysman, clear, timeout, pEvents );
+    return pfnEventsListen( hSysman, clear, timeout, pEvents );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -433,17 +1536,17 @@ xetSysmanGetEvents(
 ///         + nullptr == ppTests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanGetDiagnosticTests(
+xetSysmanDiagnosticsGetTestList(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
     xet_diag_type_t type,                           ///< [in] Type of diagnostic to run
     const xet_diag_test_list_t** ppTests            ///< [in] Returns a constant pointer to the list of diagnostic tests
     )
 {
-    auto pfnGetDiagnosticTests = xet_lib::context.ddiTable.Sysman.pfnGetDiagnosticTests;
-    if( nullptr == pfnGetDiagnosticTests )
+    auto pfnDiagnosticsGetTestList = xet_lib::context.ddiTable.Sysman.pfnDiagnosticsGetTestList;
+    if( nullptr == pfnDiagnosticsGetTestList )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetDiagnosticTests( hSysman, type, ppTests );
+    return pfnDiagnosticsGetTestList( hSysman, type, ppTests );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -461,7 +1564,7 @@ xetSysmanGetDiagnosticTests(
 ///         + nullptr == pResult
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanRunDiagnosticTests(
+xetSysmanDiagnosticsRunTests(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
     xet_diag_type_t type,                           ///< [in] Type of diagnostic to run
     uint32_t start,                                 ///< [in] The index of the first test to run. Set to
@@ -471,33 +1574,11 @@ xetSysmanRunDiagnosticTests(
     xet_diag_result_t* pResult                      ///< [in] The result of the diagnostics
     )
 {
-    auto pfnRunDiagnosticTests = xet_lib::context.ddiTable.Sysman.pfnRunDiagnosticTests;
-    if( nullptr == pfnRunDiagnosticTests )
+    auto pfnDiagnosticsRunTests = xet_lib::context.ddiTable.Sysman.pfnDiagnosticsRunTests;
+    if( nullptr == pfnDiagnosticsRunTests )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnRunDiagnosticTests( hSysman, type, start, end, pResult );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Reset device
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanDeviceReset(
-    xet_sysman_handle_t hSysman                     ///< [in] SMI handle for the device
-    )
-{
-    auto pfnDeviceReset = xet_lib::context.ddiTable.Sysman.pfnDeviceReset;
-    if( nullptr == pfnDeviceReset )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    return pfnDeviceReset( hSysman );
+    return pfnDiagnosticsRunTests( hSysman, type, start, end, pResult );
 }
 
 } // extern "C"
@@ -558,31 +1639,50 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Find out if specific resources are available on this device
+    /// @brief Get a SMI handle to a subdevice
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
+    /// @returns
+    ///     - Sysman*: The handle for accessing the sub-device.
+    /// 
     /// @throws result_t
-    void __xecall
-    Sysman::GetResourceInfo(
-        uint32_t count,                                 ///< [in] The number of entries in the the array pResources
-        resid_info_t* pResources                        ///< [in] Pointer to an array that hold the ID of resources on input and
-                                                        ///< will contain the availability on output
+    Sysman* __xecall
+    Sysman::GetSubdevice(
+        uint32_t ordinal                                ///< [in] The index of the sub-device.
         )
     {
-        auto result = static_cast<result_t>( ::xetSysmanGetResourceInfo(
+        xet_sysman_handle_t hSysmanSubdevice;
+
+        auto result = static_cast<result_t>( ::xetSysmanGetSubdevice(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            count,
-            reinterpret_cast<xet_resid_info_t*>( pResources ) ) );
+            ordinal,
+            &hSysmanSubdevice ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::GetResourceInfo" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::GetSubdevice" );
+
+        Sysman* pSysmanSubdevice = nullptr;
+
+        try
+        {
+            pSysmanSubdevice = new Sysman( reinterpret_cast<sysman_handle_t>( hSysmanSubdevice ), m_pDevice );
+        }
+        catch( std::bad_alloc& )
+        {
+            delete pSysmanSubdevice;
+            pSysmanSubdevice = nullptr;
+
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xet::Sysman::GetSubdevice" );
+        }
+
+        return pSysmanSubdevice;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get list of resources available on this device of a given type
+    /// @brief Get properties about the device
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -590,62 +1690,41 @@ namespace xet
     /// 
     /// @throws result_t
     void __xecall
-    Sysman::GetResources(
-        resource_type_t type,                           ///< [in] Get a list of resources of given type. If this is
-                                                        ///< ::XET_RESOURCE_TYPE_ANY, then all resources will be returned.
-        uint32_t* pCount,                               ///< [in] Pointer to the number of elements in the array pResources.
-                                                        ///< If count is 0 or pResources is nullptr, driver will update with the
-                                                        ///< number of supported resources on this device.
-                                                        ///< If count is non-zero and less than the number of supported resources,
-                                                        ///< driver will update with the number of resources. No data is returned
-                                                        ///< and an error is generated.
-                                                        ///< If count is greater than or equal to the number of supported
-                                                        ///< resources, all data is returned and count will be set to the number of
-                                                        ///< returned resources.
-        resid_info_t* pResources                        ///< [in] Pointer to an array that will hold the ID of information about
-                                                        ///< supported resources
+    Sysman::DeviceGetProperties(
+        properties_t* pProperties                       ///< [in] Structure that will contain information about the device.
         )
     {
-        auto result = static_cast<result_t>( ::xetSysmanGetResources(
+        auto result = static_cast<result_t>( ::xetSysmanDeviceGetProperties(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            static_cast<xet_resource_type_t>( type ),
-            pCount,
-            reinterpret_cast<xet_resid_info_t*>( pResources ) ) );
+            reinterpret_cast<xet_sysman_properties_t*>( pProperties ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::GetResources" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::DeviceGetProperties" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Find out which resources properties are available on a given device
+    /// @brief Get operating mode of the device
     /// 
     /// @details
-    ///     - Access rights are specific to the device. Need to check separately on
-    ///       each device.
-    ///     - API support is based on the device class and doesn't need to be
-    ///       checked for each device.
     ///     - The application may call this function from simultaneous threads.
     ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
     void __xecall
-    Sysman::GetPropertyInfo(
-        uint32_t count,                                 ///< [in] The number of entries in the array pProperties
-        resprop_info_t* pProperties                     ///< [in] Pointer to an array of property info. Contains the property ID on
-                                                        ///< input and the property info completed on output
+    Sysman::DeviceGetOperatingMode(
+        operating_mode_t* pMode                         ///< [in] The current operating mode of the device.
         )
     {
-        auto result = static_cast<result_t>( ::xetSysmanGetPropertyInfo(
+        auto result = static_cast<result_t>( ::xetSysmanDeviceGetOperatingMode(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            count,
-            reinterpret_cast<xet_resprop_info_t*>( pProperties ) ) );
+            reinterpret_cast<xet_operating_mode_t*>( pMode ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::GetPropertyInfo" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::DeviceGetOperatingMode" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get resource property data
+    /// @brief Set operating mode of the device
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -653,22 +1732,36 @@ namespace xet
     /// 
     /// @throws result_t
     void __xecall
-    Sysman::GetProperties(
-        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
-        resprop_request_t* pRequest                     ///< [in] Pointer to list of properties and corresponding data storage
+    Sysman::DeviceSetOperatingMode(
+        operating_mode_t pMode                          ///< [in] The new operating mode of the device.
         )
     {
-        auto result = static_cast<result_t>( ::xetSysmanGetProperties(
+        auto result = static_cast<result_t>( ::xetSysmanDeviceSetOperatingMode(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            count,
-            reinterpret_cast<xet_resprop_request_t*>( pRequest ) ) );
+            static_cast<xet_operating_mode_t>( pMode ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::GetProperties" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::DeviceSetOperatingMode" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Set resource property data
+    /// @brief Reset device
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::DeviceReset(
+        void
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanDeviceReset(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::DeviceReset" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get properties related to power
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -676,18 +1769,917 @@ namespace xet
     /// 
     /// @throws result_t
     void __xecall
-    Sysman::SetProperties(
-        uint32_t count,                                 ///< [in] The number of properties in the array pRequest
-        resprop_request_t* pRequest                     ///< [in] Pointer to list of properties and corresponding data storage
+    Sysman::PowerGetProperties(
+        power_properties_t* pProperties                 ///< [in] Structure that will contain property data.
         )
     {
-        auto result = static_cast<result_t>( ::xetSysmanSetProperties(
+        auto result = static_cast<result_t>( ::xetSysmanPowerGetProperties(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            count,
-            reinterpret_cast<xet_resprop_request_t*>( pRequest ) ) );
+            reinterpret_cast<xet_power_properties_t*>( pProperties ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::SetProperties" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::PowerGetProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get energy counter
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::PowerGetEnergyCounter(
+        power_energy_counter_t* pEnergy                 ///< [in] Will contain the latest snapshot of the energy counter and
+                                                        ///< timestamp when the last counter value was measured.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanPowerGetEnergyCounter(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_energy_counter_t*>( pEnergy ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::PowerGetEnergyCounter" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get power limits
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::PowerGetLimits(
+        power_sustained_limit_t* pSustained,            ///< [in][optional] The sustained power limit.
+        power_burst_limit_t* pBurst,                    ///< [in][optional] The burst power limit.
+        power_peak_limit_t* pPeak                       ///< [in][optional] The peak power limit.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanPowerGetLimits(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_sustained_limit_t*>( pSustained ),
+            reinterpret_cast<xet_power_burst_limit_t*>( pBurst ),
+            reinterpret_cast<xet_power_peak_limit_t*>( pPeak ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::PowerGetLimits" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Set power limits
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::PowerSetLimits(
+        const power_sustained_limit_t* pSustained,      ///< [in][optional] The sustained power limit.
+        const power_burst_limit_t* pBurst,              ///< [in][optional] The burst power limit.
+        const power_peak_limit_t* pPeak                 ///< [in][optional] The peak power limit.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanPowerSetLimits(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<const xet_power_sustained_limit_t*>( pSustained ),
+            reinterpret_cast<const xet_power_burst_limit_t*>( pBurst ),
+            reinterpret_cast<const xet_power_peak_limit_t*>( pPeak ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::PowerSetLimits" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get frequency properties - available frequencies
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::FrequencyGetProperties(
+        freq_domain_t domain,                           ///< [in] The frequency domain.
+        freq_properties_t* pProperties                  ///< [in] The frequency properties for the specified domain.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanFrequencyGetProperties(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            static_cast<xet_freq_domain_t>( domain ),
+            reinterpret_cast<xet_freq_properties_t*>( pProperties ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::FrequencyGetProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get current frequency limits
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::FrequencyGetLimits(
+        freq_domain_t domain,                           ///< [in] The frequency domain.
+        freq_limits_t* pLimits                          ///< [in] The limits between which the hardware can operate for the
+                                                        ///< specified domain.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanFrequencyGetLimits(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            static_cast<xet_freq_domain_t>( domain ),
+            reinterpret_cast<xet_freq_limits_t*>( pLimits ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::FrequencyGetLimits" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Set frequency limits between which the hardware can operate.
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::FrequencySetLimits(
+        freq_domain_t domain,                           ///< [in] The frequency domain.
+        const freq_limits_t* pLimits                    ///< [in] The limits between which the hardware can operate for the
+                                                        ///< specified domain.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanFrequencySetLimits(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            static_cast<xet_freq_domain_t>( domain ),
+            reinterpret_cast<const xet_freq_limits_t*>( pLimits ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::FrequencySetLimits" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get current frequency state - frequency request, actual frequency, TDP
+    ///        limits
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::FrequencyGetState(
+        freq_domain_t domain,                           ///< [in] The frequency domain.
+        freq_state_t* pState                            ///< [in] Frequency state for the specified domain.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanFrequencyGetState(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            static_cast<xet_freq_domain_t>( domain ),
+            reinterpret_cast<xet_freq_state_t*>( pState ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::FrequencyGetState" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get frequency throttle time
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::FrequencyGetThrottleTime(
+        freq_domain_t domain,                           ///< [in] The frequency domain.
+        freq_throttle_time_t* pThrottleTime             ///< [in] Will contain a snapshot of the throttle time counters for the
+                                                        ///< specified domain.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanFrequencyGetThrottleTime(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            static_cast<xet_freq_domain_t>( domain ),
+            reinterpret_cast<xet_freq_throttle_time_t*>( pThrottleTime ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::FrequencyGetThrottleTime" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get the activity counters of a part of the device
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::ActivityGetStats(
+        activity_type_t type,                           ///< [in] The type of activity stats.
+        activity_stats_t* pStats                        ///< [in] Will contain a snapshot of the activity counters.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanActivityGetStats(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            static_cast<xet_activity_type_t>( type ),
+            reinterpret_cast<xet_activity_stats_t*>( pStats ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::ActivityGetStats" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get memory properties
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::MemoryGetProperties(
+        mem_properties_t* pProperties                   ///< [in] Will contain memory properties.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanMemoryGetProperties(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<xet_mem_properties_t*>( pProperties ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::MemoryGetProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get memory bandwidth
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::MemoryGetBandwidth(
+        mem_bandwidth_t* pBandwidth                     ///< [in] Will contain a snapshot of the bandwidth counters.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanMemoryGetBandwidth(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<xet_mem_bandwidth_t*>( pBandwidth ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::MemoryGetBandwidth" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get memory allocation
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::MemoryGetAllocated(
+        mem_alloc_t* pAllocated                         ///< [in] Will contain the current allocated memory.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanMemoryGetAllocated(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<xet_mem_alloc_t*>( pAllocated ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::MemoryGetAllocated" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get PCI properties - address, max speed
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::PciGetProperties(
+        pci_properties_t* pProperties                   ///< [in] Will contain the PCI properties.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanPciGetProperties(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<xet_pci_properties_t*>( pProperties ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::PciGetProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get current PCI state - current speed
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::PciGetState(
+        pci_state_t* pState                             ///< [in] Will contain the PCI properties.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanPciGetState(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<xet_pci_state_t*>( pState ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::PciGetState" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get properties of a bar
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::PciGetBarProperties(
+        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_pci_properties_t.numBars -
+                                                        ///< 1]).
+        pci_bar_properties_t* pProperties               ///< [in] Will contain properties of the specified bar
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanPciGetBarProperties(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            ordinal,
+            reinterpret_cast<xet_pci_bar_properties_t*>( pProperties ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::PciGetBarProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get PCI throughput
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::PciGetThroughput(
+        pci_throughput_t* pThroughput                   ///< [in] Will contain a snapshot of the latest throughput counters.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanPciGetThroughput(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<xet_pci_throughput_t*>( pThroughput ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::PciGetThroughput" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get PCI stats
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::PciGetStats(
+        pci_stats_t* pStats                             ///< [in] Will contain a snapshot of the latest stats.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanPciGetStats(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<xet_pci_stats_t*>( pStats ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::PciGetStats" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get Switch properties
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::SwitchGetProperties(
+        switch_properties_t* pProperties                ///< [in] Will contain the Switch properties.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanSwitchGetProperties(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<xet_switch_properties_t*>( pProperties ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::SwitchGetProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get Switch state
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::SwitchGetState(
+        switch_state_t* pState                          ///< [in] Will contain the current state of the switch (enabled/disabled).
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanSwitchGetState(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<xet_switch_state_t*>( pState ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::SwitchGetState" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Set Switch state
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::SwitchSetState(
+        xe::bool_t enable                               ///< [in] Set to true to enable the Switch, otherwise it will be disabled.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanSwitchSetState(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            static_cast<xe_bool_t>( enable ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::SwitchSetState" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get Switch Port properties
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::SwitchPortGetProperties(
+        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+                                                        ///< - 1]).
+        switch_port_properties_t* pProperties           ///< [in] Will contain properties of the Switch Port
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanSwitchPortGetProperties(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            ordinal,
+            reinterpret_cast<xet_switch_port_properties_t*>( pProperties ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::SwitchPortGetProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get Switch Port state
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::SwitchPortGetState(
+        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+                                                        ///< - 1]).
+        switch_port_state_t* pState                     ///< [in] Will contain the current state of the Switch Port
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanSwitchPortGetState(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            ordinal,
+            reinterpret_cast<xet_switch_port_state_t*>( pState ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::SwitchPortGetState" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get Switch Port throughput
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::SwitchPortGetThroughput(
+        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+                                                        ///< - 1]).
+        switch_port_throughput_t* pThroughput           ///< [in] Will contain the Switch port throughput counters.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanSwitchPortGetThroughput(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            ordinal,
+            reinterpret_cast<xet_switch_port_throughput_t*>( pThroughput ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::SwitchPortGetThroughput" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get Switch Port stats
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::SwitchPortGetStats(
+        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+                                                        ///< - 1]).
+        switch_port_stats_t* pStats                     ///< [in] Will contain the Switch port stats.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanSwitchPortGetStats(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            ordinal,
+            reinterpret_cast<xet_switch_port_stats_t*>( pStats ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::SwitchPortGetStats" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get the temperature from a specified sensor
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::TemperatureGet(
+        temp_sensors_t sensor,                          ///< [in] The port address.
+        uint32_t* pTemperature                          ///< [in] Will contain the temperature read from the specified sensor.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanTemperatureGet(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            static_cast<xet_temp_sensors_t>( sensor ),
+            pTemperature ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::TemperatureGet" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get the current standby promotion mode
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::StandbyGetMode(
+        stby_promo_mode_t* pMode                        ///< [in] Will contain the current standby mode.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanStandbyGetMode(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<xet_stby_promo_mode_t*>( pMode ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::StandbyGetMode" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Set standby promotion mode
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::StandbySetMode(
+        stby_promo_mode_t mode                          ///< [in] New standby mode.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanStandbySetMode(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            static_cast<xet_stby_promo_mode_t>( mode ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::StandbySetMode" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get firmware properties
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::FirmwareGetProperties(
+        uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+                                                        ///< [::xet_sysman_properties_t.numFirmwares - 1]).
+        firmware_properties_t* pProperties              ///< [in] Pointer to an array that will hold the properties of the firmware
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanFirmwareGetProperties(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            ordinal,
+            reinterpret_cast<xet_firmware_properties_t*>( pProperties ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::FirmwareGetProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get firmware checksum
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::FirmwareGetChecksum(
+        uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+                                                        ///< [::xet_sysman_properties_t.numFirmwares - 1]).
+        uint32_t* pChecksum                             ///< [in] Calculated checksum of the installed firmware.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanFirmwareGetChecksum(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            ordinal,
+            pChecksum ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::FirmwareGetChecksum" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Flash a new firmware image
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::FirmwareFlash(
+        uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+                                                        ///< [::xet_sysman_properties_t.numFirmwares - 1]).
+        void* pImage,                                   ///< [in] Image of the new firmware to flash.
+        uint32_t size                                   ///< [in] Size of the flash image.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanFirmwareFlash(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            ordinal,
+            pImage,
+            size ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::FirmwareFlash" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get power supply properties
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::PsuGetProperties(
+        uint32_t ordinal,                               ///< [in] The index of the power supply (0 ...
+                                                        ///< [::xet_sysman_properties_t.numPsus - 1]).
+        psu_properties_t* pProperties                   ///< [in] Will contain the properties of the power supply.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanPsuGetProperties(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            ordinal,
+            reinterpret_cast<xet_psu_properties_t*>( pProperties ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::PsuGetProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get current power supply state
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::PsuGetState(
+        uint32_t ordinal,                               ///< [in] The index of the power supply (0 ...
+                                                        ///< [::xet_sysman_properties_t.numPsus - 1]).
+        psu_state_t* pState                             ///< [in] Will contain the current state of the power supply.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanPsuGetState(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            ordinal,
+            reinterpret_cast<xet_psu_state_t*>( pState ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::PsuGetState" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get fan properties
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::FanGetProperties(
+        uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+                                                        ///< 1]).
+        fan_properties_t* pProperties                   ///< [in] Will contain the properties of the fan.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanFanGetProperties(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            ordinal,
+            reinterpret_cast<xet_fan_properties_t*>( pProperties ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::FanGetProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get current fan configuration
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::FanGetConfig(
+        uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+                                                        ///< 1]).
+        fan_config_t* pConfig                           ///< [in] Will contain the current configuration of the fan.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanFanGetConfig(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            ordinal,
+            reinterpret_cast<xet_fan_config_t*>( pConfig ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::FanGetConfig" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Set fan configuration
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::FanSetConfig(
+        uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+                                                        ///< 1]).
+        const fan_config_t* pConfig                     ///< [in] New fan configuration.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanFanSetConfig(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            ordinal,
+            reinterpret_cast<const xet_fan_config_t*>( pConfig ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::FanSetConfig" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get current state of a fan - current mode and speed
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::FanGetState(
+        uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+                                                        ///< 1]).
+        fan_speed_units_t units,                        ///< [in] The units in which the fan speed should be returned.
+        fan_state_t* pState                             ///< [in] Will contain the current state of the fan.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanFanGetState(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            ordinal,
+            static_cast<xet_fan_speed_units_t>( units ),
+            reinterpret_cast<xet_fan_state_t*>( pState ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::FanGetState" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get LED properties
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::LedGetProperties(
+        uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+                                                        ///< 1]).
+        led_properties_t* pProperties                   ///< [in] Will contain the properties of the LED.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanLedGetProperties(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            ordinal,
+            reinterpret_cast<xet_led_properties_t*>( pProperties ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::LedGetProperties" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get current state of a LED - on/off, color
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::LedGetState(
+        uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+                                                        ///< 1]).
+        led_state_t* pState                             ///< [in] Will contain the current state of the LED.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanLedGetState(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            ordinal,
+            reinterpret_cast<xet_led_state_t*>( pState ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::LedGetState" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Set state of a LED - on/off, color
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::LedSetState(
+        uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+                                                        ///< 1]).
+        const led_state_t* pState                       ///< [in] New state of the LED.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanLedSetState(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            ordinal,
+            reinterpret_cast<const xet_led_state_t*>( pState ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::LedSetState" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -743,30 +2735,6 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Find out which events are supported on a given device
-    /// 
-    /// @details
-    ///     - Event support is the same for all devices with the same device ID.
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @throws result_t
-    void __xecall
-    Sysman::SupportedEvents(
-        uint32_t count,                                 ///< [in] The number of entries in the array pAccess
-        event_support_t* pAccess                        ///< [in] Pointer to an array of event support requests
-        )
-    {
-        auto result = static_cast<result_t>( ::xetSysmanSupportedEvents(
-            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            count,
-            reinterpret_cast<xet_event_support_t*>( pAccess ) ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::SupportedEvents" );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Register to receive events
     /// 
     /// @details
@@ -778,19 +2746,19 @@ namespace xet
     /// 
     /// @throws result_t
     void __xecall
-    Sysman::RegisterEvents(
+    Sysman::EventsRegister(
         uint32_t count,                                 ///< [in] Number of entries in the array pEvents. If zero, all events will
                                                         ///< be registered.
-        event_request_t* pEvents                        ///< [in] Events to register.
+        event_request_t* pEvents                        ///< [in][optional] Events to register.
         )
     {
-        auto result = static_cast<result_t>( ::xetSysmanRegisterEvents(
+        auto result = static_cast<result_t>( ::xetSysmanEventsRegister(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
             count,
             reinterpret_cast<xet_event_request_t*>( pEvents ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::RegisterEvents" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::EventsRegister" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -805,19 +2773,19 @@ namespace xet
     /// 
     /// @throws result_t
     void __xecall
-    Sysman::UnregisterEvents(
+    Sysman::EventsUnregister(
         uint32_t count,                                 ///< [in] Number of entries in the array pEvents. If zero, all events will
                                                         ///< be unregistered.
-        event_request_t* pEvents                        ///< [in] Events to unregister.
+        event_request_t* pEvents                        ///< [in][optional] Events to unregister.
         )
     {
-        auto result = static_cast<result_t>( ::xetSysmanUnregisterEvents(
+        auto result = static_cast<result_t>( ::xetSysmanEventsUnregister(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
             count,
             reinterpret_cast<xet_event_request_t*>( pEvents ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::UnregisterEvents" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::EventsUnregister" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -836,7 +2804,7 @@ namespace xet
     /// 
     /// @throws result_t
     void __xecall
-    Sysman::GetEvents(
+    Sysman::EventsListen(
         Sysman* pSysman,                                ///< [in] SMI handle for a device. Set to nullptr to get events from any
                                                         ///< device for which the application has registered to receive
                                                         ///< notifications.
@@ -848,14 +2816,14 @@ namespace xet
                                                         ///< triggered.
         )
     {
-        auto result = static_cast<result_t>( ::xetSysmanGetEvents(
+        auto result = static_cast<result_t>( ::xetSysmanEventsListen(
             reinterpret_cast<xet_sysman_handle_t>( pSysman->getHandle() ),
             static_cast<xe_bool_t>( clear ),
             timeout,
             pEvents ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::GetEvents" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::EventsListen" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -868,18 +2836,18 @@ namespace xet
     /// 
     /// @throws result_t
     void __xecall
-    Sysman::GetDiagnosticTests(
+    Sysman::DiagnosticsGetTestList(
         diag_type_t type,                               ///< [in] Type of diagnostic to run
         const diag_test_list_t** ppTests                ///< [in] Returns a constant pointer to the list of diagnostic tests
         )
     {
-        auto result = static_cast<result_t>( ::xetSysmanGetDiagnosticTests(
+        auto result = static_cast<result_t>( ::xetSysmanDiagnosticsGetTestList(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
             static_cast<xet_diag_type_t>( type ),
             reinterpret_cast<const xet_diag_test_list_t**>( ppTests ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::GetDiagnosticTests" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::DiagnosticsGetTestList" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -890,7 +2858,7 @@ namespace xet
     /// 
     /// @throws result_t
     void __xecall
-    Sysman::RunDiagnosticTests(
+    Sysman::DiagnosticsRunTests(
         diag_type_t type,                               ///< [in] Type of diagnostic to run
         uint32_t start,                                 ///< [in] The index of the first test to run. Set to
                                                         ///< ::XET_DIAG_FIRST_TEST_INDEX to start from the beginning.
@@ -899,7 +2867,7 @@ namespace xet
         diag_result_t* pResult                          ///< [in] The result of the diagnostics
         )
     {
-        auto result = static_cast<result_t>( ::xetSysmanRunDiagnosticTests(
+        auto result = static_cast<result_t>( ::xetSysmanDiagnosticsRunTests(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
             static_cast<xet_diag_type_t>( type ),
             start,
@@ -907,23 +2875,7 @@ namespace xet
             reinterpret_cast<xet_diag_result_t*>( pResult ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::RunDiagnosticTests" );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Reset device
-    /// 
-    /// @throws result_t
-    void __xecall
-    Sysman::DeviceReset(
-        void
-        )
-    {
-        auto result = static_cast<result_t>( ::xetSysmanDeviceReset(
-            reinterpret_cast<xet_sysman_handle_t>( getHandle() ) ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::DeviceReset" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::DiagnosticsRunTests" );
     }
 
 } // namespace xet
@@ -951,67 +2903,23 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resource_type_t to std::string
-    std::string to_string( const Sysman::resource_type_t val )
+    /// @brief Converts Sysman::operating_mode_t to std::string
+    std::string to_string( const Sysman::operating_mode_t val )
     {
         std::string str;
 
         switch( val )
         {
-        case Sysman::resource_type_t::DEV:
-            str = "Sysman::resource_type_t::DEV";
+        case Sysman::operating_mode_t::DEFAULT:
+            str = "Sysman::operating_mode_t::DEFAULT";
             break;
 
-        case Sysman::resource_type_t::PWR:
-            str = "Sysman::resource_type_t::PWR";
-            break;
-
-        case Sysman::resource_type_t::FREQ:
-            str = "Sysman::resource_type_t::FREQ";
-            break;
-
-        case Sysman::resource_type_t::UTIL:
-            str = "Sysman::resource_type_t::UTIL";
-            break;
-
-        case Sysman::resource_type_t::MEM:
-            str = "Sysman::resource_type_t::MEM";
-            break;
-
-        case Sysman::resource_type_t::LINK:
-            str = "Sysman::resource_type_t::LINK";
-            break;
-
-        case Sysman::resource_type_t::TEMP:
-            str = "Sysman::resource_type_t::TEMP";
-            break;
-
-        case Sysman::resource_type_t::STBY:
-            str = "Sysman::resource_type_t::STBY";
-            break;
-
-        case Sysman::resource_type_t::FW:
-            str = "Sysman::resource_type_t::FW";
-            break;
-
-        case Sysman::resource_type_t::PSU:
-            str = "Sysman::resource_type_t::PSU";
-            break;
-
-        case Sysman::resource_type_t::FAN:
-            str = "Sysman::resource_type_t::FAN";
-            break;
-
-        case Sysman::resource_type_t::LED:
-            str = "Sysman::resource_type_t::LED";
-            break;
-
-        case Sysman::resource_type_t::ANY:
-            str = "Sysman::resource_type_t::ANY";
+        case Sysman::operating_mode_t::EXCLUSIVE_COMPUTE_PROCESS:
+            str = "Sysman::operating_mode_t::EXCLUSIVE_COMPUTE_PROCESS";
             break;
 
         default:
-            str = "Sysman::resource_type_t::?";
+            str = "Sysman::operating_mode_t::?";
             break;
         };
 
@@ -1019,271 +2927,27 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resid_t to std::string
-    std::string to_string( const Sysman::resid_t val )
+    /// @brief Converts Sysman::freq_domain_t to std::string
+    std::string to_string( const Sysman::freq_domain_t val )
     {
         std::string str;
 
         switch( val )
         {
-        case Sysman::resid_t::DEV_INVENTORY:
-            str = "Sysman::resid_t::DEV_INVENTORY";
+        case Sysman::freq_domain_t::GPU:
+            str = "Sysman::freq_domain_t::GPU";
             break;
 
-        case Sysman::resid_t::PWR_TOTAL:
-            str = "Sysman::resid_t::PWR_TOTAL";
+        case Sysman::freq_domain_t::MEMORY:
+            str = "Sysman::freq_domain_t::MEMORY";
             break;
 
-        case Sysman::resid_t::FREQ_GPU:
-            str = "Sysman::resid_t::FREQ_GPU";
-            break;
-
-        case Sysman::resid_t::FREQ_LOCAL_MEM:
-            str = "Sysman::resid_t::FREQ_LOCAL_MEM";
-            break;
-
-        case Sysman::resid_t::UTIL_GPU:
-            str = "Sysman::resid_t::UTIL_GPU";
-            break;
-
-        case Sysman::resid_t::UTIL_COMPUTE:
-            str = "Sysman::resid_t::UTIL_COMPUTE";
-            break;
-
-        case Sysman::resid_t::UTIL_MEDIA:
-            str = "Sysman::resid_t::UTIL_MEDIA";
-            break;
-
-        case Sysman::resid_t::UTIL_VIDEO_DECODE:
-            str = "Sysman::resid_t::UTIL_VIDEO_DECODE";
-            break;
-
-        case Sysman::resid_t::UTIL_VIDEO_ENCODE:
-            str = "Sysman::resid_t::UTIL_VIDEO_ENCODE";
-            break;
-
-        case Sysman::resid_t::MEM_LOCAL:
-            str = "Sysman::resid_t::MEM_LOCAL";
-            break;
-
-        case Sysman::resid_t::LINK_PCIE:
-            str = "Sysman::resid_t::LINK_PCIE";
-            break;
-
-        case Sysman::resid_t::LINK_CD_PORT1:
-            str = "Sysman::resid_t::LINK_CD_PORT1";
-            break;
-
-        case Sysman::resid_t::LINK_CD_PORT2:
-            str = "Sysman::resid_t::LINK_CD_PORT2";
-            break;
-
-        case Sysman::resid_t::LINK_CD_PORT3:
-            str = "Sysman::resid_t::LINK_CD_PORT3";
-            break;
-
-        case Sysman::resid_t::LINK_CD_PORT4:
-            str = "Sysman::resid_t::LINK_CD_PORT4";
-            break;
-
-        case Sysman::resid_t::LINK_CD_PORT5:
-            str = "Sysman::resid_t::LINK_CD_PORT5";
-            break;
-
-        case Sysman::resid_t::LINK_CD_PORT6:
-            str = "Sysman::resid_t::LINK_CD_PORT6";
-            break;
-
-        case Sysman::resid_t::LINK_CD_PORT7:
-            str = "Sysman::resid_t::LINK_CD_PORT7";
-            break;
-
-        case Sysman::resid_t::LINK_CD_PORT8:
-            str = "Sysman::resid_t::LINK_CD_PORT8";
-            break;
-
-        case Sysman::resid_t::LINK_CD_PORT9:
-            str = "Sysman::resid_t::LINK_CD_PORT9";
-            break;
-
-        case Sysman::resid_t::LINK_CD_PORT10:
-            str = "Sysman::resid_t::LINK_CD_PORT10";
-            break;
-
-        case Sysman::resid_t::LINK_CD_PORT11:
-            str = "Sysman::resid_t::LINK_CD_PORT11";
-            break;
-
-        case Sysman::resid_t::LINK_CD_PORT12:
-            str = "Sysman::resid_t::LINK_CD_PORT12";
-            break;
-
-        case Sysman::resid_t::LINK_CD_PORT13:
-            str = "Sysman::resid_t::LINK_CD_PORT13";
-            break;
-
-        case Sysman::resid_t::LINK_CD_PORT14:
-            str = "Sysman::resid_t::LINK_CD_PORT14";
-            break;
-
-        case Sysman::resid_t::LINK_CD_PORT15:
-            str = "Sysman::resid_t::LINK_CD_PORT15";
-            break;
-
-        case Sysman::resid_t::LINK_CD_PORT16:
-            str = "Sysman::resid_t::LINK_CD_PORT16";
-            break;
-
-        case Sysman::resid_t::TEMP_MAX:
-            str = "Sysman::resid_t::TEMP_MAX";
-            break;
-
-        case Sysman::resid_t::TEMP_GPU:
-            str = "Sysman::resid_t::TEMP_GPU";
-            break;
-
-        case Sysman::resid_t::TEMP_LOCAL_MEM:
-            str = "Sysman::resid_t::TEMP_LOCAL_MEM";
-            break;
-
-        case Sysman::resid_t::STBY_GLOBAL:
-            str = "Sysman::resid_t::STBY_GLOBAL";
-            break;
-
-        case Sysman::resid_t::FW_1:
-            str = "Sysman::resid_t::FW_1";
-            break;
-
-        case Sysman::resid_t::FW_2:
-            str = "Sysman::resid_t::FW_2";
-            break;
-
-        case Sysman::resid_t::FW_3:
-            str = "Sysman::resid_t::FW_3";
-            break;
-
-        case Sysman::resid_t::FW_4:
-            str = "Sysman::resid_t::FW_4";
-            break;
-
-        case Sysman::resid_t::FW_5:
-            str = "Sysman::resid_t::FW_5";
-            break;
-
-        case Sysman::resid_t::FW_6:
-            str = "Sysman::resid_t::FW_6";
-            break;
-
-        case Sysman::resid_t::FW_7:
-            str = "Sysman::resid_t::FW_7";
-            break;
-
-        case Sysman::resid_t::FW_8:
-            str = "Sysman::resid_t::FW_8";
-            break;
-
-        case Sysman::resid_t::FW_9:
-            str = "Sysman::resid_t::FW_9";
-            break;
-
-        case Sysman::resid_t::FW_10:
-            str = "Sysman::resid_t::FW_10";
-            break;
-
-        case Sysman::resid_t::FW_11:
-            str = "Sysman::resid_t::FW_11";
-            break;
-
-        case Sysman::resid_t::FW_12:
-            str = "Sysman::resid_t::FW_12";
-            break;
-
-        case Sysman::resid_t::FW_13:
-            str = "Sysman::resid_t::FW_13";
-            break;
-
-        case Sysman::resid_t::FW_14:
-            str = "Sysman::resid_t::FW_14";
-            break;
-
-        case Sysman::resid_t::FW_15:
-            str = "Sysman::resid_t::FW_15";
-            break;
-
-        case Sysman::resid_t::FW_16:
-            str = "Sysman::resid_t::FW_16";
-            break;
-
-        case Sysman::resid_t::FW_17:
-            str = "Sysman::resid_t::FW_17";
-            break;
-
-        case Sysman::resid_t::FW_18:
-            str = "Sysman::resid_t::FW_18";
-            break;
-
-        case Sysman::resid_t::FW_19:
-            str = "Sysman::resid_t::FW_19";
-            break;
-
-        case Sysman::resid_t::FW_20:
-            str = "Sysman::resid_t::FW_20";
-            break;
-
-        case Sysman::resid_t::PSU_MAIN:
-            str = "Sysman::resid_t::PSU_MAIN";
-            break;
-
-        case Sysman::resid_t::PSU_AUX:
-            str = "Sysman::resid_t::PSU_AUX";
-            break;
-
-        case Sysman::resid_t::PSU_1:
-            str = "Sysman::resid_t::PSU_1";
-            break;
-
-        case Sysman::resid_t::PSU_2:
-            str = "Sysman::resid_t::PSU_2";
-            break;
-
-        case Sysman::resid_t::FAN_MAIN:
-            str = "Sysman::resid_t::FAN_MAIN";
-            break;
-
-        case Sysman::resid_t::FAN_1:
-            str = "Sysman::resid_t::FAN_1";
-            break;
-
-        case Sysman::resid_t::FAN_2:
-            str = "Sysman::resid_t::FAN_2";
-            break;
-
-        case Sysman::resid_t::FAN_3:
-            str = "Sysman::resid_t::FAN_3";
-            break;
-
-        case Sysman::resid_t::LED_MAIN:
-            str = "Sysman::resid_t::LED_MAIN";
-            break;
-
-        case Sysman::resid_t::LED_1:
-            str = "Sysman::resid_t::LED_1";
-            break;
-
-        case Sysman::resid_t::LED_2:
-            str = "Sysman::resid_t::LED_2";
-            break;
-
-        case Sysman::resid_t::LED_3:
-            str = "Sysman::resid_t::LED_3";
-            break;
-
-        case Sysman::resid_t::ANY:
-            str = "Sysman::resid_t::ANY";
+        case Sysman::freq_domain_t::NUM:
+            str = "Sysman::freq_domain_t::NUM";
             break;
 
         default:
-            str = "Sysman::resid_t::?";
+            str = "Sysman::freq_domain_t::?";
             break;
         };
 
@@ -1291,235 +2955,136 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_t to std::string
-    std::string to_string( const Sysman::resprop_t val )
+    /// @brief Converts Sysman::event_type_t to std::string
+    std::string to_string( const Sysman::event_type_t val )
     {
         std::string str;
 
         switch( val )
         {
-        case Sysman::resprop_t::DEV_SERIAL_NUMBER:
-            str = "Sysman::resprop_t::DEV_SERIAL_NUMBER";
+        case Sysman::event_type_t::FREQ_THROTTLED:
+            str = "Sysman::event_type_t::FREQ_THROTTLED";
             break;
 
-        case Sysman::resprop_t::DEV_BOARD_NUMBER:
-            str = "Sysman::resprop_t::DEV_BOARD_NUMBER";
+        case Sysman::event_type_t::RAS_ERRORS:
+            str = "Sysman::event_type_t::RAS_ERRORS";
             break;
 
-        case Sysman::resprop_t::DEV_BRAND:
-            str = "Sysman::resprop_t::DEV_BRAND";
-            break;
-
-        case Sysman::resprop_t::DEV_MODEL:
-            str = "Sysman::resprop_t::DEV_MODEL";
-            break;
-
-        case Sysman::resprop_t::DEV_DEVICEID:
-            str = "Sysman::resprop_t::DEV_DEVICEID";
-            break;
-
-        case Sysman::resprop_t::DEV_VENDOR_NAME:
-            str = "Sysman::resprop_t::DEV_VENDOR_NAME";
-            break;
-
-        case Sysman::resprop_t::DEV_DRIVER_VERSION:
-            str = "Sysman::resprop_t::DEV_DRIVER_VERSION";
-            break;
-
-        case Sysman::resprop_t::DEV_BARS:
-            str = "Sysman::resprop_t::DEV_BARS";
-            break;
-
-        case Sysman::resprop_t::DEV_UUID:
-            str = "Sysman::resprop_t::DEV_UUID";
-            break;
-
-        case Sysman::resprop_t::PWR_MAX_LIMIT:
-            str = "Sysman::resprop_t::PWR_MAX_LIMIT";
-            break;
-
-        case Sysman::resprop_t::PWR_ENERGY_COUNTER:
-            str = "Sysman::resprop_t::PWR_ENERGY_COUNTER";
-            break;
-
-        case Sysman::resprop_t::PWR_SUSTAINED_LIMIT:
-            str = "Sysman::resprop_t::PWR_SUSTAINED_LIMIT";
-            break;
-
-        case Sysman::resprop_t::PWR_BURST_LIMIT:
-            str = "Sysman::resprop_t::PWR_BURST_LIMIT";
-            break;
-
-        case Sysman::resprop_t::PWR_PEAK_LIMIT:
-            str = "Sysman::resprop_t::PWR_PEAK_LIMIT";
-            break;
-
-        case Sysman::resprop_t::FREQ_AVAIL_CLOCKS:
-            str = "Sysman::resprop_t::FREQ_AVAIL_CLOCKS";
-            break;
-
-        case Sysman::resprop_t::FREQ_RANGE:
-            str = "Sysman::resprop_t::FREQ_RANGE";
-            break;
-
-        case Sysman::resprop_t::FREQ_REQUESTED_FREQ:
-            str = "Sysman::resprop_t::FREQ_REQUESTED_FREQ";
-            break;
-
-        case Sysman::resprop_t::FREQ_TDP_FREQ:
-            str = "Sysman::resprop_t::FREQ_TDP_FREQ";
-            break;
-
-        case Sysman::resprop_t::FREQ_EFFICIENT_FREQ:
-            str = "Sysman::resprop_t::FREQ_EFFICIENT_FREQ";
-            break;
-
-        case Sysman::resprop_t::FREQ_RESOLVED_FREQ:
-            str = "Sysman::resprop_t::FREQ_RESOLVED_FREQ";
-            break;
-
-        case Sysman::resprop_t::FREQ_THROTTLE_REASONS:
-            str = "Sysman::resprop_t::FREQ_THROTTLE_REASONS";
-            break;
-
-        case Sysman::resprop_t::FREQ_THROTTLE_TIME:
-            str = "Sysman::resprop_t::FREQ_THROTTLE_TIME";
-            break;
-
-        case Sysman::resprop_t::UTIL_COUNTERS:
-            str = "Sysman::resprop_t::UTIL_COUNTERS";
-            break;
-
-        case Sysman::resprop_t::MEM_TYPE:
-            str = "Sysman::resprop_t::MEM_TYPE";
-            break;
-
-        case Sysman::resprop_t::MEM_UTILIZATION:
-            str = "Sysman::resprop_t::MEM_UTILIZATION";
-            break;
-
-        case Sysman::resprop_t::MEM_BANDWIDTH:
-            str = "Sysman::resprop_t::MEM_BANDWIDTH";
-            break;
-
-        case Sysman::resprop_t::LINK_TYPE:
-            str = "Sysman::resprop_t::LINK_TYPE";
-            break;
-
-        case Sysman::resprop_t::LINK_BUS_ADDRESS:
-            str = "Sysman::resprop_t::LINK_BUS_ADDRESS";
-            break;
-
-        case Sysman::resprop_t::LINK_PEER_DEVICE:
-            str = "Sysman::resprop_t::LINK_PEER_DEVICE";
-            break;
-
-        case Sysman::resprop_t::LINK_AVAIL_SPEEDS:
-            str = "Sysman::resprop_t::LINK_AVAIL_SPEEDS";
-            break;
-
-        case Sysman::resprop_t::LINK_MAX_PACKET_SIZE:
-            str = "Sysman::resprop_t::LINK_MAX_PACKET_SIZE";
-            break;
-
-        case Sysman::resprop_t::LINK_STATE:
-            str = "Sysman::resprop_t::LINK_STATE";
-            break;
-
-        case Sysman::resprop_t::LINK_BANDWIDTH:
-            str = "Sysman::resprop_t::LINK_BANDWIDTH";
-            break;
-
-        case Sysman::resprop_t::LINK_SPEED:
-            str = "Sysman::resprop_t::LINK_SPEED";
-            break;
-
-        case Sysman::resprop_t::LINK_SPEED_RANGE:
-            str = "Sysman::resprop_t::LINK_SPEED_RANGE";
-            break;
-
-        case Sysman::resprop_t::TEMP_TEMPERATURE:
-            str = "Sysman::resprop_t::TEMP_TEMPERATURE";
-            break;
-
-        case Sysman::resprop_t::STBY_PROMO_MODE:
-            str = "Sysman::resprop_t::STBY_PROMO_MODE";
-            break;
-
-        case Sysman::resprop_t::FW_NAME:
-            str = "Sysman::resprop_t::FW_NAME";
-            break;
-
-        case Sysman::resprop_t::FW_VERSION:
-            str = "Sysman::resprop_t::FW_VERSION";
-            break;
-
-        case Sysman::resprop_t::FW_CHECK:
-            str = "Sysman::resprop_t::FW_CHECK";
-            break;
-
-        case Sysman::resprop_t::FW_FLASH:
-            str = "Sysman::resprop_t::FW_FLASH";
-            break;
-
-        case Sysman::resprop_t::PSU_AMP_LIMIT:
-            str = "Sysman::resprop_t::PSU_AMP_LIMIT";
-            break;
-
-        case Sysman::resprop_t::PSU_VOLTAGE_STATUS:
-            str = "Sysman::resprop_t::PSU_VOLTAGE_STATUS";
-            break;
-
-        case Sysman::resprop_t::PSU_FAN_FAILURE:
-            str = "Sysman::resprop_t::PSU_FAN_FAILURE";
-            break;
-
-        case Sysman::resprop_t::PSU_TEMPERATURE:
-            str = "Sysman::resprop_t::PSU_TEMPERATURE";
-            break;
-
-        case Sysman::resprop_t::PSU_AMPS:
-            str = "Sysman::resprop_t::PSU_AMPS";
-            break;
-
-        case Sysman::resprop_t::FAN_MAX_RPM:
-            str = "Sysman::resprop_t::FAN_MAX_RPM";
-            break;
-
-        case Sysman::resprop_t::FAN_MAX_TABLE_SIZE:
-            str = "Sysman::resprop_t::FAN_MAX_TABLE_SIZE";
-            break;
-
-        case Sysman::resprop_t::FAN_SPEED_RPM:
-            str = "Sysman::resprop_t::FAN_SPEED_RPM";
-            break;
-
-        case Sysman::resprop_t::FAN_SPEED_PERCENT:
-            str = "Sysman::resprop_t::FAN_SPEED_PERCENT";
-            break;
-
-        case Sysman::resprop_t::FAN_MODE:
-            str = "Sysman::resprop_t::FAN_MODE";
-            break;
-
-        case Sysman::resprop_t::FAN_FIXED_SPEED:
-            str = "Sysman::resprop_t::FAN_FIXED_SPEED";
-            break;
-
-        case Sysman::resprop_t::FAN_SPEED_TABLE:
-            str = "Sysman::resprop_t::FAN_SPEED_TABLE";
-            break;
-
-        case Sysman::resprop_t::LED_RGB_CAP:
-            str = "Sysman::resprop_t::LED_RGB_CAP";
-            break;
-
-        case Sysman::resprop_t::LED_STATE:
-            str = "Sysman::resprop_t::LED_STATE";
+        case Sysman::event_type_t::NUM:
+            str = "Sysman::event_type_t::NUM";
             break;
 
         default:
-            str = "Sysman::resprop_t::?";
+            str = "Sysman::event_type_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::freq_throttle_reasons_t to std::string
+    std::string to_string( const Sysman::freq_throttle_reasons_t val )
+    {
+        const auto bits = static_cast<uint32_t>( val );
+
+        std::string str;
+        
+        if( 0 == bits )
+            str += "NONE   ";
+        
+        if( static_cast<uint32_t>(Sysman::freq_throttle_reasons_t::AVE_PWR_CAP) & bits )
+            str += "AVE_PWR_CAP | ";
+        
+        if( static_cast<uint32_t>(Sysman::freq_throttle_reasons_t::BURST_PWR_CAP) & bits )
+            str += "BURST_PWR_CAP | ";
+        
+        if( static_cast<uint32_t>(Sysman::freq_throttle_reasons_t::CURRENT_LIMIT) & bits )
+            str += "CURRENT_LIMIT | ";
+        
+        if( static_cast<uint32_t>(Sysman::freq_throttle_reasons_t::THERMAL_LIMIT) & bits )
+            str += "THERMAL_LIMIT | ";
+        
+        if( static_cast<uint32_t>(Sysman::freq_throttle_reasons_t::PSU_ALERT) & bits )
+            str += "PSU_ALERT | ";
+        
+        if( static_cast<uint32_t>(Sysman::freq_throttle_reasons_t::SW_RANGE) & bits )
+            str += "SW_RANGE | ";
+        
+        if( static_cast<uint32_t>(Sysman::freq_throttle_reasons_t::HW_RANGE) & bits )
+            str += "HW_RANGE | ";
+
+        return ( str.size() > 3 ) 
+            ? "Sysman::freq_throttle_reasons_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Sysman::freq_throttle_reasons_t::{ ? }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::activity_type_t to std::string
+    std::string to_string( const Sysman::activity_type_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Sysman::activity_type_t::GLOBAL:
+            str = "Sysman::activity_type_t::GLOBAL";
+            break;
+
+        case Sysman::activity_type_t::COMPUTE:
+            str = "Sysman::activity_type_t::COMPUTE";
+            break;
+
+        case Sysman::activity_type_t::MEDIA:
+            str = "Sysman::activity_type_t::MEDIA";
+            break;
+
+        default:
+            str = "Sysman::activity_type_t::?";
+            break;
+        };
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::mem_type_t to std::string
+    std::string to_string( const Sysman::mem_type_t val )
+    {
+        std::string str;
+
+        switch( val )
+        {
+        case Sysman::mem_type_t::HBM:
+            str = "Sysman::mem_type_t::HBM";
+            break;
+
+        case Sysman::mem_type_t::DDR:
+            str = "Sysman::mem_type_t::DDR";
+            break;
+
+        case Sysman::mem_type_t::SRAM:
+            str = "Sysman::mem_type_t::SRAM";
+            break;
+
+        case Sysman::mem_type_t::L1:
+            str = "Sysman::mem_type_t::L1";
+            break;
+
+        case Sysman::mem_type_t::L3:
+            str = "Sysman::mem_type_t::L3";
+            break;
+
+        case Sysman::mem_type_t::GRF:
+            str = "Sysman::mem_type_t::GRF";
+            break;
+
+        case Sysman::mem_type_t::SLM:
+            str = "Sysman::mem_type_t::SLM";
+            break;
+
+        default:
+            str = "Sysman::mem_type_t::?";
             break;
         };
 
@@ -1579,104 +3144,31 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::freq_throttle_reasons_t to std::string
-    std::string to_string( const Sysman::freq_throttle_reasons_t val )
-    {
-        const auto bits = static_cast<uint32_t>( val );
-
-        std::string str;
-        
-        if( 0 == bits )
-            str += "NONE   ";
-        
-        if( static_cast<uint32_t>(Sysman::freq_throttle_reasons_t::AVE_PWR_CAP) & bits )
-            str += "AVE_PWR_CAP | ";
-        
-        if( static_cast<uint32_t>(Sysman::freq_throttle_reasons_t::BURST_PWR_CAP) & bits )
-            str += "BURST_PWR_CAP | ";
-        
-        if( static_cast<uint32_t>(Sysman::freq_throttle_reasons_t::CURRENT_LIMIT) & bits )
-            str += "CURRENT_LIMIT | ";
-        
-        if( static_cast<uint32_t>(Sysman::freq_throttle_reasons_t::THERMAL_LIMIT) & bits )
-            str += "THERMAL_LIMIT | ";
-        
-        if( static_cast<uint32_t>(Sysman::freq_throttle_reasons_t::PSU_ALERT) & bits )
-            str += "PSU_ALERT | ";
-        
-        if( static_cast<uint32_t>(Sysman::freq_throttle_reasons_t::SW_RANGE) & bits )
-            str += "SW_RANGE | ";
-        
-        if( static_cast<uint32_t>(Sysman::freq_throttle_reasons_t::HW_RANGE) & bits )
-            str += "HW_RANGE | ";
-
-        return ( str.size() > 3 ) 
-            ? "Sysman::freq_throttle_reasons_t::{ " + str.substr(0, str.size() - 3) + " }"
-            : "Sysman::freq_throttle_reasons_t::{ ? }";
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::mem_type_t to std::string
-    std::string to_string( const Sysman::mem_type_t val )
+    /// @brief Converts Sysman::temp_sensors_t to std::string
+    std::string to_string( const Sysman::temp_sensors_t val )
     {
         std::string str;
 
         switch( val )
         {
-        case Sysman::mem_type_t::HBM:
-            str = "Sysman::mem_type_t::HBM";
+        case Sysman::temp_sensors_t::GLOBAL:
+            str = "Sysman::temp_sensors_t::GLOBAL";
             break;
 
-        case Sysman::mem_type_t::DDR:
-            str = "Sysman::mem_type_t::DDR";
+        case Sysman::temp_sensors_t::GPU:
+            str = "Sysman::temp_sensors_t::GPU";
             break;
 
-        case Sysman::mem_type_t::SRAM:
-            str = "Sysman::mem_type_t::SRAM";
+        case Sysman::temp_sensors_t::MEMORY:
+            str = "Sysman::temp_sensors_t::MEMORY";
             break;
 
-        case Sysman::mem_type_t::L1:
-            str = "Sysman::mem_type_t::L1";
-            break;
-
-        case Sysman::mem_type_t::L3:
-            str = "Sysman::mem_type_t::L3";
-            break;
-
-        case Sysman::mem_type_t::GRF:
-            str = "Sysman::mem_type_t::GRF";
-            break;
-
-        case Sysman::mem_type_t::SLM:
-            str = "Sysman::mem_type_t::SLM";
+        case Sysman::temp_sensors_t::NUM:
+            str = "Sysman::temp_sensors_t::NUM";
             break;
 
         default:
-            str = "Sysman::mem_type_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::link_type_t to std::string
-    std::string to_string( const Sysman::link_type_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case Sysman::link_type_t::PCI:
-            str = "Sysman::link_type_t::PCI";
-            break;
-
-        case Sysman::link_type_t::CD_PORT:
-            str = "Sysman::link_type_t::CD_PORT";
-            break;
-
-        default:
-            str = "Sysman::link_type_t::?";
+            str = "Sysman::temp_sensors_t::?";
             break;
         };
 
@@ -1743,6 +3235,10 @@ namespace xet
 
         switch( val )
         {
+        case Sysman::fan_speed_mode_t::DEFAULT:
+            str = "Sysman::fan_speed_mode_t::DEFAULT";
+            break;
+
         case Sysman::fan_speed_mode_t::FIXED:
             str = "Sysman::fan_speed_mode_t::FIXED";
             break;
@@ -1784,53 +3280,6 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::prop_support_t to std::string
-    std::string to_string( const Sysman::prop_support_t val )
-    {
-        const auto bits = static_cast<uint32_t>( val );
-
-        std::string str;
-        
-        if( 0 == bits )
-            str += "NONE   ";
-        
-        if( static_cast<uint32_t>(Sysman::prop_support_t::API) & bits )
-            str += "API | ";
-        
-        if( static_cast<uint32_t>(Sysman::prop_support_t::DEVICE_CLASS) & bits )
-            str += "DEVICE_CLASS | ";
-        
-        if( static_cast<uint32_t>(Sysman::prop_support_t::DEVICE) & bits )
-            str += "DEVICE | ";
-
-        return ( str.size() > 3 ) 
-            ? "Sysman::prop_support_t::{ " + str.substr(0, str.size() - 3) + " }"
-            : "Sysman::prop_support_t::{ ? }";
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::prop_access_t to std::string
-    std::string to_string( const Sysman::prop_access_t val )
-    {
-        const auto bits = static_cast<uint32_t>( val );
-
-        std::string str;
-        
-        if( 0 == bits )
-            str += "NO_PERMISSIONS   ";
-        
-        if( static_cast<uint32_t>(Sysman::prop_access_t::READ_PERMISSIONS) & bits )
-            str += "READ_PERMISSIONS | ";
-        
-        if( static_cast<uint32_t>(Sysman::prop_access_t::WRITE_PERMISSIONS) & bits )
-            str += "WRITE_PERMISSIONS | ";
-
-        return ( str.size() > 3 ) 
-            ? "Sysman::prop_access_t::{ " + str.substr(0, str.size() - 3) + " }"
-            : "Sysman::prop_access_t::{ ? }";
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::ras_error_type_t to std::string
     std::string to_string( const Sysman::ras_error_type_t val )
     {
@@ -1852,34 +3301,6 @@ namespace xet
 
         default:
             str = "Sysman::ras_error_type_t::?";
-            break;
-        };
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::event_type_t to std::string
-    std::string to_string( const Sysman::event_type_t val )
-    {
-        std::string str;
-
-        switch( val )
-        {
-        case Sysman::event_type_t::FREQ_THROTTLED:
-            str = "Sysman::event_type_t::FREQ_THROTTLED";
-            break;
-
-        case Sysman::event_type_t::RAS_ERRORS:
-            str = "Sysman::event_type_t::RAS_ERRORS";
-            break;
-
-        case Sysman::event_type_t::COUNT:
-            str = "Sysman::event_type_t::COUNT";
-            break;
-
-        default:
-            str = "Sysman::event_type_t::?";
             break;
         };
 
@@ -1943,248 +3364,219 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::pci_bar_info_t to std::string
-    std::string to_string( const Sysman::pci_bar_info_t val )
+    /// @brief Converts Sysman::properties_t to std::string
+    std::string to_string( const Sysman::properties_t val )
     {
         std::string str;
         
-        str += "Sysman::pci_bar_info_t::type : ";
+        str += "Sysman::properties_t::type : ";
         str += to_string(val.type);
         str += "\n";
         
-        str += "Sysman::pci_bar_info_t::base : ";
-        str += std::to_string(val.base);
+        str += "Sysman::properties_t::vendorId : ";
+        str += std::to_string(val.vendorId);
         str += "\n";
         
-        str += "Sysman::pci_bar_info_t::size : ";
-        str += std::to_string(val.size);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_dev_serial_number_t to std::string
-    std::string to_string( const Sysman::resprop_dev_serial_number_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_dev_serial_number_t::str : ";
-        {
-            std::string tmp;
-            for( auto& entry : val.str )
-            {
-                tmp += std::to_string( entry );
-                tmp += ", ";
-            }
-            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
-        }
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_dev_board_number_t to std::string
-    std::string to_string( const Sysman::resprop_dev_board_number_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_dev_board_number_t::str : ";
-        {
-            std::string tmp;
-            for( auto& entry : val.str )
-            {
-                tmp += std::to_string( entry );
-                tmp += ", ";
-            }
-            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
-        }
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_dev_brand_t to std::string
-    std::string to_string( const Sysman::resprop_dev_brand_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_dev_brand_t::str : ";
-        {
-            std::string tmp;
-            for( auto& entry : val.str )
-            {
-                tmp += std::to_string( entry );
-                tmp += ", ";
-            }
-            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
-        }
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_dev_model_t to std::string
-    std::string to_string( const Sysman::resprop_dev_model_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_dev_model_t::str : ";
-        {
-            std::string tmp;
-            for( auto& entry : val.str )
-            {
-                tmp += std::to_string( entry );
-                tmp += ", ";
-            }
-            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
-        }
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_dev_deviceid_t to std::string
-    std::string to_string( const Sysman::resprop_dev_deviceid_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_dev_deviceid_t::str : ";
-        {
-            std::string tmp;
-            for( auto& entry : val.str )
-            {
-                tmp += std::to_string( entry );
-                tmp += ", ";
-            }
-            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
-        }
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_dev_vendor_name_t to std::string
-    std::string to_string( const Sysman::resprop_dev_vendor_name_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_dev_vendor_name_t::str : ";
-        {
-            std::string tmp;
-            for( auto& entry : val.str )
-            {
-                tmp += std::to_string( entry );
-                tmp += ", ";
-            }
-            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
-        }
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_dev_driver_version_t to std::string
-    std::string to_string( const Sysman::resprop_dev_driver_version_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_dev_driver_version_t::str : ";
-        {
-            std::string tmp;
-            for( auto& entry : val.str )
-            {
-                tmp += std::to_string( entry );
-                tmp += ", ";
-            }
-            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
-        }
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_dev_bars_t to std::string
-    std::string to_string( const Sysman::resprop_dev_bars_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_dev_bars_t::num : ";
-        str += std::to_string(val.num);
+        str += "Sysman::properties_t::deviceId : ";
+        str += std::to_string(val.deviceId);
         str += "\n";
         
-        str += "Sysman::resprop_dev_bars_t::pBars : ";
-        {
-            std::stringstream ss;
-            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pBars);
-            str += ss.str();
-        }
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_dev_uuid_t to std::string
-    std::string to_string( const Sysman::resprop_dev_uuid_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_dev_uuid_t::uuid : ";
+        str += "Sysman::properties_t::uuid : ";
         str += to_string(val.uuid);
         str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_pwr_max_limit_t to std::string
-    std::string to_string( const Sysman::resprop_pwr_max_limit_t val )
-    {
-        std::string str;
         
-        str += "Sysman::resprop_pwr_max_limit_t::limit : ";
-        str += std::to_string(val.limit);
+        str += "Sysman::properties_t::numSubdevices : ";
+        str += std::to_string(val.numSubdevices);
+        str += "\n";
+        
+        str += "Sysman::properties_t::isSubdevice : ";
+        str += std::to_string(val.isSubdevice);
+        str += "\n";
+        
+        str += "Sysman::properties_t::subdeviceId : ";
+        str += std::to_string(val.subdeviceId);
+        str += "\n";
+        
+        str += "Sysman::properties_t::serialNumber : ";
+        {
+            std::string tmp;
+            for( auto& entry : val.serialNumber )
+            {
+                tmp += std::to_string( entry );
+                tmp += ", ";
+            }
+            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
+        }
+        str += "\n";
+        
+        str += "Sysman::properties_t::boardNumber : ";
+        {
+            std::string tmp;
+            for( auto& entry : val.boardNumber )
+            {
+                tmp += std::to_string( entry );
+                tmp += ", ";
+            }
+            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
+        }
+        str += "\n";
+        
+        str += "Sysman::properties_t::brandName : ";
+        {
+            std::string tmp;
+            for( auto& entry : val.brandName )
+            {
+                tmp += std::to_string( entry );
+                tmp += ", ";
+            }
+            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
+        }
+        str += "\n";
+        
+        str += "Sysman::properties_t::modelName : ";
+        {
+            std::string tmp;
+            for( auto& entry : val.modelName )
+            {
+                tmp += std::to_string( entry );
+                tmp += ", ";
+            }
+            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
+        }
+        str += "\n";
+        
+        str += "Sysman::properties_t::vendorName : ";
+        {
+            std::string tmp;
+            for( auto& entry : val.vendorName )
+            {
+                tmp += std::to_string( entry );
+                tmp += ", ";
+            }
+            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
+        }
+        str += "\n";
+        
+        str += "Sysman::properties_t::driverVersion : ";
+        {
+            std::string tmp;
+            for( auto& entry : val.driverVersion )
+            {
+                tmp += std::to_string( entry );
+                tmp += ", ";
+            }
+            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
+        }
+        str += "\n";
+        
+        str += "Sysman::properties_t::havePowerControl : ";
+        str += std::to_string(val.havePowerControl);
+        str += "\n";
+        
+        str += "Sysman::properties_t::haveFreqControl : ";
+        {
+            std::string tmp;
+            for( auto& entry : val.haveFreqControl )
+            {
+                tmp += std::to_string( entry );
+                tmp += ", ";
+            }
+            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
+        }
+        str += "\n";
+        
+        str += "Sysman::properties_t::haveOverclock : ";
+        {
+            std::string tmp;
+            for( auto& entry : val.haveOverclock )
+            {
+                tmp += std::to_string( entry );
+                tmp += ", ";
+            }
+            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
+        }
+        str += "\n";
+        
+        str += "Sysman::properties_t::haveSwitch : ";
+        str += std::to_string(val.haveSwitch);
+        str += "\n";
+        
+        str += "Sysman::properties_t::numFirmwares : ";
+        str += std::to_string(val.numFirmwares);
+        str += "\n";
+        
+        str += "Sysman::properties_t::numPsus : ";
+        str += std::to_string(val.numPsus);
+        str += "\n";
+        
+        str += "Sysman::properties_t::numFans : ";
+        str += std::to_string(val.numFans);
+        str += "\n";
+        
+        str += "Sysman::properties_t::numLeds : ";
+        str += std::to_string(val.numLeds);
+        str += "\n";
+        
+        str += "Sysman::properties_t::supportedEvents : ";
+        {
+            std::string tmp;
+            for( auto& entry : val.supportedEvents )
+            {
+                tmp += std::to_string( entry );
+                tmp += ", ";
+            }
+            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
+        }
         str += "\n";
 
         return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_pwr_energy_counter_t to std::string
-    std::string to_string( const Sysman::resprop_pwr_energy_counter_t val )
+    /// @brief Converts Sysman::power_properties_t to std::string
+    std::string to_string( const Sysman::power_properties_t val )
     {
         std::string str;
         
-        str += "Sysman::resprop_pwr_energy_counter_t::energy : ";
+        str += "Sysman::power_properties_t::maxLimit : ";
+        str += std::to_string(val.maxLimit);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::power_energy_counter_t to std::string
+    std::string to_string( const Sysman::power_energy_counter_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::power_energy_counter_t::energy : ";
         str += std::to_string(val.energy);
         str += "\n";
+        
+        str += "Sysman::power_energy_counter_t::timestamp : ";
+        str += std::to_string(val.timestamp);
+        str += "\n";
 
         return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_pwr_sustained_limit_t to std::string
-    std::string to_string( const Sysman::resprop_pwr_sustained_limit_t val )
+    /// @brief Converts Sysman::power_sustained_limit_t to std::string
+    std::string to_string( const Sysman::power_sustained_limit_t val )
     {
         std::string str;
         
-        str += "Sysman::resprop_pwr_sustained_limit_t::enabled : ";
+        str += "Sysman::power_sustained_limit_t::enabled : ";
         str += std::to_string(val.enabled);
         str += "\n";
         
-        str += "Sysman::resprop_pwr_sustained_limit_t::power : ";
+        str += "Sysman::power_sustained_limit_t::power : ";
         str += std::to_string(val.power);
         str += "\n";
         
-        str += "Sysman::resprop_pwr_sustained_limit_t::interval : ";
+        str += "Sysman::power_sustained_limit_t::interval : ";
         str += std::to_string(val.interval);
         str += "\n";
 
@@ -2192,16 +3584,16 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_pwr_burst_limit_t to std::string
-    std::string to_string( const Sysman::resprop_pwr_burst_limit_t val )
+    /// @brief Converts Sysman::power_burst_limit_t to std::string
+    std::string to_string( const Sysman::power_burst_limit_t val )
     {
         std::string str;
         
-        str += "Sysman::resprop_pwr_burst_limit_t::enabled : ";
+        str += "Sysman::power_burst_limit_t::enabled : ";
         str += std::to_string(val.enabled);
         str += "\n";
         
-        str += "Sysman::resprop_pwr_burst_limit_t::power : ";
+        str += "Sysman::power_burst_limit_t::power : ";
         str += std::to_string(val.power);
         str += "\n";
 
@@ -2209,12 +3601,12 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_pwr_peak_limit_t to std::string
-    std::string to_string( const Sysman::resprop_pwr_peak_limit_t val )
+    /// @brief Converts Sysman::power_peak_limit_t to std::string
+    std::string to_string( const Sysman::power_peak_limit_t val )
     {
         std::string str;
         
-        str += "Sysman::resprop_pwr_peak_limit_t::power : ";
+        str += "Sysman::power_peak_limit_t::power : ";
         str += std::to_string(val.power);
         str += "\n";
 
@@ -2222,28 +3614,28 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_freq_avail_clocks_t to std::string
-    std::string to_string( const Sysman::resprop_freq_avail_clocks_t val )
+    /// @brief Converts Sysman::freq_properties_t to std::string
+    std::string to_string( const Sysman::freq_properties_t val )
     {
         std::string str;
         
-        str += "Sysman::resprop_freq_avail_clocks_t::min : ";
+        str += "Sysman::freq_properties_t::min : ";
         str += std::to_string(val.min);
         str += "\n";
         
-        str += "Sysman::resprop_freq_avail_clocks_t::max : ";
+        str += "Sysman::freq_properties_t::max : ";
         str += std::to_string(val.max);
         str += "\n";
         
-        str += "Sysman::resprop_freq_avail_clocks_t::step : ";
+        str += "Sysman::freq_properties_t::step : ";
         str += std::to_string(val.step);
         str += "\n";
         
-        str += "Sysman::resprop_freq_avail_clocks_t::num : ";
+        str += "Sysman::freq_properties_t::num : ";
         str += std::to_string(val.num);
         str += "\n";
         
-        str += "Sysman::resprop_freq_avail_clocks_t::pClocks : ";
+        str += "Sysman::freq_properties_t::pClocks : ";
         {
             std::stringstream ss;
             ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pClocks);
@@ -2255,16 +3647,16 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_freq_range_t to std::string
-    std::string to_string( const Sysman::resprop_freq_range_t val )
+    /// @brief Converts Sysman::freq_limits_t to std::string
+    std::string to_string( const Sysman::freq_limits_t val )
     {
         std::string str;
         
-        str += "Sysman::resprop_freq_range_t::min : ";
+        str += "Sysman::freq_limits_t::min : ";
         str += std::to_string(val.min);
         str += "\n";
         
-        str += "Sysman::resprop_freq_range_t::max : ";
+        str += "Sysman::freq_limits_t::max : ";
         str += std::to_string(val.max);
         str += "\n";
 
@@ -2272,64 +3664,28 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_freq_requested_freq_t to std::string
-    std::string to_string( const Sysman::resprop_freq_requested_freq_t val )
+    /// @brief Converts Sysman::freq_state_t to std::string
+    std::string to_string( const Sysman::freq_state_t val )
     {
         std::string str;
         
-        str += "Sysman::resprop_freq_requested_freq_t::freqRequest : ";
-        str += std::to_string(val.freqRequest);
+        str += "Sysman::freq_state_t::request : ";
+        str += std::to_string(val.request);
         str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_freq_tdp_freq_t to std::string
-    std::string to_string( const Sysman::resprop_freq_tdp_freq_t val )
-    {
-        std::string str;
         
-        str += "Sysman::resprop_freq_tdp_freq_t::freqTdp : ";
-        str += std::to_string(val.freqTdp);
+        str += "Sysman::freq_state_t::tdp : ";
+        str += std::to_string(val.tdp);
         str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_freq_efficient_freq_t to std::string
-    std::string to_string( const Sysman::resprop_freq_efficient_freq_t val )
-    {
-        std::string str;
         
-        str += "Sysman::resprop_freq_efficient_freq_t::freqEfficient : ";
-        str += std::to_string(val.freqEfficient);
+        str += "Sysman::freq_state_t::efficient : ";
+        str += std::to_string(val.efficient);
         str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_freq_resolved_freq_t to std::string
-    std::string to_string( const Sysman::resprop_freq_resolved_freq_t val )
-    {
-        std::string str;
         
-        str += "Sysman::resprop_freq_resolved_freq_t::freqResolved : ";
-        str += std::to_string(val.freqResolved);
+        str += "Sysman::freq_state_t::actual : ";
+        str += std::to_string(val.actual);
         str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_freq_throttle_reasons_t to std::string
-    std::string to_string( const Sysman::resprop_freq_throttle_reasons_t val )
-    {
-        std::string str;
         
-        str += "Sysman::resprop_freq_throttle_reasons_t::throttleReasons : ";
+        str += "Sysman::freq_state_t::throttleReasons : ";
         str += std::to_string(val.throttleReasons);
         str += "\n";
 
@@ -2337,372 +3693,50 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_freq_throttle_time_t to std::string
-    std::string to_string( const Sysman::resprop_freq_throttle_time_t val )
+    /// @brief Converts Sysman::freq_throttle_time_t to std::string
+    std::string to_string( const Sysman::freq_throttle_time_t val )
     {
         std::string str;
         
-        str += "Sysman::resprop_freq_throttle_time_t::throttleTime : ";
+        str += "Sysman::freq_throttle_time_t::throttleTime : ";
         str += std::to_string(val.throttleTime);
         str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_util_counters_t to std::string
-    std::string to_string( const Sysman::resprop_util_counters_t val )
-    {
-        std::string str;
         
-        str += "Sysman::resprop_util_counters_t::activeCounter : ";
-        str += std::to_string(val.activeCounter);
-        str += "\n";
-        
-        str += "Sysman::resprop_util_counters_t::idleCounter : ";
-        str += std::to_string(val.idleCounter);
+        str += "Sysman::freq_throttle_time_t::timestamp : ";
+        str += std::to_string(val.timestamp);
         str += "\n";
 
         return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_mem_type_t to std::string
-    std::string to_string( const Sysman::resprop_mem_type_t val )
+    /// @brief Converts Sysman::activity_stats_t to std::string
+    std::string to_string( const Sysman::activity_stats_t val )
     {
         std::string str;
         
-        str += "Sysman::resprop_mem_type_t::type : ";
+        str += "Sysman::activity_stats_t::activeTime : ";
+        str += std::to_string(val.activeTime);
+        str += "\n";
+        
+        str += "Sysman::activity_stats_t::timestamp : ";
+        str += std::to_string(val.timestamp);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::mem_properties_t to std::string
+    std::string to_string( const Sysman::mem_properties_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::mem_properties_t::type : ";
         str += to_string(val.type);
         str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_mem_utilization_t to std::string
-    std::string to_string( const Sysman::resprop_mem_utilization_t val )
-    {
-        std::string str;
         
-        str += "Sysman::resprop_mem_utilization_t::total : ";
-        str += std::to_string(val.total);
-        str += "\n";
-        
-        str += "Sysman::resprop_mem_utilization_t::stolen : ";
-        str += std::to_string(val.stolen);
-        str += "\n";
-        
-        str += "Sysman::resprop_mem_utilization_t::bad : ";
-        str += std::to_string(val.bad);
-        str += "\n";
-        
-        str += "Sysman::resprop_mem_utilization_t::allocated : ";
-        str += std::to_string(val.allocated);
-        str += "\n";
-        
-        str += "Sysman::resprop_mem_utilization_t::unallocated : ";
-        str += std::to_string(val.unallocated);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_mem_bandwidth_t to std::string
-    std::string to_string( const Sysman::resprop_mem_bandwidth_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_mem_bandwidth_t::readCounter : ";
-        str += std::to_string(val.readCounter);
-        str += "\n";
-        
-        str += "Sysman::resprop_mem_bandwidth_t::writeCounter : ";
-        str += std::to_string(val.writeCounter);
-        str += "\n";
-        
-        str += "Sysman::resprop_mem_bandwidth_t::maxBandwidth : ";
-        str += std::to_string(val.maxBandwidth);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::link_speed_t to std::string
-    std::string to_string( const Sysman::link_speed_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::link_speed_t::numLanes : ";
-        str += std::to_string(val.numLanes);
-        str += "\n";
-        
-        str += "Sysman::link_speed_t::speed : ";
-        str += std::to_string(val.speed);
-        str += "\n";
-        
-        str += "Sysman::link_speed_t::bandwidth : ";
-        str += std::to_string(val.bandwidth);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_link_type_t to std::string
-    std::string to_string( const Sysman::resprop_link_type_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_link_type_t::type : ";
-        str += to_string(val.type);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_link_bus_address_t to std::string
-    std::string to_string( const Sysman::resprop_link_bus_address_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_link_bus_address_t::str : ";
-        {
-            std::string tmp;
-            for( auto& entry : val.str )
-            {
-                tmp += std::to_string( entry );
-                tmp += ", ";
-            }
-            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
-        }
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_link_peer_device_t to std::string
-    std::string to_string( const Sysman::resprop_link_peer_device_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_link_peer_device_t::uuid : ";
-        str += to_string(val.uuid);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_link_avail_speeds_t to std::string
-    std::string to_string( const Sysman::resprop_link_avail_speeds_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_link_avail_speeds_t::num : ";
-        str += std::to_string(val.num);
-        str += "\n";
-        
-        str += "Sysman::resprop_link_avail_speeds_t::pList : ";
-        {
-            std::stringstream ss;
-            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pList);
-            str += ss.str();
-        }
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_link_state_t to std::string
-    std::string to_string( const Sysman::resprop_link_state_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_link_state_t::enable : ";
-        str += std::to_string(val.enable);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_link_max_packet_size_t to std::string
-    std::string to_string( const Sysman::resprop_link_max_packet_size_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_link_max_packet_size_t::maxPacketSize : ";
-        str += std::to_string(val.maxPacketSize);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_link_bandwidth_t to std::string
-    std::string to_string( const Sysman::resprop_link_bandwidth_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_link_bandwidth_t::recvCounter : ";
-        str += std::to_string(val.recvCounter);
-        str += "\n";
-        
-        str += "Sysman::resprop_link_bandwidth_t::sendCounter : ";
-        str += std::to_string(val.sendCounter);
-        str += "\n";
-        
-        str += "Sysman::resprop_link_bandwidth_t::maxBandwidth : ";
-        str += std::to_string(val.maxBandwidth);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_link_speed_t to std::string
-    std::string to_string( const Sysman::resprop_link_speed_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_link_speed_t::pSpeed : ";
-        {
-            std::stringstream ss;
-            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pSpeed);
-            str += ss.str();
-        }
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_link_speed_range_t to std::string
-    std::string to_string( const Sysman::resprop_link_speed_range_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_link_speed_range_t::pMinSpeed : ";
-        {
-            std::stringstream ss;
-            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pMinSpeed);
-            str += ss.str();
-        }
-        str += "\n";
-        
-        str += "Sysman::resprop_link_speed_range_t::pMaxSpeed : ";
-        {
-            std::stringstream ss;
-            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pMaxSpeed);
-            str += ss.str();
-        }
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_temp_temperature_t to std::string
-    std::string to_string( const Sysman::resprop_temp_temperature_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_temp_temperature_t::temperature : ";
-        str += std::to_string(val.temperature);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_stby_promo_mode_t to std::string
-    std::string to_string( const Sysman::resprop_stby_promo_mode_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_stby_promo_mode_t::mode : ";
-        str += to_string(val.mode);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_fw_name_t to std::string
-    std::string to_string( const Sysman::resprop_fw_name_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_fw_name_t::str : ";
-        {
-            std::string tmp;
-            for( auto& entry : val.str )
-            {
-                tmp += std::to_string( entry );
-                tmp += ", ";
-            }
-            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
-        }
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_fw_version_t to std::string
-    std::string to_string( const Sysman::resprop_fw_version_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_fw_version_t::str : ";
-        {
-            std::string tmp;
-            for( auto& entry : val.str )
-            {
-                tmp += std::to_string( entry );
-                tmp += ", ";
-            }
-            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
-        }
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_fw_check_t to std::string
-    std::string to_string( const Sysman::resprop_fw_check_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_fw_check_t::checksum : ";
-        str += std::to_string(val.checksum);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_fw_flash_t to std::string
-    std::string to_string( const Sysman::resprop_fw_flash_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_fw_flash_t::pImage : ";
-        {
-            std::stringstream ss;
-            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pImage);
-            str += ss.str();
-        }
-        str += "\n";
-        
-        str += "Sysman::resprop_fw_flash_t::size : ";
+        str += "Sysman::mem_properties_t::size : ";
         str += std::to_string(val.size);
         str += "\n";
 
@@ -2710,64 +3744,402 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_psu_amp_limit_t to std::string
-    std::string to_string( const Sysman::resprop_psu_amp_limit_t val )
+    /// @brief Converts Sysman::mem_bandwidth_t to std::string
+    std::string to_string( const Sysman::mem_bandwidth_t val )
     {
         std::string str;
         
-        str += "Sysman::resprop_psu_amp_limit_t::limit : ";
-        str += std::to_string(val.limit);
+        str += "Sysman::mem_bandwidth_t::readCounter : ";
+        str += std::to_string(val.readCounter);
+        str += "\n";
+        
+        str += "Sysman::mem_bandwidth_t::writeCounter : ";
+        str += std::to_string(val.writeCounter);
+        str += "\n";
+        
+        str += "Sysman::mem_bandwidth_t::maxBandwidth : ";
+        str += std::to_string(val.maxBandwidth);
+        str += "\n";
+        
+        str += "Sysman::mem_bandwidth_t::timestamp : ";
+        str += std::to_string(val.timestamp);
         str += "\n";
 
         return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_psu_voltage_status_t to std::string
-    std::string to_string( const Sysman::resprop_psu_voltage_status_t val )
+    /// @brief Converts Sysman::mem_alloc_t to std::string
+    std::string to_string( const Sysman::mem_alloc_t val )
     {
         std::string str;
         
-        str += "Sysman::resprop_psu_voltage_status_t::status : ";
-        str += to_string(val.status);
+        str += "Sysman::mem_alloc_t::allocated : ";
+        str += std::to_string(val.allocated);
+        str += "\n";
+        
+        str += "Sysman::mem_alloc_t::total : ";
+        str += std::to_string(val.total);
         str += "\n";
 
         return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_psu_fan_failure_t to std::string
-    std::string to_string( const Sysman::resprop_psu_fan_failure_t val )
+    /// @brief Converts Sysman::pci_address_t to std::string
+    std::string to_string( const Sysman::pci_address_t val )
     {
         std::string str;
         
-        str += "Sysman::resprop_psu_fan_failure_t::status : ";
-        str += std::to_string(val.status);
+        str += "Sysman::pci_address_t::domain : ";
+        str += std::to_string(val.domain);
+        str += "\n";
+        
+        str += "Sysman::pci_address_t::bus : ";
+        str += std::to_string(val.bus);
+        str += "\n";
+        
+        str += "Sysman::pci_address_t::device : ";
+        str += std::to_string(val.device);
+        str += "\n";
+        
+        str += "Sysman::pci_address_t::function : ";
+        str += std::to_string(val.function);
         str += "\n";
 
         return str;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_psu_temperature_t to std::string
-    std::string to_string( const Sysman::resprop_psu_temperature_t val )
+    /// @brief Converts Sysman::pci_speed_t to std::string
+    std::string to_string( const Sysman::pci_speed_t val )
     {
         std::string str;
         
-        str += "Sysman::resprop_psu_temperature_t::temperature : ";
+        str += "Sysman::pci_speed_t::gen : ";
+        str += std::to_string(val.gen);
+        str += "\n";
+        
+        str += "Sysman::pci_speed_t::width : ";
+        str += std::to_string(val.width);
+        str += "\n";
+        
+        str += "Sysman::pci_speed_t::maxBandwidth : ";
+        str += std::to_string(val.maxBandwidth);
+        str += "\n";
+        
+        str += "Sysman::pci_speed_t::maxPacketSize : ";
+        str += std::to_string(val.maxPacketSize);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pci_properties_t to std::string
+    std::string to_string( const Sysman::pci_properties_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::pci_properties_t::address : ";
+        str += to_string(val.address);
+        str += "\n";
+        
+        str += "Sysman::pci_properties_t::numBars : ";
+        str += std::to_string(val.numBars);
+        str += "\n";
+        
+        str += "Sysman::pci_properties_t::maxSpeed : ";
+        str += to_string(val.maxSpeed);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pci_state_t to std::string
+    std::string to_string( const Sysman::pci_state_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::pci_state_t::speed : ";
+        str += to_string(val.speed);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pci_bar_properties_t to std::string
+    std::string to_string( const Sysman::pci_bar_properties_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::pci_bar_properties_t::type : ";
+        str += to_string(val.type);
+        str += "\n";
+        
+        str += "Sysman::pci_bar_properties_t::base : ";
+        str += std::to_string(val.base);
+        str += "\n";
+        
+        str += "Sysman::pci_bar_properties_t::size : ";
+        str += std::to_string(val.size);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pci_throughput_t to std::string
+    std::string to_string( const Sysman::pci_throughput_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::pci_throughput_t::timestamp : ";
+        str += std::to_string(val.timestamp);
+        str += "\n";
+        
+        str += "Sysman::pci_throughput_t::rxCounter : ";
+        str += std::to_string(val.rxCounter);
+        str += "\n";
+        
+        str += "Sysman::pci_throughput_t::txCounter : ";
+        str += std::to_string(val.txCounter);
+        str += "\n";
+        
+        str += "Sysman::pci_throughput_t::replayCounter : ";
+        str += std::to_string(val.replayCounter);
+        str += "\n";
+        
+        str += "Sysman::pci_throughput_t::maxBandwidth : ";
+        str += std::to_string(val.maxBandwidth);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pci_stats_t to std::string
+    std::string to_string( const Sysman::pci_stats_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::pci_stats_t::timestamp : ";
+        str += std::to_string(val.timestamp);
+        str += "\n";
+        
+        str += "Sysman::pci_stats_t::replayCounter : ";
+        str += std::to_string(val.replayCounter);
+        str += "\n";
+        
+        str += "Sysman::pci_stats_t::packetCounter : ";
+        str += std::to_string(val.packetCounter);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::switch_address_t to std::string
+    std::string to_string( const Sysman::switch_address_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::switch_address_t::guid : ";
+        {
+            std::string tmp;
+            for( auto& entry : val.guid )
+            {
+                tmp += std::to_string( entry );
+                tmp += ", ";
+            }
+            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
+        }
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::switch_properties_t to std::string
+    std::string to_string( const Sysman::switch_properties_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::switch_properties_t::address : ";
+        str += to_string(val.address);
+        str += "\n";
+        
+        str += "Sysman::switch_properties_t::numPorts : ";
+        str += std::to_string(val.numPorts);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::switch_state_t to std::string
+    std::string to_string( const Sysman::switch_state_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::switch_state_t::enabled : ";
+        str += std::to_string(val.enabled);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::switch_port_properties_t to std::string
+    std::string to_string( const Sysman::switch_port_properties_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::switch_port_properties_t::maxBandwidth : ";
+        str += std::to_string(val.maxBandwidth);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::switch_port_state_t to std::string
+    std::string to_string( const Sysman::switch_port_state_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::switch_port_state_t::connected : ";
+        str += std::to_string(val.connected);
+        str += "\n";
+        
+        str += "Sysman::switch_port_state_t::remote : ";
+        str += to_string(val.remote);
+        str += "\n";
+        
+        str += "Sysman::switch_port_state_t::maxBandwidth : ";
+        str += std::to_string(val.maxBandwidth);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::switch_port_throughput_t to std::string
+    std::string to_string( const Sysman::switch_port_throughput_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::switch_port_throughput_t::timestamp : ";
+        str += std::to_string(val.timestamp);
+        str += "\n";
+        
+        str += "Sysman::switch_port_throughput_t::rxCounter : ";
+        str += std::to_string(val.rxCounter);
+        str += "\n";
+        
+        str += "Sysman::switch_port_throughput_t::txCounter : ";
+        str += std::to_string(val.txCounter);
+        str += "\n";
+        
+        str += "Sysman::switch_port_throughput_t::maxBandwidth : ";
+        str += std::to_string(val.maxBandwidth);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::switch_port_stats_t to std::string
+    std::string to_string( const Sysman::switch_port_stats_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::switch_port_stats_t::timestamp : ";
+        str += std::to_string(val.timestamp);
+        str += "\n";
+        
+        str += "Sysman::switch_port_stats_t::replayCounter : ";
+        str += std::to_string(val.replayCounter);
+        str += "\n";
+        
+        str += "Sysman::switch_port_stats_t::packetCounter : ";
+        str += std::to_string(val.packetCounter);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::firmware_properties_t to std::string
+    std::string to_string( const Sysman::firmware_properties_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::firmware_properties_t::name : ";
+        {
+            std::string tmp;
+            for( auto& entry : val.name )
+            {
+                tmp += std::to_string( entry );
+                tmp += ", ";
+            }
+            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
+        }
+        str += "\n";
+        
+        str += "Sysman::firmware_properties_t::version : ";
+        {
+            std::string tmp;
+            for( auto& entry : val.version )
+            {
+                tmp += std::to_string( entry );
+                tmp += ", ";
+            }
+            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
+        }
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::psu_properties_t to std::string
+    std::string to_string( const Sysman::psu_properties_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::psu_properties_t::haveFan : ";
+        str += std::to_string(val.haveFan);
+        str += "\n";
+        
+        str += "Sysman::psu_properties_t::ampLimit : ";
+        str += std::to_string(val.ampLimit);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::psu_state_t to std::string
+    std::string to_string( const Sysman::psu_state_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::psu_state_t::voltStatus : ";
+        str += to_string(val.voltStatus);
+        str += "\n";
+        
+        str += "Sysman::psu_state_t::fanFailed : ";
+        str += std::to_string(val.fanFailed);
+        str += "\n";
+        
+        str += "Sysman::psu_state_t::temperature : ";
         str += std::to_string(val.temperature);
         str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_psu_amps_t to std::string
-    std::string to_string( const Sysman::resprop_psu_amps_t val )
-    {
-        std::string str;
         
-        str += "Sysman::resprop_psu_amps_t::current : ";
+        str += "Sysman::psu_state_t::current : ";
         str += std::to_string(val.current);
         str += "\n";
 
@@ -2796,25 +4168,16 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_fan_max_rpm_t to std::string
-    std::string to_string( const Sysman::resprop_fan_max_rpm_t val )
+    /// @brief Converts Sysman::fan_properties_t to std::string
+    std::string to_string( const Sysman::fan_properties_t val )
     {
         std::string str;
         
-        str += "Sysman::resprop_fan_max_rpm_t::maxSpeed : ";
+        str += "Sysman::fan_properties_t::maxSpeed : ";
         str += std::to_string(val.maxSpeed);
         str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_fan_max_table_size_t to std::string
-    std::string to_string( const Sysman::resprop_fan_max_table_size_t val )
-    {
-        std::string str;
         
-        str += "Sysman::resprop_fan_max_table_size_t::maxPoints : ";
+        str += "Sysman::fan_properties_t::maxPoints : ";
         str += std::to_string(val.maxPoints);
         str += "\n";
 
@@ -2822,79 +4185,31 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_fan_speed_rpm_t to std::string
-    std::string to_string( const Sysman::resprop_fan_speed_rpm_t val )
+    /// @brief Converts Sysman::fan_config_t to std::string
+    std::string to_string( const Sysman::fan_config_t val )
     {
         std::string str;
         
-        str += "Sysman::resprop_fan_speed_rpm_t::speed : ";
-        str += std::to_string(val.speed);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_fan_speed_percent_t to std::string
-    std::string to_string( const Sysman::resprop_fan_speed_percent_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_fan_speed_percent_t::speed : ";
-        str += std::to_string(val.speed);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_fan_mode_t to std::string
-    std::string to_string( const Sysman::resprop_fan_mode_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_fan_mode_t::mode : ";
+        str += "Sysman::fan_config_t::mode : ";
         str += to_string(val.mode);
         str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_fan_fixed_speed_t to std::string
-    std::string to_string( const Sysman::resprop_fan_fixed_speed_t val )
-    {
-        std::string str;
         
-        str += "Sysman::resprop_fan_fixed_speed_t::speed : ";
+        str += "Sysman::fan_config_t::speed : ";
         str += std::to_string(val.speed);
         str += "\n";
         
-        str += "Sysman::resprop_fan_fixed_speed_t::units : ";
-        str += to_string(val.units);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_fan_speed_table_t to std::string
-    std::string to_string( const Sysman::resprop_fan_speed_table_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_fan_speed_table_t::pCount : ";
-        {
-            std::stringstream ss;
-            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pCount);
-            str += ss.str();
-        }
+        str += "Sysman::fan_config_t::speedUnits : ";
+        str += to_string(val.speedUnits);
         str += "\n";
         
-        str += "Sysman::resprop_fan_speed_table_t::points : ";
+        str += "Sysman::fan_config_t::numPoints : ";
+        str += std::to_string(val.numPoints);
+        str += "\n";
+        
+        str += "Sysman::fan_config_t::table : ";
         {
             std::string tmp;
-            for( auto& entry : val.points )
+            for( auto& entry : val.table )
             {
                 tmp += to_string( entry );
                 tmp += ", ";
@@ -2907,12 +4222,33 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_led_rgb_cap_t to std::string
-    std::string to_string( const Sysman::resprop_led_rgb_cap_t val )
+    /// @brief Converts Sysman::fan_state_t to std::string
+    std::string to_string( const Sysman::fan_state_t val )
     {
         std::string str;
         
-        str += "Sysman::resprop_led_rgb_cap_t::haveRGB : ";
+        str += "Sysman::fan_state_t::mode : ";
+        str += to_string(val.mode);
+        str += "\n";
+        
+        str += "Sysman::fan_state_t::speedUnits : ";
+        str += to_string(val.speedUnits);
+        str += "\n";
+        
+        str += "Sysman::fan_state_t::speed : ";
+        str += std::to_string(val.speed);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::led_properties_t to std::string
+    std::string to_string( const Sysman::led_properties_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::led_properties_t::haveRGB : ";
         str += std::to_string(val.haveRGB);
         str += "\n";
 
@@ -2920,132 +4256,25 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_led_state_t to std::string
-    std::string to_string( const Sysman::resprop_led_state_t val )
+    /// @brief Converts Sysman::led_state_t to std::string
+    std::string to_string( const Sysman::led_state_t val )
     {
         std::string str;
         
-        str += "Sysman::resprop_led_state_t::isOn : ";
+        str += "Sysman::led_state_t::isOn : ";
         str += std::to_string(val.isOn);
         str += "\n";
         
-        str += "Sysman::resprop_led_state_t::red : ";
+        str += "Sysman::led_state_t::red : ";
         str += std::to_string(val.red);
         str += "\n";
         
-        str += "Sysman::resprop_led_state_t::green : ";
+        str += "Sysman::led_state_t::green : ";
         str += std::to_string(val.green);
         str += "\n";
         
-        str += "Sysman::resprop_led_state_t::blue : ";
+        str += "Sysman::led_state_t::blue : ";
         str += std::to_string(val.blue);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resid_info_t to std::string
-    std::string to_string( const Sysman::resid_info_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resid_info_t::id : ";
-        str += to_string(val.id);
-        str += "\n";
-        
-        str += "Sysman::resid_info_t::type : ";
-        str += to_string(val.type);
-        str += "\n";
-        
-        str += "Sysman::resid_info_t::pName : ";
-        str += val.pName;
-        str += "\n";
-        
-        str += "Sysman::resid_info_t::pDesc : ";
-        str += val.pDesc;
-        str += "\n";
-        
-        str += "Sysman::resid_info_t::available : ";
-        str += std::to_string(val.available);
-        str += "\n";
-        
-        str += "Sysman::resid_info_t::propsOnSubdevices : ";
-        str += std::to_string(val.propsOnSubdevices);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_info_t to std::string
-    std::string to_string( const Sysman::resprop_info_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_info_t::property : ";
-        str += to_string(val.property);
-        str += "\n";
-        
-        str += "Sysman::resprop_info_t::resourceType : ";
-        str += to_string(val.resourceType);
-        str += "\n";
-        
-        str += "Sysman::resprop_info_t::pName : ";
-        str += val.pName;
-        str += "\n";
-        
-        str += "Sysman::resprop_info_t::pDesc : ";
-        str += val.pDesc;
-        str += "\n";
-        
-        str += "Sysman::resprop_info_t::support : ";
-        str += to_string(val.support);
-        str += "\n";
-        
-        str += "Sysman::resprop_info_t::access : ";
-        str += to_string(val.access);
-        str += "\n";
-        
-        str += "Sysman::resprop_info_t::minGetInterval : ";
-        str += std::to_string(val.minGetInterval);
-        str += "\n";
-        
-        str += "Sysman::resprop_info_t::minSetInterval : ";
-        str += std::to_string(val.minSetInterval);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::resprop_request_t to std::string
-    std::string to_string( const Sysman::resprop_request_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::resprop_request_t::resource : ";
-        str += to_string(val.resource);
-        str += "\n";
-        
-        str += "Sysman::resprop_request_t::property : ";
-        str += to_string(val.property);
-        str += "\n";
-        
-        str += "Sysman::resprop_request_t::pData : ";
-        {
-            std::stringstream ss;
-            ss << "0x" << std::hex << reinterpret_cast<size_t>(val.pData);
-            str += ss.str();
-        }
-        str += "\n";
-        
-        str += "Sysman::resprop_request_t::size : ";
-        str += std::to_string(val.size);
-        str += "\n";
-        
-        str += "Sysman::resprop_request_t::status : ";
-        str += to_string(val.status);
         str += "\n";
 
         return str;
@@ -3118,23 +4347,6 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::event_support_t to std::string
-    std::string to_string( const Sysman::event_support_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::event_support_t::event : ";
-        str += to_string(val.event);
-        str += "\n";
-        
-        str += "Sysman::event_support_t::supported : ";
-        str += std::to_string(val.supported);
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::event_request_t to std::string
     std::string to_string( const Sysman::event_request_t val )
     {
@@ -3142,10 +4354,6 @@ namespace xet
         
         str += "Sysman::event_request_t::event : ";
         str += to_string(val.event);
-        str += "\n";
-        
-        str += "Sysman::event_request_t::resourceId : ";
-        str += to_string(val.resourceId);
         str += "\n";
         
         str += "Sysman::event_request_t::threshold : ";

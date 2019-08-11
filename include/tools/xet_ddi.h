@@ -601,44 +601,348 @@ typedef xe_result_t (__xecall *xet_pfnSysmanGet_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanGetResourceInfo 
-typedef xe_result_t (__xecall *xet_pfnSysmanGetResourceInfo_t)(
+/// @brief Function-pointer for xetSysmanGetSubdevice 
+typedef xe_result_t (__xecall *xet_pfnSysmanGetSubdevice_t)(
     xet_sysman_handle_t,
     uint32_t,
-    xet_resid_info_t*
+    xet_sysman_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanGetResources 
-typedef xe_result_t (__xecall *xet_pfnSysmanGetResources_t)(
+/// @brief Function-pointer for xetSysmanDeviceGetProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanDeviceGetProperties_t)(
     xet_sysman_handle_t,
-    xet_resource_type_t,
-    uint32_t*,
-    xet_resid_info_t*
+    xet_sysman_properties_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanGetPropertyInfo 
-typedef xe_result_t (__xecall *xet_pfnSysmanGetPropertyInfo_t)(
+/// @brief Function-pointer for xetSysmanDeviceGetOperatingMode 
+typedef xe_result_t (__xecall *xet_pfnSysmanDeviceGetOperatingMode_t)(
     xet_sysman_handle_t,
-    uint32_t,
-    xet_resprop_info_t*
+    xet_operating_mode_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanGetProperties 
-typedef xe_result_t (__xecall *xet_pfnSysmanGetProperties_t)(
+/// @brief Function-pointer for xetSysmanDeviceSetOperatingMode 
+typedef xe_result_t (__xecall *xet_pfnSysmanDeviceSetOperatingMode_t)(
     xet_sysman_handle_t,
-    uint32_t,
-    xet_resprop_request_t*
+    xet_operating_mode_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanSetProperties 
-typedef xe_result_t (__xecall *xet_pfnSysmanSetProperties_t)(
+/// @brief Function-pointer for xetSysmanDeviceReset 
+typedef xe_result_t (__xecall *xet_pfnSysmanDeviceReset_t)(
+    xet_sysman_handle_t
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanPowerGetProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanPowerGetProperties_t)(
+    xet_sysman_handle_t,
+    xet_power_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanPowerGetEnergyCounter 
+typedef xe_result_t (__xecall *xet_pfnSysmanPowerGetEnergyCounter_t)(
+    xet_sysman_handle_t,
+    xet_power_energy_counter_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanPowerGetLimits 
+typedef xe_result_t (__xecall *xet_pfnSysmanPowerGetLimits_t)(
+    xet_sysman_handle_t,
+    xet_power_sustained_limit_t*,
+    xet_power_burst_limit_t*,
+    xet_power_peak_limit_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanPowerSetLimits 
+typedef xe_result_t (__xecall *xet_pfnSysmanPowerSetLimits_t)(
+    xet_sysman_handle_t,
+    const xet_power_sustained_limit_t*,
+    const xet_power_burst_limit_t*,
+    const xet_power_peak_limit_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanFrequencyGetProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanFrequencyGetProperties_t)(
+    xet_sysman_handle_t,
+    xet_freq_domain_t,
+    xet_freq_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanFrequencyGetLimits 
+typedef xe_result_t (__xecall *xet_pfnSysmanFrequencyGetLimits_t)(
+    xet_sysman_handle_t,
+    xet_freq_domain_t,
+    xet_freq_limits_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanFrequencySetLimits 
+typedef xe_result_t (__xecall *xet_pfnSysmanFrequencySetLimits_t)(
+    xet_sysman_handle_t,
+    xet_freq_domain_t,
+    const xet_freq_limits_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanFrequencyGetState 
+typedef xe_result_t (__xecall *xet_pfnSysmanFrequencyGetState_t)(
+    xet_sysman_handle_t,
+    xet_freq_domain_t,
+    xet_freq_state_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanFrequencyGetThrottleTime 
+typedef xe_result_t (__xecall *xet_pfnSysmanFrequencyGetThrottleTime_t)(
+    xet_sysman_handle_t,
+    xet_freq_domain_t,
+    xet_freq_throttle_time_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanActivityGetStats 
+typedef xe_result_t (__xecall *xet_pfnSysmanActivityGetStats_t)(
+    xet_sysman_handle_t,
+    xet_activity_type_t,
+    xet_activity_stats_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanMemoryGetProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanMemoryGetProperties_t)(
+    xet_sysman_handle_t,
+    xet_mem_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanMemoryGetBandwidth 
+typedef xe_result_t (__xecall *xet_pfnSysmanMemoryGetBandwidth_t)(
+    xet_sysman_handle_t,
+    xet_mem_bandwidth_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanMemoryGetAllocated 
+typedef xe_result_t (__xecall *xet_pfnSysmanMemoryGetAllocated_t)(
+    xet_sysman_handle_t,
+    xet_mem_alloc_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanPciGetProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanPciGetProperties_t)(
+    xet_sysman_handle_t,
+    xet_pci_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanPciGetState 
+typedef xe_result_t (__xecall *xet_pfnSysmanPciGetState_t)(
+    xet_sysman_handle_t,
+    xet_pci_state_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanPciGetBarProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanPciGetBarProperties_t)(
     xet_sysman_handle_t,
     uint32_t,
-    xet_resprop_request_t*
+    xet_pci_bar_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanPciGetThroughput 
+typedef xe_result_t (__xecall *xet_pfnSysmanPciGetThroughput_t)(
+    xet_sysman_handle_t,
+    xet_pci_throughput_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanPciGetStats 
+typedef xe_result_t (__xecall *xet_pfnSysmanPciGetStats_t)(
+    xet_sysman_handle_t,
+    xet_pci_stats_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanSwitchGetProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanSwitchGetProperties_t)(
+    xet_sysman_handle_t,
+    xet_switch_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanSwitchGetState 
+typedef xe_result_t (__xecall *xet_pfnSysmanSwitchGetState_t)(
+    xet_sysman_handle_t,
+    xet_switch_state_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanSwitchSetState 
+typedef xe_result_t (__xecall *xet_pfnSysmanSwitchSetState_t)(
+    xet_sysman_handle_t,
+    xe_bool_t
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanSwitchPortGetProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanSwitchPortGetProperties_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_switch_port_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanSwitchPortGetState 
+typedef xe_result_t (__xecall *xet_pfnSysmanSwitchPortGetState_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_switch_port_state_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanSwitchPortGetThroughput 
+typedef xe_result_t (__xecall *xet_pfnSysmanSwitchPortGetThroughput_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_switch_port_throughput_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanSwitchPortGetStats 
+typedef xe_result_t (__xecall *xet_pfnSysmanSwitchPortGetStats_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_switch_port_stats_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanTemperatureGet 
+typedef xe_result_t (__xecall *xet_pfnSysmanTemperatureGet_t)(
+    xet_sysman_handle_t,
+    xet_temp_sensors_t,
+    uint32_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanStandbyGetMode 
+typedef xe_result_t (__xecall *xet_pfnSysmanStandbyGetMode_t)(
+    xet_sysman_handle_t,
+    xet_stby_promo_mode_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanStandbySetMode 
+typedef xe_result_t (__xecall *xet_pfnSysmanStandbySetMode_t)(
+    xet_sysman_handle_t,
+    xet_stby_promo_mode_t
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanFirmwareGetProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanFirmwareGetProperties_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_firmware_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanFirmwareGetChecksum 
+typedef xe_result_t (__xecall *xet_pfnSysmanFirmwareGetChecksum_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    uint32_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanFirmwareFlash 
+typedef xe_result_t (__xecall *xet_pfnSysmanFirmwareFlash_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    void*,
+    uint32_t
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanPsuGetProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanPsuGetProperties_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_psu_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanPsuGetState 
+typedef xe_result_t (__xecall *xet_pfnSysmanPsuGetState_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_psu_state_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanFanGetProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanFanGetProperties_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_fan_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanFanGetConfig 
+typedef xe_result_t (__xecall *xet_pfnSysmanFanGetConfig_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_fan_config_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanFanSetConfig 
+typedef xe_result_t (__xecall *xet_pfnSysmanFanSetConfig_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    const xet_fan_config_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanFanGetState 
+typedef xe_result_t (__xecall *xet_pfnSysmanFanGetState_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_fan_speed_units_t,
+    xet_fan_state_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanLedGetProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanLedGetProperties_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_led_properties_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanLedGetState 
+typedef xe_result_t (__xecall *xet_pfnSysmanLedGetState_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    xet_led_state_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanLedSetState 
+typedef xe_result_t (__xecall *xet_pfnSysmanLedSetState_t)(
+    xet_sysman_handle_t,
+    uint32_t,
+    const xet_led_state_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -659,32 +963,24 @@ typedef xe_result_t (__xecall *xet_pfnSysmanRasGetErrors_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanSupportedEvents 
-typedef xe_result_t (__xecall *xet_pfnSysmanSupportedEvents_t)(
-    xet_sysman_handle_t,
-    uint32_t,
-    xet_event_support_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanRegisterEvents 
-typedef xe_result_t (__xecall *xet_pfnSysmanRegisterEvents_t)(
+/// @brief Function-pointer for xetSysmanEventsRegister 
+typedef xe_result_t (__xecall *xet_pfnSysmanEventsRegister_t)(
     xet_sysman_handle_t,
     uint32_t,
     xet_event_request_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanUnregisterEvents 
-typedef xe_result_t (__xecall *xet_pfnSysmanUnregisterEvents_t)(
+/// @brief Function-pointer for xetSysmanEventsUnregister 
+typedef xe_result_t (__xecall *xet_pfnSysmanEventsUnregister_t)(
     xet_sysman_handle_t,
     uint32_t,
     xet_event_request_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanGetEvents 
-typedef xe_result_t (__xecall *xet_pfnSysmanGetEvents_t)(
+/// @brief Function-pointer for xetSysmanEventsListen 
+typedef xe_result_t (__xecall *xet_pfnSysmanEventsListen_t)(
     xet_sysman_handle_t,
     xe_bool_t,
     uint32_t,
@@ -692,16 +988,16 @@ typedef xe_result_t (__xecall *xet_pfnSysmanGetEvents_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanGetDiagnosticTests 
-typedef xe_result_t (__xecall *xet_pfnSysmanGetDiagnosticTests_t)(
+/// @brief Function-pointer for xetSysmanDiagnosticsGetTestList 
+typedef xe_result_t (__xecall *xet_pfnSysmanDiagnosticsGetTestList_t)(
     xet_sysman_handle_t,
     xet_diag_type_t,
     const xet_diag_test_list_t**
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanRunDiagnosticTests 
-typedef xe_result_t (__xecall *xet_pfnSysmanRunDiagnosticTests_t)(
+/// @brief Function-pointer for xetSysmanDiagnosticsRunTests 
+typedef xe_result_t (__xecall *xet_pfnSysmanDiagnosticsRunTests_t)(
     xet_sysman_handle_t,
     xet_diag_type_t,
     uint32_t,
@@ -710,30 +1006,62 @@ typedef xe_result_t (__xecall *xet_pfnSysmanRunDiagnosticTests_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanDeviceReset 
-typedef xe_result_t (__xecall *xet_pfnSysmanDeviceReset_t)(
-    xet_sysman_handle_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Sysman functions pointers
 typedef struct _xet_sysman_dditable_t
 {
     xet_pfnSysmanGet_t                                          pfnGet;
-    xet_pfnSysmanGetResourceInfo_t                              pfnGetResourceInfo;
-    xet_pfnSysmanGetResources_t                                 pfnGetResources;
-    xet_pfnSysmanGetPropertyInfo_t                              pfnGetPropertyInfo;
-    xet_pfnSysmanGetProperties_t                                pfnGetProperties;
-    xet_pfnSysmanSetProperties_t                                pfnSetProperties;
+    xet_pfnSysmanGetSubdevice_t                                 pfnGetSubdevice;
+    xet_pfnSysmanDeviceGetProperties_t                          pfnDeviceGetProperties;
+    xet_pfnSysmanDeviceGetOperatingMode_t                       pfnDeviceGetOperatingMode;
+    xet_pfnSysmanDeviceSetOperatingMode_t                       pfnDeviceSetOperatingMode;
+    xet_pfnSysmanDeviceReset_t                                  pfnDeviceReset;
+    xet_pfnSysmanPowerGetProperties_t                           pfnPowerGetProperties;
+    xet_pfnSysmanPowerGetEnergyCounter_t                        pfnPowerGetEnergyCounter;
+    xet_pfnSysmanPowerGetLimits_t                               pfnPowerGetLimits;
+    xet_pfnSysmanPowerSetLimits_t                               pfnPowerSetLimits;
+    xet_pfnSysmanFrequencyGetProperties_t                       pfnFrequencyGetProperties;
+    xet_pfnSysmanFrequencyGetLimits_t                           pfnFrequencyGetLimits;
+    xet_pfnSysmanFrequencySetLimits_t                           pfnFrequencySetLimits;
+    xet_pfnSysmanFrequencyGetState_t                            pfnFrequencyGetState;
+    xet_pfnSysmanFrequencyGetThrottleTime_t                     pfnFrequencyGetThrottleTime;
+    xet_pfnSysmanActivityGetStats_t                             pfnActivityGetStats;
+    xet_pfnSysmanMemoryGetProperties_t                          pfnMemoryGetProperties;
+    xet_pfnSysmanMemoryGetBandwidth_t                           pfnMemoryGetBandwidth;
+    xet_pfnSysmanMemoryGetAllocated_t                           pfnMemoryGetAllocated;
+    xet_pfnSysmanPciGetProperties_t                             pfnPciGetProperties;
+    xet_pfnSysmanPciGetState_t                                  pfnPciGetState;
+    xet_pfnSysmanPciGetBarProperties_t                          pfnPciGetBarProperties;
+    xet_pfnSysmanPciGetThroughput_t                             pfnPciGetThroughput;
+    xet_pfnSysmanPciGetStats_t                                  pfnPciGetStats;
+    xet_pfnSysmanSwitchGetProperties_t                          pfnSwitchGetProperties;
+    xet_pfnSysmanSwitchGetState_t                               pfnSwitchGetState;
+    xet_pfnSysmanSwitchSetState_t                               pfnSwitchSetState;
+    xet_pfnSysmanSwitchPortGetProperties_t                      pfnSwitchPortGetProperties;
+    xet_pfnSysmanSwitchPortGetState_t                           pfnSwitchPortGetState;
+    xet_pfnSysmanSwitchPortGetThroughput_t                      pfnSwitchPortGetThroughput;
+    xet_pfnSysmanSwitchPortGetStats_t                           pfnSwitchPortGetStats;
+    xet_pfnSysmanTemperatureGet_t                               pfnTemperatureGet;
+    xet_pfnSysmanStandbyGetMode_t                               pfnStandbyGetMode;
+    xet_pfnSysmanStandbySetMode_t                               pfnStandbySetMode;
+    xet_pfnSysmanFirmwareGetProperties_t                        pfnFirmwareGetProperties;
+    xet_pfnSysmanFirmwareGetChecksum_t                          pfnFirmwareGetChecksum;
+    xet_pfnSysmanFirmwareFlash_t                                pfnFirmwareFlash;
+    xet_pfnSysmanPsuGetProperties_t                             pfnPsuGetProperties;
+    xet_pfnSysmanPsuGetState_t                                  pfnPsuGetState;
+    xet_pfnSysmanFanGetProperties_t                             pfnFanGetProperties;
+    xet_pfnSysmanFanGetConfig_t                                 pfnFanGetConfig;
+    xet_pfnSysmanFanSetConfig_t                                 pfnFanSetConfig;
+    xet_pfnSysmanFanGetState_t                                  pfnFanGetState;
+    xet_pfnSysmanLedGetProperties_t                             pfnLedGetProperties;
+    xet_pfnSysmanLedGetState_t                                  pfnLedGetState;
+    xet_pfnSysmanLedSetState_t                                  pfnLedSetState;
     xet_pfnSysmanRasGetProperties_t                             pfnRasGetProperties;
     xet_pfnSysmanRasGetErrors_t                                 pfnRasGetErrors;
-    xet_pfnSysmanSupportedEvents_t                              pfnSupportedEvents;
-    xet_pfnSysmanRegisterEvents_t                               pfnRegisterEvents;
-    xet_pfnSysmanUnregisterEvents_t                             pfnUnregisterEvents;
-    xet_pfnSysmanGetEvents_t                                    pfnGetEvents;
-    xet_pfnSysmanGetDiagnosticTests_t                           pfnGetDiagnosticTests;
-    xet_pfnSysmanRunDiagnosticTests_t                           pfnRunDiagnosticTests;
-    xet_pfnSysmanDeviceReset_t                                  pfnDeviceReset;
+    xet_pfnSysmanEventsRegister_t                               pfnEventsRegister;
+    xet_pfnSysmanEventsUnregister_t                             pfnEventsUnregister;
+    xet_pfnSysmanEventsListen_t                                 pfnEventsListen;
+    xet_pfnSysmanDiagnosticsGetTestList_t                       pfnDiagnosticsGetTestList;
+    xet_pfnSysmanDiagnosticsRunTests_t                          pfnDiagnosticsRunTests;
 } xet_sysman_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////

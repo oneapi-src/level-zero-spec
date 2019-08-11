@@ -107,248 +107,152 @@ typedef struct _xet_profile_free_register_token_t xet_profile_free_register_toke
 typedef struct _xet_profile_register_sequence_t xet_profile_register_sequence_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_pci_bar_info_t
-typedef struct _xet_pci_bar_info_t xet_pci_bar_info_t;
+/// @brief Forward-declare xet_sysman_properties_t
+typedef struct _xet_sysman_properties_t xet_sysman_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_dev_serial_number_t
-typedef struct _xet_resprop_dev_serial_number_t xet_resprop_dev_serial_number_t;
+/// @brief Forward-declare xet_power_properties_t
+typedef struct _xet_power_properties_t xet_power_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_dev_board_number_t
-typedef struct _xet_resprop_dev_board_number_t xet_resprop_dev_board_number_t;
+/// @brief Forward-declare xet_power_energy_counter_t
+typedef struct _xet_power_energy_counter_t xet_power_energy_counter_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_dev_brand_t
-typedef struct _xet_resprop_dev_brand_t xet_resprop_dev_brand_t;
+/// @brief Forward-declare xet_power_sustained_limit_t
+typedef struct _xet_power_sustained_limit_t xet_power_sustained_limit_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_dev_model_t
-typedef struct _xet_resprop_dev_model_t xet_resprop_dev_model_t;
+/// @brief Forward-declare xet_power_burst_limit_t
+typedef struct _xet_power_burst_limit_t xet_power_burst_limit_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_dev_deviceid_t
-typedef struct _xet_resprop_dev_deviceid_t xet_resprop_dev_deviceid_t;
+/// @brief Forward-declare xet_power_peak_limit_t
+typedef struct _xet_power_peak_limit_t xet_power_peak_limit_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_dev_vendor_name_t
-typedef struct _xet_resprop_dev_vendor_name_t xet_resprop_dev_vendor_name_t;
+/// @brief Forward-declare xet_freq_properties_t
+typedef struct _xet_freq_properties_t xet_freq_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_dev_driver_version_t
-typedef struct _xet_resprop_dev_driver_version_t xet_resprop_dev_driver_version_t;
+/// @brief Forward-declare xet_freq_limits_t
+typedef struct _xet_freq_limits_t xet_freq_limits_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_dev_bars_t
-typedef struct _xet_resprop_dev_bars_t xet_resprop_dev_bars_t;
+/// @brief Forward-declare xet_freq_state_t
+typedef struct _xet_freq_state_t xet_freq_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_dev_uuid_t
-typedef struct _xet_resprop_dev_uuid_t xet_resprop_dev_uuid_t;
+/// @brief Forward-declare xet_freq_throttle_time_t
+typedef struct _xet_freq_throttle_time_t xet_freq_throttle_time_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_pwr_max_limit_t
-typedef struct _xet_resprop_pwr_max_limit_t xet_resprop_pwr_max_limit_t;
+/// @brief Forward-declare xet_activity_stats_t
+typedef struct _xet_activity_stats_t xet_activity_stats_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_pwr_energy_counter_t
-typedef struct _xet_resprop_pwr_energy_counter_t xet_resprop_pwr_energy_counter_t;
+/// @brief Forward-declare xet_mem_properties_t
+typedef struct _xet_mem_properties_t xet_mem_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_pwr_sustained_limit_t
-typedef struct _xet_resprop_pwr_sustained_limit_t xet_resprop_pwr_sustained_limit_t;
+/// @brief Forward-declare xet_mem_bandwidth_t
+typedef struct _xet_mem_bandwidth_t xet_mem_bandwidth_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_pwr_burst_limit_t
-typedef struct _xet_resprop_pwr_burst_limit_t xet_resprop_pwr_burst_limit_t;
+/// @brief Forward-declare xet_mem_alloc_t
+typedef struct _xet_mem_alloc_t xet_mem_alloc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_pwr_peak_limit_t
-typedef struct _xet_resprop_pwr_peak_limit_t xet_resprop_pwr_peak_limit_t;
+/// @brief Forward-declare xet_pci_address_t
+typedef struct _xet_pci_address_t xet_pci_address_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_freq_avail_clocks_t
-typedef struct _xet_resprop_freq_avail_clocks_t xet_resprop_freq_avail_clocks_t;
+/// @brief Forward-declare xet_pci_speed_t
+typedef struct _xet_pci_speed_t xet_pci_speed_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_freq_range_t
-typedef struct _xet_resprop_freq_range_t xet_resprop_freq_range_t;
+/// @brief Forward-declare xet_pci_properties_t
+typedef struct _xet_pci_properties_t xet_pci_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_freq_requested_freq_t
-typedef struct _xet_resprop_freq_requested_freq_t xet_resprop_freq_requested_freq_t;
+/// @brief Forward-declare xet_pci_state_t
+typedef struct _xet_pci_state_t xet_pci_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_freq_tdp_freq_t
-typedef struct _xet_resprop_freq_tdp_freq_t xet_resprop_freq_tdp_freq_t;
+/// @brief Forward-declare xet_pci_bar_properties_t
+typedef struct _xet_pci_bar_properties_t xet_pci_bar_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_freq_efficient_freq_t
-typedef struct _xet_resprop_freq_efficient_freq_t xet_resprop_freq_efficient_freq_t;
+/// @brief Forward-declare xet_pci_throughput_t
+typedef struct _xet_pci_throughput_t xet_pci_throughput_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_freq_resolved_freq_t
-typedef struct _xet_resprop_freq_resolved_freq_t xet_resprop_freq_resolved_freq_t;
+/// @brief Forward-declare xet_pci_stats_t
+typedef struct _xet_pci_stats_t xet_pci_stats_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_freq_throttle_reasons_t
-typedef struct _xet_resprop_freq_throttle_reasons_t xet_resprop_freq_throttle_reasons_t;
+/// @brief Forward-declare xet_switch_address_t
+typedef struct _xet_switch_address_t xet_switch_address_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_freq_throttle_time_t
-typedef struct _xet_resprop_freq_throttle_time_t xet_resprop_freq_throttle_time_t;
+/// @brief Forward-declare xet_switch_properties_t
+typedef struct _xet_switch_properties_t xet_switch_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_util_counters_t
-typedef struct _xet_resprop_util_counters_t xet_resprop_util_counters_t;
+/// @brief Forward-declare xet_switch_state_t
+typedef struct _xet_switch_state_t xet_switch_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_mem_type_t
-typedef struct _xet_resprop_mem_type_t xet_resprop_mem_type_t;
+/// @brief Forward-declare xet_switch_port_properties_t
+typedef struct _xet_switch_port_properties_t xet_switch_port_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_mem_utilization_t
-typedef struct _xet_resprop_mem_utilization_t xet_resprop_mem_utilization_t;
+/// @brief Forward-declare xet_switch_port_state_t
+typedef struct _xet_switch_port_state_t xet_switch_port_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_mem_bandwidth_t
-typedef struct _xet_resprop_mem_bandwidth_t xet_resprop_mem_bandwidth_t;
+/// @brief Forward-declare xet_switch_port_throughput_t
+typedef struct _xet_switch_port_throughput_t xet_switch_port_throughput_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_link_speed_t
-typedef struct _xet_link_speed_t xet_link_speed_t;
+/// @brief Forward-declare xet_switch_port_stats_t
+typedef struct _xet_switch_port_stats_t xet_switch_port_stats_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_link_type_t
-typedef struct _xet_resprop_link_type_t xet_resprop_link_type_t;
+/// @brief Forward-declare xet_firmware_properties_t
+typedef struct _xet_firmware_properties_t xet_firmware_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_link_bus_address_t
-typedef struct _xet_resprop_link_bus_address_t xet_resprop_link_bus_address_t;
+/// @brief Forward-declare xet_psu_properties_t
+typedef struct _xet_psu_properties_t xet_psu_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_link_peer_device_t
-typedef struct _xet_resprop_link_peer_device_t xet_resprop_link_peer_device_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_link_avail_speeds_t
-typedef struct _xet_resprop_link_avail_speeds_t xet_resprop_link_avail_speeds_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_link_state_t
-typedef struct _xet_resprop_link_state_t xet_resprop_link_state_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_link_max_packet_size_t
-typedef struct _xet_resprop_link_max_packet_size_t xet_resprop_link_max_packet_size_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_link_bandwidth_t
-typedef struct _xet_resprop_link_bandwidth_t xet_resprop_link_bandwidth_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_link_speed_t
-typedef struct _xet_resprop_link_speed_t xet_resprop_link_speed_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_link_speed_range_t
-typedef struct _xet_resprop_link_speed_range_t xet_resprop_link_speed_range_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_temp_temperature_t
-typedef struct _xet_resprop_temp_temperature_t xet_resprop_temp_temperature_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_stby_promo_mode_t
-typedef struct _xet_resprop_stby_promo_mode_t xet_resprop_stby_promo_mode_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_fw_name_t
-typedef struct _xet_resprop_fw_name_t xet_resprop_fw_name_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_fw_version_t
-typedef struct _xet_resprop_fw_version_t xet_resprop_fw_version_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_fw_check_t
-typedef struct _xet_resprop_fw_check_t xet_resprop_fw_check_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_fw_flash_t
-typedef struct _xet_resprop_fw_flash_t xet_resprop_fw_flash_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_psu_amp_limit_t
-typedef struct _xet_resprop_psu_amp_limit_t xet_resprop_psu_amp_limit_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_psu_voltage_status_t
-typedef struct _xet_resprop_psu_voltage_status_t xet_resprop_psu_voltage_status_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_psu_fan_failure_t
-typedef struct _xet_resprop_psu_fan_failure_t xet_resprop_psu_fan_failure_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_psu_temperature_t
-typedef struct _xet_resprop_psu_temperature_t xet_resprop_psu_temperature_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_psu_amps_t
-typedef struct _xet_resprop_psu_amps_t xet_resprop_psu_amps_t;
+/// @brief Forward-declare xet_psu_state_t
+typedef struct _xet_psu_state_t xet_psu_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_fan_temp_speed_t
 typedef struct _xet_fan_temp_speed_t xet_fan_temp_speed_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_fan_max_rpm_t
-typedef struct _xet_resprop_fan_max_rpm_t xet_resprop_fan_max_rpm_t;
+/// @brief Forward-declare xet_fan_properties_t
+typedef struct _xet_fan_properties_t xet_fan_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_fan_max_table_size_t
-typedef struct _xet_resprop_fan_max_table_size_t xet_resprop_fan_max_table_size_t;
+/// @brief Forward-declare xet_fan_config_t
+typedef struct _xet_fan_config_t xet_fan_config_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_fan_speed_rpm_t
-typedef struct _xet_resprop_fan_speed_rpm_t xet_resprop_fan_speed_rpm_t;
+/// @brief Forward-declare xet_fan_state_t
+typedef struct _xet_fan_state_t xet_fan_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_fan_speed_percent_t
-typedef struct _xet_resprop_fan_speed_percent_t xet_resprop_fan_speed_percent_t;
+/// @brief Forward-declare xet_led_properties_t
+typedef struct _xet_led_properties_t xet_led_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_fan_mode_t
-typedef struct _xet_resprop_fan_mode_t xet_resprop_fan_mode_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_fan_fixed_speed_t
-typedef struct _xet_resprop_fan_fixed_speed_t xet_resprop_fan_fixed_speed_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_fan_speed_table_t
-typedef struct _xet_resprop_fan_speed_table_t xet_resprop_fan_speed_table_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_led_rgb_cap_t
-typedef struct _xet_resprop_led_rgb_cap_t xet_resprop_led_rgb_cap_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_led_state_t
-typedef struct _xet_resprop_led_state_t xet_resprop_led_state_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resid_info_t
-typedef struct _xet_resid_info_t xet_resid_info_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_info_t
-typedef struct _xet_resprop_info_t xet_resprop_info_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_resprop_request_t
-typedef struct _xet_resprop_request_t xet_resprop_request_t;
+/// @brief Forward-declare xet_led_state_t
+typedef struct _xet_led_state_t xet_led_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_ras_properties_t
@@ -357,10 +261,6 @@ typedef struct _xet_ras_properties_t xet_ras_properties_t;
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_ras_details_t
 typedef struct _xet_ras_details_t xet_ras_details_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_event_support_t
-typedef struct _xet_event_support_t xet_event_support_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_event_request_t

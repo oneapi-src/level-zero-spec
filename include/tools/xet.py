@@ -342,356 +342,102 @@ class xet_sysman_version_t(c_int):
 
 
 ###############################################################################
-## @brief Resource types
-class xet_resource_type_v(IntEnum):
-    DEV = 0x0                                       ## Inventory resource
-    PWR = 0x1                                       ## Power domain resource
-    FREQ = 0x2                                      ## Frequency domain resource
-    UTIL = 0x3                                      ## Resource used to monitor GPU utilization
-    MEM = 0x4                                       ## Memory resource
-    LINK = 0x5                                      ## Link resource
-    TEMP = 0x6                                      ## Temperature sensor resource
-    STBY = 0x7                                      ## Resource used to control standby mode
-    FW = 0x8                                        ## Firmware resource
-    PSU = 0x9                                       ## PSU resource
-    FAN = 0xA                                       ## Fan resource
-    LED = 0xB                                       ## LED resource
-    ANY = -1                                        ## Any resource filter
-
-class xet_resource_type_t(c_int):
-    def __str__(self):
-        return str(xet_resource_type_v(value))
-
-
-###############################################################################
-## @brief Resource ID
-## 
-## @details
-##     - Every resource in the system has a unique identify.
-##     - Resource IDs will always have the same value between versions of the
-##       API.
-##     - Never assume that resources of the same type have numerically
-##       sequential values.
-##     - The resource ID has the resource type (::xet_resource_type_t) in the
-##       upper 16 bits.
-class xet_resid_v(IntEnum):
-    DEV_INVENTORY = 0                               ## General device inventory
-    PWR_TOTAL = 0x10000                             ## Device total power
-    FREQ_GPU = 0x20000                              ## GPU frequency
-    FREQ_LOCAL_MEM = 0x20001                        ## Local memory frequency
-    UTIL_GPU = 0x30000                              ## Utilization of the entire GPU
-    UTIL_COMPUTE = 0x30001                          ## Utilization of the compute/3D units
-    UTIL_MEDIA = 0x30002                            ## Utilization of the media units
-    UTIL_VIDEO_DECODE = 0x30003                     ## Utilization of the video decode units
-    UTIL_VIDEO_ENCODE = 0x30004                     ## Utilization of the video encode units
-    MEM_LOCAL = 0x40000                             ## Local GPU memory
-    LINK_PCIE = 0x50000                             ## PCIe link
-    LINK_CD_PORT1 = 0x50001                         ## High speed companion die switch port 1
-    LINK_CD_PORT2 = 0x50002                         ## High speed companion die switch port 2
-    LINK_CD_PORT3 = 0x50003                         ## High speed companion die switch port 3
-    LINK_CD_PORT4 = 0x50004                         ## High speed companion die switch port 4
-    LINK_CD_PORT5 = 0x50005                         ## High speed companion die switch port 5
-    LINK_CD_PORT6 = 0x50006                         ## High speed companion die switch port 6
-    LINK_CD_PORT7 = 0x50007                         ## High speed companion die switch port 7
-    LINK_CD_PORT8 = 0x50008                         ## High speed companion die switch port 8
-    LINK_CD_PORT9 = 0x50009                         ## High speed companion die switch port 9
-    LINK_CD_PORT10 = 0x5000A                        ## High speed companion die switch port 10
-    LINK_CD_PORT11 = 0x5000B                        ## High speed companion die switch port 11
-    LINK_CD_PORT12 = 0x5000C                        ## High speed companion die switch port 12
-    LINK_CD_PORT13 = 0x5000D                        ## High speed companion die switch port 13
-    LINK_CD_PORT14 = 0x5000E                        ## High speed companion die switch port 14
-    LINK_CD_PORT15 = 0x5000F                        ## High speed companion die switch port 15
-    LINK_CD_PORT16 = 0x50010                        ## High speed companion die switch port 16
-    TEMP_MAX = 0x60000                              ## The maximum temperature reported by the sensors in the device
-    TEMP_GPU = 0x60001                              ## The maximum temperature reported by the sensors in the GPU component
-                                                    ## of the device
-    TEMP_LOCAL_MEM = 0x60002                        ## The maximum temperature reported by the sensors in the local memory of
-                                                    ## device
-    STBY_GLOBAL = 0x70000                           ## Control sleep promotion of the entire device
-    FW_1 = 0x80001                                  ## Firmware 1
-    FW_2 = 0x80002                                  ## Firmware 2
-    FW_3 = 0x80003                                  ## Firmware 3
-    FW_4 = 0x80004                                  ## Firmware 4
-    FW_5 = 0x80005                                  ## Firmware 5
-    FW_6 = 0x80006                                  ## Firmware 6
-    FW_7 = 0x80007                                  ## Firmware 7
-    FW_8 = 0x80008                                  ## Firmware 8
-    FW_9 = 0x80009                                  ## Firmware 9
-    FW_10 = 0x8000A                                 ## Firmware 10
-    FW_11 = 0x8000B                                 ## Firmware 11
-    FW_12 = 0x8000C                                 ## Firmware 12
-    FW_13 = 0x8000D                                 ## Firmware 13
-    FW_14 = 0x8000E                                 ## Firmware 14
-    FW_15 = 0x8000F                                 ## Firmware 15
-    FW_16 = 0x80010                                 ## Firmware 16
-    FW_17 = 0x80011                                 ## Firmware 17
-    FW_18 = 0x80012                                 ## Firmware 18
-    FW_19 = 0x80013                                 ## Firmware 19
-    FW_20 = 0x80014                                 ## Firmware 20
-    PSU_MAIN = 0x90000                              ## Primary power supply
-    PSU_AUX = 0x90001                               ## Auxilary power supply
-    PSU_1 = 0x90002                                 ## Power supply 1
-    PSU_2 = 0x90003                                 ## Power supply 2
-    FAN_MAIN = 0xA0000                              ## The main fan
-    FAN_1 = 0xA0001                                 ## Fan 1
-    FAN_2 = 0xA0002                                 ## Fan 2
-    FAN_3 = 0xA0003                                 ## Fan 3
-    LED_MAIN = 0xB0000                              ## The main LED
-    LED_1 = 0xB0001                                 ## LED 1
-    LED_2 = 0xB0002                                 ## LED 1
-    LED_3 = 0xB0003                                 ## LED 1
-    ANY = -1                                        ## Any resource ID
-
-class xet_resid_t(c_int):
-    def __str__(self):
-        return str(xet_resid_v(value))
-
-
-###############################################################################
-## @brief Resource properties
-## 
-## @details
-##     - For every property, there is a corresponding structure used to hold
-##       the property data. The type of the data structure is derived from the
-##       property enumerator, converted to lower-case with '_t' appended.
-##     - Properties can be either read-only (ro), write-only (wo) or read-write
-##       (rw).
-##     - Properties can be either static or dynamic. Static properties are set
-##       during initialization and will not change during the lifetime of the
-##       application. Dynamic properties can change at any time and should be
-##       reread.
-class xet_resprop_v(IntEnum):
-    DEV_SERIAL_NUMBER = 0x00000                     ## (ro static) The serial number of the device (data:
-                                                    ## ::xet_resprop_dev_serial_number_t)
-    DEV_BOARD_NUMBER = 0x00001                      ## (ro static) The board number of the device (data:
-                                                    ## ::xet_resprop_dev_board_number_t)
-    DEV_BRAND = 0x00002                             ## (ro static) The brand name of the device (data:
-                                                    ## ::xet_resprop_dev_brand_t)
-    DEV_MODEL = 0x00003                             ## (ro static) The model name of the device (data:
-                                                    ## ::xet_resprop_dev_model_t)
-    DEV_DEVICEID = 0x00004                          ## (ro static) The device ID of the device (data:
-                                                    ## ::xet_resprop_dev_deviceid_t)
-    DEV_VENDOR_NAME = 0x00005                       ## (ro static) The vendor name of the device (data:
-                                                    ## ::xet_resprop_dev_vendor_name_t)
-    DEV_DRIVER_VERSION = 0x00006                    ## (ro static) The driver version associated with the device (data:
-                                                    ## ::xet_resprop_dev_driver_version_t)
-    DEV_BARS = 0x00007                              ## (ro static) The bars configured for the device (data:
-                                                    ## ::xet_resprop_dev_bars_t)
-    DEV_UUID = 0x00008                              ## (ro static) Universal Unique ID for the device (data:
-                                                    ## ::xet_resprop_dev_uuid_t)
-    PWR_MAX_LIMIT = 0x10000                         ## (ro static) The maximum power limit that can be requested (data:
-                                                    ## ::xet_resprop_pwr_max_limit_t)
-    PWR_ENERGY_COUNTER = 0x10001                    ## (ro dynamic) The value of the monotonic energy counter (data:
-                                                    ## ::xet_resprop_pwr_energy_counter_t)
-    PWR_SUSTAINED_LIMIT = 0x10002                   ## (rw dynamic) The sustained power limit (data:
-                                                    ## ::xet_resprop_pwr_sustained_limit_t)
-    PWR_BURST_LIMIT = 0x10003                       ## (rw dynamic) The burst power limit (data:
-                                                    ## ::xet_resprop_pwr_burst_limit_t)
-    PWR_PEAK_LIMIT = 0x10004                        ## (rw dynamic) The peak power limit (data:
-                                                    ## ::xet_resprop_pwr_peak_limit_t)
-    FREQ_AVAIL_CLOCKS = 0x20000                     ## (ro static) Available frequency clocks that this domain can run at
-                                                    ## (data: ::xet_resprop_freq_avail_clocks_t)
-    FREQ_RANGE = 0x20001                            ## (rw dynamic) The current frequency range (data:
-                                                    ## ::xet_resprop_freq_range_t)
-    FREQ_REQUESTED_FREQ = 0x20002                   ## (ro dynamic) The current frequency request (data:
-                                                    ## ::xet_resprop_freq_requested_freq_t)
-    FREQ_TDP_FREQ = 0x20003                         ## (ro dynamic) The maximum frequency supported under the current TDP
-                                                    ## conditions (data: ::xet_resprop_freq_tdp_freq_t)
-    FREQ_EFFICIENT_FREQ = 0x20004                   ## (ro dynamic) The efficient minimum frequency (data:
-                                                    ## ::xet_resprop_freq_efficient_freq_t)
-    FREQ_RESOLVED_FREQ = 0x20005                    ## (ro dynamic) The resolved frequency (data:
-                                                    ## ::xet_resprop_freq_resolved_freq_t)
-    FREQ_THROTTLE_REASONS = 0x20006                 ## (ro dynamic) The reasons that the frequency is being limited by the
-                                                    ## PCU (data: ::xet_resprop_freq_throttle_reasons_t)
-    FREQ_THROTTLE_TIME = 0x20007                    ## (ro dynamic) The total time that the frequency has been limited by the
-                                                    ## PCU (data: ::xet_resprop_freq_throttle_time_t)
-    UTIL_COUNTERS = 0x30000                         ## (ro dynamic) The total wall time this resource is active (data:
-                                                    ## ::xet_resprop_util_counters_t)
-    MEM_TYPE = 0x40000                              ## (ro static) The type of memory covered by this resource (data:
-                                                    ## ::xet_resprop_mem_type_t)
-    MEM_UTILIZATION = 0x40001                       ## (ro dynamic) Get current allocated/unallocated size (data:
-                                                    ## ::xet_resprop_mem_utilization_t)
-    MEM_BANDWIDTH = 0x40002                         ## (ro dynamic) Get current read/write bandwidth counters and maximum
-                                                    ## bandwidth (data: ::xet_resprop_mem_bandwidth_t)
-    LINK_TYPE = 0x50000                             ## (ro static) The type of link (data: ::xet_resprop_link_type_t)
-    LINK_BUS_ADDRESS = 0x50001                      ## (ro static) The bus address of the link (data:
-                                                    ## ::xet_resprop_link_bus_address_t)
-    LINK_PEER_DEVICE = 0x50002                      ## (ro static) For links of type ::XET_LINK_TYPE_CD_PORT, this gives the
-                                                    ## UUID of the peer device (data: ::xet_resprop_link_peer_device_t)
-    LINK_AVAIL_SPEEDS = 0x50003                     ## (ro static) Available link speeds (data:
-                                                    ## ::xet_resprop_link_avail_speeds_t)
-    LINK_MAX_PACKET_SIZE = 0x50004                  ## (ro static) Maximum packet size (data:
-                                                    ## ::xet_resprop_link_max_packet_size_t)
-    LINK_STATE = 0x50005                            ## (rw dynamic) Link state (enabled/disabled) (data:
-                                                    ## ::xet_resprop_link_state_t)
-    LINK_BANDWIDTH = 0x50006                        ## (ro dynamic) Monotonic bandwidth counters (data:
-                                                    ## ::xet_resprop_link_bandwidth_t)
-    LINK_SPEED = 0x50007                            ## (ro dynamic) Current link speed (data: ::xet_resprop_link_speed_t)
-    LINK_SPEED_RANGE = 0x50008                      ## (wo dynamic) Set the min/max speeds between which the link can operate
-                                                    ## (data: ::xet_resprop_link_speed_range_t)
-    TEMP_TEMPERATURE = 0x60000                      ## (ro dynamic) The current temperature of the sensor in degrees celcius
-                                                    ## (data: ::xet_resprop_temp_temperature_t)
-    STBY_PROMO_MODE = 0x70000                       ## (rw dynamic) The current promotion mode (data:
-                                                    ## ::xet_resprop_stby_promo_mode_t)
-    FW_NAME = 0x80000                               ## (ro static) Name encoded in the loaded firmware image (data:
-                                                    ## ::xet_resprop_fw_name_t)
-    FW_VERSION = 0x80001                            ## (ro static) The version of the loaded firmware image (data:
-                                                    ## ::xet_resprop_fw_version_t)
-    FW_CHECK = 0x80002                              ## (ro dynamic) Verify the checksum of the loaded firmware image (data:
-                                                    ## ::xet_resprop_fw_check_t)
-    FW_FLASH = 0x80003                              ## (wo dynamically) Flash a new firmware image (data:
-                                                    ## ::xet_resprop_fw_flash_t)
-    PSU_AMP_LIMIT = 0x90000                         ## (ro static) The maximum electrical current in amperes that can be
-                                                    ## drawn (data: ::xet_resprop_psu_amp_limit_t)
-    PSU_VOLTAGE_STATUS = 0x90001                    ## (ro dynamic) Indicates if under or over voltage has occurred (data:
-                                                    ## ::xet_resprop_psu_voltage_status_t)
-    PSU_FAN_FAILURE = 0x90002                       ## (ro dynamic) Indicates if the fan has failed (data:
-                                                    ## ::xet_resprop_psu_fan_failure_t)
-    PSU_TEMPERATURE = 0x90003                       ## (ro dynamic) The current heatsink temperature in degrees celcius
-                                                    ## (data: ::xet_resprop_psu_temperature_t)
-    PSU_AMPS = 0x90004                              ## (ro dynamic) The current amps being drawn in amperes (data:
-                                                    ## ::xet_resprop_psu_amps_t)
-    FAN_MAX_RPM = 0xA0000                           ## (ro static) The maximum RPM of the fan (data:
-                                                    ## ::xet_resprop_fan_max_rpm_t)
-    FAN_MAX_TABLE_SIZE = 0xA0001                    ## (ro static) The maximum number of points in the fan temp/speed table
-                                                    ## (data: ::xet_resprop_fan_max_table_size_t)
-    FAN_SPEED_RPM = 0xA0002                         ## (ro dynamic) The current fan speed in units of revolutions per minute
-                                                    ## (rpm) (data: ::xet_resprop_fan_speed_rpm_t)
-    FAN_SPEED_PERCENT = 0xA0003                     ## (ro dynamic) The current fan speed as a percentage of the maximum
-                                                    ## speed of that fan (data: ::xet_resprop_fan_speed_percent_t)
-    FAN_MODE = 0xA0004                              ## (ro dynamic) The current fan speed mode (one of
-                                                    ## ::xet_fan_speed_mode_t) (data: ::xet_resprop_fan_mode_t)
-    FAN_FIXED_SPEED = 0xA0005                       ## (rw dynamic) Read/write the fixed speed setting for the fan (data:
-                                                    ## ::xet_resprop_fan_fixed_speed_t)
-    FAN_SPEED_TABLE = 0xA0006                       ## (rw dynamic) Read/write the fan speed table (data:
-                                                    ## ::xet_resprop_fan_speed_table_t)
-    LED_RGB_CAP = 0xB0000                           ## (ro static) Indicates if the LED is RGB capable (data:
-                                                    ## ::xet_resprop_led_rgb_cap_t)
-    LED_STATE = 0xB0001                             ## (rw dynaic) The LED state - on/off and color (data:
-                                                    ## ::xet_resprop_led_state_t)
-
-class xet_resprop_t(c_int):
-    def __str__(self):
-        return str(xet_resprop_v(value))
-
-
-###############################################################################
 ## @brief Maximum number of characters in string properties.
 XET_STRING_PROPERTY_SIZE = 32
 
 ###############################################################################
-## @brief PCI bar types
-class xet_pci_bar_type_v(IntEnum):
-    CONFIG = 0                                      ## PCI configuration space
-    MMIO = auto()                                   ## MMIO registers
-    VRAM = auto()                                   ## VRAM aperture
-    ROM = auto()                                    ## ROM aperture
-    VGA_IO = auto()                                 ## Legacy VGA IO ports
-    VGA_MEM = auto()                                ## Legacy VGA memory
-    INDIRECT_IO = auto()                            ## Indirect IO port access
-    INDIRECT_MEM = auto()                           ## Indirect memory access
-    OTHER = auto()                                  ## Other type of PCI bar
+## @brief Device mode
+class xet_operating_mode_v(IntEnum):
+    DEFAULT = 0                                     ## Multiple workloads are running on the device
+    EXCLUSIVE_COMPUTE_PROCESS = auto()              ## A single process submitting compute workloads can monopolize the
+                                                    ## accelerator resources
 
-class xet_pci_bar_type_t(c_int):
+class xet_operating_mode_t(c_int):
     def __str__(self):
-        return str(xet_pci_bar_type_v(value))
+        return str(xet_operating_mode_v(value))
 
 
 ###############################################################################
-## @brief Data for a PCI bar
-class xet_pci_bar_info_t(Structure):
+## @brief Frequency domains
+class xet_freq_domain_v(IntEnum):
+    GPU = 0                                         ## Frequency of the GPU.
+    MEMORY = auto()                                 ## Frequency of the local memory.
+    NUM = auto()                                    ## The total number of frequency domains.
+
+class xet_freq_domain_t(c_int):
+    def __str__(self):
+        return str(xet_freq_domain_v(value))
+
+
+###############################################################################
+## @brief Event types
+class xet_sysman_event_type_v(IntEnum):
+    FREQ_THROTTLED = 0                              ## The frequency is being throttled
+    RAS_ERRORS = auto()                             ## ECC/RAS errors
+    NUM = auto()                                    ## The number of event types
+
+class xet_sysman_event_type_t(c_int):
+    def __str__(self):
+        return str(xet_sysman_event_type_v(value))
+
+
+###############################################################################
+## @brief Device properties
+class xet_sysman_properties_t(Structure):
     _fields_ = [
-        ("type", xet_pci_bar_type_t),                                   ## [out] The type of bar
-        ("base", c_ulonglong),                                          ## [out] Base address of the bar.
-        ("size", c_ulonglong)                                           ## [out] Size of the bar.
+        ("type", xe_device_type_t),                                     ## [out] generic device type
+        ("vendorId", c_ulong),                                          ## [out] vendorId from PCI configuration
+        ("deviceId", c_ulong),                                          ## [out] deviceId from PCI configuration
+        ("uuid", xe_device_uuid_t),                                     ## [out] Device UUID
+        ("numSubdevices", c_ulong),                                     ## [out] The number of sub-devices
+        ("isSubdevice", xe_bool_t),                                     ## [out] If this handle refers to a sub-device.
+        ("subdeviceId", c_ulong),                                       ## [out] sub-device id. Only valid if isSubdevice is true.
+        ("serialNumber", c_int8_t * XET_STRING_PROPERTY_SIZE),          ## [out] Manufacturing serial number (NULL terminated string value)
+        ("boardNumber", c_int8_t * XET_STRING_PROPERTY_SIZE),           ## [out] Manufacturing board number (NULL terminated string value)
+        ("brandName", c_int8_t * XET_STRING_PROPERTY_SIZE),             ## [out] Brand name of the device (NULL terminated string value)
+        ("modelName", c_int8_t * XET_STRING_PROPERTY_SIZE),             ## [out] Model name of the device (NULL terminated string value)
+        ("vendorName", c_int8_t * XET_STRING_PROPERTY_SIZE),            ## [out] Vendor name of the device (NULL terminated string value)
+        ("driverVersion", c_int8_t * XET_STRING_PROPERTY_SIZE),         ## [out] Installed driver version (NULL terminated string value)
+        ("havePowerControl", xe_bool_t),                                ## [out] Set to true if the power limits of the device can be changed
+        ("haveFreqControl", xe_bool_t * XET_FREQ_DOMAIN_NUM),           ## [out] Set to true if the frequency limits can be changed for each
+                                                                        ## domain
+        ("haveOverclock", xe_bool_t * XET_FREQ_DOMAIN_NUM),             ## [out] Set to true if the frequency can be overclocked for each domain
+        ("haveSwitch", xe_bool_t),                                      ## [out] Set to true if the device/sub-device has a switch
+        ("numFirmwares", c_ulong),                                      ## [out] Number of firmwares that can be managed
+        ("numPsus", c_ulong),                                           ## [out] Number of power supply units that can be managed
+        ("numFans", c_ulong),                                           ## [out] Number of fans that can be managed
+        ("numLeds", c_ulong),                                           ## [out] Number of LEDs that can be managed
+        ("supportedEvents", xe_bool_t * XET_SYSMAN_EVENT_TYPE_NUM)      ## [out] Set to true for the events that are supported
     ]
 
 ###############################################################################
-## @brief Data for property ::XET_RESPROP_DEV_SERIAL_NUMBER
-class xet_resprop_dev_serial_number_t(Structure):
+## @brief Properties related to device power settings
+class xet_power_properties_t(Structure):
     _fields_ = [
-        ("str", c_int8_t * XET_STRING_PROPERTY_SIZE)                    ## [out] NULL terminated string value
+        ("maxLimit", c_ulong)                                           ## [out] The maximum power limit in milliwatts that can be requested.
     ]
 
 ###############################################################################
-## @brief Data for property ::XET_RESPROP_DEV_BOARD_NUMBER
-class xet_resprop_dev_board_number_t(Structure):
+## @brief Energy counter snapshot
+## 
+## @details
+##     - Average power is calculated by taking two snapshots (s1, s2) and using
+##       the equation: PowerWatts = (s2.energy - s1.energy) / (s2.timestamp -
+##       s1.timestamp)
+class xet_power_energy_counter_t(Structure):
     _fields_ = [
-        ("str", c_int8_t * XET_STRING_PROPERTY_SIZE)                    ## [out] NULL terminated string value
+        ("energy", c_ulonglong),                                        ## [out] The monotonic energy counter in microjoules.
+        ("timestamp", c_ulonglong)                                      ## [out] Microsecond timestamp when energy was captured.
     ]
 
 ###############################################################################
-## @brief Data for property ::XET_RESPROP_DEV_BRAND
-class xet_resprop_dev_brand_t(Structure):
-    _fields_ = [
-        ("str", c_int8_t * XET_STRING_PROPERTY_SIZE)                    ## [out] NULL terminated string value
-    ]
-
-###############################################################################
-## @brief Data for property ::XET_RESPROP_DEV_MODEL
-class xet_resprop_dev_model_t(Structure):
-    _fields_ = [
-        ("str", c_int8_t * XET_STRING_PROPERTY_SIZE)                    ## [out] NULL terminated string value
-    ]
-
-###############################################################################
-## @brief Data for property ::XET_RESPROP_DEV_DEVICEID
-class xet_resprop_dev_deviceid_t(Structure):
-    _fields_ = [
-        ("str", c_int8_t * XET_STRING_PROPERTY_SIZE)                    ## [out] NULL terminated string value
-    ]
-
-###############################################################################
-## @brief Data for property ::XET_RESPROP_DEV_VENDOR_NAME
-class xet_resprop_dev_vendor_name_t(Structure):
-    _fields_ = [
-        ("str", c_int8_t * XET_STRING_PROPERTY_SIZE)                    ## [out] NULL terminated string value
-    ]
-
-###############################################################################
-## @brief Data for property ::XET_RESPROP_DEV_DRIVER_VERSION
-class xet_resprop_dev_driver_version_t(Structure):
-    _fields_ = [
-        ("str", c_int8_t * XET_STRING_PROPERTY_SIZE)                    ## [out] NULL terminated string value
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_RESPROP_DEV_BARS
-class xet_resprop_dev_bars_t(Structure):
-    _fields_ = [
-        ("num", c_ulong),                                               ## [out] The number of bars
-        ("pBars", POINTER(xet_pci_bar_info_t))                          ## [out][range(0, num-1)] Information about each bar.
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_RESPROP_DEV_UUID
-class xet_resprop_dev_uuid_t(Structure):
-    _fields_ = [
-        ("uuid", xe_device_uuid_t)                                      ## [out] Device UUID
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_RESPROP_PWR_MAX_LIMIT
-class xet_resprop_pwr_max_limit_t(Structure):
-    _fields_ = [
-        ("limit", c_ulong)                                              ## [out] The maximum power limit in milliwatts that can be requested.
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_RESPROP_PWR_ENERGY_COUNTER
-class xet_resprop_pwr_energy_counter_t(Structure):
-    _fields_ = [
-        ("energy", c_ulonglong)                                         ## [out] The value of the monotonic energy counter in millijoules.
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_RESPROP_PWR_SUSTAINED_LIMIT
+## @brief Sustained power limits
 ## 
 ## @details
 ##     - The power controller (Punit) will throttle the operating frequency if
 ##       the power averaged over a window (typically seconds) exceeds this
 ##       limit.
-class xet_resprop_pwr_sustained_limit_t(Structure):
+class xet_power_sustained_limit_t(Structure):
     _fields_ = [
         ("enabled", xe_bool_t),                                         ## [in,out] indicates if the limit is enabled (true) or ignored (false)
         ("power", c_ulong),                                             ## [in,out] power limit in milliwatts
@@ -699,7 +445,7 @@ class xet_resprop_pwr_sustained_limit_t(Structure):
     ]
 
 ###############################################################################
-## @brief Data for the property ::XET_RESPROP_PWR_BURST_LIMIT
+## @brief Burst power limit
 ## 
 ## @details
 ##     - The power controller (Punit) will throttle the operating frequency of
@@ -707,14 +453,14 @@ class xet_resprop_pwr_sustained_limit_t(Structure):
 ##       limit known as PL2. Typically PL2 > PL1 so that it permits the
 ##       frequency to burst higher for short periods than would be otherwise
 ##       permitted by PL1.
-class xet_resprop_pwr_burst_limit_t(Structure):
+class xet_power_burst_limit_t(Structure):
     _fields_ = [
         ("enabled", xe_bool_t),                                         ## [in,out] indicates if the limit is enabled (true) or ignored (false)
         ("power", c_ulong)                                              ## [in,out] power limit in milliwatts
     ]
 
 ###############################################################################
-## @brief Data for the property ::XET_RESPROP_PWR_PEAK_LIMIT
+## @brief Peak power limit
 ## 
 ## @details
 ##     - The power controller (Punit) will preemptively throttle the operating
@@ -726,9 +472,39 @@ class xet_resprop_pwr_burst_limit_t(Structure):
 ##       power controller will throttle the device frequencies down to min. It
 ##       is thus better to tune the PL4 value in order to avoid such
 ##       excursions.
-class xet_resprop_pwr_peak_limit_t(Structure):
+class xet_power_peak_limit_t(Structure):
     _fields_ = [
         ("power", c_ulong)                                              ## [in,out] power limit in milliwatts
+    ]
+
+###############################################################################
+## @brief Frequency properties
+## 
+## @details
+##     - Provides the set of frequencies as a list and as a range/step.
+##     - It is generally recommended that applications choose frequencies from
+##       the list. However applications can also construct the list themselves
+##       using the range/steps provided.
+class xet_freq_properties_t(Structure):
+    _fields_ = [
+        ("min", c_double),                                              ## [out] The minimum clock frequency in units of MHz
+        ("max", c_double),                                              ## [out] The maximum clock frequency in units of MHz
+        ("step", c_double),                                             ## [out] The step clock frequency in units of MHz
+        ("num", c_ulong),                                               ## [out] The number of clocks in the array pClocks
+        ("pClocks", POINTER(c_double))                                  ## [out] Array of clock frequencies in units of MHz ordered from smallest
+                                                                        ## to largest.
+    ]
+
+###############################################################################
+## @brief Frequency limits between which the hardware can operate.
+class xet_freq_limits_t(Structure):
+    _fields_ = [
+        ("min", c_double),                                              ## [in,out] The min frequency in MHz below which hardware frequency
+                                                                        ## management will not request frequencies. Setting to 0 will use the
+                                                                        ## hardware default value.
+        ("max", c_double)                                               ## [in,out] The max frequency in MHz above which hardware frequency
+                                                                        ## management will not request frequencies. Setting to 0 will use the
+                                                                        ## hardware default value.
     ]
 
 ###############################################################################
@@ -750,92 +526,57 @@ class xet_freq_throttle_reasons_t(c_int):
 
 
 ###############################################################################
-## @brief Data for the property ::XET_RESPROP_FREQ_AVAIL_CLOCKS
-## 
-## @details
-##     - Provides the set of frequencies as a list and as a range/step.
-##     - It is generally recommended that applications choose frequencies from
-##       the list. However applications can also construct the list themselves
-##       using the range/steps provided.
-class xet_resprop_freq_avail_clocks_t(Structure):
+## @brief Frequency state
+class xet_freq_state_t(Structure):
     _fields_ = [
-        ("min", c_double),                                              ## [out] The minimum clock frequency in units of MHz
-        ("max", c_double),                                              ## [out] The maximum clock frequency in units of MHz
-        ("step", c_double),                                             ## [out] The step clock frequency in units of MHz
-        ("num", c_ulong),                                               ## [out] The number of clocks
-        ("pClocks", POINTER(c_double))                                  ## [out] Array of clock frequencies in units of MHz ordered from smallest
-                                                                        ## to largest.
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_RESPROP_FREQ_RANGE
-class xet_resprop_freq_range_t(Structure):
-    _fields_ = [
-        ("min", c_double),                                              ## [in,out] The min frequency in MHz below which hardware frequency
-                                                                        ## management will not request frequencies. Setting to 0 will return the
-                                                                        ## hardware default value.
-        ("max", c_double)                                               ## [in,out] The max frequency in MHz above which hardware frequency
-                                                                        ## management will not request frequencies. Setting to 0 will return the
-                                                                        ## hardware default value.
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_RESPROP_FREQ_REQUESTED_FREQ
-class xet_resprop_freq_requested_freq_t(Structure):
-    _fields_ = [
-        ("freqRequest", c_double)                                       ## [out] The current frequency request in MHz.
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_RESPROP_FREQ_TDP_FREQ
-class xet_resprop_freq_tdp_freq_t(Structure):
-    _fields_ = [
-        ("freqTdp", c_double)                                           ## [out] The maximum frequency in MHz supported under the current TDP
+        ("request", c_double),                                          ## [out] The current frequency request in MHz.
+        ("tdp", c_double),                                              ## [out] The maximum frequency in MHz supported under the current TDP
                                                                         ## conditions
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_RESPROP_FREQ_EFFICIENT_FREQ
-class xet_resprop_freq_efficient_freq_t(Structure):
-    _fields_ = [
-        ("freqEfficient", c_double)                                     ## [out] The efficient minimum frequency in MHz
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_RESPROP_FREQ_RESOLVED_FREQ
-class xet_resprop_freq_resolved_freq_t(Structure):
-    _fields_ = [
-        ("freqResolved", c_double)                                      ## [out] The resolved frequency in MHz
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_RESPROP_FREQ_THROTTLE_REASONS
-class xet_resprop_freq_throttle_reasons_t(Structure):
-    _fields_ = [
-        ("throttleReasons", c_ulong)                                    ## [out] The reasons that the frequency is being limited by the PCU
+        ("efficient", c_double),                                        ## [out] The efficient minimum frequency in MHz
+        ("actual", c_double),                                           ## [out] The resolved frequency in MHz
+        ("throttleReasons", c_ulong)                                    ## [out] The reasons that the frequency is being limited by the hardware
                                                                         ## (Bitfield of (1<<::xet_freq_throttle_reasons_t)).
     ]
 
 ###############################################################################
-## @brief Data for the property ::XET_RESPROP_FREQ_THROTTLE_TIME
-class xet_resprop_freq_throttle_time_t(Structure):
+## @brief Frequency throttle time snapshot
+## 
+## @details
+##     - Percent time throttled is calculated by taking two snapshots (s1, s2)
+##       and using the equation: %throttled = (s2.throttleTime -
+##       s1.throttleTime) / (s2.timestamp - s1.timestamp)
+class xet_freq_throttle_time_t(Structure):
     _fields_ = [
-        ("throttleTime", c_ulong)                                       ## [out] The total time in microseconds that the frequency has been
-                                                                        ## limited by the PCU.
+        ("throttleTime", c_ulonglong),                                  ## [out] The monotonic counter of time in microseconds that the frequency
+                                                                        ## has been limited by the hardware.
+        ("timestamp", c_ulonglong)                                      ## [out] Microsecond timestamp when throttleTime was captured.
     ]
 
 ###############################################################################
-## @brief Data for the property ::XET_RESPROP_UTIL_COUNTERS
+## @brief Activity components
+class xet_activity_type_v(IntEnum):
+    GLOBAL = 0                                      ## Overall activity of all accelerators on the device.
+    COMPUTE = auto()                                ## Activity of all compute accelerators on the device.
+    MEDIA = auto()                                  ## Activity of all media accelerators on the device.
+
+class xet_activity_type_t(c_int):
+    def __str__(self):
+        return str(xet_activity_type_v(value))
+
+
+###############################################################################
+## @brief Activity counters
 ## 
 ## @details
-##     - Percentage utilization is given by the equation: 100 *
-##       delta(activeCounter) / ( delta(activeCounter) + delta(idleCounter) ).
-class xet_resprop_util_counters_t(Structure):
+##     - Percent utilization is calculated by taking two snapshots (s1, s2) and
+##       using the equation: %util = (s2.activeTime - s1.activeTime) /
+##       (s2.timestamp - s1.timestamp)
+class xet_activity_stats_t(Structure):
     _fields_ = [
-        ("activeCounter", c_ulong),                                     ## [out] Monotonic counter for total wall time in microseconds that this
-                                                                        ## resource is actively running workloads.
-        ("idleCounter", c_ulong)                                        ## [out] Monotonic counter for total wall time in microseconds that this
-                                                                        ## resource is not actively running any workloads.
+        ("activeTime", c_ulonglong),                                    ## [out] Monotonic counter for time in microseconds that this resource is
+                                                                        ## actively running workloads.
+        ("timestamp", c_ulonglong)                                      ## [out] Monotonic timestamp counter in microseconds when activeTime
+                                                                        ## counter was sampled.
     ]
 
 ###############################################################################
@@ -855,137 +596,223 @@ class xet_mem_type_t(c_int):
 
 
 ###############################################################################
-## @brief Data for the property ::XET_RESPROP_MEM_TYPE
-class xet_resprop_mem_type_t(Structure):
+## @brief Memory properties
+class xet_mem_properties_t(Structure):
     _fields_ = [
-        ("type", xet_mem_type_t)                                        ## [out] The memory type
+        ("type", xet_mem_type_t),                                       ## [out] The memory type
+        ("size", c_ulonglong)                                           ## [out] Physical memory size in bytes
     ]
 
 ###############################################################################
-## @brief Data for the property ::XET_RESPROP_MEM_UTILIZATION
+## @brief Memory bandwidth
 ## 
 ## @details
-##     - The total physical memory is the sum of all others (stolen + bad +
-##       allocated + unallocated).
-##     - Percent software memory utilization given by 100 * allocated /
-##       (allocated + unallocated).
-##     - Percent bad memory given by 100 * bad / total
-class xet_resprop_mem_utilization_t(Structure):
+##     - Percent bandwidth is calculated by taking two snapshots (s1, s2) and
+##       using the equation: %bw = 10^6 * ((s2.readCounter - s1.readCounter) +
+##       (s2.writeCounter - s1.writeCounter)) / (s2.maxBandwidth *
+##       (s2.timestamp - s1.timestamp))
+class xet_mem_bandwidth_t(Structure):
     _fields_ = [
-        ("total", c_ulonglong),                                         ## [out] The total physical memory in bytes
-        ("stolen", c_ulonglong),                                        ## [out] The total stolen memory in bytes
-        ("bad", c_ulonglong),                                           ## [out] The total bad memory in bytes
+        ("readCounter", c_ulonglong),                                   ## [out] Total bytes read from memory
+        ("writeCounter", c_ulonglong),                                  ## [out] Total bytes written to memory
+        ("maxBandwidth", c_ulonglong),                                  ## [out] Current maximum bandwidth in units of bytes/sec
+        ("timestamp", c_ulonglong)                                      ## [out] The timestamp when these measurements were sampled
+    ]
+
+###############################################################################
+## @brief Memory allocation
+## 
+## @details
+##     - Percent allocation is given by 100 * allocated / total.
+##     - Percent free is given by 100 * (total - allocated) / total.
+class xet_mem_alloc_t(Structure):
+    _fields_ = [
         ("allocated", c_ulonglong),                                     ## [out] The total allocated bytes
-        ("unallocated", c_ulonglong)                                    ## [out] The total unallocated bytes
+        ("total", c_ulonglong)                                          ## [out] The total physical memory in bytes
     ]
 
 ###############################################################################
-## @brief Data for the property ::XET_RESPROP_MEM_BANDWIDTH
-class xet_resprop_mem_bandwidth_t(Structure):
+## @brief PCI address
+class xet_pci_address_t(Structure):
     _fields_ = [
-        ("readCounter", c_ulong),                                       ## [out] Total bytes read from memory
-        ("writeCounter", c_ulong),                                      ## [out] Total bytes written to memory
-        ("maxBandwidth", c_ulong)                                       ## [out] Current maximum bandwidth in units of bytes/sec
+        ("domain", c_ulong),                                            ## [out] BDF domain
+        ("bus", c_ulong),                                               ## [out] BDF bus
+        ("device", c_ulong),                                            ## [out] BDF device
+        ("function", c_ulong)                                           ## [out] BDF function
     ]
 
 ###############################################################################
-## @brief Link resource types
-class xet_link_type_v(IntEnum):
-    PCI = 0                                         ## PCI connection
-    CD_PORT = auto()                                ## Companion die physical port
-
-class xet_link_type_t(c_int):
-    def __str__(self):
-        return str(xet_link_type_v(value))
-
-
-###############################################################################
-## @brief Link speed element
-class xet_link_speed_t(Structure):
+## @brief PCI speed
+class xet_pci_speed_t(Structure):
     _fields_ = [
-        ("numLanes", c_ulong),                                          ## [out] The number of lanes used by the link
-        ("speed", c_ulong),                                             ## [out] The frequency of the link in units of MHz
-        ("bandwidth", c_ulong)                                          ## [out] The maximum bandwidth in units of bytes/sec
-    ]
-
-###############################################################################
-## @brief Data for property ::XET_RESPROP_LINK_TYPE
-class xet_resprop_link_type_t(Structure):
-    _fields_ = [
-        ("type", xet_link_type_t)                                       ## [out] The type of link
-    ]
-
-###############################################################################
-## @brief Data for property ::XET_RESPROP_LINK_BUS_ADDRESS
-class xet_resprop_link_bus_address_t(Structure):
-    _fields_ = [
-        ("str", c_int8_t * XET_STRING_PROPERTY_SIZE)                    ## [out] NULL terminated string value
-    ]
-
-###############################################################################
-## @brief Data for property ::XET_RESPROP_LINK_PEER_DEVICE
-class xet_resprop_link_peer_device_t(Structure):
-    _fields_ = [
-        ("uuid", xe_device_uuid_t)                                      ## [out] UUID of the peer device connected to through this link
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_RESPROP_LINK_AVAIL_SPEEDS
-## 
-## @details
-##     - The list is ordered from the smallest ratio to the largest ratio.
-class xet_resprop_link_avail_speeds_t(Structure):
-    _fields_ = [
-        ("num", c_ulong),                                               ## [out] The number of elements in pList
-        ("pList", POINTER(xet_link_speed_t))                            ## [out][range(0, num-1)] Pointer to an array of link speeds
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_RESPROP_LINK_STATE
-class xet_resprop_link_state_t(Structure):
-    _fields_ = [
-        ("enable", xe_bool_t)                                           ## [out] Indicates if the link is disabled/enabled.
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_RESPROP_LINK_MAX_PACKET_SIZE
-class xet_resprop_link_max_packet_size_t(Structure):
-    _fields_ = [
+        ("gen", c_ulong),                                               ## [out] The link generation
+        ("width", c_ulong),                                             ## [out] The number of lanes
+        ("maxBandwidth", c_ulong),                                      ## [out] The maximum bandwidth in bytes/sec
         ("maxPacketSize", c_ulong)                                      ## [out] Maximum packet size in bytes.
     ]
 
 ###############################################################################
-## @brief Data for the property ::XET_RESPROP_LINK_BANDWIDTH
-class xet_resprop_link_bandwidth_t(Structure):
+## @brief Static PCI properties
+class xet_pci_properties_t(Structure):
     _fields_ = [
-        ("recvCounter", c_ulong),                                       ## [out] Total bytes received across the link
-        ("sendCounter", c_ulong),                                       ## [out] Total bytes sent across the link
-        ("maxBandwidth", c_ulong)                                       ## [out] Maximum bytes/sec that can be transfered acros the link
+        ("address", xet_pci_address_t),                                 ## [out] The BDF address
+        ("numBars", c_ulong),                                           ## [out] The number of configured bars
+        ("maxSpeed", xet_pci_speed_t)                                   ## [out] Fastest port configuration supported by the device.
     ]
 
 ###############################################################################
-## @brief Data for the property ::XET_RESPROP_LINK_SPEED
-class xet_resprop_link_speed_t(Structure):
+## @brief Dynamic PCI state
+class xet_pci_state_t(Structure):
     _fields_ = [
-        ("pSpeed", POINTER(xet_link_speed_t))                           ## [out] Pointer to the current speed configuration
+        ("speed", xet_pci_speed_t)                                      ## [out] The current port configure speed
     ]
 
 ###############################################################################
-## @brief Data for the property ::XET_RESPROP_LINK_SPEED_RANGE
-class xet_resprop_link_speed_range_t(Structure):
+## @brief PCI bar types
+class xet_pci_bar_type_v(IntEnum):
+    CONFIG = 0                                      ## PCI configuration space
+    MMIO = auto()                                   ## MMIO registers
+    VRAM = auto()                                   ## VRAM aperture
+    ROM = auto()                                    ## ROM aperture
+    VGA_IO = auto()                                 ## Legacy VGA IO ports
+    VGA_MEM = auto()                                ## Legacy VGA memory
+    INDIRECT_IO = auto()                            ## Indirect IO port access
+    INDIRECT_MEM = auto()                           ## Indirect memory access
+    OTHER = auto()                                  ## Other type of PCI bar
+
+class xet_pci_bar_type_t(c_int):
+    def __str__(self):
+        return str(xet_pci_bar_type_v(value))
+
+
+###############################################################################
+## @brief Properties of a pci bar
+class xet_pci_bar_properties_t(Structure):
     _fields_ = [
-        ("pMinSpeed", POINTER(xet_link_speed_t)),                       ## [out] Pointer to the min speed configuration (one of those in the
-                                                                        ## array returned by property ::XET_RESPROP_LINK_AVAIL_SPEEDS)
-        ("pMaxSpeed", POINTER(xet_link_speed_t))                        ## [out] Pointer to the max speed configuration (one of those in the
-                                                                        ## array returned by property ::XET_RESPROP_LINK_AVAIL_SPEEDS)
+        ("type", xet_pci_bar_type_t),                                   ## [out] The type of bar
+        ("base", c_ulonglong),                                          ## [out] Base address of the bar.
+        ("size", c_ulonglong)                                           ## [out] Size of the bar.
     ]
 
 ###############################################################################
-## @brief Data for the property ::XET_RESPROP_TEMP_TEMPERATURE
-class xet_resprop_temp_temperature_t(Structure):
+## @brief PCI throughput
+## 
+## @details
+##     - Percent throughput is calculated by taking two snapshots (s1, s2) and
+##       using the equation: %bw = 10^6 * ((s2.rxCounter - s1.rxCounter) +
+##       (s2.txCounter - s1.txCounter)) / (s2.maxBandwidth * (s2.timestamp -
+##       s1.timestamp))
+class xet_pci_throughput_t(Structure):
     _fields_ = [
-        ("temperature", c_ulong)                                        ## [out] The current temperature of the sensor in degrees celcius
+        ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when this sample was
+                                                                        ## taken
+        ("rxCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes received
+        ("txCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes transmitted (including
+                                                                        ## replays)
+        ("replayCounter", c_ulonglong),                                 ## [out] Monotonic counter for the number of replay packets
+        ("maxBandwidth", c_ulong)                                       ## [out] The maximum bandwidth in bytes/sec under the current
+                                                                        ## configuration
     ]
+
+###############################################################################
+## @brief PCI stats counters
+## 
+## @details
+##     - Percent replays is calculated by taking two snapshots (s1, s2) and
+##       using the equation: %replay = 10^6 * (s2.replayCounter -
+##       s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))
+class xet_pci_stats_t(Structure):
+    _fields_ = [
+        ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when this sample was
+                                                                        ## taken
+        ("replayCounter", c_ulonglong),                                 ## [out] Monotonic counter for the number of replay packets
+        ("packetCounter", c_ulonglong)                                  ## [out] Monotonic counter for the number of packets
+    ]
+
+###############################################################################
+## @brief Switch address
+class xet_switch_address_t(Structure):
+    _fields_ = [
+        ("guid", c_ubyte * 8)                                           ## [out] GUID of the Switch
+    ]
+
+###############################################################################
+## @brief Switch properties
+class xet_switch_properties_t(Structure):
+    _fields_ = [
+        ("address", xet_switch_address_t),                              ## [out] Address of this Switch
+        ("numPorts", c_ulong)                                           ## [out] The number of ports
+    ]
+
+###############################################################################
+## @brief Switch state
+class xet_switch_state_t(Structure):
+    _fields_ = [
+        ("enabled", xe_bool_t)                                          ## [out] Indicates if the switch is enabled/disabled
+    ]
+
+###############################################################################
+## @brief Switch Port properties
+class xet_switch_port_properties_t(Structure):
+    _fields_ = [
+        ("maxBandwidth", c_ulong)                                       ## [out] Maximum bandwidth (bytes/sec) supported by the port
+    ]
+
+###############################################################################
+## @brief Switch Port state
+class xet_switch_port_state_t(Structure):
+    _fields_ = [
+        ("connected", xe_bool_t),                                       ## [out] Indicates if the port is connected to a remote Switch
+        ("remote", xet_switch_address_t),                               ## [out] If connected is true, this gives the address of the remote
+                                                                        ## Componian Die to which this port connects
+        ("maxBandwidth", c_ulong)                                       ## [out] Current maximum bandwidth (bytes/sec)
+    ]
+
+###############################################################################
+## @brief Switch Port throughput
+## 
+## @details
+##     - Percent throughput is calculated by taking two snapshots (s1, s2) and
+##       using the equation: %bw = 10^6 * ((s2.rxCounter - s1.rxCounter) +
+##       (s2.txCounter - s1.txCounter)) / (s2.maxBandwidth * (s2.timestamp -
+##       s1.timestamp))
+class xet_switch_port_throughput_t(Structure):
+    _fields_ = [
+        ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when this sample was
+                                                                        ## taken
+        ("rxCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes received
+        ("txCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes transmitted
+        ("maxBandwidth", c_ulong)                                       ## [out] The maximum bandwidth in bytes/sec under the current port
+                                                                        ## configuration
+    ]
+
+###############################################################################
+## @brief Switch Port stats counters
+## 
+## @details
+##     - Percent replays is calculated by taking two snapshots (s1, s2) and
+##       using the equation: %replay = 10^6 * (s2.replayCounter -
+##       s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))
+class xet_switch_port_stats_t(Structure):
+    _fields_ = [
+        ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when this sample was
+                                                                        ## taken
+        ("replayCounter", c_ulonglong),                                 ## [out] Monotonic counter for the number of replay packets
+        ("packetCounter", c_ulonglong)                                  ## [out] Monotonic counter for the number of packets
+    ]
+
+###############################################################################
+## @brief Temperature sensors
+class xet_temp_sensors_v(IntEnum):
+    GLOBAL = 0                                      ## The maximum temperature across all device sensors
+    GPU = auto()                                    ## The maximum temperature across all sensors in the GPU
+    MEMORY = auto()                                 ## The maximum temperature across all sensors in the local memory
+    NUM = auto()                                    ## The number of sensors
+
+class xet_temp_sensors_t(c_int):
+    def __str__(self):
+        return str(xet_temp_sensors_v(value))
+
 
 ###############################################################################
 ## @brief Standby promotion modes
@@ -1000,39 +827,11 @@ class xet_stby_promo_mode_t(c_int):
 
 
 ###############################################################################
-## @brief Data for the property ::XET_RESPROP_STBY_PROMO_MODE
-class xet_resprop_stby_promo_mode_t(Structure):
+## @brief Firmware properties
+class xet_firmware_properties_t(Structure):
     _fields_ = [
-        ("mode", xet_stby_promo_mode_t)                                 ## [in,out] Current promotion mode
-    ]
-
-###############################################################################
-## @brief Data for property ::XET_RESPROP_FW_NAME
-class xet_resprop_fw_name_t(Structure):
-    _fields_ = [
-        ("str", c_int8_t * XET_STRING_PROPERTY_SIZE)                    ## [out] NULL terminated string value
-    ]
-
-###############################################################################
-## @brief Data for property ::XET_RESPROP_FW_VERSION
-class xet_resprop_fw_version_t(Structure):
-    _fields_ = [
-        ("str", c_int8_t * XET_STRING_PROPERTY_SIZE)                    ## [out] NULL terminated string value
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_RESPROP_FW_CHECK
-class xet_resprop_fw_check_t(Structure):
-    _fields_ = [
-        ("checksum", c_ulong)                                           ## [out] The calculated checksum of the loaded firmware image
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_RESPROP_FW_FLASH
-class xet_resprop_fw_flash_t(Structure):
-    _fields_ = [
-        ("pImage", c_void_p),                                           ## [in] Pointer to the image to be flashed
-        ("size", c_ulong)                                               ## [in] Size in bytes of the image pointed to by pImage
+        ("name", c_int8_t * XET_STRING_PROPERTY_SIZE),                  ## [out] NULL terminated string value
+        ("version", c_int8_t * XET_STRING_PROPERTY_SIZE)                ## [out] NULL terminated string value
     ]
 
 ###############################################################################
@@ -1048,44 +847,28 @@ class xet_psu_voltage_status_t(c_int):
 
 
 ###############################################################################
-## @brief Data for the property ::XET_RESPROP_PSU_AMP_LIMIT
-class xet_resprop_psu_amp_limit_t(Structure):
+## @brief Static properties of the power supply
+class xet_psu_properties_t(Structure):
     _fields_ = [
-        ("limit", c_ulong)                                              ## [out] The maximum electrical current in amperes that can be drawn
+        ("haveFan", xe_bool_t),                                         ## [out] True if the power supply has a fan
+        ("ampLimit", c_ulong)                                           ## [out] The maximum electrical current in amperes that can be drawn
     ]
 
 ###############################################################################
-## @brief Data for the property ::XET_RESPROP_PSU_VOLTAGE_STATUS
-class xet_resprop_psu_voltage_status_t(Structure):
+## @brief Dynamic state of the power supply
+class xet_psu_state_t(Structure):
     _fields_ = [
-        ("status", xet_psu_voltage_status_t)                            ## [out] The current PSU voltage status)
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_RESPROP_PSU_FAN_FAILURE
-class xet_resprop_psu_fan_failure_t(Structure):
-    _fields_ = [
-        ("status", xe_bool_t)                                           ## [out] Indicates if the fan has failed
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_RESPROP_PSU_TEMPERATURE
-class xet_resprop_psu_temperature_t(Structure):
-    _fields_ = [
-        ("temperature", c_ulong)                                        ## [out] Read the current heatsink temperature in degrees celcius
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_RESPROP_PSU_AMPS
-class xet_resprop_psu_amps_t(Structure):
-    _fields_ = [
+        ("voltStatus", xet_psu_voltage_status_t),                       ## [out] The current PSU voltage status
+        ("fanFailed", xe_bool_t),                                       ## [out] Indicates if the fan has failed
+        ("temperature", c_ulong),                                       ## [out] Read the current heatsink temperature in degrees celcius
         ("current", c_ulong)                                            ## [out] The amps being drawn in amperes
     ]
 
 ###############################################################################
 ## @brief Fan resource speed mode
 class xet_fan_speed_mode_v(IntEnum):
-    FIXED = 0                                       ## The fan speed is currently set to a fixed value
+    DEFAULT = 0                                     ## The fan speed is operating using the hardware default settings
+    FIXED = auto()                                  ## The fan speed is currently set to a fixed value
     TABLE = auto()                                  ## The fan speed is currently controlled dynamically by hardware based on
                                                     ## a temp/speed table
 
@@ -1119,153 +902,48 @@ class xet_fan_temp_speed_t(Structure):
 XET_FAN_TEMP_SPEED_PAIR_COUNT = 32
 
 ###############################################################################
-## @brief Data for the property ::XET_RESPROP_FAN_MAX_RPM
-class xet_resprop_fan_max_rpm_t(Structure):
+## @brief Fan properties
+class xet_fan_properties_t(Structure):
     _fields_ = [
-        ("maxSpeed", c_ulong)                                           ## [out] The maximum RPM of the fan
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_RESPROP_FAN_MAX_TABLE_SIZE
-class xet_resprop_fan_max_table_size_t(Structure):
-    _fields_ = [
+        ("maxSpeed", c_ulong),                                          ## [out] The maximum RPM of the fan
         ("maxPoints", c_ulong)                                          ## [out] The maximum number of points in the fan temp/speed table
     ]
 
 ###############################################################################
-## @brief Data for the property ::XET_RESPROP_FAN_SPEED_RPM
-class xet_resprop_fan_speed_rpm_t(Structure):
+## @brief Fan configuration
+class xet_fan_config_t(Structure):
     _fields_ = [
-        ("speed", c_ulong)                                              ## [out] The current fan speed in units of revolutions per minute (rpm)
+        ("mode", xet_fan_speed_mode_t),                                 ## [in,out] The fan speed mode (fixed, temp-speed table)
+        ("speed", c_ulong),                                             ## [in,out] The fixed fan speed setting
+        ("speedUnits", xet_fan_speed_units_t),                          ## [in,out] The units of the fixed fan speed setting
+        ("numPoints", c_ulong),                                         ## [in,out] The number of valid points in the fan speed table
+        ("table", xet_fan_temp_speed_t * XET_FAN_TEMP_SPEED_PAIR_COUNT) ## [in,out] Array of temperature/fan speed pairs
     ]
 
 ###############################################################################
-## @brief Data for the property ::XET_RESPROP_FAN_SPEED_PERCENT
-class xet_resprop_fan_speed_percent_t(Structure):
+## @brief Fan state
+class xet_fan_state_t(Structure):
     _fields_ = [
-        ("speed", c_ulong)                                              ## [out] The current fan speed as a percentage of the maximum speed of
-                                                                        ## that fan
+        ("mode", xet_fan_speed_mode_t),                                 ## [out] The fan speed mode (default, fixed, temp-speed table)
+        ("speedUnits", xet_fan_speed_units_t),                          ## [out] The units of the fan speed
+        ("speed", c_ulong)                                              ## [out] The current fan speed
     ]
 
 ###############################################################################
-## @brief Data for the property ::XET_RESPROP_FAN_MODE
-class xet_resprop_fan_mode_t(Structure):
-    _fields_ = [
-        ("mode", xet_fan_speed_mode_t)                                  ## [in,out] The current fan speed mode (one of ::xet_fan_speed_mode_t)
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_RESPROP_FAN_FIXED_SPEED
-class xet_resprop_fan_fixed_speed_t(Structure):
-    _fields_ = [
-        ("speed", c_ulong),                                             ## [in,out] The speed of the fan
-        ("units", xet_fan_speed_units_t)                                ## [in,out] The units of the member speed
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_RESPROP_FAN_SPEED_TABLE
-class xet_resprop_fan_speed_table_t(Structure):
-    _fields_ = [
-        ("pCount", POINTER(c_ulong)),                                   ## [in,out] The number of temp/speed pairs.
-                                                                        ## When reading the current fan speed table, this will be set to the
-                                                                        ## number of points returned.
-                                                                        ## When setting the fan speed table, this specifies the number of valid
-                                                                        ## points in the table.
-        ("points", xet_fan_temp_speed_t * XET_FAN_TEMP_SPEED_PAIR_COUNT)## [in,out][range(0, *pCount)] Array of temperature/fan speed pairs
-    ]
-
-###############################################################################
-## @brief Data for the property ::XET_RESPROP_LED_RGB_CAP
-class xet_resprop_led_rgb_cap_t(Structure):
+## @brief LED properties
+class xet_led_properties_t(Structure):
     _fields_ = [
         ("haveRGB", xe_bool_t)                                          ## [out] Indicates if the LED is RGB capable
     ]
 
 ###############################################################################
-## @brief Data for the property ::XET_RESPROP_LED_STATE
-class xet_resprop_led_state_t(Structure):
+## @brief LED state
+class xet_led_state_t(Structure):
     _fields_ = [
         ("isOn", xe_bool_t),                                            ## [in,out] Indicates if the LED is on or off
         ("red", c_ubyte),                                               ## [in,out][range(0, 255)] The LED red value
         ("green", c_ubyte),                                             ## [in,out][range(0, 255)] The LED green value
         ("blue", c_ubyte)                                               ## [in,out][range(0, 255)] The LED blue value
-    ]
-
-###############################################################################
-## @brief Property support
-class xet_prop_support_v(IntEnum):
-    NONE = 0                                        ## The property is not supported by this version of the API
-    API = XE_BIT( 0 )                               ## The property is supported by the the API
-    DEVICE_CLASS = XE_BIT( 1 )                      ## The property is supported for the class of device
-    DEVICE = XE_BIT( 2 )                            ## The property is supported for the device
-
-class xet_prop_support_t(c_int):
-    def __str__(self):
-        return str(xet_prop_support_v(value))
-
-
-###############################################################################
-## @brief Property access permissions
-class xet_prop_access_v(IntEnum):
-    NO_PERMISSIONS = 0                              ## The application does not have read-write access to the property
-    READ_PERMISSIONS = XE_BIT( 0 )                  ## The application has only read access to the property
-    WRITE_PERMISSIONS = XE_BIT( 1 )                 ## The application has write access to the property
-
-class xet_prop_access_t(c_int):
-    def __str__(self):
-        return str(xet_prop_access_v(value))
-
-
-###############################################################################
-## @brief Structure containing information about a resource
-class xet_resid_info_t(Structure):
-    _fields_ = [
-        ("id", xet_resid_t),                                            ## [in] The ID of the resource
-        ("type", xet_resource_type_t),                                  ## [in] The type of resource
-        ("pName", POINTER(c_char)),                                     ## [out] The name of the resource
-        ("pDesc", POINTER(c_char)),                                     ## [out] Human readable description of this resouce
-        ("available", xe_bool_t),                                       ## [out] Set to TRUE if the resource with this ID is available on the
-                                                                        ## device, otherwise set to FALSE
-        ("propsOnSubdevices", xe_bool_t)                                ## [out] Set to TRUE if this resource will change properties on
-                                                                        ## sub-devices or is merging telemetry from sub-devices
-    ]
-
-###############################################################################
-## @brief Request structure to get resource property info
-class xet_resprop_info_t(Structure):
-    _fields_ = [
-        ("property", xet_resprop_t),                                    ## [in] The property
-        ("resourceType", xet_resource_type_t),                          ## [out] The type of resource this property is used with
-        ("pName", POINTER(c_char)),                                     ## [out] Resource property name
-        ("pDesc", POINTER(c_char)),                                     ## [out] Human readable description of this property
-        ("support", xet_prop_support_t),                                ## [out] API support for the property
-        ("access", xet_prop_access_t),                                  ## [out] The access permissions for the property
-        ("minGetInterval", c_ulong),                                    ## [out] The minimum interval in microseconds between reads to this
-                                                                        ## property
-        ("minSetInterval", c_ulong)                                     ## [out] The minimum interval in microseconds between writes to this
-                                                                        ## property
-    ]
-
-###############################################################################
-## @brief Request structure used to query a resource property value
-class xet_resprop_request_t(Structure):
-    _fields_ = [
-        ("resource", xet_resid_t),                                      ## [in] The resource ID
-        ("property", xet_resprop_t),                                    ## [in] The property being requested
-        ("pData", c_void_p),                                            ## [in] Pointer to the data for the property.
-                                                                        ## Each property has a corresponding data structure. The type of the data
-                                                                        ## structure is derived from the property enumerator, converted to
-                                                                        ## lower-case with "_t" appended.
-        ("size", c_ulong),                                              ## [in] The size of the data structure pointed to by pData.
-        ("status", xe_result_t)                                         ## [out] Indicates if the request was successful or not.
-                                                                        ## ::XE_RESULT_SUCCESS - Data was successful read or updated.
-                                                                        ## ::XE_RESULT_ERROR_DEVICE_ACCESS - Problem reading or writing device data.
-                                                                        ## ::XE_RESULT_ERROR_INVALID_ARGUMENT - Resource ID or property ID are
-                                                                        ## invalid or size does not match required storage for property data.
-                                                                        ## ::XE_RESULT_ERROR_UNSUPPORTED - Resource ID and/or property ID not
-                                                                        ## supported on this device.
-                                                                        ## ::XE_RESULT_ERROR_INSUFFICENT_PERMISSIONS - Insufficient permission to
-                                                                        ## access this property.
     ]
 
 ###############################################################################
@@ -1311,33 +989,10 @@ class xet_ras_details_t(Structure):
     ]
 
 ###############################################################################
-## @brief Event types
-class xet_sysman_event_type_v(IntEnum):
-    FREQ_THROTTLED = 0                              ## The frequency is being throttled
-    RAS_ERRORS = auto()                             ## ECC/RAS errors
-    COUNT = auto()                                  ## The number of event types
-
-class xet_sysman_event_type_t(c_int):
-    def __str__(self):
-        return str(xet_sysman_event_type_v(value))
-
-
-###############################################################################
-## @brief Request structure to determine events that are supported
-class xet_event_support_t(Structure):
-    _fields_ = [
-        ("event", xet_sysman_event_type_t),                             ## [in] The event
-        ("supported", xe_bool_t)                                        ## [out] Set to true/false to know if the event is supported
-    ]
-
-###############################################################################
 ## @brief Request structure used to register/unregister events
 class xet_event_request_t(Structure):
     _fields_ = [
         ("event", xet_sysman_event_type_t),                             ## [in] The event type to register.
-        ("resourceId", xet_resid_t),                                    ## [in] Only events being generated by the specified resource. If
-                                                                        ## ::XET_RESID_ANY, then applies to all events from all resources in the
-                                                                        ## device.
         ("threshold", c_ulong)                                          ## [in] The application only receives a notification when the total count
                                                                         ## exceeds this value. Set to zero to receive a notification for every
                                                                         ## new event.
@@ -1753,39 +1408,319 @@ else:
     _xetSysmanGet_t = CFUNCTYPE( xe_result_t, xet_device_handle_t, xet_sysman_version_t, POINTER(xet_sysman_handle_t) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanGetResourceInfo
+## @brief Function-pointer for xetSysmanGetSubdevice
 if __use_win_types:
-    _xetSysmanGetResourceInfo_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_resid_info_t) )
+    _xetSysmanGetSubdevice_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_sysman_handle_t) )
 else:
-    _xetSysmanGetResourceInfo_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_resid_info_t) )
+    _xetSysmanGetSubdevice_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_sysman_handle_t) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanGetResources
+## @brief Function-pointer for xetSysmanDeviceGetProperties
 if __use_win_types:
-    _xetSysmanGetResources_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_resource_type_t, POINTER(c_ulong), POINTER(xet_resid_info_t) )
+    _xetSysmanDeviceGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_sysman_properties_t) )
 else:
-    _xetSysmanGetResources_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_resource_type_t, POINTER(c_ulong), POINTER(xet_resid_info_t) )
+    _xetSysmanDeviceGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_sysman_properties_t) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanGetPropertyInfo
+## @brief Function-pointer for xetSysmanDeviceGetOperatingMode
 if __use_win_types:
-    _xetSysmanGetPropertyInfo_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_resprop_info_t) )
+    _xetSysmanDeviceGetOperatingMode_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_operating_mode_t) )
 else:
-    _xetSysmanGetPropertyInfo_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_resprop_info_t) )
+    _xetSysmanDeviceGetOperatingMode_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_operating_mode_t) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanGetProperties
+## @brief Function-pointer for xetSysmanDeviceSetOperatingMode
 if __use_win_types:
-    _xetSysmanGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_resprop_request_t) )
+    _xetSysmanDeviceSetOperatingMode_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_operating_mode_t )
 else:
-    _xetSysmanGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_resprop_request_t) )
+    _xetSysmanDeviceSetOperatingMode_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_operating_mode_t )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanSetProperties
+## @brief Function-pointer for xetSysmanDeviceReset
 if __use_win_types:
-    _xetSysmanSetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_resprop_request_t) )
+    _xetSysmanDeviceReset_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t )
 else:
-    _xetSysmanSetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_resprop_request_t) )
+    _xetSysmanDeviceReset_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanPowerGetProperties
+if __use_win_types:
+    _xetSysmanPowerGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_properties_t) )
+else:
+    _xetSysmanPowerGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanPowerGetEnergyCounter
+if __use_win_types:
+    _xetSysmanPowerGetEnergyCounter_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_energy_counter_t) )
+else:
+    _xetSysmanPowerGetEnergyCounter_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_energy_counter_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanPowerGetLimits
+if __use_win_types:
+    _xetSysmanPowerGetLimits_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_sustained_limit_t), POINTER(xet_power_burst_limit_t), POINTER(xet_power_peak_limit_t) )
+else:
+    _xetSysmanPowerGetLimits_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_sustained_limit_t), POINTER(xet_power_burst_limit_t), POINTER(xet_power_peak_limit_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanPowerSetLimits
+if __use_win_types:
+    _xetSysmanPowerSetLimits_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_sustained_limit_t), POINTER(xet_power_burst_limit_t), POINTER(xet_power_peak_limit_t) )
+else:
+    _xetSysmanPowerSetLimits_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_sustained_limit_t), POINTER(xet_power_burst_limit_t), POINTER(xet_power_peak_limit_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanFrequencyGetProperties
+if __use_win_types:
+    _xetSysmanFrequencyGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_freq_domain_t, POINTER(xet_freq_properties_t) )
+else:
+    _xetSysmanFrequencyGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_freq_domain_t, POINTER(xet_freq_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanFrequencyGetLimits
+if __use_win_types:
+    _xetSysmanFrequencyGetLimits_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_freq_domain_t, POINTER(xet_freq_limits_t) )
+else:
+    _xetSysmanFrequencyGetLimits_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_freq_domain_t, POINTER(xet_freq_limits_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanFrequencySetLimits
+if __use_win_types:
+    _xetSysmanFrequencySetLimits_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_freq_domain_t, POINTER(xet_freq_limits_t) )
+else:
+    _xetSysmanFrequencySetLimits_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_freq_domain_t, POINTER(xet_freq_limits_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanFrequencyGetState
+if __use_win_types:
+    _xetSysmanFrequencyGetState_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_freq_domain_t, POINTER(xet_freq_state_t) )
+else:
+    _xetSysmanFrequencyGetState_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_freq_domain_t, POINTER(xet_freq_state_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanFrequencyGetThrottleTime
+if __use_win_types:
+    _xetSysmanFrequencyGetThrottleTime_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_freq_domain_t, POINTER(xet_freq_throttle_time_t) )
+else:
+    _xetSysmanFrequencyGetThrottleTime_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_freq_domain_t, POINTER(xet_freq_throttle_time_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanActivityGetStats
+if __use_win_types:
+    _xetSysmanActivityGetStats_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_activity_type_t, POINTER(xet_activity_stats_t) )
+else:
+    _xetSysmanActivityGetStats_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_activity_type_t, POINTER(xet_activity_stats_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanMemoryGetProperties
+if __use_win_types:
+    _xetSysmanMemoryGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_mem_properties_t) )
+else:
+    _xetSysmanMemoryGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_mem_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanMemoryGetBandwidth
+if __use_win_types:
+    _xetSysmanMemoryGetBandwidth_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_mem_bandwidth_t) )
+else:
+    _xetSysmanMemoryGetBandwidth_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_mem_bandwidth_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanMemoryGetAllocated
+if __use_win_types:
+    _xetSysmanMemoryGetAllocated_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_mem_alloc_t) )
+else:
+    _xetSysmanMemoryGetAllocated_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_mem_alloc_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanPciGetProperties
+if __use_win_types:
+    _xetSysmanPciGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_pci_properties_t) )
+else:
+    _xetSysmanPciGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_pci_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanPciGetState
+if __use_win_types:
+    _xetSysmanPciGetState_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_pci_state_t) )
+else:
+    _xetSysmanPciGetState_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_pci_state_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanPciGetBarProperties
+if __use_win_types:
+    _xetSysmanPciGetBarProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_pci_bar_properties_t) )
+else:
+    _xetSysmanPciGetBarProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_pci_bar_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanPciGetThroughput
+if __use_win_types:
+    _xetSysmanPciGetThroughput_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_pci_throughput_t) )
+else:
+    _xetSysmanPciGetThroughput_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_pci_throughput_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanPciGetStats
+if __use_win_types:
+    _xetSysmanPciGetStats_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_pci_stats_t) )
+else:
+    _xetSysmanPciGetStats_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_pci_stats_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanSwitchGetProperties
+if __use_win_types:
+    _xetSysmanSwitchGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_switch_properties_t) )
+else:
+    _xetSysmanSwitchGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_switch_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanSwitchGetState
+if __use_win_types:
+    _xetSysmanSwitchGetState_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_switch_state_t) )
+else:
+    _xetSysmanSwitchGetState_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_switch_state_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanSwitchSetState
+if __use_win_types:
+    _xetSysmanSwitchSetState_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xe_bool_t )
+else:
+    _xetSysmanSwitchSetState_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xe_bool_t )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanSwitchPortGetProperties
+if __use_win_types:
+    _xetSysmanSwitchPortGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_switch_port_properties_t) )
+else:
+    _xetSysmanSwitchPortGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_switch_port_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanSwitchPortGetState
+if __use_win_types:
+    _xetSysmanSwitchPortGetState_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_switch_port_state_t) )
+else:
+    _xetSysmanSwitchPortGetState_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_switch_port_state_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanSwitchPortGetThroughput
+if __use_win_types:
+    _xetSysmanSwitchPortGetThroughput_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_switch_port_throughput_t) )
+else:
+    _xetSysmanSwitchPortGetThroughput_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_switch_port_throughput_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanSwitchPortGetStats
+if __use_win_types:
+    _xetSysmanSwitchPortGetStats_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_switch_port_stats_t) )
+else:
+    _xetSysmanSwitchPortGetStats_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_switch_port_stats_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanTemperatureGet
+if __use_win_types:
+    _xetSysmanTemperatureGet_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_temp_sensors_t, POINTER(c_ulong) )
+else:
+    _xetSysmanTemperatureGet_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_temp_sensors_t, POINTER(c_ulong) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanStandbyGetMode
+if __use_win_types:
+    _xetSysmanStandbyGetMode_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_stby_promo_mode_t) )
+else:
+    _xetSysmanStandbyGetMode_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_stby_promo_mode_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanStandbySetMode
+if __use_win_types:
+    _xetSysmanStandbySetMode_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_stby_promo_mode_t )
+else:
+    _xetSysmanStandbySetMode_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_stby_promo_mode_t )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanFirmwareGetProperties
+if __use_win_types:
+    _xetSysmanFirmwareGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_firmware_properties_t) )
+else:
+    _xetSysmanFirmwareGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_firmware_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanFirmwareGetChecksum
+if __use_win_types:
+    _xetSysmanFirmwareGetChecksum_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(c_ulong) )
+else:
+    _xetSysmanFirmwareGetChecksum_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(c_ulong) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanFirmwareFlash
+if __use_win_types:
+    _xetSysmanFirmwareFlash_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, c_void_p, c_ulong )
+else:
+    _xetSysmanFirmwareFlash_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, c_void_p, c_ulong )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanPsuGetProperties
+if __use_win_types:
+    _xetSysmanPsuGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_psu_properties_t) )
+else:
+    _xetSysmanPsuGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_psu_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanPsuGetState
+if __use_win_types:
+    _xetSysmanPsuGetState_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_psu_state_t) )
+else:
+    _xetSysmanPsuGetState_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_psu_state_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanFanGetProperties
+if __use_win_types:
+    _xetSysmanFanGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_fan_properties_t) )
+else:
+    _xetSysmanFanGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_fan_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanFanGetConfig
+if __use_win_types:
+    _xetSysmanFanGetConfig_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_fan_config_t) )
+else:
+    _xetSysmanFanGetConfig_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_fan_config_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanFanSetConfig
+if __use_win_types:
+    _xetSysmanFanSetConfig_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_fan_config_t) )
+else:
+    _xetSysmanFanSetConfig_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_fan_config_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanFanGetState
+if __use_win_types:
+    _xetSysmanFanGetState_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, xet_fan_speed_units_t, POINTER(xet_fan_state_t) )
+else:
+    _xetSysmanFanGetState_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, xet_fan_speed_units_t, POINTER(xet_fan_state_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanLedGetProperties
+if __use_win_types:
+    _xetSysmanLedGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_led_properties_t) )
+else:
+    _xetSysmanLedGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_led_properties_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanLedGetState
+if __use_win_types:
+    _xetSysmanLedGetState_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_led_state_t) )
+else:
+    _xetSysmanLedGetState_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_led_state_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanLedSetState
+if __use_win_types:
+    _xetSysmanLedSetState_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_led_state_t) )
+else:
+    _xetSysmanLedSetState_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_led_state_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanRasGetProperties
@@ -1802,53 +1737,39 @@ else:
     _xetSysmanRasGetErrors_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_ras_error_type_t, xe_bool_t, POINTER(c_ulonglong), POINTER(xet_ras_details_t) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanSupportedEvents
+## @brief Function-pointer for xetSysmanEventsRegister
 if __use_win_types:
-    _xetSysmanSupportedEvents_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_event_support_t) )
+    _xetSysmanEventsRegister_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_event_request_t) )
 else:
-    _xetSysmanSupportedEvents_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_event_support_t) )
+    _xetSysmanEventsRegister_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_event_request_t) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanRegisterEvents
+## @brief Function-pointer for xetSysmanEventsUnregister
 if __use_win_types:
-    _xetSysmanRegisterEvents_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_event_request_t) )
+    _xetSysmanEventsUnregister_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_event_request_t) )
 else:
-    _xetSysmanRegisterEvents_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_event_request_t) )
+    _xetSysmanEventsUnregister_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_event_request_t) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanUnregisterEvents
+## @brief Function-pointer for xetSysmanEventsListen
 if __use_win_types:
-    _xetSysmanUnregisterEvents_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_event_request_t) )
+    _xetSysmanEventsListen_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xe_bool_t, c_ulong, POINTER(c_ulong) )
 else:
-    _xetSysmanUnregisterEvents_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_event_request_t) )
+    _xetSysmanEventsListen_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xe_bool_t, c_ulong, POINTER(c_ulong) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanGetEvents
+## @brief Function-pointer for xetSysmanDiagnosticsGetTestList
 if __use_win_types:
-    _xetSysmanGetEvents_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xe_bool_t, c_ulong, POINTER(c_ulong) )
+    _xetSysmanDiagnosticsGetTestList_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_diag_type_t, POINTER(xet_diag_test_list_t*) )
 else:
-    _xetSysmanGetEvents_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xe_bool_t, c_ulong, POINTER(c_ulong) )
+    _xetSysmanDiagnosticsGetTestList_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_diag_type_t, POINTER(xet_diag_test_list_t*) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanGetDiagnosticTests
+## @brief Function-pointer for xetSysmanDiagnosticsRunTests
 if __use_win_types:
-    _xetSysmanGetDiagnosticTests_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_diag_type_t, POINTER(xet_diag_test_list_t*) )
+    _xetSysmanDiagnosticsRunTests_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_diag_type_t, c_ulong, c_ulong, POINTER(xet_diag_result_t) )
 else:
-    _xetSysmanGetDiagnosticTests_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_diag_type_t, POINTER(xet_diag_test_list_t*) )
-
-###############################################################################
-## @brief Function-pointer for xetSysmanRunDiagnosticTests
-if __use_win_types:
-    _xetSysmanRunDiagnosticTests_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_diag_type_t, c_ulong, c_ulong, POINTER(xet_diag_result_t) )
-else:
-    _xetSysmanRunDiagnosticTests_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_diag_type_t, c_ulong, c_ulong, POINTER(xet_diag_result_t) )
-
-###############################################################################
-## @brief Function-pointer for xetSysmanDeviceReset
-if __use_win_types:
-    _xetSysmanDeviceReset_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t )
-else:
-    _xetSysmanDeviceReset_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t )
+    _xetSysmanDiagnosticsRunTests_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_diag_type_t, c_ulong, c_ulong, POINTER(xet_diag_result_t) )
 
 
 ###############################################################################
@@ -1856,20 +1777,58 @@ else:
 class _xet_sysman_dditable_t(Structure):
     _fields_ = [
         ("pfnGet", c_void_p),                                           ## _xetSysmanGet_t
-        ("pfnGetResourceInfo", c_void_p),                               ## _xetSysmanGetResourceInfo_t
-        ("pfnGetResources", c_void_p),                                  ## _xetSysmanGetResources_t
-        ("pfnGetPropertyInfo", c_void_p),                               ## _xetSysmanGetPropertyInfo_t
-        ("pfnGetProperties", c_void_p),                                 ## _xetSysmanGetProperties_t
-        ("pfnSetProperties", c_void_p),                                 ## _xetSysmanSetProperties_t
+        ("pfnGetSubdevice", c_void_p),                                  ## _xetSysmanGetSubdevice_t
+        ("pfnDeviceGetProperties", c_void_p),                           ## _xetSysmanDeviceGetProperties_t
+        ("pfnDeviceGetOperatingMode", c_void_p),                        ## _xetSysmanDeviceGetOperatingMode_t
+        ("pfnDeviceSetOperatingMode", c_void_p),                        ## _xetSysmanDeviceSetOperatingMode_t
+        ("pfnDeviceReset", c_void_p),                                   ## _xetSysmanDeviceReset_t
+        ("pfnPowerGetProperties", c_void_p),                            ## _xetSysmanPowerGetProperties_t
+        ("pfnPowerGetEnergyCounter", c_void_p),                         ## _xetSysmanPowerGetEnergyCounter_t
+        ("pfnPowerGetLimits", c_void_p),                                ## _xetSysmanPowerGetLimits_t
+        ("pfnPowerSetLimits", c_void_p),                                ## _xetSysmanPowerSetLimits_t
+        ("pfnFrequencyGetProperties", c_void_p),                        ## _xetSysmanFrequencyGetProperties_t
+        ("pfnFrequencyGetLimits", c_void_p),                            ## _xetSysmanFrequencyGetLimits_t
+        ("pfnFrequencySetLimits", c_void_p),                            ## _xetSysmanFrequencySetLimits_t
+        ("pfnFrequencyGetState", c_void_p),                             ## _xetSysmanFrequencyGetState_t
+        ("pfnFrequencyGetThrottleTime", c_void_p),                      ## _xetSysmanFrequencyGetThrottleTime_t
+        ("pfnActivityGetStats", c_void_p),                              ## _xetSysmanActivityGetStats_t
+        ("pfnMemoryGetProperties", c_void_p),                           ## _xetSysmanMemoryGetProperties_t
+        ("pfnMemoryGetBandwidth", c_void_p),                            ## _xetSysmanMemoryGetBandwidth_t
+        ("pfnMemoryGetAllocated", c_void_p),                            ## _xetSysmanMemoryGetAllocated_t
+        ("pfnPciGetProperties", c_void_p),                              ## _xetSysmanPciGetProperties_t
+        ("pfnPciGetState", c_void_p),                                   ## _xetSysmanPciGetState_t
+        ("pfnPciGetBarProperties", c_void_p),                           ## _xetSysmanPciGetBarProperties_t
+        ("pfnPciGetThroughput", c_void_p),                              ## _xetSysmanPciGetThroughput_t
+        ("pfnPciGetStats", c_void_p),                                   ## _xetSysmanPciGetStats_t
+        ("pfnSwitchGetProperties", c_void_p),                           ## _xetSysmanSwitchGetProperties_t
+        ("pfnSwitchGetState", c_void_p),                                ## _xetSysmanSwitchGetState_t
+        ("pfnSwitchSetState", c_void_p),                                ## _xetSysmanSwitchSetState_t
+        ("pfnSwitchPortGetProperties", c_void_p),                       ## _xetSysmanSwitchPortGetProperties_t
+        ("pfnSwitchPortGetState", c_void_p),                            ## _xetSysmanSwitchPortGetState_t
+        ("pfnSwitchPortGetThroughput", c_void_p),                       ## _xetSysmanSwitchPortGetThroughput_t
+        ("pfnSwitchPortGetStats", c_void_p),                            ## _xetSysmanSwitchPortGetStats_t
+        ("pfnTemperatureGet", c_void_p),                                ## _xetSysmanTemperatureGet_t
+        ("pfnStandbyGetMode", c_void_p),                                ## _xetSysmanStandbyGetMode_t
+        ("pfnStandbySetMode", c_void_p),                                ## _xetSysmanStandbySetMode_t
+        ("pfnFirmwareGetProperties", c_void_p),                         ## _xetSysmanFirmwareGetProperties_t
+        ("pfnFirmwareGetChecksum", c_void_p),                           ## _xetSysmanFirmwareGetChecksum_t
+        ("pfnFirmwareFlash", c_void_p),                                 ## _xetSysmanFirmwareFlash_t
+        ("pfnPsuGetProperties", c_void_p),                              ## _xetSysmanPsuGetProperties_t
+        ("pfnPsuGetState", c_void_p),                                   ## _xetSysmanPsuGetState_t
+        ("pfnFanGetProperties", c_void_p),                              ## _xetSysmanFanGetProperties_t
+        ("pfnFanGetConfig", c_void_p),                                  ## _xetSysmanFanGetConfig_t
+        ("pfnFanSetConfig", c_void_p),                                  ## _xetSysmanFanSetConfig_t
+        ("pfnFanGetState", c_void_p),                                   ## _xetSysmanFanGetState_t
+        ("pfnLedGetProperties", c_void_p),                              ## _xetSysmanLedGetProperties_t
+        ("pfnLedGetState", c_void_p),                                   ## _xetSysmanLedGetState_t
+        ("pfnLedSetState", c_void_p),                                   ## _xetSysmanLedSetState_t
         ("pfnRasGetProperties", c_void_p),                              ## _xetSysmanRasGetProperties_t
         ("pfnRasGetErrors", c_void_p),                                  ## _xetSysmanRasGetErrors_t
-        ("pfnSupportedEvents", c_void_p),                               ## _xetSysmanSupportedEvents_t
-        ("pfnRegisterEvents", c_void_p),                                ## _xetSysmanRegisterEvents_t
-        ("pfnUnregisterEvents", c_void_p),                              ## _xetSysmanUnregisterEvents_t
-        ("pfnGetEvents", c_void_p),                                     ## _xetSysmanGetEvents_t
-        ("pfnGetDiagnosticTests", c_void_p),                            ## _xetSysmanGetDiagnosticTests_t
-        ("pfnRunDiagnosticTests", c_void_p),                            ## _xetSysmanRunDiagnosticTests_t
-        ("pfnDeviceReset", c_void_p)                                    ## _xetSysmanDeviceReset_t
+        ("pfnEventsRegister", c_void_p),                                ## _xetSysmanEventsRegister_t
+        ("pfnEventsUnregister", c_void_p),                              ## _xetSysmanEventsUnregister_t
+        ("pfnEventsListen", c_void_p),                                  ## _xetSysmanEventsListen_t
+        ("pfnDiagnosticsGetTestList", c_void_p),                        ## _xetSysmanDiagnosticsGetTestList_t
+        ("pfnDiagnosticsRunTests", c_void_p)                            ## _xetSysmanDiagnosticsRunTests_t
     ]
 
 ###############################################################################
@@ -2038,19 +1997,57 @@ class XET_DDI:
 
         # attach function interface to function address
         self.xetSysmanGet = _xetSysmanGet_t(self.__dditable.Sysman.pfnGet)
-        self.xetSysmanGetResourceInfo = _xetSysmanGetResourceInfo_t(self.__dditable.Sysman.pfnGetResourceInfo)
-        self.xetSysmanGetResources = _xetSysmanGetResources_t(self.__dditable.Sysman.pfnGetResources)
-        self.xetSysmanGetPropertyInfo = _xetSysmanGetPropertyInfo_t(self.__dditable.Sysman.pfnGetPropertyInfo)
-        self.xetSysmanGetProperties = _xetSysmanGetProperties_t(self.__dditable.Sysman.pfnGetProperties)
-        self.xetSysmanSetProperties = _xetSysmanSetProperties_t(self.__dditable.Sysman.pfnSetProperties)
+        self.xetSysmanGetSubdevice = _xetSysmanGetSubdevice_t(self.__dditable.Sysman.pfnGetSubdevice)
+        self.xetSysmanDeviceGetProperties = _xetSysmanDeviceGetProperties_t(self.__dditable.Sysman.pfnDeviceGetProperties)
+        self.xetSysmanDeviceGetOperatingMode = _xetSysmanDeviceGetOperatingMode_t(self.__dditable.Sysman.pfnDeviceGetOperatingMode)
+        self.xetSysmanDeviceSetOperatingMode = _xetSysmanDeviceSetOperatingMode_t(self.__dditable.Sysman.pfnDeviceSetOperatingMode)
+        self.xetSysmanDeviceReset = _xetSysmanDeviceReset_t(self.__dditable.Sysman.pfnDeviceReset)
+        self.xetSysmanPowerGetProperties = _xetSysmanPowerGetProperties_t(self.__dditable.Sysman.pfnPowerGetProperties)
+        self.xetSysmanPowerGetEnergyCounter = _xetSysmanPowerGetEnergyCounter_t(self.__dditable.Sysman.pfnPowerGetEnergyCounter)
+        self.xetSysmanPowerGetLimits = _xetSysmanPowerGetLimits_t(self.__dditable.Sysman.pfnPowerGetLimits)
+        self.xetSysmanPowerSetLimits = _xetSysmanPowerSetLimits_t(self.__dditable.Sysman.pfnPowerSetLimits)
+        self.xetSysmanFrequencyGetProperties = _xetSysmanFrequencyGetProperties_t(self.__dditable.Sysman.pfnFrequencyGetProperties)
+        self.xetSysmanFrequencyGetLimits = _xetSysmanFrequencyGetLimits_t(self.__dditable.Sysman.pfnFrequencyGetLimits)
+        self.xetSysmanFrequencySetLimits = _xetSysmanFrequencySetLimits_t(self.__dditable.Sysman.pfnFrequencySetLimits)
+        self.xetSysmanFrequencyGetState = _xetSysmanFrequencyGetState_t(self.__dditable.Sysman.pfnFrequencyGetState)
+        self.xetSysmanFrequencyGetThrottleTime = _xetSysmanFrequencyGetThrottleTime_t(self.__dditable.Sysman.pfnFrequencyGetThrottleTime)
+        self.xetSysmanActivityGetStats = _xetSysmanActivityGetStats_t(self.__dditable.Sysman.pfnActivityGetStats)
+        self.xetSysmanMemoryGetProperties = _xetSysmanMemoryGetProperties_t(self.__dditable.Sysman.pfnMemoryGetProperties)
+        self.xetSysmanMemoryGetBandwidth = _xetSysmanMemoryGetBandwidth_t(self.__dditable.Sysman.pfnMemoryGetBandwidth)
+        self.xetSysmanMemoryGetAllocated = _xetSysmanMemoryGetAllocated_t(self.__dditable.Sysman.pfnMemoryGetAllocated)
+        self.xetSysmanPciGetProperties = _xetSysmanPciGetProperties_t(self.__dditable.Sysman.pfnPciGetProperties)
+        self.xetSysmanPciGetState = _xetSysmanPciGetState_t(self.__dditable.Sysman.pfnPciGetState)
+        self.xetSysmanPciGetBarProperties = _xetSysmanPciGetBarProperties_t(self.__dditable.Sysman.pfnPciGetBarProperties)
+        self.xetSysmanPciGetThroughput = _xetSysmanPciGetThroughput_t(self.__dditable.Sysman.pfnPciGetThroughput)
+        self.xetSysmanPciGetStats = _xetSysmanPciGetStats_t(self.__dditable.Sysman.pfnPciGetStats)
+        self.xetSysmanSwitchGetProperties = _xetSysmanSwitchGetProperties_t(self.__dditable.Sysman.pfnSwitchGetProperties)
+        self.xetSysmanSwitchGetState = _xetSysmanSwitchGetState_t(self.__dditable.Sysman.pfnSwitchGetState)
+        self.xetSysmanSwitchSetState = _xetSysmanSwitchSetState_t(self.__dditable.Sysman.pfnSwitchSetState)
+        self.xetSysmanSwitchPortGetProperties = _xetSysmanSwitchPortGetProperties_t(self.__dditable.Sysman.pfnSwitchPortGetProperties)
+        self.xetSysmanSwitchPortGetState = _xetSysmanSwitchPortGetState_t(self.__dditable.Sysman.pfnSwitchPortGetState)
+        self.xetSysmanSwitchPortGetThroughput = _xetSysmanSwitchPortGetThroughput_t(self.__dditable.Sysman.pfnSwitchPortGetThroughput)
+        self.xetSysmanSwitchPortGetStats = _xetSysmanSwitchPortGetStats_t(self.__dditable.Sysman.pfnSwitchPortGetStats)
+        self.xetSysmanTemperatureGet = _xetSysmanTemperatureGet_t(self.__dditable.Sysman.pfnTemperatureGet)
+        self.xetSysmanStandbyGetMode = _xetSysmanStandbyGetMode_t(self.__dditable.Sysman.pfnStandbyGetMode)
+        self.xetSysmanStandbySetMode = _xetSysmanStandbySetMode_t(self.__dditable.Sysman.pfnStandbySetMode)
+        self.xetSysmanFirmwareGetProperties = _xetSysmanFirmwareGetProperties_t(self.__dditable.Sysman.pfnFirmwareGetProperties)
+        self.xetSysmanFirmwareGetChecksum = _xetSysmanFirmwareGetChecksum_t(self.__dditable.Sysman.pfnFirmwareGetChecksum)
+        self.xetSysmanFirmwareFlash = _xetSysmanFirmwareFlash_t(self.__dditable.Sysman.pfnFirmwareFlash)
+        self.xetSysmanPsuGetProperties = _xetSysmanPsuGetProperties_t(self.__dditable.Sysman.pfnPsuGetProperties)
+        self.xetSysmanPsuGetState = _xetSysmanPsuGetState_t(self.__dditable.Sysman.pfnPsuGetState)
+        self.xetSysmanFanGetProperties = _xetSysmanFanGetProperties_t(self.__dditable.Sysman.pfnFanGetProperties)
+        self.xetSysmanFanGetConfig = _xetSysmanFanGetConfig_t(self.__dditable.Sysman.pfnFanGetConfig)
+        self.xetSysmanFanSetConfig = _xetSysmanFanSetConfig_t(self.__dditable.Sysman.pfnFanSetConfig)
+        self.xetSysmanFanGetState = _xetSysmanFanGetState_t(self.__dditable.Sysman.pfnFanGetState)
+        self.xetSysmanLedGetProperties = _xetSysmanLedGetProperties_t(self.__dditable.Sysman.pfnLedGetProperties)
+        self.xetSysmanLedGetState = _xetSysmanLedGetState_t(self.__dditable.Sysman.pfnLedGetState)
+        self.xetSysmanLedSetState = _xetSysmanLedSetState_t(self.__dditable.Sysman.pfnLedSetState)
         self.xetSysmanRasGetProperties = _xetSysmanRasGetProperties_t(self.__dditable.Sysman.pfnRasGetProperties)
         self.xetSysmanRasGetErrors = _xetSysmanRasGetErrors_t(self.__dditable.Sysman.pfnRasGetErrors)
-        self.xetSysmanSupportedEvents = _xetSysmanSupportedEvents_t(self.__dditable.Sysman.pfnSupportedEvents)
-        self.xetSysmanRegisterEvents = _xetSysmanRegisterEvents_t(self.__dditable.Sysman.pfnRegisterEvents)
-        self.xetSysmanUnregisterEvents = _xetSysmanUnregisterEvents_t(self.__dditable.Sysman.pfnUnregisterEvents)
-        self.xetSysmanGetEvents = _xetSysmanGetEvents_t(self.__dditable.Sysman.pfnGetEvents)
-        self.xetSysmanGetDiagnosticTests = _xetSysmanGetDiagnosticTests_t(self.__dditable.Sysman.pfnGetDiagnosticTests)
-        self.xetSysmanRunDiagnosticTests = _xetSysmanRunDiagnosticTests_t(self.__dditable.Sysman.pfnRunDiagnosticTests)
-        self.xetSysmanDeviceReset = _xetSysmanDeviceReset_t(self.__dditable.Sysman.pfnDeviceReset)
+        self.xetSysmanEventsRegister = _xetSysmanEventsRegister_t(self.__dditable.Sysman.pfnEventsRegister)
+        self.xetSysmanEventsUnregister = _xetSysmanEventsUnregister_t(self.__dditable.Sysman.pfnEventsUnregister)
+        self.xetSysmanEventsListen = _xetSysmanEventsListen_t(self.__dditable.Sysman.pfnEventsListen)
+        self.xetSysmanDiagnosticsGetTestList = _xetSysmanDiagnosticsGetTestList_t(self.__dditable.Sysman.pfnDiagnosticsGetTestList)
+        self.xetSysmanDiagnosticsRunTests = _xetSysmanDiagnosticsRunTests_t(self.__dditable.Sysman.pfnDiagnosticsRunTests)
 
         # success!

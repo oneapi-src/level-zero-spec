@@ -9,33 +9,24 @@ The following documents the high-level programming models and guidelines.
 ## Table of Contents
 * [Introduction](#in)
 * [Sysman handle](#hd)
-* [Resources](#re)
-* [Properties](#pr)
-    + [Property identifier](#pri)
-    + [Property data](#prd)
-    + [Property types](#prt)
-    + [Property availability](#pra)
-    + [Property accuracy](#pry)
-    + [Property access](#prw)
-    + [Property reference](#prr)
-        + [Device properties](#prri)
-        + [Power properties](#prrp)
-		+ [Frequency properties](#prrf)
-		+ [Utilization properties](#prru)
-		+ [Memory properties](#prrm)
-		+ [Link properties](#prrl)
-		+ [Temperature properties](#prrt)
-		+ [Standby properties](#prrs)
-		+ [Firmware properties](#prrw)
-		+ [PSU properties](#prry)
-		+ [Fan properties](#prrn)
-		+ [LED properties](#prrd)
+* [System Resource Management](#sm)
+    + [General](#smg)
+    + [Power](#smp)
+	+ [Frequency](#smf)
+	+ [Activity](#sma)
+	+ [Memory](#smm)
+	+ [PCI](#smp)
+	+ [Switch](#sml)
+	+ [Temperature](#smt)
+	+ [Standby](#sms)
+	+ [Firmware](#smw)
+	+ [PSU](#smy)
+	+ [Fan](#smn)
+	+ [LED](#smd)
 * [Reliability, availability and serviceability (RAS)](#ra)
 * [Events](#ev)
 * [Diagnostics](#di)
-* [Reset](#rt)
-* [Sub-devices] (#sd)
-
+* [Sub-devices](#sd)
 
 # <a name="in">Introduction</a>
 Sysman is the System Resource Management Interface (SMI) used to monitor and control the power and performance of accelerator devices.
@@ -144,304 +135,83 @@ int ListDevices(xe_device_group_handle_t hDeviceGroup)
 }
 ```
 
-# <a name="re">Resources</a>
-A device is broken into resources. For example, the GPU frequency of a device is a resource. Resources are broken into groups, defined by the enumerator
-::xet_resource_type_t. The groups are summarized in the table below:
+# <a name="sm">System Resource Management</a>
+System resource management is broken down by device components:
 
-| Resource group         | C API key | Resource Type |Description                                                                                                       |
-| :---                   | :---      | :---                          | :---                                                                                             |
-| **Device**             | dev       | ::XET_RESOURCE_TYPE_DEV      | Properties provide device and driver inventory information.                                      |
-| **Power**              | pwr       | ::XET_RESOURCE_TYPE_PWR      | Properties permit monitoring of power consumption and setting operating power limits.            |
-| **Frequency**          | freq      | ::XET_RESOURCE_TYPE_FREQ     | Properties permit monitoring of frequency and setting frequency limits.                          |
-| **Utilization**        | util      | ::XET_RESOURCE_TYPE_UTIL     | Properties permit monitoring of activity of different component                                  |
-| **Memory**             | mem       | ::XET_RESOURCE_TYPE_MEM      | Properties permit monitoring of memory utilization.                                              |
-| **Link**               | link      | ::XET_RESOURCE_TYPE_LINK     | Properties permit monitoring utilization of PCIe and peer-to-peer links.                         |
-| **Temperature**        | temp      | ::XET_RESOURCE_TYPE_TEMP     | Properties permit monitoring temperatures.                                                       |
-| **Standby**            | stby      | ::XET_RESOURCE_TYPE_STBY     | Properties permit setting standby behavior of different components of the device.                |
-| **Firmware**           | fw        | ::XET_RESOURCE_TYPE_FW       | Properties provide firmware version and uploading new images.                                    |
-| **PSU**                | psu       | ::XET_RESOURCE_TYPE_PSU      | Properties provide status information about power supplies.                                      |
-| **Fan**                | fan       | ::XET_RESOURCE_TYPE_FAN      | Properties permit monitoring and controlling fans.                                               |
-| **LED**                | led       | ::XET_RESOURCE_TYPE_LED      | Properties permit changing the behavior of LEDs.                                                 |
+| Device component                          | Description |
+| :---                                | :---        |
+| [General](#smg) | Access to general device configuration information, operating mode and reset. |
+| [Power](#smp) | Access to power configuration of the device. |
+| [Frequency](#smf) | Access to frequency configuration of various domains (GPU, local memory). |
+| [Activity](#sma) | Access to accelerator activity counters. |
+| [Memory](#smm) | Access to local memory bandwidth and allocation information. |
+| [PCI](#smp) | Access to PCI statistics. |
+| [Switch](#sml) | Access to high-speed peer-to-peer connection configuration and statistics. |
+| [Temperature](#smt) | Access to temperature sensor readins. |
+| [Standby](#sms) | Access to standby promotion configuration. |
+| [Firmware](#smw) | Access to device firmwares. |
+| [PSU](#smy) | Access to device power supply information. |
+| [Fan](#smn) | Access to device fan controls and state. |
+| [LED](#smd) | Access to device LED controls and state. |
 
-Each resource in the system is identified uniquely by one of the values in the enumerator ::xet_resid_t. Some of these resources are expected to be available on all devices
-and are listed in the table below:
 
-|         Resource ID         |                        Description                         |
-| :---                        | :---                                                       |
-| ::XET_RESID_DEV_INVENTORY  |      Provides access to device inventory information       |
-|   ::XET_RESID_PWR_TOTAL    | Provides access to total device power telemetry and limits |
-|    ::XET_RESID_FREQ_GPU    |              Provides access to GPU frequency              |
-| ::XET_RESID_FREQ_LOCAL_MEM |         Provides access to local memory frequency          |
-|    ::XET_RESID_UTIL_GPU    |        Provides access to GPU utilization counters         |
-|   ::XET_RESID_MEM_LOCAL    |    Provides access to local memory utilization counters    |
-|   ::XET_RESID_LINK_PCIE    |         Provides access to PCIe bandwidth counters         |
-|    ::XET_RESID_TEMP_MAX    |           Provides access to device temperature            |
+## <a name="smg">General</a>
+The following functions are provided to manage general aspects of the device:
 
-It's possible to get a list of all available resources using the function ::xetSysmanGetResources(), as shown in the example below:
+| Function                             | Device behavior | Sub-device behavior |
+| :---                                 | :---        | :---        |
+| ::xetSysmanDeviceGetProperties()    | Returns static properties for the device. This includes the device serial number and the number of various components such as fans and which components can have their configuration changes. | Returns static properties for the sub-device only. Some information such as serial number are the same as the device. |
+| ::xetSysmanDeviceGetOperatingMode() | Find out what type of workload performance optimization is currently in effect (see note below). | Not supported. |
+| ::xetSysmanDeviceSetOperatingMode() | Change the workload optimization mode (see note below). | Not supported. |
+| ::xetSysmanDeviceReset()            | Performs a warm reset of the device which includes unloading the driver. | Not supported. |
+
+By default, the device is optimized for multi-application operations. This will attempt to provide fair access to the accelerator resources
+for simultaneous processes/virtual machines using the device. However, it is possible to modify the operating mode to optimize for different use-cases.
+The possible optimizations are given by the enumerator ::xet_operating_mode_t.
+
+The example below shows how to output information about a device:
 
 ```c
-void ShowAllResources(xet_sysman_handle_t hSysmanDevice)
+void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
 {
-    uint32_t numResources;
-    if (xetSysmanGetResources(hSysmanDevice, XET_RESOURCE_TYPE_ANY, &numResources, NULL) == XE_RESULT_SUCCESS)
+    xet_sysman_properties_t props;
+    xet_operating_mode_t mode;
+    
+    if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
     {
-        if (numResources)
+        fprintf(stdout, "    UUID:    %s\n", props.uuid.id);
+        fprintf(stdout, "    brand:   %s\n", props.brandName);
+        fprintf(stdout, "    model:   %s\n", props.modelName);
+        fprintf(stdout, "    serial#: %s\n", props.serialNumber);
+        fprintf(stdout, "    board#:  %s\n", props.boardNumber);
+    }
+    if (xetSysmanDeviceGetOperatingMode(hSysmanDevice, &mode) == XE_RESULT_SUCCESS)
+    {
+        switch (mode)
         {
-            xet_resid_info_t* pInfo = (xet_resid_info_t*)malloc(numResources * sizeof(xet_resid_info_t));
-            if (xetSysmanGetResources(hSysmanDevice, XET_RESOURCE_TYPE_ANY, &numResources, pInfo) == XE_RESULT_SUCCESS)
-            {
-                for (uint32_t i = 0; i < numResources; i++)
-                {
-                    fprintf(stdout, "Resource %d: %s = %s\n", pInfo->id, pInfo->pName, pInfo->pDesc);
-                }
-            }
-            free(pInfo);
+        case XET_OPERATING_MODE_EXCLUSIVE_COMPUTE_PROCESS:
+            fprintf(stdout, "    mode:    exclusive compute process\n");
+            break;
+        default:
+            fprintf(stdout, "    mode:    multiply process\n");
+            break;
         }
     }
 }
 ```
 
-It is also possible to get a list of all resources of a given type. The example below shows how to get a list of all fans associated with a device:
+## <a name="smp">Power</a>
+The PSU (Power Supply Unit) provides power to a device. The amount of power drawn by a device is a function of the voltage and frequency,
+both of which are controlled by the Punit, a micro-controller on the device. If the voltage and frequency are two high, two conditions can occur:
 
-```c
-void ShowFans(xet_sysman_handle_t hSysmanDevice)
-{
-    uint32_t numFans;
-    if (xetSysmanGetResources(hSysmanDevice, XET_RESOURCE_TYPE_FAN, &numFans, NULL) == XE_RESULT_SUCCESS)
-    {
-        if (numFans)
-        {
-            xet_resid_info_t* pInfo = (xet_resid_info_t*)malloc(numFans * sizeof(xet_resid_info_t));
-            if (xetSysmanGetResources(hSysmanDevice, XET_RESOURCE_TYPE_FAN, &numFans, pInfo) == XE_RESULT_SUCCESS)
-            {
-                for (uint32_t i = 0; i < numFans; i++)
-                {
-                    fprintf(stdout, "    Fan %s\n", pInfo->pName);
-                }
-            }
-            free(pInfo);
-        }
-    }
-}
-```
+1. Over-current - This is where the current drawn by the device exceeds the maximum current that the PSU can supply. The PSU asserts a signal when
+this occurs, and it is processed by the Punit.
+2. Over-temperature - The device is generating too much heat that cannot be dissipated fast enough. The Punit monitors temperatures and reacts when
+the sensors show the maximum temperature exceeds the threshold TjMax (typically 100 degrees celcius).
 
-Finally, it is possible to provide a list of resources and get information about their availability on a device using the function ::xetSysmanGetResourceInfo().
-The example below shows how to check whether specific resources are supported:
-
-```c
-void CheckResources(xet_sysman_handle_t hSysmanDevice)
-{
-    xet_resid_info_t resources [] =
-    {
-        { XET_RESID_UTIL_GPU },
-        { XET_RESID_UTIL_COMPUTE },
-        { XET_RESID_UTIL_MEDIA },
-        { XET_RESID_UTIL_VIDEO_DECODE },
-        { XET_RESID_UTIL_VIDEO_ENCODE }
-    };
-    uint32_t count = sizeof(resources) / sizeof(resources[0]);
-    if (xetSysmanGetResourceInfo(hSysmanDevice, count, resources) == XE_RESULT_SUCCESS)
-    {
-        for (uint32_t i = 0; i < count; i++)
-        {
-            fprintf(stdout, "Resource %d: %s = %s\n", resources[i].id, resources[i].pName, resources[i].available ? "supported" : "not supported");
-        }
-    }
-}
-```
-
-
-# <a name="pr">Properties</a>
-For every resource type, there are a set of **properties** that can be accessed. These correspond to either telemetry or controls that modify the behavior of the resource.
-
-The diagram below describes the mapping between resources and properties. It shows two types of resources (frequency and power) and examples of properties that can be
-read or controlled for each. Notices that there are two frequency resources; they each have the same set of properties but will have different values depending on the
-configuration of the device.
-
-![Resource property mapping](../images/tools_sysman_resprops.png?raw=true) 
-
-In the following sections, we will discuss where to get the list of properties, the type of properties, how to determine which are available, how to determine if
-an application has permissions to modify properties, how often properties can be accessed and how to read and write property values.
-
-## <a name="pri">Property identifier</a>
-All properties are defined in the enumeration ::xet_resprop_t. As an example, consider the property used to read the current fan speed in RPM: ::XET_RESPROP_FAN_SPEED_RPM.
-Note that resource type C API key (fan) is contained in the name of the property identifier following RESPROP. This provides an easy visual way to determine which resource
-type the property can be used with.
-
-## <a name="prd">Property data</a>
-For every property, there is a corresponding property data structure that can be used to get the current value or set a new value. The name of the property structure
-is given by the writing the property identifier in lowercase and adding "_t" to the end. For example, the property ::XET_RESPROP_FAN_SPEED_RPM has a corresponding
-data structure ::xet_resprop_fan_speed_rpm_t.
-
-## <a name="prt">Property types</a>
-There are four types of properties:
-
-- **ro static** - Properties that are configured when the device boots and not intended to change until the device is shutdown. The value of these properties cannot be changed
-by software.
-- **ro dynamic** - Properties whose values change dynamically as the device runs. These properties are read-only and can only be monitored.
-- **rw dynamic** - Runtime controls - Properties that can be controlled at runtime and modify the behavior of a device. The value of these properties can be changed by software
-and read in order to get the last value that was set.
-- **wo dynamic** - Runtime triggers - Properties that can be controlled at runtime and modify the behavior of a device. The value of these properties can be changed by software
-but cannot be read back to get the last value - these are properties that trigger some behavior but don't have a backing value.
-
-## <a name="pra">Property availability</a>
-Determining if properties are supported and accessible is achieved by calling the API function ::xetSysmanGetPropertyInfo(). The function is called with an array that indicates
-the property identifiers of interest. On return, the array is populated with the API support (one of ::xet_prop_support_t) and the access permissions (::xet_prop_access_t)
-for each property. API support indicates if the property is supported by the current version of the API, the device class and the device. It is possible that the API supports
-a property but not for a particular device class or device. Access permissions are specific to a device and so should be checked for every device.
-
-The example below shows how an application can determine if it can set a fixed fan speed on a specific device:
-
-```c
-bool HaveFanControl(xet_sysman_handle_t hSysmanDevice)
-{
-    bool ret = false;
-    xet_resprop_info_t info;
-    info.property = XET_RESPROP_FAN_FIXED_SPEED;
-    if (xetSysmanGetPropertyInfo(hSysmanDevice, 1, &info) == XE_RESULT_SUCCESS)
-    {
-        if ((info.support & XET_PROP_SUPPORT_DEVICE) &&
-            (info.access & XET_PROP_ACCESS_WRITE_PERMISSIONS))
-        {
-            ret = true;
-        }
-    }
-    return ret;
-}
-```
-
-## <a name="pry">Property accuracy</a>
-All readable dynamic properties have a minimum sample-rate that is related to the time interval between updates of the underlying telemetry. If the property returns the
-instantaneous value at the time of reading, we say that the sample interval is 0. If the property will have an updated value every 1 millisecond, we say that the
-sample interval is 1 millisecond. This means that software should not expect an accuracy of this property if sampled faster than 1 millisecond.
-
-Similarly, writable dynamic properties have a minimum update-rate that is related to the time it takes for the hardware to accept the new value. Software can update
-the property faster than this rate, but it is unlikely that the new value will take effect immediately. If hardware changes immediately when a new property value is
-written, we say that the update interval is 0. If the property will only react to a new value after 1 millisecond, we say that the update interval is 1 millisecond.
-
-Software can determine the minimum sample and update intervals for each property by using the function ::xetSysmanGetPropertyInfo(). The example below shows how
-to determine these intervals for frequency control and monitoring the resolved frequency:
-
-```c
-void GetFreqIntervals(xet_sysman_handle_t hSysmanDevice)
-{
-    xet_resprop_info_t info[] =
-    {
-        { XET_RESPROP_FREQ_RANGE },
-        { XET_RESPROP_FREQ_RESOLVED_FREQ },
-    };
-    if (xetSysmanGetPropertyInfo(hSysmanDevice, sizeof(info) / sizeof(info[0]), info) == XE_RESULT_SUCCESS)
-    {
-        fprintf(stdout, "Frequency update interval: %u microseconds\n", info[0].minSetInterval);
-        fprintf(stdout, "Frequency sample interval: %u microseconds\n", info[1].minGetInterval);
-    }
-}
-```
-
-## <a name="prw">Property access</a>
-To read/write a property, use the functions ::xetSysmanGetProperties() and ::xetSysmanSetProperties() respectively.
-
-Software passes in an array of ::xet_resprop_request_t entries. Each entry specifies the resource identifier and the property identifier to be read/written. In the case
-of writing data, the entry also stores the new values.
-
-If all accesses complete successfully, the function will return ::XE_RESULT_SUCCESS. If some of the accesses fail, the function will return ::XE_RESULT_ERROR_UNKNOWN
-in which case software should check the ::xet_resprop_request_t.status of each entry to determine the resource/properties that had problems.
-
-The code below shows how to read the fan speed and handle errors:
-
-```c
-void ShowFanInfo(xet_sysman_handle_t hSysmanDevice, xet_resid_t FanId)
-{
-    struct FanData
-    {
-        xet_resprop_fan_speed_rpm_t        speedRpm;
-        xet_resprop_fan_speed_percent_t    speedPercent;
-    };
-
-    FanData data;
-    xet_resprop_request_t requests[] = 
-    {
-        { FanId, XET_RESPROP_FAN_SPEED_RPM,       &data.speedRpm,       sizeof(data.speedRpm) },
-        { FanId, XET_RESPROP_FAN_SPEED_PERCENT,   &data.speedPercent,   sizeof(data.speedPercent) },
-    };
-
-    xe_result_t res = xetSysmanGetProperties(hSysmanDevice, sizeof(requests) / sizeof(requests[0]), requests);
-
-    if ((res == XE_RESULT_SUCCESS) || (res == XE_RESULT_ERROR_UNKNOWN))
-    {
-        if (requests[0].status == XE_RESULT_SUCCESS)
-        {
-            fprintf(stdout, "        Fan %u: speed = %u rpm\n", FanId, data.speedRpm.speed);
-        }
-        else
-        {
-            fprintf(stderr, "        Fan %u: error reading XET_RESPROP_FAN_SPEED_RPM\n", FanId);
-        }
-        if (requests[1].status == XE_RESULT_SUCCESS)
-        {
-            fprintf(stdout, "        Fan %u: speed = %u %%\n", FanId, data.speedPercent.speed);
-        }
-        else
-        {
-            fprintf(stderr, "        Fan %u: error reading XET_RESPROP_FAN_SPEED_PERCENT\n", FanId);
-        }
-    }
-    else
-    {
-        fprintf(stderr, "ERROR: Can't request data.\n");
-    }
-}
-```
-
-## <a name="prr">Property reference</a>
-The following sub-sections discuss the properties that are available for each resource type.
-
-### <a name="prri">Device properties</a>
-Device properties give access to inventory information.
-
-Resource type: ::XET_RESOURCE_TYPE_DEV
-
-Resource IDs: ::XET_RESID_DEV_INVENTORY
-
-| Property ID                           | Description |
-| :---                                  | :--- |
-| ::XET_RESPROP_DEV_UUID               | Device UUID     |
-| ::XET_RESPROP_DEV_SERIAL_NUMBER      | Get the manufacturing serial number of the device.     |
-| ::XET_RESPROP_DEV_BOARD_NUMBER       | Get the manufacturing board number of the device.     |
-| ::XET_RESPROP_DEV_BRAND              | Get the device brand name.     |
-| ::XET_RESPROP_DEV_MODEL              | Get the device model name.     |
-| ::XET_RESPROP_DEV_DEVICEID           | Get the device ID.     |
-| ::XET_RESPROP_DEV_VENDOR_NAME        | Get the device vendor name.     |
-| ::XET_RESPROP_DEV_DRIVER_VERSION     | Get the intalled device driver version.     |
-| ::XET_RESPROP_DEV_BARS               | Get configured bars.     |
-
-
-### <a name="prrp">Power properties</a>
-Power properties can be used to monitor energy consumption and set power limits.
-
-Resource type: ::XET_RESOURCE_TYPE_PWR
-
-Resource IDs: ::XET_RESID_PWR_TOTAL
-
-| Property ID                           | Description |
-| :---                                  | :--- |
-| ::XET_RESPROP_PWR_MAX_LIMIT          | The maximum power limit that can be set.     |
-| ::XET_RESPROP_PWR_ENERGY_COUNTER     | Monitor energy consumption.     |
-| ::XET_RESPROP_PWR_SUSTAINED_LIMIT    | Set sustained power limit (see discussion below).     |
-| ::XET_RESPROP_PWR_BURST_LIMIT        | Set burst power limit (see discussion below).     |
-| ::XET_RESPROP_PWR_PEAK_LIMIT         | Set peak power limit (see discussion below).     |
-
-The PSU (Power Supply Unit) provides power to a device. The amount of power drawn by a device is a function of the voltage and frequency, both of which are controlled
-by the Punit, a micro-controller on the device. If the voltage and frequency are two high, two conditions can occur:
-
-1. Over-current - This is where the current drawn by the device exceeds the maximum current that the PSU can supply. The PSU asserts a signal when this occurs,
-and it is processed by the Punit.
-2. Over-temperature - The device is generating too much heat that cannot be dissipated fast enough. The Punit monitors temperatures and reacts when the sensors show
-the maximum temperature exceeds the threshold TjMax (typically 100 degrees celcius).
-
-When either of these conditions occurs, the Punit throttles the frequencies/voltages of the device down to their minimum values, severely impacting performance.
-The Punit avoids such severe throttling by measuring the actual power being consumed by the system and slowly throttling the frequencies down when power exceeds some limits.
-Three limits are monitored by the Punit:
+When either of these conditions occurs, the Punit throttles the frequencies/voltages of the device down to their minimum values, severely impacting
+performance. The Punit avoids such severe throttling by measuring the actual power being consumed by the system and slowly throttling the frequencies
+down when power exceeds some limits. Three limits are monitored by the Punit:
 
 | Limit     | Window        | Description                                                                                                                                                                                                                |
 | :---      | :---          | :---                                                                                                                                                                                                                       |
@@ -449,193 +219,377 @@ Three limits are monitored by the Punit:
 | Burst     | 2ms           | Punit tracks the 2ms weighted moving average of power. When this exceeds a programmable threshold, the Punit starts throttling frequencies/voltages. The threshold is referred to as PL2 - Power Limit 2 - or burst power. |
 | Sustained | 28sec         | Punit tracks the 28sec weighted moving average of power. When this exceeds a programmable threshold, the Punit throttles frequencies/voltages. The threshold is referred to as PL1 - Power Limit 1 - or sustained power.   |
 
-Peak power limit is generally greater than the burst power limit which is generally greater than the sustained power limit. The default factory values are tuned assuming
-the device is operating at normal temperatures running significant workloads:
+Peak power limit is generally greater than the burst power limit which is generally greater than the sustained power limit. The default factory values
+are tuned assuming the device is operating at normal temperatures running significant workloads:
 
-- The peak power limit is tuned to avoid tripping the PSU over-current signal for all but the most intensive compute workloads. Most workloads should be able to run at maximum
-frequencies without hitting this condition.
+- The peak power limit is tuned to avoid tripping the PSU over-current signal for all but the most intensive compute workloads. Most workloads should
+be able to run at maximum frequencies without hitting this condition.
 - The burst power limit permits most workloads to run at maximum frequencies for short periods.
-- The sustained power limit will be triggered if high frequencies are requested for lengthy periods (28sec) and the frequencies will be throttled if the high requests and
-utilization of the device continues.
+- The sustained power limit will be triggered if high frequencies are requested for lengthy periods (28sec) and the frequencies will be throttled
+if the high requests and utilization of the device continues.
 
-The factory defaults tend to be conservative and attempt to provide best behavior for a variety of workloads. Devices that will be running specialized workloads can
-benefit from raising these limits. This is the purpose of the power domain resource.
+The following functions are provided to manage the power of the device:
 
-Frequency throttling is the term given to the situation where the Punit needs to resolve the software frequency requests to lower values in order to bring power
-and/or thermals under control. The reasons for throttling can be obtained using the function ::xetSysmanGetProperties() with the property ::XET_RESPROP_FREQ_THROTTLE_REASONS.
-This will return a bitfield of reasons taken from the enumerator ::xet_freq_throttle_reasons_t.
+| Function                            | Device behavior | Sub-device behavior |
+| :---                                | :---        | :---        |
+| ::xetSysmanPowerGetProperties()    | Get the maximum power limit that can be specified when changing the power of the device. | Get the maximum power limit that can be specified when changing the power of the sub-device. |
+| ::xetSysmanPowerGetEnergyCounter() | Read the energy consumption of the whole device, including sub-devices. | Read the energy consumption of the sub-device only. |
+| ::xetSysmanPowerGetLimits()        | Get the sustained/burst/peak power limits for the whole device. | Get the sustained/burst/peak power limits for the sub-device only. |
+| ::xetSysmanPowerSetLimits()        | Set the sustained/burst/peak power limits for the whole device. | Set the sustained/burst/peak power limits for the sub-device only. This may not be supported - check ::xet_sysman_properties_t.havePowerControl. |
 
+The example below shows how to output the power limits:
 
-### <a name="prrf">Frequency properties</a>
-Frequency properties can be used to monitor and set frequencies.
+```c
+void ShowPowerLimits(xet_sysman_handle_t hSysmanDevice)
+{
+    xet_power_sustained_limit_t sustainedLimits;
+    xet_power_burst_limit_t burstLimits;
+    xet_power_peak_limit_t peakLimits;
+    if (xetSysmanPowerGetLimits(hSysmanDevice, &sustainedLimits, &burstLimits, &peakLimits) == XE_RESULT_SUCCESS)
+    {
+        fprintf(stdout, "    Power limits\n");
+        if (sustainedLimits.enabled)
+        {
+            fprintf(stdout, "        Sustained: %.3f W %.3f sec\n",
+                ((double)sustainedLimits.power) / 1000, ((double)sustainedLimits.interval) / 1000);
+        }
+        else
+        {
+            fprintf(stdout, "        Sustained: Disabled\n");
+        }
+        if (burstLimits.enabled)
+        {
+            fprintf(stdout, "        Burst:     %.3f\n", ((double)burstLimits.power) / 1000);
+        }
+        else
+        {
+            fprintf(stdout, "        Burst:     Disabled\n");
+        }
+        fprintf(stdout, "        Burst:     %.3f\n", ((double)peakLimits.power) / 1000);
+    }
+}
+```
 
-Resource type: ::XET_RESOURCE_TYPE_FREQ
+The next example shows how to output the average power. It assumes that the function is called regularly (say every 100ms).
 
-Resource IDs: ::XET_RESID_FREQ_GPU, ::XET_RESID_FREQ_LOCAL_MEM
+```c
+void ShowAveragePower(xet_sysman_handle_t hSysmanDevice, xet_power_energy_counter_t* pPrevEnergyCounter)
+{
+    xet_power_energy_counter_t newEnergyCounter;
+    if (xetSysmanPowerGetEnergyCounter(hSysmanDevice, &newEnergyCounter) == XE_RESULT_SUCCESS)
+    {
+        uint64_t deltaTime = newEnergyCounter.timestamp - pPrevEnergyCounter->timestamp;
+        if (deltaTime)
+        {
+            fprintf(stdout, "    Average power: %.3f W\n",
+                ((double)(newEnergyCounter.energy - pPrevEnergyCounter->energy)) / ((double)deltaTime));
+            *pPrevEnergyCounter = newEnergyCounter;
+        }
+    }
+}
+```
 
-| Property ID                           | Description |
-| :---                                  | :--- |
-| ::XET_RESPROP_FREQ_AVAIL_CLOCKS      |  Get the list of frequencies that hardware can support.    |
-| ::XET_RESPROP_FREQ_RANGE             |  Set range between which hardware DVFS can operate.    |
-| ::XET_RESPROP_FREQ_REQUESTED_FREQ    |  Read current requested frequency.    |
-| ::XET_RESPROP_FREQ_TDP_FREQ          |  Read maximum frequency that hardware can safely operate at under current conditions.    |
-| ::XET_RESPROP_FREQ_EFFICIENT_FREQ    |  Read the most efficient frequency.    |
-| ::XET_RESPROP_FREQ_RESOLVED_FREQ     |  Read the current resolved frequency.    |
-| ::XET_RESPROP_FREQ_THROTTLE_REASONS  |  Read the reasons frequency is current throttled by the Punit.    |
-| ::XET_RESPROP_FREQ_THROTTLE_TIME     |  Read the time that frequency has been throttled below the request.    |
+## <a name="smf">Frequency</a>
+The hardware manages frequencies to achieve a balance between best performance and power consumption.
 
+A device has multiple frequency domains. Those that are visible to software are defined by the enumerator ::xet_freq_domain_t. Each domain can
+be managed individually using the following functions:
 
-### <a name="prru">Utilization properties</a>
-Utilization properties enable monitoring the load on different parts of the device.
+| Function                               | Device behavior | Sub-device behavior |
+| :---                                   | :---        | :---        |
+| ::xetSysmanFrequencyGetProperties()   | Find out the available frequencies for the frequency domain (will be the same for each sub-device). | Same behavior as at the device level. |
+| ::xetSysmanFrequencyGetLimits()       | Will take the most restrictive min/max range across all sub-devices. | The current min/max frequency between which the frequency domain can operate. |
+| ::xetSysmanFrequencySetLimits()       | Set the min/max frequency for the frequency domain. If there are sub-devices, sets the same range across all of them. | Set the min/max frequency for the frequency domain on the sub-device only. |
+| ::xetSysmanFrequencyGetState()        | Get the current frequency request, actual frequency, TDP frequency and throttle reasons. If there are sub-devices, takes the average of the frequencies and merges the throttle reasons. | Get the current frequency request, actual frequency, TDP frequency and throttle reasons for the sub-device only. |
+| ::xetSysmanFrequencyGetThrottleTime() | Gets the amount of time the frequency domain has been throttled. If there are sub-devices, it will return the max across all of them. | Gets the amount of time the frequency domain in the sub-device has been throttled. |
 
-Resource type: ::XET_RESOURCE_TYPE_UTIL
+It is only permitted to set the frequency limits if the device property ::xet_sysman_properties_t.haveFreqControl is true for the specific frequency
+domain.
 
-Resource IDs: ::XET_RESID_UTIL_GPU, ::XET_RESID_UTIL_COMPUTE, ::XET_RESID_UTIL_MEDIA, ::XET_RESID_UTIL_VIDEO_DECODE, ::XET_RESID_UTIL_VIDEO_ENCODE
+Setting the min/max frequency limits to the same value, software is effectively disabling the hardware controlled frequency and getting a fixed stable
+frequency providing the Punit does not need to throttle due to excess power/heat. 
 
-| Property ID                           | Description |
-| :---                                  | :--- |
-| ::XET_RESPROP_UTIL_COUNTERS          | Get utilization counters so that percentage load can be calculated.     |
+Based on the power/thermal conditions, the frequency requested by software or the hardware may not be respected. This situation can be determined
+using the function ::xetSysmanFrequencyGetState() which will indicate the current frequency request, the actual (resolved) frequency and other
+frequency information that depends on the current conditions. If the actual frequency is below the requested frequency,
+::xet_freq_state_t.throttleReasons will provide the reasons why the frequency is being limited by the Punit.
 
+The example below shows how to fix the frequency of a frequency domain, but only if control is permitted:
 
-### <a name="prrm">Memory properties</a>
-Memory properties enable monitoring memory utilization and bandwidth.
+```c
+void FixFrequency(xet_sysman_handle_t hSysmanDevice, xet_freq_domain_t Domain, double FreqMHz)
+{
+    xet_sysman_properties_t props;
+    
+    if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
+    {
+        if (props.haveFreqControl[Domain])
+        {
+            xet_freq_limits_t limits;
+            limits.min = FreqMHz;
+            limits.max = FreqMHz;
+            if (xetSysmanFrequencySetLimits(hSysmanDevice, Domain, &limits) != XE_RESULT_SUCCESS)
+            {
+                fprintf(stderr, "ERROR: Problem setting the frequency limits.\n");
+            }
+        }
+        else
+        {
+            fprintf(stderr, "ERROR: Can't control this frequency domain.\n");
+        }
+    }
+}
+```
 
-Resource type: ::XET_RESOURCE_TYPE_MEM
+## <a name="sma">Activity</a>
+It is possible to monitor the activity of various accelerator assets on the device - the list if provided in the enumerator ::xet_activity_type_t.
+By taking two snapshots of the activity counters, it is possible to calculate the average utilization of different parts of the device. Currently
+it is possible to get the utilization across all accelerator assets in the device or for only the compute assets and the media assets separately.
 
-Resource IDs: ::XET_RESID_MEM_LOCAL
+The following functions are provided:
 
-| Property ID                           | Description |
-| :---                                  | :--- |
-| ::XET_RESPROP_MEM_TYPE               | The type of memory (HBM, DDR5, ...).    |
-| ::XET_RESPROP_MEM_UTILIZATION        | Counters that can be used to calculate utilization of memory.    |
-| ::XET_RESPROP_MEM_BANDWIDTH          | Counters that can be used to calculate the memory bandwidth      |
-
-
-### <a name="prrl">Link properties</a>
-Link properties enable monitoring link bandwidth and in some cases controlling available operating configuration.
-
-Resource type: ::XET_RESOURCE_TYPE_LINK
-
-Resource IDs: ::XET_RESID_LINK_PCIE, ::XET_RESID_LINK_CD_PORT1 - ::XET_RESID_LINK_CD_PORT16
-
-| Property ID                           | Description |
-| :---                                  | :--- |
-| ::XET_RESPROP_LINK_TYPE              | The type of link (PCIe, peer-to-peer).     |
-| ::XET_RESPROP_LINK_BUS_ADDRESS       | The address of the link on the bus fabric.     |
-| ::XET_RESPROP_LINK_PEER_DEVICE       | The UUID of the remove device.     |
-| ::XET_RESPROP_LINK_AVAIL_SPEEDS      | The available speed configurations of the link.     |
-| ::XET_RESPROP_LINK_MAX_PACKET_SIZE   | The maximum packet size that can be transmitted across the link.     |
-| ::XET_RESPROP_LINK_STATE             | Get the current state of the link (enabled/disabled).     |
-| ::XET_RESPROP_LINK_BANDWIDTH         | Counters that can be used to calculate current link bandwidth.     |
-| ::XET_RESPROP_LINK_SPEED             | Current link speed.     |
-| ::XET_RESPROP_LINK_SPEED_RANGE       | Set the range of speeds between which the link can operate.     |
-
-Software can determine if it is possible to change the link speed (number of lanes, frequency) by calling the function ::xetSysmanGetPropertyInfo()
-and passing in the property ::XET_RESPROP_LINK_SPEED_RANGE. If the resulting value of ::xet_resprop_info_t.access indicates write access, then it is
-possible to change the speed of the link.
-
-
-### <a name="prrt">Temperature properties</a>
-Temperature properties enable monitoring temperatures on different parts of the chip.
-
-Resource type: ::XET_RESOURCE_TYPE_TEMP
-
-Resource IDs: ::XET_RESID_TEMP_MAX, ::XET_RESID_TEMP_GPU, ::XET_RESID_TEMP_LOCAL_MEM
-
-
-| Property ID                           | Description |
-| :---                                  | :--- |
-| ::XET_RESPROP_TEMP_TEMPERATURE       | Current temperature.     |
-
-
-### <a name="prrs">Standby properties</a>
-Control standby of parts of the device.
-
-Resource type: ::XET_RESOURCE_TYPE_STBY
-
-Resource IDs: ::XET_RESID_STBY_GLOBAL
-
-| Property ID                           | Description |
-| :---                                  | :--- |
-| ::XET_RESPROP_STBY_PROMO_MODE        | Set standby promotion mode (default, never).     |
-
-Different parts of a device may powered off when there is no activity. This is known as standby. While this saves power, it can also come with a performance cost
-given the latency exiting from a power-gated state. Generally the hardware effectively manages this trade-off, however these properties can be used to
-influence standby behavior.
-
-
-### <a name="prrw">Firmware properties</a>
-Firmware properties enable querying installed versions, verify the image and possibly flashing a new image.
-
-Resource type: ::XET_RESOURCE_TYPE_FW
-
-Resource IDs: ::XET_RESID_FW_1 - ::XET_RESID_FW_20
-
-| Property ID                           | Description |
-| :---                                  | :--- |
-| ::XET_RESPROP_FW_NAME                | Get firmware name encoded in the installed image.     |
-| ::XET_RESPROP_FW_VERSION             | Get firmware version encoded in the installed image.     |
-| ::XET_RESPROP_FW_CHECK               | Check the firmware image.     |
-| ::XET_RESPROP_FW_FLASH               | Flash a new firmware image.     |
-
-Not all firmwares can be flashed through this API. Software should use the function ::xetSysmanGetPropertyInfo() with the property ::XET_RESPROP_FW_FLASH
-to determine if write access is permitted.
-
-
-### <a name="prry">PSU properties</a>
-These properties provide information about power supply units attached to the device.
-
-Resource type: ::XET_RESOURCE_TYPE_PSU
-
-Resource IDs: ::XET_RESID_PSU_MAIN, ::XET_RESID_PSU_AUX, ::XET_RESID_PSU_1 - ::XET_RESID_PSU_2
-
-| Property ID                           | Description |
-| :---                                  | :--- |
-| ::XET_RESPROP_PSU_AMP_LIMIT          | The maximum electrical current in amperes that can be drawn.     |
-| ::XET_RESPROP_PSU_VOLTAGE_STATUS     | Indicates if under or over voltage has occurred.     |
-| ::XET_RESPROP_PSU_FAN_FAILURE        | Indicates if the fan has failed.     |
-| ::XET_RESPROP_PSU_TEMPERATURE        | The current heatsink temperature in degrees celcius     |
-| ::XET_RESPROP_PSU_AMPS               | The current amps being drawn in amperes     |
+| Function                               | Device behavior | Sub-device behavior |
+| :---                                   | :---        | :---        |
+| ::xetSysmanActivityGetStats()         | Returns the activity counters for the specified ::xet_activity_type_t. If there are sub-devices, this will return the average across all of them. | Returns the activity counters for the specified ::xet_activity_type_t in the sub-device. |
 
 
-### <a name="prrn">Fan properties</a>
-The properties enable monitoring fans and setting fan speeds.
+## <a name="smm">Memory</a>
+The following functions provide access to information about the local memory:
 
-Resource type: ::XET_RESOURCE_TYPE_FAN
+| Function                               | Device behavior | Sub-device behavior |
+| :---                                   | :---        | :---        |
+| ::xetSysmanMemoryGetProperties()      | Find out the type of memory and maximum physical memory. If there are sub-devices, the type of memory will be the same and the maximum physical memory will be the sum of the physical memory size in each sub-device.  | Find out the type of memory and maximum physical memory in the sub-device. |
+| ::xetSysmanMemoryGetAllocated()       | Returns the currently allocated memory size. If there are sub-devices, it returns the total allocated memory for the memory in each sub-device. | Returns the currently allocated memory size for the memory in the sub-device. |
+| ::xetSysmanMemoryGetBandwidth()       | Returns memory bandwidth counters. If there are sub-devices, this will return the average across each sub-device memory. | Returns bandwidth counters for the memory in the sub-device. |
 
-Resource IDs: ::XET_RESID_FAN_MAIN, ::XET_RESID_FAN_1 - ::XET_RESID_FAN_3
+## <a name="smp">PCI</a>
+The PCI bus is the primary means by which the CPU communicates with the device.
 
-| Property ID                           | Description |
-| :---                                  | :--- |
-| ::XET_RESPROP_FAN_MAX_RPM            | The maximum RPM of the fan.     |
-| ::XET_RESPROP_FAN_MAX_TABLE_SIZE     | The maximum number of points in the fan temp/speed table.     |
-| ::XET_RESPROP_FAN_SPEED_RPM          | The current fan speed in units of revolutions per minute (rpm).     |
-| ::XET_RESPROP_FAN_SPEED_PERCENT      | The current fan speed as a percentage of the maximum speed of that fan.    |
-| ::XET_RESPROP_FAN_MODE               | The current fan speed mode.     |
-| ::XET_RESPROP_FAN_FIXED_SPEED        | Read/write the fixed speed setting for the fan.     |
-| ::XET_RESPROP_FAN_SPEED_TABLE        | Read/write the fan speed table.     |
+The following functions provide access to information about the PCI device:
 
-Fan speeds can be given in units of RPM (revolutions per minute) or percentage of maximum RPM.
+| Function                               | Device behavior |
+| :---                                   | :---        |
+| ::xetSysmanPciGetProperties()         | Get the PCI address, number of configured bars and the maximum supported speed. |
+| ::xetSysmanPciGetBarProperties()      | Get information about each configured bar. |
+| ::xetSysmanPciGetState()              | Get the current speed. |
+| ::xetSysmanPciGetThroughput()         | Get the current throughput counters |
+| ::xetSysmanPciGetStats()              | Get telemetry counters - replay counts. |
 
-Software can either request fixed fan speed, including turning the fan off, or depending on hardware capabilities, as a fan speed table. This is a table of temperature/speed
-points. When programmed, the hardware will dynamically choose the fan speed based on the maximum temperature measured on the chip. Software should use the function
-::xetSysmanGetPropertyInfo() with the property ::XET_RESPROP_FAN_SPEED_TABLE to determine if the hardware supports this mode.
+These functions are not supported at the sub-device level.
 
+## <a name="sml">Switch</a>
+A device is able access memory and resources on a remote device using a high-speed switch rather than using the PCI bus. If the device has such a
+switch, the property ::xet_sysman_properties_t.haveSwitch will be true.
 
-### <a name="prrd">LED properties</a>
-These properties enable turning LEDs on/off and changing the color.
+The following functions can be used to manage the switch:
 
-Resource type: ::XET_RESOURCE_TYPE_LED
+| Function                               | Device/sub-device behavior |
+| :---                                   | :---        |
+| ::xetSysmanSwitchGetProperties()      | Get the GUID of the switch and the number of ports. |
+| ::xetSysmanSwitchGetState()           | Get the current state of the switch (enabled/disabled). |
+| ::xetSysmanSwitchSetState()           | Enables/disabled the switch. |
+| ::xetSysmanSwitchPortGetProperties()  | Get the properties of a port on the switch - maximum supported bandwidth. |
+| ::xetSysmanSwitchPortGetState()       | Get the current state of a port on the switch - connected, remote switch GUID, current maximum bandwidth. |
+| ::xetSysmanSwitchPortGetThroughput()  | Get the throughput counters of a port on the switch. |
+| ::xetSysmanSwitchPortGetStats()       | Gets telemetry counters of a port on the switch - number of replays. |
 
-Resource IDs: ::XET_RESID_LED_MAIN, ::XET_RESID_LED_1 - ::XET_RESID_LED_3
+For devices with sub-devices, the switch is usually located in the sub-device. If there is a switch in the device, it will be accessible through the
+SMI handle for the device only if the hardware is not located in sub-devices.
 
-| Property ID                           | Description |
-| :---                                  | :--- |
-| ::XET_RESPROP_LED_RGB_CAP            | Check if LED supports color programming.     |
-| ::XET_RESPROP_LED_STATE              | Turn LED on/off and change the color.     |
+The example below shows how to get the state of all switches in the device and sub-devices:
 
-Not all LEDs support color control. Software should use the function ::xetSysmanGetPropertyInfo() with the property ::XET_RESPROP_LED_RGB_CAP to determine if the LED
-supports programming the R/G/B color values.
+```c
+void ShowSwitchInfo(xet_sysman_handle_t hSysmanDevice)
+{
+    xet_switch_properties_t swprops;
+    if (xetSysmanSwitchGetProperties(hSysmanDevice, &swprops) == XE_RESULT_SUCCESS)
+    {
+        xet_switch_state_t swstate;
+        if (xetSysmanSwitchGetState(hSysmanDevice, &swstate) == XE_RESULT_SUCCESS)
+        {
+            fprintf(stdout, "        GUID:  %s\n", swprops.address.guid);
+            fprintf(stdout, "        #port: %u\n", swprops.numPorts);
+            fprintf(stdout, "        State: %s\n", swstate.enabled ? "Enabled" : "Disabled");
+            if (swstate.enabled)
+            {
+                fprintf(stdout, "        Ports:\n");
+                for (uint32_t portIndex = 0; portIndex < swprops.numPorts; portIndex++)
+                {
+                    xet_switch_port_state_t portstate;
+                    if (xetSysmanSwitchPortGetState(hSysmanDevice, portIndex, &portstate)
+                        == XE_RESULT_SUCCESS)
+                    {
+                        if (portstate.connected)
+                        {
+                            fprintf(stdout,
+                                "            %u: "
+                                "connected to switch with GUID %s, max bandwidth %u bytes/sec\n",
+                                portIndex, portstate.remote.guid, portstate.maxBandwidth);
+                        }
+                        else
+                        {
+                            fprintf(stdout, "            %u: not connected\n", portIndex);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+void ShowSwitches(xet_sysman_handle_t hSysmanDevice)
+{
+    xet_sysman_properties_t props;
+    if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
+    {
+        if (props.haveSwitch)
+        {
+            fprintf(stdout, "    Device switch:\n");
+            ShowSwitchInfo(hSysmanDevice);
+        }
+        if (props.numSubdevices)
+        {
+            for (uint32_t subdeviceIndex = 0; subdeviceIndex < props.numSubdevices; subdeviceIndex++)
+            {
+                xet_sysman_handle_t hSubdevice;
+                if (xetSysmanGetSubdevice(hSysmanDevice, subdeviceIndex, &hSubdevice) == XE_RESULT_SUCCESS)
+                {
+                    if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
+                    {
+                        if (props.haveSwitch)
+                        {
+                            fprintf(stdout, "    Sub-device %u switch:\n", subdeviceIndex);
+                            ShowSwitchInfo(hSubdevice);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+## <a name="smt">Temperature</a>
+A device has multiple temperature sensors embedded at different locations. The following function can be used to read their current value:
+
+| Function                               | Device behavior | Sub-device behavior |
+| :---                                   | :---        | :---        |
+| ::xetSysmanTemperatureGet()           | Gets the temperature for a specified sensor. If there are sub-devices, it will take the max found on the same sensor in each sub-device. | Gets the temperature for a specified sensor in the sub-device. |
+
+The supported temperature sensor locations are described by the enumerator ::xet_temp_sensors_t.
+
+## <a name="sms">Standby</a>
+When a device is idle, it will enter a low-power state. Since exit from low-power states have associated latency, they can hurt performance. The
+hardware attempts to stike a balance between between saving power when there are large idle times between workloads submissions to the device and
+keeping the device awake when idle because it has determined that new workload submissions are imminent.
+
+The following functions can be used to control how the hardware promotes to standby states:
+
+| Function                               | Device behavior | Sub-device behavior |
+| :---                                   | :---        | :---        |
+| ::xetSysmanStandbyGetMode()           | Get the current promotion mode for the device. If there are sub-devices, this will return the promotion mode across sub-devices that gives the best performance. | Get the current promotion mode for the sub-device. |
+| ::xetSysmanStandbySetMode()           | Set the promotion mode for the device. If there are sub-devices, this will set the same promotion mode across all sub-devices. | Set the promotion mode for the sub-device. |
+
+The available promotion modes are described in the enumerator ::xet_stby_promo_mode_t.
+
+## <a name="smw">Firmware</a>
+If ::xet_sysman_properties_t.numFirmwares is non-zero, the following functions can be used to manage firmwares on the device:
+
+| Function                               | Device behavior | Sub-device behavior |
+| :---                                   | :---        | :---        |
+| ::xetSysmanFirmwareGetProperties()    | Find out the name and version of each installed firmware. If there are sub-devices, this will only show firmwares that are not inside the sub-devices. | Find out the name and version of each installed firmware in the sub-device. |
+| ::xetSysmanFirmwareGetChecksum()      | Get the checksum for an installed firmware. | Get the checksum for an installed firmware. |
+| ::xetSysmanFirmwareFlash()            | Flash a new firmware image. | Flash a new firmware image. |
+
+## <a name="smy">PSU</a>
+If ::xet_sysman_properties_t.numPsus is non-zero, the following functions can be used to access information about each power-supply:
+
+| Function                               | Device behavior | Sub-device behavior |
+| :---                                   | :---        | :---        |
+| ::xetSysmanPsuGetProperties()         | Get static details about the power supply. | Not supported. |
+| ::xetSysmanPsuGetState()              | Get information about the health (temperature, current, fan) of the power supply. | Not supported. |
+
+## <a name="smn">Fan</a>
+If ::xet_sysman_properties_t.numFans is non-zero, it is possible to manage their speed. The hardware can be instructed to run the fan at a fixed
+speed (or 0 for silent operations) or to provide a table of temperature-speed points in which case the hardware will dynamically change the fan
+speed based on the current temperature of the chip. This configuration information is described in the structure ::xet_fan_config_t. When specifying
+speed, one can provide the value in revolutions per minute (::XET_FAN_SPEED_UNITS_RPM) or as a percentage of the maximum RPM
+(::XET_FAN_SPEED_UNITS_PERCENT).
+
+The following functions are available:
+
+| Function                               | Device behavior | Sub-device behavior |
+| :---                                   | :---        | :---        |
+| ::xetSysmanFanGetProperties()         | Get the maximum RPM of the fan and the maximum number of points that can be specified in the temperature-speed. | Not supported. |
+| ::xetSysmanFanGetConfig()             | Get the current fan configuration. | Not supported. |
+| ::xetSysmanFanSetConfig()             | Change the fan configuration. | Not supported. |
+| ::xetSysmanFanGetState()              | Get the current speed of the fan. | Not supported. |
+
+The example below shows how to output the fan speed of all fans:
+
+```c
+void ShowFans(xet_sysman_handle_t hSysmanDevice)
+{
+    xet_sysman_properties_t props;
+    
+    if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
+    {
+        if (props.numFans)
+        {
+            fprintf(stdout, "    Fans\n");
+            for (uint32_t fanIndex = 0; fanIndex < props.numFans; fanIndex++)
+            {
+                xet_fan_state_t state;
+                if (xetSysmanFanGetState(hSysmanDevice, fanIndex, XET_FAN_SPEED_UNITS_RPM, &state)
+                    == XE_RESULT_SUCCESS)
+                {
+                    fprintf(stdout, "        Fan %u: %u RPM\n", fanIndex, state.speed);
+                }
+            }
+        }
+    }
+}
+```
+
+The next example shows how to set the fan speed for all fans to a fixed value in RPM, but only if control is permitted:
+
+```c
+void SetFanSpeed(xet_sysman_handle_t hSysmanDevice, uint32_t SpeedRpm)
+{
+    xet_sysman_properties_t props;
+    
+    if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
+    {
+        if (props.haveFreqControl)
+        {
+            xet_fan_config_t config;
+            config.mode = XET_FAN_SPEED_MODE_FIXED;
+            config.speed = SpeedRpm;
+            config.speedUnits = XET_FAN_SPEED_UNITS_RPM;
+            for (uint32_t fanIndex = 0; fanIndex < props.numFans; fanIndex++)
+            {
+                xetSysmanFanSetConfig(hSysmanDevice, fanIndex, &config);
+            }
+        }
+        else
+        {
+            fprintf(stderr, "ERROR: Can't control the fans on this device.\n");
+        }
+    }
+}
+```
+
+## <a name="smd">LED</a>
+If ::xet_sysman_properties_t.numLeds is non-zero, it is possible to manage LEDs on the device. This includes turning them off/on and where
+the capability exists, changing their color in realtime.
+
+The following functions are available:
+
+| Function                               | Device behavior | Sub-device behavior |
+| :---                                   | :---        | :---        |
+| ::xetSysmanLedGetProperties()         | Find out if the LED supports color changes. | Not supported. |
+| ::xetSysmanLedGetState()              | Find out if the LED is currently off/on and the color where the capability exists. | Not supported. |
+| ::xetSysmanLedSetState()              | Turn the LED off/on and set the color where the capability exists. | Not supported. |
 
 
 # <a name="ra">Reliability, availability and serviceability (RAS)</a>
@@ -712,36 +666,38 @@ void ShowRasErrors(xet_sysman_handle_t hSysmanDevice)
 
 
 # <a name="ev">Events</a>
-Events are a way to determine is changes have occurred on a device e.g. new RAS errors. An application registers the events that it wishes to receive notification
-about and then it queries to receive notifications. The query can request a blocking wait - this will put the calling application thread to sleep until new notifications
-are received.
+Events are a way to determine is changes have occurred on a device e.g. new RAS errors. An application registers the events that it wishes to receive
+notification about and then it queries to receive notifications. The query can request a blocking wait - this will put the calling application thread
+to sleep until new notifications are received.
 
-The list of all events is provided by the enumerator ::xet_sysman_event_type_t. Before registering to receive an event from this list, the application should first
-check if it is supported for a specific class of devices (devices with the same device ID). This is achieved using the function ::xetSysmanSupportedEvents().
+The list of all events is provided by the enumerator ::xet_sysman_event_type_t. Before registering to receive an event from this list, the application
+should first check if it is supported for a specific class of devices (devices with the same device ID). This is achieved using the function
+::xetSysmanDeviceGetProperties() and looking at the array ::xet_sysman_properties_t.supportedEvents[::xet_sysman_event_type_t] for each event.
 
-For events supported on a given device, the application uses the function ::xetSysmanRegisterEvents() to register to receive notifications. It can stop notifications
-at any time using the function ::xetSysmanUnregisterEvents().
+For events supported on a given device, the application uses the function ::xetSysmanEventsRegister() to register to receive notifications.
+It can stop notifications at any time using the function ::xetSysmanEventsUnregister().
 
-Finally, the application uses the function ::xetSysmanGetEvents() to get a list of new notifications that have occurred since the last time it checked.
+Finally, the application uses the function ::xetSysmanEventsListen() to get a list of new notifications that have occurred since the last time it checked.
 
-The application can choose to block for events by setting timeout to ::XET_EVENT_WAIT_INFINITE or it can set to zero if it wishes to get the current status without
-blocking.
+The application can choose to block for events by setting timeout to ::XET_EVENT_WAIT_INFINITE or it can set to zero if it wishes to get the current
+status without blocking.
 
-The event notifications are returned as a bitfield of event types. It is up to the application to then enumerate the corresponding device properties to determine
-where the events occurred if that is required.
+The event notifications are returned as a bitfield of event types. It is up to the application to then enumerate the corresponding device properties
+to determine where the events occurred if that is required.
 
-When calling ::xetSysmanGetEvents(), the application can request that the status be cleared. The driver will return the current status and clear it internally.
-The next call to the function will return no notifications until new events occur. If the application does not request that event list be cleared, subsequent calls
-to this function will show the same notifications and any new notifications.
+When calling ::xetSysmanEventsListen(), the application can request that the status be cleared. The driver will return the current status and clear
+it internally. The next call to the function will return no notifications until new events occur. If the application does not request that event list
+be cleared, subsequent calls to this function will show the same notifications and any new notifications.
 
-The first argument of ::xetSysmanGetEvents() specifies the SMI handle for the device on which event notifications wish to be received. However, this can be set to
-NULL in order to query event notifications across all devices for which the application has created SMI handles. When querying across multiple devices, it is suggested
-not to request event status clearing. In this way, the application can no when any event has occurred and can then make individual requests to each device, this time
-requesting that the event status be cleared.
+The first argument of ::xetSysmanEventsListen() specifies the SMI handle for the device on which event notifications wish to be received. However, this
+can be set to NULL in order to query event notifications across all devices for which the application has created SMI handles. When querying across
+multiple devices, it is suggested not to request event status clearing. In this way, the application can no when any event has occurred and can then
+make individual requests to each device, this time requesting that the event status be cleared.
 
 # <a name="di">Diagnostics</a>
 Diagnostics is the process of taking a device offline and requesting that the hardware run self-checks and repairs. This is achieved using the function
-::xetSysmanRunDiagnosticTests(). On return from the function, software can use the diagnostics return code (::xet_diag_result_t) to determine the new course of action:
+::xetSysmanDiagnosticsRunTests(). On return from the function, software can use the diagnostics return code (::xet_diag_result_t) to determine the new
+course of action:
 
 1. ::XET_DIAG_RESULT_NO_ERRORS - No errors found and workloads can resume submission to the hardware.
 2. ::XET_DIAG_RESULT_ABORT - Hardware had problems running diagnostic tests.
@@ -751,51 +707,38 @@ Diagnostics is the process of taking a device offline and requesting that the ha
 There are multiple types of diagnostic tests that can be run and these are defined in the enumeration ::xet_diag_type_t.
 
 When running diagnostics, the start and end tests need to be specified. To run all tests, set the start to ::XET_DIAG_FIRST_TEST_INDEX and the end to
-::XET_DIAG_LAST_TEST_INDEX. However, it is possible to enumerate all possible tests using the function ::xetSysmanGetDiagnosticTests(). This will return
-a list of tests in the structure ::xet_diag_test_list_t - from this software can get the name of each test and the corresponding index value that can be
-used to specify start/end points when calling the function ::xetSysmanRunDiagnosticTests(). If the driver doesn't return any tests (::xet_diag_test_list_t.count = 0)
-then it is not possible on that platform to run a subset of the diagnostic tests and ::XET_DIAG_FIRST_TEST_INDEX and ::XET_DIAG_LAST_TEST_INDEX should be
-used instead for the start/stop indices respectively.
-
-
-# <a name="rt">Reset</a>
-A device can be reset (PCI device reset) can be achieved using the function ::xetSysmanDeviceReset().
-
-This operation is not supported on sub-devices.
+::XET_DIAG_LAST_TEST_INDEX. However, it is possible to enumerate all possible tests using the function ::xetSysmanDiagnosticsRunTests(). This will
+return a list of tests in the structure ::xet_diag_test_list_t - from this software can get the name of each test and the corresponding index value
+that can be used to specify start/end points when calling the function ::xetSysmanDiagnosticsRunTests(). If the driver doesn't return any tests
+(::xet_diag_test_list_t.count = 0) then it is not possible on that platform to run a subset of the diagnostic tests and ::XET_DIAG_FIRST_TEST_INDEX
+and ::XET_DIAG_LAST_TEST_INDEX should be used instead for the start/stop indices respectively.
 
 # <a name="sd">Sub-devices</a>
 Multi-tile devices consist of sub-devices that are arranged under a logical device, otherwise known as **tiles**.
 
 When ::xetSysmanGet() is called with a device handle for a sub-device, the returned SMI handle can be used to manage resources only on that sub-device.
 
-Not all resource types are available on sub-devices. In addition, devices having sub-devices may have different meanings for resources depending on
-whether they are accessed with a device or a sub-device SMI handle.
+The behavior of the system resource management functions can change depending on whether they are operating on a SMI handle for sub-devices or for
+the overall device.
 
-If a resource exists on the sub-device, there will be an equivalent resource on the device, but the significance of the device-level resource will be
-different. For example, the frequency resource for a sub-device controls only the frequency of the sub-device; if the same resource is controlled at
-the device level, it will overwrite the frequency on all sub-devices. These differences are summarized in the table below:
+These differences are described in the table below:
 
-| Resource type  | Device operations | Sub-device operations |
-| :---           | :--- | :--- |
-| Device         | Only at the device level | Not supported. |
-| Power          | Get: Power consumption of whole device, including sub-devices<br />Set: Maximum power limit of the whole device | Get: Power consumption of the sub-device<br />Set: Maximum power limit of the sub-device (if supported) |
-| Frequency      | Get: Average frequency across sub-devices<br />Set: Set same frequency on all sub-devices | Get: Actual frequency of sub-device<br />Set: Set frequency of sub-device |
-| Utilization    | Get: Averages utilization across all sub-devices. | Get: Activity of sub-device. |
-| Memory         | Get: Gives total memory utilization for all sub-devices; memory bandwidth is averaged across all sub-devices | Get: Memory bandwidth and utilization for memory located in the sub-device |
-| Link           | Get: Only PCIe link<br />Set: Only PCIe link | Get: Only CD ports<br />set: Only CD ports |
-| Temperature    | Get: Maximum temperature across all sensors, including sub-devices | Get: Maximum temperature of sensors on the sub-device |
-| Standby        | Set: Changes standby mode for all sub-devices                | Set: Change standby mode for the sub-device. |
-| Firmware       | Get/Set: Only firmwares in the device but not in the sub-device | Get/Set: Only firmwares in the sub-device |
-| PSU            | Only at the device level | Not supported |
-| Fan            | Only at the device level | Not supported |
-| LED            | Only at the device level | Not supported |
+| Component           | Device operations | Sub-device operations |
+| :---                | :--- | :--- |
+| [General](#smg)     | Only at the device level | Not supported |
+| [Power](#smp)       | Get: Power consumption of whole device, including sub-devices<br />Set: Maximum power limit of the whole device | Get: Power consumption of the sub-device<br />Set: Maximum power limit of the sub-device (if supported) |
+| [Frequency](#smf)   | Get: Average frequency across sub-devices<br />Set: Set same frequency on all sub-devices | Get: Actual frequency of sub-device<br />Set: Set frequency of sub-device |
+| [Activity](#sma)    | Get: Average activity across all sub-devices. | Get: Activity of sub-device. |
+| [Memory](#smm)      | Get: Gives total memory allocation for all sub-devices; memory bandwidth is averaged across all sub-devices | Get: Memory bandwidth and allocation for memory located in the sub-device |
+| [PCI](#smp)         | Only at the device level | Not supported |
+| [Switch](#sml)      | Only if the switch is located outside the sub-devices | Only the switch located in the sub-device |
+| [Temperature](#smt) | Get: Maximum temperature across all sensors, including sub-devices | Get: Maximum temperature of sensors on the sub-device |
+| [Standby](#sms)     | Set: Changes standby mode for all sub-devices | Set: Change standby mode for the sub-device. |
+| [Firmware](#smw)    | Get/Set: Only firmwares in the device but not in the sub-devices | Get/Set: Only firmwares in the sub-device |
+| [PSU](#smy)         | Only at the device level | Not supported |
+| [Fan](#smn)         | Only at the device level | Not supported |
+| [LED](#smd)         | Only at the device level | Not supported |
 
-The driving principle behind this table is to provide software the ability to control the device at the device level only without needing to go to the
-sub-device level. The only exception to this rule is for resources like **link** and **firmware** where it is important to enumerate these resources
-on any sub-devices since the resources enumerated at the device level only relate to components not contained in the sub-devices.
-
-As a general rule, software should always check which resources and properties are available on a device and it's sub-devices. However, it is possible
- to enumerate resources first at the device level and check the flag  ::xet_resid_info_t.propsOnSubdevices for each resource. If this flag is TRUE,
-it means that there are sub-devices and that properties of this resource at the device level have different behavior than the same properties at the
- sub-device level. This is because the properties at the device level merging telemetry from sub-devices or apply the same changes to all sub-devices.
-This flag signals to software that it needs to consider whether it wants to manage those resources at the device level or at the sub-device level.
+For most aspects of system resource management, software can manage components at the device level. The exceptions to this rule are firmware and
+switch management. Software should always check if a device has sub-devices (::xet_sysman_properties_t.numSubdevices is non-zero) in which case
+it should check for firmware and switch components on each sub-device.

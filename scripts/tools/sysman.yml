@@ -28,607 +28,227 @@ params:
     - type: "$t_sysman_handle_t*"
       name: phSysman
       desc: "[out] Handle for accessing SMI features"
+
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "Resource types"
+type: function
+desc: "Get a SMI handle to a subdevice"
 class: $tSysman
-name: $t_resource_type_t
-etors:
-    - name: $T_RESOURCE_TYPE_DEV
-      value: "0x0"
-      desc: "Inventory resource"
-    - name: $T_RESOURCE_TYPE_PWR
-      value: "0x1"
-      desc: "Power domain resource"
-    - name: $T_RESOURCE_TYPE_FREQ
-      value: "0x2"
-      desc: "Frequency domain resource"
-    - name: $T_RESOURCE_TYPE_UTIL
-      value: "0x3"
-      desc: "Resource used to monitor GPU utilization"
-    - name: $T_RESOURCE_TYPE_MEM
-      value: "0x4"
-      desc: "Memory resource"
-    - name: $T_RESOURCE_TYPE_LINK
-      value: "0x5"
-      desc: "Link resource"
-    - name: $T_RESOURCE_TYPE_TEMP
-      value: "0x6"
-      desc: "Temperature sensor resource"
-    - name: $T_RESOURCE_TYPE_STBY
-      value: "0x7"
-      desc: "Resource used to control standby mode"
-    - name: $T_RESOURCE_TYPE_FW
-      value: "0x8"
-      desc: "Firmware resource"
-    - name: $T_RESOURCE_TYPE_PSU
-      value: "0x9"
-      desc: "PSU resource"
-    - name: $T_RESOURCE_TYPE_FAN
-      value: "0xA"
-      desc: "Fan resource"
-    - name: $T_RESOURCE_TYPE_LED
-      value: "0xB"
-      desc: "LED resource"
-    - name: $T_RESOURCE_TYPE_ANY
-      value: "-1"
-      desc: "Any resource filter"
---- #--------------------------------------------------------------------------
-type: enum
-desc: "Resource ID"
-class: $tSysman
-name: $t_resid_t
+name: GetSubdevice
 details:
-    - "Every resource in the system has a unique identify."
-    - "Resource IDs will always have the same value between versions of the API."
-    - "Never assume that resources of the same type have numerically sequential values."
-    - "The resource ID has the resource type ($t_resource_type_t) in the upper 16 bits."
-etors:
-    - name: $T_RESID_DEV_INVENTORY
-      value: "0"
-      desc: "General device inventory"
-
-    - name: $T_RESID_PWR_TOTAL
-      value: "0x10000"
-      desc: "Device total power"
-
-    - name: $T_RESID_FREQ_GPU
-      value: "0x20000"
-      desc: "GPU frequency"
-    - name: $T_RESID_FREQ_LOCAL_MEM
-      value: "0x20001"
-      desc: "Local memory frequency"
-
-    - name: $T_RESID_UTIL_GPU
-      value: "0x30000"
-      desc: "Utilization of the entire GPU"
-    - name: $T_RESID_UTIL_COMPUTE
-      value: "0x30001"
-      desc: "Utilization of the compute/3D units"
-    - name: $T_RESID_UTIL_MEDIA
-      value: "0x30002"
-      desc: "Utilization of the media units"
-    - name: $T_RESID_UTIL_VIDEO_DECODE
-      value: "0x30003"
-      desc: "Utilization of the video decode units"
-    - name: $T_RESID_UTIL_VIDEO_ENCODE
-      value: "0x30004"
-      desc: "Utilization of the video encode units"
-
-    - name: $T_RESID_MEM_LOCAL
-      value: "0x40000"
-      desc: "Local GPU memory"
-
-    - name: $T_RESID_LINK_PCIE
-      value: "0x50000"
-      desc: "PCIe link"
-    - name: $T_RESID_LINK_CD_PORT1
-      value: "0x50001"
-      desc: "High speed companion die switch port 1"
-    - name: $T_RESID_LINK_CD_PORT2
-      value: "0x50002"
-      desc: "High speed companion die switch port 2"
-    - name: $T_RESID_LINK_CD_PORT3
-      value: "0x50003"
-      desc: "High speed companion die switch port 3"
-    - name: $T_RESID_LINK_CD_PORT4
-      value: "0x50004"
-      desc: "High speed companion die switch port 4"
-    - name: $T_RESID_LINK_CD_PORT5
-      value: "0x50005"
-      desc: "High speed companion die switch port 5"
-    - name: $T_RESID_LINK_CD_PORT6
-      value: "0x50006"
-      desc: "High speed companion die switch port 6"
-    - name: $T_RESID_LINK_CD_PORT7
-      value: "0x50007"
-      desc: "High speed companion die switch port 7"
-    - name: $T_RESID_LINK_CD_PORT8
-      value: "0x50008"
-      desc: "High speed companion die switch port 8"
-    - name: $T_RESID_LINK_CD_PORT9
-      value: "0x50009"
-      desc: "High speed companion die switch port 9"
-    - name: $T_RESID_LINK_CD_PORT10
-      value: "0x5000A"
-      desc: "High speed companion die switch port 10"
-    - name: $T_RESID_LINK_CD_PORT11
-      value: "0x5000B"
-      desc: "High speed companion die switch port 11"
-    - name: $T_RESID_LINK_CD_PORT12
-      value: "0x5000C"
-      desc: "High speed companion die switch port 12"
-    - name: $T_RESID_LINK_CD_PORT13
-      value: "0x5000D"
-      desc: "High speed companion die switch port 13"
-    - name: $T_RESID_LINK_CD_PORT14
-      value: "0x5000E"
-      desc: "High speed companion die switch port 14"
-    - name: $T_RESID_LINK_CD_PORT15
-      value: "0x5000F"
-      desc: "High speed companion die switch port 15"
-    - name: $T_RESID_LINK_CD_PORT16
-      value: "0x50010"
-      desc: "High speed companion die switch port 16"
-
-    - name: $T_RESID_TEMP_MAX
-      value: "0x60000"
-      desc: "The maximum temperature reported by the sensors in the device"
-    - name: $T_RESID_TEMP_GPU
-      value: "0x60001"
-      desc: "The maximum temperature reported by the sensors in the GPU component of the device"
-    - name: $T_RESID_TEMP_LOCAL_MEM
-      value: "0x60002"
-      desc: "The maximum temperature reported by the sensors in the local memory of device"
-
-    - name: $T_RESID_STBY_GLOBAL
-      value: "0x70000"
-      desc: "Control sleep promotion of the entire device"
-
-    - name: $T_RESID_FW_1
-      value: "0x80001"
-      desc: "Firmware 1"
-    - name: $T_RESID_FW_2
-      value: "0x80002"
-      desc: "Firmware 2"
-    - name: $T_RESID_FW_3
-      value: "0x80003"
-      desc: "Firmware 3"
-    - name: $T_RESID_FW_4
-      value: "0x80004"
-      desc: "Firmware 4"
-    - name: $T_RESID_FW_5
-      value: "0x80005"
-      desc: "Firmware 5"
-    - name: $T_RESID_FW_6
-      value: "0x80006"
-      desc: "Firmware 6"
-    - name: $T_RESID_FW_7
-      value: "0x80007"
-      desc: "Firmware 7"
-    - name: $T_RESID_FW_8
-      value: "0x80008"
-      desc: "Firmware 8"
-    - name: $T_RESID_FW_9
-      value: "0x80009"
-      desc: "Firmware 9"
-    - name: $T_RESID_FW_10
-      value: "0x8000A"
-      desc: "Firmware 10"
-    - name: $T_RESID_FW_11
-      value: "0x8000B"
-      desc: "Firmware 11"
-    - name: $T_RESID_FW_12
-      value: "0x8000C"
-      desc: "Firmware 12"
-    - name: $T_RESID_FW_13
-      value: "0x8000D"
-      desc: "Firmware 13"
-    - name: $T_RESID_FW_14
-      value: "0x8000E"
-      desc: "Firmware 14"
-    - name: $T_RESID_FW_15
-      value: "0x8000F"
-      desc: "Firmware 15"
-    - name: $T_RESID_FW_16
-      value: "0x80010"
-      desc: "Firmware 16"
-    - name: $T_RESID_FW_17
-      value: "0x80011"
-      desc: "Firmware 17"
-    - name: $T_RESID_FW_18
-      value: "0x80012"
-      desc: "Firmware 18"
-    - name: $T_RESID_FW_19
-      value: "0x80013"
-      desc: "Firmware 19"
-    - name: $T_RESID_FW_20
-      value: "0x80014"
-      desc: "Firmware 20"
-
-    - name: $T_RESID_PSU_MAIN
-      value: "0x90000"
-      desc: "Primary power supply"
-    - name: $T_RESID_PSU_AUX
-      value: "0x90001"
-      desc: "Auxilary power supply"
-    - name: $T_RESID_PSU_1
-      value: "0x90002"
-      desc: "Power supply 1"
-    - name: $T_RESID_PSU_2
-      value: "0x90003"
-      desc: "Power supply 2"
-
-    - name: $T_RESID_FAN_MAIN
-      value: "0xA0000"
-      desc: "The main fan"
-    - name: $T_RESID_FAN_1
-      value: "0xA0001"
-      desc: "Fan 1"
-    - name: $T_RESID_FAN_2
-      value: "0xA0002"
-      desc: "Fan 2"
-    - name: $T_RESID_FAN_3
-      value: "0xA0003"
-      desc: "Fan 3"
-
-    - name: $T_RESID_LED_MAIN
-      value: "0xB0000"
-      desc: "The main LED"
-    - name: $T_RESID_LED_1
-      value: "0xB0001"
-      desc: "LED 1"
-    - name: $T_RESID_LED_2
-      value: "0xB0002"
-      desc: "LED 1"
-    - name: $T_RESID_LED_3
-      value: "0xB0003"
-      desc: "LED 1"
-
-    - name: $T_RESID_ANY
-      value: "-1"
-      desc: "Any resource ID"
-
---- #--------------------------------------------------------------------------
-type: enum
-desc: "Resource properties"
-class: $tSysman
-name: $t_resprop_t
-details:
-    - "For every property, there is a corresponding structure used to hold the property data. The type of the data structure is derived from the property enumerator, converted to lower-case with '_t' appended."
-    - "Properties can be either read-only (ro), write-only (wo) or read-write (rw)."
-    - "Properties can be either static or dynamic. Static properties are set during initialization and will not change during the lifetime of the application. Dynamic properties can change at any time and should be reread."
-etors:
-    - name: $T_RESPROP_DEV_SERIAL_NUMBER
-      value: "0x00000"
-      desc: "(ro static) The serial number of the device (data: $t_resprop_dev_serial_number_t)"
-    - name: $T_RESPROP_DEV_BOARD_NUMBER
-      value: "0x00001"
-      desc: "(ro static) The board number of the device (data: $t_resprop_dev_board_number_t)"
-    - name: $T_RESPROP_DEV_BRAND
-      value: "0x00002"
-      desc: "(ro static) The brand name of the device (data: $t_resprop_dev_brand_t)"
-    - name: $T_RESPROP_DEV_MODEL
-      value: "0x00003"
-      desc: "(ro static) The model name of the device (data: $t_resprop_dev_model_t)"
-    - name: $T_RESPROP_DEV_DEVICEID
-      value: "0x00004"
-      desc: "(ro static) The device ID of the device (data: $t_resprop_dev_deviceid_t)"
-    - name: $T_RESPROP_DEV_VENDOR_NAME
-      value: "0x00005"
-      desc: "(ro static) The vendor name of the device (data: $t_resprop_dev_vendor_name_t)"
-    - name: $T_RESPROP_DEV_DRIVER_VERSION
-      value: "0x00006"
-      desc: "(ro static) The driver version associated with the device (data: $t_resprop_dev_driver_version_t)"
-    - name: $T_RESPROP_DEV_BARS
-      value: "0x00007"
-      desc: "(ro static) The bars configured for the device (data: $t_resprop_dev_bars_t)"
-    - name: $T_RESPROP_DEV_UUID
-      value: "0x00008"
-      desc: "(ro static) Universal Unique ID for the device (data: $t_resprop_dev_uuid_t)"
-
-    - name: $T_RESPROP_PWR_MAX_LIMIT
-      value: "0x10000"
-      desc: "(ro static) The maximum power limit that can be requested (data: $t_resprop_pwr_max_limit_t)"
-    - name: $T_RESPROP_PWR_ENERGY_COUNTER
-      value: "0x10001"
-      desc: "(ro dynamic) The value of the monotonic energy counter (data: $t_resprop_pwr_energy_counter_t)"
-    - name: $T_RESPROP_PWR_SUSTAINED_LIMIT
-      value: "0x10002"
-      desc: "(rw dynamic) The sustained power limit (data: $t_resprop_pwr_sustained_limit_t)"
-    - name: $T_RESPROP_PWR_BURST_LIMIT
-      value: "0x10003"
-      desc: "(rw dynamic) The burst power limit (data: $t_resprop_pwr_burst_limit_t)"
-    - name: $T_RESPROP_PWR_PEAK_LIMIT
-      value: "0x10004"
-      desc: "(rw dynamic) The peak power limit (data: $t_resprop_pwr_peak_limit_t)"
-
-    - name: $T_RESPROP_FREQ_AVAIL_CLOCKS
-      value: "0x20000"
-      desc: "(ro static) Available frequency clocks that this domain can run at (data: $t_resprop_freq_avail_clocks_t)"
-    - name: $T_RESPROP_FREQ_RANGE
-      value: "0x20001"
-      desc: "(rw dynamic) The current frequency range (data: $t_resprop_freq_range_t)"
-    - name: $T_RESPROP_FREQ_REQUESTED_FREQ
-      value: "0x20002"
-      desc: "(ro dynamic) The current frequency request (data: $t_resprop_freq_requested_freq_t)"
-    - name: $T_RESPROP_FREQ_TDP_FREQ
-      value: "0x20003"
-      desc: "(ro dynamic) The maximum frequency supported under the current TDP conditions (data: $t_resprop_freq_tdp_freq_t)"
-    - name: $T_RESPROP_FREQ_EFFICIENT_FREQ
-      value: "0x20004"
-      desc: "(ro dynamic) The efficient minimum frequency (data: $t_resprop_freq_efficient_freq_t)"
-    - name: $T_RESPROP_FREQ_RESOLVED_FREQ
-      value: "0x20005"
-      desc: "(ro dynamic) The resolved frequency (data: $t_resprop_freq_resolved_freq_t)"
-    - name: $T_RESPROP_FREQ_THROTTLE_REASONS
-      value: "0x20006"
-      desc: "(ro dynamic) The reasons that the frequency is being limited by the PCU (data: $t_resprop_freq_throttle_reasons_t)"
-    - name: $T_RESPROP_FREQ_THROTTLE_TIME
-      value: "0x20007"
-      desc: "(ro dynamic) The total time that the frequency has been limited by the PCU (data: $t_resprop_freq_throttle_time_t)"
-
-    - name: $T_RESPROP_UTIL_COUNTERS
-      value: "0x30000"
-      desc: "(ro dynamic) The total wall time this resource is active (data: $t_resprop_util_counters_t)"
-
-    - name: $T_RESPROP_MEM_TYPE
-      value: "0x40000"
-      desc: "(ro static) The type of memory covered by this resource (data: $t_resprop_mem_type_t)"
-    - name: $T_RESPROP_MEM_UTILIZATION
-      value: "0x40001"
-      desc: "(ro dynamic) Get current allocated/unallocated size (data: $t_resprop_mem_utilization_t)"
-    - name: $T_RESPROP_MEM_BANDWIDTH
-      value: "0x40002"
-      desc: "(ro dynamic) Get current read/write bandwidth counters and maximum bandwidth (data: $t_resprop_mem_bandwidth_t)"
-
-    - name: $T_RESPROP_LINK_TYPE
-      value: "0x50000"
-      desc: "(ro static) The type of link (data: $t_resprop_link_type_t)"
-    - name: $T_RESPROP_LINK_BUS_ADDRESS
-      value: "0x50001"
-      desc: "(ro static) The bus address of the link (data: $t_resprop_link_bus_address_t)"
-    - name: $T_RESPROP_LINK_PEER_DEVICE
-      value: "0x50002"
-      desc: "(ro static) For links of type $T_LINK_TYPE_CD_PORT, this gives the UUID of the peer device (data: $t_resprop_link_peer_device_t)"
-    - name: $T_RESPROP_LINK_AVAIL_SPEEDS
-      value: "0x50003"
-      desc: "(ro static) Available link speeds (data: $t_resprop_link_avail_speeds_t)"
-    - name: $T_RESPROP_LINK_MAX_PACKET_SIZE
-      value: "0x50004"
-      desc: "(ro static) Maximum packet size (data: $t_resprop_link_max_packet_size_t)"
-    - name: $T_RESPROP_LINK_STATE
-      value: "0x50005"
-      desc: "(rw dynamic) Link state (enabled/disabled) (data: $t_resprop_link_state_t)"
-    - name: $T_RESPROP_LINK_BANDWIDTH
-      value: "0x50006"
-      desc: "(ro dynamic) Monotonic bandwidth counters (data: $t_resprop_link_bandwidth_t)"
-    - name: $T_RESPROP_LINK_SPEED
-      value: "0x50007"
-      desc: "(ro dynamic) Current link speed (data: $t_resprop_link_speed_t)"
-    - name: $T_RESPROP_LINK_SPEED_RANGE
-      value: "0x50008"
-      desc: "(wo dynamic) Set the min/max speeds between which the link can operate (data: $t_resprop_link_speed_range_t)"
-
-    - name: $T_RESPROP_TEMP_TEMPERATURE
-      value: "0x60000"
-      desc: "(ro dynamic) The current temperature of the sensor in degrees celcius (data: $t_resprop_temp_temperature_t)"
-
-    - name: $T_RESPROP_STBY_PROMO_MODE
-      value: "0x70000"
-      desc: "(rw dynamic) The current promotion mode (data: $t_resprop_stby_promo_mode_t)"
-
-    - name: $T_RESPROP_FW_NAME
-      value: "0x80000"
-      desc: "(ro static) Name encoded in the loaded firmware image (data: $t_resprop_fw_name_t)"
-    - name: $T_RESPROP_FW_VERSION
-      value: "0x80001"
-      desc: "(ro static) The version of the loaded firmware image (data: $t_resprop_fw_version_t)"
-    - name: $T_RESPROP_FW_CHECK
-      value: "0x80002"
-      desc: "(ro dynamic) Verify the checksum of the loaded firmware image (data: $t_resprop_fw_check_t)"
-    - name: $T_RESPROP_FW_FLASH
-      value: "0x80003"
-      desc: "(wo dynamically) Flash a new firmware image (data: $t_resprop_fw_flash_t)"
-
-    - name: $T_RESPROP_PSU_AMP_LIMIT
-      value: "0x90000"
-      desc: "(ro static) The maximum electrical current in amperes that can be drawn (data: $t_resprop_psu_amp_limit_t)"
-    - name: $T_RESPROP_PSU_VOLTAGE_STATUS
-      value: "0x90001"
-      desc: "(ro dynamic) Indicates if under or over voltage has occurred (data: $t_resprop_psu_voltage_status_t)"
-    - name: $T_RESPROP_PSU_FAN_FAILURE
-      value: "0x90002"
-      desc: "(ro dynamic) Indicates if the fan has failed (data: $t_resprop_psu_fan_failure_t)"
-    - name: $T_RESPROP_PSU_TEMPERATURE
-      value: "0x90003"
-      desc: "(ro dynamic) The current heatsink temperature in degrees celcius (data: $t_resprop_psu_temperature_t)"
-    - name: $T_RESPROP_PSU_AMPS
-      value: "0x90004"
-      desc: "(ro dynamic) The current amps being drawn in amperes (data: $t_resprop_psu_amps_t)"
-
-    - name: $T_RESPROP_FAN_MAX_RPM
-      value: "0xA0000"
-      desc: "(ro static) The maximum RPM of the fan (data: $t_resprop_fan_max_rpm_t)"
-    - name: $T_RESPROP_FAN_MAX_TABLE_SIZE
-      value: "0xA0001"
-      desc: "(ro static) The maximum number of points in the fan temp/speed table (data: $t_resprop_fan_max_table_size_t)"
-    - name: $T_RESPROP_FAN_SPEED_RPM
-      value: "0xA0002"
-      desc: "(ro dynamic) The current fan speed in units of revolutions per minute (rpm) (data: $t_resprop_fan_speed_rpm_t)"
-    - name: $T_RESPROP_FAN_SPEED_PERCENT
-      value: "0xA0003"
-      desc: "(ro dynamic) The current fan speed as a percentage of the maximum speed of that fan (data: $t_resprop_fan_speed_percent_t)"
-    - name: $T_RESPROP_FAN_MODE
-      value: "0xA0004"
-      desc: "(ro dynamic) The current fan speed mode (one of $t_fan_speed_mode_t) (data: $t_resprop_fan_mode_t)"
-    - name: $T_RESPROP_FAN_FIXED_SPEED
-      value: "0xA0005"
-      desc: "(rw dynamic) Read/write the fixed speed setting for the fan (data: $t_resprop_fan_fixed_speed_t)"
-    - name: $T_RESPROP_FAN_SPEED_TABLE
-      value: "0xA0006"
-      desc: "(rw dynamic) Read/write the fan speed table (data: $t_resprop_fan_speed_table_t)"
-
-    - name: $T_RESPROP_LED_RGB_CAP
-      value: "0xB0000"
-      desc: "(ro static) Indicates if the LED is RGB capable (data: $t_resprop_led_rgb_cap_t)"
-    - name: $T_RESPROP_LED_STATE
-      value: "0xB0001"
-      desc: "(rw dynaic) The LED state - on/off and color (data: $t_resprop_led_state_t)"
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] The index of the sub-device."
+    - type: $t_sysman_handle_t*
+      name: phSysmanSubdevice
+      desc: "[out] The handle for accessing the sub-device."
 
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum number of characters in string properties."
 name: $T_STRING_PROPERTY_SIZE
 value: "32"
+
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "PCI bar types"
+desc: "Device mode"
 class: $tSysman
-name: $t_pci_bar_type_t
+name: $t_operating_mode_t
 etors:
-    - name: $T_PCI_BAR_TYPE_CONFIG
+    - name: $T_OPERATING_MODE_DEFAULT
       value: "0"
-      desc: "PCI configuration space"
-    - name: $T_PCI_BAR_TYPE_MMIO
-      desc: "MMIO registers"
-    - name: $T_PCI_BAR_TYPE_VRAM
-      desc: "VRAM aperture"
-    - name: $T_PCI_BAR_TYPE_ROM
-      desc: "ROM aperture"
-    - name: $T_PCI_BAR_TYPE_VGA_IO
-      desc: "Legacy VGA IO ports"
-    - name: $T_PCI_BAR_TYPE_VGA_MEM
-      desc: "Legacy VGA memory"
-    - name: $T_PCI_BAR_TYPE_INDIRECT_IO
-      desc: "Indirect IO port access"
-    - name: $T_PCI_BAR_TYPE_INDIRECT_MEM
-      desc: "Indirect memory access"
-    - name: $T_PCI_BAR_TYPE_OTHER
-      desc: "Other type of PCI bar"
+      desc: "Multiple workloads are running on the device"
+    - name: $T_OPERATING_MODE_EXCLUSIVE_COMPUTE_PROCESS
+      desc: "A single process submitting compute workloads can monopolize the accelerator resources"
+
 --- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for a PCI bar"
+type: enum
+desc: "Frequency domains"
 class: $tSysman
-name: $t_pci_bar_info_t
-members:
-    - type: $t_pci_bar_type_t
-      name: "type"
-      desc: "[out] The type of bar"
-    - type: uint64_t
-      name: "base"
-      desc: "[out] Base address of the bar."
-    - type: uint64_t
-      name: "size"
-      desc: "[out] Size of the bar."
+name: $t_freq_domain_t
+etors:
+    - name: $T_FREQ_DOMAIN_GPU
+      value: "0"
+      desc: "Frequency of the GPU."
+    - name: $T_FREQ_DOMAIN_MEMORY
+      desc: "Frequency of the local memory."
+    - name: $T_FREQ_DOMAIN_NUM
+      desc: "The total number of frequency domains."
+
 --- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for property $T_RESPROP_DEV_SERIAL_NUMBER"
+type: enum
+desc: "Event types"
 class: $tSysman
-name: $t_resprop_dev_serial_number_t
-members:
-    - type: int8_t
-      name: "str[$T_STRING_PROPERTY_SIZE]"
-      desc: "[out] NULL terminated string value"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for property $T_RESPROP_DEV_BOARD_NUMBER"
-class: $tSysman
-name: $t_resprop_dev_board_number_t
-members:
-    - type: int8_t
-      name: "str[$T_STRING_PROPERTY_SIZE]"
-      desc: "[out] NULL terminated string value"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for property $T_RESPROP_DEV_BRAND"
-class: $tSysman
-name: $t_resprop_dev_brand_t
-members:
-    - type: int8_t
-      name: "str[$T_STRING_PROPERTY_SIZE]"
-      desc: "[out] NULL terminated string value"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for property $T_RESPROP_DEV_MODEL"
-class: $tSysman
-name: $t_resprop_dev_model_t
-members:
-    - type: int8_t
-      name: "str[$T_STRING_PROPERTY_SIZE]"
-      desc: "[out] NULL terminated string value"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for property $T_RESPROP_DEV_DEVICEID"
-class: $tSysman
-name: $t_resprop_dev_deviceid_t
-members:
-    - type: int8_t
-      name: "str[$T_STRING_PROPERTY_SIZE]"
-      desc: "[out] NULL terminated string value"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for property $T_RESPROP_DEV_VENDOR_NAME"
-class: $tSysman
-name: $t_resprop_dev_vendor_name_t
-members:
-    - type: int8_t
-      name: "str[$T_STRING_PROPERTY_SIZE]"
-      desc: "[out] NULL terminated string value"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for property $T_RESPROP_DEV_DRIVER_VERSION"
-class: $tSysman
-name: $t_resprop_dev_driver_version_t
-members:
-    - type: int8_t
-      name: "str[$T_STRING_PROPERTY_SIZE]"
-      desc: "[out] NULL terminated string value"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_DEV_BARS"
-class: $tSysman
-name: $t_resprop_dev_bars_t
-members:
-    - type: uint32_t
-      name: "num"
-      desc: "[out] The number of bars"
-    - type: "const $t_pci_bar_info_t*"
-      name: "pBars"
-      desc: "[out][range(0, num-1)] Information about each bar."
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_DEV_UUID"
-class: $tSysman
-name: $t_resprop_dev_uuid_t
-members:
-    - type: $x_device_uuid_t
-      name: "uuid"
-      desc: "[out] Device UUID"
+name: $t_sysman_event_type_t
+etors:
+    - name: $T_SYSMAN_EVENT_TYPE_FREQ_THROTTLED
+      value: "0"
+      desc: "The frequency is being throttled"
+    - name: $T_SYSMAN_EVENT_TYPE_RAS_ERRORS
+      desc: "ECC/RAS errors"
+    - name: $T_SYSMAN_EVENT_TYPE_NUM
+      desc: "The number of event types"
 
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_RESPROP_PWR_MAX_LIMIT"
+desc: "Device properties"
 class: $tSysman
-name: $t_resprop_pwr_max_limit_t
+name: $t_sysman_properties_t
+members:
+    - type: $x_device_type_t
+      name: type
+      desc: "[out] generic device type"
+    - type: uint32_t
+      name: "vendorId"
+      desc: "[out] vendorId from PCI configuration"
+    - type: uint32_t
+      name: "deviceId"
+      desc: "[out] deviceId from PCI configuration"
+    - type: $x_device_uuid_t
+      name: "uuid"
+      desc: "[out] Device UUID"
+    - type: uint32_t
+      name: "numSubdevices"
+      desc: "[out] The number of sub-devices"
+    - type: $x_bool_t
+      name: isSubdevice
+      desc: "[out] If this handle refers to a sub-device."
+    - type: uint32_t
+      name: subdeviceId
+      desc: "[out] sub-device id. Only valid if isSubdevice is true."
+    - type: int8_t
+      name: "serialNumber[$T_STRING_PROPERTY_SIZE]"
+      desc: "[out] Manufacturing serial number (NULL terminated string value)"
+    - type: int8_t
+      name: "boardNumber[$T_STRING_PROPERTY_SIZE]"
+      desc: "[out] Manufacturing board number (NULL terminated string value)"
+    - type: int8_t
+      name: "brandName[$T_STRING_PROPERTY_SIZE]"
+      desc: "[out] Brand name of the device (NULL terminated string value)"
+    - type: int8_t
+      name: "modelName[$T_STRING_PROPERTY_SIZE]"
+      desc: "[out] Model name of the device (NULL terminated string value)"
+    - type: int8_t
+      name: "vendorName[$T_STRING_PROPERTY_SIZE]"
+      desc: "[out] Vendor name of the device (NULL terminated string value)"
+    - type: int8_t
+      name: "driverVersion[$T_STRING_PROPERTY_SIZE]"
+      desc: "[out] Installed driver version (NULL terminated string value)"
+    - type: $x_bool_t
+      name: "havePowerControl"
+      desc: "[out] Set to true if the power limits of the device can be changed"
+    - type: $x_bool_t
+      name: "haveFreqControl[$T_FREQ_DOMAIN_NUM]"
+      desc: "[out] Set to true if the frequency limits can be changed for each domain"
+    - type: $x_bool_t
+      name: "haveOverclock[$T_FREQ_DOMAIN_NUM]"
+      desc: "[out] Set to true if the frequency can be overclocked for each domain"
+    - type: $x_bool_t
+      name: "haveSwitch"
+      desc: "[out] Set to true if the device/sub-device has a switch"
+    - type: uint32_t
+      name: "numFirmwares"
+      desc: "[out] Number of firmwares that can be managed"
+    - type: uint32_t
+      name: "numPsus"
+      desc: "[out] Number of power supply units that can be managed"
+    - type: uint32_t
+      name: "numFans"
+      desc: "[out] Number of fans that can be managed"
+    - type: uint32_t
+      name: "numLeds"
+      desc: "[out] Number of LEDs that can be managed"
+    - type: $x_bool_t
+      name: "supportedEvents[$T_SYSMAN_EVENT_TYPE_NUM]"
+      desc: "[out] Set to true for the events that are supported"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get properties about the device"
+class: $tSysman
+name: DeviceGetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_sysman_properties_t*
+      name: pProperties
+      desc: "[in] Structure that will contain information about the device."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get operating mode of the device"
+class: $tSysman
+name: DeviceGetOperatingMode
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_operating_mode_t*
+      name: pMode
+      desc: "[in] The current operating mode of the device."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set operating mode of the device"
+class: $tSysman
+name: DeviceSetOperatingMode
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_operating_mode_t
+      name: pMode
+      desc: "[in] The new operating mode of the device."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Reset device"
+class: $tSysman
+name: DeviceReset
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle for the device"
+
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Properties related to device power settings"
+class: $tSysman
+name: $t_power_properties_t
 members:
     - type: uint32_t
-      name: "limit"
+      name: "maxLimit"
       desc: "[out] The maximum power limit in milliwatts that can be requested."
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_RESPROP_PWR_ENERGY_COUNTER"
+desc: "Energy counter snapshot"
 class: $tSysman
-name: $t_resprop_pwr_energy_counter_t
+name: $t_power_energy_counter_t
+details:
+    - "Average power is calculated by taking two snapshots (s1, s2) and using the equation: PowerWatts = (s2.energy - s1.energy) / (s2.timestamp - s1.timestamp)"
 members:
     - type: uint64_t
       name: "energy"
-      desc: "[out] The value of the monotonic energy counter in millijoules."
+      desc: "[out] The monotonic energy counter in microjoules."
+    - type: uint64_t
+      name: "timestamp"
+      desc: "[out] Microsecond timestamp when energy was captured."
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_RESPROP_PWR_SUSTAINED_LIMIT"
+desc: "Sustained power limits"
 class: $tSysman
-name: $t_resprop_pwr_sustained_limit_t
+name: $t_power_sustained_limit_t
 details:
     - "The power controller (Punit) will throttle the operating frequency if the power averaged over a window (typically seconds) exceeds this limit."
 members:
@@ -643,9 +263,9 @@ members:
       desc: "[in,out] power averaging window (Tau) in milliseconds"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_RESPROP_PWR_BURST_LIMIT"
+desc: "Burst power limit"
 class: $tSysman
-name: $t_resprop_pwr_burst_limit_t
+name: $t_power_burst_limit_t
 details:
     - "The power controller (Punit) will throttle the operating frequency of the device if the power averaged over a few milliseconds exceeds a limit known as PL2. Typically PL2 > PL1 so that it permits the frequency to burst higher for short periods than would be otherwise permitted by PL1."
 members:
@@ -657,9 +277,9 @@ members:
       desc: "[in,out] power limit in milliwatts"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_RESPROP_PWR_PEAK_LIMIT"
+desc: "Peak power limit"
 class: $tSysman
-name: $t_resprop_pwr_peak_limit_t
+name: $t_power_peak_limit_t
 details:
     - "The power controller (Punit) will preemptively throttle the operating frequency of the device when the instantaneous power exceeds this limit. The limit is known as PL4. It expresses the maximum power that can be drawn from the power supply."
     - "If this power limit is removed or set too high, the power supply will generate an interrupt when it detects an overcurrent condition and the power controller will throttle the device frequencies down to min. It is thus better to tune the PL4 value in order to avoid such excursions."
@@ -667,7 +287,115 @@ members:
     - type: uint32_t
       name: power
       desc: "[in,out] power limit in milliwatts"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get properties related to power"
+class: $tSysman
+name: PowerGetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_power_properties_t*
+      name: pProperties
+      desc: "[in] Structure that will contain property data."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get energy counter"
+class: $tSysman
+name: PowerGetEnergyCounter
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_power_energy_counter_t*
+      name: pEnergy
+      desc: "[in] Will contain the latest snapshot of the energy counter and timestamp when the last counter value was measured."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get power limits"
+class: $tSysman
+name: PowerGetLimits
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_power_sustained_limit_t*
+      name: pSustained
+      desc: "[in][optional] The sustained power limit."
+    - type: $t_power_burst_limit_t*
+      name: pBurst
+      desc: "[in][optional] The burst power limit."
+    - type: $t_power_peak_limit_t*
+      name: pPeak
+      desc: "[in][optional] The peak power limit."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set power limits"
+class: $tSysman
+name: PowerSetLimits
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: const $t_power_sustained_limit_t*
+      name: pSustained
+      desc: "[in][optional] The sustained power limit."
+    - type: const $t_power_burst_limit_t*
+      name: pBurst
+      desc: "[in][optional] The burst power limit."
+    - type: const $t_power_peak_limit_t*
+      name: pPeak
+      desc: "[in][optional] The peak power limit."
 
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Frequency properties"
+class: $tSysman
+name: $t_freq_properties_t
+details:
+    - "Provides the set of frequencies as a list and as a range/step."
+    - "It is generally recommended that applications choose frequencies from the list. However applications can also construct the list themselves using the range/steps provided."
+members:
+    - type: double
+      name: min
+      desc: "[out] The minimum clock frequency in units of MHz"
+    - type: double
+      name: max
+      desc: "[out] The maximum clock frequency in units of MHz"
+    - type: double
+      name: step
+      desc: "[out] The step clock frequency in units of MHz"
+    - type: uint32_t
+      name: num
+      desc: "[out] The number of clocks in the array pClocks"
+    - type: "const double*"
+      name: "pClocks"
+      desc: "[out] Array of clock frequencies in units of MHz ordered from smallest to largest."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Frequency limits between which the hardware can operate."
+class: $tSysman
+name: $t_freq_limits_t
+members:
+    - type: double
+      name: "min"
+      desc: "[in,out] The min frequency in MHz below which hardware frequency management will not request frequencies. Setting to 0 will use the hardware default value."
+    - type: double
+      name: "max"
+      desc: "[in,out] The max frequency in MHz above which hardware frequency management will not request frequencies. Setting to 0 will use the hardware default value."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Frequency throttle reasons"
@@ -700,109 +428,175 @@ etors:
       desc: "frequency throttled due to a sub block that has a lower frequency range when it receives clocks"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_RESPROP_FREQ_AVAIL_CLOCKS"
+desc: "Frequency state"
 class: $tSysman
-name: $t_resprop_freq_avail_clocks_t
-details:
-    - "Provides the set of frequencies as a list and as a range/step."
-    - "It is generally recommended that applications choose frequencies from the list. However applications can also construct the list themselves using the range/steps provided."
+name: $t_freq_state_t
 members:
     - type: double
-      name: min
-      desc: "[out] The minimum clock frequency in units of MHz"
-    - type: double
-      name: max
-      desc: "[out] The maximum clock frequency in units of MHz"
-    - type: double
-      name: step
-      desc: "[out] The step clock frequency in units of MHz"
-    - type: uint32_t
-      name: num
-      desc: "[out] The number of clocks"
-    - type: "const double*"
-      name: "pClocks"
-      desc: "[out] Array of clock frequencies in units of MHz ordered from smallest to largest."
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_FREQ_RANGE"
-class: $tSysman
-name: $t_resprop_freq_range_t
-members:
-    - type: double
-      name: "min"
-      desc: "[in,out] The min frequency in MHz below which hardware frequency management will not request frequencies. Setting to 0 will return the hardware default value."
-    - type: double
-      name: "max"
-      desc: "[in,out] The max frequency in MHz above which hardware frequency management will not request frequencies. Setting to 0 will return the hardware default value."
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_FREQ_REQUESTED_FREQ"
-class: $tSysman
-name: $t_resprop_freq_requested_freq_t
-members:
-    - type: double
-      name: "freqRequest"
+      name: "request"
       desc: "[out] The current frequency request in MHz."
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_FREQ_TDP_FREQ"
-class: $tSysman
-name: $t_resprop_freq_tdp_freq_t
-members:
     - type: double
-      name: "freqTdp"
+      name: "tdp"
       desc: "[out] The maximum frequency in MHz supported under the current TDP conditions"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_FREQ_EFFICIENT_FREQ"
-class: $tSysman
-name: $t_resprop_freq_efficient_freq_t
-members:
     - type: double
-      name: "freqEfficient"
+      name: "efficient"
       desc: "[out] The efficient minimum frequency in MHz"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_FREQ_RESOLVED_FREQ"
-class: $tSysman
-name: $t_resprop_freq_resolved_freq_t
-members:
     - type: double
-      name: "freqResolved"
+      name: "actual"
       desc: "[out] The resolved frequency in MHz"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_FREQ_THROTTLE_REASONS"
-class: $tSysman
-name: $t_resprop_freq_throttle_reasons_t
-members:
     - type: uint32_t
       name: "throttleReasons"
-      desc: "[out] The reasons that the frequency is being limited by the PCU (Bitfield of (1<<$t_freq_throttle_reasons_t))."
+      desc: "[out] The reasons that the frequency is being limited by the hardware (Bitfield of (1<<$t_freq_throttle_reasons_t))."
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_RESPROP_FREQ_THROTTLE_TIME"
+desc: "Frequency throttle time snapshot"
 class: $tSysman
-name: $t_resprop_freq_throttle_time_t
+name: $t_freq_throttle_time_t
+details:
+    - "Percent time throttled is calculated by taking two snapshots (s1, s2) and using the equation: %throttled = (s2.throttleTime - s1.throttleTime) / (s2.timestamp - s1.timestamp)"
 members:
-    - type: uint32_t
+    - type: uint64_t
       name: "throttleTime"
-      desc: "[out] The total time in microseconds that the frequency has been limited by the PCU."
+      desc: "[out] The monotonic counter of time in microseconds that the frequency has been limited by the hardware."
+    - type: uint64_t
+      name: "timestamp"
+      desc: "[out] Microsecond timestamp when throttleTime was captured."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get frequency properties - available frequencies"
+class: $tSysman
+name: FrequencyGetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_freq_domain_t
+      name: domain
+      desc: "[in] The frequency domain."
+    - type: $t_freq_properties_t*
+      name: pProperties
+      desc: "[in] The frequency properties for the specified domain."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get current frequency limits"
+class: $tSysman
+name: FrequencyGetLimits
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_freq_domain_t
+      name: domain
+      desc: "[in] The frequency domain."
+    - type: $t_freq_limits_t*
+      name: pLimits
+      desc: "[in] The limits between which the hardware can operate for the specified domain."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set frequency limits between which the hardware can operate."
+class: $tSysman
+name: FrequencySetLimits
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_freq_domain_t
+      name: domain
+      desc: "[in] The frequency domain."
+    - type: const $t_freq_limits_t*
+      name: pLimits
+      desc: "[in] The limits between which the hardware can operate for the specified domain."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get current frequency state - frequency request, actual frequency, TDP limits"
+class: $tSysman
+name: FrequencyGetState
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_freq_domain_t
+      name: domain
+      desc: "[in] The frequency domain."
+    - type: $t_freq_state_t*
+      name: pState
+      desc: "[in] Frequency state for the specified domain."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get frequency throttle time"
+class: $tSysman
+name: FrequencyGetThrottleTime
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_freq_domain_t
+      name: domain
+      desc: "[in] The frequency domain."
+    - type: $t_freq_throttle_time_t*
+      name: pThrottleTime
+      desc: "[in] Will contain a snapshot of the throttle time counters for the specified domain."
 
 --- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_UTIL_COUNTERS"
-details:
-    - "Percentage utilization is given by the equation: 100 * delta(activeCounter) / ( delta(activeCounter) + delta(idleCounter) )."
+type: enum
+desc: "Activity components"
 class: $tSysman
-name: $t_resprop_util_counters_t
+name: $t_activity_type_t
+etors:
+    - name: $T_ACTIVITY_TYPE_GLOBAL
+      value: "0"
+      desc: "Overall activity of all accelerators on the device."
+    - name: $T_ACTIVITY_TYPE_COMPUTE
+      desc: "Activity of all compute accelerators on the device."
+    - name: $T_ACTIVITY_TYPE_MEDIA
+      desc: "Activity of all media accelerators on the device."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Activity counters"
+details:
+    - "Percent utilization is calculated by taking two snapshots (s1, s2) and using the equation: %util = (s2.activeTime - s1.activeTime) / (s2.timestamp - s1.timestamp)"
+class: $tSysman
+name: $t_activity_stats_t
 members:
-    - type: uint32_t
-      name: "activeCounter"
-      desc: "[out] Monotonic counter for total wall time in microseconds that this resource is actively running workloads."
-    - type: uint32_t
-      name: "idleCounter"
-      desc: "[out] Monotonic counter for total wall time in microseconds that this resource is not actively running any workloads."
+    - type: uint64_t
+      name: "activeTime"
+      desc: "[out] Monotonic counter for time in microseconds that this resource is actively running workloads."
+    - type: uint64_t
+      name: "timestamp"
+      desc: "[out] Monotonic timestamp counter in microseconds when activeTime counter was sampled."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get the activity counters of a part of the device"
+class: $tSysman
+name: ActivityGetStats
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_activity_type_t
+      name: type
+      desc: "[in] The type of activity stats."
+    - type: $t_activity_stats_t*
+      name: pStats
+      desc: "[in] Will contain a snapshot of the activity counters."
 
 --- #--------------------------------------------------------------------------
 type: enum
@@ -827,185 +621,558 @@ etors:
       desc: "Execution unit shared local memory"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_RESPROP_MEM_TYPE"
+desc: "Memory properties"
 class: $tSysman
-name: $t_resprop_mem_type_t
+name: $t_mem_properties_t
 members:
     - type: $t_mem_type_t
       name: type
       desc: "[out] The memory type"
+    - type: uint64_t
+      name: size
+      desc: "[out] Physical memory size in bytes"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_RESPROP_MEM_UTILIZATION"
+desc: "Memory bandwidth"
 class: $tSysman
-name: $t_resprop_mem_utilization_t
+name: $t_mem_bandwidth_t
 details:
-    - "The total physical memory is the sum of all others (stolen + bad + allocated + unallocated)."
-    - "Percent software memory utilization given by 100 * allocated / (allocated + unallocated)."
-    - "Percent bad memory given by 100 * bad / total"
+    - "Percent bandwidth is calculated by taking two snapshots (s1, s2) and using the equation: %bw = 10^6 * ((s2.readCounter - s1.readCounter) + (s2.writeCounter - s1.writeCounter)) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))"
 members:
     - type: uint64_t
-      name: total
-      desc: "[out] The total physical memory in bytes"
+      name: readCounter
+      desc: "[out] Total bytes read from memory"
     - type: uint64_t
-      name: stolen
-      desc: "[out] The total stolen memory in bytes"
+      name: writeCounter
+      desc: "[out] Total bytes written to memory"
     - type: uint64_t
-      name: bad
-      desc: "[out] The total bad memory in bytes"
+      name: maxBandwidth
+      desc: "[out] Current maximum bandwidth in units of bytes/sec"
+    - type: uint64_t
+      name: timestamp
+      desc: "[out] The timestamp when these measurements were sampled"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Memory allocation"
+class: $tSysman
+name: $t_mem_alloc_t
+details:
+    - "Percent allocation is given by 100 * allocated / total."
+    - "Percent free is given by 100 * (total - allocated) / total."
+members:
     - type: uint64_t
       name: allocated
       desc: "[out] The total allocated bytes"
     - type: uint64_t
-      name: unallocated
-      desc: "[out] The total unallocated bytes"
+      name: total
+      desc: "[out] The total physical memory in bytes"
 --- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_MEM_BANDWIDTH"
+type: function
+desc: "Get memory properties"
 class: $tSysman
-name: $t_resprop_mem_bandwidth_t
-members:
-    - type: uint32_t
-      name: readCounter
-      desc: "[out] Total bytes read from memory"
-    - type: uint32_t
-      name: writeCounter
-      desc: "[out] Total bytes written to memory"
-    - type: uint32_t
-      name: maxBandwidth
-      desc: "[out] Current maximum bandwidth in units of bytes/sec"
+name: MemoryGetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_mem_properties_t*
+      name: pProperties
+      desc: "[in] Will contain memory properties."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get memory bandwidth"
+class: $tSysman
+name: MemoryGetBandwidth
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_mem_bandwidth_t*
+      name: pBandwidth
+      desc: "[in] Will contain a snapshot of the bandwidth counters."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get memory allocation"
+class: $tSysman
+name: MemoryGetAllocated
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_mem_alloc_t*
+      name: pAllocated
+      desc: "[in] Will contain the current allocated memory."
 
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "Link resource types"
-class: $tSysman
-name: $t_link_type_t
-etors:
-    - name: $T_LINK_TYPE_PCI
-      value: "0"
-      desc: "PCI connection"
-    - name: $T_LINK_TYPE_CD_PORT
-      desc: "Companion die physical port"
---- #--------------------------------------------------------------------------
 type: struct
-desc: "Link speed element"
+desc: "PCI address"
 class: $tSysman
-name: $t_link_speed_t
+name: $t_pci_address_t
 members:
     - type: uint32_t
-      name: numLanes
-      desc: "[out] The number of lanes used by the link"
+      name: "domain"
+      desc: "[out] BDF domain"
     - type: uint32_t
-      name: speed
-      desc: "[out] The frequency of the link in units of MHz"
+      name: "bus"
+      desc: "[out] BDF bus"
     - type: uint32_t
-      name: bandwidth
-      desc: "[out] The maximum bandwidth in units of bytes/sec"
+      name: "device"
+      desc: "[out] BDF device"
+    - type: uint32_t
+      name: "function"
+      desc: "[out] BDF function"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for property $T_RESPROP_LINK_TYPE"
+desc: "PCI speed"
 class: $tSysman
-name: $t_resprop_link_type_t
-members:
-    - type: $t_link_type_t
-      name: "type"
-      desc: "[out] The type of link"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for property $T_RESPROP_LINK_BUS_ADDRESS"
-class: $tSysman
-name: $t_resprop_link_bus_address_t
-members:
-    - type: int8_t
-      name: "str[$T_STRING_PROPERTY_SIZE]"
-      desc: "[out] NULL terminated string value"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for property $T_RESPROP_LINK_PEER_DEVICE"
-class: $tSysman
-name: $t_resprop_link_peer_device_t
-members:
-    - type: $x_device_uuid_t
-      name: "uuid"
-      desc: "[out] UUID of the peer device connected to through this link"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_LINK_AVAIL_SPEEDS"
-class: $tSysman
-name: $t_resprop_link_avail_speeds_t
-details:
-    - "The list is ordered from the smallest ratio to the largest ratio."
+name: $t_pci_speed_t
 members:
     - type: uint32_t
-      name: num
-      desc: "[out] The number of elements in pList"
-    - type: "const $t_link_speed_t*"
-      name: "pList"
-      desc: "[out][range(0, num-1)] Pointer to an array of link speeds"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_LINK_STATE"
-class: $tSysman
-name: $t_resprop_link_state_t
-members:
-    - type: $x_bool_t
-      name: "enable"
-      desc: "[out] Indicates if the link is disabled/enabled."
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_LINK_MAX_PACKET_SIZE"
-class: $tSysman
-name: $t_resprop_link_max_packet_size_t
-members:
+      name: "gen"
+      desc: "[out] The link generation"
+    - type: uint32_t
+      name: "width"
+      desc: "[out] The number of lanes"
+    - type: uint32_t
+      name: "maxBandwidth"
+      desc: "[out] The maximum bandwidth in bytes/sec"
     - type: uint32_t
       name: "maxPacketSize"
       desc: "[out] Maximum packet size in bytes."
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_RESPROP_LINK_BANDWIDTH"
+desc: "Static PCI properties"
 class: $tSysman
-name: $t_resprop_link_bandwidth_t
+name: $t_pci_properties_t
 members:
+    - type: $t_pci_address_t
+      name: "address"
+      desc: "[out] The BDF address"
     - type: uint32_t
-      name: recvCounter
-      desc: "[out] Total bytes received across the link"
-    - type: uint32_t
-      name: "sendCounter"
-      desc: "[out] Total bytes sent across the link"
+      name: "numBars"
+      desc: "[out] The number of configured bars"
+    - type: $t_pci_speed_t
+      name: "maxSpeed"
+      desc: "[out] Fastest port configuration supported by the device."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Dynamic PCI state"
+class: $tSysman
+name: $t_pci_state_t
+members:
+    - type: $t_pci_speed_t
+      name: "speed"
+      desc: "[out] The current port configure speed"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "PCI bar types"
+class: $tSysman
+name: $t_pci_bar_type_t
+etors:
+    - name: $T_PCI_BAR_TYPE_CONFIG
+      value: "0"
+      desc: "PCI configuration space"
+    - name: $T_PCI_BAR_TYPE_MMIO
+      desc: "MMIO registers"
+    - name: $T_PCI_BAR_TYPE_VRAM
+      desc: "VRAM aperture"
+    - name: $T_PCI_BAR_TYPE_ROM
+      desc: "ROM aperture"
+    - name: $T_PCI_BAR_TYPE_VGA_IO
+      desc: "Legacy VGA IO ports"
+    - name: $T_PCI_BAR_TYPE_VGA_MEM
+      desc: "Legacy VGA memory"
+    - name: $T_PCI_BAR_TYPE_INDIRECT_IO
+      desc: "Indirect IO port access"
+    - name: $T_PCI_BAR_TYPE_INDIRECT_MEM
+      desc: "Indirect memory access"
+    - name: $T_PCI_BAR_TYPE_OTHER
+      desc: "Other type of PCI bar"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Properties of a pci bar"
+class: $tSysman
+name: $t_pci_bar_properties_t
+members:
+    - type: $t_pci_bar_type_t
+      name: "type"
+      desc: "[out] The type of bar"
+    - type: uint64_t
+      name: "base"
+      desc: "[out] Base address of the bar."
+    - type: uint64_t
+      name: "size"
+      desc: "[out] Size of the bar."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "PCI throughput"
+class: $tSysman
+name: $t_pci_throughput_t
+details:
+    - "Percent throughput is calculated by taking two snapshots (s1, s2) and using the equation: %bw = 10^6 * ((s2.rxCounter - s1.rxCounter) + (s2.txCounter - s1.txCounter)) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))"
+members:
+    - type: uint64_t
+      name: "timestamp"
+      desc: "[out] Monotonic timestamp counter in microseconds when this sample was taken"
+    - type: uint64_t
+      name: "rxCounter"
+      desc: "[out] Monotonic counter for the number of bytes received"
+    - type: uint64_t
+      name: "txCounter"
+      desc: "[out] Monotonic counter for the number of bytes transmitted (including replays)"
+    - type: uint64_t
+      name: "replayCounter"
+      desc: "[out] Monotonic counter for the number of replay packets"
     - type: uint32_t
       name: "maxBandwidth"
-      desc: "[out] Maximum bytes/sec that can be transfered acros the link"
+      desc: "[out] The maximum bandwidth in bytes/sec under the current configuration"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_RESPROP_LINK_SPEED"
+desc: "PCI stats counters"
 class: $tSysman
-name: $t_resprop_link_speed_t
+name: $t_pci_stats_t
+details:
+    - "Percent replays is calculated by taking two snapshots (s1, s2) and using the equation: %replay = 10^6 * (s2.replayCounter - s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))"
 members:
-    - type: "const $t_link_speed_t*"
-      name: "pSpeed"
-      desc: "[out] Pointer to the current speed configuration"
+    - type: uint64_t
+      name: "timestamp"
+      desc: "[out] Monotonic timestamp counter in microseconds when this sample was taken"
+    - type: uint64_t
+      name: "replayCounter"
+      desc: "[out] Monotonic counter for the number of replay packets"
+    - type: uint64_t
+      name: "packetCounter"
+      desc: "[out] Monotonic counter for the number of packets"
 --- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_LINK_SPEED_RANGE"
+type: function
+desc: "Get PCI properties - address, max speed"
 class: $tSysman
-name: $t_resprop_link_speed_range_t
-members:
-    - type: "const $t_link_speed_t*"
-      name: "pMinSpeed"
-      desc: "[out] Pointer to the min speed configuration (one of those in the array returned by property $T_RESPROP_LINK_AVAIL_SPEEDS)"
-    - type: "const $t_link_speed_t*"
-      name: "pMaxSpeed"
-      desc: "[out] Pointer to the max speed configuration (one of those in the array returned by property $T_RESPROP_LINK_AVAIL_SPEEDS)"
+name: PciGetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_pci_properties_t*
+      name: pProperties
+      desc: "[in] Will contain the PCI properties."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get current PCI state - current speed"
+class: $tSysman
+name: PciGetState
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_pci_state_t*
+      name: pState
+      desc: "[in] Will contain the PCI properties."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get properties of a bar"
+class: $tSysman
+name: PciGetBarProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] The index of the port (0 ... [$t_pci_properties_t.numBars - 1])."
+    - type: $t_pci_bar_properties_t*
+      name: pProperties
+      desc: "[in] Will contain properties of the specified bar"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get PCI throughput"
+class: $tSysman
+name: PciGetThroughput
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_pci_throughput_t*
+      name: pThroughput
+      desc: "[in] Will contain a snapshot of the latest throughput counters."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get PCI stats"
+class: $tSysman
+name: PciGetStats
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_pci_stats_t*
+      name: pStats
+      desc: "[in] Will contain a snapshot of the latest stats."
 
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_RESPROP_TEMP_TEMPERATURE"
+desc: "Switch address"
 class: $tSysman
-name: $t_resprop_temp_temperature_t
+name: $t_switch_address_t
+members:
+    - type: uint8_t
+      name: "guid[8]"
+      desc: "[out] GUID of the Switch"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Switch properties"
+class: $tSysman
+name: $t_switch_properties_t
+members:
+    - type: $t_switch_address_t
+      name: "address"
+      desc: "[out] Address of this Switch"
+    - type: uint32_t
+      name: "numPorts"
+      desc: "[out] The number of ports"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Switch state"
+class: $tSysman
+name: $t_switch_state_t
+members:
+    - type: $x_bool_t
+      name: "enabled"
+      desc: "[out] Indicates if the switch is enabled/disabled"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Switch Port properties"
+class: $tSysman
+name: $t_switch_port_properties_t
 members:
     - type: uint32_t
-      name: "temperature"
-      desc: "[out] The current temperature of the sensor in degrees celcius"
+      name: "maxBandwidth"
+      desc: "[out] Maximum bandwidth (bytes/sec) supported by the port"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Switch Port state"
+class: $tSysman
+name: $t_switch_port_state_t
+members:
+    - type: $x_bool_t
+      name: "connected"
+      desc: "[out] Indicates if the port is connected to a remote Switch"
+    - type: $t_switch_address_t
+      name: "remote"
+      desc: "[out] If connected is true, this gives the address of the remote Componian Die to which this port connects"
+    - type: uint32_t
+      name: "maxBandwidth"
+      desc: "[out] Current maximum bandwidth (bytes/sec)"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Switch Port throughput"
+class: $tSysman
+name: $t_switch_port_throughput_t
+details:
+    - "Percent throughput is calculated by taking two snapshots (s1, s2) and using the equation: %bw = 10^6 * ((s2.rxCounter - s1.rxCounter) + (s2.txCounter - s1.txCounter)) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))"
+members:
+    - type: uint64_t
+      name: "timestamp"
+      desc: "[out] Monotonic timestamp counter in microseconds when this sample was taken"
+    - type: uint64_t
+      name: "rxCounter"
+      desc: "[out] Monotonic counter for the number of bytes received"
+    - type: uint64_t
+      name: "txCounter"
+      desc: "[out] Monotonic counter for the number of bytes transmitted"
+    - type: uint32_t
+      name: "maxBandwidth"
+      desc: "[out] The maximum bandwidth in bytes/sec under the current port configuration"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Switch Port stats counters"
+class: $tSysman
+name: $t_switch_port_stats_t
+details:
+    - "Percent replays is calculated by taking two snapshots (s1, s2) and using the equation: %replay = 10^6 * (s2.replayCounter - s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))"
+members:
+    - type: uint64_t
+      name: "timestamp"
+      desc: "[out] Monotonic timestamp counter in microseconds when this sample was taken"
+    - type: uint64_t
+      name: "replayCounter"
+      desc: "[out] Monotonic counter for the number of replay packets"
+    - type: uint64_t
+      name: "packetCounter"
+      desc: "[out] Monotonic counter for the number of packets"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get Switch properties"
+class: $tSysman
+name: SwitchGetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_switch_properties_t*
+      name: pProperties
+      desc: "[in] Will contain the Switch properties."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get Switch state"
+class: $tSysman
+name: SwitchGetState
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_switch_state_t*
+      name: pState
+      desc: "[in] Will contain the current state of the switch (enabled/disabled)."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set Switch state"
+class: $tSysman
+name: SwitchSetState
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $x_bool_t
+      name: enable
+      desc: "[in] Set to true to enable the Switch, otherwise it will be disabled."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get Switch Port properties"
+class: $tSysman
+name: SwitchPortGetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] The index of the port (0 ... [$t_switch_properties_t.numPorts - 1])."
+    - type: $t_switch_port_properties_t*
+      name: pProperties
+      desc: "[in] Will contain properties of the Switch Port"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get Switch Port state"
+class: $tSysman
+name: SwitchPortGetState
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] The index of the port (0 ... [$t_switch_properties_t.numPorts - 1])."
+    - type: $t_switch_port_state_t*
+      name: pState
+      desc: "[in] Will contain the current state of the Switch Port"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get Switch Port throughput"
+class: $tSysman
+name: SwitchPortGetThroughput
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] The index of the port (0 ... [$t_switch_properties_t.numPorts - 1])."
+    - type: $t_switch_port_throughput_t*
+      name: pThroughput
+      desc: "[in] Will contain the Switch port throughput counters."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get Switch Port stats"
+class: $tSysman
+name: SwitchPortGetStats
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] The index of the port (0 ... [$t_switch_properties_t.numPorts - 1])."
+    - type: $t_switch_port_stats_t*
+      name: pStats
+      desc: "[in] Will contain the Switch port stats."
+
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Temperature sensors"
+class: $tSysman
+name: $t_temp_sensors_t
+etors:
+    - name: $T_TEMP_SENSORS_GLOBAL
+      value: "0"
+      desc: "The maximum temperature across all device sensors"
+    - name: $T_TEMP_SENSORS_GPU
+      desc: "The maximum temperature across all sensors in the GPU"
+    - name: $T_TEMP_SENSORS_MEMORY
+      desc: "The maximum temperature across all sensors in the local memory"
+    - name: $T_TEMP_SENSORS_NUM
+      desc: "The number of sensors"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get the temperature from a specified sensor"
+class: $tSysman
+name: TemperatureGet
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_temp_sensors_t
+      name: sensor
+      desc: "[in] The port address."
+    - type: uint32_t*
+      name: pTemperature
+      desc: "[in] Will contain the temperature read from the specified sensor."
 
 --- #--------------------------------------------------------------------------
 type: enum
@@ -1019,54 +1186,105 @@ etors:
     - name: $T_STBY_PROMO_MODE_NEVER
       desc: "The device/component will never shutdown. This can improve performance but uses more energy."
 --- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_STBY_PROMO_MODE"
+type: function
+desc: "Get the current standby promotion mode"
 class: $tSysman
-name: $t_resprop_stby_promo_mode_t
-members:
+name: StandbyGetMode
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: $t_stby_promo_mode_t*
+      name: pMode
+      desc: "[in] Will contain the current standby mode."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set standby promotion mode"
+class: $tSysman
+name: StandbySetMode
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
     - type: $t_stby_promo_mode_t
       name: mode
-      desc: "[in,out] Current promotion mode"
+      desc: "[in] New standby mode."
 
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for property $T_RESPROP_FW_NAME"
+desc: "Firmware properties"
 class: $tSysman
-name: $t_resprop_fw_name_t
+name: $t_firmware_properties_t
 members:
     - type: int8_t
-      name: "str[$T_STRING_PROPERTY_SIZE]"
+      name: "name[$T_STRING_PROPERTY_SIZE]"
       desc: "[out] NULL terminated string value"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for property $T_RESPROP_FW_VERSION"
-class: $tSysman
-name: $t_resprop_fw_version_t
-members:
     - type: int8_t
-      name: "str[$T_STRING_PROPERTY_SIZE]"
+      name: "version[$T_STRING_PROPERTY_SIZE]"
       desc: "[out] NULL terminated string value"
 --- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_FW_CHECK"
+type: function
+desc: "Get firmware properties"
 class: $tSysman
-name: $t_resprop_fw_check_t
-members:
+name: FirmwareGetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: "checksum"
-      desc: "[out] The calculated checksum of the loaded firmware image"
+      name: ordinal
+      desc: "[in] The index of the firmware (0 ... [$t_sysman_properties_t.numFirmwares - 1])."
+    - type: $t_firmware_properties_t*
+      name: pProperties
+      desc: "[in] Pointer to an array that will hold the properties of the firmware"
 --- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_FW_FLASH"
+type: function
+desc: "Get firmware checksum"
 class: $tSysman
-name: $t_resprop_fw_flash_t
-members:
+name: FirmwareGetChecksum
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] The index of the firmware (0 ... [$t_sysman_properties_t.numFirmwares - 1])."
+    - type: uint32_t*
+      name: pChecksum
+      desc: "[in] Calculated checksum of the installed firmware."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Flash a new firmware image"
+class: $tSysman
+name: FirmwareFlash
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] The index of the firmware (0 ... [$t_sysman_properties_t.numFirmwares - 1])."
     - type: void*
-      name: "pImage"
-      desc: "[in] Pointer to the image to be flashed"
+      name: pImage
+      desc: "[in] Image of the new firmware to flash."
     - type: uint32_t
-      name: "size"
-      desc: "[in] Size in bytes of the image pointed to by pImage"
+      name: size
+      desc: "[in] Size of the flash image."
 
 --- #--------------------------------------------------------------------------
 type: enum
@@ -1083,49 +1301,70 @@ etors:
       desc: "Under-voltage has occurred"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_RESPROP_PSU_AMP_LIMIT"
+desc: "Static properties of the power supply"
 class: $tSysman
-name: $t_resprop_psu_amp_limit_t
+name: $t_psu_properties_t
 members:
+    - type: $x_bool_t
+      name: "haveFan"
+      desc: "[out] True if the power supply has a fan"
     - type: uint32_t
-      name: "limit"
+      name: "ampLimit"
       desc: "[out] The maximum electrical current in amperes that can be drawn"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_RESPROP_PSU_VOLTAGE_STATUS"
+desc: "Dynamic state of the power supply"
 class: $tSysman
-name: $t_resprop_psu_voltage_status_t
+name: $t_psu_state_t
 members:
     - type: $t_psu_voltage_status_t
-      name: "status"
-      desc: "[out] The current PSU voltage status)"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_PSU_FAN_FAILURE"
-class: $tSysman
-name: $t_resprop_psu_fan_failure_t
-members:
+      name: "voltStatus"
+      desc: "[out] The current PSU voltage status"
     - type: $x_bool_t
-      name: "status"
+      name: "fanFailed"
       desc: "[out] Indicates if the fan has failed"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_PSU_TEMPERATURE"
-class: $tSysman
-name: $t_resprop_psu_temperature_t
-members:
     - type: uint32_t
       name: "temperature"
       desc: "[out] Read the current heatsink temperature in degrees celcius"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_PSU_AMPS"
-class: $tSysman
-name: $t_resprop_psu_amps_t
-members:
     - type: uint32_t
       name: "current"
       desc: "[out] The amps being drawn in amperes"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get power supply properties"
+class: $tSysman
+name: PsuGetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] The index of the power supply (0 ... [$t_sysman_properties_t.numPsus - 1])."
+    - type: $t_psu_properties_t*
+      name: pProperties
+      desc: "[in] Will contain the properties of the power supply."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get current power supply state"
+class: $tSysman
+name: PsuGetState
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] The index of the power supply (0 ... [$t_sysman_properties_t.numPsus - 1])."
+    - type: $t_psu_state_t*
+      name: pState
+      desc: "[in] Will contain the current state of the power supply."
 
 --- #--------------------------------------------------------------------------
 type: enum
@@ -1133,8 +1372,10 @@ desc: "Fan resource speed mode"
 class: $tSysman
 name: $t_fan_speed_mode_t
 etors:
-    - name: $T_FAN_SPEED_MODE_FIXED
+    - name: $T_FAN_SPEED_MODE_DEFAULT
       value: "0"
+      desc: "The fan speed is operating using the hardware default settings"
+    - name: $T_FAN_SPEED_MODE_FIXED
       desc: "The fan speed is currently set to a fixed value"
     - name: $T_FAN_SPEED_MODE_TABLE
       desc: "The fan speed is currently controlled dynamically by hardware based on a temp/speed table"
@@ -1171,91 +1412,142 @@ name: $T_FAN_TEMP_SPEED_PAIR_COUNT
 value: "32"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_RESPROP_FAN_MAX_RPM"
+desc: "Fan properties"
 class: $tSysman
-name: $t_resprop_fan_max_rpm_t
+name: $t_fan_properties_t
 members:
     - type: uint32_t
       name: "maxSpeed"
       desc: "[out] The maximum RPM of the fan"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_FAN_MAX_TABLE_SIZE"
-class: $tSysman
-name: $t_resprop_fan_max_table_size_t
-members:
     - type: uint32_t
       name: "maxPoints"
       desc: "[out] The maximum number of points in the fan temp/speed table"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_RESPROP_FAN_SPEED_RPM"
+desc: "Fan configuration"
 class: $tSysman
-name: $t_resprop_fan_speed_rpm_t
-members:
-    - type: uint32_t
-      name: "speed"
-      desc: "[out] The current fan speed in units of revolutions per minute (rpm)"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_FAN_SPEED_PERCENT"
-class: $tSysman
-name: $t_resprop_fan_speed_percent_t
-members:
-    - type: uint32_t
-      name: "speed"
-      desc: "[out] The current fan speed as a percentage of the maximum speed of that fan"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_FAN_MODE"
-class: $tSysman
-name: $t_resprop_fan_mode_t
+name: $t_fan_config_t
 members:
     - type: $t_fan_speed_mode_t
       name: "mode"
-      desc: "[in,out] The current fan speed mode (one of $t_fan_speed_mode_t)"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Data for the property $T_RESPROP_FAN_FIXED_SPEED"
-class: $tSysman
-name: $t_resprop_fan_fixed_speed_t
-members:
+      desc: "[in,out] The fan speed mode (fixed, temp-speed table)"
     - type: uint32_t
       name: "speed"
-      desc: "[in,out] The speed of the fan"
+      desc: "[in,out] The fixed fan speed setting"
     - type: $t_fan_speed_units_t
-      name: "units"
-      desc: "[in,out] The units of the member speed"
+      name: "speedUnits"
+      desc: "[in,out] The units of the fixed fan speed setting"
+    - type: uint32_t
+      name: "numPoints"
+      desc: "[in,out] The number of valid points in the fan speed table"
+    - type: $t_fan_temp_speed_t
+      name: "table[$T_FAN_TEMP_SPEED_PAIR_COUNT]"
+      desc: "[in,out] Array of temperature/fan speed pairs"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_RESPROP_FAN_SPEED_TABLE"
+desc: "Fan state"
 class: $tSysman
-name: $t_resprop_fan_speed_table_t
+name: $t_fan_state_t
 members:
-    - type: uint32_t*
-      name: "pCount"
-      desc: |
-            [in,out] The number of temp/speed pairs.
-            When reading the current fan speed table, this will be set to the number of points returned.
-            When setting the fan speed table, this specifies the number of valid points in the table.
-    - type: $t_fan_temp_speed_t
-      name: "points[$T_FAN_TEMP_SPEED_PAIR_COUNT]"
-      desc: "[in,out][range(0, *pCount)] Array of temperature/fan speed pairs"
+    - type: $t_fan_speed_mode_t
+      name: "mode"
+      desc: "[out] The fan speed mode (default, fixed, temp-speed table)"
+    - type: $t_fan_speed_units_t
+      name: "speedUnits"
+      desc: "[out] The units of the fan speed"
+    - type: uint32_t
+      name: "speed"
+      desc: "[out] The current fan speed"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get fan properties"
+class: $tSysman
+name: FanGetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] The index of the fan (0 ... [$t_sysman_properties_t.numFans - 1])."
+    - type: $t_fan_properties_t*
+      name: pProperties
+      desc: "[in] Will contain the properties of the fan."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get current fan configuration"
+class: $tSysman
+name: FanGetConfig
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] The index of the fan (0 ... [$t_sysman_properties_t.numFans - 1])."
+    - type: $t_fan_config_t*
+      name: pConfig
+      desc: "[in] Will contain the current configuration of the fan."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set fan configuration"
+class: $tSysman
+name: FanSetConfig
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] The index of the fan (0 ... [$t_sysman_properties_t.numFans - 1])."
+    - type: const $t_fan_config_t*
+      name: pConfig
+      desc: "[in] New fan configuration."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get current state of a fan - current mode and speed"
+class: $tSysman
+name: FanGetState
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_sysman_handle_t
+      name: hSysman
+      desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] The index of the fan (0 ... [$t_sysman_properties_t.numFans - 1])."
+    - type: $t_fan_speed_units_t
+      name: units
+      desc: "[in] The units in which the fan speed should be returned."
+    - type: $t_fan_state_t*
+      name: pState
+      desc: "[in] Will contain the current state of the fan."
 
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_RESPROP_LED_RGB_CAP"
+desc: "LED properties"
 class: $tSysman
-name: $t_resprop_led_rgb_cap_t
+name: $t_led_properties_t
 members:
     - type: $x_bool_t
       name: "haveRGB"
       desc: "[out] Indicates if the LED is RGB capable"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Data for the property $T_RESPROP_LED_STATE"
+desc: "LED state"
 class: $tSysman
-name: $t_resprop_led_state_t
+name: $t_led_state_t
 members:
     - type: $x_bool_t
       name: isOn
@@ -1269,69 +1561,11 @@ members:
     - type: uint8_t
       name: "blue"
       desc: "[in,out][range(0, 255)] The LED blue value"
-
---- #--------------------------------------------------------------------------
-type: enum
-desc: "Property support"
-class: $tSysman
-name: $t_prop_support_t
-etors:
-    - name: $T_PROP_SUPPORT_NONE
-      value: "0"
-      desc: "The property is not supported by this version of the API"
-    - name: $T_PROP_SUPPORT_API
-      value: "$X_BIT( 0 )"
-      desc: "The property is supported by the the API"
-    - name: $T_PROP_SUPPORT_DEVICE_CLASS
-      value: "$X_BIT( 1 )"
-      desc: "The property is supported for the class of device"
-    - name: $T_PROP_SUPPORT_DEVICE
-      value: "$X_BIT( 2 )"
-      desc: "The property is supported for the device"
---- #--------------------------------------------------------------------------
-type: enum
-desc: "Property access permissions"
-class: $tSysman
-name: $t_prop_access_t
-etors:
-    - name: $T_PROP_ACCESS_NO_PERMISSIONS
-      value: "0"
-      desc: "The application does not have read-write access to the property"
-    - name: $T_PROP_ACCESS_READ_PERMISSIONS
-      value: "$X_BIT( 0 )"
-      desc: "The application has only read access to the property"
-    - name: $T_PROP_ACCESS_WRITE_PERMISSIONS
-      value: "$X_BIT( 1 )"
-      desc: "The application has write access to the property"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Structure containing information about a resource"
-class: $tSysman
-name: $t_resid_info_t
-members:
-    - type: $t_resid_t
-      name: "id"
-      desc: "[in] The ID of the resource"
-    - type: $t_resource_type_t
-      name: "type"
-      desc: "[in] The type of resource"
-    - type: const char*
-      name: "pName"
-      desc: "[out] The name of the resource"
-    - type: const char*
-      name: "pDesc"
-      desc: "[out] Human readable description of this resouce"
-    - type: $x_bool_t
-      name: "available"
-      desc: "[out] Set to TRUE if the resource with this ID is available on the device, otherwise set to FALSE"
-    - type: $x_bool_t
-      name: "propsOnSubdevices"
-      desc: "[out] Set to TRUE if this resource will change properties on sub-devices or is merging telemetry from sub-devices"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Find out if specific resources are available on this device"
+desc: "Get LED properties"
 class: $tSysman
-name: GetResourceInfo
+name: LedGetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -1340,163 +1574,47 @@ params:
       name: hSysman
       desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: count
-      desc: "[in] The number of entries in the the array pResources"
-    - type: $t_resid_info_t*
-      name: pResources
-      desc: "[in] Pointer to an array that hold the ID of resources on input and will contain the availability on output"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get list of resources available on this device of a given type"
-class: $tSysman
-name: GetResources
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: $t_resource_type_t
-      name: type
-      desc: "[in] Get a list of resources of given type. If this is $T_RESOURCE_TYPE_ANY, then all resources will be returned."
-    - type: uint32_t*
-      name: pCount
-      desc: |
-            [in] Pointer to the number of elements in the array pResources.
-            If count is 0 or pResources is nullptr, driver will update with the number of supported resources on this device.
-            If count is non-zero and less than the number of supported resources, driver will update with the number of resources. No data is returned and an error is generated.
-            If count is greater than or equal to the number of supported resources, all data is returned and count will be set to the number of returned resources.
-    - type: $t_resid_info_t*
-      name: pResources
-      desc: "[in] Pointer to an array that will hold the ID of information about supported resources"
-return:
-    - $X_RESULT_ERROR_ARRAY_SIZE_TOO_SMALL:
-        - "The array doesn't have enough elements to store all the errors"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Request structure to get resource property info"
-class: $tSysman
-name: $t_resprop_info_t
-members:
-    - type: $t_resprop_t
-      name: "property"
-      desc: "[in] The property"
-    - type: $t_resource_type_t
-      name: "resourceType"
-      desc: "[out] The type of resource this property is used with"
-    - type: const char*
-      name: "pName"
-      desc: "[out] Resource property name"
-    - type: const char*
-      name: "pDesc"
-      desc: "[out] Human readable description of this property"
-    - type: $t_prop_support_t
-      name: "support"
-      desc: "[out] API support for the property"
-    - type: $t_prop_access_t
-      name: "access"
-      desc: "[out] The access permissions for the property"
-    - type: uint32_t
-      name: "minGetInterval"
-      desc: "[out] The minimum interval in microseconds between reads to this property"
-    - type: uint32_t
-      name: "minSetInterval"
-      desc: "[out] The minimum interval in microseconds between writes to this property"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Find out which resources properties are available on a given device"
-class: $tSysman
-name: GetPropertyInfo
-details:
-    - "Access rights are specific to the device. Need to check separately on each device."
-    - "API support is based on the device class and doesn't need to be checked for each device."
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: count
-      desc: "[in] The number of entries in the array pProperties"
-    - type: $t_resprop_info_t*
+      name: ordinal
+      desc: "[in] The index of the LED (0 ... [$t_sysman_properties_t.numLeds - 1])."
+    - type: $t_led_properties_t*
       name: pProperties
-      desc: "[in] Pointer to an array of property info. Contains the property ID on input and the property info completed on output"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Request structure used to query a resource property value"
-class: $tSysman
-name: $t_resprop_request_t
-members:
-    - type: $t_resid_t
-      name: "resource"
-      desc: "[in] The resource ID"
-    - type: $t_resprop_t
-      name: "property"
-      desc: "[in] The property being requested"
-    - type: "void*"
-      name: "pData"
-      desc: |
-            [in] Pointer to the data for the property.
-            Each property has a corresponding data structure. The type of the data structure is derived from the property enumerator, converted to lower-case with "_t" appended.
-    - type: uint32_t
-      name: "size"
-      desc: "[in] The size of the data structure pointed to by pData."
-    - type: $x_result_t
-      name: "status"
-      desc: "[out] Indicates if the request was successful or not."
-      desc: |
-            [out] Indicates if the request was successful or not.
-            $X_RESULT_SUCCESS - Data was successful read or updated.
-            $X_RESULT_ERROR_DEVICE_ACCESS - Problem reading or writing device data.
-            $X_RESULT_ERROR_INVALID_ARGUMENT - Resource ID or property ID are invalid or size does not match required storage for property data.
-            $X_RESULT_ERROR_UNSUPPORTED - Resource ID and/or property ID not supported on this device.
-            $X_RESULT_ERROR_INSUFFICENT_PERMISSIONS - Insufficient permission to access this property.
+      desc: "[in] Will contain the properties of the LED."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get resource property data"
+desc: "Get current state of a LED - on/off, color"
 class: $tSysman
-name: GetProperties
+name: LedGetState
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device"
+      desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: count
-      desc: "[in] The number of properties in the array pRequest"
-    - type: $t_resprop_request_t*
-      name: pRequest
-      desc: "[in] Pointer to list of properties and corresponding data storage"
-returns:
-    - $X_RESULT_ERROR_UNKNOWN:
-        - "One or more of the specified resource/properties had access errors. Check $t_resprop_request_t.status for each request."
+      name: ordinal
+      desc: "[in] The index of the LED (0 ... [$t_sysman_properties_t.numLeds - 1])."
+    - type: $t_led_state_t*
+      name: pState
+      desc: "[in] Will contain the current state of the LED."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set resource property data"
+desc: "Set state of a LED - on/off, color"
 class: $tSysman
-name: SetProperties
+name: LedSetState
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $t_sysman_handle_t
       name: hSysman
-      desc: "[in] SMI handle of the device"
+      desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: count
-      desc: "[in] The number of properties in the array pRequest"
-    - type: $t_resprop_request_t*
-      name: pRequest
-      desc: "[in] Pointer to list of properties and corresponding data storage"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "An invalid resource index was specified in one or more of the requests"
-    - $X_RESULT_ERROR_UNSUPPORTED:
-        - "One or more requested properties is not supported on this device"
+      name: ordinal
+      desc: "[in] The index of the LED (0 ... [$t_sysman_properties_t.numLeds - 1])."
+    - type: const $t_led_state_t*
+      name: pState
+      desc: "[in] New state of the LED."
 
 --- #--------------------------------------------------------------------------
 type: struct
@@ -1607,50 +1725,6 @@ returns:
         - "Don't have permissions to clear error counters."
 
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "Event types"
-class: $tSysman
-name: $t_sysman_event_type_t
-etors:
-    - name: $T_SYSMAN_EVENT_TYPE_FREQ_THROTTLED
-      value: "0"
-      desc: "The frequency is being throttled"
-    - name: $T_SYSMAN_EVENT_TYPE_RAS_ERRORS
-      desc: "ECC/RAS errors"
-    - name: $T_SYSMAN_EVENT_TYPE_COUNT
-      desc: "The number of event types"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Request structure to determine events that are supported"
-class: $tSysman
-name: $t_event_support_t
-members:
-    - type: $t_sysman_event_type_t
-      name: "event"
-      desc: "[in] The event"
-    - type: $x_bool_t
-      name: "supported"
-      desc: "[out] Set to true/false to know if the event is supported"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Find out which events are supported on a given device"
-class: $tSysman
-name: SupportedEvents
-details:
-    - "Event support is the same for all devices with the same device ID."
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: count
-      desc: "[in] The number of entries in the array pAccess"
-    - type: $t_event_support_t*
-      name: pAccess
-      desc: "[in] Pointer to an array of event support requests"
---- #--------------------------------------------------------------------------
 type: struct
 desc: "Request structure used to register/unregister events"
 class: $tSysman
@@ -1659,9 +1733,6 @@ members:
     - type: $t_sysman_event_type_t
       name: "event"
       desc: "[in] The event type to register."
-    - type: $t_resid_t
-      name: "resourceId"
-      desc: "[in] Only events being generated by the specified resource. If $T_RESID_ANY, then applies to all events from all resources in the device."
     - type: uint32_t
       name: "threshold"
       desc: "[in] The application only receives a notification when the total count exceeds this value. Set to zero to receive a notification for every new event."
@@ -1669,7 +1740,7 @@ members:
 type: function
 desc: "Register to receive events"
 class: $tSysman
-name: RegisterEvents
+name: EventsRegister
 details:
     - "This will only register the specified list of events. If other events have been registered, notifications for them will continue."
     - "Set count to zero to receive notifications for all events."
@@ -1684,12 +1755,12 @@ params:
       desc: "[in] Number of entries in the array pEvents. If zero, all events will be registered."
     - type: $t_event_request_t*
       name: pEvents
-      desc: "[in] Events to register."
+      desc: "[in][optional] Events to register."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Unregister events"
 class: $tSysman
-name: UnregisterEvents
+name: EventsUnregister
 details:
     - "This will only unregister the specified list of events. If other events have been registered, notifications for them will continue."
     - "Set count to zero to no longer receive any notifications."
@@ -1704,7 +1775,7 @@ params:
       desc: "[in] Number of entries in the array pEvents. If zero, all events will be unregistered."
     - type: $t_event_request_t*
       name: pEvents
-      desc: "[in] Events to unregister."
+      desc: "[in][optional] Events to unregister."
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Wait infinitely for events to arrive."
@@ -1715,7 +1786,7 @@ type: function
 desc: "Get events that have been triggered for a specific device or from all registered devices"
 class: $tSysman
 decl: static
-name: GetEvents
+name: EventsListen
 details:
     - "If events have occurred, they are returned and the corresponding event status is cleared if the argument clear = true."
     - "If listening to events from multiple devices, it is recommended to call this function with hSysman = nullptr, clear = false and timeout = $T_EVENT_WAIT_INFINITE. Then call this function for each device with clear = true and timeout = 0."
@@ -1802,7 +1873,7 @@ members:
 type: function
 desc: "Get diagnostic tests"
 class: $tSysman
-name: GetDiagnosticTests
+name: DiagnosticsGetTestList
 details:
     - "Tests are returned in order of increasing index."
     - "The application may call this function from simultaneous threads."
@@ -1821,7 +1892,7 @@ params:
 type: function
 desc: "Run diagnostics"
 class: $tSysman
-name: RunDiagnosticTests
+name: DiagnosticsRunTests
 details:
     - "This function will block until the diagnostics have completed."
 params:
@@ -1840,16 +1911,6 @@ params:
     - type: $t_diag_result_t*
       name: pResult
       desc: "[in] The result of the diagnostics"
-
---- #--------------------------------------------------------------------------
-type: function
-desc: "Reset device"
-class: $tSysman
-name: DeviceReset
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle for the device"
 
 --- #--------------------------------------------------------------------------
 type: class

@@ -56,232 +56,26 @@ xetSysmanGet(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Resource types
-typedef enum _xet_resource_type_t
-{
-    XET_RESOURCE_TYPE_DEV = 0x0,                    ///< Inventory resource
-    XET_RESOURCE_TYPE_PWR = 0x1,                    ///< Power domain resource
-    XET_RESOURCE_TYPE_FREQ = 0x2,                   ///< Frequency domain resource
-    XET_RESOURCE_TYPE_UTIL = 0x3,                   ///< Resource used to monitor GPU utilization
-    XET_RESOURCE_TYPE_MEM = 0x4,                    ///< Memory resource
-    XET_RESOURCE_TYPE_LINK = 0x5,                   ///< Link resource
-    XET_RESOURCE_TYPE_TEMP = 0x6,                   ///< Temperature sensor resource
-    XET_RESOURCE_TYPE_STBY = 0x7,                   ///< Resource used to control standby mode
-    XET_RESOURCE_TYPE_FW = 0x8,                     ///< Firmware resource
-    XET_RESOURCE_TYPE_PSU = 0x9,                    ///< PSU resource
-    XET_RESOURCE_TYPE_FAN = 0xA,                    ///< Fan resource
-    XET_RESOURCE_TYPE_LED = 0xB,                    ///< LED resource
-    XET_RESOURCE_TYPE_ANY = -1,                     ///< Any resource filter
-
-} xet_resource_type_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Resource ID
+/// @brief Get a SMI handle to a subdevice
 /// 
 /// @details
-///     - Every resource in the system has a unique identify.
-///     - Resource IDs will always have the same value between versions of the
-///       API.
-///     - Never assume that resources of the same type have numerically
-///       sequential values.
-///     - The resource ID has the resource type (::xet_resource_type_t) in the
-///       upper 16 bits.
-typedef enum _xet_resid_t
-{
-    XET_RESID_DEV_INVENTORY = 0,                    ///< General device inventory
-    XET_RESID_PWR_TOTAL = 0x10000,                  ///< Device total power
-    XET_RESID_FREQ_GPU = 0x20000,                   ///< GPU frequency
-    XET_RESID_FREQ_LOCAL_MEM = 0x20001,             ///< Local memory frequency
-    XET_RESID_UTIL_GPU = 0x30000,                   ///< Utilization of the entire GPU
-    XET_RESID_UTIL_COMPUTE = 0x30001,               ///< Utilization of the compute/3D units
-    XET_RESID_UTIL_MEDIA = 0x30002,                 ///< Utilization of the media units
-    XET_RESID_UTIL_VIDEO_DECODE = 0x30003,          ///< Utilization of the video decode units
-    XET_RESID_UTIL_VIDEO_ENCODE = 0x30004,          ///< Utilization of the video encode units
-    XET_RESID_MEM_LOCAL = 0x40000,                  ///< Local GPU memory
-    XET_RESID_LINK_PCIE = 0x50000,                  ///< PCIe link
-    XET_RESID_LINK_CD_PORT1 = 0x50001,              ///< High speed companion die switch port 1
-    XET_RESID_LINK_CD_PORT2 = 0x50002,              ///< High speed companion die switch port 2
-    XET_RESID_LINK_CD_PORT3 = 0x50003,              ///< High speed companion die switch port 3
-    XET_RESID_LINK_CD_PORT4 = 0x50004,              ///< High speed companion die switch port 4
-    XET_RESID_LINK_CD_PORT5 = 0x50005,              ///< High speed companion die switch port 5
-    XET_RESID_LINK_CD_PORT6 = 0x50006,              ///< High speed companion die switch port 6
-    XET_RESID_LINK_CD_PORT7 = 0x50007,              ///< High speed companion die switch port 7
-    XET_RESID_LINK_CD_PORT8 = 0x50008,              ///< High speed companion die switch port 8
-    XET_RESID_LINK_CD_PORT9 = 0x50009,              ///< High speed companion die switch port 9
-    XET_RESID_LINK_CD_PORT10 = 0x5000A,             ///< High speed companion die switch port 10
-    XET_RESID_LINK_CD_PORT11 = 0x5000B,             ///< High speed companion die switch port 11
-    XET_RESID_LINK_CD_PORT12 = 0x5000C,             ///< High speed companion die switch port 12
-    XET_RESID_LINK_CD_PORT13 = 0x5000D,             ///< High speed companion die switch port 13
-    XET_RESID_LINK_CD_PORT14 = 0x5000E,             ///< High speed companion die switch port 14
-    XET_RESID_LINK_CD_PORT15 = 0x5000F,             ///< High speed companion die switch port 15
-    XET_RESID_LINK_CD_PORT16 = 0x50010,             ///< High speed companion die switch port 16
-    XET_RESID_TEMP_MAX = 0x60000,                   ///< The maximum temperature reported by the sensors in the device
-    XET_RESID_TEMP_GPU = 0x60001,                   ///< The maximum temperature reported by the sensors in the GPU component
-                                                    ///< of the device
-    XET_RESID_TEMP_LOCAL_MEM = 0x60002,             ///< The maximum temperature reported by the sensors in the local memory of
-                                                    ///< device
-    XET_RESID_STBY_GLOBAL = 0x70000,                ///< Control sleep promotion of the entire device
-    XET_RESID_FW_1 = 0x80001,                       ///< Firmware 1
-    XET_RESID_FW_2 = 0x80002,                       ///< Firmware 2
-    XET_RESID_FW_3 = 0x80003,                       ///< Firmware 3
-    XET_RESID_FW_4 = 0x80004,                       ///< Firmware 4
-    XET_RESID_FW_5 = 0x80005,                       ///< Firmware 5
-    XET_RESID_FW_6 = 0x80006,                       ///< Firmware 6
-    XET_RESID_FW_7 = 0x80007,                       ///< Firmware 7
-    XET_RESID_FW_8 = 0x80008,                       ///< Firmware 8
-    XET_RESID_FW_9 = 0x80009,                       ///< Firmware 9
-    XET_RESID_FW_10 = 0x8000A,                      ///< Firmware 10
-    XET_RESID_FW_11 = 0x8000B,                      ///< Firmware 11
-    XET_RESID_FW_12 = 0x8000C,                      ///< Firmware 12
-    XET_RESID_FW_13 = 0x8000D,                      ///< Firmware 13
-    XET_RESID_FW_14 = 0x8000E,                      ///< Firmware 14
-    XET_RESID_FW_15 = 0x8000F,                      ///< Firmware 15
-    XET_RESID_FW_16 = 0x80010,                      ///< Firmware 16
-    XET_RESID_FW_17 = 0x80011,                      ///< Firmware 17
-    XET_RESID_FW_18 = 0x80012,                      ///< Firmware 18
-    XET_RESID_FW_19 = 0x80013,                      ///< Firmware 19
-    XET_RESID_FW_20 = 0x80014,                      ///< Firmware 20
-    XET_RESID_PSU_MAIN = 0x90000,                   ///< Primary power supply
-    XET_RESID_PSU_AUX = 0x90001,                    ///< Auxilary power supply
-    XET_RESID_PSU_1 = 0x90002,                      ///< Power supply 1
-    XET_RESID_PSU_2 = 0x90003,                      ///< Power supply 2
-    XET_RESID_FAN_MAIN = 0xA0000,                   ///< The main fan
-    XET_RESID_FAN_1 = 0xA0001,                      ///< Fan 1
-    XET_RESID_FAN_2 = 0xA0002,                      ///< Fan 2
-    XET_RESID_FAN_3 = 0xA0003,                      ///< Fan 3
-    XET_RESID_LED_MAIN = 0xB0000,                   ///< The main LED
-    XET_RESID_LED_1 = 0xB0001,                      ///< LED 1
-    XET_RESID_LED_2 = 0xB0002,                      ///< LED 1
-    XET_RESID_LED_3 = 0xB0003,                      ///< LED 1
-    XET_RESID_ANY = -1,                             ///< Any resource ID
-
-} xet_resid_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Resource properties
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
 /// 
-/// @details
-///     - For every property, there is a corresponding structure used to hold
-///       the property data. The type of the data structure is derived from the
-///       property enumerator, converted to lower-case with '_t' appended.
-///     - Properties can be either read-only (ro), write-only (wo) or read-write
-///       (rw).
-///     - Properties can be either static or dynamic. Static properties are set
-///       during initialization and will not change during the lifetime of the
-///       application. Dynamic properties can change at any time and should be
-///       reread.
-typedef enum _xet_resprop_t
-{
-    XET_RESPROP_DEV_SERIAL_NUMBER = 0x00000,        ///< (ro static) The serial number of the device (data:
-                                                    ///< ::xet_resprop_dev_serial_number_t)
-    XET_RESPROP_DEV_BOARD_NUMBER = 0x00001,         ///< (ro static) The board number of the device (data:
-                                                    ///< ::xet_resprop_dev_board_number_t)
-    XET_RESPROP_DEV_BRAND = 0x00002,                ///< (ro static) The brand name of the device (data:
-                                                    ///< ::xet_resprop_dev_brand_t)
-    XET_RESPROP_DEV_MODEL = 0x00003,                ///< (ro static) The model name of the device (data:
-                                                    ///< ::xet_resprop_dev_model_t)
-    XET_RESPROP_DEV_DEVICEID = 0x00004,             ///< (ro static) The device ID of the device (data:
-                                                    ///< ::xet_resprop_dev_deviceid_t)
-    XET_RESPROP_DEV_VENDOR_NAME = 0x00005,          ///< (ro static) The vendor name of the device (data:
-                                                    ///< ::xet_resprop_dev_vendor_name_t)
-    XET_RESPROP_DEV_DRIVER_VERSION = 0x00006,       ///< (ro static) The driver version associated with the device (data:
-                                                    ///< ::xet_resprop_dev_driver_version_t)
-    XET_RESPROP_DEV_BARS = 0x00007,                 ///< (ro static) The bars configured for the device (data:
-                                                    ///< ::xet_resprop_dev_bars_t)
-    XET_RESPROP_DEV_UUID = 0x00008,                 ///< (ro static) Universal Unique ID for the device (data:
-                                                    ///< ::xet_resprop_dev_uuid_t)
-    XET_RESPROP_PWR_MAX_LIMIT = 0x10000,            ///< (ro static) The maximum power limit that can be requested (data:
-                                                    ///< ::xet_resprop_pwr_max_limit_t)
-    XET_RESPROP_PWR_ENERGY_COUNTER = 0x10001,       ///< (ro dynamic) The value of the monotonic energy counter (data:
-                                                    ///< ::xet_resprop_pwr_energy_counter_t)
-    XET_RESPROP_PWR_SUSTAINED_LIMIT = 0x10002,      ///< (rw dynamic) The sustained power limit (data:
-                                                    ///< ::xet_resprop_pwr_sustained_limit_t)
-    XET_RESPROP_PWR_BURST_LIMIT = 0x10003,          ///< (rw dynamic) The burst power limit (data:
-                                                    ///< ::xet_resprop_pwr_burst_limit_t)
-    XET_RESPROP_PWR_PEAK_LIMIT = 0x10004,           ///< (rw dynamic) The peak power limit (data:
-                                                    ///< ::xet_resprop_pwr_peak_limit_t)
-    XET_RESPROP_FREQ_AVAIL_CLOCKS = 0x20000,        ///< (ro static) Available frequency clocks that this domain can run at
-                                                    ///< (data: ::xet_resprop_freq_avail_clocks_t)
-    XET_RESPROP_FREQ_RANGE = 0x20001,               ///< (rw dynamic) The current frequency range (data:
-                                                    ///< ::xet_resprop_freq_range_t)
-    XET_RESPROP_FREQ_REQUESTED_FREQ = 0x20002,      ///< (ro dynamic) The current frequency request (data:
-                                                    ///< ::xet_resprop_freq_requested_freq_t)
-    XET_RESPROP_FREQ_TDP_FREQ = 0x20003,            ///< (ro dynamic) The maximum frequency supported under the current TDP
-                                                    ///< conditions (data: ::xet_resprop_freq_tdp_freq_t)
-    XET_RESPROP_FREQ_EFFICIENT_FREQ = 0x20004,      ///< (ro dynamic) The efficient minimum frequency (data:
-                                                    ///< ::xet_resprop_freq_efficient_freq_t)
-    XET_RESPROP_FREQ_RESOLVED_FREQ = 0x20005,       ///< (ro dynamic) The resolved frequency (data:
-                                                    ///< ::xet_resprop_freq_resolved_freq_t)
-    XET_RESPROP_FREQ_THROTTLE_REASONS = 0x20006,    ///< (ro dynamic) The reasons that the frequency is being limited by the
-                                                    ///< PCU (data: ::xet_resprop_freq_throttle_reasons_t)
-    XET_RESPROP_FREQ_THROTTLE_TIME = 0x20007,       ///< (ro dynamic) The total time that the frequency has been limited by the
-                                                    ///< PCU (data: ::xet_resprop_freq_throttle_time_t)
-    XET_RESPROP_UTIL_COUNTERS = 0x30000,            ///< (ro dynamic) The total wall time this resource is active (data:
-                                                    ///< ::xet_resprop_util_counters_t)
-    XET_RESPROP_MEM_TYPE = 0x40000,                 ///< (ro static) The type of memory covered by this resource (data:
-                                                    ///< ::xet_resprop_mem_type_t)
-    XET_RESPROP_MEM_UTILIZATION = 0x40001,          ///< (ro dynamic) Get current allocated/unallocated size (data:
-                                                    ///< ::xet_resprop_mem_utilization_t)
-    XET_RESPROP_MEM_BANDWIDTH = 0x40002,            ///< (ro dynamic) Get current read/write bandwidth counters and maximum
-                                                    ///< bandwidth (data: ::xet_resprop_mem_bandwidth_t)
-    XET_RESPROP_LINK_TYPE = 0x50000,                ///< (ro static) The type of link (data: ::xet_resprop_link_type_t)
-    XET_RESPROP_LINK_BUS_ADDRESS = 0x50001,         ///< (ro static) The bus address of the link (data:
-                                                    ///< ::xet_resprop_link_bus_address_t)
-    XET_RESPROP_LINK_PEER_DEVICE = 0x50002,         ///< (ro static) For links of type ::XET_LINK_TYPE_CD_PORT, this gives the
-                                                    ///< UUID of the peer device (data: ::xet_resprop_link_peer_device_t)
-    XET_RESPROP_LINK_AVAIL_SPEEDS = 0x50003,        ///< (ro static) Available link speeds (data:
-                                                    ///< ::xet_resprop_link_avail_speeds_t)
-    XET_RESPROP_LINK_MAX_PACKET_SIZE = 0x50004,     ///< (ro static) Maximum packet size (data:
-                                                    ///< ::xet_resprop_link_max_packet_size_t)
-    XET_RESPROP_LINK_STATE = 0x50005,               ///< (rw dynamic) Link state (enabled/disabled) (data:
-                                                    ///< ::xet_resprop_link_state_t)
-    XET_RESPROP_LINK_BANDWIDTH = 0x50006,           ///< (ro dynamic) Monotonic bandwidth counters (data:
-                                                    ///< ::xet_resprop_link_bandwidth_t)
-    XET_RESPROP_LINK_SPEED = 0x50007,               ///< (ro dynamic) Current link speed (data: ::xet_resprop_link_speed_t)
-    XET_RESPROP_LINK_SPEED_RANGE = 0x50008,         ///< (wo dynamic) Set the min/max speeds between which the link can operate
-                                                    ///< (data: ::xet_resprop_link_speed_range_t)
-    XET_RESPROP_TEMP_TEMPERATURE = 0x60000,         ///< (ro dynamic) The current temperature of the sensor in degrees celcius
-                                                    ///< (data: ::xet_resprop_temp_temperature_t)
-    XET_RESPROP_STBY_PROMO_MODE = 0x70000,          ///< (rw dynamic) The current promotion mode (data:
-                                                    ///< ::xet_resprop_stby_promo_mode_t)
-    XET_RESPROP_FW_NAME = 0x80000,                  ///< (ro static) Name encoded in the loaded firmware image (data:
-                                                    ///< ::xet_resprop_fw_name_t)
-    XET_RESPROP_FW_VERSION = 0x80001,               ///< (ro static) The version of the loaded firmware image (data:
-                                                    ///< ::xet_resprop_fw_version_t)
-    XET_RESPROP_FW_CHECK = 0x80002,                 ///< (ro dynamic) Verify the checksum of the loaded firmware image (data:
-                                                    ///< ::xet_resprop_fw_check_t)
-    XET_RESPROP_FW_FLASH = 0x80003,                 ///< (wo dynamically) Flash a new firmware image (data:
-                                                    ///< ::xet_resprop_fw_flash_t)
-    XET_RESPROP_PSU_AMP_LIMIT = 0x90000,            ///< (ro static) The maximum electrical current in amperes that can be
-                                                    ///< drawn (data: ::xet_resprop_psu_amp_limit_t)
-    XET_RESPROP_PSU_VOLTAGE_STATUS = 0x90001,       ///< (ro dynamic) Indicates if under or over voltage has occurred (data:
-                                                    ///< ::xet_resprop_psu_voltage_status_t)
-    XET_RESPROP_PSU_FAN_FAILURE = 0x90002,          ///< (ro dynamic) Indicates if the fan has failed (data:
-                                                    ///< ::xet_resprop_psu_fan_failure_t)
-    XET_RESPROP_PSU_TEMPERATURE = 0x90003,          ///< (ro dynamic) The current heatsink temperature in degrees celcius
-                                                    ///< (data: ::xet_resprop_psu_temperature_t)
-    XET_RESPROP_PSU_AMPS = 0x90004,                 ///< (ro dynamic) The current amps being drawn in amperes (data:
-                                                    ///< ::xet_resprop_psu_amps_t)
-    XET_RESPROP_FAN_MAX_RPM = 0xA0000,              ///< (ro static) The maximum RPM of the fan (data:
-                                                    ///< ::xet_resprop_fan_max_rpm_t)
-    XET_RESPROP_FAN_MAX_TABLE_SIZE = 0xA0001,       ///< (ro static) The maximum number of points in the fan temp/speed table
-                                                    ///< (data: ::xet_resprop_fan_max_table_size_t)
-    XET_RESPROP_FAN_SPEED_RPM = 0xA0002,            ///< (ro dynamic) The current fan speed in units of revolutions per minute
-                                                    ///< (rpm) (data: ::xet_resprop_fan_speed_rpm_t)
-    XET_RESPROP_FAN_SPEED_PERCENT = 0xA0003,        ///< (ro dynamic) The current fan speed as a percentage of the maximum
-                                                    ///< speed of that fan (data: ::xet_resprop_fan_speed_percent_t)
-    XET_RESPROP_FAN_MODE = 0xA0004,                 ///< (ro dynamic) The current fan speed mode (one of
-                                                    ///< ::xet_fan_speed_mode_t) (data: ::xet_resprop_fan_mode_t)
-    XET_RESPROP_FAN_FIXED_SPEED = 0xA0005,          ///< (rw dynamic) Read/write the fixed speed setting for the fan (data:
-                                                    ///< ::xet_resprop_fan_fixed_speed_t)
-    XET_RESPROP_FAN_SPEED_TABLE = 0xA0006,          ///< (rw dynamic) Read/write the fan speed table (data:
-                                                    ///< ::xet_resprop_fan_speed_table_t)
-    XET_RESPROP_LED_RGB_CAP = 0xB0000,              ///< (ro static) Indicates if the LED is RGB capable (data:
-                                                    ///< ::xet_resprop_led_rgb_cap_t)
-    XET_RESPROP_LED_STATE = 0xB0001,                ///< (rw dynaic) The LED state - on/off and color (data:
-                                                    ///< ::xet_resprop_led_state_t)
-
-} xet_resprop_t;
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == phSysmanSubdevice
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanGetSubdevice(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the sub-device.
+    xet_sysman_handle_t* phSysmanSubdevice          ///< [out] The handle for accessing the sub-device.
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
 #ifndef XET_STRING_PROPERTY_SIZE
@@ -290,137 +84,181 @@ typedef enum _xet_resprop_t
 #endif // XET_STRING_PROPERTY_SIZE
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief PCI bar types
-typedef enum _xet_pci_bar_type_t
+/// @brief Device mode
+typedef enum _xet_operating_mode_t
 {
-    XET_PCI_BAR_TYPE_CONFIG = 0,                    ///< PCI configuration space
-    XET_PCI_BAR_TYPE_MMIO,                          ///< MMIO registers
-    XET_PCI_BAR_TYPE_VRAM,                          ///< VRAM aperture
-    XET_PCI_BAR_TYPE_ROM,                           ///< ROM aperture
-    XET_PCI_BAR_TYPE_VGA_IO,                        ///< Legacy VGA IO ports
-    XET_PCI_BAR_TYPE_VGA_MEM,                       ///< Legacy VGA memory
-    XET_PCI_BAR_TYPE_INDIRECT_IO,                   ///< Indirect IO port access
-    XET_PCI_BAR_TYPE_INDIRECT_MEM,                  ///< Indirect memory access
-    XET_PCI_BAR_TYPE_OTHER,                         ///< Other type of PCI bar
+    XET_OPERATING_MODE_DEFAULT = 0,                 ///< Multiple workloads are running on the device
+    XET_OPERATING_MODE_EXCLUSIVE_COMPUTE_PROCESS,   ///< A single process submitting compute workloads can monopolize the
+                                                    ///< accelerator resources
 
-} xet_pci_bar_type_t;
+} xet_operating_mode_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for a PCI bar
-typedef struct _xet_pci_bar_info_t
+/// @brief Frequency domains
+typedef enum _xet_freq_domain_t
 {
-    xet_pci_bar_type_t type;                        ///< [out] The type of bar
-    uint64_t base;                                  ///< [out] Base address of the bar.
-    uint64_t size;                                  ///< [out] Size of the bar.
+    XET_FREQ_DOMAIN_GPU = 0,                        ///< Frequency of the GPU.
+    XET_FREQ_DOMAIN_MEMORY,                         ///< Frequency of the local memory.
+    XET_FREQ_DOMAIN_NUM,                            ///< The total number of frequency domains.
 
-} xet_pci_bar_info_t;
+} xet_freq_domain_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for property ::XET_RESPROP_DEV_SERIAL_NUMBER
-typedef struct _xet_resprop_dev_serial_number_t
+/// @brief Event types
+typedef enum _xet_sysman_event_type_t
 {
-    int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
+    XET_SYSMAN_EVENT_TYPE_FREQ_THROTTLED = 0,       ///< The frequency is being throttled
+    XET_SYSMAN_EVENT_TYPE_RAS_ERRORS,               ///< ECC/RAS errors
+    XET_SYSMAN_EVENT_TYPE_NUM,                      ///< The number of event types
 
-} xet_resprop_dev_serial_number_t;
+} xet_sysman_event_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for property ::XET_RESPROP_DEV_BOARD_NUMBER
-typedef struct _xet_resprop_dev_board_number_t
+/// @brief Device properties
+typedef struct _xet_sysman_properties_t
 {
-    int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
-
-} xet_resprop_dev_board_number_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for property ::XET_RESPROP_DEV_BRAND
-typedef struct _xet_resprop_dev_brand_t
-{
-    int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
-
-} xet_resprop_dev_brand_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for property ::XET_RESPROP_DEV_MODEL
-typedef struct _xet_resprop_dev_model_t
-{
-    int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
-
-} xet_resprop_dev_model_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for property ::XET_RESPROP_DEV_DEVICEID
-typedef struct _xet_resprop_dev_deviceid_t
-{
-    int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
-
-} xet_resprop_dev_deviceid_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for property ::XET_RESPROP_DEV_VENDOR_NAME
-typedef struct _xet_resprop_dev_vendor_name_t
-{
-    int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
-
-} xet_resprop_dev_vendor_name_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for property ::XET_RESPROP_DEV_DRIVER_VERSION
-typedef struct _xet_resprop_dev_driver_version_t
-{
-    int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
-
-} xet_resprop_dev_driver_version_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_DEV_BARS
-typedef struct _xet_resprop_dev_bars_t
-{
-    uint32_t num;                                   ///< [out] The number of bars
-    const xet_pci_bar_info_t* pBars;                ///< [out][range(0, num-1)] Information about each bar.
-
-} xet_resprop_dev_bars_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_DEV_UUID
-typedef struct _xet_resprop_dev_uuid_t
-{
+    xe_device_type_t type;                          ///< [out] generic device type
+    uint32_t vendorId;                              ///< [out] vendorId from PCI configuration
+    uint32_t deviceId;                              ///< [out] deviceId from PCI configuration
     xe_device_uuid_t uuid;                          ///< [out] Device UUID
+    uint32_t numSubdevices;                         ///< [out] The number of sub-devices
+    xe_bool_t isSubdevice;                          ///< [out] If this handle refers to a sub-device.
+    uint32_t subdeviceId;                           ///< [out] sub-device id. Only valid if isSubdevice is true.
+    int8_t serialNumber[XET_STRING_PROPERTY_SIZE];  ///< [out] Manufacturing serial number (NULL terminated string value)
+    int8_t boardNumber[XET_STRING_PROPERTY_SIZE];   ///< [out] Manufacturing board number (NULL terminated string value)
+    int8_t brandName[XET_STRING_PROPERTY_SIZE];     ///< [out] Brand name of the device (NULL terminated string value)
+    int8_t modelName[XET_STRING_PROPERTY_SIZE];     ///< [out] Model name of the device (NULL terminated string value)
+    int8_t vendorName[XET_STRING_PROPERTY_SIZE];    ///< [out] Vendor name of the device (NULL terminated string value)
+    int8_t driverVersion[XET_STRING_PROPERTY_SIZE]; ///< [out] Installed driver version (NULL terminated string value)
+    xe_bool_t havePowerControl;                     ///< [out] Set to true if the power limits of the device can be changed
+    xe_bool_t haveFreqControl[XET_FREQ_DOMAIN_NUM]; ///< [out] Set to true if the frequency limits can be changed for each
+                                                    ///< domain
+    xe_bool_t haveOverclock[XET_FREQ_DOMAIN_NUM];   ///< [out] Set to true if the frequency can be overclocked for each domain
+    xe_bool_t haveSwitch;                           ///< [out] Set to true if the device/sub-device has a switch
+    uint32_t numFirmwares;                          ///< [out] Number of firmwares that can be managed
+    uint32_t numPsus;                               ///< [out] Number of power supply units that can be managed
+    uint32_t numFans;                               ///< [out] Number of fans that can be managed
+    uint32_t numLeds;                               ///< [out] Number of LEDs that can be managed
+    xe_bool_t supportedEvents[XET_SYSMAN_EVENT_TYPE_NUM];   ///< [out] Set to true for the events that are supported
 
-} xet_resprop_dev_uuid_t;
+} xet_sysman_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_PWR_MAX_LIMIT
-typedef struct _xet_resprop_pwr_max_limit_t
+/// @brief Get properties about the device
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanDeviceGetProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_sysman_properties_t* pProperties            ///< [in] Structure that will contain information about the device.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get operating mode of the device
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pMode
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanDeviceGetOperatingMode(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_operating_mode_t* pMode                     ///< [in] The current operating mode of the device.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set operating mode of the device
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanDeviceSetOperatingMode(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_operating_mode_t pMode                      ///< [in] The new operating mode of the device.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Reset device
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanDeviceReset(
+    xet_sysman_handle_t hSysman                     ///< [in] SMI handle for the device
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Properties related to device power settings
+typedef struct _xet_power_properties_t
 {
-    uint32_t limit;                                 ///< [out] The maximum power limit in milliwatts that can be requested.
+    uint32_t maxLimit;                              ///< [out] The maximum power limit in milliwatts that can be requested.
 
-} xet_resprop_pwr_max_limit_t;
+} xet_power_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_PWR_ENERGY_COUNTER
-typedef struct _xet_resprop_pwr_energy_counter_t
+/// @brief Energy counter snapshot
+/// 
+/// @details
+///     - Average power is calculated by taking two snapshots (s1, s2) and using
+///       the equation: PowerWatts = (s2.energy - s1.energy) / (s2.timestamp -
+///       s1.timestamp)
+typedef struct _xet_power_energy_counter_t
 {
-    uint64_t energy;                                ///< [out] The value of the monotonic energy counter in millijoules.
+    uint64_t energy;                                ///< [out] The monotonic energy counter in microjoules.
+    uint64_t timestamp;                             ///< [out] Microsecond timestamp when energy was captured.
 
-} xet_resprop_pwr_energy_counter_t;
+} xet_power_energy_counter_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_PWR_SUSTAINED_LIMIT
+/// @brief Sustained power limits
 /// 
 /// @details
 ///     - The power controller (Punit) will throttle the operating frequency if
 ///       the power averaged over a window (typically seconds) exceeds this
 ///       limit.
-typedef struct _xet_resprop_pwr_sustained_limit_t
+typedef struct _xet_power_sustained_limit_t
 {
     xe_bool_t enabled;                              ///< [in,out] indicates if the limit is enabled (true) or ignored (false)
     uint32_t power;                                 ///< [in,out] power limit in milliwatts
     uint32_t interval;                              ///< [in,out] power averaging window (Tau) in milliseconds
 
-} xet_resprop_pwr_sustained_limit_t;
+} xet_power_sustained_limit_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_PWR_BURST_LIMIT
+/// @brief Burst power limit
 /// 
 /// @details
 ///     - The power controller (Punit) will throttle the operating frequency of
@@ -428,15 +266,15 @@ typedef struct _xet_resprop_pwr_sustained_limit_t
 ///       limit known as PL2. Typically PL2 > PL1 so that it permits the
 ///       frequency to burst higher for short periods than would be otherwise
 ///       permitted by PL1.
-typedef struct _xet_resprop_pwr_burst_limit_t
+typedef struct _xet_power_burst_limit_t
 {
     xe_bool_t enabled;                              ///< [in,out] indicates if the limit is enabled (true) or ignored (false)
     uint32_t power;                                 ///< [in,out] power limit in milliwatts
 
-} xet_resprop_pwr_burst_limit_t;
+} xet_power_burst_limit_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_PWR_PEAK_LIMIT
+/// @brief Peak power limit
 /// 
 /// @details
 ///     - The power controller (Punit) will preemptively throttle the operating
@@ -448,11 +286,130 @@ typedef struct _xet_resprop_pwr_burst_limit_t
 ///       power controller will throttle the device frequencies down to min. It
 ///       is thus better to tune the PL4 value in order to avoid such
 ///       excursions.
-typedef struct _xet_resprop_pwr_peak_limit_t
+typedef struct _xet_power_peak_limit_t
 {
     uint32_t power;                                 ///< [in,out] power limit in milliwatts
 
-} xet_resprop_pwr_peak_limit_t;
+} xet_power_peak_limit_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get properties related to power
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPowerGetProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_power_properties_t* pProperties             ///< [in] Structure that will contain property data.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get energy counter
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pEnergy
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPowerGetEnergyCounter(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_power_energy_counter_t* pEnergy             ///< [in] Will contain the latest snapshot of the energy counter and
+                                                    ///< timestamp when the last counter value was measured.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get power limits
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPowerGetLimits(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_power_sustained_limit_t* pSustained,        ///< [in][optional] The sustained power limit.
+    xet_power_burst_limit_t* pBurst,                ///< [in][optional] The burst power limit.
+    xet_power_peak_limit_t* pPeak                   ///< [in][optional] The peak power limit.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set power limits
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPowerSetLimits(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    const xet_power_sustained_limit_t* pSustained,  ///< [in][optional] The sustained power limit.
+    const xet_power_burst_limit_t* pBurst,          ///< [in][optional] The burst power limit.
+    const xet_power_peak_limit_t* pPeak             ///< [in][optional] The peak power limit.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Frequency properties
+/// 
+/// @details
+///     - Provides the set of frequencies as a list and as a range/step.
+///     - It is generally recommended that applications choose frequencies from
+///       the list. However applications can also construct the list themselves
+///       using the range/steps provided.
+typedef struct _xet_freq_properties_t
+{
+    double min;                                     ///< [out] The minimum clock frequency in units of MHz
+    double max;                                     ///< [out] The maximum clock frequency in units of MHz
+    double step;                                    ///< [out] The step clock frequency in units of MHz
+    uint32_t num;                                   ///< [out] The number of clocks in the array pClocks
+    const double* pClocks;                          ///< [out] Array of clock frequencies in units of MHz ordered from smallest
+                                                    ///< to largest.
+
+} xet_freq_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Frequency limits between which the hardware can operate.
+typedef struct _xet_freq_limits_t
+{
+    double min;                                     ///< [in,out] The min frequency in MHz below which hardware frequency
+                                                    ///< management will not request frequencies. Setting to 0 will use the
+                                                    ///< hardware default value.
+    double max;                                     ///< [in,out] The max frequency in MHz above which hardware frequency
+                                                    ///< management will not request frequencies. Setting to 0 will use the
+                                                    ///< hardware default value.
+
+} xet_freq_limits_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Frequency throttle reasons
@@ -471,102 +428,195 @@ typedef enum _xet_freq_throttle_reasons_t
 } xet_freq_throttle_reasons_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_FREQ_AVAIL_CLOCKS
-/// 
-/// @details
-///     - Provides the set of frequencies as a list and as a range/step.
-///     - It is generally recommended that applications choose frequencies from
-///       the list. However applications can also construct the list themselves
-///       using the range/steps provided.
-typedef struct _xet_resprop_freq_avail_clocks_t
+/// @brief Frequency state
+typedef struct _xet_freq_state_t
 {
-    double min;                                     ///< [out] The minimum clock frequency in units of MHz
-    double max;                                     ///< [out] The maximum clock frequency in units of MHz
-    double step;                                    ///< [out] The step clock frequency in units of MHz
-    uint32_t num;                                   ///< [out] The number of clocks
-    const double* pClocks;                          ///< [out] Array of clock frequencies in units of MHz ordered from smallest
-                                                    ///< to largest.
-
-} xet_resprop_freq_avail_clocks_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_FREQ_RANGE
-typedef struct _xet_resprop_freq_range_t
-{
-    double min;                                     ///< [in,out] The min frequency in MHz below which hardware frequency
-                                                    ///< management will not request frequencies. Setting to 0 will return the
-                                                    ///< hardware default value.
-    double max;                                     ///< [in,out] The max frequency in MHz above which hardware frequency
-                                                    ///< management will not request frequencies. Setting to 0 will return the
-                                                    ///< hardware default value.
-
-} xet_resprop_freq_range_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_FREQ_REQUESTED_FREQ
-typedef struct _xet_resprop_freq_requested_freq_t
-{
-    double freqRequest;                             ///< [out] The current frequency request in MHz.
-
-} xet_resprop_freq_requested_freq_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_FREQ_TDP_FREQ
-typedef struct _xet_resprop_freq_tdp_freq_t
-{
-    double freqTdp;                                 ///< [out] The maximum frequency in MHz supported under the current TDP
+    double request;                                 ///< [out] The current frequency request in MHz.
+    double tdp;                                     ///< [out] The maximum frequency in MHz supported under the current TDP
                                                     ///< conditions
-
-} xet_resprop_freq_tdp_freq_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_FREQ_EFFICIENT_FREQ
-typedef struct _xet_resprop_freq_efficient_freq_t
-{
-    double freqEfficient;                           ///< [out] The efficient minimum frequency in MHz
-
-} xet_resprop_freq_efficient_freq_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_FREQ_RESOLVED_FREQ
-typedef struct _xet_resprop_freq_resolved_freq_t
-{
-    double freqResolved;                            ///< [out] The resolved frequency in MHz
-
-} xet_resprop_freq_resolved_freq_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_FREQ_THROTTLE_REASONS
-typedef struct _xet_resprop_freq_throttle_reasons_t
-{
-    uint32_t throttleReasons;                       ///< [out] The reasons that the frequency is being limited by the PCU
+    double efficient;                               ///< [out] The efficient minimum frequency in MHz
+    double actual;                                  ///< [out] The resolved frequency in MHz
+    uint32_t throttleReasons;                       ///< [out] The reasons that the frequency is being limited by the hardware
                                                     ///< (Bitfield of (1<<::xet_freq_throttle_reasons_t)).
 
-} xet_resprop_freq_throttle_reasons_t;
+} xet_freq_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_FREQ_THROTTLE_TIME
-typedef struct _xet_resprop_freq_throttle_time_t
-{
-    uint32_t throttleTime;                          ///< [out] The total time in microseconds that the frequency has been
-                                                    ///< limited by the PCU.
-
-} xet_resprop_freq_throttle_time_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_UTIL_COUNTERS
+/// @brief Frequency throttle time snapshot
 /// 
 /// @details
-///     - Percentage utilization is given by the equation: 100 *
-///       delta(activeCounter) / ( delta(activeCounter) + delta(idleCounter) ).
-typedef struct _xet_resprop_util_counters_t
+///     - Percent time throttled is calculated by taking two snapshots (s1, s2)
+///       and using the equation: %throttled = (s2.throttleTime -
+///       s1.throttleTime) / (s2.timestamp - s1.timestamp)
+typedef struct _xet_freq_throttle_time_t
 {
-    uint32_t activeCounter;                         ///< [out] Monotonic counter for total wall time in microseconds that this
-                                                    ///< resource is actively running workloads.
-    uint32_t idleCounter;                           ///< [out] Monotonic counter for total wall time in microseconds that this
-                                                    ///< resource is not actively running any workloads.
+    uint64_t throttleTime;                          ///< [out] The monotonic counter of time in microseconds that the frequency
+                                                    ///< has been limited by the hardware.
+    uint64_t timestamp;                             ///< [out] Microsecond timestamp when throttleTime was captured.
 
-} xet_resprop_util_counters_t;
+} xet_freq_throttle_time_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get frequency properties - available frequencies
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencyGetProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_freq_domain_t domain,                       ///< [in] The frequency domain.
+    xet_freq_properties_t* pProperties              ///< [in] The frequency properties for the specified domain.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get current frequency limits
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pLimits
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencyGetLimits(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_freq_domain_t domain,                       ///< [in] The frequency domain.
+    xet_freq_limits_t* pLimits                      ///< [in] The limits between which the hardware can operate for the
+                                                    ///< specified domain.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set frequency limits between which the hardware can operate.
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pLimits
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencySetLimits(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_freq_domain_t domain,                       ///< [in] The frequency domain.
+    const xet_freq_limits_t* pLimits                ///< [in] The limits between which the hardware can operate for the
+                                                    ///< specified domain.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get current frequency state - frequency request, actual frequency, TDP
+///        limits
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pState
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencyGetState(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_freq_domain_t domain,                       ///< [in] The frequency domain.
+    xet_freq_state_t* pState                        ///< [in] Frequency state for the specified domain.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get frequency throttle time
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pThrottleTime
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFrequencyGetThrottleTime(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_freq_domain_t domain,                       ///< [in] The frequency domain.
+    xet_freq_throttle_time_t* pThrottleTime         ///< [in] Will contain a snapshot of the throttle time counters for the
+                                                    ///< specified domain.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Activity components
+typedef enum _xet_activity_type_t
+{
+    XET_ACTIVITY_TYPE_GLOBAL = 0,                   ///< Overall activity of all accelerators on the device.
+    XET_ACTIVITY_TYPE_COMPUTE,                      ///< Activity of all compute accelerators on the device.
+    XET_ACTIVITY_TYPE_MEDIA,                        ///< Activity of all media accelerators on the device.
+
+} xet_activity_type_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Activity counters
+/// 
+/// @details
+///     - Percent utilization is calculated by taking two snapshots (s1, s2) and
+///       using the equation: %util = (s2.activeTime - s1.activeTime) /
+///       (s2.timestamp - s1.timestamp)
+typedef struct _xet_activity_stats_t
+{
+    uint64_t activeTime;                            ///< [out] Monotonic counter for time in microseconds that this resource is
+                                                    ///< actively running workloads.
+    uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when activeTime
+                                                    ///< counter was sampled.
+
+} xet_activity_stats_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get the activity counters of a part of the device
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pStats
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanActivityGetStats(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_activity_type_t type,                       ///< [in] The type of activity stats.
+    xet_activity_stats_t* pStats                    ///< [in] Will contain a snapshot of the activity counters.
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Memory resource types
@@ -583,149 +633,582 @@ typedef enum _xet_mem_type_t
 } xet_mem_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_MEM_TYPE
-typedef struct _xet_resprop_mem_type_t
+/// @brief Memory properties
+typedef struct _xet_mem_properties_t
 {
     xet_mem_type_t type;                            ///< [out] The memory type
+    uint64_t size;                                  ///< [out] Physical memory size in bytes
 
-} xet_resprop_mem_type_t;
+} xet_mem_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_MEM_UTILIZATION
+/// @brief Memory bandwidth
 /// 
 /// @details
-///     - The total physical memory is the sum of all others (stolen + bad +
-///       allocated + unallocated).
-///     - Percent software memory utilization given by 100 * allocated /
-///       (allocated + unallocated).
-///     - Percent bad memory given by 100 * bad / total
-typedef struct _xet_resprop_mem_utilization_t
+///     - Percent bandwidth is calculated by taking two snapshots (s1, s2) and
+///       using the equation: %bw = 10^6 * ((s2.readCounter - s1.readCounter) +
+///       (s2.writeCounter - s1.writeCounter)) / (s2.maxBandwidth *
+///       (s2.timestamp - s1.timestamp))
+typedef struct _xet_mem_bandwidth_t
 {
-    uint64_t total;                                 ///< [out] The total physical memory in bytes
-    uint64_t stolen;                                ///< [out] The total stolen memory in bytes
-    uint64_t bad;                                   ///< [out] The total bad memory in bytes
+    uint64_t readCounter;                           ///< [out] Total bytes read from memory
+    uint64_t writeCounter;                          ///< [out] Total bytes written to memory
+    uint64_t maxBandwidth;                          ///< [out] Current maximum bandwidth in units of bytes/sec
+    uint64_t timestamp;                             ///< [out] The timestamp when these measurements were sampled
+
+} xet_mem_bandwidth_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Memory allocation
+/// 
+/// @details
+///     - Percent allocation is given by 100 * allocated / total.
+///     - Percent free is given by 100 * (total - allocated) / total.
+typedef struct _xet_mem_alloc_t
+{
     uint64_t allocated;                             ///< [out] The total allocated bytes
-    uint64_t unallocated;                           ///< [out] The total unallocated bytes
+    uint64_t total;                                 ///< [out] The total physical memory in bytes
 
-} xet_resprop_mem_utilization_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_MEM_BANDWIDTH
-typedef struct _xet_resprop_mem_bandwidth_t
-{
-    uint32_t readCounter;                           ///< [out] Total bytes read from memory
-    uint32_t writeCounter;                          ///< [out] Total bytes written to memory
-    uint32_t maxBandwidth;                          ///< [out] Current maximum bandwidth in units of bytes/sec
-
-} xet_resprop_mem_bandwidth_t;
+} xet_mem_alloc_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Link resource types
-typedef enum _xet_link_type_t
-{
-    XET_LINK_TYPE_PCI = 0,                          ///< PCI connection
-    XET_LINK_TYPE_CD_PORT,                          ///< Companion die physical port
-
-} xet_link_type_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Link speed element
-typedef struct _xet_link_speed_t
-{
-    uint32_t numLanes;                              ///< [out] The number of lanes used by the link
-    uint32_t speed;                                 ///< [out] The frequency of the link in units of MHz
-    uint32_t bandwidth;                             ///< [out] The maximum bandwidth in units of bytes/sec
-
-} xet_link_speed_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for property ::XET_RESPROP_LINK_TYPE
-typedef struct _xet_resprop_link_type_t
-{
-    xet_link_type_t type;                           ///< [out] The type of link
-
-} xet_resprop_link_type_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for property ::XET_RESPROP_LINK_BUS_ADDRESS
-typedef struct _xet_resprop_link_bus_address_t
-{
-    int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
-
-} xet_resprop_link_bus_address_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for property ::XET_RESPROP_LINK_PEER_DEVICE
-typedef struct _xet_resprop_link_peer_device_t
-{
-    xe_device_uuid_t uuid;                          ///< [out] UUID of the peer device connected to through this link
-
-} xet_resprop_link_peer_device_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_LINK_AVAIL_SPEEDS
+/// @brief Get memory properties
 /// 
 /// @details
-///     - The list is ordered from the smallest ratio to the largest ratio.
-typedef struct _xet_resprop_link_avail_speeds_t
-{
-    uint32_t num;                                   ///< [out] The number of elements in pList
-    const xet_link_speed_t* pList;                  ///< [out][range(0, num-1)] Pointer to an array of link speeds
-
-} xet_resprop_link_avail_speeds_t;
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanMemoryGetProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_mem_properties_t* pProperties               ///< [in] Will contain memory properties.
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_LINK_STATE
-typedef struct _xet_resprop_link_state_t
-{
-    xe_bool_t enable;                               ///< [out] Indicates if the link is disabled/enabled.
-
-} xet_resprop_link_state_t;
+/// @brief Get memory bandwidth
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pBandwidth
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanMemoryGetBandwidth(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_mem_bandwidth_t* pBandwidth                 ///< [in] Will contain a snapshot of the bandwidth counters.
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_LINK_MAX_PACKET_SIZE
-typedef struct _xet_resprop_link_max_packet_size_t
+/// @brief Get memory allocation
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pAllocated
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanMemoryGetAllocated(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_mem_alloc_t* pAllocated                     ///< [in] Will contain the current allocated memory.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief PCI address
+typedef struct _xet_pci_address_t
 {
+    uint32_t domain;                                ///< [out] BDF domain
+    uint32_t bus;                                   ///< [out] BDF bus
+    uint32_t device;                                ///< [out] BDF device
+    uint32_t function;                              ///< [out] BDF function
+
+} xet_pci_address_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief PCI speed
+typedef struct _xet_pci_speed_t
+{
+    uint32_t gen;                                   ///< [out] The link generation
+    uint32_t width;                                 ///< [out] The number of lanes
+    uint32_t maxBandwidth;                          ///< [out] The maximum bandwidth in bytes/sec
     uint32_t maxPacketSize;                         ///< [out] Maximum packet size in bytes.
 
-} xet_resprop_link_max_packet_size_t;
+} xet_pci_speed_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_LINK_BANDWIDTH
-typedef struct _xet_resprop_link_bandwidth_t
+/// @brief Static PCI properties
+typedef struct _xet_pci_properties_t
 {
-    uint32_t recvCounter;                           ///< [out] Total bytes received across the link
-    uint32_t sendCounter;                           ///< [out] Total bytes sent across the link
-    uint32_t maxBandwidth;                          ///< [out] Maximum bytes/sec that can be transfered acros the link
+    xet_pci_address_t address;                      ///< [out] The BDF address
+    uint32_t numBars;                               ///< [out] The number of configured bars
+    xet_pci_speed_t maxSpeed;                       ///< [out] Fastest port configuration supported by the device.
 
-} xet_resprop_link_bandwidth_t;
+} xet_pci_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_LINK_SPEED
-typedef struct _xet_resprop_link_speed_t
+/// @brief Dynamic PCI state
+typedef struct _xet_pci_state_t
 {
-    const xet_link_speed_t* pSpeed;                 ///< [out] Pointer to the current speed configuration
+    xet_pci_speed_t speed;                          ///< [out] The current port configure speed
 
-} xet_resprop_link_speed_t;
+} xet_pci_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_LINK_SPEED_RANGE
-typedef struct _xet_resprop_link_speed_range_t
+/// @brief PCI bar types
+typedef enum _xet_pci_bar_type_t
 {
-    const xet_link_speed_t* pMinSpeed;              ///< [out] Pointer to the min speed configuration (one of those in the
-                                                    ///< array returned by property ::XET_RESPROP_LINK_AVAIL_SPEEDS)
-    const xet_link_speed_t* pMaxSpeed;              ///< [out] Pointer to the max speed configuration (one of those in the
-                                                    ///< array returned by property ::XET_RESPROP_LINK_AVAIL_SPEEDS)
+    XET_PCI_BAR_TYPE_CONFIG = 0,                    ///< PCI configuration space
+    XET_PCI_BAR_TYPE_MMIO,                          ///< MMIO registers
+    XET_PCI_BAR_TYPE_VRAM,                          ///< VRAM aperture
+    XET_PCI_BAR_TYPE_ROM,                           ///< ROM aperture
+    XET_PCI_BAR_TYPE_VGA_IO,                        ///< Legacy VGA IO ports
+    XET_PCI_BAR_TYPE_VGA_MEM,                       ///< Legacy VGA memory
+    XET_PCI_BAR_TYPE_INDIRECT_IO,                   ///< Indirect IO port access
+    XET_PCI_BAR_TYPE_INDIRECT_MEM,                  ///< Indirect memory access
+    XET_PCI_BAR_TYPE_OTHER,                         ///< Other type of PCI bar
 
-} xet_resprop_link_speed_range_t;
+} xet_pci_bar_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_TEMP_TEMPERATURE
-typedef struct _xet_resprop_temp_temperature_t
+/// @brief Properties of a pci bar
+typedef struct _xet_pci_bar_properties_t
 {
-    uint32_t temperature;                           ///< [out] The current temperature of the sensor in degrees celcius
+    xet_pci_bar_type_t type;                        ///< [out] The type of bar
+    uint64_t base;                                  ///< [out] Base address of the bar.
+    uint64_t size;                                  ///< [out] Size of the bar.
 
-} xet_resprop_temp_temperature_t;
+} xet_pci_bar_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief PCI throughput
+/// 
+/// @details
+///     - Percent throughput is calculated by taking two snapshots (s1, s2) and
+///       using the equation: %bw = 10^6 * ((s2.rxCounter - s1.rxCounter) +
+///       (s2.txCounter - s1.txCounter)) / (s2.maxBandwidth * (s2.timestamp -
+///       s1.timestamp))
+typedef struct _xet_pci_throughput_t
+{
+    uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when this sample was
+                                                    ///< taken
+    uint64_t rxCounter;                             ///< [out] Monotonic counter for the number of bytes received
+    uint64_t txCounter;                             ///< [out] Monotonic counter for the number of bytes transmitted (including
+                                                    ///< replays)
+    uint64_t replayCounter;                         ///< [out] Monotonic counter for the number of replay packets
+    uint32_t maxBandwidth;                          ///< [out] The maximum bandwidth in bytes/sec under the current
+                                                    ///< configuration
+
+} xet_pci_throughput_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief PCI stats counters
+/// 
+/// @details
+///     - Percent replays is calculated by taking two snapshots (s1, s2) and
+///       using the equation: %replay = 10^6 * (s2.replayCounter -
+///       s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))
+typedef struct _xet_pci_stats_t
+{
+    uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when this sample was
+                                                    ///< taken
+    uint64_t replayCounter;                         ///< [out] Monotonic counter for the number of replay packets
+    uint64_t packetCounter;                         ///< [out] Monotonic counter for the number of packets
+
+} xet_pci_stats_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get PCI properties - address, max speed
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPciGetProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_pci_properties_t* pProperties               ///< [in] Will contain the PCI properties.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get current PCI state - current speed
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pState
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPciGetState(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_pci_state_t* pState                         ///< [in] Will contain the PCI properties.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get properties of a bar
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPciGetBarProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_pci_properties_t.numBars -
+                                                    ///< 1]).
+    xet_pci_bar_properties_t* pProperties           ///< [in] Will contain properties of the specified bar
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get PCI throughput
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pThroughput
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPciGetThroughput(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_pci_throughput_t* pThroughput               ///< [in] Will contain a snapshot of the latest throughput counters.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get PCI stats
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pStats
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPciGetStats(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_pci_stats_t* pStats                         ///< [in] Will contain a snapshot of the latest stats.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Switch address
+typedef struct _xet_switch_address_t
+{
+    uint8_t guid[8];                                ///< [out] GUID of the Switch
+
+} xet_switch_address_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Switch properties
+typedef struct _xet_switch_properties_t
+{
+    xet_switch_address_t address;                   ///< [out] Address of this Switch
+    uint32_t numPorts;                              ///< [out] The number of ports
+
+} xet_switch_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Switch state
+typedef struct _xet_switch_state_t
+{
+    xe_bool_t enabled;                              ///< [out] Indicates if the switch is enabled/disabled
+
+} xet_switch_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Switch Port properties
+typedef struct _xet_switch_port_properties_t
+{
+    uint32_t maxBandwidth;                          ///< [out] Maximum bandwidth (bytes/sec) supported by the port
+
+} xet_switch_port_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Switch Port state
+typedef struct _xet_switch_port_state_t
+{
+    xe_bool_t connected;                            ///< [out] Indicates if the port is connected to a remote Switch
+    xet_switch_address_t remote;                    ///< [out] If connected is true, this gives the address of the remote
+                                                    ///< Componian Die to which this port connects
+    uint32_t maxBandwidth;                          ///< [out] Current maximum bandwidth (bytes/sec)
+
+} xet_switch_port_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Switch Port throughput
+/// 
+/// @details
+///     - Percent throughput is calculated by taking two snapshots (s1, s2) and
+///       using the equation: %bw = 10^6 * ((s2.rxCounter - s1.rxCounter) +
+///       (s2.txCounter - s1.txCounter)) / (s2.maxBandwidth * (s2.timestamp -
+///       s1.timestamp))
+typedef struct _xet_switch_port_throughput_t
+{
+    uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when this sample was
+                                                    ///< taken
+    uint64_t rxCounter;                             ///< [out] Monotonic counter for the number of bytes received
+    uint64_t txCounter;                             ///< [out] Monotonic counter for the number of bytes transmitted
+    uint32_t maxBandwidth;                          ///< [out] The maximum bandwidth in bytes/sec under the current port
+                                                    ///< configuration
+
+} xet_switch_port_throughput_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Switch Port stats counters
+/// 
+/// @details
+///     - Percent replays is calculated by taking two snapshots (s1, s2) and
+///       using the equation: %replay = 10^6 * (s2.replayCounter -
+///       s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))
+typedef struct _xet_switch_port_stats_t
+{
+    uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when this sample was
+                                                    ///< taken
+    uint64_t replayCounter;                         ///< [out] Monotonic counter for the number of replay packets
+    uint64_t packetCounter;                         ///< [out] Monotonic counter for the number of packets
+
+} xet_switch_port_stats_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get Switch properties
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanSwitchGetProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_switch_properties_t* pProperties            ///< [in] Will contain the Switch properties.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get Switch state
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pState
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanSwitchGetState(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_switch_state_t* pState                      ///< [in] Will contain the current state of the switch (enabled/disabled).
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set Switch state
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanSwitchSetState(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xe_bool_t enable                                ///< [in] Set to true to enable the Switch, otherwise it will be disabled.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get Switch Port properties
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanSwitchPortGetProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+                                                    ///< - 1]).
+    xet_switch_port_properties_t* pProperties       ///< [in] Will contain properties of the Switch Port
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get Switch Port state
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pState
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanSwitchPortGetState(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+                                                    ///< - 1]).
+    xet_switch_port_state_t* pState                 ///< [in] Will contain the current state of the Switch Port
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get Switch Port throughput
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pThroughput
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanSwitchPortGetThroughput(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+                                                    ///< - 1]).
+    xet_switch_port_throughput_t* pThroughput       ///< [in] Will contain the Switch port throughput counters.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get Switch Port stats
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pStats
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanSwitchPortGetStats(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+                                                    ///< - 1]).
+    xet_switch_port_stats_t* pStats                 ///< [in] Will contain the Switch port stats.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Temperature sensors
+typedef enum _xet_temp_sensors_t
+{
+    XET_TEMP_SENSORS_GLOBAL = 0,                    ///< The maximum temperature across all device sensors
+    XET_TEMP_SENSORS_GPU,                           ///< The maximum temperature across all sensors in the GPU
+    XET_TEMP_SENSORS_MEMORY,                        ///< The maximum temperature across all sensors in the local memory
+    XET_TEMP_SENSORS_NUM,                           ///< The number of sensors
+
+} xet_temp_sensors_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get the temperature from a specified sensor
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pTemperature
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanTemperatureGet(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_temp_sensors_t sensor,                      ///< [in] The port address.
+    uint32_t* pTemperature                          ///< [in] Will contain the temperature read from the specified sensor.
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Standby promotion modes
@@ -738,45 +1221,124 @@ typedef enum _xet_stby_promo_mode_t
 } xet_stby_promo_mode_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_STBY_PROMO_MODE
-typedef struct _xet_resprop_stby_promo_mode_t
-{
-    xet_stby_promo_mode_t mode;                     ///< [in,out] Current promotion mode
-
-} xet_resprop_stby_promo_mode_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for property ::XET_RESPROP_FW_NAME
-typedef struct _xet_resprop_fw_name_t
-{
-    int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
-
-} xet_resprop_fw_name_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for property ::XET_RESPROP_FW_VERSION
-typedef struct _xet_resprop_fw_version_t
-{
-    int8_t str[XET_STRING_PROPERTY_SIZE];           ///< [out] NULL terminated string value
-
-} xet_resprop_fw_version_t;
+/// @brief Get the current standby promotion mode
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pMode
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanStandbyGetMode(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_stby_promo_mode_t* pMode                    ///< [in] Will contain the current standby mode.
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_FW_CHECK
-typedef struct _xet_resprop_fw_check_t
-{
-    uint32_t checksum;                              ///< [out] The calculated checksum of the loaded firmware image
-
-} xet_resprop_fw_check_t;
+/// @brief Set standby promotion mode
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanStandbySetMode(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_stby_promo_mode_t mode                      ///< [in] New standby mode.
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_FW_FLASH
-typedef struct _xet_resprop_fw_flash_t
+/// @brief Firmware properties
+typedef struct _xet_firmware_properties_t
 {
-    void* pImage;                                   ///< [in] Pointer to the image to be flashed
-    uint32_t size;                                  ///< [in] Size in bytes of the image pointed to by pImage
+    int8_t name[XET_STRING_PROPERTY_SIZE];          ///< [out] NULL terminated string value
+    int8_t version[XET_STRING_PROPERTY_SIZE];       ///< [out] NULL terminated string value
 
-} xet_resprop_fw_flash_t;
+} xet_firmware_properties_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get firmware properties
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFirmwareGetProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+                                                    ///< [::xet_sysman_properties_t.numFirmwares - 1]).
+    xet_firmware_properties_t* pProperties          ///< [in] Pointer to an array that will hold the properties of the firmware
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get firmware checksum
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pChecksum
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFirmwareGetChecksum(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+                                                    ///< [::xet_sysman_properties_t.numFirmwares - 1]).
+    uint32_t* pChecksum                             ///< [in] Calculated checksum of the installed firmware.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Flash a new firmware image
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pImage
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFirmwareFlash(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+                                                    ///< [::xet_sysman_properties_t.numFirmwares - 1]).
+    void* pImage,                                   ///< [in] Image of the new firmware to flash.
+    uint32_t size                                   ///< [in] Size of the flash image.
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief PSU voltage status
@@ -789,50 +1351,77 @@ typedef enum _xet_psu_voltage_status_t
 } xet_psu_voltage_status_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_PSU_AMP_LIMIT
-typedef struct _xet_resprop_psu_amp_limit_t
+/// @brief Static properties of the power supply
+typedef struct _xet_psu_properties_t
 {
-    uint32_t limit;                                 ///< [out] The maximum electrical current in amperes that can be drawn
+    xe_bool_t haveFan;                              ///< [out] True if the power supply has a fan
+    uint32_t ampLimit;                              ///< [out] The maximum electrical current in amperes that can be drawn
 
-} xet_resprop_psu_amp_limit_t;
+} xet_psu_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_PSU_VOLTAGE_STATUS
-typedef struct _xet_resprop_psu_voltage_status_t
+/// @brief Dynamic state of the power supply
+typedef struct _xet_psu_state_t
 {
-    xet_psu_voltage_status_t status;                ///< [out] The current PSU voltage status)
-
-} xet_resprop_psu_voltage_status_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_PSU_FAN_FAILURE
-typedef struct _xet_resprop_psu_fan_failure_t
-{
-    xe_bool_t status;                               ///< [out] Indicates if the fan has failed
-
-} xet_resprop_psu_fan_failure_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_PSU_TEMPERATURE
-typedef struct _xet_resprop_psu_temperature_t
-{
+    xet_psu_voltage_status_t voltStatus;            ///< [out] The current PSU voltage status
+    xe_bool_t fanFailed;                            ///< [out] Indicates if the fan has failed
     uint32_t temperature;                           ///< [out] Read the current heatsink temperature in degrees celcius
-
-} xet_resprop_psu_temperature_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_PSU_AMPS
-typedef struct _xet_resprop_psu_amps_t
-{
     uint32_t current;                               ///< [out] The amps being drawn in amperes
 
-} xet_resprop_psu_amps_t;
+} xet_psu_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get power supply properties
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pProperties
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPsuGetProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the power supply (0 ...
+                                                    ///< [::xet_sysman_properties_t.numPsus - 1]).
+    xet_psu_properties_t* pProperties               ///< [in] Will contain the properties of the power supply.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get current power supply state
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pState
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPsuGetState(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the power supply (0 ...
+                                                    ///< [::xet_sysman_properties_t.numPsus - 1]).
+    xet_psu_state_t* pState                         ///< [in] Will contain the current state of the power supply.
+    );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Fan resource speed mode
 typedef enum _xet_fan_speed_mode_t
 {
-    XET_FAN_SPEED_MODE_FIXED = 0,                   ///< The fan speed is currently set to a fixed value
+    XET_FAN_SPEED_MODE_DEFAULT = 0,                 ///< The fan speed is operating using the hardware default settings
+    XET_FAN_SPEED_MODE_FIXED,                       ///< The fan speed is currently set to a fixed value
     XET_FAN_SPEED_MODE_TABLE,                       ///< The fan speed is currently controlled dynamically by hardware based on
                                                     ///< a temp/speed table
 
@@ -864,205 +1453,40 @@ typedef struct _xet_fan_temp_speed_t
 #endif // XET_FAN_TEMP_SPEED_PAIR_COUNT
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_FAN_MAX_RPM
-typedef struct _xet_resprop_fan_max_rpm_t
+/// @brief Fan properties
+typedef struct _xet_fan_properties_t
 {
     uint32_t maxSpeed;                              ///< [out] The maximum RPM of the fan
-
-} xet_resprop_fan_max_rpm_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_FAN_MAX_TABLE_SIZE
-typedef struct _xet_resprop_fan_max_table_size_t
-{
     uint32_t maxPoints;                             ///< [out] The maximum number of points in the fan temp/speed table
 
-} xet_resprop_fan_max_table_size_t;
+} xet_fan_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_FAN_SPEED_RPM
-typedef struct _xet_resprop_fan_speed_rpm_t
+/// @brief Fan configuration
+typedef struct _xet_fan_config_t
 {
-    uint32_t speed;                                 ///< [out] The current fan speed in units of revolutions per minute (rpm)
+    xet_fan_speed_mode_t mode;                      ///< [in,out] The fan speed mode (fixed, temp-speed table)
+    uint32_t speed;                                 ///< [in,out] The fixed fan speed setting
+    xet_fan_speed_units_t speedUnits;               ///< [in,out] The units of the fixed fan speed setting
+    uint32_t numPoints;                             ///< [in,out] The number of valid points in the fan speed table
+    xet_fan_temp_speed_t table[XET_FAN_TEMP_SPEED_PAIR_COUNT];  ///< [in,out] Array of temperature/fan speed pairs
 
-} xet_resprop_fan_speed_rpm_t;
+} xet_fan_config_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_FAN_SPEED_PERCENT
-typedef struct _xet_resprop_fan_speed_percent_t
+/// @brief Fan state
+typedef struct _xet_fan_state_t
 {
-    uint32_t speed;                                 ///< [out] The current fan speed as a percentage of the maximum speed of
-                                                    ///< that fan
+    xet_fan_speed_mode_t mode;                      ///< [out] The fan speed mode (default, fixed, temp-speed table)
+    xet_fan_speed_units_t speedUnits;               ///< [out] The units of the fan speed
+    uint32_t speed;                                 ///< [out] The current fan speed
 
-} xet_resprop_fan_speed_percent_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_FAN_MODE
-typedef struct _xet_resprop_fan_mode_t
-{
-    xet_fan_speed_mode_t mode;                      ///< [in,out] The current fan speed mode (one of ::xet_fan_speed_mode_t)
-
-} xet_resprop_fan_mode_t;
+} xet_fan_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_FAN_FIXED_SPEED
-typedef struct _xet_resprop_fan_fixed_speed_t
-{
-    uint32_t speed;                                 ///< [in,out] The speed of the fan
-    xet_fan_speed_units_t units;                    ///< [in,out] The units of the member speed
-
-} xet_resprop_fan_fixed_speed_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_FAN_SPEED_TABLE
-typedef struct _xet_resprop_fan_speed_table_t
-{
-    uint32_t* pCount;                               ///< [in,out] The number of temp/speed pairs.
-                                                    ///< When reading the current fan speed table, this will be set to the
-                                                    ///< number of points returned.
-                                                    ///< When setting the fan speed table, this specifies the number of valid
-                                                    ///< points in the table.
-    xet_fan_temp_speed_t points[XET_FAN_TEMP_SPEED_PAIR_COUNT]; ///< [in,out][range(0, *pCount)] Array of temperature/fan speed pairs
-
-} xet_resprop_fan_speed_table_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_LED_RGB_CAP
-typedef struct _xet_resprop_led_rgb_cap_t
-{
-    xe_bool_t haveRGB;                              ///< [out] Indicates if the LED is RGB capable
-
-} xet_resprop_led_rgb_cap_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Data for the property ::XET_RESPROP_LED_STATE
-typedef struct _xet_resprop_led_state_t
-{
-    xe_bool_t isOn;                                 ///< [in,out] Indicates if the LED is on or off
-    uint8_t red;                                    ///< [in,out][range(0, 255)] The LED red value
-    uint8_t green;                                  ///< [in,out][range(0, 255)] The LED green value
-    uint8_t blue;                                   ///< [in,out][range(0, 255)] The LED blue value
-
-} xet_resprop_led_state_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Property support
-typedef enum _xet_prop_support_t
-{
-    XET_PROP_SUPPORT_NONE = 0,                      ///< The property is not supported by this version of the API
-    XET_PROP_SUPPORT_API = XE_BIT( 0 ),             ///< The property is supported by the the API
-    XET_PROP_SUPPORT_DEVICE_CLASS = XE_BIT( 1 ),    ///< The property is supported for the class of device
-    XET_PROP_SUPPORT_DEVICE = XE_BIT( 2 ),          ///< The property is supported for the device
-
-} xet_prop_support_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Property access permissions
-typedef enum _xet_prop_access_t
-{
-    XET_PROP_ACCESS_NO_PERMISSIONS = 0,             ///< The application does not have read-write access to the property
-    XET_PROP_ACCESS_READ_PERMISSIONS = XE_BIT( 0 ), ///< The application has only read access to the property
-    XET_PROP_ACCESS_WRITE_PERMISSIONS = XE_BIT( 1 ),///< The application has write access to the property
-
-} xet_prop_access_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Structure containing information about a resource
-typedef struct _xet_resid_info_t
-{
-    xet_resid_t id;                                 ///< [in] The ID of the resource
-    xet_resource_type_t type;                       ///< [in] The type of resource
-    const char* pName;                              ///< [out] The name of the resource
-    const char* pDesc;                              ///< [out] Human readable description of this resouce
-    xe_bool_t available;                            ///< [out] Set to TRUE if the resource with this ID is available on the
-                                                    ///< device, otherwise set to FALSE
-    xe_bool_t propsOnSubdevices;                    ///< [out] Set to TRUE if this resource will change properties on
-                                                    ///< sub-devices or is merging telemetry from sub-devices
-
-} xet_resid_info_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Find out if specific resources are available on this device
+/// @brief Get fan properties
 /// 
 /// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pResources
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanGetResourceInfo(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t count,                                 ///< [in] The number of entries in the the array pResources
-    xet_resid_info_t* pResources                    ///< [in] Pointer to an array that hold the ID of resources on input and
-                                                    ///< will contain the availability on output
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Get list of resources available on this device of a given type
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pCount
-///         + nullptr == pResources
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanGetResources(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    xet_resource_type_t type,                       ///< [in] Get a list of resources of given type. If this is
-                                                    ///< ::XET_RESOURCE_TYPE_ANY, then all resources will be returned.
-    uint32_t* pCount,                               ///< [in] Pointer to the number of elements in the array pResources.
-                                                    ///< If count is 0 or pResources is nullptr, driver will update with the
-                                                    ///< number of supported resources on this device.
-                                                    ///< If count is non-zero and less than the number of supported resources,
-                                                    ///< driver will update with the number of resources. No data is returned
-                                                    ///< and an error is generated.
-                                                    ///< If count is greater than or equal to the number of supported
-                                                    ///< resources, all data is returned and count will be set to the number of
-                                                    ///< returned resources.
-    xet_resid_info_t* pResources                    ///< [in] Pointer to an array that will hold the ID of information about
-                                                    ///< supported resources
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Request structure to get resource property info
-typedef struct _xet_resprop_info_t
-{
-    xet_resprop_t property;                         ///< [in] The property
-    xet_resource_type_t resourceType;               ///< [out] The type of resource this property is used with
-    const char* pName;                              ///< [out] Resource property name
-    const char* pDesc;                              ///< [out] Human readable description of this property
-    xet_prop_support_t support;                     ///< [out] API support for the property
-    xet_prop_access_t access;                       ///< [out] The access permissions for the property
-    uint32_t minGetInterval;                        ///< [out] The minimum interval in microseconds between reads to this
-                                                    ///< property
-    uint32_t minSetInterval;                        ///< [out] The minimum interval in microseconds between writes to this
-                                                    ///< property
-
-} xet_resprop_info_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Find out which resources properties are available on a given device
-/// 
-/// @details
-///     - Access rights are specific to the device. Need to check separately on
-///       each device.
-///     - API support is based on the device class and doesn't need to be
-///       checked for each device.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -1075,38 +1499,104 @@ typedef struct _xet_resprop_info_t
 ///         + nullptr == pProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanGetPropertyInfo(
+xetSysmanFanGetProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t count,                                 ///< [in] The number of entries in the array pProperties
-    xet_resprop_info_t* pProperties                 ///< [in] Pointer to an array of property info. Contains the property ID on
-                                                    ///< input and the property info completed on output
+    uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+                                                    ///< 1]).
+    xet_fan_properties_t* pProperties               ///< [in] Will contain the properties of the fan.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Request structure used to query a resource property value
-typedef struct _xet_resprop_request_t
+/// @brief Get current fan configuration
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pConfig
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFanGetConfig(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+                                                    ///< 1]).
+    xet_fan_config_t* pConfig                       ///< [in] Will contain the current configuration of the fan.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set fan configuration
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pConfig
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFanSetConfig(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+                                                    ///< 1]).
+    const xet_fan_config_t* pConfig                 ///< [in] New fan configuration.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get current state of a fan - current mode and speed
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pState
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanFanGetState(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+                                                    ///< 1]).
+    xet_fan_speed_units_t units,                    ///< [in] The units in which the fan speed should be returned.
+    xet_fan_state_t* pState                         ///< [in] Will contain the current state of the fan.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief LED properties
+typedef struct _xet_led_properties_t
 {
-    xet_resid_t resource;                           ///< [in] The resource ID
-    xet_resprop_t property;                         ///< [in] The property being requested
-    void* pData;                                    ///< [in] Pointer to the data for the property.
-                                                    ///< Each property has a corresponding data structure. The type of the data
-                                                    ///< structure is derived from the property enumerator, converted to
-                                                    ///< lower-case with "_t" appended.
-    uint32_t size;                                  ///< [in] The size of the data structure pointed to by pData.
-    xe_result_t status;                             ///< [out] Indicates if the request was successful or not.
-                                                    ///< ::XE_RESULT_SUCCESS - Data was successful read or updated.
-                                                    ///< ::XE_RESULT_ERROR_DEVICE_ACCESS - Problem reading or writing device data.
-                                                    ///< ::XE_RESULT_ERROR_INVALID_ARGUMENT - Resource ID or property ID are
-                                                    ///< invalid or size does not match required storage for property data.
-                                                    ///< ::XE_RESULT_ERROR_UNSUPPORTED - Resource ID and/or property ID not
-                                                    ///< supported on this device.
-                                                    ///< ::XE_RESULT_ERROR_INSUFFICENT_PERMISSIONS - Insufficient permission to
-                                                    ///< access this property.
+    xe_bool_t haveRGB;                              ///< [out] Indicates if the LED is RGB capable
 
-} xet_resprop_request_t;
+} xet_led_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get resource property data
+/// @brief LED state
+typedef struct _xet_led_state_t
+{
+    xe_bool_t isOn;                                 ///< [in,out] Indicates if the LED is on or off
+    uint8_t red;                                    ///< [in,out][range(0, 255)] The LED red value
+    uint8_t green;                                  ///< [in,out][range(0, 255)] The LED green value
+    uint8_t blue;                                   ///< [in,out][range(0, 255)] The LED blue value
+
+} xet_led_state_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get LED properties
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -1118,19 +1608,18 @@ typedef struct _xet_resprop_request_t
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
-///         + nullptr == pRequest
+///         + nullptr == pProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///     - ::XE_RESULT_ERROR_UNKNOWN
-///         + One or more of the specified resource/properties had access errors. Check ::xet_resprop_request_t.status for each request.
 xe_result_t __xecall
-xetSysmanGetProperties(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
-    uint32_t count,                                 ///< [in] The number of properties in the array pRequest
-    xet_resprop_request_t* pRequest                 ///< [in] Pointer to list of properties and corresponding data storage
+xetSysmanLedGetProperties(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+                                                    ///< 1]).
+    xet_led_properties_t* pProperties               ///< [in] Will contain the properties of the LED.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set resource property data
+/// @brief Get current state of a LED - on/off, color
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -1142,15 +1631,37 @@ xetSysmanGetProperties(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
-///         + nullptr == pRequest
-///         + An invalid resource index was specified in one or more of the requests
+///         + nullptr == pState
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
-///         + One or more requested properties is not supported on this device
 xe_result_t __xecall
-xetSysmanSetProperties(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device
-    uint32_t count,                                 ///< [in] The number of properties in the array pRequest
-    xet_resprop_request_t* pRequest                 ///< [in] Pointer to list of properties and corresponding data storage
+xetSysmanLedGetState(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+                                                    ///< 1]).
+    xet_led_state_t* pState                         ///< [in] Will contain the current state of the LED.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set state of a LED - on/off, color
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pState
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanLedSetState(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+                                                    ///< 1]).
+    const xet_led_state_t* pState                   ///< [in] New state of the LED.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1248,55 +1759,10 @@ xetSysmanRasGetErrors(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Event types
-typedef enum _xet_sysman_event_type_t
-{
-    XET_SYSMAN_EVENT_TYPE_FREQ_THROTTLED = 0,       ///< The frequency is being throttled
-    XET_SYSMAN_EVENT_TYPE_RAS_ERRORS,               ///< ECC/RAS errors
-    XET_SYSMAN_EVENT_TYPE_COUNT,                    ///< The number of event types
-
-} xet_sysman_event_type_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Request structure to determine events that are supported
-typedef struct _xet_event_support_t
-{
-    xet_sysman_event_type_t event;                  ///< [in] The event
-    xe_bool_t supported;                            ///< [out] Set to true/false to know if the event is supported
-
-} xet_event_support_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Find out which events are supported on a given device
-/// 
-/// @details
-///     - Event support is the same for all devices with the same device ID.
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == pAccess
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanSupportedEvents(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t count,                                 ///< [in] The number of entries in the array pAccess
-    xet_event_support_t* pAccess                    ///< [in] Pointer to an array of event support requests
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Request structure used to register/unregister events
 typedef struct _xet_event_request_t
 {
     xet_sysman_event_type_t event;                  ///< [in] The event type to register.
-    xet_resid_t resourceId;                         ///< [in] Only events being generated by the specified resource. If
-                                                    ///< ::XET_RESID_ANY, then applies to all events from all resources in the
-                                                    ///< device.
     uint32_t threshold;                             ///< [in] The application only receives a notification when the total count
                                                     ///< exceeds this value. Set to zero to receive a notification for every
                                                     ///< new event.
@@ -1319,14 +1785,13 @@ typedef struct _xet_event_request_t
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
-///         + nullptr == pEvents
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanRegisterEvents(
+xetSysmanEventsRegister(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
     uint32_t count,                                 ///< [in] Number of entries in the array pEvents. If zero, all events will
                                                     ///< be registered.
-    xet_event_request_t* pEvents                    ///< [in] Events to register.
+    xet_event_request_t* pEvents                    ///< [in][optional] Events to register.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1345,14 +1810,13 @@ xetSysmanRegisterEvents(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
-///         + nullptr == pEvents
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanUnregisterEvents(
+xetSysmanEventsUnregister(
     xet_sysman_handle_t hSysman,                    ///< [in] Handle of the SMI object
     uint32_t count,                                 ///< [in] Number of entries in the array pEvents. If zero, all events will
                                                     ///< be unregistered.
-    xet_event_request_t* pEvents                    ///< [in] Events to unregister.
+    xet_event_request_t* pEvents                    ///< [in][optional] Events to unregister.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1384,7 +1848,7 @@ xetSysmanUnregisterEvents(
 ///         + nullptr == pEvents
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanGetEvents(
+xetSysmanEventsListen(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for a device. Set to nullptr to get events from any
                                                     ///< device for which the application has registered to receive
                                                     ///< notifications.
@@ -1466,7 +1930,7 @@ typedef struct _xet_diag_test_list_t
 ///         + nullptr == ppTests
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanGetDiagnosticTests(
+xetSysmanDiagnosticsGetTestList(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
     xet_diag_type_t type,                           ///< [in] Type of diagnostic to run
     const xet_diag_test_list_t** ppTests            ///< [in] Returns a constant pointer to the list of diagnostic tests
@@ -1487,7 +1951,7 @@ xetSysmanGetDiagnosticTests(
 ///         + nullptr == pResult
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanRunDiagnosticTests(
+xetSysmanDiagnosticsRunTests(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle for the device
     xet_diag_type_t type,                           ///< [in] Type of diagnostic to run
     uint32_t start,                                 ///< [in] The index of the first test to run. Set to
@@ -1495,21 +1959,6 @@ xetSysmanRunDiagnosticTests(
     uint32_t end,                                   ///< [in] The index of the last test to run. Set to
                                                     ///< ::XET_DIAG_LAST_TEST_INDEX to complete all tests after the start test.
     xet_diag_result_t* pResult                      ///< [in] The result of the diagnostics
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Reset device
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanDeviceReset(
-    xet_sysman_handle_t hSysman                     ///< [in] SMI handle for the device
     );
 
 #if defined(__cplusplus)
