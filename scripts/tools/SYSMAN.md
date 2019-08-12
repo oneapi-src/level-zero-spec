@@ -381,11 +381,11 @@ The following functions provide access to information about the PCI device:
 | ::${t}SysmanPciGetThroughput()         | Get the current throughput counters |
 | ::${t}SysmanPciGetStats()              | Get telemetry counters - replay counts. |
 
-These functions are not supported at the sub-device level.
+These functions will return the same information for a sub-device handle.
 
 ${"##"} <a name="sml">Switch</a>
 A device is able access memory and resources on a remote device using a high-speed switch rather than using the PCI bus. If the device has such a
-switch, the property ::${t}_sysman_properties_t.haveSwitch will be true.
+switch, the property ::${t}_sysman_properties_t.numSwitches will be non-zero.
 
 The following functions can be used to manage the switch:
 
@@ -399,38 +399,45 @@ The following functions can be used to manage the switch:
 | ::${t}SysmanSwitchPortGetThroughput()  | Get the throughput counters of a port on the switch. |
 | ::${t}SysmanSwitchPortGetStats()       | Gets telemetry counters of a port on the switch - number of replays. |
 
-For devices with sub-devices, the switch is usually located in the sub-device. If there is a switch in the device, it will be accessible through the
-SMI handle for the device only if the hardware is not located in sub-devices.
+For devices with sub-devices, the switch is usually located in the sub-device. Given a device handle, ::${t}_sysman_properties_t.numSwitches will
+include the switches on each sub-device. In this case, ::${t}_switch_properties_t.onSubdevice will be set to true and
+::${t}_switch_properties_t.subdeviceUuid will give the device UUID of the sub-device where that switch is located. Give a sub-device handle,
+::${t}_sysman_properties_t.numSwitches will only give the number of switches in the sub-device.
 
 The example below shows how to get the state of all switches in the device and sub-devices:
 
 ```c
-void ShowSwitchInfo(xet_sysman_handle_t hSysmanDevice)
+void ShowSwitchInfo(xet_sysman_handle_t hSysmanDevice, uint32_t SwitchIndex)
 {
     xet_switch_properties_t swprops;
-    if (xetSysmanSwitchGetProperties(hSysmanDevice, &swprops) == XE_RESULT_SUCCESS)
+    if (xetSysmanSwitchGetProperties(hSysmanDevice, SwitchIndex, &swprops) == XE_RESULT_SUCCESS)
     {
         xet_switch_state_t swstate;
-        if (xetSysmanSwitchGetState(hSysmanDevice, &swstate) == XE_RESULT_SUCCESS)
+        if (xetSysmanSwitchGetState(hSysmanDevice, SwitchIndex, &swstate) == XE_RESULT_SUCCESS)
         {
-            fprintf(stdout, "        GUID:  %s\n", swprops.address.guid);
-            fprintf(stdout, "        #port: %u\n", swprops.numPorts);
-            fprintf(stdout, "        State: %s\n", swstate.enabled ? "Enabled" : "Disabled");
+            fprintf(stdout, "        GUID:          %s\n", swprops.address.guid);
+            fprintf(stdout, "        #port:         %u\n", swprops.numPorts);
+            if (swprops.onSubdevice)
+            {
+                fprintf(stdout, "        On sub-device: %s\n", swprops.subdeviceUuid.id);
+            }
+            fprintf(stdout, "        State:         %s\n", swstate.enabled ? "Enabled" : "Disabled");
             if (swstate.enabled)
             {
                 fprintf(stdout, "        Ports:\n");
                 for (uint32_t portIndex = 0; portIndex < swprops.numPorts; portIndex++)
                 {
                     xet_switch_port_state_t portstate;
-                    if (xetSysmanSwitchPortGetState(hSysmanDevice, portIndex, &portstate)
+                    if (xetSysmanSwitchPortGetState(hSysmanDevice, SwitchIndex, portIndex, &portstate)
                         == XE_RESULT_SUCCESS)
                     {
                         if (portstate.connected)
                         {
                             fprintf(stdout,
                                 "            %u: "
-                                "connected to switch with GUID %s, max bandwidth %u bytes/sec\n",
-                                portIndex, portstate.remote.guid, portstate.maxBandwidth);
+                                "connected to switch with GUID %s, max rx/tx bandwidth %u/%u bytes/sec\n",
+                                portIndex, portstate.remote.guid,
+                                portstate.rxSpeed.maxBandwidth, portstate.txSpeed.maxBandwidth);
                         }
                         else
                         {
@@ -448,27 +455,12 @@ void ShowSwitches(xet_sysman_handle_t hSysmanDevice)
     xet_sysman_properties_t props;
     if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
     {
-        if (props.haveSwitch)
+        if (props.numSwitches)
         {
-            fprintf(stdout, "    Device switch:\n");
-            ShowSwitchInfo(hSysmanDevice);
-        }
-        if (props.numSubdevices)
-        {
-            for (uint32_t subdeviceIndex = 0; subdeviceIndex < props.numSubdevices; subdeviceIndex++)
+            for (uint32_t switchIndex = 0; switchIndex < props.numSwitches; switchIndex++)
             {
-                xet_sysman_handle_t hSubdevice;
-                if (xetSysmanGetSubdevice(hSysmanDevice, subdeviceIndex, &hSubdevice) == XE_RESULT_SUCCESS)
-                {
-                    if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
-                    {
-                        if (props.haveSwitch)
-                        {
-                            fprintf(stdout, "    Sub-device %u switch:\n", subdeviceIndex);
-                            ShowSwitchInfo(hSubdevice);
-                        }
-                    }
-                }
+                fprintf(stdout, "    Switch %u:\n", switchIndex);
+                ShowSwitchInfo(hSysmanDevice, switchIndex);
             }
         }
     }
@@ -503,17 +495,17 @@ If ::${t}_sysman_properties_t.numFirmwares is non-zero, the following functions 
 
 | Function                               | Device behavior | Sub-device behavior |
 | :---                                   | :---        | :---        |
-| ::${t}SysmanFirmwareGetProperties()    | Find out the name and version of each installed firmware. If there are sub-devices, this will only show firmwares that are not inside the sub-devices. | Find out the name and version of each installed firmware in the sub-device. |
-| ::${t}SysmanFirmwareGetChecksum()      | Get the checksum for an installed firmware. | Get the checksum for an installed firmware. |
-| ::${t}SysmanFirmwareFlash()            | Flash a new firmware image. | Flash a new firmware image. |
+| ::${t}SysmanFirmwareGetProperties()    | Find out the name and version of each installed firmware, including those in sub-devices. | Find out the name and version of each installed firmware in the sub-device. |
+| ::${t}SysmanFirmwareGetChecksum()      | Get the checksum for an installed firmware, including those in sub-devices | Get the checksum for an installed firmware. |
+| ::${t}SysmanFirmwareFlash()            | Flash a new firmware image, including for firmware on sub-devices | Flash a new firmware image on a sub-devices |
 
 ${"##"} <a name="smy">PSU</a>
 If ::${t}_sysman_properties_t.numPsus is non-zero, the following functions can be used to access information about each power-supply:
 
 | Function                               | Device behavior | Sub-device behavior |
 | :---                                   | :---        | :---        |
-| ::${t}SysmanPsuGetProperties()         | Get static details about the power supply. | Not supported. |
-| ::${t}SysmanPsuGetState()              | Get information about the health (temperature, current, fan) of the power supply. | Not supported. |
+| ::${t}SysmanPsuGetProperties()         | Get static details about the power supply. | No power supplies will be enumerated. |
+| ::${t}SysmanPsuGetState()              | Get information about the health (temperature, current, fan) of the power supply. | No power supplies will be enumerated. |
 
 ${"##"} <a name="smn">Fan</a>
 If ::${t}_sysman_properties_t.numFans is non-zero, it is possible to manage their speed. The hardware can be instructed to run the fan at a fixed
@@ -526,10 +518,10 @@ The following functions are available:
 
 | Function                               | Device behavior | Sub-device behavior |
 | :---                                   | :---        | :---        |
-| ::${t}SysmanFanGetProperties()         | Get the maximum RPM of the fan and the maximum number of points that can be specified in the temperature-speed. | Not supported. |
-| ::${t}SysmanFanGetConfig()             | Get the current fan configuration. | Not supported. |
-| ::${t}SysmanFanSetConfig()             | Change the fan configuration. | Not supported. |
-| ::${t}SysmanFanGetState()              | Get the current speed of the fan. | Not supported. |
+| ::${t}SysmanFanGetProperties()         | Get the maximum RPM of the fan and the maximum number of points that can be specified in the temperature-speed. | No fans will be enumerated. |
+| ::${t}SysmanFanGetConfig()             | Get the current fan configuration. | No fans will be enumerated. |
+| ::${t}SysmanFanSetConfig()             | Change the fan configuration. | No fans will be enumerated. |
+| ::${t}SysmanFanGetState()              | Get the current speed of the fan. | No fans will be enumerated. |
 
 The example below shows how to output the fan speed of all fans:
 
@@ -593,9 +585,9 @@ The following functions are available:
 
 | Function                               | Device behavior | Sub-device behavior |
 | :---                                   | :---        | :---        |
-| ::${t}SysmanLedGetProperties()         | Find out if the LED supports color changes. | Not supported. |
-| ::${t}SysmanLedGetState()              | Find out if the LED is currently off/on and the color where the capability exists. | Not supported. |
-| ::${t}SysmanLedSetState()              | Turn the LED off/on and set the color where the capability exists. | Not supported. |
+| ::${t}SysmanLedGetProperties()         | Find out if the LED supports color changes. | No LEDs will be enumerated. |
+| ::${t}SysmanLedGetState()              | Find out if the LED is currently off/on and the color where the capability exists. | No LEDs will be enumerated. |
+| ::${t}SysmanLedSetState()              | Turn the LED off/on and set the color where the capability exists. | No LEDs will be enumerated. |
 
 
 ${"#"} <a name="ra">Reliability, availability and serviceability (RAS)</a>
@@ -724,27 +716,26 @@ Multi-tile devices consist of sub-devices that are arranged under a logical devi
 
 When ::${t}SysmanGet() is called with a device handle for a sub-device, the returned SMI handle can be used to manage resources only on that sub-device.
 
-The behavior of the system resource management functions can change depending on whether they are operating on a SMI handle for sub-devices or for
+The behavior of the system resource management functions can change depending on whether they are operating on a SMI handle for a sub-devices or for
 the overall device.
 
 These differences are described in the table below:
 
 | Component           | Device operations | Sub-device operations |
 | :---                | :--- | :--- |
-| [General](#smg)     | Only at the device level | Not supported |
+| [General](#smg)     | Get: Device level information<br />Set: Operating mode for all sub-devices | Get: Mostly same as device level information<br />Set: Changing operating mode not supported |
 | [Power](#smp)       | Get: Power consumption of whole device, including sub-devices<br />Set: Maximum power limit of the whole device | Get: Power consumption of the sub-device<br />Set: Maximum power limit of the sub-device (if supported) |
 | [Frequency](#smf)   | Get: Average frequency across sub-devices<br />Set: Set same frequency on all sub-devices | Get: Actual frequency of sub-device<br />Set: Set frequency of sub-device |
 | [Activity](#sma)    | Get: Average activity across all sub-devices. | Get: Activity of sub-device. |
 | [Memory](#smm)      | Get: Gives total memory allocation for all sub-devices; memory bandwidth is averaged across all sub-devices | Get: Memory bandwidth and allocation for memory located in the sub-device |
-| [PCI](#smp)         | Only at the device level | Not supported |
-| [Switch](#sml)      | Only if the switch is located outside the sub-devices | Only the switch located in the sub-device |
-| [Temperature](#smt) | Get: Maximum temperature across all sensors, including sub-devices | Get: Maximum temperature of sensors on the sub-device |
+| [PCI](#smp)         | Get: PCI information at device level | Get: Same as device-level |
+| [Switch](#sml)      | Get/Set: Can access all switches, including those in sub-devices | Get/Set: Can access on switches in the sub-device |
+| [Temperature](#smt) | Get: Maximum temperature across all sensors of all sub-devices | Get: Maximum temperature of sensors on the sub-device |
 | [Standby](#sms)     | Set: Changes standby mode for all sub-devices | Set: Change standby mode for the sub-device. |
-| [Firmware](#smw)    | Get/Set: Only firmwares in the device but not in the sub-devices | Get/Set: Only firmwares in the sub-device |
-| [PSU](#smy)         | Only at the device level | Not supported |
-| [Fan](#smn)         | Only at the device level | Not supported |
-| [LED](#smd)         | Only at the device level | Not supported |
+| [Firmware](#smw)    | Get/Set: Can access all firmwares, including those in sub-devices | Get/Set: Can access firmwares in the sub-device |
+| [PSU](#smy)         | Get/Set: Can access all power supplies | Get/Set: No PSUs will be enumerated |
+| [Fan](#smn)         | Get/Set: Can access all fans | Get/Set: No fans will be enumerated |
+| [LED](#smd)         | Get/Set: Can access all LEDs | Get/Set: No LEDs will be enumerated |
 
-For most aspects of system resource management, software can manage components at the device level. The exceptions to this rule are firmware and
-switch management. Software should always check if a device has sub-devices (::${t}_sysman_properties_t.numSubdevices is non-zero) in which case
-it should check for firmware and switch components on each sub-device.
+Everything can be accessed from the device-level. In some cases, software might want to limit settings to the sub-device level e.g. setting different
+frequencies on each sub-device.

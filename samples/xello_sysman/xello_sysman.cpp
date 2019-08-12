@@ -73,32 +73,37 @@ void ResetDevice(xet_sysman_handle_t hSysmanDevice)
     }
 }
 
-void ShowSwitchInfo(xet_sysman_handle_t hSysmanDevice)
+void ShowSwitchInfo(xet_sysman_handle_t hSysmanDevice, uint32_t SwitchIndex)
 {
     xet_switch_properties_t swprops;
-    if (xetSysmanSwitchGetProperties(hSysmanDevice, &swprops) == XE_RESULT_SUCCESS)
+    if (xetSysmanSwitchGetProperties(hSysmanDevice, SwitchIndex, &swprops) == XE_RESULT_SUCCESS)
     {
         xet_switch_state_t swstate;
-        if (xetSysmanSwitchGetState(hSysmanDevice, &swstate) == XE_RESULT_SUCCESS)
+        if (xetSysmanSwitchGetState(hSysmanDevice, SwitchIndex, &swstate) == XE_RESULT_SUCCESS)
         {
-            fprintf(stdout, "        GUID:  %s\n", swprops.address.guid);
-            fprintf(stdout, "        #port: %u\n", swprops.numPorts);
-            fprintf(stdout, "        State: %s\n", swstate.enabled ? "Enabled" : "Disabled");
+            fprintf(stdout, "        GUID:          %s\n", swprops.address.guid);
+            fprintf(stdout, "        #port:         %u\n", swprops.numPorts);
+            if (swprops.onSubdevice)
+            {
+                fprintf(stdout, "        On sub-device: %s\n", swprops.subdeviceUuid.id);
+            }
+            fprintf(stdout, "        State:         %s\n", swstate.enabled ? "Enabled" : "Disabled");
             if (swstate.enabled)
             {
                 fprintf(stdout, "        Ports:\n");
                 for (uint32_t portIndex = 0; portIndex < swprops.numPorts; portIndex++)
                 {
                     xet_switch_port_state_t portstate;
-                    if (xetSysmanSwitchPortGetState(hSysmanDevice, portIndex, &portstate)
+                    if (xetSysmanSwitchPortGetState(hSysmanDevice, SwitchIndex, portIndex, &portstate)
                         == XE_RESULT_SUCCESS)
                     {
                         if (portstate.connected)
                         {
                             fprintf(stdout,
                                 "            %u: "
-                                "connected to switch with GUID %s, max bandwidth %u bytes/sec\n",
-                                portIndex, portstate.remote.guid, portstate.maxBandwidth);
+                                "connected to switch with GUID %s, max rx/tx bandwidth %u/%u bytes/sec\n",
+                                portIndex, portstate.remote.guid,
+                                portstate.rxSpeed.maxBandwidth, portstate.txSpeed.maxBandwidth);
                         }
                         else
                         {
@@ -116,27 +121,12 @@ void ShowSwitches(xet_sysman_handle_t hSysmanDevice)
     xet_sysman_properties_t props;
     if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
     {
-        if (props.haveSwitch)
+        if (props.numSwitches)
         {
-            fprintf(stdout, "    Device switch:\n");
-            ShowSwitchInfo(hSysmanDevice);
-        }
-        if (props.numSubdevices)
-        {
-            for (uint32_t subdeviceIndex = 0; subdeviceIndex < props.numSubdevices; subdeviceIndex++)
+            for (uint32_t switchIndex = 0; switchIndex < props.numSwitches; switchIndex++)
             {
-                xet_sysman_handle_t hSubdevice;
-                if (xetSysmanGetSubdevice(hSysmanDevice, subdeviceIndex, &hSubdevice) == XE_RESULT_SUCCESS)
-                {
-                    if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
-                    {
-                        if (props.haveSwitch)
-                        {
-                            fprintf(stdout, "    Sub-device %u switch:\n", subdeviceIndex);
-                            ShowSwitchInfo(hSubdevice);
-                        }
-                    }
-                }
+                fprintf(stdout, "    Switch %u:\n", switchIndex);
+                ShowSwitchInfo(hSysmanDevice, switchIndex);
             }
         }
     }

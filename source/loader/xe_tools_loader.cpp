@@ -785,43 +785,6 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanGetSubdevice
-    xe_result_t __xecall
-    xetSysmanGetSubdevice(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the sub-device.
-        xet_sysman_handle_t* phSysmanSubdevice          ///< [out] The handle for accessing the sub-device.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnGetSubdevice = dditable->xet.Sysman.pfnGetSubdevice;
-        if( nullptr == pfnGetSubdevice )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
-
-        // forward to device-driver
-        result = pfnGetSubdevice( hSysman, ordinal, phSysmanSubdevice );
-
-        try
-        {
-            // convert driver handle to loader handle
-            *phSysmanSubdevice = reinterpret_cast<xet_sysman_handle_t>(
-                xet_sysman_factory.getInstance( *phSysmanSubdevice, dditable ) );
-        }
-        catch( std::bad_alloc& )
-        {
-            result = XE_RESULT_ERROR_OUT_OF_HOST_MEMORY;
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanDeviceGetProperties
     xe_result_t __xecall
     xetSysmanDeviceGetProperties(
@@ -1314,7 +1277,7 @@ namespace loader
     xe_result_t __xecall
     xetSysmanPciGetBarProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_pci_properties_t.numBars -
+        uint32_t barIndex,                              ///< [in] The index of the bar (0 ... [::xet_pci_properties_t.numBars -
                                                         ///< 1]).
         xet_pci_bar_properties_t* pProperties           ///< [in] Will contain properties of the specified bar
         )
@@ -1331,7 +1294,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnPciGetBarProperties( hSysman, ordinal, pProperties );
+        result = pfnPciGetBarProperties( hSysman, barIndex, pProperties );
 
         return result;
     }
@@ -1391,6 +1354,8 @@ namespace loader
     xe_result_t __xecall
     xetSysmanSwitchGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
         xet_switch_properties_t* pProperties            ///< [in] Will contain the Switch properties.
         )
     {
@@ -1406,7 +1371,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnSwitchGetProperties( hSysman, pProperties );
+        result = pfnSwitchGetProperties( hSysman, switchIndex, pProperties );
 
         return result;
     }
@@ -1416,6 +1381,8 @@ namespace loader
     xe_result_t __xecall
     xetSysmanSwitchGetState(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
         xet_switch_state_t* pState                      ///< [in] Will contain the current state of the switch (enabled/disabled).
         )
     {
@@ -1431,7 +1398,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnSwitchGetState( hSysman, pState );
+        result = pfnSwitchGetState( hSysman, switchIndex, pState );
 
         return result;
     }
@@ -1441,6 +1408,8 @@ namespace loader
     xe_result_t __xecall
     xetSysmanSwitchSetState(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
         xe_bool_t enable                                ///< [in] Set to true to enable the Switch, otherwise it will be disabled.
         )
     {
@@ -1456,7 +1425,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnSwitchSetState( hSysman, enable );
+        result = pfnSwitchSetState( hSysman, switchIndex, enable );
 
         return result;
     }
@@ -1466,7 +1435,9 @@ namespace loader
     xe_result_t __xecall
     xetSysmanSwitchPortGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
+        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
                                                         ///< - 1]).
         xet_switch_port_properties_t* pProperties       ///< [in] Will contain properties of the Switch Port
         )
@@ -1483,7 +1454,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnSwitchPortGetProperties( hSysman, ordinal, pProperties );
+        result = pfnSwitchPortGetProperties( hSysman, switchIndex, portIndex, pProperties );
 
         return result;
     }
@@ -1493,7 +1464,9 @@ namespace loader
     xe_result_t __xecall
     xetSysmanSwitchPortGetState(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
+        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
                                                         ///< - 1]).
         xet_switch_port_state_t* pState                 ///< [in] Will contain the current state of the Switch Port
         )
@@ -1510,7 +1483,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnSwitchPortGetState( hSysman, ordinal, pState );
+        result = pfnSwitchPortGetState( hSysman, switchIndex, portIndex, pState );
 
         return result;
     }
@@ -1520,7 +1493,9 @@ namespace loader
     xe_result_t __xecall
     xetSysmanSwitchPortGetThroughput(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
+        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
                                                         ///< - 1]).
         xet_switch_port_throughput_t* pThroughput       ///< [in] Will contain the Switch port throughput counters.
         )
@@ -1537,7 +1512,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnSwitchPortGetThroughput( hSysman, ordinal, pThroughput );
+        result = pfnSwitchPortGetThroughput( hSysman, switchIndex, portIndex, pThroughput );
 
         return result;
     }
@@ -1547,7 +1522,9 @@ namespace loader
     xe_result_t __xecall
     xetSysmanSwitchPortGetStats(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
+        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
                                                         ///< - 1]).
         xet_switch_port_stats_t* pStats                 ///< [in] Will contain the Switch port stats.
         )
@@ -1564,7 +1541,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnSwitchPortGetStats( hSysman, ordinal, pStats );
+        result = pfnSwitchPortGetStats( hSysman, switchIndex, portIndex, pStats );
 
         return result;
     }
@@ -1650,7 +1627,7 @@ namespace loader
     xe_result_t __xecall
     xetSysmanFirmwareGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+        uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ...
                                                         ///< [::xet_sysman_properties_t.numFirmwares - 1]).
         xet_firmware_properties_t* pProperties          ///< [in] Pointer to an array that will hold the properties of the firmware
         )
@@ -1667,7 +1644,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnFirmwareGetProperties( hSysman, ordinal, pProperties );
+        result = pfnFirmwareGetProperties( hSysman, firmwareIndex, pProperties );
 
         return result;
     }
@@ -1677,7 +1654,7 @@ namespace loader
     xe_result_t __xecall
     xetSysmanFirmwareGetChecksum(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+        uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ...
                                                         ///< [::xet_sysman_properties_t.numFirmwares - 1]).
         uint32_t* pChecksum                             ///< [in] Calculated checksum of the installed firmware.
         )
@@ -1694,7 +1671,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnFirmwareGetChecksum( hSysman, ordinal, pChecksum );
+        result = pfnFirmwareGetChecksum( hSysman, firmwareIndex, pChecksum );
 
         return result;
     }
@@ -1704,7 +1681,7 @@ namespace loader
     xe_result_t __xecall
     xetSysmanFirmwareFlash(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+        uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ...
                                                         ///< [::xet_sysman_properties_t.numFirmwares - 1]).
         void* pImage,                                   ///< [in] Image of the new firmware to flash.
         uint32_t size                                   ///< [in] Size of the flash image.
@@ -1722,7 +1699,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnFirmwareFlash( hSysman, ordinal, pImage, size );
+        result = pfnFirmwareFlash( hSysman, firmwareIndex, pImage, size );
 
         return result;
     }
@@ -1732,7 +1709,7 @@ namespace loader
     xe_result_t __xecall
     xetSysmanPsuGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the power supply (0 ...
+        uint32_t psuIndex,                              ///< [in] The index of the power supply (0 ...
                                                         ///< [::xet_sysman_properties_t.numPsus - 1]).
         xet_psu_properties_t* pProperties               ///< [in] Will contain the properties of the power supply.
         )
@@ -1749,7 +1726,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnPsuGetProperties( hSysman, ordinal, pProperties );
+        result = pfnPsuGetProperties( hSysman, psuIndex, pProperties );
 
         return result;
     }
@@ -1759,7 +1736,7 @@ namespace loader
     xe_result_t __xecall
     xetSysmanPsuGetState(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the power supply (0 ...
+        uint32_t psuIndex,                              ///< [in] The index of the power supply (0 ...
                                                         ///< [::xet_sysman_properties_t.numPsus - 1]).
         xet_psu_state_t* pState                         ///< [in] Will contain the current state of the power supply.
         )
@@ -1776,7 +1753,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnPsuGetState( hSysman, ordinal, pState );
+        result = pfnPsuGetState( hSysman, psuIndex, pState );
 
         return result;
     }
@@ -1786,7 +1763,7 @@ namespace loader
     xe_result_t __xecall
     xetSysmanFanGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
                                                         ///< 1]).
         xet_fan_properties_t* pProperties               ///< [in] Will contain the properties of the fan.
         )
@@ -1803,7 +1780,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnFanGetProperties( hSysman, ordinal, pProperties );
+        result = pfnFanGetProperties( hSysman, fanIndex, pProperties );
 
         return result;
     }
@@ -1813,7 +1790,7 @@ namespace loader
     xe_result_t __xecall
     xetSysmanFanGetConfig(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
                                                         ///< 1]).
         xet_fan_config_t* pConfig                       ///< [in] Will contain the current configuration of the fan.
         )
@@ -1830,7 +1807,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnFanGetConfig( hSysman, ordinal, pConfig );
+        result = pfnFanGetConfig( hSysman, fanIndex, pConfig );
 
         return result;
     }
@@ -1840,7 +1817,7 @@ namespace loader
     xe_result_t __xecall
     xetSysmanFanSetConfig(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
                                                         ///< 1]).
         const xet_fan_config_t* pConfig                 ///< [in] New fan configuration.
         )
@@ -1857,7 +1834,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnFanSetConfig( hSysman, ordinal, pConfig );
+        result = pfnFanSetConfig( hSysman, fanIndex, pConfig );
 
         return result;
     }
@@ -1867,7 +1844,7 @@ namespace loader
     xe_result_t __xecall
     xetSysmanFanGetState(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
                                                         ///< 1]).
         xet_fan_speed_units_t units,                    ///< [in] The units in which the fan speed should be returned.
         xet_fan_state_t* pState                         ///< [in] Will contain the current state of the fan.
@@ -1885,7 +1862,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnFanGetState( hSysman, ordinal, units, pState );
+        result = pfnFanGetState( hSysman, fanIndex, units, pState );
 
         return result;
     }
@@ -1895,7 +1872,7 @@ namespace loader
     xe_result_t __xecall
     xetSysmanLedGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+        uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
                                                         ///< 1]).
         xet_led_properties_t* pProperties               ///< [in] Will contain the properties of the LED.
         )
@@ -1912,7 +1889,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnLedGetProperties( hSysman, ordinal, pProperties );
+        result = pfnLedGetProperties( hSysman, ledIndex, pProperties );
 
         return result;
     }
@@ -1922,7 +1899,7 @@ namespace loader
     xe_result_t __xecall
     xetSysmanLedGetState(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+        uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
                                                         ///< 1]).
         xet_led_state_t* pState                         ///< [in] Will contain the current state of the LED.
         )
@@ -1939,7 +1916,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnLedGetState( hSysman, ordinal, pState );
+        result = pfnLedGetState( hSysman, ledIndex, pState );
 
         return result;
     }
@@ -1949,7 +1926,7 @@ namespace loader
     xe_result_t __xecall
     xetSysmanLedSetState(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+        uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
                                                         ///< 1]).
         const xet_led_state_t* pState                   ///< [in] New state of the LED.
         )
@@ -1966,7 +1943,7 @@ namespace loader
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnLedSetState( hSysman, ordinal, pState );
+        result = pfnLedSetState( hSysman, ledIndex, pState );
 
         return result;
     }
@@ -3082,7 +3059,6 @@ xetGetSysmanProcAddrTable(
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnGet                                      = loader::xetSysmanGet;
-            pDdiTable->pfnGetSubdevice                             = loader::xetSysmanGetSubdevice;
             pDdiTable->pfnDeviceGetProperties                      = loader::xetSysmanDeviceGetProperties;
             pDdiTable->pfnDeviceGetOperatingMode                   = loader::xetSysmanDeviceGetOperatingMode;
             pDdiTable->pfnDeviceSetOperatingMode                   = loader::xetSysmanDeviceSetOperatingMode;

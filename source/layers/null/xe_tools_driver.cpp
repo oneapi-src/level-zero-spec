@@ -666,33 +666,6 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanGetSubdevice
-    xe_result_t __xecall
-    xetSysmanGetSubdevice(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the sub-device.
-        xet_sysman_handle_t* phSysmanSubdevice          ///< [out] The handle for accessing the sub-device.
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetSubdevice = context.xetDdiTable.Sysman.pfnGetSubdevice;
-        if( nullptr != pfnGetSubdevice )
-        {
-            result = pfnGetSubdevice( hSysman, ordinal, phSysmanSubdevice );
-        }
-        else
-        {
-            // generic implementation
-            *phSysmanSubdevice = reinterpret_cast<xet_sysman_handle_t>( context.get() );
-
-        }
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanDeviceGetProperties
     xe_result_t __xecall
     xetSysmanDeviceGetProperties(
@@ -1166,7 +1139,7 @@ namespace driver
     xe_result_t __xecall
     xetSysmanPciGetBarProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_pci_properties_t.numBars -
+        uint32_t barIndex,                              ///< [in] The index of the bar (0 ... [::xet_pci_properties_t.numBars -
                                                         ///< 1]).
         xet_pci_bar_properties_t* pProperties           ///< [in] Will contain properties of the specified bar
         )
@@ -1177,7 +1150,7 @@ namespace driver
         auto pfnPciGetBarProperties = context.xetDdiTable.Sysman.pfnPciGetBarProperties;
         if( nullptr != pfnPciGetBarProperties )
         {
-            result = pfnPciGetBarProperties( hSysman, ordinal, pProperties );
+            result = pfnPciGetBarProperties( hSysman, barIndex, pProperties );
         }
         else
         {
@@ -1240,6 +1213,8 @@ namespace driver
     xe_result_t __xecall
     xetSysmanSwitchGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
         xet_switch_properties_t* pProperties            ///< [in] Will contain the Switch properties.
         )
     {
@@ -1249,7 +1224,7 @@ namespace driver
         auto pfnSwitchGetProperties = context.xetDdiTable.Sysman.pfnSwitchGetProperties;
         if( nullptr != pfnSwitchGetProperties )
         {
-            result = pfnSwitchGetProperties( hSysman, pProperties );
+            result = pfnSwitchGetProperties( hSysman, switchIndex, pProperties );
         }
         else
         {
@@ -1264,6 +1239,8 @@ namespace driver
     xe_result_t __xecall
     xetSysmanSwitchGetState(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
         xet_switch_state_t* pState                      ///< [in] Will contain the current state of the switch (enabled/disabled).
         )
     {
@@ -1273,7 +1250,7 @@ namespace driver
         auto pfnSwitchGetState = context.xetDdiTable.Sysman.pfnSwitchGetState;
         if( nullptr != pfnSwitchGetState )
         {
-            result = pfnSwitchGetState( hSysman, pState );
+            result = pfnSwitchGetState( hSysman, switchIndex, pState );
         }
         else
         {
@@ -1288,6 +1265,8 @@ namespace driver
     xe_result_t __xecall
     xetSysmanSwitchSetState(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
         xe_bool_t enable                                ///< [in] Set to true to enable the Switch, otherwise it will be disabled.
         )
     {
@@ -1297,7 +1276,7 @@ namespace driver
         auto pfnSwitchSetState = context.xetDdiTable.Sysman.pfnSwitchSetState;
         if( nullptr != pfnSwitchSetState )
         {
-            result = pfnSwitchSetState( hSysman, enable );
+            result = pfnSwitchSetState( hSysman, switchIndex, enable );
         }
         else
         {
@@ -1312,7 +1291,9 @@ namespace driver
     xe_result_t __xecall
     xetSysmanSwitchPortGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
+        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
                                                         ///< - 1]).
         xet_switch_port_properties_t* pProperties       ///< [in] Will contain properties of the Switch Port
         )
@@ -1323,7 +1304,7 @@ namespace driver
         auto pfnSwitchPortGetProperties = context.xetDdiTable.Sysman.pfnSwitchPortGetProperties;
         if( nullptr != pfnSwitchPortGetProperties )
         {
-            result = pfnSwitchPortGetProperties( hSysman, ordinal, pProperties );
+            result = pfnSwitchPortGetProperties( hSysman, switchIndex, portIndex, pProperties );
         }
         else
         {
@@ -1338,7 +1319,9 @@ namespace driver
     xe_result_t __xecall
     xetSysmanSwitchPortGetState(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
+        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
                                                         ///< - 1]).
         xet_switch_port_state_t* pState                 ///< [in] Will contain the current state of the Switch Port
         )
@@ -1349,7 +1332,7 @@ namespace driver
         auto pfnSwitchPortGetState = context.xetDdiTable.Sysman.pfnSwitchPortGetState;
         if( nullptr != pfnSwitchPortGetState )
         {
-            result = pfnSwitchPortGetState( hSysman, ordinal, pState );
+            result = pfnSwitchPortGetState( hSysman, switchIndex, portIndex, pState );
         }
         else
         {
@@ -1364,7 +1347,9 @@ namespace driver
     xe_result_t __xecall
     xetSysmanSwitchPortGetThroughput(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
+        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
                                                         ///< - 1]).
         xet_switch_port_throughput_t* pThroughput       ///< [in] Will contain the Switch port throughput counters.
         )
@@ -1375,7 +1360,7 @@ namespace driver
         auto pfnSwitchPortGetThroughput = context.xetDdiTable.Sysman.pfnSwitchPortGetThroughput;
         if( nullptr != pfnSwitchPortGetThroughput )
         {
-            result = pfnSwitchPortGetThroughput( hSysman, ordinal, pThroughput );
+            result = pfnSwitchPortGetThroughput( hSysman, switchIndex, portIndex, pThroughput );
         }
         else
         {
@@ -1390,7 +1375,9 @@ namespace driver
     xe_result_t __xecall
     xetSysmanSwitchPortGetStats(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
+        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
                                                         ///< - 1]).
         xet_switch_port_stats_t* pStats                 ///< [in] Will contain the Switch port stats.
         )
@@ -1401,7 +1388,7 @@ namespace driver
         auto pfnSwitchPortGetStats = context.xetDdiTable.Sysman.pfnSwitchPortGetStats;
         if( nullptr != pfnSwitchPortGetStats )
         {
-            result = pfnSwitchPortGetStats( hSysman, ordinal, pStats );
+            result = pfnSwitchPortGetStats( hSysman, switchIndex, portIndex, pStats );
         }
         else
         {
@@ -1489,7 +1476,7 @@ namespace driver
     xe_result_t __xecall
     xetSysmanFirmwareGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+        uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ...
                                                         ///< [::xet_sysman_properties_t.numFirmwares - 1]).
         xet_firmware_properties_t* pProperties          ///< [in] Pointer to an array that will hold the properties of the firmware
         )
@@ -1500,7 +1487,7 @@ namespace driver
         auto pfnFirmwareGetProperties = context.xetDdiTable.Sysman.pfnFirmwareGetProperties;
         if( nullptr != pfnFirmwareGetProperties )
         {
-            result = pfnFirmwareGetProperties( hSysman, ordinal, pProperties );
+            result = pfnFirmwareGetProperties( hSysman, firmwareIndex, pProperties );
         }
         else
         {
@@ -1515,7 +1502,7 @@ namespace driver
     xe_result_t __xecall
     xetSysmanFirmwareGetChecksum(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+        uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ...
                                                         ///< [::xet_sysman_properties_t.numFirmwares - 1]).
         uint32_t* pChecksum                             ///< [in] Calculated checksum of the installed firmware.
         )
@@ -1526,7 +1513,7 @@ namespace driver
         auto pfnFirmwareGetChecksum = context.xetDdiTable.Sysman.pfnFirmwareGetChecksum;
         if( nullptr != pfnFirmwareGetChecksum )
         {
-            result = pfnFirmwareGetChecksum( hSysman, ordinal, pChecksum );
+            result = pfnFirmwareGetChecksum( hSysman, firmwareIndex, pChecksum );
         }
         else
         {
@@ -1541,7 +1528,7 @@ namespace driver
     xe_result_t __xecall
     xetSysmanFirmwareFlash(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+        uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ...
                                                         ///< [::xet_sysman_properties_t.numFirmwares - 1]).
         void* pImage,                                   ///< [in] Image of the new firmware to flash.
         uint32_t size                                   ///< [in] Size of the flash image.
@@ -1553,7 +1540,7 @@ namespace driver
         auto pfnFirmwareFlash = context.xetDdiTable.Sysman.pfnFirmwareFlash;
         if( nullptr != pfnFirmwareFlash )
         {
-            result = pfnFirmwareFlash( hSysman, ordinal, pImage, size );
+            result = pfnFirmwareFlash( hSysman, firmwareIndex, pImage, size );
         }
         else
         {
@@ -1568,7 +1555,7 @@ namespace driver
     xe_result_t __xecall
     xetSysmanPsuGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the power supply (0 ...
+        uint32_t psuIndex,                              ///< [in] The index of the power supply (0 ...
                                                         ///< [::xet_sysman_properties_t.numPsus - 1]).
         xet_psu_properties_t* pProperties               ///< [in] Will contain the properties of the power supply.
         )
@@ -1579,7 +1566,7 @@ namespace driver
         auto pfnPsuGetProperties = context.xetDdiTable.Sysman.pfnPsuGetProperties;
         if( nullptr != pfnPsuGetProperties )
         {
-            result = pfnPsuGetProperties( hSysman, ordinal, pProperties );
+            result = pfnPsuGetProperties( hSysman, psuIndex, pProperties );
         }
         else
         {
@@ -1594,7 +1581,7 @@ namespace driver
     xe_result_t __xecall
     xetSysmanPsuGetState(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the power supply (0 ...
+        uint32_t psuIndex,                              ///< [in] The index of the power supply (0 ...
                                                         ///< [::xet_sysman_properties_t.numPsus - 1]).
         xet_psu_state_t* pState                         ///< [in] Will contain the current state of the power supply.
         )
@@ -1605,7 +1592,7 @@ namespace driver
         auto pfnPsuGetState = context.xetDdiTable.Sysman.pfnPsuGetState;
         if( nullptr != pfnPsuGetState )
         {
-            result = pfnPsuGetState( hSysman, ordinal, pState );
+            result = pfnPsuGetState( hSysman, psuIndex, pState );
         }
         else
         {
@@ -1620,7 +1607,7 @@ namespace driver
     xe_result_t __xecall
     xetSysmanFanGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
                                                         ///< 1]).
         xet_fan_properties_t* pProperties               ///< [in] Will contain the properties of the fan.
         )
@@ -1631,7 +1618,7 @@ namespace driver
         auto pfnFanGetProperties = context.xetDdiTable.Sysman.pfnFanGetProperties;
         if( nullptr != pfnFanGetProperties )
         {
-            result = pfnFanGetProperties( hSysman, ordinal, pProperties );
+            result = pfnFanGetProperties( hSysman, fanIndex, pProperties );
         }
         else
         {
@@ -1646,7 +1633,7 @@ namespace driver
     xe_result_t __xecall
     xetSysmanFanGetConfig(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
                                                         ///< 1]).
         xet_fan_config_t* pConfig                       ///< [in] Will contain the current configuration of the fan.
         )
@@ -1657,7 +1644,7 @@ namespace driver
         auto pfnFanGetConfig = context.xetDdiTable.Sysman.pfnFanGetConfig;
         if( nullptr != pfnFanGetConfig )
         {
-            result = pfnFanGetConfig( hSysman, ordinal, pConfig );
+            result = pfnFanGetConfig( hSysman, fanIndex, pConfig );
         }
         else
         {
@@ -1672,7 +1659,7 @@ namespace driver
     xe_result_t __xecall
     xetSysmanFanSetConfig(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
                                                         ///< 1]).
         const xet_fan_config_t* pConfig                 ///< [in] New fan configuration.
         )
@@ -1683,7 +1670,7 @@ namespace driver
         auto pfnFanSetConfig = context.xetDdiTable.Sysman.pfnFanSetConfig;
         if( nullptr != pfnFanSetConfig )
         {
-            result = pfnFanSetConfig( hSysman, ordinal, pConfig );
+            result = pfnFanSetConfig( hSysman, fanIndex, pConfig );
         }
         else
         {
@@ -1698,7 +1685,7 @@ namespace driver
     xe_result_t __xecall
     xetSysmanFanGetState(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
                                                         ///< 1]).
         xet_fan_speed_units_t units,                    ///< [in] The units in which the fan speed should be returned.
         xet_fan_state_t* pState                         ///< [in] Will contain the current state of the fan.
@@ -1710,7 +1697,7 @@ namespace driver
         auto pfnFanGetState = context.xetDdiTable.Sysman.pfnFanGetState;
         if( nullptr != pfnFanGetState )
         {
-            result = pfnFanGetState( hSysman, ordinal, units, pState );
+            result = pfnFanGetState( hSysman, fanIndex, units, pState );
         }
         else
         {
@@ -1725,7 +1712,7 @@ namespace driver
     xe_result_t __xecall
     xetSysmanLedGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+        uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
                                                         ///< 1]).
         xet_led_properties_t* pProperties               ///< [in] Will contain the properties of the LED.
         )
@@ -1736,7 +1723,7 @@ namespace driver
         auto pfnLedGetProperties = context.xetDdiTable.Sysman.pfnLedGetProperties;
         if( nullptr != pfnLedGetProperties )
         {
-            result = pfnLedGetProperties( hSysman, ordinal, pProperties );
+            result = pfnLedGetProperties( hSysman, ledIndex, pProperties );
         }
         else
         {
@@ -1751,7 +1738,7 @@ namespace driver
     xe_result_t __xecall
     xetSysmanLedGetState(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+        uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
                                                         ///< 1]).
         xet_led_state_t* pState                         ///< [in] Will contain the current state of the LED.
         )
@@ -1762,7 +1749,7 @@ namespace driver
         auto pfnLedGetState = context.xetDdiTable.Sysman.pfnLedGetState;
         if( nullptr != pfnLedGetState )
         {
-            result = pfnLedGetState( hSysman, ordinal, pState );
+            result = pfnLedGetState( hSysman, ledIndex, pState );
         }
         else
         {
@@ -1777,7 +1764,7 @@ namespace driver
     xe_result_t __xecall
     xetSysmanLedSetState(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+        uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
                                                         ///< 1]).
         const xet_led_state_t* pState                   ///< [in] New state of the LED.
         )
@@ -1788,7 +1775,7 @@ namespace driver
         auto pfnLedSetState = context.xetDdiTable.Sysman.pfnLedSetState;
         if( nullptr != pfnLedSetState )
         {
-            result = pfnLedSetState( hSysman, ordinal, pState );
+            result = pfnLedSetState( hSysman, ledIndex, pState );
         }
         else
         {
@@ -2510,8 +2497,6 @@ xetGetSysmanProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     pDdiTable->pfnGet                                    = driver::xetSysmanGet;
-
-    pDdiTable->pfnGetSubdevice                           = driver::xetSysmanGetSubdevice;
 
     pDdiTable->pfnDeviceGetProperties                    = driver::xetSysmanDeviceGetProperties;
 

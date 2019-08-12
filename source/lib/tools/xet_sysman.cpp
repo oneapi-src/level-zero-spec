@@ -46,35 +46,6 @@ xetSysmanGet(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get a SMI handle to a subdevice
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hSysman
-///         + nullptr == phSysmanSubdevice
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xetSysmanGetSubdevice(
-    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t ordinal,                               ///< [in] The index of the sub-device.
-    xet_sysman_handle_t* phSysmanSubdevice          ///< [out] The handle for accessing the sub-device.
-    )
-{
-    auto pfnGetSubdevice = xet_lib::context.ddiTable.Sysman.pfnGetSubdevice;
-    if( nullptr == pfnGetSubdevice )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    return pfnGetSubdevice( hSysman, ordinal, phSysmanSubdevice );
-}
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Get properties about the device
 /// 
 /// @details
@@ -630,7 +601,7 @@ xetSysmanPciGetState(
 xe_result_t __xecall
 xetSysmanPciGetBarProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_pci_properties_t.numBars -
+    uint32_t barIndex,                              ///< [in] The index of the bar (0 ... [::xet_pci_properties_t.numBars -
                                                     ///< 1]).
     xet_pci_bar_properties_t* pProperties           ///< [in] Will contain properties of the specified bar
     )
@@ -639,7 +610,7 @@ xetSysmanPciGetBarProperties(
     if( nullptr == pfnPciGetBarProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnPciGetBarProperties( hSysman, ordinal, pProperties );
+    return pfnPciGetBarProperties( hSysman, barIndex, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -716,6 +687,8 @@ xetSysmanPciGetStats(
 xe_result_t __xecall
 xetSysmanSwitchGetProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                    ///< [::xet_sysman_properties_t.numSwitches - 1]).
     xet_switch_properties_t* pProperties            ///< [in] Will contain the Switch properties.
     )
 {
@@ -723,7 +696,7 @@ xetSysmanSwitchGetProperties(
     if( nullptr == pfnSwitchGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSwitchGetProperties( hSysman, pProperties );
+    return pfnSwitchGetProperties( hSysman, switchIndex, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -744,6 +717,8 @@ xetSysmanSwitchGetProperties(
 xe_result_t __xecall
 xetSysmanSwitchGetState(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                    ///< [::xet_sysman_properties_t.numSwitches - 1]).
     xet_switch_state_t* pState                      ///< [in] Will contain the current state of the switch (enabled/disabled).
     )
 {
@@ -751,7 +726,7 @@ xetSysmanSwitchGetState(
     if( nullptr == pfnSwitchGetState )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSwitchGetState( hSysman, pState );
+    return pfnSwitchGetState( hSysman, switchIndex, pState );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -771,6 +746,8 @@ xetSysmanSwitchGetState(
 xe_result_t __xecall
 xetSysmanSwitchSetState(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                    ///< [::xet_sysman_properties_t.numSwitches - 1]).
     xe_bool_t enable                                ///< [in] Set to true to enable the Switch, otherwise it will be disabled.
     )
 {
@@ -778,7 +755,7 @@ xetSysmanSwitchSetState(
     if( nullptr == pfnSwitchSetState )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSwitchSetState( hSysman, enable );
+    return pfnSwitchSetState( hSysman, switchIndex, enable );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -799,7 +776,9 @@ xetSysmanSwitchSetState(
 xe_result_t __xecall
 xetSysmanSwitchPortGetProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+    uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                    ///< [::xet_sysman_properties_t.numSwitches - 1]).
+    uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
                                                     ///< - 1]).
     xet_switch_port_properties_t* pProperties       ///< [in] Will contain properties of the Switch Port
     )
@@ -808,7 +787,7 @@ xetSysmanSwitchPortGetProperties(
     if( nullptr == pfnSwitchPortGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSwitchPortGetProperties( hSysman, ordinal, pProperties );
+    return pfnSwitchPortGetProperties( hSysman, switchIndex, portIndex, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -829,7 +808,9 @@ xetSysmanSwitchPortGetProperties(
 xe_result_t __xecall
 xetSysmanSwitchPortGetState(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+    uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                    ///< [::xet_sysman_properties_t.numSwitches - 1]).
+    uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
                                                     ///< - 1]).
     xet_switch_port_state_t* pState                 ///< [in] Will contain the current state of the Switch Port
     )
@@ -838,7 +819,7 @@ xetSysmanSwitchPortGetState(
     if( nullptr == pfnSwitchPortGetState )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSwitchPortGetState( hSysman, ordinal, pState );
+    return pfnSwitchPortGetState( hSysman, switchIndex, portIndex, pState );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -859,7 +840,9 @@ xetSysmanSwitchPortGetState(
 xe_result_t __xecall
 xetSysmanSwitchPortGetThroughput(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+    uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                    ///< [::xet_sysman_properties_t.numSwitches - 1]).
+    uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
                                                     ///< - 1]).
     xet_switch_port_throughput_t* pThroughput       ///< [in] Will contain the Switch port throughput counters.
     )
@@ -868,7 +851,7 @@ xetSysmanSwitchPortGetThroughput(
     if( nullptr == pfnSwitchPortGetThroughput )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSwitchPortGetThroughput( hSysman, ordinal, pThroughput );
+    return pfnSwitchPortGetThroughput( hSysman, switchIndex, portIndex, pThroughput );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -889,7 +872,9 @@ xetSysmanSwitchPortGetThroughput(
 xe_result_t __xecall
 xetSysmanSwitchPortGetStats(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+    uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                    ///< [::xet_sysman_properties_t.numSwitches - 1]).
+    uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
                                                     ///< - 1]).
     xet_switch_port_stats_t* pStats                 ///< [in] Will contain the Switch port stats.
     )
@@ -898,7 +883,7 @@ xetSysmanSwitchPortGetStats(
     if( nullptr == pfnSwitchPortGetStats )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnSwitchPortGetStats( hSysman, ordinal, pStats );
+    return pfnSwitchPortGetStats( hSysman, switchIndex, portIndex, pStats );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1003,7 +988,7 @@ xetSysmanStandbySetMode(
 xe_result_t __xecall
 xetSysmanFirmwareGetProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+    uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ...
                                                     ///< [::xet_sysman_properties_t.numFirmwares - 1]).
     xet_firmware_properties_t* pProperties          ///< [in] Pointer to an array that will hold the properties of the firmware
     )
@@ -1012,7 +997,7 @@ xetSysmanFirmwareGetProperties(
     if( nullptr == pfnFirmwareGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnFirmwareGetProperties( hSysman, ordinal, pProperties );
+    return pfnFirmwareGetProperties( hSysman, firmwareIndex, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1033,7 +1018,7 @@ xetSysmanFirmwareGetProperties(
 xe_result_t __xecall
 xetSysmanFirmwareGetChecksum(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+    uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ...
                                                     ///< [::xet_sysman_properties_t.numFirmwares - 1]).
     uint32_t* pChecksum                             ///< [in] Calculated checksum of the installed firmware.
     )
@@ -1042,7 +1027,7 @@ xetSysmanFirmwareGetChecksum(
     if( nullptr == pfnFirmwareGetChecksum )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnFirmwareGetChecksum( hSysman, ordinal, pChecksum );
+    return pfnFirmwareGetChecksum( hSysman, firmwareIndex, pChecksum );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1063,7 +1048,7 @@ xetSysmanFirmwareGetChecksum(
 xe_result_t __xecall
 xetSysmanFirmwareFlash(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+    uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ...
                                                     ///< [::xet_sysman_properties_t.numFirmwares - 1]).
     void* pImage,                                   ///< [in] Image of the new firmware to flash.
     uint32_t size                                   ///< [in] Size of the flash image.
@@ -1073,7 +1058,7 @@ xetSysmanFirmwareFlash(
     if( nullptr == pfnFirmwareFlash )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnFirmwareFlash( hSysman, ordinal, pImage, size );
+    return pfnFirmwareFlash( hSysman, firmwareIndex, pImage, size );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1094,7 +1079,7 @@ xetSysmanFirmwareFlash(
 xe_result_t __xecall
 xetSysmanPsuGetProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t ordinal,                               ///< [in] The index of the power supply (0 ...
+    uint32_t psuIndex,                              ///< [in] The index of the power supply (0 ...
                                                     ///< [::xet_sysman_properties_t.numPsus - 1]).
     xet_psu_properties_t* pProperties               ///< [in] Will contain the properties of the power supply.
     )
@@ -1103,7 +1088,7 @@ xetSysmanPsuGetProperties(
     if( nullptr == pfnPsuGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnPsuGetProperties( hSysman, ordinal, pProperties );
+    return pfnPsuGetProperties( hSysman, psuIndex, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1124,7 +1109,7 @@ xetSysmanPsuGetProperties(
 xe_result_t __xecall
 xetSysmanPsuGetState(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t ordinal,                               ///< [in] The index of the power supply (0 ...
+    uint32_t psuIndex,                              ///< [in] The index of the power supply (0 ...
                                                     ///< [::xet_sysman_properties_t.numPsus - 1]).
     xet_psu_state_t* pState                         ///< [in] Will contain the current state of the power supply.
     )
@@ -1133,7 +1118,7 @@ xetSysmanPsuGetState(
     if( nullptr == pfnPsuGetState )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnPsuGetState( hSysman, ordinal, pState );
+    return pfnPsuGetState( hSysman, psuIndex, pState );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1154,7 +1139,7 @@ xetSysmanPsuGetState(
 xe_result_t __xecall
 xetSysmanFanGetProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+    uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
                                                     ///< 1]).
     xet_fan_properties_t* pProperties               ///< [in] Will contain the properties of the fan.
     )
@@ -1163,7 +1148,7 @@ xetSysmanFanGetProperties(
     if( nullptr == pfnFanGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnFanGetProperties( hSysman, ordinal, pProperties );
+    return pfnFanGetProperties( hSysman, fanIndex, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1184,7 +1169,7 @@ xetSysmanFanGetProperties(
 xe_result_t __xecall
 xetSysmanFanGetConfig(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+    uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
                                                     ///< 1]).
     xet_fan_config_t* pConfig                       ///< [in] Will contain the current configuration of the fan.
     )
@@ -1193,7 +1178,7 @@ xetSysmanFanGetConfig(
     if( nullptr == pfnFanGetConfig )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnFanGetConfig( hSysman, ordinal, pConfig );
+    return pfnFanGetConfig( hSysman, fanIndex, pConfig );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1214,7 +1199,7 @@ xetSysmanFanGetConfig(
 xe_result_t __xecall
 xetSysmanFanSetConfig(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+    uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
                                                     ///< 1]).
     const xet_fan_config_t* pConfig                 ///< [in] New fan configuration.
     )
@@ -1223,7 +1208,7 @@ xetSysmanFanSetConfig(
     if( nullptr == pfnFanSetConfig )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnFanSetConfig( hSysman, ordinal, pConfig );
+    return pfnFanSetConfig( hSysman, fanIndex, pConfig );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1244,7 +1229,7 @@ xetSysmanFanSetConfig(
 xe_result_t __xecall
 xetSysmanFanGetState(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+    uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
                                                     ///< 1]).
     xet_fan_speed_units_t units,                    ///< [in] The units in which the fan speed should be returned.
     xet_fan_state_t* pState                         ///< [in] Will contain the current state of the fan.
@@ -1254,7 +1239,7 @@ xetSysmanFanGetState(
     if( nullptr == pfnFanGetState )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnFanGetState( hSysman, ordinal, units, pState );
+    return pfnFanGetState( hSysman, fanIndex, units, pState );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1275,7 +1260,7 @@ xetSysmanFanGetState(
 xe_result_t __xecall
 xetSysmanLedGetProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+    uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
                                                     ///< 1]).
     xet_led_properties_t* pProperties               ///< [in] Will contain the properties of the LED.
     )
@@ -1284,7 +1269,7 @@ xetSysmanLedGetProperties(
     if( nullptr == pfnLedGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnLedGetProperties( hSysman, ordinal, pProperties );
+    return pfnLedGetProperties( hSysman, ledIndex, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1305,7 +1290,7 @@ xetSysmanLedGetProperties(
 xe_result_t __xecall
 xetSysmanLedGetState(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+    uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
                                                     ///< 1]).
     xet_led_state_t* pState                         ///< [in] Will contain the current state of the LED.
     )
@@ -1314,7 +1299,7 @@ xetSysmanLedGetState(
     if( nullptr == pfnLedGetState )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnLedGetState( hSysman, ordinal, pState );
+    return pfnLedGetState( hSysman, ledIndex, pState );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1335,7 +1320,7 @@ xetSysmanLedGetState(
 xe_result_t __xecall
 xetSysmanLedSetState(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+    uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
                                                     ///< 1]).
     const xet_led_state_t* pState                   ///< [in] New state of the LED.
     )
@@ -1344,7 +1329,7 @@ xetSysmanLedSetState(
     if( nullptr == pfnLedSetState )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnLedSetState( hSysman, ordinal, pState );
+    return pfnLedSetState( hSysman, ledIndex, pState );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1636,49 +1621,6 @@ namespace xet
         }
 
         return pSysman;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get a SMI handle to a subdevice
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @returns
-    ///     - Sysman*: The handle for accessing the sub-device.
-    /// 
-    /// @throws result_t
-    Sysman* __xecall
-    Sysman::GetSubdevice(
-        uint32_t ordinal                                ///< [in] The index of the sub-device.
-        )
-    {
-        xet_sysman_handle_t hSysmanSubdevice;
-
-        auto result = static_cast<result_t>( ::xetSysmanGetSubdevice(
-            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            ordinal,
-            &hSysmanSubdevice ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::GetSubdevice" );
-
-        Sysman* pSysmanSubdevice = nullptr;
-
-        try
-        {
-            pSysmanSubdevice = new Sysman( reinterpret_cast<sysman_handle_t>( hSysmanSubdevice ), m_pDevice );
-        }
-        catch( std::bad_alloc& )
-        {
-            delete pSysmanSubdevice;
-            pSysmanSubdevice = nullptr;
-
-            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xet::Sysman::GetSubdevice" );
-        }
-
-        return pSysmanSubdevice;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2110,14 +2052,14 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::PciGetBarProperties(
-        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_pci_properties_t.numBars -
+        uint32_t barIndex,                              ///< [in] The index of the bar (0 ... [::xet_pci_properties_t.numBars -
                                                         ///< 1]).
         pci_bar_properties_t* pProperties               ///< [in] Will contain properties of the specified bar
         )
     {
         auto result = static_cast<result_t>( ::xetSysmanPciGetBarProperties(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            ordinal,
+            barIndex,
             reinterpret_cast<xet_pci_bar_properties_t*>( pProperties ) ) );
 
         if( result_t::SUCCESS != result )
@@ -2176,11 +2118,14 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::SwitchGetProperties(
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
         switch_properties_t* pProperties                ///< [in] Will contain the Switch properties.
         )
     {
         auto result = static_cast<result_t>( ::xetSysmanSwitchGetProperties(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            switchIndex,
             reinterpret_cast<xet_switch_properties_t*>( pProperties ) ) );
 
         if( result_t::SUCCESS != result )
@@ -2197,11 +2142,14 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::SwitchGetState(
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
         switch_state_t* pState                          ///< [in] Will contain the current state of the switch (enabled/disabled).
         )
     {
         auto result = static_cast<result_t>( ::xetSysmanSwitchGetState(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            switchIndex,
             reinterpret_cast<xet_switch_state_t*>( pState ) ) );
 
         if( result_t::SUCCESS != result )
@@ -2218,11 +2166,14 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::SwitchSetState(
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
         xe::bool_t enable                               ///< [in] Set to true to enable the Switch, otherwise it will be disabled.
         )
     {
         auto result = static_cast<result_t>( ::xetSysmanSwitchSetState(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            switchIndex,
             static_cast<xe_bool_t>( enable ) ) );
 
         if( result_t::SUCCESS != result )
@@ -2239,14 +2190,17 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::SwitchPortGetProperties(
-        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
+        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
                                                         ///< - 1]).
         switch_port_properties_t* pProperties           ///< [in] Will contain properties of the Switch Port
         )
     {
         auto result = static_cast<result_t>( ::xetSysmanSwitchPortGetProperties(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            ordinal,
+            switchIndex,
+            portIndex,
             reinterpret_cast<xet_switch_port_properties_t*>( pProperties ) ) );
 
         if( result_t::SUCCESS != result )
@@ -2263,14 +2217,17 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::SwitchPortGetState(
-        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
+        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
                                                         ///< - 1]).
         switch_port_state_t* pState                     ///< [in] Will contain the current state of the Switch Port
         )
     {
         auto result = static_cast<result_t>( ::xetSysmanSwitchPortGetState(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            ordinal,
+            switchIndex,
+            portIndex,
             reinterpret_cast<xet_switch_port_state_t*>( pState ) ) );
 
         if( result_t::SUCCESS != result )
@@ -2287,14 +2244,17 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::SwitchPortGetThroughput(
-        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
+        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
                                                         ///< - 1]).
         switch_port_throughput_t* pThroughput           ///< [in] Will contain the Switch port throughput counters.
         )
     {
         auto result = static_cast<result_t>( ::xetSysmanSwitchPortGetThroughput(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            ordinal,
+            switchIndex,
+            portIndex,
             reinterpret_cast<xet_switch_port_throughput_t*>( pThroughput ) ) );
 
         if( result_t::SUCCESS != result )
@@ -2311,14 +2271,17 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::SwitchPortGetStats(
-        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
+        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
                                                         ///< - 1]).
         switch_port_stats_t* pStats                     ///< [in] Will contain the Switch port stats.
         )
     {
         auto result = static_cast<result_t>( ::xetSysmanSwitchPortGetStats(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            ordinal,
+            switchIndex,
+            portIndex,
             reinterpret_cast<xet_switch_port_stats_t*>( pStats ) ) );
 
         if( result_t::SUCCESS != result )
@@ -2400,14 +2363,14 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::FirmwareGetProperties(
-        uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+        uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ...
                                                         ///< [::xet_sysman_properties_t.numFirmwares - 1]).
         firmware_properties_t* pProperties              ///< [in] Pointer to an array that will hold the properties of the firmware
         )
     {
         auto result = static_cast<result_t>( ::xetSysmanFirmwareGetProperties(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            ordinal,
+            firmwareIndex,
             reinterpret_cast<xet_firmware_properties_t*>( pProperties ) ) );
 
         if( result_t::SUCCESS != result )
@@ -2424,14 +2387,14 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::FirmwareGetChecksum(
-        uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+        uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ...
                                                         ///< [::xet_sysman_properties_t.numFirmwares - 1]).
         uint32_t* pChecksum                             ///< [in] Calculated checksum of the installed firmware.
         )
     {
         auto result = static_cast<result_t>( ::xetSysmanFirmwareGetChecksum(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            ordinal,
+            firmwareIndex,
             pChecksum ) );
 
         if( result_t::SUCCESS != result )
@@ -2448,7 +2411,7 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::FirmwareFlash(
-        uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+        uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ...
                                                         ///< [::xet_sysman_properties_t.numFirmwares - 1]).
         void* pImage,                                   ///< [in] Image of the new firmware to flash.
         uint32_t size                                   ///< [in] Size of the flash image.
@@ -2456,7 +2419,7 @@ namespace xet
     {
         auto result = static_cast<result_t>( ::xetSysmanFirmwareFlash(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            ordinal,
+            firmwareIndex,
             pImage,
             size ) );
 
@@ -2474,14 +2437,14 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::PsuGetProperties(
-        uint32_t ordinal,                               ///< [in] The index of the power supply (0 ...
+        uint32_t psuIndex,                              ///< [in] The index of the power supply (0 ...
                                                         ///< [::xet_sysman_properties_t.numPsus - 1]).
         psu_properties_t* pProperties                   ///< [in] Will contain the properties of the power supply.
         )
     {
         auto result = static_cast<result_t>( ::xetSysmanPsuGetProperties(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            ordinal,
+            psuIndex,
             reinterpret_cast<xet_psu_properties_t*>( pProperties ) ) );
 
         if( result_t::SUCCESS != result )
@@ -2498,14 +2461,14 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::PsuGetState(
-        uint32_t ordinal,                               ///< [in] The index of the power supply (0 ...
+        uint32_t psuIndex,                              ///< [in] The index of the power supply (0 ...
                                                         ///< [::xet_sysman_properties_t.numPsus - 1]).
         psu_state_t* pState                             ///< [in] Will contain the current state of the power supply.
         )
     {
         auto result = static_cast<result_t>( ::xetSysmanPsuGetState(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            ordinal,
+            psuIndex,
             reinterpret_cast<xet_psu_state_t*>( pState ) ) );
 
         if( result_t::SUCCESS != result )
@@ -2522,14 +2485,14 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::FanGetProperties(
-        uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
                                                         ///< 1]).
         fan_properties_t* pProperties                   ///< [in] Will contain the properties of the fan.
         )
     {
         auto result = static_cast<result_t>( ::xetSysmanFanGetProperties(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            ordinal,
+            fanIndex,
             reinterpret_cast<xet_fan_properties_t*>( pProperties ) ) );
 
         if( result_t::SUCCESS != result )
@@ -2546,14 +2509,14 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::FanGetConfig(
-        uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
                                                         ///< 1]).
         fan_config_t* pConfig                           ///< [in] Will contain the current configuration of the fan.
         )
     {
         auto result = static_cast<result_t>( ::xetSysmanFanGetConfig(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            ordinal,
+            fanIndex,
             reinterpret_cast<xet_fan_config_t*>( pConfig ) ) );
 
         if( result_t::SUCCESS != result )
@@ -2570,14 +2533,14 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::FanSetConfig(
-        uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
                                                         ///< 1]).
         const fan_config_t* pConfig                     ///< [in] New fan configuration.
         )
     {
         auto result = static_cast<result_t>( ::xetSysmanFanSetConfig(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            ordinal,
+            fanIndex,
             reinterpret_cast<const xet_fan_config_t*>( pConfig ) ) );
 
         if( result_t::SUCCESS != result )
@@ -2594,7 +2557,7 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::FanGetState(
-        uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
                                                         ///< 1]).
         fan_speed_units_t units,                        ///< [in] The units in which the fan speed should be returned.
         fan_state_t* pState                             ///< [in] Will contain the current state of the fan.
@@ -2602,7 +2565,7 @@ namespace xet
     {
         auto result = static_cast<result_t>( ::xetSysmanFanGetState(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            ordinal,
+            fanIndex,
             static_cast<xet_fan_speed_units_t>( units ),
             reinterpret_cast<xet_fan_state_t*>( pState ) ) );
 
@@ -2620,14 +2583,14 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::LedGetProperties(
-        uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+        uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
                                                         ///< 1]).
         led_properties_t* pProperties                   ///< [in] Will contain the properties of the LED.
         )
     {
         auto result = static_cast<result_t>( ::xetSysmanLedGetProperties(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            ordinal,
+            ledIndex,
             reinterpret_cast<xet_led_properties_t*>( pProperties ) ) );
 
         if( result_t::SUCCESS != result )
@@ -2644,14 +2607,14 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::LedGetState(
-        uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+        uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
                                                         ///< 1]).
         led_state_t* pState                             ///< [in] Will contain the current state of the LED.
         )
     {
         auto result = static_cast<result_t>( ::xetSysmanLedGetState(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            ordinal,
+            ledIndex,
             reinterpret_cast<xet_led_state_t*>( pState ) ) );
 
         if( result_t::SUCCESS != result )
@@ -2668,14 +2631,14 @@ namespace xet
     /// @throws result_t
     void __xecall
     Sysman::LedSetState(
-        uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+        uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
                                                         ///< 1]).
         const led_state_t* pState                       ///< [in] New state of the LED.
         )
     {
         auto result = static_cast<result_t>( ::xetSysmanLedSetState(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            ordinal,
+            ledIndex,
             reinterpret_cast<const xet_led_state_t*>( pState ) ) );
 
         if( result_t::SUCCESS != result )
@@ -3385,10 +3348,6 @@ namespace xet
         str += to_string(val.uuid);
         str += "\n";
         
-        str += "Sysman::properties_t::numSubdevices : ";
-        str += std::to_string(val.numSubdevices);
-        str += "\n";
-        
         str += "Sysman::properties_t::isSubdevice : ";
         str += std::to_string(val.isSubdevice);
         str += "\n";
@@ -3497,8 +3456,8 @@ namespace xet
         }
         str += "\n";
         
-        str += "Sysman::properties_t::haveSwitch : ";
-        str += std::to_string(val.haveSwitch);
+        str += "Sysman::properties_t::numSwitches : ";
+        str += std::to_string(val.numSwitches);
         str += "\n";
         
         str += "Sysman::properties_t::numFirmwares : ";
@@ -3908,10 +3867,6 @@ namespace xet
         str += std::to_string(val.txCounter);
         str += "\n";
         
-        str += "Sysman::pci_throughput_t::replayCounter : ";
-        str += std::to_string(val.replayCounter);
-        str += "\n";
-        
         str += "Sysman::pci_throughput_t::maxBandwidth : ";
         str += std::to_string(val.maxBandwidth);
         str += "\n";
@@ -3974,6 +3929,14 @@ namespace xet
         str += "Sysman::switch_properties_t::numPorts : ";
         str += std::to_string(val.numPorts);
         str += "\n";
+        
+        str += "Sysman::switch_properties_t::onSubdevice : ";
+        str += std::to_string(val.onSubdevice);
+        str += "\n";
+        
+        str += "Sysman::switch_properties_t::subdeviceUuid : ";
+        str += to_string(val.subdeviceUuid);
+        str += "\n";
 
         return str;
     }
@@ -3992,13 +3955,34 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::switch_port_speed_t to std::string
+    std::string to_string( const Sysman::switch_port_speed_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::switch_port_speed_t::bitRate : ";
+        str += std::to_string(val.bitRate);
+        str += "\n";
+        
+        str += "Sysman::switch_port_speed_t::width : ";
+        str += std::to_string(val.width);
+        str += "\n";
+        
+        str += "Sysman::switch_port_speed_t::maxBandwidth : ";
+        str += std::to_string(val.maxBandwidth);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::switch_port_properties_t to std::string
     std::string to_string( const Sysman::switch_port_properties_t val )
     {
         std::string str;
         
-        str += "Sysman::switch_port_properties_t::maxBandwidth : ";
-        str += std::to_string(val.maxBandwidth);
+        str += "Sysman::switch_port_properties_t::maxSpeed : ";
+        str += to_string(val.maxSpeed);
         str += "\n";
 
         return str;
@@ -4018,8 +4002,12 @@ namespace xet
         str += to_string(val.remote);
         str += "\n";
         
-        str += "Sysman::switch_port_state_t::maxBandwidth : ";
-        str += std::to_string(val.maxBandwidth);
+        str += "Sysman::switch_port_state_t::rxSpeed : ";
+        str += to_string(val.rxSpeed);
+        str += "\n";
+        
+        str += "Sysman::switch_port_state_t::txSpeed : ";
+        str += to_string(val.txSpeed);
         str += "\n";
 
         return str;
@@ -4043,8 +4031,12 @@ namespace xet
         str += std::to_string(val.txCounter);
         str += "\n";
         
-        str += "Sysman::switch_port_throughput_t::maxBandwidth : ";
-        str += std::to_string(val.maxBandwidth);
+        str += "Sysman::switch_port_throughput_t::rxMaxBandwidth : ";
+        str += std::to_string(val.rxMaxBandwidth);
+        str += "\n";
+        
+        str += "Sysman::switch_port_throughput_t::txMaxBandwidth : ";
+        str += std::to_string(val.txMaxBandwidth);
         str += "\n";
 
         return str;

@@ -601,14 +601,6 @@ typedef xe_result_t (__xecall *xet_pfnSysmanGet_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanGetSubdevice 
-typedef xe_result_t (__xecall *xet_pfnSysmanGetSubdevice_t)(
-    xet_sysman_handle_t,
-    uint32_t,
-    xet_sysman_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetSysmanDeviceGetProperties 
 typedef xe_result_t (__xecall *xet_pfnSysmanDeviceGetProperties_t)(
     xet_sysman_handle_t,
@@ -776,6 +768,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanPciGetStats_t)(
 /// @brief Function-pointer for xetSysmanSwitchGetProperties 
 typedef xe_result_t (__xecall *xet_pfnSysmanSwitchGetProperties_t)(
     xet_sysman_handle_t,
+    uint32_t,
     xet_switch_properties_t*
     );
 
@@ -783,6 +776,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanSwitchGetProperties_t)(
 /// @brief Function-pointer for xetSysmanSwitchGetState 
 typedef xe_result_t (__xecall *xet_pfnSysmanSwitchGetState_t)(
     xet_sysman_handle_t,
+    uint32_t,
     xet_switch_state_t*
     );
 
@@ -790,6 +784,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanSwitchGetState_t)(
 /// @brief Function-pointer for xetSysmanSwitchSetState 
 typedef xe_result_t (__xecall *xet_pfnSysmanSwitchSetState_t)(
     xet_sysman_handle_t,
+    uint32_t,
     xe_bool_t
     );
 
@@ -797,6 +792,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanSwitchSetState_t)(
 /// @brief Function-pointer for xetSysmanSwitchPortGetProperties 
 typedef xe_result_t (__xecall *xet_pfnSysmanSwitchPortGetProperties_t)(
     xet_sysman_handle_t,
+    uint32_t,
     uint32_t,
     xet_switch_port_properties_t*
     );
@@ -806,6 +802,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanSwitchPortGetProperties_t)(
 typedef xe_result_t (__xecall *xet_pfnSysmanSwitchPortGetState_t)(
     xet_sysman_handle_t,
     uint32_t,
+    uint32_t,
     xet_switch_port_state_t*
     );
 
@@ -814,6 +811,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanSwitchPortGetState_t)(
 typedef xe_result_t (__xecall *xet_pfnSysmanSwitchPortGetThroughput_t)(
     xet_sysman_handle_t,
     uint32_t,
+    uint32_t,
     xet_switch_port_throughput_t*
     );
 
@@ -821,6 +819,7 @@ typedef xe_result_t (__xecall *xet_pfnSysmanSwitchPortGetThroughput_t)(
 /// @brief Function-pointer for xetSysmanSwitchPortGetStats 
 typedef xe_result_t (__xecall *xet_pfnSysmanSwitchPortGetStats_t)(
     xet_sysman_handle_t,
+    uint32_t,
     uint32_t,
     xet_switch_port_stats_t*
     );
@@ -1010,7 +1009,6 @@ typedef xe_result_t (__xecall *xet_pfnSysmanDiagnosticsRunTests_t)(
 typedef struct _xet_sysman_dditable_t
 {
     xet_pfnSysmanGet_t                                          pfnGet;
-    xet_pfnSysmanGetSubdevice_t                                 pfnGetSubdevice;
     xet_pfnSysmanDeviceGetProperties_t                          pfnDeviceGetProperties;
     xet_pfnSysmanDeviceGetOperatingMode_t                       pfnDeviceGetOperatingMode;
     xet_pfnSysmanDeviceSetOperatingMode_t                       pfnDeviceSetOperatingMode;

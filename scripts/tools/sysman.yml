@@ -30,25 +30,6 @@ params:
       desc: "[out] Handle for accessing SMI features"
 
 --- #--------------------------------------------------------------------------
-type: function
-desc: "Get a SMI handle to a subdevice"
-class: $tSysman
-name: GetSubdevice
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $t_sysman_handle_t
-      name: hSysman
-      desc: "[in] SMI handle of the device."
-    - type: uint32_t
-      name: ordinal
-      desc: "[in] The index of the sub-device."
-    - type: $t_sysman_handle_t*
-      name: phSysmanSubdevice
-      desc: "[out] The handle for accessing the sub-device."
-
---- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum number of characters in string properties."
 name: $T_STRING_PROPERTY_SIZE
@@ -112,9 +93,6 @@ members:
     - type: $x_device_uuid_t
       name: "uuid"
       desc: "[out] Device UUID"
-    - type: uint32_t
-      name: "numSubdevices"
-      desc: "[out] The number of sub-devices"
     - type: $x_bool_t
       name: isSubdevice
       desc: "[out] If this handle refers to a sub-device."
@@ -149,8 +127,8 @@ members:
       name: "haveOverclock[$T_FREQ_DOMAIN_NUM]"
       desc: "[out] Set to true if the frequency can be overclocked for each domain"
     - type: $x_bool_t
-      name: "haveSwitch"
-      desc: "[out] Set to true if the device/sub-device has a switch"
+      name: "numSwitches"
+      desc: "[out] The number of switches on the device"
     - type: uint32_t
       name: "numFirmwares"
       desc: "[out] Number of firmwares that can be managed"
@@ -829,9 +807,6 @@ members:
     - type: uint64_t
       name: "txCounter"
       desc: "[out] Monotonic counter for the number of bytes transmitted (including replays)"
-    - type: uint64_t
-      name: "replayCounter"
-      desc: "[out] Monotonic counter for the number of replay packets"
     - type: uint32_t
       name: "maxBandwidth"
       desc: "[out] The maximum bandwidth in bytes/sec under the current configuration"
@@ -895,8 +870,8 @@ params:
       name: hSysman
       desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: ordinal
-      desc: "[in] The index of the port (0 ... [$t_pci_properties_t.numBars - 1])."
+      name: barIndex
+      desc: "[in] The index of the bar (0 ... [$t_pci_properties_t.numBars - 1])."
     - type: $t_pci_bar_properties_t*
       name: pProperties
       desc: "[in] Will contain properties of the specified bar"
@@ -952,6 +927,12 @@ members:
     - type: uint32_t
       name: "numPorts"
       desc: "[out] The number of ports"
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if the switch is located on a sub-device; false means that the switch is on the device of the calling SMI handle"
+    - type: $x_device_uuid_t
+      name: "subdeviceUuid"
+      desc: "[out] If onSubdevice is true, this gives the UUID of the sub-device"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Switch state"
@@ -963,13 +944,28 @@ members:
       desc: "[out] Indicates if the switch is enabled/disabled"
 --- #--------------------------------------------------------------------------
 type: struct
+desc: "Switch port speed"
+class: $tSysman
+name: $t_switch_port_speed_t
+members:
+    - type: uint32_t
+      name: "bitRate"
+      desc: "[out] Bits/sec that the link is operating at"
+    - type: uint32_t
+      name: "width"
+      desc: "[out] The number of lanes"
+    - type: uint32_t
+      name: "maxBandwidth"
+      desc: "[out] The maximum bandwidth in bytes/sec"
+--- #--------------------------------------------------------------------------
+type: struct
 desc: "Switch Port properties"
 class: $tSysman
 name: $t_switch_port_properties_t
 members:
-    - type: uint32_t
-      name: "maxBandwidth"
-      desc: "[out] Maximum bandwidth (bytes/sec) supported by the port"
+    - type: $t_switch_port_speed_t
+      name: "maxSpeed"
+      desc: "[out] Maximum bandwidth supported by the port"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Switch Port state"
@@ -982,16 +978,21 @@ members:
     - type: $t_switch_address_t
       name: "remote"
       desc: "[out] If connected is true, this gives the address of the remote Componian Die to which this port connects"
-    - type: uint32_t
-      name: "maxBandwidth"
-      desc: "[out] Current maximum bandwidth (bytes/sec)"
+    - type: $t_switch_port_speed_t
+      name: "rxSpeed"
+      desc: "[out] Current maximum receive speed"
+    - type: $t_switch_port_speed_t
+      name: "txSpeed"
+      desc: "[out] Current maximum transmit speed"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Switch Port throughput"
 class: $tSysman
 name: $t_switch_port_throughput_t
 details:
-    - "Percent throughput is calculated by taking two snapshots (s1, s2) and using the equation: %bw = 10^6 * ((s2.rxCounter - s1.rxCounter) + (s2.txCounter - s1.txCounter)) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))"
+    - "Percent throughput is calculated by taking two snapshots (s1, s2) and using the equation:"
+    - "    %rx_bandwidth = 10^6 * (s2.rxCounter - s1.rxCounter) / (s2.rxMaxBandwidth * (s2.timestamp - s1.timestamp))"
+    - "    %tx_bandwidth = 10^6 * (s2.txCounter - s1.txCounter) / (s2.txMaxBandwidth * (s2.timestamp - s1.timestamp))"
 members:
     - type: uint64_t
       name: "timestamp"
@@ -1003,8 +1004,11 @@ members:
       name: "txCounter"
       desc: "[out] Monotonic counter for the number of bytes transmitted"
     - type: uint32_t
-      name: "maxBandwidth"
-      desc: "[out] The maximum bandwidth in bytes/sec under the current port configuration"
+      name: "rxMaxBandwidth"
+      desc: "[out] The current maximum bandwidth in bytes/sec for receiving packats"
+    - type: uint32_t
+      name: "txMaxBandwidth"
+      desc: "[out] The current maximum bandwidth in bytes/sec for transmitting packets"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Switch Port stats counters"
@@ -1034,6 +1038,9 @@ params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: switchIndex
+      desc: "[in] The index of the switch (0 ... [$t_sysman_properties_t.numSwitches - 1])."
     - type: $t_switch_properties_t*
       name: pProperties
       desc: "[in] Will contain the Switch properties."
@@ -1049,6 +1056,9 @@ params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: switchIndex
+      desc: "[in] The index of the switch (0 ... [$t_sysman_properties_t.numSwitches - 1])."
     - type: $t_switch_state_t*
       name: pState
       desc: "[in] Will contain the current state of the switch (enabled/disabled)."
@@ -1064,6 +1074,9 @@ params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] SMI handle of the device."
+    - type: uint32_t
+      name: switchIndex
+      desc: "[in] The index of the switch (0 ... [$t_sysman_properties_t.numSwitches - 1])."
     - type: $x_bool_t
       name: enable
       desc: "[in] Set to true to enable the Switch, otherwise it will be disabled."
@@ -1080,7 +1093,10 @@ params:
       name: hSysman
       desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: ordinal
+      name: switchIndex
+      desc: "[in] The index of the switch (0 ... [$t_sysman_properties_t.numSwitches - 1])."
+    - type: uint32_t
+      name: portIndex
       desc: "[in] The index of the port (0 ... [$t_switch_properties_t.numPorts - 1])."
     - type: $t_switch_port_properties_t*
       name: pProperties
@@ -1098,7 +1114,10 @@ params:
       name: hSysman
       desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: ordinal
+      name: switchIndex
+      desc: "[in] The index of the switch (0 ... [$t_sysman_properties_t.numSwitches - 1])."
+    - type: uint32_t
+      name: portIndex
       desc: "[in] The index of the port (0 ... [$t_switch_properties_t.numPorts - 1])."
     - type: $t_switch_port_state_t*
       name: pState
@@ -1116,7 +1135,10 @@ params:
       name: hSysman
       desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: ordinal
+      name: switchIndex
+      desc: "[in] The index of the switch (0 ... [$t_sysman_properties_t.numSwitches - 1])."
+    - type: uint32_t
+      name: portIndex
       desc: "[in] The index of the port (0 ... [$t_switch_properties_t.numPorts - 1])."
     - type: $t_switch_port_throughput_t*
       name: pThroughput
@@ -1134,7 +1156,10 @@ params:
       name: hSysman
       desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: ordinal
+      name: switchIndex
+      desc: "[in] The index of the switch (0 ... [$t_sysman_properties_t.numSwitches - 1])."
+    - type: uint32_t
+      name: portIndex
       desc: "[in] The index of the port (0 ... [$t_switch_properties_t.numPorts - 1])."
     - type: $t_switch_port_stats_t*
       name: pStats
@@ -1241,7 +1266,7 @@ params:
       name: hSysman
       desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: ordinal
+      name: firmwareIndex
       desc: "[in] The index of the firmware (0 ... [$t_sysman_properties_t.numFirmwares - 1])."
     - type: $t_firmware_properties_t*
       name: pProperties
@@ -1259,7 +1284,7 @@ params:
       name: hSysman
       desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: ordinal
+      name: firmwareIndex
       desc: "[in] The index of the firmware (0 ... [$t_sysman_properties_t.numFirmwares - 1])."
     - type: uint32_t*
       name: pChecksum
@@ -1277,7 +1302,7 @@ params:
       name: hSysman
       desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: ordinal
+      name: firmwareIndex
       desc: "[in] The index of the firmware (0 ... [$t_sysman_properties_t.numFirmwares - 1])."
     - type: void*
       name: pImage
@@ -1342,7 +1367,7 @@ params:
       name: hSysman
       desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: ordinal
+      name: psuIndex
       desc: "[in] The index of the power supply (0 ... [$t_sysman_properties_t.numPsus - 1])."
     - type: $t_psu_properties_t*
       name: pProperties
@@ -1360,7 +1385,7 @@ params:
       name: hSysman
       desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: ordinal
+      name: psuIndex
       desc: "[in] The index of the power supply (0 ... [$t_sysman_properties_t.numPsus - 1])."
     - type: $t_psu_state_t*
       name: pState
@@ -1471,7 +1496,7 @@ params:
       name: hSysman
       desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: ordinal
+      name: fanIndex
       desc: "[in] The index of the fan (0 ... [$t_sysman_properties_t.numFans - 1])."
     - type: $t_fan_properties_t*
       name: pProperties
@@ -1489,7 +1514,7 @@ params:
       name: hSysman
       desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: ordinal
+      name: fanIndex
       desc: "[in] The index of the fan (0 ... [$t_sysman_properties_t.numFans - 1])."
     - type: $t_fan_config_t*
       name: pConfig
@@ -1507,7 +1532,7 @@ params:
       name: hSysman
       desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: ordinal
+      name: fanIndex
       desc: "[in] The index of the fan (0 ... [$t_sysman_properties_t.numFans - 1])."
     - type: const $t_fan_config_t*
       name: pConfig
@@ -1525,7 +1550,7 @@ params:
       name: hSysman
       desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: ordinal
+      name: fanIndex
       desc: "[in] The index of the fan (0 ... [$t_sysman_properties_t.numFans - 1])."
     - type: $t_fan_speed_units_t
       name: units
@@ -1574,7 +1599,7 @@ params:
       name: hSysman
       desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: ordinal
+      name: ledIndex
       desc: "[in] The index of the LED (0 ... [$t_sysman_properties_t.numLeds - 1])."
     - type: $t_led_properties_t*
       name: pProperties
@@ -1592,7 +1617,7 @@ params:
       name: hSysman
       desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: ordinal
+      name: ledIndex
       desc: "[in] The index of the LED (0 ... [$t_sysman_properties_t.numLeds - 1])."
     - type: $t_led_state_t*
       name: pState
@@ -1610,7 +1635,7 @@ params:
       name: hSysman
       desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: ordinal
+      name: ledIndex
       desc: "[in] The index of the LED (0 ... [$t_sysman_properties_t.numLeds - 1])."
     - type: const $t_led_state_t*
       name: pState

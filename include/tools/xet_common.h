@@ -203,6 +203,10 @@ typedef struct _xet_switch_properties_t xet_switch_properties_t;
 typedef struct _xet_switch_state_t xet_switch_state_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_switch_port_speed_t
+typedef struct _xet_switch_port_speed_t xet_switch_port_speed_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_switch_port_properties_t
 typedef struct _xet_switch_port_properties_t xet_switch_port_properties_t;
 

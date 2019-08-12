@@ -694,33 +694,6 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanGetSubdevice
-    xe_result_t __xecall
-    xetSysmanGetSubdevice(
-        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the sub-device.
-        xet_sysman_handle_t* phSysmanSubdevice          ///< [out] The handle for accessing the sub-device.
-        )
-    {
-        auto pfnGetSubdevice = context.xetDdiTable.Sysman.pfnGetSubdevice;
-
-        if( nullptr == pfnGetSubdevice )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hSysman )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == phSysmanSubdevice )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetSubdevice( hSysman, ordinal, phSysmanSubdevice );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanDeviceGetProperties
     xe_result_t __xecall
     xetSysmanDeviceGetProperties(
@@ -1220,7 +1193,7 @@ namespace layer
     xe_result_t __xecall
     xetSysmanPciGetBarProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_pci_properties_t.numBars -
+        uint32_t barIndex,                              ///< [in] The index of the bar (0 ... [::xet_pci_properties_t.numBars -
                                                         ///< 1]).
         xet_pci_bar_properties_t* pProperties           ///< [in] Will contain properties of the specified bar
         )
@@ -1240,7 +1213,7 @@ namespace layer
 
         }
 
-        return pfnPciGetBarProperties( hSysman, ordinal, pProperties );
+        return pfnPciGetBarProperties( hSysman, barIndex, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1300,6 +1273,8 @@ namespace layer
     xe_result_t __xecall
     xetSysmanSwitchGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
         xet_switch_properties_t* pProperties            ///< [in] Will contain the Switch properties.
         )
     {
@@ -1318,7 +1293,7 @@ namespace layer
 
         }
 
-        return pfnSwitchGetProperties( hSysman, pProperties );
+        return pfnSwitchGetProperties( hSysman, switchIndex, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1326,6 +1301,8 @@ namespace layer
     xe_result_t __xecall
     xetSysmanSwitchGetState(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
         xet_switch_state_t* pState                      ///< [in] Will contain the current state of the switch (enabled/disabled).
         )
     {
@@ -1344,7 +1321,7 @@ namespace layer
 
         }
 
-        return pfnSwitchGetState( hSysman, pState );
+        return pfnSwitchGetState( hSysman, switchIndex, pState );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1352,6 +1329,8 @@ namespace layer
     xe_result_t __xecall
     xetSysmanSwitchSetState(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
         xe_bool_t enable                                ///< [in] Set to true to enable the Switch, otherwise it will be disabled.
         )
     {
@@ -1367,7 +1346,7 @@ namespace layer
 
         }
 
-        return pfnSwitchSetState( hSysman, enable );
+        return pfnSwitchSetState( hSysman, switchIndex, enable );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1375,7 +1354,9 @@ namespace layer
     xe_result_t __xecall
     xetSysmanSwitchPortGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
+        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
                                                         ///< - 1]).
         xet_switch_port_properties_t* pProperties       ///< [in] Will contain properties of the Switch Port
         )
@@ -1395,7 +1376,7 @@ namespace layer
 
         }
 
-        return pfnSwitchPortGetProperties( hSysman, ordinal, pProperties );
+        return pfnSwitchPortGetProperties( hSysman, switchIndex, portIndex, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1403,7 +1384,9 @@ namespace layer
     xe_result_t __xecall
     xetSysmanSwitchPortGetState(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
+        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
                                                         ///< - 1]).
         xet_switch_port_state_t* pState                 ///< [in] Will contain the current state of the Switch Port
         )
@@ -1423,7 +1406,7 @@ namespace layer
 
         }
 
-        return pfnSwitchPortGetState( hSysman, ordinal, pState );
+        return pfnSwitchPortGetState( hSysman, switchIndex, portIndex, pState );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1431,7 +1414,9 @@ namespace layer
     xe_result_t __xecall
     xetSysmanSwitchPortGetThroughput(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
+        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
                                                         ///< - 1]).
         xet_switch_port_throughput_t* pThroughput       ///< [in] Will contain the Switch port throughput counters.
         )
@@ -1451,7 +1436,7 @@ namespace layer
 
         }
 
-        return pfnSwitchPortGetThroughput( hSysman, ordinal, pThroughput );
+        return pfnSwitchPortGetThroughput( hSysman, switchIndex, portIndex, pThroughput );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1459,7 +1444,9 @@ namespace layer
     xe_result_t __xecall
     xetSysmanSwitchPortGetStats(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
+        uint32_t switchIndex,                           ///< [in] The index of the switch (0 ...
+                                                        ///< [::xet_sysman_properties_t.numSwitches - 1]).
+        uint32_t portIndex,                             ///< [in] The index of the port (0 ... [::xet_switch_properties_t.numPorts
                                                         ///< - 1]).
         xet_switch_port_stats_t* pStats                 ///< [in] Will contain the Switch port stats.
         )
@@ -1479,7 +1466,7 @@ namespace layer
 
         }
 
-        return pfnSwitchPortGetStats( hSysman, ordinal, pStats );
+        return pfnSwitchPortGetStats( hSysman, switchIndex, portIndex, pStats );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1563,7 +1550,7 @@ namespace layer
     xe_result_t __xecall
     xetSysmanFirmwareGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+        uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ...
                                                         ///< [::xet_sysman_properties_t.numFirmwares - 1]).
         xet_firmware_properties_t* pProperties          ///< [in] Pointer to an array that will hold the properties of the firmware
         )
@@ -1583,7 +1570,7 @@ namespace layer
 
         }
 
-        return pfnFirmwareGetProperties( hSysman, ordinal, pProperties );
+        return pfnFirmwareGetProperties( hSysman, firmwareIndex, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1591,7 +1578,7 @@ namespace layer
     xe_result_t __xecall
     xetSysmanFirmwareGetChecksum(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+        uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ...
                                                         ///< [::xet_sysman_properties_t.numFirmwares - 1]).
         uint32_t* pChecksum                             ///< [in] Calculated checksum of the installed firmware.
         )
@@ -1611,7 +1598,7 @@ namespace layer
 
         }
 
-        return pfnFirmwareGetChecksum( hSysman, ordinal, pChecksum );
+        return pfnFirmwareGetChecksum( hSysman, firmwareIndex, pChecksum );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1619,7 +1606,7 @@ namespace layer
     xe_result_t __xecall
     xetSysmanFirmwareFlash(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the firmware (0 ...
+        uint32_t firmwareIndex,                         ///< [in] The index of the firmware (0 ...
                                                         ///< [::xet_sysman_properties_t.numFirmwares - 1]).
         void* pImage,                                   ///< [in] Image of the new firmware to flash.
         uint32_t size                                   ///< [in] Size of the flash image.
@@ -1640,7 +1627,7 @@ namespace layer
 
         }
 
-        return pfnFirmwareFlash( hSysman, ordinal, pImage, size );
+        return pfnFirmwareFlash( hSysman, firmwareIndex, pImage, size );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1648,7 +1635,7 @@ namespace layer
     xe_result_t __xecall
     xetSysmanPsuGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the power supply (0 ...
+        uint32_t psuIndex,                              ///< [in] The index of the power supply (0 ...
                                                         ///< [::xet_sysman_properties_t.numPsus - 1]).
         xet_psu_properties_t* pProperties               ///< [in] Will contain the properties of the power supply.
         )
@@ -1668,7 +1655,7 @@ namespace layer
 
         }
 
-        return pfnPsuGetProperties( hSysman, ordinal, pProperties );
+        return pfnPsuGetProperties( hSysman, psuIndex, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1676,7 +1663,7 @@ namespace layer
     xe_result_t __xecall
     xetSysmanPsuGetState(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the power supply (0 ...
+        uint32_t psuIndex,                              ///< [in] The index of the power supply (0 ...
                                                         ///< [::xet_sysman_properties_t.numPsus - 1]).
         xet_psu_state_t* pState                         ///< [in] Will contain the current state of the power supply.
         )
@@ -1696,7 +1683,7 @@ namespace layer
 
         }
 
-        return pfnPsuGetState( hSysman, ordinal, pState );
+        return pfnPsuGetState( hSysman, psuIndex, pState );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1704,7 +1691,7 @@ namespace layer
     xe_result_t __xecall
     xetSysmanFanGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
                                                         ///< 1]).
         xet_fan_properties_t* pProperties               ///< [in] Will contain the properties of the fan.
         )
@@ -1724,7 +1711,7 @@ namespace layer
 
         }
 
-        return pfnFanGetProperties( hSysman, ordinal, pProperties );
+        return pfnFanGetProperties( hSysman, fanIndex, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1732,7 +1719,7 @@ namespace layer
     xe_result_t __xecall
     xetSysmanFanGetConfig(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
                                                         ///< 1]).
         xet_fan_config_t* pConfig                       ///< [in] Will contain the current configuration of the fan.
         )
@@ -1752,7 +1739,7 @@ namespace layer
 
         }
 
-        return pfnFanGetConfig( hSysman, ordinal, pConfig );
+        return pfnFanGetConfig( hSysman, fanIndex, pConfig );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1760,7 +1747,7 @@ namespace layer
     xe_result_t __xecall
     xetSysmanFanSetConfig(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
                                                         ///< 1]).
         const xet_fan_config_t* pConfig                 ///< [in] New fan configuration.
         )
@@ -1780,7 +1767,7 @@ namespace layer
 
         }
 
-        return pfnFanSetConfig( hSysman, ordinal, pConfig );
+        return pfnFanSetConfig( hSysman, fanIndex, pConfig );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1788,7 +1775,7 @@ namespace layer
     xe_result_t __xecall
     xetSysmanFanGetState(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
+        uint32_t fanIndex,                              ///< [in] The index of the fan (0 ... [::xet_sysman_properties_t.numFans -
                                                         ///< 1]).
         xet_fan_speed_units_t units,                    ///< [in] The units in which the fan speed should be returned.
         xet_fan_state_t* pState                         ///< [in] Will contain the current state of the fan.
@@ -1809,7 +1796,7 @@ namespace layer
 
         }
 
-        return pfnFanGetState( hSysman, ordinal, units, pState );
+        return pfnFanGetState( hSysman, fanIndex, units, pState );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1817,7 +1804,7 @@ namespace layer
     xe_result_t __xecall
     xetSysmanLedGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+        uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
                                                         ///< 1]).
         xet_led_properties_t* pProperties               ///< [in] Will contain the properties of the LED.
         )
@@ -1837,7 +1824,7 @@ namespace layer
 
         }
 
-        return pfnLedGetProperties( hSysman, ordinal, pProperties );
+        return pfnLedGetProperties( hSysman, ledIndex, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1845,7 +1832,7 @@ namespace layer
     xe_result_t __xecall
     xetSysmanLedGetState(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+        uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
                                                         ///< 1]).
         xet_led_state_t* pState                         ///< [in] Will contain the current state of the LED.
         )
@@ -1865,7 +1852,7 @@ namespace layer
 
         }
 
-        return pfnLedGetState( hSysman, ordinal, pState );
+        return pfnLedGetState( hSysman, ledIndex, pState );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1873,7 +1860,7 @@ namespace layer
     xe_result_t __xecall
     xetSysmanLedSetState(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t ordinal,                               ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
+        uint32_t ledIndex,                              ///< [in] The index of the LED (0 ... [::xet_sysman_properties_t.numLeds -
                                                         ///< 1]).
         const xet_led_state_t* pState                   ///< [in] New state of the LED.
         )
@@ -1893,7 +1880,7 @@ namespace layer
 
         }
 
-        return pfnLedSetState( hSysman, ordinal, pState );
+        return pfnLedSetState( hSysman, ledIndex, pState );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2676,9 +2663,6 @@ xetGetSysmanProcAddrTable(
 
     dditable.pfnGet                                      = pDdiTable->pfnGet;
     pDdiTable->pfnGet                                    = layer::xetSysmanGet;
-
-    dditable.pfnGetSubdevice                             = pDdiTable->pfnGetSubdevice;
-    pDdiTable->pfnGetSubdevice                           = layer::xetSysmanGetSubdevice;
 
     dditable.pfnDeviceGetProperties                      = pDdiTable->pfnDeviceGetProperties;
     pDdiTable->pfnDeviceGetProperties                    = layer::xetSysmanDeviceGetProperties;

@@ -389,7 +389,6 @@ class xet_sysman_properties_t(Structure):
         ("vendorId", c_ulong),                                          ## [out] vendorId from PCI configuration
         ("deviceId", c_ulong),                                          ## [out] deviceId from PCI configuration
         ("uuid", xe_device_uuid_t),                                     ## [out] Device UUID
-        ("numSubdevices", c_ulong),                                     ## [out] The number of sub-devices
         ("isSubdevice", xe_bool_t),                                     ## [out] If this handle refers to a sub-device.
         ("subdeviceId", c_ulong),                                       ## [out] sub-device id. Only valid if isSubdevice is true.
         ("serialNumber", c_int8_t * XET_STRING_PROPERTY_SIZE),          ## [out] Manufacturing serial number (NULL terminated string value)
@@ -402,7 +401,7 @@ class xet_sysman_properties_t(Structure):
         ("haveFreqControl", xe_bool_t * XET_FREQ_DOMAIN_NUM),           ## [out] Set to true if the frequency limits can be changed for each
                                                                         ## domain
         ("haveOverclock", xe_bool_t * XET_FREQ_DOMAIN_NUM),             ## [out] Set to true if the frequency can be overclocked for each domain
-        ("haveSwitch", xe_bool_t),                                      ## [out] Set to true if the device/sub-device has a switch
+        ("numSwitches", xe_bool_t),                                     ## [out] The number of switches on the device
         ("numFirmwares", c_ulong),                                      ## [out] Number of firmwares that can be managed
         ("numPsus", c_ulong),                                           ## [out] Number of power supply units that can be managed
         ("numFans", c_ulong),                                           ## [out] Number of fans that can be managed
@@ -709,7 +708,6 @@ class xet_pci_throughput_t(Structure):
         ("rxCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes received
         ("txCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes transmitted (including
                                                                         ## replays)
-        ("replayCounter", c_ulonglong),                                 ## [out] Monotonic counter for the number of replay packets
         ("maxBandwidth", c_ulong)                                       ## [out] The maximum bandwidth in bytes/sec under the current
                                                                         ## configuration
     ]
@@ -741,7 +739,10 @@ class xet_switch_address_t(Structure):
 class xet_switch_properties_t(Structure):
     _fields_ = [
         ("address", xet_switch_address_t),                              ## [out] Address of this Switch
-        ("numPorts", c_ulong)                                           ## [out] The number of ports
+        ("numPorts", c_ulong),                                          ## [out] The number of ports
+        ("onSubdevice", xe_bool_t),                                     ## [out] True if the switch is located on a sub-device; false means that
+                                                                        ## the switch is on the device of the calling SMI handle
+        ("subdeviceUuid", xe_device_uuid_t)                             ## [out] If onSubdevice is true, this gives the UUID of the sub-device
     ]
 
 ###############################################################################
@@ -752,10 +753,19 @@ class xet_switch_state_t(Structure):
     ]
 
 ###############################################################################
+## @brief Switch port speed
+class xet_switch_port_speed_t(Structure):
+    _fields_ = [
+        ("bitRate", c_ulong),                                           ## [out] Bits/sec that the link is operating at
+        ("width", c_ulong),                                             ## [out] The number of lanes
+        ("maxBandwidth", c_ulong)                                       ## [out] The maximum bandwidth in bytes/sec
+    ]
+
+###############################################################################
 ## @brief Switch Port properties
 class xet_switch_port_properties_t(Structure):
     _fields_ = [
-        ("maxBandwidth", c_ulong)                                       ## [out] Maximum bandwidth (bytes/sec) supported by the port
+        ("maxSpeed", xet_switch_port_speed_t)                           ## [out] Maximum bandwidth supported by the port
     ]
 
 ###############################################################################
@@ -765,7 +775,8 @@ class xet_switch_port_state_t(Structure):
         ("connected", xe_bool_t),                                       ## [out] Indicates if the port is connected to a remote Switch
         ("remote", xet_switch_address_t),                               ## [out] If connected is true, this gives the address of the remote
                                                                         ## Componian Die to which this port connects
-        ("maxBandwidth", c_ulong)                                       ## [out] Current maximum bandwidth (bytes/sec)
+        ("rxSpeed", xet_switch_port_speed_t),                           ## [out] Current maximum receive speed
+        ("txSpeed", xet_switch_port_speed_t)                            ## [out] Current maximum transmit speed
     ]
 
 ###############################################################################
@@ -773,17 +784,20 @@ class xet_switch_port_state_t(Structure):
 ## 
 ## @details
 ##     - Percent throughput is calculated by taking two snapshots (s1, s2) and
-##       using the equation: %bw = 10^6 * ((s2.rxCounter - s1.rxCounter) +
-##       (s2.txCounter - s1.txCounter)) / (s2.maxBandwidth * (s2.timestamp -
-##       s1.timestamp))
+##       using the equation:
+##     -     %rx_bandwidth = 10^6 * (s2.rxCounter - s1.rxCounter) /
+##       (s2.rxMaxBandwidth * (s2.timestamp - s1.timestamp))
+##     -     %tx_bandwidth = 10^6 * (s2.txCounter - s1.txCounter) /
+##       (s2.txMaxBandwidth * (s2.timestamp - s1.timestamp))
 class xet_switch_port_throughput_t(Structure):
     _fields_ = [
         ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when this sample was
                                                                         ## taken
         ("rxCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes received
         ("txCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes transmitted
-        ("maxBandwidth", c_ulong)                                       ## [out] The maximum bandwidth in bytes/sec under the current port
-                                                                        ## configuration
+        ("rxMaxBandwidth", c_ulong),                                    ## [out] The current maximum bandwidth in bytes/sec for receiving packats
+        ("txMaxBandwidth", c_ulong)                                     ## [out] The current maximum bandwidth in bytes/sec for transmitting
+                                                                        ## packets
     ]
 
 ###############################################################################
@@ -1408,13 +1422,6 @@ else:
     _xetSysmanGet_t = CFUNCTYPE( xe_result_t, xet_device_handle_t, xet_sysman_version_t, POINTER(xet_sysman_handle_t) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanGetSubdevice
-if __use_win_types:
-    _xetSysmanGetSubdevice_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_sysman_handle_t) )
-else:
-    _xetSysmanGetSubdevice_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_sysman_handle_t) )
-
-###############################################################################
 ## @brief Function-pointer for xetSysmanDeviceGetProperties
 if __use_win_types:
     _xetSysmanDeviceGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_sysman_properties_t) )
@@ -1571,51 +1578,51 @@ else:
 ###############################################################################
 ## @brief Function-pointer for xetSysmanSwitchGetProperties
 if __use_win_types:
-    _xetSysmanSwitchGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_switch_properties_t) )
+    _xetSysmanSwitchGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_switch_properties_t) )
 else:
-    _xetSysmanSwitchGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_switch_properties_t) )
+    _xetSysmanSwitchGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_switch_properties_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanSwitchGetState
 if __use_win_types:
-    _xetSysmanSwitchGetState_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_switch_state_t) )
+    _xetSysmanSwitchGetState_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_switch_state_t) )
 else:
-    _xetSysmanSwitchGetState_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_switch_state_t) )
+    _xetSysmanSwitchGetState_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_switch_state_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanSwitchSetState
 if __use_win_types:
-    _xetSysmanSwitchSetState_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xe_bool_t )
+    _xetSysmanSwitchSetState_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, xe_bool_t )
 else:
-    _xetSysmanSwitchSetState_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xe_bool_t )
+    _xetSysmanSwitchSetState_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, xe_bool_t )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanSwitchPortGetProperties
 if __use_win_types:
-    _xetSysmanSwitchPortGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_switch_port_properties_t) )
+    _xetSysmanSwitchPortGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, c_ulong, POINTER(xet_switch_port_properties_t) )
 else:
-    _xetSysmanSwitchPortGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_switch_port_properties_t) )
+    _xetSysmanSwitchPortGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, c_ulong, POINTER(xet_switch_port_properties_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanSwitchPortGetState
 if __use_win_types:
-    _xetSysmanSwitchPortGetState_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_switch_port_state_t) )
+    _xetSysmanSwitchPortGetState_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, c_ulong, POINTER(xet_switch_port_state_t) )
 else:
-    _xetSysmanSwitchPortGetState_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_switch_port_state_t) )
+    _xetSysmanSwitchPortGetState_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, c_ulong, POINTER(xet_switch_port_state_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanSwitchPortGetThroughput
 if __use_win_types:
-    _xetSysmanSwitchPortGetThroughput_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_switch_port_throughput_t) )
+    _xetSysmanSwitchPortGetThroughput_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, c_ulong, POINTER(xet_switch_port_throughput_t) )
 else:
-    _xetSysmanSwitchPortGetThroughput_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_switch_port_throughput_t) )
+    _xetSysmanSwitchPortGetThroughput_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, c_ulong, POINTER(xet_switch_port_throughput_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanSwitchPortGetStats
 if __use_win_types:
-    _xetSysmanSwitchPortGetStats_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_switch_port_stats_t) )
+    _xetSysmanSwitchPortGetStats_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, c_ulong, POINTER(xet_switch_port_stats_t) )
 else:
-    _xetSysmanSwitchPortGetStats_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_switch_port_stats_t) )
+    _xetSysmanSwitchPortGetStats_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, c_ulong, POINTER(xet_switch_port_stats_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanTemperatureGet
@@ -1777,7 +1784,6 @@ else:
 class _xet_sysman_dditable_t(Structure):
     _fields_ = [
         ("pfnGet", c_void_p),                                           ## _xetSysmanGet_t
-        ("pfnGetSubdevice", c_void_p),                                  ## _xetSysmanGetSubdevice_t
         ("pfnDeviceGetProperties", c_void_p),                           ## _xetSysmanDeviceGetProperties_t
         ("pfnDeviceGetOperatingMode", c_void_p),                        ## _xetSysmanDeviceGetOperatingMode_t
         ("pfnDeviceSetOperatingMode", c_void_p),                        ## _xetSysmanDeviceSetOperatingMode_t
@@ -1997,7 +2003,6 @@ class XET_DDI:
 
         # attach function interface to function address
         self.xetSysmanGet = _xetSysmanGet_t(self.__dditable.Sysman.pfnGet)
-        self.xetSysmanGetSubdevice = _xetSysmanGetSubdevice_t(self.__dditable.Sysman.pfnGetSubdevice)
         self.xetSysmanDeviceGetProperties = _xetSysmanDeviceGetProperties_t(self.__dditable.Sysman.pfnDeviceGetProperties)
         self.xetSysmanDeviceGetOperatingMode = _xetSysmanDeviceGetOperatingMode_t(self.__dditable.Sysman.pfnDeviceGetOperatingMode)
         self.xetSysmanDeviceSetOperatingMode = _xetSysmanDeviceSetOperatingMode_t(self.__dditable.Sysman.pfnDeviceSetOperatingMode)
