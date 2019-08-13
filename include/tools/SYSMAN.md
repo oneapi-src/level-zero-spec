@@ -136,9 +136,9 @@ int ListDevices(xe_device_group_handle_t hDeviceGroup)
 ```
 
 # <a name="sm">System Resource Management</a>
-System resource management is broken down by device components:
+System resource management is broken down by device component type:
 
-| Device component                          | Description |
+| Device component type                         | Description |
 | :---                                | :---        |
 | [General](#smg) | Access to general device configuration information, operating mode and reset. |
 | [Power](#smp) | Access to power configuration of the device. |
@@ -154,6 +154,22 @@ System resource management is broken down by device components:
 | [Fan](#smn) | Access to device fan controls and state. |
 | [LED](#smd) | Access to device LED controls and state. |
 
+For each component type, there are a set of functions that provide access and control of that component. Most components types have the same function
+set of functions - read static properties of the component, read the current state of the component, get statistical data, make configuration changes.
+The diagram below illustrated the typical flow used when working with frequency domains:
+
+![Frequency flow](../images/tools_sysman_freq_flow.png?raw=true) 
+
+Many component types have multiple components - for example, there are two frequency domains (GPU, MEMORY). When calling the functions for a component
+type, the appropriate component identifier is provided as an argument to the function. The diagram above shows that there are two frequency domains
+and so the function calls will receive either ::XET_FREQ_DOMAIN_GPU or ::XET_FREQ_DOMAIN_MEMORY.
+
+Other component types can have an arbitrary number of components - for example the number of fans. The number is provided in the general device properties
+for the SMI handle ::xet_sysman_properties_t which is obtained by call the function ::xetSysmanDeviceGetProperties(). For example, the number of
+fans is given in ::xet_sysman_properties_t.numFans. When calling the functions for fans, one specifies the fan index, a number between 0 and the
+number of fans minus 1. This is illustrated in the diagram below:
+
+![Fan flow](../images/tools_sysman_fan_flow.png?raw=true)
 
 ## <a name="smg">General</a>
 The following functions are provided to manage general aspects of the device:
@@ -235,7 +251,7 @@ The following functions are provided to manage the power of the device:
 | ::xetSysmanPowerGetProperties()    | Get the maximum power limit that can be specified when changing the power of the device. | Get the maximum power limit that can be specified when changing the power of the sub-device. |
 | ::xetSysmanPowerGetEnergyCounter() | Read the energy consumption of the whole device, including sub-devices. | Read the energy consumption of the sub-device only. |
 | ::xetSysmanPowerGetLimits()        | Get the sustained/burst/peak power limits for the whole device. | Get the sustained/burst/peak power limits for the sub-device only. |
-| ::xetSysmanPowerSetLimits()        | Set the sustained/burst/peak power limits for the whole device. | Set the sustained/burst/peak power limits for the sub-device only. This may not be supported - check ::xet_sysman_properties_t.havePowerControl. |
+| ::xetSysmanPowerSetLimits()        | Set the sustained/burst/peak power limits for the whole device. | Set the sustained/burst/peak power limits for the sub-device only. This may not be supported - check ::xet_power_properties_t.canControl. |
 
 The example below shows how to output the power limits:
 
@@ -303,7 +319,7 @@ be managed individually using the following functions:
 | ::xetSysmanFrequencyGetState()        | Get the current frequency request, actual frequency, TDP frequency and throttle reasons. If there are sub-devices, takes the average of the frequencies and merges the throttle reasons. | Get the current frequency request, actual frequency, TDP frequency and throttle reasons for the sub-device only. |
 | ::xetSysmanFrequencyGetThrottleTime() | Gets the amount of time the frequency domain has been throttled. If there are sub-devices, it will return the max across all of them. | Gets the amount of time the frequency domain in the sub-device has been throttled. |
 
-It is only permitted to set the frequency limits if the device property ::xet_sysman_properties_t.haveFreqControl is true for the specific frequency
+It is only permitted to set the frequency limits if the device property ::xet_freq_properties_t.canControl is true for the specific frequency
 domain.
 
 Setting the min/max frequency limits to the same value, software is effectively disabling the hardware controlled frequency and getting a fixed stable
@@ -319,11 +335,10 @@ The example below shows how to fix the frequency of a frequency domain, but only
 ```c
 void FixFrequency(xet_sysman_handle_t hSysmanDevice, xet_freq_domain_t Domain, double FreqMHz)
 {
-    xet_sysman_properties_t props;
-    
-    if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
+    xet_freq_properties_t props;
+    if (xetSysmanFrequencyGetProperties(hSysmanDevice, Domain, &props) == XE_RESULT_SUCCESS)
     {
-        if (props.haveFreqControl[Domain])
+        if (props.canControl)
         {
             xet_freq_limits_t limits;
             limits.min = FreqMHz;
@@ -549,10 +564,9 @@ The next example shows how to set the fan speed for all fans to a fixed value in
 void SetFanSpeed(xet_sysman_handle_t hSysmanDevice, uint32_t SpeedRpm)
 {
     xet_sysman_properties_t props;
-    
     if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
     {
-        if (props.haveFreqControl)
+        if (props.numFans)
         {
             xet_fan_config_t config;
             config.mode = XET_FAN_SPEED_MODE_FIXED;
@@ -560,12 +574,19 @@ void SetFanSpeed(xet_sysman_handle_t hSysmanDevice, uint32_t SpeedRpm)
             config.speedUnits = XET_FAN_SPEED_UNITS_RPM;
             for (uint32_t fanIndex = 0; fanIndex < props.numFans; fanIndex++)
             {
-                xetSysmanFanSetConfig(hSysmanDevice, fanIndex, &config);
+                xet_fan_properties_t fanprops;
+                if (xetSysmanFanGetProperties(hSysmanDevice, fanIndex, &fanprops) == XE_RESULT_SUCCESS)
+                {
+                    if (fanprops.canControl)
+                    {
+                        xetSysmanFanSetConfig(hSysmanDevice, fanIndex, &config);
+                    }
+                    else
+                    {
+                        fprintf(stderr, "ERROR: Can't control fan %u.\n", fanIndex);
+                    }
+                }
             }
-        }
-        else
-        {
-            fprintf(stderr, "ERROR: Can't control the fans on this device.\n");
         }
     }
 }

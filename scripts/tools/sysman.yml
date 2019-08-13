@@ -118,15 +118,6 @@ members:
       name: "driverVersion[$T_STRING_PROPERTY_SIZE]"
       desc: "[out] Installed driver version (NULL terminated string value)"
     - type: $x_bool_t
-      name: "havePowerControl"
-      desc: "[out] Set to true if the power limits of the device can be changed"
-    - type: $x_bool_t
-      name: "haveFreqControl[$T_FREQ_DOMAIN_NUM]"
-      desc: "[out] Set to true if the frequency limits can be changed for each domain"
-    - type: $x_bool_t
-      name: "haveOverclock[$T_FREQ_DOMAIN_NUM]"
-      desc: "[out] Set to true if the frequency can be overclocked for each domain"
-    - type: $x_bool_t
       name: "numSwitches"
       desc: "[out] The number of switches on the device"
     - type: uint32_t
@@ -205,6 +196,9 @@ desc: "Properties related to device power settings"
 class: $tSysman
 name: $t_power_properties_t
 members:
+    - type: $x_bool_t
+      name: "canControl"
+      desc: "[out] Software can change the power limits."
     - type: uint32_t
       name: "maxLimit"
       desc: "[out] The maximum power limit in milliwatts that can be requested."
@@ -347,6 +341,12 @@ details:
     - "Provides the set of frequencies as a list and as a range/step."
     - "It is generally recommended that applications choose frequencies from the list. However applications can also construct the list themselves using the range/steps provided."
 members:
+    - type: $x_bool_t
+      name: canControl
+      desc: "[out] Indicates if software can control the frequency of this domain"
+    - type: $x_bool_t
+      name: canOverclock
+      desc: "[out] Indicates if software can overclock this frequency domain"
     - type: double
       name: min
       desc: "[out] The minimum clock frequency in units of MHz"
@@ -908,9 +908,9 @@ params:
 
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Switch address"
+desc: "Switch GUID address"
 class: $tSysman
-name: $t_switch_address_t
+name: $t_switch_guid_t
 members:
     - type: uint8_t
       name: "guid[8]"
@@ -921,8 +921,8 @@ desc: "Switch properties"
 class: $tSysman
 name: $t_switch_properties_t
 members:
-    - type: $t_switch_address_t
-      name: "address"
+    - type: $t_switch_guid_t
+      name: "switchGuid"
       desc: "[out] Address of this Switch"
     - type: uint32_t
       name: "numPorts"
@@ -973,10 +973,10 @@ class: $tSysman
 name: $t_switch_port_state_t
 members:
     - type: $x_bool_t
-      name: "connected"
+      name: "isConnected"
       desc: "[out] Indicates if the port is connected to a remote Switch"
-    - type: $t_switch_address_t
-      name: "remote"
+    - type: $t_switch_guid_t
+      name: "remoteSwitchGuid"
       desc: "[out] If connected is true, this gives the address of the remote Componian Die to which this port connects"
     - type: $t_switch_port_speed_t
       name: "rxSpeed"
@@ -1247,6 +1247,9 @@ desc: "Firmware properties"
 class: $tSysman
 name: $t_firmware_properties_t
 members:
+    - type: $x_bool_t
+      name: "canControl"
+      desc: "[out] Indicates if software can flash the firmware"
     - type: int8_t
       name: "name[$T_STRING_PROPERTY_SIZE]"
       desc: "[out] NULL terminated string value"
@@ -1330,6 +1333,9 @@ desc: "Static properties of the power supply"
 class: $tSysman
 name: $t_psu_properties_t
 members:
+    - type: $x_bool_t
+      name: "canControl"
+      desc: "[out] Indicates if software can control the PSU"
     - type: $x_bool_t
       name: "haveFan"
       desc: "[out] True if the power supply has a fan"
@@ -1441,6 +1447,9 @@ desc: "Fan properties"
 class: $tSysman
 name: $t_fan_properties_t
 members:
+    - type: $x_bool_t
+      name: "canControl"
+      desc: "[out] Indicates if software can control the fan speed"
     - type: uint32_t
       name: "maxSpeed"
       desc: "[out] The maximum RPM of the fan"
@@ -1565,6 +1574,9 @@ desc: "LED properties"
 class: $tSysman
 name: $t_led_properties_t
 members:
+    - type: $x_bool_t
+      name: "canControl"
+      desc: "[out] Indicates if software can control the LED"
     - type: $x_bool_t
       name: "haveRGB"
       desc: "[out] Indicates if the LED is RGB capable"
@@ -1697,8 +1709,11 @@ members:
       name: "numMemoryErrors"
       desc: "[out] The number of errors that have occurred in the local memory"
     - type: uint64_t
-      name: "numLinkErrors"
-      desc: "[out] The number of errors that have occurred in the PCI or peer-to-peer links"
+      name: "numPciErrors"
+      desc: "[out] The number of errors that have occurred in the PCI link"
+    - type: uint64_t
+      name: "numSwitchErrors"
+      desc: "[out] The number of errors that have occurred in the P2P links"
     - type: uint64_t
       name: "numDisplayErrors"
       desc: "[out] The number of errors that have occurred in the display"

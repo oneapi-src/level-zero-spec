@@ -191,8 +191,8 @@ typedef struct _xet_pci_throughput_t xet_pci_throughput_t;
 typedef struct _xet_pci_stats_t xet_pci_stats_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_switch_address_t
-typedef struct _xet_switch_address_t xet_switch_address_t;
+/// @brief Forward-declare xet_switch_guid_t
+typedef struct _xet_switch_guid_t xet_switch_guid_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_switch_properties_t

@@ -97,12 +97,12 @@ void ShowSwitchInfo(xet_sysman_handle_t hSysmanDevice, uint32_t SwitchIndex)
                     if (xetSysmanSwitchPortGetState(hSysmanDevice, SwitchIndex, portIndex, &portstate)
                         == XE_RESULT_SUCCESS)
                     {
-                        if (portstate.connected)
+                        if (portstate.isConnected)
                         {
                             fprintf(stdout,
                                 "            %u: "
                                 "connected to switch with GUID %s, max rx/tx bandwidth %u/%u bytes/sec\n",
-                                portIndex, portstate.remote.guid,
+                                portIndex, portstate.remoteAddress.guid,
                                 portstate.rxSpeed.maxBandwidth, portstate.txSpeed.maxBandwidth);
                         }
                         else
@@ -134,11 +134,10 @@ void ShowSwitches(xet_sysman_handle_t hSysmanDevice)
 
 void FixFrequency(xet_sysman_handle_t hSysmanDevice, xet_freq_domain_t Domain, double FreqMHz)
 {
-    xet_sysman_properties_t props;
-    
-    if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
+    xet_freq_properties_t props;
+    if (xetSysmanFrequencyGetProperties(hSysmanDevice, Domain, &props) == XE_RESULT_SUCCESS)
     {
-        if (props.haveFreqControl[Domain])
+        if (props.canControl)
         {
             xet_freq_limits_t limits;
             limits.min = FreqMHz;
@@ -158,10 +157,9 @@ void FixFrequency(xet_sysman_handle_t hSysmanDevice, xet_freq_domain_t Domain, d
 void SetFanSpeed(xet_sysman_handle_t hSysmanDevice, uint32_t SpeedRpm)
 {
     xet_sysman_properties_t props;
-    
     if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
     {
-        if (props.haveFreqControl)
+        if (props.numFans)
         {
             xet_fan_config_t config;
             config.mode = XET_FAN_SPEED_MODE_FIXED;
@@ -169,12 +167,19 @@ void SetFanSpeed(xet_sysman_handle_t hSysmanDevice, uint32_t SpeedRpm)
             config.speedUnits = XET_FAN_SPEED_UNITS_RPM;
             for (uint32_t fanIndex = 0; fanIndex < props.numFans; fanIndex++)
             {
-                xetSysmanFanSetConfig(hSysmanDevice, fanIndex, &config);
+                xet_fan_properties_t fanprops;
+                if (xetSysmanFanGetProperties(hSysmanDevice, fanIndex, &fanprops) == XE_RESULT_SUCCESS)
+                {
+                    if (fanprops.canControl)
+                    {
+                        xetSysmanFanSetConfig(hSysmanDevice, fanIndex, &config);
+                    }
+                    else
+                    {
+                        fprintf(stderr, "ERROR: Can't control fan %u.\n", fanIndex);
+                    }
+                }
             }
-        }
-        else
-        {
-            fprintf(stderr, "ERROR: Can't control the fans on this device.\n");
         }
     }
 }

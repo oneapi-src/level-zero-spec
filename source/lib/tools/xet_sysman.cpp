@@ -3428,34 +3428,6 @@ namespace xet
         }
         str += "\n";
         
-        str += "Sysman::properties_t::havePowerControl : ";
-        str += std::to_string(val.havePowerControl);
-        str += "\n";
-        
-        str += "Sysman::properties_t::haveFreqControl : ";
-        {
-            std::string tmp;
-            for( auto& entry : val.haveFreqControl )
-            {
-                tmp += std::to_string( entry );
-                tmp += ", ";
-            }
-            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
-        }
-        str += "\n";
-        
-        str += "Sysman::properties_t::haveOverclock : ";
-        {
-            std::string tmp;
-            for( auto& entry : val.haveOverclock )
-            {
-                tmp += std::to_string( entry );
-                tmp += ", ";
-            }
-            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
-        }
-        str += "\n";
-        
         str += "Sysman::properties_t::numSwitches : ";
         str += std::to_string(val.numSwitches);
         str += "\n";
@@ -3496,6 +3468,10 @@ namespace xet
     std::string to_string( const Sysman::power_properties_t val )
     {
         std::string str;
+        
+        str += "Sysman::power_properties_t::canControl : ";
+        str += std::to_string(val.canControl);
+        str += "\n";
         
         str += "Sysman::power_properties_t::maxLimit : ";
         str += std::to_string(val.maxLimit);
@@ -3577,6 +3553,14 @@ namespace xet
     std::string to_string( const Sysman::freq_properties_t val )
     {
         std::string str;
+        
+        str += "Sysman::freq_properties_t::canControl : ";
+        str += std::to_string(val.canControl);
+        str += "\n";
+        
+        str += "Sysman::freq_properties_t::canOverclock : ";
+        str += std::to_string(val.canOverclock);
+        str += "\n";
         
         str += "Sysman::freq_properties_t::min : ";
         str += std::to_string(val.min);
@@ -3896,12 +3880,12 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::switch_address_t to std::string
-    std::string to_string( const Sysman::switch_address_t val )
+    /// @brief Converts Sysman::switch_guid_t to std::string
+    std::string to_string( const Sysman::switch_guid_t val )
     {
         std::string str;
         
-        str += "Sysman::switch_address_t::guid : ";
+        str += "Sysman::switch_guid_t::guid : ";
         {
             std::string tmp;
             for( auto& entry : val.guid )
@@ -3922,8 +3906,8 @@ namespace xet
     {
         std::string str;
         
-        str += "Sysman::switch_properties_t::address : ";
-        str += to_string(val.address);
+        str += "Sysman::switch_properties_t::switchGuid : ";
+        str += to_string(val.switchGuid);
         str += "\n";
         
         str += "Sysman::switch_properties_t::numPorts : ";
@@ -3994,12 +3978,12 @@ namespace xet
     {
         std::string str;
         
-        str += "Sysman::switch_port_state_t::connected : ";
-        str += std::to_string(val.connected);
+        str += "Sysman::switch_port_state_t::isConnected : ";
+        str += std::to_string(val.isConnected);
         str += "\n";
         
-        str += "Sysman::switch_port_state_t::remote : ";
-        str += to_string(val.remote);
+        str += "Sysman::switch_port_state_t::remoteSwitchGuid : ";
+        str += to_string(val.remoteSwitchGuid);
         str += "\n";
         
         str += "Sysman::switch_port_state_t::rxSpeed : ";
@@ -4069,6 +4053,10 @@ namespace xet
     {
         std::string str;
         
+        str += "Sysman::firmware_properties_t::canControl : ";
+        str += std::to_string(val.canControl);
+        str += "\n";
+        
         str += "Sysman::firmware_properties_t::name : ";
         {
             std::string tmp;
@@ -4101,6 +4089,10 @@ namespace xet
     std::string to_string( const Sysman::psu_properties_t val )
     {
         std::string str;
+        
+        str += "Sysman::psu_properties_t::canControl : ";
+        str += std::to_string(val.canControl);
+        str += "\n";
         
         str += "Sysman::psu_properties_t::haveFan : ";
         str += std::to_string(val.haveFan);
@@ -4164,6 +4156,10 @@ namespace xet
     std::string to_string( const Sysman::fan_properties_t val )
     {
         std::string str;
+        
+        str += "Sysman::fan_properties_t::canControl : ";
+        str += std::to_string(val.canControl);
+        str += "\n";
         
         str += "Sysman::fan_properties_t::maxSpeed : ";
         str += std::to_string(val.maxSpeed);
@@ -4239,6 +4235,10 @@ namespace xet
     std::string to_string( const Sysman::led_properties_t val )
     {
         std::string str;
+        
+        str += "Sysman::led_properties_t::canControl : ";
+        str += std::to_string(val.canControl);
+        str += "\n";
         
         str += "Sysman::led_properties_t::haveRGB : ";
         str += std::to_string(val.haveRGB);
@@ -4327,8 +4327,12 @@ namespace xet
         str += std::to_string(val.numMemoryErrors);
         str += "\n";
         
-        str += "Sysman::ras_details_t::numLinkErrors : ";
-        str += std::to_string(val.numLinkErrors);
+        str += "Sysman::ras_details_t::numPciErrors : ";
+        str += std::to_string(val.numPciErrors);
+        str += "\n";
+        
+        str += "Sysman::ras_details_t::numSwitchErrors : ";
+        str += std::to_string(val.numSwitchErrors);
         str += "\n";
         
         str += "Sysman::ras_details_t::numDisplayErrors : ";
