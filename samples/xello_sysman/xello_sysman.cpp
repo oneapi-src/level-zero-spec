@@ -24,7 +24,8 @@ void PrintRasDetails(xet_ras_details_t* pDetails)
     fprintf(stdout, "    Number new non-compute errors:    %llu\n", pDetails->numNonComputeErrors);
     fprintf(stdout, "    Number new cache errors:          %llu\n", pDetails->numCacheErrors);
     fprintf(stdout, "    Number new memory errors:         %llu\n", pDetails->numMemoryErrors);
-    fprintf(stdout, "    Number new link errors:           %llu\n", pDetails->numLinkErrors);
+    fprintf(stdout, "    Number new PCI errors:            %llu\n", pDetails->numPciErrors);
+    fprintf(stdout, "    Number new switch errors:         %llu\n", pDetails->numSwitchErrors);
     fprintf(stdout, "    Number new display errors:        %llu\n", pDetails->numDisplayErrors);
 }
 
@@ -81,7 +82,7 @@ void ShowSwitchInfo(xet_sysman_handle_t hSysmanDevice, uint32_t SwitchIndex)
         xet_switch_state_t swstate;
         if (xetSysmanSwitchGetState(hSysmanDevice, SwitchIndex, &swstate) == XE_RESULT_SUCCESS)
         {
-            fprintf(stdout, "        GUID:          %s\n", swprops.address.guid);
+            fprintf(stdout, "        GUID:          %s\n", swprops.switchGuid.guid);
             fprintf(stdout, "        #port:         %u\n", swprops.numPorts);
             if (swprops.onSubdevice)
             {
@@ -102,7 +103,7 @@ void ShowSwitchInfo(xet_sysman_handle_t hSysmanDevice, uint32_t SwitchIndex)
                             fprintf(stdout,
                                 "            %u: "
                                 "connected to switch with GUID %s, max rx/tx bandwidth %u/%u bytes/sec\n",
-                                portIndex, portstate.remoteAddress.guid,
+                                portIndex, portstate.remoteSwitchGuid.guid,
                                 portstate.rxSpeed.maxBandwidth, portstate.txSpeed.maxBandwidth);
                         }
                         else
