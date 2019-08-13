@@ -250,10 +250,6 @@ namespace xet
             int8_t modelName[XET_STRING_PROPERTY_SIZE];     ///< [out] Model name of the device (NULL terminated string value)
             int8_t vendorName[XET_STRING_PROPERTY_SIZE];    ///< [out] Vendor name of the device (NULL terminated string value)
             int8_t driverVersion[XET_STRING_PROPERTY_SIZE]; ///< [out] Installed driver version (NULL terminated string value)
-            xe::bool_t havePowerControl;                    ///< [out] Set to true if the power limits of the device can be changed
-            xe::bool_t haveFreqControl[static_cast<int>(freq_domain_t::NUM)];   ///< [out] Set to true if the frequency limits can be changed for each
-                                                            ///< domain
-            xe::bool_t haveOverclock[static_cast<int>(freq_domain_t::NUM)]; ///< [out] Set to true if the frequency can be overclocked for each domain
             xe::bool_t numSwitches;                         ///< [out] The number of switches on the device
             uint32_t numFirmwares;                          ///< [out] Number of firmwares that can be managed
             uint32_t numPsus;                               ///< [out] Number of power supply units that can be managed
@@ -267,6 +263,7 @@ namespace xet
         /// @brief Properties related to device power settings
         struct power_properties_t
         {
+            xe::bool_t canControl;                          ///< [out] Software can change the power limits.
             uint32_t maxLimit;                              ///< [out] The maximum power limit in milliwatts that can be requested.
 
         };
@@ -282,6 +279,11 @@ namespace xet
         {
             uint64_t energy;                                ///< [out] The monotonic energy counter in microjoules.
             uint64_t timestamp;                             ///< [out] Microsecond timestamp when energy was captured.
+                                                            ///< No assumption should be made about the absolute value of the timestamp.
+                                                            ///< It should only be used to calculate delta time between two snapshots
+                                                            ///< of the same structure.
+                                                            ///< Never take the delta of this timestamp with the timestamp from a
+                                                            ///< different structure.
 
         };
 
@@ -345,6 +347,8 @@ namespace xet
         ///       using the range/steps provided.
         struct freq_properties_t
         {
+            xe::bool_t canControl;                          ///< [out] Indicates if software can control the frequency of this domain
+            xe::bool_t canOverclock;                        ///< [out] Indicates if software can overclock this frequency domain
             double min;                                     ///< [out] The minimum clock frequency in units of MHz
             double max;                                     ///< [out] The maximum clock frequency in units of MHz
             double step;                                    ///< [out] The step clock frequency in units of MHz
@@ -393,6 +397,11 @@ namespace xet
             uint64_t throttleTime;                          ///< [out] The monotonic counter of time in microseconds that the frequency
                                                             ///< has been limited by the hardware.
             uint64_t timestamp;                             ///< [out] Microsecond timestamp when throttleTime was captured.
+                                                            ///< No assumption should be made about the absolute value of the timestamp.
+                                                            ///< It should only be used to calculate delta time between two snapshots
+                                                            ///< of the same structure.
+                                                            ///< Never take the delta of this timestamp with the timestamp from a
+                                                            ///< different structure.
 
         };
 
@@ -409,6 +418,11 @@ namespace xet
                                                             ///< actively running workloads.
             uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when activeTime
                                                             ///< counter was sampled.
+                                                            ///< No assumption should be made about the absolute value of the timestamp.
+                                                            ///< It should only be used to calculate delta time between two snapshots
+                                                            ///< of the same structure.
+                                                            ///< Never take the delta of this timestamp with the timestamp from a
+                                                            ///< different structure.
 
         };
 
@@ -434,7 +448,12 @@ namespace xet
             uint64_t readCounter;                           ///< [out] Total bytes read from memory
             uint64_t writeCounter;                          ///< [out] Total bytes written to memory
             uint64_t maxBandwidth;                          ///< [out] Current maximum bandwidth in units of bytes/sec
-            uint64_t timestamp;                             ///< [out] The timestamp when these measurements were sampled
+            uint64_t timestamp;                             ///< [out] The timestamp when these measurements were sampled.
+                                                            ///< No assumption should be made about the absolute value of the timestamp.
+                                                            ///< It should only be used to calculate delta time between two snapshots
+                                                            ///< of the same structure.
+                                                            ///< Never take the delta of this timestamp with the timestamp from a
+                                                            ///< different structure.
 
         };
 
@@ -511,8 +530,13 @@ namespace xet
         ///       s1.timestamp))
         struct pci_throughput_t
         {
-            uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when this sample was
-                                                            ///< taken
+            uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when the measurement
+                                                            ///< was made.
+                                                            ///< No assumption should be made about the absolute value of the timestamp.
+                                                            ///< It should only be used to calculate delta time between two snapshots
+                                                            ///< of the same structure.
+                                                            ///< Never take the delta of this timestamp with the timestamp from a
+                                                            ///< different structure.
             uint64_t rxCounter;                             ///< [out] Monotonic counter for the number of bytes received
             uint64_t txCounter;                             ///< [out] Monotonic counter for the number of bytes transmitted (including
                                                             ///< replays)
@@ -530,16 +554,21 @@ namespace xet
         ///       s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))
         struct pci_stats_t
         {
-            uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when this sample was
-                                                            ///< taken
+            uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when the measurement
+                                                            ///< was made.
+                                                            ///< No assumption should be made about the absolute value of the timestamp.
+                                                            ///< It should only be used to calculate delta time between two snapshots
+                                                            ///< of the same structure.
+                                                            ///< Never take the delta of this timestamp with the timestamp from a
+                                                            ///< different structure.
             uint64_t replayCounter;                         ///< [out] Monotonic counter for the number of replay packets
             uint64_t packetCounter;                         ///< [out] Monotonic counter for the number of packets
 
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Switch address
-        struct switch_address_t
+        /// @brief Switch GUID address
+        struct switch_guid_t
         {
             uint8_t guid[8];                                ///< [out] GUID of the Switch
 
@@ -549,7 +578,7 @@ namespace xet
         /// @brief Switch properties
         struct switch_properties_t
         {
-            switch_address_t address;                       ///< [out] Address of this Switch
+            switch_guid_t switchGuid;                       ///< [out] Address of this Switch
             uint32_t numPorts;                              ///< [out] The number of ports
             xe::bool_t onSubdevice;                         ///< [out] True if the switch is located on a sub-device; false means that
                                                             ///< the switch is on the device of the calling SMI handle
@@ -587,9 +616,11 @@ namespace xet
         /// @brief Switch Port state
         struct switch_port_state_t
         {
-            xe::bool_t connected;                           ///< [out] Indicates if the port is connected to a remote Switch
-            switch_address_t remote;                        ///< [out] If connected is true, this gives the address of the remote
-                                                            ///< Componian Die to which this port connects
+            xe::bool_t isConnected;                         ///< [out] Indicates if the port is connected to a remote Switch
+            switch_guid_t remoteSwitchGuid;                 ///< [out] If connected is true, this gives the address of the remote
+                                                            ///< switch to which this port connects
+            uint32_t remoteSwitchPortIndex;                 ///< [out] If connected is true, this gives the port index on the remote
+                                                            ///< switch
             switch_port_speed_t rxSpeed;                    ///< [out] Current maximum receive speed
             switch_port_speed_t txSpeed;                    ///< [out] Current maximum transmit speed
 
@@ -607,8 +638,13 @@ namespace xet
         ///       (s2.txMaxBandwidth * (s2.timestamp - s1.timestamp))
         struct switch_port_throughput_t
         {
-            uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when this sample was
-                                                            ///< taken
+            uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when the measurement
+                                                            ///< was made.
+                                                            ///< No assumption should be made about the absolute value of the timestamp.
+                                                            ///< It should only be used to calculate delta time between two snapshots
+                                                            ///< of the same structure.
+                                                            ///< Never take the delta of this timestamp with the timestamp from a
+                                                            ///< different structure.
             uint64_t rxCounter;                             ///< [out] Monotonic counter for the number of bytes received
             uint64_t txCounter;                             ///< [out] Monotonic counter for the number of bytes transmitted
             uint32_t rxMaxBandwidth;                        ///< [out] The current maximum bandwidth in bytes/sec for receiving packats
@@ -626,8 +662,13 @@ namespace xet
         ///       s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))
         struct switch_port_stats_t
         {
-            uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when this sample was
-                                                            ///< taken
+            uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when the measurement
+                                                            ///< was made.
+                                                            ///< No assumption should be made about the absolute value of the timestamp.
+                                                            ///< It should only be used to calculate delta time between two snapshots
+                                                            ///< of the same structure.
+                                                            ///< Never take the delta of this timestamp with the timestamp from a
+                                                            ///< different structure.
             uint64_t replayCounter;                         ///< [out] Monotonic counter for the number of replay packets
             uint64_t packetCounter;                         ///< [out] Monotonic counter for the number of packets
 
@@ -637,6 +678,7 @@ namespace xet
         /// @brief Firmware properties
         struct firmware_properties_t
         {
+            xe::bool_t canControl;                          ///< [out] Indicates if software can flash the firmware
             int8_t name[XET_STRING_PROPERTY_SIZE];          ///< [out] NULL terminated string value
             int8_t version[XET_STRING_PROPERTY_SIZE];       ///< [out] NULL terminated string value
 
@@ -646,6 +688,7 @@ namespace xet
         /// @brief Static properties of the power supply
         struct psu_properties_t
         {
+            xe::bool_t canControl;                          ///< [out] Indicates if software can control the PSU
             xe::bool_t haveFan;                             ///< [out] True if the power supply has a fan
             uint32_t ampLimit;                              ///< [out] The maximum electrical current in amperes that can be drawn
 
@@ -676,6 +719,7 @@ namespace xet
         /// @brief Fan properties
         struct fan_properties_t
         {
+            xe::bool_t canControl;                          ///< [out] Indicates if software can control the fan speed
             uint32_t maxSpeed;                              ///< [out] The maximum RPM of the fan
             uint32_t maxPoints;                             ///< [out] The maximum number of points in the fan temp/speed table
 
@@ -707,6 +751,7 @@ namespace xet
         /// @brief LED properties
         struct led_properties_t
         {
+            xe::bool_t canControl;                          ///< [out] Indicates if software can control the LED
             xe::bool_t haveRGB;                             ///< [out] Indicates if the LED is RGB capable
 
         };
@@ -748,8 +793,8 @@ namespace xet
             uint64_t numCacheErrors;                        ///< [out] The number of errors that have occurred in caches
                                                             ///< (L1/L3/register file/shared local memory/sampler)
             uint64_t numMemoryErrors;                       ///< [out] The number of errors that have occurred in the local memory
-            uint64_t numLinkErrors;                         ///< [out] The number of errors that have occurred in the PCI or
-                                                            ///< peer-to-peer links
+            uint64_t numPciErrors;                          ///< [out] The number of errors that have occurred in the PCI link
+            uint64_t numSwitchErrors;                       ///< [out] The number of errors that have occurred in the P2P links
             uint64_t numDisplayErrors;                      ///< [out] The number of errors that have occurred in the display
 
         };
@@ -1661,8 +1706,8 @@ namespace xet
     std::string to_string( const Sysman::pci_stats_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::switch_address_t to std::string
-    std::string to_string( const Sysman::switch_address_t val );
+    /// @brief Converts Sysman::switch_guid_t to std::string
+    std::string to_string( const Sysman::switch_guid_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::switch_properties_t to std::string

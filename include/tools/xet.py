@@ -397,10 +397,6 @@ class xet_sysman_properties_t(Structure):
         ("modelName", c_int8_t * XET_STRING_PROPERTY_SIZE),             ## [out] Model name of the device (NULL terminated string value)
         ("vendorName", c_int8_t * XET_STRING_PROPERTY_SIZE),            ## [out] Vendor name of the device (NULL terminated string value)
         ("driverVersion", c_int8_t * XET_STRING_PROPERTY_SIZE),         ## [out] Installed driver version (NULL terminated string value)
-        ("havePowerControl", xe_bool_t),                                ## [out] Set to true if the power limits of the device can be changed
-        ("haveFreqControl", xe_bool_t * XET_FREQ_DOMAIN_NUM),           ## [out] Set to true if the frequency limits can be changed for each
-                                                                        ## domain
-        ("haveOverclock", xe_bool_t * XET_FREQ_DOMAIN_NUM),             ## [out] Set to true if the frequency can be overclocked for each domain
         ("numSwitches", xe_bool_t),                                     ## [out] The number of switches on the device
         ("numFirmwares", c_ulong),                                      ## [out] Number of firmwares that can be managed
         ("numPsus", c_ulong),                                           ## [out] Number of power supply units that can be managed
@@ -413,6 +409,7 @@ class xet_sysman_properties_t(Structure):
 ## @brief Properties related to device power settings
 class xet_power_properties_t(Structure):
     _fields_ = [
+        ("canControl", xe_bool_t),                                      ## [out] Software can change the power limits.
         ("maxLimit", c_ulong)                                           ## [out] The maximum power limit in milliwatts that can be requested.
     ]
 
@@ -427,6 +424,11 @@ class xet_power_energy_counter_t(Structure):
     _fields_ = [
         ("energy", c_ulonglong),                                        ## [out] The monotonic energy counter in microjoules.
         ("timestamp", c_ulonglong)                                      ## [out] Microsecond timestamp when energy was captured.
+                                                                        ## No assumption should be made about the absolute value of the timestamp.
+                                                                        ## It should only be used to calculate delta time between two snapshots
+                                                                        ## of the same structure.
+                                                                        ## Never take the delta of this timestamp with the timestamp from a
+                                                                        ## different structure.
     ]
 
 ###############################################################################
@@ -486,6 +488,8 @@ class xet_power_peak_limit_t(Structure):
 ##       using the range/steps provided.
 class xet_freq_properties_t(Structure):
     _fields_ = [
+        ("canControl", xe_bool_t),                                      ## [out] Indicates if software can control the frequency of this domain
+        ("canOverclock", xe_bool_t),                                    ## [out] Indicates if software can overclock this frequency domain
         ("min", c_double),                                              ## [out] The minimum clock frequency in units of MHz
         ("max", c_double),                                              ## [out] The maximum clock frequency in units of MHz
         ("step", c_double),                                             ## [out] The step clock frequency in units of MHz
@@ -549,6 +553,11 @@ class xet_freq_throttle_time_t(Structure):
         ("throttleTime", c_ulonglong),                                  ## [out] The monotonic counter of time in microseconds that the frequency
                                                                         ## has been limited by the hardware.
         ("timestamp", c_ulonglong)                                      ## [out] Microsecond timestamp when throttleTime was captured.
+                                                                        ## No assumption should be made about the absolute value of the timestamp.
+                                                                        ## It should only be used to calculate delta time between two snapshots
+                                                                        ## of the same structure.
+                                                                        ## Never take the delta of this timestamp with the timestamp from a
+                                                                        ## different structure.
     ]
 
 ###############################################################################
@@ -576,6 +585,11 @@ class xet_activity_stats_t(Structure):
                                                                         ## actively running workloads.
         ("timestamp", c_ulonglong)                                      ## [out] Monotonic timestamp counter in microseconds when activeTime
                                                                         ## counter was sampled.
+                                                                        ## No assumption should be made about the absolute value of the timestamp.
+                                                                        ## It should only be used to calculate delta time between two snapshots
+                                                                        ## of the same structure.
+                                                                        ## Never take the delta of this timestamp with the timestamp from a
+                                                                        ## different structure.
     ]
 
 ###############################################################################
@@ -615,7 +629,12 @@ class xet_mem_bandwidth_t(Structure):
         ("readCounter", c_ulonglong),                                   ## [out] Total bytes read from memory
         ("writeCounter", c_ulonglong),                                  ## [out] Total bytes written to memory
         ("maxBandwidth", c_ulonglong),                                  ## [out] Current maximum bandwidth in units of bytes/sec
-        ("timestamp", c_ulonglong)                                      ## [out] The timestamp when these measurements were sampled
+        ("timestamp", c_ulonglong)                                      ## [out] The timestamp when these measurements were sampled.
+                                                                        ## No assumption should be made about the absolute value of the timestamp.
+                                                                        ## It should only be used to calculate delta time between two snapshots
+                                                                        ## of the same structure.
+                                                                        ## Never take the delta of this timestamp with the timestamp from a
+                                                                        ## different structure.
     ]
 
 ###############################################################################
@@ -703,8 +722,13 @@ class xet_pci_bar_properties_t(Structure):
 ##       s1.timestamp))
 class xet_pci_throughput_t(Structure):
     _fields_ = [
-        ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when this sample was
-                                                                        ## taken
+        ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when the measurement
+                                                                        ## was made.
+                                                                        ## No assumption should be made about the absolute value of the timestamp.
+                                                                        ## It should only be used to calculate delta time between two snapshots
+                                                                        ## of the same structure.
+                                                                        ## Never take the delta of this timestamp with the timestamp from a
+                                                                        ## different structure.
         ("rxCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes received
         ("txCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes transmitted (including
                                                                         ## replays)
@@ -721,15 +745,20 @@ class xet_pci_throughput_t(Structure):
 ##       s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))
 class xet_pci_stats_t(Structure):
     _fields_ = [
-        ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when this sample was
-                                                                        ## taken
+        ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when the measurement
+                                                                        ## was made.
+                                                                        ## No assumption should be made about the absolute value of the timestamp.
+                                                                        ## It should only be used to calculate delta time between two snapshots
+                                                                        ## of the same structure.
+                                                                        ## Never take the delta of this timestamp with the timestamp from a
+                                                                        ## different structure.
         ("replayCounter", c_ulonglong),                                 ## [out] Monotonic counter for the number of replay packets
         ("packetCounter", c_ulonglong)                                  ## [out] Monotonic counter for the number of packets
     ]
 
 ###############################################################################
-## @brief Switch address
-class xet_switch_address_t(Structure):
+## @brief Switch GUID address
+class xet_switch_guid_t(Structure):
     _fields_ = [
         ("guid", c_ubyte * 8)                                           ## [out] GUID of the Switch
     ]
@@ -738,7 +767,7 @@ class xet_switch_address_t(Structure):
 ## @brief Switch properties
 class xet_switch_properties_t(Structure):
     _fields_ = [
-        ("address", xet_switch_address_t),                              ## [out] Address of this Switch
+        ("switchGuid", xet_switch_guid_t),                              ## [out] Address of this Switch
         ("numPorts", c_ulong),                                          ## [out] The number of ports
         ("onSubdevice", xe_bool_t),                                     ## [out] True if the switch is located on a sub-device; false means that
                                                                         ## the switch is on the device of the calling SMI handle
@@ -772,9 +801,11 @@ class xet_switch_port_properties_t(Structure):
 ## @brief Switch Port state
 class xet_switch_port_state_t(Structure):
     _fields_ = [
-        ("connected", xe_bool_t),                                       ## [out] Indicates if the port is connected to a remote Switch
-        ("remote", xet_switch_address_t),                               ## [out] If connected is true, this gives the address of the remote
-                                                                        ## Componian Die to which this port connects
+        ("isConnected", xe_bool_t),                                     ## [out] Indicates if the port is connected to a remote Switch
+        ("remoteSwitchGuid", xet_switch_guid_t),                        ## [out] If connected is true, this gives the address of the remote
+                                                                        ## switch to which this port connects
+        ("remoteSwitchPortIndex", c_ulong),                             ## [out] If connected is true, this gives the port index on the remote
+                                                                        ## switch
         ("rxSpeed", xet_switch_port_speed_t),                           ## [out] Current maximum receive speed
         ("txSpeed", xet_switch_port_speed_t)                            ## [out] Current maximum transmit speed
     ]
@@ -791,8 +822,13 @@ class xet_switch_port_state_t(Structure):
 ##       (s2.txMaxBandwidth * (s2.timestamp - s1.timestamp))
 class xet_switch_port_throughput_t(Structure):
     _fields_ = [
-        ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when this sample was
-                                                                        ## taken
+        ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when the measurement
+                                                                        ## was made.
+                                                                        ## No assumption should be made about the absolute value of the timestamp.
+                                                                        ## It should only be used to calculate delta time between two snapshots
+                                                                        ## of the same structure.
+                                                                        ## Never take the delta of this timestamp with the timestamp from a
+                                                                        ## different structure.
         ("rxCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes received
         ("txCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes transmitted
         ("rxMaxBandwidth", c_ulong),                                    ## [out] The current maximum bandwidth in bytes/sec for receiving packats
@@ -809,8 +845,13 @@ class xet_switch_port_throughput_t(Structure):
 ##       s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))
 class xet_switch_port_stats_t(Structure):
     _fields_ = [
-        ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when this sample was
-                                                                        ## taken
+        ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when the measurement
+                                                                        ## was made.
+                                                                        ## No assumption should be made about the absolute value of the timestamp.
+                                                                        ## It should only be used to calculate delta time between two snapshots
+                                                                        ## of the same structure.
+                                                                        ## Never take the delta of this timestamp with the timestamp from a
+                                                                        ## different structure.
         ("replayCounter", c_ulonglong),                                 ## [out] Monotonic counter for the number of replay packets
         ("packetCounter", c_ulonglong)                                  ## [out] Monotonic counter for the number of packets
     ]
@@ -844,6 +885,7 @@ class xet_stby_promo_mode_t(c_int):
 ## @brief Firmware properties
 class xet_firmware_properties_t(Structure):
     _fields_ = [
+        ("canControl", xe_bool_t),                                      ## [out] Indicates if software can flash the firmware
         ("name", c_int8_t * XET_STRING_PROPERTY_SIZE),                  ## [out] NULL terminated string value
         ("version", c_int8_t * XET_STRING_PROPERTY_SIZE)                ## [out] NULL terminated string value
     ]
@@ -864,6 +906,7 @@ class xet_psu_voltage_status_t(c_int):
 ## @brief Static properties of the power supply
 class xet_psu_properties_t(Structure):
     _fields_ = [
+        ("canControl", xe_bool_t),                                      ## [out] Indicates if software can control the PSU
         ("haveFan", xe_bool_t),                                         ## [out] True if the power supply has a fan
         ("ampLimit", c_ulong)                                           ## [out] The maximum electrical current in amperes that can be drawn
     ]
@@ -919,6 +962,7 @@ XET_FAN_TEMP_SPEED_PAIR_COUNT = 32
 ## @brief Fan properties
 class xet_fan_properties_t(Structure):
     _fields_ = [
+        ("canControl", xe_bool_t),                                      ## [out] Indicates if software can control the fan speed
         ("maxSpeed", c_ulong),                                          ## [out] The maximum RPM of the fan
         ("maxPoints", c_ulong)                                          ## [out] The maximum number of points in the fan temp/speed table
     ]
@@ -947,6 +991,7 @@ class xet_fan_state_t(Structure):
 ## @brief LED properties
 class xet_led_properties_t(Structure):
     _fields_ = [
+        ("canControl", xe_bool_t),                                      ## [out] Indicates if software can control the LED
         ("haveRGB", xe_bool_t)                                          ## [out] Indicates if the LED is RGB capable
     ]
 
@@ -997,8 +1042,8 @@ class xet_ras_details_t(Structure):
         ("numCacheErrors", c_ulonglong),                                ## [out] The number of errors that have occurred in caches
                                                                         ## (L1/L3/register file/shared local memory/sampler)
         ("numMemoryErrors", c_ulonglong),                               ## [out] The number of errors that have occurred in the local memory
-        ("numLinkErrors", c_ulonglong),                                 ## [out] The number of errors that have occurred in the PCI or
-                                                                        ## peer-to-peer links
+        ("numPciErrors", c_ulonglong),                                  ## [out] The number of errors that have occurred in the PCI link
+        ("numSwitchErrors", c_ulonglong),                               ## [out] The number of errors that have occurred in the P2P links
         ("numDisplayErrors", c_ulonglong)                               ## [out] The number of errors that have occurred in the display
     ]
 

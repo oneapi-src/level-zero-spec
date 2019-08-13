@@ -118,15 +118,6 @@ members:
       name: "driverVersion[$T_STRING_PROPERTY_SIZE]"
       desc: "[out] Installed driver version (NULL terminated string value)"
     - type: $x_bool_t
-      name: "havePowerControl"
-      desc: "[out] Set to true if the power limits of the device can be changed"
-    - type: $x_bool_t
-      name: "haveFreqControl[$T_FREQ_DOMAIN_NUM]"
-      desc: "[out] Set to true if the frequency limits can be changed for each domain"
-    - type: $x_bool_t
-      name: "haveOverclock[$T_FREQ_DOMAIN_NUM]"
-      desc: "[out] Set to true if the frequency can be overclocked for each domain"
-    - type: $x_bool_t
       name: "numSwitches"
       desc: "[out] The number of switches on the device"
     - type: uint32_t
@@ -205,6 +196,9 @@ desc: "Properties related to device power settings"
 class: $tSysman
 name: $t_power_properties_t
 members:
+    - type: $x_bool_t
+      name: "canControl"
+      desc: "[out] Software can change the power limits."
     - type: uint32_t
       name: "maxLimit"
       desc: "[out] The maximum power limit in milliwatts that can be requested."
@@ -221,7 +215,11 @@ members:
       desc: "[out] The monotonic energy counter in microjoules."
     - type: uint64_t
       name: "timestamp"
-      desc: "[out] Microsecond timestamp when energy was captured."
+      desc: |
+            [out] Microsecond timestamp when energy was captured.
+            No assumption should be made about the absolute value of the timestamp.
+            It should only be used to calculate delta time between two snapshots of the same structure.
+            Never take the delta of this timestamp with the timestamp from a different structure.
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Sustained power limits"
@@ -347,6 +345,12 @@ details:
     - "Provides the set of frequencies as a list and as a range/step."
     - "It is generally recommended that applications choose frequencies from the list. However applications can also construct the list themselves using the range/steps provided."
 members:
+    - type: $x_bool_t
+      name: canControl
+      desc: "[out] Indicates if software can control the frequency of this domain"
+    - type: $x_bool_t
+      name: canOverclock
+      desc: "[out] Indicates if software can overclock this frequency domain"
     - type: double
       name: min
       desc: "[out] The minimum clock frequency in units of MHz"
@@ -438,7 +442,11 @@ members:
       desc: "[out] The monotonic counter of time in microseconds that the frequency has been limited by the hardware."
     - type: uint64_t
       name: "timestamp"
-      desc: "[out] Microsecond timestamp when throttleTime was captured."
+      desc: |
+            [out] Microsecond timestamp when throttleTime was captured.
+            No assumption should be made about the absolute value of the timestamp.
+            It should only be used to calculate delta time between two snapshots of the same structure.
+            Never take the delta of this timestamp with the timestamp from a different structure.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get frequency properties - available frequencies"
@@ -556,7 +564,11 @@ members:
       desc: "[out] Monotonic counter for time in microseconds that this resource is actively running workloads."
     - type: uint64_t
       name: "timestamp"
-      desc: "[out] Monotonic timestamp counter in microseconds when activeTime counter was sampled."
+      desc: |
+            [out] Monotonic timestamp counter in microseconds when activeTime counter was sampled.
+            No assumption should be made about the absolute value of the timestamp.
+            It should only be used to calculate delta time between two snapshots of the same structure.
+            Never take the delta of this timestamp with the timestamp from a different structure.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the activity counters of a part of the device"
@@ -628,7 +640,11 @@ members:
       desc: "[out] Current maximum bandwidth in units of bytes/sec"
     - type: uint64_t
       name: timestamp
-      desc: "[out] The timestamp when these measurements were sampled"
+      desc: |
+            [out] The timestamp when these measurements were sampled.
+            No assumption should be made about the absolute value of the timestamp.
+            It should only be used to calculate delta time between two snapshots of the same structure.
+            Never take the delta of this timestamp with the timestamp from a different structure.
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Memory allocation"
@@ -800,7 +816,11 @@ details:
 members:
     - type: uint64_t
       name: "timestamp"
-      desc: "[out] Monotonic timestamp counter in microseconds when this sample was taken"
+      desc: |
+            [out] Monotonic timestamp counter in microseconds when the measurement was made.
+            No assumption should be made about the absolute value of the timestamp.
+            It should only be used to calculate delta time between two snapshots of the same structure.
+            Never take the delta of this timestamp with the timestamp from a different structure.
     - type: uint64_t
       name: "rxCounter"
       desc: "[out] Monotonic counter for the number of bytes received"
@@ -820,7 +840,11 @@ details:
 members:
     - type: uint64_t
       name: "timestamp"
-      desc: "[out] Monotonic timestamp counter in microseconds when this sample was taken"
+      desc: |
+            [out] Monotonic timestamp counter in microseconds when the measurement was made.
+            No assumption should be made about the absolute value of the timestamp.
+            It should only be used to calculate delta time between two snapshots of the same structure.
+            Never take the delta of this timestamp with the timestamp from a different structure.
     - type: uint64_t
       name: "replayCounter"
       desc: "[out] Monotonic counter for the number of replay packets"
@@ -908,9 +932,9 @@ params:
 
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Switch address"
+desc: "Switch GUID address"
 class: $tSysman
-name: $t_switch_address_t
+name: $t_switch_guid_t
 members:
     - type: uint8_t
       name: "guid[8]"
@@ -921,8 +945,8 @@ desc: "Switch properties"
 class: $tSysman
 name: $t_switch_properties_t
 members:
-    - type: $t_switch_address_t
-      name: "address"
+    - type: $t_switch_guid_t
+      name: "switchGuid"
       desc: "[out] Address of this Switch"
     - type: uint32_t
       name: "numPorts"
@@ -973,11 +997,14 @@ class: $tSysman
 name: $t_switch_port_state_t
 members:
     - type: $x_bool_t
-      name: "connected"
+      name: "isConnected"
       desc: "[out] Indicates if the port is connected to a remote Switch"
-    - type: $t_switch_address_t
-      name: "remote"
-      desc: "[out] If connected is true, this gives the address of the remote Componian Die to which this port connects"
+    - type: $t_switch_guid_t
+      name: "remoteSwitchGuid"
+      desc: "[out] If connected is true, this gives the address of the remote switch to which this port connects"
+    - type: uint32_t
+      name: "remoteSwitchPortIndex"
+      desc: "[out] If connected is true, this gives the port index on the remote switch"
     - type: $t_switch_port_speed_t
       name: "rxSpeed"
       desc: "[out] Current maximum receive speed"
@@ -996,7 +1023,11 @@ details:
 members:
     - type: uint64_t
       name: "timestamp"
-      desc: "[out] Monotonic timestamp counter in microseconds when this sample was taken"
+      desc: |
+            [out] Monotonic timestamp counter in microseconds when the measurement was made.
+            No assumption should be made about the absolute value of the timestamp.
+            It should only be used to calculate delta time between two snapshots of the same structure.
+            Never take the delta of this timestamp with the timestamp from a different structure.
     - type: uint64_t
       name: "rxCounter"
       desc: "[out] Monotonic counter for the number of bytes received"
@@ -1019,7 +1050,11 @@ details:
 members:
     - type: uint64_t
       name: "timestamp"
-      desc: "[out] Monotonic timestamp counter in microseconds when this sample was taken"
+      desc: |
+            [out] Monotonic timestamp counter in microseconds when the measurement was made.
+            No assumption should be made about the absolute value of the timestamp.
+            It should only be used to calculate delta time between two snapshots of the same structure.
+            Never take the delta of this timestamp with the timestamp from a different structure.
     - type: uint64_t
       name: "replayCounter"
       desc: "[out] Monotonic counter for the number of replay packets"
@@ -1247,6 +1282,9 @@ desc: "Firmware properties"
 class: $tSysman
 name: $t_firmware_properties_t
 members:
+    - type: $x_bool_t
+      name: "canControl"
+      desc: "[out] Indicates if software can flash the firmware"
     - type: int8_t
       name: "name[$T_STRING_PROPERTY_SIZE]"
       desc: "[out] NULL terminated string value"
@@ -1330,6 +1368,9 @@ desc: "Static properties of the power supply"
 class: $tSysman
 name: $t_psu_properties_t
 members:
+    - type: $x_bool_t
+      name: "canControl"
+      desc: "[out] Indicates if software can control the PSU"
     - type: $x_bool_t
       name: "haveFan"
       desc: "[out] True if the power supply has a fan"
@@ -1441,6 +1482,9 @@ desc: "Fan properties"
 class: $tSysman
 name: $t_fan_properties_t
 members:
+    - type: $x_bool_t
+      name: "canControl"
+      desc: "[out] Indicates if software can control the fan speed"
     - type: uint32_t
       name: "maxSpeed"
       desc: "[out] The maximum RPM of the fan"
@@ -1565,6 +1609,9 @@ desc: "LED properties"
 class: $tSysman
 name: $t_led_properties_t
 members:
+    - type: $x_bool_t
+      name: "canControl"
+      desc: "[out] Indicates if software can control the LED"
     - type: $x_bool_t
       name: "haveRGB"
       desc: "[out] Indicates if the LED is RGB capable"
@@ -1697,8 +1744,11 @@ members:
       name: "numMemoryErrors"
       desc: "[out] The number of errors that have occurred in the local memory"
     - type: uint64_t
-      name: "numLinkErrors"
-      desc: "[out] The number of errors that have occurred in the PCI or peer-to-peer links"
+      name: "numPciErrors"
+      desc: "[out] The number of errors that have occurred in the PCI link"
+    - type: uint64_t
+      name: "numSwitchErrors"
+      desc: "[out] The number of errors that have occurred in the P2P links"
     - type: uint64_t
       name: "numDisplayErrors"
       desc: "[out] The number of errors that have occurred in the display"
