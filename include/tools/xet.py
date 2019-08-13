@@ -803,7 +803,9 @@ class xet_switch_port_state_t(Structure):
     _fields_ = [
         ("isConnected", xe_bool_t),                                     ## [out] Indicates if the port is connected to a remote Switch
         ("remoteSwitchGuid", xet_switch_guid_t),                        ## [out] If connected is true, this gives the address of the remote
-                                                                        ## Componian Die to which this port connects
+                                                                        ## switch to which this port connects
+        ("remoteSwitchPortIndex", c_ulong),                             ## [out] If connected is true, this gives the port index on the remote
+                                                                        ## switch
         ("rxSpeed", xet_switch_port_speed_t),                           ## [out] Current maximum receive speed
         ("txSpeed", xet_switch_port_speed_t)                            ## [out] Current maximum transmit speed
     ]

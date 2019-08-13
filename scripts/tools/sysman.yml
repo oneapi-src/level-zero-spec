@@ -1001,7 +1001,10 @@ members:
       desc: "[out] Indicates if the port is connected to a remote Switch"
     - type: $t_switch_guid_t
       name: "remoteSwitchGuid"
-      desc: "[out] If connected is true, this gives the address of the remote Componian Die to which this port connects"
+      desc: "[out] If connected is true, this gives the address of the remote switch to which this port connects"
+    - type: uint32_t
+      name: "remoteSwitchPortIndex"
+      desc: "[out] If connected is true, this gives the port index on the remote switch"
     - type: $t_switch_port_speed_t
       name: "rxSpeed"
       desc: "[out] Current maximum receive speed"

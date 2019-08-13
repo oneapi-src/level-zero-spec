@@ -1001,7 +1001,9 @@ typedef struct _xet_switch_port_state_t
 {
     xe_bool_t isConnected;                          ///< [out] Indicates if the port is connected to a remote Switch
     xet_switch_guid_t remoteSwitchGuid;             ///< [out] If connected is true, this gives the address of the remote
-                                                    ///< Componian Die to which this port connects
+                                                    ///< switch to which this port connects
+    uint32_t remoteSwitchPortIndex;                 ///< [out] If connected is true, this gives the port index on the remote
+                                                    ///< switch
     xet_switch_port_speed_t rxSpeed;                ///< [out] Current maximum receive speed
     xet_switch_port_speed_t txSpeed;                ///< [out] Current maximum transmit speed
 

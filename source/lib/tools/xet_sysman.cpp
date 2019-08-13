@@ -3986,6 +3986,10 @@ namespace xet
         str += to_string(val.remoteSwitchGuid);
         str += "\n";
         
+        str += "Sysman::switch_port_state_t::remoteSwitchPortIndex : ";
+        str += std::to_string(val.remoteSwitchPortIndex);
+        str += "\n";
+        
         str += "Sysman::switch_port_state_t::rxSpeed : ";
         str += to_string(val.rxSpeed);
         str += "\n";
