@@ -279,6 +279,11 @@ namespace xet
         {
             uint64_t energy;                                ///< [out] The monotonic energy counter in microjoules.
             uint64_t timestamp;                             ///< [out] Microsecond timestamp when energy was captured.
+                                                            ///< No assumption should be made about the absolute value of the timestamp.
+                                                            ///< It should only be used to calculate delta time between two snapshots
+                                                            ///< of the same structure.
+                                                            ///< Never take the delta of this timestamp with the timestamp from a
+                                                            ///< different structure.
 
         };
 
@@ -392,6 +397,11 @@ namespace xet
             uint64_t throttleTime;                          ///< [out] The monotonic counter of time in microseconds that the frequency
                                                             ///< has been limited by the hardware.
             uint64_t timestamp;                             ///< [out] Microsecond timestamp when throttleTime was captured.
+                                                            ///< No assumption should be made about the absolute value of the timestamp.
+                                                            ///< It should only be used to calculate delta time between two snapshots
+                                                            ///< of the same structure.
+                                                            ///< Never take the delta of this timestamp with the timestamp from a
+                                                            ///< different structure.
 
         };
 
@@ -408,6 +418,11 @@ namespace xet
                                                             ///< actively running workloads.
             uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when activeTime
                                                             ///< counter was sampled.
+                                                            ///< No assumption should be made about the absolute value of the timestamp.
+                                                            ///< It should only be used to calculate delta time between two snapshots
+                                                            ///< of the same structure.
+                                                            ///< Never take the delta of this timestamp with the timestamp from a
+                                                            ///< different structure.
 
         };
 
@@ -433,7 +448,12 @@ namespace xet
             uint64_t readCounter;                           ///< [out] Total bytes read from memory
             uint64_t writeCounter;                          ///< [out] Total bytes written to memory
             uint64_t maxBandwidth;                          ///< [out] Current maximum bandwidth in units of bytes/sec
-            uint64_t timestamp;                             ///< [out] The timestamp when these measurements were sampled
+            uint64_t timestamp;                             ///< [out] The timestamp when these measurements were sampled.
+                                                            ///< No assumption should be made about the absolute value of the timestamp.
+                                                            ///< It should only be used to calculate delta time between two snapshots
+                                                            ///< of the same structure.
+                                                            ///< Never take the delta of this timestamp with the timestamp from a
+                                                            ///< different structure.
 
         };
 
@@ -510,8 +530,13 @@ namespace xet
         ///       s1.timestamp))
         struct pci_throughput_t
         {
-            uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when this sample was
-                                                            ///< taken
+            uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when the measurement
+                                                            ///< was made.
+                                                            ///< No assumption should be made about the absolute value of the timestamp.
+                                                            ///< It should only be used to calculate delta time between two snapshots
+                                                            ///< of the same structure.
+                                                            ///< Never take the delta of this timestamp with the timestamp from a
+                                                            ///< different structure.
             uint64_t rxCounter;                             ///< [out] Monotonic counter for the number of bytes received
             uint64_t txCounter;                             ///< [out] Monotonic counter for the number of bytes transmitted (including
                                                             ///< replays)
@@ -529,8 +554,13 @@ namespace xet
         ///       s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))
         struct pci_stats_t
         {
-            uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when this sample was
-                                                            ///< taken
+            uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when the measurement
+                                                            ///< was made.
+                                                            ///< No assumption should be made about the absolute value of the timestamp.
+                                                            ///< It should only be used to calculate delta time between two snapshots
+                                                            ///< of the same structure.
+                                                            ///< Never take the delta of this timestamp with the timestamp from a
+                                                            ///< different structure.
             uint64_t replayCounter;                         ///< [out] Monotonic counter for the number of replay packets
             uint64_t packetCounter;                         ///< [out] Monotonic counter for the number of packets
 
@@ -606,8 +636,13 @@ namespace xet
         ///       (s2.txMaxBandwidth * (s2.timestamp - s1.timestamp))
         struct switch_port_throughput_t
         {
-            uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when this sample was
-                                                            ///< taken
+            uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when the measurement
+                                                            ///< was made.
+                                                            ///< No assumption should be made about the absolute value of the timestamp.
+                                                            ///< It should only be used to calculate delta time between two snapshots
+                                                            ///< of the same structure.
+                                                            ///< Never take the delta of this timestamp with the timestamp from a
+                                                            ///< different structure.
             uint64_t rxCounter;                             ///< [out] Monotonic counter for the number of bytes received
             uint64_t txCounter;                             ///< [out] Monotonic counter for the number of bytes transmitted
             uint32_t rxMaxBandwidth;                        ///< [out] The current maximum bandwidth in bytes/sec for receiving packats
@@ -625,8 +660,13 @@ namespace xet
         ///       s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))
         struct switch_port_stats_t
         {
-            uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when this sample was
-                                                            ///< taken
+            uint64_t timestamp;                             ///< [out] Monotonic timestamp counter in microseconds when the measurement
+                                                            ///< was made.
+                                                            ///< No assumption should be made about the absolute value of the timestamp.
+                                                            ///< It should only be used to calculate delta time between two snapshots
+                                                            ///< of the same structure.
+                                                            ///< Never take the delta of this timestamp with the timestamp from a
+                                                            ///< different structure.
             uint64_t replayCounter;                         ///< [out] Monotonic counter for the number of replay packets
             uint64_t packetCounter;                         ///< [out] Monotonic counter for the number of packets
 

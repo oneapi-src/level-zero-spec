@@ -215,7 +215,11 @@ members:
       desc: "[out] The monotonic energy counter in microjoules."
     - type: uint64_t
       name: "timestamp"
-      desc: "[out] Microsecond timestamp when energy was captured."
+      desc: |
+            [out] Microsecond timestamp when energy was captured.
+            No assumption should be made about the absolute value of the timestamp.
+            It should only be used to calculate delta time between two snapshots of the same structure.
+            Never take the delta of this timestamp with the timestamp from a different structure.
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Sustained power limits"
@@ -438,7 +442,11 @@ members:
       desc: "[out] The monotonic counter of time in microseconds that the frequency has been limited by the hardware."
     - type: uint64_t
       name: "timestamp"
-      desc: "[out] Microsecond timestamp when throttleTime was captured."
+      desc: |
+            [out] Microsecond timestamp when throttleTime was captured.
+            No assumption should be made about the absolute value of the timestamp.
+            It should only be used to calculate delta time between two snapshots of the same structure.
+            Never take the delta of this timestamp with the timestamp from a different structure.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get frequency properties - available frequencies"
@@ -556,7 +564,11 @@ members:
       desc: "[out] Monotonic counter for time in microseconds that this resource is actively running workloads."
     - type: uint64_t
       name: "timestamp"
-      desc: "[out] Monotonic timestamp counter in microseconds when activeTime counter was sampled."
+      desc: |
+            [out] Monotonic timestamp counter in microseconds when activeTime counter was sampled.
+            No assumption should be made about the absolute value of the timestamp.
+            It should only be used to calculate delta time between two snapshots of the same structure.
+            Never take the delta of this timestamp with the timestamp from a different structure.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the activity counters of a part of the device"
@@ -628,7 +640,11 @@ members:
       desc: "[out] Current maximum bandwidth in units of bytes/sec"
     - type: uint64_t
       name: timestamp
-      desc: "[out] The timestamp when these measurements were sampled"
+      desc: |
+            [out] The timestamp when these measurements were sampled.
+            No assumption should be made about the absolute value of the timestamp.
+            It should only be used to calculate delta time between two snapshots of the same structure.
+            Never take the delta of this timestamp with the timestamp from a different structure.
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Memory allocation"
@@ -800,7 +816,11 @@ details:
 members:
     - type: uint64_t
       name: "timestamp"
-      desc: "[out] Monotonic timestamp counter in microseconds when this sample was taken"
+      desc: |
+            [out] Monotonic timestamp counter in microseconds when the measurement was made.
+            No assumption should be made about the absolute value of the timestamp.
+            It should only be used to calculate delta time between two snapshots of the same structure.
+            Never take the delta of this timestamp with the timestamp from a different structure.
     - type: uint64_t
       name: "rxCounter"
       desc: "[out] Monotonic counter for the number of bytes received"
@@ -820,7 +840,11 @@ details:
 members:
     - type: uint64_t
       name: "timestamp"
-      desc: "[out] Monotonic timestamp counter in microseconds when this sample was taken"
+      desc: |
+            [out] Monotonic timestamp counter in microseconds when the measurement was made.
+            No assumption should be made about the absolute value of the timestamp.
+            It should only be used to calculate delta time between two snapshots of the same structure.
+            Never take the delta of this timestamp with the timestamp from a different structure.
     - type: uint64_t
       name: "replayCounter"
       desc: "[out] Monotonic counter for the number of replay packets"
@@ -996,7 +1020,11 @@ details:
 members:
     - type: uint64_t
       name: "timestamp"
-      desc: "[out] Monotonic timestamp counter in microseconds when this sample was taken"
+      desc: |
+            [out] Monotonic timestamp counter in microseconds when the measurement was made.
+            No assumption should be made about the absolute value of the timestamp.
+            It should only be used to calculate delta time between two snapshots of the same structure.
+            Never take the delta of this timestamp with the timestamp from a different structure.
     - type: uint64_t
       name: "rxCounter"
       desc: "[out] Monotonic counter for the number of bytes received"
@@ -1019,7 +1047,11 @@ details:
 members:
     - type: uint64_t
       name: "timestamp"
-      desc: "[out] Monotonic timestamp counter in microseconds when this sample was taken"
+      desc: |
+            [out] Monotonic timestamp counter in microseconds when the measurement was made.
+            No assumption should be made about the absolute value of the timestamp.
+            It should only be used to calculate delta time between two snapshots of the same structure.
+            Never take the delta of this timestamp with the timestamp from a different structure.
     - type: uint64_t
       name: "replayCounter"
       desc: "[out] Monotonic counter for the number of replay packets"

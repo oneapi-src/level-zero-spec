@@ -424,6 +424,11 @@ class xet_power_energy_counter_t(Structure):
     _fields_ = [
         ("energy", c_ulonglong),                                        ## [out] The monotonic energy counter in microjoules.
         ("timestamp", c_ulonglong)                                      ## [out] Microsecond timestamp when energy was captured.
+                                                                        ## No assumption should be made about the absolute value of the timestamp.
+                                                                        ## It should only be used to calculate delta time between two snapshots
+                                                                        ## of the same structure.
+                                                                        ## Never take the delta of this timestamp with the timestamp from a
+                                                                        ## different structure.
     ]
 
 ###############################################################################
@@ -548,6 +553,11 @@ class xet_freq_throttle_time_t(Structure):
         ("throttleTime", c_ulonglong),                                  ## [out] The monotonic counter of time in microseconds that the frequency
                                                                         ## has been limited by the hardware.
         ("timestamp", c_ulonglong)                                      ## [out] Microsecond timestamp when throttleTime was captured.
+                                                                        ## No assumption should be made about the absolute value of the timestamp.
+                                                                        ## It should only be used to calculate delta time between two snapshots
+                                                                        ## of the same structure.
+                                                                        ## Never take the delta of this timestamp with the timestamp from a
+                                                                        ## different structure.
     ]
 
 ###############################################################################
@@ -575,6 +585,11 @@ class xet_activity_stats_t(Structure):
                                                                         ## actively running workloads.
         ("timestamp", c_ulonglong)                                      ## [out] Monotonic timestamp counter in microseconds when activeTime
                                                                         ## counter was sampled.
+                                                                        ## No assumption should be made about the absolute value of the timestamp.
+                                                                        ## It should only be used to calculate delta time between two snapshots
+                                                                        ## of the same structure.
+                                                                        ## Never take the delta of this timestamp with the timestamp from a
+                                                                        ## different structure.
     ]
 
 ###############################################################################
@@ -614,7 +629,12 @@ class xet_mem_bandwidth_t(Structure):
         ("readCounter", c_ulonglong),                                   ## [out] Total bytes read from memory
         ("writeCounter", c_ulonglong),                                  ## [out] Total bytes written to memory
         ("maxBandwidth", c_ulonglong),                                  ## [out] Current maximum bandwidth in units of bytes/sec
-        ("timestamp", c_ulonglong)                                      ## [out] The timestamp when these measurements were sampled
+        ("timestamp", c_ulonglong)                                      ## [out] The timestamp when these measurements were sampled.
+                                                                        ## No assumption should be made about the absolute value of the timestamp.
+                                                                        ## It should only be used to calculate delta time between two snapshots
+                                                                        ## of the same structure.
+                                                                        ## Never take the delta of this timestamp with the timestamp from a
+                                                                        ## different structure.
     ]
 
 ###############################################################################
@@ -702,8 +722,13 @@ class xet_pci_bar_properties_t(Structure):
 ##       s1.timestamp))
 class xet_pci_throughput_t(Structure):
     _fields_ = [
-        ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when this sample was
-                                                                        ## taken
+        ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when the measurement
+                                                                        ## was made.
+                                                                        ## No assumption should be made about the absolute value of the timestamp.
+                                                                        ## It should only be used to calculate delta time between two snapshots
+                                                                        ## of the same structure.
+                                                                        ## Never take the delta of this timestamp with the timestamp from a
+                                                                        ## different structure.
         ("rxCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes received
         ("txCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes transmitted (including
                                                                         ## replays)
@@ -720,8 +745,13 @@ class xet_pci_throughput_t(Structure):
 ##       s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))
 class xet_pci_stats_t(Structure):
     _fields_ = [
-        ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when this sample was
-                                                                        ## taken
+        ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when the measurement
+                                                                        ## was made.
+                                                                        ## No assumption should be made about the absolute value of the timestamp.
+                                                                        ## It should only be used to calculate delta time between two snapshots
+                                                                        ## of the same structure.
+                                                                        ## Never take the delta of this timestamp with the timestamp from a
+                                                                        ## different structure.
         ("replayCounter", c_ulonglong),                                 ## [out] Monotonic counter for the number of replay packets
         ("packetCounter", c_ulonglong)                                  ## [out] Monotonic counter for the number of packets
     ]
@@ -790,8 +820,13 @@ class xet_switch_port_state_t(Structure):
 ##       (s2.txMaxBandwidth * (s2.timestamp - s1.timestamp))
 class xet_switch_port_throughput_t(Structure):
     _fields_ = [
-        ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when this sample was
-                                                                        ## taken
+        ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when the measurement
+                                                                        ## was made.
+                                                                        ## No assumption should be made about the absolute value of the timestamp.
+                                                                        ## It should only be used to calculate delta time between two snapshots
+                                                                        ## of the same structure.
+                                                                        ## Never take the delta of this timestamp with the timestamp from a
+                                                                        ## different structure.
         ("rxCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes received
         ("txCounter", c_ulonglong),                                     ## [out] Monotonic counter for the number of bytes transmitted
         ("rxMaxBandwidth", c_ulong),                                    ## [out] The current maximum bandwidth in bytes/sec for receiving packats
@@ -808,8 +843,13 @@ class xet_switch_port_throughput_t(Structure):
 ##       s1.replayCounter) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))
 class xet_switch_port_stats_t(Structure):
     _fields_ = [
-        ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when this sample was
-                                                                        ## taken
+        ("timestamp", c_ulonglong),                                     ## [out] Monotonic timestamp counter in microseconds when the measurement
+                                                                        ## was made.
+                                                                        ## No assumption should be made about the absolute value of the timestamp.
+                                                                        ## It should only be used to calculate delta time between two snapshots
+                                                                        ## of the same structure.
+                                                                        ## Never take the delta of this timestamp with the timestamp from a
+                                                                        ## different structure.
         ("replayCounter", c_ulonglong),                                 ## [out] Monotonic counter for the number of replay packets
         ("packetCounter", c_ulonglong)                                  ## [out] Monotonic counter for the number of packets
     ]
