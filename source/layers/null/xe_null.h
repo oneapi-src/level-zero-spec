@@ -45,7 +45,7 @@ namespace instrumented
     //////////////////////////////////////////////////////////////////////////
     struct tracer_data_t
     {
-        bool enabled = false;
+        xe_bool_t enabled = false;
 
         void* userData = nullptr;
 
@@ -60,7 +60,7 @@ namespace instrumented
     class context_t
     {
     public:
-        bool enableTracing = false;
+        xe_bool_t enableTracing = false;
         std::vector< tracer_data_t > tracerData;
 
         context_t();
