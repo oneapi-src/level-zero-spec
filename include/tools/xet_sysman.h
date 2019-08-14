@@ -469,7 +469,7 @@ typedef enum _xet_pcu_interrupt_reasons_t
 {
     XET_PCU_INTERRUPT_DUTY_CYCLE_CHANGE = XE_BIT( 1 ),  ///< signaled every time the duty cycle changes
     XET_PCU_INTERRUPT_DUTY_CYCLE_EXIT = XE_BIT( 2 ),///< signaled at the end of the duty cycle stalling
-    XET_PCU_INTERRUPT_DITY_CYCLE_ENTRY = XE_BIT( 3 ),   ///< signaled at the beginning of the duty cycle stalling
+    XET_PCU_INTERRUPT_DUTY_CYCLE_ENTRY = XE_BIT( 3 ),   ///< signaled at the beginning of the duty cycle stalling
     XET_PCU_INTERRUPT_ENERGY_THRESHOLD_CROSSED = XE_BIT( 4 ),   ///< signaled when the energy threshold is crossed
 
 } xet_pcu_interrupt_reasons_t;

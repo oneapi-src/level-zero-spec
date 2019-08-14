@@ -3105,8 +3105,8 @@ namespace xet
         if( static_cast<uint32_t>(Sysman::pcu_interrupt_reasons_t::PCU_INTERRUPT_DUTY_CYCLE_EXIT) & bits )
             str += "PCU_INTERRUPT_DUTY_CYCLE_EXIT | ";
         
-        if( static_cast<uint32_t>(Sysman::pcu_interrupt_reasons_t::PCU_INTERRUPT_DITY_CYCLE_ENTRY) & bits )
-            str += "PCU_INTERRUPT_DITY_CYCLE_ENTRY | ";
+        if( static_cast<uint32_t>(Sysman::pcu_interrupt_reasons_t::PCU_INTERRUPT_DUTY_CYCLE_ENTRY) & bits )
+            str += "PCU_INTERRUPT_DUTY_CYCLE_ENTRY | ";
         
         if( static_cast<uint32_t>(Sysman::pcu_interrupt_reasons_t::PCU_INTERRUPT_ENERGY_THRESHOLD_CROSSED) & bits )
             str += "PCU_INTERRUPT_ENERGY_THRESHOLD_CROSSED | ";

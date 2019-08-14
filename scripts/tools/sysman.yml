@@ -463,7 +463,7 @@ etors:
     - name: $T_PCU_INTERRUPT_DUTY_CYCLE_EXIT
       value: "$X_BIT( 2 )"
       desc: "signaled at the end of the duty cycle stalling"
-    - name: $T_PCU_INTERRUPT_DITY_CYCLE_ENTRY
+    - name: $T_PCU_INTERRUPT_DUTY_CYCLE_ENTRY
       value: "$X_BIT( 3 )"
       desc: "signaled at the beginning of the duty cycle stalling"
     - name: $T_PCU_INTERRUPT_ENERGY_THRESHOLD_CROSSED

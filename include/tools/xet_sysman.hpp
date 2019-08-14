@@ -119,7 +119,7 @@ namespace xet
         {
             PCU_INTERRUPT_DUTY_CYCLE_CHANGE = XE_BIT( 1 ),  ///< signaled every time the duty cycle changes
             PCU_INTERRUPT_DUTY_CYCLE_EXIT = XE_BIT( 2 ),    ///< signaled at the end of the duty cycle stalling
-            PCU_INTERRUPT_DITY_CYCLE_ENTRY = XE_BIT( 3 ),   ///< signaled at the beginning of the duty cycle stalling
+            PCU_INTERRUPT_DUTY_CYCLE_ENTRY = XE_BIT( 3 ),   ///< signaled at the beginning of the duty cycle stalling
             PCU_INTERRUPT_ENERGY_THRESHOLD_CROSSED = XE_BIT( 4 ),   ///< signaled when the energy threshold is crossed
 
         };
