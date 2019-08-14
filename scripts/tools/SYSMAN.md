@@ -737,6 +737,8 @@ that can be used to specify start/end points when calling the function ::${t}Sys
 (::${t}_diag_test_list_t.count = 0) then it is not possible on that platform to run a subset of the diagnostic tests and ::${T}_DIAG_FIRST_TEST_INDEX
 and ::${T}_DIAG_LAST_TEST_INDEX should be used instead for the start/stop indices respectively.
 
+Diagnostics can only be performed at the device level. Using these functions with a sub-device SMI handle will return an unsupported error.
+
 ${"#"} <a name="sd">Sub-devices</a>
 Multi-tile devices consist of sub-devices that are arranged under a logical device, otherwise known as **tiles**.
 
