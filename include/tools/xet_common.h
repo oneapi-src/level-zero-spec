@@ -119,6 +119,10 @@ typedef struct _xet_power_properties_t xet_power_properties_t;
 typedef struct _xet_power_energy_counter_t xet_power_energy_counter_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Forward-declare xet_power_energy_threshold_t
+typedef struct _xet_power_energy_threshold_t xet_power_energy_threshold_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_power_sustained_limit_t
 typedef struct _xet_power_sustained_limit_t xet_power_sustained_limit_t;
 

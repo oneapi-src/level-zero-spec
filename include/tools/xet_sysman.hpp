@@ -91,6 +91,7 @@ namespace xet
         enum class event_type_t
         {
             FREQ_THROTTLED = 0,                             ///< The frequency is being throttled
+            PCU_INTERRUPT,                                  ///< Interrupt from the PCU
             RAS_ERRORS,                                     ///< ECC/RAS errors
             NUM,                                            ///< The number of event types
 
@@ -109,6 +110,17 @@ namespace xet
             SW_RANGE = XE_BIT( 5 ),                         ///< frequency throttled due to software supplied frequency range
             HW_RANGE = XE_BIT( 6 ),                         ///< frequency throttled due to a sub block that has a lower frequency
                                                             ///< range when it receives clocks
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief PCU interrupt reasons
+        enum class pcu_interrupt_reasons_t
+        {
+            PCU_INTERRUPT_DUTY_CYCLE_CHANGE = XE_BIT( 1 ),  ///< signaled every time the duty cycle changes
+            PCU_INTERRUPT_DUTY_CYCLE_EXIT = XE_BIT( 2 ),    ///< signaled at the end of the duty cycle stalling
+            PCU_INTERRUPT_DITY_CYCLE_ENTRY = XE_BIT( 3 ),   ///< signaled at the beginning of the duty cycle stalling
+            PCU_INTERRUPT_ENERGY_THRESHOLD_CROSSED = XE_BIT( 4 ),   ///< signaled when the energy threshold is crossed
 
         };
 
@@ -284,6 +296,18 @@ namespace xet
                                                             ///< of the same structure.
                                                             ///< Never take the delta of this timestamp with the timestamp from a
                                                             ///< different structure.
+
+        };
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Energy threshold
+        /// 
+        /// @details
+        ///     - Energy threshold value, when this value is crossed, pcu will signal an
+        ///       interrupt.
+        struct power_energy_threshold_t
+        {
+            uint32_t energy;                                ///< [in,out] The energy threshold in joules.
 
         };
 
@@ -938,6 +962,33 @@ namespace xet
         PowerGetEnergyCounter(
             power_energy_counter_t* pEnergy                 ///< [in] Will contain the latest snapshot of the energy counter and
                                                             ///< timestamp when the last counter value was measured.
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Get energy threshold
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @returns
+        ///     - power_energy_threshold_t: The current energy threshold value in joules.
+        /// 
+        /// @throws result_t
+        power_energy_threshold_t __xecall
+        PowerGetEnergyThreshold(
+            void
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Set energy threshold
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// @throws result_t
+        void __xecall
+        PowerSetEnergyThreshold(
+            power_energy_threshold_t* pThreshold            ///< [in] The energy threshold to be set in joules.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -1618,6 +1669,10 @@ namespace xet
     std::string to_string( const Sysman::power_energy_counter_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::power_energy_threshold_t to std::string
+    std::string to_string( const Sysman::power_energy_threshold_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::power_sustained_limit_t to std::string
     std::string to_string( const Sysman::power_sustained_limit_t val );
 
@@ -1640,6 +1695,10 @@ namespace xet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::freq_throttle_reasons_t to std::string
     std::string to_string( const Sysman::freq_throttle_reasons_t val );
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pcu_interrupt_reasons_t to std::string
+    std::string to_string( const Sysman::pcu_interrupt_reasons_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::freq_state_t to std::string

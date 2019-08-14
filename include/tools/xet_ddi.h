@@ -642,6 +642,20 @@ typedef xe_result_t (__xecall *xet_pfnSysmanPowerGetEnergyCounter_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanPowerGetEnergyThreshold 
+typedef xe_result_t (__xecall *xet_pfnSysmanPowerGetEnergyThreshold_t)(
+    xet_sysman_handle_t,
+    xet_power_energy_threshold_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xetSysmanPowerSetEnergyThreshold 
+typedef xe_result_t (__xecall *xet_pfnSysmanPowerSetEnergyThreshold_t)(
+    xet_sysman_handle_t,
+    xet_power_energy_threshold_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xetSysmanPowerGetLimits 
 typedef xe_result_t (__xecall *xet_pfnSysmanPowerGetLimits_t)(
     xet_sysman_handle_t,
@@ -1015,6 +1029,8 @@ typedef struct _xet_sysman_dditable_t
     xet_pfnSysmanDeviceReset_t                                  pfnDeviceReset;
     xet_pfnSysmanPowerGetProperties_t                           pfnPowerGetProperties;
     xet_pfnSysmanPowerGetEnergyCounter_t                        pfnPowerGetEnergyCounter;
+    xet_pfnSysmanPowerGetEnergyThreshold_t                      pfnPowerGetEnergyThreshold;
+    xet_pfnSysmanPowerSetEnergyThreshold_t                      pfnPowerSetEnergyThreshold;
     xet_pfnSysmanPowerGetLimits_t                               pfnPowerGetLimits;
     xet_pfnSysmanPowerSetLimits_t                               pfnPowerSetLimits;
     xet_pfnSysmanFrequencyGetProperties_t                       pfnFrequencyGetProperties;

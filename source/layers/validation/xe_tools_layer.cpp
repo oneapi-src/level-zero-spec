@@ -844,6 +844,58 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanPowerGetEnergyThreshold
+    xe_result_t __xecall
+    xetSysmanPowerGetEnergyThreshold(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        xet_power_energy_threshold_t* pThreshold        ///< [out] The current energy threshold value in joules.
+        )
+    {
+        auto pfnPowerGetEnergyThreshold = context.xetDdiTable.Sysman.pfnPowerGetEnergyThreshold;
+
+        if( nullptr == pfnPowerGetEnergyThreshold )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pThreshold )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnPowerGetEnergyThreshold( hSysman, pThreshold );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanPowerSetEnergyThreshold
+    xe_result_t __xecall
+    xetSysmanPowerSetEnergyThreshold(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        xet_power_energy_threshold_t* pThreshold        ///< [in] The energy threshold to be set in joules.
+        )
+    {
+        auto pfnPowerSetEnergyThreshold = context.xetDdiTable.Sysman.pfnPowerSetEnergyThreshold;
+
+        if( nullptr == pfnPowerSetEnergyThreshold )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hSysman )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pThreshold )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnPowerSetEnergyThreshold( hSysman, pThreshold );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanPowerGetLimits
     xe_result_t __xecall
     xetSysmanPowerGetLimits(
@@ -2681,6 +2733,12 @@ xetGetSysmanProcAddrTable(
 
     dditable.pfnPowerGetEnergyCounter                    = pDdiTable->pfnPowerGetEnergyCounter;
     pDdiTable->pfnPowerGetEnergyCounter                  = layer::xetSysmanPowerGetEnergyCounter;
+
+    dditable.pfnPowerGetEnergyThreshold                  = pDdiTable->pfnPowerGetEnergyThreshold;
+    pDdiTable->pfnPowerGetEnergyThreshold                = layer::xetSysmanPowerGetEnergyThreshold;
+
+    dditable.pfnPowerSetEnergyThreshold                  = pDdiTable->pfnPowerSetEnergyThreshold;
+    pDdiTable->pfnPowerSetEnergyThreshold                = layer::xetSysmanPowerSetEnergyThreshold;
 
     dditable.pfnPowerGetLimits                           = pDdiTable->pfnPowerGetLimits;
     pDdiTable->pfnPowerGetLimits                         = layer::xetSysmanPowerGetLimits;

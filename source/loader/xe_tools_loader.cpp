@@ -935,6 +935,56 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanPowerGetEnergyThreshold
+    xe_result_t __xecall
+    xetSysmanPowerGetEnergyThreshold(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        xet_power_energy_threshold_t* pThreshold        ///< [out] The current energy threshold value in joules.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnPowerGetEnergyThreshold = dditable->xet.Sysman.pfnPowerGetEnergyThreshold;
+        if( nullptr == pfnPowerGetEnergyThreshold )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnPowerGetEnergyThreshold( hSysman, pThreshold );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanPowerSetEnergyThreshold
+    xe_result_t __xecall
+    xetSysmanPowerSetEnergyThreshold(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        xet_power_energy_threshold_t* pThreshold        ///< [in] The energy threshold to be set in joules.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
+        auto pfnPowerSetEnergyThreshold = dditable->xet.Sysman.pfnPowerSetEnergyThreshold;
+        if( nullptr == pfnPowerSetEnergyThreshold )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
+
+        // forward to device-driver
+        result = pfnPowerSetEnergyThreshold( hSysman, pThreshold );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanPowerGetLimits
     xe_result_t __xecall
     xetSysmanPowerGetLimits(
@@ -3065,6 +3115,8 @@ xetGetSysmanProcAddrTable(
             pDdiTable->pfnDeviceReset                              = loader::xetSysmanDeviceReset;
             pDdiTable->pfnPowerGetProperties                       = loader::xetSysmanPowerGetProperties;
             pDdiTable->pfnPowerGetEnergyCounter                    = loader::xetSysmanPowerGetEnergyCounter;
+            pDdiTable->pfnPowerGetEnergyThreshold                  = loader::xetSysmanPowerGetEnergyThreshold;
+            pDdiTable->pfnPowerSetEnergyThreshold                  = loader::xetSysmanPowerSetEnergyThreshold;
             pDdiTable->pfnPowerGetLimits                           = loader::xetSysmanPowerGetLimits;
             pDdiTable->pfnPowerSetLimits                           = loader::xetSysmanPowerSetLimits;
             pDdiTable->pfnFrequencyGetProperties                   = loader::xetSysmanFrequencyGetProperties;

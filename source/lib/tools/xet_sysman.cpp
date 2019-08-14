@@ -208,6 +208,62 @@ xetSysmanPowerGetEnergyCounter(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Get energy threshold
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pThreshold
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPowerGetEnergyThreshold(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_power_energy_threshold_t* pThreshold        ///< [out] The current energy threshold value in joules.
+    )
+{
+    auto pfnPowerGetEnergyThreshold = xet_lib::context.ddiTable.Sysman.pfnPowerGetEnergyThreshold;
+    if( nullptr == pfnPowerGetEnergyThreshold )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnPowerGetEnergyThreshold( hSysman, pThreshold );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set energy threshold
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pThreshold
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPowerSetEnergyThreshold(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_power_energy_threshold_t* pThreshold        ///< [in] The energy threshold to be set in joules.
+    )
+{
+    auto pfnPowerSetEnergyThreshold = xet_lib::context.ddiTable.Sysman.pfnPowerSetEnergyThreshold;
+    if( nullptr == pfnPowerSetEnergyThreshold )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnPowerSetEnergyThreshold( hSysman, pThreshold );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Get power limits
 /// 
 /// @details
@@ -1746,6 +1802,55 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Get energy threshold
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @returns
+    ///     - power_energy_threshold_t: The current energy threshold value in joules.
+    /// 
+    /// @throws result_t
+    Sysman::power_energy_threshold_t __xecall
+    Sysman::PowerGetEnergyThreshold(
+        void
+        )
+    {
+        xet_power_energy_threshold_t threshold;
+
+        auto result = static_cast<result_t>( ::xetSysmanPowerGetEnergyThreshold(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            &threshold ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::PowerGetEnergyThreshold" );
+
+        return *reinterpret_cast<power_energy_threshold_t*>( &threshold );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Set energy threshold
+    /// 
+    /// @details
+    ///     - The application may call this function from simultaneous threads.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @throws result_t
+    void __xecall
+    Sysman::PowerSetEnergyThreshold(
+        power_energy_threshold_t* pThreshold            ///< [in] The energy threshold to be set in joules.
+        )
+    {
+        auto result = static_cast<result_t>( ::xetSysmanPowerSetEnergyThreshold(
+            reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
+            reinterpret_cast<xet_power_energy_threshold_t*>( pThreshold ) ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::PowerSetEnergyThreshold" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Get power limits
     /// 
     /// @details
@@ -2929,6 +3034,10 @@ namespace xet
             str = "Sysman::event_type_t::FREQ_THROTTLED";
             break;
 
+        case Sysman::event_type_t::PCU_INTERRUPT:
+            str = "Sysman::event_type_t::PCU_INTERRUPT";
+            break;
+
         case Sysman::event_type_t::RAS_ERRORS:
             str = "Sysman::event_type_t::RAS_ERRORS";
             break;
@@ -2980,6 +3089,31 @@ namespace xet
         return ( str.size() > 3 ) 
             ? "Sysman::freq_throttle_reasons_t::{ " + str.substr(0, str.size() - 3) + " }"
             : "Sysman::freq_throttle_reasons_t::{ ? }";
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::pcu_interrupt_reasons_t to std::string
+    std::string to_string( const Sysman::pcu_interrupt_reasons_t val )
+    {
+        const auto bits = static_cast<uint32_t>( val );
+
+        std::string str;
+        
+        if( static_cast<uint32_t>(Sysman::pcu_interrupt_reasons_t::PCU_INTERRUPT_DUTY_CYCLE_CHANGE) & bits )
+            str += "PCU_INTERRUPT_DUTY_CYCLE_CHANGE | ";
+        
+        if( static_cast<uint32_t>(Sysman::pcu_interrupt_reasons_t::PCU_INTERRUPT_DUTY_CYCLE_EXIT) & bits )
+            str += "PCU_INTERRUPT_DUTY_CYCLE_EXIT | ";
+        
+        if( static_cast<uint32_t>(Sysman::pcu_interrupt_reasons_t::PCU_INTERRUPT_DITY_CYCLE_ENTRY) & bits )
+            str += "PCU_INTERRUPT_DITY_CYCLE_ENTRY | ";
+        
+        if( static_cast<uint32_t>(Sysman::pcu_interrupt_reasons_t::PCU_INTERRUPT_ENERGY_THRESHOLD_CROSSED) & bits )
+            str += "PCU_INTERRUPT_ENERGY_THRESHOLD_CROSSED | ";
+
+        return ( str.size() > 3 ) 
+            ? "Sysman::pcu_interrupt_reasons_t::{ " + str.substr(0, str.size() - 3) + " }"
+            : "Sysman::pcu_interrupt_reasons_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3492,6 +3626,19 @@ namespace xet
         
         str += "Sysman::power_energy_counter_t::timestamp : ";
         str += std::to_string(val.timestamp);
+        str += "\n";
+
+        return str;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Converts Sysman::power_energy_threshold_t to std::string
+    std::string to_string( const Sysman::power_energy_threshold_t val )
+    {
+        std::string str;
+        
+        str += "Sysman::power_energy_threshold_t::energy : ";
+        str += std::to_string(val.energy);
         str += "\n";
 
         return str;

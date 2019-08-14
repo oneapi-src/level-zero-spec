@@ -373,6 +373,7 @@ class xet_freq_domain_t(c_int):
 ## @brief Event types
 class xet_sysman_event_type_v(IntEnum):
     FREQ_THROTTLED = 0                              ## The frequency is being throttled
+    PCU_INTERRUPT = auto()                          ## Interrupt from the PCU
     RAS_ERRORS = auto()                             ## ECC/RAS errors
     NUM = auto()                                    ## The number of event types
 
@@ -429,6 +430,17 @@ class xet_power_energy_counter_t(Structure):
                                                                         ## of the same structure.
                                                                         ## Never take the delta of this timestamp with the timestamp from a
                                                                         ## different structure.
+    ]
+
+###############################################################################
+## @brief Energy threshold
+## 
+## @details
+##     - Energy threshold value, when this value is crossed, pcu will signal an
+##       interrupt.
+class xet_power_energy_threshold_t(Structure):
+    _fields_ = [
+        ("energy", c_ulong)                                             ## [in,out] The energy threshold in joules.
     ]
 
 ###############################################################################
@@ -526,6 +538,19 @@ class xet_freq_throttle_reasons_v(IntEnum):
 class xet_freq_throttle_reasons_t(c_int):
     def __str__(self):
         return str(xet_freq_throttle_reasons_v(value))
+
+
+###############################################################################
+## @brief PCU interrupt reasons
+class xet_pcu_interrupt_reasons_v(IntEnum):
+    PCU_INTERRUPT_DUTY_CYCLE_CHANGE = XE_BIT( 1 )   ## signaled every time the duty cycle changes
+    PCU_INTERRUPT_DUTY_CYCLE_EXIT = XE_BIT( 2 )     ## signaled at the end of the duty cycle stalling
+    PCU_INTERRUPT_DITY_CYCLE_ENTRY = XE_BIT( 3 )    ## signaled at the beginning of the duty cycle stalling
+    PCU_INTERRUPT_ENERGY_THRESHOLD_CROSSED = XE_BIT( 4 )## signaled when the energy threshold is crossed
+
+class xet_pcu_interrupt_reasons_t(c_int):
+    def __str__(self):
+        return str(xet_pcu_interrupt_reasons_v(value))
 
 
 ###############################################################################
@@ -1509,6 +1534,20 @@ else:
     _xetSysmanPowerGetEnergyCounter_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_energy_counter_t) )
 
 ###############################################################################
+## @brief Function-pointer for xetSysmanPowerGetEnergyThreshold
+if __use_win_types:
+    _xetSysmanPowerGetEnergyThreshold_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_energy_threshold_t) )
+else:
+    _xetSysmanPowerGetEnergyThreshold_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_energy_threshold_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanPowerSetEnergyThreshold
+if __use_win_types:
+    _xetSysmanPowerSetEnergyThreshold_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_energy_threshold_t) )
+else:
+    _xetSysmanPowerSetEnergyThreshold_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_energy_threshold_t) )
+
+###############################################################################
 ## @brief Function-pointer for xetSysmanPowerGetLimits
 if __use_win_types:
     _xetSysmanPowerGetLimits_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_sustained_limit_t), POINTER(xet_power_burst_limit_t), POINTER(xet_power_peak_limit_t) )
@@ -1835,6 +1874,8 @@ class _xet_sysman_dditable_t(Structure):
         ("pfnDeviceReset", c_void_p),                                   ## _xetSysmanDeviceReset_t
         ("pfnPowerGetProperties", c_void_p),                            ## _xetSysmanPowerGetProperties_t
         ("pfnPowerGetEnergyCounter", c_void_p),                         ## _xetSysmanPowerGetEnergyCounter_t
+        ("pfnPowerGetEnergyThreshold", c_void_p),                       ## _xetSysmanPowerGetEnergyThreshold_t
+        ("pfnPowerSetEnergyThreshold", c_void_p),                       ## _xetSysmanPowerSetEnergyThreshold_t
         ("pfnPowerGetLimits", c_void_p),                                ## _xetSysmanPowerGetLimits_t
         ("pfnPowerSetLimits", c_void_p),                                ## _xetSysmanPowerSetLimits_t
         ("pfnFrequencyGetProperties", c_void_p),                        ## _xetSysmanFrequencyGetProperties_t
@@ -2054,6 +2095,8 @@ class XET_DDI:
         self.xetSysmanDeviceReset = _xetSysmanDeviceReset_t(self.__dditable.Sysman.pfnDeviceReset)
         self.xetSysmanPowerGetProperties = _xetSysmanPowerGetProperties_t(self.__dditable.Sysman.pfnPowerGetProperties)
         self.xetSysmanPowerGetEnergyCounter = _xetSysmanPowerGetEnergyCounter_t(self.__dditable.Sysman.pfnPowerGetEnergyCounter)
+        self.xetSysmanPowerGetEnergyThreshold = _xetSysmanPowerGetEnergyThreshold_t(self.__dditable.Sysman.pfnPowerGetEnergyThreshold)
+        self.xetSysmanPowerSetEnergyThreshold = _xetSysmanPowerSetEnergyThreshold_t(self.__dditable.Sysman.pfnPowerSetEnergyThreshold)
         self.xetSysmanPowerGetLimits = _xetSysmanPowerGetLimits_t(self.__dditable.Sysman.pfnPowerGetLimits)
         self.xetSysmanPowerSetLimits = _xetSysmanPowerSetLimits_t(self.__dditable.Sysman.pfnPowerSetLimits)
         self.xetSysmanFrequencyGetProperties = _xetSysmanFrequencyGetProperties_t(self.__dditable.Sysman.pfnFrequencyGetProperties)

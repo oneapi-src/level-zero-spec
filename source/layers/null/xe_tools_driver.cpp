@@ -810,6 +810,54 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanPowerGetEnergyThreshold
+    xe_result_t __xecall
+    xetSysmanPowerGetEnergyThreshold(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        xet_power_energy_threshold_t* pThreshold        ///< [out] The current energy threshold value in joules.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnPowerGetEnergyThreshold = context.xetDdiTable.Sysman.pfnPowerGetEnergyThreshold;
+        if( nullptr != pfnPowerGetEnergyThreshold )
+        {
+            result = pfnPowerGetEnergyThreshold( hSysman, pThreshold );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xetSysmanPowerSetEnergyThreshold
+    xe_result_t __xecall
+    xetSysmanPowerSetEnergyThreshold(
+        xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+        xet_power_energy_threshold_t* pThreshold        ///< [in] The energy threshold to be set in joules.
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnPowerSetEnergyThreshold = context.xetDdiTable.Sysman.pfnPowerSetEnergyThreshold;
+        if( nullptr != pfnPowerSetEnergyThreshold )
+        {
+            result = pfnPowerSetEnergyThreshold( hSysman, pThreshold );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xetSysmanPowerGetLimits
     xe_result_t __xecall
     xetSysmanPowerGetLimits(
@@ -2509,6 +2557,10 @@ xetGetSysmanProcAddrTable(
     pDdiTable->pfnPowerGetProperties                     = driver::xetSysmanPowerGetProperties;
 
     pDdiTable->pfnPowerGetEnergyCounter                  = driver::xetSysmanPowerGetEnergyCounter;
+
+    pDdiTable->pfnPowerGetEnergyThreshold                = driver::xetSysmanPowerGetEnergyThreshold;
+
+    pDdiTable->pfnPowerSetEnergyThreshold                = driver::xetSysmanPowerSetEnergyThreshold;
 
     pDdiTable->pfnPowerGetLimits                         = driver::xetSysmanPowerGetLimits;
 

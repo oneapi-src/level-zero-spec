@@ -86,6 +86,7 @@ typedef enum _xet_freq_domain_t
 typedef enum _xet_sysman_event_type_t
 {
     XET_SYSMAN_EVENT_TYPE_FREQ_THROTTLED = 0,       ///< The frequency is being throttled
+    XET_SYSMAN_EVENT_TYPE_PCU_INTERRUPT,            ///< Interrupt from the PCU
     XET_SYSMAN_EVENT_TYPE_RAS_ERRORS,               ///< ECC/RAS errors
     XET_SYSMAN_EVENT_TYPE_NUM,                      ///< The number of event types
 
@@ -222,6 +223,18 @@ typedef struct _xet_power_energy_counter_t
 } xet_power_energy_counter_t;
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Energy threshold
+/// 
+/// @details
+///     - Energy threshold value, when this value is crossed, pcu will signal an
+///       interrupt.
+typedef struct _xet_power_energy_threshold_t
+{
+    uint32_t energy;                                ///< [in,out] The energy threshold in joules.
+
+} xet_power_energy_threshold_t;
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Sustained power limits
 /// 
 /// @details
@@ -312,6 +325,48 @@ xetSysmanPowerGetEnergyCounter(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
     xet_power_energy_counter_t* pEnergy             ///< [in] Will contain the latest snapshot of the energy counter and
                                                     ///< timestamp when the last counter value was measured.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get energy threshold
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pThreshold
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPowerGetEnergyThreshold(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_power_energy_threshold_t* pThreshold        ///< [out] The current energy threshold value in joules.
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Set energy threshold
+/// 
+/// @details
+///     - The application may call this function from simultaneous threads.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hSysman
+///         + nullptr == pThreshold
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xetSysmanPowerSetEnergyThreshold(
+    xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
+    xet_power_energy_threshold_t* pThreshold        ///< [in] The energy threshold to be set in joules.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -407,6 +462,17 @@ typedef enum _xet_freq_throttle_reasons_t
                                                     ///< range when it receives clocks
 
 } xet_freq_throttle_reasons_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief PCU interrupt reasons
+typedef enum _xet_pcu_interrupt_reasons_t
+{
+    XET_PCU_INTERRUPT_DUTY_CYCLE_CHANGE = XE_BIT( 1 ),  ///< signaled every time the duty cycle changes
+    XET_PCU_INTERRUPT_DUTY_CYCLE_EXIT = XE_BIT( 2 ),///< signaled at the end of the duty cycle stalling
+    XET_PCU_INTERRUPT_DITY_CYCLE_ENTRY = XE_BIT( 3 ),   ///< signaled at the beginning of the duty cycle stalling
+    XET_PCU_INTERRUPT_ENERGY_THRESHOLD_CROSSED = XE_BIT( 4 ),   ///< signaled when the energy threshold is crossed
+
+} xet_pcu_interrupt_reasons_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Frequency state
