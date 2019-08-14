@@ -528,28 +528,6 @@ typedef xe_result_t (__xecall *xe_pfnCommandListReset_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListSetParameter 
-typedef xe_result_t (__xecall *xe_pfnCommandListSetParameter_t)(
-    xe_command_list_handle_t,
-    xe_command_list_parameter_t,
-    uint32_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListGetParameter 
-typedef xe_result_t (__xecall *xe_pfnCommandListGetParameter_t)(
-    xe_command_list_handle_t,
-    xe_command_list_parameter_t,
-    uint32_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeCommandListResetParameters 
-typedef xe_result_t (__xecall *xe_pfnCommandListResetParameters_t)(
-    xe_command_list_handle_t
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeCommandListAppendBarrier 
 typedef xe_result_t (__xecall *xe_pfnCommandListAppendBarrier_t)(
     xe_command_list_handle_t,
@@ -738,9 +716,6 @@ typedef struct _xe_command_list_dditable_t
     xe_pfnCommandListDestroy_t                                  pfnDestroy;
     xe_pfnCommandListClose_t                                    pfnClose;
     xe_pfnCommandListReset_t                                    pfnReset;
-    xe_pfnCommandListSetParameter_t                             pfnSetParameter;
-    xe_pfnCommandListGetParameter_t                             pfnGetParameter;
-    xe_pfnCommandListResetParameters_t                          pfnResetParameters;
     xe_pfnCommandListAppendBarrier_t                            pfnAppendBarrier;
     xe_pfnCommandListAppendMemoryRangesBarrier_t                pfnAppendMemoryRangesBarrier;
     xe_pfnCommandListAppendMemoryCopy_t                         pfnAppendMemoryCopy;

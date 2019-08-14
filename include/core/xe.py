@@ -556,16 +556,6 @@ class xe_command_list_desc_t(Structure):
     ]
 
 ###############################################################################
-## @brief Supported command list parameters
-class xe_command_list_parameter_v(IntEnum):
-    TBD = auto()                                    ## TBD
-
-class xe_command_list_parameter_t(c_int):
-    def __str__(self):
-        return str(xe_command_list_parameter_v(value))
-
-
-###############################################################################
 ## @brief Copy region descriptor
 class xe_copy_region_t(Structure):
     _fields_ = [
@@ -1476,27 +1466,6 @@ else:
     _xeCommandListReset_t = CFUNCTYPE( xe_result_t, xe_command_list_handle_t )
 
 ###############################################################################
-## @brief Function-pointer for xeCommandListSetParameter
-if __use_win_types:
-    _xeCommandListSetParameter_t = WINFUNCTYPE( xe_result_t, xe_command_list_handle_t, xe_command_list_parameter_t, c_ulong )
-else:
-    _xeCommandListSetParameter_t = CFUNCTYPE( xe_result_t, xe_command_list_handle_t, xe_command_list_parameter_t, c_ulong )
-
-###############################################################################
-## @brief Function-pointer for xeCommandListGetParameter
-if __use_win_types:
-    _xeCommandListGetParameter_t = WINFUNCTYPE( xe_result_t, xe_command_list_handle_t, xe_command_list_parameter_t, POINTER(c_ulong) )
-else:
-    _xeCommandListGetParameter_t = CFUNCTYPE( xe_result_t, xe_command_list_handle_t, xe_command_list_parameter_t, POINTER(c_ulong) )
-
-###############################################################################
-## @brief Function-pointer for xeCommandListResetParameters
-if __use_win_types:
-    _xeCommandListResetParameters_t = WINFUNCTYPE( xe_result_t, xe_command_list_handle_t )
-else:
-    _xeCommandListResetParameters_t = CFUNCTYPE( xe_result_t, xe_command_list_handle_t )
-
-###############################################################################
 ## @brief Function-pointer for xeCommandListAppendBarrier
 if __use_win_types:
     _xeCommandListAppendBarrier_t = WINFUNCTYPE( xe_result_t, xe_command_list_handle_t, xe_event_handle_t, c_ulong, POINTER(xe_event_handle_t) )
@@ -1632,9 +1601,6 @@ class _xe_command_list_dditable_t(Structure):
         ("pfnDestroy", c_void_p),                                       ## _xeCommandListDestroy_t
         ("pfnClose", c_void_p),                                         ## _xeCommandListClose_t
         ("pfnReset", c_void_p),                                         ## _xeCommandListReset_t
-        ("pfnSetParameter", c_void_p),                                  ## _xeCommandListSetParameter_t
-        ("pfnGetParameter", c_void_p),                                  ## _xeCommandListGetParameter_t
-        ("pfnResetParameters", c_void_p),                               ## _xeCommandListResetParameters_t
         ("pfnAppendBarrier", c_void_p),                                 ## _xeCommandListAppendBarrier_t
         ("pfnAppendMemoryRangesBarrier", c_void_p),                     ## _xeCommandListAppendMemoryRangesBarrier_t
         ("pfnAppendMemoryCopy", c_void_p),                              ## _xeCommandListAppendMemoryCopy_t
@@ -2106,9 +2072,6 @@ class XE_DDI:
         self.xeCommandListDestroy = _xeCommandListDestroy_t(self.__dditable.CommandList.pfnDestroy)
         self.xeCommandListClose = _xeCommandListClose_t(self.__dditable.CommandList.pfnClose)
         self.xeCommandListReset = _xeCommandListReset_t(self.__dditable.CommandList.pfnReset)
-        self.xeCommandListSetParameter = _xeCommandListSetParameter_t(self.__dditable.CommandList.pfnSetParameter)
-        self.xeCommandListGetParameter = _xeCommandListGetParameter_t(self.__dditable.CommandList.pfnGetParameter)
-        self.xeCommandListResetParameters = _xeCommandListResetParameters_t(self.__dditable.CommandList.pfnResetParameters)
         self.xeCommandListAppendBarrier = _xeCommandListAppendBarrier_t(self.__dditable.CommandList.pfnAppendBarrier)
         self.xeCommandListAppendMemoryRangesBarrier = _xeCommandListAppendMemoryRangesBarrier_t(self.__dditable.CommandList.pfnAppendMemoryRangesBarrier)
         self.xeCommandListAppendMemoryCopy = _xeCommandListAppendMemoryCopy_t(self.__dditable.CommandList.pfnAppendMemoryCopy)

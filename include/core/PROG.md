@@ -319,8 +319,6 @@ A command list represents a sequence of commands for execution on a command queu
   multiple engines and/or sub-devices.  If the application prefers to opt-out of
   these optimizations, such as when the application plans to perform this distribution
   itself, then it should use ::XE_COMMAND_LIST_FLAG_EXPLICIT_ONLY.
-- The command list maintains some machine state, which is inherited by subsequent
-  commands. See ::xe_command_list_parameter_t for details.
 
 The following sample code demonstrates a basic sequence for creation of command lists:
 ```c

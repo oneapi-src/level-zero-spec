@@ -809,82 +809,6 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListSetParameter
-    xe_result_t __xecall
-    xeCommandListSetParameter(
-        xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-        xe_command_list_parameter_t parameter,          ///< [in] parameter to change
-        uint32_t value                                  ///< [in] value of attribute
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
-        auto pfnSetParameter = dditable->xe.CommandList.pfnSetParameter;
-        if( nullptr == pfnSetParameter )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
-
-        // forward to device-driver
-        result = pfnSetParameter( hCommandList, parameter, value );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListGetParameter
-    xe_result_t __xecall
-    xeCommandListGetParameter(
-        xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-        xe_command_list_parameter_t parameter,          ///< [in] parameter to retrieve
-        uint32_t* value                                 ///< [out] value of attribute
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
-        auto pfnGetParameter = dditable->xe.CommandList.pfnGetParameter;
-        if( nullptr == pfnGetParameter )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
-
-        // forward to device-driver
-        result = pfnGetParameter( hCommandList, parameter, value );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListResetParameters
-    xe_result_t __xecall
-    xeCommandListResetParameters(
-        xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
-        )
-    {
-        xe_result_t result = XE_RESULT_SUCCESS;
-
-        // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
-        auto pfnResetParameters = dditable->xe.CommandList.pfnResetParameters;
-        if( nullptr == pfnResetParameters )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        // convert loader handle to driver handle
-        hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
-
-        // forward to device-driver
-        result = pfnResetParameters( hCommandList );
-
-        return result;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xeCommandListAppendBarrier
     xe_result_t __xecall
     xeCommandListAppendBarrier(
@@ -3395,9 +3319,6 @@ xeGetCommandListProcAddrTable(
             pDdiTable->pfnDestroy                                  = loader::xeCommandListDestroy;
             pDdiTable->pfnClose                                    = loader::xeCommandListClose;
             pDdiTable->pfnReset                                    = loader::xeCommandListReset;
-            pDdiTable->pfnSetParameter                             = loader::xeCommandListSetParameter;
-            pDdiTable->pfnGetParameter                             = loader::xeCommandListGetParameter;
-            pDdiTable->pfnResetParameters                          = loader::xeCommandListResetParameters;
             pDdiTable->pfnAppendBarrier                            = loader::xeCommandListAppendBarrier;
             pDdiTable->pfnAppendMemoryRangesBarrier                = loader::xeCommandListAppendMemoryRangesBarrier;
             pDdiTable->pfnAppendMemoryCopy                         = loader::xeCommandListAppendMemoryCopy;

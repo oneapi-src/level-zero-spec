@@ -73,14 +73,6 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Supported command list parameters
-        enum class parameter_t
-        {
-            TBD,                                            ///< TBD
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Supported memory advice hints
         enum class memory_advice_t
         {
@@ -254,61 +246,6 @@ namespace xe
         /// @throws result_t
         void __xecall
         Reset(
-            void
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Sets a command list's parameter.
-        /// 
-        /// @details
-        ///     - The application may **not** call this function from simultaneous
-        ///       threads with the same command list handle.
-        ///     - The implementation of this function should be lock-free.
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - cuCtxSetCacheConfig
-        ///     - cuCtxSetLimit
-        ///     - cuCtxSetSharedMemConfig
-        /// @throws result_t
-        void __xecall
-        SetParameter(
-            parameter_t parameter,                          ///< [in] parameter to change
-            uint32_t value                                  ///< [in] value of attribute
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Retrieves a command list's parameter.
-        /// 
-        /// @details
-        ///     - The application may call this function from simultaneous threads.
-        ///     - The implementation of this function should be lock-free.
-        /// 
-        /// @remarks
-        ///   _Analogues_
-        ///     - cuCtxGetCacheConfig
-        ///     - cuCtxGetLimit
-        ///     - cuCtxGetSharedMemConfig
-        ///     - cuCtxGetStreamPriorityRange
-        /// @returns
-        ///     - uint32_t: value of attribute
-        /// 
-        /// @throws result_t
-        uint32_t __xecall
-        GetParameter(
-            parameter_t parameter                           ///< [in] parameter to retrieve
-            );
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Resets all command list parameters to default state.
-        /// 
-        /// @details
-        ///     - The application may **not** call this function from simultaneous
-        ///       threads with the same command list handle.
-        ///     - The implementation of this function should be lock-free.
-        /// @throws result_t
-        void __xecall
-        ResetParameters(
             void
             );
 
@@ -761,10 +698,6 @@ namespace xe
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts CommandList::desc_t to std::string
     std::string to_string( const CommandList::desc_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts CommandList::parameter_t to std::string
-    std::string to_string( const CommandList::parameter_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts CommandList::copy_region_t to std::string

@@ -720,79 +720,6 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListSetParameter
-    xe_result_t __xecall
-    xeCommandListSetParameter(
-        xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-        xe_command_list_parameter_t parameter,          ///< [in] parameter to change
-        uint32_t value                                  ///< [in] value of attribute
-        )
-    {
-        auto pfnSetParameter = context.xeDdiTable.CommandList.pfnSetParameter;
-
-        if( nullptr == pfnSetParameter )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hCommandList )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnSetParameter( hCommandList, parameter, value );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListGetParameter
-    xe_result_t __xecall
-    xeCommandListGetParameter(
-        xe_command_list_handle_t hCommandList,          ///< [in] handle of command list
-        xe_command_list_parameter_t parameter,          ///< [in] parameter to retrieve
-        uint32_t* value                                 ///< [out] value of attribute
-        )
-    {
-        auto pfnGetParameter = context.xeDdiTable.CommandList.pfnGetParameter;
-
-        if( nullptr == pfnGetParameter )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hCommandList )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-            if( nullptr == value )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnGetParameter( hCommandList, parameter, value );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeCommandListResetParameters
-    xe_result_t __xecall
-    xeCommandListResetParameters(
-        xe_command_list_handle_t hCommandList           ///< [in] handle of the command list
-        )
-    {
-        auto pfnResetParameters = context.xeDdiTable.CommandList.pfnResetParameters;
-
-        if( nullptr == pfnResetParameters )
-            return XE_RESULT_ERROR_UNSUPPORTED;
-
-        if( context.enableParameterValidation )
-        {
-            if( nullptr == hCommandList )
-                return XE_RESULT_ERROR_INVALID_ARGUMENT;
-
-        }
-
-        return pfnResetParameters( hCommandList );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xeCommandListAppendBarrier
     xe_result_t __xecall
     xeCommandListAppendBarrier(
@@ -3079,15 +3006,6 @@ xeGetCommandListProcAddrTable(
 
     dditable.pfnReset                                    = pDdiTable->pfnReset;
     pDdiTable->pfnReset                                  = layer::xeCommandListReset;
-
-    dditable.pfnSetParameter                             = pDdiTable->pfnSetParameter;
-    pDdiTable->pfnSetParameter                           = layer::xeCommandListSetParameter;
-
-    dditable.pfnGetParameter                             = pDdiTable->pfnGetParameter;
-    pDdiTable->pfnGetParameter                           = layer::xeCommandListGetParameter;
-
-    dditable.pfnResetParameters                          = pDdiTable->pfnResetParameters;
-    pDdiTable->pfnResetParameters                        = layer::xeCommandListResetParameters;
 
     dditable.pfnAppendBarrier                            = pDdiTable->pfnAppendBarrier;
     pDdiTable->pfnAppendBarrier                          = layer::xeCommandListAppendBarrier;

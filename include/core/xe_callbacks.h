@@ -1126,76 +1126,6 @@ typedef void (__xecall *xe_pfnCommandListResetCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeCommandListSetParameter 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_command_list_set_parameter_params_t
-{
-    xe_command_list_handle_t* phCommandList;
-    xe_command_list_parameter_t* pparameter;
-    uint32_t* pvalue;
-} xe_command_list_set_parameter_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeCommandListSetParameter 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnCommandListSetParameterCb_t)(
-    xe_command_list_set_parameter_params_t* params,
-    xe_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeCommandListGetParameter 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_command_list_get_parameter_params_t
-{
-    xe_command_list_handle_t* phCommandList;
-    xe_command_list_parameter_t* pparameter;
-    uint32_t** pvalue;
-} xe_command_list_get_parameter_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeCommandListGetParameter 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnCommandListGetParameterCb_t)(
-    xe_command_list_get_parameter_params_t* params,
-    xe_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeCommandListResetParameters 
-/// @details Each entry is a pointer to the parameter passed to the function;
-///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_command_list_reset_parameters_params_t
-{
-    xe_command_list_handle_t* phCommandList;
-} xe_command_list_reset_parameters_params_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeCommandListResetParameters 
-/// @param[in] params Parameters passed to this instance
-/// @param[in] result Return value
-/// @param[in] pTracerUserData Per-Tracer user data
-/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnCommandListResetParametersCb_t)(
-    xe_command_list_reset_parameters_params_t* params,
-    xe_result_t result,
-    void* pTracerUserData,
-    void** ppTracerInstanceUserData
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListAppendBarrier 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
@@ -1672,9 +1602,6 @@ typedef struct _xe_command_list_callbacks_t
     xe_pfnCommandListDestroyCb_t                                    pfnDestroyCb;
     xe_pfnCommandListCloseCb_t                                      pfnCloseCb;
     xe_pfnCommandListResetCb_t                                      pfnResetCb;
-    xe_pfnCommandListSetParameterCb_t                               pfnSetParameterCb;
-    xe_pfnCommandListGetParameterCb_t                               pfnGetParameterCb;
-    xe_pfnCommandListResetParametersCb_t                            pfnResetParametersCb;
     xe_pfnCommandListAppendBarrierCb_t                              pfnAppendBarrierCb;
     xe_pfnCommandListAppendMemoryRangesBarrierCb_t                  pfnAppendMemoryRangesBarrierCb;
     xe_pfnCommandListAppendMemoryCopyCb_t                           pfnAppendMemoryCopyCb;
