@@ -765,3 +765,6 @@ These differences are described in the table below:
 
 Everything can be accessed from the device-level. In some cases, software might want to limit settings to the sub-device level e.g. setting different
 frequencies on each sub-device.
+
+Note that RAS is available per sub-device. However, diagnostics can only be performed at the device level - providing an SMI handle for a sub-device
+will return an error.

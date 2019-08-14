@@ -677,6 +677,11 @@ void ShowRasErrors(xet_sysman_handle_t hSysmanDevice)
 }
 ```
 
+For devices with sub-devices, the RAS error counters are collected per sub-device. The driver also maintains accumulated totals acrosss all sub-devices.
+When ::xetSysmanRasGetErrors() is called with a device-level SMI handle, the accumulated total errors across all sub-devices will be returned and
+all accumulated totals and sub-device error counters are cleared if requested. When called with a sub-device SMI handle, only the errors relevant
+to that sub-device are returned and cleared if requested.
+
 
 # <a name="ev">Events</a>
 Events are a way to determine is changes have occurred on a device e.g. new RAS errors. An application registers the events that it wishes to receive
@@ -754,3 +759,6 @@ These differences are described in the table below:
 
 Everything can be accessed from the device-level. In some cases, software might want to limit settings to the sub-device level e.g. setting different
 frequencies on each sub-device.
+
+Note that RAS is available per sub-device. However, diagnostics can only be performed at the device level - providing an SMI handle for a sub-device
+will return an error.
