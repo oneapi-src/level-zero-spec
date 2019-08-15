@@ -91,7 +91,7 @@ namespace xet
         enum class event_type_t
         {
             FREQ_THROTTLED = 0,                             ///< The frequency is being throttled
-            PCU_INTERRUPT,                                  ///< Interrupt from the PCU
+            ENERGY_THRESHOLD_CROSSED,                       ///< Interrupt from the PCU when the energy threshold is crossed.
             RAS_ERRORS,                                     ///< ECC/RAS errors
             NUM,                                            ///< The number of event types
 
@@ -110,17 +110,6 @@ namespace xet
             SW_RANGE = XE_BIT( 5 ),                         ///< frequency throttled due to software supplied frequency range
             HW_RANGE = XE_BIT( 6 ),                         ///< frequency throttled due to a sub block that has a lower frequency
                                                             ///< range when it receives clocks
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief PCU interrupt reasons
-        enum class pcu_interrupt_reasons_t
-        {
-            PCU_INTERRUPT_DUTY_CYCLE_CHANGE = XE_BIT( 1 ),  ///< signaled every time the duty cycle changes
-            PCU_INTERRUPT_DUTY_CYCLE_EXIT = XE_BIT( 2 ),    ///< signaled at the end of the duty cycle stalling
-            PCU_INTERRUPT_DUTY_CYCLE_ENTRY = XE_BIT( 3 ),   ///< signaled at the beginning of the duty cycle stalling
-            PCU_INTERRUPT_ENERGY_THRESHOLD_CROSSED = XE_BIT( 4 ),   ///< signaled when the energy threshold is crossed
 
         };
 
@@ -1688,10 +1677,6 @@ namespace xet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::freq_throttle_reasons_t to std::string
     std::string to_string( const Sysman::freq_throttle_reasons_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::pcu_interrupt_reasons_t to std::string
-    std::string to_string( const Sysman::pcu_interrupt_reasons_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::freq_state_t to std::string

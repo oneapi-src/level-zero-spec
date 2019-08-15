@@ -373,7 +373,7 @@ class xet_freq_domain_t(c_int):
 ## @brief Event types
 class xet_sysman_event_type_v(IntEnum):
     FREQ_THROTTLED = 0                              ## The frequency is being throttled
-    PCU_INTERRUPT = auto()                          ## Interrupt from the PCU
+    ENERGY_THRESHOLD_CROSSED = auto()               ## Interrupt from the PCU when the energy threshold is crossed.
     RAS_ERRORS = auto()                             ## ECC/RAS errors
     NUM = auto()                                    ## The number of event types
 
@@ -538,19 +538,6 @@ class xet_freq_throttle_reasons_v(IntEnum):
 class xet_freq_throttle_reasons_t(c_int):
     def __str__(self):
         return str(xet_freq_throttle_reasons_v(value))
-
-
-###############################################################################
-## @brief PCU interrupt reasons
-class xet_pcu_interrupt_reasons_v(IntEnum):
-    PCU_INTERRUPT_DUTY_CYCLE_CHANGE = XE_BIT( 1 )   ## signaled every time the duty cycle changes
-    PCU_INTERRUPT_DUTY_CYCLE_EXIT = XE_BIT( 2 )     ## signaled at the end of the duty cycle stalling
-    PCU_INTERRUPT_DUTY_CYCLE_ENTRY = XE_BIT( 3 )    ## signaled at the beginning of the duty cycle stalling
-    PCU_INTERRUPT_ENERGY_THRESHOLD_CROSSED = XE_BIT( 4 )## signaled when the energy threshold is crossed
-
-class xet_pcu_interrupt_reasons_t(c_int):
-    def __str__(self):
-        return str(xet_pcu_interrupt_reasons_v(value))
 
 
 ###############################################################################

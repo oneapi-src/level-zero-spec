@@ -3034,8 +3034,8 @@ namespace xet
             str = "Sysman::event_type_t::FREQ_THROTTLED";
             break;
 
-        case Sysman::event_type_t::PCU_INTERRUPT:
-            str = "Sysman::event_type_t::PCU_INTERRUPT";
+        case Sysman::event_type_t::ENERGY_THRESHOLD_CROSSED:
+            str = "Sysman::event_type_t::ENERGY_THRESHOLD_CROSSED";
             break;
 
         case Sysman::event_type_t::RAS_ERRORS:
@@ -3089,31 +3089,6 @@ namespace xet
         return ( str.size() > 3 ) 
             ? "Sysman::freq_throttle_reasons_t::{ " + str.substr(0, str.size() - 3) + " }"
             : "Sysman::freq_throttle_reasons_t::{ ? }";
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::pcu_interrupt_reasons_t to std::string
-    std::string to_string( const Sysman::pcu_interrupt_reasons_t val )
-    {
-        const auto bits = static_cast<uint32_t>( val );
-
-        std::string str;
-        
-        if( static_cast<uint32_t>(Sysman::pcu_interrupt_reasons_t::PCU_INTERRUPT_DUTY_CYCLE_CHANGE) & bits )
-            str += "PCU_INTERRUPT_DUTY_CYCLE_CHANGE | ";
-        
-        if( static_cast<uint32_t>(Sysman::pcu_interrupt_reasons_t::PCU_INTERRUPT_DUTY_CYCLE_EXIT) & bits )
-            str += "PCU_INTERRUPT_DUTY_CYCLE_EXIT | ";
-        
-        if( static_cast<uint32_t>(Sysman::pcu_interrupt_reasons_t::PCU_INTERRUPT_DUTY_CYCLE_ENTRY) & bits )
-            str += "PCU_INTERRUPT_DUTY_CYCLE_ENTRY | ";
-        
-        if( static_cast<uint32_t>(Sysman::pcu_interrupt_reasons_t::PCU_INTERRUPT_ENERGY_THRESHOLD_CROSSED) & bits )
-            str += "PCU_INTERRUPT_ENERGY_THRESHOLD_CROSSED | ";
-
-        return ( str.size() > 3 ) 
-            ? "Sysman::pcu_interrupt_reasons_t::{ " + str.substr(0, str.size() - 3) + " }"
-            : "Sysman::pcu_interrupt_reasons_t::{ ? }";
     }
 
     ///////////////////////////////////////////////////////////////////////////////

@@ -86,7 +86,7 @@ typedef enum _xet_freq_domain_t
 typedef enum _xet_sysman_event_type_t
 {
     XET_SYSMAN_EVENT_TYPE_FREQ_THROTTLED = 0,       ///< The frequency is being throttled
-    XET_SYSMAN_EVENT_TYPE_PCU_INTERRUPT,            ///< Interrupt from the PCU
+    XET_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED, ///< Interrupt from the PCU when the energy threshold is crossed.
     XET_SYSMAN_EVENT_TYPE_RAS_ERRORS,               ///< ECC/RAS errors
     XET_SYSMAN_EVENT_TYPE_NUM,                      ///< The number of event types
 
@@ -462,17 +462,6 @@ typedef enum _xet_freq_throttle_reasons_t
                                                     ///< range when it receives clocks
 
 } xet_freq_throttle_reasons_t;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief PCU interrupt reasons
-typedef enum _xet_pcu_interrupt_reasons_t
-{
-    XET_PCU_INTERRUPT_DUTY_CYCLE_CHANGE = XE_BIT( 1 ),  ///< signaled every time the duty cycle changes
-    XET_PCU_INTERRUPT_DUTY_CYCLE_EXIT = XE_BIT( 2 ),///< signaled at the end of the duty cycle stalling
-    XET_PCU_INTERRUPT_DUTY_CYCLE_ENTRY = XE_BIT( 3 ),   ///< signaled at the beginning of the duty cycle stalling
-    XET_PCU_INTERRUPT_ENERGY_THRESHOLD_CROSSED = XE_BIT( 4 ),   ///< signaled when the energy threshold is crossed
-
-} xet_pcu_interrupt_reasons_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Frequency state

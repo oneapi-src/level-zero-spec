@@ -70,8 +70,8 @@ etors:
     - name: $T_SYSMAN_EVENT_TYPE_FREQ_THROTTLED
       value: "0"
       desc: "The frequency is being throttled"
-    - name: $T_SYSMAN_EVENT_TYPE_PCU_INTERRUPT
-      desc: "Interrupt from the PCU"
+    - name: $T_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED
+      desc: "Interrupt from the PCU when the energy threshold is crossed."
     - name: $T_SYSMAN_EVENT_TYPE_RAS_ERRORS
       desc: "ECC/RAS errors"
     - name: $T_SYSMAN_EVENT_TYPE_NUM
@@ -451,24 +451,6 @@ etors:
     - name: $T_FREQ_THROTTLE_REASONS_HW_RANGE
       value: "$X_BIT( 6 )"
       desc: "frequency throttled due to a sub block that has a lower frequency range when it receives clocks"
---- #--------------------------------------------------------------------------
-type: enum
-desc: "PCU interrupt reasons"
-class: $tSysman
-name: $t_pcu_interrupt_reasons_t
-etors:
-    - name: $T_PCU_INTERRUPT_DUTY_CYCLE_CHANGE
-      value: "$X_BIT( 1 )"
-      desc: "signaled every time the duty cycle changes"
-    - name: $T_PCU_INTERRUPT_DUTY_CYCLE_EXIT
-      value: "$X_BIT( 2 )"
-      desc: "signaled at the end of the duty cycle stalling"
-    - name: $T_PCU_INTERRUPT_DUTY_CYCLE_ENTRY
-      value: "$X_BIT( 3 )"
-      desc: "signaled at the beginning of the duty cycle stalling"
-    - name: $T_PCU_INTERRUPT_ENERGY_THRESHOLD_CROSSED
-      value: "$X_BIT( 4 )"
-      desc: "signaled when the energy threshold is crossed"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Frequency state"
