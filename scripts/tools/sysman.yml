@@ -993,22 +993,10 @@ params:
 
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Switch GUID address"
-class: $tSysman
-name: $t_switch_guid_t
-members:
-    - type: uint8_t
-      name: "guid[8]"
-      desc: "[out] GUID of the Switch"
---- #--------------------------------------------------------------------------
-type: struct
 desc: "Switch properties"
 class: $tSysman
 name: $t_switch_properties_t
 members:
-    - type: $t_switch_guid_t
-      name: "switchGuid"
-      desc: "[out] Address of this Switch"
     - type: uint32_t
       name: "numPorts"
       desc: "[out] The number of ports"
@@ -1060,9 +1048,12 @@ members:
     - type: $x_bool_t
       name: "isConnected"
       desc: "[out] Indicates if the port is connected to a remote Switch"
-    - type: $t_switch_guid_t
-      name: "remoteSwitchGuid"
-      desc: "[out] If connected is true, this gives the address of the remote switch to which this port connects"
+    - type: $x_device_uuid_t
+      name: "remoteDeviceUuid"
+      desc: "[out] If connected is true, this gives the device UUID where the port connects"
+    - type: uint32_t
+      name: "remoteDeviceSwitchIndex"
+      desc: "[out] If connected is true, this gives the switch index on the remote device where the port connects"
     - type: uint32_t
       name: "remoteSwitchPortIndex"
       desc: "[out] If connected is true, this gives the port index on the remote switch"

@@ -782,17 +782,9 @@ class xet_pci_stats_t(Structure):
     ]
 
 ###############################################################################
-## @brief Switch GUID address
-class xet_switch_guid_t(Structure):
-    _fields_ = [
-        ("guid", c_ubyte * 8)                                           ## [out] GUID of the Switch
-    ]
-
-###############################################################################
 ## @brief Switch properties
 class xet_switch_properties_t(Structure):
     _fields_ = [
-        ("switchGuid", xet_switch_guid_t),                              ## [out] Address of this Switch
         ("numPorts", c_ulong),                                          ## [out] The number of ports
         ("onSubdevice", xe_bool_t),                                     ## [out] True if the switch is located on a sub-device; false means that
                                                                         ## the switch is on the device of the calling SMI handle
@@ -827,8 +819,10 @@ class xet_switch_port_properties_t(Structure):
 class xet_switch_port_state_t(Structure):
     _fields_ = [
         ("isConnected", xe_bool_t),                                     ## [out] Indicates if the port is connected to a remote Switch
-        ("remoteSwitchGuid", xet_switch_guid_t),                        ## [out] If connected is true, this gives the address of the remote
-                                                                        ## switch to which this port connects
+        ("remoteDeviceUuid", xe_device_uuid_t),                         ## [out] If connected is true, this gives the device UUID where the port
+                                                                        ## connects
+        ("remoteDeviceSwitchIndex", c_ulong),                           ## [out] If connected is true, this gives the switch index on the remote
+                                                                        ## device where the port connects
         ("remoteSwitchPortIndex", c_ulong),                             ## [out] If connected is true, this gives the port index on the remote
                                                                         ## switch
         ("rxSpeed", xet_switch_port_speed_t),                           ## [out] Current maximum receive speed

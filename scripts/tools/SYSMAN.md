@@ -406,11 +406,11 @@ The following functions can be used to manage the switch:
 
 | Function                               | Device/sub-device behavior |
 | :---                                   | :---        |
-| ::${t}SysmanSwitchGetProperties()      | Get the GUID of the switch and the number of ports. |
+| ::${t}SysmanSwitchGetProperties()      | Get the number of ports. |
 | ::${t}SysmanSwitchGetState()           | Get the current state of the switch (enabled/disabled). |
 | ::${t}SysmanSwitchSetState()           | Enables/disabled the switch. |
 | ::${t}SysmanSwitchPortGetProperties()  | Get the properties of a port on the switch - maximum supported bandwidth. |
-| ::${t}SysmanSwitchPortGetState()       | Get the current state of a port on the switch - connected, remote switch GUID, current maximum bandwidth. |
+| ::${t}SysmanSwitchPortGetState()       | Get the current state of a port on the switch - connected, remote switch device/index/port, current maximum bandwidth. |
 | ::${t}SysmanSwitchPortGetThroughput()  | Get the throughput counters of a port on the switch. |
 | ::${t}SysmanSwitchPortGetStats()       | Gets telemetry counters of a port on the switch - number of replays. |
 
@@ -430,7 +430,6 @@ void ShowSwitchInfo(xet_sysman_handle_t hSysmanDevice, uint32_t SwitchIndex)
         xet_switch_state_t swstate;
         if (xetSysmanSwitchGetState(hSysmanDevice, SwitchIndex, &swstate) == XE_RESULT_SUCCESS)
         {
-            fprintf(stdout, "        GUID:          %s\n", swprops.address.guid);
             fprintf(stdout, "        #port:         %u\n", swprops.numPorts);
             if (swprops.onSubdevice)
             {
@@ -446,12 +445,12 @@ void ShowSwitchInfo(xet_sysman_handle_t hSysmanDevice, uint32_t SwitchIndex)
                     if (xetSysmanSwitchPortGetState(hSysmanDevice, SwitchIndex, portIndex, &portstate)
                         == XE_RESULT_SUCCESS)
                     {
-                        if (portstate.connected)
+                        if (portstate.isConnected)
                         {
                             fprintf(stdout,
                                 "            %u: "
-                                "connected to switch with GUID %s, max rx/tx bandwidth %u/%u bytes/sec\n",
-                                portIndex, portstate.remote.guid,
+                                "connected to switch on device UUID %s, max rx/tx bandwidth %u/%u bytes/sec\n",
+                                portIndex, portstate.remoteDeviceUuid.id,
                                 portstate.rxSpeed.maxBandwidth, portstate.txSpeed.maxBandwidth);
                         }
                         else

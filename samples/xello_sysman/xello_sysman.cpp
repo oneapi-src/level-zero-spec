@@ -82,7 +82,6 @@ void ShowSwitchInfo(xet_sysman_handle_t hSysmanDevice, uint32_t SwitchIndex)
         xet_switch_state_t swstate;
         if (xetSysmanSwitchGetState(hSysmanDevice, SwitchIndex, &swstate) == XE_RESULT_SUCCESS)
         {
-            fprintf(stdout, "        GUID:          %s\n", swprops.switchGuid.guid);
             fprintf(stdout, "        #port:         %u\n", swprops.numPorts);
             if (swprops.onSubdevice)
             {
@@ -102,8 +101,8 @@ void ShowSwitchInfo(xet_sysman_handle_t hSysmanDevice, uint32_t SwitchIndex)
                         {
                             fprintf(stdout,
                                 "            %u: "
-                                "connected to switch with GUID %s, max rx/tx bandwidth %u/%u bytes/sec\n",
-                                portIndex, portstate.remoteSwitchGuid.guid,
+                                "connected to switch on device UUID %s, max rx/tx bandwidth %u/%u bytes/sec\n",
+                                portIndex, portstate.remoteDeviceUuid.id,
                                 portstate.rxSpeed.maxBandwidth, portstate.txSpeed.maxBandwidth);
                         }
                         else

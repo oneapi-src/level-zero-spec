@@ -1016,18 +1016,9 @@ xetSysmanPciGetStats(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Switch GUID address
-typedef struct _xet_switch_guid_t
-{
-    uint8_t guid[8];                                ///< [out] GUID of the Switch
-
-} xet_switch_guid_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Switch properties
 typedef struct _xet_switch_properties_t
 {
-    xet_switch_guid_t switchGuid;                   ///< [out] Address of this Switch
     uint32_t numPorts;                              ///< [out] The number of ports
     xe_bool_t onSubdevice;                          ///< [out] True if the switch is located on a sub-device; false means that
                                                     ///< the switch is on the device of the calling SMI handle
@@ -1066,8 +1057,10 @@ typedef struct _xet_switch_port_properties_t
 typedef struct _xet_switch_port_state_t
 {
     xe_bool_t isConnected;                          ///< [out] Indicates if the port is connected to a remote Switch
-    xet_switch_guid_t remoteSwitchGuid;             ///< [out] If connected is true, this gives the address of the remote
-                                                    ///< switch to which this port connects
+    xe_device_uuid_t remoteDeviceUuid;              ///< [out] If connected is true, this gives the device UUID where the port
+                                                    ///< connects
+    uint32_t remoteDeviceSwitchIndex;               ///< [out] If connected is true, this gives the switch index on the remote
+                                                    ///< device where the port connects
     uint32_t remoteSwitchPortIndex;                 ///< [out] If connected is true, this gives the port index on the remote
                                                     ///< switch
     xet_switch_port_speed_t rxSpeed;                ///< [out] Current maximum receive speed

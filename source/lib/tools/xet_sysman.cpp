@@ -4027,35 +4027,10 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::switch_guid_t to std::string
-    std::string to_string( const Sysman::switch_guid_t val )
-    {
-        std::string str;
-        
-        str += "Sysman::switch_guid_t::guid : ";
-        {
-            std::string tmp;
-            for( auto& entry : val.guid )
-            {
-                tmp += std::to_string( entry );
-                tmp += ", ";
-            }
-            str += "[ " + tmp.substr( 0, tmp.size() - 2 ) + " ]";;
-        }
-        str += "\n";
-
-        return str;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::switch_properties_t to std::string
     std::string to_string( const Sysman::switch_properties_t val )
     {
         std::string str;
-        
-        str += "Sysman::switch_properties_t::switchGuid : ";
-        str += to_string(val.switchGuid);
-        str += "\n";
         
         str += "Sysman::switch_properties_t::numPorts : ";
         str += std::to_string(val.numPorts);
@@ -4129,8 +4104,12 @@ namespace xet
         str += std::to_string(val.isConnected);
         str += "\n";
         
-        str += "Sysman::switch_port_state_t::remoteSwitchGuid : ";
-        str += to_string(val.remoteSwitchGuid);
+        str += "Sysman::switch_port_state_t::remoteDeviceUuid : ";
+        str += to_string(val.remoteDeviceUuid);
+        str += "\n";
+        
+        str += "Sysman::switch_port_state_t::remoteDeviceSwitchIndex : ";
+        str += std::to_string(val.remoteDeviceSwitchIndex);
         str += "\n";
         
         str += "Sysman::switch_port_state_t::remoteSwitchPortIndex : ";

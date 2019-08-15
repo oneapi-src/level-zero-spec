@@ -591,18 +591,9 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Switch GUID address
-        struct switch_guid_t
-        {
-            uint8_t guid[8];                                ///< [out] GUID of the Switch
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Switch properties
         struct switch_properties_t
         {
-            switch_guid_t switchGuid;                       ///< [out] Address of this Switch
             uint32_t numPorts;                              ///< [out] The number of ports
             xe::bool_t onSubdevice;                         ///< [out] True if the switch is located on a sub-device; false means that
                                                             ///< the switch is on the device of the calling SMI handle
@@ -641,8 +632,10 @@ namespace xet
         struct switch_port_state_t
         {
             xe::bool_t isConnected;                         ///< [out] Indicates if the port is connected to a remote Switch
-            switch_guid_t remoteSwitchGuid;                 ///< [out] If connected is true, this gives the address of the remote
-                                                            ///< switch to which this port connects
+            xe::Driver::device_uuid_t remoteDeviceUuid;     ///< [out] If connected is true, this gives the device UUID where the port
+                                                            ///< connects
+            uint32_t remoteDeviceSwitchIndex;               ///< [out] If connected is true, this gives the switch index on the remote
+                                                            ///< device where the port connects
             uint32_t remoteSwitchPortIndex;                 ///< [out] If connected is true, this gives the port index on the remote
                                                             ///< switch
             switch_port_speed_t rxSpeed;                    ///< [out] Current maximum receive speed
@@ -1763,10 +1756,6 @@ namespace xet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::pci_stats_t to std::string
     std::string to_string( const Sysman::pci_stats_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::switch_guid_t to std::string
-    std::string to_string( const Sysman::switch_guid_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::switch_properties_t to std::string
