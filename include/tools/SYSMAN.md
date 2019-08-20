@@ -140,7 +140,7 @@ System resource management is broken down by device component type:
 
 | Device component type                         | Description |
 | :---                                | :---        |
-| [General](#smg) | Access to general device configuration information, operating mode and reset. |
+| [General](#smg) | Access to general device configuration information, optimization mode and reset. |
 | [Power](#smp) | Access to power configuration of the device. |
 | [Frequency](#smf) | Access to frequency configuration of various domains (GPU, local memory). |
 | [Activity](#sma) | Access to accelerator activity counters. |
@@ -164,10 +164,8 @@ Many component types have multiple components - for example, there are two frequ
 type, the appropriate component identifier is provided as an argument to the function. The diagram above shows that there are two frequency domains
 and so the function calls will receive either ::XET_FREQ_DOMAIN_GPU or ::XET_FREQ_DOMAIN_MEMORY.
 
-Other component types can have an arbitrary number of components - for example the number of fans. The number is provided in the general device properties
-for the SMI handle ::xet_sysman_properties_t which is obtained by call the function ::xetSysmanDeviceGetProperties(). For example, the number of
-fans is given in ::xet_sysman_properties_t.numFans. When calling the functions for fans, one specifies the fan index, a number between 0 and the
-number of fans minus 1. This is illustrated in the diagram below:
+Other component types can have an arbitrary number of components - for example the number of fans is given by the function ::xetSysmanFanGetCount().
+When calling the functions for fans, one specifies the fan index, a number between 0 and the number of fans minus 1. This is illustrated in the diagram below:
 
 ![Fan flow](../images/tools_sysman_fan_flow.png?raw=true)
 
@@ -177,13 +175,13 @@ The following functions are provided to manage general aspects of the device:
 | Function                             | Device behavior | Sub-device behavior |
 | :---                                 | :---        | :---        |
 | ::xetSysmanDeviceGetProperties()    | Returns static properties for the device. This includes the device serial number and the number of various components such as fans and which components can have their configuration changes. | Returns static properties for the sub-device only. Some information such as serial number are the same as the device. |
-| ::xetSysmanDeviceGetOperatingMode() | Find out what type of workload performance optimization is currently in effect (see note below). | Not supported. |
-| ::xetSysmanDeviceSetOperatingMode() | Change the workload optimization mode (see note below). | Not supported. |
+| ::xetSysmanDeviceGetOptimizationMode() | Find out what type of workload performance optimization is currently in effect (see note below). | Not supported. |
+| ::xetSysmanDeviceSetOptimizationMode() | Change the workload optimization mode (see note below). | Not supported. |
 | ::xetSysmanDeviceReset()            | Performs a warm reset of the device which includes unloading the driver. | Not supported. |
 
 By default, the device is optimized for multi-application operations. This will attempt to provide fair access to the accelerator resources
-for simultaneous processes/virtual machines using the device. However, it is possible to modify the operating mode to optimize for different use-cases.
-The possible optimizations are given by the enumerator ::xet_operating_mode_t.
+for simultaneous processes/virtual machines using the device. However, it is possible to modify the optimization mode to optimize for different use-cases.
+The possible optimizations are given by the enumerator ::xet_optimization_mode_t.
 
 The example below shows how to output information about a device:
 
@@ -191,7 +189,7 @@ The example below shows how to output information about a device:
 void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
 {
     xet_sysman_properties_t props;
-    xet_operating_mode_t mode;
+    xet_optimization_mode_t mode;
     
     if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
     {
@@ -201,12 +199,12 @@ void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
         fprintf(stdout, "    serial#: %s\n", props.serialNumber);
         fprintf(stdout, "    board#:  %s\n", props.boardNumber);
     }
-    if (xetSysmanDeviceGetOperatingMode(hSysmanDevice, &mode) == XE_RESULT_SUCCESS)
+    if (xetSysmanDeviceGetOptimizationMode(hSysmanDevice, &mode) == XE_RESULT_SUCCESS)
     {
         switch (mode)
         {
-        case XET_OPERATING_MODE_EXCLUSIVE_COMPUTE_PROCESS:
-            fprintf(stdout, "    mode:    exclusive compute process\n");
+        case XET_OPTIMIZATION_MODE_SINGLE_PROCESS_COMPUTE:
+            fprintf(stdout, "    mode:    single process compute\n");
             break;
         default:
             fprintf(stdout, "    mode:    multiply process\n");
@@ -314,15 +312,15 @@ be managed individually using the following functions:
 | Function                               | Device behavior | Sub-device behavior |
 | :---                                   | :---        | :---        |
 | ::xetSysmanFrequencyGetProperties()   | Find out the available frequencies for the frequency domain (will be the same for each sub-device). | Same behavior as at the device level. |
-| ::xetSysmanFrequencyGetLimits()       | Will take the most restrictive min/max range across all sub-devices. | The current min/max frequency between which the frequency domain can operate. |
-| ::xetSysmanFrequencySetLimits()       | Set the min/max frequency for the frequency domain. If there are sub-devices, sets the same range across all of them. | Set the min/max frequency for the frequency domain on the sub-device only. |
+| ::xetSysmanFrequencyGetRange()        | Will take the most restrictive min/max range across all sub-devices. | The current min/max frequency between which the frequency domain can operate. |
+| ::xetSysmanFrequencySetRange()        | Set the min/max frequency for the frequency domain. If there are sub-devices, sets the same range across all of them. | Set the min/max frequency for the frequency domain on the sub-device only. |
 | ::xetSysmanFrequencyGetState()        | Get the current frequency request, actual frequency, TDP frequency and throttle reasons. If there are sub-devices, takes the average of the frequencies and merges the throttle reasons. | Get the current frequency request, actual frequency, TDP frequency and throttle reasons for the sub-device only. |
 | ::xetSysmanFrequencyGetThrottleTime() | Gets the amount of time the frequency domain has been throttled. If there are sub-devices, it will return the max across all of them. | Gets the amount of time the frequency domain in the sub-device has been throttled. |
 
-It is only permitted to set the frequency limits if the device property ::xet_freq_properties_t.canControl is true for the specific frequency
+It is only permitted to set the frequency range if the device property ::xet_freq_properties_t.canControl is true for the specific frequency
 domain.
 
-Setting the min/max frequency limits to the same value, software is effectively disabling the hardware controlled frequency and getting a fixed stable
+Setting the min/max frequency range to the same value, software is effectively disabling the hardware controlled frequency and getting a fixed stable
 frequency providing the Punit does not need to throttle due to excess power/heat. 
 
 Based on the power/thermal conditions, the frequency requested by software or the hardware may not be respected. This situation can be determined
@@ -330,27 +328,37 @@ using the function ::xetSysmanFrequencyGetState() which will indicate the curren
 frequency information that depends on the current conditions. If the actual frequency is below the requested frequency,
 ::xet_freq_state_t.throttleReasons will provide the reasons why the frequency is being limited by the Punit.
 
-The example below shows how to fix the frequency of a frequency domain, but only if control is permitted:
+The example below shows how to fix the frequency of all GPU frequency domains, but only if control is permitted:
 
 ```c
-void FixFrequency(xet_sysman_handle_t hSysmanDevice, xet_freq_domain_t Domain, double FreqMHz)
+void FixGpuFrequency(xet_sysman_handle_t hSysmanDevice, uint32_t FreqDomainIndex, double FreqMHz)
 {
-    xet_freq_properties_t props;
-    if (xetSysmanFrequencyGetProperties(hSysmanDevice, Domain, &props) == XE_RESULT_SUCCESS)
+    uint32_t numFreqDomains;
+    if (xetSysmanFrequencyGetCount(hSysmanDevice, &numFreqDomains) == XE_RESULT_SUCCESS)
     {
-        if (props.canControl)
+        for (uint32_t index = 0; index < numFreqDomains; index++)
         {
-            xet_freq_limits_t limits;
-            limits.min = FreqMHz;
-            limits.max = FreqMHz;
-            if (xetSysmanFrequencySetLimits(hSysmanDevice, Domain, &limits) != XE_RESULT_SUCCESS)
+            xet_freq_properties_t props;
+            if (xetSysmanFrequencyGetProperties(hSysmanDevice, index, &props) == XE_RESULT_SUCCESS)
             {
-                fprintf(stderr, "ERROR: Problem setting the frequency limits.\n");
+                if (props.type == XET_FREQ_DOMAIN_GPU)
+                {
+                    if (props.canControl)
+                    {
+                        xet_freq_range_t range;
+                        range.min = FreqMHz;
+                        range.max = FreqMHz;
+                        if (xetSysmanFrequencySetRange(hSysmanDevice, index, &range) != XE_RESULT_SUCCESS)
+                        {
+                            fprintf(stderr, "ERROR: Problem setting the frequency range for domain with index %u.\n", index);
+                        }
+                    }
+                    else
+                    {
+                        fprintf(stderr, "ERROR: Can't control GPU frequency domain with index %u.\n", index);
+                    }
+                }
             }
-        }
-        else
-        {
-            fprintf(stderr, "ERROR: Can't control this frequency domain.\n");
         }
     }
 }
@@ -394,7 +402,7 @@ These functions will return the same information for a sub-device handle.
 
 ## <a name="sml">Switch</a>
 A device is able access memory and resources on a remote device using a high-speed switch rather than using the PCI bus. If the device has such a
-switch, the property ::xet_sysman_properties_t.numSwitches will be non-zero.
+switch, ::xetSysmanSwitchGetCount() will return a non-zero number.
 
 The following functions can be used to manage the switch:
 
@@ -408,10 +416,10 @@ The following functions can be used to manage the switch:
 | ::xetSysmanSwitchPortGetThroughput()  | Get the throughput counters of a port on the switch. |
 | ::xetSysmanSwitchPortGetStats()       | Gets telemetry counters of a port on the switch - number of replays. |
 
-For devices with sub-devices, the switch is usually located in the sub-device. Given a device handle, ::xet_sysman_properties_t.numSwitches will
+For devices with sub-devices, the switch is usually located in the sub-device. Given a device handle, ::xetSysmanSwitchGetCount() will
 include the switches on each sub-device. In this case, ::xet_switch_properties_t.onSubdevice will be set to true and
 ::xet_switch_properties_t.subdeviceUuid will give the device UUID of the sub-device where that switch is located. Give a sub-device handle,
-::xet_sysman_properties_t.numSwitches will only give the number of switches in the sub-device.
+::xetSysmanSwitchGetCount() will only give the number of switches in the sub-device.
 
 The example below shows how to get the state of all switches in the device and sub-devices:
 
@@ -499,7 +507,7 @@ The following functions can be used to control how the hardware promotes to stan
 The available promotion modes are described in the enumerator ::xet_stby_promo_mode_t.
 
 ## <a name="smw">Firmware</a>
-If ::xet_sysman_properties_t.numFirmwares is non-zero, the following functions can be used to manage firmwares on the device:
+If ::xetSysmanFirmwareGetCount() is non-zero, the following functions can be used to manage firmwares on the device:
 
 | Function                               | Device behavior | Sub-device behavior |
 | :---                                   | :---        | :---        |
@@ -508,7 +516,7 @@ If ::xet_sysman_properties_t.numFirmwares is non-zero, the following functions c
 | ::xetSysmanFirmwareFlash()            | Flash a new firmware image, including for firmware on sub-devices | Flash a new firmware image on a sub-devices |
 
 ## <a name="smy">PSU</a>
-If ::xet_sysman_properties_t.numPsus is non-zero, the following functions can be used to access information about each power-supply:
+If ::xetSysmanPsuGetCount() is non-zero, the following functions can be used to access information about each power-supply:
 
 | Function                               | Device behavior | Sub-device behavior |
 | :---                                   | :---        | :---        |
@@ -516,7 +524,7 @@ If ::xet_sysman_properties_t.numPsus is non-zero, the following functions can be
 | ::xetSysmanPsuGetState()              | Get information about the health (temperature, current, fan) of the power supply. | No power supplies will be enumerated. |
 
 ## <a name="smn">Fan</a>
-If ::xet_sysman_properties_t.numFans is non-zero, it is possible to manage their speed. The hardware can be instructed to run the fan at a fixed
+If ::xetSysmanFanGetCount() is non-zero, it is possible to manage their speed. The hardware can be instructed to run the fan at a fixed
 speed (or 0 for silent operations) or to provide a table of temperature-speed points in which case the hardware will dynamically change the fan
 speed based on the current temperature of the chip. This configuration information is described in the structure ::xet_fan_config_t. When specifying
 speed, one can provide the value in revolutions per minute (::XET_FAN_SPEED_UNITS_RPM) or as a percentage of the maximum RPM
@@ -592,7 +600,7 @@ void SetFanSpeed(xet_sysman_handle_t hSysmanDevice, uint32_t SpeedRpm)
 ```
 
 ## <a name="smd">LED</a>
-If ::xet_sysman_properties_t.numLeds is non-zero, it is possible to manage LEDs on the device. This includes turning them off/on and where
+If ::xetSysmanLedGetCount() is non-zero, it is possible to manage LEDs on the device. This includes turning them off/on and where
 the capability exists, changing their color in realtime.
 
 The following functions are available:
@@ -689,7 +697,7 @@ to sleep until new notifications are received.
 
 The list of all events is provided by the enumerator ::xet_sysman_event_type_t. Before registering to receive an event from this list, the application
 should first check if it is supported for a specific class of devices (devices with the same device ID). This is achieved using the function
-::xetSysmanDeviceGetProperties() and looking at the array ::xet_sysman_properties_t.supportedEvents[::xet_sysman_event_type_t] for each event.
+::xetSysmanEventsGetProperties() and looking at the array ::xet_event_properties_t.supportedEvents[::xet_sysman_event_type_t] for each event.
 
 For events supported on a given device, the application uses the function ::xetSysmanEventsRegister() to register to receive notifications.
 It can stop notifications at any time using the function ::xetSysmanEventsUnregister().
@@ -724,10 +732,10 @@ course of action:
 There are multiple types of diagnostic tests that can be run and these are defined in the enumeration ::xet_diag_type_t.
 
 When running diagnostics, the start and end tests need to be specified. To run all tests, set the start to ::XET_DIAG_FIRST_TEST_INDEX and the end to
-::XET_DIAG_LAST_TEST_INDEX. However, it is possible to enumerate all possible tests using the function ::xetSysmanDiagnosticsRunTests(). This will
-return a list of tests in the structure ::xet_diag_test_list_t - from this software can get the name of each test and the corresponding index value
+::XET_DIAG_LAST_TEST_INDEX. However, it is possible to enumerate all possible tests using the function ::xetSysmanDiagnosticsGetProperties(). This will
+return a list of tests in the structure ::xet_diag_properties_t - from this software can get the name of each test and the corresponding index value
 that can be used to specify start/end points when calling the function ::xetSysmanDiagnosticsRunTests(). If the driver doesn't return any tests
-(::xet_diag_test_list_t.count = 0) then it is not possible on that platform to run a subset of the diagnostic tests and ::XET_DIAG_FIRST_TEST_INDEX
+(::xet_diag_properties_t.numTests = 0) then it is not possible on that platform to run a subset of the diagnostic tests and ::XET_DIAG_FIRST_TEST_INDEX
 and ::XET_DIAG_LAST_TEST_INDEX should be used instead for the start/stop indices respectively.
 
 Diagnostics can only be performed at the device level. Using these functions with a sub-device SMI handle will return an unsupported error.
@@ -744,7 +752,7 @@ These differences are described in the table below:
 
 | Component           | Device operations | Sub-device operations |
 | :---                | :--- | :--- |
-| [General](#smg)     | Get: Device level information<br />Set: Operating mode for all sub-devices | Get: Mostly same as device level information<br />Set: Changing operating mode not supported |
+| [General](#smg)     | Get: Device level information<br />Set: optimization mode for all sub-devices | Get: Mostly same as device level information<br />Set: Changing optimization mode not supported |
 | [Power](#smp)       | Get: Power consumption of whole device, including sub-devices<br />Set: Maximum power limit of the whole device | Get: Power consumption of the sub-device<br />Set: Maximum power limit of the sub-device (if supported) |
 | [Frequency](#smf)   | Get: Average frequency across sub-devices<br />Set: Set same frequency on all sub-devices | Get: Actual frequency of sub-device<br />Set: Set frequency of sub-device |
 | [Activity](#sma)    | Get: Average activity across all sub-devices. | Get: Activity of sub-device. |

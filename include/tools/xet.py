@@ -347,39 +347,14 @@ XET_STRING_PROPERTY_SIZE = 32
 
 ###############################################################################
 ## @brief Device mode
-class xet_operating_mode_v(IntEnum):
+class xet_optimization_mode_v(IntEnum):
     DEFAULT = 0                                     ## Multiple workloads are running on the device
-    EXCLUSIVE_COMPUTE_PROCESS = auto()              ## A single process submitting compute workloads can monopolize the
+    SINGLE_PROCESS_COMPUTE = auto()                 ## A single process submitting compute workloads can monopolize the
                                                     ## accelerator resources
 
-class xet_operating_mode_t(c_int):
+class xet_optimization_mode_t(c_int):
     def __str__(self):
-        return str(xet_operating_mode_v(value))
-
-
-###############################################################################
-## @brief Frequency domains
-class xet_freq_domain_v(IntEnum):
-    GPU = 0                                         ## Frequency of the GPU.
-    MEMORY = auto()                                 ## Frequency of the local memory.
-    NUM = auto()                                    ## The total number of frequency domains.
-
-class xet_freq_domain_t(c_int):
-    def __str__(self):
-        return str(xet_freq_domain_v(value))
-
-
-###############################################################################
-## @brief Event types
-class xet_sysman_event_type_v(IntEnum):
-    FREQ_THROTTLED = 0                              ## The frequency is being throttled
-    ENERGY_THRESHOLD_CROSSED = auto()               ## Interrupt from the PCU when the energy threshold is crossed.
-    RAS_ERRORS = auto()                             ## ECC/RAS errors
-    NUM = auto()                                    ## The number of event types
-
-class xet_sysman_event_type_t(c_int):
-    def __str__(self):
-        return str(xet_sysman_event_type_v(value))
+        return str(xet_optimization_mode_v(value))
 
 
 ###############################################################################
@@ -390,6 +365,7 @@ class xet_sysman_properties_t(Structure):
         ("vendorId", c_ulong),                                          ## [out] vendorId from PCI configuration
         ("deviceId", c_ulong),                                          ## [out] deviceId from PCI configuration
         ("uuid", xe_device_uuid_t),                                     ## [out] Device UUID
+        ("numSubdevices", c_ulong),                                     ## [out] Number of sub-devices
         ("isSubdevice", xe_bool_t),                                     ## [out] If this handle refers to a sub-device.
         ("subdeviceId", c_ulong),                                       ## [out] sub-device id. Only valid if isSubdevice is true.
         ("serialNumber", c_int8_t * XET_STRING_PROPERTY_SIZE),          ## [out] Manufacturing serial number (NULL terminated string value)
@@ -398,18 +374,27 @@ class xet_sysman_properties_t(Structure):
         ("modelName", c_int8_t * XET_STRING_PROPERTY_SIZE),             ## [out] Model name of the device (NULL terminated string value)
         ("vendorName", c_int8_t * XET_STRING_PROPERTY_SIZE),            ## [out] Vendor name of the device (NULL terminated string value)
         ("driverVersion", c_int8_t * XET_STRING_PROPERTY_SIZE),         ## [out] Installed driver version (NULL terminated string value)
-        ("numSwitches", xe_bool_t),                                     ## [out] The number of switches on the device
-        ("numFirmwares", c_ulong),                                      ## [out] Number of firmwares that can be managed
-        ("numPsus", c_ulong),                                           ## [out] Number of power supply units that can be managed
-        ("numFans", c_ulong),                                           ## [out] Number of fans that can be managed
-        ("numLeds", c_ulong),                                           ## [out] Number of LEDs that can be managed
-        ("supportedEvents", xe_bool_t * XET_SYSMAN_EVENT_TYPE_NUM)      ## [out] Set to true for the events that are supported
+        ("wasRepaired", xe_bool_t)                                      ## [out] Indicates if repairs were already carried out on this device
     ]
+
+###############################################################################
+## @brief Power domains
+class xet_power_domain_v(IntEnum):
+    PWR_DOMAIN_TOTAL = 0                            ## Measures/controls total power for the device/sub-device.
+
+class xet_power_domain_t(c_int):
+    def __str__(self):
+        return str(xet_power_domain_v(value))
+
 
 ###############################################################################
 ## @brief Properties related to device power settings
 class xet_power_properties_t(Structure):
     _fields_ = [
+        ("type", xet_power_domain_t),                                   ## [out] The type of power domain
+        ("onSubdevice", xe_bool_t),                                     ## [out] True if this resource is located on a sub-device; false means
+                                                                        ## that the resource is on the device of the calling SMI handle
+        ("subdeviceUuid", xe_device_uuid_t),                            ## [out] If onSubdevice is true, this gives the UUID of the sub-device
         ("canControl", xe_bool_t),                                      ## [out] Software can change the power limits.
         ("maxLimit", c_ulong)                                           ## [out] The maximum power limit in milliwatts that can be requested.
     ]
@@ -491,6 +476,17 @@ class xet_power_peak_limit_t(Structure):
     ]
 
 ###############################################################################
+## @brief Frequency domains
+class xet_freq_domain_v(IntEnum):
+    GPU = 0                                         ## Frequency of the GPU.
+    MEMORY = auto()                                 ## Frequency of the local memory.
+
+class xet_freq_domain_t(c_int):
+    def __str__(self):
+        return str(xet_freq_domain_v(value))
+
+
+###############################################################################
 ## @brief Frequency properties
 ## 
 ## @details
@@ -500,6 +496,10 @@ class xet_power_peak_limit_t(Structure):
 ##       using the range/steps provided.
 class xet_freq_properties_t(Structure):
     _fields_ = [
+        ("type", xet_freq_domain_t),                                    ## [out] The type of frequency domain (GPU, memory, ...)
+        ("onSubdevice", xe_bool_t),                                     ## [out] True if this resource is located on a sub-device; false means
+                                                                        ## that the resource is on the device of the calling SMI handle
+        ("subdeviceUuid", xe_device_uuid_t),                            ## [out] If onSubdevice is true, this gives the UUID of the sub-device
         ("canControl", xe_bool_t),                                      ## [out] Indicates if software can control the frequency of this domain
         ("canOverclock", xe_bool_t),                                    ## [out] Indicates if software can overclock this frequency domain
         ("min", c_double),                                              ## [out] The minimum clock frequency in units of MHz
@@ -511,8 +511,8 @@ class xet_freq_properties_t(Structure):
     ]
 
 ###############################################################################
-## @brief Frequency limits between which the hardware can operate.
-class xet_freq_limits_t(Structure):
+## @brief Frequency range between which the hardware can operate.
+class xet_freq_range_t(Structure):
     _fields_ = [
         ("min", c_double),                                              ## [in,out] The min frequency in MHz below which hardware frequency
                                                                         ## management will not request frequencies. Setting to 0 will use the
@@ -573,7 +573,7 @@ class xet_freq_throttle_time_t(Structure):
     ]
 
 ###############################################################################
-## @brief Activity components
+## @brief GPU activities that can be monitored
 class xet_activity_type_v(IntEnum):
     GLOBAL = 0                                      ## Overall activity of all accelerators on the device.
     COMPUTE = auto()                                ## Activity of all compute accelerators on the device.
@@ -583,6 +583,22 @@ class xet_activity_type_t(c_int):
     def __str__(self):
         return str(xet_activity_type_v(value))
 
+
+###############################################################################
+## @brief Activity properties
+## 
+## @details
+##     - Provides the set of frequencies as a list and as a range/step.
+##     - It is generally recommended that applications choose frequencies from
+##       the list. However applications can also construct the list themselves
+##       using the range/steps provided.
+class xet_activity_properties_t(Structure):
+    _fields_ = [
+        ("type", xet_activity_type_t),                                  ## [out] The type of activity domain
+        ("onSubdevice", xe_bool_t),                                     ## [out] True if this resource is located on a sub-device; false means
+                                                                        ## that the resource is on the device of the calling SMI handle
+        ("subdeviceUuid", xe_device_uuid_t)                             ## [out] If onSubdevice is true, this gives the UUID of the sub-device
+    ]
 
 ###############################################################################
 ## @brief Activity counters
@@ -625,6 +641,9 @@ class xet_mem_type_t(c_int):
 class xet_mem_properties_t(Structure):
     _fields_ = [
         ("type", xet_mem_type_t),                                       ## [out] The memory type
+        ("onSubdevice", xe_bool_t),                                     ## [out] True if this resource is located on a sub-device; false means
+                                                                        ## that the resource is on the device of the calling SMI handle
+        ("subdeviceUuid", xe_device_uuid_t),                            ## [out] If onSubdevice is true, this gives the UUID of the sub-device
         ("size", c_ulonglong)                                           ## [out] Physical memory size in bytes
     ]
 
@@ -686,6 +705,9 @@ class xet_pci_speed_t(Structure):
 class xet_pci_properties_t(Structure):
     _fields_ = [
         ("address", xet_pci_address_t),                                 ## [out] The BDF address
+        ("onSubdevice", xe_bool_t),                                     ## [out] True if this resource is located on a sub-device; false means
+                                                                        ## that the resource is on the device of the calling SMI handle
+        ("subdeviceUuid", xe_device_uuid_t),                            ## [out] If onSubdevice is true, this gives the UUID of the sub-device
         ("numBars", c_ulong),                                           ## [out] The number of configured bars
         ("maxSpeed", xet_pci_speed_t)                                   ## [out] Fastest port configuration supported by the device.
     ]
@@ -868,12 +890,41 @@ class xet_temp_sensors_v(IntEnum):
     GLOBAL = 0                                      ## The maximum temperature across all device sensors
     GPU = auto()                                    ## The maximum temperature across all sensors in the GPU
     MEMORY = auto()                                 ## The maximum temperature across all sensors in the local memory
-    NUM = auto()                                    ## The number of sensors
 
 class xet_temp_sensors_t(c_int):
     def __str__(self):
         return str(xet_temp_sensors_v(value))
 
+
+###############################################################################
+## @brief Temperature sensor properties
+class xet_temp_properties_t(Structure):
+    _fields_ = [
+        ("type", xet_temp_sensors_t),                                   ## [out] Which part of the device the temperature sensor measures
+        ("onSubdevice", xe_bool_t),                                     ## [out] True if the resource is located on a sub-device; false means
+                                                                        ## that the resource is on the device of the calling SMI handle
+        ("subdeviceUuid", xe_device_uuid_t)                             ## [out] If onSubdevice is true, this gives the UUID of the sub-device
+    ]
+
+###############################################################################
+## @brief Standby hardware components
+class xet_stby_type_v(IntEnum):
+    GLOBAL = 0                                      ## Control the overall standby policy of the device/sub-device
+
+class xet_stby_type_t(c_int):
+    def __str__(self):
+        return str(xet_stby_type_v(value))
+
+
+###############################################################################
+## @brief Standby hardware component properties
+class xet_stby_properties_t(Structure):
+    _fields_ = [
+        ("type", xet_stby_type_t),                                      ## [out] Which standby hardware component this controls
+        ("onSubdevice", xe_bool_t),                                     ## [out] True if the resource is located on a sub-device; false means
+                                                                        ## that the resource is on the device of the calling SMI handle
+        ("subdeviceUuid", xe_device_uuid_t)                             ## [out] If onSubdevice is true, this gives the UUID of the sub-device
+    ]
 
 ###############################################################################
 ## @brief Standby promotion modes
@@ -891,6 +942,9 @@ class xet_stby_promo_mode_t(c_int):
 ## @brief Firmware properties
 class xet_firmware_properties_t(Structure):
     _fields_ = [
+        ("onSubdevice", xe_bool_t),                                     ## [out] True if the resource is located on a sub-device; false means
+                                                                        ## that the resource is on the device of the calling SMI handle
+        ("subdeviceUuid", xe_device_uuid_t),                            ## [out] If onSubdevice is true, this gives the UUID of the sub-device
         ("canControl", xe_bool_t),                                      ## [out] Indicates if software can flash the firmware
         ("name", c_int8_t * XET_STRING_PROPERTY_SIZE),                  ## [out] NULL terminated string value
         ("version", c_int8_t * XET_STRING_PROPERTY_SIZE)                ## [out] NULL terminated string value
@@ -912,6 +966,9 @@ class xet_psu_voltage_status_t(c_int):
 ## @brief Static properties of the power supply
 class xet_psu_properties_t(Structure):
     _fields_ = [
+        ("onSubdevice", xe_bool_t),                                     ## [out] True if the resource is located on a sub-device; false means
+                                                                        ## that the resource is on the device of the calling SMI handle
+        ("subdeviceUuid", xe_device_uuid_t),                            ## [out] If onSubdevice is true, this gives the UUID of the sub-device
         ("canControl", xe_bool_t),                                      ## [out] Indicates if software can control the PSU
         ("haveFan", xe_bool_t),                                         ## [out] True if the power supply has a fan
         ("ampLimit", c_ulong)                                           ## [out] The maximum electrical current in amperes that can be drawn
@@ -968,6 +1025,9 @@ XET_FAN_TEMP_SPEED_PAIR_COUNT = 32
 ## @brief Fan properties
 class xet_fan_properties_t(Structure):
     _fields_ = [
+        ("onSubdevice", xe_bool_t),                                     ## [out] True if the resource is located on a sub-device; false means
+                                                                        ## that the resource is on the device of the calling SMI handle
+        ("subdeviceUuid", xe_device_uuid_t),                            ## [out] If onSubdevice is true, this gives the UUID of the sub-device
         ("canControl", xe_bool_t),                                      ## [out] Indicates if software can control the fan speed
         ("maxSpeed", c_ulong),                                          ## [out] The maximum RPM of the fan
         ("maxPoints", c_ulong)                                          ## [out] The maximum number of points in the fan temp/speed table
@@ -997,6 +1057,9 @@ class xet_fan_state_t(Structure):
 ## @brief LED properties
 class xet_led_properties_t(Structure):
     _fields_ = [
+        ("onSubdevice", xe_bool_t),                                     ## [out] True if the resource is located on a sub-device; false means
+                                                                        ## that the resource is on the device of the calling SMI handle
+        ("subdeviceUuid", xe_device_uuid_t),                            ## [out] If onSubdevice is true, this gives the UUID of the sub-device
         ("canControl", xe_bool_t),                                      ## [out] Indicates if software can control the LED
         ("haveRGB", xe_bool_t)                                          ## [out] Indicates if the LED is RGB capable
     ]
@@ -1012,25 +1075,27 @@ class xet_led_state_t(Structure):
     ]
 
 ###############################################################################
-## @brief RAS properties
-class xet_ras_properties_t(Structure):
-    _fields_ = [
-        ("supported", xe_bool_t),                                       ## [out] True if RAS is supported on this device
-        ("enabled", xe_bool_t),                                         ## [out] True if RAS is enabled on this device
-        ("repaired", xe_bool_t)                                         ## [out] True if the device has been repaired
-    ]
-
-###############################################################################
 ## @brief RAS error type
 class xet_ras_error_type_v(IntEnum):
     CORRECTABLE = 0                                 ## Errors were corrected by hardware
     UNCORRECTABLE = auto()                          ## Error were not corrected
-    NUM = auto()                                    ## The number of error types
 
 class xet_ras_error_type_t(c_int):
     def __str__(self):
         return str(xet_ras_error_type_v(value))
 
+
+###############################################################################
+## @brief RAS properties
+class xet_ras_properties_t(Structure):
+    _fields_ = [
+        ("type", xet_ras_error_type_t),                                 ## [out] The type of RAS error
+        ("onSubdevice", xe_bool_t),                                     ## [out] True if the resource is located on a sub-device; false means
+                                                                        ## that the resource is on the device of the calling SMI handle
+        ("subdeviceUuid", xe_device_uuid_t),                            ## [out] If onSubdevice is true, this gives the UUID of the sub-device
+        ("supported", xe_bool_t),                                       ## [out] True if RAS is supported on this device
+        ("enabled", xe_bool_t)                                          ## [out] True if RAS is enabled on this device
+    ]
 
 ###############################################################################
 ## @brief RAS error details
@@ -1051,6 +1116,26 @@ class xet_ras_details_t(Structure):
         ("numPciErrors", c_ulonglong),                                  ## [out] The number of errors that have occurred in the PCI link
         ("numSwitchErrors", c_ulonglong),                               ## [out] The number of errors that have occurred in the P2P links
         ("numDisplayErrors", c_ulonglong)                               ## [out] The number of errors that have occurred in the display
+    ]
+
+###############################################################################
+## @brief Event types
+class xet_sysman_event_type_v(IntEnum):
+    FREQ_THROTTLED = 0                              ## The frequency is being throttled
+    ENERGY_THRESHOLD_CROSSED = auto()               ## Interrupt from the PCU when the energy threshold is crossed.
+    RAS_ERRORS = auto()                             ## ECC/RAS errors
+    NUM = auto()                                    ## The number of event types
+
+class xet_sysman_event_type_t(c_int):
+    def __str__(self):
+        return str(xet_sysman_event_type_v(value))
+
+
+###############################################################################
+## @brief Event properties
+class xet_event_properties_t(Structure):
+    _fields_ = [
+        ("supportedEvents", xe_bool_t * XET_SYSMAN_EVENT_TYPE_NUM)      ## [out] Set to true for the events that are supported
     ]
 
 ###############################################################################
@@ -1109,13 +1194,17 @@ class xet_diag_test_t(Structure):
     ]
 
 ###############################################################################
-## @brief List of all diagnostic tests of a given type ::xet_diag_type_t
-class xet_diag_test_list_t(Structure):
+## @brief Diagnostics test suite properties
+class xet_diag_properties_t(Structure):
     _fields_ = [
-        ("type", xet_diag_type_t),                                      ## [out] The type of tests
-        ("count", c_ulong),                                             ## [out] The number of tests in the array pTests
-        ("pTests", POINTER(xet_diag_test_t))                            ## [out] Array of tests, sorted by increasing value of
-                                                                        ## ::xet_diag_test_t.index
+        ("type", xet_diag_type_t),                                      ## [out] The type of diagnostics test suite
+        ("onSubdevice", xe_bool_t),                                     ## [out] True if the resource is located on a sub-device; false means
+                                                                        ## that the resource is on the device of the calling SMI handle
+        ("subdeviceUuid", xe_device_uuid_t),                            ## [out] If onSubdevice is true, this gives the UUID of the sub-device
+        ("name", POINTER(c_char)),                                      ## [out] Name of the diagnostics test suite
+        ("numTests", c_ulong),                                          ## [out] The number of tests in the test suite
+        ("pTests", POINTER(xet_diag_test_t))                            ## [out] Array of tests (size ::xet_diag_properties_t.numTests), sorted
+                                                                        ## by increasing value of ::xet_diag_test_t.index
     ]
 
 ###############################################################################
@@ -1480,18 +1569,18 @@ else:
     _xetSysmanDeviceGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_sysman_properties_t) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanDeviceGetOperatingMode
+## @brief Function-pointer for xetSysmanDeviceGetOptimizationMode
 if __use_win_types:
-    _xetSysmanDeviceGetOperatingMode_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_operating_mode_t) )
+    _xetSysmanDeviceGetOptimizationMode_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_optimization_mode_t) )
 else:
-    _xetSysmanDeviceGetOperatingMode_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_operating_mode_t) )
+    _xetSysmanDeviceGetOptimizationMode_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_optimization_mode_t) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanDeviceSetOperatingMode
+## @brief Function-pointer for xetSysmanDeviceSetOptimizationMode
 if __use_win_types:
-    _xetSysmanDeviceSetOperatingMode_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_operating_mode_t )
+    _xetSysmanDeviceSetOptimizationMode_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_optimization_mode_t )
 else:
-    _xetSysmanDeviceSetOperatingMode_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_operating_mode_t )
+    _xetSysmanDeviceSetOptimizationMode_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_optimization_mode_t )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanDeviceReset
@@ -1501,144 +1590,193 @@ else:
     _xetSysmanDeviceReset_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t )
 
 ###############################################################################
+## @brief Function-pointer for xetSysmanPowerGetCount
+if __use_win_types:
+    _xetSysmanPowerGetCount_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
+else:
+    _xetSysmanPowerGetCount_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
+
+###############################################################################
 ## @brief Function-pointer for xetSysmanPowerGetProperties
 if __use_win_types:
-    _xetSysmanPowerGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_properties_t) )
+    _xetSysmanPowerGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_power_properties_t) )
 else:
-    _xetSysmanPowerGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_properties_t) )
+    _xetSysmanPowerGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_power_properties_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanPowerGetEnergyCounter
 if __use_win_types:
-    _xetSysmanPowerGetEnergyCounter_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_energy_counter_t) )
+    _xetSysmanPowerGetEnergyCounter_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_power_energy_counter_t) )
 else:
-    _xetSysmanPowerGetEnergyCounter_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_energy_counter_t) )
+    _xetSysmanPowerGetEnergyCounter_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_power_energy_counter_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanPowerGetEnergyThreshold
 if __use_win_types:
-    _xetSysmanPowerGetEnergyThreshold_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_energy_threshold_t) )
+    _xetSysmanPowerGetEnergyThreshold_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_power_energy_threshold_t) )
 else:
-    _xetSysmanPowerGetEnergyThreshold_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_energy_threshold_t) )
+    _xetSysmanPowerGetEnergyThreshold_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_power_energy_threshold_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanPowerSetEnergyThreshold
 if __use_win_types:
-    _xetSysmanPowerSetEnergyThreshold_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_energy_threshold_t) )
+    _xetSysmanPowerSetEnergyThreshold_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_power_energy_threshold_t) )
 else:
-    _xetSysmanPowerSetEnergyThreshold_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_energy_threshold_t) )
+    _xetSysmanPowerSetEnergyThreshold_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_power_energy_threshold_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanPowerGetLimits
 if __use_win_types:
-    _xetSysmanPowerGetLimits_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_sustained_limit_t), POINTER(xet_power_burst_limit_t), POINTER(xet_power_peak_limit_t) )
+    _xetSysmanPowerGetLimits_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_power_sustained_limit_t), POINTER(xet_power_burst_limit_t), POINTER(xet_power_peak_limit_t) )
 else:
-    _xetSysmanPowerGetLimits_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_sustained_limit_t), POINTER(xet_power_burst_limit_t), POINTER(xet_power_peak_limit_t) )
+    _xetSysmanPowerGetLimits_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_power_sustained_limit_t), POINTER(xet_power_burst_limit_t), POINTER(xet_power_peak_limit_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanPowerSetLimits
 if __use_win_types:
-    _xetSysmanPowerSetLimits_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_sustained_limit_t), POINTER(xet_power_burst_limit_t), POINTER(xet_power_peak_limit_t) )
+    _xetSysmanPowerSetLimits_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_power_sustained_limit_t), POINTER(xet_power_burst_limit_t), POINTER(xet_power_peak_limit_t) )
 else:
-    _xetSysmanPowerSetLimits_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_power_sustained_limit_t), POINTER(xet_power_burst_limit_t), POINTER(xet_power_peak_limit_t) )
+    _xetSysmanPowerSetLimits_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_power_sustained_limit_t), POINTER(xet_power_burst_limit_t), POINTER(xet_power_peak_limit_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanFrequencyGetCount
+if __use_win_types:
+    _xetSysmanFrequencyGetCount_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
+else:
+    _xetSysmanFrequencyGetCount_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanFrequencyGetProperties
 if __use_win_types:
-    _xetSysmanFrequencyGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_freq_domain_t, POINTER(xet_freq_properties_t) )
+    _xetSysmanFrequencyGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_freq_properties_t) )
 else:
-    _xetSysmanFrequencyGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_freq_domain_t, POINTER(xet_freq_properties_t) )
+    _xetSysmanFrequencyGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_freq_properties_t) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanFrequencyGetLimits
+## @brief Function-pointer for xetSysmanFrequencyGetRange
 if __use_win_types:
-    _xetSysmanFrequencyGetLimits_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_freq_domain_t, POINTER(xet_freq_limits_t) )
+    _xetSysmanFrequencyGetRange_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_freq_range_t) )
 else:
-    _xetSysmanFrequencyGetLimits_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_freq_domain_t, POINTER(xet_freq_limits_t) )
+    _xetSysmanFrequencyGetRange_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_freq_range_t) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanFrequencySetLimits
+## @brief Function-pointer for xetSysmanFrequencySetRange
 if __use_win_types:
-    _xetSysmanFrequencySetLimits_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_freq_domain_t, POINTER(xet_freq_limits_t) )
+    _xetSysmanFrequencySetRange_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_freq_range_t) )
 else:
-    _xetSysmanFrequencySetLimits_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_freq_domain_t, POINTER(xet_freq_limits_t) )
+    _xetSysmanFrequencySetRange_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_freq_range_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanFrequencyGetState
 if __use_win_types:
-    _xetSysmanFrequencyGetState_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_freq_domain_t, POINTER(xet_freq_state_t) )
+    _xetSysmanFrequencyGetState_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_freq_state_t) )
 else:
-    _xetSysmanFrequencyGetState_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_freq_domain_t, POINTER(xet_freq_state_t) )
+    _xetSysmanFrequencyGetState_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_freq_state_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanFrequencyGetThrottleTime
 if __use_win_types:
-    _xetSysmanFrequencyGetThrottleTime_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_freq_domain_t, POINTER(xet_freq_throttle_time_t) )
+    _xetSysmanFrequencyGetThrottleTime_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_freq_throttle_time_t) )
 else:
-    _xetSysmanFrequencyGetThrottleTime_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_freq_domain_t, POINTER(xet_freq_throttle_time_t) )
+    _xetSysmanFrequencyGetThrottleTime_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_freq_throttle_time_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanActivityGetCount
+if __use_win_types:
+    _xetSysmanActivityGetCount_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
+else:
+    _xetSysmanActivityGetCount_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanActivityGetProperties
+if __use_win_types:
+    _xetSysmanActivityGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_activity_properties_t) )
+else:
+    _xetSysmanActivityGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_activity_properties_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanActivityGetStats
 if __use_win_types:
-    _xetSysmanActivityGetStats_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_activity_type_t, POINTER(xet_activity_stats_t) )
+    _xetSysmanActivityGetStats_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_activity_stats_t) )
 else:
-    _xetSysmanActivityGetStats_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_activity_type_t, POINTER(xet_activity_stats_t) )
+    _xetSysmanActivityGetStats_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_activity_stats_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanMemoryGetCount
+if __use_win_types:
+    _xetSysmanMemoryGetCount_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
+else:
+    _xetSysmanMemoryGetCount_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanMemoryGetProperties
 if __use_win_types:
-    _xetSysmanMemoryGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_mem_properties_t) )
+    _xetSysmanMemoryGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_mem_properties_t) )
 else:
-    _xetSysmanMemoryGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_mem_properties_t) )
+    _xetSysmanMemoryGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_mem_properties_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanMemoryGetBandwidth
 if __use_win_types:
-    _xetSysmanMemoryGetBandwidth_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_mem_bandwidth_t) )
+    _xetSysmanMemoryGetBandwidth_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_mem_bandwidth_t) )
 else:
-    _xetSysmanMemoryGetBandwidth_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_mem_bandwidth_t) )
+    _xetSysmanMemoryGetBandwidth_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_mem_bandwidth_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanMemoryGetAllocated
 if __use_win_types:
-    _xetSysmanMemoryGetAllocated_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_mem_alloc_t) )
+    _xetSysmanMemoryGetAllocated_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_mem_alloc_t) )
 else:
-    _xetSysmanMemoryGetAllocated_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_mem_alloc_t) )
+    _xetSysmanMemoryGetAllocated_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_mem_alloc_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanPciGetCount
+if __use_win_types:
+    _xetSysmanPciGetCount_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
+else:
+    _xetSysmanPciGetCount_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanPciGetProperties
 if __use_win_types:
-    _xetSysmanPciGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_pci_properties_t) )
+    _xetSysmanPciGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_pci_properties_t) )
 else:
-    _xetSysmanPciGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_pci_properties_t) )
+    _xetSysmanPciGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_pci_properties_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanPciGetState
 if __use_win_types:
-    _xetSysmanPciGetState_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_pci_state_t) )
+    _xetSysmanPciGetState_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_pci_state_t) )
 else:
-    _xetSysmanPciGetState_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_pci_state_t) )
+    _xetSysmanPciGetState_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_pci_state_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanPciGetBarProperties
 if __use_win_types:
-    _xetSysmanPciGetBarProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_pci_bar_properties_t) )
+    _xetSysmanPciGetBarProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, c_ulong, POINTER(xet_pci_bar_properties_t) )
 else:
-    _xetSysmanPciGetBarProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_pci_bar_properties_t) )
+    _xetSysmanPciGetBarProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, c_ulong, POINTER(xet_pci_bar_properties_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanPciGetThroughput
 if __use_win_types:
-    _xetSysmanPciGetThroughput_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_pci_throughput_t) )
+    _xetSysmanPciGetThroughput_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_pci_throughput_t) )
 else:
-    _xetSysmanPciGetThroughput_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_pci_throughput_t) )
+    _xetSysmanPciGetThroughput_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_pci_throughput_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanPciGetStats
 if __use_win_types:
-    _xetSysmanPciGetStats_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_pci_stats_t) )
+    _xetSysmanPciGetStats_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_pci_stats_t) )
 else:
-    _xetSysmanPciGetStats_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_pci_stats_t) )
+    _xetSysmanPciGetStats_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_pci_stats_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanSwitchGetCount
+if __use_win_types:
+    _xetSysmanSwitchGetCount_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
+else:
+    _xetSysmanSwitchGetCount_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanSwitchGetProperties
@@ -1690,25 +1828,60 @@ else:
     _xetSysmanSwitchPortGetStats_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, c_ulong, POINTER(xet_switch_port_stats_t) )
 
 ###############################################################################
+## @brief Function-pointer for xetSysmanTemperatureGetCount
+if __use_win_types:
+    _xetSysmanTemperatureGetCount_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
+else:
+    _xetSysmanTemperatureGetCount_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanTemperatureGetProperties
+if __use_win_types:
+    _xetSysmanTemperatureGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_temp_properties_t) )
+else:
+    _xetSysmanTemperatureGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_temp_properties_t) )
+
+###############################################################################
 ## @brief Function-pointer for xetSysmanTemperatureGet
 if __use_win_types:
-    _xetSysmanTemperatureGet_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_temp_sensors_t, POINTER(c_ulong) )
+    _xetSysmanTemperatureGet_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(c_ulong) )
 else:
-    _xetSysmanTemperatureGet_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_temp_sensors_t, POINTER(c_ulong) )
+    _xetSysmanTemperatureGet_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(c_ulong) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanStandbyGetCount
+if __use_win_types:
+    _xetSysmanStandbyGetCount_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
+else:
+    _xetSysmanStandbyGetCount_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanStandbyGetProperties
+if __use_win_types:
+    _xetSysmanStandbyGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_stby_properties_t) )
+else:
+    _xetSysmanStandbyGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_stby_properties_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanStandbyGetMode
 if __use_win_types:
-    _xetSysmanStandbyGetMode_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_stby_promo_mode_t) )
+    _xetSysmanStandbyGetMode_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_stby_promo_mode_t) )
 else:
-    _xetSysmanStandbyGetMode_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_stby_promo_mode_t) )
+    _xetSysmanStandbyGetMode_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_stby_promo_mode_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanStandbySetMode
 if __use_win_types:
-    _xetSysmanStandbySetMode_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_stby_promo_mode_t )
+    _xetSysmanStandbySetMode_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, xet_stby_promo_mode_t )
 else:
-    _xetSysmanStandbySetMode_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_stby_promo_mode_t )
+    _xetSysmanStandbySetMode_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, xet_stby_promo_mode_t )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanFirmwareGetCount
+if __use_win_types:
+    _xetSysmanFirmwareGetCount_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
+else:
+    _xetSysmanFirmwareGetCount_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanFirmwareGetProperties
@@ -1732,6 +1905,13 @@ else:
     _xetSysmanFirmwareFlash_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, c_void_p, c_ulong )
 
 ###############################################################################
+## @brief Function-pointer for xetSysmanPsuGetCount
+if __use_win_types:
+    _xetSysmanPsuGetCount_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
+else:
+    _xetSysmanPsuGetCount_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
+
+###############################################################################
 ## @brief Function-pointer for xetSysmanPsuGetProperties
 if __use_win_types:
     _xetSysmanPsuGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_psu_properties_t) )
@@ -1744,6 +1924,13 @@ if __use_win_types:
     _xetSysmanPsuGetState_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_psu_state_t) )
 else:
     _xetSysmanPsuGetState_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_psu_state_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanFanGetCount
+if __use_win_types:
+    _xetSysmanFanGetCount_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
+else:
+    _xetSysmanFanGetCount_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanFanGetProperties
@@ -1774,6 +1961,13 @@ else:
     _xetSysmanFanGetState_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, xet_fan_speed_units_t, POINTER(xet_fan_state_t) )
 
 ###############################################################################
+## @brief Function-pointer for xetSysmanLedGetCount
+if __use_win_types:
+    _xetSysmanLedGetCount_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
+else:
+    _xetSysmanLedGetCount_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
+
+###############################################################################
 ## @brief Function-pointer for xetSysmanLedGetProperties
 if __use_win_types:
     _xetSysmanLedGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_led_properties_t) )
@@ -1795,18 +1989,32 @@ else:
     _xetSysmanLedSetState_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_led_state_t) )
 
 ###############################################################################
+## @brief Function-pointer for xetSysmanRasGetCount
+if __use_win_types:
+    _xetSysmanRasGetCount_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
+else:
+    _xetSysmanRasGetCount_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
+
+###############################################################################
 ## @brief Function-pointer for xetSysmanRasGetProperties
 if __use_win_types:
-    _xetSysmanRasGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_ras_properties_t) )
+    _xetSysmanRasGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_ras_properties_t) )
 else:
-    _xetSysmanRasGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_ras_properties_t) )
+    _xetSysmanRasGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_ras_properties_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanRasGetErrors
 if __use_win_types:
-    _xetSysmanRasGetErrors_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_ras_error_type_t, xe_bool_t, POINTER(c_ulonglong), POINTER(xet_ras_details_t) )
+    _xetSysmanRasGetErrors_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, xe_bool_t, POINTER(c_ulonglong), POINTER(xet_ras_details_t) )
 else:
-    _xetSysmanRasGetErrors_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_ras_error_type_t, xe_bool_t, POINTER(c_ulonglong), POINTER(xet_ras_details_t) )
+    _xetSysmanRasGetErrors_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, xe_bool_t, POINTER(c_ulonglong), POINTER(xet_ras_details_t) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanEventsGetProperties
+if __use_win_types:
+    _xetSysmanEventsGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_event_properties_t) )
+else:
+    _xetSysmanEventsGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_event_properties_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanEventsRegister
@@ -1830,18 +2038,25 @@ else:
     _xetSysmanEventsListen_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xe_bool_t, c_ulong, POINTER(c_ulong) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanDiagnosticsGetTestList
+## @brief Function-pointer for xetSysmanDiagnosticsGetCount
 if __use_win_types:
-    _xetSysmanDiagnosticsGetTestList_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_diag_type_t, POINTER(xet_diag_test_list_t*) )
+    _xetSysmanDiagnosticsGetCount_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
 else:
-    _xetSysmanDiagnosticsGetTestList_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_diag_type_t, POINTER(xet_diag_test_list_t*) )
+    _xetSysmanDiagnosticsGetCount_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
+
+###############################################################################
+## @brief Function-pointer for xetSysmanDiagnosticsGetProperties
+if __use_win_types:
+    _xetSysmanDiagnosticsGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_diag_properties_t) )
+else:
+    _xetSysmanDiagnosticsGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_diag_properties_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanDiagnosticsRunTests
 if __use_win_types:
-    _xetSysmanDiagnosticsRunTests_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_diag_type_t, c_ulong, c_ulong, POINTER(xet_diag_result_t) )
+    _xetSysmanDiagnosticsRunTests_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, c_ulong, c_ulong, POINTER(xet_diag_result_t) )
 else:
-    _xetSysmanDiagnosticsRunTests_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_diag_type_t, c_ulong, c_ulong, POINTER(xet_diag_result_t) )
+    _xetSysmanDiagnosticsRunTests_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, c_ulong, c_ulong, POINTER(xet_diag_result_t) )
 
 
 ###############################################################################
@@ -1850,29 +2065,36 @@ class _xet_sysman_dditable_t(Structure):
     _fields_ = [
         ("pfnGet", c_void_p),                                           ## _xetSysmanGet_t
         ("pfnDeviceGetProperties", c_void_p),                           ## _xetSysmanDeviceGetProperties_t
-        ("pfnDeviceGetOperatingMode", c_void_p),                        ## _xetSysmanDeviceGetOperatingMode_t
-        ("pfnDeviceSetOperatingMode", c_void_p),                        ## _xetSysmanDeviceSetOperatingMode_t
+        ("pfnDeviceGetOptimizationMode", c_void_p),                     ## _xetSysmanDeviceGetOptimizationMode_t
+        ("pfnDeviceSetOptimizationMode", c_void_p),                     ## _xetSysmanDeviceSetOptimizationMode_t
         ("pfnDeviceReset", c_void_p),                                   ## _xetSysmanDeviceReset_t
+        ("pfnPowerGetCount", c_void_p),                                 ## _xetSysmanPowerGetCount_t
         ("pfnPowerGetProperties", c_void_p),                            ## _xetSysmanPowerGetProperties_t
         ("pfnPowerGetEnergyCounter", c_void_p),                         ## _xetSysmanPowerGetEnergyCounter_t
         ("pfnPowerGetEnergyThreshold", c_void_p),                       ## _xetSysmanPowerGetEnergyThreshold_t
         ("pfnPowerSetEnergyThreshold", c_void_p),                       ## _xetSysmanPowerSetEnergyThreshold_t
         ("pfnPowerGetLimits", c_void_p),                                ## _xetSysmanPowerGetLimits_t
         ("pfnPowerSetLimits", c_void_p),                                ## _xetSysmanPowerSetLimits_t
+        ("pfnFrequencyGetCount", c_void_p),                             ## _xetSysmanFrequencyGetCount_t
         ("pfnFrequencyGetProperties", c_void_p),                        ## _xetSysmanFrequencyGetProperties_t
-        ("pfnFrequencyGetLimits", c_void_p),                            ## _xetSysmanFrequencyGetLimits_t
-        ("pfnFrequencySetLimits", c_void_p),                            ## _xetSysmanFrequencySetLimits_t
+        ("pfnFrequencyGetRange", c_void_p),                             ## _xetSysmanFrequencyGetRange_t
+        ("pfnFrequencySetRange", c_void_p),                             ## _xetSysmanFrequencySetRange_t
         ("pfnFrequencyGetState", c_void_p),                             ## _xetSysmanFrequencyGetState_t
         ("pfnFrequencyGetThrottleTime", c_void_p),                      ## _xetSysmanFrequencyGetThrottleTime_t
+        ("pfnActivityGetCount", c_void_p),                              ## _xetSysmanActivityGetCount_t
+        ("pfnActivityGetProperties", c_void_p),                         ## _xetSysmanActivityGetProperties_t
         ("pfnActivityGetStats", c_void_p),                              ## _xetSysmanActivityGetStats_t
+        ("pfnMemoryGetCount", c_void_p),                                ## _xetSysmanMemoryGetCount_t
         ("pfnMemoryGetProperties", c_void_p),                           ## _xetSysmanMemoryGetProperties_t
         ("pfnMemoryGetBandwidth", c_void_p),                            ## _xetSysmanMemoryGetBandwidth_t
         ("pfnMemoryGetAllocated", c_void_p),                            ## _xetSysmanMemoryGetAllocated_t
+        ("pfnPciGetCount", c_void_p),                                   ## _xetSysmanPciGetCount_t
         ("pfnPciGetProperties", c_void_p),                              ## _xetSysmanPciGetProperties_t
         ("pfnPciGetState", c_void_p),                                   ## _xetSysmanPciGetState_t
         ("pfnPciGetBarProperties", c_void_p),                           ## _xetSysmanPciGetBarProperties_t
         ("pfnPciGetThroughput", c_void_p),                              ## _xetSysmanPciGetThroughput_t
         ("pfnPciGetStats", c_void_p),                                   ## _xetSysmanPciGetStats_t
+        ("pfnSwitchGetCount", c_void_p),                                ## _xetSysmanSwitchGetCount_t
         ("pfnSwitchGetProperties", c_void_p),                           ## _xetSysmanSwitchGetProperties_t
         ("pfnSwitchGetState", c_void_p),                                ## _xetSysmanSwitchGetState_t
         ("pfnSwitchSetState", c_void_p),                                ## _xetSysmanSwitchSetState_t
@@ -1880,27 +2102,38 @@ class _xet_sysman_dditable_t(Structure):
         ("pfnSwitchPortGetState", c_void_p),                            ## _xetSysmanSwitchPortGetState_t
         ("pfnSwitchPortGetThroughput", c_void_p),                       ## _xetSysmanSwitchPortGetThroughput_t
         ("pfnSwitchPortGetStats", c_void_p),                            ## _xetSysmanSwitchPortGetStats_t
+        ("pfnTemperatureGetCount", c_void_p),                           ## _xetSysmanTemperatureGetCount_t
+        ("pfnTemperatureGetProperties", c_void_p),                      ## _xetSysmanTemperatureGetProperties_t
         ("pfnTemperatureGet", c_void_p),                                ## _xetSysmanTemperatureGet_t
+        ("pfnStandbyGetCount", c_void_p),                               ## _xetSysmanStandbyGetCount_t
+        ("pfnStandbyGetProperties", c_void_p),                          ## _xetSysmanStandbyGetProperties_t
         ("pfnStandbyGetMode", c_void_p),                                ## _xetSysmanStandbyGetMode_t
         ("pfnStandbySetMode", c_void_p),                                ## _xetSysmanStandbySetMode_t
+        ("pfnFirmwareGetCount", c_void_p),                              ## _xetSysmanFirmwareGetCount_t
         ("pfnFirmwareGetProperties", c_void_p),                         ## _xetSysmanFirmwareGetProperties_t
         ("pfnFirmwareGetChecksum", c_void_p),                           ## _xetSysmanFirmwareGetChecksum_t
         ("pfnFirmwareFlash", c_void_p),                                 ## _xetSysmanFirmwareFlash_t
+        ("pfnPsuGetCount", c_void_p),                                   ## _xetSysmanPsuGetCount_t
         ("pfnPsuGetProperties", c_void_p),                              ## _xetSysmanPsuGetProperties_t
         ("pfnPsuGetState", c_void_p),                                   ## _xetSysmanPsuGetState_t
+        ("pfnFanGetCount", c_void_p),                                   ## _xetSysmanFanGetCount_t
         ("pfnFanGetProperties", c_void_p),                              ## _xetSysmanFanGetProperties_t
         ("pfnFanGetConfig", c_void_p),                                  ## _xetSysmanFanGetConfig_t
         ("pfnFanSetConfig", c_void_p),                                  ## _xetSysmanFanSetConfig_t
         ("pfnFanGetState", c_void_p),                                   ## _xetSysmanFanGetState_t
+        ("pfnLedGetCount", c_void_p),                                   ## _xetSysmanLedGetCount_t
         ("pfnLedGetProperties", c_void_p),                              ## _xetSysmanLedGetProperties_t
         ("pfnLedGetState", c_void_p),                                   ## _xetSysmanLedGetState_t
         ("pfnLedSetState", c_void_p),                                   ## _xetSysmanLedSetState_t
+        ("pfnRasGetCount", c_void_p),                                   ## _xetSysmanRasGetCount_t
         ("pfnRasGetProperties", c_void_p),                              ## _xetSysmanRasGetProperties_t
         ("pfnRasGetErrors", c_void_p),                                  ## _xetSysmanRasGetErrors_t
+        ("pfnEventsGetProperties", c_void_p),                           ## _xetSysmanEventsGetProperties_t
         ("pfnEventsRegister", c_void_p),                                ## _xetSysmanEventsRegister_t
         ("pfnEventsUnregister", c_void_p),                              ## _xetSysmanEventsUnregister_t
         ("pfnEventsListen", c_void_p),                                  ## _xetSysmanEventsListen_t
-        ("pfnDiagnosticsGetTestList", c_void_p),                        ## _xetSysmanDiagnosticsGetTestList_t
+        ("pfnDiagnosticsGetCount", c_void_p),                           ## _xetSysmanDiagnosticsGetCount_t
+        ("pfnDiagnosticsGetProperties", c_void_p),                      ## _xetSysmanDiagnosticsGetProperties_t
         ("pfnDiagnosticsRunTests", c_void_p)                            ## _xetSysmanDiagnosticsRunTests_t
     ]
 
@@ -2071,29 +2304,36 @@ class XET_DDI:
         # attach function interface to function address
         self.xetSysmanGet = _xetSysmanGet_t(self.__dditable.Sysman.pfnGet)
         self.xetSysmanDeviceGetProperties = _xetSysmanDeviceGetProperties_t(self.__dditable.Sysman.pfnDeviceGetProperties)
-        self.xetSysmanDeviceGetOperatingMode = _xetSysmanDeviceGetOperatingMode_t(self.__dditable.Sysman.pfnDeviceGetOperatingMode)
-        self.xetSysmanDeviceSetOperatingMode = _xetSysmanDeviceSetOperatingMode_t(self.__dditable.Sysman.pfnDeviceSetOperatingMode)
+        self.xetSysmanDeviceGetOptimizationMode = _xetSysmanDeviceGetOptimizationMode_t(self.__dditable.Sysman.pfnDeviceGetOptimizationMode)
+        self.xetSysmanDeviceSetOptimizationMode = _xetSysmanDeviceSetOptimizationMode_t(self.__dditable.Sysman.pfnDeviceSetOptimizationMode)
         self.xetSysmanDeviceReset = _xetSysmanDeviceReset_t(self.__dditable.Sysman.pfnDeviceReset)
+        self.xetSysmanPowerGetCount = _xetSysmanPowerGetCount_t(self.__dditable.Sysman.pfnPowerGetCount)
         self.xetSysmanPowerGetProperties = _xetSysmanPowerGetProperties_t(self.__dditable.Sysman.pfnPowerGetProperties)
         self.xetSysmanPowerGetEnergyCounter = _xetSysmanPowerGetEnergyCounter_t(self.__dditable.Sysman.pfnPowerGetEnergyCounter)
         self.xetSysmanPowerGetEnergyThreshold = _xetSysmanPowerGetEnergyThreshold_t(self.__dditable.Sysman.pfnPowerGetEnergyThreshold)
         self.xetSysmanPowerSetEnergyThreshold = _xetSysmanPowerSetEnergyThreshold_t(self.__dditable.Sysman.pfnPowerSetEnergyThreshold)
         self.xetSysmanPowerGetLimits = _xetSysmanPowerGetLimits_t(self.__dditable.Sysman.pfnPowerGetLimits)
         self.xetSysmanPowerSetLimits = _xetSysmanPowerSetLimits_t(self.__dditable.Sysman.pfnPowerSetLimits)
+        self.xetSysmanFrequencyGetCount = _xetSysmanFrequencyGetCount_t(self.__dditable.Sysman.pfnFrequencyGetCount)
         self.xetSysmanFrequencyGetProperties = _xetSysmanFrequencyGetProperties_t(self.__dditable.Sysman.pfnFrequencyGetProperties)
-        self.xetSysmanFrequencyGetLimits = _xetSysmanFrequencyGetLimits_t(self.__dditable.Sysman.pfnFrequencyGetLimits)
-        self.xetSysmanFrequencySetLimits = _xetSysmanFrequencySetLimits_t(self.__dditable.Sysman.pfnFrequencySetLimits)
+        self.xetSysmanFrequencyGetRange = _xetSysmanFrequencyGetRange_t(self.__dditable.Sysman.pfnFrequencyGetRange)
+        self.xetSysmanFrequencySetRange = _xetSysmanFrequencySetRange_t(self.__dditable.Sysman.pfnFrequencySetRange)
         self.xetSysmanFrequencyGetState = _xetSysmanFrequencyGetState_t(self.__dditable.Sysman.pfnFrequencyGetState)
         self.xetSysmanFrequencyGetThrottleTime = _xetSysmanFrequencyGetThrottleTime_t(self.__dditable.Sysman.pfnFrequencyGetThrottleTime)
+        self.xetSysmanActivityGetCount = _xetSysmanActivityGetCount_t(self.__dditable.Sysman.pfnActivityGetCount)
+        self.xetSysmanActivityGetProperties = _xetSysmanActivityGetProperties_t(self.__dditable.Sysman.pfnActivityGetProperties)
         self.xetSysmanActivityGetStats = _xetSysmanActivityGetStats_t(self.__dditable.Sysman.pfnActivityGetStats)
+        self.xetSysmanMemoryGetCount = _xetSysmanMemoryGetCount_t(self.__dditable.Sysman.pfnMemoryGetCount)
         self.xetSysmanMemoryGetProperties = _xetSysmanMemoryGetProperties_t(self.__dditable.Sysman.pfnMemoryGetProperties)
         self.xetSysmanMemoryGetBandwidth = _xetSysmanMemoryGetBandwidth_t(self.__dditable.Sysman.pfnMemoryGetBandwidth)
         self.xetSysmanMemoryGetAllocated = _xetSysmanMemoryGetAllocated_t(self.__dditable.Sysman.pfnMemoryGetAllocated)
+        self.xetSysmanPciGetCount = _xetSysmanPciGetCount_t(self.__dditable.Sysman.pfnPciGetCount)
         self.xetSysmanPciGetProperties = _xetSysmanPciGetProperties_t(self.__dditable.Sysman.pfnPciGetProperties)
         self.xetSysmanPciGetState = _xetSysmanPciGetState_t(self.__dditable.Sysman.pfnPciGetState)
         self.xetSysmanPciGetBarProperties = _xetSysmanPciGetBarProperties_t(self.__dditable.Sysman.pfnPciGetBarProperties)
         self.xetSysmanPciGetThroughput = _xetSysmanPciGetThroughput_t(self.__dditable.Sysman.pfnPciGetThroughput)
         self.xetSysmanPciGetStats = _xetSysmanPciGetStats_t(self.__dditable.Sysman.pfnPciGetStats)
+        self.xetSysmanSwitchGetCount = _xetSysmanSwitchGetCount_t(self.__dditable.Sysman.pfnSwitchGetCount)
         self.xetSysmanSwitchGetProperties = _xetSysmanSwitchGetProperties_t(self.__dditable.Sysman.pfnSwitchGetProperties)
         self.xetSysmanSwitchGetState = _xetSysmanSwitchGetState_t(self.__dditable.Sysman.pfnSwitchGetState)
         self.xetSysmanSwitchSetState = _xetSysmanSwitchSetState_t(self.__dditable.Sysman.pfnSwitchSetState)
@@ -2101,27 +2341,38 @@ class XET_DDI:
         self.xetSysmanSwitchPortGetState = _xetSysmanSwitchPortGetState_t(self.__dditable.Sysman.pfnSwitchPortGetState)
         self.xetSysmanSwitchPortGetThroughput = _xetSysmanSwitchPortGetThroughput_t(self.__dditable.Sysman.pfnSwitchPortGetThroughput)
         self.xetSysmanSwitchPortGetStats = _xetSysmanSwitchPortGetStats_t(self.__dditable.Sysman.pfnSwitchPortGetStats)
+        self.xetSysmanTemperatureGetCount = _xetSysmanTemperatureGetCount_t(self.__dditable.Sysman.pfnTemperatureGetCount)
+        self.xetSysmanTemperatureGetProperties = _xetSysmanTemperatureGetProperties_t(self.__dditable.Sysman.pfnTemperatureGetProperties)
         self.xetSysmanTemperatureGet = _xetSysmanTemperatureGet_t(self.__dditable.Sysman.pfnTemperatureGet)
+        self.xetSysmanStandbyGetCount = _xetSysmanStandbyGetCount_t(self.__dditable.Sysman.pfnStandbyGetCount)
+        self.xetSysmanStandbyGetProperties = _xetSysmanStandbyGetProperties_t(self.__dditable.Sysman.pfnStandbyGetProperties)
         self.xetSysmanStandbyGetMode = _xetSysmanStandbyGetMode_t(self.__dditable.Sysman.pfnStandbyGetMode)
         self.xetSysmanStandbySetMode = _xetSysmanStandbySetMode_t(self.__dditable.Sysman.pfnStandbySetMode)
+        self.xetSysmanFirmwareGetCount = _xetSysmanFirmwareGetCount_t(self.__dditable.Sysman.pfnFirmwareGetCount)
         self.xetSysmanFirmwareGetProperties = _xetSysmanFirmwareGetProperties_t(self.__dditable.Sysman.pfnFirmwareGetProperties)
         self.xetSysmanFirmwareGetChecksum = _xetSysmanFirmwareGetChecksum_t(self.__dditable.Sysman.pfnFirmwareGetChecksum)
         self.xetSysmanFirmwareFlash = _xetSysmanFirmwareFlash_t(self.__dditable.Sysman.pfnFirmwareFlash)
+        self.xetSysmanPsuGetCount = _xetSysmanPsuGetCount_t(self.__dditable.Sysman.pfnPsuGetCount)
         self.xetSysmanPsuGetProperties = _xetSysmanPsuGetProperties_t(self.__dditable.Sysman.pfnPsuGetProperties)
         self.xetSysmanPsuGetState = _xetSysmanPsuGetState_t(self.__dditable.Sysman.pfnPsuGetState)
+        self.xetSysmanFanGetCount = _xetSysmanFanGetCount_t(self.__dditable.Sysman.pfnFanGetCount)
         self.xetSysmanFanGetProperties = _xetSysmanFanGetProperties_t(self.__dditable.Sysman.pfnFanGetProperties)
         self.xetSysmanFanGetConfig = _xetSysmanFanGetConfig_t(self.__dditable.Sysman.pfnFanGetConfig)
         self.xetSysmanFanSetConfig = _xetSysmanFanSetConfig_t(self.__dditable.Sysman.pfnFanSetConfig)
         self.xetSysmanFanGetState = _xetSysmanFanGetState_t(self.__dditable.Sysman.pfnFanGetState)
+        self.xetSysmanLedGetCount = _xetSysmanLedGetCount_t(self.__dditable.Sysman.pfnLedGetCount)
         self.xetSysmanLedGetProperties = _xetSysmanLedGetProperties_t(self.__dditable.Sysman.pfnLedGetProperties)
         self.xetSysmanLedGetState = _xetSysmanLedGetState_t(self.__dditable.Sysman.pfnLedGetState)
         self.xetSysmanLedSetState = _xetSysmanLedSetState_t(self.__dditable.Sysman.pfnLedSetState)
+        self.xetSysmanRasGetCount = _xetSysmanRasGetCount_t(self.__dditable.Sysman.pfnRasGetCount)
         self.xetSysmanRasGetProperties = _xetSysmanRasGetProperties_t(self.__dditable.Sysman.pfnRasGetProperties)
         self.xetSysmanRasGetErrors = _xetSysmanRasGetErrors_t(self.__dditable.Sysman.pfnRasGetErrors)
+        self.xetSysmanEventsGetProperties = _xetSysmanEventsGetProperties_t(self.__dditable.Sysman.pfnEventsGetProperties)
         self.xetSysmanEventsRegister = _xetSysmanEventsRegister_t(self.__dditable.Sysman.pfnEventsRegister)
         self.xetSysmanEventsUnregister = _xetSysmanEventsUnregister_t(self.__dditable.Sysman.pfnEventsUnregister)
         self.xetSysmanEventsListen = _xetSysmanEventsListen_t(self.__dditable.Sysman.pfnEventsListen)
-        self.xetSysmanDiagnosticsGetTestList = _xetSysmanDiagnosticsGetTestList_t(self.__dditable.Sysman.pfnDiagnosticsGetTestList)
+        self.xetSysmanDiagnosticsGetCount = _xetSysmanDiagnosticsGetCount_t(self.__dditable.Sysman.pfnDiagnosticsGetCount)
+        self.xetSysmanDiagnosticsGetProperties = _xetSysmanDiagnosticsGetProperties_t(self.__dditable.Sysman.pfnDiagnosticsGetProperties)
         self.xetSysmanDiagnosticsRunTests = _xetSysmanDiagnosticsRunTests_t(self.__dditable.Sysman.pfnDiagnosticsRunTests)
 
         # success!

@@ -17,44 +17,60 @@
 
 void PrintRasDetails(xet_ras_details_t* pDetails)
 {
-    fprintf(stdout, "    Number new resets:                %llu\n", pDetails->numResets);
-    fprintf(stdout, "    Number new programming errors:    %llu\n", pDetails->numProgrammingErrors);
-    fprintf(stdout, "    Number new driver errors:         %llu\n", pDetails->numDriverErrors);
-    fprintf(stdout, "    Number new compute errors:        %llu\n", pDetails->numComputeErrors);
-    fprintf(stdout, "    Number new non-compute errors:    %llu\n", pDetails->numNonComputeErrors);
-    fprintf(stdout, "    Number new cache errors:          %llu\n", pDetails->numCacheErrors);
-    fprintf(stdout, "    Number new memory errors:         %llu\n", pDetails->numMemoryErrors);
-    fprintf(stdout, "    Number new PCI errors:            %llu\n", pDetails->numPciErrors);
-    fprintf(stdout, "    Number new switch errors:         %llu\n", pDetails->numSwitchErrors);
-    fprintf(stdout, "    Number new display errors:        %llu\n", pDetails->numDisplayErrors);
+    fprintf(stdout, "        Number new resets:                %llu\n", pDetails->numResets);
+    fprintf(stdout, "        Number new programming errors:    %llu\n", pDetails->numProgrammingErrors);
+    fprintf(stdout, "        Number new driver errors:         %llu\n", pDetails->numDriverErrors);
+    fprintf(stdout, "        Number new compute errors:        %llu\n", pDetails->numComputeErrors);
+    fprintf(stdout, "        Number new non-compute errors:    %llu\n", pDetails->numNonComputeErrors);
+    fprintf(stdout, "        Number new cache errors:          %llu\n", pDetails->numCacheErrors);
+    fprintf(stdout, "        Number new memory errors:         %llu\n", pDetails->numMemoryErrors);
+    fprintf(stdout, "        Number new PCI errors:            %llu\n", pDetails->numPciErrors);
+    fprintf(stdout, "        Number new switch errors:         %llu\n", pDetails->numSwitchErrors);
+    fprintf(stdout, "        Number new display errors:        %llu\n", pDetails->numDisplayErrors);
 }
 
 void ShowRasErrors(xet_sysman_handle_t hSysmanDevice)
 {
-    xet_ras_properties_t props;
-    if (xetSysmanRasGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
+    uint32_t numRasErrorSets;
+    if (xetSysmanRasGetCount(hSysmanDevice, &numRasErrorSets) == XE_RESULT_SUCCESS)
     {
-        fprintf(stdout, "RAS supported: %s\n", props.supported ? "yes" : "no");
-        fprintf(stdout, "RAS enabled: %s\n", props.enabled ? "yes" : "no");
-        fprintf(stdout, "RAS repaired: %s\n", props.repaired ? "yes" : "no");
-        if (props.supported && props.enabled)
+        for (uint32_t rasIndex = 0; rasIndex < numRasErrorSets; rasIndex++)
         {
-            uint64_t newErrors;
-            xet_ras_details_t errorDetails;
-            if (xetSysmanRasGetErrors(hSysmanDevice, XET_RAS_ERROR_TYPE_UNCORRECTABLE, 1, &newErrors, &errorDetails) == XE_RESULT_SUCCESS)
+            xet_ras_properties_t props;
+            if (xetSysmanRasGetProperties(hSysmanDevice, rasIndex, &props) == XE_RESULT_SUCCESS)
             {
-                fprintf(stdout, "RAS new uncorrectable errors: %llu\n", newErrors);
-                if (newErrors)
+                const char* pErrorType;
+                switch (props.type)
                 {
-                    PrintRasDetails(&errorDetails);
+                case XET_RAS_ERROR_TYPE_CORRECTABLE:
+                    pErrorType = "Correctable";
+                    break;
+                case XET_RAS_ERROR_TYPE_UNCORRECTABLE:
+                    pErrorType = "Uncorrectable";
+                    break;
+                default:
+                    pErrorType = "Unknown";
+                    break;
                 }
-            }
-            if (xetSysmanRasGetErrors(hSysmanDevice, XET_RAS_ERROR_TYPE_CORRECTABLE, 1, &newErrors, &errorDetails) == XE_RESULT_SUCCESS)
-            {
-                fprintf(stdout, "RAS new correctable errors: %llu\n", newErrors);
-                if (newErrors)
+                fprintf(stdout, "RAS %s errors\n", pErrorType);
+                if (props.onSubdevice)
                 {
-                    PrintRasDetails(&errorDetails);
+                    fprintf(stdout, "    On sub-device: %s\n", props.subdeviceUuid.id);
+                }
+                fprintf(stdout, "    RAS supported: %s\n", props.supported ? "yes" : "no");
+                fprintf(stdout, "    RAS enabled: %s\n", props.enabled ? "yes" : "no");
+                if (props.supported && props.enabled)
+                {
+                    uint64_t newErrors;
+                    xet_ras_details_t errorDetails;
+                    if (xetSysmanRasGetErrors(hSysmanDevice, rasIndex, 1, &newErrors, &errorDetails) == XE_RESULT_SUCCESS)
+                    {
+                        fprintf(stdout, "    Number new errors: %llu\n", newErrors);
+                        if (newErrors)
+                        {
+                            PrintRasDetails(&errorDetails);
+                        }
+                    }
                 }
             }
         }
@@ -118,54 +134,61 @@ void ShowSwitchInfo(xet_sysman_handle_t hSysmanDevice, uint32_t SwitchIndex)
 
 void ShowSwitches(xet_sysman_handle_t hSysmanDevice)
 {
-    xet_sysman_properties_t props;
-    if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
+    uint32_t numSwitches;
+    if (xetSysmanSwitchGetCount(hSysmanDevice, &numSwitches) == XE_RESULT_SUCCESS)
     {
-        if (props.numSwitches)
+        for (uint32_t switchIndex = 0; switchIndex < numSwitches; switchIndex++)
         {
-            for (uint32_t switchIndex = 0; switchIndex < props.numSwitches; switchIndex++)
-            {
-                fprintf(stdout, "    Switch %u:\n", switchIndex);
-                ShowSwitchInfo(hSysmanDevice, switchIndex);
-            }
+            fprintf(stdout, "    Switch %u:\n", switchIndex);
+            ShowSwitchInfo(hSysmanDevice, switchIndex);
         }
     }
 }
 
-void FixFrequency(xet_sysman_handle_t hSysmanDevice, xet_freq_domain_t Domain, double FreqMHz)
+void FixGpuFrequency(xet_sysman_handle_t hSysmanDevice, uint32_t FreqDomainIndex, double FreqMHz)
 {
-    xet_freq_properties_t props;
-    if (xetSysmanFrequencyGetProperties(hSysmanDevice, Domain, &props) == XE_RESULT_SUCCESS)
+    uint32_t numFreqDomains;
+    if (xetSysmanFrequencyGetCount(hSysmanDevice, &numFreqDomains) == XE_RESULT_SUCCESS)
     {
-        if (props.canControl)
+        for (uint32_t index = 0; index < numFreqDomains; index++)
         {
-            xet_freq_limits_t limits;
-            limits.min = FreqMHz;
-            limits.max = FreqMHz;
-            if (xetSysmanFrequencySetLimits(hSysmanDevice, Domain, &limits) != XE_RESULT_SUCCESS)
+            xet_freq_properties_t props;
+            if (xetSysmanFrequencyGetProperties(hSysmanDevice, index, &props) == XE_RESULT_SUCCESS)
             {
-                fprintf(stderr, "ERROR: Problem setting the frequency limits.\n");
+                if (props.type == XET_FREQ_DOMAIN_GPU)
+                {
+                    if (props.canControl)
+                    {
+                        xet_freq_range_t range;
+                        range.min = FreqMHz;
+                        range.max = FreqMHz;
+                        if (xetSysmanFrequencySetRange(hSysmanDevice, index, &range) != XE_RESULT_SUCCESS)
+                        {
+                            fprintf(stderr, "ERROR: Problem setting the frequency range for domain with index %u.\n", index);
+                        }
+                    }
+                    else
+                    {
+                        fprintf(stderr, "ERROR: Can't control GPU frequency domain with index %u.\n", index);
+                    }
+                }
             }
-        }
-        else
-        {
-            fprintf(stderr, "ERROR: Can't control this frequency domain.\n");
         }
     }
 }
 
 void SetFanSpeed(xet_sysman_handle_t hSysmanDevice, uint32_t SpeedRpm)
 {
-    xet_sysman_properties_t props;
-    if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
+    uint32_t numFans;
+    if (xetSysmanFanGetCount(hSysmanDevice, &numFans) == XE_RESULT_SUCCESS)
     {
-        if (props.numFans)
+        if (numFans)
         {
             xet_fan_config_t config;
             config.mode = XET_FAN_SPEED_MODE_FIXED;
             config.speed = SpeedRpm;
             config.speedUnits = XET_FAN_SPEED_UNITS_RPM;
-            for (uint32_t fanIndex = 0; fanIndex < props.numFans; fanIndex++)
+            for (uint32_t fanIndex = 0; fanIndex < numFans; fanIndex++)
             {
                 xet_fan_properties_t fanprops;
                 if (xetSysmanFanGetProperties(hSysmanDevice, fanIndex, &fanprops) == XE_RESULT_SUCCESS)
@@ -186,14 +209,13 @@ void SetFanSpeed(xet_sysman_handle_t hSysmanDevice, uint32_t SpeedRpm)
 
 void ShowFans(xet_sysman_handle_t hSysmanDevice)
 {
-    xet_sysman_properties_t props;
-    
-    if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
+    uint32_t numFans;
+    if (xetSysmanFanGetCount(hSysmanDevice, &numFans) == XE_RESULT_SUCCESS)
     {
-        if (props.numFans)
+        if (numFans)
         {
             fprintf(stdout, "    Fans\n");
-            for (uint32_t fanIndex = 0; fanIndex < props.numFans; fanIndex++)
+            for (uint32_t fanIndex = 0; fanIndex < numFans; fanIndex++)
             {
                 xet_fan_state_t state;
                 if (xetSysmanFanGetState(hSysmanDevice, fanIndex, XET_FAN_SPEED_UNITS_RPM, &state)
@@ -206,10 +228,10 @@ void ShowFans(xet_sysman_handle_t hSysmanDevice)
     }
 }
 
-void ShowAveragePower(xet_sysman_handle_t hSysmanDevice, xet_power_energy_counter_t* pPrevEnergyCounter)
+void ShowAveragePower(xet_sysman_handle_t hSysmanDevice, uint32_t powerIndex, xet_power_energy_counter_t* pPrevEnergyCounter)
 {
     xet_power_energy_counter_t newEnergyCounter;
-    if (xetSysmanPowerGetEnergyCounter(hSysmanDevice, &newEnergyCounter) == XE_RESULT_SUCCESS)
+    if (xetSysmanPowerGetEnergyCounter(hSysmanDevice, powerIndex, &newEnergyCounter) == XE_RESULT_SUCCESS)
     {
         uint64_t deltaTime = newEnergyCounter.timestamp - pPrevEnergyCounter->timestamp;
         if (deltaTime)
@@ -221,12 +243,12 @@ void ShowAveragePower(xet_sysman_handle_t hSysmanDevice, xet_power_energy_counte
     }
 }
 
-void ShowPowerLimits(xet_sysman_handle_t hSysmanDevice)
+void ShowPowerLimits(xet_sysman_handle_t hSysmanDevice, uint32_t powerIndex)
 {
     xet_power_sustained_limit_t sustainedLimits;
     xet_power_burst_limit_t burstLimits;
     xet_power_peak_limit_t peakLimits;
-    if (xetSysmanPowerGetLimits(hSysmanDevice, &sustainedLimits, &burstLimits, &peakLimits) == XE_RESULT_SUCCESS)
+    if (xetSysmanPowerGetLimits(hSysmanDevice, powerIndex, &sustainedLimits, &burstLimits, &peakLimits) == XE_RESULT_SUCCESS)
     {
         fprintf(stdout, "    Power limits\n");
         if (sustainedLimits.enabled)
@@ -253,7 +275,7 @@ void ShowPowerLimits(xet_sysman_handle_t hSysmanDevice)
 void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
 {
     xet_sysman_properties_t props;
-    xet_operating_mode_t mode;
+    xet_optimization_mode_t mode;
     
     if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
     {
@@ -263,12 +285,12 @@ void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
         fprintf(stdout, "    serial#: %s\n", props.serialNumber);
         fprintf(stdout, "    board#:  %s\n", props.boardNumber);
     }
-    if (xetSysmanDeviceGetOperatingMode(hSysmanDevice, &mode) == XE_RESULT_SUCCESS)
+    if (xetSysmanDeviceGetOptimizationMode(hSysmanDevice, &mode) == XE_RESULT_SUCCESS)
     {
         switch (mode)
         {
-        case XET_OPERATING_MODE_EXCLUSIVE_COMPUTE_PROCESS:
-            fprintf(stdout, "    mode:    exclusive compute process\n");
+        case XET_OPTIMIZATION_MODE_SINGLE_PROCESS_COMPUTE:
+            fprintf(stdout, "    mode:    single process compute\n");
             break;
         default:
             fprintf(stdout, "    mode:    multiply process\n");
