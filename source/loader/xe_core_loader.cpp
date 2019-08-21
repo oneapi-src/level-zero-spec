@@ -269,7 +269,7 @@ namespace loader
     xe_result_t __xecall
     xeDeviceGetProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
+        xe_device_properties_t* pDeviceProperties       ///< [in,out] query result for device properties
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -294,7 +294,7 @@ namespace loader
     xe_result_t __xecall
     xeDeviceGetComputeProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
+        xe_device_compute_properties_t* pComputeProperties  ///< [in,out] query result for compute properties
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -353,7 +353,7 @@ namespace loader
     xe_result_t __xecall
     xeDeviceGetMemoryAccessProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        xe_device_memory_access_properties_t* pMemAccessProperties  ///< [out] query result for memory access properties
+        xe_device_memory_access_properties_t* pMemAccessProperties  ///< [in,out] query result for memory access properties
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -378,7 +378,7 @@ namespace loader
     xe_result_t __xecall
     xeDeviceGetCacheProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        xe_device_cache_properties_t* pCacheProperties  ///< [out] query result for cache properties
+        xe_device_cache_properties_t* pCacheProperties  ///< [in,out] query result for cache properties
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -403,7 +403,7 @@ namespace loader
     xe_result_t __xecall
     xeDeviceGetImageProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        xe_device_image_properties_t* pImageProperties  ///< [out] query result for image properties
+        xe_device_image_properties_t* pImageProperties  ///< [in,out] query result for image properties
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -429,7 +429,7 @@ namespace loader
     xeDeviceGetP2PProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
         xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
-        xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
+        xe_device_p2p_properties_t* pP2PProperties      ///< [in,out] Peer-to-Peer properties between source and peer device
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -2077,12 +2077,12 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDriverGetMemProperties
+    /// @brief Intercept function for xeDriverGetMemAllocProperties
     xe_result_t __xecall
-    xeDriverGetMemProperties(
+    xeDriverGetMemAllocProperties(
         xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const void* ptr,                                ///< [in] memory pointer to query
-        xe_memory_allocation_properties_t* pMemProperties,  ///< [out] query result for memory allocation properties
+        xe_memory_allocation_properties_t* pMemAllocProperties, ///< [in,out] query result for memory allocation properties
         xe_device_handle_t* phDevice                    ///< [out][optional] device associated with this allocation
         )
     {
@@ -2090,15 +2090,15 @@ namespace loader
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_driver_object_t*>( hDriver )->dditable;
-        auto pfnGetMemProperties = dditable->xe.Driver.pfnGetMemProperties;
-        if( nullptr == pfnGetMemProperties )
+        auto pfnGetMemAllocProperties = dditable->xe.Driver.pfnGetMemAllocProperties;
+        if( nullptr == pfnGetMemAllocProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDriver = reinterpret_cast<xe_driver_object_t*>( hDriver )->handle;
 
         // forward to device-driver
-        result = pfnGetMemProperties( hDriver, ptr, pMemProperties, phDevice );
+        result = pfnGetMemAllocProperties( hDriver, ptr, pMemAllocProperties, phDevice );
 
         try
         {
@@ -3179,7 +3179,7 @@ xeGetDriverProcAddrTable(
             pDdiTable->pfnAllocDeviceMem                           = loader::xeDriverAllocDeviceMem;
             pDdiTable->pfnAllocHostMem                             = loader::xeDriverAllocHostMem;
             pDdiTable->pfnFreeMem                                  = loader::xeDriverFreeMem;
-            pDdiTable->pfnGetMemProperties                         = loader::xeDriverGetMemProperties;
+            pDdiTable->pfnGetMemAllocProperties                    = loader::xeDriverGetMemAllocProperties;
             pDdiTable->pfnGetMemAddressRange                       = loader::xeDriverGetMemAddressRange;
             pDdiTable->pfnGetMemIpcHandle                          = loader::xeDriverGetMemIpcHandle;
             pDdiTable->pfnOpenMemIpcHandle                         = loader::xeDriverOpenMemIpcHandle;

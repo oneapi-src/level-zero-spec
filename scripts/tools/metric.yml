@@ -100,7 +100,7 @@ params:
       desc: "[in] handle of the metric group"
     - type: "$t_metric_group_properties_t*"
       name: pProperties
-      desc: "[out] metric group properties"
+      desc: "[in,out] metric group properties"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid metric group handle"
@@ -304,7 +304,7 @@ params:
       desc: "[in] handle of the metric"
     - type: "$t_metric_properties_t*"
       name: pProperties
-      desc: "[out] metric properties"
+      desc: "[in,out] metric properties"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "invalid handle"

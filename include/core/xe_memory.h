@@ -240,13 +240,13 @@ typedef struct _xe_memory_allocation_properties_t
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDriver
 ///         + nullptr == ptr
-///         + nullptr == pMemProperties
+///         + nullptr == pMemAllocProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDriverGetMemProperties(
+xeDriverGetMemAllocProperties(
     xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     const void* ptr,                                ///< [in] memory pointer to query
-    xe_memory_allocation_properties_t* pMemProperties,  ///< [out] query result for memory allocation properties
+    xe_memory_allocation_properties_t* pMemAllocProperties, ///< [in,out] query result for memory allocation properties
     xe_device_handle_t* phDevice                    ///< [out][optional] device associated with this allocation
     );
 

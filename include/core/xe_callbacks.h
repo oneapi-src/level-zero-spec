@@ -766,25 +766,25 @@ typedef void (__xecall *xe_pfnDriverFreeMemCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function parameters for xeDriverGetMemProperties 
+/// @brief Callback function parameters for xeDriverGetMemAllocProperties 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
-typedef struct _xe_driver_get_mem_properties_params_t
+typedef struct _xe_driver_get_mem_alloc_properties_params_t
 {
     xe_driver_handle_t* phDriver;
     const void** pptr;
-    xe_memory_allocation_properties_t** ppMemProperties;
+    xe_memory_allocation_properties_t** ppMemAllocProperties;
     xe_device_handle_t** pphDevice;
-} xe_driver_get_mem_properties_params_t;
+} xe_driver_get_mem_alloc_properties_params_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Callback function-pointer for xeDriverGetMemProperties 
+/// @brief Callback function-pointer for xeDriverGetMemAllocProperties 
 /// @param[in] params Parameters passed to this instance
 /// @param[in] result Return value
 /// @param[in] pTracerUserData Per-Tracer user data
 /// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
-typedef void (__xecall *xe_pfnDriverGetMemPropertiesCb_t)(
-    xe_driver_get_mem_properties_params_t* params,
+typedef void (__xecall *xe_pfnDriverGetMemAllocPropertiesCb_t)(
+    xe_driver_get_mem_alloc_properties_params_t* params,
     xe_result_t result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
@@ -900,7 +900,7 @@ typedef struct _xe_driver_callbacks_t
     xe_pfnDriverAllocDeviceMemCb_t                                  pfnAllocDeviceMemCb;
     xe_pfnDriverAllocHostMemCb_t                                    pfnAllocHostMemCb;
     xe_pfnDriverFreeMemCb_t                                         pfnFreeMemCb;
-    xe_pfnDriverGetMemPropertiesCb_t                                pfnGetMemPropertiesCb;
+    xe_pfnDriverGetMemAllocPropertiesCb_t                           pfnGetMemAllocPropertiesCb;
     xe_pfnDriverGetMemAddressRangeCb_t                              pfnGetMemAddressRangeCb;
     xe_pfnDriverGetMemIpcHandleCb_t                                 pfnGetMemIpcHandleCb;
     xe_pfnDriverOpenMemIpcHandleCb_t                                pfnOpenMemIpcHandleCb;

@@ -1337,11 +1337,11 @@ else:
     _xeDriverFreeMem_t = CFUNCTYPE( xe_result_t, xe_driver_handle_t, c_void_p )
 
 ###############################################################################
-## @brief Function-pointer for xeDriverGetMemProperties
+## @brief Function-pointer for xeDriverGetMemAllocProperties
 if __use_win_types:
-    _xeDriverGetMemProperties_t = WINFUNCTYPE( xe_result_t, xe_driver_handle_t, c_void_p, POINTER(xe_memory_allocation_properties_t), POINTER(xe_device_handle_t) )
+    _xeDriverGetMemAllocProperties_t = WINFUNCTYPE( xe_result_t, xe_driver_handle_t, c_void_p, POINTER(xe_memory_allocation_properties_t), POINTER(xe_device_handle_t) )
 else:
-    _xeDriverGetMemProperties_t = CFUNCTYPE( xe_result_t, xe_driver_handle_t, c_void_p, POINTER(xe_memory_allocation_properties_t), POINTER(xe_device_handle_t) )
+    _xeDriverGetMemAllocProperties_t = CFUNCTYPE( xe_result_t, xe_driver_handle_t, c_void_p, POINTER(xe_memory_allocation_properties_t), POINTER(xe_device_handle_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xeDriverGetMemAddressRange
@@ -1384,7 +1384,7 @@ class _xe_driver_dditable_t(Structure):
         ("pfnAllocDeviceMem", c_void_p),                                ## _xeDriverAllocDeviceMem_t
         ("pfnAllocHostMem", c_void_p),                                  ## _xeDriverAllocHostMem_t
         ("pfnFreeMem", c_void_p),                                       ## _xeDriverFreeMem_t
-        ("pfnGetMemProperties", c_void_p),                              ## _xeDriverGetMemProperties_t
+        ("pfnGetMemAllocProperties", c_void_p),                         ## _xeDriverGetMemAllocProperties_t
         ("pfnGetMemAddressRange", c_void_p),                            ## _xeDriverGetMemAddressRange_t
         ("pfnGetMemIpcHandle", c_void_p),                               ## _xeDriverGetMemIpcHandle_t
         ("pfnOpenMemIpcHandle", c_void_p),                              ## _xeDriverOpenMemIpcHandle_t
@@ -2040,7 +2040,7 @@ class XE_DDI:
         self.xeDriverAllocDeviceMem = _xeDriverAllocDeviceMem_t(self.__dditable.Driver.pfnAllocDeviceMem)
         self.xeDriverAllocHostMem = _xeDriverAllocHostMem_t(self.__dditable.Driver.pfnAllocHostMem)
         self.xeDriverFreeMem = _xeDriverFreeMem_t(self.__dditable.Driver.pfnFreeMem)
-        self.xeDriverGetMemProperties = _xeDriverGetMemProperties_t(self.__dditable.Driver.pfnGetMemProperties)
+        self.xeDriverGetMemAllocProperties = _xeDriverGetMemAllocProperties_t(self.__dditable.Driver.pfnGetMemAllocProperties)
         self.xeDriverGetMemAddressRange = _xeDriverGetMemAddressRange_t(self.__dditable.Driver.pfnGetMemAddressRange)
         self.xeDriverGetMemIpcHandle = _xeDriverGetMemIpcHandle_t(self.__dditable.Driver.pfnGetMemIpcHandle)
         self.xeDriverOpenMemIpcHandle = _xeDriverOpenMemIpcHandle_t(self.__dditable.Driver.pfnOpenMemIpcHandle)

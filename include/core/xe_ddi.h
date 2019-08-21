@@ -344,8 +344,8 @@ typedef xe_result_t (__xecall *xe_pfnDriverFreeMem_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDriverGetMemProperties 
-typedef xe_result_t (__xecall *xe_pfnDriverGetMemProperties_t)(
+/// @brief Function-pointer for xeDriverGetMemAllocProperties 
+typedef xe_result_t (__xecall *xe_pfnDriverGetMemAllocProperties_t)(
     xe_driver_handle_t,
     const void*,
     xe_memory_allocation_properties_t*,
@@ -398,7 +398,7 @@ typedef struct _xe_driver_dditable_t
     xe_pfnDriverAllocDeviceMem_t                                pfnAllocDeviceMem;
     xe_pfnDriverAllocHostMem_t                                  pfnAllocHostMem;
     xe_pfnDriverFreeMem_t                                       pfnFreeMem;
-    xe_pfnDriverGetMemProperties_t                              pfnGetMemProperties;
+    xe_pfnDriverGetMemAllocProperties_t                         pfnGetMemAllocProperties;
     xe_pfnDriverGetMemAddressRange_t                            pfnGetMemAddressRange;
     xe_pfnDriverGetMemIpcHandle_t                               pfnGetMemIpcHandle;
     xe_pfnDriverOpenMemIpcHandle_t                              pfnOpenMemIpcHandle;

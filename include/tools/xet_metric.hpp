@@ -180,13 +180,10 @@ namespace xet
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
-        /// @returns
-        ///     - properties_t: metric group properties
-        /// 
         /// @throws result_t
-        properties_t __xecall
+        void __xecall
         GetProperties(
-            void
+            properties_t* pProperties                       ///< [in,out] metric group properties
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -306,13 +303,10 @@ namespace xet
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
-        /// @returns
-        ///     - properties_t: metric properties
-        /// 
         /// @throws result_t
-        properties_t __xecall
+        void __xecall
         GetProperties(
-            void
+            properties_t* pProperties                       ///< [in,out] metric properties
             );
 
     };

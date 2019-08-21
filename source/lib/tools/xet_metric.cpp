@@ -71,7 +71,7 @@ xetMetricGroupGet(
 xe_result_t __xecall
 xetMetricGroupGetProperties(
     xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
-    xet_metric_group_properties_t* pProperties      ///< [out] metric group properties
+    xet_metric_group_properties_t* pProperties      ///< [in,out] metric group properties
     )
 {
     auto pfnGetProperties = xet_lib::context.ddiTable.MetricGroup.pfnGetProperties;
@@ -173,7 +173,7 @@ xetMetricGet(
 xe_result_t __xecall
 xetMetricGetProperties(
     xet_metric_handle_t hMetric,                    ///< [in] handle of the metric
-    xet_metric_properties_t* pProperties            ///< [out] metric properties
+    xet_metric_properties_t* pProperties            ///< [in,out] metric properties
     )
 {
     auto pfnGetProperties = xet_lib::context.ddiTable.Metric.pfnGetProperties;
@@ -731,25 +731,18 @@ namespace xet
     /// @details
     ///     - The application may call this function from simultaneous threads.
     /// 
-    /// @returns
-    ///     - properties_t: metric group properties
-    /// 
     /// @throws result_t
-    MetricGroup::properties_t __xecall
+    void __xecall
     MetricGroup::GetProperties(
-        void
+        properties_t* pProperties                       ///< [in,out] metric group properties
         )
     {
-        xet_metric_group_properties_t properties;
-
         auto result = static_cast<result_t>( ::xetMetricGroupGetProperties(
             reinterpret_cast<xet_metric_group_handle_t>( getHandle() ),
-            &properties ) );
+            reinterpret_cast<xet_metric_group_properties_t*>( pProperties ) ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::MetricGroup::GetProperties" );
-
-        return *reinterpret_cast<properties_t*>( &properties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -837,25 +830,18 @@ namespace xet
     /// @details
     ///     - The application may call this function from simultaneous threads.
     /// 
-    /// @returns
-    ///     - properties_t: metric properties
-    /// 
     /// @throws result_t
-    Metric::properties_t __xecall
+    void __xecall
     Metric::GetProperties(
-        void
+        properties_t* pProperties                       ///< [in,out] metric properties
         )
     {
-        xet_metric_properties_t properties;
-
         auto result = static_cast<result_t>( ::xetMetricGetProperties(
             reinterpret_cast<xet_metric_handle_t>( getHandle() ),
-            &properties ) );
+            reinterpret_cast<xet_metric_properties_t*>( pProperties ) ) );
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Metric::GetProperties" );
-
-        return *reinterpret_cast<properties_t*>( &properties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

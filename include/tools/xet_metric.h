@@ -116,7 +116,7 @@ typedef struct _xet_metric_group_properties_t
 xe_result_t __xecall
 xetMetricGroupGetProperties(
     xet_metric_group_handle_t hMetricGroup,         ///< [in] handle of the metric group
-    xet_metric_group_properties_t* pProperties      ///< [out] metric group properties
+    xet_metric_group_properties_t* pProperties      ///< [in,out] metric group properties
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -292,7 +292,7 @@ typedef struct _xet_metric_properties_t
 xe_result_t __xecall
 xetMetricGetProperties(
     xet_metric_handle_t hMetric,                    ///< [in] handle of the metric
-    xet_metric_properties_t* pProperties            ///< [out] metric properties
+    xet_metric_properties_t* pProperties            ///< [in,out] metric properties
     );
 
 ///////////////////////////////////////////////////////////////////////////////

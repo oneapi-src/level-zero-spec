@@ -214,7 +214,7 @@ namespace driver
     xe_result_t __xecall
     xeDeviceGetProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
+        xe_device_properties_t* pDeviceProperties       ///< [in,out] query result for device properties
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -238,7 +238,7 @@ namespace driver
     xe_result_t __xecall
     xeDeviceGetComputeProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
+        xe_device_compute_properties_t* pComputeProperties  ///< [in,out] query result for compute properties
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -295,7 +295,7 @@ namespace driver
     xe_result_t __xecall
     xeDeviceGetMemoryAccessProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        xe_device_memory_access_properties_t* pMemAccessProperties  ///< [out] query result for memory access properties
+        xe_device_memory_access_properties_t* pMemAccessProperties  ///< [in,out] query result for memory access properties
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -319,7 +319,7 @@ namespace driver
     xe_result_t __xecall
     xeDeviceGetCacheProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        xe_device_cache_properties_t* pCacheProperties  ///< [out] query result for cache properties
+        xe_device_cache_properties_t* pCacheProperties  ///< [in,out] query result for cache properties
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -343,7 +343,7 @@ namespace driver
     xe_result_t __xecall
     xeDeviceGetImageProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        xe_device_image_properties_t* pImageProperties  ///< [out] query result for image properties
+        xe_device_image_properties_t* pImageProperties  ///< [in,out] query result for image properties
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -368,7 +368,7 @@ namespace driver
     xeDeviceGetP2PProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
         xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
-        xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
+        xe_device_p2p_properties_t* pP2PProperties      ///< [in,out] Peer-to-Peer properties between source and peer device
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -1769,22 +1769,22 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDriverGetMemProperties
+    /// @brief Intercept function for xeDriverGetMemAllocProperties
     xe_result_t __xecall
-    xeDriverGetMemProperties(
+    xeDriverGetMemAllocProperties(
         xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const void* ptr,                                ///< [in] memory pointer to query
-        xe_memory_allocation_properties_t* pMemProperties,  ///< [out] query result for memory allocation properties
+        xe_memory_allocation_properties_t* pMemAllocProperties, ///< [in,out] query result for memory allocation properties
         xe_device_handle_t* phDevice                    ///< [out][optional] device associated with this allocation
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetMemProperties = context.xeDdiTable.Driver.pfnGetMemProperties;
-        if( nullptr != pfnGetMemProperties )
+        auto pfnGetMemAllocProperties = context.xeDdiTable.Driver.pfnGetMemAllocProperties;
+        if( nullptr != pfnGetMemAllocProperties )
         {
-            result = pfnGetMemProperties( hDriver, ptr, pMemProperties, phDevice );
+            result = pfnGetMemAllocProperties( hDriver, ptr, pMemAllocProperties, phDevice );
         }
         else
         {
@@ -2928,7 +2928,7 @@ namespace instrumented
     xe_result_t __xecall
     xeDeviceGetProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
+        xe_device_properties_t* pDeviceProperties       ///< [in,out] query result for device properties
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -2981,7 +2981,7 @@ namespace instrumented
     xe_result_t __xecall
     xeDeviceGetComputeProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
+        xe_device_compute_properties_t* pComputeProperties  ///< [in,out] query result for compute properties
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -3098,7 +3098,7 @@ namespace instrumented
     xe_result_t __xecall
     xeDeviceGetMemoryAccessProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        xe_device_memory_access_properties_t* pMemAccessProperties  ///< [out] query result for memory access properties
+        xe_device_memory_access_properties_t* pMemAccessProperties  ///< [in,out] query result for memory access properties
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -3151,7 +3151,7 @@ namespace instrumented
     xe_result_t __xecall
     xeDeviceGetCacheProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        xe_device_cache_properties_t* pCacheProperties  ///< [out] query result for cache properties
+        xe_device_cache_properties_t* pCacheProperties  ///< [in,out] query result for cache properties
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -3204,7 +3204,7 @@ namespace instrumented
     xe_result_t __xecall
     xeDeviceGetImageProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        xe_device_image_properties_t* pImageProperties  ///< [out] query result for image properties
+        xe_device_image_properties_t* pImageProperties  ///< [in,out] query result for image properties
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -3258,7 +3258,7 @@ namespace instrumented
     xeDeviceGetP2PProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
         xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
-        xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
+        xe_device_p2p_properties_t* pP2PProperties      ///< [in,out] Peer-to-Peer properties between source and peer device
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
@@ -6310,22 +6310,22 @@ namespace instrumented
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDriverGetMemProperties
+    /// @brief Intercept function for xeDriverGetMemAllocProperties
     xe_result_t __xecall
-    xeDriverGetMemProperties(
+    xeDriverGetMemAllocProperties(
         xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const void* ptr,                                ///< [in] memory pointer to query
-        xe_memory_allocation_properties_t* pMemProperties,  ///< [out] query result for memory allocation properties
+        xe_memory_allocation_properties_t* pMemAllocProperties, ///< [in,out] query result for memory allocation properties
         xe_device_handle_t* phDevice                    ///< [out][optional] device associated with this allocation
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // capture parameters
-        xe_driver_get_mem_properties_params_t in_params = {
+        xe_driver_get_mem_alloc_properties_params_t in_params = {
             &hDriver,
             &ptr,
-            &pMemProperties,
+            &pMemAllocProperties,
             &phDevice
         };
 
@@ -6338,19 +6338,19 @@ namespace instrumented
             if( context.tracerData[ i ].enabled )
             {
                 auto& table = context.tracerData[ i ].xePrologueCbs.Driver;
-                if( nullptr != table.pfnGetMemPropertiesCb )
-                    table.pfnGetMemPropertiesCb( &in_params, result,
+                if( nullptr != table.pfnGetMemAllocPropertiesCb )
+                    table.pfnGetMemAllocPropertiesCb( &in_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
 
-        result = driver::xeDriverGetMemProperties( hDriver, ptr, pMemProperties, phDevice );
+        result = driver::xeDriverGetMemAllocProperties( hDriver, ptr, pMemAllocProperties, phDevice );
 
         // capture parameters
-        xe_driver_get_mem_properties_params_t out_params = {
+        xe_driver_get_mem_alloc_properties_params_t out_params = {
             &hDriver,
             &ptr,
-            &pMemProperties,
+            &pMemAllocProperties,
             &phDevice
         };
 
@@ -6359,8 +6359,8 @@ namespace instrumented
             if( context.tracerData[ i ].enabled )
             {
                 auto& table = context.tracerData[ i ].xeEpilogueCbs.Driver;
-                if( nullptr != table.pfnGetMemPropertiesCb )
-                    table.pfnGetMemPropertiesCb( &out_params, result,
+                if( nullptr != table.pfnGetMemAllocPropertiesCb )
+                    table.pfnGetMemAllocPropertiesCb( &out_params, result,
                         context.tracerData[ i ].userData,
                         &instanceUserData[ i ] );
             }
@@ -8222,9 +8222,9 @@ xeGetDriverProcAddrTable(
         pDdiTable->pfnFreeMem                                = driver::xeDriverFreeMem;
 
     if( instrumented::context.enableTracing )
-        pDdiTable->pfnGetMemProperties                       = instrumented::xeDriverGetMemProperties;
+        pDdiTable->pfnGetMemAllocProperties                  = instrumented::xeDriverGetMemAllocProperties;
     else
-        pDdiTable->pfnGetMemProperties                       = driver::xeDriverGetMemProperties;
+        pDdiTable->pfnGetMemAllocProperties                  = driver::xeDriverGetMemAllocProperties;
 
     if( instrumented::context.enableTracing )
         pDdiTable->pfnGetMemAddressRange                     = instrumented::xeDriverGetMemAddressRange;

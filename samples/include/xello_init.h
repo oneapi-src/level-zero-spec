@@ -80,7 +80,8 @@ inline xe::Device* findDevice(
     {
         auto pDevice = devices[device];
 
-        auto device_properties = pDevice->GetProperties();
+        xe::Device::properties_t device_properties;
+        pDevice->GetProperties( &device_properties );
 
         if( type == device_properties.type )
         {
@@ -92,7 +93,8 @@ inline xe::Device* findDevice(
 
             std::cout << xe::to_string( device_properties ) << "\n";
 
-            auto compute_properties = pDevice->GetComputeProperties();
+            xe::Device::compute_properties_t compute_properties;
+            pDevice->GetComputeProperties( &compute_properties );
             std::cout << xe::to_string( compute_properties ) << "\n";
 
             uint32_t memoryCount = 0;
@@ -105,13 +107,16 @@ inline xe::Device* findDevice(
             }
             delete[] pMemoryProperties;
 
-            auto memory_access_properties = pDevice->GetMemoryAccessProperties();
+            xe::Device::memory_access_properties_t memory_access_properties;
+            pDevice->GetMemoryAccessProperties( &memory_access_properties );
             std::cout << xe::to_string( memory_access_properties ) << "\n";
 
-            auto cache_properties = pDevice->GetCacheProperties();
+            xe::Device::cache_properties_t cache_properties;
+            pDevice->GetCacheProperties( &cache_properties );
             std::cout << xe::to_string( cache_properties ) << "\n";
 
-            auto image_properties = pDevice->GetImageProperties();
+            xe::Device::image_properties_t image_properties;
+            pDevice->GetImageProperties( &image_properties );
             std::cout << xe::to_string( image_properties ) << "\n";
 
             break;

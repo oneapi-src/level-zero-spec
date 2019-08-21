@@ -222,7 +222,7 @@ members:
 type: function
 desc: "Retrieves attributes of a memory allocation"
 class: $xDriver
-name: GetMemProperties
+name: GetMemAllocProperties
 analogue:
     - "**cuPointerGetAttribute**"
 details:
@@ -235,8 +235,8 @@ params:
       name: ptr
       desc: "[in] memory pointer to query"
     - type: "$x_memory_allocation_properties_t*"
-      name: pMemProperties
-      desc: "[out] query result for memory allocation properties"
+      name: pMemAllocProperties
+      desc: "[in,out] query result for memory allocation properties"
     - type: "$x_device_handle_t*"
       name: phDevice
       desc: "[out][optional] device associated with this allocation"

@@ -210,7 +210,7 @@ namespace layer
     xe_result_t __xecall
     xeDeviceGetProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        xe_device_properties_t* pDeviceProperties       ///< [out] query result for device properties
+        xe_device_properties_t* pDeviceProperties       ///< [in,out] query result for device properties
         )
     {
         auto pfnGetProperties = context.xeDdiTable.Device.pfnGetProperties;
@@ -236,7 +236,7 @@ namespace layer
     xe_result_t __xecall
     xeDeviceGetComputeProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        xe_device_compute_properties_t* pComputeProperties  ///< [out] query result for compute properties
+        xe_device_compute_properties_t* pComputeProperties  ///< [in,out] query result for compute properties
         )
     {
         auto pfnGetComputeProperties = context.xeDdiTable.Device.pfnGetComputeProperties;
@@ -297,7 +297,7 @@ namespace layer
     xe_result_t __xecall
     xeDeviceGetMemoryAccessProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        xe_device_memory_access_properties_t* pMemAccessProperties  ///< [out] query result for memory access properties
+        xe_device_memory_access_properties_t* pMemAccessProperties  ///< [in,out] query result for memory access properties
         )
     {
         auto pfnGetMemoryAccessProperties = context.xeDdiTable.Device.pfnGetMemoryAccessProperties;
@@ -323,7 +323,7 @@ namespace layer
     xe_result_t __xecall
     xeDeviceGetCacheProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        xe_device_cache_properties_t* pCacheProperties  ///< [out] query result for cache properties
+        xe_device_cache_properties_t* pCacheProperties  ///< [in,out] query result for cache properties
         )
     {
         auto pfnGetCacheProperties = context.xeDdiTable.Device.pfnGetCacheProperties;
@@ -349,7 +349,7 @@ namespace layer
     xe_result_t __xecall
     xeDeviceGetImageProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        xe_device_image_properties_t* pImageProperties  ///< [out] query result for image properties
+        xe_device_image_properties_t* pImageProperties  ///< [in,out] query result for image properties
         )
     {
         auto pfnGetImageProperties = context.xeDdiTable.Device.pfnGetImageProperties;
@@ -376,7 +376,7 @@ namespace layer
     xeDeviceGetP2PProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device performing the access
         xe_device_handle_t hPeerDevice,                 ///< [in] handle of the peer device with the allocation
-        xe_device_p2p_properties_t* pP2PProperties      ///< [out] Peer-to-Peer properties between source and peer device
+        xe_device_p2p_properties_t* pP2PProperties      ///< [in,out] Peer-to-Peer properties between source and peer device
         )
     {
         auto pfnGetP2PProperties = context.xeDdiTable.Device.pfnGetP2PProperties;
@@ -1885,18 +1885,18 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDriverGetMemProperties
+    /// @brief Intercept function for xeDriverGetMemAllocProperties
     xe_result_t __xecall
-    xeDriverGetMemProperties(
+    xeDriverGetMemAllocProperties(
         xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         const void* ptr,                                ///< [in] memory pointer to query
-        xe_memory_allocation_properties_t* pMemProperties,  ///< [out] query result for memory allocation properties
+        xe_memory_allocation_properties_t* pMemAllocProperties, ///< [in,out] query result for memory allocation properties
         xe_device_handle_t* phDevice                    ///< [out][optional] device associated with this allocation
         )
     {
-        auto pfnGetMemProperties = context.xeDdiTable.Driver.pfnGetMemProperties;
+        auto pfnGetMemAllocProperties = context.xeDdiTable.Driver.pfnGetMemAllocProperties;
 
-        if( nullptr == pfnGetMemProperties )
+        if( nullptr == pfnGetMemAllocProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1907,12 +1907,12 @@ namespace layer
             if( nullptr == ptr )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pMemProperties )
+            if( nullptr == pMemAllocProperties )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnGetMemProperties( hDriver, ptr, pMemProperties, phDevice );
+        return pfnGetMemAllocProperties( hDriver, ptr, pMemAllocProperties, phDevice );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2905,8 +2905,8 @@ xeGetDriverProcAddrTable(
     dditable.pfnFreeMem                                  = pDdiTable->pfnFreeMem;
     pDdiTable->pfnFreeMem                                = layer::xeDriverFreeMem;
 
-    dditable.pfnGetMemProperties                         = pDdiTable->pfnGetMemProperties;
-    pDdiTable->pfnGetMemProperties                       = layer::xeDriverGetMemProperties;
+    dditable.pfnGetMemAllocProperties                    = pDdiTable->pfnGetMemAllocProperties;
+    pDdiTable->pfnGetMemAllocProperties                  = layer::xeDriverGetMemAllocProperties;
 
     dditable.pfnGetMemAddressRange                       = pDdiTable->pfnGetMemAddressRange;
     pDdiTable->pfnGetMemAddressRange                     = layer::xeDriverGetMemAddressRange;

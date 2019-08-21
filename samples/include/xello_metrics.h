@@ -25,7 +25,8 @@ inline xet::MetricGroup* findMetricGroup(
     for( uint32_t grp = 0; grp < groupCount; ++grp )
     {
         auto pMetricGroup = metricGroups[ grp ];
-        auto metric_group_properties = pMetricGroup->GetProperties();
+        xet::MetricGroup::properties_t metric_group_properties;
+        pMetricGroup->GetProperties( &metric_group_properties );
 
         if( 0 != ( static_cast<uint32_t>(type) & static_cast<uint32_t>(metric_group_properties.samplingType) ) )
         {
@@ -74,7 +75,8 @@ inline void calculateResults( xet::MetricGroup* pMetricGroup, xet::MetricQuery* 
     {
         for( uint32_t metric = 0; metric < metricCount; ++metric )
         {
-            auto metric_properties = metrics[ metric ]->GetProperties();
+            xet::Metric::properties_t metric_properties;
+            metrics[ metric ]->GetProperties( &metric_properties );
 
             auto& result = metricValues[ report * metricCount + metric ];
             std::cout << metric_properties.name << " (" << metric_properties.resultUnits << ") :\n";

@@ -209,21 +209,21 @@ xeDriverFreeMem(
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hDriver
 ///         + nullptr == ptr
-///         + nullptr == pMemProperties
+///         + nullptr == pMemAllocProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeDriverGetMemProperties(
+xeDriverGetMemAllocProperties(
     xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     const void* ptr,                                ///< [in] memory pointer to query
-    xe_memory_allocation_properties_t* pMemProperties,  ///< [out] query result for memory allocation properties
+    xe_memory_allocation_properties_t* pMemAllocProperties, ///< [in,out] query result for memory allocation properties
     xe_device_handle_t* phDevice                    ///< [out][optional] device associated with this allocation
     )
 {
-    auto pfnGetMemProperties = xe_lib::context.ddiTable.Driver.pfnGetMemProperties;
-    if( nullptr == pfnGetMemProperties )
+    auto pfnGetMemAllocProperties = xe_lib::context.ddiTable.Driver.pfnGetMemAllocProperties;
+    if( nullptr == pfnGetMemAllocProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetMemProperties( hDriver, ptr, pMemProperties, phDevice );
+    return pfnGetMemAllocProperties( hDriver, ptr, pMemAllocProperties, phDevice );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -550,28 +550,26 @@ namespace xe
     ///     - **cuPointerGetAttribute**
     /// 
     /// @returns
-    ///     - memory_allocation_properties_t: query result for memory allocation properties
     ///     - Device*: device associated with this allocation
     /// 
     /// @throws result_t
-    Driver::memory_allocation_properties_t __xecall
-    Driver::GetMemProperties(
+    void __xecall
+    Driver::GetMemAllocProperties(
         const void* ptr,                                ///< [in] memory pointer to query
+        memory_allocation_properties_t* pMemAllocProperties,///< [in,out] query result for memory allocation properties
         Device** ppDevice                               ///< [out][optional] device associated with this allocation
         )
     {
-        xe_memory_allocation_properties_t memProperties;
-
         xe_device_handle_t hDevice;
 
-        auto result = static_cast<result_t>( ::xeDriverGetMemProperties(
+        auto result = static_cast<result_t>( ::xeDriverGetMemAllocProperties(
             reinterpret_cast<xe_driver_handle_t>( getHandle() ),
             ptr,
-            &memProperties,
+            reinterpret_cast<xe_memory_allocation_properties_t*>( pMemAllocProperties ),
             ( ppDevice ) ? &hDevice : nullptr ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Driver::GetMemProperties" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Driver::GetMemAllocProperties" );
 
         if( ppDevice )
             *ppDevice =  nullptr;
@@ -583,10 +581,8 @@ namespace xe
         }
         catch( std::bad_alloc& )
         {
-            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Driver::GetMemProperties" );
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Driver::GetMemAllocProperties" );
         }
-
-        return *reinterpret_cast<memory_allocation_properties_t*>( &memProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
