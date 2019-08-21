@@ -55,12 +55,11 @@ xetTracerCreate(
 /// @brief Destroys a tracer.
 /// 
 /// @details
+///     - The application may **not** call this function from simultaneous
+///       threads with the same tracer handle.
 ///     - The implementation of this function will stall and wait on any
 ///       outstanding threads executing callbacks before freeing any Host
 ///       allocations associated with this tracer.
-///     - The application may **not** call this function from simultaneous
-///       threads with the same tracer handle.
-///     - The implementation of this function should be lock-free.
 /// 
 /// @returns
 ///     - ::XE_RESULT_SUCCESS
@@ -244,12 +243,11 @@ namespace xet
     /// @brief Destroys a tracer.
     /// 
     /// @details
+    ///     - The application may **not** call this function from simultaneous
+    ///       threads with the same tracer handle.
     ///     - The implementation of this function will stall and wait on any
     ///       outstanding threads executing callbacks before freeing any Host
     ///       allocations associated with this tracer.
-    ///     - The application may **not** call this function from simultaneous
-    ///       threads with the same tracer handle.
-    ///     - The implementation of this function should be lock-free.
     /// 
     /// @throws result_t
     void __xecall

@@ -75,9 +75,8 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The implementation of this function will stall and wait on any outstanding threads executing callbacks before freeing any Host allocations associated with this tracer."
     - "The application may **not** call this function from simultaneous threads with the same tracer handle."
-    - "The implementation of this function should be lock-free."
+    - "The implementation of this function will stall and wait on any outstanding threads executing callbacks before freeing any Host allocations associated with this tracer."
 params:
     - type: $t_tracer_handle_t
       name: hTracer
