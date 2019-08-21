@@ -29,18 +29,10 @@ typedef xe_result_t (__xecall *xe_pfnInit_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeGetDrivers 
-typedef xe_result_t (__xecall *xe_pfnGetDrivers_t)(
-    uint32_t*,
-    xe_driver_handle_t*
-    );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Table of Global functions pointers
 typedef struct _xe_global_dditable_t
 {
     xe_pfnInit_t                                                pfnInit;
-    xe_pfnGetDrivers_t                                          pfnGetDrivers;
 } xe_global_dditable_t;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -65,6 +57,14 @@ xeGetGlobalProcAddrTable(
 typedef xe_result_t (__xecall *xe_pfnGetGlobalProcAddrTable_t)(
     xe_api_version_t,
     xe_global_dditable_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeDeviceGet 
+typedef xe_result_t (__xecall *xe_pfnDeviceGet_t)(
+    xe_driver_handle_t,
+    uint32_t*,
+    xe_device_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -221,6 +221,7 @@ typedef xe_result_t (__xecall *xe_pfnDeviceEvictImage_t)(
 /// @brief Table of Device functions pointers
 typedef struct _xe_device_dditable_t
 {
+    xe_pfnDeviceGet_t                                           pfnGet;
     xe_pfnDeviceGetSubDevices_t                                 pfnGetSubDevices;
     xe_pfnDeviceGetProperties_t                                 pfnGetProperties;
     xe_pfnDeviceGetComputeProperties_t                          pfnGetComputeProperties;
@@ -273,11 +274,10 @@ typedef xe_result_t (__xecall *xe_pfnGetDeviceProcAddrTable_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xeDriverGetDevices 
-typedef xe_result_t (__xecall *xe_pfnDriverGetDevices_t)(
-    xe_driver_handle_t,
+/// @brief Function-pointer for xeDriverGet 
+typedef xe_result_t (__xecall *xe_pfnDriverGet_t)(
     uint32_t*,
-    xe_device_handle_t*
+    xe_driver_handle_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -390,7 +390,7 @@ typedef xe_result_t (__xecall *xe_pfnDriverCloseMemIpcHandle_t)(
 /// @brief Table of Driver functions pointers
 typedef struct _xe_driver_dditable_t
 {
-    xe_pfnDriverGetDevices_t                                    pfnGetDevices;
+    xe_pfnDriverGet_t                                           pfnGet;
     xe_pfnDriverGetDriverVersion_t                              pfnGetDriverVersion;
     xe_pfnDriverGetApiVersion_t                                 pfnGetApiVersion;
     xe_pfnDriverGetIPCProperties_t                              pfnGetIPCProperties;

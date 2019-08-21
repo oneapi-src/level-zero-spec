@@ -85,7 +85,7 @@ xeInit(
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeGetDrivers(
+xeDriverGet(
     uint32_t* pCount,                               ///< [in,out] pointer to the number of driver instances.
                                                     ///< if count is zero, then the loader will update the value with the total
                                                     ///< number of drivers available.
@@ -203,37 +203,6 @@ xe_result_t __xecall
 xeDriverGetIPCProperties(
     xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
     xe_driver_ipc_properties_t* pIPCProperties      ///< [out] query result for IPC properties
-    );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves devices within a driver
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuDeviceGet**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == pCount
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xeDriverGetDevices(
-    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
-    uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
-                                                    ///< if count is zero, then the driver will update the value with the total
-                                                    ///< number of devices available.
-                                                    ///< if count is non-zero, then driver will only retrieve that number of devices.
-                                                    ///< if count is larger than the number of devices available, then the
-                                                    ///< driver will update the value with the correct number of devices available.
-    xe_device_handle_t* phDevices                   ///< [in,out][optional][range(0, *pCount)] array of handle of devices
     );
 
 #if defined(__cplusplus)

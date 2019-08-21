@@ -34,10 +34,10 @@ int main( int argc, char *argv[] )
     if( init_xe() )
     {
         uint32_t driverCount = 0;
-        xe::GetDrivers( &driverCount );
+        xe::Driver::Get( &driverCount );
 
         std::vector<xe::Driver*> drivers( driverCount );
-        xe::GetDrivers( &driverCount, drivers.data() );
+        xe::Driver::Get( &driverCount, drivers.data() );
 
         for( uint32_t driver = 0; driver < driverCount; ++driver )
         {

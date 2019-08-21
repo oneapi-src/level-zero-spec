@@ -50,9 +50,9 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeGetDrivers
+    /// @brief Intercept function for xeDriverGet
     xe_result_t __xecall
-    xeGetDrivers(
+    xeDriverGet(
         uint32_t* pCount,                               ///< [in,out] pointer to the number of driver instances.
                                                         ///< if count is zero, then the loader will update the value with the total
                                                         ///< number of drivers available.
@@ -71,7 +71,7 @@ namespace loader
         {
             uint32_t count = 0;
 
-            result = drv.dditable.xe.Global.pfnGetDrivers( &count, nullptr );
+            result = drv.dditable.xe.Driver.pfnGet( &count, nullptr );
             if( XE_RESULT_SUCCESS != result ) break;
 
             if( ( 0 < *pCount ) && ( *pCount > total_count + count ) )
@@ -79,7 +79,7 @@ namespace loader
 
             if( nullptr != phDrivers )
             {
-                result = drv.dditable.xe.Global.pfnGetDrivers( &count, &phDrivers[ total_count ] );
+                result = drv.dditable.xe.Driver.pfnGet( &count, &phDrivers[ total_count ] );
                 if( XE_RESULT_SUCCESS != result ) break;
 
                 try
@@ -179,9 +179,9 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDriverGetDevices
+    /// @brief Intercept function for xeDeviceGet
     xe_result_t __xecall
-    xeDriverGetDevices(
+    xeDeviceGet(
         xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
                                                         ///< if count is zero, then the driver will update the value with the total
@@ -196,15 +196,15 @@ namespace loader
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xe_driver_object_t*>( hDriver )->dditable;
-        auto pfnGetDevices = dditable->xe.Driver.pfnGetDevices;
-        if( nullptr == pfnGetDevices )
+        auto pfnGet = dditable->xe.Device.pfnGet;
+        if( nullptr == pfnGet )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hDriver = reinterpret_cast<xe_driver_object_t*>( hDriver )->handle;
 
         // forward to device-driver
-        result = pfnGetDevices( hDriver, pCount, phDevices );
+        result = pfnGet( hDriver, pCount, phDevices );
 
         try
         {
@@ -3019,7 +3019,6 @@ xeGetGlobalProcAddrTable(
         {
             // return pointers to loader's DDIs
             pDdiTable->pfnInit                                     = loader::xeInit;
-            pDdiTable->pfnGetDrivers                               = loader::xeGetDrivers;
         }
         else
         {
@@ -3083,6 +3082,7 @@ xeGetDeviceProcAddrTable(
         if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
         {
             // return pointers to loader's DDIs
+            pDdiTable->pfnGet                                      = loader::xeDeviceGet;
             pDdiTable->pfnGetSubDevices                            = loader::xeDeviceGetSubDevices;
             pDdiTable->pfnGetProperties                            = loader::xeDeviceGetProperties;
             pDdiTable->pfnGetComputeProperties                     = loader::xeDeviceGetComputeProperties;
@@ -3171,7 +3171,7 @@ xeGetDriverProcAddrTable(
         if( ( loader::context.drivers.size() > 1 ) || loader::context.forceIntercept )
         {
             // return pointers to loader's DDIs
-            pDdiTable->pfnGetDevices                               = loader::xeDriverGetDevices;
+            pDdiTable->pfnGet                                      = loader::xeDriverGet;
             pDdiTable->pfnGetDriverVersion                         = loader::xeDriverGetDriverVersion;
             pDdiTable->pfnGetApiVersion                            = loader::xeDriverGetApiVersion;
             pDdiTable->pfnGetIPCProperties                         = loader::xeDriverGetIPCProperties;

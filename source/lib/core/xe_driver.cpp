@@ -78,7 +78,7 @@ xeInit(
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xeGetDrivers(
+xeDriverGet(
     uint32_t* pCount,                               ///< [in,out] pointer to the number of driver instances.
                                                     ///< if count is zero, then the loader will update the value with the total
                                                     ///< number of drivers available.
@@ -89,11 +89,11 @@ xeGetDrivers(
     xe_driver_handle_t* phDrivers                   ///< [in,out][optional][range(0, *pCount)] array of driver instance handles
     )
 {
-    auto pfnGetDrivers = xe_lib::context.ddiTable.Global.pfnGetDrivers;
-    if( nullptr == pfnGetDrivers )
+    auto pfnGet = xe_lib::context.ddiTable.Driver.pfnGet;
+    if( nullptr == pfnGet )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnGetDrivers( pCount, phDrivers );
+    return pfnGet( pCount, phDrivers );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -194,44 +194,6 @@ xeDriverGetIPCProperties(
     return pfnGetIPCProperties( hDriver, pIPCProperties );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/// @brief Retrieves devices within a driver
-/// 
-/// @details
-///     - The application may call this function from simultaneous threads.
-///     - The implementation of this function should be lock-free.
-/// 
-/// @remarks
-///   _Analogues_
-///     - **cuDeviceGet**
-/// 
-/// @returns
-///     - ::XE_RESULT_SUCCESS
-///     - ::XE_RESULT_ERROR_UNINITIALIZED
-///     - ::XE_RESULT_ERROR_DEVICE_LOST
-///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDriver
-///         + nullptr == pCount
-///     - ::XE_RESULT_ERROR_UNSUPPORTED
-xe_result_t __xecall
-xeDriverGetDevices(
-    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
-    uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
-                                                    ///< if count is zero, then the driver will update the value with the total
-                                                    ///< number of devices available.
-                                                    ///< if count is non-zero, then driver will only retrieve that number of devices.
-                                                    ///< if count is larger than the number of devices available, then the
-                                                    ///< driver will update the value with the correct number of devices available.
-    xe_device_handle_t* phDevices                   ///< [in,out][optional][range(0, *pCount)] array of handle of devices
-    )
-{
-    auto pfnGetDevices = xe_lib::context.ddiTable.Driver.pfnGetDevices;
-    if( nullptr == pfnGetDevices )
-        return XE_RESULT_ERROR_UNSUPPORTED;
-
-    return pfnGetDevices( hDriver, pCount, phDevices );
-}
-
 } // extern "C"
 
 namespace xe
@@ -280,7 +242,7 @@ namespace xe
     /// 
     /// @throws result_t
     void __xecall
-    GetDrivers(
+    Driver::Get(
         uint32_t* pCount,                               ///< [in,out] pointer to the number of driver instances.
                                                         ///< if count is zero, then the loader will update the value with the total
                                                         ///< number of drivers available.
@@ -294,12 +256,12 @@ namespace xe
         thread_local std::vector<xe_driver_handle_t> hDrivers;
         hDrivers.resize( ( ppDrivers ) ? *pCount : 0 );
 
-        auto result = static_cast<result_t>( ::xeGetDrivers(
+        auto result = static_cast<result_t>( ::xeDriverGet(
             pCount,
             hDrivers.data() ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::::GetDrivers" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Driver::Get" );
 
         for( uint32_t i = 0; ( ppDrivers ) && ( i < *pCount ); ++i )
             ppDrivers[ i ] = nullptr;
@@ -311,7 +273,7 @@ namespace xe
         }
         catch( std::bad_alloc& )
         {
-            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::::GetDrivers" );
+            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Driver::Get" );
         }
     }
 
@@ -411,55 +373,6 @@ namespace xe
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Driver::GetIPCProperties" );
 
         return *reinterpret_cast<ipc_properties_t*>( &iPCProperties );
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Retrieves devices within a driver
-    /// 
-    /// @details
-    ///     - The application may call this function from simultaneous threads.
-    ///     - The implementation of this function should be lock-free.
-    /// 
-    /// @remarks
-    ///   _Analogues_
-    ///     - **cuDeviceGet**
-    /// 
-    /// @throws result_t
-    void __xecall
-    Driver::GetDevices(
-        Driver* pDriver,                                ///< [in] pointer to the driver instance
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
-                                                        ///< if count is zero, then the driver will update the value with the total
-                                                        ///< number of devices available.
-                                                        ///< if count is non-zero, then driver will only retrieve that number of devices.
-                                                        ///< if count is larger than the number of devices available, then the
-                                                        ///< driver will update the value with the correct number of devices available.
-        Device** ppDevices                              ///< [in,out][optional][range(0, *pCount)] array of pointer to devices
-        )
-    {
-        thread_local std::vector<xe_device_handle_t> hDevices;
-        hDevices.resize( ( ppDevices ) ? *pCount : 0 );
-
-        auto result = static_cast<result_t>( ::xeDriverGetDevices(
-            reinterpret_cast<xe_driver_handle_t>( pDriver->getHandle() ),
-            pCount,
-            hDevices.data() ) );
-
-        if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::Driver::GetDevices" );
-
-        for( uint32_t i = 0; ( ppDevices ) && ( i < *pCount ); ++i )
-            ppDevices[ i ] = nullptr;
-
-        try
-        {
-            for( uint32_t i = 0; ( ppDevices ) && ( i < *pCount ); ++i )
-                ppDevices[ i ] = xe_lib::context.deviceFactory.getInstance( reinterpret_cast<device_handle_t>( hDevices[ i ] ), pDriver );
-        }
-        catch( std::bad_alloc& )
-        {
-            throw exception_t( result_t::ERROR_OUT_OF_HOST_MEMORY, __FILE__, STRING(__LINE__), "xe::Driver::GetDevices" );
-        }
     }
 
 } // namespace xe

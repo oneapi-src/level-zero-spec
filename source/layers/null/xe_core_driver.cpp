@@ -39,9 +39,9 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeGetDrivers
+    /// @brief Intercept function for xeDriverGet
     xe_result_t __xecall
-    xeGetDrivers(
+    xeDriverGet(
         uint32_t* pCount,                               ///< [in,out] pointer to the number of driver instances.
                                                         ///< if count is zero, then the loader will update the value with the total
                                                         ///< number of drivers available.
@@ -55,10 +55,10 @@ namespace driver
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetDrivers = context.xeDdiTable.Global.pfnGetDrivers;
-        if( nullptr != pfnGetDrivers )
+        auto pfnGet = context.xeDdiTable.Driver.pfnGet;
+        if( nullptr != pfnGet )
         {
-            result = pfnGetDrivers( pCount, phDrivers );
+            result = pfnGet( pCount, phDrivers );
         }
         else
         {
@@ -144,9 +144,9 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDriverGetDevices
+    /// @brief Intercept function for xeDeviceGet
     xe_result_t __xecall
-    xeDriverGetDevices(
+    xeDeviceGet(
         xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
                                                         ///< if count is zero, then the driver will update the value with the total
@@ -160,10 +160,10 @@ namespace driver
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnGetDevices = context.xeDdiTable.Driver.pfnGetDevices;
-        if( nullptr != pfnGetDevices )
+        auto pfnGet = context.xeDdiTable.Device.pfnGet;
+        if( nullptr != pfnGet )
         {
-            result = pfnGetDevices( hDriver, pCount, phDevices );
+            result = pfnGet( hDriver, pCount, phDevices );
         }
         else
         {
@@ -2548,8 +2548,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -2559,7 +2559,7 @@ namespace instrumented
                 if( nullptr != table.pfnInitCb )
                     table.pfnInitCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeInit( flags );
@@ -2577,16 +2577,16 @@ namespace instrumented
                 if( nullptr != table.pfnInitCb )
                     table.pfnInitCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeGetDrivers
+    /// @brief Intercept function for xeDriverGet
     xe_result_t __xecall
-    xeGetDrivers(
+    xeDriverGet(
         uint32_t* pCount,                               ///< [in,out] pointer to the number of driver instances.
                                                         ///< if count is zero, then the loader will update the value with the total
                                                         ///< number of drivers available.
@@ -2600,30 +2600,30 @@ namespace instrumented
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // capture parameters
-        xe_get_drivers_params_t in_params = {
+        xe_driver_get_params_t in_params = {
             &pCount,
             &phDrivers
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
             if( context.tracerData[ i ].enabled )
             {
-                auto& table = context.tracerData[ i ].xePrologueCbs.Global;
-                if( nullptr != table.pfnGetDriversCb )
-                    table.pfnGetDriversCb( &in_params, result,
+                auto& table = context.tracerData[ i ].xePrologueCbs.Driver;
+                if( nullptr != table.pfnGetCb )
+                    table.pfnGetCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
-        result = driver::xeGetDrivers( pCount, phDrivers );
+        result = driver::xeDriverGet( pCount, phDrivers );
 
         // capture parameters
-        xe_get_drivers_params_t out_params = {
+        xe_driver_get_params_t out_params = {
             &pCount,
             &phDrivers
         };
@@ -2632,11 +2632,11 @@ namespace instrumented
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
             if( context.tracerData[ i ].enabled )
             {
-                auto& table = context.tracerData[ i ].xeEpilogueCbs.Global;
-                if( nullptr != table.pfnGetDriversCb )
-                    table.pfnGetDriversCb( &out_params, result,
+                auto& table = context.tracerData[ i ].xeEpilogueCbs.Driver;
+                if( nullptr != table.pfnGetCb )
+                    table.pfnGetCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -2659,8 +2659,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -2670,7 +2670,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetDriverVersionCb )
                     table.pfnGetDriverVersionCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDriverGetDriverVersion( hDriver, version );
@@ -2689,7 +2689,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetDriverVersionCb )
                     table.pfnGetDriverVersionCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -2712,8 +2712,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -2723,7 +2723,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetApiVersionCb )
                     table.pfnGetApiVersionCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDriverGetApiVersion( hDrivers, version );
@@ -2742,7 +2742,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetApiVersionCb )
                     table.pfnGetApiVersionCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -2765,8 +2765,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -2776,7 +2776,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetIPCPropertiesCb )
                     table.pfnGetIPCPropertiesCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDriverGetIPCProperties( hDriver, pIPCProperties );
@@ -2795,16 +2795,16 @@ namespace instrumented
                 if( nullptr != table.pfnGetIPCPropertiesCb )
                     table.pfnGetIPCPropertiesCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDriverGetDevices
+    /// @brief Intercept function for xeDeviceGet
     xe_result_t __xecall
-    xeDriverGetDevices(
+    xeDeviceGet(
         xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
                                                         ///< if count is zero, then the driver will update the value with the total
@@ -2818,31 +2818,31 @@ namespace instrumented
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // capture parameters
-        xe_driver_get_devices_params_t in_params = {
+        xe_device_get_params_t in_params = {
             &hDriver,
             &pCount,
             &phDevices
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
             if( context.tracerData[ i ].enabled )
             {
-                auto& table = context.tracerData[ i ].xePrologueCbs.Driver;
-                if( nullptr != table.pfnGetDevicesCb )
-                    table.pfnGetDevicesCb( &in_params, result,
+                auto& table = context.tracerData[ i ].xePrologueCbs.Device;
+                if( nullptr != table.pfnGetCb )
+                    table.pfnGetCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
-        result = driver::xeDriverGetDevices( hDriver, pCount, phDevices );
+        result = driver::xeDeviceGet( hDriver, pCount, phDevices );
 
         // capture parameters
-        xe_driver_get_devices_params_t out_params = {
+        xe_device_get_params_t out_params = {
             &hDriver,
             &pCount,
             &phDevices
@@ -2852,11 +2852,11 @@ namespace instrumented
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
             if( context.tracerData[ i ].enabled )
             {
-                auto& table = context.tracerData[ i ].xeEpilogueCbs.Driver;
-                if( nullptr != table.pfnGetDevicesCb )
-                    table.pfnGetDevicesCb( &out_params, result,
+                auto& table = context.tracerData[ i ].xeEpilogueCbs.Device;
+                if( nullptr != table.pfnGetCb )
+                    table.pfnGetCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -2886,8 +2886,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -2897,7 +2897,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetSubDevicesCb )
                     table.pfnGetSubDevicesCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDeviceGetSubDevices( hDevice, pCount, phSubdevices );
@@ -2917,7 +2917,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetSubDevicesCb )
                     table.pfnGetSubDevicesCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -2940,8 +2940,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -2951,7 +2951,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetPropertiesCb )
                     table.pfnGetPropertiesCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDeviceGetProperties( hDevice, pDeviceProperties );
@@ -2970,7 +2970,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetPropertiesCb )
                     table.pfnGetPropertiesCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -2993,8 +2993,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -3004,7 +3004,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetComputePropertiesCb )
                     table.pfnGetComputePropertiesCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDeviceGetComputeProperties( hDevice, pComputeProperties );
@@ -3023,7 +3023,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetComputePropertiesCb )
                     table.pfnGetComputePropertiesCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -3056,8 +3056,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -3067,7 +3067,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetMemoryPropertiesCb )
                     table.pfnGetMemoryPropertiesCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDeviceGetMemoryProperties( hDevice, pCount, pMemProperties );
@@ -3087,7 +3087,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetMemoryPropertiesCb )
                     table.pfnGetMemoryPropertiesCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -3110,8 +3110,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -3121,7 +3121,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetMemoryAccessPropertiesCb )
                     table.pfnGetMemoryAccessPropertiesCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDeviceGetMemoryAccessProperties( hDevice, pMemAccessProperties );
@@ -3140,7 +3140,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetMemoryAccessPropertiesCb )
                     table.pfnGetMemoryAccessPropertiesCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -3163,8 +3163,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -3174,7 +3174,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetCachePropertiesCb )
                     table.pfnGetCachePropertiesCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDeviceGetCacheProperties( hDevice, pCacheProperties );
@@ -3193,7 +3193,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetCachePropertiesCb )
                     table.pfnGetCachePropertiesCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -3216,8 +3216,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -3227,7 +3227,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetImagePropertiesCb )
                     table.pfnGetImagePropertiesCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDeviceGetImageProperties( hDevice, pImageProperties );
@@ -3246,7 +3246,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetImagePropertiesCb )
                     table.pfnGetImagePropertiesCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -3271,8 +3271,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -3282,7 +3282,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetP2PPropertiesCb )
                     table.pfnGetP2PPropertiesCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDeviceGetP2PProperties( hDevice, hPeerDevice, pP2PProperties );
@@ -3302,7 +3302,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetP2PPropertiesCb )
                     table.pfnGetP2PPropertiesCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -3327,8 +3327,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -3338,7 +3338,7 @@ namespace instrumented
                 if( nullptr != table.pfnCanAccessPeerCb )
                     table.pfnCanAccessPeerCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDeviceCanAccessPeer( hDevice, hPeerDevice, value );
@@ -3358,7 +3358,7 @@ namespace instrumented
                 if( nullptr != table.pfnCanAccessPeerCb )
                     table.pfnCanAccessPeerCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -3381,8 +3381,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -3392,7 +3392,7 @@ namespace instrumented
                 if( nullptr != table.pfnSetIntermediateCacheConfigCb )
                     table.pfnSetIntermediateCacheConfigCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDeviceSetIntermediateCacheConfig( hDevice, CacheConfig );
@@ -3411,7 +3411,7 @@ namespace instrumented
                 if( nullptr != table.pfnSetIntermediateCacheConfigCb )
                     table.pfnSetIntermediateCacheConfigCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -3434,8 +3434,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -3445,7 +3445,7 @@ namespace instrumented
                 if( nullptr != table.pfnSetLastLevelCacheConfigCb )
                     table.pfnSetLastLevelCacheConfigCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDeviceSetLastLevelCacheConfig( hDevice, CacheConfig );
@@ -3464,7 +3464,7 @@ namespace instrumented
                 if( nullptr != table.pfnSetLastLevelCacheConfigCb )
                     table.pfnSetLastLevelCacheConfigCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -3489,8 +3489,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -3500,7 +3500,7 @@ namespace instrumented
                 if( nullptr != table.pfnCreateCb )
                     table.pfnCreateCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandQueueCreate( hDevice, desc, phCommandQueue );
@@ -3520,7 +3520,7 @@ namespace instrumented
                 if( nullptr != table.pfnCreateCb )
                     table.pfnCreateCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -3541,8 +3541,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -3552,7 +3552,7 @@ namespace instrumented
                 if( nullptr != table.pfnDestroyCb )
                     table.pfnDestroyCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandQueueDestroy( hCommandQueue );
@@ -3570,7 +3570,7 @@ namespace instrumented
                 if( nullptr != table.pfnDestroyCb )
                     table.pfnDestroyCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -3598,8 +3598,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -3609,7 +3609,7 @@ namespace instrumented
                 if( nullptr != table.pfnExecuteCommandListsCb )
                     table.pfnExecuteCommandListsCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandQueueExecuteCommandLists( hCommandQueue, numCommandLists, phCommandLists, hFence );
@@ -3630,7 +3630,7 @@ namespace instrumented
                 if( nullptr != table.pfnExecuteCommandListsCb )
                     table.pfnExecuteCommandListsCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -3657,8 +3657,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -3668,7 +3668,7 @@ namespace instrumented
                 if( nullptr != table.pfnSynchronizeCb )
                     table.pfnSynchronizeCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandQueueSynchronize( hCommandQueue, timeout );
@@ -3687,7 +3687,7 @@ namespace instrumented
                 if( nullptr != table.pfnSynchronizeCb )
                     table.pfnSynchronizeCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -3712,8 +3712,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -3723,7 +3723,7 @@ namespace instrumented
                 if( nullptr != table.pfnCreateCb )
                     table.pfnCreateCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandListCreate( hDevice, desc, phCommandList );
@@ -3743,7 +3743,7 @@ namespace instrumented
                 if( nullptr != table.pfnCreateCb )
                     table.pfnCreateCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -3768,8 +3768,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -3779,7 +3779,7 @@ namespace instrumented
                 if( nullptr != table.pfnCreateImmediateCb )
                     table.pfnCreateImmediateCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandListCreateImmediate( hDevice, altdesc, phCommandList );
@@ -3799,7 +3799,7 @@ namespace instrumented
                 if( nullptr != table.pfnCreateImmediateCb )
                     table.pfnCreateImmediateCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -3820,8 +3820,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -3831,7 +3831,7 @@ namespace instrumented
                 if( nullptr != table.pfnDestroyCb )
                     table.pfnDestroyCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandListDestroy( hCommandList );
@@ -3849,7 +3849,7 @@ namespace instrumented
                 if( nullptr != table.pfnDestroyCb )
                     table.pfnDestroyCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -3870,8 +3870,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -3881,7 +3881,7 @@ namespace instrumented
                 if( nullptr != table.pfnCloseCb )
                     table.pfnCloseCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandListClose( hCommandList );
@@ -3899,7 +3899,7 @@ namespace instrumented
                 if( nullptr != table.pfnCloseCb )
                     table.pfnCloseCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -3920,8 +3920,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -3931,7 +3931,7 @@ namespace instrumented
                 if( nullptr != table.pfnResetCb )
                     table.pfnResetCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandListReset( hCommandList );
@@ -3949,7 +3949,7 @@ namespace instrumented
                 if( nullptr != table.pfnResetCb )
                     table.pfnResetCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -3977,8 +3977,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -3988,7 +3988,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendBarrierCb )
                     table.pfnAppendBarrierCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandListAppendBarrier( hCommandList, hSignalEvent, numWaitEvents, phWaitEvents );
@@ -4009,7 +4009,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendBarrierCb )
                     table.pfnAppendBarrierCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -4043,8 +4043,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -4054,7 +4054,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendMemoryRangesBarrierCb )
                     table.pfnAppendMemoryRangesBarrierCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandListAppendMemoryRangesBarrier( hCommandList, numRanges, pRangeSizes, pRanges, hSignalEvent, numWaitEvents, phWaitEvents );
@@ -4078,7 +4078,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendMemoryRangesBarrierCb )
                     table.pfnAppendMemoryRangesBarrierCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -4099,8 +4099,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -4110,7 +4110,7 @@ namespace instrumented
                 if( nullptr != table.pfnSystemBarrierCb )
                     table.pfnSystemBarrierCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDeviceSystemBarrier( hDevice );
@@ -4128,7 +4128,7 @@ namespace instrumented
                 if( nullptr != table.pfnSystemBarrierCb )
                     table.pfnSystemBarrierCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -4156,8 +4156,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -4167,7 +4167,7 @@ namespace instrumented
                 if( nullptr != table.pfnRegisterCLMemoryCb )
                     table.pfnRegisterCLMemoryCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDeviceRegisterCLMemory( hDevice, context, mem, ptr );
@@ -4188,7 +4188,7 @@ namespace instrumented
                 if( nullptr != table.pfnRegisterCLMemoryCb )
                     table.pfnRegisterCLMemoryCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -4217,8 +4217,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -4228,7 +4228,7 @@ namespace instrumented
                 if( nullptr != table.pfnRegisterCLProgramCb )
                     table.pfnRegisterCLProgramCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDeviceRegisterCLProgram( hDevice, context, program, phModule );
@@ -4249,7 +4249,7 @@ namespace instrumented
                 if( nullptr != table.pfnRegisterCLProgramCb )
                     table.pfnRegisterCLProgramCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -4278,8 +4278,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -4289,7 +4289,7 @@ namespace instrumented
                 if( nullptr != table.pfnRegisterCLCommandQueueCb )
                     table.pfnRegisterCLCommandQueueCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDeviceRegisterCLCommandQueue( hDevice, context, command_queue, phCommandQueue );
@@ -4310,7 +4310,7 @@ namespace instrumented
                 if( nullptr != table.pfnRegisterCLCommandQueueCb )
                     table.pfnRegisterCLCommandQueueCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -4340,8 +4340,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -4351,7 +4351,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendMemoryCopyCb )
                     table.pfnAppendMemoryCopyCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandListAppendMemoryCopy( hCommandList, dstptr, srcptr, size, hEvent );
@@ -4373,7 +4373,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendMemoryCopyCb )
                     table.pfnAppendMemoryCopyCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -4402,8 +4402,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -4413,7 +4413,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendMemorySetCb )
                     table.pfnAppendMemorySetCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandListAppendMemorySet( hCommandList, ptr, value, size, hEvent );
@@ -4435,7 +4435,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendMemorySetCb )
                     table.pfnAppendMemorySetCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -4470,8 +4470,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -4481,7 +4481,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendMemoryCopyRegionCb )
                     table.pfnAppendMemoryCopyRegionCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandListAppendMemoryCopyRegion( hCommandList, dstptr, dstRegion, dstPitch, srcptr, srcRegion, srcPitch, hEvent );
@@ -4506,7 +4506,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendMemoryCopyRegionCb )
                     table.pfnAppendMemoryCopyRegionCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -4533,8 +4533,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -4544,7 +4544,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendImageCopyCb )
                     table.pfnAppendImageCopyCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandListAppendImageCopy( hCommandList, hDstImage, hSrcImage, hEvent );
@@ -4565,7 +4565,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendImageCopyCb )
                     table.pfnAppendImageCopyCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -4596,8 +4596,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -4607,7 +4607,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendImageCopyRegionCb )
                     table.pfnAppendImageCopyRegionCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandListAppendImageCopyRegion( hCommandList, hDstImage, hSrcImage, pDstRegion, pSrcRegion, hEvent );
@@ -4630,7 +4630,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendImageCopyRegionCb )
                     table.pfnAppendImageCopyRegionCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -4659,8 +4659,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -4670,7 +4670,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendImageCopyToMemoryCb )
                     table.pfnAppendImageCopyToMemoryCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandListAppendImageCopyToMemory( hCommandList, dstptr, hSrcImage, pSrcRegion, hEvent );
@@ -4692,7 +4692,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendImageCopyToMemoryCb )
                     table.pfnAppendImageCopyToMemoryCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -4721,8 +4721,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -4732,7 +4732,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendImageCopyFromMemoryCb )
                     table.pfnAppendImageCopyFromMemoryCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandListAppendImageCopyFromMemory( hCommandList, hDstImage, srcptr, pDstRegion, hEvent );
@@ -4754,7 +4754,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendImageCopyFromMemoryCb )
                     table.pfnAppendImageCopyFromMemoryCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -4779,8 +4779,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -4790,7 +4790,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendMemoryPrefetchCb )
                     table.pfnAppendMemoryPrefetchCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandListAppendMemoryPrefetch( hCommandList, ptr, size );
@@ -4810,7 +4810,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendMemoryPrefetchCb )
                     table.pfnAppendMemoryPrefetchCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -4839,8 +4839,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -4850,7 +4850,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendMemAdviseCb )
                     table.pfnAppendMemAdviseCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandListAppendMemAdvise( hCommandList, hDevice, ptr, size, advice );
@@ -4872,7 +4872,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendMemAdviseCb )
                     table.pfnAppendMemAdviseCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -4904,8 +4904,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -4915,7 +4915,7 @@ namespace instrumented
                 if( nullptr != table.pfnCreateCb )
                     table.pfnCreateCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeEventPoolCreate( hDriver, desc, numDevices, phDevices, phEventPool );
@@ -4937,7 +4937,7 @@ namespace instrumented
                 if( nullptr != table.pfnCreateCb )
                     table.pfnCreateCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -4958,8 +4958,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -4969,7 +4969,7 @@ namespace instrumented
                 if( nullptr != table.pfnDestroyCb )
                     table.pfnDestroyCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeEventPoolDestroy( hEventPool );
@@ -4987,7 +4987,7 @@ namespace instrumented
                 if( nullptr != table.pfnDestroyCb )
                     table.pfnDestroyCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -5012,8 +5012,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -5023,7 +5023,7 @@ namespace instrumented
                 if( nullptr != table.pfnCreateCb )
                     table.pfnCreateCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeEventCreate( hEventPool, desc, phEvent );
@@ -5043,7 +5043,7 @@ namespace instrumented
                 if( nullptr != table.pfnCreateCb )
                     table.pfnCreateCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -5064,8 +5064,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -5075,7 +5075,7 @@ namespace instrumented
                 if( nullptr != table.pfnDestroyCb )
                     table.pfnDestroyCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeEventDestroy( hEvent );
@@ -5093,7 +5093,7 @@ namespace instrumented
                 if( nullptr != table.pfnDestroyCb )
                     table.pfnDestroyCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -5116,8 +5116,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -5127,7 +5127,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetIpcHandleCb )
                     table.pfnGetIpcHandleCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeEventPoolGetIpcHandle( hEventPool, phIpc );
@@ -5146,7 +5146,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetIpcHandleCb )
                     table.pfnGetIpcHandleCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -5171,8 +5171,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -5182,7 +5182,7 @@ namespace instrumented
                 if( nullptr != table.pfnOpenIpcHandleCb )
                     table.pfnOpenIpcHandleCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeEventPoolOpenIpcHandle( hDevice, hIpc, phEventPool );
@@ -5202,7 +5202,7 @@ namespace instrumented
                 if( nullptr != table.pfnOpenIpcHandleCb )
                     table.pfnOpenIpcHandleCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -5223,8 +5223,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -5234,7 +5234,7 @@ namespace instrumented
                 if( nullptr != table.pfnCloseIpcHandleCb )
                     table.pfnCloseIpcHandleCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeEventPoolCloseIpcHandle( hEventPool );
@@ -5252,7 +5252,7 @@ namespace instrumented
                 if( nullptr != table.pfnCloseIpcHandleCb )
                     table.pfnCloseIpcHandleCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -5275,8 +5275,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -5286,7 +5286,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendSignalEventCb )
                     table.pfnAppendSignalEventCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandListAppendSignalEvent( hCommandList, hEvent );
@@ -5305,7 +5305,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendSignalEventCb )
                     table.pfnAppendSignalEventCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -5331,8 +5331,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -5342,7 +5342,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendWaitOnEventsCb )
                     table.pfnAppendWaitOnEventsCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandListAppendWaitOnEvents( hCommandList, numEvents, phEvents );
@@ -5362,7 +5362,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendWaitOnEventsCb )
                     table.pfnAppendWaitOnEventsCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -5383,8 +5383,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -5394,7 +5394,7 @@ namespace instrumented
                 if( nullptr != table.pfnHostSignalCb )
                     table.pfnHostSignalCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeEventHostSignal( hEvent );
@@ -5412,7 +5412,7 @@ namespace instrumented
                 if( nullptr != table.pfnHostSignalCb )
                     table.pfnHostSignalCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -5439,8 +5439,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -5450,7 +5450,7 @@ namespace instrumented
                 if( nullptr != table.pfnHostSynchronizeCb )
                     table.pfnHostSynchronizeCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeEventHostSynchronize( hEvent, timeout );
@@ -5469,7 +5469,7 @@ namespace instrumented
                 if( nullptr != table.pfnHostSynchronizeCb )
                     table.pfnHostSynchronizeCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -5490,8 +5490,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -5501,7 +5501,7 @@ namespace instrumented
                 if( nullptr != table.pfnQueryStatusCb )
                     table.pfnQueryStatusCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeEventQueryStatus( hEvent );
@@ -5519,7 +5519,7 @@ namespace instrumented
                 if( nullptr != table.pfnQueryStatusCb )
                     table.pfnQueryStatusCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -5542,8 +5542,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -5553,7 +5553,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendEventResetCb )
                     table.pfnAppendEventResetCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandListAppendEventReset( hCommandList, hEvent );
@@ -5572,7 +5572,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendEventResetCb )
                     table.pfnAppendEventResetCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -5593,8 +5593,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -5604,7 +5604,7 @@ namespace instrumented
                 if( nullptr != table.pfnResetCb )
                     table.pfnResetCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeEventReset( hEvent );
@@ -5622,7 +5622,7 @@ namespace instrumented
                 if( nullptr != table.pfnResetCb )
                     table.pfnResetCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -5647,8 +5647,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -5658,7 +5658,7 @@ namespace instrumented
                 if( nullptr != table.pfnCreateCb )
                     table.pfnCreateCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeFenceCreate( hCommandQueue, desc, phFence );
@@ -5678,7 +5678,7 @@ namespace instrumented
                 if( nullptr != table.pfnCreateCb )
                     table.pfnCreateCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -5699,8 +5699,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -5710,7 +5710,7 @@ namespace instrumented
                 if( nullptr != table.pfnDestroyCb )
                     table.pfnDestroyCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeFenceDestroy( hFence );
@@ -5728,7 +5728,7 @@ namespace instrumented
                 if( nullptr != table.pfnDestroyCb )
                     table.pfnDestroyCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -5755,8 +5755,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -5766,7 +5766,7 @@ namespace instrumented
                 if( nullptr != table.pfnHostSynchronizeCb )
                     table.pfnHostSynchronizeCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeFenceHostSynchronize( hFence, timeout );
@@ -5785,7 +5785,7 @@ namespace instrumented
                 if( nullptr != table.pfnHostSynchronizeCb )
                     table.pfnHostSynchronizeCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -5806,8 +5806,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -5817,7 +5817,7 @@ namespace instrumented
                 if( nullptr != table.pfnQueryStatusCb )
                     table.pfnQueryStatusCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeFenceQueryStatus( hFence );
@@ -5835,7 +5835,7 @@ namespace instrumented
                 if( nullptr != table.pfnQueryStatusCb )
                     table.pfnQueryStatusCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -5856,8 +5856,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -5867,7 +5867,7 @@ namespace instrumented
                 if( nullptr != table.pfnResetCb )
                     table.pfnResetCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeFenceReset( hFence );
@@ -5885,7 +5885,7 @@ namespace instrumented
                 if( nullptr != table.pfnResetCb )
                     table.pfnResetCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -5910,8 +5910,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -5921,7 +5921,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetPropertiesCb )
                     table.pfnGetPropertiesCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeImageGetProperties( hDevice, desc, pImageProperties );
@@ -5941,7 +5941,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetPropertiesCb )
                     table.pfnGetPropertiesCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -5966,8 +5966,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -5977,7 +5977,7 @@ namespace instrumented
                 if( nullptr != table.pfnCreateCb )
                     table.pfnCreateCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeImageCreate( hDevice, desc, phImage );
@@ -5997,7 +5997,7 @@ namespace instrumented
                 if( nullptr != table.pfnCreateCb )
                     table.pfnCreateCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -6018,8 +6018,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -6029,7 +6029,7 @@ namespace instrumented
                 if( nullptr != table.pfnDestroyCb )
                     table.pfnDestroyCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeImageDestroy( hImage );
@@ -6047,7 +6047,7 @@ namespace instrumented
                 if( nullptr != table.pfnDestroyCb )
                     table.pfnDestroyCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -6083,8 +6083,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -6094,7 +6094,7 @@ namespace instrumented
                 if( nullptr != table.pfnAllocSharedMemCb )
                     table.pfnAllocSharedMemCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDriverAllocSharedMem( hDriver, hDevice, device_flags, ordinal, host_flags, size, alignment, pptr );
@@ -6119,7 +6119,7 @@ namespace instrumented
                 if( nullptr != table.pfnAllocSharedMemCb )
                     table.pfnAllocSharedMemCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -6153,8 +6153,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -6164,7 +6164,7 @@ namespace instrumented
                 if( nullptr != table.pfnAllocDeviceMemCb )
                     table.pfnAllocDeviceMemCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDriverAllocDeviceMem( hDriver, hDevice, flags, ordinal, size, alignment, pptr );
@@ -6188,7 +6188,7 @@ namespace instrumented
                 if( nullptr != table.pfnAllocDeviceMemCb )
                     table.pfnAllocDeviceMemCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -6217,8 +6217,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -6228,7 +6228,7 @@ namespace instrumented
                 if( nullptr != table.pfnAllocHostMemCb )
                     table.pfnAllocHostMemCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDriverAllocHostMem( hDriver, flags, size, alignment, pptr );
@@ -6250,7 +6250,7 @@ namespace instrumented
                 if( nullptr != table.pfnAllocHostMemCb )
                     table.pfnAllocHostMemCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -6273,8 +6273,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -6284,7 +6284,7 @@ namespace instrumented
                 if( nullptr != table.pfnFreeMemCb )
                     table.pfnFreeMemCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDriverFreeMem( hDriver, ptr );
@@ -6303,7 +6303,7 @@ namespace instrumented
                 if( nullptr != table.pfnFreeMemCb )
                     table.pfnFreeMemCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -6330,8 +6330,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -6341,7 +6341,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetMemPropertiesCb )
                     table.pfnGetMemPropertiesCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDriverGetMemProperties( hDriver, ptr, pMemProperties, phDevice );
@@ -6362,7 +6362,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetMemPropertiesCb )
                     table.pfnGetMemPropertiesCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -6389,8 +6389,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -6400,7 +6400,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetMemAddressRangeCb )
                     table.pfnGetMemAddressRangeCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDriverGetMemAddressRange( hDriver, ptr, pBase, pSize );
@@ -6421,7 +6421,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetMemAddressRangeCb )
                     table.pfnGetMemAddressRangeCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -6446,8 +6446,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -6457,7 +6457,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetMemIpcHandleCb )
                     table.pfnGetMemIpcHandleCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDriverGetMemIpcHandle( hDriver, ptr, pIpcHandle );
@@ -6477,7 +6477,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetMemIpcHandleCb )
                     table.pfnGetMemIpcHandleCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -6506,8 +6506,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -6517,7 +6517,7 @@ namespace instrumented
                 if( nullptr != table.pfnOpenMemIpcHandleCb )
                     table.pfnOpenMemIpcHandleCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDriverOpenMemIpcHandle( hDriver, hDevice, handle, flags, pptr );
@@ -6539,7 +6539,7 @@ namespace instrumented
                 if( nullptr != table.pfnOpenMemIpcHandleCb )
                     table.pfnOpenMemIpcHandleCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -6562,8 +6562,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -6573,7 +6573,7 @@ namespace instrumented
                 if( nullptr != table.pfnCloseMemIpcHandleCb )
                     table.pfnCloseMemIpcHandleCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDriverCloseMemIpcHandle( hDriver, ptr );
@@ -6592,7 +6592,7 @@ namespace instrumented
                 if( nullptr != table.pfnCloseMemIpcHandleCb )
                     table.pfnCloseMemIpcHandleCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -6619,8 +6619,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -6630,7 +6630,7 @@ namespace instrumented
                 if( nullptr != table.pfnCreateCb )
                     table.pfnCreateCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeModuleCreate( hDevice, desc, phModule, phBuildLog );
@@ -6651,7 +6651,7 @@ namespace instrumented
                 if( nullptr != table.pfnCreateCb )
                     table.pfnCreateCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -6672,8 +6672,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -6683,7 +6683,7 @@ namespace instrumented
                 if( nullptr != table.pfnDestroyCb )
                     table.pfnDestroyCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeModuleDestroy( hModule );
@@ -6701,7 +6701,7 @@ namespace instrumented
                 if( nullptr != table.pfnDestroyCb )
                     table.pfnDestroyCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -6722,8 +6722,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -6733,7 +6733,7 @@ namespace instrumented
                 if( nullptr != table.pfnDestroyCb )
                     table.pfnDestroyCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeModuleBuildLogDestroy( hModuleBuildLog );
@@ -6751,7 +6751,7 @@ namespace instrumented
                 if( nullptr != table.pfnDestroyCb )
                     table.pfnDestroyCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -6776,8 +6776,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -6787,7 +6787,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetStringCb )
                     table.pfnGetStringCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeModuleBuildLogGetString( hModuleBuildLog, pSize, pBuildLog );
@@ -6807,7 +6807,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetStringCb )
                     table.pfnGetStringCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -6832,8 +6832,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -6843,7 +6843,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetNativeBinaryCb )
                     table.pfnGetNativeBinaryCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeModuleGetNativeBinary( hModule, pSize, pModuleNativeBinary );
@@ -6863,7 +6863,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetNativeBinaryCb )
                     table.pfnGetNativeBinaryCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -6888,8 +6888,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -6899,7 +6899,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetGlobalPointerCb )
                     table.pfnGetGlobalPointerCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeModuleGetGlobalPointer( hModule, pGlobalName, pptr );
@@ -6919,7 +6919,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetGlobalPointerCb )
                     table.pfnGetGlobalPointerCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -6944,8 +6944,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -6955,7 +6955,7 @@ namespace instrumented
                 if( nullptr != table.pfnCreateCb )
                     table.pfnCreateCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeFunctionCreate( hModule, desc, phFunction );
@@ -6975,7 +6975,7 @@ namespace instrumented
                 if( nullptr != table.pfnCreateCb )
                     table.pfnCreateCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -6996,8 +6996,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -7007,7 +7007,7 @@ namespace instrumented
                 if( nullptr != table.pfnDestroyCb )
                     table.pfnDestroyCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeFunctionDestroy( hFunction );
@@ -7025,7 +7025,7 @@ namespace instrumented
                 if( nullptr != table.pfnDestroyCb )
                     table.pfnDestroyCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -7050,8 +7050,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -7061,7 +7061,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetFunctionPointerCb )
                     table.pfnGetFunctionPointerCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeModuleGetFunctionPointer( hModule, pFunctionName, pfnFunction );
@@ -7081,7 +7081,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetFunctionPointerCb )
                     table.pfnGetFunctionPointerCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -7108,8 +7108,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -7119,7 +7119,7 @@ namespace instrumented
                 if( nullptr != table.pfnSetGroupSizeCb )
                     table.pfnSetGroupSizeCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeFunctionSetGroupSize( hFunction, groupSizeX, groupSizeY, groupSizeZ );
@@ -7140,7 +7140,7 @@ namespace instrumented
                 if( nullptr != table.pfnSetGroupSizeCb )
                     table.pfnSetGroupSizeCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -7173,8 +7173,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -7184,7 +7184,7 @@ namespace instrumented
                 if( nullptr != table.pfnSuggestGroupSizeCb )
                     table.pfnSuggestGroupSizeCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeFunctionSuggestGroupSize( hFunction, globalSizeX, globalSizeY, globalSizeZ, groupSizeX, groupSizeY, groupSizeZ );
@@ -7208,7 +7208,7 @@ namespace instrumented
                 if( nullptr != table.pfnSuggestGroupSizeCb )
                     table.pfnSuggestGroupSizeCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -7236,8 +7236,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -7247,7 +7247,7 @@ namespace instrumented
                 if( nullptr != table.pfnSetArgumentValueCb )
                     table.pfnSetArgumentValueCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeFunctionSetArgumentValue( hFunction, argIndex, argSize, pArgValue );
@@ -7268,7 +7268,7 @@ namespace instrumented
                 if( nullptr != table.pfnSetArgumentValueCb )
                     table.pfnSetArgumentValueCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -7293,8 +7293,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -7304,7 +7304,7 @@ namespace instrumented
                 if( nullptr != table.pfnSetAttributeCb )
                     table.pfnSetAttributeCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeFunctionSetAttribute( hFunction, attr, value );
@@ -7324,7 +7324,7 @@ namespace instrumented
                 if( nullptr != table.pfnSetAttributeCb )
                     table.pfnSetAttributeCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -7349,8 +7349,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -7360,7 +7360,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetAttributeCb )
                     table.pfnGetAttributeCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeFunctionGetAttribute( hFunction, attr, pValue );
@@ -7380,7 +7380,7 @@ namespace instrumented
                 if( nullptr != table.pfnGetAttributeCb )
                     table.pfnGetAttributeCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -7412,8 +7412,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -7423,7 +7423,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendLaunchFunctionCb )
                     table.pfnAppendLaunchFunctionCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandListAppendLaunchFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
@@ -7446,7 +7446,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendLaunchFunctionCb )
                     table.pfnAppendLaunchFunctionCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -7478,8 +7478,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -7489,7 +7489,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendLaunchFunctionIndirectCb )
                     table.pfnAppendLaunchFunctionIndirectCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandListAppendLaunchFunctionIndirect( hCommandList, hFunction, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
@@ -7512,7 +7512,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendLaunchFunctionIndirectCb )
                     table.pfnAppendLaunchFunctionIndirectCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -7551,8 +7551,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -7562,7 +7562,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendLaunchMultipleFunctionsIndirectCb )
                     table.pfnAppendLaunchMultipleFunctionsIndirectCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandListAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
@@ -7587,7 +7587,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendLaunchMultipleFunctionsIndirectCb )
                     table.pfnAppendLaunchMultipleFunctionsIndirectCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -7619,8 +7619,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -7630,7 +7630,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendLaunchHostFunctionCb )
                     table.pfnAppendLaunchHostFunctionCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeCommandListAppendLaunchHostFunction( hCommandList, pfnHostFunc, pUserData, hSignalEvent, numWaitEvents, phWaitEvents );
@@ -7653,7 +7653,7 @@ namespace instrumented
                 if( nullptr != table.pfnAppendLaunchHostFunctionCb )
                     table.pfnAppendLaunchHostFunctionCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -7678,8 +7678,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -7689,7 +7689,7 @@ namespace instrumented
                 if( nullptr != table.pfnMakeMemoryResidentCb )
                     table.pfnMakeMemoryResidentCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDeviceMakeMemoryResident( hDevice, ptr, size );
@@ -7709,7 +7709,7 @@ namespace instrumented
                 if( nullptr != table.pfnMakeMemoryResidentCb )
                     table.pfnMakeMemoryResidentCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -7734,8 +7734,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -7745,7 +7745,7 @@ namespace instrumented
                 if( nullptr != table.pfnEvictMemoryCb )
                     table.pfnEvictMemoryCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDeviceEvictMemory( hDevice, ptr, size );
@@ -7765,7 +7765,7 @@ namespace instrumented
                 if( nullptr != table.pfnEvictMemoryCb )
                     table.pfnEvictMemoryCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -7788,8 +7788,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -7799,7 +7799,7 @@ namespace instrumented
                 if( nullptr != table.pfnMakeImageResidentCb )
                     table.pfnMakeImageResidentCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDeviceMakeImageResident( hDevice, hImage );
@@ -7818,7 +7818,7 @@ namespace instrumented
                 if( nullptr != table.pfnMakeImageResidentCb )
                     table.pfnMakeImageResidentCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -7841,8 +7841,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -7852,7 +7852,7 @@ namespace instrumented
                 if( nullptr != table.pfnEvictImageCb )
                     table.pfnEvictImageCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeDeviceEvictImage( hDevice, hImage );
@@ -7871,7 +7871,7 @@ namespace instrumented
                 if( nullptr != table.pfnEvictImageCb )
                     table.pfnEvictImageCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -7896,8 +7896,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -7907,7 +7907,7 @@ namespace instrumented
                 if( nullptr != table.pfnCreateCb )
                     table.pfnCreateCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeSamplerCreate( hDevice, desc, phSampler );
@@ -7927,7 +7927,7 @@ namespace instrumented
                 if( nullptr != table.pfnCreateCb )
                     table.pfnCreateCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -7948,8 +7948,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -7959,7 +7959,7 @@ namespace instrumented
                 if( nullptr != table.pfnDestroyCb )
                     table.pfnDestroyCb( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::xeSamplerDestroy( hSampler );
@@ -7977,7 +7977,7 @@ namespace instrumented
                 if( nullptr != table.pfnDestroyCb )
                     table.pfnDestroyCb( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;
@@ -8019,11 +8019,6 @@ xeGetGlobalProcAddrTable(
     else
         pDdiTable->pfnInit                                   = driver::xeInit;
 
-    if( instrumented::context.enableTracing )
-        pDdiTable->pfnGetDrivers                             = instrumented::xeGetDrivers;
-    else
-        pDdiTable->pfnGetDrivers                             = driver::xeGetDrivers;
-
     return result;
 }
 
@@ -8051,6 +8046,11 @@ xeGetDeviceProcAddrTable(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnGet                                    = instrumented::xeDeviceGet;
+    else
+        pDdiTable->pfnGet                                    = driver::xeDeviceGet;
 
     if( instrumented::context.enableTracing )
         pDdiTable->pfnGetSubDevices                          = instrumented::xeDeviceGetSubDevices;
@@ -8182,9 +8182,9 @@ xeGetDriverProcAddrTable(
     xe_result_t result = XE_RESULT_SUCCESS;
 
     if( instrumented::context.enableTracing )
-        pDdiTable->pfnGetDevices                             = instrumented::xeDriverGetDevices;
+        pDdiTable->pfnGet                                    = instrumented::xeDriverGet;
     else
-        pDdiTable->pfnGetDevices                             = driver::xeDriverGetDevices;
+        pDdiTable->pfnGet                                    = driver::xeDriverGet;
 
     if( instrumented::context.enableTracing )
         pDdiTable->pfnGetDriverVersion                       = instrumented::xeDriverGetDriverVersion;

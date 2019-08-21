@@ -1120,21 +1120,20 @@ if __use_win_types:
 else:
     _xeInit_t = CFUNCTYPE( xe_result_t, xe_init_flag_t )
 
-###############################################################################
-## @brief Function-pointer for xeGetDrivers
-if __use_win_types:
-    _xeGetDrivers_t = WINFUNCTYPE( xe_result_t, POINTER(c_ulong), POINTER(xe_driver_handle_t) )
-else:
-    _xeGetDrivers_t = CFUNCTYPE( xe_result_t, POINTER(c_ulong), POINTER(xe_driver_handle_t) )
-
 
 ###############################################################################
 ## @brief Table of Global functions pointers
 class _xe_global_dditable_t(Structure):
     _fields_ = [
-        ("pfnInit", c_void_p),                                          ## _xeInit_t
-        ("pfnGetDrivers", c_void_p)                                     ## _xeGetDrivers_t
+        ("pfnInit", c_void_p)                                           ## _xeInit_t
     ]
+
+###############################################################################
+## @brief Function-pointer for xeDeviceGet
+if __use_win_types:
+    _xeDeviceGet_t = WINFUNCTYPE( xe_result_t, xe_driver_handle_t, POINTER(c_ulong), POINTER(xe_device_handle_t) )
+else:
+    _xeDeviceGet_t = CFUNCTYPE( xe_result_t, xe_driver_handle_t, POINTER(c_ulong), POINTER(xe_device_handle_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xeDeviceGetSubDevices
@@ -1262,6 +1261,7 @@ else:
 ## @brief Table of Device functions pointers
 class _xe_device_dditable_t(Structure):
     _fields_ = [
+        ("pfnGet", c_void_p),                                           ## _xeDeviceGet_t
         ("pfnGetSubDevices", c_void_p),                                 ## _xeDeviceGetSubDevices_t
         ("pfnGetProperties", c_void_p),                                 ## _xeDeviceGetProperties_t
         ("pfnGetComputeProperties", c_void_p),                          ## _xeDeviceGetComputeProperties_t
@@ -1281,11 +1281,11 @@ class _xe_device_dditable_t(Structure):
     ]
 
 ###############################################################################
-## @brief Function-pointer for xeDriverGetDevices
+## @brief Function-pointer for xeDriverGet
 if __use_win_types:
-    _xeDriverGetDevices_t = WINFUNCTYPE( xe_result_t, xe_driver_handle_t, POINTER(c_ulong), POINTER(xe_device_handle_t) )
+    _xeDriverGet_t = WINFUNCTYPE( xe_result_t, POINTER(c_ulong), POINTER(xe_driver_handle_t) )
 else:
-    _xeDriverGetDevices_t = CFUNCTYPE( xe_result_t, xe_driver_handle_t, POINTER(c_ulong), POINTER(xe_device_handle_t) )
+    _xeDriverGet_t = CFUNCTYPE( xe_result_t, POINTER(c_ulong), POINTER(xe_driver_handle_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xeDriverGetDriverVersion
@@ -1376,7 +1376,7 @@ else:
 ## @brief Table of Driver functions pointers
 class _xe_driver_dditable_t(Structure):
     _fields_ = [
-        ("pfnGetDevices", c_void_p),                                    ## _xeDriverGetDevices_t
+        ("pfnGet", c_void_p),                                           ## _xeDriverGet_t
         ("pfnGetDriverVersion", c_void_p),                              ## _xeDriverGetDriverVersion_t
         ("pfnGetApiVersion", c_void_p),                                 ## _xeDriverGetApiVersion_t
         ("pfnGetIPCProperties", c_void_p),                              ## _xeDriverGetIPCProperties_t
@@ -1997,7 +1997,6 @@ class XE_DDI:
 
         # attach function interface to function address
         self.xeInit = _xeInit_t(self.__dditable.Global.pfnInit)
-        self.xeGetDrivers = _xeGetDrivers_t(self.__dditable.Global.pfnGetDrivers)
 
         # call driver to get function pointers
         _Device = _xe_device_dditable_t()
@@ -2007,6 +2006,7 @@ class XE_DDI:
         self.__dditable.Device = _Device
 
         # attach function interface to function address
+        self.xeDeviceGet = _xeDeviceGet_t(self.__dditable.Device.pfnGet)
         self.xeDeviceGetSubDevices = _xeDeviceGetSubDevices_t(self.__dditable.Device.pfnGetSubDevices)
         self.xeDeviceGetProperties = _xeDeviceGetProperties_t(self.__dditable.Device.pfnGetProperties)
         self.xeDeviceGetComputeProperties = _xeDeviceGetComputeProperties_t(self.__dditable.Device.pfnGetComputeProperties)
@@ -2032,7 +2032,7 @@ class XE_DDI:
         self.__dditable.Driver = _Driver
 
         # attach function interface to function address
-        self.xeDriverGetDevices = _xeDriverGetDevices_t(self.__dditable.Driver.pfnGetDevices)
+        self.xeDriverGet = _xeDriverGet_t(self.__dditable.Driver.pfnGet)
         self.xeDriverGetDriverVersion = _xeDriverGetDriverVersion_t(self.__dditable.Driver.pfnGetDriverVersion)
         self.xeDriverGetApiVersion = _xeDriverGetApiVersion_t(self.__dditable.Driver.pfnGetApiVersion)
         self.xeDriverGetIPCProperties = _xeDriverGetIPCProperties_t(self.__dditable.Driver.pfnGetIPCProperties)

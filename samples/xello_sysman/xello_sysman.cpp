@@ -337,21 +337,21 @@ int main( int argc, char *argv[] )
     {
         // Discover all the device groups and devices
         uint32_t driversCount = 0;
-        xeGetDrivers(&driversCount, nullptr);
+        xeDriverGet(&driversCount, nullptr);
         xe_driver_handle_t* allDrivers = (xe_driver_handle_t*)
             malloc(driversCount * sizeof(xe_driver_handle_t));
-        xeGetDrivers(&driversCount, allDrivers);
+        xeDriverGet(&driversCount, allDrivers);
 
         // Find the first GPU device group
         xe_driver_handle_t hDriver = nullptr;
         for(uint32_t i = 0; i < driversCount; ++i)
         {
             uint32_t deviceCount = 0;
-            xeDriverGetDevices(allDrivers[i], &deviceCount, nullptr);
+            xeDeviceGet(allDrivers[i], &deviceCount, nullptr);
 
             xe_device_handle_t* allDevices = (xe_device_handle_t*)
                 malloc(deviceCount * sizeof(xe_device_handle_t));
-            xeDriverGetDevices(allDrivers[i], &deviceCount, allDevices);
+            xeDeviceGet(allDrivers[i], &deviceCount, allDevices);
 
             for(uint32_t d = 0; d < deviceCount; ++i)
             {

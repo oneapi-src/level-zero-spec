@@ -18,7 +18,7 @@ namespace driver
     context_t::context_t()
     {
         //////////////////////////////////////////////////////////////////////////
-        xeDdiTable.Driver.pfnGetDevices = [](
+        xeDdiTable.Device.pfnGet = [](
             xe_driver_handle_t,
             uint32_t* pCount,
             xe_device_handle_t* phDevices )

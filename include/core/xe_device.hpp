@@ -177,26 +177,29 @@ namespace xe
         auto getHandle( void ) const { return m_handle; }
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Retrieves devices within a driver
+        /// @brief Retrieves driver instances
         /// 
         /// @details
+        ///     - A driver represents a collection of physical devices.
+        ///     - The application may pass nullptr for pDrivers when only querying the
+        ///       number of drivers.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// 
         /// @remarks
         ///   _Analogues_
-        ///     - **cuDeviceGet**
+        ///     - clGetPlatformIDs
         /// @throws result_t
         static void __xecall
-        GetDevices(
-            Driver* pDriver,                                ///< [in] pointer to the driver instance
-            uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
-                                                            ///< if count is zero, then the driver will update the value with the total
-                                                            ///< number of devices available.
-                                                            ///< if count is non-zero, then driver will only retrieve that number of devices.
-                                                            ///< if count is larger than the number of devices available, then the
-                                                            ///< driver will update the value with the correct number of devices available.
-            Device** ppDevices = nullptr                    ///< [in,out][optional][range(0, *pCount)] array of pointer to devices
+        Get(
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of driver instances.
+                                                            ///< if count is zero, then the loader will update the value with the total
+                                                            ///< number of drivers available.
+                                                            ///< if count is non-zero, then the loader will only retrieve that number
+                                                            ///< of drivers.
+                                                            ///< if count is larger than the number of drivers available, then the
+                                                            ///< loader will update the value with the correct number of drivers available.
+            Driver** ppDrivers = nullptr                    ///< [in,out][optional][range(0, *pCount)] array of driver instance handles
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -692,6 +695,29 @@ namespace xe
         ///////////////////////////////////////////////////////////////////////////////
         auto getHandle( void ) const { return m_handle; }
         auto getDriver( void ) const { return m_pDriver; }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Retrieves devices within a driver
+        /// 
+        /// @details
+        ///     - The application may call this function from simultaneous threads.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuDeviceGet**
+        /// @throws result_t
+        static void __xecall
+        Get(
+            Driver* pDriver,                                ///< [in] pointer to the driver instance
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
+                                                            ///< if count is zero, then the driver will update the value with the total
+                                                            ///< number of devices available.
+                                                            ///< if count is non-zero, then driver will only retrieve that number of devices.
+                                                            ///< if count is larger than the number of devices available, then the
+                                                            ///< driver will update the value with the correct number of devices available.
+            Device** ppDevices = nullptr                    ///< [in,out][optional][range(0, *pCount)] array of pointer to devices
+            );
 
         ///////////////////////////////////////////////////////////////////////////////
         /// @brief Retrieves a sub-device from a device

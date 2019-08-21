@@ -70,22 +70,22 @@ The following sample code demonstrates a basic initialization and device discove
 
     // Discover all the driver instances
     uint32_t driverCount = 0;
-    ${x}GetDrivers(&driverCount, nullptr);
+    ${x}DriverGet(&driverCount, nullptr);
 
     ${x}_driver_handle_t* allDrivers = (${x}_driver_handle_t*)
         malloc(driverCount * sizeof(${x}_driver_handle_t));
-    ${x}GetDrivers(&driverCount, allDrivers);
+    ${x}DriverGet(&driverCount, allDrivers);
 
     // Find a driver instance with a GPU device
     ${x}_driver_handle_t hDriver = nullptr;
     ${x}_device_handle_t hDevice = nullptr;
     for(uint32_t i = 0; i < driverCount; ++i) {
         uint32_t deviceCount = 0;
-        ${x}DriverGetDevices(allDrivers[i], &deviceCount, nullptr);
+        ${x}DeviceGet(allDrivers[i], &deviceCount, nullptr);
 
         ${x}_device_handle_t* allDevices = (${x}_device_handle_t*)
             malloc(deviceCount * sizeof(${x}_device_handle_t));
-        ${x}DriverGetDevices(allDrivers[i], &deviceCount, allDevices);
+        ${x}DeviceGet(allDrivers[i], &deviceCount, allDevices);
 
         for(uint32_t d = 0; d < deviceCount; ++d) {
             ${x}_device_properties_t device_properties;

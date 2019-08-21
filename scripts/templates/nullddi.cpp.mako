@@ -100,8 +100,8 @@ namespace instrumented
         };
 
         // create storage locations for callbacks
-        std::vector<void*> driverUserData;
-        driverUserData.resize( context.tracerData.size() );
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
 
         // call each callback registered
         for( uint32_t i = 0; i < context.tracerData.size(); ++i )
@@ -111,7 +111,7 @@ namespace instrumented
                 if( nullptr != table.${th.make_pfncb_name(n, tags, obj)} )
                     table.${th.make_pfncb_name(n, tags, obj)}( &in_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         result = driver::${fname}( ${", ".join(th.make_param_lines(n, tags, obj, format=["name"]))} );
@@ -129,7 +129,7 @@ namespace instrumented
                 if( nullptr != table.${th.make_pfncb_name(n, tags, obj)} )
                     table.${th.make_pfncb_name(n, tags, obj)}( &out_params, result,
                         context.tracerData[ i ].userData,
-                        &driverUserData[ i ] );
+                        &instanceUserData[ i ] );
             }
 
         return result;

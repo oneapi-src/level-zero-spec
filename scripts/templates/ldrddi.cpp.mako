@@ -59,7 +59,7 @@ namespace loader
             }
         }
 
-        %elif re.match(r"\w+GetDrivers$", th.make_func_name(n, tags, obj)):
+        %elif re.match(r"\w+DriverGet$", th.make_func_name(n, tags, obj)):
         uint32_t total_count = 0;
 
         for( auto& drv : context.drivers )

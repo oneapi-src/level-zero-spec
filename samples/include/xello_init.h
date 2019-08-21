@@ -68,10 +68,10 @@ inline xe::Device* findDevice(
 {
     // get all devices
     uint32_t deviceCount = 0;
-    xe::Driver::GetDevices( pDriver, &deviceCount );
+    xe::Device::Get( pDriver, &deviceCount );
 
     std::vector<xe::Device*> devices( deviceCount );
-    xe::Driver::GetDevices( pDriver, &deviceCount, devices.data() );
+    xe::Device::Get( pDriver, &deviceCount, devices.data() );
 
     xe::Device* found = nullptr;
 

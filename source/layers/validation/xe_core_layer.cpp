@@ -35,9 +35,9 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeGetDrivers
+    /// @brief Intercept function for xeDriverGet
     xe_result_t __xecall
-    xeGetDrivers(
+    xeDriverGet(
         uint32_t* pCount,                               ///< [in,out] pointer to the number of driver instances.
                                                         ///< if count is zero, then the loader will update the value with the total
                                                         ///< number of drivers available.
@@ -48,9 +48,9 @@ namespace layer
         xe_driver_handle_t* phDrivers                   ///< [in,out][optional][range(0, *pCount)] array of driver instance handles
         )
     {
-        auto pfnGetDrivers = context.xeDdiTable.Global.pfnGetDrivers;
+        auto pfnGet = context.xeDdiTable.Driver.pfnGet;
 
-        if( nullptr == pfnGetDrivers )
+        if( nullptr == pfnGet )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -60,7 +60,7 @@ namespace layer
 
         }
 
-        return pfnGetDrivers( pCount, phDrivers );
+        return pfnGet( pCount, phDrivers );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -142,9 +142,9 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xeDriverGetDevices
+    /// @brief Intercept function for xeDeviceGet
     xe_result_t __xecall
-    xeDriverGetDevices(
+    xeDeviceGet(
         xe_driver_handle_t hDriver,                     ///< [in] handle of the driver instance
         uint32_t* pCount,                               ///< [in,out] pointer to the number of devices.
                                                         ///< if count is zero, then the driver will update the value with the total
@@ -155,9 +155,9 @@ namespace layer
         xe_device_handle_t* phDevices                   ///< [in,out][optional][range(0, *pCount)] array of handle of devices
         )
     {
-        auto pfnGetDevices = context.xeDdiTable.Driver.pfnGetDevices;
+        auto pfnGet = context.xeDdiTable.Device.pfnGet;
 
-        if( nullptr == pfnGetDevices )
+        if( nullptr == pfnGet )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -170,7 +170,7 @@ namespace layer
 
         }
 
-        return pfnGetDevices( hDriver, pCount, phDevices );
+        return pfnGet( hDriver, pCount, phDevices );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -2755,9 +2755,6 @@ xeGetGlobalProcAddrTable(
     dditable.pfnInit                                     = pDdiTable->pfnInit;
     pDdiTable->pfnInit                                   = layer::xeInit;
 
-    dditable.pfnGetDrivers                               = pDdiTable->pfnGetDrivers;
-    pDdiTable->pfnGetDrivers                             = layer::xeGetDrivers;
-
     return result;
 }
 
@@ -2787,6 +2784,9 @@ xeGetDeviceProcAddrTable(
         return XE_RESULT_ERROR_UNSUPPORTED;
 
     xe_result_t result = XE_RESULT_SUCCESS;
+
+    dditable.pfnGet                                      = pDdiTable->pfnGet;
+    pDdiTable->pfnGet                                    = layer::xeDeviceGet;
 
     dditable.pfnGetSubDevices                            = pDdiTable->pfnGetSubDevices;
     pDdiTable->pfnGetSubDevices                          = layer::xeDeviceGetSubDevices;
@@ -2881,8 +2881,8 @@ xeGetDriverProcAddrTable(
 
     xe_result_t result = XE_RESULT_SUCCESS;
 
-    dditable.pfnGetDevices                               = pDdiTable->pfnGetDevices;
-    pDdiTable->pfnGetDevices                             = layer::xeDriverGetDevices;
+    dditable.pfnGet                                      = pDdiTable->pfnGet;
+    pDdiTable->pfnGet                                    = layer::xeDriverGet;
 
     dditable.pfnGetDriverVersion                         = pDdiTable->pfnGetDriverVersion;
     pDdiTable->pfnGetDriverVersion                       = layer::xeDriverGetDriverVersion;

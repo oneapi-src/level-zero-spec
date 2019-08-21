@@ -66,22 +66,22 @@ The following sample code demonstrates a basic initialization and device discove
 
     // Discover all the driver instances
     uint32_t driverCount = 0;
-    xeGetDrivers(&driverCount, nullptr);
+    xeDriverGet(&driverCount, nullptr);
 
     xe_driver_handle_t* allDrivers = (xe_driver_handle_t*)
         malloc(driverCount * sizeof(xe_driver_handle_t));
-    xeGetDrivers(&driverCount, allDrivers);
+    xeDriverGet(&driverCount, allDrivers);
 
     // Find a driver instance with a GPU device
     xe_driver_handle_t hDriver = nullptr;
     xe_device_handle_t hDevice = nullptr;
     for(uint32_t i = 0; i < driverCount; ++i) {
         uint32_t deviceCount = 0;
-        xeDriverGetDevices(allDrivers[i], &deviceCount, nullptr);
+        xeDeviceGet(allDrivers[i], &deviceCount, nullptr);
 
         xe_device_handle_t* allDevices = (xe_device_handle_t*)
             malloc(deviceCount * sizeof(xe_device_handle_t));
-        xeDriverGetDevices(allDrivers[i], &deviceCount, allDevices);
+        xeDeviceGet(allDrivers[i], &deviceCount, allDevices);
 
         for(uint32_t d = 0; d < deviceCount; ++d) {
             xe_device_properties_t device_properties;
