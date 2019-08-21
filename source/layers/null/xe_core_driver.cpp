@@ -1237,7 +1237,7 @@ namespace driver
     /// @brief Intercept function for xeEventPoolOpenIpcHandle
     xe_result_t __xecall
     xeEventPoolOpenIpcHandle(
-        xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC event pool handle
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver to associate with the IPC event pool handle
         xe_ipc_event_pool_handle_t hIpc,                ///< [in] IPC event handle
         xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
         )
@@ -1248,7 +1248,7 @@ namespace driver
         auto pfnOpenIpcHandle = context.xeDdiTable.EventPool.pfnOpenIpcHandle;
         if( nullptr != pfnOpenIpcHandle )
         {
-            result = pfnOpenIpcHandle( hDevice, hIpc, phEventPool );
+            result = pfnOpenIpcHandle( hDriver, hIpc, phEventPool );
         }
         else
         {
@@ -5156,7 +5156,7 @@ namespace instrumented
     /// @brief Intercept function for xeEventPoolOpenIpcHandle
     xe_result_t __xecall
     xeEventPoolOpenIpcHandle(
-        xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC event pool handle
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver to associate with the IPC event pool handle
         xe_ipc_event_pool_handle_t hIpc,                ///< [in] IPC event handle
         xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
         )
@@ -5165,7 +5165,7 @@ namespace instrumented
 
         // capture parameters
         xe_event_pool_open_ipc_handle_params_t in_params = {
-            &hDevice,
+            &hDriver,
             &hIpc,
             &phEventPool
         };
@@ -5185,11 +5185,11 @@ namespace instrumented
                         &instanceUserData[ i ] );
             }
 
-        result = driver::xeEventPoolOpenIpcHandle( hDevice, hIpc, phEventPool );
+        result = driver::xeEventPoolOpenIpcHandle( hDriver, hIpc, phEventPool );
 
         // capture parameters
         xe_event_pool_open_ipc_handle_params_t out_params = {
-            &hDevice,
+            &hDriver,
             &hIpc,
             &phEventPool
         };

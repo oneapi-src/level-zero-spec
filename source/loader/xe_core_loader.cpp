@@ -1475,7 +1475,7 @@ namespace loader
     /// @brief Intercept function for xeEventPoolOpenIpcHandle
     xe_result_t __xecall
     xeEventPoolOpenIpcHandle(
-        xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC event pool handle
+        xe_driver_handle_t hDriver,                     ///< [in] handle of the driver to associate with the IPC event pool handle
         xe_ipc_event_pool_handle_t hIpc,                ///< [in] IPC event handle
         xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
         )
@@ -1483,16 +1483,16 @@ namespace loader
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
-        auto dditable = reinterpret_cast<xe_device_object_t*>( hDevice )->dditable;
+        auto dditable = reinterpret_cast<xe_driver_object_t*>( hDriver )->dditable;
         auto pfnOpenIpcHandle = dditable->xe.EventPool.pfnOpenIpcHandle;
         if( nullptr == pfnOpenIpcHandle )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
-        hDevice = reinterpret_cast<xe_device_object_t*>( hDevice )->handle;
+        hDriver = reinterpret_cast<xe_driver_object_t*>( hDriver )->handle;
 
         // forward to device-driver
-        result = pfnOpenIpcHandle( hDevice, hIpc, phEventPool );
+        result = pfnOpenIpcHandle( hDriver, hIpc, phEventPool );
 
         try
         {

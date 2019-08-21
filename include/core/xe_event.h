@@ -255,12 +255,12 @@ xeEventPoolGetIpcHandle(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
+///         + nullptr == hDriver
 ///         + nullptr == phEventPool
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeEventPoolOpenIpcHandle(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC event pool handle
+    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver to associate with the IPC event pool handle
     xe_ipc_event_pool_handle_t hIpc,                ///< [in] IPC event handle
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
     );

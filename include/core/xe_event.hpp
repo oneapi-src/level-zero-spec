@@ -163,7 +163,7 @@ namespace xe
         /// @throws result_t
         static EventPool* __xecall
         OpenIpcHandle(
-            Device* pDevice,                                ///< [in] pointer to the device to associate with the IPC event pool handle
+            Driver* pDriver,                                ///< [in] pointer to the driver to associate with the IPC event pool handle
             ipc_event_pool_handle_t pIpc                    ///< [in] IPC event handle
             );
 

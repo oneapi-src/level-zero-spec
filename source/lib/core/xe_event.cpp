@@ -216,12 +216,12 @@ xeEventPoolGetIpcHandle(
 ///     - ::XE_RESULT_ERROR_UNINITIALIZED
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
-///         + nullptr == hDevice
+///         + nullptr == hDriver
 ///         + nullptr == phEventPool
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
 xeEventPoolOpenIpcHandle(
-    xe_device_handle_t hDevice,                     ///< [in] handle of the device to associate with the IPC event pool handle
+    xe_driver_handle_t hDriver,                     ///< [in] handle of the driver to associate with the IPC event pool handle
     xe_ipc_event_pool_handle_t hIpc,                ///< [in] IPC event handle
     xe_event_pool_handle_t* phEventPool             ///< [out] pointer handle of event pool object created
     )
@@ -230,7 +230,7 @@ xeEventPoolOpenIpcHandle(
     if( nullptr == pfnOpenIpcHandle )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnOpenIpcHandle( hDevice, hIpc, phEventPool );
+    return pfnOpenIpcHandle( hDriver, hIpc, phEventPool );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -747,14 +747,14 @@ namespace xe
     /// @throws result_t
     EventPool* __xecall
     EventPool::OpenIpcHandle(
-        Device* pDevice,                                ///< [in] pointer to the device to associate with the IPC event pool handle
+        Driver* pDriver,                                ///< [in] pointer to the driver to associate with the IPC event pool handle
         ipc_event_pool_handle_t pIpc                    ///< [in] IPC event handle
         )
     {
         xe_event_pool_handle_t hEventPool;
 
         auto result = static_cast<result_t>( ::xeEventPoolOpenIpcHandle(
-            reinterpret_cast<xe_device_handle_t>( pDevice->getHandle() ),
+            reinterpret_cast<xe_driver_handle_t>( pDriver->getHandle() ),
             *reinterpret_cast<xe_ipc_event_pool_handle_t*>( &pIpc ),
             &hEventPool ) );
 
@@ -765,7 +765,7 @@ namespace xe
 
         try
         {
-            pEventPool = new EventPool( reinterpret_cast<event_pool_handle_t>( hEventPool ), nullptr, nullptr );
+            pEventPool = new EventPool( reinterpret_cast<event_pool_handle_t>( hEventPool ), pDriver, nullptr );
         }
         catch( std::bad_alloc& )
         {

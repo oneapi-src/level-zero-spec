@@ -1102,14 +1102,20 @@ The following code examples demonstrate how to use the event IPC APIs:
  
     // open event pool
     ${x}_event_pool_handle_t hEventPool;
-    ${x}EventPoolOpenIpcHandle(hDevice, hIpcEvent, &hEventPool);
+    ${x}EventPoolOpenIpcHandle(hDriver, hIpcEventPool, &hEventPool);
 ```
 
 3. Each process may now refer to the same device event allocation via its handle.  
     a. receiving process creates event at location 
 ```c
     ${x}_event_handle_t hEvent;
-    ${x}EventCreate(hEventPool, 5, &hEvent);
+    ${x}_event_desc_t eventDesc = {
+        ${X}_EVENT_DESC_VERSION_CURRENT,
+        5,
+        ${X}_EVENT_SCOPE_FLAG_NONE,
+        ${X}_EVENT_SCOPE_FLAG_HOST, // ensure memory coherency across device and Host after event signalled
+    };
+    ${x}EventCreate(hEventPool, &eventDesc, &hEvent);
 
     // submit function and signal event when complete
     ${x}CommandListAppendLaunchFunction(hCommandList, hFunction, &args, hEvent, 0, nullptr);
@@ -1119,7 +1125,13 @@ The following code examples demonstrate how to use the event IPC APIs:
     b. sending process creates event at same location
 ```c
     ${x}_event_handle_t hEvent;
-    ${x}EventCreate(hEventPool, 5, &hEvent);
+    ${x}_event_desc_t eventDesc = {
+        ${X}_EVENT_DESC_VERSION_CURRENT,
+        5,
+        ${X}_EVENT_SCOPE_FLAG_NONE,
+        ${X}_EVENT_SCOPE_FLAG_HOST, // ensure memory coherency across device and Host after event signalled
+    };
+    ${x}EventCreate(hEventPool, &eventDesc, &hEvent);
 
     ${x}EventHostSynchronize(hEvent, UINT32_MAX);
 ```

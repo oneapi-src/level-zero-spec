@@ -1823,7 +1823,7 @@ typedef void (__xecall *xe_pfnEventPoolGetIpcHandleCb_t)(
 ///     allowing the callback the ability to modify the parameter's value
 typedef struct _xe_event_pool_open_ipc_handle_params_t
 {
-    xe_device_handle_t* phDevice;
+    xe_driver_handle_t* phDriver;
     xe_ipc_event_pool_handle_t* phIpc;
     xe_event_pool_handle_t** pphEventPool;
 } xe_event_pool_open_ipc_handle_params_t;

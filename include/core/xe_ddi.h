@@ -854,7 +854,7 @@ typedef xe_result_t (__xecall *xe_pfnEventPoolGetIpcHandle_t)(
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeEventPoolOpenIpcHandle 
 typedef xe_result_t (__xecall *xe_pfnEventPoolOpenIpcHandle_t)(
-    xe_device_handle_t,
+    xe_driver_handle_t,
     xe_ipc_event_pool_handle_t,
     xe_event_pool_handle_t*
     );

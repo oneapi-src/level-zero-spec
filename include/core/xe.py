@@ -1692,9 +1692,9 @@ else:
 ###############################################################################
 ## @brief Function-pointer for xeEventPoolOpenIpcHandle
 if __use_win_types:
-    _xeEventPoolOpenIpcHandle_t = WINFUNCTYPE( xe_result_t, xe_device_handle_t, xe_ipc_event_pool_handle_t, POINTER(xe_event_pool_handle_t) )
+    _xeEventPoolOpenIpcHandle_t = WINFUNCTYPE( xe_result_t, xe_driver_handle_t, xe_ipc_event_pool_handle_t, POINTER(xe_event_pool_handle_t) )
 else:
-    _xeEventPoolOpenIpcHandle_t = CFUNCTYPE( xe_result_t, xe_device_handle_t, xe_ipc_event_pool_handle_t, POINTER(xe_event_pool_handle_t) )
+    _xeEventPoolOpenIpcHandle_t = CFUNCTYPE( xe_result_t, xe_driver_handle_t, xe_ipc_event_pool_handle_t, POINTER(xe_event_pool_handle_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xeEventPoolCloseIpcHandle

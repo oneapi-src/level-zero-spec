@@ -1096,14 +1096,20 @@ The following code examples demonstrate how to use the event IPC APIs:
  
     // open event pool
     xe_event_pool_handle_t hEventPool;
-    xeEventPoolOpenIpcHandle(hDevice, hIpcEvent, &hEventPool);
+    xeEventPoolOpenIpcHandle(hDriver, hIpcEventPool, &hEventPool);
 ```
 
 3. Each process may now refer to the same device event allocation via its handle.  
     a. receiving process creates event at location 
 ```c
     xe_event_handle_t hEvent;
-    xeEventCreate(hEventPool, 5, &hEvent);
+    xe_event_desc_t eventDesc = {
+        XE_EVENT_DESC_VERSION_CURRENT,
+        5,
+        XE_EVENT_SCOPE_FLAG_NONE,
+        XE_EVENT_SCOPE_FLAG_HOST, // ensure memory coherency across device and Host after event signalled
+    };
+    xeEventCreate(hEventPool, &eventDesc, &hEvent);
 
     // submit function and signal event when complete
     xeCommandListAppendLaunchFunction(hCommandList, hFunction, &args, hEvent, 0, nullptr);
@@ -1113,7 +1119,13 @@ The following code examples demonstrate how to use the event IPC APIs:
     b. sending process creates event at same location
 ```c
     xe_event_handle_t hEvent;
-    xeEventCreate(hEventPool, 5, &hEvent);
+    xe_event_desc_t eventDesc = {
+        XE_EVENT_DESC_VERSION_CURRENT,
+        5,
+        XE_EVENT_SCOPE_FLAG_NONE,
+        XE_EVENT_SCOPE_FLAG_HOST, // ensure memory coherency across device and Host after event signalled
+    };
+    xeEventCreate(hEventPool, &eventDesc, &hEvent);
 
     xeEventHostSynchronize(hEvent, UINT32_MAX);
 ```
