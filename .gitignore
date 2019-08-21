@@ -51,9 +51,7 @@
 *.app
 
 # Debug files
-scripts/core/*.json
-scripts/extended/*.json
-scripts/tools/*.json
+scripts/**/*.json
 
 # Generated docs
 html/
