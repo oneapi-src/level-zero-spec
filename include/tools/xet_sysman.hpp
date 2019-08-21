@@ -110,12 +110,12 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief GPU activities that can be monitored
-        enum class activity_type_t
+        /// @brief Accelerator engine groups
+        enum class engine_group_t
         {
-            GLOBAL = 0,                                     ///< Overall activity of all accelerators on the device.
-            COMPUTE,                                        ///< Activity of all compute accelerators on the device.
-            MEDIA,                                          ///< Activity of all media accelerators on the device.
+            ALL = 0,                                        ///< Access information about all engines combined.
+            COMPUTE,                                        ///< Access information about compute engines.
+            MEDIA,                                          ///< Access information about media engines.
 
         };
 
@@ -436,16 +436,10 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Activity properties
-        /// 
-        /// @details
-        ///     - Provides the set of frequencies as a list and as a range/step.
-        ///     - It is generally recommended that applications choose frequencies from
-        ///       the list. However applications can also construct the list themselves
-        ///       using the range/steps provided.
-        struct activity_properties_t
+        /// @brief Engine group properties
+        struct engine_properties_t
         {
-            activity_type_t type;                           ///< [out] The type of activity domain
+            engine_group_t type;                            ///< [out] The engine group
             xe::bool_t onSubdevice;                         ///< [out] True if this resource is located on a sub-device; false means
                                                             ///< that the resource is on the device of the calling SMI handle
             xe::Driver::device_uuid_t subdeviceUuid;        ///< [out] If onSubdevice is true, this gives the UUID of the sub-device
@@ -453,13 +447,13 @@ namespace xet
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Activity counters
+        /// @brief Engine counters
         /// 
         /// @details
         ///     - Percent utilization is calculated by taking two snapshots (s1, s2) and
         ///       using the equation: %util = (s2.activeTime - s1.activeTime) /
         ///       (s2.timestamp - s1.timestamp)
-        struct activity_stats_t
+        struct engine_stats_t
         {
             uint64_t activeTime;                            ///< [out] Monotonic counter for time in microseconds that this resource is
                                                             ///< actively running workloads.
@@ -1200,7 +1194,7 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the number of activity domains that can be monitored on this
+        /// @brief Get the number of engine groups that can be monitored on this
         ///        device/sub-device
         /// 
         /// @details
@@ -1208,37 +1202,36 @@ namespace xet
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
-        ActivityGetCount(
-            uint32_t* pCount                                ///< [in] The number of activity domains.
+        EngineGetCount(
+            uint32_t* pCount                                ///< [in] The number of engine groups.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get activity properties - type of activity counter, if the activity
-        ///        counter is on a sub-device
+        /// @brief Get engine group properties
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
-        ActivityGetProperties(
-            uint32_t activityIndex,                         ///< [in] The index of the activity domain (0 ...
-                                                            ///< [::xetSysmanActivityGetCount() - 1]).
-            activity_properties_t* pProperties              ///< [in] The properties for the specified activity domain.
+        EngineGetProperties(
+            uint32_t engineIndex,                           ///< [in] The index of the engine group (0 ... [::xetSysmanEngineGetCount()
+                                                            ///< - 1]).
+            engine_properties_t* pProperties                ///< [in] The properties for the specified engine group.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get the activity counters of a part of the device
+        /// @brief Get the activity stats for an engine group
         /// 
         /// @details
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
-        ActivityGetStats(
-            uint32_t activityIndex,                         ///< [in] The index of the activity domain (0 ...
-                                                            ///< [::xetSysmanActivityGetCount() - 1]).
-            activity_stats_t* pStats                        ///< [in] Will contain a snapshot of the activity counters.
+        EngineGetActivity(
+            uint32_t engineIndex,                           ///< [in] The index of the engine group (0 ... [::xetSysmanEngineGetCount()
+                                                            ///< - 1]).
+            engine_stats_t* pStats                          ///< [in] Will contain a snapshot of the engine group activity counters.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2040,16 +2033,16 @@ namespace xet
     std::string to_string( const Sysman::freq_throttle_time_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::activity_type_t to std::string
-    std::string to_string( const Sysman::activity_type_t val );
+    /// @brief Converts Sysman::engine_group_t to std::string
+    std::string to_string( const Sysman::engine_group_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::activity_properties_t to std::string
-    std::string to_string( const Sysman::activity_properties_t val );
+    /// @brief Converts Sysman::engine_properties_t to std::string
+    std::string to_string( const Sysman::engine_properties_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::activity_stats_t to std::string
-    std::string to_string( const Sysman::activity_stats_t val );
+    /// @brief Converts Sysman::engine_stats_t to std::string
+    std::string to_string( const Sysman::engine_stats_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::mem_type_t to std::string

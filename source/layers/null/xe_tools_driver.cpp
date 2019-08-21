@@ -1103,20 +1103,20 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanActivityGetCount
+    /// @brief Intercept function for xetSysmanEngineGetCount
     xe_result_t __xecall
-    xetSysmanActivityGetCount(
+    xetSysmanEngineGetCount(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of activity domains.
+        uint32_t* pCount                                ///< [in] The number of engine groups.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnActivityGetCount = context.xetDdiTable.Sysman.pfnActivityGetCount;
-        if( nullptr != pfnActivityGetCount )
+        auto pfnEngineGetCount = context.xetDdiTable.Sysman.pfnEngineGetCount;
+        if( nullptr != pfnEngineGetCount )
         {
-            result = pfnActivityGetCount( hSysman, pCount );
+            result = pfnEngineGetCount( hSysman, pCount );
         }
         else
         {
@@ -1127,22 +1127,22 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanActivityGetProperties
+    /// @brief Intercept function for xetSysmanEngineGetProperties
     xe_result_t __xecall
-    xetSysmanActivityGetProperties(
+    xetSysmanEngineGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t activityIndex,                         ///< [in] The index of the activity domain (0 ...
-                                                        ///< [::xetSysmanActivityGetCount() - 1]).
-        xet_activity_properties_t* pProperties          ///< [in] The properties for the specified activity domain.
+        uint32_t engineIndex,                           ///< [in] The index of the engine group (0 ... [::xetSysmanEngineGetCount()
+                                                        ///< - 1]).
+        xet_engine_properties_t* pProperties            ///< [in] The properties for the specified engine group.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnActivityGetProperties = context.xetDdiTable.Sysman.pfnActivityGetProperties;
-        if( nullptr != pfnActivityGetProperties )
+        auto pfnEngineGetProperties = context.xetDdiTable.Sysman.pfnEngineGetProperties;
+        if( nullptr != pfnEngineGetProperties )
         {
-            result = pfnActivityGetProperties( hSysman, activityIndex, pProperties );
+            result = pfnEngineGetProperties( hSysman, engineIndex, pProperties );
         }
         else
         {
@@ -1153,22 +1153,22 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanActivityGetStats
+    /// @brief Intercept function for xetSysmanEngineGetActivity
     xe_result_t __xecall
-    xetSysmanActivityGetStats(
+    xetSysmanEngineGetActivity(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t activityIndex,                         ///< [in] The index of the activity domain (0 ...
-                                                        ///< [::xetSysmanActivityGetCount() - 1]).
-        xet_activity_stats_t* pStats                    ///< [in] Will contain a snapshot of the activity counters.
+        uint32_t engineIndex,                           ///< [in] The index of the engine group (0 ... [::xetSysmanEngineGetCount()
+                                                        ///< - 1]).
+        xet_engine_stats_t* pStats                      ///< [in] Will contain a snapshot of the engine group activity counters.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnActivityGetStats = context.xetDdiTable.Sysman.pfnActivityGetStats;
-        if( nullptr != pfnActivityGetStats )
+        auto pfnEngineGetActivity = context.xetDdiTable.Sysman.pfnEngineGetActivity;
+        if( nullptr != pfnEngineGetActivity )
         {
-            result = pfnActivityGetStats( hSysman, activityIndex, pStats );
+            result = pfnEngineGetActivity( hSysman, engineIndex, pStats );
         }
         else
         {
@@ -3054,11 +3054,11 @@ xetGetSysmanProcAddrTable(
 
     pDdiTable->pfnFrequencyGetThrottleTime               = driver::xetSysmanFrequencyGetThrottleTime;
 
-    pDdiTable->pfnActivityGetCount                       = driver::xetSysmanActivityGetCount;
+    pDdiTable->pfnEngineGetCount                         = driver::xetSysmanEngineGetCount;
 
-    pDdiTable->pfnActivityGetProperties                  = driver::xetSysmanActivityGetProperties;
+    pDdiTable->pfnEngineGetProperties                    = driver::xetSysmanEngineGetProperties;
 
-    pDdiTable->pfnActivityGetStats                       = driver::xetSysmanActivityGetStats;
+    pDdiTable->pfnEngineGetActivity                      = driver::xetSysmanEngineGetActivity;
 
     pDdiTable->pfnMemoryGetCount                         = driver::xetSysmanMemoryGetCount;
 

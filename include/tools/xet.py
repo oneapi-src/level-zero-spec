@@ -573,41 +573,35 @@ class xet_freq_throttle_time_t(Structure):
     ]
 
 ###############################################################################
-## @brief GPU activities that can be monitored
-class xet_activity_type_v(IntEnum):
-    GLOBAL = 0                                      ## Overall activity of all accelerators on the device.
-    COMPUTE = auto()                                ## Activity of all compute accelerators on the device.
-    MEDIA = auto()                                  ## Activity of all media accelerators on the device.
+## @brief Accelerator engine groups
+class xet_engine_group_v(IntEnum):
+    ALL = 0                                         ## Access information about all engines combined.
+    COMPUTE = auto()                                ## Access information about compute engines.
+    MEDIA = auto()                                  ## Access information about media engines.
 
-class xet_activity_type_t(c_int):
+class xet_engine_group_t(c_int):
     def __str__(self):
-        return str(xet_activity_type_v(value))
+        return str(xet_engine_group_v(value))
 
 
 ###############################################################################
-## @brief Activity properties
-## 
-## @details
-##     - Provides the set of frequencies as a list and as a range/step.
-##     - It is generally recommended that applications choose frequencies from
-##       the list. However applications can also construct the list themselves
-##       using the range/steps provided.
-class xet_activity_properties_t(Structure):
+## @brief Engine group properties
+class xet_engine_properties_t(Structure):
     _fields_ = [
-        ("type", xet_activity_type_t),                                  ## [out] The type of activity domain
+        ("type", xet_engine_group_t),                                   ## [out] The engine group
         ("onSubdevice", xe_bool_t),                                     ## [out] True if this resource is located on a sub-device; false means
                                                                         ## that the resource is on the device of the calling SMI handle
         ("subdeviceUuid", xe_device_uuid_t)                             ## [out] If onSubdevice is true, this gives the UUID of the sub-device
     ]
 
 ###############################################################################
-## @brief Activity counters
+## @brief Engine counters
 ## 
 ## @details
 ##     - Percent utilization is calculated by taking two snapshots (s1, s2) and
 ##       using the equation: %util = (s2.activeTime - s1.activeTime) /
 ##       (s2.timestamp - s1.timestamp)
-class xet_activity_stats_t(Structure):
+class xet_engine_stats_t(Structure):
     _fields_ = [
         ("activeTime", c_ulonglong),                                    ## [out] Monotonic counter for time in microseconds that this resource is
                                                                         ## actively running workloads.
@@ -1681,25 +1675,25 @@ else:
     _xetSysmanFrequencyGetThrottleTime_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_freq_throttle_time_t) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanActivityGetCount
+## @brief Function-pointer for xetSysmanEngineGetCount
 if __use_win_types:
-    _xetSysmanActivityGetCount_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
+    _xetSysmanEngineGetCount_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
 else:
-    _xetSysmanActivityGetCount_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
+    _xetSysmanEngineGetCount_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanActivityGetProperties
+## @brief Function-pointer for xetSysmanEngineGetProperties
 if __use_win_types:
-    _xetSysmanActivityGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_activity_properties_t) )
+    _xetSysmanEngineGetProperties_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_engine_properties_t) )
 else:
-    _xetSysmanActivityGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_activity_properties_t) )
+    _xetSysmanEngineGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_engine_properties_t) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanActivityGetStats
+## @brief Function-pointer for xetSysmanEngineGetActivity
 if __use_win_types:
-    _xetSysmanActivityGetStats_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_activity_stats_t) )
+    _xetSysmanEngineGetActivity_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_engine_stats_t) )
 else:
-    _xetSysmanActivityGetStats_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_activity_stats_t) )
+    _xetSysmanEngineGetActivity_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong, POINTER(xet_engine_stats_t) )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanMemoryGetCount
@@ -2081,9 +2075,9 @@ class _xet_sysman_dditable_t(Structure):
         ("pfnFrequencySetRange", c_void_p),                             ## _xetSysmanFrequencySetRange_t
         ("pfnFrequencyGetState", c_void_p),                             ## _xetSysmanFrequencyGetState_t
         ("pfnFrequencyGetThrottleTime", c_void_p),                      ## _xetSysmanFrequencyGetThrottleTime_t
-        ("pfnActivityGetCount", c_void_p),                              ## _xetSysmanActivityGetCount_t
-        ("pfnActivityGetProperties", c_void_p),                         ## _xetSysmanActivityGetProperties_t
-        ("pfnActivityGetStats", c_void_p),                              ## _xetSysmanActivityGetStats_t
+        ("pfnEngineGetCount", c_void_p),                                ## _xetSysmanEngineGetCount_t
+        ("pfnEngineGetProperties", c_void_p),                           ## _xetSysmanEngineGetProperties_t
+        ("pfnEngineGetActivity", c_void_p),                             ## _xetSysmanEngineGetActivity_t
         ("pfnMemoryGetCount", c_void_p),                                ## _xetSysmanMemoryGetCount_t
         ("pfnMemoryGetProperties", c_void_p),                           ## _xetSysmanMemoryGetProperties_t
         ("pfnMemoryGetBandwidth", c_void_p),                            ## _xetSysmanMemoryGetBandwidth_t
@@ -2320,9 +2314,9 @@ class XET_DDI:
         self.xetSysmanFrequencySetRange = _xetSysmanFrequencySetRange_t(self.__dditable.Sysman.pfnFrequencySetRange)
         self.xetSysmanFrequencyGetState = _xetSysmanFrequencyGetState_t(self.__dditable.Sysman.pfnFrequencyGetState)
         self.xetSysmanFrequencyGetThrottleTime = _xetSysmanFrequencyGetThrottleTime_t(self.__dditable.Sysman.pfnFrequencyGetThrottleTime)
-        self.xetSysmanActivityGetCount = _xetSysmanActivityGetCount_t(self.__dditable.Sysman.pfnActivityGetCount)
-        self.xetSysmanActivityGetProperties = _xetSysmanActivityGetProperties_t(self.__dditable.Sysman.pfnActivityGetProperties)
-        self.xetSysmanActivityGetStats = _xetSysmanActivityGetStats_t(self.__dditable.Sysman.pfnActivityGetStats)
+        self.xetSysmanEngineGetCount = _xetSysmanEngineGetCount_t(self.__dditable.Sysman.pfnEngineGetCount)
+        self.xetSysmanEngineGetProperties = _xetSysmanEngineGetProperties_t(self.__dditable.Sysman.pfnEngineGetProperties)
+        self.xetSysmanEngineGetActivity = _xetSysmanEngineGetActivity_t(self.__dditable.Sysman.pfnEngineGetActivity)
         self.xetSysmanMemoryGetCount = _xetSysmanMemoryGetCount_t(self.__dditable.Sysman.pfnMemoryGetCount)
         self.xetSysmanMemoryGetProperties = _xetSysmanMemoryGetProperties_t(self.__dditable.Sysman.pfnMemoryGetProperties)
         self.xetSysmanMemoryGetBandwidth = _xetSysmanMemoryGetBandwidth_t(self.__dditable.Sysman.pfnMemoryGetBandwidth)

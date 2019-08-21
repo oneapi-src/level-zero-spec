@@ -364,8 +364,8 @@ void FixGpuFrequency(xet_sysman_handle_t hSysmanDevice, uint32_t FreqDomainIndex
 }
 ```
 
-## <a name="sma">Activity</a>
-It is possible to monitor the activity of various accelerator assets on the device - the list if provided in the enumerator ::xet_activity_type_t.
+## <a name="sma">Engine groups</a>
+It is possible to monitor the activity of various accelerator assets on the device - the list is provided in the enumerator ::xet_engine_group_t.
 By taking two snapshots of the activity counters, it is possible to calculate the average utilization of different parts of the device. Currently
 it is possible to get the utilization across all accelerator assets in the device or for only the compute assets and the media assets separately.
 
@@ -373,7 +373,7 @@ The following functions are provided:
 
 | Function                               | Device behavior | Sub-device behavior |
 | :---                                   | :---        | :---        |
-| ::xetSysmanActivityGetStats()         | Returns the activity counters for the specified ::xet_activity_type_t. If there are sub-devices, this will return the average across all of them. | Returns the activity counters for the specified ::xet_activity_type_t in the sub-device. |
+| ::xetSysmanEngineGetActivity()         | Returns the activity counters for the specified ::xet_engine_group_t. If there are sub-devices, this will return the average across all of them. | Returns the activity counters for the specified ::xet_engine_group_t in the sub-device. |
 
 
 ## <a name="smm">Memory</a>

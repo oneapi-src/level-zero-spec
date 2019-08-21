@@ -151,12 +151,12 @@ typedef struct _xet_freq_state_t xet_freq_state_t;
 typedef struct _xet_freq_throttle_time_t xet_freq_throttle_time_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_activity_properties_t
-typedef struct _xet_activity_properties_t xet_activity_properties_t;
+/// @brief Forward-declare xet_engine_properties_t
+typedef struct _xet_engine_properties_t xet_engine_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Forward-declare xet_activity_stats_t
-typedef struct _xet_activity_stats_t xet_activity_stats_t;
+/// @brief Forward-declare xet_engine_stats_t
+typedef struct _xet_engine_stats_t xet_engine_stats_t;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Forward-declare xet_mem_properties_t

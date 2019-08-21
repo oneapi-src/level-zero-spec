@@ -671,40 +671,34 @@ xetSysmanFrequencyGetThrottleTime(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief GPU activities that can be monitored
-typedef enum _xet_activity_type_t
+/// @brief Accelerator engine groups
+typedef enum _xet_engine_group_t
 {
-    XET_ACTIVITY_TYPE_GLOBAL = 0,                   ///< Overall activity of all accelerators on the device.
-    XET_ACTIVITY_TYPE_COMPUTE,                      ///< Activity of all compute accelerators on the device.
-    XET_ACTIVITY_TYPE_MEDIA,                        ///< Activity of all media accelerators on the device.
+    XET_ENGINE_GROUP_ALL = 0,                       ///< Access information about all engines combined.
+    XET_ENGINE_GROUP_COMPUTE,                       ///< Access information about compute engines.
+    XET_ENGINE_GROUP_MEDIA,                         ///< Access information about media engines.
 
-} xet_activity_type_t;
+} xet_engine_group_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Activity properties
-/// 
-/// @details
-///     - Provides the set of frequencies as a list and as a range/step.
-///     - It is generally recommended that applications choose frequencies from
-///       the list. However applications can also construct the list themselves
-///       using the range/steps provided.
-typedef struct _xet_activity_properties_t
+/// @brief Engine group properties
+typedef struct _xet_engine_properties_t
 {
-    xet_activity_type_t type;                       ///< [out] The type of activity domain
+    xet_engine_group_t type;                        ///< [out] The engine group
     xe_bool_t onSubdevice;                          ///< [out] True if this resource is located on a sub-device; false means
                                                     ///< that the resource is on the device of the calling SMI handle
     xe_device_uuid_t subdeviceUuid;                 ///< [out] If onSubdevice is true, this gives the UUID of the sub-device
 
-} xet_activity_properties_t;
+} xet_engine_properties_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Activity counters
+/// @brief Engine counters
 /// 
 /// @details
 ///     - Percent utilization is calculated by taking two snapshots (s1, s2) and
 ///       using the equation: %util = (s2.activeTime - s1.activeTime) /
 ///       (s2.timestamp - s1.timestamp)
-typedef struct _xet_activity_stats_t
+typedef struct _xet_engine_stats_t
 {
     uint64_t activeTime;                            ///< [out] Monotonic counter for time in microseconds that this resource is
                                                     ///< actively running workloads.
@@ -716,10 +710,10 @@ typedef struct _xet_activity_stats_t
                                                     ///< Never take the delta of this timestamp with the timestamp from a
                                                     ///< different structure.
 
-} xet_activity_stats_t;
+} xet_engine_stats_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the number of activity domains that can be monitored on this
+/// @brief Get the number of engine groups that can be monitored on this
 ///        device/sub-device
 /// 
 /// @details
@@ -735,14 +729,13 @@ typedef struct _xet_activity_stats_t
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanActivityGetCount(
+xetSysmanEngineGetCount(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t* pCount                                ///< [in] The number of activity domains.
+    uint32_t* pCount                                ///< [in] The number of engine groups.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get activity properties - type of activity counter, if the activity
-///        counter is on a sub-device
+/// @brief Get engine group properties
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -757,15 +750,15 @@ xetSysmanActivityGetCount(
 ///         + nullptr == pProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanActivityGetProperties(
+xetSysmanEngineGetProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t activityIndex,                         ///< [in] The index of the activity domain (0 ...
-                                                    ///< [::xetSysmanActivityGetCount() - 1]).
-    xet_activity_properties_t* pProperties          ///< [in] The properties for the specified activity domain.
+    uint32_t engineIndex,                           ///< [in] The index of the engine group (0 ... [::xetSysmanEngineGetCount()
+                                                    ///< - 1]).
+    xet_engine_properties_t* pProperties            ///< [in] The properties for the specified engine group.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the activity counters of a part of the device
+/// @brief Get the activity stats for an engine group
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -780,11 +773,11 @@ xetSysmanActivityGetProperties(
 ///         + nullptr == pStats
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanActivityGetStats(
+xetSysmanEngineGetActivity(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t activityIndex,                         ///< [in] The index of the activity domain (0 ...
-                                                    ///< [::xetSysmanActivityGetCount() - 1]).
-    xet_activity_stats_t* pStats                    ///< [in] Will contain a snapshot of the activity counters.
+    uint32_t engineIndex,                           ///< [in] The index of the engine group (0 ... [::xetSysmanEngineGetCount()
+                                                    ///< - 1]).
+    xet_engine_stats_t* pStats                      ///< [in] Will contain a snapshot of the engine group activity counters.
     );
 
 ///////////////////////////////////////////////////////////////////////////////

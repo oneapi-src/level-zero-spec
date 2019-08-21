@@ -1239,80 +1239,80 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanActivityGetCount
+    /// @brief Intercept function for xetSysmanEngineGetCount
     xe_result_t __xecall
-    xetSysmanActivityGetCount(
+    xetSysmanEngineGetCount(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of activity domains.
+        uint32_t* pCount                                ///< [in] The number of engine groups.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnActivityGetCount = dditable->xet.Sysman.pfnActivityGetCount;
-        if( nullptr == pfnActivityGetCount )
+        auto pfnEngineGetCount = dditable->xet.Sysman.pfnEngineGetCount;
+        if( nullptr == pfnEngineGetCount )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnActivityGetCount( hSysman, pCount );
+        result = pfnEngineGetCount( hSysman, pCount );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanActivityGetProperties
+    /// @brief Intercept function for xetSysmanEngineGetProperties
     xe_result_t __xecall
-    xetSysmanActivityGetProperties(
+    xetSysmanEngineGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t activityIndex,                         ///< [in] The index of the activity domain (0 ...
-                                                        ///< [::xetSysmanActivityGetCount() - 1]).
-        xet_activity_properties_t* pProperties          ///< [in] The properties for the specified activity domain.
+        uint32_t engineIndex,                           ///< [in] The index of the engine group (0 ... [::xetSysmanEngineGetCount()
+                                                        ///< - 1]).
+        xet_engine_properties_t* pProperties            ///< [in] The properties for the specified engine group.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnActivityGetProperties = dditable->xet.Sysman.pfnActivityGetProperties;
-        if( nullptr == pfnActivityGetProperties )
+        auto pfnEngineGetProperties = dditable->xet.Sysman.pfnEngineGetProperties;
+        if( nullptr == pfnEngineGetProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnActivityGetProperties( hSysman, activityIndex, pProperties );
+        result = pfnEngineGetProperties( hSysman, engineIndex, pProperties );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanActivityGetStats
+    /// @brief Intercept function for xetSysmanEngineGetActivity
     xe_result_t __xecall
-    xetSysmanActivityGetStats(
+    xetSysmanEngineGetActivity(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t activityIndex,                         ///< [in] The index of the activity domain (0 ...
-                                                        ///< [::xetSysmanActivityGetCount() - 1]).
-        xet_activity_stats_t* pStats                    ///< [in] Will contain a snapshot of the activity counters.
+        uint32_t engineIndex,                           ///< [in] The index of the engine group (0 ... [::xetSysmanEngineGetCount()
+                                                        ///< - 1]).
+        xet_engine_stats_t* pStats                      ///< [in] Will contain a snapshot of the engine group activity counters.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnActivityGetStats = dditable->xet.Sysman.pfnActivityGetStats;
-        if( nullptr == pfnActivityGetStats )
+        auto pfnEngineGetActivity = dditable->xet.Sysman.pfnEngineGetActivity;
+        if( nullptr == pfnEngineGetActivity )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnActivityGetStats( hSysman, activityIndex, pStats );
+        result = pfnEngineGetActivity( hSysman, engineIndex, pStats );
 
         return result;
     }
@@ -3618,9 +3618,9 @@ xetGetSysmanProcAddrTable(
             pDdiTable->pfnFrequencySetRange                        = loader::xetSysmanFrequencySetRange;
             pDdiTable->pfnFrequencyGetState                        = loader::xetSysmanFrequencyGetState;
             pDdiTable->pfnFrequencyGetThrottleTime                 = loader::xetSysmanFrequencyGetThrottleTime;
-            pDdiTable->pfnActivityGetCount                         = loader::xetSysmanActivityGetCount;
-            pDdiTable->pfnActivityGetProperties                    = loader::xetSysmanActivityGetProperties;
-            pDdiTable->pfnActivityGetStats                         = loader::xetSysmanActivityGetStats;
+            pDdiTable->pfnEngineGetCount                           = loader::xetSysmanEngineGetCount;
+            pDdiTable->pfnEngineGetProperties                      = loader::xetSysmanEngineGetProperties;
+            pDdiTable->pfnEngineGetActivity                        = loader::xetSysmanEngineGetActivity;
             pDdiTable->pfnMemoryGetCount                           = loader::xetSysmanMemoryGetCount;
             pDdiTable->pfnMemoryGetProperties                      = loader::xetSysmanMemoryGetProperties;
             pDdiTable->pfnMemoryGetBandwidth                       = loader::xetSysmanMemoryGetBandwidth;

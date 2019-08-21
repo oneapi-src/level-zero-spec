@@ -627,29 +627,26 @@ params:
 
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "GPU activities that can be monitored"
+desc: "Accelerator engine groups"
 class: $tSysman
-name: $t_activity_type_t
+name: $t_engine_group_t
 etors:
-    - name: $T_ACTIVITY_TYPE_GLOBAL
+    - name: $T_ENGINE_GROUP_ALL
       value: "0"
-      desc: "Overall activity of all accelerators on the device."
-    - name: $T_ACTIVITY_TYPE_COMPUTE
-      desc: "Activity of all compute accelerators on the device."
-    - name: $T_ACTIVITY_TYPE_MEDIA
-      desc: "Activity of all media accelerators on the device."
+      desc: "Access information about all engines combined."
+    - name: $T_ENGINE_GROUP_COMPUTE
+      desc: "Access information about compute engines."
+    - name: $T_ENGINE_GROUP_MEDIA
+      desc: "Access information about media engines."
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Activity properties"
+desc: "Engine group properties"
 class: $tSysman
-name: $t_activity_properties_t
-details:
-    - "Provides the set of frequencies as a list and as a range/step."
-    - "It is generally recommended that applications choose frequencies from the list. However applications can also construct the list themselves using the range/steps provided."
+name: $t_engine_properties_t
 members:
-    - type: $t_activity_type_t
+    - type: $t_engine_group_t
       name: "type"
-      desc: "[out] The type of activity domain"
+      desc: "[out] The engine group"
     - type: $x_bool_t
       name: "onSubdevice"
       desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling SMI handle"
@@ -658,11 +655,11 @@ members:
       desc: "[out] If onSubdevice is true, this gives the UUID of the sub-device"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Activity counters"
+desc: "Engine counters"
 details:
     - "Percent utilization is calculated by taking two snapshots (s1, s2) and using the equation: %util = (s2.activeTime - s1.activeTime) / (s2.timestamp - s1.timestamp)"
 class: $tSysman
-name: $t_activity_stats_t
+name: $t_engine_stats_t
 members:
     - type: uint64_t
       name: "activeTime"
@@ -676,9 +673,9 @@ members:
             Never take the delta of this timestamp with the timestamp from a different structure.
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the number of activity domains that can be monitored on this device/sub-device"
+desc: "Get the number of engine groups that can be monitored on this device/sub-device"
 class: $tSysman
-name: ActivityGetCount
+name: EngineGetCount
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -688,12 +685,12 @@ params:
       desc: "[in] SMI handle of the device."
     - type: uint32_t*
       name: pCount
-      desc: "[in] The number of activity domains."
+      desc: "[in] The number of engine groups."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get activity properties - type of activity counter, if the activity counter is on a sub-device"
+desc: "Get engine group properties"
 class: $tSysman
-name: ActivityGetProperties
+name: EngineGetProperties
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -702,16 +699,16 @@ params:
       name: hSysman
       desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: activityIndex
-      desc: "[in] The index of the activity domain (0 ... [$tSysmanActivityGetCount() - 1])."
-    - type: $t_activity_properties_t*
+      name: engineIndex
+      desc: "[in] The index of the engine group (0 ... [$tSysmanEngineGetCount() - 1])."
+    - type: $t_engine_properties_t*
       name: pProperties
-      desc: "[in] The properties for the specified activity domain."
+      desc: "[in] The properties for the specified engine group."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the activity counters of a part of the device"
+desc: "Get the activity stats for an engine group"
 class: $tSysman
-name: ActivityGetStats
+name: EngineGetActivity
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -720,11 +717,11 @@ params:
       name: hSysman
       desc: "[in] SMI handle of the device."
     - type: uint32_t
-      name: activityIndex
-      desc: "[in] The index of the activity domain (0 ... [$tSysmanActivityGetCount() - 1])."
-    - type: $t_activity_stats_t*
+      name: engineIndex
+      desc: "[in] The index of the engine group (0 ... [$tSysmanEngineGetCount() - 1])."
+    - type: $t_engine_stats_t*
       name: pStats
-      desc: "[in] Will contain a snapshot of the activity counters."
+      desc: "[in] Will contain a snapshot of the engine group activity counters."
 
 --- #--------------------------------------------------------------------------
 type: enum

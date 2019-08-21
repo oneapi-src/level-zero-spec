@@ -544,7 +544,7 @@ xetSysmanFrequencyGetThrottleTime(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the number of activity domains that can be monitored on this
+/// @brief Get the number of engine groups that can be monitored on this
 ///        device/sub-device
 /// 
 /// @details
@@ -560,21 +560,20 @@ xetSysmanFrequencyGetThrottleTime(
 ///         + nullptr == pCount
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanActivityGetCount(
+xetSysmanEngineGetCount(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t* pCount                                ///< [in] The number of activity domains.
+    uint32_t* pCount                                ///< [in] The number of engine groups.
     )
 {
-    auto pfnActivityGetCount = xet_lib::context.ddiTable.Sysman.pfnActivityGetCount;
-    if( nullptr == pfnActivityGetCount )
+    auto pfnEngineGetCount = xet_lib::context.ddiTable.Sysman.pfnEngineGetCount;
+    if( nullptr == pfnEngineGetCount )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnActivityGetCount( hSysman, pCount );
+    return pfnEngineGetCount( hSysman, pCount );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get activity properties - type of activity counter, if the activity
-///        counter is on a sub-device
+/// @brief Get engine group properties
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -589,22 +588,22 @@ xetSysmanActivityGetCount(
 ///         + nullptr == pProperties
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanActivityGetProperties(
+xetSysmanEngineGetProperties(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t activityIndex,                         ///< [in] The index of the activity domain (0 ...
-                                                    ///< [::xetSysmanActivityGetCount() - 1]).
-    xet_activity_properties_t* pProperties          ///< [in] The properties for the specified activity domain.
+    uint32_t engineIndex,                           ///< [in] The index of the engine group (0 ... [::xetSysmanEngineGetCount()
+                                                    ///< - 1]).
+    xet_engine_properties_t* pProperties            ///< [in] The properties for the specified engine group.
     )
 {
-    auto pfnActivityGetProperties = xet_lib::context.ddiTable.Sysman.pfnActivityGetProperties;
-    if( nullptr == pfnActivityGetProperties )
+    auto pfnEngineGetProperties = xet_lib::context.ddiTable.Sysman.pfnEngineGetProperties;
+    if( nullptr == pfnEngineGetProperties )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnActivityGetProperties( hSysman, activityIndex, pProperties );
+    return pfnEngineGetProperties( hSysman, engineIndex, pProperties );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get the activity counters of a part of the device
+/// @brief Get the activity stats for an engine group
 /// 
 /// @details
 ///     - The application may call this function from simultaneous threads.
@@ -619,18 +618,18 @@ xetSysmanActivityGetProperties(
 ///         + nullptr == pStats
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanActivityGetStats(
+xetSysmanEngineGetActivity(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    uint32_t activityIndex,                         ///< [in] The index of the activity domain (0 ...
-                                                    ///< [::xetSysmanActivityGetCount() - 1]).
-    xet_activity_stats_t* pStats                    ///< [in] Will contain a snapshot of the activity counters.
+    uint32_t engineIndex,                           ///< [in] The index of the engine group (0 ... [::xetSysmanEngineGetCount()
+                                                    ///< - 1]).
+    xet_engine_stats_t* pStats                      ///< [in] Will contain a snapshot of the engine group activity counters.
     )
 {
-    auto pfnActivityGetStats = xet_lib::context.ddiTable.Sysman.pfnActivityGetStats;
-    if( nullptr == pfnActivityGetStats )
+    auto pfnEngineGetActivity = xet_lib::context.ddiTable.Sysman.pfnEngineGetActivity;
+    if( nullptr == pfnEngineGetActivity )
         return XE_RESULT_ERROR_UNSUPPORTED;
 
-    return pfnActivityGetStats( hSysman, activityIndex, pStats );
+    return pfnEngineGetActivity( hSysman, engineIndex, pStats );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2637,7 +2636,7 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get the number of activity domains that can be monitored on this
+    /// @brief Get the number of engine groups that can be monitored on this
     ///        device/sub-device
     /// 
     /// @details
@@ -2646,21 +2645,20 @@ namespace xet
     /// 
     /// @throws result_t
     void __xecall
-    Sysman::ActivityGetCount(
-        uint32_t* pCount                                ///< [in] The number of activity domains.
+    Sysman::EngineGetCount(
+        uint32_t* pCount                                ///< [in] The number of engine groups.
         )
     {
-        auto result = static_cast<result_t>( ::xetSysmanActivityGetCount(
+        auto result = static_cast<result_t>( ::xetSysmanEngineGetCount(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
             pCount ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::ActivityGetCount" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::EngineGetCount" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get activity properties - type of activity counter, if the activity
-    ///        counter is on a sub-device
+    /// @brief Get engine group properties
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -2668,23 +2666,23 @@ namespace xet
     /// 
     /// @throws result_t
     void __xecall
-    Sysman::ActivityGetProperties(
-        uint32_t activityIndex,                         ///< [in] The index of the activity domain (0 ...
-                                                        ///< [::xetSysmanActivityGetCount() - 1]).
-        activity_properties_t* pProperties              ///< [in] The properties for the specified activity domain.
+    Sysman::EngineGetProperties(
+        uint32_t engineIndex,                           ///< [in] The index of the engine group (0 ... [::xetSysmanEngineGetCount()
+                                                        ///< - 1]).
+        engine_properties_t* pProperties                ///< [in] The properties for the specified engine group.
         )
     {
-        auto result = static_cast<result_t>( ::xetSysmanActivityGetProperties(
+        auto result = static_cast<result_t>( ::xetSysmanEngineGetProperties(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            activityIndex,
-            reinterpret_cast<xet_activity_properties_t*>( pProperties ) ) );
+            engineIndex,
+            reinterpret_cast<xet_engine_properties_t*>( pProperties ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::ActivityGetProperties" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::EngineGetProperties" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Get the activity counters of a part of the device
+    /// @brief Get the activity stats for an engine group
     /// 
     /// @details
     ///     - The application may call this function from simultaneous threads.
@@ -2692,19 +2690,19 @@ namespace xet
     /// 
     /// @throws result_t
     void __xecall
-    Sysman::ActivityGetStats(
-        uint32_t activityIndex,                         ///< [in] The index of the activity domain (0 ...
-                                                        ///< [::xetSysmanActivityGetCount() - 1]).
-        activity_stats_t* pStats                        ///< [in] Will contain a snapshot of the activity counters.
+    Sysman::EngineGetActivity(
+        uint32_t engineIndex,                           ///< [in] The index of the engine group (0 ... [::xetSysmanEngineGetCount()
+                                                        ///< - 1]).
+        engine_stats_t* pStats                          ///< [in] Will contain a snapshot of the engine group activity counters.
         )
     {
-        auto result = static_cast<result_t>( ::xetSysmanActivityGetStats(
+        auto result = static_cast<result_t>( ::xetSysmanEngineGetActivity(
             reinterpret_cast<xet_sysman_handle_t>( getHandle() ),
-            activityIndex,
-            reinterpret_cast<xet_activity_stats_t*>( pStats ) ) );
+            engineIndex,
+            reinterpret_cast<xet_engine_stats_t*>( pStats ) ) );
 
         if( result_t::SUCCESS != result )
-            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::ActivityGetStats" );
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xet::Sysman::EngineGetActivity" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -4075,27 +4073,27 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::activity_type_t to std::string
-    std::string to_string( const Sysman::activity_type_t val )
+    /// @brief Converts Sysman::engine_group_t to std::string
+    std::string to_string( const Sysman::engine_group_t val )
     {
         std::string str;
 
         switch( val )
         {
-        case Sysman::activity_type_t::GLOBAL:
-            str = "Sysman::activity_type_t::GLOBAL";
+        case Sysman::engine_group_t::ALL:
+            str = "Sysman::engine_group_t::ALL";
             break;
 
-        case Sysman::activity_type_t::COMPUTE:
-            str = "Sysman::activity_type_t::COMPUTE";
+        case Sysman::engine_group_t::COMPUTE:
+            str = "Sysman::engine_group_t::COMPUTE";
             break;
 
-        case Sysman::activity_type_t::MEDIA:
-            str = "Sysman::activity_type_t::MEDIA";
+        case Sysman::engine_group_t::MEDIA:
+            str = "Sysman::engine_group_t::MEDIA";
             break;
 
         default:
-            str = "Sysman::activity_type_t::?";
+            str = "Sysman::engine_group_t::?";
             break;
         };
 
@@ -4802,20 +4800,20 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::activity_properties_t to std::string
-    std::string to_string( const Sysman::activity_properties_t val )
+    /// @brief Converts Sysman::engine_properties_t to std::string
+    std::string to_string( const Sysman::engine_properties_t val )
     {
         std::string str;
         
-        str += "Sysman::activity_properties_t::type : ";
+        str += "Sysman::engine_properties_t::type : ";
         str += to_string(val.type);
         str += "\n";
         
-        str += "Sysman::activity_properties_t::onSubdevice : ";
+        str += "Sysman::engine_properties_t::onSubdevice : ";
         str += std::to_string(val.onSubdevice);
         str += "\n";
         
-        str += "Sysman::activity_properties_t::subdeviceUuid : ";
+        str += "Sysman::engine_properties_t::subdeviceUuid : ";
         str += to_string(val.subdeviceUuid);
         str += "\n";
 
@@ -4823,16 +4821,16 @@ namespace xet
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::activity_stats_t to std::string
-    std::string to_string( const Sysman::activity_stats_t val )
+    /// @brief Converts Sysman::engine_stats_t to std::string
+    std::string to_string( const Sysman::engine_stats_t val )
     {
         std::string str;
         
-        str += "Sysman::activity_stats_t::activeTime : ";
+        str += "Sysman::engine_stats_t::activeTime : ";
         str += std::to_string(val.activeTime);
         str += "\n";
         
-        str += "Sysman::activity_stats_t::timestamp : ";
+        str += "Sysman::engine_stats_t::timestamp : ";
         str += std::to_string(val.timestamp);
         str += "\n";
 

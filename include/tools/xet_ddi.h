@@ -734,26 +734,26 @@ typedef xe_result_t (__xecall *xet_pfnSysmanFrequencyGetThrottleTime_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanActivityGetCount 
-typedef xe_result_t (__xecall *xet_pfnSysmanActivityGetCount_t)(
+/// @brief Function-pointer for xetSysmanEngineGetCount 
+typedef xe_result_t (__xecall *xet_pfnSysmanEngineGetCount_t)(
     xet_sysman_handle_t,
     uint32_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanActivityGetProperties 
-typedef xe_result_t (__xecall *xet_pfnSysmanActivityGetProperties_t)(
+/// @brief Function-pointer for xetSysmanEngineGetProperties 
+typedef xe_result_t (__xecall *xet_pfnSysmanEngineGetProperties_t)(
     xet_sysman_handle_t,
     uint32_t,
-    xet_activity_properties_t*
+    xet_engine_properties_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanActivityGetStats 
-typedef xe_result_t (__xecall *xet_pfnSysmanActivityGetStats_t)(
+/// @brief Function-pointer for xetSysmanEngineGetActivity 
+typedef xe_result_t (__xecall *xet_pfnSysmanEngineGetActivity_t)(
     xet_sysman_handle_t,
     uint32_t,
-    xet_activity_stats_t*
+    xet_engine_stats_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1186,9 +1186,9 @@ typedef struct _xet_sysman_dditable_t
     xet_pfnSysmanFrequencySetRange_t                            pfnFrequencySetRange;
     xet_pfnSysmanFrequencyGetState_t                            pfnFrequencyGetState;
     xet_pfnSysmanFrequencyGetThrottleTime_t                     pfnFrequencyGetThrottleTime;
-    xet_pfnSysmanActivityGetCount_t                             pfnActivityGetCount;
-    xet_pfnSysmanActivityGetProperties_t                        pfnActivityGetProperties;
-    xet_pfnSysmanActivityGetStats_t                             pfnActivityGetStats;
+    xet_pfnSysmanEngineGetCount_t                               pfnEngineGetCount;
+    xet_pfnSysmanEngineGetProperties_t                          pfnEngineGetProperties;
+    xet_pfnSysmanEngineGetActivity_t                            pfnEngineGetActivity;
     xet_pfnSysmanMemoryGetCount_t                               pfnMemoryGetCount;
     xet_pfnSysmanMemoryGetProperties_t                          pfnMemoryGetProperties;
     xet_pfnSysmanMemoryGetBandwidth_t                           pfnMemoryGetBandwidth;

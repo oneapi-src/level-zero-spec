@@ -1153,16 +1153,16 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanActivityGetCount
+    /// @brief Intercept function for xetSysmanEngineGetCount
     xe_result_t __xecall
-    xetSysmanActivityGetCount(
+    xetSysmanEngineGetCount(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t* pCount                                ///< [in] The number of activity domains.
+        uint32_t* pCount                                ///< [in] The number of engine groups.
         )
     {
-        auto pfnActivityGetCount = context.xetDdiTable.Sysman.pfnActivityGetCount;
+        auto pfnEngineGetCount = context.xetDdiTable.Sysman.pfnEngineGetCount;
 
-        if( nullptr == pfnActivityGetCount )
+        if( nullptr == pfnEngineGetCount )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1175,22 +1175,22 @@ namespace layer
 
         }
 
-        return pfnActivityGetCount( hSysman, pCount );
+        return pfnEngineGetCount( hSysman, pCount );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanActivityGetProperties
+    /// @brief Intercept function for xetSysmanEngineGetProperties
     xe_result_t __xecall
-    xetSysmanActivityGetProperties(
+    xetSysmanEngineGetProperties(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t activityIndex,                         ///< [in] The index of the activity domain (0 ...
-                                                        ///< [::xetSysmanActivityGetCount() - 1]).
-        xet_activity_properties_t* pProperties          ///< [in] The properties for the specified activity domain.
+        uint32_t engineIndex,                           ///< [in] The index of the engine group (0 ... [::xetSysmanEngineGetCount()
+                                                        ///< - 1]).
+        xet_engine_properties_t* pProperties            ///< [in] The properties for the specified engine group.
         )
     {
-        auto pfnActivityGetProperties = context.xetDdiTable.Sysman.pfnActivityGetProperties;
+        auto pfnEngineGetProperties = context.xetDdiTable.Sysman.pfnEngineGetProperties;
 
-        if( nullptr == pfnActivityGetProperties )
+        if( nullptr == pfnEngineGetProperties )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1203,22 +1203,22 @@ namespace layer
 
         }
 
-        return pfnActivityGetProperties( hSysman, activityIndex, pProperties );
+        return pfnEngineGetProperties( hSysman, engineIndex, pProperties );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanActivityGetStats
+    /// @brief Intercept function for xetSysmanEngineGetActivity
     xe_result_t __xecall
-    xetSysmanActivityGetStats(
+    xetSysmanEngineGetActivity(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        uint32_t activityIndex,                         ///< [in] The index of the activity domain (0 ...
-                                                        ///< [::xetSysmanActivityGetCount() - 1]).
-        xet_activity_stats_t* pStats                    ///< [in] Will contain a snapshot of the activity counters.
+        uint32_t engineIndex,                           ///< [in] The index of the engine group (0 ... [::xetSysmanEngineGetCount()
+                                                        ///< - 1]).
+        xet_engine_stats_t* pStats                      ///< [in] Will contain a snapshot of the engine group activity counters.
         )
     {
-        auto pfnActivityGetStats = context.xetDdiTable.Sysman.pfnActivityGetStats;
+        auto pfnEngineGetActivity = context.xetDdiTable.Sysman.pfnEngineGetActivity;
 
-        if( nullptr == pfnActivityGetStats )
+        if( nullptr == pfnEngineGetActivity )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -1231,7 +1231,7 @@ namespace layer
 
         }
 
-        return pfnActivityGetStats( hSysman, activityIndex, pStats );
+        return pfnEngineGetActivity( hSysman, engineIndex, pStats );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3277,14 +3277,14 @@ xetGetSysmanProcAddrTable(
     dditable.pfnFrequencyGetThrottleTime                 = pDdiTable->pfnFrequencyGetThrottleTime;
     pDdiTable->pfnFrequencyGetThrottleTime               = layer::xetSysmanFrequencyGetThrottleTime;
 
-    dditable.pfnActivityGetCount                         = pDdiTable->pfnActivityGetCount;
-    pDdiTable->pfnActivityGetCount                       = layer::xetSysmanActivityGetCount;
+    dditable.pfnEngineGetCount                           = pDdiTable->pfnEngineGetCount;
+    pDdiTable->pfnEngineGetCount                         = layer::xetSysmanEngineGetCount;
 
-    dditable.pfnActivityGetProperties                    = pDdiTable->pfnActivityGetProperties;
-    pDdiTable->pfnActivityGetProperties                  = layer::xetSysmanActivityGetProperties;
+    dditable.pfnEngineGetProperties                      = pDdiTable->pfnEngineGetProperties;
+    pDdiTable->pfnEngineGetProperties                    = layer::xetSysmanEngineGetProperties;
 
-    dditable.pfnActivityGetStats                         = pDdiTable->pfnActivityGetStats;
-    pDdiTable->pfnActivityGetStats                       = layer::xetSysmanActivityGetStats;
+    dditable.pfnEngineGetActivity                        = pDdiTable->pfnEngineGetActivity;
+    pDdiTable->pfnEngineGetActivity                      = layer::xetSysmanEngineGetActivity;
 
     dditable.pfnMemoryGetCount                           = pDdiTable->pfnMemoryGetCount;
     pDdiTable->pfnMemoryGetCount                         = layer::xetSysmanMemoryGetCount;
