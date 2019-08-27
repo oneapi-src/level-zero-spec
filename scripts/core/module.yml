@@ -565,8 +565,8 @@ params:
       name: phFunctions
       desc: "[in][range(0, numFunctions)] handles of the function objects"
     - type: "const uint32_t*"
-      name: pNumLaunchArguments
-      desc: "[in] pointer to device memory location that will contain the actual number of launch arguments; value must be less-than or equal-to numFunctions"
+      name: pCountBuffer
+      desc: "[in] pointer to device memory location that will contain the actual number of functions to launch; value must be less-than or equal-to numFunctions"
     - type: "const $x_thread_group_dimensions_t*"
       name: pLaunchArgumentsBuffer
       desc: "[in][range(0, numFunctions)] pointer to device buffer that will contain a contiguous array of launch arguments"

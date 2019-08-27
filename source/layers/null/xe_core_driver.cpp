@@ -2324,8 +2324,8 @@ namespace driver
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
         xe_function_handle_t* phFunctions,              ///< [in][range(0, numFunctions)] handles of the function objects
-        const uint32_t* pNumLaunchArguments,            ///< [in] pointer to device memory location that will contain the actual
-                                                        ///< number of launch arguments; value must be less-than or equal-to
+        const uint32_t* pCountBuffer,                   ///< [in] pointer to device memory location that will contain the actual
+                                                        ///< number of functions to launch; value must be less-than or equal-to
                                                         ///< numFunctions
         const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in][range(0, numFunctions)] pointer to device buffer that will
                                                         ///< contain a contiguous array of launch arguments
@@ -2341,7 +2341,7 @@ namespace driver
         auto pfnAppendLaunchMultipleFunctionsIndirect = context.xeDdiTable.CommandList.pfnAppendLaunchMultipleFunctionsIndirect;
         if( nullptr != pfnAppendLaunchMultipleFunctionsIndirect )
         {
-            result = pfnAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+            result = pfnAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pCountBuffer, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
         }
         else
         {
@@ -7525,8 +7525,8 @@ namespace instrumented
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
         xe_function_handle_t* phFunctions,              ///< [in][range(0, numFunctions)] handles of the function objects
-        const uint32_t* pNumLaunchArguments,            ///< [in] pointer to device memory location that will contain the actual
-                                                        ///< number of launch arguments; value must be less-than or equal-to
+        const uint32_t* pCountBuffer,                   ///< [in] pointer to device memory location that will contain the actual
+                                                        ///< number of functions to launch; value must be less-than or equal-to
                                                         ///< numFunctions
         const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in][range(0, numFunctions)] pointer to device buffer that will
                                                         ///< contain a contiguous array of launch arguments
@@ -7543,7 +7543,7 @@ namespace instrumented
             &hCommandList,
             &numFunctions,
             &phFunctions,
-            &pNumLaunchArguments,
+            &pCountBuffer,
             &pLaunchArgumentsBuffer,
             &hSignalEvent,
             &numWaitEvents,
@@ -7565,14 +7565,14 @@ namespace instrumented
                         &instanceUserData[ i ] );
             }
 
-        result = driver::xeCommandListAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+        result = driver::xeCommandListAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pCountBuffer, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
 
         // capture parameters
         xe_command_list_append_launch_multiple_functions_indirect_params_t out_params = {
             &hCommandList,
             &numFunctions,
             &phFunctions,
-            &pNumLaunchArguments,
+            &pCountBuffer,
             &pLaunchArgumentsBuffer,
             &hSignalEvent,
             &numWaitEvents,

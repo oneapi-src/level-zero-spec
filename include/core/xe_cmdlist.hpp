@@ -645,8 +645,8 @@ namespace xe
         AppendLaunchMultipleFunctionsIndirect(
             uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
             Function** ppFunctions,                         ///< [in][range(0, numFunctions)] handles of the function objects
-            const uint32_t* pNumLaunchArguments,            ///< [in] pointer to device memory location that will contain the actual
-                                                            ///< number of launch arguments; value must be less-than or equal-to
+            const uint32_t* pCountBuffer,                   ///< [in] pointer to device memory location that will contain the actual
+                                                            ///< number of functions to launch; value must be less-than or equal-to
                                                             ///< numFunctions
             const thread_group_dimensions_t* pLaunchArgumentsBuffer,///< [in][range(0, numFunctions)] pointer to device buffer that will
                                                             ///< contain a contiguous array of launch arguments

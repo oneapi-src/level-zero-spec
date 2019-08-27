@@ -2492,8 +2492,8 @@ namespace layer
         xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
         uint32_t numFunctions,                          ///< [in] maximum number of functions to launch
         xe_function_handle_t* phFunctions,              ///< [in][range(0, numFunctions)] handles of the function objects
-        const uint32_t* pNumLaunchArguments,            ///< [in] pointer to device memory location that will contain the actual
-                                                        ///< number of launch arguments; value must be less-than or equal-to
+        const uint32_t* pCountBuffer,                   ///< [in] pointer to device memory location that will contain the actual
+                                                        ///< number of functions to launch; value must be less-than or equal-to
                                                         ///< numFunctions
         const xe_thread_group_dimensions_t* pLaunchArgumentsBuffer, ///< [in][range(0, numFunctions)] pointer to device buffer that will
                                                         ///< contain a contiguous array of launch arguments
@@ -2516,7 +2516,7 @@ namespace layer
             if( nullptr == phFunctions )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pNumLaunchArguments )
+            if( nullptr == pCountBuffer )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
             if( nullptr == pLaunchArgumentsBuffer )
@@ -2524,7 +2524,7 @@ namespace layer
 
         }
 
-        return pfnAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pNumLaunchArguments, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
+        return pfnAppendLaunchMultipleFunctionsIndirect( hCommandList, numFunctions, phFunctions, pCountBuffer, pLaunchArgumentsBuffer, hSignalEvent, numWaitEvents, phWaitEvents );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

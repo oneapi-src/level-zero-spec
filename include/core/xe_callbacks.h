@@ -1546,7 +1546,7 @@ typedef struct _xe_command_list_append_launch_multiple_functions_indirect_params
     xe_command_list_handle_t* phCommandList;
     uint32_t* pnumFunctions;
     xe_function_handle_t** pphFunctions;
-    const uint32_t** ppNumLaunchArguments;
+    const uint32_t** ppCountBuffer;
     const xe_thread_group_dimensions_t** ppLaunchArgumentsBuffer;
     xe_event_handle_t* phSignalEvent;
     uint32_t* pnumWaitEvents;
