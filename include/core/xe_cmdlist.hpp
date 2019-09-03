@@ -597,6 +597,32 @@ namespace xe
             );
 
         ///////////////////////////////////////////////////////////////////////////////
+        /// @brief Launch function cooperatively over one or more work groups.
+        /// 
+        /// @details
+        ///     - This may **not** be called for a command list created with
+        ///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
+        ///     - This may only be used for a command list that are submitted to command
+        ///       queue with cooperative flag set.
+        ///     - This function may **not** be called from simultaneous threads with the
+        ///       same command list handle.
+        ///     - The implementation of this function should be lock-free.
+        /// 
+        /// @remarks
+        ///   _Analogues_
+        ///     - **cuLaunchKernel**
+        /// @throws result_t
+        void __xecall
+        AppendLaunchCooperativeFunction(
+            Function* pFunction,                            ///< [in] pointer to the function object
+            const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] launch function arguments.
+            Event* pSignalEvent = nullptr,                  ///< [in][optional] pointer to the event to signal on completion
+            uint32_t numWaitEvents = 0,                     ///< [in][optional] number of events to wait on before launching
+            Event** ppWaitEvents = nullptr                  ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+                                                            ///< on before launching
+            );
+
+        ///////////////////////////////////////////////////////////////////////////////
         /// @brief Launch function over one or more work groups using indirect arguments.
         /// 
         /// @details

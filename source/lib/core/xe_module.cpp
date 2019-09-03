@@ -559,6 +559,49 @@ xeCommandListAppendLaunchFunction(
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Launch function cooperatively over one or more work groups.
+/// 
+/// @details
+///     - This may **not** be called for a command list created with
+///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
+///     - This may only be used for a command list that are submitted to command
+///       queue with cooperative flag set.
+///     - This function may **not** be called from simultaneous threads with the
+///       same command list handle.
+///     - The implementation of this function should be lock-free.
+/// 
+/// @remarks
+///   _Analogues_
+///     - **cuLaunchKernel**
+/// 
+/// @returns
+///     - ::XE_RESULT_SUCCESS
+///     - ::XE_RESULT_ERROR_UNINITIALIZED
+///     - ::XE_RESULT_ERROR_DEVICE_LOST
+///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
+///         + nullptr == hCommandList
+///         + nullptr == hFunction
+///         + nullptr == pLaunchFuncArgs
+///     - ::XE_RESULT_ERROR_UNSUPPORTED
+xe_result_t __xecall
+xeCommandListAppendLaunchCooperativeFunction(
+    xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+    xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+    const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
+    xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+    uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+    xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
+                                                    ///< on before launching
+    )
+{
+    auto pfnAppendLaunchCooperativeFunction = xe_lib::context.ddiTable.CommandList.pfnAppendLaunchCooperativeFunction;
+    if( nullptr == pfnAppendLaunchCooperativeFunction )
+        return XE_RESULT_ERROR_UNSUPPORTED;
+
+    return pfnAppendLaunchCooperativeFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
+}
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Launch function over one or more work groups using indirect arguments.
 /// 
 /// @details
@@ -1270,6 +1313,51 @@ namespace xe
 
         if( result_t::SUCCESS != result )
             throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendLaunchFunction" );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Launch function cooperatively over one or more work groups.
+    /// 
+    /// @details
+    ///     - This may **not** be called for a command list created with
+    ///       ::XE_COMMAND_LIST_FLAG_COPY_ONLY.
+    ///     - This may only be used for a command list that are submitted to command
+    ///       queue with cooperative flag set.
+    ///     - This function may **not** be called from simultaneous threads with the
+    ///       same command list handle.
+    ///     - The implementation of this function should be lock-free.
+    /// 
+    /// @remarks
+    ///   _Analogues_
+    ///     - **cuLaunchKernel**
+    /// 
+    /// @throws result_t
+    void __xecall
+    CommandList::AppendLaunchCooperativeFunction(
+        Function* pFunction,                            ///< [in] pointer to the function object
+        const thread_group_dimensions_t* pLaunchFuncArgs,   ///< [in] launch function arguments.
+        Event* pSignalEvent,                            ///< [in][optional] pointer to the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+        Event** ppWaitEvents                            ///< [in][optional][range(0, numWaitEvents)] pointer to the events to wait
+                                                        ///< on before launching
+        )
+    {
+        thread_local std::vector<xe_event_handle_t> hWaitEvents;
+        hWaitEvents.resize( 0 );
+        hWaitEvents.reserve( numWaitEvents );
+        for( uint32_t i = 0; i < numWaitEvents; ++i )
+            hWaitEvents.emplace_back( ( ppWaitEvents ) ? reinterpret_cast<xe_event_handle_t>( ppWaitEvents[ i ]->getHandle() ) : nullptr );
+
+        auto result = static_cast<result_t>( ::xeCommandListAppendLaunchCooperativeFunction(
+            reinterpret_cast<xe_command_list_handle_t>( getHandle() ),
+            reinterpret_cast<xe_function_handle_t>( pFunction->getHandle() ),
+            reinterpret_cast<const xe_thread_group_dimensions_t*>( pLaunchFuncArgs ),
+            ( pSignalEvent ) ? reinterpret_cast<xe_event_handle_t>( pSignalEvent->getHandle() ) : nullptr,
+            numWaitEvents,
+            hWaitEvents.data() ) );
+
+        if( result_t::SUCCESS != result )
+            throw exception_t( result, __FILE__, STRING(__LINE__), "xe::CommandList::AppendLaunchCooperativeFunction" );
     }
 
     ///////////////////////////////////////////////////////////////////////////////

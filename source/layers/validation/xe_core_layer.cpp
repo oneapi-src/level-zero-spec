@@ -2452,6 +2452,40 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeCommandListAppendLaunchCooperativeFunction
+    xe_result_t __xecall
+    xeCommandListAppendLaunchCooperativeFunction(
+        xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+        const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
+        xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
+                                                        ///< on before launching
+        )
+    {
+        auto pfnAppendLaunchCooperativeFunction = context.xeDdiTable.CommandList.pfnAppendLaunchCooperativeFunction;
+
+        if( nullptr == pfnAppendLaunchCooperativeFunction )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        if( context.enableParameterValidation )
+        {
+            if( nullptr == hCommandList )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == hFunction )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+            if( nullptr == pLaunchFuncArgs )
+                return XE_RESULT_ERROR_INVALID_ARGUMENT;
+
+        }
+
+        return pfnAppendLaunchCooperativeFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xeCommandListAppendLaunchFunctionIndirect
     xe_result_t __xecall
     xeCommandListAppendLaunchFunctionIndirect(
@@ -3051,6 +3085,9 @@ xeGetCommandListProcAddrTable(
 
     dditable.pfnAppendLaunchFunction                     = pDdiTable->pfnAppendLaunchFunction;
     pDdiTable->pfnAppendLaunchFunction                   = layer::xeCommandListAppendLaunchFunction;
+
+    dditable.pfnAppendLaunchCooperativeFunction          = pDdiTable->pfnAppendLaunchCooperativeFunction;
+    pDdiTable->pfnAppendLaunchCooperativeFunction        = layer::xeCommandListAppendLaunchCooperativeFunction;
 
     dditable.pfnAppendLaunchFunctionIndirect             = pDdiTable->pfnAppendLaunchFunctionIndirect;
     pDdiTable->pfnAppendLaunchFunctionIndirect           = layer::xeCommandListAppendLaunchFunctionIndirect;

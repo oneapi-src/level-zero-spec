@@ -1511,6 +1511,33 @@ typedef void (__xecall *xe_pfnCommandListAppendLaunchFunctionCb_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function parameters for xeCommandListAppendLaunchCooperativeFunction 
+/// @details Each entry is a pointer to the parameter passed to the function;
+///     allowing the callback the ability to modify the parameter's value
+typedef struct _xe_command_list_append_launch_cooperative_function_params_t
+{
+    xe_command_list_handle_t* phCommandList;
+    xe_function_handle_t* phFunction;
+    const xe_thread_group_dimensions_t** ppLaunchFuncArgs;
+    xe_event_handle_t* phSignalEvent;
+    uint32_t* pnumWaitEvents;
+    xe_event_handle_t** pphWaitEvents;
+} xe_command_list_append_launch_cooperative_function_params_t;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Callback function-pointer for xeCommandListAppendLaunchCooperativeFunction 
+/// @param[in] params Parameters passed to this instance
+/// @param[in] result Return value
+/// @param[in] pTracerUserData Per-Tracer user data
+/// @param[in,out] ppTracerInstanceUserData Per-Tracer, Per-Instance user data
+typedef void (__xecall *xe_pfnCommandListAppendLaunchCooperativeFunctionCb_t)(
+    xe_command_list_append_launch_cooperative_function_params_t* params,
+    xe_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Callback function parameters for xeCommandListAppendLaunchFunctionIndirect 
 /// @details Each entry is a pointer to the parameter passed to the function;
 ///     allowing the callback the ability to modify the parameter's value
@@ -1617,6 +1644,7 @@ typedef struct _xe_command_list_callbacks_t
     xe_pfnCommandListAppendWaitOnEventsCb_t                         pfnAppendWaitOnEventsCb;
     xe_pfnCommandListAppendEventResetCb_t                           pfnAppendEventResetCb;
     xe_pfnCommandListAppendLaunchFunctionCb_t                       pfnAppendLaunchFunctionCb;
+    xe_pfnCommandListAppendLaunchCooperativeFunctionCb_t            pfnAppendLaunchCooperativeFunctionCb;
     xe_pfnCommandListAppendLaunchFunctionIndirectCb_t               pfnAppendLaunchFunctionIndirectCb;
     xe_pfnCommandListAppendLaunchMultipleFunctionsIndirectCb_t      pfnAppendLaunchMultipleFunctionsIndirectCb;
     xe_pfnCommandListAppendLaunchHostFunctionCb_t                   pfnAppendLaunchHostFunctionCb;

@@ -462,6 +462,9 @@ class xe_command_queue_flag_v(IntEnum):
                                                     ## dynamically assign based on usage
     SINGLE_SLICE_ONLY = XE_BIT(2)                   ## command queue reserves and cannot comsume more than a single slice.
                                                     ## 'slice' size is device-specific.  cannot be combined with COPY_ONLY.
+    SUPPORTS_COOPERATIVE_FUNCTIONS = XE_BIT(3)      ## command queue supports command list with cooperative functions. See
+                                                    ## ::xeCommandListAppendLaunchCooperativeFunction for more details.
+                                                    ## cannot be combined with COPY_ONLY.
 
 class xe_command_queue_flag_t(c_int):
     def __str__(self):
@@ -503,6 +506,7 @@ class xe_command_queue_desc_t(Structure):
         ("mode", xe_command_queue_mode_t),                              ## [in] operation mode
         ("priority", xe_command_queue_priority_t),                      ## [in] priority
         ("ordinal", c_ulong)                                            ## [in] if logical-only flag is set, then will be ignored;
+                                                                        ## if supports-cooperative-functions is set, then may be ignored;
                                                                         ## else-if copy-only flag is set, then must be less than ::xe_device_properties_t.numAsyncCopyEngines;
                                                                         ## otherwise must be less than
                                                                         ## ::xe_device_properties_t.numAsyncComputeEngines. When using sub-devices
@@ -1571,6 +1575,13 @@ else:
     _xeCommandListAppendLaunchFunction_t = CFUNCTYPE( xe_result_t, xe_command_list_handle_t, xe_function_handle_t, POINTER(xe_thread_group_dimensions_t), xe_event_handle_t, c_ulong, POINTER(xe_event_handle_t) )
 
 ###############################################################################
+## @brief Function-pointer for xeCommandListAppendLaunchCooperativeFunction
+if __use_win_types:
+    _xeCommandListAppendLaunchCooperativeFunction_t = WINFUNCTYPE( xe_result_t, xe_command_list_handle_t, xe_function_handle_t, POINTER(xe_thread_group_dimensions_t), xe_event_handle_t, c_ulong, POINTER(xe_event_handle_t) )
+else:
+    _xeCommandListAppendLaunchCooperativeFunction_t = CFUNCTYPE( xe_result_t, xe_command_list_handle_t, xe_function_handle_t, POINTER(xe_thread_group_dimensions_t), xe_event_handle_t, c_ulong, POINTER(xe_event_handle_t) )
+
+###############################################################################
 ## @brief Function-pointer for xeCommandListAppendLaunchFunctionIndirect
 if __use_win_types:
     _xeCommandListAppendLaunchFunctionIndirect_t = WINFUNCTYPE( xe_result_t, xe_command_list_handle_t, xe_function_handle_t, POINTER(xe_thread_group_dimensions_t), xe_event_handle_t, c_ulong, POINTER(xe_event_handle_t) )
@@ -1616,6 +1627,7 @@ class _xe_command_list_dditable_t(Structure):
         ("pfnAppendWaitOnEvents", c_void_p),                            ## _xeCommandListAppendWaitOnEvents_t
         ("pfnAppendEventReset", c_void_p),                              ## _xeCommandListAppendEventReset_t
         ("pfnAppendLaunchFunction", c_void_p),                          ## _xeCommandListAppendLaunchFunction_t
+        ("pfnAppendLaunchCooperativeFunction", c_void_p),               ## _xeCommandListAppendLaunchCooperativeFunction_t
         ("pfnAppendLaunchFunctionIndirect", c_void_p),                  ## _xeCommandListAppendLaunchFunctionIndirect_t
         ("pfnAppendLaunchMultipleFunctionsIndirect", c_void_p),         ## _xeCommandListAppendLaunchMultipleFunctionsIndirect_t
         ("pfnAppendLaunchHostFunction", c_void_p)                       ## _xeCommandListAppendLaunchHostFunction_t
@@ -2087,6 +2099,7 @@ class XE_DDI:
         self.xeCommandListAppendWaitOnEvents = _xeCommandListAppendWaitOnEvents_t(self.__dditable.CommandList.pfnAppendWaitOnEvents)
         self.xeCommandListAppendEventReset = _xeCommandListAppendEventReset_t(self.__dditable.CommandList.pfnAppendEventReset)
         self.xeCommandListAppendLaunchFunction = _xeCommandListAppendLaunchFunction_t(self.__dditable.CommandList.pfnAppendLaunchFunction)
+        self.xeCommandListAppendLaunchCooperativeFunction = _xeCommandListAppendLaunchCooperativeFunction_t(self.__dditable.CommandList.pfnAppendLaunchCooperativeFunction)
         self.xeCommandListAppendLaunchFunctionIndirect = _xeCommandListAppendLaunchFunctionIndirect_t(self.__dditable.CommandList.pfnAppendLaunchFunctionIndirect)
         self.xeCommandListAppendLaunchMultipleFunctionsIndirect = _xeCommandListAppendLaunchMultipleFunctionsIndirect_t(self.__dditable.CommandList.pfnAppendLaunchMultipleFunctionsIndirect)
         self.xeCommandListAppendLaunchHostFunction = _xeCommandListAppendLaunchHostFunction_t(self.__dditable.CommandList.pfnAppendLaunchHostFunction)

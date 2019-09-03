@@ -2674,6 +2674,46 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeCommandListAppendLaunchCooperativeFunction
+    xe_result_t __xecall
+    xeCommandListAppendLaunchCooperativeFunction(
+        xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+        const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
+        xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
+                                                        ///< on before launching
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // extract driver's function pointer table
+        auto dditable = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->dditable;
+        auto pfnAppendLaunchCooperativeFunction = dditable->xe.CommandList.pfnAppendLaunchCooperativeFunction;
+        if( nullptr == pfnAppendLaunchCooperativeFunction )
+            return XE_RESULT_ERROR_UNSUPPORTED;
+
+        // convert loader handle to driver handle
+        hCommandList = reinterpret_cast<xe_command_list_object_t*>( hCommandList )->handle;
+
+        // convert loader handle to driver handle
+        hFunction = reinterpret_cast<xe_function_object_t*>( hFunction )->handle;
+
+        // convert loader handle to driver handle
+        hSignalEvent = ( hSignalEvent ) ? reinterpret_cast<xe_event_object_t*>( hSignalEvent )->handle : nullptr;
+
+        // convert loader handles to driver handles
+        for( size_t i = 0; ( nullptr != phWaitEvents ) && ( i < numWaitEvents ); ++i )
+            phWaitEvents[ i ] = reinterpret_cast<xe_event_object_t*>( phWaitEvents[ i ] )->handle;
+
+        // forward to device-driver
+        result = pfnAppendLaunchCooperativeFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xeCommandListAppendLaunchFunctionIndirect
     xe_result_t __xecall
     xeCommandListAppendLaunchFunctionIndirect(
@@ -3334,6 +3374,7 @@ xeGetCommandListProcAddrTable(
             pDdiTable->pfnAppendWaitOnEvents                       = loader::xeCommandListAppendWaitOnEvents;
             pDdiTable->pfnAppendEventReset                         = loader::xeCommandListAppendEventReset;
             pDdiTable->pfnAppendLaunchFunction                     = loader::xeCommandListAppendLaunchFunction;
+            pDdiTable->pfnAppendLaunchCooperativeFunction          = loader::xeCommandListAppendLaunchCooperativeFunction;
             pDdiTable->pfnAppendLaunchFunctionIndirect             = loader::xeCommandListAppendLaunchFunctionIndirect;
             pDdiTable->pfnAppendLaunchMultipleFunctionsIndirect    = loader::xeCommandListAppendLaunchMultipleFunctionsIndirect;
             pDdiTable->pfnAppendLaunchHostFunction                 = loader::xeCommandListAppendLaunchHostFunction;

@@ -2289,6 +2289,35 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeCommandListAppendLaunchCooperativeFunction
+    xe_result_t __xecall
+    xeCommandListAppendLaunchCooperativeFunction(
+        xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+        const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
+        xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
+                                                        ///< on before launching
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // if the driver has created a custom function, then call it instead of using the generic path
+        auto pfnAppendLaunchCooperativeFunction = context.xeDdiTable.CommandList.pfnAppendLaunchCooperativeFunction;
+        if( nullptr != pfnAppendLaunchCooperativeFunction )
+        {
+            result = pfnAppendLaunchCooperativeFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
+        }
+        else
+        {
+            // generic implementation
+        }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xeCommandListAppendLaunchFunctionIndirect
     xe_result_t __xecall
     xeCommandListAppendLaunchFunctionIndirect(
@@ -7453,6 +7482,72 @@ namespace instrumented
     }
 
     ///////////////////////////////////////////////////////////////////////////////
+    /// @brief Intercept function for xeCommandListAppendLaunchCooperativeFunction
+    xe_result_t __xecall
+    xeCommandListAppendLaunchCooperativeFunction(
+        xe_command_list_handle_t hCommandList,          ///< [in] handle of the command list
+        xe_function_handle_t hFunction,                 ///< [in] handle of the function object
+        const xe_thread_group_dimensions_t* pLaunchFuncArgs,///< [in] launch function arguments.
+        xe_event_handle_t hSignalEvent,                 ///< [in][optional] handle of the event to signal on completion
+        uint32_t numWaitEvents,                         ///< [in][optional] number of events to wait on before launching
+        xe_event_handle_t* phWaitEvents                 ///< [in][optional][range(0, numWaitEvents)] handle of the events to wait
+                                                        ///< on before launching
+        )
+    {
+        xe_result_t result = XE_RESULT_SUCCESS;
+
+        // capture parameters
+        xe_command_list_append_launch_cooperative_function_params_t in_params = {
+            &hCommandList,
+            &hFunction,
+            &pLaunchFuncArgs,
+            &hSignalEvent,
+            &numWaitEvents,
+            &phWaitEvents
+        };
+
+        // create storage locations for callbacks
+        std::vector<void*> instanceUserData;
+        instanceUserData.resize( context.tracerData.size() );
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].xePrologueCbs.CommandList;
+                if( nullptr != table.pfnAppendLaunchCooperativeFunctionCb )
+                    table.pfnAppendLaunchCooperativeFunctionCb( &in_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        result = driver::xeCommandListAppendLaunchCooperativeFunction( hCommandList, hFunction, pLaunchFuncArgs, hSignalEvent, numWaitEvents, phWaitEvents );
+
+        // capture parameters
+        xe_command_list_append_launch_cooperative_function_params_t out_params = {
+            &hCommandList,
+            &hFunction,
+            &pLaunchFuncArgs,
+            &hSignalEvent,
+            &numWaitEvents,
+            &phWaitEvents
+        };
+
+        // call each callback registered
+        for( uint32_t i = 0; i < context.tracerData.size(); ++i )
+            if( context.tracerData[ i ].enabled )
+            {
+                auto& table = context.tracerData[ i ].xeEpilogueCbs.CommandList;
+                if( nullptr != table.pfnAppendLaunchCooperativeFunctionCb )
+                    table.pfnAppendLaunchCooperativeFunctionCb( &out_params, result,
+                        context.tracerData[ i ].userData,
+                        &instanceUserData[ i ] );
+            }
+
+        return result;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
     /// @brief Intercept function for xeCommandListAppendLaunchFunctionIndirect
     xe_result_t __xecall
     xeCommandListAppendLaunchFunctionIndirect(
@@ -8421,6 +8516,11 @@ xeGetCommandListProcAddrTable(
         pDdiTable->pfnAppendLaunchFunction                   = instrumented::xeCommandListAppendLaunchFunction;
     else
         pDdiTable->pfnAppendLaunchFunction                   = driver::xeCommandListAppendLaunchFunction;
+
+    if( instrumented::context.enableTracing )
+        pDdiTable->pfnAppendLaunchCooperativeFunction        = instrumented::xeCommandListAppendLaunchCooperativeFunction;
+    else
+        pDdiTable->pfnAppendLaunchCooperativeFunction        = driver::xeCommandListAppendLaunchCooperativeFunction;
 
     if( instrumented::context.enableTracing )
         pDdiTable->pfnAppendLaunchFunctionIndirect           = instrumented::xeCommandListAppendLaunchFunctionIndirect;

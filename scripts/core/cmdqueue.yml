@@ -34,6 +34,9 @@ etors:
     - name: $X_COMMAND_QUEUE_FLAG_SINGLE_SLICE_ONLY
       value: "$X_BIT(2)"
       desc: "command queue reserves and cannot comsume more than a single slice. 'slice' size is device-specific.  cannot be combined with COPY_ONLY."
+    - name: $X_COMMAND_QUEUE_FLAG_SUPPORTS_COOPERATIVE_FUNCTIONS
+      value: "$X_BIT(3)"
+      desc: "command queue supports command list with cooperative functions. See $xCommandListAppendLaunchCooperativeFunction for more details. cannot be combined with COPY_ONLY."      
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command queue modes"
@@ -90,6 +93,7 @@ members:
       name: ordinal
       desc: |
         [in] if logical-only flag is set, then will be ignored;
+        if supports-cooperative-functions is set, then may be ignored;
         else-if copy-only flag is set, then must be less than $x_device_properties_t.numAsyncCopyEngines;
         otherwise must be less than $x_device_properties_t.numAsyncComputeEngines. When using sub-devices
         the $x_device_properties_t.numAsyncComputeEngines must be queried from the sub-device being used.

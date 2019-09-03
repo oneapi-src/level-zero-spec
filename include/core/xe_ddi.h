@@ -673,6 +673,17 @@ typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchFunction_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @brief Function-pointer for xeCommandListAppendLaunchCooperativeFunction 
+typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchCooperativeFunction_t)(
+    xe_command_list_handle_t,
+    xe_function_handle_t,
+    const xe_thread_group_dimensions_t*,
+    xe_event_handle_t,
+    uint32_t,
+    xe_event_handle_t*
+    );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @brief Function-pointer for xeCommandListAppendLaunchFunctionIndirect 
 typedef xe_result_t (__xecall *xe_pfnCommandListAppendLaunchFunctionIndirect_t)(
     xe_command_list_handle_t,
@@ -731,6 +742,7 @@ typedef struct _xe_command_list_dditable_t
     xe_pfnCommandListAppendWaitOnEvents_t                       pfnAppendWaitOnEvents;
     xe_pfnCommandListAppendEventReset_t                         pfnAppendEventReset;
     xe_pfnCommandListAppendLaunchFunction_t                     pfnAppendLaunchFunction;
+    xe_pfnCommandListAppendLaunchCooperativeFunction_t          pfnAppendLaunchCooperativeFunction;
     xe_pfnCommandListAppendLaunchFunctionIndirect_t             pfnAppendLaunchFunctionIndirect;
     xe_pfnCommandListAppendLaunchMultipleFunctionsIndirect_t    pfnAppendLaunchMultipleFunctionsIndirect;
     xe_pfnCommandListAppendLaunchHostFunction_t                 pfnAppendLaunchHostFunction;
