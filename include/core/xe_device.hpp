@@ -794,7 +794,7 @@ namespace xe
         /// @throws result_t
         void __xecall
         GetMemoryProperties(
-            uint32_t* pCount,                               ///< [in,out] pointer to the number of memory properties supported.
+            uint32_t* pCount,                               ///< [in,out] pointer to the number of memory properties.
                                                             ///< if count is zero, then the driver will update the value with the total
                                                             ///< number of memory properties available.
                                                             ///< if count is non-zero, then driver will only retrieve that number of

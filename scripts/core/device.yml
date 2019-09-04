@@ -309,7 +309,7 @@ params:
     - type: uint32_t*
       name: pCount
       desc: |
-            [in,out] pointer to the number of memory properties supported.
+            [in,out] pointer to the number of memory properties.
             if count is zero, then the driver will update the value with the total number of memory properties available.
             if count is non-zero, then driver will only retrieve that number of memory properties.
             if count is larger than the number of memory properties available, then the driver will update the value with the correct number of memory properties available.

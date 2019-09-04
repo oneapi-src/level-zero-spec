@@ -262,7 +262,7 @@ namespace driver
     xe_result_t __xecall
     xeDeviceGetMemoryProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of memory properties supported.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of memory properties.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of memory properties available.
                                                         ///< if count is non-zero, then driver will only retrieve that number of
@@ -3063,7 +3063,7 @@ namespace instrumented
     xe_result_t __xecall
     xeDeviceGetMemoryProperties(
         xe_device_handle_t hDevice,                     ///< [in] handle of the device
-        uint32_t* pCount,                               ///< [in,out] pointer to the number of memory properties supported.
+        uint32_t* pCount,                               ///< [in,out] pointer to the number of memory properties.
                                                         ///< if count is zero, then the driver will update the value with the total
                                                         ///< number of memory properties available.
                                                         ///< if count is non-zero, then driver will only retrieve that number of
