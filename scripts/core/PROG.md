@@ -159,9 +159,14 @@ In summary:
 Devices may support different capabilities for each type of allocation.
 Supported capabilities are:
 * ::${X}_MEMORY_ACCESS - if a device supports access (read or write) to allocations of the specified type.
-* ::${X}_MEMORY_ATOMIC_ACCESS - if a device support atomic access to allocations of the specified type.
-* ::${X}_MEMORY_CONCURRENT_ACCESS - if a device supports concurrent access to allocations of the specified type, or another device's allocation of the specified type.
-* ::${X}_MEMORY_CONCURRENT_ATOMIC_ACCESS - if a device supports concurrent atomic access to allocations of the specified type, or another device's allocations of the specified type.
+* ::${X}_MEMORY_ATOMIC_ACCESS - if a device support atomic operations on allocations of the specified type.
+  Atomic operations may include relaxed consistency read-modify-write atomics and atomic operations that enforce memory consistency for non-atomic operations.
+* ::${X}_MEMORY_CONCURRENT_ACCESS - if a device supports concurrent access to allocations of the specified type.
+  Concurrent access may be from another device that supports concurrent access, or from the host.
+  Devices that support concurrent access but do not support concurrent atomic access must write to unique non-overlapping memory locations to avoid data races and hence undefined behavior.
+* ::${X}_MEMORY_CONCURRENT_ATOMIC_ACCESS - if a device supports concurrent atomic operations on allocations of the specified type.
+  Concurrent atomic operations may be from another device that supports concurrent atomic access, or from the host.
+  Devices that support concurrent atomic access may use atomic operations to enforce memory consistency with other devices that support concurrent atomic access, or with the host.
 
 Some devices may _oversubscribe_ some **shared** allocations.
 When and how such oversubscription occurs, including which allocations are evicted when the working set changes, are considered implementation details.

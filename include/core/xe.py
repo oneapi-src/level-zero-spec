@@ -916,7 +916,8 @@ class xe_memory_type_t(c_int):
 
 
 ###############################################################################
-## @brief Memory allocation properties queried using ::xeDriverGetMemProperties
+## @brief Memory allocation properties queried using
+##        ::xeDriverGetMemAllocProperties
 class xe_memory_allocation_properties_t(Structure):
     _fields_ = [
         ("version", xe_memory_allocation_properties_version_t),         ## [in] ::XE_MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT

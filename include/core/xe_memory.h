@@ -214,7 +214,8 @@ typedef enum _xe_memory_type_t
 } xe_memory_type_t;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Memory allocation properties queried using ::xeDriverGetMemProperties
+/// @brief Memory allocation properties queried using
+///        ::xeDriverGetMemAllocProperties
 typedef struct _xe_memory_allocation_properties_t
 {
     xe_memory_allocation_properties_version_t version;  ///< [in] ::XE_MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT

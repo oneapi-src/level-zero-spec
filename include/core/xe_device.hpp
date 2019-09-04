@@ -144,7 +144,8 @@ namespace xe
         };
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Memory allocation properties queried using ::xeDriverGetMemProperties
+        /// @brief Memory allocation properties queried using
+        ///        ::xeDriverGetMemAllocProperties
         struct memory_allocation_properties_t
         {
             memory_allocation_properties_version_t version = memory_allocation_properties_version_t::CURRENT;   ///< [in] ::XE_MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT

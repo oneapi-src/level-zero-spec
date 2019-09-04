@@ -204,7 +204,7 @@ etors:
       desc: "the memory pointed to is a shared ownership allocation"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Memory allocation properties queried using $xDriverGetMemProperties"
+desc: "Memory allocation properties queried using $xDriverGetMemAllocProperties"
 class: $xDriver
 name: $x_memory_allocation_properties_t
 members:
