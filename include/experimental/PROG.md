@@ -1,15 +1,20 @@
 # Programming Guide (Experimental)
 
-[DO NOT EDIT]: # (generated from /scripts/extended/PROG.md)
+[DO NOT EDIT]: # (generated from /scripts/experimental/PROG.md)
 
 The following documents the high-level programming models and guidelines.  
 
 NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
 
 ## Table of Contents
+* [Initialization](#init)
 * [Device-Specific Commands](#dsc)
 * [Command Graphs](#cg)
 * [Future](#fut)
+
+# <a name="init">Initialization</a>
+The driver must be initialized by calling ::xexInit after calling ::xeInit and before calling any other experimental function.
+Simultaneous calls to ::xexInit are thread-safe.
 
 # <a name="dsc">Device-Specific Commands</a>
 ::xexCommandListReserveSpace provides direct access to the command list's command buffers in order to allow unrestricted access the device's capabilities.

@@ -13,10 +13,15 @@ The following documents the high-level programming models and guidelines.
 NOTE: This is a **PRELIMINARY** specification, provided for review and feedback.
 
 ${"##"} Table of Contents
+* [Initialization](#init)
 * [API Tracing](#at)
 * [Metrics](#md)
 * [Program Instrumentation](#pin)
 * [Program Debug](#dbg)
+
+${"#"} <a name="init">Initialization</a>
+The driver must be initialized by calling ::${t}Init after calling ::${x}Init and before calling any other experimental function.
+Simultaneous calls to ::${t}Init are thread-safe.
 
 ${"#"} <a name="at">API Tracing</a>
 
