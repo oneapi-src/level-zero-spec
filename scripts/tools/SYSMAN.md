@@ -222,7 +222,7 @@ void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
 
 ${"##"} <a name="smp">Power</a>
 The PSU (Power Supply Unit) provides power to a device. The amount of power drawn by a device is a function of the voltage and frequency,
-both of which are controlled by the Punit, a micro-controller on the device. If the voltage and frequency are two high, two conditions can occur:
+both of which are controlled by the Punit, a micro-controller on the device. If the voltage and frequency are too high, two conditions can occur:
 
 1. Over-current - This is where the current drawn by the device exceeds the maximum current that the PSU can supply. The PSU asserts a signal when
 this occurs, and it is processed by the Punit.
@@ -246,7 +246,7 @@ are tuned assuming the device is operating at normal temperatures running signif
 be able to run at maximum frequencies without hitting this condition.
 - The burst power limit permits most workloads to run at maximum frequencies for short periods.
 - The sustained power limit will be triggered if high frequencies are requested for lengthy periods (28sec) and the frequencies will be throttled
-if the high requests and utilization of the device continues.
+if the high requests and utilization of the device continue.
 
 The following functions are provided to manage the power of the device:
 
@@ -722,7 +722,7 @@ be cleared, subsequent calls to this function will show the same notifications a
 
 The first argument of ::${t}SysmanEventsListen() specifies the SMI handle for the device on which event notifications wish to be received. However, this
 can be set to NULL in order to query event notifications across all devices for which the application has created SMI handles. When querying across
-multiple devices, it is suggested not to request event status clearing. In this way, the application can no when any event has occurred and can then
+multiple devices, it is suggested not to request event status clearing. In this way, the application can know when any event has occurred and can then
 make individual requests to each device, this time requesting that the event status be cleared.
 
 ${"#"} <a name="di">Diagnostics</a>
