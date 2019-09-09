@@ -575,15 +575,18 @@ def get_type_name(namespace, tags, obj, item, cpp=False, meta=None, handle_to_cl
 
             is_inscope = False
             if obj_traits.is_class(obj):                        # if the obj _is_ a class
-                is_inscope = cname == obj['name']                   # then is the item's class this obj? 
+                is_inscope = cname == obj['name']                   # then is the item's class this obj?
             elif not is_global:                                 # else if the obj belongs to a class
                 is_inscope = cname == obj_traits.class_name(obj)    # then is the item's class the same as the obj?
 
+            cname2 = subt(namespace, tags, cname, cpp=cpp, remove_namespace=True)
             cname = subt(namespace, tags, cname, cpp=cpp)   # remove tags from class name
 
             if not (is_global or is_namespace or is_handle or is_inscope):
                 # need to prepend the class name to the type after removing namespace from the type
+                #name = make_type_name(namespace, tags, obj, cpp)
                 name = subt(namespace, tags, item, cpp=cpp, remove_namespace=True)
+                name = _remove_class(name, cname2)
                 name = _add_class(name, cname)
 
             elif handle_to_class and is_handle and not obj_traits.is_class(obj):
@@ -593,6 +596,7 @@ def get_type_name(namespace, tags, obj, item, cpp=False, meta=None, handle_to_cl
             if not is_handle:
                 # remove the verbose class part from the type name
                 name = _remove_class(name, cname)
+
     return name
 
 """
