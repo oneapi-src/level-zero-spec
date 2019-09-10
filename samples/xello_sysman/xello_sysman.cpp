@@ -300,8 +300,7 @@ void ShowPowerLimits(xet_sysman_handle_t hSysmanDevice, xet_sysman_pwr_handle_t 
 void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
 {
     xet_sysman_properties_t props;
-    xet_optimization_mode_t mode;
-    
+    uint32_t timeout;
     if (xetSysmanDeviceGetProperties(hSysmanDevice, &props) == XE_RESULT_SUCCESS)
     {
         fprintf(stdout, "    UUID:    %s\n", props.core.uuid.id);
@@ -310,16 +309,15 @@ void ShowDeviceInfo(xet_sysman_handle_t hSysmanDevice)
         fprintf(stdout, "    serial#: %s\n", props.serialNumber);
         fprintf(stdout, "    board#:  %s\n", props.boardNumber);
     }
-    if (xetSysmanDeviceGetOptimizationMode(hSysmanDevice, &mode) == XE_RESULT_SUCCESS)
+    if (xetSysmanDeviceGetGuardTimeout(hSysmanDevice, &timeout) == XE_RESULT_SUCCESS)
     {
-        switch (mode)
+        if (timeout == XET_DISABLE_GUARD_TIMEOUT)
         {
-        case XET_OPTIMIZATION_MODE_SINGLE_PROCESS_COMPUTE:
-            fprintf(stdout, "    mode:    single process compute\n");
-            break;
-        default:
-            fprintf(stdout, "    mode:    multiply process\n");
-            break;
+            fprintf(stdout, "    timeout: disabled\n");
+        }
+        else
+        {
+            fprintf(stdout, "    timeout: %u milliseconds\n", timeout);
         }
     }
 }
