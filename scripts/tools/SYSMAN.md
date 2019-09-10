@@ -181,13 +181,9 @@ The following functions are provided to manage general aspects of the device:
 | Function                             | Device behavior | Sub-device behavior |
 | :---                                 | :---        | :---        |
 | ::${t}SysmanDeviceGetProperties()    | Returns static properties for the device. This includes the device serial number and the number of various components such as fans and which components can have their configuration changes. | Returns static properties for the sub-device only. Some information such as serial number are the same as the device. |
-| ::${t}SysmanDeviceGetOptimizationMode() | Find out what type of workload performance optimization is currently in effect (see note below). | Not supported. |
-| ::${t}SysmanDeviceSetOptimizationMode() | Change the workload optimization mode (see note below). | Not supported. |
+| ::${t}SysmanDeviceGetGuardTimeout()  | Get current forward progress guard timeout. | Not supported. |
+| ::${t}SysmanDeviceSetGuardTimeout()  | Set forward progress guard timeout. | Not supported. |
 | ::${t}SysmanDeviceReset()            | Performs a warm reset of the device which includes unloading the driver. | Not supported. |
-
-By default, the device is optimized for multi-application operations. This will attempt to provide fair access to the accelerator resources
-for simultaneous processes/virtual machines using the device. However, it is possible to modify the optimization mode to optimize for different use-cases.
-The possible optimizations are given by the enumerator ::${t}_optimization_mode_t.
 
 The example below shows how to output information about a device:
 

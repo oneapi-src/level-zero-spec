@@ -824,51 +824,54 @@ namespace loader
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanDeviceGetOptimizationMode
+    /// @brief Intercept function for xetSysmanDeviceGetGuardTimeout
     xe_result_t __xecall
-    xetSysmanDeviceGetOptimizationMode(
+    xetSysmanDeviceGetGuardTimeout(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        xet_optimization_mode_t* pMode                  ///< [in] The current optimization mode of the device.
+        uint32_t* pTimeout                              ///< [in] Returns the guard timeout in milliseconds (a value of
+                                                        ///< ::XET_DISABLE_GUARD_TIMEOUT indicates that the guard timeout is
+                                                        ///< disabled).
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnDeviceGetOptimizationMode = dditable->xet.Sysman.pfnDeviceGetOptimizationMode;
-        if( nullptr == pfnDeviceGetOptimizationMode )
+        auto pfnDeviceGetGuardTimeout = dditable->xet.Sysman.pfnDeviceGetGuardTimeout;
+        if( nullptr == pfnDeviceGetGuardTimeout )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnDeviceGetOptimizationMode( hSysman, pMode );
+        result = pfnDeviceGetGuardTimeout( hSysman, pTimeout );
 
         return result;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanDeviceSetOptimizationMode
+    /// @brief Intercept function for xetSysmanDeviceSetGuardTimeout
     xe_result_t __xecall
-    xetSysmanDeviceSetOptimizationMode(
+    xetSysmanDeviceSetGuardTimeout(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        xet_optimization_mode_t pMode                   ///< [in] The new optimization mode of the device.
+        uint32_t timeout                                ///< [in] The timeout in milliseconds or ::XET_DISABLE_GUARD_TIMEOUT to
+                                                        ///< disable the timeout.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // extract driver's function pointer table
         auto dditable = reinterpret_cast<xet_sysman_object_t*>( hSysman )->dditable;
-        auto pfnDeviceSetOptimizationMode = dditable->xet.Sysman.pfnDeviceSetOptimizationMode;
-        if( nullptr == pfnDeviceSetOptimizationMode )
+        auto pfnDeviceSetGuardTimeout = dditable->xet.Sysman.pfnDeviceSetGuardTimeout;
+        if( nullptr == pfnDeviceSetGuardTimeout )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         // convert loader handle to driver handle
         hSysman = reinterpret_cast<xet_sysman_object_t*>( hSysman )->handle;
 
         // forward to device-driver
-        result = pfnDeviceSetOptimizationMode( hSysman, pMode );
+        result = pfnDeviceSetGuardTimeout( hSysman, timeout );
 
         return result;
     }
@@ -3826,8 +3829,8 @@ xetGetSysmanProcAddrTable(
             // return pointers to loader's DDIs
             pDdiTable->pfnGet                                      = loader::xetSysmanGet;
             pDdiTable->pfnDeviceGetProperties                      = loader::xetSysmanDeviceGetProperties;
-            pDdiTable->pfnDeviceGetOptimizationMode                = loader::xetSysmanDeviceGetOptimizationMode;
-            pDdiTable->pfnDeviceSetOptimizationMode                = loader::xetSysmanDeviceSetOptimizationMode;
+            pDdiTable->pfnDeviceGetGuardTimeout                    = loader::xetSysmanDeviceGetGuardTimeout;
+            pDdiTable->pfnDeviceSetGuardTimeout                    = loader::xetSysmanDeviceSetGuardTimeout;
             pDdiTable->pfnDeviceReset                              = loader::xetSysmanDeviceReset;
             pDdiTable->pfnPciGetProperties                         = loader::xetSysmanPciGetProperties;
             pDdiTable->pfnPciGetState                              = loader::xetSysmanPciGetState;

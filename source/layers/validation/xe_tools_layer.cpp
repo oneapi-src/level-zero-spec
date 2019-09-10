@@ -720,16 +720,18 @@ namespace layer
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanDeviceGetOptimizationMode
+    /// @brief Intercept function for xetSysmanDeviceGetGuardTimeout
     xe_result_t __xecall
-    xetSysmanDeviceGetOptimizationMode(
+    xetSysmanDeviceGetGuardTimeout(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        xet_optimization_mode_t* pMode                  ///< [in] The current optimization mode of the device.
+        uint32_t* pTimeout                              ///< [in] Returns the guard timeout in milliseconds (a value of
+                                                        ///< ::XET_DISABLE_GUARD_TIMEOUT indicates that the guard timeout is
+                                                        ///< disabled).
         )
     {
-        auto pfnDeviceGetOptimizationMode = context.xetDdiTable.Sysman.pfnDeviceGetOptimizationMode;
+        auto pfnDeviceGetGuardTimeout = context.xetDdiTable.Sysman.pfnDeviceGetGuardTimeout;
 
-        if( nullptr == pfnDeviceGetOptimizationMode )
+        if( nullptr == pfnDeviceGetGuardTimeout )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -737,25 +739,26 @@ namespace layer
             if( nullptr == hSysman )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
-            if( nullptr == pMode )
+            if( nullptr == pTimeout )
                 return XE_RESULT_ERROR_INVALID_ARGUMENT;
 
         }
 
-        return pfnDeviceGetOptimizationMode( hSysman, pMode );
+        return pfnDeviceGetGuardTimeout( hSysman, pTimeout );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanDeviceSetOptimizationMode
+    /// @brief Intercept function for xetSysmanDeviceSetGuardTimeout
     xe_result_t __xecall
-    xetSysmanDeviceSetOptimizationMode(
+    xetSysmanDeviceSetGuardTimeout(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        xet_optimization_mode_t pMode                   ///< [in] The new optimization mode of the device.
+        uint32_t timeout                                ///< [in] The timeout in milliseconds or ::XET_DISABLE_GUARD_TIMEOUT to
+                                                        ///< disable the timeout.
         )
     {
-        auto pfnDeviceSetOptimizationMode = context.xetDdiTable.Sysman.pfnDeviceSetOptimizationMode;
+        auto pfnDeviceSetGuardTimeout = context.xetDdiTable.Sysman.pfnDeviceSetGuardTimeout;
 
-        if( nullptr == pfnDeviceSetOptimizationMode )
+        if( nullptr == pfnDeviceSetGuardTimeout )
             return XE_RESULT_ERROR_UNSUPPORTED;
 
         if( context.enableParameterValidation )
@@ -765,7 +768,7 @@ namespace layer
 
         }
 
-        return pfnDeviceSetOptimizationMode( hSysman, pMode );
+        return pfnDeviceSetGuardTimeout( hSysman, timeout );
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -3272,11 +3275,11 @@ xetGetSysmanProcAddrTable(
     dditable.pfnDeviceGetProperties                      = pDdiTable->pfnDeviceGetProperties;
     pDdiTable->pfnDeviceGetProperties                    = layer::xetSysmanDeviceGetProperties;
 
-    dditable.pfnDeviceGetOptimizationMode                = pDdiTable->pfnDeviceGetOptimizationMode;
-    pDdiTable->pfnDeviceGetOptimizationMode              = layer::xetSysmanDeviceGetOptimizationMode;
+    dditable.pfnDeviceGetGuardTimeout                    = pDdiTable->pfnDeviceGetGuardTimeout;
+    pDdiTable->pfnDeviceGetGuardTimeout                  = layer::xetSysmanDeviceGetGuardTimeout;
 
-    dditable.pfnDeviceSetOptimizationMode                = pDdiTable->pfnDeviceSetOptimizationMode;
-    pDdiTable->pfnDeviceSetOptimizationMode              = layer::xetSysmanDeviceSetOptimizationMode;
+    dditable.pfnDeviceSetGuardTimeout                    = pDdiTable->pfnDeviceSetGuardTimeout;
+    pDdiTable->pfnDeviceSetGuardTimeout                  = layer::xetSysmanDeviceSetGuardTimeout;
 
     dditable.pfnDeviceReset                              = pDdiTable->pfnDeviceReset;
     pDdiTable->pfnDeviceReset                            = layer::xetSysmanDeviceReset;

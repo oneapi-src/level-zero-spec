@@ -28,6 +28,12 @@
 #endif // XET_STRING_PROPERTY_SIZE
 
 ///////////////////////////////////////////////////////////////////////////////
+#ifndef XET_DISABLE_GUARD_TIMEOUT
+/// @brief Disable forward progress guard timeout.
+#define XET_DISABLE_GUARD_TIMEOUT  0xFFFFFFFF
+#endif // XET_DISABLE_GUARD_TIMEOUT
+
+///////////////////////////////////////////////////////////////////////////////
 #ifndef XET_FAN_TEMP_SPEED_PAIR_COUNT
 /// @brief Maximum number of fan temperature/speed pairs in the fan speed table.
 #define XET_FAN_TEMP_SPEED_PAIR_COUNT  32
@@ -63,16 +69,6 @@ namespace xet
         enum class version_t
         {
             CURRENT = XE_MAKE_VERSION( 1, 0 ),              ///< version 1.0
-
-        };
-
-        ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Device mode
-        enum class optimization_mode_t
-        {
-            DEFAULT = 0,                                    ///< Multiple workloads are running on the device
-            SINGLE_PROCESS_COMPUTE,                         ///< A single process submitting compute workloads can monopolize the
-                                                            ///< accelerator resources
 
         };
 
@@ -291,27 +287,42 @@ namespace xet
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Get optimization mode of the device
+        /// @brief Get current forward progress guard timeout
         /// 
         /// @details
+        ///     - The driver keeps track of how long it takes the GPU to complete a
+        ///       batch of work. If this exceeds a guard timeout value, the graphics
+        ///       context is destroyed.
+        ///     - Some graphics kernels are designed to run longer than the default
+        ///       guard timeout. In this case, administrators should increase or disable
+        ///       the timeout.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
-        DeviceGetOptimizationMode(
-            optimization_mode_t* pMode                      ///< [in] The current optimization mode of the device.
+        DeviceGetGuardTimeout(
+            uint32_t* pTimeout                              ///< [in] Returns the guard timeout in milliseconds (a value of
+                                                            ///< ::XET_DISABLE_GUARD_TIMEOUT indicates that the guard timeout is
+                                                            ///< disabled).
             );
 
         ///////////////////////////////////////////////////////////////////////////////
-        /// @brief Set optimization mode of the device
+        /// @brief Set forward progress guard timeout
         /// 
         /// @details
+        ///     - The driver keeps track of how long it takes the GPU to complete a
+        ///       batch of work. If this exceeds a guard timeout value, the graphics
+        ///       context is destroyed.
+        ///     - Some graphics kernels are designed to run longer than the default
+        ///       guard timeout. In this case, administrators should increase or disable
+        ///       the timeout.
         ///     - The application may call this function from simultaneous threads.
         ///     - The implementation of this function should be lock-free.
         /// @throws result_t
         void __xecall
-        DeviceSetOptimizationMode(
-            optimization_mode_t pMode                       ///< [in] The new optimization mode of the device.
+        DeviceSetGuardTimeout(
+            uint32_t timeout                                ///< [in] The timeout in milliseconds or ::XET_DISABLE_GUARD_TIMEOUT to
+                                                            ///< disable the timeout.
             );
 
         ///////////////////////////////////////////////////////////////////////////////
@@ -2442,10 +2453,6 @@ namespace xet
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::version_t to std::string
     std::string to_string( const Sysman::version_t val );
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Converts Sysman::optimization_mode_t to std::string
-    std::string to_string( const Sysman::optimization_mode_t val );
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @brief Converts Sysman::properties_t to std::string

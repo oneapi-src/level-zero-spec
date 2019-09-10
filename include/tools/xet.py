@@ -416,18 +416,6 @@ class xet_sysman_version_t(c_int):
 XET_STRING_PROPERTY_SIZE = 32
 
 ###############################################################################
-## @brief Device mode
-class xet_optimization_mode_v(IntEnum):
-    DEFAULT = 0                                     ## Multiple workloads are running on the device
-    SINGLE_PROCESS_COMPUTE = auto()                 ## A single process submitting compute workloads can monopolize the
-                                                    ## accelerator resources
-
-class xet_optimization_mode_t(c_int):
-    def __str__(self):
-        return str(xet_optimization_mode_v(value))
-
-
-###############################################################################
 ## @brief Device properties
 class xet_sysman_properties_t(Structure):
     _fields_ = [
@@ -441,6 +429,10 @@ class xet_sysman_properties_t(Structure):
         ("driverVersion", c_int8_t * XET_STRING_PROPERTY_SIZE),         ## [out] Installed driver version (NULL terminated string value)
         ("wasRepaired", xe_bool_t)                                      ## [out] Indicates if repairs were already carried out on this device
     ]
+
+###############################################################################
+## @brief Disable forward progress guard timeout.
+XET_DISABLE_GUARD_TIMEOUT = 0xFFFFFFFF
 
 ###############################################################################
 ## @brief PCI address
@@ -1622,18 +1614,18 @@ else:
     _xetSysmanDeviceGetProperties_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_sysman_properties_t) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanDeviceGetOptimizationMode
+## @brief Function-pointer for xetSysmanDeviceGetGuardTimeout
 if __use_win_types:
-    _xetSysmanDeviceGetOptimizationMode_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_optimization_mode_t) )
+    _xetSysmanDeviceGetGuardTimeout_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
 else:
-    _xetSysmanDeviceGetOptimizationMode_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(xet_optimization_mode_t) )
+    _xetSysmanDeviceGetGuardTimeout_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, POINTER(c_ulong) )
 
 ###############################################################################
-## @brief Function-pointer for xetSysmanDeviceSetOptimizationMode
+## @brief Function-pointer for xetSysmanDeviceSetGuardTimeout
 if __use_win_types:
-    _xetSysmanDeviceSetOptimizationMode_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_optimization_mode_t )
+    _xetSysmanDeviceSetGuardTimeout_t = WINFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong )
 else:
-    _xetSysmanDeviceSetOptimizationMode_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, xet_optimization_mode_t )
+    _xetSysmanDeviceSetGuardTimeout_t = CFUNCTYPE( xe_result_t, xet_sysman_handle_t, c_ulong )
 
 ###############################################################################
 ## @brief Function-pointer for xetSysmanDeviceReset
@@ -1803,8 +1795,8 @@ class _xet_sysman_dditable_t(Structure):
     _fields_ = [
         ("pfnGet", c_void_p),                                           ## _xetSysmanGet_t
         ("pfnDeviceGetProperties", c_void_p),                           ## _xetSysmanDeviceGetProperties_t
-        ("pfnDeviceGetOptimizationMode", c_void_p),                     ## _xetSysmanDeviceGetOptimizationMode_t
-        ("pfnDeviceSetOptimizationMode", c_void_p),                     ## _xetSysmanDeviceSetOptimizationMode_t
+        ("pfnDeviceGetGuardTimeout", c_void_p),                         ## _xetSysmanDeviceGetGuardTimeout_t
+        ("pfnDeviceSetGuardTimeout", c_void_p),                         ## _xetSysmanDeviceSetGuardTimeout_t
         ("pfnDeviceReset", c_void_p),                                   ## _xetSysmanDeviceReset_t
         ("pfnPciGetProperties", c_void_p),                              ## _xetSysmanPciGetProperties_t
         ("pfnPciGetState", c_void_p),                                   ## _xetSysmanPciGetState_t
@@ -2477,8 +2469,8 @@ class XET_DDI:
         # attach function interface to function address
         self.xetSysmanGet = _xetSysmanGet_t(self.__dditable.Sysman.pfnGet)
         self.xetSysmanDeviceGetProperties = _xetSysmanDeviceGetProperties_t(self.__dditable.Sysman.pfnDeviceGetProperties)
-        self.xetSysmanDeviceGetOptimizationMode = _xetSysmanDeviceGetOptimizationMode_t(self.__dditable.Sysman.pfnDeviceGetOptimizationMode)
-        self.xetSysmanDeviceSetOptimizationMode = _xetSysmanDeviceSetOptimizationMode_t(self.__dditable.Sysman.pfnDeviceSetOptimizationMode)
+        self.xetSysmanDeviceGetGuardTimeout = _xetSysmanDeviceGetGuardTimeout_t(self.__dditable.Sysman.pfnDeviceGetGuardTimeout)
+        self.xetSysmanDeviceSetGuardTimeout = _xetSysmanDeviceSetGuardTimeout_t(self.__dditable.Sysman.pfnDeviceSetGuardTimeout)
         self.xetSysmanDeviceReset = _xetSysmanDeviceReset_t(self.__dditable.Sysman.pfnDeviceReset)
         self.xetSysmanPciGetProperties = _xetSysmanPciGetProperties_t(self.__dditable.Sysman.pfnPciGetProperties)
         self.xetSysmanPciGetState = _xetSysmanPciGetState_t(self.__dditable.Sysman.pfnPciGetState)

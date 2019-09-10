@@ -690,20 +690,22 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanDeviceGetOptimizationMode
+    /// @brief Intercept function for xetSysmanDeviceGetGuardTimeout
     xe_result_t __xecall
-    xetSysmanDeviceGetOptimizationMode(
+    xetSysmanDeviceGetGuardTimeout(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        xet_optimization_mode_t* pMode                  ///< [in] The current optimization mode of the device.
+        uint32_t* pTimeout                              ///< [in] Returns the guard timeout in milliseconds (a value of
+                                                        ///< ::XET_DISABLE_GUARD_TIMEOUT indicates that the guard timeout is
+                                                        ///< disabled).
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnDeviceGetOptimizationMode = context.xetDdiTable.Sysman.pfnDeviceGetOptimizationMode;
-        if( nullptr != pfnDeviceGetOptimizationMode )
+        auto pfnDeviceGetGuardTimeout = context.xetDdiTable.Sysman.pfnDeviceGetGuardTimeout;
+        if( nullptr != pfnDeviceGetGuardTimeout )
         {
-            result = pfnDeviceGetOptimizationMode( hSysman, pMode );
+            result = pfnDeviceGetGuardTimeout( hSysman, pTimeout );
         }
         else
         {
@@ -714,20 +716,21 @@ namespace driver
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @brief Intercept function for xetSysmanDeviceSetOptimizationMode
+    /// @brief Intercept function for xetSysmanDeviceSetGuardTimeout
     xe_result_t __xecall
-    xetSysmanDeviceSetOptimizationMode(
+    xetSysmanDeviceSetGuardTimeout(
         xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-        xet_optimization_mode_t pMode                   ///< [in] The new optimization mode of the device.
+        uint32_t timeout                                ///< [in] The timeout in milliseconds or ::XET_DISABLE_GUARD_TIMEOUT to
+                                                        ///< disable the timeout.
         )
     {
         xe_result_t result = XE_RESULT_SUCCESS;
 
         // if the driver has created a custom function, then call it instead of using the generic path
-        auto pfnDeviceSetOptimizationMode = context.xetDdiTable.Sysman.pfnDeviceSetOptimizationMode;
-        if( nullptr != pfnDeviceSetOptimizationMode )
+        auto pfnDeviceSetGuardTimeout = context.xetDdiTable.Sysman.pfnDeviceSetGuardTimeout;
+        if( nullptr != pfnDeviceSetGuardTimeout )
         {
-            result = pfnDeviceSetOptimizationMode( hSysman, pMode );
+            result = pfnDeviceSetGuardTimeout( hSysman, timeout );
         }
         else
         {
@@ -3102,9 +3105,9 @@ xetGetSysmanProcAddrTable(
 
     pDdiTable->pfnDeviceGetProperties                    = driver::xetSysmanDeviceGetProperties;
 
-    pDdiTable->pfnDeviceGetOptimizationMode              = driver::xetSysmanDeviceGetOptimizationMode;
+    pDdiTable->pfnDeviceGetGuardTimeout                  = driver::xetSysmanDeviceGetGuardTimeout;
 
-    pDdiTable->pfnDeviceSetOptimizationMode              = driver::xetSysmanDeviceSetOptimizationMode;
+    pDdiTable->pfnDeviceSetGuardTimeout                  = driver::xetSysmanDeviceSetGuardTimeout;
 
     pDdiTable->pfnDeviceReset                            = driver::xetSysmanDeviceReset;
 

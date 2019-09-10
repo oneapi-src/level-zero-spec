@@ -36,18 +36,6 @@ name: $T_STRING_PROPERTY_SIZE
 value: "32"
 
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "Device mode"
-class: $tSysman
-name: $t_optimization_mode_t
-etors:
-    - name: $T_OPTIMIZATION_MODE_DEFAULT
-      value: "0"
-      desc: "Multiple workloads are running on the device"
-    - name: $T_OPTIMIZATION_MODE_SINGLE_PROCESS_COMPUTE
-      desc: "A single process submitting compute workloads can monopolize the accelerator resources"
-
---- #--------------------------------------------------------------------------
 type: struct
 desc: "Device properties"
 class: $tSysman
@@ -95,36 +83,47 @@ params:
     - type: $t_sysman_properties_t*
       name: pProperties
       desc: "[in] Structure that will contain information about the device."
+
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Disable forward progress guard timeout."
+name: $T_DISABLE_GUARD_TIMEOUT
+value: "0xFFFFFFFF"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get optimization mode of the device"
+desc: "Get current forward progress guard timeout"
 class: $tSysman
-name: DeviceGetOptimizationMode
+name: DeviceGetGuardTimeout
 details:
+    - "The driver keeps track of how long it takes the GPU to complete a batch of work. If this exceeds a guard timeout value, the graphics context is destroyed."
+    - "Some graphics kernels are designed to run longer than the default guard timeout. In this case, administrators should increase or disable the timeout."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] SMI handle of the device."
-    - type: $t_optimization_mode_t*
-      name: pMode
-      desc: "[in] The current optimization mode of the device."
+    - type: uint32_t*
+      name: pTimeout
+      desc: "[in] Returns the guard timeout in milliseconds (a value of $T_DISABLE_GUARD_TIMEOUT indicates that the guard timeout is disabled)."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set optimization mode of the device"
+desc: "Set forward progress guard timeout"
 class: $tSysman
-name: DeviceSetOptimizationMode
+name: DeviceSetGuardTimeout
 details:
+    - "The driver keeps track of how long it takes the GPU to complete a batch of work. If this exceeds a guard timeout value, the graphics context is destroyed."
+    - "Some graphics kernels are designed to run longer than the default guard timeout. In this case, administrators should increase or disable the timeout."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $t_sysman_handle_t
       name: hSysman
       desc: "[in] SMI handle of the device."
-    - type: $t_optimization_mode_t
-      name: pMode
-      desc: "[in] The new optimization mode of the device."
+    - type: uint32_t
+      name: timeout
+      desc: "[in] The timeout in milliseconds or $T_DISABLE_GUARD_TIMEOUT to disable the timeout."
+
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reset device"

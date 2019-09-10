@@ -608,17 +608,17 @@ typedef xe_result_t (__xecall *xet_pfnSysmanDeviceGetProperties_t)(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanDeviceGetOptimizationMode 
-typedef xe_result_t (__xecall *xet_pfnSysmanDeviceGetOptimizationMode_t)(
+/// @brief Function-pointer for xetSysmanDeviceGetGuardTimeout 
+typedef xe_result_t (__xecall *xet_pfnSysmanDeviceGetGuardTimeout_t)(
     xet_sysman_handle_t,
-    xet_optimization_mode_t*
+    uint32_t*
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Function-pointer for xetSysmanDeviceSetOptimizationMode 
-typedef xe_result_t (__xecall *xet_pfnSysmanDeviceSetOptimizationMode_t)(
+/// @brief Function-pointer for xetSysmanDeviceSetGuardTimeout 
+typedef xe_result_t (__xecall *xet_pfnSysmanDeviceSetGuardTimeout_t)(
     xet_sysman_handle_t,
-    xet_optimization_mode_t
+    uint32_t
     );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -805,8 +805,8 @@ typedef struct _xet_sysman_dditable_t
 {
     xet_pfnSysmanGet_t                                          pfnGet;
     xet_pfnSysmanDeviceGetProperties_t                          pfnDeviceGetProperties;
-    xet_pfnSysmanDeviceGetOptimizationMode_t                    pfnDeviceGetOptimizationMode;
-    xet_pfnSysmanDeviceSetOptimizationMode_t                    pfnDeviceSetOptimizationMode;
+    xet_pfnSysmanDeviceGetGuardTimeout_t                        pfnDeviceGetGuardTimeout;
+    xet_pfnSysmanDeviceSetGuardTimeout_t                        pfnDeviceSetGuardTimeout;
     xet_pfnSysmanDeviceReset_t                                  pfnDeviceReset;
     xet_pfnSysmanPciGetProperties_t                             pfnPciGetProperties;
     xet_pfnSysmanPciGetState_t                                  pfnPciGetState;

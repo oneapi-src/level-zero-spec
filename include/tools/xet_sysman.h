@@ -62,16 +62,6 @@ xetSysmanGet(
 #endif // XET_STRING_PROPERTY_SIZE
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Device mode
-typedef enum _xet_optimization_mode_t
-{
-    XET_OPTIMIZATION_MODE_DEFAULT = 0,              ///< Multiple workloads are running on the device
-    XET_OPTIMIZATION_MODE_SINGLE_PROCESS_COMPUTE,   ///< A single process submitting compute workloads can monopolize the
-                                                    ///< accelerator resources
-
-} xet_optimization_mode_t;
-
-///////////////////////////////////////////////////////////////////////////////
 /// @brief Device properties
 typedef struct _xet_sysman_properties_t
 {
@@ -109,9 +99,21 @@ xetSysmanDeviceGetProperties(
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Get optimization mode of the device
+#ifndef XET_DISABLE_GUARD_TIMEOUT
+/// @brief Disable forward progress guard timeout.
+#define XET_DISABLE_GUARD_TIMEOUT  0xFFFFFFFF
+#endif // XET_DISABLE_GUARD_TIMEOUT
+
+///////////////////////////////////////////////////////////////////////////////
+/// @brief Get current forward progress guard timeout
 /// 
 /// @details
+///     - The driver keeps track of how long it takes the GPU to complete a
+///       batch of work. If this exceeds a guard timeout value, the graphics
+///       context is destroyed.
+///     - Some graphics kernels are designed to run longer than the default
+///       guard timeout. In this case, administrators should increase or disable
+///       the timeout.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -121,18 +123,26 @@ xetSysmanDeviceGetProperties(
 ///     - ::XE_RESULT_ERROR_DEVICE_LOST
 ///     - ::XE_RESULT_ERROR_INVALID_ARGUMENT
 ///         + nullptr == hSysman
-///         + nullptr == pMode
+///         + nullptr == pTimeout
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanDeviceGetOptimizationMode(
+xetSysmanDeviceGetGuardTimeout(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    xet_optimization_mode_t* pMode                  ///< [in] The current optimization mode of the device.
+    uint32_t* pTimeout                              ///< [in] Returns the guard timeout in milliseconds (a value of
+                                                    ///< ::XET_DISABLE_GUARD_TIMEOUT indicates that the guard timeout is
+                                                    ///< disabled).
     );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @brief Set optimization mode of the device
+/// @brief Set forward progress guard timeout
 /// 
 /// @details
+///     - The driver keeps track of how long it takes the GPU to complete a
+///       batch of work. If this exceeds a guard timeout value, the graphics
+///       context is destroyed.
+///     - Some graphics kernels are designed to run longer than the default
+///       guard timeout. In this case, administrators should increase or disable
+///       the timeout.
 ///     - The application may call this function from simultaneous threads.
 ///     - The implementation of this function should be lock-free.
 /// 
@@ -144,9 +154,10 @@ xetSysmanDeviceGetOptimizationMode(
 ///         + nullptr == hSysman
 ///     - ::XE_RESULT_ERROR_UNSUPPORTED
 xe_result_t __xecall
-xetSysmanDeviceSetOptimizationMode(
+xetSysmanDeviceSetGuardTimeout(
     xet_sysman_handle_t hSysman,                    ///< [in] SMI handle of the device.
-    xet_optimization_mode_t pMode                   ///< [in] The new optimization mode of the device.
+    uint32_t timeout                                ///< [in] The timeout in milliseconds or ::XET_DISABLE_GUARD_TIMEOUT to
+                                                    ///< disable the timeout.
     );
 
 ///////////////////////////////////////////////////////////////////////////////
